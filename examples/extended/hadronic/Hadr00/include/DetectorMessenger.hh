@@ -42,8 +42,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -55,28 +55,25 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    virtual ~DetectorMessenger();
 
-  DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  private:
+    DetectorConstruction* fDetector;
 
-private:
-
-  DetectorConstruction* fDetector;
-
-  G4UIdirectory*             ftestDir;
-  G4UIcmdWithAString*        fmatCmd;
-  G4UIcmdWithAString*        fmat1Cmd;
-  G4UIcmdWithABool*          fRDCmd;
-  G4UIcmdWithADoubleAndUnit* frCmd;
-  G4UIcmdWithADoubleAndUnit* flCmd;
+    G4UIdirectory* ftestDir;
+    G4UIcmdWithAString* fmatCmd;
+    G4UIcmdWithAString* fmat1Cmd;
+    G4UIcmdWithABool* fRDCmd;
+    G4UIcmdWithADoubleAndUnit* frCmd;
+    G4UIcmdWithADoubleAndUnit* flCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

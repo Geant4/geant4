@@ -45,6 +45,8 @@
 #include "G4THitsMap.hh"
 #include "G4PseudoScene.hh"
 
+#include <map>
+
 class G4Scene;
 class G4VGraphicsSystem;
 class G4AttHolder;
@@ -451,6 +453,7 @@ protected:
   G4int              fNestingDepth;    // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs; // Working vis attributes.
   const G4Transform3D fIdentityTransformation;
+  std::map<G4VPhysicalVolume*,G4String> fProblematicVolumes;
 
 private:
 

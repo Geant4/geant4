@@ -28,14 +28,12 @@
 /// \brief Implementation of the B4a::EventAction class
 
 #include "EventAction.hh"
-#include "RunAction.hh"
 
 #include "G4AnalysisManager.hh"
-#include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
-#include "Randomize.hh"
 #include <iomanip>
 
 namespace B4a
@@ -76,23 +74,17 @@ void EventAction::EndOfEventAction(const G4Event* event)
   //
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-  if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout
-       << "   Absorber: total energy: " << std::setw(7)
-                                        << G4BestUnit(fEnergyAbs,"Energy")
-       << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(fTrackLAbs,"Length")
-       << G4endl
-       << "        Gap: total energy: " << std::setw(7)
-                                        << G4BestUnit(fEnergyGap,"Energy")
-       << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(fTrackLGap,"Length")
-       << G4endl;
-       
-    G4cout << "--> End of event " << eventID << "\n" << G4endl;       
+  if ((printModulo > 0) && (eventID % printModulo == 0)) {
+    G4cout << "   Absorber: total energy: " << std::setw(7) << G4BestUnit(fEnergyAbs, "Energy")
+           << "       total track length: " << std::setw(7) << G4BestUnit(fTrackLAbs, "Length")
+           << G4endl << "        Gap: total energy: " << std::setw(7)
+           << G4BestUnit(fEnergyGap, "Energy") << "       total track length: " << std::setw(7)
+           << G4BestUnit(fTrackLGap, "Length") << G4endl;
+
+    G4cout << "--> End of event " << eventID << "\n" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-} 
+}  // namespace B4a

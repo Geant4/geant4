@@ -37,25 +37,25 @@
 
 #include "ClusteringAlgo.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction():G4UserEventAction()
+EventAction::EventAction() : G4UserEventAction()
 {
-  //default parameter values
-  fEdep=0.;
+  // default parameter values
+  fEdep = 0.;
 
   // Create clustering algorithm
   // These default values have been tuned for the Physics List G4EmDNAPhysics
   // to reproduce data published by:
   // Francis et al. 2011 Comput. Meth. Programs. Biomed. 2011 101(3)
-  fpClustering = new ClusteringAlgo(3.3*nanometer,2,0.2,5*eV,37.5*eV);
+  fpClustering = new ClusteringAlgo(3.3 * nanometer, 2, 0.2, 5 * eV, 37.5 * eV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,35 +67,30 @@ EventAction::~EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction( const G4Event*)
+void EventAction::BeginOfEventAction(const G4Event*)
 {
-  fEdep=0.;
+  fEdep = 0.;
   fpClustering->Purge();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction( const G4Event*)
+void EventAction::EndOfEventAction(const G4Event*)
 {
-  std::map<G4int,G4int> sizeDistribution = fpClustering->RunClustering();
+  std::map<G4int, G4int> sizeDistribution = fpClustering->RunClustering();
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  analysisManager->FillH1(1,fpClustering->GetSSB());
-  analysisManager->FillH1(2,fpClustering->GetComplexSSB());
-  analysisManager->FillH1(3,fpClustering->GetDSB());
+  analysisManager->FillH1(1, fpClustering->GetSSB());
+  analysisManager->FillH1(2, fpClustering->GetComplexSSB());
+  analysisManager->FillH1(3, fpClustering->GetDSB());
 
-  while ( !sizeDistribution.empty() )
-  {
-    analysisManager->FillH1(4,
-                            sizeDistribution.begin()->first,
-                            sizeDistribution.begin()->second);
+  while (!sizeDistribution.empty()) {
+    analysisManager->FillH1(4, sizeDistribution.begin()->first, sizeDistribution.begin()->second);
     sizeDistribution.erase(sizeDistribution.begin());
-  } 
+  }
 
-  analysisManager->FillH1(5,
-                          (fEdep/joule)/
-                          (G4LogicalVolumeStore::GetInstance()->
-                              GetVolume("Target")->GetMass()/kg)
-  );
+  analysisManager->FillH1(
+    5,
+    (fEdep / joule) / (G4LogicalVolumeStore::GetInstance()->GetVolume("Target")->GetMass() / kg));
 }

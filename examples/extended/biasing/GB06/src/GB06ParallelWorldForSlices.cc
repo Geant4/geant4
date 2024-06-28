@@ -29,27 +29,31 @@
 //
 #include "GB06ParallelWorldForSlices.hh"
 
+#include "GB06BOptrSplitAndKillByImportance.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
-
-#include "GB06BOptrSplitAndKillByImportance.hh"
+#include "G4ThreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB06ParallelWorldForSlices::GB06ParallelWorldForSlices(G4String worldName)
   : G4VUserParallelWorld(worldName)
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB06ParallelWorldForSlices::~GB06ParallelWorldForSlices()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,11 +66,10 @@ void GB06ParallelWorldForSlices::Construct()
   // -------------------------
   //  Build parallel geometry:
   // -------------------------
-  
+
   // -- Obtain clone of mass geometry world from GetWorld() base class utility:
   G4VPhysicalVolume* physicalParallelWorld = GetWorld();
-  G4LogicalVolume*    logicalParallelWorld = physicalParallelWorld->GetLogicalVolume();
-
+  G4LogicalVolume* logicalParallelWorld = physicalParallelWorld->GetLogicalVolume();
 
   // -- We overlay a sliced geometry on top of the block of concrete in the mass geometry
   // -- (ie, in the detector construction class), using the same dimensions.
@@ -82,75 +85,67 @@ void GB06ParallelWorldForSlices::Construct()
   // -- are of interest. Note that the absence of materials is only possible in parallel
   // -- geometries.
 
-  
   // -- 1) get back the solid used to create the concrete shield:
   //       ------------------------------------------------------
-  
+
   // -- get back the logical volume of the shield, using its name:
-  G4LogicalVolume* shieldLogical =
-    G4LogicalVolumeStore::GetInstance()->GetVolume("shield.logical");
-  
+  G4LogicalVolume* shieldLogical = G4LogicalVolumeStore::GetInstance()->GetVolume("shield.logical");
+
   // -- get back the solid, a G4box in this case. We cast the pointer to access later on
   // -- the G4Box class specific methods:
-  G4Box* shieldSolid = (G4Box*) shieldLogical->GetSolid();
-  
+  G4Box* shieldSolid = (G4Box*)shieldLogical->GetSolid();
+
   // -- we now re-create a logical volume for the mother volume of the slices:
   G4LogicalVolume* motherForSlicesLogical =
-    new G4LogicalVolume(shieldSolid,                 // its solid
-                        nullptr,                     // no material
+    new G4LogicalVolume(shieldSolid,  // its solid
+                        nullptr,  // no material
                         "motherForSlices.logical");  // its name
 
-
-  
   // -- 2) new logical volume of same shape than the shield and place inside the slices:
   //       -----------------------------------------------------------------------------
-  
+
   // -- We create now the slices; we choose 20 slices:
   const G4int nSlices(20);
   // -- the solid for slices:
   G4double halfSliceZ = shieldSolid->GetZHalfLength() / nSlices;
-  G4Box*             sliceSolid = new G4Box("slice.solid",
-                                            shieldSolid->GetXHalfLength(),
-                                            shieldSolid->GetYHalfLength(),
-                                            halfSliceZ                    );
-  
+  G4Box* sliceSolid = new G4Box("slice.solid", shieldSolid->GetXHalfLength(),
+                                shieldSolid->GetYHalfLength(), halfSliceZ);
+
   // -- the logical volume for slices:
-  G4LogicalVolume* sliceLogical = new G4LogicalVolume(sliceSolid,        // its solid
-                                                      nullptr,           // no material
+  G4LogicalVolume* sliceLogical = new G4LogicalVolume(sliceSolid,  // its solid
+                                                      nullptr,  // no material
                                                       "slice.logical");  // its name
-  
+
   // -- we use a replica, to place the 20 slices in one go, along the Z axis:
-  new G4PVReplica( "slice.physical",        // its name
-                   sliceLogical,            // its logical volume
-                   motherForSlicesLogical,  // its mother volume
-                   kZAxis,                  // axis of replication
-                   nSlices,                 // number of replica
-                   2*halfSliceZ);           // width of replica
-  
-  
+  new G4PVReplica("slice.physical",  // its name
+                  sliceLogical,  // its logical volume
+                  motherForSlicesLogical,  // its mother volume
+                  kZAxis,  // axis of replication
+                  nSlices,  // number of replica
+                  2 * halfSliceZ);  // width of replica
+
   // -- 3) place the sliced structure, using the concrete shield placement:
   //       ----------------------------------------------------------------
-  
+
   // -- get back the physical volume of the shield, using its name:
   // -- (note that we know we have only one physical volume with this name. If we had
   // -- several, we should loop by ourselves on the store which is of
   // -- std::vector<G4VPhysicalVolume*> type.)
-  G4VPhysicalVolume*
-    shieldPhysical = G4PhysicalVolumeStore::GetInstance()->GetVolume("shield.physical");
-  
+  G4VPhysicalVolume* shieldPhysical =
+    G4PhysicalVolumeStore::GetInstance()->GetVolume("shield.physical");
+
   // -- get back the translation
   // -- (we don't try to get back the rotation, we know we used nullptr):
   G4ThreeVector translation = shieldPhysical->GetObjectTranslation();
-  
-  // -- finally, we place the sliced structure:
-  new G4PVPlacement( nullptr,                           // no rotation
-                     translation,                       // translate as for the shield
-                     motherForSlicesLogical,            // its logical volume
-                     "motherForSlices.physical",        // its name
-                     logicalParallelWorld,              // its mother  volume
-                     false,                             // no boolean operation
-                     0);                                // copy number
 
+  // -- finally, we place the sliced structure:
+  new G4PVPlacement(nullptr,  // no rotation
+                    translation,  // translate as for the shield
+                    motherForSlicesLogical,  // its logical volume
+                    "motherForSlices.physical",  // its name
+                    logicalParallelWorld,  // its mother  volume
+                    false,  // no boolean operation
+                    0);  // copy number
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -158,10 +153,10 @@ void GB06ParallelWorldForSlices::Construct()
 void GB06ParallelWorldForSlices::ConstructSD()
 {
   // -- Create the biasing operator:
-  auto biasingOperator = new GB06BOptrSplitAndKillByImportance("neutron","parallelOptr");
+  auto biasingOperator = new GB06BOptrSplitAndKillByImportance("neutron", "parallelOptr");
   // -- Tell it it is active for this parallel geometry, passing the world
   // -- volume of this geometry :
-  biasingOperator->SetParallelWorld( GetWorld() );
+  biasingOperator->SetParallelWorld(GetWorld());
 
   // -- Attach to the logical volume where the biasing has to be applied:
   auto slice = G4LogicalVolumeStore::GetInstance()->GetVolume("slice.logical");
@@ -177,10 +172,8 @@ void GB06ParallelWorldForSlices::ConstructSD()
   G4int nReplica = slicePhysical->GetMultiplicity();
   // -- We use and fill the map we defined in the biasing operator:
   G4int importance = 1;
-  for ( G4int iReplica = 0 ; iReplica < nReplica ; iReplica++ )
-    {
-      (biasingOperator->GetImportanceMap())[ iReplica ] = importance;
-      importance *= 2;
-    }
-  
+  for (G4int iReplica = 0; iReplica < nReplica; iReplica++) {
+    (biasingOperator->GetImportanceMap())[iReplica] = importance;
+    importance *= 2;
+  }
 }

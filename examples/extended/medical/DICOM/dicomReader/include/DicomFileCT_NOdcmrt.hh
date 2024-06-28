@@ -26,105 +26,107 @@
 #ifndef DicomFileCT_NOdcmrt__HH
 #define DicomFileCT_NOdcmrt__HH
 
-#include "DicomVFile.hh"
 #include "DicomFileMgr.hh"
+#include "DicomVFile.hh"
+
 #include "G4ThreeVector.hh"
 
 class DicomFileCT_NOdcmrt : public DicomVFile
-{ 
-public:
-  DicomFileCT_NOdcmrt();
-  DicomFileCT_NOdcmrt(DcmDataset* dset);
-  ~DicomFileCT_NOdcmrt(){};
+{
+  public:
+    DicomFileCT_NOdcmrt();
+    DicomFileCT_NOdcmrt(DcmDataset* dset);
+    ~DicomFileCT_NOdcmrt() {};
 
-public:
-  virtual void ReadData();
+  public:
+    virtual void ReadData();
 
-  void operator+=( const DicomFileCT_NOdcmrt& rhs );
-  DicomFileCT_NOdcmrt operator+( const DicomFileCT_NOdcmrt& rhs );
-  // add two slices that have the same dimensions, merging them in Z
+    void operator+=(const DicomFileCT_NOdcmrt& rhs);
+    DicomFileCT_NOdcmrt operator+(const DicomFileCT_NOdcmrt& rhs);
+    // add two slices that have the same dimensions, merging them in Z
 
-  void BuildMaterials();
-  void DumpHeaderToTextFile(std::ofstream& fout);
-  void DumpMateIDsToTextFile(std::ofstream& fout);
-  void DumpDensitiesToTextFile(std::ofstream& fout);
-  void BuildStructureIDs();
-  void DumpStructureIDsToTextFile(std::ofstream& fout);
+    void BuildMaterials();
+    void DumpHeaderToTextFile(std::ofstream& fout);
+    void DumpMateIDsToTextFile(std::ofstream& fout);
+    void DumpDensitiesToTextFile(std::ofstream& fout);
+    void BuildStructureIDs();
+    void DumpStructureIDsToTextFile(std::ofstream& fout);
 
- // Get and set methods
-  G4int GetNoVoxelsX() const { return fNoVoxelsX; };
-  G4int GetNoVoxelsY() const { return fNoVoxelsY; };
-  G4int GetNoVoxelsZ() const { return fNoVoxelsZ; };
-  G4int GetNoVoxels() const { return fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ; };
-    
-  G4double GetMinX() const { return fMinX; };
-  G4double GetMinY() const { return fMinY; };
-  G4double GetMinZ() const { return fMinZ; };
-  G4double GetMaxX() const { return fMaxX; };
-  G4double GetMaxY() const { return fMaxY; };
-  G4double GetMaxZ() const { return fMaxZ; };
-  
-  void SetNoVoxelsX(const G4int& val) { fNoVoxelsX = val; }
-  void SetNoVoxelsY(const G4int& val) { fNoVoxelsY = val; }
-  void SetNoVoxelsZ(const G4int& val) { fNoVoxelsZ = val; }
-  
-  void SetMinX(const G4double& val) { fMinX = val; };
-  void SetMaxX(const G4double& val) { fMaxX = val; };
-  void SetMinY(const G4double& val) { fMinY = val; };
-  void SetMaxY(const G4double& val) { fMaxY = val; };
-  void SetMinZ(const G4double& val) { fMinZ = val; };
-  void SetMaxZ(const G4double& val) { fMaxZ = val; };
-    
-  const G4double& GetLocation() const { return fLocation; }
-  
-  void SetLocation(const G4double& val) { fLocation = val; }
+    // Get and set methods
+    G4int GetNoVoxelsX() const { return fNoVoxelsX; };
+    G4int GetNoVoxelsY() const { return fNoVoxelsY; };
+    G4int GetNoVoxelsZ() const { return fNoVoxelsZ; };
+    G4int GetNoVoxels() const { return fNoVoxelsX * fNoVoxelsY * fNoVoxelsZ; };
 
-  G4ThreeVector GetOrientationRows() const { return fOrientationRows; }
-  G4ThreeVector GetOrientationColumns() const { return fOrientationColumns; }
-  
-  void DumpToTextFile();
-  void DumpToBinaryFile();
+    G4double GetMinX() const { return fMinX; };
+    G4double GetMinY() const { return fMinY; };
+    G4double GetMinZ() const { return fMinZ; };
+    G4double GetMaxX() const { return fMaxX; };
+    G4double GetMaxY() const { return fMaxY; };
+    G4double GetMaxZ() const { return fMaxZ; };
 
-  void ReadDataFromFile();
+    void SetNoVoxelsX(const G4int& val) { fNoVoxelsX = val; }
+    void SetNoVoxelsY(const G4int& val) { fNoVoxelsY = val; }
+    void SetNoVoxelsZ(const G4int& val) { fNoVoxelsZ = val; }
 
-private:
-  template <typename T> inline bool CheckConsistency(const T&, const T&, G4String);
+    void SetMinX(const G4double& val) { fMinX = val; };
+    void SetMaxX(const G4double& val) { fMaxX = val; };
+    void SetMinY(const G4double& val) { fMinY = val; };
+    void SetMaxY(const G4double& val) { fMaxY = val; };
+    void SetMinZ(const G4double& val) { fMinZ = val; };
+    void SetMaxZ(const G4double& val) { fMaxZ = val; };
 
-  void ReadPixelData();
-  void Print( std::ostream& out );
-  
-private:
-  G4double fLocation;
-  G4double fBitAllocated;
-  G4double fRescaleSlope;
-  G4double fRescaleIntercept;
+    const G4double& GetLocation() const { return fLocation; }
 
-  G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;  // number of voxels in each dimensions
-  G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position of wall)
-  G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position of wall)
-  G4double fVoxelDimX,fVoxelDimY,fVoxelDimZ; // maximum extension of voxels (position of wall)
+    void SetLocation(const G4double& val) { fLocation = val; }
 
-  G4ThreeVector fOrientationRows;
-  G4ThreeVector fOrientationColumns;
-  
-  std::vector<int> fHounsfieldV;
-  std::vector<size_t> fMateIDs;
-  std::vector<G4double> fDensities;
-  std::vector<G4int> fStructure;
-  //  G4int* fStructure;
-  
-  DicomFileMgr* theFileMgr;
+    G4ThreeVector GetOrientationRows() const { return fOrientationRows; }
+    G4ThreeVector GetOrientationColumns() const { return fOrientationColumns; }
+
+    void DumpToTextFile();
+    void DumpToBinaryFile();
+
+    void ReadDataFromFile();
+
+  private:
+    template<typename T>
+    inline bool CheckConsistency(const T&, const T&, G4String);
+
+    void ReadPixelData();
+    void Print(std::ostream& out);
+
+  private:
+    G4double fLocation;
+    G4double fBitAllocated;
+    G4double fRescaleSlope;
+    G4double fRescaleIntercept;
+
+    G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;  // number of voxels in each dimensions
+    G4double fMinX, fMinY, fMinZ;  // minimum extension of voxels (position of wall)
+    G4double fMaxX, fMaxY, fMaxZ;  // maximum extension of voxels (position of wall)
+    G4double fVoxelDimX, fVoxelDimY, fVoxelDimZ;  // maximum extension of voxels (position of wall)
+
+    G4ThreeVector fOrientationRows;
+    G4ThreeVector fOrientationColumns;
+
+    std::vector<int> fHounsfieldV;
+    std::vector<size_t> fMateIDs;
+    std::vector<G4double> fDensities;
+    std::vector<G4int> fStructure;
+    //  G4int* fStructure;
+
+    DicomFileMgr* theFileMgr;
 };
 
 //============================================================================
-template <typename T>
-inline bool DicomFileCT_NOdcmrt::CheckConsistency(const T& val1, const T& val2, 
-                                                       G4String category) {
-  if(val1 != val2) {
-    G4Exception("DicomFileCT_NOdcmrtr::CheckConsistency", 
-                "Consistency Mismatch : Keeping previous value if nonzero",
-                JustWarning, category.c_str());
-        return false;
+template<typename T>
+inline bool DicomFileCT_NOdcmrt::CheckConsistency(const T& val1, const T& val2, G4String category)
+{
+  if (val1 != val2) {
+    G4Exception("DicomFileCT_NOdcmrtr::CheckConsistency",
+                "Consistency Mismatch : Keeping previous value if nonzero", JustWarning,
+                category.c_str());
+    return false;
   }
   return true;
 }

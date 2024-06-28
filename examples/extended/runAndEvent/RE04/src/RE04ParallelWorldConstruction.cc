@@ -28,29 +28,33 @@
 //
 //
 #include "RE04ParallelWorldConstruction.hh"
+
 #include "RE04ParallelWorldParam.hh"
 
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4PVParameterised.hh"
 #include "G4Material.hh"
-#include "G4SystemOfUnits.hh"    
+#include "G4PVParameterised.hh"
+#include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE04ParallelWorldConstruction
-::RE04ParallelWorldConstruction(G4String& parallelWorldName)
-:G4VUserParallelWorld(parallelWorldName),fConstructed(false)
-{;}
+RE04ParallelWorldConstruction ::RE04ParallelWorldConstruction(G4String& parallelWorldName)
+  : G4VUserParallelWorld(parallelWorldName), fConstructed(false)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04ParallelWorldConstruction::~RE04ParallelWorldConstruction()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04ParallelWorldConstruction::Construct()
 {
-  if(fConstructed) return;
+  if (fConstructed) return;
   fConstructed = true;
 
   //
@@ -67,28 +71,24 @@ void RE04ParallelWorldConstruction::Construct()
   //
   // parallel world placement box
   //
-  G4VSolid* paraBox = new G4Box("paraBox",5.0*cm,30.0*cm,5.0*cm);
-  G4LogicalVolume* paraBoxLogical = new G4LogicalVolume(paraBox,water,
-                                                        "paraBox");
-  new G4PVPlacement(0,G4ThreeVector(-25.0*cm,0.,0.),paraBoxLogical,
-                    "paraBox",worldLogical,false,0);
+  G4VSolid* paraBox = new G4Box("paraBox", 5.0 * cm, 30.0 * cm, 5.0 * cm);
+  G4LogicalVolume* paraBoxLogical = new G4LogicalVolume(paraBox, water, "paraBox");
+  new G4PVPlacement(0, G4ThreeVector(-25.0 * cm, 0., 0.), paraBoxLogical, "paraBox", worldLogical,
+                    false, 0);
 
   //
   // mother of parallel world parameterized volumes
   //
-  G4VSolid* paraMom = new G4Box("paraMom",20.0*cm,40.0*cm,20.0*cm);
-  G4LogicalVolume* paraMomLogical = new G4LogicalVolume(paraMom,0,"paraMom");
-  new G4PVPlacement(0,G4ThreeVector(10.0*cm,0.,0.),paraMomLogical,"paraMom",
-                    worldLogical,false,0);
+  G4VSolid* paraMom = new G4Box("paraMom", 20.0 * cm, 40.0 * cm, 20.0 * cm);
+  G4LogicalVolume* paraMomLogical = new G4LogicalVolume(paraMom, 0, "paraMom");
+  new G4PVPlacement(0, G4ThreeVector(10.0 * cm, 0., 0.), paraMomLogical, "paraMom", worldLogical,
+                    false, 0);
 
   //
   // parallel world parameterized volumes
   //
-  G4VSolid* paraPara = new G4Box("paraPara",5.0*cm,15.0*cm,10.0*cm);
-  G4LogicalVolume* paraParaLogical = new G4LogicalVolume(paraPara,water,
-                                                         "paraPara");
+  G4VSolid* paraPara = new G4Box("paraPara", 5.0 * cm, 15.0 * cm, 10.0 * cm);
+  G4LogicalVolume* paraParaLogical = new G4LogicalVolume(paraPara, water, "paraPara");
   RE04ParallelWorldParam* param = new RE04ParallelWorldParam();
-  new G4PVParameterised("paraPara",paraParaLogical,paraMomLogical,
-                           kXAxis, 2, param);
-
+  new G4PVParameterised("paraPara", paraParaLogical, paraMomLogical, kXAxis, 2, param);
 }

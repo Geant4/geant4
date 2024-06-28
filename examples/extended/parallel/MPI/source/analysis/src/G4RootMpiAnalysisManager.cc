@@ -27,10 +27,11 @@
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)
 
 #include "G4RootMpiAnalysisManager.hh"
+
+#include "G4AnalysisUtilities.hh"
 #include "G4RootMpiNtupleFileManager.hh"
 #include "G4RootMpiNtupleManager.hh"
 #include "G4RootMpiPNtupleManager.hh"
-#include "G4AnalysisUtilities.hh"
 
 #include <tools/impi>
 
@@ -43,8 +44,7 @@ G4RootMpiAnalysisManager* G4RootMpiAnalysisManager::Instance()
 }
 
 //_____________________________________________________________________________
-G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool /*isMaster*/)
- : G4RootAnalysisManager()
+G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool /*isMaster*/) : G4RootAnalysisManager()
 {
   fgInstance = this;
 
@@ -69,9 +69,8 @@ G4RootMpiAnalysisManager::~G4RootMpiAnalysisManager()
 //
 
 //_____________________________________________________________________________
-void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi, 
-                                             G4int mpiRank, G4int mpiSize,
-                                             G4int nofNtupleFiles)
+void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi, G4int mpiRank, G4int mpiSize,
+                                                   G4int nofNtupleFiles)
 {
   // G4cout << "SetMpiNtupleMerging: "
   //        << impi << ", "
@@ -83,20 +82,20 @@ void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi,
     ->SetMpiNtupleMerging(impi, mpiRank, mpiSize, nofNtupleFiles);
 }
 
-// 
+//
 // protected methods
 //
 
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
-  if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kNone )  {
+  if (fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kNone) {
     return G4ToolsAnalysisManager::OpenFileImpl(fileName);
   }
 
   // Create ntuple manager(s)
   // and set it to base class which takes then their ownership
-  if ( ! fVNtupleManager ) {
+  if (!fVNtupleManager) {
     SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
   }
 
@@ -110,12 +109,11 @@ G4bool G4RootMpiAnalysisManager::OpenFileImpl(const G4String& fileName)
   result &= fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
 
   return result;
-}  
+}
 
 //_____________________________________________________________________________
-G4bool G4RootMpiAnalysisManager::WriteImpl() 
+G4bool G4RootMpiAnalysisManager::WriteImpl()
 {
-
   auto result = true;
 
   // Call base class method
@@ -123,7 +121,7 @@ G4bool G4RootMpiAnalysisManager::WriteImpl()
 
   // Write file also on Slave
   // (skipped in base class)
-  if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave )  {
+  if (fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave) {
     // write all open files
     result &= fFileManager->WriteFiles();
   }
@@ -136,8 +134,8 @@ G4bool G4RootMpiAnalysisManager::WriteImpl()
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::CloseFileImpl(G4bool reset)
 {
-// Cannot call base class function, as we need to close files also
-// on slave; an option in the base class can be added for this in future
+  // Cannot call base class function, as we need to close files also
+  // on slave; an option in the base class can be added for this in future
 
   Message(kVL4, "close", "files");
 
@@ -150,21 +148,21 @@ G4bool G4RootMpiAnalysisManager::CloseFileImpl(G4bool reset)
   // - the conditoon used in the base class is commented out
   // if ( (fVNtupleFileManager == nullptr) ||
   //      (fVNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave) )  {
-    if ( ! fVFileManager->CloseFiles() ) {
-      Warn("Closing files failed", fkClass, "CloseFileImpl");
-      result = false;
-    }
+  if (!fVFileManager->CloseFiles()) {
+    Warn("Closing files failed", fkClass, "CloseFileImpl");
+    result = false;
+  }
   // }
 
   // delete empty files
-  if ( ! fVFileManager->DeleteEmptyFiles() ) {
+  if (!fVFileManager->DeleteEmptyFiles()) {
     Warn("Deleting empty files failed", fkClass, "CloseFileImpl");
     result = false;
   }
 
   // reset histograms
-  if ( reset ) {
-    if ( ! Reset() ) {
+  if (reset) {
+    if (!Reset()) {
       Warn("Resetting data failed", fkClass, "CloseFileImpl");
       result = false;
     }

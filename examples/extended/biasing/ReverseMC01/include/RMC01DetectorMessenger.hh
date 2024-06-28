@@ -47,8 +47,8 @@
 #ifndef RMC01DetectorMessenger_h
 #define RMC01DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class RMC01DetectorConstruction;
 class G4UIdirectory;
@@ -59,27 +59,26 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RMC01DetectorMessenger: public G4UImessenger
+class RMC01DetectorMessenger : public G4UImessenger
 {
   public:
-    RMC01DetectorMessenger(RMC01DetectorConstruction* );
-    
+    RMC01DetectorMessenger(RMC01DetectorConstruction*);
+
     virtual ~RMC01DetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
     RMC01DetectorConstruction* fTheDetector;
-    
-    G4UIdirectory*             fGeneralDir;
-    G4UIdirectory*             fDetDir;
-    
-    G4UIcmdWithADoubleAndUnit*   fSetSensitiveVolumeHeightCmd;
-    G4UIcmdWithADoubleAndUnit*   fSetSensitiveVolumeRadiusCmd;
-    G4UIcmdWithADoubleAndUnit*   fSetShieldingThicknessCmd;
+
+    G4UIdirectory* fGeneralDir;
+    G4UIdirectory* fDetDir;
+
+    G4UIcmdWithADoubleAndUnit* fSetSensitiveVolumeHeightCmd;
+    G4UIcmdWithADoubleAndUnit* fSetSensitiveVolumeRadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fSetShieldingThicknessCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -6,10 +6,30 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-21 Gabriele Cosmo (track-V11-01-02)
+## 2024-06-01 Makoto Asai (track-V11-02-03)
+- Add optional copy of touchables when copy constructing G4Track to support
+  subevent parallelism
+  - Co-working with event-V11-02-04, run-V11-02-06.
+
+## 2024-05-03 Ben Morgan (track-V11-02-02)
+- Remove use of no longer supported TiMemory.
+
+## 2024-04-21 Gabriele Cosmo (track-V11-02-01)
 - Fixed compilation error in G4VParticleChange on Windows VC++ with
   C++20 Standard enabled.
   Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+## 2024-04-12 Vladimir Ivanchenko (track-V11-02-00)
+- G4Track, G4Step, G4StepPoint - added keyword "inline" to all inline method
+    declaration, improve comments
+- G4Step - move methods to compute delta energy and momentum to inline removing
+    G4Exception but improving comments to these methods, removed G4ThreadLocal
+    variable from this container
+- G4VParticleChange - improve layout of variables
+- G4ParticleChangeForGamma, G4ParticleChangeForLoss - reserve vector of
+    secondaries
+- This MR provides identical results, the main purpose - more easy reading of
+  class headers, expected CPU speed-up likely tiny.
 
 ## 2023-09-12 Makoto Asai (track-V11-01-01)
 - Adding fSuspendAndWait to G4TrackStatus.

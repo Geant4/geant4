@@ -37,18 +37,16 @@ class G4Track;
 
 class StackingAction : public G4UserStackingAction
 {
-public:
+  public:
+    StackingAction();
+    virtual ~StackingAction();
 
-  StackingAction();
-  virtual ~StackingAction();
-   
-  void SetKillStatus(G4bool value);
-    
-  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
-private:
-  G4bool fKillSecondary;
+    void SetKillStatus(G4bool value);
 
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+
+  private:
+    G4bool fKillSecondary;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

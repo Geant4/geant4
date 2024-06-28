@@ -159,6 +159,8 @@ private:
   std::vector<G4double> eEdummyVec_Au;
   std::vector<G4double> eEdummyVec_H2O;
 
+  G4Material* fpBaseWater;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

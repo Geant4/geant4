@@ -36,14 +36,14 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4Material.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4Material.hh"
 
 class G4Tubs;
 class G4LogicalVolume;
@@ -55,51 +55,48 @@ class G4VModularPhysicsList;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
 
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
+    virtual G4VPhysicalVolume* Construct();
 
-  virtual G4VPhysicalVolume* Construct();
+    void SetWorldMaterial(const G4String&);
+    void SetTargetMaterial(const G4String&);
 
-  void SetWorldMaterial(const G4String&);
-  void SetTargetMaterial(const G4String&);
+    void SetTargetRadius(G4double val);
+    void SetTargetLength(G4double val);
 
-  void SetTargetRadius(G4double val);
-  void SetTargetLength(G4double val);
+    const G4Material* GetTargetMaterial() const { return fTargetMaterial; }
+    G4VModularPhysicsList* GetPhysicsList() { return fPhysList; }
+    void SetPhysicsList(G4VModularPhysicsList* ptr) { fPhysList = ptr; }
 
-  const G4Material* GetTargetMaterial() const { return fTargetMaterial; }
-  G4VModularPhysicsList* GetPhysicsList() { return fPhysList; }
-  void SetPhysicsList(G4VModularPhysicsList* ptr) { fPhysList = ptr; }
+  private:
+    void ComputeGeomParameters();
 
-private:
+    DetectorConstruction& operator=(const DetectorConstruction& right);
+    DetectorConstruction(const DetectorConstruction&);
 
-  void ComputeGeomParameters();
+    G4double fRadius;
+    G4double fLength;
+    G4double fWorldR;
+    G4double fWorldZ;
 
-  DetectorConstruction & operator=(const DetectorConstruction &right);
-  DetectorConstruction(const DetectorConstruction&);
+    G4Material* fTargetMaterial;
+    G4Material* fWorldMaterial;
 
-  G4double fRadius;
-  G4double fLength;
-  G4double fWorldR;
-  G4double fWorldZ;
+    G4Tubs* fSolidW;
+    G4Tubs* fSolidA;
 
-  G4Material*  fTargetMaterial;
-  G4Material*  fWorldMaterial;
+    G4LogicalVolume* fLogicTarget;
+    G4LogicalVolume* fLogicWorld;
 
-  G4Tubs* fSolidW;
-  G4Tubs* fSolidA;
+    G4VPhysicalVolume* fPhysWorld;
 
-  G4LogicalVolume* fLogicTarget;
-  G4LogicalVolume* fLogicWorld;
-
-  G4VPhysicalVolume* fPhysWorld;
-
-  DetectorMessenger* fDetectorMessenger;
-  G4VModularPhysicsList* fPhysList;
+    DetectorMessenger* fDetectorMessenger;
+    G4VModularPhysicsList* fPhysList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif
-

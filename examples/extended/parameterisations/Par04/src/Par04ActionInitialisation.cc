@@ -24,18 +24,18 @@
 // ********************************************************************
 //
 #include "Par04ActionInitialisation.hh"
-#include <G4VUserActionInitialization.hh>  // for G4VUserActionInitialization
-#include "Par04EventAction.hh"             // for Par04EventAction
+
+#include "Par04EventAction.hh"  // for Par04EventAction
 #include "Par04PrimaryGeneratorAction.hh"  // for Par04PrimaryGeneratorAction
-#include "Par04RunAction.hh"               // for Par04RunAction
+#include "Par04RunAction.hh"  // for Par04RunAction
+
+#include <G4VUserActionInitialization.hh>  // for G4VUserActionInitialization
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04ActionInitialisation::Par04ActionInitialisation(Par04DetectorConstruction* aDetector,
                                                      Par04ParallelFullWorld* aParallel)
-  : G4VUserActionInitialization()
-  , fDetector(aDetector)
-  , fParallel(aParallel)
+  : G4VUserActionInitialization(), fDetector(aDetector), fParallel(aParallel)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

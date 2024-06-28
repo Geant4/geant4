@@ -33,8 +33,8 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "G4Run.hh"
 #include "G4AnalysisManager.hh"
+#include "G4Run.hh"
 #include "globals.hh"
 
 class PrimaryGeneratorAction;
@@ -44,38 +44,39 @@ class DetectorConstruction;
 
 class Run : public G4Run
 {
-public:
-  Run(DetectorConstruction*, PrimaryGeneratorAction*);
-  ~Run();
-    
-  virtual void Merge(const G4Run*);
-  void EndOfRun(G4double binLength);
+  public:
+    Run(DetectorConstruction*, PrimaryGeneratorAction*);
+    ~Run();
 
-  void FillHisto(G4int id, G4double x, G4double weight = 1.0);
-           
-  inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose; }
-  inline G4int GetVerbose() const       { return fVerboseLevel; }
-  inline G4double GetOffsetX() const    { return fOffsetX; }
+    virtual void Merge(const G4Run*);
+    void EndOfRun(G4double binLength);
 
-  inline void AddProjRange (G4double x) { fProjRange += x; 
-                                          fProjRange2 += x*x; };
+    void FillHisto(G4int id, G4double x, G4double weight = 1.0);
 
-private:
-  
-  DetectorConstruction*   fDetector;
-  PrimaryGeneratorAction* fPrimary;    
-  G4AnalysisManager*      fAnalysisManager;
+    inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose; }
+    inline G4int GetVerbose() const { return fVerboseLevel; }
+    inline G4double GetOffsetX() const { return fOffsetX; }
 
-  G4int                   fNevt;
+    inline void AddProjRange(G4double x)
+    {
+      fProjRange += x;
+      fProjRange2 += x * x;
+    };
 
-  G4double                fOffsetX;
-  G4double                fProjRange; 
-  G4double                fProjRange2;
+  private:
+    DetectorConstruction* fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    G4AnalysisManager* fAnalysisManager;
 
-  G4int                   fVerboseLevel;
+    G4int fNevt;
+
+    G4double fOffsetX;
+    G4double fProjRange;
+    G4double fProjRange2;
+
+    G4int fVerboseLevel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

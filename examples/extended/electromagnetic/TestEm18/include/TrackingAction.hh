@@ -40,13 +40,13 @@ class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
     TrackingAction(RunAction*);
-   ~TrackingAction() override = default;
+    ~TrackingAction() override = default;
 
-    void  PreUserTrackingAction(const G4Track*) override;
+    void PreUserTrackingAction(const G4Track*) override;
     void PostUserTrackingAction(const G4Track*) override;
 
   private:

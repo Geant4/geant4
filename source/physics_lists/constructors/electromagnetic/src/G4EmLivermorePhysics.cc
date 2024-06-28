@@ -132,6 +132,7 @@ G4EmLivermorePhysics::G4EmLivermorePhysics(G4int ver, const G4String& pname)
   param->SetUseICRU90Data(true);
   param->SetFluctuationType(fUrbanFluctuation);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
+  param->SetPositronAtRestModelType(fAllisonPositronium);
   SetPhysicsType(bElectromagnetic);
 }
 

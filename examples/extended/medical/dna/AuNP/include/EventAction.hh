@@ -43,14 +43,14 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction();
-   ~EventAction();
+    ~EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
-    
-    void AddEnergy      (G4double edep)   {fEnergyDeposit  += edep;};
-        
+    virtual void EndOfEventAction(const G4Event*);
+
+    void AddEnergy(G4double edep) { fEnergyDeposit += edep; };
+
   private:
     G4double fEnergyDeposit;
 };
@@ -58,5 +58,3 @@ class EventAction : public G4UserEventAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

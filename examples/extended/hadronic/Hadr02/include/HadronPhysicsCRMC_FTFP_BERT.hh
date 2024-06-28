@@ -32,7 +32,7 @@
 //
 // Author:    2018 Alberto Ribon
 //
-// This is a variant of HadronPhysicsFTFP_BERT whereby CRMC is used 
+// This is a variant of HadronPhysicsFTFP_BERT whereby CRMC is used
 // for modeling final-state for pion- , kaon- , proton- and neutron-
 // nuclear inelastic interactions at very high energies.
 // For other hadron projectile types (e.g. hyperons, antinucleons and
@@ -51,16 +51,16 @@
 
 #include "G4HadronPhysicsFTFP_BERT.hh"
 
-
-class HadronPhysicsCRMC_FTFP_BERT : public G4HadronPhysicsFTFP_BERT {
-  public: 
-    HadronPhysicsCRMC_FTFP_BERT( G4int verbose = 1 );
-    HadronPhysicsCRMC_FTFP_BERT( const G4String& name, G4bool quasiElastic = false );
+class HadronPhysicsCRMC_FTFP_BERT : public G4HadronPhysicsFTFP_BERT
+{
+  public:
+    HadronPhysicsCRMC_FTFP_BERT(G4int verbose = 1);
+    HadronPhysicsCRMC_FTFP_BERT(const G4String& name, G4bool quasiElastic = false);
     ~HadronPhysicsCRMC_FTFP_BERT() override;
 
     // copy constructor and hide assignment operator
-    HadronPhysicsCRMC_FTFP_BERT( HadronPhysicsCRMC_FTFP_BERT & ) = delete;
-    HadronPhysicsCRMC_FTFP_BERT & operator=( const HadronPhysicsCRMC_FTFP_BERT &right ) = delete;
+    HadronPhysicsCRMC_FTFP_BERT(HadronPhysicsCRMC_FTFP_BERT&) = delete;
+    HadronPhysicsCRMC_FTFP_BERT& operator=(const HadronPhysicsCRMC_FTFP_BERT& right) = delete;
 
   protected:
     virtual void Neutron() override;
@@ -69,8 +69,9 @@ class HadronPhysicsCRMC_FTFP_BERT : public G4HadronPhysicsFTFP_BERT {
     virtual void Kaon() override;
 
   private:
-    G4int fModel;                                            // 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
-    static const std::array< std::string, 13 > fModelNames;  // 7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
+    G4int fModel;  // 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
+    static const std::array<std::string, 13>
+      fModelNames;  // 7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
     G4double fMinCRMC;
     G4double fMaxFTFP;
 };

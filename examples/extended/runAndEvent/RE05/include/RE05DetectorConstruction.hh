@@ -45,19 +45,19 @@ class RE05DetectorConstruction : public G4VUserDetectorConstruction
     virtual ~RE05DetectorConstruction();
 
   public:
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
   private:
-     void DefineMaterials();
+    void DefineMaterials();
 
 #include "RE05DetectorParameterDef.hh"
 
-  G4Material* fAir;
-  G4Material* fAr;
-  G4Material* fSilicon;
-  G4Material* fScinti;
-  G4Material* fLead;
+    G4Material* fAir;
+    G4Material* fAr;
+    G4Material* fSilicon;
+    G4Material* fScinti;
+    G4Material* fLead;
 };
 
 #endif

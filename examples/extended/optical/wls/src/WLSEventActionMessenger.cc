@@ -48,13 +48,15 @@ WLSEventActionMessenger::WLSEventActionMessenger(WLSEventAction* eventaction)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSEventActionMessenger::~WLSEventActionMessenger() { delete fSetVerboseCmd; }
+WLSEventActionMessenger::~WLSEventActionMessenger()
+{
+  delete fSetVerboseCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSEventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
+void WLSEventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fSetVerboseCmd)
+  if (command == fSetVerboseCmd)
     fEventAction->SetEventVerbose(fSetVerboseCmd->GetNewIntValue(newValue));
 }

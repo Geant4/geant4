@@ -28,7 +28,9 @@
 /// \brief Implementation of the ExTGDetectorConstructionWithCuts class
 
 #include "ExTGDetectorConstructionWithCuts.hh"
+
 #include "ExTGRCDetectorBuilder.hh"
+
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgrMessenger.hh"
 
@@ -47,18 +49,18 @@ ExTGDetectorConstructionWithCuts::~ExTGDetectorConstructionWithCuts()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* ExTGDetectorConstructionWithCuts::Construct()
 {
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Define one or several text files containing the geometry description
-  //------------------------------------------------ 
+  //------------------------------------------------
   G4String filename = "g4geom_cutsPerRegion.txt";
   G4tgbVolumeMgr* volmgr = G4tgbVolumeMgr::GetInstance();
   volmgr->AddTextFile(filename);
 
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Use your own detector builder, that will invoke your own line processor
-  //------------------------------------------------ 
+  //------------------------------------------------
   ExTGRCDetectorBuilder* gtb = new ExTGRCDetectorBuilder;
-  volmgr->SetDetectorBuilder( gtb );
+  volmgr->SetDetectorBuilder(gtb);
 
   const G4tgrVolume* tgrVoltop = gtb->ReadDetector();
   G4VPhysicalVolume* physiWorld = gtb->ConstructDetector(tgrVoltop);

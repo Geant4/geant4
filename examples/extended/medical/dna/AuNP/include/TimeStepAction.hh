@@ -38,39 +38,38 @@
 #ifndef ITACTION_H
 #define ITACTION_H
 
-#include "G4UserTimeStepAction.hh"
-#include "G4MoleculeIterator.hh"
 #include "G4MolecularConfiguration.hh"
+#include "G4MoleculeIterator.hh"
 #include "G4MoleculeTable.hh"
+#include "G4UserTimeStepAction.hh"
 
 class DetectorConstruction;
 class G4Molecule;
 
 class TimeStepAction : public G4UserTimeStepAction
 {
-public:
-  TimeStepAction();
-  virtual ~TimeStepAction();
-  TimeStepAction(const TimeStepAction& other);
-  TimeStepAction& operator=(const TimeStepAction& other);
+  public:
+    TimeStepAction();
+    virtual ~TimeStepAction();
+    TimeStepAction(const TimeStepAction& other);
+    TimeStepAction& operator=(const TimeStepAction& other);
 
-  virtual void StartProcessing(){;}
+    virtual void StartProcessing() { ; }
 
-  virtual void UserPreTimeStepAction();
-  virtual void UserPostTimeStepAction(){;}
+    virtual void UserPreTimeStepAction();
+    virtual void UserPostTimeStepAction() { ; }
 
-  virtual void UserReactionAction(const G4Track& /*trackA*/,
-                                  const G4Track& /*trackB*/,
-                                  const std::vector<G4Track*>* /*products*/);
+    virtual void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                                    const std::vector<G4Track*>* /*products*/);
 
-  virtual void EndProcessing(){;}
+    virtual void EndProcessing() { ; }
 
-  void Save(G4MolecularConfiguration* molconf);
-  void SaveMoleculeInfo(G4Track* track, G4int molID, const G4String& 
-                                                    /*moleculeName*/);
+    void Save(G4MolecularConfiguration* molconf);
+    void SaveMoleculeInfo(G4Track* track, G4int molID, const G4String&
+                          /*moleculeName*/);
 
   private:
     const DetectorConstruction* fpDetector;
 };
 
-#endif // ITACTION_H
+#endif  // ITACTION_H

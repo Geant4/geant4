@@ -281,7 +281,8 @@ private:
 
   G4bool all_tables_are_built{false};
   G4bool startInitialisation{false};
-  G4bool isMaster{true};
+  G4bool resetParam{true};
+  G4bool isMaster{false};
 
   std::vector<G4VEnergyLossProcess*> loss_vector;
   std::vector<PD> part_vector;

@@ -43,8 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetSD::WLSPhotonDetSD(G4String name)
-  : G4VSensitiveDetector(name)
+WLSPhotonDetSD::WLSPhotonDetSD(G4String name) : G4VSensitiveDetector(name)
 {
   collectionName.insert("PhotonDetHitCollection");
 }
@@ -56,10 +55,8 @@ void WLSPhotonDetSD::Initialize(G4HCofThisEvent* HCE)
   fPhotonDetHitCollection =
     new WLSPhotonDetHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-  if(fHCID < 0)
-  {
-    fHCID =
-      G4SDManager::GetSDMpointer()->GetCollectionID(fPhotonDetHitCollection);
+  if (fHCID < 0) {
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fPhotonDetHitCollection);
   }
   HCE->AddHitsCollection(fHCID, fPhotonDetHitCollection);
 }
@@ -68,33 +65,29 @@ void WLSPhotonDetSD::Initialize(G4HCofThisEvent* HCE)
 
 G4bool WLSPhotonDetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  if(!aStep)
-    return false;
+  if (!aStep) return false;
   G4Track* theTrack = aStep->GetTrack();
 
   // Need to know if this is an optical photon
-  if(theTrack->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition())
-  {
+  if (theTrack->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition()) {
     return false;
   }
 
   // Find out information regarding the hit
   G4StepPoint* thePostPoint = aStep->GetPostStepPoint();
 
-  auto trackInformation =
-    (WLSUserTrackInformation*) theTrack->GetUserInformation();
+  auto trackInformation = (WLSUserTrackInformation*)theTrack->GetUserInformation();
 
-  auto theTouchable = (G4TouchableHistory*) (thePostPoint->GetTouchable());
+  auto theTouchable = (G4TouchableHistory*)(thePostPoint->GetTouchable());
 
-  G4ThreeVector photonExit   = trackInformation->GetExitPosition();
+  G4ThreeVector photonExit = trackInformation->GetExitPosition();
   G4ThreeVector photonArrive = thePostPoint->GetPosition();
-  G4double arrivalTime       = theTrack->GetGlobalTime();
-  G4double energy            = theTrack->GetTotalEnergy();
+  G4double arrivalTime = theTrack->GetGlobalTime();
+  G4double energy = theTrack->GetTotalEnergy();
 
   // Convert the global coordinate for arriving photons into
   // the local coordinate of the detector
-  photonArrive =
-    theTouchable->GetHistory()->GetTopTransform().TransformPoint(photonArrive);
+  photonArrive = theTouchable->GetHistory()->GetTopTransform().TransformPoint(photonArrive);
 
   // Creating the hit and add it to the collection
   fPhotonDetHitCollection->insert(
@@ -105,12 +98,11 @@ G4bool WLSPhotonDetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 void WLSPhotonDetSD::EndOfEvent(G4HCofThisEvent*)
 {
-  if ( verboseLevel>1 ) {
-     G4int nofHits = fPhotonDetHitCollection->entries();
-     G4cout << G4endl
-            << "-------->Hits Collection: in this event there are " << nofHits
-            << " hits in the photon detector: " << G4endl;
-     for ( G4int i=0; i<nofHits; i++ ) (*fPhotonDetHitCollection)[i]->Print();
+  if (verboseLevel > 1) {
+    G4int nofHits = fPhotonDetHitCollection->entries();
+    G4cout << G4endl << "-------->Hits Collection: in this event there are " << nofHits
+           << " hits in the photon detector: " << G4endl;
+    for (G4int i = 0; i < nofHits; i++)
+      (*fPhotonDetHitCollection)[i]->Print();
   }
 }
-

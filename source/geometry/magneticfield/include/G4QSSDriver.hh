@@ -27,10 +27,10 @@
 //
 // QSS Interpolator Driver
 
-// Authors:  Lucio Santi, Rodrigo Castro - 2018-2021
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
 // --------------------------------------------------------------------
 #ifndef G4QSSDriver_HH
-#define G4QSSDriver_HH
+#define G4QSSDriver_HH 1
 
 #include "G4InterpolationDriver.hh"
 #include "G4QSSMessenger.hh"

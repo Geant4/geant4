@@ -29,49 +29,44 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
+
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager() :
-    fFileName("splitting")
+HistoManager::HistoManager() : fFileName("splitting")
 {
-    Book();
+  Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager()
-{
-}
+HistoManager::~HistoManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::Book()
 {
-    // Create or get analysis manager
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    analysisManager->SetFileName(fFileName);
-    analysisManager->SetVerboseLevel(1);
-    analysisManager->SetActivation(true);
+  // Create or get analysis manager
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetFileName(fFileName);
+  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetActivation(true);
 
-    const G4int kMaxHisto = 2;
-    const G4String id[] = {"0", "1"};
+  const G4int kMaxHisto = 2;
+  const G4String id[] = {"0", "1"};
 
-    const G4String title[] = {"Energy deposit in the target (eV)",
-                            "Cluster size"};
+  const G4String title[] = {"Energy deposit in the target (eV)", "Cluster size"};
 
-    G4int nbins = 100;
-    G4double vmin = 0.;
-    G4double vmax = 100.;
+  G4int nbins = 100;
+  G4double vmin = 0.;
+  G4double vmax = 100.;
 
-    // Create all histograms as inactivated 
-    for (G4int k = 0; k < kMaxHisto; k++)
-    {
-        G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-        analysisManager->SetH1Activation(ih, false);
-    }
+  // Create all histograms as inactivated
+  for (G4int k = 0; k < kMaxHisto; k++) {
+    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    analysisManager->SetH1Activation(ih, false);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

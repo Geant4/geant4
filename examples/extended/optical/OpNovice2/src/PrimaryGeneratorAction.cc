@@ -37,20 +37,19 @@
 
 #include "G4Event.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
-  , fParticleGun(nullptr)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(nullptr)
 {
   G4int n_particle = 1;
-  fParticleGun     = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   // create a messenger for this class
   fGunMessenger = new PrimaryGeneratorMessenger(this);
@@ -60,8 +59,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleTime(0.0 * ns);
-  fParticleGun->SetParticlePosition(
-    G4ThreeVector(0.0 * cm, 0.0 * cm, 0.0 * cm));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0 * cm, 0.0 * cm, 0.0 * cm));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
   fParticleGun->SetParticleEnergy(500.0 * keV);
 }
@@ -78,20 +76,17 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(fRandomDirection)
-  {
+  if (fRandomDirection) {
     G4double theta = CLHEP::halfpi * G4UniformRand();
-    G4double phi   = CLHEP::twopi * G4UniformRand();
-    G4double x     = std::cos(theta);
-    G4double y     = std::sin(theta) * std::sin(phi);
-    G4double z     = std::sin(theta) * std::cos(phi);
+    G4double phi = CLHEP::twopi * G4UniformRand();
+    G4double x = std::cos(theta);
+    G4double y = std::sin(theta) * std::sin(phi);
+    G4double z = std::sin(theta) * std::cos(phi);
     G4ThreeVector dir(x, y, z);
     fParticleGun->SetParticleMomentumDirection(dir);
   }
-  if(fParticleGun->GetParticleDefinition() ==
-     G4OpticalPhoton::OpticalPhotonDefinition())
-  {
-    if(fPolarized)
+  if (fParticleGun->GetParticleDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
+    if (fPolarized)
       SetOptPhotonPolar(fPolarization);
     else
       SetOptPhotonPolar();
@@ -111,31 +106,26 @@ void PrimaryGeneratorAction::SetOptPhotonPolar()
 
 void PrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
 {
-  if(fParticleGun->GetParticleDefinition() !=
-     G4OpticalPhoton::OpticalPhotonDefinition())
-  {
+  if (fParticleGun->GetParticleDefinition() != G4OpticalPhoton::OpticalPhotonDefinition()) {
     G4ExceptionDescription ed;
     ed << "The particleGun is not an opticalphoton.";
-    G4Exception("PrimaryGeneratorAction::SetOptPhotonPolar", "OpNovice2_004",
-                JustWarning, ed);
+    G4Exception("PrimaryGeneratorAction::SetOptPhotonPolar", "OpNovice2_004", JustWarning, ed);
     return;
   }
 
-  fPolarized    = true;
+  fPolarized = true;
   fPolarization = angle;
 
   G4ThreeVector normal(1., 0., 0.);
   G4ThreeVector kphoton = fParticleGun->GetParticleMomentumDirection();
   G4ThreeVector product = normal.cross(kphoton);
-  G4double modul2       = product * product;
+  G4double modul2 = product * product;
 
   G4ThreeVector e_perpend(0., 0., 1.);
-  if(modul2 > 0.)
-    e_perpend = (1. / std::sqrt(modul2)) * product;
+  if (modul2 > 0.) e_perpend = (1. / std::sqrt(modul2)) * product;
   G4ThreeVector e_paralle = e_perpend.cross(kphoton);
 
-  G4ThreeVector polar =
-    std::cos(angle) * e_paralle + std::sin(angle) * e_perpend;
+  G4ThreeVector polar = std::cos(angle) * e_paralle + std::sin(angle) * e_perpend;
   fParticleGun->SetParticlePolarization(polar);
 }
 

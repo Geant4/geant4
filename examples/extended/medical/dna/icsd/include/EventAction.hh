@@ -44,17 +44,17 @@ class RunAction;
 
 class EventAction : public G4UserEventAction
 {
-public:
+  public:
     EventAction();
-   ~EventAction();
+    ~EventAction();
 
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
-    G4int GetEventIn() const     { return fEventIn;   }
+    G4int GetEventIn() const { return fEventIn; }
     void AddEventIn(G4int value) { fEventIn += value; }
 
-private:
+  private:
     G4int fEventIn;
 };
 

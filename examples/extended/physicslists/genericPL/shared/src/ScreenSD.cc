@@ -30,24 +30,20 @@
 
 #include "ScreenSD.hh"
 
-#include "G4VTouchable.hh"
-#include "G4Step.hh"
-#include "G4ios.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4AnalysisManager.hh"
-
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VProcess.hh"
+#include "G4VTouchable.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ScreenSD::ScreenSD(const G4String& name)
- : G4VSensitiveDetector(name)
-{}
+ScreenSD::ScreenSD(const G4String& name) : G4VSensitiveDetector(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ScreenSD::Initialize(G4HCofThisEvent* /*hce*/)
-{}
+void ScreenSD::Initialize(G4HCofThisEvent* /*hce*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,13 +62,13 @@ G4bool ScreenSD::ProcessHits(G4Step* step, G4TouchableHistory* /*history*/)
   G4StepPoint* preStepPoint = step->GetPreStepPoint();
 
   // Ekin:
-  G4double Ekin =  preStepPoint->GetKineticEnergy();
+  G4double Ekin = preStepPoint->GetKineticEnergy();
 
   // Obtain local coordinates:
   const G4VTouchable* touchable = preStepPoint->GetTouchable();
   G4ThreeVector globalPosition = preStepPoint->GetPosition();
-  G4ThreeVector localPosition
-    = touchable->GetHistory()->GetTopTransform().TransformPoint(globalPosition);
+  G4ThreeVector localPosition =
+    touchable->GetHistory()->GetTopTransform().TransformPoint(globalPosition);
   // // Example for obtaining the local direction:
   // G4ThreeVector globalDirection = preStepPoint->GetMomentumDirection();
   // G4ThreeVector localDirection
@@ -85,10 +81,10 @@ G4bool ScreenSD::ProcessHits(G4Step* step, G4TouchableHistory* /*history*/)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->FillNtupleIColumn(0, ID);
   analysisManager->FillNtupleIColumn(1, pdgCode);
-  analysisManager->FillNtupleDColumn(2, Ekin/MeV);
-  analysisManager->FillNtupleDColumn(3, localPosition.x()/cm);
-  analysisManager->FillNtupleDColumn(4, localPosition.y()/cm);
-  analysisManager->FillNtupleDColumn(5, time/ns);
+  analysisManager->FillNtupleDColumn(2, Ekin / MeV);
+  analysisManager->FillNtupleDColumn(3, localPosition.x() / cm);
+  analysisManager->FillNtupleDColumn(4, localPosition.y() / cm);
+  analysisManager->FillNtupleDColumn(5, time / ns);
   analysisManager->AddNtupleRow();
 
   return true;
@@ -96,7 +92,6 @@ G4bool ScreenSD::ProcessHits(G4Step* step, G4TouchableHistory* /*history*/)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ScreenSD::EndOfEvent(G4HCofThisEvent* /*hce*/)
-{}
+void ScreenSD::EndOfEvent(G4HCofThisEvent* /*hce*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

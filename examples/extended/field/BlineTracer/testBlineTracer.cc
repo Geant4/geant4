@@ -28,9 +28,10 @@
 /// \file testBlineTracer.cc
 /// \brief Test program for the G4BlineTracer class
 
+#include "FTFP_BERT.hh"
+
 #include "G4BlineTracer.hh"
 #include "G4RunManagerFactory.hh"
-#include "FTFP_BERT.hh"
 
 // Test program which only instantiates the G4BlineTracer class.
 
@@ -42,10 +43,8 @@ int main()
   runManager->SetUserInitialization(new FTFP_BERT);
 
   // Instantiate the G4BlineTracer class
-  auto  theBlineTool = new G4BlineTracer();
+  auto theBlineTool = new G4BlineTracer();
 
   // delete it
   delete theBlineTool;
 }
-
-

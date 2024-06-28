@@ -45,7 +45,6 @@
 #include "G4Run.hh"
 #include "G4StateManager.hh"
 #include "G4TaskManager.hh"
-#include "G4TiMemory.hh"
 #include "G4UImanager.hh"
 #include "G4UserWorkerInitialization.hh"
 #include "G4UserWorkerThreadInitialization.hh"

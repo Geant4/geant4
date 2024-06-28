@@ -165,6 +165,13 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
     virtual G4ThreeVector GetPointOnSurface() const override;
       // Returns a random point located on the surface of the solid.
 
+    virtual G4int GetNumOfConstituents() const override;
+      // Returns the number of constituents used for construction of the solid.
+      // For non-Boolean solids the return value is one.
+
+    virtual G4bool IsFaceted() const override;
+      // Returns true if the solid has only planar faces, false otherwise.
+
     virtual G4GeometryType GetEntityType() const override;
       // Provide identification of the class of an object.
       // (required for persistency)
@@ -410,6 +417,18 @@ G4ThreeVector G4UAdapter<UnplacedVolume_t>::GetPointOnSurface() const
 {
   U3Vector p = UnplacedVolume_t::SamplePointOnSurface();
   return G4ThreeVector(p.x(), p.y(), p.z());
+}
+
+template <class UnplacedVolume_t>
+G4int G4UAdapter<UnplacedVolume_t>::GetNumOfConstituents() const
+{
+  return 1;
+}
+
+template <class UnplacedVolume_t>
+G4bool G4UAdapter<UnplacedVolume_t>::IsFaceted() const
+{
+  return false;
 }
 
 // Inline visualization adapters

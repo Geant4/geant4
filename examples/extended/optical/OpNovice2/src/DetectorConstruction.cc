@@ -35,26 +35,25 @@
 
 #include "DetectorMessenger.hh"
 
-#include "G4NistManager.hh"
-#include "G4Material.hh"
+#include "G4Box.hh"
 #include "G4Element.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
-#include "G4OpticalSurface.hh"
-#include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4ThreeVector.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4OpticalSurface.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-  : G4VUserDetectorConstruction()
-  , fDetectorMessenger(nullptr)
+  : G4VUserDetectorConstruction(), fDetectorMessenger(nullptr)
 {
-  fTankMPT    = new G4MaterialPropertiesTable();
-  fWorldMPT   = new G4MaterialPropertiesTable();
+  fTankMPT = new G4MaterialPropertiesTable();
+  fWorldMPT = new G4MaterialPropertiesTable();
   fSurfaceMPT = new G4MaterialPropertiesTable();
 
   fSurface = new G4OpticalSurface("Surface");
@@ -63,7 +62,7 @@ DetectorConstruction::DetectorConstruction()
   fSurface->SetModel(unified);
   fSurface->SetMaterialPropertiesTable(fSurfaceMPT);
 
-  fTankMaterial  = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+  fTankMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
 
   fDetectorMessenger = new DetectorMessenger(this);
@@ -71,7 +70,8 @@ DetectorConstruction::DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::~DetectorConstruction() {
+DetectorConstruction::~DetectorConstruction()
+{
   delete fTankMPT;
   delete fWorldMPT;
   delete fSurfaceMPT;
@@ -95,27 +95,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   fWorld_LV = new G4LogicalVolume(world_box, fWorldMaterial, "World");
 
   G4VPhysicalVolume* world_PV =
-    new G4PVPlacement(nullptr, G4ThreeVector(), fWorld_LV, "World", nullptr,
-                      false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), fWorld_LV, "World", nullptr, false, 0);
 
   // The tank
   auto tank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
 
   fTank_LV = new G4LogicalVolume(tank_box, fTankMaterial, "Tank");
 
-  fTank = new G4PVPlacement(nullptr, G4ThreeVector(), fTank_LV, "Tank",
-                            fWorld_LV, false, 0);
+  fTank = new G4PVPlacement(nullptr, G4ThreeVector(), fTank_LV, "Tank", fWorld_LV, false, 0);
 
   // ------------- Surface --------------
 
-  auto surface =
-    new G4LogicalBorderSurface("Surface", fTank, world_PV, fSurface);
+  auto surface = new G4LogicalBorderSurface("Surface", fTank, world_PV, fSurface);
 
-  auto opticalSurface = dynamic_cast<G4OpticalSurface*>(
-    surface->GetSurface(fTank, world_PV)->GetSurfaceProperty());
+  auto opticalSurface =
+    dynamic_cast<G4OpticalSurface*>(surface->GetSurface(fTank, world_PV)->GetSurfaceProperty());
   G4cout << "******  opticalSurface->DumpInfo:" << G4endl;
-  if(opticalSurface)
-  {
+  if (opticalSurface) {
     opticalSurface->DumpInfo();
   }
   G4cout << "******  end of opticalSurface->DumpInfo" << G4endl;
@@ -129,8 +125,7 @@ void DetectorConstruction::SetSurfaceSigmaAlpha(G4double v)
   fSurface->SetSigmaAlpha(v);
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 
-  G4cout << "Surface sigma alpha set to: " << fSurface->GetSigmaAlpha()
-         << G4endl;
+  G4cout << "Surface sigma alpha set to: " << fSurface->GetSigmaAlpha() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,8 +138,7 @@ void DetectorConstruction::SetSurfacePolish(G4double v)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DetectorConstruction::AddTankMPV(const G4String& prop,
-                                      G4MaterialPropertyVector* mpv)
+void DetectorConstruction::AddTankMPV(const G4String& prop, G4MaterialPropertyVector* mpv)
 {
   fTankMPT->AddProperty(prop, mpv);
   G4cout << "The MPT for the box is now: " << G4endl;
@@ -153,8 +147,7 @@ void DetectorConstruction::AddTankMPV(const G4String& prop,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DetectorConstruction::AddWorldMPV(const G4String& prop,
-                                       G4MaterialPropertyVector* mpv)
+void DetectorConstruction::AddWorldMPV(const G4String& prop, G4MaterialPropertyVector* mpv)
 {
   fWorldMPT->AddProperty(prop, mpv);
   G4cout << "The MPT for the world is now: " << G4endl;
@@ -163,8 +156,7 @@ void DetectorConstruction::AddWorldMPV(const G4String& prop,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DetectorConstruction::AddSurfaceMPV(const G4String& prop,
-                                         G4MaterialPropertyVector* mpv)
+void DetectorConstruction::AddSurfaceMPV(const G4String& prop, G4MaterialPropertyVector* mpv)
 {
   fSurfaceMPT->AddProperty(prop, mpv);
   G4cout << "The MPT for the surface is now: " << G4endl;
@@ -202,11 +194,9 @@ void DetectorConstruction::AddSurfaceMPC(const G4String& prop, G4double v)
 void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 {
   G4Material* pmat = G4NistManager::Instance()->FindOrBuildMaterial(mat);
-  if(pmat && fWorldMaterial != pmat)
-  {
+  if (pmat && fWorldMaterial != pmat) {
     fWorldMaterial = pmat;
-    if(fWorld_LV)
-    {
+    if (fWorld_LV) {
       fWorld_LV->SetMaterial(fWorldMaterial);
       fWorldMaterial->SetMaterialPropertiesTable(fWorldMPT);
     }
@@ -219,11 +209,9 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 void DetectorConstruction::SetTankMaterial(const G4String& mat)
 {
   G4Material* pmat = G4NistManager::Instance()->FindOrBuildMaterial(mat);
-  if(pmat && fTankMaterial != pmat)
-  {
+  if (pmat && fTankMaterial != pmat) {
     fTankMaterial = pmat;
-    if(fTank_LV)
-    {
+    if (fTank_LV) {
       fTank_LV->SetMaterial(fTankMaterial);
       fTankMaterial->SetMaterialPropertiesTable(fTankMPT);
       fTankMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);

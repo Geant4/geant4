@@ -34,74 +34,71 @@
 //
 // --------------------------------------------------------------
 
-#include <vector>
-
+#include "FTFP_BERT.hh"
 #include "G04ActionInitialization.hh"
 #include "G04DetectorConstruction.hh"
 #include "G04SensitiveDetector.hh"
 
+#include "G4GDMLParser.hh"
 #include "G4RunManagerFactory.hh"
-
-#include "FTFP_BERT.hh"
+#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-#include "G4GDMLParser.hh"
 
-int main(int argc,char **argv)
+#include <vector>
+
+int main(int argc, char** argv)
 {
-   G4cout << G4endl;
-   G4cout << "Usage: gdml_det <intput_gdml_file:mandatory>"
-          << G4endl;
-   G4cout << G4endl;
+  G4cout << G4endl;
+  G4cout << "Usage: gdml_det <intput_gdml_file:mandatory>" << G4endl;
+  G4cout << G4endl;
 
-   if (argc<2)
-   {
-      G4cout << "Error! Mandatory input file is not specified!" << G4endl;
-      G4cout << G4endl;
-      return -1;
-   }
+  if (argc < 2) {
+    G4cout << "Error! Mandatory input file is not specified!" << G4endl;
+    G4cout << G4endl;
+    return -1;
+  }
 
-   // Detect interactive mode (if only one argument) and define UI session
-   //
-   G4UIExecutive* ui = 0;
-   if ( argc == 2 ) {
-     ui = new G4UIExecutive(argc, argv);
-   }
+  // Detect interactive mode (if only one argument) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if (argc == 2) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
-   G4GDMLParser parser;
-   parser.Read(argv[1]);
+  G4GDMLParser parser;
+  parser.Read(argv[1]);
 
-   auto* runManager = G4RunManagerFactory::CreateRunManager();
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
-   runManager->SetUserInitialization(new G04DetectorConstruction(parser));
-   runManager->SetUserInitialization(new FTFP_BERT);
+  runManager->SetUserInitialization(new G04DetectorConstruction(parser));
+  runManager->SetUserInitialization(new FTFP_BERT);
 
-   // User action initialization
-   runManager->SetUserInitialization(new G04ActionInitialization());
-   runManager->Initialize();
+  // User action initialization
+  runManager->SetUserInitialization(new G04ActionInitialization());
+  runManager->Initialize();
 
-   // Initialize visualization
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+  // Initialize visualization
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 
-   // Get the pointer to the User Interface manager
-   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-   // Process macro or start UI session
-   if ( ! ui )   // batch mode
-   {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[2];
-     UImanager->ApplyCommand(command+fileName);
-   }
-   else           // interactive mode
-   {
-     UImanager->ApplyCommand("/control/execute vis.mac");
-     ui->SessionStart();
-     delete ui;
-   }
+  // Process macro or start UI session
+  if (!ui)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[2];
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else  // interactive mode
+  {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
-   delete visManager;
-   delete runManager;
+  delete visManager;
+  delete runManager;
 }

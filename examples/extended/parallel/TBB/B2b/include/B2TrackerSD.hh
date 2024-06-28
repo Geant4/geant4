@@ -30,9 +30,9 @@
 #ifndef B2TrackerSD_h
 #define B2TrackerSD_h 1
 
-#include "G4VSensitiveDetector.hh"
-
 #include "B2TrackerHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 
 #include <vector>
 
@@ -50,14 +50,13 @@ class G4HCofThisEvent;
 class B2TrackerSD : public G4VSensitiveDetector
 {
   public:
-    B2TrackerSD(const G4String& name, 
-                const G4String& hitsCollectionName);
+    B2TrackerSD(const G4String& name, const G4String& hitsCollectionName);
     virtual ~B2TrackerSD();
-  
+
     // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
+    virtual void Initialize(G4HCofThisEvent* hitCollection);
     virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
+    virtual void EndOfEvent(G4HCofThisEvent* hitCollection);
 
   private:
     B2TrackerHitsCollection* fHitsCollection;

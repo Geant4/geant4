@@ -92,6 +92,9 @@ G4GammaGeneralProcess::G4GammaGeneralProcess(const G4String& pname):
   SetVerboseLevel(1);
   SetParticle(G4Gamma::Gamma());
   SetProcessSubType(fGammaGeneralProcess);
+  if (nullptr == theHandler) {
+    theHandler = new G4EmDataHandler(nTables);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -146,14 +149,11 @@ void G4GammaGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part
   idxEnergy = 0;
   currentCouple = nullptr;
 
-  G4EmParameters* param = G4EmParameters::Instance();
   G4LossTableManager* man = G4LossTableManager::Instance();
 
-  isTheMaster = man->IsMaster();
-  if(isTheMaster) { SetVerboseLevel(param->Verbose()); }
-  else { SetVerboseLevel(param->WorkerVerbose()); }
-
+  // initialise base material for the current run
   G4LossTableBuilder* bld = man->GetTableBuilder();
+  bld->InitialiseBaseMaterials();
   baseMat = bld->GetBaseMaterialFlag();
 
   if(1 < verboseLevel) {
@@ -173,14 +173,15 @@ void G4GammaGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part
        << "\n Conversion: " << theConversionEE;
     G4Exception("G4GeneralGammaProcess","em0004",
 		FatalException, ed,"");
+    return;
   }
 
-  if(thePhotoElectric) { thePhotoElectric->PreparePhysicsTable(part); }
-  if(theCompton)       { theCompton->PreparePhysicsTable(part); }
-  if(theConversionEE)  { theConversionEE->PreparePhysicsTable(part); }
-  if(theRayleigh)      { theRayleigh->PreparePhysicsTable(part); }
-  if(theGammaNuclear)  { theGammaNuclear->PreparePhysicsTable(part); }
-  if(theConversionMM)  { theConversionMM->PreparePhysicsTable(part); }
+  thePhotoElectric->PreparePhysicsTable(part);
+  theCompton->PreparePhysicsTable(part);
+  theConversionEE->PreparePhysicsTable(part);
+  if (nullptr != theRayleigh) { theRayleigh->PreparePhysicsTable(part); }
+  if (nullptr != theGammaNuclear) { theGammaNuclear->PreparePhysicsTable(part); }
+  if (nullptr != theConversionMM) { theConversionMM->PreparePhysicsTable(part); }
 
   InitialiseProcess(&part);
 }
@@ -195,15 +196,13 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
     G4LossTableManager* man = G4LossTableManager::Instance();
 
     // tables are created and its size is defined only once
-    if(nullptr == theHandler) {
-      theHandler = new G4EmDataHandler(nTables);
-      if(theRayleigh) { theT[1] = true; }
+    if (nullptr != theRayleigh) { theT[1] = true; }
 
-      theHandler->SetMasterProcess(thePhotoElectric);
-      theHandler->SetMasterProcess(theCompton);
-      theHandler->SetMasterProcess(theConversionEE);
-      theHandler->SetMasterProcess(theRayleigh);
-    }
+    theHandler->SetMasterProcess(thePhotoElectric);
+    theHandler->SetMasterProcess(theCompton);
+    theHandler->SetMasterProcess(theConversionEE);
+    theHandler->SetMasterProcess(theRayleigh);
+   
     auto bld = man->GetTableBuilder();
 
     const G4ProductionCutsTable* theCoupleTable=
@@ -230,7 +229,6 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
       for(std::size_t j=0; j<numOfCouples; ++j) {
 	vec = (*table)[j];
 	if (bld->GetFlag(j) && nullptr == vec) {
-	  //G4cout <<"InitialiseProcess iTable="<<i<<" jCouple="<< j <<" make new vector"<< G4endl;
 	  if(i<=1) {
 	    vec = new G4PhysicsVector(aVector);
 	  } else if(i<=5) {
@@ -694,6 +692,7 @@ G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
                                             const G4String& directory,
                                             G4bool ascii)
 {
+  if (!isTheMaster) { return true; }
   if(1 < verboseLevel) {
     G4cout << "G4GammaGeneralProcess::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
@@ -719,8 +718,6 @@ G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
       if(!theHandler->RetrievePhysicsTable(i, part, fnam, ascii, spline))
 	{ yes = false; }
     }
-  }
-  if(yes) {
   }
   return yes;
 }

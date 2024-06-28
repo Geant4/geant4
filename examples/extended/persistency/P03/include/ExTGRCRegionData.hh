@@ -30,34 +30,33 @@
 #ifndef ExTGRCRegionData_h
 #define ExTGRCRegionData_h
 
-#include <vector>
 #include "globals.hh"
+
+#include <vector>
 
 /// Stores cuts per region data
 ///
 /// Changes:     creation   May 2007
 /// \author      P. Arce
 
-class ExTGRCRegionData 
-{ 
+class ExTGRCRegionData
+{
   public:
+    ExTGRCRegionData(const std::vector<G4String>& rd);
+    ~ExTGRCRegionData();
 
-    ExTGRCRegionData( const std::vector<G4String>& rd );
-   ~ExTGRCRegionData();
-
-    void SetCutsData( const std::vector<G4String>& cu );
+    void SetCutsData(const std::vector<G4String>& cu);
 
     //--- Get methods
 
-    G4String GetRegionName() const     { return fRegionName;  }
-    std::vector<G4String> GetLVNames() { return fLVNames;     }
-    G4double GetGammaCut() const       { return fGammaCut;    }
-    G4double GetElectronCut() const    { return fElectronCut; }
-    G4double GetPositronCut() const    { return fPositronCut; }
-    G4bool CutsAreSet() const          { return fbCutsSet;       }
+    G4String GetRegionName() const { return fRegionName; }
+    std::vector<G4String> GetLVNames() { return fLVNames; }
+    G4double GetGammaCut() const { return fGammaCut; }
+    G4double GetElectronCut() const { return fElectronCut; }
+    G4double GetPositronCut() const { return fPositronCut; }
+    G4bool CutsAreSet() const { return fbCutsSet; }
 
   private:
-
     G4String fRegionName;
     std::vector<G4String> fLVNames;
     G4double fGammaCut, fElectronCut, fPositronCut;

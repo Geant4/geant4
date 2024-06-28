@@ -30,39 +30,40 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-: G4UImessenger(), fPhysicsList(pPhys),
-  fPListCmd(0)
+  : G4UImessenger(), fPhysicsList(pPhys), fPListCmd(0)
 {
-    fPhysDir = new G4UIdirectory("/testem/phys/");
-    fPhysDir->SetGuidance("physics list commands");
-    
-    fPListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);
-    fPListCmd->SetGuidance("Add modula physics list.");
-    fPListCmd->SetParameterName("PList",false);
-    fPListCmd->AvailableForStates(G4State_PreInit);
-    fPListCmd->SetToBeBroadcasted(false);
+  fPhysDir = new G4UIdirectory("/testem/phys/");
+  fPhysDir->SetGuidance("physics list commands");
+
+  fPListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics", this);
+  fPListCmd->SetGuidance("Add modula physics list.");
+  fPListCmd->SetParameterName("PList", false);
+  fPListCmd->AvailableForStates(G4State_PreInit);
+  fPListCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-    delete fPListCmd;
-    delete fPhysDir;
+  delete fPListCmd;
+  delete fPhysDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-    if( command == fPListCmd )
-    { fPhysicsList->AddPhysicsList(newValue);}
+  if (command == fPListCmd) {
+    fPhysicsList->AddPhysicsList(newValue);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -33,24 +33,24 @@
 #ifndef OpNoviceStackingAction_h
 #define OpNoviceStackingAction_h 1
 
-#include "globals.hh"
 #include "G4UserStackingAction.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class OpNoviceStackingAction : public G4UserStackingAction
 {
- public:
-  OpNoviceStackingAction() = default;
-  ~OpNoviceStackingAction() override= default;
+  public:
+    OpNoviceStackingAction() = default;
+    ~OpNoviceStackingAction() override = default;
 
-  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
-  void NewStage() override;
-  void PrepareNewEvent() override;
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
+    void NewStage() override;
+    void PrepareNewEvent() override;
 
- private:
-  G4int fScintillationCounter = 0;
-  G4int fCerenkovCounter = 0;
+  private:
+    G4int fScintillationCounter = 0;
+    G4int fCerenkovCounter = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

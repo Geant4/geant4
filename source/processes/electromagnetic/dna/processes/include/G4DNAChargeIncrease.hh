@@ -30,26 +30,21 @@
 #define G4DNAChargeIncrease_h 1
 
 #include "G4VEmProcess.hh"
-#include "G4DNAGenericIonsManager.hh"
-
-// Available models
-#include "G4DNADingfelderChargeIncreaseModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4DNAChargeIncrease : public G4VEmProcess
-
 {
 public: 
 
   G4DNAChargeIncrease(const G4String& processName ="DNAChargeIncrease",
-		     G4ProcessType type = fElectromagnetic);
+                      G4ProcessType type = fElectromagnetic);
 
-  ~G4DNAChargeIncrease() override;
+  ~G4DNAChargeIncrease() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition&) override;
   
-  virtual void PrintInfo();
+  void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
 
@@ -57,7 +52,7 @@ protected:
 
 private:
      
-  G4bool       isInitialised{false};
+  G4bool isInitialised{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

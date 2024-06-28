@@ -24,32 +24,32 @@
 // ********************************************************************
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "ChemistryWorld.hh"
 #include "DetectorConstruction.hh"
+
+#include "G4Electron.hh"
 #include "G4Event.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4SingleParticleSource.hh"
 #include "G4SystemOfUnits.hh"
-#include "PrimaryGeneratorMessenger.hh"
-#include "G4Electron.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction *pDet)
-    : G4VUserPrimaryGeneratorAction(), fpDetector(pDet) {
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* pDet)
+  : G4VUserPrimaryGeneratorAction(), fpDetector(pDet)
+{
   fpMessenger = std::make_unique<PrimaryGeneratorMessenger>(this);
   fParticleGun = std::make_unique<G4SingleParticleSource>();
-  G4ParticleDefinition *particle = G4Electron::Definition();
+  G4ParticleDefinition* particle = G4Electron::Definition();
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetNumberOfParticles(1000000); // by user
+  fParticleGun->SetNumberOfParticles(1000000);  // by user
 
   auto pPosDist = fParticleGun->GetPosDist();
   pPosDist->SetPosDisType("Plane");
   pPosDist->SetPosDisShape("Square");
-  auto faceSiez = fpDetector->GetChemistryWorld()
-      ->GetChemistryBoundary()
-      ->halfSideLengthInY();
+  auto faceSiez = fpDetector->GetChemistryWorld()->GetChemistryBoundary()->halfSideLengthInY();
   pPosDist->SetCentreCoords(G4ThreeVector(0, 0, -faceSiez));
   pPosDist->SetHalfX(faceSiez);
   pPosDist->SetHalfY(faceSiez);
@@ -60,10 +60,12 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction *pDet)
   auto pEnergyDis = fParticleGun->GetEneDist();
   pEnergyDis->SetMonoEnergy(0.9999 * MeV);
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
-  G4ParticleDefinition *particle = fParticleGun->GetParticleDefinition();
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  G4ParticleDefinition* particle = fParticleGun->GetParticleDefinition();
   auto NumberOfParticlesToBeGenerated = fParticleGun->GetNumberOfParticles();
   auto pPosDist = fParticleGun->GetPosDist();
   auto pAngleDist = fParticleGun->GetAngDist();

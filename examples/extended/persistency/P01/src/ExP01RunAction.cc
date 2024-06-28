@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01RunAction class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,14 +37,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01RunAction::ExP01RunAction()
-: G4UserRunAction()
-{}
+ExP01RunAction::ExP01RunAction() : G4UserRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01RunAction::~ExP01RunAction()
-{}
+ExP01RunAction::~ExP01RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,8 +52,6 @@ void ExP01RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExP01RunAction::EndOfRunAction(const G4Run*)
-{ }
+void ExP01RunAction::EndOfRunAction(const G4Run*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

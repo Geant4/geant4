@@ -32,34 +32,31 @@
 
 #include "EventAction.hh"
 
-#include "Run.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
-{    
- //energy deposited per event
- fTotalEdep = 0.;   
+{
+  // energy deposited per event
+  fTotalEdep = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  //plot energy deposited per event
+  // plot energy deposited per event
   //
   if (fTotalEdep > 0.) {
-   Run* run
-    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
     run->AddEdep(fTotalEdep);
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-    analysisManager->FillH1(2,fTotalEdep);
-  }  
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillH1(2, fTotalEdep);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

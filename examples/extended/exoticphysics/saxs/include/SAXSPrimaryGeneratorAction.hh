@@ -26,7 +26,7 @@
 /// \file SAXSPrimaryGeneratorAction.hh
 /// \brief Definition of the SAXSPrimaryGeneratorAction class
 //
-/// The G4GeneralParticleSource generator is defined and the 
+/// The G4GeneralParticleSource generator is defined and the
 /// features of the primary beam are set through macro commands
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,17 +45,16 @@ class G4Event;
 
 class SAXSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  SAXSPrimaryGeneratorAction();
-  virtual ~SAXSPrimaryGeneratorAction();
-    
-  virtual void GeneratePrimaries(G4Event*);   
-    
-private:
+  public:
+    SAXSPrimaryGeneratorAction();
+    virtual ~SAXSPrimaryGeneratorAction();
+
+    virtual void GeneratePrimaries(G4Event*);
+
+  private:
     G4GeneralParticleSource* fParticleGPS;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

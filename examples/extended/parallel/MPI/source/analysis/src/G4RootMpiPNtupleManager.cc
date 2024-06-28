@@ -27,18 +27,20 @@
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)
 
 #include "G4RootMpiPNtupleManager.hh"
-#include "G4RootFileManager.hh"
-#include "G4AnalysisUtilities.hh"
 
 #include "tools/wroot/file"
-#include "tools/wroot/mpi_ntuple_row_wise"
 #include "tools/wroot/mpi_ntuple_column_wise"
+#include "tools/wroot/mpi_ntuple_row_wise"
+
+#include "G4AnalysisUtilities.hh"
+#include "G4RootFileManager.hh"
 
 using namespace G4Analysis;
 
-const int kTAG_NTUPLE = 1004;   // This constant is defined in G4MPImanager
-                                // (should be passed from the application)
-namespace {
+const int kTAG_NTUPLE = 1004;  // This constant is defined in G4MPImanager
+                               // (should be passed from the application)
+namespace
+{
 
 //_____________________________________________________________________________
 void NotExistException(const G4String& what, G4int id, const G4String& functionName)
@@ -50,26 +52,25 @@ void NotExistException(const G4String& what, G4int id, const G4String& functionN
   G4Exception(inFunction, "Analysis_W011", JustWarning, description);
 }
 
-}
+}  // namespace
 
 //_____________________________________________________________________________
-G4RootMpiPNtupleManager::G4RootMpiPNtupleManager(
-                           const G4AnalysisManagerState& state, 
-                           tools::impi* impi, G4int mpiRank, G4int destinationRank)
- : G4BaseNtupleManager(state),
-   fNtupleVector(),
-   fImpi(impi),
-   fMpiRank(mpiRank),
-   fDestinationRank(destinationRank)
-{
-}
+G4RootMpiPNtupleManager::G4RootMpiPNtupleManager(const G4AnalysisManagerState& state,
+                                                 tools::impi* impi, G4int mpiRank,
+                                                 G4int destinationRank)
+  : G4BaseNtupleManager(state),
+    fNtupleVector(),
+    fImpi(impi),
+    fMpiRank(mpiRank),
+    fDestinationRank(destinationRank)
+{}
 
 //_____________________________________________________________________________
 G4RootMpiPNtupleManager::~G4RootMpiPNtupleManager()
 {
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+  for (auto ntupleDescription : fNtupleDescriptionVector) {
     delete ntupleDescription;
-  }   
+  }
 }
 
 //
@@ -77,34 +78,34 @@ G4RootMpiPNtupleManager::~G4RootMpiPNtupleManager()
 //
 
 //_____________________________________________________________________________
-G4RootMpiPNtupleDescription*  
-G4RootMpiPNtupleManager::GetNtupleDescriptionInFunction(
-  G4int id, G4String functionName, G4bool warn) const
-{                                      
+G4RootMpiPNtupleDescription*
+G4RootMpiPNtupleManager::GetNtupleDescriptionInFunction(G4int id, G4String functionName,
+                                                        G4bool warn) const
+{
   auto index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fNtupleDescriptionVector.size()) ) {
-    if ( warn) {
+  if (index < 0 || index >= G4int(fNtupleDescriptionVector.size())) {
+    if (warn) {
       NotExistException("ntuple description", id, functionName);
     }
-    return nullptr;         
+    return nullptr;
   }
-  
+
   return fNtupleDescriptionVector[index];
 }
 
 //_____________________________________________________________________________
-tools::wroot::base_pntuple*  G4RootMpiPNtupleManager::GetNtupleInFunction(
-  G4int id, G4String functionName, G4bool warn) const
-{                                      
+tools::wroot::base_pntuple*
+G4RootMpiPNtupleManager::GetNtupleInFunction(G4int id, G4String functionName, G4bool warn) const
+{
   auto ntupleDescription = GetNtupleDescriptionInFunction(id, functionName);
-  if ( ! ntupleDescription ) return nullptr;
+  if (!ntupleDescription) return nullptr;
 
-  if ( ! ntupleDescription->GetBasePNtuple() ) {
-    if ( warn ) {
+  if (!ntupleDescription->GetBasePNtuple()) {
+    if (warn) {
       NotExistException("ntuple", id, functionName);
     }
     return nullptr;
-  }  
+  }
   return ntupleDescription->GetBasePNtuple();
 }
 
@@ -116,7 +117,7 @@ tools::wroot::base_pntuple*  G4RootMpiPNtupleManager::GetNtupleInFunction(
 void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDescription)
 {
   Message(kVL4, "create from booking", "mpi pntuple",
-    ntupleDescription->GetDescription().GetNtupleBooking().name());
+          ntupleDescription->GetDescription().GetNtupleBooking().name());
 
   // Wait for the ntuple data from main
 
@@ -125,8 +126,8 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   G4cout << "Go to wait_buffer from " << fDestinationRank << G4endl;
   fImpi->pack_reset();
   int probe_src;
-  if ( ! fImpi->wait_buffer(fMpiRank, fDestinationRank, kTAG_NTUPLE, probe_src, verbose)) {
-    G4cerr << "G4RootMpiPNtupleManager::CreateNtuple: wait_buffer() failed."<< G4endl;
+  if (!fImpi->wait_buffer(fMpiRank, fDestinationRank, kTAG_NTUPLE, probe_src, verbose)) {
+    G4cerr << "G4RootMpiPNtupleManager::CreateNtuple: wait_buffer() failed." << G4endl;
     return;
   }
   G4cout << "After wait_buffer with " << fImpi << G4endl;
@@ -141,51 +142,52 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   std::vector<tools::uint32> basketSizes;
   unsigned int basketEntries;
 
-  if ( ! fImpi->unpack(mainNtupleId) ) {
-    G4cerr << "bunpack(byteSwap) failed."<< G4endl;
+  if (!fImpi->unpack(mainNtupleId)) {
+    G4cerr << "bunpack(byteSwap) failed." << G4endl;
     return;
   }
   // G4cout << "unpack 1" << G4endl;
-  
-  if ( ! fImpi->bunpack(rowWise) ) {
-    G4cerr << "bunpack(rowWise) failed."<< G4endl;
+
+  if (!fImpi->bunpack(rowWise)) {
+    G4cerr << "bunpack(rowWise) failed." << G4endl;
     return;
   }
   // G4cout << "unpack 1/2" << G4endl;
 
-  if ( ! fImpi->bunpack(byteSwap) ) {
-    G4cerr << "bunpack(byteSwap) failed."<< G4endl;
+  if (!fImpi->bunpack(byteSwap)) {
+    G4cerr << "bunpack(byteSwap) failed." << G4endl;
     return;
   }
   // G4cout << "unpack 2" << G4endl;
-  
-  if ( ! fImpi->unpack(compression) ) {
-    G4cerr << "unpack(compression) failed."<< G4endl;
+
+  if (!fImpi->unpack(compression)) {
+    G4cerr << "unpack(compression) failed." << G4endl;
     return;
   }
   // G4cout << "unpack 3" << G4endl;
 
-  if ( ! fImpi->unpack(seekDirectory) ) {
-    G4cerr << "unpack(seek) failed."<< G4endl;
+  if (!fImpi->unpack(seekDirectory)) {
+    G4cerr << "unpack(seek) failed." << G4endl;
     return;
   }
   // G4cout << "unpack 4" << G4endl;
-  
+
   if (rowWise) {
-    if ( ! fImpi->unpack(basketSize) ) {
-      G4cerr << "unpack(basketSize) failed."<< G4endl;
+    if (!fImpi->unpack(basketSize)) {
+      G4cerr << "unpack(basketSize) failed." << G4endl;
       return;
     }
-  } else {
-    if ( ! fImpi->bunpack(rowMode) ) {
+  }
+  else {
+    if (!fImpi->bunpack(rowMode)) {
       G4cerr << "bpack(rowMode) failed." << G4endl;
       return;
-    }      
-    if ( ! fImpi->vunpack(basketSizes) ) {
-      G4cerr << "vunpack(basketSizes) failed."<< G4endl;
+    }
+    if (!fImpi->vunpack(basketSizes)) {
+      G4cerr << "vunpack(basketSizes) failed." << G4endl;
       return;
     }
-    if( ! fImpi->unpack(basketEntries) ) {
+    if (!fImpi->unpack(basketEntries)) {
       G4cerr << "unpack(basketEntries) failed." << G4endl;
       return;
     }
@@ -194,7 +196,7 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
 
   // G4cout << "rank = " << fMpiRank
   //           << ", verbose = " << verbose
-  //           << ", mainNtupleId = " << mainNtupleId 
+  //           << ", mainNtupleId = " << mainNtupleId
   //           << ", byteSwap = " << byteSwap
   //           << ", compression = " << compression
   //           << ", seekDirectory = " << seekDirectory
@@ -202,140 +204,133 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   //           << G4endl;
 
   // Create MPI pntuple
-  if ( rowWise ) {
-    tools::wroot::mpi_ntuple_row_wise* ntuple
-      = new tools::wroot::mpi_ntuple_row_wise(
-              mainNtupleId, G4cout, byteSwap, compression, seekDirectory,
-              basketSize, ntupleDescription->GetDescription().GetNtupleBooking(), verbose);
+  if (rowWise) {
+    tools::wroot::mpi_ntuple_row_wise* ntuple = new tools::wroot::mpi_ntuple_row_wise(
+      mainNtupleId, G4cout, byteSwap, compression, seekDirectory, basketSize,
+      ntupleDescription->GetDescription().GetNtupleBooking(), verbose);
     ntupleDescription->SetNtuple(ntuple);
     ntupleDescription->SetBasePNtuple(ntuple);
-  } else {
-    tools::wroot::mpi_ntuple_column_wise* ntuple
-      = new tools::wroot::mpi_ntuple_column_wise(
-              mainNtupleId, G4cout, byteSwap, compression, seekDirectory,
-              basketSizes, ntupleDescription->GetDescription().GetNtupleBooking(),
-              rowMode, basketEntries, verbose);
+  }
+  else {
+    tools::wroot::mpi_ntuple_column_wise* ntuple = new tools::wroot::mpi_ntuple_column_wise(
+      mainNtupleId, G4cout, byteSwap, compression, seekDirectory, basketSizes,
+      ntupleDescription->GetDescription().GetNtupleBooking(), rowMode, basketEntries, verbose);
     ntupleDescription->SetNtuple(ntuple);
     ntupleDescription->SetBasePNtuple(ntuple);
   }
 
   ntupleDescription->GetDescription().SetIsNtupleOwner(true);
   ntupleDescription->SetImpi(fImpi);
-         // should be not needed
-         // pntuple object is not deleted automatically
+  // should be not needed
+  // pntuple object is not deleted automatically
   fNtupleVector.push_back(ntupleDescription->GetNtuple());
 
   Message(kVL3, "create from booking", "mpi pntuple",
-    ntupleDescription->GetDescription().GetNtupleBooking().name());
+          ntupleDescription->GetDescription().GetNtupleBooking().name());
 }
 
 //_____________________________________________________________________________
 void G4RootMpiPNtupleManager::CreateNtuplesFromBooking(
   const std::vector<G4NtupleBooking*>& ntupleBookings)
 {
-// Create ntuple from ntuple_booking & the buffer from main rank
+  // Create ntuple from ntuple_booking & the buffer from main rank
 
   // G4cout << "Start G4RootMpiPNtupleManager::CreateNtuplesFromBooking" << G4endl;
 
   // Do not create ntuples if NtupleVector is not empty
-  if ( fNtupleVector.size() ) return;
+  if (fNtupleVector.size()) return;
 
   // Create pntuple descriptions from ntuple booking.
   // auto g4NtupleBookings = fBookingManager->GetNtupleBookingVector();
-  for ( auto g4NtupleBooking : ntupleBookings ) {
+  for (auto g4NtupleBooking : ntupleBookings) {
     auto ntupleDescription = new G4RootMpiPNtupleDescription(g4NtupleBooking);
     ntupleDescription->SetMainNtupleRank(fDestinationRank);
-    fNtupleDescriptionVector.push_back(ntupleDescription);  
+    fNtupleDescriptionVector.push_back(ntupleDescription);
   }
 
   // Create mpi ntuples
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+  for (auto ntupleDescription : fNtupleDescriptionVector) {
+    // Do not create ntuple if it is inactivated
+    if (fState.GetIsActivation() && (!ntupleDescription->GetDescription().GetActivation()))
+      continue;
 
-    // Do not create ntuple if it is inactivated 
-    if ( fState.GetIsActivation() && ( ! ntupleDescription->GetDescription().GetActivation() ) ) continue;
-    
     // Do not create ntuple if it already exists
-    if ( ntupleDescription->GetNtuple() ) continue;
-    
+    if (ntupleDescription->GetNtuple()) continue;
+
     Message(kVL4, "create from booking", "mpi pntuple",
-      ntupleDescription->GetDescription().GetNtupleBooking().name());
+            ntupleDescription->GetDescription().GetNtupleBooking().name());
 
     // create ntuple
     CreateNtuple(ntupleDescription);
 
-    // finish created ntuple 
+    // finish created ntuple
     // (nothing to be done ?)
     // FinishTNtuple(ntupleDescription);
 
     Message(kVL3, "create from booking", "mpi pntuple",
-      ntupleDescription->GetDescription().GetNtupleBooking().name());
+            ntupleDescription->GetDescription().GetNtupleBooking().name());
   }
-
-}   
+}
 
 //_____________________________________________________________________________
 G4int G4RootMpiPNtupleManager::CreateNtuple(G4NtupleBooking* /*booking*/)
-  // const G4String& name, const G4String& title)
+// const G4String& name, const G4String& title)
 {
-// Create pntuple description from g4 ntuple booking
-// Nothing to be done here.
+  // Create pntuple description from g4 ntuple booking
+  // Nothing to be done here.
 
   return G4Analysis::kInvalidId;
-}                                         
+}
 
 //_____________________________________________________________________________
-G4bool G4RootMpiPNtupleManager::FillNtupleIColumn(
-  G4int ntupleId, G4int columnId, G4int value)
+G4bool G4RootMpiPNtupleManager::FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value)
 {
   return FillNtupleTColumn<int>(ntupleId, columnId, value);
-}                                         
+}
 
 //_____________________________________________________________________________
-G4bool G4RootMpiPNtupleManager::FillNtupleFColumn(
-  G4int ntupleId, G4int columnId, G4float value)
+G4bool G4RootMpiPNtupleManager::FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value)
 {
   return FillNtupleTColumn<float>(ntupleId, columnId, value);
-}                                         
+}
 
 //_____________________________________________________________________________
-G4bool G4RootMpiPNtupleManager::FillNtupleDColumn(
-  G4int ntupleId, G4int columnId, G4double value)
+G4bool G4RootMpiPNtupleManager::FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value)
 {
   return FillNtupleTColumn<double>(ntupleId, columnId, value);
-}                                         
+}
 
 //_____________________________________________________________________________
-G4bool G4RootMpiPNtupleManager::FillNtupleSColumn(
-  G4int ntupleId, G4int columnId, const G4String& value)
+G4bool G4RootMpiPNtupleManager::FillNtupleSColumn(G4int ntupleId, G4int columnId,
+                                                  const G4String& value)
 {
   return FillNtupleTColumn<std::string>(ntupleId, columnId, value);
-}                                         
+}
 
 //_____________________________________________________________________________
 G4bool G4RootMpiPNtupleManager::AddNtupleRow(G4int ntupleId)
-{ 
-  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
-    //G4cout << "Skipping AddNtupleRow for " << ntupleId << G4endl; 
-    return false; 
-  }  
+{
+  if (fState.GetIsActivation() && (!GetActivation(ntupleId))) {
+    // G4cout << "Skipping AddNtupleRow for " << ntupleId << G4endl;
+    return false;
+  }
 
   Message(kVL4, "add", "pntuple row", " ntupleId " + to_string(ntupleId));
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
-  if ( ! ntupleDescription ) return false;
-  
-  // if(!_ntuple->add_row(_impi,rank_src,tag)) {
-  auto result 
-    = ntupleDescription->GetNtuple()
-      ->add_row(*fImpi, ntupleDescription->GetMainNtupleRank(), kTAG_NTUPLE );
+  if (!ntupleDescription) return false;
 
-  if ( ! result ) {
+  // if(!_ntuple->add_row(_impi,rank_src,tag)) {
+  auto result = ntupleDescription->GetNtuple()->add_row(
+    *fImpi, ntupleDescription->GetMainNtupleRank(), kTAG_NTUPLE);
+
+  if (!result) {
     G4ExceptionDescription description;
-    description << "      " << " ntupleId " << ntupleId 
-                << "adding row has failed.";
-    G4Exception("G4RootMpiPNtupleManager::AddNtupleRow()",
-                "Analysis_W002", JustWarning, description);
-  }         
+    description << "      "
+                << " ntupleId " << ntupleId << "adding row has failed.";
+    G4Exception("G4RootMpiPNtupleManager::AddNtupleRow()", "Analysis_W002", JustWarning,
+                description);
+  }
 
   Message(kVL3, "add", "pntuple row", " ntupleId " + to_string(ntupleId));
 
@@ -345,41 +340,40 @@ G4bool G4RootMpiPNtupleManager::AddNtupleRow(G4int ntupleId)
 //_____________________________________________________________________________
 G4bool G4RootMpiPNtupleManager::Merge()
 {
-
   // G4cout << "Start G4RootMpiPNtupleManager::Merge" << G4endl;
 
   auto finalResult = true;
 
-  for ( auto ntupleDescription : fNtupleDescriptionVector) {
-
+  for (auto ntupleDescription : fNtupleDescriptionVector) {
     // skip inactivated ntuples
-    if ( ! ntupleDescription->GetDescription().GetActivation() ) continue;
-  
+    if (!ntupleDescription->GetDescription().GetActivation()) continue;
+
     // skip if ntuple was already merged and deleted
     // (this happend when the main rank re-opens a new file for merged data)
-    if ( ! ntupleDescription->GetNtuple() ) continue;
-  
-    Message(kVL4, "merge", "pntuple", ntupleDescription->GetDescription().GetNtupleBooking().name());
+    if (!ntupleDescription->GetNtuple()) continue;
 
-    // G4cout << "call end_fill " << fImpi 
+    Message(kVL4, "merge", "pntuple",
+            ntupleDescription->GetDescription().GetNtupleBooking().name());
+
+    // G4cout << "call end_fill " << fImpi
     //        << " to rank " << ntupleDescription->GetMainNtupleRank()
     //        << " pntuple: " << ntupleDescription->GetNtuple() << G4endl;
-    auto result 
-      = ntupleDescription->GetNtuple()
-        ->end_fill(*fImpi, ntupleDescription->GetMainNtupleRank(), kTAG_NTUPLE);
+    auto result = ntupleDescription->GetNtuple()->end_fill(
+      *fImpi, ntupleDescription->GetMainNtupleRank(), kTAG_NTUPLE);
 
-    if ( ! result ) {
+    if (!result) {
       G4ExceptionDescription description;
-      description << "      " << " ntuple " << ntupleDescription->GetDescription().GetNtupleBooking().name()
+      description << "      "
+                  << " ntuple " << ntupleDescription->GetDescription().GetNtupleBooking().name()
                   << "end fill has failed.";
-      G4Exception("G4RootMpiPNtupleManager::Merge()",
-                  "Analysis_W002", JustWarning, description);
+      G4Exception("G4RootMpiPNtupleManager::Merge()", "Analysis_W002", JustWarning, description);
     }
 
     delete ntupleDescription->GetNtuple();
     ntupleDescription->SetNtuple(nullptr);
-  
-    Message(kVL3, "merge", "pntuple", ntupleDescription->GetDescription().GetNtupleBooking().name());
+
+    Message(kVL3, "merge", "pntuple",
+            ntupleDescription->GetDescription().GetNtupleBooking().name());
   }
 
   return finalResult;
@@ -392,7 +386,7 @@ G4bool G4RootMpiPNtupleManager::Reset()
   // we have its ownership.
   // The ntuples will be recreated with new cycle or new open file.
 
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+  for (auto ntupleDescription : fNtupleDescriptionVector) {
     ntupleDescription->GetDescription().Reset();
   }
 
@@ -404,7 +398,7 @@ G4bool G4RootMpiPNtupleManager::Reset()
 //_____________________________________________________________________________
 void G4RootMpiPNtupleManager::Clear()
 {
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+  for (auto ntupleDescription : fNtupleDescriptionVector) {
     delete ntupleDescription->GetNtuple();
   }
 
@@ -417,7 +411,7 @@ void G4RootMpiPNtupleManager::Clear()
 //_____________________________________________________________________________
 G4bool G4RootMpiPNtupleManager::Delete(G4int id)
 {
-  if ( IsVerbose(G4Analysis::kVL4) ) {
+  if (IsVerbose(G4Analysis::kVL4)) {
     Message(G4Analysis::kVL4, "delete", "pntuple ntupleId " + to_string(id));
   }
 
@@ -442,31 +436,28 @@ G4bool G4RootMpiPNtupleManager::Delete(G4int id)
 
 //_____________________________________________________________________________
 
-void  G4RootMpiPNtupleManager::SetActivation(
-  G4bool activation)
+void G4RootMpiPNtupleManager::SetActivation(G4bool activation)
 {
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+  for (auto ntupleDescription : fNtupleDescriptionVector) {
     ntupleDescription->GetDescription().SetActivation(activation);
-  } 
+  }
 }
 
 //_____________________________________________________________________________
 
-void  G4RootMpiPNtupleManager::SetActivation(
-  G4int ntupleId, G4bool activation)
+void G4RootMpiPNtupleManager::SetActivation(G4int ntupleId, G4bool activation)
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetActivation");
-  if ( ! ntupleDescription ) return;
+  if (!ntupleDescription) return;
 
   ntupleDescription->GetDescription().SetActivation(activation);
 }
 
 //_____________________________________________________________________________
-G4bool  G4RootMpiPNtupleManager::GetActivation(
-  G4int ntupleId) const
+G4bool G4RootMpiPNtupleManager::GetActivation(G4int ntupleId) const
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetActivation");
-  if ( ! ntupleDescription ) return false;
+  if (!ntupleDescription) return false;
 
   return ntupleDescription->GetDescription().GetActivation();
 }

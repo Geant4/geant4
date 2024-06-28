@@ -40,19 +40,17 @@
 
 #include "G4BlinePrimaryGeneratorAction.hh"
 
-#include "G4Types.hh"
-#include "G4Event.hh"
 #include "G4ChargedGeantino.hh"
+#include "G4Event.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if (!fUserPrimaryAction)
-  {
-    G4Exception("G4BlinePrimaryGeneratorAction::GeneratePrimaries()",
-                "NullPointer", JustWarning,
+  if (!fUserPrimaryAction) {
+    G4Exception("G4BlinePrimaryGeneratorAction::GeneratePrimaries()", "NullPointer", JustWarning,
                 "Primary generator action not defined !");
     return;
   }
@@ -61,11 +59,10 @@ void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // by using the USER primary action while for the second part the previous
   // values are taken.
 
-  if (fFirstPartOfBline)
-  {
+  if (fFirstPartOfBline) {
     // set the position and time defined by using the USER primary action
 
-    auto  tmpEvent = new G4Event();
+    auto tmpEvent = new G4Event();
     fUserPrimaryAction->GeneratePrimaries(tmpEvent);
     fBlineStartPosition = tmpEvent->GetPrimaryVertex()->GetPosition();
     fT0 = tmpEvent->GetPrimaryVertex()->GetT0();
@@ -73,16 +70,15 @@ void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
   fFirstPartOfBline = false;
 
-  auto  primary_vertex =
-    new G4PrimaryVertex(fBlineStartPosition, fT0);
+  auto primary_vertex = new G4PrimaryVertex(fBlineStartPosition, fT0);
 
   // Define the particle to be tracked as Charged Geantino
 
   G4ChargedGeantino* pdef = G4ChargedGeantino::ChargedGeantino();
 
-  G4double mass =  pdef->GetPDGMass();
-  G4double energy = 10000.*MeV + mass;
-  G4double pmom = std::sqrt(energy*energy-mass*mass);
+  G4double mass = pdef->GetPDGMass();
+  G4double energy = 10000. * MeV + mass;
+  G4double pmom = std::sqrt(energy * energy - mass * mass);
 
   // The momentum direction and energy do not have an effect in tracing of
   // bline but still need to be defined.
@@ -91,10 +87,10 @@ void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double py = 0.;
   G4double pz = pmom;
 
-  auto  particle = new G4PrimaryParticle(pdef,px,py,pz);
-  particle->SetMass( mass );
+  auto particle = new G4PrimaryParticle(pdef, px, py, pz);
+  particle->SetMass(mass);
   particle->SetCharge(pdef->GetPDGCharge());
-  primary_vertex->SetPrimary( particle );
+  primary_vertex->SetPrimary(particle);
 
-  anEvent->AddPrimaryVertex( primary_vertex );
+  anEvent->AddPrimaryVertex(primary_vertex);
 }

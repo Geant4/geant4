@@ -28,31 +28,29 @@
 /// \brief Implementation of the GB05ActionInitialization class
 
 #include "GB05ActionInitialization.hh"
-#include "GB05PrimaryGeneratorAction.hh"
 
+#include "GB05PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB05ActionInitialization::GB05ActionInitialization()
- : G4VUserActionInitialization()
-{}
+GB05ActionInitialization::GB05ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB05ActionInitialization::~GB05ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void GB05ActionInitialization::BuildForMaster() const
-{
-}
+void GB05ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB05ActionInitialization::Build() const
 {
   SetUserAction(new GB05PrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

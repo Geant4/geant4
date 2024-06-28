@@ -45,38 +45,37 @@
 #ifndef CHEM6_ScoreLET_h
 #define CHEM6_ScoreLET_h 1
 
-#include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
-#include "G4UImessenger.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImessenger.hh"
+#include "G4VPrimitiveScorer.hh"
 
-class ScoreLET : public G4VPrimitiveScorer,
-                 public G4UImessenger
+class ScoreLET : public G4VPrimitiveScorer, public G4UImessenger
 {
-public: // with description
-  ScoreLET(G4String name);
-  ~ScoreLET() override;
-  void Initialize(G4HCofThisEvent*) override;
-  void EndOfEvent(G4HCofThisEvent*) override;
-  void OutputAndClear();
+  public:  // with description
+    ScoreLET(G4String name);
+    ~ScoreLET() override;
+    void Initialize(G4HCofThisEvent*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
+    void OutputAndClear();
 
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
-  G4int GetIndex(G4Step*) override;
-  void SetNewValue(G4UIcommand*, G4String) override;
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+    G4int GetIndex(G4Step*) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-private:
-  G4UIdirectory* fpLETDir;
-  G4UIcmdWithADoubleAndUnit* fpCutoff;
+  private:
+    G4UIdirectory* fpLETDir;
+    G4UIcmdWithADoubleAndUnit* fpCutoff;
 
-  G4double fCutoff;
-  G4int fNEvent;
-  G4double fLET;
-  G4double fEdep;
-  G4double fStepL;
-  G4int fTrackID;
+    G4double fCutoff;
+    G4int fNEvent;
+    G4double fLET;
+    G4double fEdep;
+    G4double fStepL;
+    G4int fTrackID;
 
-  G4THitsMap<G4double>* fEvtMap;
+    G4THitsMap<G4double>* fEvtMap;
 };
 #endif

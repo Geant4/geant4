@@ -31,24 +31,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingMessenger.hh"
+
 #include "TrackingAction.hh"
 
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
-:fTrackingAction(trackA)
+TrackingMessenger::TrackingMessenger(TrackingAction* trackA) : fTrackingAction(trackA)
 {
   fTrackingDir = new G4UIdirectory("/testhadr/tracking/");
   fTrackingDir->SetGuidance("tracking commands");
-  
-  fCountCmd = new G4UIcmdWithABool("/testhadr/tracking/countParticles",this);
+
+  fCountCmd = new G4UIcmdWithABool("/testhadr/tracking/countParticles", this);
   fCountCmd->SetGuidance("count created particles");
-  fCountCmd->SetParameterName("flag",false);
+  fCountCmd->SetParameterName("flag", false);
   fCountCmd->SetDefaultValue(true);
-  fCountCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCountCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,9 +62,10 @@ TrackingMessenger::~TrackingMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if(command == fCountCmd)
-   { fTrackingAction->SetParticleCount(fCountCmd->GetNewBoolValue(newValue));}
+{
+  if (command == fCountCmd) {
+    fTrackingAction->SetParticleCount(fCountCmd->GetNewBoolValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -33,9 +33,10 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
+#include "DetectorConstruction.hh"
+
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-#include "DetectorConstruction.hh"
 
 class Run;
 class PrimaryGeneratorAction;
@@ -47,21 +48,20 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction() override;
+    ~RunAction() override;
 
   public:
-    void   BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*)   override;
-    G4Run* GenerateRun() override;     
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
+    G4Run* GenerateRun() override;
 
   private:
-    DetectorConstruction*   fDetector     = nullptr;
-    PrimaryGeneratorAction* fPrimary      = nullptr;
-    Run*                    fRun          = nullptr;
-    HistoManager*           fHistoManager = nullptr;
+    DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary = nullptr;
+    Run* fRun = nullptr;
+    HistoManager* fHistoManager = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

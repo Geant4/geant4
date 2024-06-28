@@ -30,25 +30,25 @@
 /// \author I. Hrivnacova; IPN, Orsay
 
 #include "P6DExtDecayerPhysics.hh"
+
 #include "G4Pythia6Decayer.hh"
 
+#include <G4Decay.hh>
 #include <G4ParticleDefinition.hh>
 #include <G4ProcessManager.hh>
-#include <G4Decay.hh>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-P6DExtDecayerPhysics::P6DExtDecayerPhysics(const G4String& name)
-  : G4VPhysicsConstructor(name)
+P6DExtDecayerPhysics::P6DExtDecayerPhysics(const G4String& name) : G4VPhysicsConstructor(name)
 {
-/// Standard constructor
+  /// Standard constructor
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-P6DExtDecayerPhysics::~P6DExtDecayerPhysics() 
+P6DExtDecayerPhysics::~P6DExtDecayerPhysics()
 {
-/// Destructor
+  /// Destructor
 }
 
 //
@@ -59,54 +59,51 @@ P6DExtDecayerPhysics::~P6DExtDecayerPhysics()
 
 void P6DExtDecayerPhysics::ConstructParticle()
 {
-/// Nothing to be done here
+  /// Nothing to be done here
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void P6DExtDecayerPhysics::ConstructProcess()
 {
-/// Loop over all particles instantiated and add external decayer
-/// to all decay processes if External decayer is set
+  /// Loop over all particles instantiated and add external decayer
+  /// to all decay processes if External decayer is set
 
   // Create Geant4 external decayer
   G4Pythia6Decayer* extDecayer = new G4Pythia6Decayer();
-  extDecayer->SetVerboseLevel(1); 
-     // The extDecayer will be deleted in G4Decay destructor
+  extDecayer->SetVerboseLevel(1);
+  // The extDecayer will be deleted in G4Decay destructor
 
   G4bool isSet = false;
-     // One G4Decay object is shared by all unstable particles (per thread).
-     // Thus, we need to set the external decayer only once.
+  // One G4Decay object is shared by all unstable particles (per thread).
+  // Thus, we need to set the external decayer only once.
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     if (isSet) break;
 
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    
-    if ( verboseLevel > 1 ) {
-      G4cout << "Setting ext decayer for: " 
-             <<  particleIterator->value()->GetParticleName()
+
+    if (verboseLevel > 1) {
+      G4cout << "Setting ext decayer for: " << particleIterator->value()->GetParticleName()
              << G4endl;
-    } 
-    
+    }
+
     G4ProcessVector* processVector = pmanager->GetProcessList();
-    for (std::size_t i=0; i<processVector->length(); i++) {
-    
+    for (std::size_t i = 0; i < processVector->length(); i++) {
       G4Decay* decay = dynamic_cast<G4Decay*>((*processVector)[i]);
-      if ( decay ) {
+      if (decay) {
         decay->SetExtDecayer(extDecayer);
         isSet = true;
       }
-    }              
+    }
   }
 
-  if ( verboseLevel > 0 ) {
+  if (verboseLevel > 0) {
     G4cout << "External decayer physics constructed." << G4endl;
-  }  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

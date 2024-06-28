@@ -35,17 +35,16 @@
 
 class RE01CalorimeterROGeometry : public G4VUserParallelWorld
 {
-public:
-  RE01CalorimeterROGeometry(G4String&);
-  virtual ~RE01CalorimeterROGeometry();
+  public:
+    RE01CalorimeterROGeometry(G4String&);
+    virtual ~RE01CalorimeterROGeometry();
 
-protected:
-  virtual void Construct();
-  virtual void ConstructSD();
+  protected:
+    virtual void Construct();
+    virtual void ConstructSD();
 
-private:
+  private:
 #include "RE01DetectorParameterDef.hh"
-
 };
 
 #endif

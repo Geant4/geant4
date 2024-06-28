@@ -44,25 +44,21 @@
 //*******************************************************
 
 #include "DicomEventAction.hh"
+
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomEventAction::DicomEventAction()
- : G4UserEventAction(),
-   fDrawFlag("all")
-{ }
+DicomEventAction::DicomEventAction() : G4UserEventAction(), fDrawFlag("all") {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomEventAction::~DicomEventAction()
-{ }
+DicomEventAction::~DicomEventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  //G4cout << "EV: " << evt->GetEventID() << G4endl;
-    G4ConsumeParameters(evt);
+  // G4cout << "EV: " << evt->GetEventID() << G4endl;
+  G4ConsumeParameters(evt);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomEventAction::EndOfEventAction(const G4Event*)
-{ }
+void DicomEventAction::EndOfEventAction(const G4Event*) {}

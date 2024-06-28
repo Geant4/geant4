@@ -24,23 +24,28 @@
 // ********************************************************************
 //
 ////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  File:   G4RadioactivationMessenger.cc                                     //
-//  Author: D.H. Wright (SLAC)                                                //
-//  Date:   29 August 2017                                                    //
-//  Description: messenger class for biased version of G4RadioactiveDecay.    //
-//  Based on the code of F. Lei and P.R. Truscott.                            //
-//                                                                            //
+//
+//  GEANT4 Class source file
+//
+//  G4RadioactivationMessenger
+//
+//  Author: D.H. Wright (SLAC)
+//  Date:   29 August 2017
+//
+//  Based on the code of F. Lei and P.R. Truscott.
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4RadioactivationMessenger.hh"
 #include "G4NuclearLevelData.hh"
+#include "G4RadioactiveDecay.hh"
+
 #include <sstream>
 #include "G4HadronicException.hh"
 
 
-G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRadioactivationContainer1)
- :theRadioactivationContainer(theRadioactivationContainer1)
+G4RadioactivationMessenger::G4RadioactivationMessenger(G4RadioactiveDecay* ptr)
+ :theRadDecay(ptr)
 {
   rdmDirectory = new G4UIdirectory("/process/had/rdm/");
   rdmDirectory->SetGuidance("Controls the biased version of radioactive decay");
@@ -100,17 +105,17 @@ G4RadioactivationMessenger::~G4RadioactivationMessenger()
 
 void G4RadioactivationMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if ( command == analoguemcCmd ) { theRadioactivationContainer->
+  if ( command == analoguemcCmd ) { theRadDecay->
     SetAnalogueMonteCarlo( analoguemcCmd->GetNewBoolValue( newValues ) );
-  } else if ( command == brbiasCmd ) { theRadioactivationContainer->
+  } else if ( command == brbiasCmd ) { theRadDecay->
     SetBRBias( brbiasCmd->GetNewBoolValue( newValues ) );
-  } else if ( command == sourcetimeprofileCmd ) { theRadioactivationContainer->
+  } else if ( command == sourcetimeprofileCmd ) { theRadDecay->
     SetSourceTimeProfile( newValues );
-  } else if ( command == decaybiasprofileCmd ) { theRadioactivationContainer->
+  } else if ( command == decaybiasprofileCmd ) { theRadDecay->
     SetDecayBias( newValues );
-  } else if ( command == splitnucleiCmd ) { theRadioactivationContainer->
+  } else if ( command == splitnucleiCmd ) { theRadDecay->
     SetSplitNuclei( splitnucleiCmd->GetNewIntValue( newValues ) );
-  } else if ( command == hlthCmd ) { theRadioactivationContainer->
+  } else if ( command == hlthCmd ) { theRadDecay->
     SetHLThreshold( hlthCmd->GetNewDoubleValue( newValues ) );
   }
 }

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,29 +35,25 @@
 
 // particles
 //
+#include "G4BaryonConstructor.hh"
 #include "G4BosonConstructor.hh"
+#include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList()
-: G4VUserPhysicsList()
-{ }
+PhysicsList::PhysicsList() : G4VUserPhysicsList() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()
-{ }
+PhysicsList::~PhysicsList() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  G4BosonConstructor  pBosonConstructor;
+  G4BosonConstructor pBosonConstructor;
   pBosonConstructor.ConstructParticle();
 
   G4LeptonConstructor pLeptonConstructor;
@@ -84,7 +80,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::SetCuts()
 {
- SetCutsWithDefault(); 
+  SetCutsWithDefault();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

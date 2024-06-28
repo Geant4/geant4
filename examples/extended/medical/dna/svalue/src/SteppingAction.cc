@@ -24,19 +24,22 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
-#include "Run.hh"
-#include "EventAction.hh"
+
 #include "DetectorConstruction.hh"
+#include "EventAction.hh"
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
@@ -44,40 +47,38 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(EventAction* event, DetectorConstruction* detector)
-:G4UserSteppingAction(),
- fEventAction(event),
- fDetectorConstruction(detector)
+  : G4UserSteppingAction(), fEventAction(event), fDetectorConstruction(detector)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- G4double edep = aStep->GetTotalEnergyDeposit();
- if (edep <= 0.) return;
- 
- //total energy deposit in cytoplasm or nucleus
- //
- if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()
-     ==fDetectorConstruction->GetCytoLogicalVolume()) fEventAction->AddCytoEdep(edep);
-       
- if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()
-     ==fDetectorConstruction->GetNuclLogicalVolume()) fEventAction->AddNuclEdep(edep);     
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  if (edep <= 0.) return;
 
- //G4cout << edep << G4endl;
+  // Total energy deposit in cytoplasm or nucleus
 
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-     
- //step size of primary particle or charged secondaries
- //
- G4double steplen = aStep->GetStepLength();
- const G4Track* track = aStep->GetTrack();
- if      (track->GetTrackID() == 1) analysisManager->FillH1(8, steplen);
- else if (track->GetDefinition()->GetPDGCharge() != 0.)
-                                    analysisManager->FillH1(9, steplen); 
+  if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()
+      == fDetectorConstruction->GetCytoLogicalVolume())
+    fEventAction->AddCytoEdep(edep);
+
+  if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()
+      == fDetectorConstruction->GetNuclLogicalVolume())
+    fEventAction->AddNuclEdep(edep);
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  // Step size of primary particle or charged secondaries
+
+  G4double steplen = aStep->GetStepLength();
+  const G4Track* track = aStep->GetTrack();
+  if (track->GetTrackID() == 1)
+    analysisManager->FillH1(8, steplen);
+  else if (track->GetDefinition()->GetPDGCharge() != 0.)
+    analysisManager->FillH1(9, steplen);
 }

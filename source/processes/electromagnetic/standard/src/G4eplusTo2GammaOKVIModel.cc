@@ -35,6 +35,7 @@
 //
 // Creation date: 29.03.2018
 //
+//
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,6 +54,7 @@
 #include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
+#include "G4RandomDirection.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Log.hh"
@@ -60,64 +62,70 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4PhysicsVector* G4eplusTo2GammaOKVIModel::fCrossSection   = nullptr;
-G4PhysicsVector* G4eplusTo2GammaOKVIModel::fCrossSection3G = nullptr;
 G4PhysicsVector* G4eplusTo2GammaOKVIModel::f3GProbability  = nullptr;
 
-G4eplusTo2GammaOKVIModel::G4eplusTo2GammaOKVIModel(const G4ParticleDefinition*,
-                                                   const G4String& nam)
-  : G4VEmModel(nam),
-    fDelta(0.001),
-    fGammaTh(MeV)
+G4eplusTo2GammaOKVIModel::G4eplusTo2GammaOKVIModel()
+  : G4VEmModel("eplus2ggOKVI"),
+    fDeltaMin(0.001),
+    fDelta(fDeltaMin),
+    fGammaTh(CLHEP::MeV)
 {
   theGamma = G4Gamma::Gamma();
   fParticleChange = nullptr;
-  fCuts = nullptr;
   f3GModel = new G4eplusTo3GammaOKVIModel();
   SetTripletModel(f3GModel);
+
+  // instantiate vectors once
+  if (nullptr == fCrossSection) {
+    G4double emin = 10*CLHEP::eV;
+    G4double emax = 100*CLHEP::TeV;
+    G4int nbins = 20*G4lrint(std::log10(emax/emin));
+    fCrossSection = new G4PhysicsLogVector(emin, emax, nbins, true);
+    f3GProbability = new G4PhysicsLogVector(emin, emax, nbins, true);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eplusTo2GammaOKVIModel::~G4eplusTo2GammaOKVIModel() = default;
+G4eplusTo2GammaOKVIModel::~G4eplusTo2GammaOKVIModel()
+{
+  if (IsMaster()) {
+    delete fCrossSection;
+    delete f3GProbability;
+    fCrossSection = nullptr;
+    f3GProbability = nullptr;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
 					  const G4DataVector& cuts)
 {
-  f3GModel->Initialise(p, cuts); 
-  fCuts = &cuts;
-  fGammaTh = G4EmParameters::Instance()->LowestTripletEnergy();
-  f3GModel->SetDelta(fDelta);
-  
-  if(IsMaster()) {
-    if(!fCrossSection) {
-      G4double emin = 10*eV;
-      G4double emax = 100*TeV;
-      G4int nbins = 20*G4lrint(std::log10(emax/emin));
-      fCrossSection   = new G4PhysicsLogVector(emin, emax, nbins, true);
-      fCrossSection3G = new G4PhysicsLogVector(emin, emax, nbins, true);
-      f3GProbability  = new G4PhysicsLogVector(emin, emax, nbins, true);
-      for(G4int i=0; i<= nbins; ++i) {
-        G4double e = fCrossSection->Energy(i);
-        G4double cs2 = ComputeCrossSectionPerElectron(e);
-        G4double cs3 = f3GModel->ComputeCrossSectionPerElectron(e);
-	cs2 += cs3;
-	fCrossSection->PutValue(i, cs2);
-	fCrossSection3G->PutValue(i, cs3);
-	f3GProbability->PutValue(i, cs3/cs2);
-      }
-      fCrossSection->FillSecondDerivatives();
-      fCrossSection3G->FillSecondDerivatives();
-      f3GProbability->FillSecondDerivatives();
-    }
-  }
   // here particle change is set for the triplet model
-  if(fParticleChange) { return; }
-  fParticleChange = GetParticleChangeForGamma();
+  if (nullptr == fParticleChange) {
+    fParticleChange = GetParticleChangeForGamma();
+  }
+  // initialialise 3-gamma model before new run
+  f3GModel->Initialise(p, cuts);
+  fGammaTh = G4EmParameters::Instance()->LowestTripletEnergy();
+
+  // initialise vectors
+  if (IsMaster()) {
+    std::size_t num = fCrossSection->GetVectorLength();
+    for (std::size_t i=0; i<num; ++i) {
+      G4double e = fCrossSection->Energy(i);
+      G4double cs2 = ComputeCrossSectionPerElectron(e);
+      G4double cs3 = f3GModel->ComputeCrossSectionPerElectron(e);
+      cs2 += cs3;
+      fCrossSection->PutValue(i, cs2);
+      G4double y = (cs2 > 0.0) ? cs3/cs2 : 0.0;
+      f3GProbability->PutValue(i, y);
+    }
+    fCrossSection->FillSecondDerivatives();
+    f3GProbability->FillSecondDerivatives();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,16 +137,20 @@ G4eplusTo2GammaOKVIModel::ComputeCrossSectionPerElectron(G4double kinEnergy)
   // photons from the Heilter formula with the radiation correction to 3 gamma 
   // annihilation channel. (A.A.) rho is changed
 
-  G4double ekin   = std::max(eV,kinEnergy);   
-  G4double tau    = ekin/electron_mass_c2;
+  G4double ekin   = std::max(CLHEP::eV, kinEnergy);   
+  G4double tau    = ekin/CLHEP::electron_mass_c2;
   G4double gam    = tau + 1.0;
   G4double gamma2 = gam*gam;
   G4double bg2    = tau * (tau+2.0);
-  G4double bg     = sqrt(bg2);
+  G4double bg     = std::sqrt(bg2);
   G4double rho = (gamma2+4.*gam+1.)*G4Log(gam+bg)/(gamma2-1.) 
-    - (gam+3.)/(sqrt(gam*gam - 1.));   
+    - (gam+3.)/(std::sqrt(gam*gam - 1.));
+  G4double eGammaCMS = CLHEP::electron_mass_c2 * std::sqrt(0.5*(tau + 2.0));
+  fDelta = std::max(fDeltaMin, fGammaTh/eGammaCMS);
+  f3GModel->SetDelta(fDelta);
 
-  static const G4double pir2 = pi*classic_electr_radius*classic_electr_radius;
+  static const G4double pir2 =
+    CLHEP::pi*CLHEP::classic_electr_radius*CLHEP::classic_electr_radius;
   G4double cross = (pir2*rho + alpha_rcl2*2.*G4Log(fDelta)*rho*rho)/(gam+1.);
 
   return cross;  
@@ -175,143 +187,54 @@ G4double G4eplusTo2GammaOKVIModel::CrossSectionPerVolume(
 // Polarisation of gamma according to M.H.L.Pryce and J.C.Ward, 
 // Nature 4065 (1947) 435.
 
-void 
-G4eplusTo2GammaOKVIModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-					    const G4MaterialCutsCouple* mcc,
-					    const G4DynamicParticle* dp,
-					    G4double, G4double)
+void G4eplusTo2GammaOKVIModel::SampleSecondaries(
+				     std::vector<G4DynamicParticle*>* vdp,
+                                     const G4MaterialCutsCouple* couple,
+                                     const G4DynamicParticle* dp,
+                                     G4double, G4double)
 {
-  G4double posiKinEnergy = dp->GetKineticEnergy();
-  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
-
-  if(rndmEngine->flat() < f3GProbability->Value(posiKinEnergy)) {
-    G4double cutd = std::max(fGammaTh,(*fCuts)[mcc->GetIndex()])
-      /(posiKinEnergy + electron_mass_c2);
-    // check cut to avoid production of 3d gamma below 
-    if(cutd > fDelta) {
-      G4double cs30 = fCrossSection3G->Value(posiKinEnergy);
-      f3GModel->SetDelta(cutd);
-      G4double cs3 = f3GModel->ComputeCrossSectionPerElectron(posiKinEnergy);
-      if(rndmEngine->flat()*cs30 < cs3) {
-	f3GModel->SampleSecondaries(vdp, mcc, dp);
-	return;
-      }
-    } else {
-      f3GModel->SampleSecondaries(vdp, mcc, dp);
-      return;
-    }
-  }
-
-  G4DynamicParticle *aGamma1, *aGamma2;
-
-  // Case at rest
-  if(posiKinEnergy == 0.0) {
-    G4double cost = 2.*rndmEngine->flat()-1.;
-    G4double sint = sqrt((1. - cost)*(1. + cost));
-    G4double phi  = twopi * rndmEngine->flat();
-    G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
-    phi = twopi * rndmEngine->flat();
-    G4double cosphi = cos(phi);
-    G4double sinphi = sin(phi);
-    G4ThreeVector pol(cosphi, sinphi, 0.0);
-    pol.rotateUz(dir);
-    aGamma1 = new G4DynamicParticle(theGamma, dir, electron_mass_c2);
-    aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
-    aGamma2 = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
-    pol.set(-sinphi, cosphi, 0.0);
-    pol.rotateUz(dir);
-    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
-
-  } else {
-
-    G4ThreeVector posiDirection = dp->GetMomentumDirection();
-
-    G4double tau     = posiKinEnergy/electron_mass_c2;
-    G4double gam     = tau + 1.0;
-    G4double tau2    = tau + 2.0;
-    G4double sqgrate = sqrt(tau/tau2)*0.5;
-    G4double sqg2m1  = sqrt(tau*tau2);
-
-    // limits of the energy sampling
-    G4double epsilmin = 0.5 - sqgrate;
-    G4double epsilmax = 0.5 + sqgrate;
-    G4double epsilqot = epsilmax/epsilmin;
-
-    //
-    // sample the energy rate of the created gammas
-    //
-    G4double epsil, greject;
-
-    do {
-      epsil = epsilmin*G4Exp(G4Log(epsilqot)*rndmEngine->flat());
-      greject = 1. - epsil + (2.*gam*epsil-1.)/(epsil*tau2*tau2);
-      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-    } while( greject < rndmEngine->flat());
-
-    //
-    // scattered Gamma angles. ( Z - axis along the parent positron)
-    //
-
-    G4double cost = (epsil*tau2-1.)/(epsil*sqg2m1);
-    if(std::abs(cost) > 1.0) {
-      G4cout << "### G4eplusTo2GammaOKVIModel WARNING cost= " << cost
-	     << " positron Ekin(MeV)= " << posiKinEnergy
-	     << " gamma epsil= " << epsil
-	     << G4endl;
-      if(cost > 1.0) cost = 1.0;
-      else cost = -1.0; 
-    }
-    G4double sint = sqrt((1.+cost)*(1.-cost));
-    G4double phi  = twopi * rndmEngine->flat();
-
-    //
-    // kinematic of the created pair
-    //
-
-    G4double TotalAvailableEnergy = posiKinEnergy + 2.0*electron_mass_c2;
-    G4double phot1Energy = epsil*TotalAvailableEnergy;
-
-    G4ThreeVector phot1Direction(sint*cos(phi), sint*sin(phi), cost);
-    phot1Direction.rotateUz(posiDirection);
-    aGamma1 = new G4DynamicParticle (theGamma,phot1Direction, phot1Energy);
-    phi = twopi * rndmEngine->flat();
-    G4double cosphi = cos(phi);
-    G4double sinphi = sin(phi);
-    G4ThreeVector pol(cosphi, sinphi, 0.0);
-    pol.rotateUz(phot1Direction);
-    aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
-
-    G4double phot2Energy =(1.-epsil)*TotalAvailableEnergy;
-    G4double posiP= sqrt(posiKinEnergy*(posiKinEnergy+2.*electron_mass_c2));
-    G4ThreeVector dir = posiDirection*posiP - phot1Direction*phot1Energy;
-    G4ThreeVector phot2Direction = dir.unit();
-
-    // create G4DynamicParticle object for the particle2
-    aGamma2 = new G4DynamicParticle (theGamma,phot2Direction, phot2Energy);
-
-    //!!! likely problematic direction to be checked
-    pol.set(-sinphi, cosphi, 0.0);
-    pol.rotateUz(phot1Direction);
-    cost = pol*phot2Direction;
-    pol -= cost*phot2Direction;
-    pol = pol.unit();
-    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
-  }
-  /*
-    G4cout << "Annihilation in fly: e0= " << posiKinEnergy
-    << " m= " << electron_mass_c2
-    << " e1= " << phot1Energy 
-    << " e2= " << phot2Energy << " dir= " <<  dir 
-    << " -> " << phot1Direction << " " 
-    << phot2Direction << G4endl;
-  */
- 
-  vdp->push_back(aGamma1);
-  vdp->push_back(aGamma2);
-
   // kill primary positron
   fParticleChange->SetProposedKineticEnergy(0.0);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
+
+  // Case at rest not considered anymore
+  G4double posiKinEnergy = dp->GetKineticEnergy();
+  G4LorentzVector lv(dp->GetMomentum(),
+		     posiKinEnergy + 2*CLHEP::electron_mass_c2);
+  G4double eGammaCMS = 0.5 * lv.mag();
+
+  if (G4UniformRand() < f3GProbability->Value(posiKinEnergy)) {
+    fDelta = std::max(fDeltaMin, fGammaTh/eGammaCMS);
+    f3GModel->SetDelta(fDelta);
+    f3GModel->SampleSecondaries(vdp, couple, dp);
+    return;
+  }
+
+  G4ThreeVector dir1 = G4RandomDirection();
+  G4double phi = CLHEP::twopi * G4UniformRand();
+  G4double cosphi = std::cos(phi);
+  G4double sinphi = std::sin(phi);
+  G4ThreeVector pol1(cosphi, sinphi, 0.0);
+  pol1.rotateUz(dir1);
+  G4LorentzVector lv1(eGammaCMS*dir1, eGammaCMS);
+  
+  G4ThreeVector pol2(-sinphi, cosphi, 0.0);
+  pol2.rotateUz(dir1);
+
+  // transformation to lab system
+  lv1.boost(lv.boostVector());
+  lv -= lv1;
+
+  //!!! boost of polarisation vector is not yet implemented
+  
+  // use constructors optimal for massless particle
+  auto aGamma1 = new G4DynamicParticle(G4Gamma::Gamma(), lv1.vect());
+  aGamma1->SetPolarization(pol1);
+  auto aGamma2 = new G4DynamicParticle(G4Gamma::Gamma(), lv.vect());
+  aGamma2->SetPolarization(pol2);
+ 
+  vdp->push_back(aGamma1);
+  vdp->push_back(aGamma2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

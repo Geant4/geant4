@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -224,7 +224,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -547,31 +547,31 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.500000s Real=1.702545s Sys=0.000000s
+  User=1.600000s Real=1.721576s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 775.36 MeV :  17.79 MeV     2.295 +- 0.2295 %      54.7 cm  +- 1.37 cm 
-        G4_lAr: 213.68 MeV :  16.63 MeV     7.783 +- 0.7783 %      1.05 m   +- 8.45 cm 
+         G4_Pb: 777.02 MeV :  15.11 MeV     1.944 +- 0.1944 %      54.9 cm  +- 1.24 cm 
+        G4_lAr: 212.08 MeV :  14.64 MeV     6.903 +- 0.6903 %      1.04 m   +- 7.59 cm 
 
- Total energy deposited = 989 MeV +- 7.31 MeV
- Energy leakage = 10.95 MeV +- 7.291 MeV
- Total energy :  Edep + Eleak = 1000 MeV +- 101.7 keV
+ Total energy deposited = 989.1 MeV +- 7.478 MeV
+ Energy leakage = 10.88 MeV +- 7.445 MeV
+ Total energy :  Edep + Eleak = 1000 MeV +- 143.1 keV
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       506.9
- Mean number of e-          870.1
- Mean number of e+          53.67
- Mean number of charged steps  3659.12
- Mean number of neutral steps  3651.52
+ Mean number of gamma       509.6
+ Mean number of e-          877.1
+ Mean number of e+          53.4
+ Mean number of charged steps  3659.8
+ Mean number of neutral steps  3743.57
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 775.372 MeV
-    G4_lAr:	 213.651 MeV
+     G4_Pb:	 777.04 MeV
+    G4_lAr:	 212.063 MeV
 
 ------------------------------------------------------------
 
@@ -622,36 +622,36 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.210000s Real=1.234455s Sys=0.000000s
+  User=1.240000s Real=1.306412s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 773.86 MeV :  20.77 MeV     2.683 +- 0.2683 %        52 cm  +- 1.36 cm 
-        G4_lAr: 215.88 MeV :  17.59 MeV      8.15 +- 0.815 %      1.02 m   +- 8.23 cm 
+         G4_Pb: 772.06 MeV :  27.33 MeV      3.54 +- 0.354 %      51.9 cm  +- 1.77 cm 
+        G4_lAr: 215.96 MeV :  17.58 MeV     8.142 +- 0.8142 %      1.02 m   +- 8.02 cm 
 
- Total energy deposited = 989.7 MeV +- 14.37 MeV
- Energy leakage = 8.747 MeV +- 6.022 MeV
- Total energy :  Edep + Eleak = 998.5 MeV +- 12.42 MeV
+ Total energy deposited = 988 MeV +- 26.74 MeV
+ Energy leakage = 11.93 MeV +- 21.64 MeV
+ Total energy :  Edep + Eleak = 999.9 MeV +- 14.43 MeV
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma       290.5
- Mean number of e-          556.2
- Mean number of e+          53.21
- Mean number of charged steps  3103.77
- Mean number of neutral steps  2939.75
+ Mean number of e-          553.8
+ Mean number of e+          53.4
+ Mean number of charged steps  3118.64
+ Mean number of neutral steps  2942.43
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 773.503 MeV
-    G4_lAr:	 217.71 MeV
+     G4_Pb:	 771.342 MeV
+    G4_lAr:	 216.669 MeV
 
 ------------------------------------------------------------
 
 #
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.11 MB
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.091 MB
 ============================================================

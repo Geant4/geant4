@@ -168,6 +168,12 @@
 \verbatim
 % fanoCavity   run01.mac
 \endverbatim
+
+ - Alternative macro file:
+\verbatim
+   basic.mac - disabled multiple scattering and fluctuations of energy loss
+\endverbatim
+
  
  - Execute fanoCavity in 'interactive mode' with visualization
 \verbatim

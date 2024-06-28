@@ -131,6 +131,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
                            const G4AffineTransform& pTransform,
                                  G4double& pMin, G4double& pMax) const override;
     G4GeometryType GetEntityType () const override;
+    G4bool IsFaceted () const override;
     G4VSolid* Clone() const override;
 
     std::ostream& StreamInfo(std::ostream& os) const override;

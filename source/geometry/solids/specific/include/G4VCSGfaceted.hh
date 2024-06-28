@@ -33,7 +33,7 @@
 // Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 #ifndef G4VCSGFACETED_HH
-#define G4VCSGFACETED_HH
+#define G4VCSGFACETED_HH 1
 
 #include "G4VSolid.hh"
 
@@ -45,7 +45,7 @@ class G4VCSGfaceted : public G4VSolid
   public:
 
     G4VCSGfaceted( const G4String& name );
-    virtual ~G4VCSGfaceted();
+    ~G4VCSGfaceted() override;
   
     G4VCSGfaceted( const G4VCSGfaceted& source );
     G4VCSGfaceted& operator=( const G4VCSGfaceted& source );

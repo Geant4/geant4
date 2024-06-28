@@ -28,37 +28,35 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
-#include "Randomize.hh"
+
 #include "G4ParticleGun.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-    : G4VUserPrimaryGeneratorAction()
-    , fpParticleGun(nullptr)
+  : G4VUserPrimaryGeneratorAction(), fpParticleGun(nullptr)
 {
-    G4int n_particle = 1;
-    fpParticleGun.reset(new G4ParticleGun(n_particle));
-  
-// default gun parameters
-    fpParticleGun->SetParticleEnergy(10.*CLHEP::keV);
-    fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-    fpParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-20.*CLHEP::nm));
+  G4int n_particle = 1;
+  fpParticleGun.reset(new G4ParticleGun(n_particle));
+
+  // default gun parameters
+  fpParticleGun->SetParticleEnergy(10. * CLHEP::keV);
+  fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fpParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -20. * CLHEP::nm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{}
+PrimaryGeneratorAction::~PrimaryGeneratorAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    G4double randomx = -1 + 2*G4UniformRand();
-    G4double randomy = -1 + 2*G4UniformRand();
-    fpParticleGun->SetParticlePosition(G4ThreeVector(10.*randomx*CLHEP::nm,
-                                                     10.*randomy*CLHEP::nm,
-                                                     -20.*CLHEP::nm));
-    fpParticleGun->GeneratePrimaryVertex(anEvent);
+  G4double randomx = -1 + 2 * G4UniformRand();
+  G4double randomy = -1 + 2 * G4UniformRand();
+  fpParticleGun->SetParticlePosition(
+    G4ThreeVector(10. * randomx * CLHEP::nm, 10. * randomy * CLHEP::nm, -20. * CLHEP::nm));
+  fpParticleGun->GeneratePrimaryVertex(anEvent);
 }

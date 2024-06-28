@@ -30,16 +30,14 @@
 #include "G4SystemOfUnits.hh"
 
 Par03PrimaryGeneratorAction::Par03PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
-  , fParticleGun(nullptr)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(nullptr)
 {
   G4int n_particle = 1;
-  fParticleGun     = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
   // Default particle properties
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle =
-    particleTable->FindParticle(particleName = "e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "e-");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
   fParticleGun->SetParticleEnergy(10. * GeV);
@@ -48,7 +46,10 @@ Par03PrimaryGeneratorAction::Par03PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03PrimaryGeneratorAction::~Par03PrimaryGeneratorAction() { delete fParticleGun; }
+Par03PrimaryGeneratorAction::~Par03PrimaryGeneratorAction()
+{
+  delete fParticleGun;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -39,7 +39,6 @@
 #ifndef G4UIparameter_hh
 #define G4UIparameter_hh 1
 
-#include "G4UItokenNum.hh"
 #include "globals.hh"
 
 class G4UIparameter
@@ -108,36 +107,11 @@ class G4UIparameter
     inline const G4String& GetParameterGuidance() const { return parameterGuidance; }
     inline void SetGuidance(const char* theGuidance) { parameterGuidance = theGuidance; }
 
-  protected:
-    using yystype = G4UItokenNum::yystype;
-    using tokenNum = G4UItokenNum::tokenNum;
+  private:
+    G4bool TypeCheck(const char* newValue);
+    G4bool CandidateCheck(const char* newValue);
 
   private:
-    // --- the following is used by CheckNewValue() -------
-    G4bool TypeCheck(const char* newValue);
-    G4bool RangeCheck(const char* newValue);
-    G4bool CandidateCheck(const char* newValue);
-    //  syntax nodes
-    yystype Expression();
-    yystype LogicalORExpression();
-    yystype LogicalANDExpression();
-    yystype EqualityExpression();
-    yystype RelationalExpression();
-    yystype AdditiveExpression();
-    yystype MultiplicativeExpression();
-    yystype UnaryExpression();
-    yystype PrimaryExpression();
-    //  semantics routines
-    G4int Eval2(const yystype& arg1, G4int op, const yystype& arg2);
-    //  utility
-    tokenNum Yylex();  // returns next token
-    G4int G4UIpGetc();  // read one char from rangeBuf
-    G4int G4UIpUngetc(G4int c);  // put back
-    G4int Backslash(G4int c);
-    G4int Follow(G4int expect, G4int ifyes, G4int ifno);
-
-    // data -----------------------------------------------------------
-
     G4String parameterName;
     G4String parameterGuidance;
     G4String defaultValue;
@@ -146,13 +120,6 @@ class G4UIparameter
     char parameterType = '\0';
     G4bool omittable = false;
     G4bool currentAsDefaultFlag = false;
-
-    //------------ CheckNewValue() related data members ---------------
-    G4int bp = 0;  // current index in rangeExpression
-    tokenNum token = G4UItokenNum::NONE;
-    yystype yylval;
-    yystype newVal;
-    G4int paramERR = 0;
 };
 
 #endif

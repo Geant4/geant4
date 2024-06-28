@@ -24,106 +24,101 @@
 // ********************************************************************
 #ifdef G4_USE_FLUKA
 
+#  include "G4_HP_CernFLUKAHadronInelastic_PhysicsList.hh"
 
-#include "G4_HP_CernFLUKAHadronInelastic_PhysicsList.hh"
-
 // G4
-//#include "G4EmStandardPhysics.hh"
-#include "G4EmLivermorePhysics.hh"         // LIV
-#include "G4EmExtraPhysics.hh"
+// #include "G4EmStandardPhysics.hh"
+#  include "G4EmExtraPhysics.hh"
+#  include "G4EmLivermorePhysics.hh"  // LIV
 // G4
-#include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"    // HP
+#  include "G4DecayPhysics.hh"
+#  include "G4RadioactiveDecayPhysics.hh"  // HP
 // G4
-//#include "G4HadronElasticPhysics.hh"
-#include "G4HadronElasticPhysicsHP.hh"     // HP
+// #include "G4HadronElasticPhysics.hh"
+#  include "G4HadronElasticPhysicsHP.hh"  // HP
 // G4
-//#include "G4HadronPhysicsFTFP_BERT_HP.hh"
-#include "FLUKAHadronInelasticPhysicsConstructor.hh"
+// #include "G4HadronPhysicsFTFP_BERT_HP.hh"
+#  include "FLUKAHadronInelasticPhysicsConstructor.hh"
 // G4
-#include "G4IonPhysics.hh"
+#  include "G4IonPhysics.hh"
 // G4
-#include "G4StoppingPhysics.hh"
-//#include "G4NeutronTrackingCut.hh"        // when NOT HP
-// G4
-#include "CLHEP/Units/SystemOfUnits.h"
-
-#include "fluka_interface.hh"
-
+#  include "G4StoppingPhysics.hh"
+// #include "G4NeutronTrackingCut.hh"        // when NOT HP
+//  G4
+#  include "CLHEP/Units/SystemOfUnits.h"
+#  include "fluka_interface.hh"
 
 // ***************************************************************************
-// A physics list based on FTFP_BERT_HP LIV, 
+// A physics list based on FTFP_BERT_HP LIV,
 // but with full hadron inelastic physics replaced by the one from FLUKA.CERN.
 // ***************************************************************************
-G4_HP_CernFLUKAHadronInelastic_PhysicsList::G4_HP_CernFLUKAHadronInelastic_PhysicsList(G4int verbose) {
-
+G4_HP_CernFLUKAHadronInelastic_PhysicsList::G4_HP_CernFLUKAHadronInelastic_PhysicsList(
+  G4int verbose)
+{
   if (verbose > 0) {
-    G4cout << "<<< Geant4 Physics List simulation engine: G4_HP_CernFLUKAHadronInelastic_PhysicsList" 
-           << G4endl << G4endl;
+    G4cout
+      << "<<< Geant4 Physics List simulation engine: G4_HP_CernFLUKAHadronInelastic_PhysicsList"
+      << G4endl << G4endl;
   }
   SetVerboseLevel(verbose);
 
   // IMPORTANT: The default production cut is set here.
-  defaultCutValue = 0.7*CLHEP::mm;
-  
+  defaultCutValue = 0.7 * CLHEP::mm;
 
   // EM PHYSICS
-  //RegisterPhysics( new G4EmStandardPhysics(ver) );
-  RegisterPhysics( new G4EmLivermorePhysics( verbose ) );    // LIV
+  // RegisterPhysics( new G4EmStandardPhysics(ver) );
+  RegisterPhysics(new G4EmLivermorePhysics(verbose));  // LIV
 
   // SYNCHROTON RADIATION & GN PHYSICS
-  RegisterPhysics( new G4EmExtraPhysics(verbose) );
+  RegisterPhysics(new G4EmExtraPhysics(verbose));
 
-  // DECAYS 
-  RegisterPhysics( new G4DecayPhysics(verbose) );
-  RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) ); // HP
+  // DECAYS
+  RegisterPhysics(new G4DecayPhysics(verbose));
+  RegisterPhysics(new G4RadioactiveDecayPhysics(verbose));  // HP
 
   // HADRON ELASTIC SCATTERING
-  //RegisterPhysics( new G4HadronElasticPhysics(verbose) );
-  RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );   // HP
+  // RegisterPhysics( new G4HadronElasticPhysics(verbose) );
+  RegisterPhysics(new G4HadronElasticPhysicsHP(verbose));  // HP
 
   // HADRON INELASTIC PHYSICS
-  //RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verbose) );
-  RegisterPhysics( new FLUKAHadronInelasticPhysicsConstructor( verbose ) );
+  // RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verbose) );
+  RegisterPhysics(new FLUKAHadronInelasticPhysicsConstructor(verbose));
 
   // ION PHYSICS
-  RegisterPhysics( new G4IonPhysics(verbose) );
+  RegisterPhysics(new G4IonPhysics(verbose));
 
   // STOPPING PHYSICS
-  RegisterPhysics( new G4StoppingPhysics(verbose) );
+  RegisterPhysics(new G4StoppingPhysics(verbose));
   // NEUTRON TRACKING CUT
   // NB: Not in FTFP_BERT_HP!
-  //RegisterPhysics( new G4NeutronTrackingCut( verbose ) ); // when NOT HP
+  // RegisterPhysics( new G4NeutronTrackingCut( verbose ) ); // when NOT HP
 
-  
   // IMPORTANT: Initialize the FLUKA interface here.
   // Both activation switches should be set to TRUE to provide the most comprehensive results.
-  // NB: COMPARISON WITH G4 DOES NOT SEEM MEANINGFUL 
+  // NB: COMPARISON WITH G4 DOES NOT SEEM MEANINGFUL
   // WHEN COALESCENCE IS ACTIVATED IN BOTH FLUKA AND G4.
   // Freedom to choose & see the effect of these switches is hence provided here.
   const G4bool activateCoalescence = true;
   const G4bool activateHeavyFragmentsEvaporation = true;
-  fluka_interface::initialize(activateCoalescence, 
-                              activateHeavyFragmentsEvaporation);
+  fluka_interface::initialize(activateCoalescence, activateHeavyFragmentsEvaporation);
 }
-
 
 // ***************************************************************************
 // IMPORTANT: Set production cuts here: add a 0. cut for proton production.
 // ***************************************************************************
-void G4_HP_CernFLUKAHadronInelastic_PhysicsList::SetCuts() {
+void G4_HP_CernFLUKAHadronInelastic_PhysicsList::SetCuts()
+{
+  if (verboseLevel > 1) {
+    G4cout << "G4_HP_CernFLUKAHadronInelastic_PhysicsList::SetCuts:";
+  }
 
-	if (verboseLevel > 1) { G4cout << "G4_HP_CernFLUKAHadronInelastic_PhysicsList::SetCuts:"; }
+  // G4VUserPhysicsList::SetCutsWithDefault sets
+  // the default cut value for all particle types.
+  SetCutsWithDefault();
 
-	// G4VUserPhysicsList::SetCutsWithDefault sets 
-	// the default cut value for all particle types.
-	SetCutsWithDefault();
-
-	// Set proton cut value to 0, for producing low energy recoil nucleus.
-	SetCutValue(0., "proton");
-	G4cout << "Proton production cut: " << GetCutValue("proton") << G4endl;
+  // Set proton cut value to 0, for producing low energy recoil nucleus.
+  SetCutValue(0., "proton");
+  G4cout << "Proton production cut: " << GetCutValue("proton") << G4endl;
 }
 
-
-#endif // G4_USE_FLUKA
-
+#endif  // G4_USE_FLUKA

@@ -33,23 +33,22 @@
 #ifndef StepMaxBuilder_h
 #define StepMaxBuilder_h 1
 
-#include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StepMaxBuilder : public G4VPhysicsConstructor
 {
   public:
-    StepMaxBuilder(const G4String& name="UserStepMax");
-   ~StepMaxBuilder() override = default;
+    StepMaxBuilder(const G4String& name = "UserStepMax");
+    ~StepMaxBuilder() override = default;
 
   public:
-    void ConstructParticle() override { };
+    void ConstructParticle() override {};
     void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

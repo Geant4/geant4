@@ -27,19 +27,19 @@
 /// \brief Implementation of the ExP01MagneticField class
 //
 //
-//  
+//
 //   User Field class implementation.
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExP01MagneticField.hh"
+
 #include "G4FieldManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01MagneticField::ExP01MagneticField()
-  : G4UniformMagField(G4ThreeVector())
+ExP01MagneticField::ExP01MagneticField() : G4UniformMagField(G4ThreeVector())
 {
   GetGlobalFieldManager()->SetDetectorField(this);
   GetGlobalFieldManager()->CreateChordFinder(this);
@@ -47,10 +47,9 @@ ExP01MagneticField::ExP01MagneticField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01MagneticField::ExP01MagneticField(G4ThreeVector fieldVector)
-  : G4UniformMagField(fieldVector)
+ExP01MagneticField::ExP01MagneticField(G4ThreeVector fieldVector) : G4UniformMagField(fieldVector)
 {
-  GetGlobalFieldManager()->SetDetectorField(this);    
+  GetGlobalFieldManager()->SetDetectorField(this);
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
@@ -60,7 +59,7 @@ ExP01MagneticField::ExP01MagneticField(G4ThreeVector fieldVector)
 //
 void ExP01MagneticField::SetFieldValue(G4double fieldValue)
 {
-   G4UniformMagField::SetFieldValue(G4ThreeVector(fieldValue,0,0));
+  G4UniformMagField::SetFieldValue(G4ThreeVector(fieldValue, 0, 0));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,13 +69,13 @@ void ExP01MagneticField::SetFieldValue(G4double fieldValue)
 void ExP01MagneticField::SetFieldValue(G4ThreeVector fieldVector)
 {
   // Find the Field Manager for the global field
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
-    
-  if(fieldVector!=G4ThreeVector(0.,0.,0.))
-  { 
+  G4FieldManager* fieldMgr = GetGlobalFieldManager();
+
+  if (fieldVector != G4ThreeVector(0., 0., 0.)) {
     G4UniformMagField::SetFieldValue(fieldVector);
     fieldMgr->SetDetectorField(this);
-  } else {
+  }
+  else {
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
     G4MagneticField* magField = NULL;
@@ -95,7 +94,7 @@ ExP01MagneticField::~ExP01MagneticField()
 
 #include "G4TransportationManager.hh"
 
-G4FieldManager*  ExP01MagneticField::GetGlobalFieldManager()
+G4FieldManager* ExP01MagneticField::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()->GetFieldManager();
 }

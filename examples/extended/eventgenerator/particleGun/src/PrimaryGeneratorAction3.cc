@@ -27,60 +27,59 @@
 /// \brief Implementation of the PrimaryGeneratorAction3 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction3.hh"
+
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction3::PrimaryGeneratorAction3(G4ParticleGun* gun)
-: fParticleGun(gun)
-{    
+PrimaryGeneratorAction3::PrimaryGeneratorAction3(G4ParticleGun* gun) : fParticleGun(gun)
+{
   // direction
   //
-  G4double theta = 90*deg, phi = 45*deg;
-  fNewUz = G4ThreeVector(std::sin(theta)*std::cos(phi),
-                         std::sin(theta)*std::sin(phi),
+  G4double theta = 90 * deg, phi = 45 * deg;
+  fNewUz = G4ThreeVector(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi),
                          std::cos(theta));
-                        
-  fAlphaMax = 15*deg;                        
+
+  fAlphaMax = 15 * deg;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction3::GeneratePrimaries(G4Event* anEvent)
 {
-  //particle direction uniform around fNewUz axis
+  // particle direction uniform around fNewUz axis
   //
-  //1- in World frame      
-  //cosAlpha uniform in [cos(0), cos(fAlphaMax)]
-  G4double cosAlpha = 1. - G4UniformRand()*(1.- std::cos(fAlphaMax));
-  G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
-  G4double psi      = twopi*G4UniformRand();  //psi uniform in [0, 2*pi]  
-  G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
-  
-  //2- rotate dir   (rotateUz transforms uz to fNewUz)
-  dir.rotateUz(fNewUz);           
+  // 1- in World frame
+  // cosAlpha uniform in [cos(0), cos(fAlphaMax)]
+  G4double cosAlpha = 1. - G4UniformRand() * (1. - std::cos(fAlphaMax));
+  G4double sinAlpha = std::sqrt(1. - cosAlpha * cosAlpha);
+  G4double psi = twopi * G4UniformRand();  // psi uniform in [0, 2*pi]
+  G4ThreeVector dir(sinAlpha * std::cos(psi), sinAlpha * std::sin(psi), cosAlpha);
+
+  // 2- rotate dir   (rotateUz transforms uz to fNewUz)
+  dir.rotateUz(fNewUz);
 
   fParticleGun->SetParticleMomentumDirection(dir);
-  
-  //set energy
-  //
-  fParticleGun->SetParticleEnergy(1*MeV);    
 
-  //create vertex
-  //   
+  // set energy
+  //
+  fParticleGun->SetParticleEnergy(1 * MeV);
+
+  // create vertex
+  //
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

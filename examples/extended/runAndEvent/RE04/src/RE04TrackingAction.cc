@@ -28,12 +28,14 @@
 //
 //
 #include "RE04TrackingAction.hh"
-#include "G4TrackingManager.hh"
-#include "G4Track.hh"
+
 #include "RE04Trajectory.hh"
 
+#include "G4Track.hh"
+#include "G4TrackingManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RE04TrackingAction::PreUserTrackingAction(const G4Track* aTrack) 
+void RE04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   fpTrackingManager->SetStoreTrajectory(true);
   fpTrackingManager->SetTrajectory(new RE04Trajectory(aTrack));
@@ -41,6 +43,6 @@ void RE04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04TrackingAction::PostUserTrackingAction(const G4Track* /*aTrack*/)
-{;}
-
-
+{
+  ;
+}

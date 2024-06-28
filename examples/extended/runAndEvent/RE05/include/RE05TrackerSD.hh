@@ -31,8 +31,9 @@
 #ifndef RE05TrackerSD_h
 #define RE05TrackerSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "RE05TrackerHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
@@ -40,18 +41,18 @@ class G4TouchableHistory;
 class RE05TrackerSD : public G4VSensitiveDetector
 {
   public:
-      RE05TrackerSD(G4String name);
-      virtual ~RE05TrackerSD();
+    RE05TrackerSD(G4String name);
+    virtual ~RE05TrackerSD();
 
-      virtual void Initialize(G4HCofThisEvent*HCE);
-      virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      virtual void EndOfEvent(G4HCofThisEvent*HCE);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+    virtual void Initialize(G4HCofThisEvent* HCE);
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent* HCE);
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
 
   private:
-      RE05TrackerHitsCollection* fTrackerCollection;
+    RE05TrackerHitsCollection* fTrackerCollection;
 };
 
 #endif

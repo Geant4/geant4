@@ -562,8 +562,6 @@ G4IntersectionSolid::CreatePolyhedron () const
   }
   else
   {
-    return fExternalBoolProcessor
-            ->Intersection(GetConstituentSolid(0)->GetPolyhedron(),
-                           GetConstituentSolid(1)->GetPolyhedron());
+    return fExternalBoolProcessor->Process(this);
   }
 }

@@ -28,8 +28,8 @@
 //
 //
 // ======================================================================
-//      PARAMETER (NMXHEP=4000) 
-//      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP), 
+//      PARAMETER (NMXHEP=4000)
+//      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP),
 //     &        JMOHEP(2,NMXHEP),JDAHEP(2,NMXHEP),PHEP(5,NMXHEP),VHEP(4,NMXHEP)
 // ======================================================================
 ///**********************************************************/
@@ -59,12 +59,12 @@
 ///*========================================================*/
 //
 // This interface to HEPEVT common block treats the block as
-// an array of bytes --- the precision and number of entries 
+// an array of bytes --- the precision and number of entries
 // is determined "on the fly" by the wrapper and used to decode
 // each entry.
 //
-// HEPEVT_EntriesAllocation is the maximum size of the HEPEVT common block 
-// that can be interfaced. It is NOT the actual size of the HEPEVT common 
+// HEPEVT_EntriesAllocation is the maximum size of the HEPEVT common block
+// that can be interfaced. It is NOT the actual size of the HEPEVT common
 // used in each individual application. The actual size can be changed on
 // the fly using HepMC::HEPEVT_Wrapper::set_max_number_entries().
 // Thus HEPEVT_EntriesAllocation should typically be set
@@ -73,15 +73,21 @@
 
 #include <ctype.h>
 
-enum {HEPEVT_EntriesAllocation=4000};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const unsigned int hepevt_bytes_allocation = 
-sizeof(long int) * ( 2 + 4 * HEPEVT_EntriesAllocation )
-  + sizeof(double) * ( 9 * HEPEVT_EntriesAllocation );
+enum
+{
+  HEPEVT_EntriesAllocation = 4000
+};
 
-extern "C" struct hepevt{
-  char data[hepevt_bytes_allocation];
+const unsigned int hepevt_bytes_allocation = sizeof(long int) * (2 + 4 * HEPEVT_EntriesAllocation)
+                                             + sizeof(double) * (9 * HEPEVT_EntriesAllocation);
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+extern "C" struct hepevt
+{
+    char data[hepevt_bytes_allocation];
 };
 
 hepevt hepevt_;
-

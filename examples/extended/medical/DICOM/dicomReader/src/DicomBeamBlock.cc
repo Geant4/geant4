@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 #include "DicomBeamBlock.hh"
+
 #include "dcmtk/dcmrt/seq/drtcos.h"
+
 #include "G4UIcommand.hh"
 
 // DOC at https://www.dabsoft.ch/dicom/3/C.8.8.14/
@@ -35,7 +37,7 @@ DicomBeamBlock::DicomBeamBlock(DRTBlockSequenceInRTBeamsModule::Item bblItem)
   Sint32 fint;
   Float64 ffloat;
   OFVector<Float64> fvfloat;
-  OFCondition cond; 
+  OFCondition cond;
   G4cout << " DicomBeamBlock::DicomBeamBlock " << G4endl;
 
   bblItem.getBlockName(fstr);
@@ -47,31 +49,27 @@ DicomBeamBlock::DicomBeamBlock(DRTBlockSequenceInRTBeamsModule::Item bblItem)
   bblItem.getMaterialID(fstr);
   bblItem.getBlockNumberOfPoints(fint);
   bblItem.getBlockData(fvfloat);
-  
+
   bblItem.getSourceToBlockTrayDistance(ffloat);
   theSourceToBlockTrayDistance = ffloat;
 
   bblItem.getBlockMountingPosition(fstr);
   theBlockMountingPosition = fstr;
-  
+
   bblItem.getBlockDivergence(fstr);
   bblItem.getBlockThickness(ffloat);
   bblItem.getBlockTransmission(ffloat);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamBlock::Print( std::ostream&  )
-{
-
-}
+void DicomBeamBlock::Print(std::ostream&) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamBlock::DumpToFile( std::ofstream& fout )
+void DicomBeamBlock::DumpToFile(std::ofstream& fout)
 {
-  std::string name  = ":P BLOCK_" + G4UIcommand::ConvertToString(theBlockNumber) + "_";
+  std::string name = ":P BLOCK_" + G4UIcommand::ConvertToString(theBlockNumber) + "_";
 
   fout << ":PS BLOCK_POS " << theBlockMountingPosition << G4endl;
-  
-  fout << name << "SourceToBlockTrayDistance " << theSourceToBlockTrayDistance << G4endl;
 
+  fout << name << "SourceToBlockTrayDistance " << theSourceToBlockTrayDistance << G4endl;
 }

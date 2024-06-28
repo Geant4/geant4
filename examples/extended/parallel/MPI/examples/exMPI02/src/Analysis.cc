@@ -27,13 +27,15 @@
 /// @file Analysis.cc
 /// @brief Define histograms
 
+#include "Analysis.hh"
+
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TROOT.h"
-#include "G4SystemOfUnits.hh"
-#include "Analysis.hh"
+
 #include "G4AutoLock.hh"
+#include "G4SystemOfUnits.hh"
 
 G4ThreadLocal G4int Analysis::fincidentFlag = false;
 G4ThreadLocal Analysis* the_analysis = 0;
@@ -43,8 +45,8 @@ G4Mutex rootm = G4MUTEX_INITIALIZER;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Analysis* Analysis::GetAnalysis()
 {
-   if ( ! the_analysis ) the_analysis = new Analysis;
-   return the_analysis;
+  if (!the_analysis) the_analysis = new Analysis;
+  return the_analysis;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,29 +54,25 @@ Analysis::Analysis()
 {
   G4AutoLock l(&rootm);
   // define histograms
-  fincident_map = new TH2D("incident map", "Incident Distributuon",
-                            50, -5., 5.,
-                            50, -5., 5.);
-  fincident_map-> GetXaxis()-> SetTitle("X (cm)");
-  fincident_map-> GetYaxis()-> SetTitle("Y (cm)");
-  fincident_map-> SetStats(0);
+  fincident_map = new TH2D("incident map", "Incident Distributuon", 50, -5., 5., 50, -5., 5.);
+  fincident_map->GetXaxis()->SetTitle("X (cm)");
+  fincident_map->GetYaxis()->SetTitle("Y (cm)");
+  fincident_map->SetStats(0);
 
   fincident_x_hist = new TH1D("incident x", "Incident X", 100, -5., 5.);
-  fincident_x_hist-> GetXaxis()-> SetTitle("X (cm)");
-  fincident_x_hist-> SetFillColor(kRed);
+  fincident_x_hist->GetXaxis()->SetTitle("X (cm)");
+  fincident_x_hist->SetFillColor(kRed);
 
-  fdose_map = new TH2D("dose map", "Dose Distribution",
-                       500, 0., 50.,
-                       200, -10., 10.);
-  fdose_map-> GetXaxis()-> SetTitle("Z (cm)");
-  fdose_map-> GetYaxis()-> SetTitle("X (cm)");
-  fdose_map-> SetStats(0);
+  fdose_map = new TH2D("dose map", "Dose Distribution", 500, 0., 50., 200, -10., 10.);
+  fdose_map->GetXaxis()->SetTitle("Z (cm)");
+  fdose_map->GetYaxis()->SetTitle("X (cm)");
+  fdose_map->SetStats(0);
 
   fdose_hist = new TH1D("dose", "Dose Distribution", 500, 0., 50.);
-  fdose_hist-> GetXaxis()-> SetTitle("Z (cm)");
-  fdose_hist-> GetYaxis()-> SetTitle("Dose (GeV)");
-  fdose_hist-> SetFillColor(kBlue);
-  fdose_hist-> SetStats(0);
+  fdose_hist->GetXaxis()->SetTitle("Z (cm)");
+  fdose_hist->GetYaxis()->SetTitle("Dose (GeV)");
+  fdose_hist->SetFillColor(kBlue);
+  fdose_hist->SetStats(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,10 +93,10 @@ void Analysis::Update()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::Clear()
 {
-  fincident_map-> Reset();
-  fincident_x_hist-> Reset();
-  fdose_map-> Reset();
-  fdose_hist-> Reset();
+  fincident_map->Reset();
+  fincident_x_hist->Reset();
+  fdose_map->Reset();
+  fdose_hist->Reset();
 
   return;
 }
@@ -109,12 +107,12 @@ void Analysis::Save(const G4String& fname)
   G4AutoLock l(&rootm);
   TFile* file = new TFile(fname.c_str(), "RECREATE", "Geant4 ROOT analysis");
 
-  fincident_map-> Write();
-  fincident_x_hist-> Write();
-  fdose_map-> Write();
-  fdose_hist-> Write();
+  fincident_map->Write();
+  fincident_x_hist->Write();
+  fdose_map->Write();
+  fdose_hist->Write();
 
-  file-> Close();
+  file->Close();
 
   delete file;
 
@@ -124,9 +122,9 @@ void Analysis::Save(const G4String& fname)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::FillIncident(const G4ThreeVector& p)
 {
-  if ( ! fincidentFlag ) {
-    fincident_map-> Fill(p.x()/cm, p.y()/cm);
-    fincident_x_hist-> Fill(p.x()/cm);
+  if (!fincidentFlag) {
+    fincident_map->Fill(p.x() / cm, p.y() / cm);
+    fincident_x_hist->Fill(p.x() / cm);
 
     fincidentFlag = true;
   }
@@ -135,14 +133,14 @@ void Analysis::FillIncident(const G4ThreeVector& p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::FillDose(const G4ThreeVector& p, G4double dedx)
 {
-  const G4double Z0 = 25.*cm;
-  const G4double dxy = 10.*mm;
+  const G4double Z0 = 25. * cm;
+  const G4double dxy = 10. * mm;
 
-  if ( std::abs(p.y()) < dxy ) {
-    fdose_map-> Fill((p.z()+Z0)/cm, p.x()/cm, dedx/GeV);
+  if (std::abs(p.y()) < dxy) {
+    fdose_map->Fill((p.z() + Z0) / cm, p.x() / cm, dedx / GeV);
 
-    if ( std::abs(p.x()) < dxy ) {
-      fdose_hist-> Fill((p.z()+Z0)/cm, dedx/GeV);
+    if (std::abs(p.x()) < dxy) {
+      fdose_hist->Fill((p.z() + Z0) / cm, dedx / GeV);
     }
   }
 }

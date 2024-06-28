@@ -32,10 +32,9 @@
 
 #include "G4VUserActionInitialization.hh"
 
-
 namespace B4
 {
-  class DetectorConstruction;
+class DetectorConstruction;
 }
 
 namespace B4a
@@ -56,8 +55,6 @@ class ActionInitialization : public G4VUserActionInitialization
     B4::DetectorConstruction* fDetConstruction = nullptr;
 };
 
-}
+}  // namespace B4a
 
 #endif
-
-

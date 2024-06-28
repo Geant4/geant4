@@ -42,6 +42,7 @@
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"
 
@@ -107,6 +108,7 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun* fPtclGun)
 
   positionCmd = new G4UIcmdWith3VectorAndUnit("/gun/position",this);
   positionCmd->SetGuidance("Set starting position of the particle.");
+  positionCmd->SetGuidance(" Position must be located inside the world volume.");
   positionCmd->SetParameterName("X","Y","Z",true,true);
   positionCmd->SetDefaultUnit("cm");
   // positionCmd->SetUnitCategory("Length");
@@ -176,12 +178,17 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun* fPtclGun)
   paraml->SetDefaultValue("0");
   ionLvlCmd->SetParameter(paraml);
 
+  volChkCmd = new G4UIcmdWithABool("/gun/checkVolume",this);
+  volChkCmd->SetGuidance("Switch on/off the check if the vertex position is inside the world volume.");
+  volChkCmd->SetGuidance("By default the check is on. There is a small performance gain if this check is off,");
+  volChkCmd->SetGuidance("but the user has to make sure setting the vertex position inside the world.");
+  volChkCmd->SetParameterName("switch",true,true);
+
   // Set initial value to G4ParticleGun
   //
   fParticleGun->SetParticleDefinition( G4Geantino::Geantino() );
   fParticleGun->SetParticleMomentumDirection( G4ThreeVector(1.0,0.0,0.0) );
   fParticleGun->SetParticleEnergy( 1.0*GeV );
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 0.0*cm));
   fParticleGun->SetParticleTime( 0.0*ns );
 }
 
@@ -199,6 +206,7 @@ G4ParticleGunMessenger::~G4ParticleGunMessenger()
   delete numberCmd;
   delete ionCmd;
   delete ionLvlCmd;
+  delete volChkCmd;
   delete gunDirectory;
 }
 
@@ -277,6 +285,10 @@ SetNewValue(G4UIcommand* command, G4String newValues)
       command->CommandFailed(ed);
     }
   }
+  else if( command==volChkCmd )
+  {
+    fParticleGun->CheckInside(volChkCmd->GetNewBoolValue(newValues));
+  }
 }
 
 G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand* command)
@@ -331,6 +343,8 @@ G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand* command)
       cv = "";
     }  
   }    
+  else if( command==volChkCmd )
+  { cv = volChkCmd->ConvertToString(fParticleGun->IfCheckInside()); }
   return cv;
 }
 

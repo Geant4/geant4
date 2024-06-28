@@ -31,12 +31,15 @@
 #define B5DriftChamberHit_h 1
 
 #include "G4VHit.hh"
-#include "G4THitsCollection.hh"
+
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4Threading.hh"
 #include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
-#include "G4RotationMatrix.hh"
+#include "globals.hh"
+
+#include <map>
+#include <vector>
 
 class G4AttDef;
 class G4AttValue;
@@ -56,17 +59,17 @@ class DriftChamberHit : public G4VHit
   public:
     DriftChamberHit() = default;
     DriftChamberHit(G4int layerID);
-    DriftChamberHit(const DriftChamberHit &right) = default;
+    DriftChamberHit(const DriftChamberHit& right) = default;
     ~DriftChamberHit() override = default;
 
-    DriftChamberHit& operator=(const DriftChamberHit &right) = default;
-    G4bool operator==(const DriftChamberHit &right) const;
+    DriftChamberHit& operator=(const DriftChamberHit& right) = default;
+    G4bool operator==(const DriftChamberHit& right) const;
 
-    inline void *operator new(size_t);
-    inline void operator delete(void *aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
     void Draw() override;
-    const std::map<G4String,G4AttDef>* GetAttDefs() const override;
+    const std::map<G4String, G4AttDef>* GetAttDefs() const override;
     std::vector<G4AttValue>* CreateAttValues() const override;
     void Print() override;
 
@@ -96,17 +99,17 @@ extern G4ThreadLocal G4Allocator<DriftChamberHit>* DriftChamberHitAllocator;
 inline void* DriftChamberHit::operator new(size_t)
 {
   if (!DriftChamberHitAllocator) {
-       DriftChamberHitAllocator = new G4Allocator<DriftChamberHit>;
+    DriftChamberHitAllocator = new G4Allocator<DriftChamberHit>;
   }
   return (void*)DriftChamberHitAllocator->MallocSingle();
 }
 
 inline void DriftChamberHit::operator delete(void* aHit)
 {
-  DriftChamberHitAllocator->FreeSingle((DriftChamberHit*) aHit);
+  DriftChamberHitAllocator->FreeSingle((DriftChamberHit*)aHit);
 }
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

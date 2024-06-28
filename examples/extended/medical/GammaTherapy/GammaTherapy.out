@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -309,7 +309,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=   10 GeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=   10 GeV
 
@@ -661,20 +661,20 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.330000s Real=3.661400s Sys=0.010000s
+  User=3.370000s Real=3.442387s Sys=0.000000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.09
-Average number of gamma                      19.5
-Average number of e+                         0.7681
-Average number of steps in the phantom       11.66
-Average number of e- steps in the target     17.95
-Average number of g  produced in the target  18.65
-Average number of e- produced in the target  20.82
-Average number of g produced in the phantom  0.5056
-Average number of e- produced in the phantom 5.975
-Total fGamma fluence in front of the phantom 8.093 MeV 
+Average number of e-                         33.13
+Average number of gamma                      19.58
+Average number of e+                         0.7605
+Average number of steps in the phantom       11.51
+Average number of e- steps in the target     17.98
+Average number of g  produced in the target  18.72
+Average number of e- produced in the target  20.83
+Average number of g produced in the phantom  0.4933
+Average number of e- produced in the phantom 5.953
+Total fGamma fluence in front of the phantom 7.954 MeV 
 ========================================================
 
 
@@ -682,10 +682,10 @@ Total fGamma fluence in front of the phantom 8.093 MeV
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={868811246491154990, 305116273861624973, 763889555670262191, 1543227937352160365, 59551185052207865, 490056457312732075, 1169937754278509350, 1519540221460173381, 695242014668347949, 2280252941837865889, 233727860707683078, 1428385833700401411, 1232250928138607945, 1423991102878068020, 2297706300400700002, 1583295553813983302, 1667585771871221555} counter= 8sumtot= 1115824865786152733
+N=17 V[N]={961145400483405076, 699745897242935866, 1057413413739364408, 662555405695072145, 1718128862343597050, 1055151940051380955, 2185583859974491267, 673048765014179189, 467115907169885361, 358922768063147600, 1116951267450062581, 2116545342320611943, 2097059162164451181, 93621624613885263, 529728786058221144, 735650886969976136, 590625775673630549} counter= 4sumtot= 978094000532440057
 ---------------------------------------
 #
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.47 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.058 MB
 ============================================================

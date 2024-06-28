@@ -53,7 +53,7 @@ class G4RegularNavigation : public G4VNavigation
   public:  // with description
   
     G4RegularNavigation();
-   ~G4RegularNavigation();
+   ~G4RegularNavigation() override;
   
     G4bool LevelLocate(      G4NavigationHistory& history,
                        const G4VPhysicalVolume* blockedVol,

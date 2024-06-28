@@ -32,28 +32,27 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "G4GenericMessenger.hh"
 #include "DetectorConstruction.hh"
 #include "HistoManager.hh"
 
 #include "G4Event.hh"
+#include "G4GenericMessenger.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fDetector(det)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det) : fDetector(det)
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
   SetDefaultKinematic();
-  
+
   // define commands for this class
-  DefineCommands();    
+  DefineCommands();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,40 +63,39 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
   delete fMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OO ooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::SetDefaultKinematic()
 {
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="proton");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "proton");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-  fParticleGun->SetParticleEnergy(5.*GeV);
-  G4double position = -0.5*(fDetector->GetWorldSizeX());
-  fParticleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
+  fParticleGun->SetParticleEnergy(5. * GeV);
+  G4double position = -0.5 * (fDetector->GetWorldSizeX()) + 1 * nm;
+  fParticleGun->SetParticlePosition(G4ThreeVector(position, 0. * cm, 0. * cm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  // this function is called at the begining of event
   //
-  //randomize the beam, if requested.
-  if (fRndmBeam > 0.) 
-    {
-      G4ThreeVector oldPosition = fParticleGun->GetParticlePosition();    
-      G4double rbeam = 0.5*(fDetector->GetCalorSizeYZ())*fRndmBeam;
-      G4double x0 = oldPosition.x();
-      G4double y0 = oldPosition.y() + (2*G4UniformRand()-1.)*rbeam;
-      G4double z0 = oldPosition.z() + (2*G4UniformRand()-1.)*rbeam;
-      fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-      fParticleGun->GeneratePrimaryVertex(anEvent);
-      fParticleGun->SetParticlePosition(oldPosition);      
-    }
-  else  fParticleGun->GeneratePrimaryVertex(anEvent);
+  // randomize the beam, if requested.
+  if (fRndmBeam > 0.) {
+    G4ThreeVector oldPosition = fParticleGun->GetParticlePosition();
+    G4double rbeam = 0.5 * (fDetector->GetCalorSizeYZ()) * fRndmBeam;
+    G4double x0 = oldPosition.x();
+    G4double y0 = oldPosition.y() + (2 * G4UniformRand() - 1.) * rbeam;
+    G4double z0 = oldPosition.z() + (2 * G4UniformRand() - 1.) * rbeam;
+    fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    fParticleGun->SetParticlePosition(oldPosition);
+  }
+  else
+    fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,28 +103,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 void PrimaryGeneratorAction::DefineCommands()
 {
   // Define /testhadr/gun command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this,
-                        "/testhadr/gun/",
-                        "gun control");
-                        
+  fMessenger = new G4GenericMessenger(this, "/testhadr/gun/", "gun control");
+
   // default kinematic command
-  auto& defaultCmd
-    = fMessenger->DeclareMethod("setDefault",
-                                &PrimaryGeneratorAction::SetDefaultKinematic,
-                                "set/reset kinematic in PrimaryGenerator");
-                                
-  defaultCmd.SetStates(G4State_PreInit, G4State_Idle);                        
+  auto& defaultCmd =
+    fMessenger->DeclareMethod("setDefault", &PrimaryGeneratorAction::SetDefaultKinematic,
+                              "set/reset kinematic in PrimaryGenerator");
+
+  defaultCmd.SetStates(G4State_PreInit, G4State_Idle);
 
   // randomize beam extension command
-  auto& rndmCmd
-    = fMessenger->DeclareProperty("rndm", fRndmBeam);
+  auto& rndmCmd = fMessenger->DeclareProperty("rndm", fRndmBeam);
 
   rndmCmd.SetGuidance("lateral size of the beam, in fraction of sizeYZ ");
   rndmCmd.SetParameterName("rBeam", false);
   rndmCmd.SetRange("rBeam>=0.&&rBeam<=1.");
   rndmCmd.SetDefaultValue("0.");
-  rndmCmd.SetStates(G4State_Idle);  
+  rndmCmd.SetStates(G4State_Idle);
 }
 
 //..oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

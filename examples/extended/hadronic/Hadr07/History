@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-03-20 Michel Maire (exhadr07-V11-02-00)
+- RadioactiveDecayPhysics.cc: add Triton
+- apply coding rules: HistoManager.cc, Run.cc, TrackingAction.cc,
+                      GammaNuclearPhysics.cc, GammaNuclearPhysicsLEND.cc
+- document hadr07.in, multilayers.mac
+ 
 ## 2023-11-12 Alberto Ribon (exhadr07-V11-01-03)
 - Na22.mac : introduced the UI command
 /process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year

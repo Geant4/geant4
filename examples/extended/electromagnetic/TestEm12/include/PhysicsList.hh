@@ -46,30 +46,29 @@ class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList() override;
+    ~PhysicsList() override;
 
     void ConstructParticle() override;
-        
+
     void AddPhysicsList(const G4String& name);
     void ConstructProcess() override;
-    void AddDecay();    
+    void AddDecay();
     void AddStepMax();
-           
-    StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
 
-  private:       
-    G4String                      fEmName;
-    G4VPhysicsConstructor*        fEmPhysicsList = nullptr;    
+    StepMax* GetStepMaxProcess() { return fStepMaxProcess; };
+
+  private:
+    G4String fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList = nullptr;
     static G4ThreadLocal StepMax* fStepMaxProcess;
-    
-    PhysicsListMessenger*  fMessenger = nullptr;
+
+    PhysicsListMessenger* fMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

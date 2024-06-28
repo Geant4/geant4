@@ -35,13 +35,12 @@
 
 class GB06SD : public G4VSensitiveDetector
 {
-public:
-  GB06SD(G4String name);
-  virtual ~GB06SD() {}
-  
-  virtual void Initialize(G4HCofThisEvent* ) {}
-  virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
-  
+  public:
+    GB06SD(G4String name);
+    virtual ~GB06SD() {}
+
+    virtual void Initialize(G4HCofThisEvent*) {}
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

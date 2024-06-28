@@ -28,30 +28,29 @@
 //
 
 #include "GB06PrimaryGeneratorAction.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB06PrimaryGeneratorAction::GB06PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction()
+GB06PrimaryGeneratorAction::GB06PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle = particleTable->FindParticle(particleName="neutron");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "neutron");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(100.*MeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-50*cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(100. * MeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -50 * cm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,9 +60,7 @@ GB06PrimaryGeneratorAction::~GB06PrimaryGeneratorAction()
   delete fParticleGun;
 }
 
-
 void GB06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
-

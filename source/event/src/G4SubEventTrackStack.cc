@@ -66,6 +66,7 @@ void G4SubEventTrackStack::PushToStack(const G4StackedTrack& aStackedTrack)
   if(fCurrentSE==nullptr)
   {
     fCurrentSE = new G4SubEvent(fSubEventType,fMaxEnt); 
+    fCurrentSE->SetEvent(fCurrentEvent);
   }
   else if(fCurrentSE->size()==fMaxEnt)
   {
@@ -78,7 +79,18 @@ void G4SubEventTrackStack::PushToStack(const G4StackedTrack& aStackedTrack)
              << " tracks is stored" << G4endl;
     }
     fCurrentSE = new G4SubEvent(fSubEventType,fMaxEnt);
+    fCurrentSE->SetEvent(fCurrentEvent);
   }
+
+  // Sanity check
+  if(fCurrentEvent == nullptr || fCurrentSE->GetEvent() == nullptr
+       || fCurrentEvent != fCurrentSE->GetEvent())
+  {
+    G4ExceptionDescription ed;
+    ed << "Event object is broken or storing tracks of more than one events. PANIC!!!";
+    G4Exception("G4SubEventTrackStack::PushToStack()","SubEvt7003",FatalException,ed);
+  }
+  
   fCurrentSE->PushToStack(aStackedTrack);
 }
 

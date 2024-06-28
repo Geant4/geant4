@@ -43,41 +43,38 @@ class G4Step;
 
 class LXePMTSD : public G4VSensitiveDetector
 {
- public:
-  LXePMTSD(G4String name);
-  ~LXePMTSD() override;
+  public:
+    LXePMTSD(G4String name);
+    ~LXePMTSD() override;
 
-  void Initialize(G4HCofThisEvent*) override;
-  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*) override;
+    void Initialize(G4HCofThisEvent*) override;
+    G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*) override;
 
-  // A version of processHits active on boundary
-  G4bool ProcessHits_boundary(const G4Step*, G4TouchableHistory*);
+    // A version of processHits active on boundary
+    G4bool ProcessHits_boundary(const G4Step*, G4TouchableHistory*);
 
-  // Initialize the arrays to store pmt possitions
-  inline void InitPMTs()
-  {
-    if(fPMTPositionsX)
-      delete fPMTPositionsX;
-    if(fPMTPositionsY)
-      delete fPMTPositionsY;
-    if(fPMTPositionsZ)
-      delete fPMTPositionsZ;
-    fPMTPositionsX = new G4DataVector();
-    fPMTPositionsY = new G4DataVector();
-    fPMTPositionsZ = new G4DataVector();
-  }
+    // Initialize the arrays to store pmt possitions
+    inline void InitPMTs()
+    {
+      if (fPMTPositionsX) delete fPMTPositionsX;
+      if (fPMTPositionsY) delete fPMTPositionsY;
+      if (fPMTPositionsZ) delete fPMTPositionsZ;
+      fPMTPositionsX = new G4DataVector();
+      fPMTPositionsY = new G4DataVector();
+      fPMTPositionsZ = new G4DataVector();
+    }
 
-  // Store a pmt position
-  void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
+    // Store a pmt position
+    void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
 
- private:
-  LXePMTHitsCollection* fPMTHitCollection = nullptr;
+  private:
+    LXePMTHitsCollection* fPMTHitCollection = nullptr;
 
-  G4DataVector* fPMTPositionsX = nullptr;
-  G4DataVector* fPMTPositionsY = nullptr;
-  G4DataVector* fPMTPositionsZ = nullptr;
+    G4DataVector* fPMTPositionsX = nullptr;
+    G4DataVector* fPMTPositionsY = nullptr;
+    G4DataVector* fPMTPositionsZ = nullptr;
 
-  G4int fHitCID = -1;
+    G4int fHitCID = -1;
 };
 
 #endif

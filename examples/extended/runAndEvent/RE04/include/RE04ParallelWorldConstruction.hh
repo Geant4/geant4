@@ -56,4 +56,3 @@ class RE04ParallelWorldConstruction : public G4VUserParallelWorld
 };
 
 #endif
-

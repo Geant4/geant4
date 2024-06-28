@@ -35,14 +35,15 @@
 
 class G4Polyhedron;
 
-class StandaloneVisAction: public G4VUserVisAction {
-public:
-  StandaloneVisAction();
-  ~StandaloneVisAction();
-  void Draw() override;
-private:
-  G4Polyhedron* fpSubtractedPolyhedron;
+class StandaloneVisAction : public G4VUserVisAction
+{
+  public:
+    StandaloneVisAction();
+    ~StandaloneVisAction();
+    void Draw() override;
+
+  private:
+    G4Polyhedron* fpSubtractedPolyhedron;
 };
 
 #endif
-

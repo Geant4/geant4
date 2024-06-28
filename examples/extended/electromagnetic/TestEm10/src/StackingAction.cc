@@ -33,43 +33,41 @@
 #include "StackingAction.hh"
 
 #include "G4AnalysisManager.hh"
-#include "G4Track.hh"
-#include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4Gamma.hh"
+#include "G4Track.hh"
 #include "G4VProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction()
- : G4UserStackingAction()
-{}
+StackingAction::StackingAction() : G4UserStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::~StackingAction()
-{}
+StackingAction::~StackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* track)
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* track)
 {
   // do nothing if primary particle
-  if (track->GetParentID() == 0) { return fUrgent; }
+  if (track->GetParentID() == 0) {
+    return fUrgent;
+  }
 
-  //count secondary particles
+  // count secondary particles
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   //
-  //energy spectrum of secondaries
+  // energy spectrum of secondaries
   //
   G4double energy = track->GetKineticEnergy();
 
-  // Gamma 
+  // Gamma
   if (track->GetDefinition() == G4Gamma::Gamma()) {
     // XTR gamma
-    // G4int processSubType 
+    // G4int processSubType
     //   = track->GetCreatorProcess()->GetProcessSubType();
     // if ( processSubType == fTransitionRadiation) {
     G4String creatorProcessName = track->GetCreatorProcess()->GetProcessName();
@@ -85,7 +83,7 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   if (track->GetDefinition() == G4Electron::Electron()) {
     analysisManager->FillH1(4, energy);
   }
-    
+
   return fUrgent;
 }
 

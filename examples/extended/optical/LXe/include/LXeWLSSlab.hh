@@ -31,29 +31,28 @@
 #ifndef LXeWLSSlab_h
 #define LXeWLSSlab_h 1
 
-#include "G4PVPlacement.hh"
-
 #include "LXeDetectorConstruction.hh"
+
+#include "G4PVPlacement.hh"
 
 class LXeWLSSlab : public G4PVPlacement
 {
- public:
-  LXeWLSSlab(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
-             G4LogicalVolume* pMotherLogical, G4bool pMany, G4int pCopyNo,
-             LXeDetectorConstruction* c);
+  public:
+    LXeWLSSlab(G4RotationMatrix* pRot, const G4ThreeVector& tlate, G4LogicalVolume* pMotherLogical,
+               G4bool pMany, G4int pCopyNo, LXeDetectorConstruction* c);
 
- private:
-  void CopyValues();
+  private:
+    void CopyValues();
 
-  LXeDetectorConstruction* fConstructor = nullptr;
+    LXeDetectorConstruction* fConstructor = nullptr;
 
-  static G4LogicalVolume* fScintSlab_log;
+    static G4LogicalVolume* fScintSlab_log;
 
-  G4int fNfibers = 0;
-  G4double fScint_x = 0.;
-  G4double fScint_y = 0.;
-  G4double fScint_z = 0.;
-  G4double fSlab_z = 0.;
+    G4int fNfibers = 0;
+    G4double fScint_x = 0.;
+    G4double fScint_y = 0.;
+    G4double fScint_z = 0.;
+    G4double fSlab_z = 0.;
 };
 
 #endif

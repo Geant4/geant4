@@ -54,12 +54,13 @@
 #include "G4PhysicalConstants.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4eeToTwoGammaModel.hh"
 #include "G4EmBiasingManager.hh"
 #include "G4EntanglementAuxInfo.hh"
 #include "G4eplusAnnihilationEntanglementClipBoard.hh"
+#include "G4SimplePositronAtRestModel.hh"
+#include "G4AllisonPositronAtRestModel.hh"
 #include "G4EmParameters.hh"
 #include "G4PhysicsModelCatalog.hh"
 
@@ -68,12 +69,10 @@
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   : G4VEmProcess(name)
 {
-  theGamma = G4Gamma::Gamma();
-  theElectron = G4Electron::Electron();
   SetCrossSectionType(fEmDecreasing);
   SetBuildTableFlag(false);
   SetStartFromNullFlag(false);
-  SetSecondaryParticle(theGamma);
+  SetSecondaryParticle(G4Gamma::Gamma());
   SetProcessSubType(fAnnihilation);
   enableAtRestDoIt = true;
   mainSecondaries = 2;
@@ -82,7 +81,10 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eplusAnnihilation::~G4eplusAnnihilation() = default;
+G4eplusAnnihilation::~G4eplusAnnihilation()
+{
+  delete fAtRestModel;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -104,13 +106,28 @@ G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
 
 void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
-  if(!isInitialised) {
+  if (!isInitialised) {
     isInitialised = true;
     if(nullptr == EmModel(0)) { SetEmModel(new G4eeToTwoGammaModel()); }
     EmModel(0)->SetLowEnergyLimit(MinKinEnergy());
     EmModel(0)->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, EmModel(0));
   }
+  auto param = G4EmParameters::Instance();
+
+  // AtRest model should be chosen only once
+  if (nullptr == fAtRestModel) {
+    auto type = param->PositronAtRestModelType();
+    if (type == fAllisonPositronium) {
+      fAtRestModel = new G4AllisonPositronAtRestModel();
+    } else {
+      fAtRestModel = new G4SimplePositronAtRestModel();
+    }
+  }
+  // Check that entanglement is switched on
+  // It may be set by the UI command "/process/em/QuantumEntanglement true".
+  fEntangled = param->QuantumEntanglement();
+  fApplyCuts = param->ApplyCuts();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,136 +139,96 @@ void G4eplusAnnihilation::StreamProcessInfo(std::ostream&) const
 
 G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
 						   const G4Step& step)
-// Performs the e+ e- annihilation when both particles are assumed at rest.
 {
+  // positron at rest should be killed
   fParticleChange.InitializeForPostStep(track);
+  fParticleChange.SetProposedKineticEnergy(0.);
+  fParticleChange.ProposeTrackStatus(fStopAndKill);
 
-  DefineMaterial(track.GetMaterialCutsCouple());
-  G4int idx = (G4int)CurrentMaterialCutsCoupleIndex();
-  G4double ene(0.0);
-  G4VEmModel* model = SelectModel(ene, idx);
+  auto couple = step.GetPreStepPoint()->GetMaterialCutsCouple();
+  DefineMaterial(couple);
+  
+  G4double gammaCut = GetGammaEnergyCut();
 
-  // define new weight for primary and secondaries
-  G4double weight = fParticleChange.GetParentWeight();
+  // apply cuts 
+  if (fApplyCuts && gammaCut > CLHEP::electron_mass_c2) {
+    fParticleChange.ProposeLocalEnergyDeposit(2*CLHEP::electron_mass_c2); 
+    return &fParticleChange;
+  }
 
   // sample secondaries
   secParticles.clear();
-  G4double gammaCut = GetGammaEnergyCut();
-  model->SampleSecondaries(&secParticles, MaterialCutsCouple(), 
-			   track.GetDynamicParticle(), gammaCut);
 
-  G4int num0 = (G4int)secParticles.size();
+  G4double edep = 0.0;
+  fAtRestModel->SampleSecondaries(secParticles, edep, couple->GetMaterial()); 
 
+  // define new weight for primary and secondaries
+  G4double weight = fParticleChange.GetParentWeight();				  
+  std::size_t num0 = secParticles.size();
+  
   // splitting or Russian roulette
-  if(biasManager) {
-    if(biasManager->SecondaryBiasingRegion(idx)) {
+  if (nullptr != biasManager) {
+    G4int idx = couple->GetIndex();
+    if (biasManager->SecondaryBiasingRegion(idx) &&
+	!biasManager->GetDirectionalSplitting()) {
+      G4VEmModel* mod = nullptr;
       G4double eloss = 0.0;
-      weight *= biasManager->ApplySecondaryBiasing(
-	secParticles, track, model, &fParticleChange, eloss, 
-        idx, gammaCut, step.GetPostStepPoint()->GetSafety());
-      if(eloss > 0.0) {
-        eloss += fParticleChange.GetLocalEnergyDeposit();
-        fParticleChange.ProposeLocalEnergyDeposit(eloss);
-      }
+      weight *= biasManager->ApplySecondaryBiasing(secParticles, track, mod,
+						   &fParticleChange, eloss, 
+                                                   idx, gammaCut);
+      edep += eloss;
     }
   }
 
   // save secondaries
-  G4int num = (G4int)secParticles.size();
+  std::size_t num = secParticles.size();
 
-  // Check that entanglement is switched on... (the following flag is
-  // set by /process/em/QuantumEntanglement).
-  G4bool entangled = G4EmParameters::Instance()->QuantumEntanglement();
-  // ...and that we have two gammas with both gammas' energies above
-  // gammaCut (entanglement is only programmed for e+ e- -> gamma gamma).
-  G4bool entangledgammagamma = false;
-  if (entangled) {
-    if (num == 2) {
-      entangledgammagamma = true;
-      for (const auto* p: secParticles) {
-        if (p->GetDefinition() != theGamma ||
-            p->GetKineticEnergy() < gammaCut) {
-          entangledgammagamma = false;
-        }
-      }
-    }
-  }
-
-  // Prepare a shared pointer for psossible use below. If it is used, the
+  // Prepare a shared pointer only for two first gamma. If it is used, the
   // shared pointer is copied into the tracks through G4EntanglementAuxInfo.
   // This ensures the clip board lasts until both tracks are destroyed.
+  // It is assumed that 2 first secondary particles are the most energetic gamma
   std::shared_ptr<G4eplusAnnihilationEntanglementClipBoard> clipBoard;
-  if (entangledgammagamma) {
+  if (fEntangled && num >= 2) {
     clipBoard = std::make_shared<G4eplusAnnihilationEntanglementClipBoard>();
     clipBoard->SetParentParticleDefinition(track.GetDefinition());
   }
 
-  if(num > 0) {
+  if (num > 0) {
+    const G4double time = track.GetGlobalTime();
+    const G4ThreeVector& pos = track.GetPosition();
+    auto touch = track.GetTouchableHandle();
+    for (std::size_t i=0; i<num; ++i) {
+      G4DynamicParticle* dp = secParticles[i];
+      G4Track* t = new G4Track(dp, time, pos);
+      t->SetTouchableHandle(touch);
+      if (fEntangled && i < 2) {
+	// entangledgammagamma is only true when there are only two gammas
+	// (See code above where entangledgammagamma is calculated.)
+	if (i == 0) { // First gamma
+	  clipBoard->SetTrackA(t);
+	} else if (i == 1) {  // Second gamma
+	  clipBoard->SetTrackB(t);
+	}
+	t->SetAuxiliaryTrackInformation
+	  (fEntanglementModelID, new G4EntanglementAuxInfo(clipBoard));
+      }
+      if (nullptr != biasManager) {
+	t->SetWeight(weight * biasManager->GetWeight((G4int)i));
+      } else {
+	t->SetWeight(weight);
+      }
+      pParticleChange->AddSecondary(t);
 
-    fParticleChange.SetNumberOfSecondaries(num);
-    G4double edep = fParticleChange.GetLocalEnergyDeposit();
-    G4double time = track.GetGlobalTime();
-     
-    for (G4int i=0; i<num; ++i) {
-      if (secParticles[i]) {
-        G4DynamicParticle* dp = secParticles[i];
-        const G4ParticleDefinition* p = dp->GetParticleDefinition();
-        G4double e = dp->GetKineticEnergy();
-        G4bool good = true;
-        if(ApplyCuts()) {
-          if (p == theGamma) {
-            if (e < gammaCut) { good = false; }
-          } else if (p == theElectron) {
-            if (e < GetElectronEnergyCut()) { good = false; }
-          }
-          // added secondary if it is good
-        }
-        if (good) { 
-          G4Track* t = new G4Track(dp, time, track.GetPosition());
-          t->SetTouchableHandle(track.GetTouchableHandle());
-          if (entangledgammagamma) {
-	    // entangledgammagamma is only true when there are only two gammas
-	    // (See code above where entangledgammagamma is calculated.)
-            if (i == 0) { // First gamma
-              clipBoard->SetTrackA(t);
-            } else if (i == 1) {  // Second gamma
-              clipBoard->SetTrackB(t);
-            }
-            t->SetAuxiliaryTrackInformation
-            (fEntanglementModelID,new G4EntanglementAuxInfo(clipBoard));
-          }
-          if (biasManager) {
-            t->SetWeight(weight * biasManager->GetWeight(i));
-          } else {
-            t->SetWeight(weight);
-          }
-          pParticleChange->AddSecondary(t);
-
-          // define type of secondary
-          if(i < mainSecondaries) { t->SetCreatorModelID(secID); }
-          else if(i < num0) {
-            if(p == theGamma) { 
-              t->SetCreatorModelID(fluoID);
-            } else {
-              t->SetCreatorModelID(augerID);
-	    }
-	  } else {
-            t->SetCreatorModelID(biasID);
-          }
-          /* 
-          G4cout << "Secondary(post step) has weight " << t->GetWeight() 
-                 << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV "
-                 << GetProcessName() << " fluoID= " << fluoID
-                 << " augerID= " << augerID <<G4endl;
-          */
-        } else {
-          delete dp;
-          edep += e;
-        }
-      } 
+      // define type of secondary
+      if (i < num0) {
+	t->SetCreatorModelID(secID);
+      }
+      else {
+	t->SetCreatorModelID(biasID);
+      }
     }
-    fParticleChange.ProposeLocalEnergyDeposit(edep);
   }
+  fParticleChange.ProposeLocalEnergyDeposit(edep);
   return &fParticleChange;
 }
 

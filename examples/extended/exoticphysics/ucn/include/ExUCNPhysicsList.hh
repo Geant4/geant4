@@ -36,10 +36,9 @@
 
 #include "G4VModularPhysicsList.hh"
 
-class ExUCNPhysicsList: public G4VModularPhysicsList
+class ExUCNPhysicsList : public G4VModularPhysicsList
 {
-public:
-
+  public:
     ExUCNPhysicsList();
     virtual ~ExUCNPhysicsList();
 
@@ -48,8 +47,7 @@ public:
 
     void SetCuts();
 
-private:
-
+  private:
 };
 
 #endif

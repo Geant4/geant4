@@ -23,10 +23,7 @@
  sum of these scorers that were updated via mutex locking. If round-off
  errors in thread-local EnergyDeposit are present, they can be viewed
  in "mfd_diff.out" at the end of the simulation
-    This example also provides a demonstration of the timemory (a performance
- instrumentation toolkit) package provided in Geant4 -- for documentation of timemory
- see https://github.com/NERSC/timemory and https://timemory.readthedocs.io.
-
+ 
  1- ATOMICS and the ATOMIC SCORERS
 
    atomics can ONLY handle plain-old data (POD) types, e.g. int, double, etc.
@@ -174,15 +171,3 @@
       (without visualization)
         % ./ts_scorers run.mac
         % ./ts_scorers run.mac > run.out
-
-8- TIMEMORY USAGE
-
-    This example demonstrates profiling analysis with timemory
-    (https://github.com/NERSC/timemory).
-
-    - Compile Geant4 with timemory (-DGEANT4_USE_TIMEMORY=ON)
-    - timemory provide timing within the Geant4 source code
-      and within the example (TSRun::RecordEvent)
-    - Analysis is echoed to stdout and generates several output
-      files in a folder based on the name of the executable. In
-      general that folder will be "timemory-{name of executable}-output"

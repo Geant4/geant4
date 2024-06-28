@@ -27,55 +27,50 @@
 /// \brief Implementation of the scavenger::DetectorConstruction class
 
 #include "DetectorConstruction.hh"
-#include "G4NistManager.hh"
+
+#include "PrimaryKiller.hh"
+#include "ScoreSpecies.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4VisAttributes.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VPrimitiveScorer.hh"
-#include "ScoreSpecies.hh"
-#include "PrimaryKiller.hh"
+#include "G4VisAttributes.hh"
 
 namespace scavenger
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-DetectorConstruction::DetectorConstruction()
-  : G4VUserDetectorConstruction() {}
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4VPhysicalVolume *DetectorConstruction::Construct() {
+G4VPhysicalVolume* DetectorConstruction::Construct()
+{
   // Water is defined from NIST material database
-  auto *man = G4NistManager::Instance();
-  auto *water = man->FindOrBuildMaterial("G4_WATER");
+  auto* man = G4NistManager::Instance();
+  auto* water = man->FindOrBuildMaterial("G4_WATER");
 
   // World
   G4double world_sizeXYZ = 1. * km;
   auto solidWorld =
-    new G4Box("World",
-              0.5 * world_sizeXYZ,
-              0.5 * world_sizeXYZ,
-              0.5 * world_sizeXYZ);
+    new G4Box("World", 0.5 * world_sizeXYZ, 0.5 * world_sizeXYZ, 0.5 * world_sizeXYZ);
 
-  auto logicWorld =
-    new G4LogicalVolume(solidWorld,
-                        water,
-                        "World");
+  auto logicWorld = new G4LogicalVolume(solidWorld, water, "World");
 
-  G4VPhysicalVolume *physWorld =
-    new G4PVPlacement(nullptr,               //no rotation
-                      G4ThreeVector(),       //its position at (0,0,0)
-                      logicWorld,            //its logical volume
-                      "World",               //its name
-                      nullptr,               //its mother  volume
-                      false,                 //no boolean operation
-                      0,                     //copy number
-                      true);                 //checking overlaps
+  G4VPhysicalVolume* physWorld = new G4PVPlacement(nullptr,  // no rotation
+                                                   G4ThreeVector(),  // its position at (0,0,0)
+                                                   logicWorld,  // its logical volume
+                                                   "World",  // its name
+                                                   nullptr,  // its mother  volume
+                                                   false,  // no boolean operation
+                                                   0,  // copy number
+                                                   true);  // checking overlaps
 
   // Visualization attributes
   auto worldVisAtt = new G4VisAttributes(G4Colour(.5, 1.0, .5));
@@ -86,7 +81,8 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void DetectorConstruction::ConstructSDandField() {
+void DetectorConstruction::ConstructSDandField()
+{
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
   /**
    * declare World as a MultiFunctionalDetector scorer
@@ -96,15 +92,15 @@ void DetectorConstruction::ConstructSDandField() {
   // Kill primary track after a chosen energy loss OR under a chosen
   // kinetic energy
   auto primaryKiller = new PrimaryKiller("PrimaryKiller");
-  primaryKiller->SetMinLossEnergyLimit(500. * eV); // default value
-  primaryKiller->SetMaxLossEnergyLimit(1. * keV); // default value
+  primaryKiller->SetMinLossEnergyLimit(500. * eV);  // default value
+  primaryKiller->SetMaxLossEnergyLimit(1. * keV);  // default value
   mfDetector->RegisterPrimitive(primaryKiller);
 
   // Record Species scorer:
   //  - score number of species over time
   //  - score the total energy deposition
   //  - compute the radiochemical yields (G values)
-  G4VPrimitiveScorer *gValues = new ScoreSpecies("Species");
+  G4VPrimitiveScorer* gValues = new ScoreSpecies("Species");
   mfDetector->RegisterPrimitive(gValues);
   G4SDManager::GetSDMpointer()->AddNewDetector(mfDetector);
   SetSensitiveDetector("World", mfDetector);
@@ -112,4 +108,4 @@ void DetectorConstruction::ConstructSDandField() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-}
+}  // namespace scavenger

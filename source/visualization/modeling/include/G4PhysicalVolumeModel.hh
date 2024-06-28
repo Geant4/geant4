@@ -243,8 +243,11 @@ public: // With description
   // G4Atts.
 
   const std::map<G4int,G4int>& GetNumberOfTouchables() const {return fNTouchables;}
-  // Total number of touchables drawn at each depth
-  
+  // Number of touchables drawn at each depth.
+
+  G4int GetTotalTouchables () {return fTotalTouchables;}
+  // Total numbere of touchables.
+
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
   }
@@ -313,6 +316,7 @@ protected:
   ClippingMode       fClippingMode;
   G4int              fNClippers;     // No of clipping/cutting solids - only 0 or 1 allowed
   std::map<G4int,G4int> fNTouchables;   // No of touchables at each depth
+  G4int              fTotalTouchables;
 
 private:
 

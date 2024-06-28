@@ -223,6 +223,11 @@ void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore,
   theStore = theMerge;
 }
 
+G4WendtFissionFragmentGenerator* G4ParticleHPChannel::GetWendtFissionGenerator() {
+  if ( wendtFissionGenerator ) return wendtFissionGenerator;
+  else                         return nullptr;
+}
+
 G4HadFinalState*
 G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTrack,
 				   G4int anIsotope, G4bool isElastic)

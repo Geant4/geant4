@@ -6,6 +6,27 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-17 Gabriele Cosmo (geommng-V11-02-03)
+- Removed G4SmartVoxelProxy source file, as now empty.
+- Minor code cleanup/indentation.
+
+## 2024-06-02 John Apostolakis (geommng-V11-02-02)
+- New capability to run voxel optimisation in threads (off by default).
+  First version, parallelises only over volumes. The user must currently call
+  G4GeometryManager::RequestParallelOptimisation(optimise=true, verbose) to use
+  it. Set verbose=true to obtain the volumes with biggest contribution to memory
+  size and CPU time for voxelisation.
+  Added new method BuildOptimisationsParallel() to be called by
+  G4WorkerRunManager to initialize. Added method ReportVoxelInfo() to write out
+  for verification. Checked with simple and complex/large geometries.
+
+## 2024-05-29 Evgueni Tcherniaev (geommng-V11-02-01)
+- Added new methods GetNumOfConstituents() and IsFaceted().
+
+## 2024-04-02 Gabriele Cosmo (geommng-V11-02-00)
+- Applied trivial clang-tidy fixes to G4ErrorTarget, i.e. use of default
+  constructor.
+
 ## 2023-10-06 Gabriele Cosmo (geommng-V11-01-05)
 - Restore virtual methods in G4TouchableHistory to allow for backwards
   compatibility with visualization modeling code.

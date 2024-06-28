@@ -40,20 +40,12 @@
 class G01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
- 
-    G01DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
-    {   
-      fWorld = setWorld;
-    }
+    G01DetectorConstruction(G4VPhysicalVolume* setWorld = 0) { fWorld = setWorld; }
 
-    virtual G4VPhysicalVolume *Construct()
-    {
-      return fWorld;
-    }
+    virtual G4VPhysicalVolume* Construct() { return fWorld; }
 
   private:
-
-    G4VPhysicalVolume *fWorld;
+    G4VPhysicalVolume* fWorld;
 };
 
 #endif

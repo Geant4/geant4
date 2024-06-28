@@ -31,36 +31,33 @@
 //
 
 #include "DetectorSimpleALICE.hh"
-#include "SensitiveDetector.hh"
+
 #include "Materials.hh"
+#include "SensitiveDetector.hh"
 
-#include "G4Material.hh"
 #include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
 #include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4SDManager.hh"
-
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4PVPlacement.hh"
 #include "G4Region.hh"
-
-#include "G4UnitsTable.hh"
+#include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4TransportationManager.hh"
+#include "G4UniformMagField.hh"
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorSimpleALICE::DetectorSimpleALICE()
-  : fRadiatorDescription(0) 
-{}
+DetectorSimpleALICE::DetectorSimpleALICE() : fRadiatorDescription(0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorSimpleALICE::~DetectorSimpleALICE()
 {
   // delete fRadiatorDescription;
-        // the description is deleted in detector construction
+  // the description is deleted in detector construction
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,41 +69,40 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
 
   G4cout << "DetectorSimpleALICE setup" << G4endl;
 
-  G4double worldSizeZ = 400.*cm;
-  G4double worldSizeR = 20.*cm;
+  G4double worldSizeZ = 400. * cm;
+  G4double worldSizeR = 20. * cm;
 
   // Radiator and detector parameters
 
-  G4double radThickness = 0.020*mm;
-  G4double gasGap       = 0.250*mm;  
-  G4double foilGasRatio = radThickness/(radThickness+gasGap);
-  G4int foilNumber      = 220;
+  G4double radThickness = 0.020 * mm;
+  G4double gasGap = 0.250 * mm;
+  G4double foilGasRatio = radThickness / (radThickness + gasGap);
+  G4int foilNumber = 220;
 
-  G4double absorberThickness = 38.3*mm;
-  G4double absorberRadius    = 100.*mm;
+  G4double absorberThickness = 38.3 * mm;
+  G4double absorberRadius = 100. * mm;
 
-  G4double windowThick    = 51.0*micrometer;
-  G4double electrodeThick = 10.0*micrometer;
-  G4double gapThick       = 10.0*cm;
-  G4double detGap         = 0.01*mm;
+  G4double windowThick = 51.0 * micrometer;
+  G4double electrodeThick = 10.0 * micrometer;
+  G4double gapThick = 10.0 * cm;
+  G4double detGap = 0.01 * mm;
 
-  G4double startZ       = 100.0*mm;
+  G4double startZ = 100.0 * mm;
 
   // Materials
   //
 
   // Change to create materials using NIST
-  G4Material* air   = Materials::GetInstance()->GetMaterial("Air");
+  G4Material* air = Materials::GetInstance()->GetMaterial("Air");
   G4Material* mylar = Materials::GetInstance()->GetMaterial("Mylar");
   G4Material* xe15CO2 = Materials::GetInstance()->GetMaterial("Xe15CO2");
 
   G4double foilDensity = mylar->GetDensity();
-  G4double gasDensity  = air->GetDensity();  
-  G4double totDensity  = foilDensity*foilGasRatio 
-                       + gasDensity*(1.0-foilGasRatio);
+  G4double gasDensity = air->GetDensity();
+  G4double totDensity = foilDensity * foilGasRatio + gasDensity * (1.0 - foilGasRatio);
 
-  G4double fractionFoil =  foilDensity*foilGasRatio/totDensity;
-  G4double fractionGas  =  gasDensity*(1.0-foilGasRatio)/totDensity;
+  G4double fractionFoil = foilDensity * foilGasRatio / totDensity;
+  G4double fractionGas = gasDensity * (1.0 - foilGasRatio) / totDensity;
 
   G4Material* radiatorMat = new G4Material("radiatorMat", totDensity, 2);
   radiatorMat->AddMaterial(mylar, fractionFoil);
@@ -114,42 +110,38 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
 
   // Radiator description
   fRadiatorDescription = new RadiatorDescription;
-  fRadiatorDescription->fFoilMaterial  = mylar; 
+  fRadiatorDescription->fFoilMaterial = mylar;
   // CH2; // Kapton; // Mylar ; // Li ; // CH2 ;
-  fRadiatorDescription->fGasMaterial   = air; // CO2; // He; //
+  fRadiatorDescription->fGasMaterial = air;  // CO2; // He; //
   fRadiatorDescription->fFoilThickness = radThickness;
-  fRadiatorDescription->fGasThickness  = gasGap;
+  fRadiatorDescription->fGasThickness = gasGap;
   fRadiatorDescription->fFoilNumber = foilNumber;
 
-  G4Material* worldMaterial    = air; // CO2;
+  G4Material* worldMaterial = air;  // CO2;
   G4Material* absorberMaterial = xe15CO2;
 
   // Volumes
   //
- 
-  G4VSolid* solidWorld 
-    = new G4Box("World", worldSizeR, worldSizeR, worldSizeZ/2.);
- 
-  G4LogicalVolume* logicWorld 
-    = new G4LogicalVolume(solidWorld,  worldMaterial,  "World");
 
-  G4VPhysicalVolume* physicsWorld 
-    = new G4PVPlacement(0, G4ThreeVector(), "World", logicWorld, 0,  false, 0);
+  G4VSolid* solidWorld = new G4Box("World", worldSizeR, worldSizeR, worldSizeZ / 2.);
+
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, worldMaterial, "World");
+
+  G4VPhysicalVolume* physicsWorld =
+    new G4PVPlacement(0, G4ThreeVector(), "World", logicWorld, 0, false, 0);
 
   // TR radiator envelope
 
-  G4double radThick = foilNumber*(radThickness + gasGap) - gasGap + detGap;
-  G4double radZ = startZ + 0.5*radThick;
+  G4double radThick = foilNumber * (radThickness + gasGap) - gasGap + detGap;
+  G4double radZ = startZ + 0.5 * radThick;
 
-  G4VSolid* solidRadiator 
-    = new G4Box("Radiator", 1.1*absorberRadius, 1.1*absorberRadius, 
-                0.5*radThick);
+  G4VSolid* solidRadiator =
+    new G4Box("Radiator", 1.1 * absorberRadius, 1.1 * absorberRadius, 0.5 * radThick);
 
-  G4LogicalVolume* logicRadiator 
-    = new G4LogicalVolume(solidRadiator, radiatorMat, "Radiator");
- 
-  new G4PVPlacement(0, G4ThreeVector(0, 0, radZ),
-                    "Radiator", logicRadiator, physicsWorld, false, 0 );
+  G4LogicalVolume* logicRadiator = new G4LogicalVolume(solidRadiator, radiatorMat, "Radiator");
+
+  new G4PVPlacement(0, G4ThreeVector(0, 0, radZ), "Radiator", logicRadiator, physicsWorld, false,
+                    0);
 
   fRadiatorDescription->fLogicalVolume = logicRadiator;
 
@@ -160,21 +152,18 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
 
   // Absorber
 
-  G4VSolid* solidAbsorber 
-    = new G4Box("Absorber", absorberRadius, absorberRadius, 
-                absorberThickness/2.);
+  G4VSolid* solidAbsorber =
+    new G4Box("Absorber", absorberRadius, absorberRadius, absorberThickness / 2.);
 
-  G4LogicalVolume* logicAbsorber 
-    = new G4LogicalVolume(solidAbsorber, absorberMaterial, "Absorber");
+  G4LogicalVolume* logicAbsorber = new G4LogicalVolume(solidAbsorber, absorberMaterial, "Absorber");
 
-  G4double windowZ = startZ + radThick + windowThick/2. + 15.0*mm;
-  G4double gapZ = windowZ + windowThick/2. + gapThick/2. + 0.01*mm;
-  G4double electrodeZ = gapZ + gapThick/2. + electrodeThick/2. + 0.01*mm;
-  G4double absorberZ = electrodeZ + electrodeThick/2. 
-    + absorberThickness/2. + 0.01*mm;
+  G4double windowZ = startZ + radThick + windowThick / 2. + 15.0 * mm;
+  G4double gapZ = windowZ + windowThick / 2. + gapThick / 2. + 0.01 * mm;
+  G4double electrodeZ = gapZ + gapThick / 2. + electrodeThick / 2. + 0.01 * mm;
+  G4double absorberZ = electrodeZ + electrodeThick / 2. + absorberThickness / 2. + 0.01 * mm;
 
-  new G4PVPlacement(0, G4ThreeVector(0., 0., absorberZ),
-                    "Absorber", logicAbsorber, physicsWorld, false, 0);
+  new G4PVPlacement(0, G4ThreeVector(0., 0., absorberZ), "Absorber", logicAbsorber, physicsWorld,
+                    false, 0);
 
   G4Region* regGasDet = new G4Region("XTRdEdxDetector");
   regGasDet->AddRootLogicalVolume(logicAbsorber);
@@ -182,26 +171,23 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
   // Sensitive Detectors: Absorber
 
   SensitiveDetector* sd = new SensitiveDetector("AbsorberSD");
-  G4SDManager::GetSDMpointer()->AddNewDetector(sd );
+  G4SDManager::GetSDMpointer()->AddNewDetector(sd);
   logicAbsorber->SetSensitiveDetector(sd);
 
   // Print geometry parameters
 
-  G4cout << "\n The  WORLD   is made of "
-         << worldSizeZ/mm << "mm of " << worldMaterial->GetName();
-  G4cout << ", the transverse size (R) of the world is " 
-         << worldSizeR/mm << " mm. " << G4endl;
-  G4cout << " The ABSORBER is made of "
-         << absorberThickness/mm << "mm of " << absorberMaterial->GetName();
-  G4cout << ", the transverse size (R) is " 
-         << absorberRadius/mm << " mm. " << G4endl;
-  G4cout << " Z position of the (middle of the) absorber " 
-         << absorberZ/mm << "  mm." << G4endl;
+  G4cout << "\n The  WORLD   is made of " << worldSizeZ / mm << "mm of "
+         << worldMaterial->GetName();
+  G4cout << ", the transverse size (R) of the world is " << worldSizeR / mm << " mm. " << G4endl;
+  G4cout << " The ABSORBER is made of " << absorberThickness / mm << "mm of "
+         << absorberMaterial->GetName();
+  G4cout << ", the transverse size (R) is " << absorberRadius / mm << " mm. " << G4endl;
+  G4cout << " Z position of the (middle of the) absorber " << absorberZ / mm << "  mm." << G4endl;
 
-  G4cout << "radZ = " << radZ/mm << " mm" << G4endl;
-  G4cout << "startZ = " << startZ/mm<< " mm" << G4endl;
+  G4cout << "radZ = " << radZ / mm << " mm" << G4endl;
+  G4cout << "startZ = " << startZ / mm << " mm" << G4endl;
 
-  G4cout << "fRadThick = " << radThick/mm << " mm"<<G4endl;
+  G4cout << "fRadThick = " << radThick / mm << " mm" << G4endl;
   G4cout << "fFoilNumber = " << foilNumber << G4endl;
   G4cout << "fRadiatorMat = " << radiatorMat->GetName() << G4endl;
   G4cout << "WorldMaterial = " << worldMaterial->GetName() << G4endl;

@@ -29,7 +29,7 @@
 //
 
 #ifndef B02PrimaryGeneratorAction_hh
-#define B02PrimaryGeneratorAction_hh B02PrimaryGeneratorAction_hh 
+#define B02PrimaryGeneratorAction_hh B02PrimaryGeneratorAction_hh
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -50,4 +50,3 @@ class B02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 };
 
 #endif
-

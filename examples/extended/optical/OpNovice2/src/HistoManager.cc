@@ -37,8 +37,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager()
-  : fFileName("opnovice2")
+HistoManager::HistoManager() : fFileName("opnovice2")
 {
   Book();
 }
@@ -56,7 +55,7 @@ void HistoManager::Book()
 
   // Define histograms
   // Default values (to be reset via /analysis/h1/set command)
-  G4int n      = 100;
+  G4int n = 100;
   G4double xmn = 0.;
   G4double xmx = 100.;
 
@@ -65,11 +64,9 @@ void HistoManager::Book()
   // 1
   analysisMan->CreateH1("Cerenkov spectrum", "Cerenkov spectrum", n, xmn, xmx);
   // 2
-  analysisMan->CreateH1("Scintillation spectrum", "Scintillation spectrum", n,
-                        xmn, xmx);
+  analysisMan->CreateH1("Scintillation spectrum", "Scintillation spectrum", n, xmn, xmx);
   // 3
-  analysisMan->CreateH1("Scintillation time",
-                        "scintillation photons creation time", n, xmn, xmx);
+  analysisMan->CreateH1("Scintillation time", "scintillation photons creation time", n, xmn, xmx);
   // 4
   analysisMan->CreateH1("WLS abs", "WLS absorption spectrum", n, xmn, xmx);
   // 5
@@ -85,54 +82,41 @@ void HistoManager::Book()
   // 10
   analysisMan->CreateH1("bdry status", "boundary process status", n, xmn, xmx);
   // 11
-  analysisMan->CreateH1(
-    "x_backward", "X momentum dir of backward-going photons", n, xmn, xmx);
+  analysisMan->CreateH1("x_backward", "X momentum dir of backward-going photons", n, xmn, xmx);
   // 12
-  analysisMan->CreateH1(
-    "y_backward", "Y momentum dir of backward-going photons", n, xmn, xmx);
+  analysisMan->CreateH1("y_backward", "Y momentum dir of backward-going photons", n, xmn, xmx);
   // 13
-  analysisMan->CreateH1(
-    "z_backward", "Z momentum dir of backward-going photons", n, xmn, xmx);
+  analysisMan->CreateH1("z_backward", "Z momentum dir of backward-going photons", n, xmn, xmx);
   // 14
-  analysisMan->CreateH1("x_forward", "X momentum dir of forward-going photons",
-                        n, xmn, xmx);
+  analysisMan->CreateH1("x_forward", "X momentum dir of forward-going photons", n, xmn, xmx);
   // 15
-  analysisMan->CreateH1("y_forward", "Y momentum dir of forward-going photons",
-                        n, xmn, xmx);
+  analysisMan->CreateH1("y_forward", "Y momentum dir of forward-going photons", n, xmn, xmx);
   // 16
-  analysisMan->CreateH1("z_forward", "Z momentum dir of forward-going photons",
-                        n, xmn, xmx);
+  analysisMan->CreateH1("z_forward", "Z momentum dir of forward-going photons", n, xmn, xmx);
   // 17
-  analysisMan->CreateH1(
-    "x_fresnel", "X momentum dir of Fresnel-refracted photons", n, xmn, xmx);
+  analysisMan->CreateH1("x_fresnel", "X momentum dir of Fresnel-refracted photons", n, xmn, xmx);
   // 18
-  analysisMan->CreateH1(
-    "y_fresnel", "Y momentum dir of Fresnel-refracted photons", n, xmn, xmx);
+  analysisMan->CreateH1("y_fresnel", "Y momentum dir of Fresnel-refracted photons", n, xmn, xmx);
   // 19
-  analysisMan->CreateH1(
-    "z_fresnel", "Z momentum dir of Fresnel-refracted photons", n, xmn, xmx);
+  analysisMan->CreateH1("z_fresnel", "Z momentum dir of Fresnel-refracted photons", n, xmn, xmx);
   // 20
-  analysisMan->CreateH1("Fresnel refraction", "Fresnel-refracted photons", n,
-                        xmn, xmx);
+  analysisMan->CreateH1("Fresnel refraction", "Fresnel-refracted photons", n, xmn, xmx);
   // 21
-  analysisMan->CreateH1("Fresnel reflection", "Fresnel-reflected photons", n,
-                        xmn, xmx);
+  analysisMan->CreateH1("Fresnel reflection", "Fresnel-reflected photons", n, xmn, xmx);
   // 22
-  analysisMan->CreateH1("Total internal reflection",
-                        "Total internal reflected photons", n, xmn, xmx);
+  analysisMan->CreateH1("Total internal reflection", "Total internal reflected photons", n, xmn,
+                        xmx);
   // 23
-  analysisMan->CreateH1("Fresnel reflection plus TIR",
-                        "Fresnel-reflected plus TIR photons", n, xmn, xmx);
+  analysisMan->CreateH1("Fresnel reflection plus TIR", "Fresnel-reflected plus TIR photons", n, xmn,
+                        xmx);
   // 24
   analysisMan->CreateH1("Absorption", "Absorbed photons", n, xmn, xmx);
   // 25
   analysisMan->CreateH1("Transmitted", "Transmitted photons", n, xmn, xmx);
   // 26
-  analysisMan->CreateH1("Spike reflection", "Spike reflected photons", n, xmn,
-                        xmx);
+  analysisMan->CreateH1("Spike reflection", "Spike reflected photons", n, xmn, xmx);
 
-  for(G4int i = 0; i < analysisMan->GetNofH1s(); ++i)
-  {
+  for (G4int i = 0; i < analysisMan->GetNofH1s(); ++i) {
     analysisMan->SetH1Activation(i, false);
   }
 }

@@ -29,49 +29,49 @@
 //
 //
 
-#ifndef B03ImportanceDetectorConstruction_hh 
-#define B03ImportanceDetectorConstruction_hh  B03ImportanceDetectorConstruction_hh 
+#ifndef B03ImportanceDetectorConstruction_hh
+#define B03ImportanceDetectorConstruction_hh B03ImportanceDetectorConstruction_hh
 
-#include "globals.hh"
-#include <map>
-#include <vector>
-#include "G4GeometryCell.hh"
 #include "B03PVolumeStore.hh"
 
+#include "G4GeometryCell.hh"
 #include "G4VUserParallelWorld.hh"
+#include "globals.hh"
+
+#include <map>
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
 class B03ImportanceDetectorConstruction : public G4VUserParallelWorld
 {
-public:
-  B03ImportanceDetectorConstruction(G4String worldName);
-  ~B03ImportanceDetectorConstruction();
+  public:
+    B03ImportanceDetectorConstruction(G4String worldName);
+    ~B03ImportanceDetectorConstruction();
 
-  const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
-  G4VPhysicalVolume &GetWorldVolumeAddress() const;
-  G4String ListPhysNamesAsG4String();
-  G4String GetCellName(G4int i);
-  G4GeometryCell GetGeometryCell(G4int i);
+    const G4VPhysicalVolume& GetPhysicalVolumeByName(const G4String& name) const;
+    G4VPhysicalVolume& GetWorldVolumeAddress() const;
+    G4String ListPhysNamesAsG4String();
+    G4String GetCellName(G4int i);
+    G4GeometryCell GetGeometryCell(G4int i);
 
-  G4VPhysicalVolume* GetWorldVolume();
+    G4VPhysicalVolume* GetWorldVolume();
 
-  void SetSensitive();
+    void SetSensitive();
 
-  virtual void ConstructSD();
+    virtual void ConstructSD();
 
-private:
-  virtual void Construct();
-  B03PVolumeStore fPVolumeStore;
+  private:
+    virtual void Construct();
+    B03PVolumeStore fPVolumeStore;
 
-  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+    //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+    std::vector<G4LogicalVolume*> fLogicalVolumeVector;
 
-  //  G4VPhysicalVolume *fWorldVolume;
+    //  G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* fGhostWorld;
-
+    G4VPhysicalVolume* fGhostWorld;
 };
 
 #endif

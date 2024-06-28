@@ -45,11 +45,11 @@
 #ifndef DicomHandler_h
 #define DicomHandler_h 1
 
-#include <cstdio>
-#include <map>
-#include <fstream>
-
 #include "globals.hh"
+
+#include <cstdio>
+#include <fstream>
+#include <map>
 
 //*******************************************************
 /// Dicom Handler class
@@ -69,67 +69,67 @@ class DicomPhantomZSliceMerged;
 
 class DicomHandler
 {
-public:
-    
+  public:
     ~DicomHandler();
-    
+
     // static accessor
     static DicomHandler* Instance();
-    
-    G4int ReadFile(FILE *,char *);
-    G4int ReadData(FILE *,char *); // note: always use readHeader
+
+    G4int ReadFile(FILE*, char*);
+    G4int ReadData(FILE*, char*);  // note: always use readHeader
     // before readData
-    
+
     // use ImageMagick to display the image
-    //G4int displayImage(char[500]);
-    
+    // G4int displayImage(char[500]);
+
     void CheckFileFormat();
-    
+
     static G4String GetDicomDataPath();
     static G4String GetDicomDataFile();
 
-private:
+  private:
     DicomHandler();
-    
-    template <class Type> void GetValue(char *, Type &);
-    
-private:
+
+    template<class Type>
+    void GetValue(char*, Type&);
+
+  private:
     static DicomHandler* fInstance;
- 
+
     const G4int DATABUFFSIZE;
     const G4int LINEBUFFSIZE;
     const G4int FILENAMESIZE;
-    
+
     void ReadCalibration();
-    void GetInformation(G4int &, char *);
+    void GetInformation(G4int&, char*);
     G4float Pixel2density(G4int pixel);
-    void ReadMaterialIndices( std::ifstream& finData);
-    unsigned int GetMaterialIndex( G4float density );
+    void ReadMaterialIndices(std::ifstream& finData);
+    unsigned int GetMaterialIndex(G4float density);
     void StoreData(std::ofstream& foutG4DCM);
     void StoreData(DicomPhantomZSliceHeader* dcmPZSH);
-    G4int read_defined_nested(FILE *, G4int);
-    void read_undefined_nested(FILE *);
-    void read_undefined_item(FILE *);
-    
+    G4int read_defined_nested(FILE*, G4int);
+    void read_undefined_nested(FILE*);
+    void read_undefined_item(FILE*);
+
     short fCompression;
     G4int fNFiles;
     short fRows;
     short fColumns;
     short fBitAllocated;
     G4int fMaxPixelValue, fMinPixelValue;
-    
+
     G4double fPixelSpacingX, fPixelSpacingY;
     G4double fSliceThickness;
     G4double fSliceLocation;
-    
+
     G4int fRescaleIntercept, fRescaleSlope;
-    
+
     G4bool fLittleEndian, fImplicitEndian;
     short fPixelRepresentation;
-    
+
     G4int** fTab;
-    std::map<G4float,G4String> fMaterialIndices;
-    
+    std::map<G4float, G4String> fMaterialIndices;
+
     G4int fNbrequali;
     G4double* fValueDensity;
     G4double* fValueCT;
@@ -138,7 +138,5 @@ private:
 
     G4String fDriverFile;
     G4String fCt2DensityFile;
-
 };
 #endif
-

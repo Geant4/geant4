@@ -31,13 +31,14 @@
 #ifndef DicomDetectorConstruction_h
 #define DicomDetectorConstruction_h 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
-#include "G4ThreeVector.hh"
 
-#include <set>
+#include "G4ThreeVector.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
+
 #include <map>
+#include <set>
 
 class G4Material;
 class G4Box;
@@ -58,9 +59,9 @@ class DicomPhantomZSliceMerged;
 
 struct matInfo
 {
-  G4double fSumdens;
-  G4int fNvoxels;
-  G4int fId;
+    G4double fSumdens;
+    G4int fNvoxels;
+    G4int fId;
 };
 
 class DicomDetectorConstruction : public G4VUserDetectorConstruction
@@ -75,14 +76,13 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
     G4int GetTotalVoxels() const;
 
   protected:
-
     void InitialisationOfMaterials();
     // create the original materials
 
     void ReadPhantomData();
     void ReadPhantomDataNew();
     // read the DICOM files describing the phantom
-    void ReadVoxelDensities( std::ifstream& fin );
+    void ReadVoxelDensities(std::ifstream& fin);
 
     void ReadPhantomDataFile(const G4String& fname);
     // read one of the DICOM files describing the phantom
@@ -92,8 +92,8 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
     void MergeZSliceHeaders();
     // merge the slice headers of all the files
 
-    G4Material* BuildMaterialWithChangingDensity(
-        const G4Material* origMate, G4float density, G4String newMateName );
+    G4Material* BuildMaterialWithChangingDensity(const G4Material* origMate, G4float density,
+                                                 G4String newMateName);
     // build a new material if the density of the voxel is different
     // to the other voxels
 
@@ -108,7 +108,6 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
     virtual void ConstructSDandField();
 
   protected:
-
     G4Material* fAir;
 
     // World ...
@@ -120,15 +119,15 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fContainer_logic;
     G4VPhysicalVolume* fContainer_phys;
 
-    G4int fNoFiles; // number of DICOM files
+    G4int fNoFiles;  // number of DICOM files
     std::vector<G4Material*> fOriginalMaterials;  // list of original materials
     std::vector<G4Material*> fMaterials;
     // list of new materials created to distinguish different density
     //  voxels that have the same original materials
-    size_t* fMateIDs; // index of material of each voxel
-    //unsigned int* fMateIDs; // index of material of each voxel
+    size_t* fMateIDs;  // index of material of each voxel
+    // unsigned int* fMateIDs; // index of material of each voxel
 
-    std::map<G4int,G4double> fDensityDiffs;
+    std::map<G4int, G4double> fDensityDiffs;
     // Density difference to distinguish material for each original
     // material (by index)
 
@@ -139,10 +138,10 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
 
     G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;
     G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
-    G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position wall)
-    G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position wall)
+    G4double fMinX, fMinY, fMinZ;  // minimum extension of voxels (position wall)
+    G4double fMaxX, fMaxY, fMaxZ;  // maximum extension of voxels (position wall)
 
-    std::map<G4int,G4Material*> fPhantomMaterialsOriginal;
+    std::map<G4int, G4Material*> fPhantomMaterialsOriginal;
     // map numberOfMaterial to G4Material. They are the list of materials as
     // built from .geom file
 
@@ -157,7 +156,7 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
 
 inline G4int DicomDetectorConstruction::GetTotalVoxels() const
 {
-    return fNoVoxelsX * fNoVoxelsY * fNoVoxelsZ;
+  return fNoVoxelsX * fNoVoxelsY * fNoVoxelsZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

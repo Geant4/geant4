@@ -34,7 +34,6 @@
 #define _G01PRIMARYGENERATORACTION_H_
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-
 #include "globals.hh"
 
 class G4Event;
@@ -45,14 +44,12 @@ class G4ParticleGun;
 class G01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-
     G01PrimaryGeneratorAction();
-   ~G01PrimaryGeneratorAction();
+    ~G01PrimaryGeneratorAction();
 
-   virtual void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-
     G4ParticleGun* fParticleGun;
 };
 

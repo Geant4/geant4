@@ -34,31 +34,26 @@
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 
-#include "G4RunManager.hh"
 #include "RunAction.hh"
-//#include "G4Run.hh
+
+#include "G4RunManager.hh"
+// #include "G4Run.hh
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction() : G4UserRunAction()
-{}
+RunAction::RunAction() : G4UserRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run*)
-{}
+void RunAction::BeginOfRunAction(const G4Run*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-    G4cout << "Seed used :"
-        <<  CLHEP::HepRandom::getTheSeed() << G4endl;
+  G4cout << "Seed used :" << CLHEP::HepRandom::getTheSeed() << G4endl;
 }
-
-

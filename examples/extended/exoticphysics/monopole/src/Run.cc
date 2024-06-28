@@ -26,27 +26,29 @@
 /// \file exoticphysics/monopole/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
-#include "PrimaryGeneratorAction.hh"
+
 #include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+
 #include "G4EmCalculator.hh"
 #include "G4Proton.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
+
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* prim)
- :fDetector(det), fPrimary(prim)
+Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* prim) : fDetector(det), fPrimary(prim)
 {
   fAnalysisManager = G4AnalysisManager::Instance();
 
-  G4double length  = fDetector->GetAbsorSizeX();
+  G4double length = fDetector->GetAbsorSizeX();
   fOffsetX = -0.5 * length;
 
   fVerboseLevel = 1;
@@ -56,8 +58,7 @@ Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::~Run()
-{}
+Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,127 +66,114 @@ void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
 
-  fNevt   += localRun->GetNumberOfEvent();
+  fNevt += localRun->GetNumberOfEvent();
   fProjRange += localRun->fProjRange;
   fProjRange2 += localRun->fProjRange2;
-  
-  G4Run::Merge(run); 
-} 
+
+  G4Run::Merge(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::EndOfRun(G4double binLength)
 {
-
-  if ( ! G4Threading::IsMultithreadedApplication() ) {
+  if (!G4Threading::IsMultithreadedApplication()) {
     fNevt += this->GetNumberOfEvent();
   }
 
   G4int nEvents = fNevt;
-  if (nEvents == 0) { return; }
+  if (nEvents == 0) {
+    return;
+  }
 
-  //run conditions
-  //  
+  // run conditions
+  //
   const G4Material* material = fDetector->GetAbsorMaterial();
   G4double density = material->GetDensity();
   G4String matName = material->GetName();
 
-  const G4ParticleDefinition* part = 
-    fPrimary->GetParticleGun()->GetParticleDefinition();
-  G4String particle = part->GetParticleName();    
-  const G4ParticleDefinition* proton = G4Proton::Proton(); 
+  const G4ParticleDefinition* part = fPrimary->GetParticleGun()->GetParticleDefinition();
+  G4String particle = part->GetParticleName();
+  const G4ParticleDefinition* proton = G4Proton::Proton();
 
   G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
 
-  if(GetVerbose() > 0){
-    G4cout << "\n The run consists of " << nEvents << " "<< particle << " of "
-           << G4BestUnit(energy,"Energy") << "\n through " 
-           << G4BestUnit(fDetector->GetAbsorSizeX(),"Length") << " of "
-           << matName << " (density: " 
-           << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-    //G4cout<<"Proj "<<fProjRange<<" "<<fProjRange2<<G4endl;
+  if (GetVerbose() > 0) {
+    G4cout << "\n The run consists of " << nEvents << " " << particle << " of "
+           << G4BestUnit(energy, "Energy") << "\n through "
+           << G4BestUnit(fDetector->GetAbsorSizeX(), "Length") << " of " << matName
+           << " (density: " << G4BestUnit(density, "Volumic Mass") << ")" << G4endl;
+    // G4cout<<"Proj "<<fProjRange<<" "<<fProjRange2<<G4endl;
   };
-         
-  //compute projected range and straggling
-  fProjRange /= nEvents; fProjRange2 /= nEvents;
-  G4double rms = fProjRange2 - fProjRange*fProjRange;        
-  if (rms>0.) { rms = std::sqrt(rms); } 
-  else { rms = 0.; }
 
-  if(GetVerbose() > 0){
-    G4cout.precision(5);       
+  // compute projected range and straggling
+  fProjRange /= nEvents;
+  fProjRange2 /= nEvents;
+  G4double rms = fProjRange2 - fProjRange * fProjRange;
+  if (rms > 0.) {
+    rms = std::sqrt(rms);
+  }
+  else {
+    rms = 0.;
+  }
+
+  if (GetVerbose() > 0) {
+    G4cout.precision(5);
     G4cout << " Projected Range= " << G4BestUnit(fProjRange, "Length")
-           << "   rms= "             << G4BestUnit(rms, "Length")
-           << "\n" << G4endl;
+           << "   rms= " << G4BestUnit(rms, "Length") << "\n"
+           << G4endl;
   };
 
-  G4double ekin[100], dedxp[100], dedxmp[100], tdedxp[100], tdedxmp[100], 
-    xsp[100], xsmp[100];
+  G4double ekin[100], dedxp[100], dedxmp[100], tdedxp[100], tdedxmp[100], xsp[100], xsmp[100];
   G4EmCalculator calc;
-  //calc.SetVerbose(2);
+  // calc.SetVerbose(2);
   G4int i;
-  for(i = 0; i < 100; ++i) {
-    ekin[i]   = std::pow(10., 0.1*G4double(i)) * keV;
-    dedxp[i]  = calc.GetDEDX(ekin[i], proton, material);
-    xsp[i]    = calc.GetCrossSectionPerVolume(ekin[i], proton, "hIoni", 
-                                              material);
+  for (i = 0; i < 100; ++i) {
+    ekin[i] = std::pow(10., 0.1 * G4double(i)) * keV;
+    dedxp[i] = calc.GetDEDX(ekin[i], proton, material);
+    xsp[i] = calc.GetCrossSectionPerVolume(ekin[i], proton, "hIoni", material);
     tdedxp[i] = calc.ComputeElectronicDEDX(ekin[i], proton, material);
     dedxmp[i] = calc.GetDEDX(ekin[i], part, material);
-    xsmp[i]   = calc.GetCrossSectionPerVolume(ekin[i], part, "mplIoni", 
-                                              material);
+    xsmp[i] = calc.GetCrossSectionPerVolume(ekin[i], part, "mplIoni", material);
     tdedxmp[i] = calc.ComputeElectronicDEDX(ekin[i], part, material);
   }
 
-  if(GetVerbose() > 0){
+  if (GetVerbose() > 0) {
     G4int prec = G4cout.precision(3);
-    G4cout<<"##################################################################"
-          << G4endl;
-    G4cout<< "### Stopping Powers and Cross Sections" << G4endl;
-    G4cout<<"##################################################################"
-          << G4endl;
-               
-    G4cout<<"# N   E(MeV)  p_dEdx(MeV/mm) mpl_dEdx(MeV/mm)           xs(1/mm)" 
-          << G4endl;
-    G4cout<<"               restr    tot      restr    tot          p      mpl" 
-          << G4endl;
-    G4cout<<"##################################################################"
-          << G4endl;
-    for(i=0; i<100; ++i) {
-      G4cout << std::setw(2) << i << "." << std::setw(9) << ekin[i] 
-             << std::setw(8) << dedxp[i] 
-             << std::setw(8) << tdedxp[i]
-             << std::setw(9) << dedxmp[i] 
-             << std::setw(9) << tdedxmp[i]
-             << std::setw(10) << xsp[i]
-             << std::setw(10) << xsmp[i]
-             << G4endl;
+    G4cout << "##################################################################" << G4endl;
+    G4cout << "### Stopping Powers and Cross Sections" << G4endl;
+    G4cout << "##################################################################" << G4endl;
+
+    G4cout << "# N   E(MeV)  p_dEdx(MeV/mm) mpl_dEdx(MeV/mm)           xs(1/mm)" << G4endl;
+    G4cout << "               restr    tot      restr    tot          p      mpl" << G4endl;
+    G4cout << "##################################################################" << G4endl;
+    for (i = 0; i < 100; ++i) {
+      G4cout << std::setw(2) << i << "." << std::setw(9) << ekin[i] << std::setw(8) << dedxp[i]
+             << std::setw(8) << tdedxp[i] << std::setw(9) << dedxmp[i] << std::setw(9) << tdedxmp[i]
+             << std::setw(10) << xsp[i] << std::setw(10) << xsmp[i] << G4endl;
     }
     G4cout.precision(prec);
-    G4cout<<"##################################################################"
-          << G4endl;
+    G4cout << "##################################################################" << G4endl;
   }
 
   // normalize histogram
-  G4double fac = (mm/MeV) / (nEvents * binLength);
-  fAnalysisManager->ScaleH1(1,fac);
+  G4double fac = (mm / MeV) / (nEvents * binLength);
+  fAnalysisManager->ScaleH1(1, fac);
 
-  for(i=0; i<100; ++i) {
+  for (i = 0; i < 100; ++i) {
     G4double e = std::log10(ekin[i] / MeV) + 0.05;
     fAnalysisManager->FillH1(2, e, tdedxp[i]);
     fAnalysisManager->FillH1(3, e, tdedxmp[i]);
-    fAnalysisManager->FillH1(4, e, 
-                   std::log10(calc.GetRange(ekin[i],"proton",matName)/mm));
-    fAnalysisManager->FillH1(5, e, 
-                   std::log10(calc.GetRange(ekin[i],"monopole",matName)/mm));
+    fAnalysisManager->FillH1(4, e, std::log10(calc.GetRange(ekin[i], "proton", matName) / mm));
+    fAnalysisManager->FillH1(5, e, std::log10(calc.GetRange(ekin[i], "monopole", matName) / mm));
     fAnalysisManager->FillH1(6, e, dedxp[i]);
     fAnalysisManager->FillH1(7, e, dedxmp[i]);
     fAnalysisManager->FillH1(8, e, xsp[i]);
     fAnalysisManager->FillH1(9, e, xsmp[i]);
   }
-}   
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 void Run::FillHisto(G4int histoId, G4double v1, G4double v2)
 {

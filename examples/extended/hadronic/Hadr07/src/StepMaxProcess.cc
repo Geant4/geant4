@@ -31,13 +31,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMaxProcess.hh"
-#include "StepMaxMessenger.hh"
+
 #include "HistoManager.hh"
+#include "StepMaxMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxProcess::StepMaxProcess(const G4String& processName, G4ProcessType type)
- : G4VDiscreteProcess(processName,type)
+  : G4VDiscreteProcess(processName, type)
 {
   fMaxStep1 = fMaxStep2 = DBL_MAX;
   fApplyMaxStep2 = true;
@@ -46,7 +47,10 @@ StepMaxProcess::StepMaxProcess(const G4String& processName, G4ProcessType type)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMaxProcess::~StepMaxProcess() { delete fMess; }
+StepMaxProcess::~StepMaxProcess()
+{
+  delete fMess;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,17 +61,22 @@ G4bool StepMaxProcess::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMaxProcess::SetMaxStep1(G4double step) {fMaxStep1 = step;}
+void StepMaxProcess::SetMaxStep1(G4double step)
+{
+  fMaxStep1 = step;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMaxProcess::ApplyMaxStep2(G4bool value) {fApplyMaxStep2 = value;}
+void StepMaxProcess::ApplyMaxStep2(G4bool value)
+{
+  fApplyMaxStep2 = value;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double StepMaxProcess::PostStepGetPhysicalInteractionLength( const G4Track&,
-                                                   G4double,
-                                                   G4ForceCondition* condition)
+G4double StepMaxProcess::PostStepGetPhysicalInteractionLength(const G4Track&, G4double,
+                                                              G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
@@ -76,20 +85,20 @@ G4double StepMaxProcess::PostStepGetPhysicalInteractionLength( const G4Track&,
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     G4int ih = 10;
     if (analysisManager->GetH1Activation(ih))
-     fMaxStep2 = analysisManager->GetH1Width(ih)*analysisManager->GetH1Unit(ih);
+      fMaxStep2 = analysisManager->GetH1Width(ih) * analysisManager->GetH1Unit(ih);
     return fMaxStep2;
   }
-  else  return fMaxStep1;
+  else
+    return fMaxStep1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* StepMaxProcess::PostStepDoIt(const G4Track& aTrack,
-                                                const G4Step&)
+G4VParticleChange* StepMaxProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
-   // do nothing
-   aParticleChange.Initialize(aTrack);
-   return &aParticleChange;
+  // do nothing
+  aParticleChange.Initialize(aTrack);
+  return &aParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

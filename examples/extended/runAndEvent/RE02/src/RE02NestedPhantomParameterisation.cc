@@ -30,12 +30,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "RE02NestedPhantomParameterisation.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4VTouchable.hh"
-#include "G4ThreeVector.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 
 //=======================================================================
 // (RE02NestedPhantomParameterisation)
@@ -49,29 +49,30 @@
 ////////////////////////////////////////////////////////////////////
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE02NestedPhantomParameterisation
-::RE02NestedPhantomParameterisation(const G4ThreeVector& voxelSize,
-                                    G4int nz,
-                                    std::vector<G4Material*>& mat):
-  G4VNestedParameterisation(),
-  fdX(voxelSize.x()),fdY(voxelSize.y()),fdZ(voxelSize.z()),
-  fNz(nz),fMat(mat)
+RE02NestedPhantomParameterisation ::RE02NestedPhantomParameterisation(
+  const G4ThreeVector& voxelSize, G4int nz, std::vector<G4Material*>& mat)
+  : G4VNestedParameterisation(),
+    fdX(voxelSize.x()),
+    fdY(voxelSize.y()),
+    fdZ(voxelSize.z()),
+    fNz(nz),
+    fMat(mat)
 {
-  // Position of voxels. 
-  // x and y positions are already defined in DetectorConstruction 
+  // Position of voxels.
+  // x and y positions are already defined in DetectorConstruction
   // by using replicated volume. Here only we need to define is z positions
   // of voxles.
   fpZ.clear();
   G4double zp;
-  for ( G4int iz = 0; iz < fNz; iz++){
-    zp = (-fNz+1+2*iz)*fdZ;
+  for (G4int iz = 0; iz < fNz; iz++) {
+    zp = (-fNz + 1 + 2 * iz) * fdZ;
     fpZ.push_back(zp);
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE02NestedPhantomParameterisation::~RE02NestedPhantomParameterisation(){
+RE02NestedPhantomParameterisation::~RE02NestedPhantomParameterisation()
+{
   fpZ.clear();
 }
 
@@ -79,22 +80,25 @@ RE02NestedPhantomParameterisation::~RE02NestedPhantomParameterisation(){
 //
 // Material assignment to geometry.
 //
-G4Material* RE02NestedPhantomParameterisation
-::ComputeMaterial(G4VPhysicalVolume* /*currentVol*/, const G4int copyNo, 
-                  const G4VTouchable* parentTouch)
+G4Material* RE02NestedPhantomParameterisation ::ComputeMaterial(G4VPhysicalVolume* /*currentVol*/,
+                                                                const G4int copyNo,
+                                                                const G4VTouchable* parentTouch)
 {
-  if(parentTouch==0) return fMat[0]; // protection for initialization and
-                                     // vis at idle state
-  // Copy number of voxels. 
+  if (parentTouch == 0)
+    return fMat[0];  // protection for initialization and
+                     // vis at idle state
+  // Copy number of voxels.
   // Copy number of X and Y are obtained from replication number.
   // Copy nymber of Z is the copy number of current voxel.
   G4int ix = parentTouch->GetReplicaNumber(0);
   G4int iy = parentTouch->GetReplicaNumber(1);
   G4int iz = copyNo;
   // For demonstration purpose,a couple of materials are chosen alternately.
-  G4Material* mat=0;
-  if ( ix%2 == 0 && iy%2 == 0 && iz%2 == 0 ) mat = fMat[0];
-  else mat = fMat[1];
+  G4Material* mat = 0;
+  if (ix % 2 == 0 && iy % 2 == 0 && iz % 2 == 0)
+    mat = fMat[0];
+  else
+    mat = fMat[1];
 
   return mat;
 }
@@ -102,9 +106,10 @@ G4Material* RE02NestedPhantomParameterisation
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //  Number of Materials
-//  Material scanner is required for preparing physics tables and so on before 
+//  Material scanner is required for preparing physics tables and so on before
 //  stating simulation, so that G4 has to know number of materials.
-G4int RE02NestedPhantomParameterisation::GetNumberOfMaterials() const{
+G4int RE02NestedPhantomParameterisation::GetNumberOfMaterials() const
+{
   return fMat.size();
 }
 
@@ -113,7 +118,8 @@ G4int RE02NestedPhantomParameterisation::GetNumberOfMaterials() const{
 // GetMaterial
 //  This is needed for material scanner and realizing geometry.
 //
-G4Material* RE02NestedPhantomParameterisation::GetMaterial(G4int i) const{
+G4Material* RE02NestedPhantomParameterisation::GetMaterial(G4int i) const
+{
   return fMat[i];
 }
 
@@ -121,9 +127,10 @@ G4Material* RE02NestedPhantomParameterisation::GetMaterial(G4int i) const{
 //
 // Transformation of voxels.
 //
-void RE02NestedPhantomParameterisation
-::ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const{
-  G4ThreeVector position(0.,0.,fpZ[copyNo]);
+void RE02NestedPhantomParameterisation ::ComputeTransformation(const G4int copyNo,
+                                                               G4VPhysicalVolume* physVol) const
+{
+  G4ThreeVector position(0., 0., fpZ[copyNo]);
   physVol->SetTranslation(position);
 }
 
@@ -131,8 +138,9 @@ void RE02NestedPhantomParameterisation
 //
 // Dimensions are always same in this RE02 example.
 //
-void RE02NestedPhantomParameterisation
-::ComputeDimensions(G4Box& box, const G4int, const G4VPhysicalVolume* ) const{
+void RE02NestedPhantomParameterisation ::ComputeDimensions(G4Box& box, const G4int,
+                                                           const G4VPhysicalVolume*) const
+{
   box.SetXHalfLength(fdX);
   box.SetYHalfLength(fdY);
   box.SetZHalfLength(fdZ);

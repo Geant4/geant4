@@ -116,6 +116,9 @@ class G4MultiUnion : public G4VSolid
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    G4int GetNumOfConstituents() const override;
+    G4bool IsFaceted() const override;
+
     G4VSolid* Clone() const override ;
 
     G4GeometryType GetEntityType() const override { return "G4MultiUnion"; }

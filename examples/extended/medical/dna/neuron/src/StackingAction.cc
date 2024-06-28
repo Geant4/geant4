@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -41,22 +41,20 @@
 /// \brief Implementation of the StackingAction class
 
 #include "StackingAction.hh"
-#include "G4StackManager.hh"
+
 #include "G4DNAChemistryManager.hh"
+#include "G4StackManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction() :
-G4UserStackingAction()
-{}
+StackingAction::StackingAction() : G4UserStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingAction::NewStage()
 {
-  if(stackManager->GetNTotalTrack() == 0)
-  {
+  if (stackManager->GetNTotalTrack() == 0) {
     G4cout << "Physics stage ends" << G4endl;
-    G4DNAChemistryManager::Instance()->Run(); // starts chemistry
+    G4DNAChemistryManager::Instance()->Run();  // starts chemistry
   }
 }

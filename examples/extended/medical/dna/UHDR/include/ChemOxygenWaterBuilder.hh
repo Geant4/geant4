@@ -25,21 +25,22 @@
 //
 
 #ifndef ChemOxygenWaterBuilder_hh
-#define ChemOxygenWaterBuilder_hh
+#  define ChemOxygenWaterBuilder_hh 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4DNAMolecularReactionTable;
 
-class ChemOxygenWaterBuilder {
-public:
-  ChemOxygenWaterBuilder() = default;
+class ChemOxygenWaterBuilder
+{
+  public:
+    ChemOxygenWaterBuilder() = default;
 
-  ~ChemOxygenWaterBuilder() = default;
+    ~ChemOxygenWaterBuilder() = default;
 
-  static void SecondOrderReactionExtended(
-      G4DNAMolecularReactionTable *pReactionTable);
+    static void SecondOrderReactionExtended(G4DNAMolecularReactionTable* pReactionTable);
 
-  static void OxygenScavengerReaction(G4DNAMolecularReactionTable
-                                      *pReactionTable);
+    static void OxygenScavengerReaction(G4DNAMolecularReactionTable* pReactionTable);
 };
 
-#endif //
+#endif  //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

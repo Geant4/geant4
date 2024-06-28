@@ -43,12 +43,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MCTruthConfig::MCTruthConfig() 
-{}
+MCTruthConfig::MCTruthConfig() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MCTruthConfig::~MCTruthConfig() 
-{} 
+MCTruthConfig::~MCTruthConfig() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

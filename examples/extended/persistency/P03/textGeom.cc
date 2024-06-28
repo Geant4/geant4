@@ -29,30 +29,27 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
-
+#include "ExTGActionInitialization.hh"
 #include "ExTGDetectorConstruction.hh"
-#include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGDetectorConstructionWithCpp.hh"
 #include "ExTGDetectorConstructionWithCuts.hh"
-#include "G4GenericPhysicsList.hh"
+#include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGPrimaryGeneratorAction.hh"
-#include "ExTGActionInitialization.hh"
 
+#include "G4GenericPhysicsList.hh"
 #include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -73,12 +70,12 @@ int main(int argc,char** argv)
 
   // User Action classes
   //
-  //MT  runManager->SetUserAction(new ExTGPrimaryGeneratorAction);
+  // MT  runManager->SetUserAction(new ExTGPrimaryGeneratorAction);
 
   runManager->SetUserInitialization(new ExTGActionInitialization);
 
   // Run action that dumps GEANT4 in-memory geometry to text file
-  //MT  runManager->SetUserAction(new ExTGRunAction);
+  // MT  runManager->SetUserAction(new ExTGRunAction);
 
   // Initialize G4 kernel
   //
@@ -86,24 +83,24 @@ int main(int argc,char** argv)
 
   // Get the pointer to the User Interface manager
   //
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (!ui)   // batch mode
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
-    }
-  else           // interactive mode : define visualization and UI terminal
-    {
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
+  if (!ui)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else  // interactive mode : define visualization and UI terminal
+  {
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
 
-     UImanager->ApplyCommand("/control/execute run.mac");
-     ui->SessionStart();
-     delete ui;
-     delete visManager;
-    }
+    UImanager->ApplyCommand("/control/execute run.mac");
+    ui->SessionStart();
+    delete ui;
+    delete visManager;
+  }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
@@ -115,4 +112,3 @@ int main(int argc,char** argv)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

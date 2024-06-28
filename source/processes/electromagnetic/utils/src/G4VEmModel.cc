@@ -74,7 +74,8 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   xsec.resize(nsec);
   fEmManager = G4LossTableManager::Instance();
   fEmManager->Register(this);
-
+  isMaster = fEmManager->IsMaster();
+  
   G4LossTableBuilder* bld = fEmManager->GetTableBuilder();
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
@@ -396,13 +397,7 @@ G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 
 void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
 {
-  if(p != xSectionTable) {
-    if(xSectionTable != nullptr && localTable) { 
-      xSectionTable->clearAndDestroy(); 
-      delete xSectionTable;
-    }
-    xSectionTable = p;
-  }
+  xSectionTable = p;
   localTable = isLocal;
 }
 
@@ -418,6 +413,11 @@ void G4VEmModel::SetLPMFlag(G4bool)
     G4Exception("G4VEmModel::SetLPMFlag", "em0001", JustWarning, ed);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmModel::SetMasterThread(G4bool)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -92,7 +92,6 @@ geant4_module_link_libraries(G4event
     G4intercoms
     G4hepnumerics
     G4globman
-    ${timemory_LIBRARIES}
   PRIVATE
     G4procman
     G4bosons

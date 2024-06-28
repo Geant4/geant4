@@ -98,6 +98,9 @@ class G4DisplacedSolid : public G4VSolid
 
     G4ThreeVector GetPointOnSurface() const override;
 
+    G4int GetNumOfConstituents() const override;
+    G4bool IsFaceted() const override;
+
     G4GeometryType  GetEntityType() const override;
     G4VSolid* Clone() const override;
 

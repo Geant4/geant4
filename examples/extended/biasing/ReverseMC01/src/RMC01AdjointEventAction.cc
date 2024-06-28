@@ -39,55 +39,64 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RMC01AdjointEventAction.hh"
+
+#include "RMC01AnalysisManager.hh"
+#include "RMC01SD.hh"
+
+#include "G4Colour.hh"
 #include "G4Event.hh"
-#include "G4PrimaryVertex.hh"
-#include "G4PrimaryParticle.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
+#include "G4PrimaryParticle.hh"
+#include "G4PrimaryVertex.hh"
+#include "G4SDManager.hh"
 #include "G4Trajectory.hh"
+#include "G4TrajectoryContainer.hh"
 #include "G4TrajectoryPoint.hh"
 #include "G4UnitsTable.hh"
-#include "G4SDManager.hh"
+#include "G4VTrajectory.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 #include "Randomize.hh"
+
 #include <iomanip>
-#include "RMC01SD.hh"
-#include "RMC01AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RMC01AdjointEventAction::RMC01AdjointEventAction()
- : G4UserEventAction()
-{;
+RMC01AdjointEventAction::RMC01AdjointEventAction() : G4UserEventAction()
+{
+  ;
 }
-        
-                
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01AdjointEventAction::~RMC01AdjointEventAction()
-{;
+{
+  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01AdjointEventAction::BeginOfEventAction(const G4Event* anEvent )
-{ G4int i_event=anEvent->GetEventID();
-  G4bool print_nb=false;
-  if (i_event <100) print_nb =true;
-  else if (i_event<500 && (i_event/100)*100 == i_event) print_nb = true;
-  else if (i_event<5000 && (i_event/500)*500 == i_event) print_nb = true;
-  else if ((i_event/5000)*5000 == i_event) print_nb = true;
-  if (print_nb) G4cout<<"nb event "<<i_event<<std::endl;
+void RMC01AdjointEventAction::BeginOfEventAction(const G4Event* anEvent)
+{
+  G4int i_event = anEvent->GetEventID();
+  G4bool print_nb = false;
+  if (i_event < 100)
+    print_nb = true;
+  else if (i_event < 500 && (i_event / 100) * 100 == i_event)
+    print_nb = true;
+  else if (i_event < 5000 && (i_event / 500) * 500 == i_event)
+    print_nb = true;
+  else if ((i_event / 5000) * 5000 == i_event)
+    print_nb = true;
+  if (print_nb) G4cout << "nb event " << i_event << std::endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01AdjointEventAction::EndOfEventAction(const G4Event* )
-{ ;
-}  
+void RMC01AdjointEventAction::EndOfEventAction(const G4Event*)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

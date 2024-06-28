@@ -66,40 +66,40 @@ class G4VoxelNavigation : public G4VNavigation
   public:  // with description
 
     G4VoxelNavigation();
-    virtual ~G4VoxelNavigation();
+    ~G4VoxelNavigation() override;
 
     G4SmartVoxelNode* VoxelLocate( G4SmartVoxelHeader* pHead,
-                             const G4ThreeVector& localPoint );
+                                   const G4ThreeVector& localPoint );
 
-    virtual G4bool LevelLocate( G4NavigationHistory& history,
-                          const G4VPhysicalVolume* blockedVol,
-                          const G4int blockedNum,
-                          const G4ThreeVector& globalPoint,
-                          const G4ThreeVector* globalDirection,
-                          const G4bool pLocatedOnEdge, 
-                                G4ThreeVector& localPoint ) override;
+    G4bool LevelLocate( G4NavigationHistory& history,
+                        const G4VPhysicalVolume* blockedVol,
+                        const G4int blockedNum,
+                        const G4ThreeVector& globalPoint,
+                        const G4ThreeVector* globalDirection,
+                        const G4bool pLocatedOnEdge, 
+                              G4ThreeVector& localPoint ) override;
 
-    virtual G4double ComputeStep( const G4ThreeVector& globalPoint,
-                                  const G4ThreeVector& globalDirection,
-                                  const G4double currentProposedStepLength,
-                                        G4double& newSafety,
-                                        G4NavigationHistory& history,
-                                        G4bool& validExitNormal,
-                                        G4ThreeVector& exitNormal,
-                                        G4bool& exiting,
-                                        G4bool& entering,
-                                        G4VPhysicalVolume* (*pBlockedPhysical),
-                                        G4int& blockedReplicaNo ) override;
+    G4double ComputeStep( const G4ThreeVector& globalPoint,
+                          const G4ThreeVector& globalDirection,
+                          const G4double currentProposedStepLength,
+                                G4double& newSafety,
+                                G4NavigationHistory& history,
+                                G4bool& validExitNormal,
+                                G4ThreeVector& exitNormal,
+                                G4bool& exiting,
+                                G4bool& entering,
+                                G4VPhysicalVolume* (*pBlockedPhysical),
+                                G4int& blockedReplicaNo ) override;
 
-    virtual G4double ComputeSafety( const G4ThreeVector& globalpoint,
-                                    const G4NavigationHistory& history,
-                                    const G4double pMaxLength = DBL_MAX ) override;
+    G4double ComputeSafety( const G4ThreeVector& globalpoint,
+                            const G4NavigationHistory& history,
+                            const G4double pMaxLength = DBL_MAX ) override;
 
-    virtual void RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
-                                       const G4ThreeVector& localPoint ) override;
+    void RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
+                               const G4ThreeVector& localPoint ) override;
 
-    virtual G4int GetVerboseLevel() const override;
-    virtual void  SetVerboseLevel(G4int level) override;
+    G4int GetVerboseLevel() const override;
+    void  SetVerboseLevel(G4int level) override;
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 

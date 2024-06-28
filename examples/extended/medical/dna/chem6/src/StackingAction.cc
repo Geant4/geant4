@@ -44,30 +44,26 @@
 
 #include "StackingAction.hh"
 
-#include "G4StackManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4SDManager.hh"
+#include "G4StackManager.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-StackingAction::StackingAction()
- : G4UserStackingAction()
-{ }
+StackingAction::StackingAction() : G4UserStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-StackingAction::~StackingAction()
-{ }
+StackingAction::~StackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void StackingAction::NewStage()
 {
-  if(stackManager->GetNTotalTrack() == 0)
-  {
-//    G4cout << "Physics stage ends" << G4endl;
-    G4DNAChemistryManager::Instance()->Run(); // starts chemistry
+  if (stackManager->GetNTotalTrack() == 0) {
+    //    G4cout << "Physics stage ends" << G4endl;
+    G4DNAChemistryManager::Instance()->Run();  // starts chemistry
   }
 }
 

@@ -29,32 +29,29 @@
 //
 
 #include "RE05MuonHit.hh"
-#include "G4VVisManager.hh"
+
+#include "G4AttCheck.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4UnitsTable.hh"
-#include "G4AttValue.hh"
-#include "G4AttDef.hh"
-#include "G4AttCheck.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
-G4ThreadLocal G4Allocator<RE05MuonHit>* RE05MuonHitAllocator=0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RE05MuonHit::RE05MuonHit()
-: G4VHit(),fEdep(0.),fPos()
-{}
+G4ThreadLocal G4Allocator<RE05MuonHit>* RE05MuonHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05MuonHit::~RE05MuonHit()
-{}
+RE05MuonHit::RE05MuonHit() : G4VHit(), fEdep(0.), fPos() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05MuonHit::RE05MuonHit(const RE05MuonHit &right)
-  : G4VHit()
+RE05MuonHit::~RE05MuonHit() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RE05MuonHit::RE05MuonHit(const RE05MuonHit& right) : G4VHit()
 {
   fEdep = right.fEdep;
   fPos = right.fPos;
@@ -62,7 +59,7 @@ RE05MuonHit::RE05MuonHit(const RE05MuonHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const RE05MuonHit& RE05MuonHit::operator=(const RE05MuonHit &right)
+const RE05MuonHit& RE05MuonHit::operator=(const RE05MuonHit& right)
 {
   fEdep = right.fEdep;
   fPos = right.fPos;
@@ -71,24 +68,23 @@ const RE05MuonHit& RE05MuonHit::operator=(const RE05MuonHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool RE05MuonHit::operator==(const RE05MuonHit &right) const
+G4bool RE05MuonHit::operator==(const RE05MuonHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
-std::map<G4String,G4AttDef> RE05MuonHit::fAttDefs;
+std::map<G4String, G4AttDef> RE05MuonHit::fAttDefs;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05MuonHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if (pVVisManager) {
     G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -97,12 +93,11 @@ void RE05MuonHit::Draw()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const std::map<G4String,G4AttDef>* RE05MuonHit::GetAttDefs() const
+const std::map<G4String, G4AttDef>* RE05MuonHit::GetAttDefs() const
 {
   // G4AttDefs have to have long life.  Use static member...
   if (fAttDefs.empty()) {
-    fAttDefs["HitType"] =
-      G4AttDef("HitType","Type of hit","Physics","","G4String");
+    fAttDefs["HitType"] = G4AttDef("HitType", "Type of hit", "Physics", "", "G4String");
   }
   return &fAttDefs;
 }
@@ -113,15 +108,13 @@ std::vector<G4AttValue>* RE05MuonHit::CreateAttValues() const
 {
   // Create expendable G4AttsValues for picking...
   std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
-  attValues->push_back
-    (G4AttValue("HitType","RE05MuonHit",""));
-  //G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
+  attValues->push_back(G4AttValue("HitType", "RE05MuonHit", ""));
+  // G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
   return attValues;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05MuonHit::Print()
-{}
+void RE05MuonHit::Print() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

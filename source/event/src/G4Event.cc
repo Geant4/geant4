@@ -35,6 +35,12 @@
 #include "G4ios.hh"
 #include "G4SubEvent.hh"
 
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+namespace{
+  G4Mutex SubEventMutex = G4MUTEX_INITIALIZER;
+}
+
 G4Allocator<G4Event>*& anEventAllocator()
 {
   G4ThreadLocalStatic G4Allocator<G4Event>* _instance = nullptr;
@@ -68,42 +74,52 @@ G4Event::~G4Event()
   delete randomNumberStatus;
   delete randomNumberStatusForProcessing;
 
-  // Following G4Exception are temporally issuing JustWarning to delete 
-  // unprocessed tracks in sub-events. Once sub-event mechanism is completely 
-  // implemented, G4Exception should cause FatalException.
-
-  G4int remainingSE = 0;
+  // TODO (PHASE-II): count remaining subevents for scoring
   for(auto& sem : fSubEvtStackMap)
   {
     if((sem.second!=nullptr)&&!(sem.second->empty()))
     {
-      remainingSE += sem.second->size();
       for(auto& se : *(sem.second))
-      {
-        se->clearAndDestroy();
-      }
+      { delete se; }
       sem.second->clear();
     }
   }
-  if(remainingSE>0)
-  {
+  /* TODO (PHASE-II): Handle incorrect scoring
+  if(!scoresRecorded) {
+    G4ExceptionDescription ed;
+    ed << "Deleting G4Event (id:" << eventID << ") that still has unrecorded scores -- "
+       << remainingSE << " sub-events un-processed.";
+    G4Exception("G4Event::~G4Event()","SubEvt0001",FatalException,ed);
+  } else if(remainingSE>0) {
     G4ExceptionDescription ed;
     ed << "Deleting G4Event (id:" << eventID << ") that still has "
        << remainingSE << " sub-events un-processed.";
-    G4Exception("G4Event::~G4Event()","SubEvt0001",JustWarning,ed);
+    G4Exception("G4Event::~G4Event()","SubEvt0002",FatalException,ed);
   }
-
+  */
   if(!(fSubEvtVector.empty()))
   {
+    for(auto& se : fSubEvtVector)
+    {
+      G4cout << "SubEvent " << se << " belongs to " << se->GetEvent()
+             << " (eventID=" << se->GetEvent()->GetEventID() << ") that has "
+             << se->GetNTrack() << " stacked tracks"<<G4endl;
+    }
     G4ExceptionDescription ed;
     ed << "Deleting G4Event (id:" << eventID << ") that has "
        << fSubEvtVector.size() << " sub-events still processing.";
-    G4Exception("G4Event::~G4Event()","SubEvt0001",JustWarning,ed);
-    for(auto& se : fSubEvtVector)
-    {
-      se->clearAndDestroy();
-      delete se;
-    }
+    G4Exception("G4Event::~G4Event()","SubEvt0003",FatalException,ed);
+    // TODO (PHASE-II): Handle deletion of subevents correctly
+    //for(auto& se : fSubEvtVector)
+    //{ delete se; }
+    //fSubEvtVector.clear();
+  }
+
+  if(!(fSubEventGarbageBin.empty()))
+  {
+    for(auto& se : fSubEventGarbageBin)
+    { delete se; }
+    fSubEventGarbageBin.clear();
   }
 }
 
@@ -157,6 +173,7 @@ void G4Event::Draw() const
 
 G4int G4Event::StoreSubEvent(G4int ty,G4SubEvent* se)
 {
+  G4AutoLock lock(&SubEventMutex);
   std::set<G4SubEvent*>* sev = nullptr;
   auto ses = fSubEvtStackMap.find(ty);
   if(ses==fSubEvtStackMap.end())
@@ -172,6 +189,7 @@ G4int G4Event::StoreSubEvent(G4int ty,G4SubEvent* se)
 
 G4SubEvent* G4Event::PopSubEvent(G4int ty)
 {
+  G4AutoLock lock(&SubEventMutex);
   G4SubEvent* se = nullptr;
   auto ses = fSubEvtStackMap.find(ty);
   if(ses!=fSubEvtStackMap.end())
@@ -188,6 +206,9 @@ G4SubEvent* G4Event::PopSubEvent(G4int ty)
 
 G4int G4Event::SpawnSubEvent(G4SubEvent* se)
 {
+  // Can't use same mutex here as call by PopSubEvent but seems o.k. as only
+  // caller is PopSubEvent
+  //G4AutoLock lock(&SubEventMutex);
   auto ss = fSubEvtVector.find(se);
   if(ss!=fSubEvtVector.end())
   {
@@ -201,8 +222,13 @@ G4int G4Event::SpawnSubEvent(G4SubEvent* se)
   return (G4int)fSubEvtVector.size();
 }
 
-void G4Event::MergeSubEventResults(const G4Event* se)
+void G4Event::MergeSubEventResults(const G4Event* /*se*/)
 {
+  // TODO (PHASE-II): Handle merging of subevent trajectories
+  // Note:
+  //     - scores are merged directly to the scoring manager
+  //     - hits collections should be merged by the user event action
+  /*
 #ifdef G4_STORE_TRAJECTORY
   if(se->trajectoryContainer!=nullptr && se->trajectoryContainer->size()>0)
   {
@@ -211,19 +237,21 @@ void G4Event::MergeSubEventResults(const G4Event* se)
     { trajectoryContainer->push_back(trj); }
   }
 #endif
-  // Note:
-  //     - scores are merged directly to the scoring manager
-  //     - hits collections should be merged by the user event action
+*/
 }
 
 G4int G4Event::TerminateSubEvent(G4SubEvent* se)
 {
+  G4AutoLock lock(&SubEventMutex);
+
   auto ss = fSubEvtVector.find(se);
   if(ss==fSubEvtVector.end())
   {
     G4ExceptionDescription ed;
     ed << "Sub-event " << se << " of type " << se->GetSubEventType()
-       << " with " << se->GetNTrack() << " tracks has never been spawned.";
+       << " with " << se->GetNTrack() << " tracks of event " << se->GetEvent()->GetEventID()
+       << " in event " << se->GetEvent()
+       << " has never been spawned.";
     G4Exception("G4Event::TerminateSubEvent","SubEvent9002",
                 FatalException,ed);
   }
@@ -240,8 +268,19 @@ G4int G4Event::TerminateSubEvent(G4SubEvent* se)
                 FatalException,ed);
   }
 
-  se->clearAndDestroy();
-  delete se;
+  //se->clearAndDestroy();
+  //delete se;
+  fSubEventGarbageBin.insert(se);
   return (G4int)fSubEvtVector.size();
 }
 
+G4int G4Event::GetNumberOfRemainingSubEvents() const
+// Number of sub-events that are either still waiting to be processed by worker
+// threads or sent to worker threads but not yet completed.
+{
+  G4AutoLock lock(&SubEventMutex);
+  auto  tot = (G4int)fSubEvtVector.size(); 
+  for(auto& sem : fSubEvtStackMap)
+  { tot += (G4int)sem.second->size(); }
+  return tot;
+}

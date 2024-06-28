@@ -33,13 +33,13 @@
 #ifndef DetectorBarr90_h
 #define DetectorBarr90_h 1
 
-#include "globals.hh"
-
 #include "RadiatorDescription.hh"
+
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 
-class DetectorBarr90 
+class DetectorBarr90
 {
   public:
     DetectorBarr90();
@@ -53,7 +53,7 @@ class DetectorBarr90
 
   private:
     // data members
-    RadiatorDescription* fRadiatorDescription; 
+    RadiatorDescription* fRadiatorDescription;
 };
 
 #endif

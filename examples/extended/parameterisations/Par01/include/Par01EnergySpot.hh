@@ -36,31 +36,30 @@ class G4Colour;
 
 class Par01EnergySpot
 {
-public:
-  Par01EnergySpot();
-  Par01EnergySpot(const G4ThreeVector& point, G4double E);
-  ~Par01EnergySpot();
+  public:
+    Par01EnergySpot();
+    Par01EnergySpot(const G4ThreeVector& point, G4double E);
+    ~Par01EnergySpot();
 
-  inline void SetEnergy(const G4double& E) {fEnergy = E;}
-  inline G4double GetEnergy() const {return fEnergy;}
+    inline void SetEnergy(const G4double& E) { fEnergy = E; }
+    inline G4double GetEnergy() const { return fEnergy; }
 
-  inline void SetPosition(const G4ThreeVector& point) {fPoint = point;}
-  inline G4ThreeVector GetPosition() const {return fPoint;}
+    inline void SetPosition(const G4ThreeVector& point) { fPoint = point; }
+    inline G4ThreeVector GetPosition() const { return fPoint; }
 
-  G4bool operator==(const Par01EnergySpot& eSpot) const
-  {
-    return (fEnergy==eSpot.fEnergy && fPoint==eSpot.fPoint) ? 1 : 0;
-  }
+    G4bool operator==(const Par01EnergySpot& eSpot) const
+    {
+      return (fEnergy == eSpot.fEnergy && fPoint == eSpot.fPoint) ? 1 : 0;
+    }
 
-  // Draw:
-  void Draw(G4Colour* color = 0);
-  // Print:
-  void Print();
+    // Draw:
+    void Draw(G4Colour* color = 0);
+    // Print:
+    void Print();
 
-
-private:
-  G4double fEnergy;
-  G4ThreeVector fPoint;
+  private:
+    G4double fEnergy;
+    G4ThreeVector fPoint;
 };
 
 #endif

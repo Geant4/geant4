@@ -46,25 +46,24 @@ class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
   public:
     explicit PhysicsList();
-   ~PhysicsList() override;
-   
+    ~PhysicsList() override;
+
     void ConstructParticle() override;
     void ConstructProcess() override;
-    
+
     void AddPhysicsList(const G4String& name);
-    
+
   private:
-    G4VPhysicsConstructor*  fEmPhysicsList = nullptr;
-    G4String                fEmName = " ";
-    
-    PhysicsListMessenger*   fMessenger = nullptr;         
+    G4VPhysicsConstructor* fEmPhysicsList = nullptr;
+    G4String fEmName = " ";
+
+    PhysicsListMessenger* fMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -23,38 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "Par03EMShowerModel.hh"
 #include "Par03EMShowerMessenger.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "Par03EMShowerModel.hh"
 
-Par03EMShowerMessenger::Par03EMShowerMessenger(Par03EMShowerModel* aModel)
-  : fModel(aModel)
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
+
+Par03EMShowerMessenger::Par03EMShowerMessenger(Par03EMShowerModel* aModel) : fModel(aModel)
 {
   fDirectory = new G4UIdirectory("/Par03/fastSim/");
-  fDirectory->SetGuidance(
-    "Set mesh parameters for the example fast sim model.");
+  fDirectory->SetGuidance("Set mesh parameters for the example fast sim model.");
 
   fPrintCmd = new G4UIcmdWithoutParameter("/Par03/fastSim/print", this);
   fPrintCmd->SetGuidance("Print current settings.");
 
-  fSigmaCmd = new G4UIcmdWithADoubleAndUnit(
-    "/Par03/fastSim/transverseProfile/sigma", this);
+  fSigmaCmd = new G4UIcmdWithADoubleAndUnit("/Par03/fastSim/transverseProfile/sigma", this);
   fSigmaCmd->SetGuidance("Set sigma parameter of 2D Gaussian distribution.");
   fSigmaCmd->SetParameterName("Sigma", false);
   fSigmaCmd->SetUnitCategory("Length");
 
-  fAlphaCmd =
-    new G4UIcmdWithADouble("/Par03/fastSim/longitudinalProfile/alpha", this);
+  fAlphaCmd = new G4UIcmdWithADouble("/Par03/fastSim/longitudinalProfile/alpha", this);
   fAlphaCmd->SetGuidance("Set alpha parameter of Gamma distribution.");
   fAlphaCmd->SetParameterName("Alpha", false);
 
-  fBetaCmd =
-    new G4UIcmdWithADouble("/Par03/fastSim/longitudinalProfile/beta", this);
+  fBetaCmd = new G4UIcmdWithADouble("/Par03/fastSim/longitudinalProfile/beta", this);
   fBetaCmd->SetGuidance("Set beta parameter of Gamma distribution.");
   fBetaCmd->SetParameterName("Beta", false);
 
@@ -65,10 +61,8 @@ Par03EMShowerMessenger::Par03EMShowerMessenger(Par03EMShowerModel* aModel)
     "the sensitive detector.");
   fNbOfHitsCmd->SetParameterName("Number", false);
 
-  fLongMaxDepthCmd =
-    new G4UIcmdWithADouble("/Par03/fastSim/longitudinalProfile/maxDepth", this);
-  fLongMaxDepthCmd->SetGuidance(
-    "Set maximum shower depth used in parametrisation.");
+  fLongMaxDepthCmd = new G4UIcmdWithADouble("/Par03/fastSim/longitudinalProfile/maxDepth", this);
+  fLongMaxDepthCmd->SetGuidance("Set maximum shower depth used in parametrisation.");
   fLongMaxDepthCmd->SetGuidance("Expressed in units of radiation length.");
   fLongMaxDepthCmd->SetParameterName("Depth", false);
 }
@@ -88,31 +82,24 @@ Par03EMShowerMessenger::~Par03EMShowerMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par03EMShowerMessenger::SetNewValue(G4UIcommand* aCommand,
-                                         G4String aNewValues)
+void Par03EMShowerMessenger::SetNewValue(G4UIcommand* aCommand, G4String aNewValues)
 {
-  if(aCommand == fPrintCmd)
-  {
+  if (aCommand == fPrintCmd) {
     fModel->Print();
   }
-  else if(aCommand == fSigmaCmd)
-  {
+  else if (aCommand == fSigmaCmd) {
     fModel->SetSigma(fSigmaCmd->GetNewDoubleValue(aNewValues));
   }
-  else if(aCommand == fAlphaCmd)
-  {
+  else if (aCommand == fAlphaCmd) {
     fModel->SetAlpha(fAlphaCmd->GetNewDoubleValue(aNewValues));
   }
-  else if(aCommand == fBetaCmd)
-  {
+  else if (aCommand == fBetaCmd) {
     fModel->SetBeta(fBetaCmd->GetNewDoubleValue(aNewValues));
   }
-  else if(aCommand == fNbOfHitsCmd)
-  {
+  else if (aCommand == fNbOfHitsCmd) {
     fModel->SetNbOfHits(fNbOfHitsCmd->GetNewIntValue(aNewValues));
   }
-  else if(aCommand == fLongMaxDepthCmd)
-  {
+  else if (aCommand == fLongMaxDepthCmd) {
     fModel->SetLongMaxDepth(fLongMaxDepthCmd->GetNewDoubleValue(aNewValues));
   }
 }
@@ -123,24 +110,19 @@ G4String Par03EMShowerMessenger::GetCurrentValue(G4UIcommand* aCommand)
 {
   G4String cv;
 
-  if(aCommand == fSigmaCmd)
-  {
+  if (aCommand == fSigmaCmd) {
     cv = fSigmaCmd->ConvertToString(fModel->GetSigma());
   }
-  else if(aCommand == fAlphaCmd)
-  {
+  else if (aCommand == fAlphaCmd) {
     cv = fAlphaCmd->ConvertToString(fModel->GetAlpha());
   }
-  else if(aCommand == fBetaCmd)
-  {
+  else if (aCommand == fBetaCmd) {
     cv = fBetaCmd->ConvertToString(fModel->GetBeta());
   }
-  else if(aCommand == fNbOfHitsCmd)
-  {
+  else if (aCommand == fNbOfHitsCmd) {
     cv = fNbOfHitsCmd->ConvertToString(fModel->GetNbOfHits());
   }
-  else if(aCommand == fLongMaxDepthCmd)
-  {
+  else if (aCommand == fLongMaxDepthCmd) {
     cv = fLongMaxDepthCmd->ConvertToString(fModel->GetLongMaxDepth());
   }
   return cv;

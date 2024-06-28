@@ -27,10 +27,10 @@
 //
 // QSS statistics
 
-// Authors:  Lucio Santi, Rodrigo Castro - 2018-2021
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
 // --------------------------------------------------------------------
 #ifndef _QSS_CUSTOM_STATS_HH_
-#define _QSS_CUSTOM_STATS_HH_
+#define _QSS_CUSTOM_STATS_HH_ 1
 
 #include <time.h>
 

@@ -29,10 +29,10 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "FTFP_BERT.hh"
 #include "LXeActionInitialization.hh"
 #include "LXeDetectorConstruction.hh"
 
-#include "FTFP_BERT.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4OpticalParameters.hh"
 #include "G4OpticalPhysics.hh"
@@ -49,8 +49,7 @@ int main(int argc, char** argv)
 {
   // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if(argc == 1)
-  {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -63,7 +62,7 @@ int main(int argc, char** argv)
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
 
   auto opticalPhysics = new G4OpticalPhysics();
-  auto opticalParams  = G4OpticalParameters::Instance();
+  auto opticalParams = G4OpticalParameters::Instance();
 
   opticalParams->SetWLSTimeProfile("delta");
 
@@ -85,21 +84,18 @@ int main(int argc, char** argv)
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(ui)
-  {
+  if (ui) {
     // interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
-    if(ui->IsGUI())
-    {
+    if (ui->IsGUI()) {
       UImanager->ApplyCommand("/control/execute gui.mac");
     }
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
+  else {
     // batch mode
-    G4String command  = "/control/execute ";
+    G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command + fileName);
   }

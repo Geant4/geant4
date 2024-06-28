@@ -87,22 +87,18 @@ G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 
 void G4CrossSectionDataSetRegistry::Clean()
 {
-  size_t n = xSections.size(); 
-  for (size_t i=0; i<n; ++i) {
+  std::size_t n = xSections.size(); 
+  for (std::size_t i=0; i<n; ++i) {
     G4VCrossSectionDataSet* p = xSections[i];
-    if(p) {
-      //std::cout << "Clean x-section #" << i << std::endl;
-      //std::cout << "     " << p->GetName() << std::endl;
+    if(nullptr != p) {
       delete p;
       xSections[i] = nullptr;
     }
   }
   n = xComponents.size(); 
-  for (size_t i=0; i<n; ++i) {
-    G4VComponentCrossSection* p = xComponents[i];
-    if(p) {
-      //std::cout << "Clean component #" << i << std::endl;
-      //std::cout << "     " << p->GetName() << std::endl;
+  for (std::size_t i=0; i<n; ++i) {
+    auto p = xComponents[i];
+    if(nullptr != p) {
       delete p;
       xComponents[i] = nullptr;
     }
@@ -112,22 +108,18 @@ void G4CrossSectionDataSetRegistry::Clean()
 void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
 {
   if(nullptr == p) { return; }
-  for (auto xsec : xSections) {
+  for (auto & xsec : xSections) {
     if(xsec == p) { return; }
   }
-  //G4cout << "Register x-section #" << xSections.size() 
-  //	 << "  " << p->GetName() << "  " << p << G4endl;
   xSections.push_back(p);
 }
 
 void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
 {
   if(nullptr == p) { return; }
-  size_t n = xSections.size(); 
-  for (size_t i=0; i<n; ++i) {
+  std::size_t n = xSections.size(); 
+  for (std::size_t i=0; i<n; ++i) {
     if(xSections[i] == p) {
-      //std::cout << "DeRegister x-section #" << i 
-      //        << "  " << p->GetName() << "  " << p << std::endl;
       xSections[i] = nullptr;
       return;
     }
@@ -136,23 +128,19 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
 
 void G4CrossSectionDataSetRegistry::Register(G4VComponentCrossSection* p)
 {
-  if(!p) { return; }
-  for (auto xsec : xComponents) {
+  if(nullptr == p) { return; }
+  for (auto & xsec : xComponents) {
     if(xsec == p) { return; }
   }
-  //G4cout << "Register component #" << xComponents.size() 
-  //<< "  " << p->GetName() << G4endl;
   xComponents.push_back(p);
 }
 
 void G4CrossSectionDataSetRegistry::DeRegister(G4VComponentCrossSection* p)
 {
-  if(!p) { return; }
-  size_t n = xComponents.size(); 
-  for (size_t i=0; i<n; ++i) {
+  if(nullptr == p) { return; }
+  std::size_t n = xComponents.size(); 
+  for (std::size_t i=0; i<n; ++i) {
     if(xComponents[i] == p) {
-      //std::cout << "DeRegister component #" << i << std::endl;
-      //std::cout << "         " << p->GetName() << std::endl;
       xComponents[i] = nullptr;
       return;
     }
@@ -162,12 +150,10 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VComponentCrossSection* p)
 void 
 G4CrossSectionDataSetRegistry::DeleteComponent(G4VComponentCrossSection* p)
 {
-  if(!p) { return; }
-  size_t n = xComponents.size(); 
-  for (size_t i=0; i<n; ++i) {
+  if(nullptr == p) { return; }
+  std::size_t n = xComponents.size(); 
+  for (std::size_t i=0; i<n; ++i) {
     if(xComponents[i] == p) {
-      //std::cout << "Delete component #" << i << std::endl;
-      //std::cout << "      " << p->GetName() << std::endl;
       delete p;
       return;
     }
@@ -178,8 +164,8 @@ G4VCrossSectionDataSet*
 G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name, 
                                                       G4bool warning)
 {
-  for (auto xsec : xSections) {
-    if(xsec && xsec->GetName() == name) { return xsec; }
+  for (auto & xsec : xSections) {
+    if(nullptr != xsec && xsec->GetName() == name) { return xsec; }
   }
   // check if factory exists...
   //
@@ -199,8 +185,8 @@ G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name,
 G4VComponentCrossSection*
 G4CrossSectionDataSetRegistry::GetComponentCrossSection(const G4String& name)
 {
-  for (auto xsec : xComponents) {
-    if(xsec && xsec->GetName() == name) { return xsec; }
+  for (auto & xsec : xComponents) {
+    if(nullptr != xsec && xsec->GetName() == name) { return xsec; }
   }
   G4VComponentCrossSection* ptr = nullptr;
   return ptr;

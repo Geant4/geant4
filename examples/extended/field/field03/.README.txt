@@ -7,10 +7,13 @@
  Example of tracking in magnetic field where field associated
  to selected logical volumes varies.
 
- A global and a local magnetic field are defined in the F03FieldSetup class,  which object
- is created in the ConstructSDandField() function in the F03DetectorConstruction
- class. The local magnetic field is set to the "Radiator" volume.
- The interactive commands are implemented in F03FieldMessenger.
+ A global and a local magnetic field are defined in
+ the ConstructSDandField() method in the F03DetectorConstruction class 
+ using the G4FieldBuilder class.
+ The local magnetic field is set to the "Radiator" volume.
+
+ The interactive commands, under the /field directory, are created with
+ the instantiation of G4FieldBuilder in the F03DetectorConstruction constructor,
 
 \section field03_s1 GEOMETRY DEFINITION
 

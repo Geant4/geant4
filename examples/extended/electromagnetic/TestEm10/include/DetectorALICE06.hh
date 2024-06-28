@@ -28,20 +28,20 @@
 //
 //
 //
-// Simplified setup for ALICE XTR test beam (~2004). 
+// Simplified setup for ALICE XTR test beam (~2004).
 // Runs by : Test salice.mac
 
 #ifndef DetectorALICE06_h
 #define DetectorALICE06_h 1
 
-#include "globals.hh"
-
 #include "RadiatorDescription.hh"
+
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4UniformMagField;
 
-class DetectorALICE06 
+class DetectorALICE06
 {
   public:
     DetectorALICE06();

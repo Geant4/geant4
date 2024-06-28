@@ -31,34 +31,31 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
+
 #include "DetectorMessenger.hh"
 
-#include "G4Material.hh"
 #include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-
-#include "G4RunManager.hh"
 #include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-
-#include "G4UnitsTable.hh"
-
-#include "G4PolarizationManager.hh"
+#include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4PolarizationManager.hh"
+#include "G4RunManager.hh"
+#include "G4SolidStore.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-: G4VUserDetectorConstruction(),
-  fWorld(0), fBox(0), fTargetMaterial(0), fWorldMaterial(0)
+  : G4VUserDetectorConstruction(), fWorld(0), fBox(0), fTargetMaterial(0), fWorldMaterial(0)
 {
-  fBoxSizeXY = 50*mm;
-  fBoxSizeZ = 5*mm;
-  fWorldSize = 1.*m;
+  fBoxSizeXY = 50 * mm;
+  fBoxSizeZ = 5 * mm;
+  fWorldSize = 1. * m;
   ConstructMaterials();
   fMessenger = new DetectorMessenger(this);
 }
@@ -76,15 +73,17 @@ void DetectorConstruction::ConstructMaterials()
   auto nistManager = G4NistManager::Instance();
 
   fTargetMaterial = nistManager->FindOrBuildMaterial("G4_Fe");
-  if(fTargetMaterial == nullptr) {
+  if (fTargetMaterial == nullptr) {
     G4cerr << "### ERROR - Material: <"
-	  << "G4_Fe" << "> not found" << G4endl;
+           << "G4_Fe"
+           << "> not found" << G4endl;
   }
 
   fWorldMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
-  if(fWorldMaterial == nullptr) {
+  if (fWorldMaterial == nullptr) {
     G4cerr << "### ERROR -  Material: <"
-	  << "G4_Galactic" << "> not found" << G4endl;
+           << "G4_Galactic"
+           << "> not found" << G4endl;
   }
 }
 
@@ -98,45 +97,42 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // World
   //
-  G4Box*
-  sWorld = new G4Box("World",                            //name
-                   fWorldSize/2,fWorldSize/2,fWorldSize/2); //dimensions
+  G4Box* sWorld = new G4Box("World",  // name
+                            fWorldSize / 2, fWorldSize / 2, fWorldSize / 2);  // dimensions
 
-  G4LogicalVolume*
-  lWorld = new G4LogicalVolume(sWorld,                   //shape
-                               fWorldMaterial,           //material
-                              "World");                  //name
+  G4LogicalVolume* lWorld = new G4LogicalVolume(sWorld,  // shape
+                                                fWorldMaterial,  // material
+                                                "World");  // name
 
-  fWorld = new G4PVPlacement(0,                          //no rotation
-                             G4ThreeVector(),            //at (0,0,0)
-                             lWorld,                     //logical volume
-                             "World",                    //name
-                             0,                          //mother volume
-                             false,                      //no boolean operation
-                             0);                         //copy number
+  fWorld = new G4PVPlacement(0,  // no rotation
+                             G4ThreeVector(),  // at (0,0,0)
+                             lWorld,  // logical volume
+                             "World",  // name
+                             0,  // mother volume
+                             false,  // no boolean operation
+                             0);  // copy number
 
   // Box
   //
-  G4Box*
-  sBox = new G4Box("Container",                           //its name
-                   fBoxSizeXY/2.,fBoxSizeXY/2.,fBoxSizeZ/2.);//its dimensions
+  G4Box* sBox = new G4Box("Container",  // its name
+                          fBoxSizeXY / 2., fBoxSizeXY / 2., fBoxSizeZ / 2.);  // its dimensions
 
-  //G4LogicalVolume*
-  lBox = new G4LogicalVolume(sBox,                        //its shape
-                             fTargetMaterial,             //its material
-                             "theBox");                   //its name
+  // G4LogicalVolume*
+  lBox = new G4LogicalVolume(sBox,  // its shape
+                             fTargetMaterial,  // its material
+                             "theBox");  // its name
 
-  fBox = new G4PVPlacement(0,                             //no rotation
-                           G4ThreeVector(),               //at (0,0,0)
-                           lBox,                          //its logical volume
-                           fTargetMaterial->GetName(),    //its name
-                           lWorld,                        //its mother  volume
-                           false,                         //no boolean operation
-                           0);                            //copy number
+  fBox = new G4PVPlacement(0,  // no rotation
+                           G4ThreeVector(),  // at (0,0,0)
+                           lBox,  // its logical volume
+                           fTargetMaterial->GetName(),  // its name
+                           lWorld,  // its mother  volume
+                           false,  // no boolean operation
+                           0);  // copy number
 
   PrintParameters();
 
-  //always return the root volume
+  // always return the root volume
   //
   return fWorld;
 }
@@ -146,18 +142,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::ConstructSDandField()
 {
   // register logical Volume in PolarizationManager with zero polarization
-  G4PolarizationManager * polMgr = G4PolarizationManager::GetInstance();
-  polMgr->SetVolumePolarization(lBox,G4ThreeVector(0.,0.,0.));
+  G4PolarizationManager* polMgr = G4PolarizationManager::GetInstance();
+  polMgr->SetVolumePolarization(lBox, G4ThreeVector(0., 0., 0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n The Box is " << G4BestUnit(fBoxSizeXY,"Length")
-         << " x " << G4BestUnit(fBoxSizeXY,"Length")
-         << " x " << G4BestUnit(fBoxSizeZ,"Length")
-         << " of " << fTargetMaterial->GetName() << G4endl;
+  G4cout << "\n The Box is " << G4BestUnit(fBoxSizeXY, "Length") << " x "
+         << G4BestUnit(fBoxSizeXY, "Length") << " x " << G4BestUnit(fBoxSizeZ, "Length") << " of "
+         << fTargetMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,16 +160,15 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* mat =
-    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  G4Material* mat = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   if (mat != fTargetMaterial) {
-    if(mat) {
+    if (mat) {
       fTargetMaterial = mat;
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
       UpdateGeometry();
-    } else {
-      G4cout << "### Warning!  Target material: <"
-           << materialChoice << "> not found" << G4endl;
+    }
+    else {
+      G4cout << "### Warning!  Target material: <" << materialChoice << "> not found" << G4endl;
     }
   }
 }
@@ -184,16 +178,15 @@ void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
 void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* mat =
-    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  G4Material* mat = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   if (mat != fWorldMaterial) {
-    if(mat) {
+    if (mat) {
       fWorldMaterial = mat;
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
       UpdateGeometry();
-    } else {
-      G4cout << "### Warning! World material: <"
-           << materialChoice << "> not found" << G4endl;
+    }
+    else {
+      G4cout << "### Warning! World material: <" << materialChoice << "> not found" << G4endl;
     }
   }
 }
@@ -203,14 +196,14 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 void DetectorConstruction::SetSizeXY(G4double value)
 {
   fBoxSizeXY = value;
-  if (fWorldSize<fBoxSizeXY) fWorldSize = 1.2*fBoxSizeXY;
+  if (fWorldSize < fBoxSizeXY) fWorldSize = 1.2 * fBoxSizeXY;
   UpdateGeometry();
 }
 
 void DetectorConstruction::SetSizeZ(G4double value)
 {
   fBoxSizeZ = value;
-  if (fWorldSize<fBoxSizeZ) fWorldSize = 1.2*fBoxSizeZ;
+  if (fWorldSize < fBoxSizeZ) fWorldSize = 1.2 * fBoxSizeZ;
   UpdateGeometry();
 }
 

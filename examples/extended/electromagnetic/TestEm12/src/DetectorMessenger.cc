@@ -33,42 +33,42 @@
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
-{ 
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : fDetector(Det)
+{
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
-  
+
   fDetDir = new G4UIdirectory("/testem/det/");
   fDetDir->SetGuidance("detector construction commands");
-      
-  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat", this);
   fMaterCmd->SetGuidance("Select material of the box.");
-  fMaterCmd->SetParameterName("choice",false);
-  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fMaterCmd->SetToBeBroadcasted(false);  
-  
-  fRadiusCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setRadius",this);
+  fMaterCmd->SetParameterName("choice", false);
+  fMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fMaterCmd->SetToBeBroadcasted(false);
+
+  fRadiusCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setRadius", this);
   fRadiusCmd->SetGuidance("Set radius of the absorber");
-  fRadiusCmd->SetParameterName("Radius",false);
+  fRadiusCmd->SetParameterName("Radius", false);
   fRadiusCmd->SetRange("Radius>0.");
   fRadiusCmd->SetUnitCategory("Length");
-  fRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fRadiusCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fRadiusCmd->SetToBeBroadcasted(false);
-      
-  fNbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers",this);
+
+  fNbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers", this);
   fNbLayersCmd->SetGuidance("Set number of layers");
-  fNbLayersCmd->SetParameterName("NbLayers",false);
+  fNbLayersCmd->SetParameterName("NbLayers", false);
   fNbLayersCmd->SetRange("NbLayers>0");
   fNbLayersCmd->AvailableForStates(G4State_PreInit);
-  fNbLayersCmd->SetToBeBroadcasted(false);  
+  fNbLayersCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,23 +77,26 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
   delete fRadiusCmd;
-  delete fNbLayersCmd;   
-  delete fDetDir;  
+  delete fNbLayersCmd;
+  delete fDetDir;
   delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fMaterCmd )
-   { fDetector->SetMaterial(newValue);}
-   
-  if( command == fRadiusCmd )
-   { fDetector->SetRadius(fRadiusCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == fNbLayersCmd )
-   { fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));}
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fMaterCmd) {
+    fDetector->SetMaterial(newValue);
+  }
+
+  if (command == fRadiusCmd) {
+    fDetector->SetRadius(fRadiusCmd->GetNewDoubleValue(newValue));
+  }
+
+  if (command == fNbLayersCmd) {
+    fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -36,7 +36,7 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef StackingAction_h
 #define StackingAction_h 1
@@ -52,27 +52,23 @@ class G4Track;
 
 class StackingAction : public G4UserStackingAction
 {
-public:
+  public:
+    StackingAction();
+    virtual ~StackingAction();
 
-  StackingAction();
-  virtual ~StackingAction();
-   
-  inline void SetKillAll(G4bool value)  {fKillAll = value;};
-  inline void SetKillEM (G4bool value)  {fKillEM  = value;};
-     
-  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
-private:
+    inline void SetKillAll(G4bool value) { fKillAll = value; };
+    inline void SetKillEM(G4bool value) { fKillEM = value; };
 
-  HistoManager*       fHistoManager;    
-  StackingMessenger*  fStackMessenger;
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
 
-  G4bool              fKillAll;
-  G4bool              fKillEM;
+  private:
+    HistoManager* fHistoManager;
+    StackingMessenger* fStackMessenger;
 
+    G4bool fKillAll;
+    G4bool fKillEM;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

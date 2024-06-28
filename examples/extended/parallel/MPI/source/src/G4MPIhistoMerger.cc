@@ -29,40 +29,43 @@
 // Jun 27, 2015 : Ivana Hrivnacova - new implementation using g4analysis
 
 #include "G4MPIhistoMerger.hh"
-#include "G4MPImanager.hh"
-#include "G4ios.hh"
+
 #include "toolx/mpi/hmpi"
-#include <mpi.h>
+
+#include "G4MPImanager.hh"
 #include "G4VAnalysisManager.hh"
+#include "G4ios.hh"
 
-G4MPIhistoMerger::G4MPIhistoMerger() :
-manager(0),destination(G4MPImanager::kRANK_MASTER),
-verboseLevel(0) {}
+#include <mpi.h>
 
-G4MPIhistoMerger::G4MPIhistoMerger(G4VAnalysisManager* m,
-    G4int dest, G4int v) : manager(m), destination(dest),verboseLevel(v) {}
+G4MPIhistoMerger::G4MPIhistoMerger()
+  : manager(0), destination(G4MPImanager::kRANK_MASTER), verboseLevel(0)
+{}
+
+G4MPIhistoMerger::G4MPIhistoMerger(G4VAnalysisManager* m, G4int dest, G4int v)
+  : manager(m), destination(dest), verboseLevel(v)
+{}
 
 void G4MPIhistoMerger::Merge()
 {
-  if ( verboseLevel > 0 ) {
+  if (verboseLevel > 0) {
     G4cout << "Starting merging of histograms" << G4endl;
   }
 
   const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
   MPI::Intracomm comm = parentComm->Dup();
 
-  G4bool verbose = ( verboseLevel > 1 );
+  G4bool verbose = (verboseLevel > 1);
   G4int tag = G4MPImanager::kTAG_HISTO;
-  //const MPI::Intracomm* comm = &COMM_G4COMMAND_;
-  toolx::mpi::hmpi* hmpi 
-    = new toolx::mpi::hmpi(G4cout, destination, tag, comm, verbose);
-  if ( ! manager->Merge(hmpi) ) {
-      G4cout<<" Merge FAILED"<<G4endl;
+  // const MPI::Intracomm* comm = &COMM_G4COMMAND_;
+  toolx::mpi::hmpi* hmpi = new toolx::mpi::hmpi(G4cout, destination, tag, comm, verbose);
+  if (!manager->Merge(hmpi)) {
+    G4cout << " Merge FAILED" << G4endl;
   }
 
   delete hmpi;
 
-  if ( verboseLevel > 0 ) {
+  if (verboseLevel > 0) {
     G4cout << "End merging of histograms" << G4endl;
   }
   comm.Free();

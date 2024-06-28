@@ -52,9 +52,9 @@ class G4HadronNucleonXsc
 {
 public:
 
-  explicit G4HadronNucleonXsc ();
-  ~G4HadronNucleonXsc ();
-   
+  G4HadronNucleonXsc();
+  ~G4HadronNucleonXsc() = default;
+ 
   // Xsc parametrisations return total x-section  
   G4double HadronNucleonXsc(const G4ParticleDefinition* theParticle, 
 			    const G4ParticleDefinition* nucleon, G4double ekin);
@@ -133,7 +133,9 @@ private:
   inline G4double CalculateEcmValue(G4double ekin1, G4double mass1, G4double mass2)
   { return std::sqrt(CalcMandelstamS(ekin1, mass1, mass2)); };
 
-  G4double fTotalXsc, fElasticXsc, fInelasticXsc;
+  G4double fTotalXsc{0.0};
+  G4double fElasticXsc{0.0};
+  G4double fInelasticXsc{0.0};
   G4Pow* g4calc;
 
   const G4ParticleDefinition* theProton;

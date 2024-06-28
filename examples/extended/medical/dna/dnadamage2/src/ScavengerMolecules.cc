@@ -31,9 +31,10 @@
 /// \brief Implementation of the Background Scavenber chemical species
 
 #include "ScavengerMolecules.hh"
+
+#include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -50,11 +51,11 @@ G4DMSO* G4DMSO::Definition()
     const G4String formatedName = "DMSO^{0}";
 
     G4double mass = 31.99546 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 2.4e-9 * (m * m / s), 0, 0,
-                                          1.7 * angstrom, 2);
+    anInstance =
+      new G4MoleculeDefinition(name, mass, 2.4e-9 * (m * m / s), 0, 0, 1.7 * angstrom, 2);
 
-    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0); // not implemented
-    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*)anInstance)->SetLevelOccupation(0);  // not implemented
+    ((G4MoleculeDefinition*)anInstance)->SetFormatedName(formatedName);
   }
   fDMSOInstance = static_cast<G4DMSO*>(anInstance);
   return fDMSOInstance;
@@ -75,11 +76,11 @@ G4OxygenB* G4OxygenB::Definition()
     const G4String formatedName = "Oxygen(B)^{0}";
 
     G4double mass = 31.99546 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 2.4e-9 * (m * m / s), 0, 0,
-                                          1.7 * angstrom, 2);
+    anInstance =
+      new G4MoleculeDefinition(name, mass, 2.4e-9 * (m * m / s), 0, 0, 1.7 * angstrom, 2);
 
-    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0); // not implemented
-    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*)anInstance)->SetLevelOccupation(0);  // not implemented
+    ((G4MoleculeDefinition*)anInstance)->SetFormatedName(formatedName);
   }
   fOxygenBInstance = static_cast<G4OxygenB*>(anInstance);
   return fOxygenBInstance;

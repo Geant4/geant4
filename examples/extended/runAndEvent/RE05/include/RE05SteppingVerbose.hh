@@ -40,22 +40,20 @@ class RE05SteppingVerbose;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/// This class manages the verbose outputs in G4SteppingManager. 
+/// This class manages the verbose outputs in G4SteppingManager.
 /// It inherits from G4SteppingVerbose.
 /// It shows how to extract informations during the tracking of a particle.
 
-class RE05SteppingVerbose : public G4SteppingVerbose 
+class RE05SteppingVerbose : public G4SteppingVerbose
 {
- public:
-   
-  RE05SteppingVerbose();
-  virtual ~RE05SteppingVerbose();
+  public:
+    RE05SteppingVerbose();
+    virtual ~RE05SteppingVerbose();
 
-  virtual G4VSteppingVerbose* Clone()
-  { return new RE05SteppingVerbose; }
+    virtual G4VSteppingVerbose* Clone() { return new RE05SteppingVerbose; }
 
-  void StepInfo();
-  void TrackingStarted();
+    void StepInfo();
+    void TrackingStarted();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

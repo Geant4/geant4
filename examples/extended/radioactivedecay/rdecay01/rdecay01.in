@@ -11,13 +11,19 @@
 /rdecay01/fullChain false
 #
 /tracking/verbose 2
-/run/beamOn 1
-#
+/run/beamOn 
 /tracking/verbose 0
-/run/printProgress 10000
-#  
+#
+/run/printProgress 10000  
 /run/beamOn 100000
 #
-/rdecay01/fullChain true
-#  
+/rdecay01/fullChain true  
+/run/beamOn 100000
+#
+# test biasing:
+/gun/particle ion
+/gun/ion 20 47
+#
+/process/had/rdm/decayBiasProfile timeWindowBiased.data
+#
 /run/beamOn 100000

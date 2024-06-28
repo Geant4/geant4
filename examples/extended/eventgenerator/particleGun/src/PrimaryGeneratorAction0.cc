@@ -27,11 +27,12 @@
 /// \brief Implementation of the PrimaryGeneratorAction0 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction0.hh"
+
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
@@ -41,41 +42,38 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction0::PrimaryGeneratorAction0(G4ParticleGun* gun)
-: fParticleGun(gun)
+PrimaryGeneratorAction0::PrimaryGeneratorAction0(G4ParticleGun* gun) : fParticleGun(gun)
 {
-  //solid angle
+  // solid angle
   //
-  G4double alphaMin =  0*deg;      //alpha in [0,pi]
-  G4double alphaMax = 60*deg;
+  G4double alphaMin = 0 * deg;  // alpha in [0,pi]
+  G4double alphaMax = 60 * deg;
   fCosAlphaMin = std::cos(alphaMin);
   fCosAlphaMax = std::cos(alphaMax);
-  
-  fPsiMin = 0*deg;       //psi in [0, 2*pi]
-  fPsiMax = 360*deg;
+
+  fPsiMin = 0 * deg;  // psi in [0, 2*pi]
+  fPsiMax = 360 * deg;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction0::GeneratePrimaries(G4Event* anEvent)
-{  
-  //vertex position fixed
+{
+  // vertex position fixed
   //
-  G4double x0 = 0*mm, y0 = 0*mm, z0 = 0*mm;
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  G4double x0 = 0 * mm, y0 = 0 * mm, z0 = 0 * mm;
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
 
-  //direction uniform in solid angle
+  // direction uniform in solid angle
   //
-  G4double cosAlpha = fCosAlphaMin-G4UniformRand()*(fCosAlphaMin-fCosAlphaMax);
-  G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
-  G4double psi = fPsiMin + G4UniformRand()*(fPsiMax - fPsiMin);
+  G4double cosAlpha = fCosAlphaMin - G4UniformRand() * (fCosAlphaMin - fCosAlphaMax);
+  G4double sinAlpha = std::sqrt(1. - cosAlpha * cosAlpha);
+  G4double psi = fPsiMin + G4UniformRand() * (fPsiMax - fPsiMin);
 
-  G4double ux = sinAlpha*std::cos(psi),
-           uy = sinAlpha*std::sin(psi),
-           uz = cosAlpha;
+  G4double ux = sinAlpha * std::cos(psi), uy = sinAlpha * std::sin(psi), uz = cosAlpha;
 
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
-  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux, uy, uz));
+
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

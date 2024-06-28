@@ -24,16 +24,18 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE
-#ifndef PAR04INFEERENCESETUP_HH
-#define PAR04INFEERENCESETUP_HH
+#  ifndef PAR04INFEERENCESETUP_HH
+#    define PAR04INFEERENCESETUP_HH
 
-#include "CLHEP/Units/SystemOfUnits.h" // for mm
-#include "G4ThreeVector.hh"            // for G4ThreeVector
-#include <G4String.hh>                 // for G4String
-#include <G4SystemOfUnits.hh>          // for mm
-#include <G4Types.hh>                  // for G4int, G4double, G4bool, G4f...
-#include <memory>                      // for unique_ptr
-#include <vector>                      // for vector
+#    include "CLHEP/Units/SystemOfUnits.h"  // for mm
+
+#    include "G4ThreeVector.hh"  // for G4ThreeVector
+
+#    include <G4String.hh>  // for G4String
+#    include <G4SystemOfUnits.hh>  // for mm
+#    include <G4Types.hh>  // for G4int, G4double, G4bool, G4f...
+#    include <memory>  // for unique_ptr
+#    include <vector>  // for vector
 class Par04DetectorConstruction;
 class Par04InferenceInterface;
 class Par04InferenceMessenger;
@@ -53,206 +55,190 @@ class Par04InferenceMessenger;
  *
  **/
 
-class Par04InferenceSetup {
-public:
-  Par04InferenceSetup();
-  ~Par04InferenceSetup();
+class Par04InferenceSetup
+{
+  public:
+    Par04InferenceSetup();
+    ~Par04InferenceSetup();
 
-  /// Geometry setup
-  /// Check if inference should be performed for the particle
-  /// @param[in] aEnergy Particle's energy
-  G4bool IfTrigger(G4double aEnergy);
-  /// Set mesh size.
-  /// @param aSize (x,y,x) size for Carthesian coordinates, or (R, phi, z) for
-  /// cylindrical coordinates.
-  inline void SetMeshSize(const G4ThreeVector &aSize) { fMeshSize = aSize; };
-  /// Get mesh size.
-  /// @return G4ThreeVector (x,y,x) size for Carthesian coordinates, or (R, phi,
-  /// z) for cylindrical coordinates.
-  inline G4ThreeVector GetMeshSize() const { return fMeshSize; };
-  /// Set number of mesh cells.
-  /// @param aSize (x,y,x) size for Carthesian coordinates, or (R, phi, z) for
-  /// cylindrical coordinates.
-  inline void SetMeshNumber(const G4ThreeVector &aSize) {
-    fMeshNumber = aSize;
-  };
-  /// Get number of mesh cells.
-  /// @return G4ThreeVector (x,y,x) size for Carthesian coordinates, or (R, phi,
-  /// z) for cylindrical coordinates.
-  inline G4ThreeVector GetMeshNumber() const { return fMeshNumber; };
-  /// Set size of the condition vector
-  inline void SetSizeConditionVector(G4int aNumber) {
-    fSizeConditionVector = aNumber;
-  };
-  /// Get size of the condition vector
-  inline G4int GetSizeConditionVector() const { return fSizeConditionVector; };
-  /// Set size of the latent space vector
-  inline void SetSizeLatentVector(G4int aNumber) {
-    fSizeLatentVector = aNumber;
-  };
-  /// Get size of the latent space vector
-  inline G4int GetSizeLatentVector() const { return fSizeLatentVector; };
-  /// Set path and name of the model
-  inline void SetModelPathName(G4String aName) { fModelPathName = aName; };
-  /// Get path and name of the model
-  inline G4String GetModelPathName() const { return fModelPathName; };
-  /// Set profiling flag
-  inline void SetProfileFlag(G4int aNumber) { fProfileFlag = aNumber; };
-  /// Get profiling flag
-  inline G4int GetProfileFlag() const { return fProfileFlag; };
-  /// Set optimization flag
-  inline void SetOptimizationFlag(G4int aNumber) {
-    fOptimizationFlag = aNumber;
-  };
-  /// Get optimization flag
-  inline G4int GetOptimizationFlag() const { return fOptimizationFlag; };
-  /// Get name of the inference library
-  inline G4String GetInferenceLibrary() const { return fInferenceLibrary; };
-  /// Set name of the inference library and create a pointer to chosen inference
-  /// interface
-  void SetInferenceLibrary(G4String aName);
-  /// Check settings of the inference library
-  void CheckInferenceLibrary();
-  /// Set number of Mesh cells in cylindrical coordinates (r, phi, z)
-  inline void SetMeshNbOfCells(G4ThreeVector aNb) { fMeshNumber = aNb; };
-  /// Set number of Mesh cells in cylindrical coordinates
-  /// @param[in] aIndex index of cylindrical axis (0,1,2) = (r, phi, z)
-  inline void SetMeshNbOfCells(G4int aIndex, G4double aNb) {
-    fMeshNumber[aIndex] = aNb;
-  };
-  /// Get number of Mesh cells in cylindrical coordinates (r, phi, z)
-  inline G4ThreeVector GetMeshNbOfCells() const { return fMeshNumber; };
-  /// Set size of Mesh cells in cylindrical coordinates (r, phi, z)
-  inline void SetMeshSizeOfCells(G4ThreeVector aNb) { fMeshSize = aNb; };
-  /// Set size of Mesh cells in cylindrical coordinates
-  /// @param[in] aIndex index of cylindrical axis (0,1,2) = (r, phi, z)
-  inline void SetMeshSizeOfCells(G4int aIndex, G4double aNb) {
-    fMeshSize[aIndex] = aNb;
-  };
-  /// Get size of Mesh cells in cylindrical coordinates (r, phi, z)
-  inline G4ThreeVector GetMeshSizeOfCells() const { return fMeshSize; };
-  /// Setting execution providers flags
-  /// GPU
-  inline void SetCudaFlag(G4int aNumber) { fCudaFlag = aNumber; };
-  inline G4int GetCudaFlag() const { return fCudaFlag; };
-  /// Setting execution providers Options
-  /// Cuda
-  inline void SetCudaDeviceId(G4String aNumber) { fCudaDeviceId = aNumber; };
-  inline G4String GetCudaDeviceId() const { return fCudaDeviceId; };
-  inline void SetCudaGpuMemLimit(G4String aNumber) {
-    fCudaGpuMemLimit = aNumber;
-  };
-  inline G4String GetCudaGpuMemLimit() const { return fCudaGpuMemLimit; };
-  inline void SetCudaArenaExtendedStrategy(G4String aNumber) {
-    fCudaArenaExtendedStrategy = aNumber;
-  };
-  inline G4String GetCudaArenaExtendedStrategy() const {
-    return fCudaArenaExtendedStrategy;
-  };
-  inline void SetCudaCudnnConvAlgoSearch(G4String aNumber) {
-    fCudaCudnnConvAlgoSearch = aNumber;
-  };
-  inline G4String GetCudaCudnnConvAlgoSearch() const {
-    return fCudaCudnnConvAlgoSearch;
-  };
-  inline void SetCudaDoCopyInDefaultStream(G4String aNumber) {
-    fCudaDoCopyInDefaultStream = aNumber;
-  };
-  inline G4String GetCudaDoCopyInDefaultStream() const {
-    return fCudaDoCopyInDefaultStream;
-  };
-  inline void SetCudaCudnnConvUseMaxWorkspace(G4String aNumber) {
-    fCudaCudnnConvUseMaxWorkspace = aNumber;
-  };
-  inline G4String GetCudaCudnnConvUseMaxWorkspace() const {
-    return fCudaCudnnConvUseMaxWorkspace;
-  };
+    /// Geometry setup
+    /// Check if inference should be performed for the particle
+    /// @param[in] aEnergy Particle's energy
+    G4bool IfTrigger(G4double aEnergy);
+    /// Set mesh size.
+    /// @param aSize (x,y,x) size for Carthesian coordinates, or (R, phi, z) for
+    /// cylindrical coordinates.
+    inline void SetMeshSize(const G4ThreeVector& aSize) { fMeshSize = aSize; };
+    /// Get mesh size.
+    /// @return G4ThreeVector (x,y,x) size for Carthesian coordinates, or (R, phi,
+    /// z) for cylindrical coordinates.
+    inline G4ThreeVector GetMeshSize() const { return fMeshSize; };
+    /// Set number of mesh cells.
+    /// @param aSize (x,y,x) size for Carthesian coordinates, or (R, phi, z) for
+    /// cylindrical coordinates.
+    inline void SetMeshNumber(const G4ThreeVector& aSize) { fMeshNumber = aSize; };
+    /// Get number of mesh cells.
+    /// @return G4ThreeVector (x,y,x) size for Carthesian coordinates, or (R, phi,
+    /// z) for cylindrical coordinates.
+    inline G4ThreeVector GetMeshNumber() const { return fMeshNumber; };
+    /// Set size of the condition vector
+    inline void SetSizeConditionVector(G4int aNumber) { fSizeConditionVector = aNumber; };
+    /// Get size of the condition vector
+    inline G4int GetSizeConditionVector() const { return fSizeConditionVector; };
+    /// Set size of the latent space vector
+    inline void SetSizeLatentVector(G4int aNumber) { fSizeLatentVector = aNumber; };
+    /// Get size of the latent space vector
+    inline G4int GetSizeLatentVector() const { return fSizeLatentVector; };
+    /// Set path and name of the model
+    inline void SetModelPathName(G4String aName) { fModelPathName = aName; };
+    /// Get path and name of the model
+    inline G4String GetModelPathName() const { return fModelPathName; };
+    /// Set profiling flag
+    inline void SetProfileFlag(G4int aNumber) { fProfileFlag = aNumber; };
+    /// Get profiling flag
+    inline G4int GetProfileFlag() const { return fProfileFlag; };
+    /// Set optimization flag
+    inline void SetOptimizationFlag(G4int aNumber) { fOptimizationFlag = aNumber; };
+    /// Get optimization flag
+    inline G4int GetOptimizationFlag() const { return fOptimizationFlag; };
+    /// Get name of the inference library
+    inline G4String GetInferenceLibrary() const { return fInferenceLibrary; };
+    /// Set name of the inference library and create a pointer to chosen inference
+    /// interface
+    void SetInferenceLibrary(G4String aName);
+    /// Check settings of the inference library
+    void CheckInferenceLibrary();
+    /// Set number of Mesh cells in cylindrical coordinates (r, phi, z)
+    inline void SetMeshNbOfCells(G4ThreeVector aNb) { fMeshNumber = aNb; };
+    /// Set number of Mesh cells in cylindrical coordinates
+    /// @param[in] aIndex index of cylindrical axis (0,1,2) = (r, phi, z)
+    inline void SetMeshNbOfCells(G4int aIndex, G4double aNb) { fMeshNumber[aIndex] = aNb; };
+    /// Get number of Mesh cells in cylindrical coordinates (r, phi, z)
+    inline G4ThreeVector GetMeshNbOfCells() const { return fMeshNumber; };
+    /// Set size of Mesh cells in cylindrical coordinates (r, phi, z)
+    inline void SetMeshSizeOfCells(G4ThreeVector aNb) { fMeshSize = aNb; };
+    /// Set size of Mesh cells in cylindrical coordinates
+    /// @param[in] aIndex index of cylindrical axis (0,1,2) = (r, phi, z)
+    inline void SetMeshSizeOfCells(G4int aIndex, G4double aNb) { fMeshSize[aIndex] = aNb; };
+    /// Get size of Mesh cells in cylindrical coordinates (r, phi, z)
+    inline G4ThreeVector GetMeshSizeOfCells() const { return fMeshSize; };
+    /// Setting execution providers flags
+    /// GPU
+    inline void SetCudaFlag(G4int aNumber) { fCudaFlag = aNumber; };
+    inline G4int GetCudaFlag() const { return fCudaFlag; };
+    /// Setting execution providers Options
+    /// Cuda
+    inline void SetCudaDeviceId(G4String aNumber) { fCudaDeviceId = aNumber; };
+    inline G4String GetCudaDeviceId() const { return fCudaDeviceId; };
+    inline void SetCudaGpuMemLimit(G4String aNumber) { fCudaGpuMemLimit = aNumber; };
+    inline G4String GetCudaGpuMemLimit() const { return fCudaGpuMemLimit; };
+    inline void SetCudaArenaExtendedStrategy(G4String aNumber)
+    {
+      fCudaArenaExtendedStrategy = aNumber;
+    };
+    inline G4String GetCudaArenaExtendedStrategy() const { return fCudaArenaExtendedStrategy; };
+    inline void SetCudaCudnnConvAlgoSearch(G4String aNumber)
+    {
+      fCudaCudnnConvAlgoSearch = aNumber;
+    };
+    inline G4String GetCudaCudnnConvAlgoSearch() const { return fCudaCudnnConvAlgoSearch; };
+    inline void SetCudaDoCopyInDefaultStream(G4String aNumber)
+    {
+      fCudaDoCopyInDefaultStream = aNumber;
+    };
+    inline G4String GetCudaDoCopyInDefaultStream() const { return fCudaDoCopyInDefaultStream; };
+    inline void SetCudaCudnnConvUseMaxWorkspace(G4String aNumber)
+    {
+      fCudaCudnnConvUseMaxWorkspace = aNumber;
+    };
+    inline G4String GetCudaCudnnConvUseMaxWorkspace() const
+    {
+      return fCudaCudnnConvUseMaxWorkspace;
+    };
 
-  /// Execute inference
-  /// @param[out] aDepositsEnergies of inferred energies deposited in the
-  /// detector
-  /// @param[in] aParticleEnergy Energy of initial particle
-  void GetEnergies(std::vector<G4double> &aEnergies, G4double aParticleEnergy,
-                   G4float aInitialAngle);
+    /// Execute inference
+    /// @param[out] aDepositsEnergies of inferred energies deposited in the
+    /// detector
+    /// @param[in] aParticleEnergy Energy of initial particle
+    void GetEnergies(std::vector<G4double>& aEnergies, G4double aParticleEnergy,
+                     G4float aInitialAngle);
 
-  /// Calculate positions
-  /// @param[out] aDepositsPositions Vector of positions corresponding to
-  /// energies deposited in the detector
-  /// @param[in] aParticlePosition Initial particle position which is centre of
-  /// transverse plane of the mesh
-  ///            and beginning of the mesh in the longitudinal direction
-  /// @param[in] aParticleDirection Initial particle direction for the mesh
-  /// rotation
-  void GetPositions(std::vector<G4ThreeVector> &aDepositsPositions,
-                    G4ThreeVector aParticlePosition,
-                    G4ThreeVector aParticleDirection);
+    /// Calculate positions
+    /// @param[out] aDepositsPositions Vector of positions corresponding to
+    /// energies deposited in the detector
+    /// @param[in] aParticlePosition Initial particle position which is centre of
+    /// transverse plane of the mesh
+    ///            and beginning of the mesh in the longitudinal direction
+    /// @param[in] aParticleDirection Initial particle direction for the mesh
+    /// rotation
+    void GetPositions(std::vector<G4ThreeVector>& aDepositsPositions,
+                      G4ThreeVector aParticlePosition, G4ThreeVector aParticleDirection);
 
-private:
-  /// Cell's size: (x,y,x) for Carthesian, and (R, phi, z) for cylindrical
-  /// coordinates Can be changed with UI command `/example/mesh/size <x y z>/<r
-  /// phi z> <unit>`. For cylindrical coordinates phi is ignored and calculated
-  /// from fMeshNumber.
-  G4ThreeVector fMeshSize =
-      G4ThreeVector(2.325 * CLHEP::mm, 1, 3.4 * CLHEP::mm);
-  /// Number of cells: (x,y,x) for Carthesian, and (R, phi, z) for cylindrical
-  /// coordinates. Can be changed with UI command `/example/mesh/number <Nx Ny
-  /// Nz>/<Nr Nphi Nz>`
-  G4ThreeVector fMeshNumber = G4ThreeVector(18, 50, 45);
-  /// Inference interface
-  std::unique_ptr<Par04InferenceInterface> fInferenceInterface;
-  /// Inference messenger
-  Par04InferenceMessenger *fInferenceMessenger;
-  /// Maximum particle energy value (in MeV) in the training range
-  float fMaxEnergy = 1024000.0;
-  /// Maximum particle angle (in degrees) in the training range
-  float fMaxAngle = 90.0;
-  /// Name of the inference library
-  G4String fInferenceLibrary = "ONNX";
-  /// Size of the latent space vector
-  G4int fSizeLatentVector = 10;
-  /// Size of the condition vector
-  G4int fSizeConditionVector = 4;
-  /// Name of the inference library
-  G4String fModelPathName = "MLModels/Generator.onnx";
-  /// ONNX specific
-  /// Profiling flag
-  G4bool fProfileFlag = false;
-  /// Optimization flag
-  G4bool fOptimizationFlag = false;
-  /// Optimization file
-  G4String fModelSavePath = "MLModels/Optimized-Generator.onnx";
-  /// Profiling file
-  G4String fProfilingOutputSavePath = "opt.json";
-  /// Intra-operation number of threads
-  G4int fIntraOpNumThreads = 1;
-  /// Flags for execution providers
-  /// GPU
-  G4bool fCudaFlag = false;
-  /// Execution Provider Options
-  /// Cuda options
-  G4String fCudaDeviceId = "0";
-  G4String fCudaGpuMemLimit = "2147483648";
-  G4String fCudaArenaExtendedStrategy = "kSameAsRequested";
-  G4String fCudaCudnnConvAlgoSearch = "DEFAULT";
-  G4String fCudaDoCopyInDefaultStream = "1";
-  G4String fCudaCudnnConvUseMaxWorkspace = "1";
-  std::vector<const char *> cuda_keys{
+  private:
+    /// Cell's size: (x,y,x) for Carthesian, and (R, phi, z) for cylindrical
+    /// coordinates Can be changed with UI command `/example/mesh/size <x y z>/<r
+    /// phi z> <unit>`. For cylindrical coordinates phi is ignored and calculated
+    /// from fMeshNumber.
+    G4ThreeVector fMeshSize = G4ThreeVector(2.325 * CLHEP::mm, 1, 3.4 * CLHEP::mm);
+    /// Number of cells: (x,y,x) for Carthesian, and (R, phi, z) for cylindrical
+    /// coordinates. Can be changed with UI command `/example/mesh/number <Nx Ny
+    /// Nz>/<Nr Nphi Nz>`
+    G4ThreeVector fMeshNumber = G4ThreeVector(18, 50, 45);
+    /// Inference interface
+    std::unique_ptr<Par04InferenceInterface> fInferenceInterface;
+    /// Inference messenger
+    Par04InferenceMessenger* fInferenceMessenger;
+    /// Maximum particle energy value (in MeV) in the training range
+    float fMaxEnergy = 1024000.0;
+    /// Maximum particle angle (in degrees) in the training range
+    float fMaxAngle = 90.0;
+    /// Name of the inference library
+    G4String fInferenceLibrary = "ONNX";
+    /// Size of the latent space vector
+    G4int fSizeLatentVector = 10;
+    /// Size of the condition vector
+    G4int fSizeConditionVector = 4;
+    /// Name of the inference library
+    G4String fModelPathName = "MLModels/Generator.onnx";
+    /// ONNX specific
+    /// Profiling flag
+    G4bool fProfileFlag = false;
+    /// Optimization flag
+    G4bool fOptimizationFlag = false;
+    /// Optimization file
+    G4String fModelSavePath = "MLModels/Optimized-Generator.onnx";
+    /// Profiling file
+    G4String fProfilingOutputSavePath = "opt.json";
+    /// Intra-operation number of threads
+    G4int fIntraOpNumThreads = 1;
+    /// Flags for execution providers
+    /// GPU
+    G4bool fCudaFlag = false;
+    /// Execution Provider Options
+    /// Cuda options
+    G4String fCudaDeviceId = "0";
+    G4String fCudaGpuMemLimit = "2147483648";
+    G4String fCudaArenaExtendedStrategy = "kSameAsRequested";
+    G4String fCudaCudnnConvAlgoSearch = "DEFAULT";
+    G4String fCudaDoCopyInDefaultStream = "1";
+    G4String fCudaCudnnConvUseMaxWorkspace = "1";
+    std::vector<const char*> cuda_keys{
       "device_id",
       "gpu_mem_limit",
       "arena_extend_strategy",
       "cudnn_conv_algo_search",
       "do_copy_in_default_stream",
       "cudnn_conv_use_max_workspace",
-  };
-  std::vector<const char *> cuda_values{
+    };
+    std::vector<const char*> cuda_values{
       fCudaDeviceId.c_str(),
       fCudaGpuMemLimit.c_str(),
       fCudaArenaExtendedStrategy.c_str(),
       fCudaCudnnConvAlgoSearch.c_str(),
       fCudaDoCopyInDefaultStream.c_str(),
       fCudaCudnnConvUseMaxWorkspace.c_str(),
-  };
+    };
 };
 
-#endif /* PAR04INFEERENCESETUP_HH */
+#  endif /* PAR04INFEERENCESETUP_HH */
 #endif

@@ -37,14 +37,12 @@
 class B03ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    B03ActionInitialization();    
+    B03ActionInitialization();
     virtual ~B03ActionInitialization();
 
   public:
     virtual void BuildForMaster() const;
     virtual void Build() const;
- 
 };
 
 #endif
-

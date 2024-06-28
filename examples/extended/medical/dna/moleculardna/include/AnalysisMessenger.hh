@@ -27,14 +27,15 @@
 #ifndef MOLECULAR_DETECTOR_MESSENGER_HH
 #define MOLECULAR_DETECTOR_MESSENGER_HH
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-#include <memory>
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
+
+#include <memory>
 
 class AnalysisManager;
 
@@ -42,26 +43,26 @@ class AnalysisManager;
 
 class AnalysisMessenger : public G4UImessenger
 {
- public:
-  explicit AnalysisMessenger(AnalysisManager*);
+  public:
+    explicit AnalysisMessenger(AnalysisManager*);
 
-  ~AnalysisMessenger() override = default;
+    ~AnalysisMessenger() override = default;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- protected:
- private:
-  AnalysisManager* fpAnalysisManager;
+  protected:
+  private:
+    AnalysisManager* fpAnalysisManager;
 
-  // Related to geometry
-  std::unique_ptr<G4UIdirectory> fpAnalysisDirectory;
-  std::unique_ptr<G4UIcmdWithABool> fpSaveStrands;
-  std::unique_ptr<G4UIcmdWithAString> fpStrandDirectory;
-  std::unique_ptr<G4UIcmdWithAnInteger> fpFragmentLength;
-  std::unique_ptr<G4UIcmdWithAnInteger> fpSaveSingleChain;
-  std::unique_ptr<G4UIcmdWithAnInteger> fpDSBDistance;
-  std::unique_ptr<G4UIcmdWithoutParameter> fpTestClassifier;
-  std::unique_ptr<G4UIcmdWithAString> fpFileName;
+    // Related to geometry
+    std::unique_ptr<G4UIdirectory> fpAnalysisDirectory;
+    std::unique_ptr<G4UIcmdWithABool> fpSaveStrands;
+    std::unique_ptr<G4UIcmdWithAString> fpStrandDirectory;
+    std::unique_ptr<G4UIcmdWithAnInteger> fpFragmentLength;
+    std::unique_ptr<G4UIcmdWithAnInteger> fpSaveSingleChain;
+    std::unique_ptr<G4UIcmdWithAnInteger> fpDSBDistance;
+    std::unique_ptr<G4UIcmdWithoutParameter> fpTestClassifier;
+    std::unique_ptr<G4UIcmdWithAString> fpFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

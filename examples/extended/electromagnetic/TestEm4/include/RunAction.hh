@@ -46,14 +46,13 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction();
-   ~RunAction() override = default;
+    ~RunAction() override = default;
 
   public:
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

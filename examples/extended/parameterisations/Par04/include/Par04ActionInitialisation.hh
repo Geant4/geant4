@@ -41,20 +41,20 @@ class Par04ParallelFullWorld;
 
 class Par04ActionInitialisation : public G4VUserActionInitialization
 {
- public:
-  Par04ActionInitialisation(Par04DetectorConstruction* aDetector,
-                            Par04ParallelFullWorld* aParallel);
-  ~Par04ActionInitialisation();
-  /// Create all user actions.
-  virtual void Build() const final;
-  /// Create run action in the master thread to allow analysis merging.
-  virtual void BuildForMaster() const final;
+  public:
+    Par04ActionInitialisation(Par04DetectorConstruction* aDetector,
+                              Par04ParallelFullWorld* aParallel);
+    ~Par04ActionInitialisation();
+    /// Create all user actions.
+    virtual void Build() const final;
+    /// Create run action in the master thread to allow analysis merging.
+    virtual void BuildForMaster() const final;
 
- private:
-  /// Pointer to detector to be passed to event and run actions in order to
-  /// retrieve detector dimensions
-  Par04DetectorConstruction* fDetector = nullptr;
-  Par04ParallelFullWorld* fParallel = nullptr;
+  private:
+    /// Pointer to detector to be passed to event and run actions in order to
+    /// retrieve detector dimensions
+    Par04DetectorConstruction* fDetector = nullptr;
+    Par04ParallelFullWorld* fParallel = nullptr;
 };
 
 #endif /* PAR04ACTIONINITIALISATION_HH */

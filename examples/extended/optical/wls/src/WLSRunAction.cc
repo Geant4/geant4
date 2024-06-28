@@ -50,9 +50,9 @@ WLSRunAction::WLSRunAction()
   analysisManager->SetVerboseLevel(1);
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
-  analysisManager->CreateH1("Energy", "Energy of optical photon", 100,
-                            2.*CLHEP::eV, 3.2*CLHEP::eV);
-  analysisManager->CreateH1("Time", "Arrival time", 100, 0., 100.*CLHEP::ns);
+  analysisManager->CreateH1("Energy", "Energy of optical photon", 100, 2. * CLHEP::eV,
+                            3.2 * CLHEP::eV);
+  analysisManager->CreateH1("Time", "Arrival time", 100, 0., 100. * CLHEP::ns);
   analysisManager->CreateH1("Number of photons", "Number of photons", 100, 0., 100.);
 }
 
@@ -78,23 +78,19 @@ void WLSRunAction::EndOfRunAction(const G4Run*)
   auto analysisManager = G4AnalysisManager::Instance();
   if (analysisManager->GetH1(0)) {
     G4cout << G4endl << " ----> print histograms statistics ";
-    if(isMaster)
-    {
+    if (isMaster) {
       G4cout << "for the entire run " << G4endl << G4endl;
     }
     else {
       G4cout << "for the local thread " << G4endl << G4endl;
     }
 
-    G4cout << " Mean number of photons detected/event: "
-       << analysisManager->GetH1(2)->mean()
-       << " rms = "
-       << analysisManager->GetH1(2)->rms() << G4endl;
+    G4cout << " Mean number of photons detected/event: " << analysisManager->GetH1(2)->mean()
+           << " rms = " << analysisManager->GetH1(2)->rms() << G4endl;
   }
 
   analysisManager->Write();
   analysisManager->CloseFile();
 
-  if(isMaster)
-    fRun->EndOfRun();
+  if (isMaster) fRun->EndOfRun();
 }

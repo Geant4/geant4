@@ -140,9 +140,9 @@ protected:
   G4double GetMeanFreePath(const G4Track& track, G4double previousStepSize,
                            G4ForceCondition* condition) override;
 
-  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt);
+  inline G4double ComputeGeneralLambda(std::size_t idxe, std::size_t idxt);
 
-  inline G4double GetProbability(size_t idxt);
+  inline G4double GetProbability(std::size_t idxt);
 
   inline void SelectedProcess(const G4Step& step, G4VProcess* ptr);
 
@@ -169,7 +169,7 @@ protected:
 
 private:
   static G4EmDataHandler*      theHandler;
-  static const size_t          nTables = 15;
+  static const std::size_t     nTables = 15;
   static G4bool                theT[nTables];
   static G4String              nameT[nTables];
 
@@ -184,15 +184,15 @@ private:
   G4double                     minMMEnergy;
   G4double                     peLambda = 0.0;
 
-  size_t                       nLowE = 40;
-  size_t                       nHighE = 50;
-  size_t                       idxEnergy = 0;
+  std::size_t                  nLowE = 40;
+  std::size_t                  nHighE = 50;
+  std::size_t                  idxEnergy = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double
-G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt)
+G4GammaGeneralProcess::ComputeGeneralLambda(std::size_t idxe, std::size_t idxt)
 {
   idxEnergy = idxe;
   return factor*theHandler->GetVector(idxt, basedCoupleIndex)
@@ -201,7 +201,7 @@ G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt)
+inline G4double G4GammaGeneralProcess::GetProbability(std::size_t idxt)
 {
   return theHandler->GetVector(idxt, basedCoupleIndex)
     ->LogVectorValue(preStepKinEnergy, preStepLogE);
@@ -218,7 +218,8 @@ G4GammaGeneralProcess::SelectedProcess(const G4Step& step, G4VProcess* ptr)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4GammaGeneralProcess::SelectEmProcess(const G4Step& step, G4VEmProcess* proc)
+inline void
+G4GammaGeneralProcess::SelectEmProcess(const G4Step& step, G4VEmProcess* proc)
 {
   proc->CurrentSetup(currentCouple, preStepKinEnergy);
   SelectedProcess(step, proc);

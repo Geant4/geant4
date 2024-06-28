@@ -32,7 +32,6 @@
 
 #include "G4LocalThreadCoutMessenger.hh"
 #include "G4MTcoutDestination.hh"
-#include "G4ProfilerMessenger.hh"
 #include "G4StateManager.hh"
 #include "G4Threading.hh"
 #include "G4Tokenizer.hh"
@@ -106,7 +105,6 @@ void G4UImanager::CreateMessenger()
   UImessenger = new G4UIcontrolMessenger;
   UnitsMessenger = new G4UnitsMessenger;
   CoutMessenger = new G4LocalThreadCoutMessenger;
-  ProfileMessenger = new G4ProfilerMessenger;
 }
 
 // --------------------------------------------------------------------
@@ -124,7 +122,6 @@ G4UImanager::~G4UImanager()
     historyFile.close();
   }
   delete CoutMessenger;
-  delete ProfileMessenger;
   delete UnitsMessenger;
   delete UImessenger;
   delete treeTop;

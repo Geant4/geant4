@@ -30,13 +30,16 @@
 #ifndef B5EventAction_h
 #define B5EventAction_h 1
 
+#include "G4UserEventAction.hh"
+
 #include "Constants.hh"
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#include <vector>
 #include <array>
+#include <vector>
+
+class G4Event;
 
 // named constants
 const G4int kEm = 0;
@@ -52,7 +55,7 @@ namespace B5
 
 class EventAction : public G4UserEventAction
 {
-public:
+  public:
     EventAction();
     ~EventAction() override = default;
 
@@ -62,23 +65,22 @@ public:
     std::vector<G4double>& GetEmCalEdep() { return fCalEdep[kEm]; }
     std::vector<G4double>& GetHadCalEdep() { return fCalEdep[kHad]; }
 
-private:
+  private:
     // hit collections Ids
-    std::array<G4int, kDim> fHodHCID = { -1, -1 };
-    std::array<G4int, kDim> fDriftHCID = { -1, -1 };
-    std::array<G4int, kDim> fCalHCID = { -1, -1 };
+    std::array<G4int, kDim> fHodHCID = {-1, -1};
+    std::array<G4int, kDim> fDriftHCID = {-1, -1};
+    std::array<G4int, kDim> fCalHCID = {-1, -1};
     // histograms Ids
-    std::array<std::array<G4int, kDim>, kDim> fDriftHistoID
-      {{ {{ -1, -1 }}, {{ -1, -1 }} }};
-        // std::array<T, N> is an aggregate that contains a C array.
-        // To initialize it, we need outer braces for the class itself
-        // and inner braces for the C array
+    std::array<std::array<G4int, kDim>, kDim> fDriftHistoID{{{{-1, -1}}, {{-1, -1}}}};
+    // std::array<T, N> is an aggregate that contains a C array.
+    // To initialize it, we need outer braces for the class itself
+    // and inner braces for the C array
     // energy deposit in calorimeters cells
-    std::array<std::vector<G4double>, kDim> fCalEdep
-      {{ std::vector<G4double>(kNofEmCells, 0.), std::vector<G4double>(kNofHadCells, 0.) }};
+    std::array<std::vector<G4double>, kDim> fCalEdep{
+      {std::vector<G4double>(kNofEmCells, 0.), std::vector<G4double>(kNofHadCells, 0.)}};
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

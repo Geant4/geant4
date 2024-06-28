@@ -35,25 +35,23 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "StackingAction.hh"
-//#include "G4DNAChemistryManager.hh"
-//#include "G4Scheduler.hh"
+// #include "G4DNAChemistryManager.hh"
+// #include "G4Scheduler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization() : G4VUserActionInitialization()
-{}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const
-{}
+void ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,14 +61,14 @@ void ActionInitialization::Build() const
   SetUserAction(primGenAction);
   SetUserAction(new StackingAction());
 
-/*
-  // Chemistry part
-  if(G4DNAChemistryManager::IsChemistryActivated()){
-    G4Scheduler::Instance()->SetVerbose(4);
-    //==========================================================================
-    // G4Scheduler::Instance()->SetMaxNbSteps(10);
-    // You may decide to stop the simulation after N steps
-    //==========================================================================
-  }
-*/
-}  
+  /*
+    // Chemistry part
+    if(G4DNAChemistryManager::IsChemistryActivated()){
+      G4Scheduler::Instance()->SetVerbose(4);
+      //==========================================================================
+      // G4Scheduler::Instance()->SetMaxNbSteps(10);
+      // You may decide to stop the simulation after N steps
+      //==========================================================================
+    }
+  */
+}

@@ -123,7 +123,7 @@
  
   - Execute Hadr05 in 'batch' mode from macro files
 \verbatim
-% Hadr05   Cu-lAr.mac
+% Hadr05  Cu-lAr.mac
 \endverbatim
  
   - Execute Hadr05 in 'interactive mode' with visualization
@@ -137,7 +137,9 @@ Idle> exit
 \endverbatim
 
   Macros provided in this example:
+  - hadr05.in: macro used in Geant4 testing
   - Fe-Sci.mac, Cu-lAr.mac, Pb-lAr.mac, W-lAr.mac : names are self explanatory
+  - Pb-lAr-em.mac : electromagnetic calorimeter
   - emtest.mac, emtutor.mac : to be run interactively
   - vis.mac: to activate visualization
 

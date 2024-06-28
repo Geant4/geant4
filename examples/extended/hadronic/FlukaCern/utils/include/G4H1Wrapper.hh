@@ -45,46 +45,41 @@
 #ifndef G4H1_WRAPPER_HH
 #define G4H1_WRAPPER_HH
 
-#include <vector>
-
-#include "globals.hh"
 #include "g4hntools_defs.hh"
+#include "globals.hh"
+
+#include <vector>
 
 class G4VAnalysisManager;
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4H1Wrapper {
+class G4H1Wrapper
+{
+  public:
+    G4H1Wrapper(G4VAnalysisManager* const analysisManager, const G4int histoIndex);
 
-public:
-  G4H1Wrapper(G4VAnalysisManager* const analysisManager,
-              const G4int histoIndex);
+    void Fill(const G4double abscissaValue, const G4double weight);
+    void EndOfEvent();
 
-  void Fill(const G4double abscissaValue, 
-            const G4double weight);
-  void EndOfEvent();
+    G4double GetSumSquaredEventTotals() const { return fSumSquaredEventTotals; }
+    G4double GetSumSquaredEventInRangeTotals() const { return fSumSquaredEventInRangeTotals; }
+    G4H1* GetG4H1() const { return fHisto; }  // RUN DATA (G4H1 from G4VAnalysisManager)
 
-  G4double GetSumSquaredEventTotals() const { return fSumSquaredEventTotals; }
-  G4double GetSumSquaredEventInRangeTotals() const { return fSumSquaredEventInRangeTotals; }
-  G4H1* GetG4H1() const { return fHisto; } // RUN DATA (G4H1 from G4VAnalysisManager)
+  private:
+    G4VAnalysisManager* fAnalysisManager = nullptr;
+    G4int fHistoIndex;
+    G4H1* fHisto = nullptr;
+    G4int fNumBins;
 
-
-private:
-  G4VAnalysisManager* fAnalysisManager = nullptr;
-  G4int fHistoIndex;
-  G4H1* fHisto = nullptr;
-  G4int fNumBins;
-
-  G4bool fIsSet;
-  G4double fUnderflow;
-  G4double fOverflow;
-  G4double fSumSquaredEventTotals;
-  G4double fSumSquaredEventInRangeTotals;
-  std::vector<G4double> fEventData; // EVENT DATA (data stored on the fly WITHIN the event)
+    G4bool fIsSet;
+    G4double fUnderflow;
+    G4double fOverflow;
+    G4double fSumSquaredEventTotals;
+    G4double fSumSquaredEventInRangeTotals;
+    std::vector<G4double> fEventData;  // EVENT DATA (data stored on the fly WITHIN the event)
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif

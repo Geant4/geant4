@@ -28,15 +28,10 @@
 #include "G4VMPIseedGenerator.hh"
 
 // --------------------------------------------------------------------------
-G4VMPIseedGenerator::G4VMPIseedGenerator()
-  : master_seed_(123456789)
-{
-}
+G4VMPIseedGenerator::G4VMPIseedGenerator() : master_seed_(123456789) {}
 
 // --------------------------------------------------------------------------
-G4VMPIseedGenerator::~G4VMPIseedGenerator()
-{
-}
+G4VMPIseedGenerator::~G4VMPIseedGenerator() {}
 
 // --------------------------------------------------------------------------
 void G4VMPIseedGenerator::SetMasterSeed(G4long aseed)

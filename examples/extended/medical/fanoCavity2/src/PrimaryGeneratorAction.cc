@@ -36,23 +36,22 @@
 #include "HistoManager.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fParticleGun(0), fDetector(det)
+  : fParticleGun(0), fDetector(det)
 {
-   fParticleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  fParticleGun = new G4ParticleGun(1);
+  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(1*MeV);  
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(1 * MeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,13 +65,12 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::RunInitialisation(G4double effWall, G4double massR)
 {
-  //this function is called at beginning of run
-
+  // this function is called at beginning of run
 
   fCavityThickness = fDetector->GetCavityThickness();
   fEffWallThick = effWall;
-  fMassWallRatio  = massR;
-    
+  fMassWallRatio = massR;
+
   fNwall = fNcavity = 0;
 }
 
@@ -80,27 +78,27 @@ void PrimaryGeneratorAction::RunInitialisation(G4double effWall, G4double massR)
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
-  //      
+  // this function is called at the begining of event
+  //
   G4double Zvertex;
   if (G4UniformRand() < fMassWallRatio) {
-    Zvertex = 0.5*fCavityThickness + G4UniformRand()*fEffWallThick;
+    Zvertex = 0.5 * fCavityThickness + G4UniformRand() * fEffWallThick;
     if (G4UniformRand() < 0.5) Zvertex = -Zvertex;
     fNwall++;
-  } else {
-    Zvertex = (G4UniformRand() - 0.5)*fCavityThickness;
+  }
+  else {
+    Zvertex = (G4UniformRand() - 0.5) * fCavityThickness;
     fNcavity++;
   }
-  
-  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., Zvertex));  
+
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., Zvertex));
   fParticleGun->GeneratePrimaryVertex(anEvent);
-  
-  //histograms
+
+  // histograms
   //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-  analysisManager->FillH1(1,Zvertex);
-  analysisManager->FillH1(2,fParticleGun->GetParticleEnergy()); 
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, Zvertex);
+  analysisManager->FillH1(2, fParticleGun->GetParticleEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

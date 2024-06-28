@@ -50,23 +50,19 @@ class G4ParticleGun;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
+    PrimaryGeneratorAction();
+    virtual ~PrimaryGeneratorAction();
 
-  PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+    virtual void GeneratePrimaries(G4Event*);
 
-  virtual void GeneratePrimaries(G4Event*);
+  private:
+    PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction& right);
+    PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-private:
-
-  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
-
-  G4ParticleGun* fParticleGun;
+    G4ParticleGun* fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

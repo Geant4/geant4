@@ -44,6 +44,7 @@ class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 class G4MaterialScanner;
+class G4UIcmdWithAnInteger;
 
 class G4MatScanMessenger : public G4UImessenger
 {
@@ -66,6 +67,7 @@ class G4MatScanMessenger : public G4UImessenger
     G4UIcmdWithABool* regSenseCmd = nullptr;
     G4UIcmdWithAString* regionCmd = nullptr;
     G4UIcmdWith3VectorAndUnit* eyePosCmd = nullptr;
+    G4UIcmdWithAnInteger * verboseCmd = nullptr;
 };
 
 #endif

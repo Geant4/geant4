@@ -23,7 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
+#ifndef PRIMARYGENERATORMESSENGER_HH
+#define PRIMARYGENERATORMESSENGER_HH 1
+
 #include "G4UImessenger.hh"
+
+#include <memory>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4UIdirectory;
 
@@ -33,23 +40,20 @@ class G4UIcmdWithADoubleAndUnit;
 
 class PrimaryGeneratorAction;
 
-#ifndef PRIMARYGENERATORMESSENGER_HH
-#define PRIMARYGENERATORMESSENGER_HH
+class PrimaryGeneratorMessenger : public G4UImessenger
+{
+  public:
+    explicit PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
 
-class PrimaryGeneratorMessenger : public G4UImessenger {
-public:
-  explicit PrimaryGeneratorMessenger(PrimaryGeneratorAction *);
+    ~PrimaryGeneratorMessenger() override;
 
-  ~PrimaryGeneratorMessenger() override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  void SetNewValue(G4UIcommand *, G4String) override;
-
-private:
-  PrimaryGeneratorAction *fpPrimaryGenerator = nullptr;
-  std::unique_ptr<G4UIcmdWithAString> fparticle;
-  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fenergy;
-
+  private:
+    PrimaryGeneratorAction* fpPrimaryGenerator = nullptr;
+    std::unique_ptr<G4UIcmdWithAString> fparticle;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fenergy;
 };
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif

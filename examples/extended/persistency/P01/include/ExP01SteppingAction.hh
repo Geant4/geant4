@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01SteppingAction class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,7 +44,7 @@ class ExP01SteppingAction : public G4UserSteppingAction
 {
   public:
     ExP01SteppingAction();
-   ~ExP01SteppingAction(){};
+    ~ExP01SteppingAction() {};
 
     virtual void UserSteppingAction(const G4Step*);
 };

@@ -25,24 +25,22 @@
 //
 #ifndef DicomFileStructure__HH
 #define DicomFileStructure__HH
-#include "DicomVFile.hh"
 #include "DicomROI.hh"
+#include "DicomVFile.hh"
 class DcmDataSet;
 
 class DicomFileStructure : public DicomVFile
-{ 
-public:
-  DicomFileStructure(DcmDataset* dset);
-  ~DicomFileStructure(){};
+{
+  public:
+    DicomFileStructure(DcmDataset* dset);
+    ~DicomFileStructure() {};
 
-public:
-  std::vector<DicomROI*> GetROIs() const {
-    return theROIs;
-  }
-  virtual void ReadData();
+  public:
+    std::vector<DicomROI*> GetROIs() const { return theROIs; }
+    virtual void ReadData();
 
-private:
-  std::vector<DicomROI*> theROIs;
+  private:
+    std::vector<DicomROI*> theROIs;
 };
 
 #endif

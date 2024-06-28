@@ -32,7 +32,7 @@
 
 #include "G4UserEventAction.hh"
 
-#include "globals.hh"
+class G4Event;
 
 namespace B2
 {
@@ -45,10 +45,10 @@ class EventAction : public G4UserEventAction
     EventAction() = default;
     ~EventAction() override = default;
 
-    void  BeginOfEventAction(const G4Event* ) override;
-    void    EndOfEventAction(const G4Event* ) override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 };
 
-}
+}  // namespace B2
 
 #endif

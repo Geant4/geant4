@@ -52,14 +52,12 @@
 class F05SteppingVerbose : public G4SteppingVerbose
 {
   public:
-
     F05SteppingVerbose() = default;
     ~F05SteppingVerbose() override = default;
-      // Constructor/Destructor
+    // Constructor/Destructor
 
     void StepInfo() override;
     void TrackingStarted() override;
-
 };
 
 #endif

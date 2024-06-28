@@ -32,26 +32,25 @@
 #ifndef RE01RegionInformation_H
 #define RE01RegionInformation_H 1
 
-#include "globals.hh"
 #include "G4VUserRegionInformation.hh"
+#include "globals.hh"
 
 class RE01RegionInformation : public G4VUserRegionInformation
 {
-public:
-  RE01RegionInformation(); 
-  virtual ~RE01RegionInformation();
-  virtual void Print() const;
+  public:
+    RE01RegionInformation();
+    virtual ~RE01RegionInformation();
+    virtual void Print() const;
 
-  inline void SetWorld(G4bool v=true) {fIsWorld = v;}
-  inline void SetTracker(G4bool v=true) {fIsTracker = v;}
-  inline void SetCalorimeter(G4bool v=true) {fIsCalorimeter = v;}
-  inline G4bool IsCalorimeter() const {return fIsCalorimeter;}
+    inline void SetWorld(G4bool v = true) { fIsWorld = v; }
+    inline void SetTracker(G4bool v = true) { fIsTracker = v; }
+    inline void SetCalorimeter(G4bool v = true) { fIsCalorimeter = v; }
+    inline G4bool IsCalorimeter() const { return fIsCalorimeter; }
 
-private:
-  G4bool fIsWorld;
-  G4bool fIsTracker;
-  G4bool fIsCalorimeter;
+  private:
+    G4bool fIsWorld;
+    G4bool fIsTracker;
+    G4bool fIsCalorimeter;
 };
 
 #endif
-

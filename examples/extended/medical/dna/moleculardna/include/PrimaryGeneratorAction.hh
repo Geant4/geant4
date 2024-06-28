@@ -30,9 +30,10 @@
 #ifndef MOLECULAR_PRIMARY_GENERATORACTION_HH
 #define MOLECULAR_PRIMARY_GENERATORACTION_HH
 
+#include "PrimaryGeneratorMessenger.hh"
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "PrimaryGeneratorMessenger.hh"
 
 class G4GeneralParticleSource;
 class PrimaryGeneratorSourceGRASCSV;
@@ -42,29 +43,26 @@ class PrimaryGeneratorMessenger;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-    public:
-        PrimaryGeneratorAction();
+  public:
+    PrimaryGeneratorAction();
 
-        ~PrimaryGeneratorAction() override;
+    ~PrimaryGeneratorAction() override;
 
-        void GeneratePrimaries(G4Event* anEvent) override;
+    void GeneratePrimaries(G4Event* anEvent) override;
 
-        // Generate events from Phase Space file
-        void SetInputFileName(const G4String& filename)
-        {
-          fMyInputFileName = filename;
-        }
+    // Generate events from Phase Space file
+    void SetInputFileName(const G4String& filename) { fMyInputFileName = filename; }
 
-    private:
-        G4GeneralParticleSource* fParticleGun = nullptr;
+  private:
+    G4GeneralParticleSource* fParticleGun = nullptr;
 
-        // parameters for input from file
-        G4String fMyInputFileName;
-        static PrimaryGeneratorSourceGRASCSV* fPrimarySource;
-        G4bool fFirstEvent;
+    // parameters for input from file
+    G4String fMyInputFileName;
+    static PrimaryGeneratorSourceGRASCSV* fPrimarySource;
+    G4bool fFirstEvent;
 
-        // class messenger
-        PrimaryGeneratorMessenger*  fGunMessenger = nullptr;
+    // class messenger
+    PrimaryGeneratorMessenger* fGunMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

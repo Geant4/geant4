@@ -26,11 +26,12 @@
 /// \file EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
+
 #include "HistoManager.hh"
 #include "Run.hh"
 
@@ -43,7 +44,7 @@
 
 EventAction::EventAction()
 {
-  // Set default print level 
+  // Set default print level
   G4RunManager::GetRunManager()->SetPrintProgress(10000);
 }
 
@@ -51,29 +52,25 @@ EventAction::EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- fDecayChain = G4String(" ");
- fEvisTot = 0.;
+  fDecayChain = G4String(" ");
+  fEvisTot = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
- G4int evtNb = evt->GetEventID(); 
- G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
- //printing survey
- //
- if (evtNb%printProgress == 0) 
-   G4cout << "    End of event. Decay chain:" << fDecayChain 
-          << G4endl << G4endl;
- 
- //total visible energy
- G4AnalysisManager::Instance()->FillH1(9, fEvisTot);
- Run* run 
-  = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
- run->EvisEvent(fEvisTot);
+  G4int evtNb = evt->GetEventID();
+  G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
+  // printing survey
+  //
+  if (evtNb % printProgress == 0)
+    G4cout << "    End of event. Decay chain:" << fDecayChain << G4endl << G4endl;
+
+  // total visible energy
+  G4AnalysisManager::Instance()->FillH1(9, fEvisTot);
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->EvisEvent(fEvisTot);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

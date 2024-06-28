@@ -44,21 +44,21 @@
 #ifndef CRMCKaonBuilder_h
 #define CRMCKaonBuilder_h 1
 
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VKaonBuilder.hh"
+#include "globals.hh"
 
 class HadronicInelasticModelCRMC;
 
-
-class CRMCKaonBuilder : public G4VKaonBuilder {
+class CRMCKaonBuilder : public G4VKaonBuilder
+{
   public:
-    CRMCKaonBuilder( const G4int crmcModelId, const std::string & crmcModelName );
+    CRMCKaonBuilder(const G4int crmcModelId, const std::string& crmcModelName);
     virtual ~CRMCKaonBuilder();
-    virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4HadronInelasticProcess* aP ) final override;
-    inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
-    inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
+    virtual void Build(G4HadronElasticProcess* aP) final override;
+    virtual void Build(G4HadronInelasticProcess* aP) final override;
+    inline void SetMinEnergy(G4double aM) final override { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) final override { fMax = aM; }
     using G4VKaonBuilder::Build;  // Prevent compiler warning
   private:
     HadronicInelasticModelCRMC* fModel;

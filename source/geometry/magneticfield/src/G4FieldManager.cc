@@ -35,6 +35,7 @@
 #include "G4FieldManagerStore.hh"
 #include "G4SystemOfUnits.hh"
 
+G4ThreadLocal G4FieldManager* G4FieldManager::fGlobalFieldManager = nullptr;
 G4double G4FieldManager::fDefault_Delta_One_Step_Value= 0.01 *    millimeter;
 G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.001 * millimeter;
 G4bool   G4FieldManager::fVerboseConstruction= false;

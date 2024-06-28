@@ -32,13 +32,14 @@
 
 #include "G4UserEventAction.hh"
 
-class H02EventAction : public G4UserEventAction {
-public:
-  H02EventAction();
-  ~H02EventAction();
+class H02EventAction : public G4UserEventAction
+{
+  public:
+    H02EventAction();
+    ~H02EventAction();
 
-  virtual void BeginOfEventAction(const G4Event* anEvent);
-  virtual void EndOfEventAction(const G4Event* anEvent);
+    virtual void BeginOfEventAction(const G4Event* anEvent);
+    virtual void EndOfEventAction(const G4Event* anEvent);
 };
 
 #endif

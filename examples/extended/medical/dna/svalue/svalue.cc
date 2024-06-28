@@ -24,87 +24,83 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
 /// \file medical/dna/svalue/svalue.cc
 /// \brief Main program of the medical/dna/svalue example
 
-#include "G4Types.hh"
-
-#include "MyFile.hh"
-
-#ifdef G4MULTITHREADED
- #include "G4MTRunManager.hh"
-#else
- #include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh"
-#include "G4UIExecutive.hh"
- #include "G4VisExecutive.hh"
-
-#include "Randomize.hh"
-
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 #include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "MyFile.hh"
+#include "PhysicsList.hh"
 #include "SteppingVerbose.hh"
 
+#ifdef G4MULTITHREADED
+#  include "G4MTRunManager.hh"
+#else
+#  include "G4RunManager.hh"
+#endif
+
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-int main(int argc,char** argv) {
- 
-  //delete output file
-  remove ("s.txt");
-  
-  //detect interactive mode (if no arguments) and define UI session
+
+int main(int argc, char** argv)
+{
+  // Delete output file
+  remove("s.txt");
+
+  // Detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  //construct the default run manager
+// Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager();
   G4int nThreads = G4Threading::G4GetNumberOfCores();
-  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  if (argc == 3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
 #else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager* runManager = new G4RunManager();
-#endif  
+#endif
 
-  //set mandatory initialization classes
+  // Set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(new ActionInitialization(detector));
 
-  //visualization
+  // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-    
-  //get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc>1)   // batch mode  
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-      ui->SessionStart();
-      delete ui;
-    }
+  // Get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
 
-  //job termination
+  if (argc > 1)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command + fileName);
+  }
+
+  else  // define visualization and UI terminal for interactive mode
+  {
+    ui->SessionStart();
+    delete ui;
+  }
+
+  // Job termination
   delete visManager;
   delete runManager;
 

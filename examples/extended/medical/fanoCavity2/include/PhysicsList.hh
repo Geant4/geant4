@@ -42,27 +42,25 @@ class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
+  public:
+    PhysicsList();
+    virtual ~PhysicsList();
 
-  virtual void ConstructParticle();
-        
-  void AddPhysicsList(const G4String& name);    
-  virtual void ConstructProcess();    
-  void AddStepMax(); 
-  
-private:
+    virtual void ConstructParticle();
 
-  PhysicsListMessenger*  fMessenger; 
+    void AddPhysicsList(const G4String& name);
+    virtual void ConstructProcess();
+    void AddStepMax();
 
-  G4String               fEmName;
-  G4VPhysicsConstructor* fEmPhysicsList;
+  private:
+    PhysicsListMessenger* fMessenger;
+
+    G4String fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -36,34 +36,31 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "G4RunManager.hh"
+#include "G4ChargedGeantino.hh"
 #include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ChargedGeantino.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
-#include "Randomize.hh"
 #include "G4UnitsTable.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0)
+PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle=
-  particleTable->FindParticle("e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleEnergy(100*keV);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
+  fParticleGun->SetParticleEnergy(100 * keV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,13 +74,9 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(anEvent->GetEventID() == 0)
-  {
-    G4cout << "Particle: "
-    << fParticleGun->GetParticleDefinition()->GetParticleName()
-    << " with "
-    << G4BestUnit(fParticleGun->GetParticleEnergy(), "Energy")
-    << G4endl;
+  if (anEvent->GetEventID() == 0) {
+    G4cout << "Particle: " << fParticleGun->GetParticleDefinition()->GetParticleName() << " with "
+           << G4BestUnit(fParticleGun->GetParticleEnergy(), "Energy") << G4endl;
   }
   G4cout << "Start event " << anEvent->GetEventID() << G4endl;
   fParticleGun->GeneratePrimaryVertex(anEvent);

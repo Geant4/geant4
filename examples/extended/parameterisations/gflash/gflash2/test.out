@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -52,14 +52,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -284,7 +291,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -839,7 +846,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -855,14 +862,14 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0120559
-Internal System Elapsed Time: 0.01
+Internal Real Elapsed Time is: 0.0112237
+Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
-  12252 hits are stored in ExGflashHitsCollection 
-   e1  12.0159   e3x3  48.4116   GeV  e5x5  48.7952
-   num1  3012   num3x3  11969    num5x5  12046
+  12125 hits are stored in ExGflashHitsCollection 
+   e1  12.0233   e3x3  48.4099   GeV  e5x5  48.7934
+   num1  2956   num3x3  11839    num5x5  11915
  Total energy deposited in the calorimeter: 49.761 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
@@ -870,143 +877,143 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00793325
+Internal Real Elapsed Time is: 0.00791128
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
-  11976 hits are stored in ExGflashHitsCollection 
-   e1  12.1487   e3x3  48.4014   GeV  e5x5  48.9162
-   num1  2940   num3x3  11697    num5x5  11796
- Total energy deposited in the calorimeter: 49.922 (GeV)
+  11954 hits are stored in ExGflashHitsCollection 
+   e1  12.1485   e3x3  48.4313   GeV  e5x5  48.8994
+   num1  2938   num3x3  11701    num5x5  11789
+ Total energy deposited in the calorimeter: 49.7864 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 2
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00800981
+Internal Real Elapsed Time is: 0.00774473
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
-  11922 hits are stored in ExGflashHitsCollection 
-   e1  12.1244   e3x3  48.1681   GeV  e5x5  48.7143
-   num1  2950   num3x3  11624    num5x5  11733
- Total energy deposited in the calorimeter: 49.67 (GeV)
+  11919 hits are stored in ExGflashHitsCollection 
+   e1  12.2873   e3x3  48.1879   GeV  e5x5  48.7664
+   num1  2972   num3x3  11636    num5x5  11745
+ Total energy deposited in the calorimeter: 49.6574 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 3
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00777784
+Internal Real Elapsed Time is: 0.00813378
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
-  11979 hits are stored in ExGflashHitsCollection 
-   e1  12.0864   e3x3  48.5604   GeV  e5x5  49.0558
-   num1  2938   num3x3  11739    num5x5  11828
- Total energy deposited in the calorimeter: 49.8601 (GeV)
+  11895 hits are stored in ExGflashHitsCollection 
+   e1  12.0554   e3x3  48.0316   GeV  e5x5  48.5297
+   num1  2897   num3x3  11578    num5x5  11676
+ Total energy deposited in the calorimeter: 49.5564 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 4
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00783116
+Internal Real Elapsed Time is: 0.00758386
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
-  11936 hits are stored in ExGflashHitsCollection 
-   e1  12.1009   e3x3  48.3909   GeV  e5x5  48.8284
-   num1  2928   num3x3  11690    num5x5  11770
- Total energy deposited in the calorimeter: 49.7036 (GeV)
+  11988 hits are stored in ExGflashHitsCollection 
+   e1  12.0166   e3x3  48.5065   GeV  e5x5  48.9841
+   num1  2895   num3x3  11732    num5x5  11817
+ Total energy deposited in the calorimeter: 49.9094 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 5
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00779628
+Internal Real Elapsed Time is: 0.00766304
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
-  11978 hits are stored in ExGflashHitsCollection 
-   e1  12.2587   e3x3  48.4859   GeV  e5x5  48.9312
-   num1  2959   num3x3  11718    num5x5  11800
- Total energy deposited in the calorimeter: 49.8898 (GeV)
+  11959 hits are stored in ExGflashHitsCollection 
+   e1  11.9579   e3x3  48.1831   GeV  e5x5  48.7352
+   num1  2896   num3x3  11621    num5x5  11732
+ Total energy deposited in the calorimeter: 49.8774 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 6
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00810208
+Internal Real Elapsed Time is: 0.00781356
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
-  11982 hits are stored in ExGflashHitsCollection 
-   e1  12.2322   e3x3  48.649   GeV  e5x5  49.0561
-   num1  2960   num3x3  11745    num5x5  11821
- Total energy deposited in the calorimeter: 49.908 (GeV)
+  11969 hits are stored in ExGflashHitsCollection 
+   e1  12.1002   e3x3  48.3984   GeV  e5x5  48.8984
+   num1  2950   num3x3  11680    num5x5  11777
+ Total energy deposited in the calorimeter: 49.9082 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 7
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00782192
+Internal Real Elapsed Time is: 0.00759103
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
-  11976 hits are stored in ExGflashHitsCollection 
-   e1  12.0913   e3x3  48.4393   GeV  e5x5  48.8471
-   num1  2927   num3x3  11688    num5x5  11769
- Total energy deposited in the calorimeter: 49.9194 (GeV)
+  11987 hits are stored in ExGflashHitsCollection 
+   e1  12.3013   e3x3  48.501   GeV  e5x5  48.9505
+   num1  3005   num3x3  11727    num5x5  11805
+ Total energy deposited in the calorimeter: 49.9308 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00767918
+Internal Real Elapsed Time is: 0.00756575
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
-  11976 hits are stored in ExGflashHitsCollection 
-   e1  12.3679   e3x3  48.5815   GeV  e5x5  48.9179
-   num1  2979   num3x3  11734    num5x5  11798
- Total energy deposited in the calorimeter: 49.865 (GeV)
+  11973 hits are stored in ExGflashHitsCollection 
+   e1  12.4257   e3x3  48.5676   GeV  e5x5  48.9457
+   num1  2993   num3x3  11714    num5x5  11786
+ Total energy deposited in the calorimeter: 49.8946 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00758146
+Internal Real Elapsed Time is: 0.00776058
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
-  11907 hits are stored in ExGflashHitsCollection 
-   e1  12.2176   e3x3  48.2334   GeV  e5x5  48.7244
-   num1  2952   num3x3  11651    num5x5  11740
- Total energy deposited in the calorimeter: 49.554 (GeV)
+  11968 hits are stored in ExGflashHitsCollection 
+   e1  12.0384   e3x3  48.347   GeV  e5x5  48.8937
+   num1  2921   num3x3  11674    num5x5  11778
+ Total energy deposited in the calorimeter: 49.8853 (GeV)
     0 trajectories stored in this event.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.00917654
+Internal Real Elapsed Time /event is: 0.00899904
 
 ******************************************
-Total Real Elapsed Time is: 3.75282
-Total System Elapsed Time: 0.21
-Total GetUserElapsed Time: 2.69
+Total Real Elapsed Time is: 3.4706
+Total System Elapsed Time: 0.18
+Total GetUserElapsed Time: 2.65
 ******************************************

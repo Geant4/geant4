@@ -43,23 +43,23 @@ class G4Region;
 
 class SpecializedTrackingManager : public G4VTrackingManager
 {
- public:
-  SpecializedTrackingManager();
-  ~SpecializedTrackingManager();
+  public:
+    SpecializedTrackingManager();
+    ~SpecializedTrackingManager();
 
-  void BuildPhysicsTable(const G4ParticleDefinition&) override;
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  void PreparePhysicsTable(const G4ParticleDefinition&) override;
+    void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
-  void HandOverOneTrack(G4Track* aTrack) override;
-  void FlushEvent() override;
+    void HandOverOneTrack(G4Track* aTrack) override;
+    void FlushEvent() override;
 
- private:
-  void StepInBackRegion(G4Track* aTrack);
-  void StepOutside(G4Track* aTrack);
+  private:
+    void StepInBackRegion(G4Track* aTrack);
+    void StepOutside(G4Track* aTrack);
 
-  std::vector<G4Track*> fBufferedTracks;
-  G4Region* fBackRegion = nullptr;
+    std::vector<G4Track*> fBufferedTracks;
+    G4Region* fBackRegion = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,57 +26,56 @@
 
 #include "RunAction.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4AnalysisManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(): G4UserRunAction(){
-    G4RunManager::GetRunManager()->SetPrintProgress(1);
-    
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    
-    //** Set defaults **//
-    analysisManager->SetVerboseLevel(1);
-    analysisManager->SetFirstHistoId(1);
-    
-    //** Creating ntuple **//
-    analysisManager->CreateNtuple("ExExChTree", "Angles and Positions");
-    analysisManager->CreateNtupleDColumn("angXin");
-    analysisManager->CreateNtupleDColumn("angYin");
-    analysisManager->CreateNtupleDColumn("posXin");
-    analysisManager->CreateNtupleDColumn("posYin");
-    analysisManager->CreateNtupleDColumn("angXout");
-    analysisManager->CreateNtupleDColumn("angYout");
-    analysisManager->FinishNtuple();
-    
+RunAction::RunAction() : G4UserRunAction()
+{
+  G4RunManager::GetRunManager()->SetPrintProgress(1);
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  //** Set defaults **//
+  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetFirstHistoId(1);
+
+  //** Creating ntuple **//
+  analysisManager->CreateNtuple("ExExChTree", "Angles and Positions");
+  analysisManager->CreateNtupleDColumn("angXin");
+  analysisManager->CreateNtupleDColumn("angYin");
+  analysisManager->CreateNtupleDColumn("posXin");
+  analysisManager->CreateNtupleDColumn("posYin");
+  analysisManager->CreateNtupleDColumn("angXout");
+  analysisManager->CreateNtupleDColumn("angYout");
+  analysisManager->FinishNtuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction(){
-}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run*){
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    G4String fileName = "ExExCh.root";
-    analysisManager->OpenFile(fileName);
-    G4cout << "Using " << analysisManager->GetType() << G4endl;
+void RunAction::BeginOfRunAction(const G4Run*)
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4String fileName = "ExExCh.root";
+  analysisManager->OpenFile(fileName);
+  G4cout << "Using " << analysisManager->GetType() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-    analysisManager->Write();
-    analysisManager->CloseFile();
-    
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

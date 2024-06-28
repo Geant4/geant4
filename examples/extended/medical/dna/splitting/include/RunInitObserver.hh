@@ -30,13 +30,14 @@
 #define RUNINITOBSERVER_HH_
 
 #include "globals.hh"
+
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunInitObserver
 {
-public:
+  public:
     RunInitObserver();
     virtual ~RunInitObserver();
 
@@ -47,11 +48,11 @@ public:
 
 class RunInitManager
 {
-public:
+  public:
     static RunInitManager* Instance();
     void Initialize();
 
-protected:
+  protected:
     friend class RunInitObserver;
     RunInitManager();
     ~RunInitManager();
@@ -61,5 +62,4 @@ protected:
     static G4ThreadLocal RunInitManager* fgInstance;
 };
 
-#endif 
-
+#endif

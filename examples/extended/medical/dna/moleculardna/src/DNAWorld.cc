@@ -29,14 +29,12 @@
 #include "DNAWorld.hh"
 
 #include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAWorld::DNAWorld()
-  : G4VUserParallelWorld("DNAWorld")
-{}
+DNAWorld::DNAWorld() : G4VUserParallelWorld("DNAWorld") {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,19 +45,15 @@ DNAWorld::~DNAWorld() = default;
 void DNAWorld::Construct()
 {
   G4VPhysicalVolume* ghostWorld = GetWorld();
-  if(fpDNAVolumePointer == nullptr)
-  {
-    G4cout << "Error: The DNA volume pointer is not set in the DNAWorld"
-           << G4endl;
+  if (fpDNAVolumePointer == nullptr) {
+    G4cout << "Error: The DNA volume pointer is not set in the DNAWorld" << G4endl;
   }
-  else
-  {
-    if(fpDNAVolumeTranslation == nullptr)
-    {
+  else {
+    if (fpDNAVolumeTranslation == nullptr) {
       fpDNAVolumeTranslation = new G4ThreeVector(0., 0., 0.);
     }
-    new G4PVPlacement(fpDNAVolumeRotation, *fpDNAVolumeTranslation, "DNA",
-                      fpDNAVolumePointer, ghostWorld, false, 0, false);
+    new G4PVPlacement(fpDNAVolumeRotation, *fpDNAVolumeTranslation, "DNA", fpDNAVolumePointer,
+                      ghostWorld, false, 0, false);
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

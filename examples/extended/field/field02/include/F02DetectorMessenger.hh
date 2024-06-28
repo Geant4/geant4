@@ -43,33 +43,37 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class F02DetectorMessenger: public G4UImessenger
+class F02DetectorMessenger : public G4UImessenger
 {
   public:
-    F02DetectorMessenger(F02DetectorConstruction* );
+    F02DetectorMessenger(F02DetectorConstruction*);
     ~F02DetectorMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
+    F02DetectorConstruction* fDetector = nullptr;
 
-    F02DetectorConstruction*   fDetector = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIdirectory* fFieldDir = nullptr;
 
-    G4UIdirectory*             fDetDir = nullptr;
-
-    G4UIcmdWithAString*        fAbsMaterCmd = nullptr;
+    G4UIcmdWithAString* fAbsMaterCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fAbsThickCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fAbsRadCmd = nullptr;
 
     G4UIcmdWithADoubleAndUnit* fAbsZposCmd = nullptr;
 
-    G4UIcmdWithAString*        fWorldMaterCmd = nullptr;
+    G4UIcmdWithAString* fWorldMaterCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fWorldZCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fWorldRCmd = nullptr;
+
+    // moved from FieldSetup (depends on the user field)
+    G4UIcmdWith3VectorAndUnit* fElFieldCmd = nullptr;
 };
 
 #endif

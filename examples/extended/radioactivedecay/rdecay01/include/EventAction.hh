@@ -26,7 +26,7 @@
 /// \file EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,22 +42,20 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction();
-   ~EventAction() override = default;
+    ~EventAction() override = default;
 
   public:
     void BeginOfEventAction(const G4Event*) override;
-    void   EndOfEventAction(const G4Event*) override;
-    
-    void AddDecayChain(G4String val) {fDecayChain += val;};
-    void AddEvisible(G4double val)   {fEvisTot    += val;};
-    
+    void EndOfEventAction(const G4Event*) override;
+
+    void AddDecayChain(G4String val) { fDecayChain += val; };
+    void AddEvisible(G4double val) { fEvisTot += val; };
+
   private:
-    G4String        fDecayChain = " ";                   
-    G4double        fEvisTot = 0.;
+    G4String fDecayChain = " ";
+    G4double fEvisTot = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

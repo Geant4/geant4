@@ -1,30 +1,41 @@
+# MT mode
 /run/numberOfThreads 4
 #
+# Tracking verbosity
 /tracking/verbose 0
 #
-/microprox/phys/addPhysics  dna_opt2	        
-#/microprox/phys/addPhysics  dna_opt4	        
-#/microprox/phys/addPhysics  dna_opt6	        
+# Selection of Geant4-DNA physics constructor
+/microprox/phys/addPhysics  dna_opt2
+#/microprox/phys/addPhysics  dna_opt4
+#/microprox/phys/addPhysics  dna_opt6
 #
+# Selection of tracking cut
 /microprox/det/setTrackingCut 7.4 eV
 #
+# Run initialization
 /run/initialize
 #
+# Atomic deexcitation activation
 /process/em/fluo true
 /process/em/auger true
 /process/em/augerCascade true
 /process/em/pixe true
-/process/em/deexcitationIgnoreCut true 
+/process/em/deexcitationIgnoreCut true
 #
+# Incident particle type
 /gun/particle e-
 #/gun/particle proton
 #/gun/particle alpha
 #
+# Incident particle energy
 /gun/energy 100 eV
 #
+# Print run progress
 /run/printProgress 1000
 #
+# Inactivation of Geant4-DNA processes (if needed)
 #/process/inactivate e-_G4DNAVibExcitation
 #/process/inactivate e-_G4DNAAttachment
 #
+# Beam on
 /run/beamOn 10000

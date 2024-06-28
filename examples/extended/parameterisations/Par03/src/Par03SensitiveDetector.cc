@@ -24,27 +24,24 @@
 // ********************************************************************
 //
 #include "Par03SensitiveDetector.hh"
+
 #include "Par03Hit.hh"
 
 #include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
+#include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4SDManager.hh"
 
-Par03SensitiveDetector::Par03SensitiveDetector(G4String aName)
-  : G4VSensitiveDetector(aName)
+Par03SensitiveDetector::Par03SensitiveDetector(G4String aName) : G4VSensitiveDetector(aName)
 {
   collectionName.insert("hits");
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03SensitiveDetector::Par03SensitiveDetector(G4String aName, G4int aNumLayers,
-                                               G4int aNumRho, G4int aNumPhi)
-  : G4VSensitiveDetector(aName)
-  , fCellNoZ(aNumLayers)
-  , fCellNoRho(aNumRho)
-  , fCellNoPhi(aNumPhi)
+Par03SensitiveDetector::Par03SensitiveDetector(G4String aName, G4int aNumLayers, G4int aNumRho,
+                                               G4int aNumPhi)
+  : G4VSensitiveDetector(aName), fCellNoZ(aNumLayers), fCellNoRho(aNumRho), fCellNoPhi(aNumPhi)
 {
   collectionName.insert("hits");
 }
@@ -57,21 +54,17 @@ Par03SensitiveDetector::~Par03SensitiveDetector() = default;
 
 void Par03SensitiveDetector::Initialize(G4HCofThisEvent* aHCE)
 {
-  fHitsCollection =
-    new Par03HitsCollection(SensitiveDetectorName, collectionName[0]);
-  if(fHitCollectionID < 0)
-  {
-    fHitCollectionID =
-      G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
+  fHitsCollection = new Par03HitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (fHitCollectionID < 0) {
+    fHitCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
   }
   aHCE->AddHitsCollection(fHitCollectionID, fHitsCollection);
 
   // fill calorimeter hits with zero energy deposition
-  for(G4int iphi = 0; iphi < fCellNoPhi; iphi++)
-    for(G4int irho = 0; irho < fCellNoRho; irho++)
-      for(G4int iz = 0; iz < fCellNoZ; iz++)
-      {
-        auto  hit = new Par03Hit();
+  for (G4int iphi = 0; iphi < fCellNoPhi; iphi++)
+    for (G4int irho = 0; irho < fCellNoRho; irho++)
+      for (G4int iz = 0; iz < fCellNoZ; iz++) {
+        auto hit = new Par03Hit();
         fHitsCollection->insert(hit);
       }
 }
@@ -81,11 +74,9 @@ void Par03SensitiveDetector::Initialize(G4HCofThisEvent* aHCE)
 G4bool Par03SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep == 0.)
-    return true;
+  if (edep == 0.) return true;
 
-  auto  aTouchable =
-    (G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable());
+  auto aTouchable = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
 
   auto hit = RetrieveAndSetupHit(aTouchable);
 
@@ -94,27 +85,23 @@ G4bool Par03SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   // Fill time information from G4Step
   // If it's already filled, choose hit with earliest global time
-  if(hit->GetTime() == -1 ||
-     hit->GetTime() > aStep->GetTrack()->GetGlobalTime())
+  if (hit->GetTime() == -1 || hit->GetTime() > aStep->GetTrack()->GetGlobalTime())
     hit->SetTime(aStep->GetTrack()->GetGlobalTime());
 
   // Set hit type to full simulation (only if hit is not already marked as fast
   // sim)
-  if(hit->GetType() != 1)
-    hit->SetType(0);
+  if (hit->GetType() != 1) hit->SetType(0);
 
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool Par03SensitiveDetector::ProcessHits(const G4FastHit* aHit,
-                                           const G4FastTrack* aTrack,
+G4bool Par03SensitiveDetector::ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
                                            G4TouchableHistory* aTouchable)
 {
   G4double edep = aHit->GetEnergy();
-  if(edep == 0.)
-    return true;
+  if (edep == 0.) return true;
 
   auto hit = RetrieveAndSetupHit(aTouchable);
 
@@ -123,9 +110,7 @@ G4bool Par03SensitiveDetector::ProcessHits(const G4FastHit* aHit,
 
   // Fill time information from G4FastTrack
   // If it's already filled, choose hit with earliest global time
-  if(hit->GetTime() == -1 ||
-     hit->GetTime() > aTrack->GetPrimaryTrack()->GetGlobalTime())
-  {
+  if (hit->GetTime() == -1 || hit->GetTime() > aTrack->GetPrimaryTrack()->GetGlobalTime()) {
     hit->SetTime(aTrack->GetPrimaryTrack()->GetGlobalTime());
   }
 
@@ -138,27 +123,22 @@ G4bool Par03SensitiveDetector::ProcessHits(const G4FastHit* aHit,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03Hit* Par03SensitiveDetector::RetrieveAndSetupHit(
-  G4TouchableHistory* aTouchable)
+Par03Hit* Par03SensitiveDetector::RetrieveAndSetupHit(G4TouchableHistory* aTouchable)
 {
   G4int rhoNo = aTouchable->GetCopyNumber(0);  // cell
   G4int phiNo = aTouchable->GetCopyNumber(1);  // segment
-  G4int zNo   = aTouchable->GetCopyNumber(2);  // layer
+  G4int zNo = aTouchable->GetCopyNumber(2);  // layer
 
   std::size_t hitID = fCellNoRho * fCellNoZ * phiNo + fCellNoZ * rhoNo + zNo;
 
-  if(hitID >= fHitsCollection->entries())
-  {
-    G4Exception(
-      "Par03SensitiveDetector::RetrieveAndSetupHit()", "InvalidSetup",
-      FatalException,
-      "Size of hit collection in Par03SensitiveDetector is smaller than the "
-      "number of cells created in Par03DetectorConstruction!");
+  if (hitID >= fHitsCollection->entries()) {
+    G4Exception("Par03SensitiveDetector::RetrieveAndSetupHit()", "InvalidSetup", FatalException,
+                "Size of hit collection in Par03SensitiveDetector is smaller than the "
+                "number of cells created in Par03DetectorConstruction!");
   }
   Par03Hit* hit = (*fHitsCollection)[hitID];
 
-  if(hit->GetRhoId() < 0)
-  {
+  if (hit->GetRhoId() < 0) {
     hit->SetRhoId(rhoNo);
     hit->SetPhiId(phiNo);
     hit->SetZid(zNo);

@@ -5,12 +5,16 @@
 #
 /tracking/verbose 1
 /run/verbose 1
+/control/verbose 2
+#/control/cout/ignoreThreadsExcept 0
 #
 #
 #
-/field/setStepperType 4
-/field/setMinStep 10 mm
-/field/update
+/field/stepperType ClassicalRK4
+/field/setMinimumStep 10 mm
+/field/Radiator/stepperType ClassicalRK4
+/field/Radiator/setMinimumStep 10 mm
+#/field/printParameters
 #
 /run/initialize
 #
@@ -25,14 +29,13 @@
 /run/printProgress 50
 /run/beamOn 100
 #
-/field/setFieldZ 1.0 kG
-# /field/update
+/field03/setField 0. 0. 1.0 kG
 #
 /run/beamOn 10
 #
 /tracking/verbose 1
-/field/setField 3.3 0 0 tesla
-/field/setLocalField 0 0 0 tesla
+/field03/setField 3.3 0 0 tesla
+/field03/setLocalField 0 0 0 tesla
 /run/beamOn 1
 #
 # Test commands defined in this example

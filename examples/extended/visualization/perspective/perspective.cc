@@ -32,27 +32,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
+#include "PerspectiveVisAction.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4VisExtent.hh"
-#include "G4UImanager.hh"
-#include "G4UIExecutive.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "PerspectiveVisAction.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
-
-  G4UIExecutive* ui = new G4UIExecutive(argc,argv);
+int main(int argc, char** argv)
+{
+  G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
   G4VisManager* visManager = new G4VisExecutive;
 
-  visManager->RegisterRunDurationUserVisAction
-  ("Perspective",
-   new PerspectiveVisAction,
-   G4VisExtent(-100*m,100*m,-100*m,100*m,-100*m,100*m));
+  visManager->RegisterRunDurationUserVisAction(
+    "Perspective", new PerspectiveVisAction,
+    G4VisExtent(-100 * m, 100 * m, -100 * m, 100 * m, -100 * m, 100 * m));
 
   visManager->Initialise();
 
@@ -64,4 +63,3 @@ int main(int argc,char** argv) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

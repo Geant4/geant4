@@ -28,20 +28,19 @@
 /// brief: G4ParallelWorldPhysics, but without application to molecular species
 
 #include "ParallelWorldPhysics.hh"
+
+#include "G4ParallelWorldProcess.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicsConstructorFactory.hh"
 #include "G4ProcessManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4ParallelWorldProcess.hh"
-#include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(ParallelWorldPhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ParallelWorldPhysics::ParallelWorldPhysics(const G4String& name,
-                                           G4bool layeredMass)
-  : G4VPhysicsConstructor(name)
-  , fLayeredMass(layeredMass)
+ParallelWorldPhysics::ParallelWorldPhysics(const G4String& name, G4bool layeredMass)
+  : G4VPhysicsConstructor(name), fLayeredMass(layeredMass)
 {
   // ctor
 }
@@ -58,8 +57,7 @@ void ParallelWorldPhysics::ConstructParticle()
 void ParallelWorldPhysics::ConstructProcess()
 {
   // Make sure the parallel world registered
-  G4TransportationManager::GetTransportationManager()->GetParallelWorld(
-    namePhysics);
+  G4TransportationManager::GetTransportationManager()->GetParallelWorld(namePhysics);
 
   // Add parallel world process//why do we need this
   auto theParallelWorldProcess = new G4ParallelWorldProcess(namePhysics);
@@ -69,20 +67,17 @@ void ParallelWorldPhysics::ConstructProcess()
   auto particleIterator = GetParticleIterator();
   particleIterator->reset();
 
-  while((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
-    if(!particle->IsShortLived() && particle->GetParticleType() != "Molecule"
-       && theParallelWorldProcess->IsApplicable(*particle))
+    if (!particle->IsShortLived() && particle->GetParticleType() != "Molecule"
+        && theParallelWorldProcess->IsApplicable(*particle))
     {
       G4ProcessManager* pmanager = particle->GetProcessManager();
       pmanager->AddProcess(theParallelWorldProcess);
-      if(theParallelWorldProcess->IsAtRestRequired(particle))
-      {
+      if (theParallelWorldProcess->IsAtRestRequired(particle)) {
         pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900);
       }
-      pmanager->SetProcessOrderingToSecond(theParallelWorldProcess,
-                                           idxAlongStep);
+      pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
       pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
     }
   }

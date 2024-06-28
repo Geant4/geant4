@@ -46,39 +46,36 @@ class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
+  public:
+    PhysicsList();
+    ~PhysicsList();
 
-  PhysicsList();
- ~PhysicsList();
+    virtual void ConstructParticle();
 
-  virtual void ConstructParticle();
-    
-  void AddPhysicsList(const G4String& name);
-  virtual void ConstructProcess();
-    
-  void AddStepMax();       
-  StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
+    void AddPhysicsList(const G4String& name);
+    virtual void ConstructProcess();
 
-private:
+    void AddStepMax();
+    StepMax* GetStepMaxProcess() { return fStepMaxProcess; };
 
-  void AddIonGasModels();
+  private:
+    void AddIonGasModels();
 
-  G4bool   fHelIsRegisted;
-  G4bool   fBicIsRegisted;
-  G4bool   fBiciIsRegisted;
-    
-  G4String                             fEmName;
-  G4VPhysicsConstructor*               fEmPhysicsList;
-  G4VPhysicsConstructor*               fDecPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  fHadronPhys;    
-  StepMax*                             fStepMaxProcess;
-    
-  PhysicsListMessenger*  fMessenger;
+    G4bool fHelIsRegisted;
+    G4bool fBicIsRegisted;
+    G4bool fBiciIsRegisted;
+
+    G4String fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fDecPhysicsList;
+    std::vector<G4VPhysicsConstructor*> fHadronPhys;
+    StepMax* fStepMaxProcess;
+
+    PhysicsListMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

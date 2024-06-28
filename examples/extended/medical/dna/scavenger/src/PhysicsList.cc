@@ -27,9 +27,11 @@
 /// \brief Implementation of the scavenger::PhysicsList class
 
 #include "PhysicsList.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "EmDNAChemistry.hh"
+
 #include "G4EmDNAPhysics_option2.hh"
+#include "G4SystemOfUnits.hh"
 
 // // Change the physicsList
 // #include "G4EmDNAPhysics.hh"
@@ -41,8 +43,8 @@
 // #include "G4EmDNAPhysics_option7.hh"
 // #include "G4EmDNAPhysics_option8.hh"
 
-#include "G4PhysicsConstructorRegistry.hh"
 #include "G4EmParameters.hh"
+#include "G4PhysicsConstructorRegistry.hh"
 
 namespace scavenger
 {
@@ -52,10 +54,10 @@ namespace scavenger
 PhysicsList::PhysicsList()
   : G4VModularPhysicsList(),
     fpEmDNAPhysicsList(new G4EmDNAPhysics_option2(verboseLevel)),
-    fpEmDNAChemistryList(new EmDNAChemistry()) {
+    fpEmDNAChemistryList(new EmDNAChemistry())
+{
   G4double currentDefaultCut = 1. * nanometer;
-  G4ProductionCutsTable::GetProductionCutsTable()->
-    SetEnergyRange(100 * eV, 1 * GeV);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV, 1 * GeV);
   SetDefaultCutValue(currentDefaultCut);
   SetVerboseLevel(1);
   fpEmDNAPhysicsList->SetVerboseLevel(verboseLevel);
@@ -63,7 +65,8 @@ PhysicsList::PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructParticle() {
+void PhysicsList::ConstructParticle()
+{
   if (fpEmDNAPhysicsList) {
     fpEmDNAPhysicsList->ConstructParticle();
   }
@@ -74,7 +77,8 @@ void PhysicsList::ConstructParticle() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructProcess() {
+void PhysicsList::ConstructProcess()
+{
   AddTransportation();
   if (fpEmDNAPhysicsList) {
     fpEmDNAPhysicsList->ConstructProcess();
@@ -86,4 +90,4 @@ void PhysicsList::ConstructProcess() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace scavenger

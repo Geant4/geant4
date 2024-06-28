@@ -190,13 +190,18 @@ G4DNAMakeReaction::FindReaction(G4ITReactionSet* pReactionSet,
     std::vector<std::unique_ptr<G4ITReactionChange>> ReactionInfo;
     ReactionInfo.clear();
     auto stepper = dynamic_cast<G4DNAIndependentReactionTimeStepper*>(fpTimeStepper);
-    if(stepper != nullptr){
-      auto pReactionChange = stepper->
-                             FindReaction(pReactionSet,currentStepTime);
-      if (pReactionChange != nullptr)
-      {
-        ReactionInfo.push_back(std::move(pReactionChange));
-      }
+    if(stepper == nullptr){
+        return ReactionInfo;
+    }else
+    {
+        do{
+            auto pReactionChange = stepper->
+                                   FindReaction(pReactionSet,currentStepTime);
+            if (pReactionChange != nullptr)
+            {
+              ReactionInfo.push_back(std::move(pReactionChange));
+            }
+        }while (!pReactionSet->GetReactionsPerTime().empty());
     }
     return ReactionInfo;
 }

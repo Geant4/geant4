@@ -37,18 +37,19 @@ namespace scavenger
 
 /// Instantiates and registers to Geant4 kernel all user action classes
 
-class ActionInitialization : public G4VUserActionInitialization {
-public:
-  ActionInitialization();
+class ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    ActionInitialization();
 
-  ~ActionInitialization() override = default;
+    ~ActionInitialization() override = default;
 
-  void BuildForMaster() const override;
+    void BuildForMaster() const override;
 
-  void Build() const override;
+    void Build() const override;
 };
 
-}
+}  // namespace scavenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

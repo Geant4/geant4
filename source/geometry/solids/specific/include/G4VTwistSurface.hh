@@ -64,7 +64,7 @@ class G4VTwistSurface
                           G4double          axis0max = kInfinity,
                           G4double          axis1max = kInfinity);
 
-   virtual ~G4VTwistSurface();
+   virtual ~G4VTwistSurface() = default;
 
    virtual G4int     AmIOnLeftSide(const G4ThreeVector& me, 
                                    const G4ThreeVector& vec, 
@@ -274,8 +274,8 @@ class G4VTwistSurface
    {
      public:
 
-      Boundary();
-      virtual ~Boundary();
+      Boundary() = default;
+      virtual ~Boundary() = default;
       
       void SetFields(const G4int&        areacode, 
                      const G4ThreeVector& d, 

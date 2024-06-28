@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-18 Hoang Tran (exdna-V11-02-00)
+- add project(dna-example) to avoid cmake warning
+
 ## 2023-11-07 I. Hrivnacova (exdna-V11-01-03)
 - add dnadamage2 example in dna/CMakeLists.txt
   and README files

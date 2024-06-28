@@ -26,23 +26,23 @@
 #ifndef G4MPIRUNMERGER_HH_
 #define G4MPIRUNMERGER_HH_
 
-#include "G4VUserMPIrunMerger.hh"
 #include "G4Run.hh"
+#include "G4VUserMPIrunMerger.hh"
 
-//MPI Merger for default G4Run class
+// MPI Merger for default G4Run class
 
-class G4MPIrunMerger : public G4VUserMPIrunMerger {
-public:
-  G4MPIrunMerger() : G4VUserMPIrunMerger() {}
-  G4MPIrunMerger(const G4Run* ar,
-                              G4int destination = G4MPImanager::kRANK_MASTER,
-                              G4int verboose = 0 ) :
-                                G4VUserMPIrunMerger(ar,destination,verboose) {}
-protected:
-  void Pack() {/*nothing do to*/}
-  G4Run* UnPack() { return new G4Run; }
+class G4MPIrunMerger : public G4VUserMPIrunMerger
+{
+  public:
+    G4MPIrunMerger() : G4VUserMPIrunMerger() {}
+    G4MPIrunMerger(const G4Run* ar, G4int destination = G4MPImanager::kRANK_MASTER,
+                   G4int verboose = 0)
+      : G4VUserMPIrunMerger(ar, destination, verboose)
+    {}
+
+  protected:
+    void Pack() { /*nothing do to*/ }
+    G4Run* UnPack() { return new G4Run; }
 };
-
-
 
 #endif /* G4MPIRUNMERGER_HH_ */

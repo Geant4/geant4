@@ -81,18 +81,21 @@ public:
   void Clean();
   //clean the store
       
-  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, 
-                                                 G4bool warning=false);
-  
+  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, G4bool warning=false);
+
   G4VComponentCrossSection* GetComponentCrossSection(const G4String& name);
-  
+
+  G4CrossSectionDataSetRegistry(G4CrossSectionDataSetRegistry&) = delete;
+  G4CrossSectionDataSetRegistry& operator=
+  (const G4CrossSectionDataSetRegistry &right) = delete;
+
 private:
 
   G4CrossSectionDataSetRegistry();
 
   static G4ThreadLocal G4CrossSectionDataSetRegistry* instance;
   
-  std::vector <G4VCrossSectionDataSet*>   xSections;
+  std::vector <G4VCrossSectionDataSet*> xSections;
   std::vector <G4VComponentCrossSection*> xComponents;
 };
 

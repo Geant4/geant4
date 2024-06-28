@@ -25,15 +25,17 @@
 //
 
 #ifdef USE_INFERENCE_ONNX
-#ifndef PAR04ONNXINFERENCE_HH
-#define PAR04ONNXINFERENCE_HH
-#include <core/session/onnxruntime_c_api.h>    // for OrtMemoryInfo
-#include <G4String.hh>                         // for G4String
-#include <G4Types.hh>                          // for G4int, G4double
-#include <memory>                              // for unique_ptr
-#include <vector>                              // for vector
-#include "Par04InferenceInterface.hh"          // for Par04InferenceInterface
-#include "core/session/onnxruntime_cxx_api.h"  // for Env, Session, SessionO...
+#  ifndef PAR04ONNXINFERENCE_HH
+#    define PAR04ONNXINFERENCE_HH
+#    include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
+#    include "core/session/onnxruntime_cxx_api.h"  // for Env, Session, SessionO...
+
+#    include <G4String.hh>  // for G4String
+#    include <G4Types.hh>  // for G4int, G4double
+#    include <memory>  // for unique_ptr
+#    include <vector>  // for vector
+
+#    include <core/session/onnxruntime_c_api.h>  // for OrtMemoryInfo
 
 /**
  * @brief Inference using the ONNX runtime.
@@ -46,36 +48,35 @@
 
 class Par04OnnxInference : public Par04InferenceInterface
 {
- public:
-  Par04OnnxInference(G4String, G4int, G4int, G4int,
-                  G4int, // For Execution Provider Runtime Flags (for now only CUDA)
-                  std::vector<const char *> &cuda_keys,
-                  std::vector<const char *> &cuda_values,     
-                  G4String, G4String);
+  public:
+    Par04OnnxInference(G4String, G4int, G4int, G4int,
+                       G4int,  // For Execution Provider Runtime Flags (for now only CUDA)
+                       std::vector<const char*>& cuda_keys, std::vector<const char*>& cuda_values,
+                       G4String, G4String);
 
-  Par04OnnxInference();
+    Par04OnnxInference();
 
-  /// Run inference
-  /// @param[in] aGenVector Input latent space and conditions
-  /// @param[out] aEnergies Model output = generated shower energies
-  /// @param[in] aSize Size of the output
-  void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
+    /// Run inference
+    /// @param[in] aGenVector Input latent space and conditions
+    /// @param[out] aEnergies Model output = generated shower energies
+    /// @param[in] aSize Size of the output
+    void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
 
- private:
-  /// Pointer to the ONNX enviroment
-  std::unique_ptr<Ort::Env> fEnv;
-  /// Pointer to the ONNX inference session
-  std::unique_ptr<Ort::Session> fSession;
-  /// ONNX settings
-  Ort::SessionOptions fSessionOptions;
-  /// ONNX memory info
-  const OrtMemoryInfo* fInfo;
-  struct MemoryInfo;
-  /// the input names represent the names given to the model
-  /// when defining  the model's architecture (if applicable)
-  /// they can also be retrieved from model.summary()
-  std::vector<const char*> fInames;
+  private:
+    /// Pointer to the ONNX enviroment
+    std::unique_ptr<Ort::Env> fEnv;
+    /// Pointer to the ONNX inference session
+    std::unique_ptr<Ort::Session> fSession;
+    /// ONNX settings
+    Ort::SessionOptions fSessionOptions;
+    /// ONNX memory info
+    const OrtMemoryInfo* fInfo;
+    struct MemoryInfo;
+    /// the input names represent the names given to the model
+    /// when defining  the model's architecture (if applicable)
+    /// they can also be retrieved from model.summary()
+    std::vector<const char*> fInames;
 };
 
-#endif /* PAR04ONNXINFERENCE_HH */
+#  endif /* PAR04ONNXINFERENCE_HH */
 #endif

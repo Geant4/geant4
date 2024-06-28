@@ -19,7 +19,7 @@
 // * technical work of the GEANT4 collaboration.                      *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your * 
+// * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
@@ -27,9 +27,9 @@
 /// \brief Definition of the scavenger::StackingAction class
 
 #ifndef SCAVENGER_StackingAction_h
-#define SCAVENGER_StackingAction_h 1
+#  define SCAVENGER_StackingAction_h 1
 
-#include "G4UserStackingAction.hh"
+#  include "G4UserStackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
@@ -38,17 +38,17 @@ namespace scavenger
 /// Verifies whether physical tracks remain to be processed and
 /// triggers the chemical module
 
-class StackingAction : public G4UserStackingAction {
-public:
-  StackingAction();
+class StackingAction : public G4UserStackingAction
+{
+  public:
+    StackingAction();
 
-  ~StackingAction() override = default;
+    ~StackingAction() override = default;
 
-  void NewStage() override;
+    void NewStage() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
 }

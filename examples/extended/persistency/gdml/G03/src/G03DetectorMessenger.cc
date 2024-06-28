@@ -32,36 +32,37 @@
 //
 // ----------------------------------------------------------------------------
 
-#include "globals.hh"
-
 #include "G03DetectorMessenger.hh"
+
 #include "G03DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G03DetectorMessenger::G03DetectorMessenger( G03DetectorConstruction* myDet )
+G03DetectorMessenger::G03DetectorMessenger(G03DetectorConstruction* myDet)
   : G4UImessenger(),
-    fTheDetector( myDet ),
+    fTheDetector(myDet),
     fTheDetectorDir(0),
     fTheReadCommand(0),
     fTheWriteCommand(0)
-{ 
-  fTheDetectorDir = new G4UIdirectory( "/mydet/" );
+{
+  fTheDetectorDir = new G4UIdirectory("/mydet/");
   fTheDetectorDir->SetGuidance("Detector control.");
 
   fTheReadCommand = new G4UIcmdWithAString("/mydet/readFile", this);
-  fTheReadCommand ->SetGuidance("READ GDML file with given name");
-  fTheReadCommand ->SetParameterName("FileRead", false);
-  fTheReadCommand ->SetDefaultValue("color_extension.gdml");
-  fTheReadCommand ->AvailableForStates(G4State_PreInit);
+  fTheReadCommand->SetGuidance("READ GDML file with given name");
+  fTheReadCommand->SetParameterName("FileRead", false);
+  fTheReadCommand->SetDefaultValue("color_extension.gdml");
+  fTheReadCommand->AvailableForStates(G4State_PreInit);
 
   fTheWriteCommand = new G4UIcmdWithAString("/mydet/writeFile", this);
-  fTheWriteCommand ->SetGuidance("WRITE GDML file with given name");
-  fTheWriteCommand ->SetParameterName("FileWrite", false);
-  fTheWriteCommand ->SetDefaultValue("color_extension_test.gdml");
-  fTheWriteCommand ->AvailableForStates(G4State_PreInit);
+  fTheWriteCommand->SetGuidance("WRITE GDML file with given name");
+  fTheWriteCommand->SetParameterName("FileWrite", false);
+  fTheWriteCommand->SetDefaultValue("color_extension_test.gdml");
+  fTheWriteCommand->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,13 +77,11 @@ G03DetectorMessenger::~G03DetectorMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G03DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if ( command == fTheReadCommand )
-  { 
+{
+  if (command == fTheReadCommand) {
     fTheDetector->SetReadFile(newValue);
   }
-  if ( command == fTheWriteCommand )
-  { 
+  if (command == fTheWriteCommand) {
     fTheDetector->SetWriteFile(newValue);
   }
 }

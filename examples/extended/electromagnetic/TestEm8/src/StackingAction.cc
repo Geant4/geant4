@@ -35,24 +35,28 @@
 #include "Run.hh"
 #include "StackingMessenger.hh"
 
-#include "G4Track.hh"
-#include "G4Step.hh"
 #include "G4RunManager.hh"
+#include "G4Step.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction() {
+StackingAction::StackingAction()
+{
   fStackMessenger = new StackingMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::~StackingAction() { delete fStackMessenger; }
+StackingAction::~StackingAction()
+{
+  delete fStackMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track *aTrack) {
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+{
   // stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
 
@@ -61,12 +65,12 @@ StackingAction::ClassifyNewTrack(const G4Track *aTrack) {
     return status;
   }
 
-  Run *run = static_cast<Run *>(
-      G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   // charged tracks are killed only inside sensitive volumes
-  if (aTrack->GetVolume()->GetLogicalVolume()->GetSensitiveDetector() &&
-      aTrack->GetDefinition()->GetPDGCharge() != 0.0) {
+  if (aTrack->GetVolume()->GetLogicalVolume()->GetSensitiveDetector()
+      && aTrack->GetDefinition()->GetPDGCharge() != 0.0)
+  {
     run->AddEnergy(aTrack->GetKineticEnergy(), 0);
     status = fKill;
   }

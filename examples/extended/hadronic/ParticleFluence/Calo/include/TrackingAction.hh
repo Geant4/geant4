@@ -26,63 +26,65 @@
 /// \file TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef TrackingAction_h 
+#ifndef TrackingAction_h
 #define TrackingAction_h 1
 
-#include "globals.hh"
 #include "G4UserTrackingAction.hh"
+#include "globals.hh"
+
 #include <array>
 
 class Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-  // We are using this class to monitor the average multiplicity, the average
-  // kinetic energy, and the average total energy flow (i.e. sum of the
-  // kinetic energies) of different particle types as they are produced
-  // inside the calorimeter.
-  // The aim is then to try to correlate some changes in these (more primitive)
-  // quantities with the observed changes in the (more indirect and complex)
-  // particle fluences.
+class TrackingAction : public G4UserTrackingAction
+{
+    // We are using this class to monitor the average multiplicity, the average
+    // kinetic energy, and the average total energy flow (i.e. sum of the
+    // kinetic energies) of different particle types as they are produced
+    // inside the calorimeter.
+    // The aim is then to try to correlate some changes in these (more primitive)
+    // quantities with the observed changes in the (more indirect and complex)
+    // particle fluences.
   public:
     TrackingAction();
     ~TrackingAction() override = default;
-    void PreUserTrackingAction( const G4Track* ) override;
-    void PostUserTrackingAction( const G4Track* ) override;
+    void PreUserTrackingAction(const G4Track*) override;
+    void PostUserTrackingAction(const G4Track*) override;
 
     void Initialize();
     // This method is called by RunAction::BeginOfRunAction for the
     // initialization of the tracking-action at the beginning of each Run.
 
-    void SetRunPointer( Run* inputValue = nullptr ) { fRunPtr = inputValue; }
+    void SetRunPointer(Run* inputValue = nullptr) { fRunPtr = inputValue; }
     // This method is called by RunAction::BeginOfRunAction for providing to the
     // tracking-action the pointer to the run object at the beginning of each Run.
     // This pointer is then used to pass the information collected by the tracking-action
     // to the run object.
-  
-    static const G4int fkNumberScoringVolumes = 1;    // calorimeter
+
+    static const G4int fkNumberScoringVolumes = 1;  // calorimeter
     static const G4int fkNumberKinematicRegions = 3;  // all, below 20 MeV, above 20 MeV
-    static const G4int fkNumberParticleTypes = 11;    // all, e, gamma, mu, nu, pi, n, p, ions,
+    static const G4int fkNumberParticleTypes = 11;  // all, e, gamma, mu, nu, pi, n, p, ions,
                                                     // other-mesons, other-baryons
     static const G4int fkNumberCombinations =
-      fkNumberScoringVolumes*fkNumberKinematicRegions*fkNumberParticleTypes;
-    static const std::array< G4String, fkNumberScoringVolumes > fkArrayScoringVolumeNames;
-    static const std::array< G4String, fkNumberKinematicRegions > fkArrayKinematicRegionNames;
-    static const std::array< G4String, fkNumberParticleTypes > fkArrayParticleTypeNames;
-    static G4int GetIndex( const G4int iScoringVolume, const G4int iKinematicRegion,
-                           const G4int iParticleType );
+      fkNumberScoringVolumes * fkNumberKinematicRegions * fkNumberParticleTypes;
+    static const std::array<G4String, fkNumberScoringVolumes> fkArrayScoringVolumeNames;
+    static const std::array<G4String, fkNumberKinematicRegions> fkArrayKinematicRegionNames;
+    static const std::array<G4String, fkNumberParticleTypes> fkArrayParticleTypeNames;
+    static G4int GetIndex(const G4int iScoringVolume, const G4int iKinematicRegion,
+                          const G4int iParticleType);
 
   private:
     Run* fRunPtr;  // Pointer to the Run object
-  
-    std::array< G4long,   fkNumberCombinations > fArrayMultiplicities;
-    std::array< G4double, fkNumberCombinations > fArraySumKineticEnergies;
+
+    std::array<G4long, fkNumberCombinations> fArrayMultiplicities;
+    std::array<G4double, fkNumberCombinations> fArraySumKineticEnergies;
     // Keep record of the fkNumber of particles and their kinetic energy at production,
     // according to the particle type and their kinetic energy range (below/above 20 MeV).
 };

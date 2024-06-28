@@ -30,8 +30,8 @@
 #ifndef ELECTRONBENCHMARKDETECTORMESSENGER_HH
 #define ELECTRONBENCHMARKDETECTORMESSENGER_HH 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class ElectronBenchmarkDetector;
 class G4UIdirectory;
@@ -40,20 +40,20 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ElectronBenchmarkDetectorMessenger: public G4UImessenger {
+class ElectronBenchmarkDetectorMessenger : public G4UImessenger
+{
+  public:
+    ElectronBenchmarkDetectorMessenger(ElectronBenchmarkDetector* det);
 
-public:
-  ElectronBenchmarkDetectorMessenger(ElectronBenchmarkDetector* det);
-  
-  virtual ~ElectronBenchmarkDetectorMessenger();
-  
-  virtual void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  ElectronBenchmarkDetector* fDetector;   
-  G4UIdirectory* fListDir;
-  G4UIcmdWithAString* fPrimFoilMatCmd;
-  G4UIcmdWithADoubleAndUnit* fPrimFoilThickCmd;
+    virtual ~ElectronBenchmarkDetectorMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    ElectronBenchmarkDetector* fDetector;
+    G4UIdirectory* fListDir;
+    G4UIcmdWithAString* fPrimFoilMatCmd;
+    G4UIcmdWithADoubleAndUnit* fPrimFoilThickCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

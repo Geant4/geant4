@@ -24,30 +24,37 @@
 // ********************************************************************
 //
 
-#include "G4Types.hh"
-
 #include "UserActionInitialization.hh"
 
-#include "PrimaryGeneratorAction.hh"
-#include "StackingAction.hh"
 #include "EventAction.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
+#include "StackingAction.hh"
+
+#include "G4Types.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UserActionInitialization::UserActionInitialization(){;}
+UserActionInitialization::UserActionInitialization()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UserActionInitialization::~UserActionInitialization(){;}
+UserActionInitialization::~UserActionInitialization()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UserActionInitialization::Build() const {
-    SetUserAction(new PrimaryGeneratorAction());
-    SetUserAction(new StackingAction());
-    SetUserAction(new EventAction());
-    SetUserAction(new RunAction());
+void UserActionInitialization::Build() const
+{
+  SetUserAction(new PrimaryGeneratorAction());
+  SetUserAction(new StackingAction());
+  SetUserAction(new EventAction());
+  SetUserAction(new RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

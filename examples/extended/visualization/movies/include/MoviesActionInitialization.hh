@@ -34,12 +34,10 @@
 
 class MoviesDetectorConstruction;
 
-class MoviesActionInitialization: public G4VUserActionInitialization
+class MoviesActionInitialization : public G4VUserActionInitialization
 {
-public:
-  virtual void Build() const;
+  public:
+    virtual void Build() const;
 };
 
 #endif
-
-    

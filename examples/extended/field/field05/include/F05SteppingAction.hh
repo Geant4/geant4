@@ -34,19 +34,18 @@
 #ifndef F05SteppingAction_h
 #define F05SteppingAction_h 1
 
-#include "globals.hh"
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F05SteppingAction : public G4UserSteppingAction
 {
-public:
+  public:
+    F05SteppingAction() = default;
+    ~F05SteppingAction() override = default;
 
-  F05SteppingAction() = default;
-  ~F05SteppingAction() override = default;
-
-  void UserSteppingAction(const G4Step*) override;
+    void UserSteppingAction(const G4Step*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

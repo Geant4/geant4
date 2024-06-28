@@ -44,8 +44,8 @@
 
 #include "TimeStepAction.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
 {
@@ -67,51 +67,38 @@ TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-TimeStepAction::~TimeStepAction()
-{
-}
+TimeStepAction::~TimeStepAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-TimeStepAction::TimeStepAction(const TimeStepAction& other) :
-        G4UserTimeStepAction(other)
-{
-}
+TimeStepAction::TimeStepAction(const TimeStepAction& other) : G4UserTimeStepAction(other) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-TimeStepAction&
-TimeStepAction::operator=(const TimeStepAction& rhs)
+TimeStepAction& TimeStepAction::operator=(const TimeStepAction& rhs)
 {
-  if (this == &rhs) return *this; // handle self assignment
-  //assignment operator
+  if (this == &rhs) return *this;  // handle self assignment
+  // assignment operator
   return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-void TimeStepAction::UserPreTimeStepAction()
-{
-}
+void TimeStepAction::UserPreTimeStepAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void TimeStepAction::UserPostTimeStepAction()
-{
-}
+void TimeStepAction::UserPostTimeStepAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void TimeStepAction::Clear()
-{
-}
+void TimeStepAction::Clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void TimeStepAction::UserReactionAction(const G4Track& /*trackA*/,
-    const G4Track& /*trackB*/,
-    const std::vector<G4Track*>* /*products*/)
+void TimeStepAction::UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                                        const std::vector<G4Track*>* /*products*/)
 {
-//  G4cout<<trackA.GetTrackID()<<" + "<<trackB.GetTrackID()<<'\n';
+  //  G4cout<<trackA.GetTrackID()<<" + "<<trackB.GetTrackID()<<'\n';
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

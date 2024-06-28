@@ -39,19 +39,19 @@
 //
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "G4ParticleGun.hh"
 #include "G4Proton.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
-  fParticleGun  = new G4ParticleGun(1);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleEnergy(1.*GeV);
+  fParticleGun = new G4ParticleGun(1);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
+  fParticleGun->SetParticleEnergy(1. * GeV);
   fParticleGun->SetParticleDefinition(G4Proton::Proton());
 }
 

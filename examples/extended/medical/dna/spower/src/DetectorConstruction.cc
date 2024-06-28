@@ -23,47 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+
 #include "DetectorMessenger.hh"
 
-#include "G4NistManager.hh"
-#include "G4Sphere.hh"
-#include "G4PVPlacement.hh"
-#include "G4PVReplica.hh"
 #include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-#include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4RunManager.hh"
+#include "G4SolidStore.hh"
+#include "G4Sphere.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
- : G4VUserDetectorConstruction(),
-   fAbsorMaterial(0),
-   fAbsor(0),
-   fDetectorMessenger(0)
+  : G4VUserDetectorConstruction(), fAbsorMaterial(0), fAbsor(0), fDetectorMessenger(0)
 {
-  // default parameter values
-  fAbsorRadius = 1*m;
-  
+  // Default parameter values
+  fAbsorRadius = 1 * m;
+
   DefineMaterials();
   SetMaterial("G4_WATER");
 
-  // create commands for interactive definition of the detector  
+  // Create commands for interactive definition of the detector
   fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete fDetectorMessenger;}
+{
+  delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,40 +84,39 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::DefineMaterials()
-{ 
+{
   G4NistManager* man = G4NistManager::Instance();
-  
+
   man->FindOrBuildMaterial("G4_WATER");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
   G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-                   
-  // spherical absorber
-  G4Sphere* 
-  sAbsor = new G4Sphere("Absorber",                           //name
-                     0., fAbsorRadius, 0., twopi, 0., pi);    //size
 
-  fLogicalAbsor = new G4LogicalVolume(sAbsor,                        //solid
-                                     fAbsorMaterial,          //material
-                                    "Absorber");              //name
-                                   
-  fAbsor = new G4PVPlacement(0,                         //no rotation
-                             G4ThreeVector(),           //at (0,0,0)
-                             fLogicalAbsor,                    //logical volume
-                            "Absorber",                 //name
-                             0,                         //mother  volume
-                             false,                     //no boolean operation
-                             0);                        //copy number
+  // Spherical absorber
+  G4Sphere* sAbsor = new G4Sphere("Absorber",  // name
+                                  0., fAbsorRadius, 0., twopi, 0., pi);  // size
+
+  fLogicalAbsor = new G4LogicalVolume(sAbsor,  // solid
+                                      fAbsorMaterial,  // material
+                                      "Absorber");  // name
+
+  fAbsor = new G4PVPlacement(0,  // no rotation
+                             G4ThreeVector(),  // at (0,0,0)
+                             fLogicalAbsor,  // logical volume
+                             "Absorber",  // name
+                             0,  // mother volume
+                             false,  // no boolean operation
+                             0);  // copy number
 
   PrintParameters();
-    
+
   return fAbsor;
 }
 
@@ -117,10 +125,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 void DetectorConstruction::PrintParameters() const
 {
   G4cout << "\n---------------------------------------------------------\n";
-  G4cout << "---> The Absorber is a sphere of " 
-         << G4BestUnit(fAbsorRadius,"Length") << " radius of "
-         << fAbsorMaterial->GetName() << " made of"
-         << "\n \n" << fAbsorMaterial << G4endl;
+  G4cout << "---> The Absorber is a sphere of " << G4BestUnit(fAbsorRadius, "Length")
+         << " radius of " << fAbsorMaterial->GetName() << " made of"
+         << "\n \n"
+         << fAbsorMaterial << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 
@@ -129,16 +137,16 @@ void DetectorConstruction::PrintParameters() const
 void DetectorConstruction::SetRadius(G4double value)
 {
   fAbsorRadius = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();  
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // search the material by its name
+  // Search the material by its name
   G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) fAbsorMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }

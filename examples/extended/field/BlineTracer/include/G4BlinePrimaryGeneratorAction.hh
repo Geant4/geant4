@@ -48,27 +48,27 @@
 #ifndef G4BlinePrimaryGeneratorAction_h
 #define G4BlinePrimaryGeneratorAction_h 1
 
-#include <vector>
-
-#include "G4Types.hh"
 #include "G4ThreeVector.hh"
+#include "G4Types.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+
+#include <vector>
 
 class G4Event;
 
 class G4BlinePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:  // with description
-
     G4BlinePrimaryGeneratorAction() = default;
     ~G4BlinePrimaryGeneratorAction() override = default;
 
-     void GeneratePrimaries(G4Event* anEvent) override;
+    void GeneratePrimaries(G4Event* anEvent) override;
     inline void SetUserPrimaryAction(G4VUserPrimaryGeneratorAction* anAction)
-      { fUserPrimaryAction=anAction; }
+    {
+      fUserPrimaryAction = anAction;
+    }
 
   private:
-
     G4VUserPrimaryGeneratorAction* fUserPrimaryAction = nullptr;
     G4bool fFirstPartOfBline = true;
     G4ThreeVector fBlineStartPosition;

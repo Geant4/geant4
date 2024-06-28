@@ -27,7 +27,9 @@
 /// \brief Implementation of the scavenger::ParserChemReaction class
 
 #include "ParserChemReaction.hh"
+
 #include "G4SystemOfUnits.hh"
+
 #include <fstream>
 
 namespace scavenger
@@ -35,12 +37,11 @@ namespace scavenger
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ParserChemReaction::ReplaceString(G4String &aString, const G4String &from,
-                                       const G4String &to) {
+void ParserChemReaction::ReplaceString(G4String& aString, const G4String& from, const G4String& to)
+{
   if (G4StrUtil::contains(aString, from)) {
     size_t startPosition = 0;
-    while ((startPosition = aString.find(from, startPosition))
-           != std::string::npos) {
+    while ((startPosition = aString.find(from, startPosition)) != std::string::npos) {
       aString.replace(startPosition, from.length(), to);
       startPosition += to.length();
     }
@@ -49,32 +50,35 @@ void ParserChemReaction::ReplaceString(G4String &aString, const G4String &from,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ParserChemReaction::ImplementReaction(const G4String &reactant1,
-                                           const G4String &reactant2,
-                                           const std::vector<G4String> &product,
-                                           const G4double &reactionRate,
-                                           const G4String &type) {
+void ParserChemReaction::ImplementReaction(const G4String& reactant1, const G4String& reactant2,
+                                           const std::vector<G4String>& product,
+                                           const G4double& reactionRate, const G4String& type)
+{
   if (type == "I") {
     fListReactant1[0].push_back(reactant1);
     fListReactant2[0].push_back(reactant2);
     fListProduct[0].push_back(product);
     fListRate[0].push_back(reactionRate);
-  } else if (type == "II") {
+  }
+  else if (type == "II") {
     fListReactant1[1].push_back(reactant1);
     fListReactant2[1].push_back(reactant2);
     fListProduct[1].push_back(product);
     fListRate[1].push_back(reactionRate);
-  } else if (type == "III") {
+  }
+  else if (type == "III") {
     fListReactant1[2].push_back(reactant1);
     fListReactant2[2].push_back(reactant2);
     fListProduct[2].push_back(product);
     fListRate[2].push_back(reactionRate);
-  } else if (type == "IV") {
+  }
+  else if (type == "IV") {
     fListReactant1[3].push_back(reactant1);
     fListReactant2[3].push_back(reactant2);
     fListProduct[3].push_back(product);
     fListRate[3].push_back(reactionRate);
-  } else if (type == "VI") {
+  }
+  else if (type == "VI") {
     fListReactant1[4].push_back(reactant1);
     fListReactant2[4].push_back(reactant2);
     fListProduct[4].push_back(product);
@@ -84,10 +88,10 @@ void ParserChemReaction::ImplementReaction(const G4String &reactant1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ParserChemReaction::ReadReaction(const G4String &reactionString,
-                                      std::vector<G4String> &reactant,
-                                      std::vector<G4String> &product,
-                                      G4double &reactionRate) {
+void ParserChemReaction::ReadReaction(const G4String& reactionString,
+                                      std::vector<G4String>& reactant,
+                                      std::vector<G4String>& product, G4double& reactionRate)
+{
   reactant.clear();
   product.clear();
 
@@ -103,13 +107,15 @@ void ParserChemReaction::ReadReaction(const G4String &reactionString,
     G4String aString;
     aStream >> aString;
 
-    if (G4StrUtil::contains(aString,"#")) {
+    if (G4StrUtil::contains(aString, "#")) {
       readReaction = false;
-    } else if (readReactant) {
+    }
+    else if (readReactant) {
       if (aString == G4String("->")) {
         readReactant = false;
         readProduct = true;
-      } else if (aString != G4String("+")) {
+      }
+      else if (aString != G4String("+")) {
         ReplaceString(aString, G4String("+"), G4String("p"));
         ReplaceString(aString, G4String("-"), G4String("m"));
 
@@ -117,17 +123,21 @@ void ParserChemReaction::ReadReaction(const G4String &reactionString,
           reactant.push_back(aString);
         }
       }
-    } else if (readProduct) {
+    }
+    else if (readProduct) {
       if (aString == G4String(",")) {
         readProduct = false;
         readRate = true;
-      } else if (aString != G4String("+") && !G4StrUtil::contains(aString,"[")
-                 && !G4StrUtil::contains(aString,"]")) {
+      }
+      else if (aString != G4String("+") && !G4StrUtil::contains(aString, "[")
+               && !G4StrUtil::contains(aString, "]"))
+      {
         ReplaceString(aString, G4String("+"), G4String("p"));
         ReplaceString(aString, G4String("-"), G4String("m"));
         product.push_back(aString);
       }
-    } else if (readRate) {
+    }
+    else if (readRate) {
       std::stringstream aStreamTmp;
       aStreamTmp << aString;
       aStreamTmp >> reactionRate;
@@ -135,7 +145,8 @@ void ParserChemReaction::ReadReaction(const G4String &reactionString,
       if (reactant.size() == 1) {
         // For first-order reactions
         reactionRate *= (1 * 1 / s);
-      } else {
+      }
+      else {
         reactionRate *= (1e-3 * m3 / (mole * s));
       }
 
@@ -152,7 +163,8 @@ void ParserChemReaction::ReadReaction(const G4String &reactionString,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double ParserChemReaction::GetScavengerConcentration(const G4String &name) {
+G4double ParserChemReaction::GetScavengerConcentration(const G4String& name)
+{
   G4double concentration = -1.;
 
   std::map<G4String, G4double>::iterator it;
@@ -160,12 +172,13 @@ G4double ParserChemReaction::GetScavengerConcentration(const G4String &name) {
 
   if (it != fReservoirConcentrationMap.end()) {
     concentration = it->second;
-  } else {
+  }
+  else {
     G4ExceptionDescription exception;
     exception << "Scavenger is not defined: "
               << "reaction will not be registered!";
-    G4Exception("ParserChemReaction::GetScavengerConcentration", "parchem01",
-                JustWarning, exception);
+    G4Exception("ParserChemReaction::GetScavengerConcentration", "parchem01", JustWarning,
+                exception);
   }
 
   return concentration;
@@ -173,7 +186,8 @@ G4double ParserChemReaction::GetScavengerConcentration(const G4String &name) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ParserChemReaction::ReadReservoir(const G4String &reservoirString) {
+void ParserChemReaction::ReadReservoir(const G4String& reservoirString)
+{
   G4double concentration = 0.;
   G4String name = "";
 
@@ -188,18 +202,21 @@ void ParserChemReaction::ReadReservoir(const G4String &reservoirString) {
     G4String aString;
     aStream >> aString;
 
-    if (G4StrUtil::contains(aString,"#")) {
+    if (G4StrUtil::contains(aString, "#")) {
       readScavenger = false;
-    } else if (aString == G4String("scavenger:")) {
+    }
+    else if (aString == G4String("scavenger:")) {
       readName = true;
-    } else if (readName) {
+    }
+    else if (readName) {
       name = G4String(aString);
       ReplaceString(name, G4String("+"), G4String("p"));
       ReplaceString(name, G4String("-"), G4String("m"));
 
       readName = false;
       readConcentration = true;
-    } else if (readConcentration) {
+    }
+    else if (readConcentration) {
       std::stringstream aStreamTmp;
       aStreamTmp << aString;
       aStreamTmp >> concentration;
@@ -212,26 +229,26 @@ void ParserChemReaction::ReadReservoir(const G4String &reservoirString) {
   if (concentration > 0.) {
     if (fReservoirConcentrationMap.count(name) < 1) {
       fReservoirConcentrationMap[name] = concentration;
-    } else {
+    }
+    else {
       G4ExceptionDescription exception;
       exception << "Scavenger already defined previously:\n"
                 << "scavenger will not be registered!";
-      G4Exception("ParserChemReaction::ReadReservoir", "parchem02",
-                  JustWarning, exception);
+      G4Exception("ParserChemReaction::ReadReservoir", "parchem02", JustWarning, exception);
     }
-  } else {
+  }
+  else {
     G4ExceptionDescription exception;
     exception << "Null or negative scavenger concentration:\n"
               << "scavenger will not be registered!";
-    G4Exception("ParserChemReaction::ReadReservoir", "parchem03",
-                JustWarning, exception);
+    G4Exception("ParserChemReaction::ReadReservoir", "parchem03", JustWarning, exception);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ParserChemReaction::AddReaction(const G4String &reactionString,
-                                     const G4String &type) {
+void ParserChemReaction::AddReaction(const G4String& reactionString, const G4String& type)
+{
   std::vector<G4String> reactant;
   std::vector<G4String> product;
   G4double reactionRate = -1;
@@ -248,15 +265,14 @@ void ParserChemReaction::AddReaction(const G4String &reactionString,
     G4ExceptionDescription exception;
     exception << "Null or negative reaction rate: "
               << "reaction will not be registered!";
-    G4Exception("ParserChemReaction::AddReaction", "parchem04",
-                JustWarning, exception);
+    G4Exception("ParserChemReaction::AddReaction", "parchem04", JustWarning, exception);
     return;
   }
 
   G4double concentration;
 
   if (reservoir && (reactant.size() >= 2)) {
-    if (G4StrUtil::contains(reactant[0],"[") && G4StrUtil::contains(reactant[0],"]")) {
+    if (G4StrUtil::contains(reactant[0], "[") && G4StrUtil::contains(reactant[0], "]")) {
       ReplaceString(reactant[0], G4String("["), G4String(""));
       ReplaceString(reactant[0], G4String("]"), G4String(""));
 
@@ -265,10 +281,10 @@ void ParserChemReaction::AddReaction(const G4String &reactionString,
       if (concentration != -1) {
         reactionRate *= concentration;
         reactant[0].append("(B)");
-        ImplementReaction(reactant[1], reactant[0], product,
-                          reactionRate, type);
+        ImplementReaction(reactant[1], reactant[0], product, reactionRate, type);
       }
-    } else if (G4StrUtil::contains(reactant[1],"[") && G4StrUtil::contains(reactant[1],"]")) {
+    }
+    else if (G4StrUtil::contains(reactant[1], "[") && G4StrUtil::contains(reactant[1], "]")) {
       ReplaceString(reactant[1], G4String("["), G4String(""));
       ReplaceString(reactant[1], G4String("]"), G4String(""));
 
@@ -277,82 +293,90 @@ void ParserChemReaction::AddReaction(const G4String &reactionString,
       if (concentration != -1) {
         reactionRate *= concentration;
         reactant[1].append("(B)");
-        ImplementReaction(reactant[0], reactant[1], product,
-                          reactionRate, type);
+        ImplementReaction(reactant[0], reactant[1], product, reactionRate, type);
       }
-    } else if (reactant[1] == "NoneM") {
+    }
+    else if (reactant[1] == "NoneM") {
       // First-order reaction
       ImplementReaction(reactant[0], reactant[1], product, reactionRate, type);
-    } else {
+    }
+    else {
       G4ExceptionDescription exception;
       exception << "Missing or unsuitable square brackets:\n"
                 << "reaction will not be registered.\n"
                 << "Verify the writing of chemical reactions!";
-      G4Exception("ParserChemReaction::AddReaction", "parchem05",
-                  JustWarning, exception);
+      G4Exception("ParserChemReaction::AddReaction", "parchem05", JustWarning, exception);
     }
-  } else if (reactant.size() >= 2) {
-    if (!G4StrUtil::contains(reactant[0],"[") && !G4StrUtil::contains(reactant[0],"]")
-        && !G4StrUtil::contains(reactant[1],"[") && !G4StrUtil::contains(reactant[1],"]")
-        && (reactant[1] != "NoneM")) {
+  }
+  else if (reactant.size() >= 2) {
+    if (!G4StrUtil::contains(reactant[0], "[") && !G4StrUtil::contains(reactant[0], "]")
+        && !G4StrUtil::contains(reactant[1], "[") && !G4StrUtil::contains(reactant[1], "]")
+        && (reactant[1] != "NoneM"))
+    {
       ImplementReaction(reactant[0], reactant[1], product, reactionRate, type);
-    } else if (reactant[1] == "NoneM") {
+    }
+    else if (reactant[1] == "NoneM") {
       G4ExceptionDescription exception;
       exception << "Unsuitable reaction type: "
                 << "reaction will not be registered.\n"
                 << "For first-order reaction, use reaction type 6.";
-      G4Exception("ParserChemReaction::AddReaction", "parchem06",
-                  JustWarning, exception);
-    } else {
+      G4Exception("ParserChemReaction::AddReaction", "parchem06", JustWarning, exception);
+    }
+    else {
       G4ExceptionDescription exception;
       exception << "Unsuitable square brackets: "
                 << "reaction will not be registered.\n"
                 << "Verify the writing of chemical reactions!";
-      G4Exception("ParserChemReaction::AddReaction", "parchem07",
-                  JustWarning, exception);
+      G4Exception("ParserChemReaction::AddReaction", "parchem07", JustWarning, exception);
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ParserChemReaction::ReadReactionFile(const G4String &fileName) {
+void ParserChemReaction::ReadReactionFile(const G4String& fileName)
+{
   G4String line;
   std::ifstream myFile(fileName);
 
   if (myFile.is_open()) {
     while (getline(myFile, line)) {
-      if (G4StrUtil::contains(line,"type_1")) {
+      if (G4StrUtil::contains(line, "type_1")) {
         AddReaction(line, "I");
-      } else if (G4StrUtil::contains(line,"type_2")) {
+      }
+      else if (G4StrUtil::contains(line, "type_2")) {
         AddReaction(line, "II");
-      } else if (G4StrUtil::contains(line,"type_3")) {
+      }
+      else if (G4StrUtil::contains(line, "type_3")) {
         AddReaction(line, "III");
-      } else if (G4StrUtil::contains(line,"type_4")) {
+      }
+      else if (G4StrUtil::contains(line, "type_4")) {
         AddReaction(line, "IV");
-      } else if (G4StrUtil::contains(line,"type_6")) {
+      }
+      else if (G4StrUtil::contains(line, "type_6")) {
         AddReaction(line, "VI");
-      } else if (G4StrUtil::contains(line,"scavenger:")) {
+      }
+      else if (G4StrUtil::contains(line, "scavenger:")) {
         ReadReservoir(line);
-      } else if (!G4StrUtil::contains(line,"#") && !line.empty()) {
+      }
+      else if (!G4StrUtil::contains(line, "#") && !line.empty()) {
         G4ExceptionDescription exception;
         exception << "Unknown declaration: "
                   << "reaction or scavenger will not be registered.\n"
                   << "Verify the writing of chemical reactions or scavengers!";
-        G4Exception("ParserChemReaction::ReadReactionFile", "parchem08",
-                    JustWarning, exception);
+        G4Exception("ParserChemReaction::ReadReactionFile", "parchem08", JustWarning, exception);
       }
     }
 
     myFile.close();
-  } else {
+  }
+  else {
     G4ExceptionDescription exception;
     exception << "Chemical reaction file not found.";
-    G4Exception("ParserChemReaction::ReadReactionFile", "parchem09",
-                JustWarning, exception);
+    G4Exception("ParserChemReaction::ReadReactionFile", "parchem09", JustWarning, exception);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace scavenger

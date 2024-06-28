@@ -24,16 +24,14 @@
 // ********************************************************************
 #ifdef G4_USE_FLUKA
 
-
-#include "FLUKANuclearInelasticModel.hh"
+#  include "FLUKANuclearInelasticModel.hh"
 
 // G4
-#include "G4HadFinalState.hh"
-#include "G4HadProjectile.hh"
-#include "G4Nucleus.hh"
+#  include "fluka_interface.hh"
 
-#include "fluka_interface.hh"
-
+#  include "G4HadFinalState.hh"
+#  include "G4HadProjectile.hh"
+#  include "G4Nucleus.hh"
 
 // ***************************************************************************
 // FLUKA hadron inelastic physics final state.
@@ -43,24 +41,20 @@ FLUKANuclearInelasticModel::FLUKANuclearInelasticModel()
     finalState_(std::make_unique<G4HadFinalState>())
 {}
 
-
 // ***************************************************************************
 // FLUKA hadron inelastic physics: returns final state from FLUKA.
 // ***************************************************************************
-G4HadFinalState* FLUKANuclearInelasticModel::ApplyYourself(const G4HadProjectile& projectile, 
-							   G4Nucleus& targetNucleus) {
-
+G4HadFinalState* FLUKANuclearInelasticModel::ApplyYourself(const G4HadProjectile& projectile,
+                                                           G4Nucleus& targetNucleus)
+{
   // Clean-up final state.
   finalState_->Clear();
   finalState_->SetStatusChange(stopAndKill);
-	
+
   // GET FINAL STATE FROM FLUKA INTERFACE
-  fluka_interface::setNuclearInelasticFinalState(finalState_.get(),
-                                                 projectile,
-                                                 targetNucleus);
+  fluka_interface::setNuclearInelasticFinalState(finalState_.get(), projectile, targetNucleus);
 
   return finalState_.get();
 }
 
-
-#endif //G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

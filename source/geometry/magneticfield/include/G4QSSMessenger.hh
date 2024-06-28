@@ -27,10 +27,10 @@
 //
 // Messenger for QSS Integrator driver
 
-// Author: Leandro Gomez Vidal - October 2021
+// Author: Leandro Gomez Vidal (Univ. Buenos Aires) - October 2021
 // --------------------------------------------------------------------
 #ifndef GEANT4_G4QSSMessenger_H
-#define GEANT4_G4QSSMessenger_H
+#define GEANT4_G4QSSMessenger_H 1
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"

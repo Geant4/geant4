@@ -25,7 +25,7 @@
 //
 /// \file HadronicGenerator.hh
 /// \brief Definition of the HadronicGenerator class
-// 
+//
 //------------------------------------------------------------------------
 // Class: HadronicGenerator
 // Author: Alberto Ribon (CERN EP/SFT)
@@ -54,7 +54,7 @@
 // This class does NOT use the Geant4 run-manager, and therefore should
 // be usable in a multi-threaded application, with one instance of this
 // class in each thread.
-// 
+//
 // This class has been inspired by test30 (whose author is Vladimir
 // Ivanchenko), with various simplifications and restricted to hadronic
 // inelastic interactions.
@@ -66,12 +66,13 @@
 #ifndef HadronicGenerator_h
 #define HadronicGenerator_h 1
 
-#include <iomanip>
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ThreeVector.hh"
-#include <map>
 #include "G4HadronicProcess.hh"
+#include "G4ThreeVector.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <iomanip>
+#include <map>
 
 class G4ParticleDefinition;
 class G4VParticleChange;
@@ -81,18 +82,18 @@ class G4HadronicInteraction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HadronicGenerator {
-  // This class provides the functionality of a "hadronic generator"
-  // for Geant4 final-state inelastic hadronic collisions.
-  // Only a few of the available Geant4 final-state hadronic inelastic
-  // "physics cases" are currently available in this class - but it can
-  // be extended to other cases if needed.
-  // It is important to notice that this class does NOT use the Geant4
-  // run-manager, so it should work fine in a multi-threaded environment,
-  // with a separate instance of this class in each thread.
+class HadronicGenerator
+{
+    // This class provides the functionality of a "hadronic generator"
+    // for Geant4 final-state inelastic hadronic collisions.
+    // Only a few of the available Geant4 final-state hadronic inelastic
+    // "physics cases" are currently available in this class - but it can
+    // be extended to other cases if needed.
+    // It is important to notice that this class does NOT use the Geant4
+    // run-manager, so it should work fine in a multi-threaded environment,
+    // with a separate instance of this class in each thread.
   public:
-
-    explicit HadronicGenerator( const G4String physicsCase = "FTFP_BERT_ATL" );
+    explicit HadronicGenerator(const G4String physicsCase = "FTFP_BERT_ATL");
     // Currently supported final-state hadronic inelastic "physics cases":
     // -  Hadronic models :        BERT, BIC, IonBIC, INCL, FTFP, QGSP
     // -  "Physics-list proxies" : FTFP_BERT_ATL (default), FTFP_BERT,
@@ -111,22 +112,22 @@ class HadronicGenerator {
     ~HadronicGenerator();
 
     inline G4bool IsPhysicsCaseSupported() const;
-    // Returns "true" if the physicsCase is supported; "false" otherwise. 
-  
-    G4bool IsApplicable( const G4String &nameProjectile, const G4double projectileEnergy ) const;
-    G4bool IsApplicable( G4ParticleDefinition* projectileDefinition,
-                         const G4double projectileEnergy ) const;
+    // Returns "true" if the physicsCase is supported; "false" otherwise.
+
+    G4bool IsApplicable(const G4String& nameProjectile, const G4double projectileEnergy) const;
+    G4bool IsApplicable(G4ParticleDefinition* projectileDefinition,
+                        const G4double projectileEnergy) const;
     // Returns "true" if the specified projectile (either by name or particle definition)
     // of given energy is applicable, "false" otherwise.
 
-    G4VParticleChange* GenerateInteraction( const G4String &nameProjectile,
-                                            const G4double projectileEnergy,
-                                            const G4ThreeVector &projectileDirection ,
-                                            G4Material* targetMaterial );
-    G4VParticleChange* GenerateInteraction( G4ParticleDefinition* projectileDefinition,
-                                            const G4double projectileEnergy,
-                                            const G4ThreeVector &projectileDirection ,
-                                            G4Material* targetMaterial );
+    G4VParticleChange* GenerateInteraction(const G4String& nameProjectile,
+                                           const G4double projectileEnergy,
+                                           const G4ThreeVector& projectileDirection,
+                                           G4Material* targetMaterial);
+    G4VParticleChange* GenerateInteraction(G4ParticleDefinition* projectileDefinition,
+                                           const G4double projectileEnergy,
+                                           const G4ThreeVector& projectileDirection,
+                                           G4Material* targetMaterial);
     // This is the main method provided by the class:
     // in input it receives the projectile (either by name or particle definition),
     // its energy, its direction and the target material, and it returns one sampled
@@ -150,28 +151,26 @@ class HadronicGenerator {
     // else, returns a negative value (-999).
 
   private:
-
     G4String fPhysicsCase;
     G4bool fPhysicsCaseIsSupported;
     G4HadronicProcess* fLastHadronicProcess;
     G4ParticleTable* fPartTable;
-    std::map< G4ParticleDefinition*, G4HadronicProcess* > fProcessMap;  
+    std::map<G4ParticleDefinition*, G4HadronicProcess*> fProcessMap;
 };
 
-
-inline G4bool HadronicGenerator::IsPhysicsCaseSupported() const {
+inline G4bool HadronicGenerator::IsPhysicsCaseSupported() const
+{
   return fPhysicsCaseIsSupported;
 }
 
-
-inline G4HadronicProcess* HadronicGenerator::GetHadronicProcess() const {
+inline G4HadronicProcess* HadronicGenerator::GetHadronicProcess() const
+{
   return fLastHadronicProcess;
 }
 
-
-inline G4HadronicInteraction* HadronicGenerator::GetHadronicInteraction() const {
-  return fLastHadronicProcess == nullptr ? nullptr
-                                         : fLastHadronicProcess->GetHadronicInteraction();
+inline G4HadronicInteraction* HadronicGenerator::GetHadronicInteraction() const
+{
+  return fLastHadronicProcess == nullptr ? nullptr : fLastHadronicProcess->GetHadronicInteraction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

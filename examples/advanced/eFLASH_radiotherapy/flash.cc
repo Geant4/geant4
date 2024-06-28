@@ -36,7 +36,7 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
-#include "Applicator.hh"
+#include "FlashApplicator.hh"
 #include "FlashActionInitialization.hh"
 #include "FlashDetectorConstruction.hh"
 #include "FlashPhysicsList.hh"

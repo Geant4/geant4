@@ -31,8 +31,9 @@
 #ifndef RE05CalorimeterSD_h
 #define RE05CalorimeterSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "RE05CalorimeterHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
@@ -40,21 +41,21 @@ class G4TouchableHistory;
 class RE05CalorimeterSD : public G4VSensitiveDetector
 {
   public:
-      RE05CalorimeterSD(G4String name);
-      virtual ~RE05CalorimeterSD();
+    RE05CalorimeterSD(G4String name);
+    virtual ~RE05CalorimeterSD();
 
-      virtual void Initialize(G4HCofThisEvent*HCE);
-      virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      virtual void EndOfEvent(G4HCofThisEvent*HCE);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+    virtual void Initialize(G4HCofThisEvent* HCE);
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent* HCE);
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
 
   private:
-      RE05CalorimeterHitsCollection *fCalCollection;
-      G4int fCellID[20][48];
-      const G4int fNumberOfCellsInZ;
-      const G4int fNumberOfCellsInPhi;
+    RE05CalorimeterHitsCollection* fCalCollection;
+    G4int fCellID[20][48];
+    const G4int fNumberOfCellsInZ;
+    const G4int fNumberOfCellsInPhi;
 };
 
 #endif

@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
+
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,29 +49,29 @@ void HistoManager::Book()
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
-  analysisManager->SetActivation(true);   //enable inactivation of histograms
-  
+  analysisManager->SetActivation(true);  // enable inactivation of histograms
+
   // Define histograms start values
   const G4int kMaxHisto = 7;
-  const G4String id[] = { "0", "1", "2", "3" , "4", "5", "6"};
-  const G4String title[] = 
-                { "dummy",                                              //0
-                  "scattered primary particle: energy spectrum",        //1
-                  "scattered primary particle: costheta distribution",  //2
-                  "charged secondaries: energy spectrum",               //3
-                  "charged secondaries: costheta distribution",         //4
-                  "neutral secondaries: energy spectrum",               //5
-                  "neutral secondaries: costheta distribution"          //6
-                 };  
+  const G4String id[] = {"0", "1", "2", "3", "4", "5", "6"};
+  const G4String title[] = {
+    "dummy",  // 0
+    "scattered primary particle: energy spectrum",  // 1
+    "scattered primary particle: costheta distribution",  // 2
+    "charged secondaries: energy spectrum",  // 3
+    "charged secondaries: costheta distribution",  // 4
+    "neutral secondaries: energy spectrum",  // 5
+    "neutral secondaries: costheta distribution"  // 6
+  };
 
-  // Default values (to be reset via /analysis/h1/set command)               
+  // Default values (to be reset via /analysis/h1/set command)
   G4int nbins = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;
 
-  // Create all histograms as inactivated 
+  // Create all histograms as inactivated
   // as we have not yet set nbins, vmin, vmax
-  for (G4int k=0; k<kMaxHisto; k++) {
+  for (G4int k = 0; k < kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);
   }

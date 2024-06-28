@@ -38,25 +38,22 @@ class RE01PrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-class RE01PrimaryGeneratorMessenger: public G4UImessenger
+class RE01PrimaryGeneratorMessenger : public G4UImessenger
 {
-public:
-  RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction* mpga);
-  virtual ~RE01PrimaryGeneratorMessenger();
+  public:
+    RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction* mpga);
+    virtual ~RE01PrimaryGeneratorMessenger();
 
-public:
-  virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-  virtual G4String GetCurrentValue(G4UIcommand * command);
+  public:
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
-private:
-  RE01PrimaryGeneratorAction * fMyAction;
-    
-private: //commands
-  G4UIdirectory *             fMydetDirectory;
-  G4UIcmdWithAString *        fGenCmd;
-    
+  private:
+    RE01PrimaryGeneratorAction* fMyAction;
+
+  private:  // commands
+    G4UIdirectory* fMydetDirectory;
+    G4UIcmdWithAString* fGenCmd;
 };
 
 #endif
-
-

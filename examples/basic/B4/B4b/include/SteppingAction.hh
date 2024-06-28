@@ -32,6 +32,8 @@
 
 #include "G4UserSteppingAction.hh"
 
+class G4Step;
+
 namespace B4
 {
 class DetectorConstruction;
@@ -48,17 +50,17 @@ namespace B4b
 
 class SteppingAction : public G4UserSteppingAction
 {
-public:
-  SteppingAction(const B4::DetectorConstruction* detConstruction);
-  ~SteppingAction() override = default;
+  public:
+    SteppingAction(const B4::DetectorConstruction* detConstruction);
+    ~SteppingAction() override = default;
 
-  void UserSteppingAction(const G4Step* step) override;
+    void UserSteppingAction(const G4Step* step) override;
 
-private:
-  const B4::DetectorConstruction* fDetConstruction = nullptr;
+  private:
+    const B4::DetectorConstruction* fDetConstruction = nullptr;
 };
 
-}
+}  // namespace B4b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

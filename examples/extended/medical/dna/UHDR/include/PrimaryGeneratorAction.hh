@@ -38,29 +38,30 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include <memory>
+#include "PrimaryGeneratorMessenger.hh"
 
-class G4SingleParticleSource;
+#include "G4SingleParticleSource.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+
+#include <memory>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 class G4Event;
 class DetectorConstruction;
-class PrimaryGeneratorMessenger;
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-public:
-  explicit PrimaryGeneratorAction(DetectorConstruction* pDet);
-  ~PrimaryGeneratorAction() override = default;
-  void GeneratePrimaries(G4Event *) override;
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    explicit PrimaryGeneratorAction(DetectorConstruction* pDet);
+    ~PrimaryGeneratorAction() override = default;
+    void GeneratePrimaries(G4Event*) override;
 
-  inline G4SingleParticleSource* GetSPGun() const
-  {
-    return fParticleGun.get();
-  }
+    inline G4SingleParticleSource* GetSPGun() const { return fParticleGun.get(); }
 
-private:
-  std::unique_ptr<G4SingleParticleSource> fParticleGun;
-  DetectorConstruction* fpDetector = nullptr;
-  std::unique_ptr<PrimaryGeneratorMessenger> fpMessenger;
+  private:
+    std::unique_ptr<G4SingleParticleSource> fParticleGun;
+    DetectorConstruction* fpDetector = nullptr;
+    std::unique_ptr<PrimaryGeneratorMessenger> fpMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

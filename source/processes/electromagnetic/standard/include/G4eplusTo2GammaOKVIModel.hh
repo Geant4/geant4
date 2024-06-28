@@ -38,8 +38,18 @@
 //
 // Class Description:
 //
-// Implementation of e+ annihilation into 2 gamma
-
+// Implementation of e+ annihilation into 2 or 3 gamma on fly
+// Annihilation at rest is sampled by G4VPositronAtRestModel
+// Implementation of 3-gamma annihilation is performed by
+// G4eplusTo3GammaOKVIModel. Cross section of both models
+// depend on cut parameter fDelta, which defines relative low-energy
+// limit on 3d gamma energy. For computation of the cross section
+// next to leading order radiative corrections are taken into account,
+// atomic effects at low-energy are not considered.
+//
+// V.N.Baier, V.S. Fadin, V.A. Khose, E.A. Kuraev,
+// Physics Reports 78 (1981) 293-393.
+//
 // -------------------------------------------------------------------
 //
 
@@ -58,8 +68,7 @@ class G4eplusTo2GammaOKVIModel : public G4VEmModel
 
 public:
 
-  explicit G4eplusTo2GammaOKVIModel(const G4ParticleDefinition* p = nullptr,
-                                    const G4String& nam = "eplus2ggOKVI");
+  G4eplusTo2GammaOKVIModel();
 
   ~G4eplusTo2GammaOKVIModel() override;
 
@@ -73,21 +82,21 @@ public:
                                  G4double Z, 
                                  G4double A = 0., 
                                  G4double cutEnergy = 0.,
-                                 G4double maxEnergy = DBL_MAX) final;
+                                 G4double maxEnergy = DBL_MAX) override;
 
   G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy = 0.0,
-				 G4double maxEnergy = DBL_MAX) final;
+				 G4double maxEnergy = DBL_MAX) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin = 0.0,
-				 G4double maxEnergy = DBL_MAX) final;
+				 G4double maxEnergy = DBL_MAX) override;
 
-  inline void SetDelta(G4double val) { if(val > 0.0) { fDelta = val; } };
+  void SetDelta(G4double val) { if(val > 0.0) { fDeltaMin = val; } };
 
   // hide assignment operator
   G4eplusTo2GammaOKVIModel & operator=
@@ -97,16 +106,14 @@ public:
 private:
 
   const G4ParticleDefinition* theGamma;
-
   G4ParticleChangeForGamma* fParticleChange;
   G4eplusTo3GammaOKVIModel* f3GModel;
-  const G4DataVector*       fCuts;
 
-  G4double fDelta;
-  G4double fGammaTh;
- 
+  G4double fDeltaMin; // fixed minimal relative limit
+  G4double fDelta;    // running limit - function of energy
+  G4double fGammaTh;  // 3-gamma annihilation low-energy limit
+
   static G4PhysicsVector* fCrossSection;
-  static G4PhysicsVector* fCrossSection3G;
   static G4PhysicsVector* f3GProbability;
 };
 

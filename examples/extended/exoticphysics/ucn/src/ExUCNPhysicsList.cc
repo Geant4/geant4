@@ -30,47 +30,50 @@
 //
 #include "ExUCNPhysicsList.hh"
 
-#include "G4ParticleTypes.hh"
+#include "ExUCNExtraPhysics.hh"
 
 #include "G4DecayPhysics.hh"
-#include "ExUCNExtraPhysics.hh"
+#include "G4ParticleTypes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExUCNPhysicsList::ExUCNPhysicsList() : G4VModularPhysicsList() 
+ExUCNPhysicsList::ExUCNPhysicsList() : G4VModularPhysicsList()
 {
-    RegisterPhysics(new G4DecayPhysics());
-    RegisterPhysics(new ExUCNExtraPhysics());
+  RegisterPhysics(new G4DecayPhysics());
+  RegisterPhysics(new ExUCNExtraPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExUCNPhysicsList::~ExUCNPhysicsList() {;}
+ExUCNPhysicsList::~ExUCNPhysicsList()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExUCNPhysicsList::ConstructParticle()
 {
-    G4Neutron::NeutronDefinition();
-    G4Proton::ProtonDefinition();
-    G4Electron::ElectronDefinition();
-    G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-    G4MuonPlus::MuonPlusDefinition();
-    G4MuonMinus::MuonMinusDefinition();
+  G4Neutron::NeutronDefinition();
+  G4Proton::ProtonDefinition();
+  G4Electron::ElectronDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
 
-    G4GenericIon::GenericIonDefinition();
+  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExUCNPhysicsList::ConstructProcess()
 {
-    G4VModularPhysicsList::ConstructProcess();
+  G4VModularPhysicsList::ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExUCNPhysicsList::SetCuts()
 {
-    SetCutsWithDefault();
+  SetCutsWithDefault();
 }

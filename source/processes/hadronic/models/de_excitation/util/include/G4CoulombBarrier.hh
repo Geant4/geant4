@@ -32,7 +32,6 @@
 #ifndef G4CoulombBarrier_h
 #define G4CoulombBarrier_h 1
 
-#include "globals.hh"
 #include "G4VCoulombBarrier.hh"
 
 class G4CoulombBarrier : public G4VCoulombBarrier

@@ -31,22 +31,21 @@
 // on the target surface for error propagation. It overloads ComputeStep()
 // and ComputeSafety() methods.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created. P. Arce, September 2004
 // --------------------------------------------------------------------
 
 #ifndef G4ErrorPropagationNavigator_hh
-#define G4ErrorPropagationNavigator_hh
+#define G4ErrorPropagationNavigator_hh 1
 
 #include "G4Navigator.hh"
 #include "G4ThreeVector.hh"
 
 class G4ErrorPropagationNavigator : public G4Navigator
 {
-  public:  // with description
+  public:
 
-    G4ErrorPropagationNavigator();
-   ~G4ErrorPropagationNavigator() override;
+    G4ErrorPropagationNavigator() = default;
+   ~G4ErrorPropagationNavigator() override = default;
   
     G4double ComputeStep (const G4ThreeVector &pGlobalPoint,
                           const G4ThreeVector &pDirection,

@@ -31,29 +31,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
 
-#include "PhysListEmStandard.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
+#include "PhysListEmStandard.hh"
+#include "PhysicsListMessenger.hh"
 
 #include "G4LossTableManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
 {
   G4LossTableManager::Instance();
-  fMessenger = new PhysicsListMessenger(this); 
-   
+  fMessenger = new PhysicsListMessenger(this);
+
   // EM physics
   fEmName = G4String("standard");
   fEmPhysicsList = new PhysListEmStandard(fEmName);
-    
-  SetDefaultCutValue(1.*mm);
-    
+
+  SetDefaultCutValue(1. * mm);
+
   SetVerboseLevel(1);
 }
 
@@ -62,42 +62,37 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete fEmPhysicsList;
-  delete fMessenger;  
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel > 1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == fEmName) return;
 
   if (name == "standard") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(name);
-        
-  } else if (name == "livermore") {
-
+  }
+  else if (name == "livermore") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmLivermore(name);
-    
-  } else if (name == "penelope") {
-
+  }
+  else if (name == "penelope") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmPenelope(name);
-
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -105,63 +100,61 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 // Bosons
 #include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
 #include "G4Gamma.hh"
+#include "G4Geantino.hh"
 
 // leptons
 #include "G4Electron.hh"
+#include "G4MuonMinus.hh"
+#include "G4MuonPlus.hh"
 #include "G4Positron.hh"
 
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-
 // Mesons
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-
-#include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
+#include "G4KaonPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4PionPlus.hh"
 
 // Baryons
-#include "G4Proton.hh"
+#include "G4AntiNeutron.hh"
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
-#include "G4AntiNeutron.hh"
+#include "G4Proton.hh"
 
 // Nuclei
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
 #include "G4Alpha.hh"
+#include "G4Deuteron.hh"
 #include "G4GenericIon.hh"
+#include "G4Triton.hh"
 
 void PhysicsList::ConstructParticle()
 {
-// pseudo-particles
+  // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-// gamma
+
+  // gamma
   G4Gamma::GammaDefinition();
 
-// leptons
+  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();
-  
-// mesons
+
+  // mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
-  
-// baryons
+
+  // baryons
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
-  
-// ions
+
+  // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
   G4Alpha::AlphaDefinition();
@@ -179,24 +172,24 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProcessManager.hh"
 #include "StepMax.hh"
+
+#include "G4ProcessManager.hh"
 
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
   StepMax* stepMaxProcess = new StepMax();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)()){
-      G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+  while ((*particleIterator)()) {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
-        {
-          pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+    if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
+      pmanager->AddDiscreteProcess(stepMaxProcess);
+    }
   }
 }
 

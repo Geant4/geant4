@@ -29,7 +29,7 @@
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// 
+//
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class
 
@@ -43,25 +43,20 @@ class RunActionMessenger;
 
 class RunAction : public G4UserRunAction
 {
-public:
-  RunAction();
-  virtual ~RunAction();
+  public:
+    RunAction();
+    virtual ~RunAction();
 
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-  void CreateHistogram();
-  void WriteHistogram();
-  void SetHistoName(G4String& val)
-  {
-    fFileName = val;
-  };
+    void CreateHistogram();
+    void WriteHistogram();
+    void SetHistoName(G4String& val) { fFileName = val; };
 
-private:
-  G4String fFileName;
-  RunActionMessenger* fpRunMessenger;
-
+  private:
+    G4String fFileName;
+    RunActionMessenger* fpRunMessenger;
 };
 
 #endif
-

@@ -30,6 +30,8 @@
 
 #include "EmStandardPhysicsTrackingManager.hh"
 
+#include "TrackingManagerHelper.hh"
+
 #include "G4ComptonScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4Electron.hh"
@@ -51,8 +53,6 @@
 #include "G4eIonisation.hh"
 #include "G4eMultipleScattering.hh"
 #include "G4eplusAnnihilation.hh"
-
-#include "TrackingManagerHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -226,150 +226,150 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
 {
   class ElectronPhysics final : public TrackingManagerHelper::Physics
   {
-   public:
-    ElectronPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
+    public:
+      ElectronPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
 
-    void StartTracking(G4Track* aTrack) override
-    {
-      auto& electronProcs = fMgr.fElectronProcs;
+      void StartTracking(G4Track* aTrack) override
+      {
+        auto& electronProcs = fMgr.fElectronProcs;
 
-      electronProcs.msc->StartTracking(aTrack);
-      electronProcs.ioni->StartTracking(aTrack);
-      electronProcs.brems->StartTracking(aTrack);
-      electronProcs.ss->StartTracking(aTrack);
+        electronProcs.msc->StartTracking(aTrack);
+        electronProcs.ioni->StartTracking(aTrack);
+        electronProcs.brems->StartTracking(aTrack);
+        electronProcs.ss->StartTracking(aTrack);
 
-      fPreviousStepLength = 0;
-    }
-    void EndTracking() override
-    {
-      auto& electronProcs = fMgr.fElectronProcs;
+        fPreviousStepLength = 0;
+      }
+      void EndTracking() override
+      {
+        auto& electronProcs = fMgr.fElectronProcs;
 
-      electronProcs.msc->EndTracking();
-      electronProcs.ioni->EndTracking();
-      electronProcs.brems->EndTracking();
-      electronProcs.ss->EndTracking();
-    }
-
-    G4double GetPhysicalInteractionLength(const G4Track& track) override
-    {
-      auto& electronProcs = fMgr.fElectronProcs;
-      G4double physIntLength, proposedSafety = DBL_MAX;
-      G4ForceCondition condition;
-      G4GPILSelection selection;
-
-      fProposedStep = DBL_MAX;
-      fSelected = -1;
-
-      physIntLength = electronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 0;
+        electronProcs.msc->EndTracking();
+        electronProcs.ioni->EndTracking();
+        electronProcs.brems->EndTracking();
+        electronProcs.ss->EndTracking();
       }
 
-      physIntLength = electronProcs.brems->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 1;
-      }
+      G4double GetPhysicalInteractionLength(const G4Track& track) override
+      {
+        auto& electronProcs = fMgr.fElectronProcs;
+        G4double physIntLength, proposedSafety = DBL_MAX;
+        G4ForceCondition condition;
+        G4GPILSelection selection;
 
-      physIntLength = electronProcs.ioni->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 2;
-      }
-
-      physIntLength = electronProcs.ioni->AlongStepGPIL(
-        track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
+        fProposedStep = DBL_MAX;
         fSelected = -1;
-      }
 
-      physIntLength = electronProcs.msc->AlongStepGPIL(
-        track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        // Check if MSC actually wants to win, in most cases it only limits the
-        // step size.
-        if (selection == CandidateForSelection) {
+        physIntLength = electronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 0;
+        }
+
+        physIntLength = electronProcs.brems->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 1;
+        }
+
+        physIntLength = electronProcs.ioni->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 2;
+        }
+
+        physIntLength = electronProcs.ioni->AlongStepGPIL(track, fPreviousStepLength, fProposedStep,
+                                                          proposedSafety, &selection);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
           fSelected = -1;
         }
+
+        physIntLength = electronProcs.msc->AlongStepGPIL(track, fPreviousStepLength, fProposedStep,
+                                                         proposedSafety, &selection);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          // Check if MSC actually wants to win, in most cases it only limits the
+          // step size.
+          if (selection == CandidateForSelection) {
+            fSelected = -1;
+          }
+        }
+
+        return fProposedStep;
       }
 
-      return fProposedStep;
-    }
+      void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector&) override
+      {
+        if (step.GetStepLength() == fProposedStep) {
+          step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
+        }
+        else {
+          // Remember that the step was limited by geometry.
+          fSelected = -1;
+        }
+        auto& electronProcs = fMgr.fElectronProcs;
+        G4VParticleChange* particleChange;
 
-    void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector&) override
-    {
-      if (step.GetStepLength() == fProposedStep) {
-        step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
-      }
-      else {
-        // Remember that the step was limited by geometry.
-        fSelected = -1;
-      }
-      auto& electronProcs = fMgr.fElectronProcs;
-      G4VParticleChange* particleChange;
+        particleChange = electronProcs.msc->AlongStepDoIt(track, step);
+        particleChange->UpdateStepForAlongStep(&step);
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
 
-      particleChange = electronProcs.msc->AlongStepDoIt(track, step);
-      particleChange->UpdateStepForAlongStep(&step);
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
+        particleChange = electronProcs.ioni->AlongStepDoIt(track, step);
+        particleChange->UpdateStepForAlongStep(&step);
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
 
-      particleChange = electronProcs.ioni->AlongStepDoIt(track, step);
-      particleChange->UpdateStepForAlongStep(&step);
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
-
-      fPreviousStepLength = step.GetStepLength();
-    }
-
-    void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
-    {
-      if (fSelected < 0) {
-        return;
-      }
-      step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
-
-      auto& electronProcs = fMgr.fElectronProcs;
-      G4VProcess* process = nullptr;
-      G4VParticleChange* particleChange = nullptr;
-
-      switch (fSelected) {
-        case 0:
-          process = electronProcs.ss;
-          particleChange = electronProcs.ss->PostStepDoIt(track, step);
-          break;
-        case 1:
-          process = electronProcs.brems;
-          particleChange = electronProcs.brems->PostStepDoIt(track, step);
-          break;
-        case 2:
-          process = electronProcs.ioni;
-          particleChange = electronProcs.ioni->PostStepDoIt(track, step);
-          break;
+        fPreviousStepLength = step.GetStepLength();
       }
 
-      particleChange->UpdateStepForPostStep(&step);
-      step.UpdateTrack();
+      void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
+      {
+        if (fSelected < 0) {
+          return;
+        }
+        step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
 
-      int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for (int i = 0; i < numSecondaries; i++) {
-        G4Track* secondary = particleChange->GetSecondary(i);
-        secondary->SetParentID(track.GetTrackID());
-        secondary->SetCreatorProcess(process);
-        secondaries.push_back(secondary);
+        auto& electronProcs = fMgr.fElectronProcs;
+        G4VProcess* process = nullptr;
+        G4VParticleChange* particleChange = nullptr;
+
+        switch (fSelected) {
+          case 0:
+            process = electronProcs.ss;
+            particleChange = electronProcs.ss->PostStepDoIt(track, step);
+            break;
+          case 1:
+            process = electronProcs.brems;
+            particleChange = electronProcs.brems->PostStepDoIt(track, step);
+            break;
+          case 2:
+            process = electronProcs.ioni;
+            particleChange = electronProcs.ioni->PostStepDoIt(track, step);
+            break;
+        }
+
+        particleChange->UpdateStepForPostStep(&step);
+        step.UpdateTrack();
+
+        G4int numSecondaries = particleChange->GetNumberOfSecondaries();
+        for (G4int i = 0; i < numSecondaries; ++i) {
+          G4Track* secondary = particleChange->GetSecondary(i);
+          secondary->SetParentID(track.GetTrackID());
+          secondary->SetCreatorProcess(process);
+          secondaries.push_back(secondary);
+        }
+
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
       }
 
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
-    }
-
-   private:
-    EmStandardPhysicsTrackingManager& fMgr;
-    G4double fPreviousStepLength;
-    G4double fProposedStep;
-    G4int fSelected;
+    private:
+      EmStandardPhysicsTrackingManager& fMgr;
+      G4double fPreviousStepLength;
+      G4double fProposedStep;
+      G4int fSelected;
   };
 
   ElectronPhysics physics(*this);
@@ -382,185 +382,185 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
 {
   class PositronPhysics final : public TrackingManagerHelper::Physics
   {
-   public:
-    PositronPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
+    public:
+      PositronPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
 
-    void StartTracking(G4Track* aTrack) override
-    {
-      auto& positronProcs = fMgr.fPositronProcs;
+      void StartTracking(G4Track* aTrack) override
+      {
+        auto& positronProcs = fMgr.fPositronProcs;
 
-      positronProcs.msc->StartTracking(aTrack);
-      positronProcs.ioni->StartTracking(aTrack);
-      positronProcs.brems->StartTracking(aTrack);
-      positronProcs.annihilation->StartTracking(aTrack);
-      positronProcs.ss->StartTracking(aTrack);
+        positronProcs.msc->StartTracking(aTrack);
+        positronProcs.ioni->StartTracking(aTrack);
+        positronProcs.brems->StartTracking(aTrack);
+        positronProcs.annihilation->StartTracking(aTrack);
+        positronProcs.ss->StartTracking(aTrack);
 
-      fPreviousStepLength = 0;
-    }
-    void EndTracking() override
-    {
-      auto& positronProcs = fMgr.fPositronProcs;
+        fPreviousStepLength = 0;
+      }
+      void EndTracking() override
+      {
+        auto& positronProcs = fMgr.fPositronProcs;
 
-      positronProcs.msc->EndTracking();
-      positronProcs.ioni->EndTracking();
-      positronProcs.brems->EndTracking();
-      positronProcs.annihilation->EndTracking();
-      positronProcs.ss->EndTracking();
-    }
-
-    G4double GetPhysicalInteractionLength(const G4Track& track) override
-    {
-      auto& positronProcs = fMgr.fPositronProcs;
-      G4double physIntLength, proposedSafety = DBL_MAX;
-      G4ForceCondition condition;
-      G4GPILSelection selection;
-
-      fProposedStep = DBL_MAX;
-      fSelected = -1;
-
-      physIntLength = positronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 0;
+        positronProcs.msc->EndTracking();
+        positronProcs.ioni->EndTracking();
+        positronProcs.brems->EndTracking();
+        positronProcs.annihilation->EndTracking();
+        positronProcs.ss->EndTracking();
       }
 
-      physIntLength =
-        positronProcs.annihilation->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 1;
-      }
+      G4double GetPhysicalInteractionLength(const G4Track& track) override
+      {
+        auto& positronProcs = fMgr.fPositronProcs;
+        G4double physIntLength, proposedSafety = DBL_MAX;
+        G4ForceCondition condition;
+        G4GPILSelection selection;
 
-      physIntLength = positronProcs.brems->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 2;
-      }
-
-      physIntLength = positronProcs.ioni->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 3;
-      }
-
-      physIntLength = positronProcs.ioni->AlongStepGPIL(
-        track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
+        fProposedStep = DBL_MAX;
         fSelected = -1;
-      }
 
-      physIntLength = positronProcs.msc->AlongStepGPIL(
-        track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        // Check if MSC actually wants to win, in most cases it only limits the
-        // step size.
-        if (selection == CandidateForSelection) {
+        physIntLength = positronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 0;
+        }
+
+        physIntLength =
+          positronProcs.annihilation->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 1;
+        }
+
+        physIntLength = positronProcs.brems->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 2;
+        }
+
+        physIntLength = positronProcs.ioni->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 3;
+        }
+
+        physIntLength = positronProcs.ioni->AlongStepGPIL(track, fPreviousStepLength, fProposedStep,
+                                                          proposedSafety, &selection);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
           fSelected = -1;
         }
+
+        physIntLength = positronProcs.msc->AlongStepGPIL(track, fPreviousStepLength, fProposedStep,
+                                                         proposedSafety, &selection);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          // Check if MSC actually wants to win, in most cases it only limits the
+          // step size.
+          if (selection == CandidateForSelection) {
+            fSelected = -1;
+          }
+        }
+
+        return fProposedStep;
       }
 
-      return fProposedStep;
-    }
+      void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector&) override
+      {
+        if (step.GetStepLength() == fProposedStep) {
+          step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
+        }
+        else {
+          // Remember that the step was limited by geometry.
+          fSelected = -1;
+        }
+        auto& positronProcs = fMgr.fPositronProcs;
+        G4VParticleChange* particleChange;
 
-    void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector&) override
-    {
-      if (step.GetStepLength() == fProposedStep) {
-        step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
-      }
-      else {
-        // Remember that the step was limited by geometry.
-        fSelected = -1;
-      }
-      auto& positronProcs = fMgr.fPositronProcs;
-      G4VParticleChange* particleChange;
+        particleChange = positronProcs.msc->AlongStepDoIt(track, step);
+        particleChange->UpdateStepForAlongStep(&step);
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
 
-      particleChange = positronProcs.msc->AlongStepDoIt(track, step);
-      particleChange->UpdateStepForAlongStep(&step);
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
+        particleChange = positronProcs.ioni->AlongStepDoIt(track, step);
+        particleChange->UpdateStepForAlongStep(&step);
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
 
-      particleChange = positronProcs.ioni->AlongStepDoIt(track, step);
-      particleChange->UpdateStepForAlongStep(&step);
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
-
-      fPreviousStepLength = step.GetStepLength();
-    }
-
-    void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
-    {
-      if (fSelected < 0) {
-        return;
-      }
-      step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
-
-      auto& positronProcs = fMgr.fPositronProcs;
-      G4VProcess* process;
-      G4VParticleChange* particleChange = nullptr;
-
-      switch (fSelected) {
-        case 0:
-          process = positronProcs.ss;
-          particleChange = positronProcs.ss->PostStepDoIt(track, step);
-          break;
-        case 1:
-          process = positronProcs.annihilation;
-          particleChange = positronProcs.annihilation->PostStepDoIt(track, step);
-          break;
-        case 2:
-          process = positronProcs.brems;
-          particleChange = positronProcs.brems->PostStepDoIt(track, step);
-          break;
-        case 3:
-          process = positronProcs.ioni;
-          particleChange = positronProcs.ioni->PostStepDoIt(track, step);
-          break;
+        fPreviousStepLength = step.GetStepLength();
       }
 
-      particleChange->UpdateStepForPostStep(&step);
-      step.UpdateTrack();
+      void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
+      {
+        if (fSelected < 0) {
+          return;
+        }
+        step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
 
-      int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for (int i = 0; i < numSecondaries; i++) {
-        G4Track* secondary = particleChange->GetSecondary(i);
-        secondary->SetParentID(track.GetTrackID());
-        secondary->SetCreatorProcess(process);
-        secondaries.push_back(secondary);
+        auto& positronProcs = fMgr.fPositronProcs;
+        G4VProcess* process = nullptr;
+        G4VParticleChange* particleChange = nullptr;
+
+        switch (fSelected) {
+          case 0:
+            process = positronProcs.ss;
+            particleChange = positronProcs.ss->PostStepDoIt(track, step);
+            break;
+          case 1:
+            process = positronProcs.annihilation;
+            particleChange = positronProcs.annihilation->PostStepDoIt(track, step);
+            break;
+          case 2:
+            process = positronProcs.brems;
+            particleChange = positronProcs.brems->PostStepDoIt(track, step);
+            break;
+          case 3:
+            process = positronProcs.ioni;
+            particleChange = positronProcs.ioni->PostStepDoIt(track, step);
+            break;
+        }
+
+        particleChange->UpdateStepForPostStep(&step);
+        step.UpdateTrack();
+
+        G4int numSecondaries = particleChange->GetNumberOfSecondaries();
+        for (G4int i = 0; i < numSecondaries; ++i) {
+          G4Track* secondary = particleChange->GetSecondary(i);
+          secondary->SetParentID(track.GetTrackID());
+          secondary->SetCreatorProcess(process);
+          secondaries.push_back(secondary);
+        }
+
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
       }
 
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
-    }
+      G4bool HasAtRestProcesses() override { return true; }
 
-    G4bool HasAtRestProcesses() override { return true; }
+      void AtRestDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
+      {
+        auto& positronProcs = fMgr.fPositronProcs;
+        // Annihilate the positron at rest.
+        G4VParticleChange* particleChange = positronProcs.annihilation->AtRestDoIt(track, step);
+        particleChange->UpdateStepForAtRest(&step);
+        step.UpdateTrack();
 
-    void AtRestDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
-    {
-      auto& positronProcs = fMgr.fPositronProcs;
-      // Annihilate the positron at rest.
-      G4VParticleChange* particleChange = positronProcs.annihilation->AtRestDoIt(track, step);
-      particleChange->UpdateStepForAtRest(&step);
-      step.UpdateTrack();
+        G4int numSecondaries = particleChange->GetNumberOfSecondaries();
+        for (G4int i = 0; i < numSecondaries; ++i) {
+          G4Track* secondary = particleChange->GetSecondary(i);
+          secondary->SetParentID(track.GetTrackID());
+          secondary->SetCreatorProcess(positronProcs.annihilation);
+          secondaries.push_back(secondary);
+        }
 
-      int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for (int i = 0; i < numSecondaries; i++) {
-        G4Track* secondary = particleChange->GetSecondary(i);
-        secondary->SetParentID(track.GetTrackID());
-        secondary->SetCreatorProcess(positronProcs.annihilation);
-        secondaries.push_back(secondary);
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
       }
 
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
-    }
-
-   private:
-    EmStandardPhysicsTrackingManager& fMgr;
-    G4double fPreviousStepLength;
-    G4double fProposedStep;
-    G4int fSelected;
+    private:
+      EmStandardPhysicsTrackingManager& fMgr;
+      G4double fPreviousStepLength;
+      G4double fProposedStep;
+      G4int fSelected;
   };
 
   PositronPhysics physics(*this);
@@ -573,128 +573,128 @@ void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
 {
   class GammaPhysics final : public TrackingManagerHelper::Physics
   {
-   public:
-    GammaPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
+    public:
+      GammaPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
 
-    void StartTracking(G4Track* aTrack) override
-    {
-      auto& gammaProcs = fMgr.fGammaProcs;
+      void StartTracking(G4Track* aTrack) override
+      {
+        auto& gammaProcs = fMgr.fGammaProcs;
 
-      gammaProcs.pe->StartTracking(aTrack);
-      gammaProcs.compton->StartTracking(aTrack);
-      gammaProcs.conversion->StartTracking(aTrack);
-      gammaProcs.rayleigh->StartTracking(aTrack);
+        gammaProcs.pe->StartTracking(aTrack);
+        gammaProcs.compton->StartTracking(aTrack);
+        gammaProcs.conversion->StartTracking(aTrack);
+        gammaProcs.rayleigh->StartTracking(aTrack);
 
-      fPreviousStepLength = 0;
-    }
-    void EndTracking() override
-    {
-      auto& gammaProcs = fMgr.fGammaProcs;
+        fPreviousStepLength = 0;
+      }
+      void EndTracking() override
+      {
+        auto& gammaProcs = fMgr.fGammaProcs;
 
-      gammaProcs.pe->EndTracking();
-      gammaProcs.compton->EndTracking();
-      gammaProcs.conversion->EndTracking();
-      gammaProcs.rayleigh->EndTracking();
-    }
-
-    G4double GetPhysicalInteractionLength(const G4Track& track) override
-    {
-      auto& gammaProcs = fMgr.fGammaProcs;
-      G4double physIntLength;
-      G4ForceCondition condition;
-
-      fProposedStep = DBL_MAX;
-      fSelected = -1;
-
-      physIntLength = gammaProcs.rayleigh->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 0;
+        gammaProcs.pe->EndTracking();
+        gammaProcs.compton->EndTracking();
+        gammaProcs.conversion->EndTracking();
+        gammaProcs.rayleigh->EndTracking();
       }
 
-      physIntLength = gammaProcs.conversion->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 1;
-      }
+      G4double GetPhysicalInteractionLength(const G4Track& track) override
+      {
+        auto& gammaProcs = fMgr.fGammaProcs;
+        G4double physIntLength;
+        G4ForceCondition condition;
 
-      physIntLength = gammaProcs.compton->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 2;
-      }
-
-      physIntLength = gammaProcs.pe->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if (physIntLength < fProposedStep) {
-        fProposedStep = physIntLength;
-        fSelected = 3;
-      }
-
-      return fProposedStep;
-    }
-
-    void AlongStepDoIt(G4Track&, G4Step& step, G4TrackVector&) override
-    {
-      if (step.GetStepLength() == fProposedStep) {
-        step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
-      }
-      else {
-        // Remember that the step was limited by geometry.
+        fProposedStep = DBL_MAX;
         fSelected = -1;
-      }
-      fPreviousStepLength = step.GetStepLength();
-    }
 
-    void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
-    {
-      if (fSelected < 0) {
-        return;
-      }
-      step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
+        physIntLength = gammaProcs.rayleigh->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 0;
+        }
 
-      auto& gammaProcs = fMgr.fGammaProcs;
-      G4VProcess* process = nullptr;
-      G4VParticleChange* particleChange = nullptr;
+        physIntLength = gammaProcs.conversion->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 1;
+        }
 
-      switch (fSelected) {
-        case 0:
-          process = gammaProcs.rayleigh;
-          particleChange = gammaProcs.rayleigh->PostStepDoIt(track, step);
-          break;
-        case 1:
-          process = gammaProcs.conversion;
-          particleChange = gammaProcs.conversion->PostStepDoIt(track, step);
-          break;
-        case 2:
-          process = gammaProcs.compton;
-          particleChange = gammaProcs.compton->PostStepDoIt(track, step);
-          break;
-        case 3:
-          process = gammaProcs.pe;
-          particleChange = gammaProcs.pe->PostStepDoIt(track, step);
-          break;
+        physIntLength = gammaProcs.compton->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 2;
+        }
+
+        physIntLength = gammaProcs.pe->PostStepGPIL(track, fPreviousStepLength, &condition);
+        if (physIntLength < fProposedStep) {
+          fProposedStep = physIntLength;
+          fSelected = 3;
+        }
+
+        return fProposedStep;
       }
 
-      particleChange->UpdateStepForPostStep(&step);
-      step.UpdateTrack();
-
-      int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for (int i = 0; i < numSecondaries; i++) {
-        G4Track* secondary = particleChange->GetSecondary(i);
-        secondary->SetParentID(track.GetTrackID());
-        secondary->SetCreatorProcess(process);
-        secondaries.push_back(secondary);
+      void AlongStepDoIt(G4Track&, G4Step& step, G4TrackVector&) override
+      {
+        if (step.GetStepLength() == fProposedStep) {
+          step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
+        }
+        else {
+          // Remember that the step was limited by geometry.
+          fSelected = -1;
+        }
+        fPreviousStepLength = step.GetStepLength();
       }
 
-      track.SetTrackStatus(particleChange->GetTrackStatus());
-      particleChange->Clear();
-    }
+      void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
+      {
+        if (fSelected < 0) {
+          return;
+        }
+        step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
 
-   private:
-    EmStandardPhysicsTrackingManager& fMgr;
-    G4double fPreviousStepLength;
-    G4double fProposedStep;
-    G4int fSelected;
+        auto& gammaProcs = fMgr.fGammaProcs;
+        G4VProcess* process = nullptr;
+        G4VParticleChange* particleChange = nullptr;
+
+        switch (fSelected) {
+          case 0:
+            process = gammaProcs.rayleigh;
+            particleChange = gammaProcs.rayleigh->PostStepDoIt(track, step);
+            break;
+          case 1:
+            process = gammaProcs.conversion;
+            particleChange = gammaProcs.conversion->PostStepDoIt(track, step);
+            break;
+          case 2:
+            process = gammaProcs.compton;
+            particleChange = gammaProcs.compton->PostStepDoIt(track, step);
+            break;
+          case 3:
+            process = gammaProcs.pe;
+            particleChange = gammaProcs.pe->PostStepDoIt(track, step);
+            break;
+        }
+
+        particleChange->UpdateStepForPostStep(&step);
+        step.UpdateTrack();
+
+        G4int numSecondaries = particleChange->GetNumberOfSecondaries();
+        for (G4int i = 0; i < numSecondaries; ++i) {
+          G4Track* secondary = particleChange->GetSecondary(i);
+          secondary->SetParentID(track.GetTrackID());
+          secondary->SetCreatorProcess(process);
+          secondaries.push_back(secondary);
+        }
+
+        track.SetTrackStatus(particleChange->GetTrackStatus());
+        particleChange->Clear();
+      }
+
+    private:
+      EmStandardPhysicsTrackingManager& fMgr;
+      G4double fPreviousStepLength;
+      G4double fProposedStep;
+      G4int fSelected;
   };
 
   GammaPhysics physics(*this);

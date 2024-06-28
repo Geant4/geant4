@@ -28,19 +28,17 @@
 /// \brief Implementation of the ExUCNActionInitialization class
 
 #include "ExUCNActionInitialization.hh"
+
 #include "ExUCNPrimaryGeneratorAction.hh"
 #include "ExUCNRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExUCNActionInitialization::ExUCNActionInitialization()
- : G4VUserActionInitialization()
-{}
+ExUCNActionInitialization::ExUCNActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExUCNActionInitialization::~ExUCNActionInitialization()
-{}
+ExUCNActionInitialization::~ExUCNActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,6 +54,6 @@ void ExUCNActionInitialization::Build() const
   SetUserAction(new ExUCNPrimaryGeneratorAction);
 
   SetUserAction(new ExUCNRunAction());
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

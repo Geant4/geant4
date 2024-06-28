@@ -112,6 +112,7 @@ protected:
   G4double pResMass = 0.0;
   G4double pProbability = 0.0;
   G4double pTolerance = 0.0;
+  G4double pWidth = 0.0;
 
 private:
 

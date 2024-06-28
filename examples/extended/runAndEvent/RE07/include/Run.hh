@@ -33,10 +33,10 @@
 #ifndef Run_h
 #define Run_h 1
 
+#include "DetectorConstruction.hh"
+
 #include "G4Run.hh"
 #include "globals.hh"
-
-#include "DetectorConstruction.hh"
 
 #include <map>
 
@@ -48,38 +48,38 @@ class G4Track;
 
 class Run : public G4Run
 {
- public:
-  Run(DetectorConstruction*);
-  ~Run();
+  public:
+    Run(DetectorConstruction*);
+    ~Run();
 
- public:
-  void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+  public:
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-  void FillPerEvent(G4int, G4double, G4double);
+    void FillPerEvent(G4int, G4double, G4double);
 
-  void AddChargedStep();
-  void AddNeutralStep();
-  void AddSecondaryTrack(const G4Track*);
+    void AddChargedStep();
+    void AddNeutralStep();
+    void AddSecondaryTrack(const G4Track*);
 
-  void Merge(const G4Run*) override;
-  void EndOfRun();
+    void Merge(const G4Run*) override;
+    void EndOfRun();
 
- private:
-  DetectorConstruction* fDetector;
-  G4ParticleDefinition* fParticle;
-  G4double fEkin;
+  private:
+    DetectorConstruction* fDetector;
+    G4ParticleDefinition* fParticle;
+    G4double fEkin;
 
-  G4double fSumEAbs[kMaxAbsor], fSum2EAbs[kMaxAbsor];
-  G4double fSumLAbs[kMaxAbsor], fSum2LAbs[kMaxAbsor];
+    G4double fSumEAbs[kMaxAbsor], fSum2EAbs[kMaxAbsor];
+    G4double fSumLAbs[kMaxAbsor], fSum2LAbs[kMaxAbsor];
 
-  std::vector<G4double> fEnergyDeposit[kMaxAbsor];
+    std::vector<G4double> fEnergyDeposit[kMaxAbsor];
 
-  G4double fChargedStep;
-  G4double fNeutralStep;
+    G4double fChargedStep;
+    G4double fNeutralStep;
 
-  G4int fN_gamma;
-  G4int fN_elec;
-  G4int fN_pos;
+    G4int fN_gamma;
+    G4int fN_elec;
+    G4int fN_pos;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

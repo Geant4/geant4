@@ -161,7 +161,7 @@ class G4VSolid
     virtual void ComputeDimensions(G4VPVParameterisation* p,
 	                           const G4int n,
                                    const G4VPhysicalVolume* pRep);
-      // Throw exception if ComputeDimensions called frrom an illegal
+      // Throw exception if ComputeDimensions called from an illegal
       // derived class.
 
     virtual G4double GetCubicVolume();
@@ -185,6 +185,13 @@ class G4VSolid
     virtual G4ThreeVector GetPointOnSurface() const;
       // Returns a random point located on the surface of the solid.
       // Points returned are not necessarily uniformly distributed.
+
+    virtual G4int GetNumOfConstituents() const;
+      // Returns the number of constituents of the solid.
+      // For non-Boolean solids the return value is one.
+
+    virtual G4bool IsFaceted() const;
+      // Returns true if the solid has only planar faces, false otherwise.
 
     virtual G4VSolid* Clone() const;
       // Returns a pointer of a dynamically allocated copy of the solid.

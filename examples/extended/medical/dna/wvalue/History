@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-03-17 Sebastien Incerti (wvalue-V11-02-00)
+- Cleaned example
+
 ## 2021-12-10 Ben Morgan (wvalue-V11-00-00)
 - Change to new Markdown History format
 
@@ -47,7 +50,7 @@ be used as a substitute for writing good git commit messages!
 14-10-16 G.Folger (wvalue-V10-02-04)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
-	 
+
 14-10-2016 SI (wvalue-V10-02-03)
 - updated README
 

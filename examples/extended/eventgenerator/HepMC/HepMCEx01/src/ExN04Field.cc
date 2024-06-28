@@ -28,32 +28,30 @@
 //
 //
 
-#include "G4SystemOfUnits.hh"
 #include "ExN04Field.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04Field::ExN04Field()
- : G4MagneticField()
+ExN04Field::ExN04Field() : G4MagneticField()
 {
-  fBz = 3.0*tesla;
-  frmax_sq = sqr(50.*cm);
-  fzmax = 100.*cm;
+  fBz = 3.0 * tesla;
+  frmax_sq = sqr(50. * cm);
+  fzmax = 100. * cm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04Field::~ExN04Field()
-{
-}
+ExN04Field::~ExN04Field() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04Field::GetFieldValue(const double Point[3],double *Bfield) const
+void ExN04Field::GetFieldValue(const double Point[3], double* Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[1] = 0.;
-  if ( std::abs(Point[2]) < fzmax &&
-      (sqr(Point[0])+sqr(Point[1])) < frmax_sq ) {
+  if (std::abs(Point[2]) < fzmax && (sqr(Point[0]) + sqr(Point[1])) < frmax_sq) {
     Bfield[2] = fBz;
-  } else {
+  }
+  else {
     Bfield[2] = 0.;
   }
 }

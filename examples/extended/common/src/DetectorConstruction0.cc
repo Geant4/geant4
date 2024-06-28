@@ -29,23 +29,21 @@
 
 #include "DetectorConstruction0.hh"
 
+#include "G4Box.hh"
+#include "G4GenericMessenger.hh"
+#include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4GenericMessenger.hh"
 
 namespace Common
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction0::DetectorConstruction0(
-                              const G4String& materialName,
-                              G4double hx, G4double hy, G4double hz)
- : fMaterialName(materialName),
-   fDimensions(hx, hy, hz)
+DetectorConstruction0::DetectorConstruction0(const G4String& materialName, G4double hx, G4double hy,
+                                             G4double hz)
+  : fMaterialName(materialName), fDimensions(hx, hy, hz)
 {
   DefineCommands();
 }
@@ -69,27 +67,23 @@ G4VPhysicalVolume* DetectorConstruction0::Construct()
 
   // World
   //
-  auto sWorld
-    = new G4Box("World",                        //name
-                 fDimensions.x(),               //dimensions (half-lentghs)
-                 fDimensions.y(),
-                 fDimensions.z());
+  auto sWorld = new G4Box("World",  // name
+                          fDimensions.x(),  // dimensions (half-lentghs)
+                          fDimensions.y(), fDimensions.z());
 
-  fWorldVolume
-    = new G4LogicalVolume(sWorld,               //shape
-                          material,             //material
-                          "World");             //name
+  fWorldVolume = new G4LogicalVolume(sWorld,  // shape
+                                     material,  // material
+                                     "World");  // name
 
-  auto pWorld
-    = new G4PVPlacement(0,                      //no rotation
-                        G4ThreeVector(),        //at (0,0,0)
-                        fWorldVolume,           //logical volume
-                        "World",                //name
-                        0,                      //mother  volume
-                        false,                  //no boolean operation
-                        0);                     //copy number
+  auto pWorld = new G4PVPlacement(0,  // no rotation
+                                  G4ThreeVector(),  // at (0,0,0)
+                                  fWorldVolume,  // logical volume
+                                  "World",  // name
+                                  0,  // mother  volume
+                                  false,  // no boolean operation
+                                  0);  // copy number
 
-  //always return the root volume
+  // always return the root volume
   //
   return pWorld;
 }
@@ -101,13 +95,13 @@ void DetectorConstruction0::SetMaterial(const G4String& materialName)
   auto nistManager = G4NistManager::Instance();
 
   auto newMaterial = nistManager->FindOrBuildMaterial(materialName);
-  if ( ! newMaterial ) {
+  if (!newMaterial) {
     G4cerr << "Material " << materialName << " not found." << G4endl;
     G4cerr << "The box material was not changed." << G4endl;
     return;
   }
 
-  if ( fWorldVolume ) fWorldVolume->SetMaterial(newMaterial);
+  if (fWorldVolume) fWorldVolume->SetMaterial(newMaterial);
   G4cout << "Material of box changed to " << materialName << G4endl;
 }
 
@@ -115,8 +109,8 @@ void DetectorConstruction0::SetMaterial(const G4String& materialName)
 
 void DetectorConstruction0::SetDimensions(G4ThreeVector dimensions)
 {
-/// Set world dimension (in half lengths).
-/// This setting has effect only if called in PreInit> phase
+  /// Set world dimension (in half lengths).
+  /// This setting has effect only if called in PreInit> phase
 
   fDimensions = dimensions;
 }
@@ -126,28 +120,23 @@ void DetectorConstruction0::SetDimensions(G4ThreeVector dimensions)
 void DetectorConstruction0::DefineCommands()
 {
   // Define /B5/detector command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this,
-                                      "/detector/",
-                                      "Detector control");
+  fMessenger = new G4GenericMessenger(this, "/detector/", "Detector control");
 
   // setMaterial command
-  auto& setMaterialCmd
-    = fMessenger->DeclareMethod("setMaterial",
-        &DetectorConstruction0::SetMaterial,
-        "Set world material name.");
+  auto& setMaterialCmd = fMessenger->DeclareMethod(
+    "setMaterial", &DetectorConstruction0::SetMaterial, "Set world material name.");
   setMaterialCmd.SetParameterName("materialName", false);
   setMaterialCmd.SetDefaultValue("G4_AIR");
   setMaterialCmd.SetStates(G4State_PreInit);
 
   // setDimensions command
-  auto& setDimensionsCmd
-    = fMessenger->DeclareMethodWithUnit("setDimensions", "mm",
-        &DetectorConstruction0::SetDimensions,
-        "Set world dimensions (in half lentgh).");
+  auto& setDimensionsCmd =
+    fMessenger->DeclareMethodWithUnit("setDimensions", "mm", &DetectorConstruction0::SetDimensions,
+                                      "Set world dimensions (in half lentgh).");
   setDimensionsCmd.SetParameterName("dimensions", false);
   setDimensionsCmd.SetStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace Common

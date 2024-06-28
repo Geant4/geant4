@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -166,19 +166,19 @@ Rayl:  for gamma applyCuts:1  SubType=11 BuildTable=1
 
 TransportationWithMsc: for e-
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  VertexDetector ======
-  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
-        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
       ===== EM models for the G4Region  MuonDetector ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:3  SubType=2
@@ -208,19 +208,19 @@ CoulombScat:  for e- XStype:1 applyCuts:1  SubType=1 BuildTable=1
 
 TransportationWithMsc: for e+
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  VertexDetector ======
-  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
-        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
       ===== EM models for the G4Region  MuonDetector ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:3  SubType=2
@@ -238,7 +238,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 applyCuts:1  SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 applyCuts:1  SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -602,39 +602,39 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.710000s Real=0.791954s Sys=0.000000s
+  User=0.700000s Real=0.724143s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         401.7
-Average number of gamma      636.9
-Average number of e+         47.98
-Average number of steps      2964
-Edep 1x1 =                   0.8358 +- 0.002757  res=  3.298 %   100
-Edep 3x3 =                   0.9585 +- 0.001534  res=  1.601 %   100
-Edep 5x5 =                   0.9789 +- 0.001311  res=  1.339 %   100
+Average number of e-         402.7
+Average number of gamma      634.3
+Average number of e+         47.91
+Average number of steps      2945
+Edep 1x1 =                   0.8315 +- 0.00288  res=  3.464 %   100
+Edep 3x3 =                   0.9578 +- 0.001466  res=  1.53 %   100
+Edep 5x5 =                   0.9789 +- 0.001178  res=  1.204 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.872 +- 0.002481
-  E1/E25 =                   0.8538 +- 0.002643
-  E9/E25 =                   0.9791 +- 0.0009064
+  E1/E9  =                   0.8681 +- 0.002698
+  E1/E25 =                   0.8494 +- 0.002821
+  E9/E25 =                   0.9784 +- 0.000934
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8358  delEdep1x1= -0.1642 nrms= -1.642
-Erms1x1: 0.02757  delErms1x1= -0.9724 nrms= -9.724
-Edep3x3: 0.9585  delEdep3x3= -0.04154 nrms= -0.4154
-Erms3x3: 0.01534  delErms3x3= -0.9847 nrms= -9.847
-Edep5x5: 0.9789  delEdep5x5= -0.02112 nrms= -0.2112
-Erms5x5: 0.01311  delErms5x5= -0.9869 nrms= -9.869
+Edep1x1: 0.8315  delEdep1x1= -0.1685 nrms= -1.685
+Erms1x1: 0.0288  delErms1x1= -0.9712 nrms= -9.712
+Edep3x3: 0.9578  delEdep3x3= -0.04225 nrms= -0.4225
+Erms3x3: 0.01466  delErms3x3= -0.9853 nrms= -9.853
+Edep5x5: 0.9789  delEdep5x5= -0.02108 nrms= -0.2108
+Erms5x5: 0.01178  delErms5x5= -0.9882 nrms= -9.882
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         156           0
-  53         259          41           0          45
-  55         280          49           0          48
+  13           0           0         155           0
+  53         260          42           0          44
+  55         277          47           0          48
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -712,22 +712,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.100000s Real=1.200512s Sys=0.000000s
+  User=1.120000s Real=1.119726s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         68.91
-Average number of gamma      60.47
-Average number of e+         3.314
-Average number of steps      416.5
-Edep 1x1 =                   0.01403 +- 0.0002133
-Edep 3x3 =                   0.01439 +- 0.0002386
-Edep 5x5 =                   0.01445 +- 0.0002427
+Average number of e-         71.65
+Average number of gamma      64.81
+Average number of e+         3.7
+Average number of steps      444.1
+Edep 1x1 =                   0.01434 +- 0.0003211
+Edep 3x3 =                   0.0147 +- 0.0003571
+Edep 5x5 =                   0.01476 +- 0.0003621
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9821 +- 0.0007863
-  E1/E25 =                   0.9791 +- 0.0008761
-  E9/E25 =                   0.9968 +- 0.0002004
+  E1/E9  =                   0.9831 +- 0.0007003
+  E1/E25 =                   0.9799 +- 0.0007927
+  E9/E25 =                   0.9967 +- 0.0001962
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -835,22 +835,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.450000s Real=0.465967s Sys=0.000000s
+  User=0.470000s Real=0.474574s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         171.1
-Average number of gamma      220
-Average number of e+         47.12
+Average number of e-         170.5
+Average number of gamma      220.3
+Average number of e+         46.79
 Average number of steps      1831
-Edep 1x1 =                   0.836 +- 0.003707  res=  4.434 %   100
-Edep 3x3 =                   0.9603 +- 0.003443  res=  3.585 %   100
-Edep 5x5 =                   0.9785 +- 0.003306  res=  3.378 %   100
+Edep 1x1 =                   0.8393 +- 0.004132  res=  4.923 %   100
+Edep 3x3 =                   0.9619 +- 0.003638  res=  3.782 %   100
+Edep 5x5 =                   0.9811 +- 0.003664  res=  3.735 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8707 +- 0.002638
-  E1/E25 =                   0.8545 +- 0.002699
-  E9/E25 =                   0.9814 +- 0.0009891
+  E1/E9  =                   0.8726 +- 0.00319
+  E1/E25 =                   0.8556 +- 0.003252
+  E9/E25 =                   0.9804 +- 0.000934
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -958,27 +958,27 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.870000s Real=0.903418s Sys=0.010000s
+  User=0.770000s Real=0.805495s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         169.5
-Average number of gamma      359.8
-Average number of e+         47.28
-Average number of steps      1975
-Edep 1x1 =                   0.8338 +- 0.003557  res=  4.266 %   100
-Edep 3x3 =                   0.9595 +- 0.003237  res=  3.374 %   100
-Edep 5x5 =                   0.979 +- 0.003332  res=  3.404 %   100
+Average number of e-         172.8
+Average number of gamma      361.1
+Average number of e+         48
+Average number of steps      1997
+Edep 1x1 =                   0.8308 +- 0.00408  res=  4.911 %   100
+Edep 3x3 =                   0.9576 +- 0.003625  res=  3.786 %   100
+Edep 5x5 =                   0.9796 +- 0.003503  res=  3.576 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8691 +- 0.002626
-  E1/E25 =                   0.8519 +- 0.002781
-  E9/E25 =                   0.9801 +- 0.001009
+  E1/E9  =                   0.8678 +- 0.003129
+  E1/E25 =                   0.8483 +- 0.003316
+  E9/E25 =                   0.9775 +- 0.001244
 Beam Energy                  1 GeV
 ==================================================================
 
 #
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.14 MB
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.094 MB
 ============================================================

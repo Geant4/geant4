@@ -27,7 +27,7 @@
 /// \file eventgenerator/pythia/decayer6/include/Pythia6.hh
 /// \brief Definition of the Pythia6 class
 
-// 
+//
 // ----------------------------------------------------------------------------
 
 // ******************************************************************************
@@ -84,117 +84,126 @@
 
 #include <vector>
 
-int const KNDCAY  =  8000; //should be 4000 for pythia61
+int const KNDCAY = 8000;  // should be 4000 for pythia61
 
-/// PYJETS common-block 
+/// PYJETS common-block
 struct Pyjets_t
 {
-  int    N;
-  int    NPAD;
-  int    K[5][4000];
-  double P[5][4000];
-  double V[5][4000];
+    int N;
+    int NPAD;
+    int K[5][4000];
+    double P[5][4000];
+    double V[5][4000];
 };
 
-/// PYDAT1 common-block 
+/// PYDAT1 common-block
 struct Pydat1_t
 {
-  int    MSTU[200];
-  double PARU[200];
-  int    MSTJ[200];
-  double PARJ[200];
+    int MSTU[200];
+    double PARU[200];
+    int MSTJ[200];
+    double PARJ[200];
 };
 
-/// PYDAT3 common-block 
+/// PYDAT3 common-block
 struct Pydat3_t
 {
-  int    MDCY[3][500];
-  int    MDME[2][KNDCAY];
-  double BRAT[KNDCAY];
-  int    KFDP[5][KNDCAY];
+    int MDCY[3][500];
+    int MDME[2][KNDCAY];
+    double BRAT[KNDCAY];
+    int KFDP[5][KNDCAY];
 };
 
 /// Structure for Pythia6 particle properties
-struct Pythia6Particle  
+struct Pythia6Particle
 {
-   Pythia6Particle(
-     int ks, int kf, int parent, int firstChild, int lastChild,
-     float px, float py, float pz, float energy, float mass,
-     float vx, float vy, float vz, float time, float lifetime)
-     : fKS(ks), fKF(kf), 
-       fParent(parent), fFirstChild(firstChild), fLastChild(lastChild),
-       fPx(px), fPy(py), fPz(pz), fEnergy(energy), fMass(mass),
-       fVx(vx), fVy(vy), fVz(vz), fTime(time), fLifetime(lifetime) {}
+    Pythia6Particle(int ks, int kf, int parent, int firstChild, int lastChild, float px, float py,
+                    float pz, float energy, float mass, float vx, float vy, float vz, float time,
+                    float lifetime)
+      : fKS(ks),
+        fKF(kf),
+        fParent(parent),
+        fFirstChild(firstChild),
+        fLastChild(lastChild),
+        fPx(px),
+        fPy(py),
+        fPz(pz),
+        fEnergy(energy),
+        fMass(mass),
+        fVx(vx),
+        fVy(vy),
+        fVz(vz),
+        fTime(time),
+        fLifetime(lifetime)
+    {}
 
-   int    fKS;            // status of particle       ( LUJETS K[1] )
-   int    fKF;            // KF flavour code          ( LUJETS K[2] )
-   int    fParent;        // parrent's id             ( LUJETS K[3] )
-   int    fFirstChild;    // id of first child        ( LUJETS K[4] )
-   int    fLastChild;     // id of last  child        ( LUJETS K[5] )
+    int fKS;  // status of particle       ( LUJETS K[1] )
+    int fKF;  // KF flavour code          ( LUJETS K[2] )
+    int fParent;  // parrent's id             ( LUJETS K[3] )
+    int fFirstChild;  // id of first child        ( LUJETS K[4] )
+    int fLastChild;  // id of last  child        ( LUJETS K[5] )
 
-   float  fPx;            // X momenta [GeV/c]        ( LUJETS P[1] )
-   float  fPy;            // Y momenta [GeV/c]        ( LUJETS P[2] )
-   float  fPz;            // Z momenta [GeV/c]        ( LUJETS P[3] )
-   float  fEnergy;        // Energy    [GeV]          ( LUJETS P[4] )
-   float  fMass;          // Mass      [Gev/c^2]      ( LUJETS P[5] )
+    float fPx;  // X momenta [GeV/c]        ( LUJETS P[1] )
+    float fPy;  // Y momenta [GeV/c]        ( LUJETS P[2] )
+    float fPz;  // Z momenta [GeV/c]        ( LUJETS P[3] )
+    float fEnergy;  // Energy    [GeV]          ( LUJETS P[4] )
+    float fMass;  // Mass      [Gev/c^2]      ( LUJETS P[5] )
 
-   float  fVx;            // X vertex  [mm]           ( LUJETS V[1] )
-   float  fVy;            // Y vertex  [mm]           ( LUJETS V[2] )
-   float  fVz;            // Z vertex  [mm]           ( LUJETS V[3] )
-   float  fTime;          // time of procuction [mm/c]( LUJETS V[4] )
-   float  fLifetime;      // proper lifetime [mm/c]   ( LUJETS V[5] )
-};   
+    float fVx;  // X vertex  [mm]           ( LUJETS V[1] )
+    float fVy;  // Y vertex  [mm]           ( LUJETS V[2] )
+    float fVz;  // Z vertex  [mm]           ( LUJETS V[3] )
+    float fTime;  // time of procuction [mm/c]( LUJETS V[4] )
+    float fLifetime;  // proper lifetime [mm/c]   ( LUJETS V[5] )
+};
 
 typedef std::vector<Pythia6Particle*> ParticleVector;
 
-/// The C++ interface class to Pythia6 
+/// The C++ interface class to Pythia6
 ///
 /// According to TPythia6 class from Root:
 /// (The TPythia6 class is an interface class to F77 routines in Pythia6                //
-/// CERNLIB event generators, written by T.Sjostrand.)                         
+/// CERNLIB event generators, written by T.Sjostrand.)
 /// http://root.cern.ch/
 /// see http://root.cern.ch/root/License.html
 ///
 /// The complete Pythia6 documentation can be found at:
 /// http://home.thep.lu.se/~torbjorn/pythiaaux/recent.html
-/// 
+///
 
 class Pythia6
 {
   public:
+    // ****** constructors and destructor
+    Pythia6();
+    virtual ~Pythia6();
 
-   // ****** constructors and destructor
-   Pythia6();
-   virtual ~Pythia6();
+    static Pythia6* Instance();
 
-   static Pythia6 *Instance();
+    // ****** TPYTHIA routines
+    //
+    int Pycomp(int kf);
+    void Py1ent(int line, int kf, double pe, double theta, double phi);
+    ParticleVector* ImportParticles();
+    int ImportParticles(ParticleVector* particles, const char* option = "");
 
-   // ****** TPYTHIA routines
-   //
-   int   Pycomp(int kf);
-   void  Py1ent(int line, int kf, double pe, double theta, double phi);
-   ParticleVector*  ImportParticles();
-   int   ImportParticles(ParticleVector* particles, const char* option="");
+    // ****** /PYDAT1/
+    //
+    void SetMSTJ(int i, int m) { fPydat1->MSTJ[i - 1] = m; }
 
-   // ****** /PYDAT1/
-   //
-   void  SetMSTJ(int i, int m   ) { fPydat1->MSTJ[i-1] = m; }
+    // ****** /PYDAT3/
+    //
+    int GetMDCY(int i, int j) { return fPydat3->MDCY[j - 1][i - 1]; }
+    int GetKFDP(int i, int j) { return fPydat3->KFDP[j - 1][i - 1]; }
+    void SetMDCY(int i, int j, int m) { fPydat3->MDCY[j - 1][i - 1] = m; }
+    void SetMDME(int i, int j, int m) { fPydat3->MDME[j - 1][i - 1] = m; }
 
-   // ****** /PYDAT3/
-   //
-   int   GetMDCY(int i, int j) { return fPydat3->MDCY[j-1][i-1]; }
-   int   GetKFDP(int i, int j) { return fPydat3->KFDP[j-1][i-1]; }
-   void  SetMDCY(int i, int j, int m) { fPydat3->MDCY[j-1][i-1] = m; }
-   void  SetMDME(int i, int j, int m) { fPydat3->MDME[j-1][i-1] = m; }
-   
   private:
-   static  Pythia6* fgInstance;
+    static Pythia6* fgInstance;
 
-   ParticleVector*  fParticles;
-   Pyjets_t*        fPyjets;
-   Pydat1_t*        fPydat1;
-   Pydat3_t*        fPydat3;
+    ParticleVector* fParticles;
+    Pyjets_t* fPyjets;
+    Pydat1_t* fPydat1;
+    Pydat3_t* fPydat3;
 };
 
 #endif
-

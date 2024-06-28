@@ -36,23 +36,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack WLSStackingAction::ClassifyNewTrack(
-  const G4Track* aTrack)
+G4ClassificationOfNewTrack WLSStackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4ParticleDefinition* particleType = aTrack->GetDefinition();
 
   // keep primary particle
-  if(aTrack->GetParentID() == 0)
-    return fUrgent;
+  if (aTrack->GetParentID() == 0) return fUrgent;
 
-  if(particleType == G4OpticalPhoton::OpticalPhotonDefinition())
-  {
+  if (particleType == G4OpticalPhoton::OpticalPhotonDefinition()) {
     // keep optical photon
     ++fPhotonCounter;
     return fUrgent;
   }
-  else
-  {
+  else {
     // discard all other secondaries
     // return fKill;
   }
@@ -69,4 +65,7 @@ void WLSStackingAction::NewStage()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSStackingAction::PrepareNewEvent() { fPhotonCounter = 0; }
+void WLSStackingAction::PrepareNewEvent()
+{
+  fPhotonCounter = 0;
+}

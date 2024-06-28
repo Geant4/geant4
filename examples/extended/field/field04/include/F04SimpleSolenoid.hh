@@ -31,11 +31,11 @@
 #ifndef F04SimpleSolenoid_h
 #define F04SimpleSolenoid_h 1
 
-#include "G4LogicalVolume.hh"
-#include "G4Tubs.hh"
-
 #include "F04ElementField.hh"
 #include "F04GlobalField.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4Tubs.hh"
 
 //  F04SimpleSolenoid implements a solenoid magnet with a constant
 //  cylindrical magnetic field in z-direction
@@ -43,7 +43,6 @@
 class F04SimpleSolenoid : public F04ElementField
 {
   public:
-
     ///  Default constructor.
     F04SimpleSolenoid(G4double, G4double, G4LogicalVolume*, G4ThreeVector);
 
@@ -54,10 +53,10 @@ class F04SimpleSolenoid : public F04ElementField
     G4double GetLength() override { return fFieldLength; }
 
     ///  GetWidth() returns the solenoid diameter
-    G4double GetWidth() override { return fFieldRadius*2.0; }
+    G4double GetWidth() override { return fFieldRadius * 2.0; }
 
     ///  GetHeight() returns the solenoid diameter
-    G4double GetHeight() override { return fFieldRadius*2.0; }
+    G4double GetHeight() override { return fFieldRadius * 2.0; }
 
     /// SetFringeZ(G4double) sets the solenoid fringe field z-length
     void SetFringeZ(G4double z) { fFringeZ = z; }
@@ -76,14 +75,12 @@ class F04SimpleSolenoid : public F04ElementField
     void AddFieldValue(const G4double point[4], G4double field[6]) const override;
 
   private:
-
     G4double fBfield = 0.;
 
     G4double fFringeZ = 0.;
 
     G4double fFieldLength = 0.;
     G4double fFieldRadius = 0.;
-
 };
 
 #endif

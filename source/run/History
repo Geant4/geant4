@@ -6,7 +6,36 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-12-13 Ben Morgan (run-V11-01-11)
+## 2024-06-14 I. Hrivnacova (run-V11-02-08)
+- G4RunManager::ReinitializeGeometry: added call to G4FieldBuilder::Reinitialize
+
+## 2024-06-04 John Apostolakis (run-V11-02-07)
+- Add call in G4WorkerRunManager to use parallel initialisation of voxels
+  (Requires geommng-V11-02-02.)
+
+## 2024-06-01 Makoto Asaim (run-V11-02-06)
+- Initial implementation of creation/processing of SubEvents
+  - Co-working with event-V11-02-04, track-V11-02-03
+
+## 2024-05-09 Ben Morgan (run-V11-02-05)
+- Remove use of no longer supported TiMemory.
+
+## 2024-05-07 Makoto Asai (run-V11-02-04)
+- G4RunManager : add SetDefaultClassification methods to enable to set the
+  default classification for the track newly arriving to a stack.
+
+## 2024-04-11 Gabriele Cosmo (run-V11-02-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode
+  on G4MSSteppingAction. Use consistently G4 types.
+
+## 2024-04-04 Shogo Okada (run-V11-02-02)
+- G4PhysicsListHelper: added `DNATripleIoni` and `DNAQuadrupleIoni` for the
+  implementation of multiple-ionisation processes in Geant4-DNA.
+
+## 2024-04-03 Alvaro Tolosa-Delgado (run-V11-02-01)
+- Material Scan output extended.
+
+## 2023-12-13 Ben Morgan (run-V11-02-00)
 - Fix Issue #86: report number of threads from G4TaskRunManager correctly.
 
 ## 2023-11-17 I. Hrivnacova (run-V11-01-10)
@@ -83,7 +112,7 @@ It must **not** be used as a substitute for writing good git commit messages!
   call to `geant4_add_category` to define library build from source modules.
 - Make DLL export symbol a CMake module-level compile definition to aid
   future modularization
-  
+
 ## 2022-01-18 Jonas Hahnfeld (run-V11-00-02)
 - Prefer pointer to `const G4Material` if possible
 
@@ -125,12 +154,12 @@ July 01, 2021 Vladimir Ivanchenko (run-V10-07-07)
 
 May 20, 2021 Vladimir Ivanchenko (run-V10-07-06)
 - G4VPhysicsConstructor - fix initialisation of hadronic parameters
-    avoiding uncontrolled override of the verbosityLevel 
+    avoiding uncontrolled override of the verbosityLevel
 
 May 17, 2021 Jonathan Madsen (run-V10-07-05)
 - Removed calling physicsList->TerminateWorker() in G4WorkerRunManager
   as this appears to cause errors at termination
-  
+
 April 25, 2021 Hoang Tran (run-V10-07-04)
 - Added new G4DNAStaticMoleculeReactionProcess in PhysicsListHelper for DNA processs
 

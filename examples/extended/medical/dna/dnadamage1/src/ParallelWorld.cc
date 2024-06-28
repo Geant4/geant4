@@ -24,58 +24,45 @@
 // ********************************************************************
 //
 //
-// 
+//
 
 #include "ParallelWorld.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
+#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ParallelWorld::ParallelWorld(G4String worldName)
-    : G4VUserParallelWorld(worldName)
-{}
+ParallelWorld::ParallelWorld(G4String worldName) : G4VUserParallelWorld(worldName) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ParallelWorld::~ParallelWorld()
-{}
+ParallelWorld::~ParallelWorld() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ParallelWorld::Construct()
 {
-    SetupChemistryGeometry();
+  SetupChemistryGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ParallelWorld::SetupChemistryGeometry()
 {
-    //     
-    //Chemistry World
-    //
-    G4NistManager * pMan = G4NistManager::Instance();
-    G4Material *pWater = pMan->FindOrBuildMaterial("G4_WATER");
+  //
+  // Chemistry World
+  //
+  G4NistManager* pMan = G4NistManager::Instance();
+  G4Material* pWater = pMan->FindOrBuildMaterial("G4_WATER");
 
-    G4VPhysicalVolume* pGhostWorld = GetWorld();
-    G4LogicalVolume* pWorldLogical = pGhostWorld->GetLogicalVolume();
-  
-    G4Box* pSolidWorld = new G4Box("solidChemistryWorld",
-                                   200*nm, 
-                                   200*nm, 
-                                   200*nm);
-    G4LogicalVolume* pLogicWorld = new G4LogicalVolume(pSolidWorld, 
-                                                       pWater, 
-                                                       "logicChemistryWorld");
-    new G4PVPlacement(0,
-                      G4ThreeVector(),
-                      pLogicWorld,
-                      "ChemistryWorld",
-                      pWorldLogical, 
-                      false, 
-                      0);
+  G4VPhysicalVolume* pGhostWorld = GetWorld();
+  G4LogicalVolume* pWorldLogical = pGhostWorld->GetLogicalVolume();
+
+  G4Box* pSolidWorld = new G4Box("solidChemistryWorld", 200 * nm, 200 * nm, 200 * nm);
+  G4LogicalVolume* pLogicWorld = new G4LogicalVolume(pSolidWorld, pWater, "logicChemistryWorld");
+  new G4PVPlacement(0, G4ThreeVector(), pLogicWorld, "ChemistryWorld", pWorldLogical, false, 0);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

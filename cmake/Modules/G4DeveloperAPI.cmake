@@ -854,6 +854,59 @@ endfunction()
 
 #-----------------------------------------------------------------------
 #-----------------------------------------------------------------------
+#.rst:
+# Test Program Commands
+# ^^^^^^^^^^^^^^^^^^^^^
+# .. cmake:command:: geant4_test_link_libraries
+#
+#  .. code-block:: cmake
+#
+#    geant4_test_link_libraries(<target>
+#                               [PUBLIC pub1 [pub2 ...]
+#                               [PRIVATE pri1 [pri2 ...]
+#                               [INTERFACE int1 [int2 ...])
+function(geant4_test_link_libraries _target)
+  cmake_parse_arguments(G4TESTLINKLIB
+    ""
+    ""
+    "PUBLIC;PRIVATE;INTERFACE"
+    ${ARGN}
+    )
+  __geant4_assert_no_unparsed_arguments(G4TESTLINKLIB geant4_test_link_libraries)
+
+  # Need defined libraries to be able to resolve between static/shared
+  get_property(__g4definedlibraries GLOBAL PROPERTY GEANT4_DEFINED_CATEGORIES) 
+
+  foreach(__prop PUBLIC PRIVATE INTERFACE)
+    __geant4_resolve_link_libraries(G4TESTLINKLIB_${__prop})
+    if(G4TESTLINKLIB_${__prop})
+      # Filter list for internal static targets
+      # NB: This only works assuming that the input target is an executable
+      # If we introduce test libraries, would need same treatment as for main libraries
+      if(BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
+        set(_g4linklibs )
+        foreach(_linklib ${G4TESTLINKLIB_${__prop}})
+          # If the linklib is a G4Library, change name to "name-static"
+          list(FIND __g4definedlibraries ${_linklib} _isg4lib)
+          if(_isg4lib GREATER -1)
+            list(APPEND _g4linklibs "${_linklib}-static")
+          else()
+            list(APPEND _g4linklibs "${_linklib}")
+          endif()
+        endforeach()
+        message(STATUS "${_g4linklibs}")
+        set(_linklibs ${_g4linklibs})
+      else()
+        set(_linklibs ${G4TESTLINKLIB_${__prop}})
+      endif()
+
+      target_link_libraries(${_target} ${__prop} ${_linklibs})
+    endif()
+  endforeach()
+endfunction()
+
+#-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Composition Functions
 #.rst:
 # .. cmake:command:: geant4_compose_targets
@@ -1184,6 +1237,9 @@ function(__geant4_resolve_link_libraries _list)
     geant4_has_module(__is_module ${__lib})
     if(__is_module)
       geant4_get_module_property(__parent_lib ${__lib} PARENT_TARGET)
+      if(NOT __parent_lib)
+        message(FATAL_ERROR "Module '${__lib}' has no PARENT_TARGET set")
+      endif()
       list(APPEND _resolved_list ${__parent_lib})
     else()
       list(APPEND _resolved_list ${__lib})

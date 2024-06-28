@@ -30,22 +30,19 @@
 
 #include "F04EventAction.hh"
 
-#include "F04RunAction.hh"
-
 #include "F04EventActionMessenger.hh"
+#include "F04RunAction.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4Trajectory.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4VVisManager.hh"
-
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04EventAction::F04EventAction(F04RunAction* runAction)
- : fRunaction(runAction)
+F04EventAction::F04EventAction(F04RunAction* runAction) : fRunaction(runAction)
 {
   fEventMessenger = new F04EventActionMessenger(this);
 }
@@ -61,10 +58,9 @@ F04EventAction::~F04EventAction()
 
 void F04EventAction::BeginOfEventAction(const G4Event* evt)
 {
- G4int evtNb = evt->GetEventID();
+  G4int evtNb = evt->GetEventID();
 
- if(fVerboseLevel>0)
-    G4cout << "<<< Event  " << evtNb << " started." << G4endl;
+  if (fVerboseLevel > 0) G4cout << "<<< Event  " << evtNb << " started." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,15 +69,13 @@ void F04EventAction::BeginOfEventAction(const G4Event* evt)
 
 void F04EventAction::EndOfEventAction(const G4Event* evt)
 {
-  if (fVerboseLevel>0)
-     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
+  if (fVerboseLevel > 0) G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 
-  if (fRunaction->GetRndmFreq() == 2)
-    {
-     std::ostringstream os;
-     os<<"endOfEvent_"<<G4Threading::G4GetThreadId()<<".rndm";
-     G4Random::saveEngineStatus(os.str().c_str());
-    }
+  if (fRunaction->GetRndmFreq() == 2) {
+    std::ostringstream os;
+    os << "endOfEvent_" << G4Threading::G4GetThreadId() << ".rndm";
+    G4Random::saveEngineStatus(os.str().c_str());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,5 +89,5 @@ G4int F04EventAction::GetEventNo()
 
 void F04EventAction::SetEventVerbose(G4int level)
 {
-  fVerboseLevel = level ;
+  fVerboseLevel = level;
 }

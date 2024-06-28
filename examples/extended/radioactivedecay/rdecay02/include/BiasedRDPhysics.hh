@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -32,29 +32,24 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-class G4Radioactivation;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class BiasedRDPhysics : public G4VPhysicsConstructor
 {
-  public: 
+  public:
     BiasedRDPhysics(G4int verbose = 1);
-    BiasedRDPhysics(const G4String& name);    
-    
-   ~BiasedRDPhysics() override = default;
+
+    ~BiasedRDPhysics() override = default;
 
     // This is a dummy method for physics
     void ConstructParticle() override;
- 
+
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
+    // registered to the process manager of each particle type
     void ConstructProcess() override;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -36,6 +36,7 @@
 #include "G4UserRunAction.hh"
 #include "G4VProcess.hh"
 #include "globals.hh"
+
 #include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,62 +55,60 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction() override;
+    ~RunAction() override;
 
   public:
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
     void CountProcesses(G4String procName);
 
-    void TrackLength (G4double step);
+    void TrackLength(G4double step);
 
-    void EnergyDeposited (G4double edepPrim, G4double edepSecond);
+    void EnergyDeposited(G4double edepPrim, G4double edepSecond);
 
-    void EnergyTransferedByProcess (G4String procName, G4double energy);
+    void EnergyTransferedByProcess(G4String procName, G4double energy);
 
-    void EnergyTransfered (G4double energy);
+    void EnergyTransfered(G4double energy);
 
-    void TotalEnergyLost (G4double energy);
+    void TotalEnergyLost(G4double energy);
 
-    void EnergyBalance (G4double energy);
+    void EnergyBalance(G4double energy);
 
-    void TotalEnergyDeposit (G4double energy);
+    void TotalEnergyDeposit(G4double energy);
 
-    void EnergySpectrumOfSecondaries (G4String particleName, G4double ekin);
+    void EnergySpectrumOfSecondaries(G4String particleName, G4double ekin);
 
   public:
-    G4double GetEnergyFromRestrictedRange
-             (G4double,G4ParticleDefinition*,G4Material*,G4double);
-                       
-    G4double GetEnergyFromCSDARange
-             (G4double,G4ParticleDefinition*,G4Material*,G4double);
+    G4double GetEnergyFromRestrictedRange(G4double, G4ParticleDefinition*, G4Material*, G4double);
 
-private:
-  struct MinMaxData {
-   MinMaxData()
-     : fCount(0), fVsum(0.), fVmin(0.), fVmax(0.) {}
-   MinMaxData(G4int count, G4double vsum, G4double vmin, G4double vmax)
-     : fCount(count), fVsum(vsum), fVmin(vmin), fVmax(vmax) {}
-   G4int     fCount;
-   G4double  fVsum;
-   G4double  fVmin;
-   G4double  fVmax;
-  };
-  
+    G4double GetEnergyFromCSDARange(G4double, G4ParticleDefinition*, G4Material*, G4double);
+
   private:
+    struct MinMaxData
+    {
+        MinMaxData() : fCount(0), fVsum(0.), fVmin(0.), fVmax(0.) {}
+        MinMaxData(G4int count, G4double vsum, G4double vmin, G4double vmax)
+          : fCount(count), fVsum(vsum), fVmin(vmin), fVmax(vmax)
+        {}
+        G4int fCount;
+        G4double fVsum;
+        G4double fVmin;
+        G4double fVmax;
+    };
 
-    DetectorConstruction*   fDetector = nullptr;
-    PrimaryGeneratorAction* fPrimary  = nullptr;
-    HistoManager*           fHistoManager = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary = nullptr;
+    HistoManager* fHistoManager = nullptr;
 
-    std::map<G4String,G4int>  fProcCounter;
+    std::map<G4String, G4int> fProcCounter;
 
-    G4long   fNbSteps = 0;
+    G4long fNbSteps = 0;
     G4double fTrackLength = 0., fStepMin = DBL_MAX, fStepMax = 0.;
 
     G4double fEdepPrimary = 0., fEdepPrimMin = DBL_MAX, fEdepPrimMax = 0.;
-    std::map<G4String,MinMaxData> fEtransfByProcess;
+    std::map<G4String, MinMaxData> fEtransfByProcess;
     G4double fEnergyTransfered = 0., fEtransfMin = DBL_MAX, fEtransfMax = 0.;
     G4double fEnergyLost = 0., fElostMin = DBL_MAX, fElostMax = 0.;
     G4double fEnergyBalance = 0., fEbalMin = DBL_MAX, fEbalMax = 0.;
@@ -117,10 +116,9 @@ private:
     G4double fEdepSecondary = 0., fEdepSecMin = DBL_MAX, fEdepSecMax = 0.;
     G4double fEdepTotal = 0., fEdepTotMin = DBL_MAX, fEdepTotMax = 0.;
 
-    std::map<G4String,MinMaxData> fEkinOfSecondaries;
+    std::map<G4String, MinMaxData> fEkinOfSecondaries;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

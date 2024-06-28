@@ -43,13 +43,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MCTruthEventAction::MCTruthEventAction() : G4UserEventAction()
-{}
+MCTruthEventAction::MCTruthEventAction() : G4UserEventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MCTruthEventAction::~MCTruthEventAction() 
-{}
+MCTruthEventAction::~MCTruthEventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

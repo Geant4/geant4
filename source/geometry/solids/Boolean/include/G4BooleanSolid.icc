@@ -40,20 +40,6 @@ G4double G4BooleanSolid::GetCubVolEpsilon() const
 }
 
 inline
-void G4BooleanSolid::SetCubVolStatistics(G4int st)
-{
-  if (st != fCubVolStatistics) { fCubicVolume = -1.; }
-  fCubVolStatistics = st;
-}
-
-inline    
-void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
-{
-  if (ep != fCubVolEpsilon) { fCubicVolume = -1.; }
-  fCubVolEpsilon = ep;
-}
-
-inline
 G4int G4BooleanSolid::GetAreaStatistics() const
 {
   return fAreaStatistics;
@@ -72,7 +58,7 @@ void G4BooleanSolid::SetAreaStatistics(G4int st)
   fAreaStatistics = st;
 }
 
-inline    
+inline
 void G4BooleanSolid::SetAreaAccuracy(G4double ep)
 {
   if (ep != fAreaAccuracy) { fSurfaceArea = -1.; }

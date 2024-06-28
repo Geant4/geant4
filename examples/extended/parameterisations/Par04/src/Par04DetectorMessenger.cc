@@ -24,26 +24,28 @@
 // ********************************************************************
 //
 #include "Par04DetectorMessenger.hh"
-#include <CLHEP/Units/SystemOfUnits.h>   // for pi
-#include <G4ApplicationState.hh>         // for G4State_PreInit, G4State_Idle
-#include <G4ThreeVector.hh>              // for G4ThreeVector
-#include <G4Types.hh>                    // for G4bool, G4double, G4int
-#include <G4UIcommand.hh>                // for G4UIcommand
-#include <G4UImessenger.hh>              // for G4UImessenger
-#include <G4UIparameter.hh>              // for G4UIparameter
-#include <istream>                       // for basic_istream, basic_istream...
-#include <string>                        // for operator>>
-#include "G4UIcmdWithADoubleAndUnit.hh"  // for G4UIcmdWithADoubleAndUnit
-#include "G4UIcmdWithAnInteger.hh"       // for G4UIcmdWithAnInteger
-#include "G4UIcmdWithoutParameter.hh"    // for G4UIcmdWithoutParameter
-#include "G4UIdirectory.hh"              // for G4UIdirectory
+
 #include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
+
+#include "G4UIcmdWithADoubleAndUnit.hh"  // for G4UIcmdWithADoubleAndUnit
+#include "G4UIcmdWithAnInteger.hh"  // for G4UIcmdWithAnInteger
+#include "G4UIcmdWithoutParameter.hh"  // for G4UIcmdWithoutParameter
+#include "G4UIdirectory.hh"  // for G4UIdirectory
+
+#include <CLHEP/Units/SystemOfUnits.h>  // for pi
+#include <G4ApplicationState.hh>  // for G4State_PreInit, G4State_Idle
+#include <G4ThreeVector.hh>  // for G4ThreeVector
+#include <G4Types.hh>  // for G4bool, G4double, G4int
+#include <G4UIcommand.hh>  // for G4UIcommand
+#include <G4UImessenger.hh>  // for G4UImessenger
+#include <G4UIparameter.hh>  // for G4UIparameter
+#include <istream>  // for basic_istream, basic_istream...
+#include <string>  // for operator>>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04DetectorMessenger::Par04DetectorMessenger(Par04DetectorConstruction* aDetector)
-  : G4UImessenger()
-  , fDetector(aDetector)
+  : G4UImessenger(), fDetector(aDetector)
 {
   fExampleDir = new G4UIdirectory("/Par04/");
   fExampleDir->SetGuidance("UI commands specific to this example");
@@ -84,23 +86,23 @@ Par04DetectorMessenger::Par04DetectorMessenger(Par04DetectorConstruction* aDetec
   fAbsorCmd->SetGuidance("  material name");
   fAbsorCmd->SetGuidance("  thickness (with unit) : t>0");
   fAbsorCmd->SetGuidance("  if sensitive : true/false.");
-  auto  absNbPrm = new G4UIparameter("AbsorNb", 'i', false);
+  auto absNbPrm = new G4UIparameter("AbsorNb", 'i', false);
   absNbPrm->SetGuidance("absor number : from 0 to 1");
   absNbPrm->SetParameterRange("AbsorNb>-1&AbsoNb<2");
   fAbsorCmd->SetParameter(absNbPrm);
-  auto  matPrm = new G4UIparameter("material", 's', false);
+  auto matPrm = new G4UIparameter("material", 's', false);
   matPrm->SetGuidance("material name");
   fAbsorCmd->SetParameter(matPrm);
-  auto  thickPrm = new G4UIparameter("thickness", 'd', false);
+  auto thickPrm = new G4UIparameter("thickness", 'd', false);
   thickPrm->SetGuidance("thickness of absorber");
   thickPrm->SetParameterRange("thickness>0.");
   fAbsorCmd->SetParameter(thickPrm);
-  auto  unitPrm = new G4UIparameter("unit", 's', false);
+  auto unitPrm = new G4UIparameter("unit", 's', false);
   unitPrm->SetGuidance("unit of thickness");
   G4String unitList = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
   unitPrm->SetParameterCandidates(unitList);
   fAbsorCmd->SetParameter(unitPrm);
-  auto  sensitivePrm = new G4UIparameter("sensitive", 'b', false);
+  auto sensitivePrm = new G4UIparameter("sensitive", 'b', false);
   sensitivePrm->SetGuidance("if absorber is sensitive (registers energy deposits)");
   fAbsorCmd->SetParameter(sensitivePrm);
 
@@ -171,24 +173,19 @@ Par04DetectorMessenger::~Par04DetectorMessenger()
 
 void Par04DetectorMessenger::SetNewValue(G4UIcommand* aCommand, G4String aNewValue)
 {
-  if(aCommand == fPrintCmd)
-  {
+  if (aCommand == fPrintCmd) {
     fDetector->Print();
   }
-  else if(aCommand == fDetectorInnerRadiusCmd)
-  {
+  else if (aCommand == fDetectorInnerRadiusCmd) {
     fDetector->SetInnerRadius(fDetectorInnerRadiusCmd->GetNewDoubleValue(aNewValue));
   }
-  else if(aCommand == fDetectorLengthCmd)
-  {
+  else if (aCommand == fDetectorLengthCmd) {
     fDetector->SetLength(fDetectorInnerRadiusCmd->GetNewDoubleValue(aNewValue));
   }
-  else if(aCommand == fNbLayersCmd)
-  {
+  else if (aCommand == fNbLayersCmd) {
     fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(aNewValue));
   }
-  else if(aCommand == fAbsorCmd)
-  {
+  else if (aCommand == fAbsorCmd) {
     G4int num;
     G4double thick;
     G4String unt, mat;
@@ -201,26 +198,21 @@ void Par04DetectorMessenger::SetNewValue(G4UIcommand* aCommand, G4String aNewVal
     fDetector->SetAbsorberThickness(num, thick);
     fDetector->SetAbsorberSensitivity(num, sensitive);
   }
-  else if(aCommand == fMeshNbRhoCellsCmd)
-  {
+  else if (aCommand == fMeshNbRhoCellsCmd) {
     fDetector->SetMeshNbOfCells(0, fMeshNbRhoCellsCmd->GetNewIntValue(aNewValue));
   }
-  else if(aCommand == fMeshNbPhiCellsCmd)
-  {
+  else if (aCommand == fMeshNbPhiCellsCmd) {
     fDetector->SetMeshNbOfCells(1, fMeshNbPhiCellsCmd->GetNewIntValue(aNewValue));
     fDetector->SetMeshSizeOfCells(1,
                                   2. * CLHEP::pi / fMeshNbPhiCellsCmd->GetNewIntValue(aNewValue));
   }
-  else if(aCommand == fMeshNbZCellsCmd)
-  {
+  else if (aCommand == fMeshNbZCellsCmd) {
     fDetector->SetMeshNbOfCells(2, fMeshNbZCellsCmd->GetNewIntValue(aNewValue));
   }
-  else if(aCommand == fMeshSizeRhoCellsCmd)
-  {
+  else if (aCommand == fMeshSizeRhoCellsCmd) {
     fDetector->SetMeshSizeOfCells(0, fMeshSizeRhoCellsCmd->GetNewDoubleValue(aNewValue));
   }
-  else if(aCommand == fMeshSizeZCellsCmd)
-  {
+  else if (aCommand == fMeshSizeZCellsCmd) {
     fDetector->SetMeshSizeOfCells(2, fMeshSizeZCellsCmd->GetNewDoubleValue(aNewValue));
   }
 }
@@ -231,36 +223,28 @@ G4String Par04DetectorMessenger::GetCurrentValue(G4UIcommand* aCommand)
 {
   G4String cv;
 
-  if(aCommand == fDetectorInnerRadiusCmd)
-  {
+  if (aCommand == fDetectorInnerRadiusCmd) {
     cv = fDetectorInnerRadiusCmd->ConvertToString(fDetector->GetInnerRadius(), "mm");
   }
-  else if(aCommand == fDetectorLengthCmd)
-  {
+  else if (aCommand == fDetectorLengthCmd) {
     cv = fDetectorLengthCmd->ConvertToString(fDetector->GetLength(), "mm");
   }
-  else if(aCommand == fNbLayersCmd)
-  {
+  else if (aCommand == fNbLayersCmd) {
     cv = fNbLayersCmd->ConvertToString(fDetector->GetNbOfLayers());
   }
-  else if(aCommand == fMeshNbRhoCellsCmd)
-  {
+  else if (aCommand == fMeshNbRhoCellsCmd) {
     cv = fMeshNbRhoCellsCmd->ConvertToString(fDetector->GetMeshNbOfCells()[0]);
   }
-  else if(aCommand == fMeshNbPhiCellsCmd)
-  {
+  else if (aCommand == fMeshNbPhiCellsCmd) {
     cv = fMeshNbPhiCellsCmd->ConvertToString(fDetector->GetMeshNbOfCells()[1]);
   }
-  else if(aCommand == fMeshNbZCellsCmd)
-  {
+  else if (aCommand == fMeshNbZCellsCmd) {
     cv = fMeshNbZCellsCmd->ConvertToString(fDetector->GetMeshNbOfCells()[2]);
   }
-  else if(aCommand == fMeshSizeRhoCellsCmd)
-  {
+  else if (aCommand == fMeshSizeRhoCellsCmd) {
     cv = fMeshSizeRhoCellsCmd->ConvertToString(fDetector->GetMeshSizeOfCells()[0]);
   }
-  else if(aCommand == fMeshSizeZCellsCmd)
-  {
+  else if (aCommand == fMeshSizeZCellsCmd) {
     cv = fMeshSizeZCellsCmd->ConvertToString(fDetector->GetMeshSizeOfCells()[2]);
   }
   return cv;

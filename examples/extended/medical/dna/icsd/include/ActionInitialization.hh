@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
@@ -39,7 +39,6 @@
 
 #include "G4VUserActionInitialization.hh"
 
-
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
@@ -50,9 +49,6 @@ class ActionInitialization : public G4VUserActionInitialization
     virtual void Build() const;
 
   private:
-
 };
 
 #endif
-
-    

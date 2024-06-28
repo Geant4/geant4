@@ -30,10 +30,10 @@
 
 #include "ActionInitialization.hh"
 
-#include "RunAction.hh"
 #include "EventAction.hh"
-#include "StackingAction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "StackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,7 +41,8 @@ ActionInitialization::ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::Build() const {
+void ActionInitialization::Build() const
+{
   SetUserAction(new PrimaryGeneratorAction());
 
   SetUserAction(new RunAction());
@@ -51,7 +52,8 @@ void ActionInitialization::Build() const {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const {
+void ActionInitialization::BuildForMaster() const
+{
   SetUserAction(new RunAction());
 }
 

@@ -24,35 +24,36 @@
 // ********************************************************************
 //
 #include "Par04Hit.hh"
-#include <CLHEP/Units/SystemOfUnits.h>     // for mm, pi, MeV, cm, rad
-#include <CLHEP/Vector/ThreeVector.h>      // for operator/, operator<<, Hep...
-#include <G4RotationMatrix.hh>             // for G4RotationMatrix
-#include <G4String.hh>                     // for G4String
-#include <G4ThreeVector.hh>                // for G4ThreeVector
-#include <G4Transform3D.hh>                // for G4Transform3D
-#include <G4VHit.hh>                       // for G4VHit
-#include <algorithm>                       // for max
-#include <iostream>                        // for operator<<, basic_ostream:...
-#include <string>                          // for operator<
-#include "G4AttDef.hh"                     // for G4AttDef
-#include "G4AttDefStore.hh"                // for GetInstance
-#include "G4AttValue.hh"                   // for G4AttValue
-#include "G4Colour.hh"                     // for G4Colour
-#include "G4SystemOfUnits.hh"              // for mm, MeV, cm, rad
-#include "G4Tubs.hh"                       // for G4Tubs
-#include "G4UnitsTable.hh"                 // for G4BestUnit
-#include "G4VVisManager.hh"                // for G4VVisManager
-#include "G4VisAttributes.hh"              // for G4VisAttributes
-#include <cmath>                           // for log10
-template <class Type> class G4Allocator;
+
+#include "G4AttDef.hh"  // for G4AttDef
+#include "G4AttDefStore.hh"  // for GetInstance
+#include "G4AttValue.hh"  // for G4AttValue
+#include "G4Colour.hh"  // for G4Colour
+#include "G4SystemOfUnits.hh"  // for mm, MeV, cm, rad
+#include "G4Tubs.hh"  // for G4Tubs
+#include "G4UnitsTable.hh"  // for G4BestUnit
+#include "G4VVisManager.hh"  // for G4VVisManager
+#include "G4VisAttributes.hh"  // for G4VisAttributes
+
+#include <CLHEP/Units/SystemOfUnits.h>  // for mm, pi, MeV, cm, rad
+#include <CLHEP/Vector/ThreeVector.h>  // for operator/, operator<<, Hep...
+#include <G4RotationMatrix.hh>  // for G4RotationMatrix
+#include <G4String.hh>  // for G4String
+#include <G4ThreeVector.hh>  // for G4ThreeVector
+#include <G4Transform3D.hh>  // for G4Transform3D
+#include <G4VHit.hh>  // for G4VHit
+#include <algorithm>  // for max
+#include <cmath>  // for log10
+#include <iostream>  // for operator<<, basic_ostream:...
+#include <string>  // for operator<
+template<class Type>
+class G4Allocator;
 
 G4ThreadLocal G4Allocator<Par04Hit>* Par04HitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04Hit::Par04Hit()
-  : G4VHit()
-{}
+Par04Hit::Par04Hit() : G4VHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,18 +61,17 @@ Par04Hit::~Par04Hit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04Hit::Par04Hit(const Par04Hit& aRight)
-  : G4VHit()
+Par04Hit::Par04Hit(const Par04Hit& aRight) : G4VHit()
 {
-  fEdep   = aRight.fEdep;
-  fNdep   = aRight.fNdep;
-  fZId    = aRight.fZId;
-  fRhoId  = aRight.fRhoId;
-  fPhiId  = aRight.fPhiId;
-  fTime   = aRight.fTime;
-  fPos    = aRight.fPos;
-  fRot    = aRight.fRot;
-  fType   = aRight.fType;
+  fEdep = aRight.fEdep;
+  fNdep = aRight.fNdep;
+  fZId = aRight.fZId;
+  fRhoId = aRight.fRhoId;
+  fPhiId = aRight.fPhiId;
+  fTime = aRight.fTime;
+  fPos = aRight.fPos;
+  fRot = aRight.fRot;
+  fType = aRight.fType;
   fLogVol = aRight.fLogVol;
 }
 
@@ -79,15 +79,15 @@ Par04Hit::Par04Hit(const Par04Hit& aRight)
 
 const Par04Hit& Par04Hit::operator=(const Par04Hit& aRight)
 {
-  fEdep   = aRight.fEdep;
-  fNdep   = aRight.fNdep;
-  fZId    = aRight.fZId;
-  fRhoId  = aRight.fRhoId;
-  fPhiId  = aRight.fPhiId;
-  fTime   = aRight.fTime;
-  fPos    = aRight.fPos;
-  fRot    = aRight.fRot;
-  fType   = aRight.fType;
+  fEdep = aRight.fEdep;
+  fNdep = aRight.fNdep;
+  fZId = aRight.fZId;
+  fRhoId = aRight.fRhoId;
+  fPhiId = aRight.fPhiId;
+  fTime = aRight.fTime;
+  fPos = aRight.fPos;
+  fRot = aRight.fRot;
+  fType = aRight.fType;
   fLogVol = aRight.fLogVol;
   return *this;
 }
@@ -105,22 +105,17 @@ void Par04Hit::Draw()
 {
   /// Arbitrary size corresponds to the example macros
   G4ThreeVector meshSize(2.325 * mm, 2 * CLHEP::pi / 50. * CLHEP::rad, 3.4 * mm);
-  G4int numPhiCells           = CLHEP::pi * 2. / meshSize.y();
+  G4int numPhiCells = CLHEP::pi * 2. / meshSize.y();
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   // Hits can be filtered out in visualisation
-  if(!pVVisManager->FilterHit(*this))
-    return;
+  if (!pVVisManager->FilterHit(*this)) return;
   // Do not plot hits from parallel world
-  if(fType >= 2)
-    return;
+  if (fType >= 2) return;
   // Do not draw empty hits
-  if(fEdep <= 0)
-    return;
+  if (fEdep <= 0) return;
   // Do not plot if default values were not changed
-  if(fRhoId == -1 && fZId == -1 && fPhiId == -1)
-    return;
-  if(pVVisManager)
-  {
+  if (fRhoId == -1 && fZId == -1 && fPhiId == -1) return;
+  if (pVVisManager) {
     G4Transform3D trans(fRot, fPos);
     G4VisAttributes attribs;
     G4Tubs solid("draw", fRhoId * meshSize.x(), (fRhoId + 1) * meshSize.x(), meshSize.z() / 2.,
@@ -145,13 +140,12 @@ const std::map<G4String, G4AttDef>* Par04Hit::GetAttDefs() const
 {
   G4bool isNew;
   std::map<G4String, G4AttDef>* store = G4AttDefStore::GetInstance("Par04Hit", isNew);
-  if(isNew)
-  {
+  if (isNew) {
     (*store)["HitType"] = G4AttDef("HitType", "Hit Type", "Physics", "", "G4String");
     (*store)["Energy"] =
       G4AttDef("Energy", "Energy Deposited", "Physics", "G4BestUnit", "G4double");
     (*store)["Time"] = G4AttDef("Time", "Time", "Physics", "G4BestUnit", "G4double");
-    (*store)["Pos"]  = G4AttDef("Pos", "Position", "Physics", "G4BestUnit", "G4ThreeVector");
+    (*store)["Pos"] = G4AttDef("Pos", "Position", "Physics", "G4BestUnit", "G4ThreeVector");
   }
   return store;
 }
@@ -173,6 +167,6 @@ std::vector<G4AttValue>* Par04Hit::CreateAttValues() const
 void Par04Hit::Print()
 {
   std::cout << "\tHit " << fEdep / MeV << " MeV from " << fNdep << " deposits at " << fPos / cm
-            << " cm rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId
-            << ", " << fZId << "), " << fTime << " ns" << std::endl;
+            << " cm rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", "
+            << fZId << "), " << fTime << " ns" << std::endl;
 }

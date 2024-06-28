@@ -28,49 +28,47 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "EventAction.hh"
+
 #include "RunAction.hh"
 
-#include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction(RunAction* runAction)
-: G4UserEventAction(),
-  fRunAction(runAction), fVerboseLevel(0)
+  : G4UserEventAction(), fRunAction(runAction), fVerboseLevel(0)
 {
   G4RunManager::GetRunManager()->SetPrintProgress(10000);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-EventAction::~EventAction()
-{}
+EventAction::~EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::BeginOfEventAction(const G4Event*)
-{}
+void EventAction::BeginOfEventAction(const G4Event*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::EndOfEventAction(const G4Event* event)
-{  
+{
   // save rndm status
-  if (fRunAction->GetRndmFreq() == 2) { 
-    CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");        
- 
+  if (fRunAction->GetRndmFreq() == 2) {
+    CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");
+
     // show rndm status
     G4int eventNb = event->GetEventID();
     G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-    if (eventNb%printModulo == 0) { 
+    if (eventNb % printModulo == 0) {
       G4cout << "\n---> End of Event: " << eventNb << G4endl;
       CLHEP::HepRandom::showEngineStatus();
     }

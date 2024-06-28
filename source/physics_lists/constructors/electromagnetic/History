@@ -6,17 +6,47 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-02-07 Vladimir Ivanchenko (phys-ctor-em-V11-01-14)
+## 2024-05-23 Hoang Tran (phys-ctor-em-V11-02-07)
+- Use EmParameters to control chemistry models in G4EmDNAChemistry_option3.
+
+## 2024-05-19 Vladimir Ivanchenko (phys-ctor-em-V11-02-06)
+- G4EmStandardPhysics_option3, G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmLivermorePhysics, G4EmDNAPhysics - use fAllisonPositronium type of model
+  for sampling of positron annihilation at rest (as it is in 11.2).
+- G4EmStandardPhysics_option4 - use model alternative model for positron
+  annihilation on fly with 3-gamma annihilation channel enabled.
+
+## 2024-05-04 Vladimir Ivanchenko (phys-ctor-em-V11-02-05)
+- G4GammaGeneralProcess - updated according to change in EM data tables 
+
+## 2024-04-05 Vladimir Ivanchenko (phys-ctor-em-V11-02-04)
+- G4EmDNABuilder - added nuclear stopping process for G4GenericIon below 1 MeV/u.
+- G4EmDNAPhysics, G4EmDNAPhysicsActivator, G4EmDNAPhysics_option2,
+  G4EmDNAPhysics_option4, G4EmDNAPhysics_option6, G4EmDNAPhysics_option8
+    change upper limit for DNA physics of Helium ions from 300 MeV to 400 MeV.
+
+## 2024-04-04 Vladimir Ivanchenko (phys-ctor-em-V11-02-03)
+- G4EmDNAPhysics - define default maximum kinetic energy 600 MeV
+    instead of 300 MeV in order to have standard ionisation and
+    multiple scattering always defined for DNA physics configurations.
+    This allows avoid situations when low-energy ions path DNA region
+    without interaction
+
+## 2024-02-07 Vladimir Ivanchenko (phys-ctor-em-V11-02-02)
 - G4EmStandardPhysics_option3 - return back step limit type to
     fUseDistanceToBoundary and the default RangeFactor 0.04 from 0.03,
     which will allow to restore more accurate distributions for several
     tests for medical benchmark
 
-## 2024-02-04 Vladimir Ivanchenko
+## 2024-02-04 Vladimir Ivanchenko (phys-ctor-em-V11-02-01)
 - G4GammaGeneralProcess - fixed sampling of muon pair production - problem 2543
 
+## 2024-01-27 Vladimir Ivanchenko (phys-ctor-em-V11-02-00)
+- G4EmStandardPhysicsWVI - return back ATIMA model for ionisation and
+    fluctuations of ions in order to make comparisons with other models.
+
 ## 2023-11-09 Hoang Tran (phys-ctor-em-V11-01-13)
-- Correct subtype process of G4LowECapture in G4EmDNABuilder .
+- Correct subtype process of G4LowECapture in G4EmDNABuilder.
 
 ## 2023-11-04 Hoang Tran (phys-ctor-em-V11-01-12)
 - Correct G4EmDNABuilder for proton constructors.

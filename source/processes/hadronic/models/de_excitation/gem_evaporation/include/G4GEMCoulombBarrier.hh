@@ -33,6 +33,8 @@
 #include "G4CoulombBarrier.hh"
 #include "globals.hh"
 
+class G4Pow;
+
 class G4GEMCoulombBarrier : public G4CoulombBarrier
 {
 public:
@@ -50,6 +52,7 @@ private:
   
   G4double CalcCompoundRadius(G4int ARes) const;
 
+  G4Pow* g4calc;
   G4double AejectOneThird;
 };
 #endif

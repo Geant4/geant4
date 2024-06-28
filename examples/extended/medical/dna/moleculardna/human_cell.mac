@@ -10,7 +10,7 @@
 /scheduler/endTime 5.0 ns
 /scheduler/maxNullTimeSteps 10000000
 /dnageom/radicalKillDistance 9 nm
-/dnageom/interactionDirectRange 3.5 angstrom
+/dnageom/interactionDirectRange 2.0 angstrom
 
 /dnageom/placementSize 75 75 75 nm
 /dnageom/fractalScaling 75 75 75 nm

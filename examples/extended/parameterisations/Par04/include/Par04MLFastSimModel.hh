@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE
-#ifndef PAR04MLFASTSIMMODEL_HH
-#define PAR04MLFASTSIMMODEL_HH
+#  ifndef PAR04MLFASTSIMMODEL_HH
+#    define PAR04MLFASTSIMMODEL_HH
 
-#include <G4String.hh>                // for G4String
-#include <G4ThreeVector.hh>           // for G4ThreeVector
-#include <G4Types.hh>                 // for G4bool, G4double
-#include <memory>                     // for unique_ptr
-#include <vector>                     // for vector
-#include "G4VFastSimulationModel.hh"  // for G4VFastSimulationModel
+#    include "G4VFastSimulationModel.hh"  // for G4VFastSimulationModel
+
+#    include <G4String.hh>  // for G4String
+#    include <G4ThreeVector.hh>  // for G4ThreeVector
+#    include <G4Types.hh>  // for G4bool, G4double
+#    include <memory>  // for unique_ptr
+#    include <vector>  // for vector
 class G4FastSimHitMaker;
 class G4FastStep;
 class G4FastHit;
@@ -53,31 +54,31 @@ class Par04InferenceSetup;
 
 class Par04MLFastSimModel : public G4VFastSimulationModel
 {
- public:
-  Par04MLFastSimModel(G4String, G4Region*);
-  Par04MLFastSimModel(G4String);
-  ~Par04MLFastSimModel();
-  /// There are no kinematics constraints. True is returned.
-  virtual G4bool ModelTrigger(const G4FastTrack&) final;
-  /// Model is applicable to electrons, positrons, and photons.
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
-  /// Take particle out of the full simulation (kill it at the entrance
-  /// depositing all the energy). Calculate energy deposited in the detector
-  /// from the NN model inference.
-  virtual void DoIt(const G4FastTrack&, G4FastStep&) final;
+  public:
+    Par04MLFastSimModel(G4String, G4Region*);
+    Par04MLFastSimModel(G4String);
+    ~Par04MLFastSimModel();
+    /// There are no kinematics constraints. True is returned.
+    virtual G4bool ModelTrigger(const G4FastTrack&) final;
+    /// Model is applicable to electrons, positrons, and photons.
+    virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
+    /// Take particle out of the full simulation (kill it at the entrance
+    /// depositing all the energy). Calculate energy deposited in the detector
+    /// from the NN model inference.
+    virtual void DoIt(const G4FastTrack&, G4FastStep&) final;
 
- private:
-  /// Inference model that is NN aware
-  Par04InferenceSetup* fInference;
-  /// Inference model that is NN aware
-  /// Helper class for creation of hits within the sensitive detector
-  std::unique_ptr<G4FastSimHitMaker> fHitMaker;
-  std::unique_ptr<G4FastSimHitMaker> fParallelHitMaker;
-  /// Vector of energy values
-  std::vector<G4double> fEnergies;
-  /// Vector of positions corresponding to energy values (const for one NN
-  /// model)
-  std::vector<G4ThreeVector> fPositions;
+  private:
+    /// Inference model that is NN aware
+    Par04InferenceSetup* fInference;
+    /// Inference model that is NN aware
+    /// Helper class for creation of hits within the sensitive detector
+    std::unique_ptr<G4FastSimHitMaker> fHitMaker;
+    std::unique_ptr<G4FastSimHitMaker> fParallelHitMaker;
+    /// Vector of energy values
+    std::vector<G4double> fEnergies;
+    /// Vector of positions corresponding to energy values (const for one NN
+    /// model)
+    std::vector<G4ThreeVector> fPositions;
 };
-#endif /* PAR04INFERENCEMODEL_HH */
+#  endif /* PAR04INFERENCEMODEL_HH */
 #endif

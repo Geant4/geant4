@@ -47,7 +47,7 @@ class ActionInitialization : public G4VUserActionInitialization
     void Build() const override;
 };
 
-}
+}  // namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

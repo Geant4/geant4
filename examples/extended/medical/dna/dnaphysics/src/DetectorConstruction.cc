@@ -24,32 +24,38 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
-#include "DetectorMessenger.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4UserLimits.hh"
+#include "DetectorMessenger.hh"
+#include "PhysicsList.hh"
+
+#include "G4LogicalVolumeStore.hh"
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UserLimits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-DetectorConstruction::DetectorConstruction(PhysicsList* ptr) :
-  G4VUserDetectorConstruction(), fpWaterMaterial(nullptr),
-  fLogicWorld(nullptr),fPhysiWorld(nullptr)
+DetectorConstruction::DetectorConstruction(PhysicsList* ptr)
+  : G4VUserDetectorConstruction(),
+    fpWaterMaterial(nullptr),
+    fLogicWorld(nullptr),
+    fPhysiWorld(nullptr)
 {
-  // create commands for interactive definition of the detector  
+  // Create commands for interactive definition of the detector
   fDetectorMessenger = new DetectorMessenger(this, ptr);
 }
 
@@ -64,11 +70,10 @@ DetectorConstruction::~DetectorConstruction()
 
 void DetectorConstruction::DefineMaterials()
 {
-
   // Water is defined from NIST material database
-  G4NistManager * man = G4NistManager::Instance();
+  G4NistManager* man = G4NistManager::Instance();
 
-  G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
+  G4Material* H2O = man->FindOrBuildMaterial("G4_WATER");
 
   /*
    If one wishes to test other density value for water material,
@@ -82,8 +87,8 @@ void DetectorConstruction::DefineMaterials()
    */
   fpWaterMaterial = H2O;
 
-  //G4cout << "-> Density of water material (g/cm3)="
-  // << fpWaterMaterial->GetDensity()/(g/cm/cm/cm) << G4endl;
+  // G4cout << "-> Density of water material (g/cm3)="
+  //  << fpWaterMaterial->GetDensity()/(g/cm/cm/cm) << G4endl;
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -92,28 +97,30 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  if(fPhysiWorld) { return fPhysiWorld; }
+  if (fPhysiWorld) {
+    return fPhysiWorld;
+  }
   DefineMaterials();
 
-  // WORLD VOLUME
+  // World volume
   G4double worldSizeX = 100 * micrometer;
   G4double worldSizeY = worldSizeX;
   G4double worldSizeZ = worldSizeX;
 
-  G4Box* solidWorld = new G4Box("World", //its name
-      worldSizeX / 2, worldSizeY / 2, worldSizeZ / 2); //its size
+  G4Box* solidWorld = new G4Box("World",  // its name
+                                worldSizeX / 2, worldSizeY / 2, worldSizeZ / 2);  // its size
 
-  fLogicWorld = new G4LogicalVolume(solidWorld, //its solid
-      fpWaterMaterial, //its material
-      "World"); //its name
+  fLogicWorld = new G4LogicalVolume(solidWorld,  // its solid
+                                    fpWaterMaterial,  // its material
+                                    "World");  // its name
 
-  fPhysiWorld = new G4PVPlacement(0, //no rotation
-      G4ThreeVector(), //at (0,0,0)
-      "World", //its name
-      fLogicWorld, //its logical volume
-      0, //its mother  volume
-      false, //no boolean operation
-      0); //copy number
+  fPhysiWorld = new G4PVPlacement(0,  // no rotation
+                                  G4ThreeVector(),  // at (0,0,0)
+                                  "World",  // its name
+                                  fLogicWorld,  // its logical volume
+                                  0,  // its mother volume
+                                  false,  // no boolean operation
+                                  0);  // copy number
 
   // Visualization attributes - white
   G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
@@ -123,10 +130,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4VisAttributes* worldVisAtt1 = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
   worldVisAtt1->SetVisibility(true);
 
-  // 
   // Shows how to introduce a 20 eV tracking cut
-  //
-  //logicWorld->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,20*eV));
+  // logicWorld->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,20*eV));
 
   return fPhysiWorld;
 }
@@ -135,14 +140,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
-  // Search the material by its name   
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(
-      materialChoice);
+  // Search the material by its name
+  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial)
-  {
+  if (pttoMaterial) {
     fpWaterMaterial = pttoMaterial;
-    if(fLogicWorld) {
+    if (fLogicWorld) {
       fLogicWorld->SetMaterial(fpWaterMaterial);
     }
     G4RunManager::GetRunManager()->GeometryHasBeenModified();

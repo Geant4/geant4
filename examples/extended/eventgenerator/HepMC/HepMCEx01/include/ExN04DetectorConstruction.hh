@@ -31,29 +31,30 @@
 #ifndef ExN04DetectorConstruction_h
 #define ExN04DetectorConstruction_h 1
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4Material;
 
-class ExN04DetectorConstruction : public G4VUserDetectorConstruction {
-public:
-  ExN04DetectorConstruction();
-  ~ExN04DetectorConstruction();
+class ExN04DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    ExN04DetectorConstruction();
+    ~ExN04DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
-private:
-  void DefineMaterials();
+  private:
+    void DefineMaterials();
 
 #include "ExN04DetectorParameterDef.hh"
 
-  G4Material* fAir;
-  G4Material* fAr;
-  G4Material* fSilicon;
-  G4Material* fScinti;
-  G4Material* fLead;
+    G4Material* fAir;
+    G4Material* fAr;
+    G4Material* fSilicon;
+    G4Material* fScinti;
+    G4Material* fLead;
 };
 
 #endif

@@ -47,5 +47,3 @@ class G01ActionInitialization : public G4VUserActionInitialization
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

@@ -34,17 +34,17 @@
 
 class G4LogicalVolume;
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
-public:
-  DetectorConstruction();
-  ~DetectorConstruction();
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
-private:
-  G4LogicalVolume* flv_voxel;
-
+  private:
+    G4LogicalVolume* flv_voxel;
 };
 
 #endif

@@ -44,19 +44,17 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+
 #include "Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-RunAction::RunAction()
- : G4UserRunAction()
-{
-}
+RunAction::RunAction() : G4UserRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -84,29 +82,21 @@ void RunAction::EndOfRunAction(const G4Run* run)
   // results
   //
   const Run* dnadamage3Run = static_cast<const Run*>(run);
-  G4double sumDose   = dnadamage3Run->GetSumDose();
+  G4double sumDose = dnadamage3Run->GetSumDose();
 
   // print
   //
-  if (IsMaster())
-  {
+  if (IsMaster()) {
+    G4cout << G4endl << "--------------------End of Global Run-----------------------" << G4endl
+           << "  The run has " << nofEvents << " events " << G4endl;
 
-    G4cout
-      << G4endl
-      << "--------------------End of Global Run-----------------------"
-      << G4endl
-      << "  The run has " << nofEvents << " events "
-      << G4endl;
+    ScoreSpecies* masterScorer = dynamic_cast<ScoreSpecies*>(dnadamage3Run->GetPrimitiveScorer());
 
-    ScoreSpecies* masterScorer=
-      dynamic_cast<ScoreSpecies*>(dnadamage3Run->GetPrimitiveScorer());
-
-    ScoreStrandBreaks* masterSBScorer=
+    ScoreStrandBreaks* masterSBScorer =
       dynamic_cast<ScoreStrandBreaks*>(dnadamage3Run->GetSBScorer());
 
     G4cout << "Number of events recorded by the species scorer = "
-      << masterScorer->GetNumberOfRecordedEvents()
-      << G4endl;
+           << masterScorer->GetNumberOfRecordedEvents() << G4endl;
 
     // LET
     Run* aRun = (Run*)run;
@@ -114,36 +104,25 @@ void RunAction::EndOfRunAction(const G4Run* run)
     G4int nOfEvent = totLET->entries();
     G4double LET_mean = 0;
     G4double LET_square = 0;
-    for(G4int i=0;i<nOfEvent;i++){
+    for (G4int i = 0; i < nOfEvent; i++) {
       G4double* LET = (*totLET)[i];
-      if(!LET) continue;
+      if (!LET) continue;
       LET_mean += *LET;
-      LET_square += (*LET)*(*LET);
+      LET_square += (*LET) * (*LET);
     }
     LET_mean /= nOfEvent;
-    LET_square = std::sqrt(LET_square/nOfEvent - std::pow(LET_mean,2));
+    LET_square = std::sqrt(LET_square / nOfEvent - std::pow(LET_mean, 2));
 
     masterScorer->OutputAndClear();
-    masterSBScorer->OutputAndClear(LET_mean,LET_square);
-
+    masterSBScorer->OutputAndClear(LET_mean, LET_square);
   }
-  else
-  {
-    G4cout
-      << G4endl
-      << "--------------------End of Local Run------------------------"
-      << G4endl
-      << "  The run has " << nofEvents << " events"
-      << G4endl;
+  else {
+    G4cout << G4endl << "--------------------End of Local Run------------------------" << G4endl
+           << "  The run has " << nofEvents << " events" << G4endl;
   }
 
-  G4cout
-    << " Total energy deposited in the world volume : "
-    << sumDose/eV << " eV"
-    << G4endl
-    << " ------------------------------------------------------------"
-    << G4endl
-    << G4endl;
+  G4cout << " Total energy deposited in the world volume : " << sumDose / eV << " eV" << G4endl
+         << " ------------------------------------------------------------" << G4endl << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

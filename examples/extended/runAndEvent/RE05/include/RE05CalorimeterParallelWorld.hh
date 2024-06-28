@@ -35,17 +35,16 @@
 
 class RE05CalorimeterParallelWorld : public G4VUserParallelWorld
 {
-public:
-  RE05CalorimeterParallelWorld(G4String& parallelWorldName);
-  virtual ~RE05CalorimeterParallelWorld();
+  public:
+    RE05CalorimeterParallelWorld(G4String& parallelWorldName);
+    virtual ~RE05CalorimeterParallelWorld();
 
-public:
-  virtual void Construct();
-  virtual void ConstructSD();
+  public:
+    virtual void Construct();
+    virtual void ConstructSD();
 
-private:
+  private:
 #include "RE05DetectorParameterDef.hh"
-
 };
 
 #endif

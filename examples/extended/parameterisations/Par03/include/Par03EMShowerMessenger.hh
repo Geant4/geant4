@@ -47,37 +47,37 @@ class G4UIcmdWithAnInteger;
 
 class Par03EMShowerMessenger : public G4UImessenger
 {
- public:
-  Par03EMShowerMessenger(Par03EMShowerModel* aModel);
-  ~Par03EMShowerMessenger();
+  public:
+    Par03EMShowerMessenger(Par03EMShowerModel* aModel);
+    ~Par03EMShowerMessenger();
 
- public:
-  /// Invokes appropriate methods based on the typed command
-  virtual void SetNewValue(G4UIcommand* aCommand, G4String aNewValues) final;
-  /// Retrieves the current settings
-  virtual G4String GetCurrentValue(G4UIcommand* aCommand) final;
+  public:
+    /// Invokes appropriate methods based on the typed command
+    virtual void SetNewValue(G4UIcommand* aCommand, G4String aNewValues) final;
+    /// Retrieves the current settings
+    virtual G4String GetCurrentValue(G4UIcommand* aCommand) final;
 
- private:
-  /// Model to setup
-  Par03EMShowerModel* fModel;
-  /// Command to set the up a directory for model settings /Par03/fastSim
-  G4UIdirectory* fDirectory;
-  /// Command printing current settings
-  G4UIcmdWithoutParameter* fPrintCmd;
-  /// Command to set the sigma parameter of the Gaussian distribution describing
-  /// the transverse profile
-  G4UIcmdWithADoubleAndUnit* fSigmaCmd;
-  /// Command to set the alpha parameter of the Gamma distribution describing
-  /// the longitudinal profile
-  G4UIcmdWithADouble* fAlphaCmd;
-  /// Command to set the beta parameter of the Gamma distribution describing the
-  /// longitudinal profile
-  G4UIcmdWithADouble* fBetaCmd;
-  /// Command to set the number of (same energy) deposits to be created by
-  /// fast simulation
-  G4UIcmdWithAnInteger* fNbOfHitsCmd;
-  /// Command to set the maximum shower depth
-  G4UIcmdWithADouble* fLongMaxDepthCmd;
+  private:
+    /// Model to setup
+    Par03EMShowerModel* fModel;
+    /// Command to set the up a directory for model settings /Par03/fastSim
+    G4UIdirectory* fDirectory;
+    /// Command printing current settings
+    G4UIcmdWithoutParameter* fPrintCmd;
+    /// Command to set the sigma parameter of the Gaussian distribution describing
+    /// the transverse profile
+    G4UIcmdWithADoubleAndUnit* fSigmaCmd;
+    /// Command to set the alpha parameter of the Gamma distribution describing
+    /// the longitudinal profile
+    G4UIcmdWithADouble* fAlphaCmd;
+    /// Command to set the beta parameter of the Gamma distribution describing the
+    /// longitudinal profile
+    G4UIcmdWithADouble* fBetaCmd;
+    /// Command to set the number of (same energy) deposits to be created by
+    /// fast simulation
+    G4UIcmdWithAnInteger* fNbOfHitsCmd;
+    /// Command to set the maximum shower depth
+    G4UIcmdWithADouble* fLongMaxDepthCmd;
 };
 
 #endif /* PAR03EMSHOWERMESSENGER_HH */

@@ -31,59 +31,59 @@
 #ifndef HEPMC_G4_PYTHIA_INTERFACE_H
 #define HEPMC_G4_PYTHIA_INTERFACE_H
 
-#include "HepMCG4Interface.hh"
 #include "HepMC/IO_HEPEVT.h"
+#include "HepMCG4Interface.hh"
 
 class HepMCG4PythiaMessenger;
 
 /// A generic interface class with Pythia event generator via HepMC.
 
-class HepMCG4PythiaInterface : public HepMCG4Interface {
-protected:
-  G4int verbose;
-  G4int mpylist;
-  HepMC::IO_HEPEVT hepevtio;
+class HepMCG4PythiaInterface : public HepMCG4Interface
+{
+  protected:
+    G4int verbose;
+    G4int mpylist;
+    HepMC::IO_HEPEVT hepevtio;
 
-  HepMCG4PythiaMessenger* messenger;
+    HepMCG4PythiaMessenger* messenger;
 
-  // In default, this is automatic conversion, Pythia->HEPEVT->HepMC,
-  // by HepMC utilities.
-  virtual HepMC::GenEvent* GenerateHepMCEvent();
+    // In default, this is automatic conversion, Pythia->HEPEVT->HepMC,
+    // by HepMC utilities.
+    virtual HepMC::GenEvent* GenerateHepMCEvent();
 
-public:
-  HepMCG4PythiaInterface();
-  ~HepMCG4PythiaInterface();
+  public:
+    HepMCG4PythiaInterface();
+    ~HepMCG4PythiaInterface();
 
-  // set/get methods
-  void SetVerboseLevel(G4int i);
-  G4int GetVerboseLevel() const;
+    // set/get methods
+    void SetVerboseLevel(G4int i);
+    G4int GetVerboseLevel() const;
 
-  void SetPylist(G4int i);
-  G4int GetPylist() const;
+    void SetPylist(G4int i);
+    G4int GetPylist() const;
 
-  // call pyxxx
-  void CallPyinit(G4String frame, G4String beam, G4String target,
-                  G4double win);
-  void CallPystat(G4int istat);
+    // call pyxxx
+    void CallPyinit(G4String frame, G4String beam, G4String target, G4double win);
+    void CallPystat(G4int istat);
 
-  // random numbers operations
-  void SetRandomSeed(G4int iseed);
-  void CallPygive(G4String par);
-  void CallPyrget(G4int lun, G4int move);
-  void CallPyrset(G4int lun, G4int move);
-  void PrintRandomStatus(std::ostream& ostr=G4cout) const;
+    // random numbers operations
+    void SetRandomSeed(G4int iseed);
+    void CallPygive(G4String par);
+    void CallPyrget(G4int lun, G4int move);
+    void CallPyrset(G4int lun, G4int move);
+    void PrintRandomStatus(std::ostream& ostr = G4cout) const;
 
-  // setup user parameters (empty in default).
-  // Implement your parameters in a delived class if you want.
-  virtual void SetUserParameters();
+    // setup user parameters (empty in default).
+    // Implement your parameters in a delived class if you want.
+    virtual void SetUserParameters();
 
-  virtual void Print() const;
+    virtual void Print() const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline void HepMCG4PythiaInterface::SetVerboseLevel(G4int i)
 {
-  verbose= i;
+  verbose = i;
 }
 
 inline G4int HepMCG4PythiaInterface::GetVerboseLevel() const
@@ -93,7 +93,7 @@ inline G4int HepMCG4PythiaInterface::GetVerboseLevel() const
 
 inline void HepMCG4PythiaInterface::SetPylist(G4int i)
 {
-  mpylist= i;
+  mpylist = i;
 }
 
 inline G4int HepMCG4PythiaInterface::GetPylist() const

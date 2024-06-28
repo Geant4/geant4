@@ -26,92 +26,118 @@
 /// \file Run.hh
 /// \brief Definition of the Run class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #ifndef Run_h
 #define Run_h 1
 
 #include "G4Run.hh"
-#include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Run : public G4Run {
-  // This class accumulates relevant quantities (related to the primay decays)
-  // collected during the run.
-  // ( Note: these information are provided via calls of accessor methods of
-  //         this Run class made by SteppingAction::UserSteppingAction. )
-  // At the end of a run, the  printInfo  method is called by the run-action
-  // to print out some summary information (typically: mean, min and max) about
-  // these quantities. In multithreaded (MT) mode, an object of this class is
-  // filled up for each working thread, and then merged (automatically by the
-  // Geant4 kernel) into another object (of this class) owned by the master class;
-  // the  printInfo  method is then called only for the latter run object.
-  // Note that, for simplicity and brevity, we avoid histograms and print-out
-  // instead some statistics (compute by ourself) at the end of the run.
+class Run : public G4Run
+{
+    // This class accumulates relevant quantities (related to the primay decays)
+    // collected during the run.
+    // ( Note: these information are provided via calls of accessor methods of
+    //         this Run class made by SteppingAction::UserSteppingAction. )
+    // At the end of a run, the  printInfo  method is called by the run-action
+    // to print out some summary information (typically: mean, min and max) about
+    // these quantities. In multithreaded (MT) mode, an object of this class is
+    // filled up for each working thread, and then merged (automatically by the
+    // Geant4 kernel) into another object (of this class) owned by the master class;
+    // the  printInfo  method is then called only for the latter run object.
+    // Note that, for simplicity and brevity, we avoid histograms and print-out
+    // instead some statistics (compute by ourself) at the end of the run.
   public:
-  
     Run();
     ~Run();
-  
+
     // This method is called automatically by the Geant4 kernel (not by the user!)
     // at the end of each event. In the case of multithreaded mode, it is called
     // only for the Working thread that handled that event.
-    virtual void RecordEvent( const G4Event* anEvent ) override;
+    virtual void RecordEvent(const G4Event* anEvent) override;
 
     // This method is called automatically by the Geant4 kernel (not by the user!)
     // only in the case of multithreaded mode and only for Working threads.
-    virtual void Merge( const G4Run* aRun ) override;
-  
+    virtual void Merge(const G4Run* aRun) override;
+
     // This method is called by RunAction::EndOfRunAction : in the case
     // of multithreaded mode, only the master thread calls it.
     void PrintInfo() const;
 
-    void SetPrimaryParticleId( const G4int inputValue ) { fPrimaryParticleId = inputValue; }
-    void SetPrimaryParticleInitialKineticEnergy( const G4double inputValue )
-      { fPrimaryParticleInitialKineticEnergy = inputValue; }
-    void SetPrimaryParticleInitialTotalEnergy( const G4double inputValue )
-      { fPrimaryParticleInitialTotalEnergy = inputValue; }
-    void SetPrimaryParticleInitialMomentum( const G4double inputValue )
-      { fPrimaryParticleInitialMomentum = inputValue; }
-    void SetPrimaryParticleInitialBeta( const G4double inputValue )
-      { fPrimaryParticleInitialBeta = inputValue; }
-    void SetPrimaryParticleInitialGamma( const G4double inputValue )
-      { fPrimaryParticleInitialGamma = inputValue; }
-    void SetPrimaryParticleInitial3Momentum( const G4ThreeVector& inputValue )
-      { fPrimaryParticleInitial3Momentum = inputValue; }
-    void SetPrimaryParticleInitialPosition( const G4ThreeVector& inputValue )
-      { fPrimaryParticleInitialPosition = inputValue; }
-    void SetToleranceEPviolations( const G4double inputValue )
-      { fToleranceEPviolations = inputValue; }
-    void SetToleranceDeltaDecayRadius( const G4double inputValue )
-      { fToleranceDeltaDecayRadius = inputValue; }
-    void SetIsPreassignedDecayEnabled( const G4bool inputValue )
-      { fIsPreassignedDecayEnabled = inputValue; }
-    void SetIsBoostToLabEnabled( const G4bool inputValue ) { fIsBoostToLabEnabled = inputValue; }
+    void SetPrimaryParticleId(const G4int inputValue) { fPrimaryParticleId = inputValue; }
+    void SetPrimaryParticleInitialKineticEnergy(const G4double inputValue)
+    {
+      fPrimaryParticleInitialKineticEnergy = inputValue;
+    }
+    void SetPrimaryParticleInitialTotalEnergy(const G4double inputValue)
+    {
+      fPrimaryParticleInitialTotalEnergy = inputValue;
+    }
+    void SetPrimaryParticleInitialMomentum(const G4double inputValue)
+    {
+      fPrimaryParticleInitialMomentum = inputValue;
+    }
+    void SetPrimaryParticleInitialBeta(const G4double inputValue)
+    {
+      fPrimaryParticleInitialBeta = inputValue;
+    }
+    void SetPrimaryParticleInitialGamma(const G4double inputValue)
+    {
+      fPrimaryParticleInitialGamma = inputValue;
+    }
+    void SetPrimaryParticleInitial3Momentum(const G4ThreeVector& inputValue)
+    {
+      fPrimaryParticleInitial3Momentum = inputValue;
+    }
+    void SetPrimaryParticleInitialPosition(const G4ThreeVector& inputValue)
+    {
+      fPrimaryParticleInitialPosition = inputValue;
+    }
+    void SetToleranceEPviolations(const G4double inputValue)
+    {
+      fToleranceEPviolations = inputValue;
+    }
+    void SetToleranceDeltaDecayRadius(const G4double inputValue)
+    {
+      fToleranceDeltaDecayRadius = inputValue;
+    }
+    void SetIsPreassignedDecayEnabled(const G4bool inputValue)
+    {
+      fIsPreassignedDecayEnabled = inputValue;
+    }
+    void SetIsBoostToLabEnabled(const G4bool inputValue) { fIsBoostToLabEnabled = inputValue; }
 
-    G4int    GetPrimaryParticleId() const { return fPrimaryParticleId; }
+    G4int GetPrimaryParticleId() const { return fPrimaryParticleId; }
     G4double GetPrimaryParticleInitialKineticEnergy() const
-      { return fPrimaryParticleInitialKineticEnergy; }
+    {
+      return fPrimaryParticleInitialKineticEnergy;
+    }
     G4double GetPrimaryParticleInitialTotalEnergy() const
-      { return fPrimaryParticleInitialTotalEnergy; }
-    G4double GetPrimaryParticleInitialMomentum() const
-      { return fPrimaryParticleInitialMomentum; }
+    {
+      return fPrimaryParticleInitialTotalEnergy;
+    }
+    G4double GetPrimaryParticleInitialMomentum() const { return fPrimaryParticleInitialMomentum; }
     G4double GetPrimaryParticleInitialBeta() const { return fPrimaryParticleInitialBeta; }
     G4double GetPrimaryParticleInitialGamma() const { return fPrimaryParticleInitialGamma; }
     G4ThreeVector GetPrimaryParticleInitial3Momentum() const
-      { return fPrimaryParticleInitial3Momentum; }
+    {
+      return fPrimaryParticleInitial3Momentum;
+    }
     G4ThreeVector GetPrimaryParticleInitialPosition() const
-      { return fPrimaryParticleInitialPosition; }
+    {
+      return fPrimaryParticleInitialPosition;
+    }
     G4double GetToleranceEPviolations() const { return fToleranceEPviolations; }
     G4double GetToleranceDeltaDecayRadius() const { return fToleranceDeltaDecayRadius; }
-    G4bool   GetIsPreassignedDecayEnabled() const { return fIsPreassignedDecayEnabled; }
-    G4bool   GetIsBoostToLabEnabled() const { return fIsBoostToLabEnabled; }
+    G4bool GetIsPreassignedDecayEnabled() const { return fIsPreassignedDecayEnabled; }
+    G4bool GetIsBoostToLabEnabled() const { return fIsBoostToLabEnabled; }
 
     void IncrementNumberDecays() { ++fNumDecays; }
     void IncrementNumberBadPrimaryDecays() { ++fNumBadDecays; }
@@ -120,63 +146,73 @@ class Run : public G4Run {
     void IncrementNumberPviolations() { ++fNumPviolations; }
     void IncrementNumber_mc_truth_rPos_deltaMax_above() { ++fNum_mc_truth_rPos_deltaMax_above; }
     void IncrementNumber_underestimated_mc_truth_rPos_delta_above()
-      { ++fNum_underestimated_mc_truth_rPos_delta_above; }
+    {
+      ++fNum_underestimated_mc_truth_rPos_delta_above;
+    }
     void IncrementNumber_overestimated_mc_truth_rPos_delta_above()
-      { ++fNum_overestimated_mc_truth_rPos_delta_above; }
+    {
+      ++fNum_overestimated_mc_truth_rPos_delta_above;
+    }
     void IncrementNumberLargeUnderestimates() { ++fNumLargeUnderestimates; }
-    void IncrementNumberLargeOverestimates()  { ++fNumLargeOverestimates; } 
-  
+    void IncrementNumberLargeOverestimates() { ++fNumLargeOverestimates; }
+
     G4int GetNumberDecays() const { return fNumDecays; };
     G4int GetNumberBadDecays() const { return fNumBadDecays; }
     G4int GetNumberUnexpectedDecays() const { return fNumUnexpectedDecays; };
     G4int GetNumberEviolations() const { return fNumEviolations; };
     G4int GetNumberPviolations() const { return fNumPviolations; };
     G4int GetNumber_mc_truth_rPos_deltaMax_above() const
-      { return fNum_mc_truth_rPos_deltaMax_above; }
+    {
+      return fNum_mc_truth_rPos_deltaMax_above;
+    }
     G4int GetNumberUnderestimated_mc_truth_rPos_delta_above() const
-      { return fNum_underestimated_mc_truth_rPos_delta_above; }
-    G4int GetNumberOverestimated_mc_truth_rPos_delta_above()  const
-      { return fNum_overestimated_mc_truth_rPos_delta_above; }
+    {
+      return fNum_underestimated_mc_truth_rPos_delta_above;
+    }
+    G4int GetNumberOverestimated_mc_truth_rPos_delta_above() const
+    {
+      return fNum_overestimated_mc_truth_rPos_delta_above;
+    }
     G4int GetNumberLargeUnderestimates() const { return fNumLargeUnderestimates; }
-    G4int GetNumberLargeOverestimates()  const { return fNumLargeOverestimates; }
+    G4int GetNumberLargeOverestimates() const { return fNumLargeOverestimates; }
 
-    void SetDecayT( const G4double inputValue );
-    void SetDecayR_mc_truth( const G4double inputValue );
-    void SetDecayR( const G4double inputValue );
-    void SetDecayX( const G4double inputValue );
-    void SetDecayY( const G4double inputValue );
-    void SetDecayZ( const G4double inputValue );
-    void SetDeltaDecayR( const G4double inputValue );
-    void SetDeflectionAngle( const G4double inputValue );
-    void SetDeltaEkin( const G4double inputValue );
-    void SetDecayEkin( const G4double inputValue );
-    void SetDecayPx( const G4double inputValue );
-    void SetDecayPy( const G4double inputValue );
-    void SetDecayPz( const G4double inputValue );
-    void SetDecayEtotViolation( const G4double inputValue );
-    void SetDecayPxViolation( const G4double inputValue );
-    void SetDecayPyViolation( const G4double inputValue );
-    void SetDecayPzViolation( const G4double inputValue );
-    void SetMaxEkin_deltaMax( const G4double inputValue );
-    void SetMaxEtot_deltaMax( const G4double inputValue );
-    void SetMaxP_deltaMax( const G4double inputValue );
-    void SetMaxPdir_deltaMax( const G4double inputValue );
-    void SetMaxMass_deltaMax1( const G4double inputValue );
-    void SetMaxMass_deltaMax2( const G4double inputValue );
-    void SetMaxMass_deltaMax3( const G4double inputValue );
-    void SetMaxBeta_deltaMax1( const G4double inputValue );
-    void SetMaxBeta_deltaMax2( const G4double inputValue );
-    void SetMaxGamma_deltaMax1( const G4double inputValue );
-    void SetMaxGamma_deltaMax2( const G4double inputValue );
-    void SetMaxGamma_deltaMax3( const G4double inputValue );
-    void SetMaxT_proper_deltaMax( const G4double inputValue );
-    void SetMaxT_lab_deltaMax( const G4double inputValue );
-    void SetMaxMc_truth_rPos_deltaMax( const G4double inputValue );
-    void SetMinUnderestimated_mc_truth_rPos_delta( const G4double inputValue );
-    void SetMaxOverestimated_mc_truth_rPos_delta(  const G4double inputValue );
-    void SetMinUnderestimated_rDeltaPos( const G4double inputValue );
-    void SetMaxOverestimated_rDeltaPos(  const G4double inputValue );
-    void SetMaxFloat_rDeltaPos_deltaMax( const G4double inputValue );
+    void SetDecayT(const G4double inputValue);
+    void SetDecayR_mc_truth(const G4double inputValue);
+    void SetDecayR(const G4double inputValue);
+    void SetDecayX(const G4double inputValue);
+    void SetDecayY(const G4double inputValue);
+    void SetDecayZ(const G4double inputValue);
+    void SetDeltaDecayR(const G4double inputValue);
+    void SetDeflectionAngle(const G4double inputValue);
+    void SetDeltaEkin(const G4double inputValue);
+    void SetDecayEkin(const G4double inputValue);
+    void SetDecayPx(const G4double inputValue);
+    void SetDecayPy(const G4double inputValue);
+    void SetDecayPz(const G4double inputValue);
+    void SetDecayEtotViolation(const G4double inputValue);
+    void SetDecayPxViolation(const G4double inputValue);
+    void SetDecayPyViolation(const G4double inputValue);
+    void SetDecayPzViolation(const G4double inputValue);
+    void SetMaxEkin_deltaMax(const G4double inputValue);
+    void SetMaxEtot_deltaMax(const G4double inputValue);
+    void SetMaxP_deltaMax(const G4double inputValue);
+    void SetMaxPdir_deltaMax(const G4double inputValue);
+    void SetMaxMass_deltaMax1(const G4double inputValue);
+    void SetMaxMass_deltaMax2(const G4double inputValue);
+    void SetMaxMass_deltaMax3(const G4double inputValue);
+    void SetMaxBeta_deltaMax1(const G4double inputValue);
+    void SetMaxBeta_deltaMax2(const G4double inputValue);
+    void SetMaxGamma_deltaMax1(const G4double inputValue);
+    void SetMaxGamma_deltaMax2(const G4double inputValue);
+    void SetMaxGamma_deltaMax3(const G4double inputValue);
+    void SetMaxT_proper_deltaMax(const G4double inputValue);
+    void SetMaxT_lab_deltaMax(const G4double inputValue);
+    void SetMaxMc_truth_rPos_deltaMax(const G4double inputValue);
+    void SetMinUnderestimated_mc_truth_rPos_delta(const G4double inputValue);
+    void SetMaxOverestimated_mc_truth_rPos_delta(const G4double inputValue);
+    void SetMinUnderestimated_rDeltaPos(const G4double inputValue);
+    void SetMaxOverestimated_rDeltaPos(const G4double inputValue);
+    void SetMaxFloat_rDeltaPos_deltaMax(const G4double inputValue);
 
     G4double GetSumDecayT() const { return fSumDecayT; }
     G4double GetMinDecayT() const { return fMinDecayT; }
@@ -244,21 +280,28 @@ class Run : public G4Run {
     G4double GetSumMc_truth_rPos_deltaMax() const { return fSumMc_truth_rPos_deltaMax; }
     G4double GetMaxMc_truth_rPos_deltaMax() const { return fMaxMc_truth_rPos_deltaMax; }
     G4double GetSumUnderestimated_mc_truth_rPos_delta() const
-      { return fSumUnderestimated_mc_truth_rPos_delta; }
+    {
+      return fSumUnderestimated_mc_truth_rPos_delta;
+    }
     G4double GetMinUnderestimated_mc_truth_rPos_delta() const
-      { return fMinUnderestimated_mc_truth_rPos_delta; }
-    G4double GetSumOverestimated_mc_truth_rPos_delta()  const
-      { return fSumOverestimated_mc_truth_rPos_delta; }
-    G4double GetMaxOverestimated_mc_truth_rPos_delta()  const
-      { return fMaxOverestimated_mc_truth_rPos_delta; }
+    {
+      return fMinUnderestimated_mc_truth_rPos_delta;
+    }
+    G4double GetSumOverestimated_mc_truth_rPos_delta() const
+    {
+      return fSumOverestimated_mc_truth_rPos_delta;
+    }
+    G4double GetMaxOverestimated_mc_truth_rPos_delta() const
+    {
+      return fMaxOverestimated_mc_truth_rPos_delta;
+    }
     G4double GetSumUnderestimated_rDeltaPos() const { return fSumUnderestimated_rDeltaPos; }
     G4double GetMinUnderestimated_rDeltaPos() const { return fMinUnderestimated_rDeltaPos; }
-    G4double GetSumOverestimated_rDeltaPos()  const { return fSumOverestimated_rDeltaPos; }
-    G4double GetMaxOverestimated_rDeltaPos()  const { return fMaxOverestimated_rDeltaPos; }
+    G4double GetSumOverestimated_rDeltaPos() const { return fSumOverestimated_rDeltaPos; }
+    G4double GetMaxOverestimated_rDeltaPos() const { return fMaxOverestimated_rDeltaPos; }
     G4double GetMaxFloat_rDeltaPos_deltaMax() const { return fMaxFloat_rDeltaPos_deltaMax; }
-  
+
   private:
-  
     G4int fNumEvents;
 
     G4int fPrimaryParticleId;
@@ -284,7 +327,7 @@ class Run : public G4Run {
     G4int fNum_overestimated_mc_truth_rPos_delta_above;
     G4int fNumLargeUnderestimates;
     G4int fNumLargeOverestimates;
-  
+
     G4double fDecayT;
     G4double fSumDecayT;
     G4double fMinDecayT;
@@ -373,7 +416,7 @@ class Run : public G4Run {
     G4double fMaxOverestimated_mc_truth_rPos_delta;
     G4double fSumUnderestimated_rDeltaPos;
     G4double fMinUnderestimated_rDeltaPos;
-    G4double fSumOverestimated_rDeltaPos;  
+    G4double fSumOverestimated_rDeltaPos;
     G4double fMaxOverestimated_rDeltaPos;
     G4double fMaxFloat_rDeltaPos_deltaMax;
 };

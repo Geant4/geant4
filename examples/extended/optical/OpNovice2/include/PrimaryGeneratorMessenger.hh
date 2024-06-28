@@ -36,8 +36,8 @@
 #ifndef PrimaryGeneratorMessenger_h
 #define PrimaryGeneratorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PrimaryGeneratorAction;
 class G4UIdirectory;
@@ -48,17 +48,17 @@ class G4UIcmdWithABool;
 
 class PrimaryGeneratorMessenger : public G4UImessenger
 {
- public:
-  PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
-  ~PrimaryGeneratorMessenger() override;
+  public:
+    PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+    ~PrimaryGeneratorMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  PrimaryGeneratorAction* fPrimaryAction = nullptr;
-  G4UIdirectory* fGunDir = nullptr;
-  G4UIcmdWithADoubleAndUnit* fPolarCmd = nullptr;
-  G4UIcmdWithABool* fRandomDirectionCmd = nullptr;
+  private:
+    PrimaryGeneratorAction* fPrimaryAction = nullptr;
+    G4UIdirectory* fGunDir = nullptr;
+    G4UIcmdWithADoubleAndUnit* fPolarCmd = nullptr;
+    G4UIcmdWithABool* fRandomDirectionCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/include/ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
@@ -41,16 +43,11 @@
 
 class ActionInitialization : public G4VUserActionInitialization
 {
-public:
-  
-  ActionInitialization();
-  virtual ~ActionInitialization();
-
-  virtual void BuildForMaster() const;
-  virtual void Build() const;
+  public:
+    ActionInitialization();
+    virtual ~ActionInitialization();
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-

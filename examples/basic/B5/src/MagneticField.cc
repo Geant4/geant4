@@ -30,8 +30,6 @@
 #include "MagneticField.hh"
 
 #include "G4GenericMessenger.hh"
-#include "G4SystemOfUnits.hh"
-#include "globals.hh"
 
 namespace B5
 {
@@ -51,7 +49,7 @@ MagneticField::~MagneticField()
   delete fMessenger;
 }
 
-void MagneticField::GetFieldValue(const G4double [4],double *bField) const
+void MagneticField::GetFieldValue(const G4double[4], double* bField) const
 {
   bField[0] = 0.;
   bField[1] = fBy;
@@ -63,19 +61,15 @@ void MagneticField::GetFieldValue(const G4double [4],double *bField) const
 void MagneticField::DefineCommands()
 {
   // Define /B5/field command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this,
-                                      "/B5/field/",
-                                      "Field control");
+  fMessenger = new G4GenericMessenger(this, "/B5/field/", "Field control");
 
   // fieldValue command
-  auto& valueCmd
-    = fMessenger->DeclareMethodWithUnit("value","tesla",
-                                &MagneticField::SetField,
-                                "Set field strength.");
+  auto& valueCmd = fMessenger->DeclareMethodWithUnit("value", "tesla", &MagneticField::SetField,
+                                                     "Set field strength.");
   valueCmd.SetParameterName("field", true);
   valueCmd.SetDefaultValue("1.");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B5

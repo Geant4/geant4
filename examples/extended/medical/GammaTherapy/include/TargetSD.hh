@@ -52,26 +52,23 @@ class G4HCofThisEvent;
 
 class TargetSD : public G4VSensitiveDetector
 {
-public: 
+  public:
+    TargetSD(const G4String&);
+    virtual ~TargetSD();
 
-  TargetSD(const G4String&);
-  virtual ~TargetSD();
+    void Initialize(G4HCofThisEvent*);
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+    void EndOfEvent(G4HCofThisEvent*);
+    void clear();
+    void PrintAll();
 
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  void EndOfEvent(G4HCofThisEvent*);
-  void clear();
-  void PrintAll();
+  private:
+    TargetSD(const TargetSD& right);
+    const TargetSD& operator=(const TargetSD& right);
 
-private:
-
-  TargetSD(const TargetSD & right);
-  const TargetSD & operator = (const TargetSD & right);
-
-  G4int  fEvno;
+    G4int fEvno;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

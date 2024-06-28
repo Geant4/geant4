@@ -31,10 +31,11 @@
 #include "G4VUserActionInitialization.hh"
 class G4GeneralParticleSource;
 
-class UserActionInitialization : public G4VUserActionInitialization{
-public:
-  UserActionInitialization();
-  ~UserActionInitialization();
+class UserActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    UserActionInitialization();
+    ~UserActionInitialization();
     void Build() const;
 };
 

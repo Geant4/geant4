@@ -39,18 +39,13 @@ class G4ParticleChangeForLoss;
 
 class MyMollerBhabhaModel : public G4MollerBhabhaModel
 {
+  public:
+    MyMollerBhabhaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "myMollerBhabha");
 
-public:
+    ~MyMollerBhabhaModel();
 
-  MyMollerBhabhaModel(const G4ParticleDefinition* p = 0, 
-                      const G4String& nam = "myMollerBhabha");
-
- ~MyMollerBhabhaModel();
-                                                                 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                                const G4ParticleDefinition*,
-                                G4double kineticEnergy,
-                                G4double cutEnergy);
+    virtual G4double ComputeDEDXPerVolume(const G4Material*, const G4ParticleDefinition*,
+                                          G4double kineticEnergy, G4double cutEnergy);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

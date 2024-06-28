@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,21 +35,20 @@
 #include "DetectorConstruction.hh"
 
 #include "G4Event.hh"
-#include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(det)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fDetector(det)
 {
-  fParticleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  fParticleGun = new G4ParticleGun(1);
+  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(1*MeV);    
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  fParticleGun->SetParticleEnergy(1 * MeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,14 +62,13 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  // this function is called at the begining of event
   //
-  G4double halfSize = 0.5*(fDetector->GetWorldSize());
-  G4double x0 = - halfSize;
-  
+  G4double halfSize = 0.5 * (fDetector->GetWorldSize());
+  G4double x0 = -halfSize;
+
   fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0., 0.));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

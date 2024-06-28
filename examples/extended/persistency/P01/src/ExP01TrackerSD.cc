@@ -32,30 +32,31 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExP01TrackerSD.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4Step.hh"
-#include "G4ThreeVector.hh"
-#include "G4SDManager.hh"
-#include "G4ios.hh"
 
 #include "RootIO.hh"
+
+#include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
+#include "G4Step.hh"
+#include "G4ThreeVector.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01TrackerSD::ExP01TrackerSD(G4String name)
-  :G4VSensitiveDetector(name), fTrackerCollection(0), fHCID(0)
+  : G4VSensitiveDetector(name), fTrackerCollection(0), fHCID(0)
 {
   G4String HCname = name + "_HC";
   collectionName.insert(HCname);
-  G4cout << collectionName.size() << "   CalorimeterSD name:  " << name << " collection Name: " 
-         << HCname << G4endl;
+  G4cout << collectionName.size() << "   CalorimeterSD name:  " << name
+         << " collection Name: " << HCname << G4endl;
   fHCID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01TrackerSD::~ExP01TrackerSD()
-{ 
+{
   RootIO::GetInstance()->Close();
 }
 
@@ -63,35 +64,32 @@ ExP01TrackerSD::~ExP01TrackerSD()
 
 void ExP01TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
-  fTrackerCollection = new ExP01TrackerHitsCollection
-                          (SensitiveDetectorName,collectionName[0]); 
+  fTrackerCollection = new ExP01TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
   if (fHCID < 0) {
-    G4cout << "CalorimeterSD::Initialize:  " << SensitiveDetectorName << "   " 
-           << collectionName[0] << G4endl;
+    G4cout << "CalorimeterSD::Initialize:  " << SensitiveDetectorName << "   " << collectionName[0]
+           << G4endl;
     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
-    
   }
   HCE->AddHitsCollection(fHCID, fTrackerCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExP01TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool ExP01TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
 
-  if(edep==0.) return false;
+  if (edep == 0.) return false;
 
   ExP01TrackerHit* newHit = new ExP01TrackerHit();
-  newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchable()
-                                               ->GetReplicaNumber());
-  newHit->SetEdep     (edep);
-  newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
-  fTrackerCollection->insert( newHit );
-  
-  //newHit->Print();
-  //newHit->Draw();
+  newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
+  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber());
+  newHit->SetEdep(edep);
+  newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
+  fTrackerCollection->insert(newHit);
+
+  // newHit->Print();
+  // newHit->Draw();
 
   return true;
 }
@@ -104,20 +102,19 @@ void ExP01TrackerSD::EndOfEvent(G4HCofThisEvent*)
   G4int NbHits = fTrackerCollection->entries();
   std::vector<ExP01TrackerHit*> hitsVector;
 
-  { 
-    G4cout << "\n-------->Storing hits in the ROOT file: in this event there are " << NbHits 
+  {
+    G4cout << "\n-------->Storing hits in the ROOT file: in this event there are " << NbHits
            << " hits in the tracker chambers: " << G4endl;
-    for (G4int i=0;i<NbHits;i++) (*fTrackerCollection)[i]->Print();
-  } 
+    for (G4int i = 0; i < NbHits; i++)
+      (*fTrackerCollection)[i]->Print();
+  }
 
-  
-  for (G4int i=0;i<NbHits;i++) 
+  for (G4int i = 0; i < NbHits; i++)
     hitsVector.push_back((*fTrackerCollection)[i]);
-  
+
   RootIO::GetInstance()->Write(&hitsVector);
 
   //
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

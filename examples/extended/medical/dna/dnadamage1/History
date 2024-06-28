@@ -1,9 +1,13 @@
 # Example dnadamage1 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-05-08 G. Cosmo (dnadamage1-V11-02-00)
+- Fixed compilation errors on macOS/clang with C++23 enabled.
 
 ## 2023-10-18 LE TUAN ANH (dnadamage1-V11-01-00)
 - Changes in ROOT macros:

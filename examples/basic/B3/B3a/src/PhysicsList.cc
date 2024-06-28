@@ -61,4 +61,4 @@ void PhysicsList::SetCuts()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B3

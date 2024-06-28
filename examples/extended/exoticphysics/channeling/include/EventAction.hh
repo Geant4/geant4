@@ -28,11 +28,12 @@
 #ifndef EventAction_h
 #define EventAction_h 1
 
+#include "G4PhysicsFreeVector.hh"
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include <iostream>
+
 #include <fstream>
-#include "G4PhysicsFreeVector.hh"
+#include <iostream>
 
 class EventAction : public G4UserEventAction
 {

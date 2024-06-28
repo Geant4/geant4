@@ -73,12 +73,11 @@ G4FissLib::G4FissLib()
   dirName = G4FindDataDir("G4NEUTRONHPDATA");
   G4String tString = "/Fission/";
   dirName = dirName + tString;
-  numEle = (G4int)G4Element::GetNumberOfElements();
+  numEle = G4Element::GetNumberOfElements();
   theFission = new G4ParticleHPChannel[numEle];
 
-  for (G4int i=0; i<numEle; ++i)
+  for (std::size_t i=0; i<numEle; ++i)
   { 
-//    G4cout << "G4FissLib::G4FissLib(): element "<< i << " : " << (*(G4Element::GetElementTable()))[i]->GetZ()<< G4endl;
     if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
     {
       theFission[i].Init((*(G4Element::GetElementTable()))[i], dirName);

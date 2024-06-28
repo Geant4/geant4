@@ -23,33 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// A physics list based on FTFP_BERT_HP LIV, 
+// A physics list based on FTFP_BERT_HP LIV,
 // but with full hadron inelastic physics replaced by the one from FLUKA.CERN.
 //
 // Author: G.Hugo, 01 August 2022
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef G4_HP_CERNFLUKAHADRONINELASTIC_PHYSICSLIST_HH
-#define G4_HP_CERNFLUKAHADRONINELASTIC_PHYSICSLIST_HH
-
+#  ifndef G4_HP_CERNFLUKAHADRONINELASTIC_PHYSICSLIST_HH
+#    define G4_HP_CERNFLUKAHADRONINELASTIC_PHYSICSLIST_HH
 
 // G4
-#include "globals.hh"
-#include "G4VModularPhysicsList.hh"
+#    include "G4VModularPhysicsList.hh"
+#    include "globals.hh"
 
+class G4_HP_CernFLUKAHadronInelastic_PhysicsList final : public G4VModularPhysicsList
+{
+  public:
+    G4_HP_CernFLUKAHadronInelastic_PhysicsList(G4int verbose = 1);
 
-class G4_HP_CernFLUKAHadronInelastic_PhysicsList final : public G4VModularPhysicsList {
+    G4_HP_CernFLUKAHadronInelastic_PhysicsList(const G4_HP_CernFLUKAHadronInelastic_PhysicsList&) =
+      delete;
+    G4_HP_CernFLUKAHadronInelastic_PhysicsList&
+    operator=(const G4_HP_CernFLUKAHadronInelastic_PhysicsList&) = delete;
 
-public:
-  G4_HP_CernFLUKAHadronInelastic_PhysicsList(G4int verbose = 1);
-
-  G4_HP_CernFLUKAHadronInelastic_PhysicsList(const G4_HP_CernFLUKAHadronInelastic_PhysicsList&) = delete;
-  G4_HP_CernFLUKAHadronInelastic_PhysicsList& operator=(const G4_HP_CernFLUKAHadronInelastic_PhysicsList&) = delete;
-
-  virtual void SetCuts();
+    virtual void SetCuts();
 };
 
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

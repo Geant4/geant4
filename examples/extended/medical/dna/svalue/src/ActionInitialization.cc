@@ -24,43 +24,43 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "MyFile.hh"
 
 #ifdef MYFILE
- #include "MyPrimaryGeneratorActionFromFile.hh"
+#  include "MyPrimaryGeneratorActionFromFile.hh"
 #else
- #include "PrimaryGeneratorAction.hh"
+#  include "PrimaryGeneratorAction.hh"
 #endif
 
-#include "RunAction.hh"
 #include "EventAction.hh"
-#include "TrackingAction.hh"
+#include "RunAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "G4RunManager.hh"
-#include "DetectorConstruction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
- : G4VUserActionInitialization(),
-   fDetectorConstruction(detConstruction)
+  : G4VUserActionInitialization(), fDetectorConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,28 +73,27 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-
 #ifdef MYFILE
- MyPrimaryGeneratorActionFromFile* primary = new MyPrimaryGeneratorActionFromFile();
+  MyPrimaryGeneratorActionFromFile* primary = new MyPrimaryGeneratorActionFromFile();
 #else
- PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
 #endif
-    
+
   SetUserAction(primary);
-  
+
   SetUserAction(new RunAction());
-  
+
   EventAction* event = new EventAction();
   SetUserAction(event);
-  
+
   SetUserAction(new TrackingAction(primary));
-  
+
   SetUserAction(new SteppingAction(event, fDetectorConstruction));
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
 {
   return new SteppingVerbose();
-}  
+}

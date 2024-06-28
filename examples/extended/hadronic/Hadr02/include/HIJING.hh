@@ -29,7 +29,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:
 //
 // Author: 2012  Andrea Dotti
 //   created from FTFP_BERT
@@ -45,14 +45,14 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-
-class HIJING : public G4VModularPhysicsList {
+class HIJING : public G4VModularPhysicsList
+{
   public:
-    HIJING( G4int ver = 1 );
+    HIJING(G4int ver = 1);
     virtual ~HIJING() = default;
 
-    HIJING( const HIJING & ) = delete;
-    HIJING & operator=( const HIJING & ) = delete;  
+    HIJING(const HIJING&) = delete;
+    HIJING& operator=(const HIJING&) = delete;
 };
 
 #endif

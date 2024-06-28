@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,20 +42,18 @@ class DetectorConstruction;
 
 class ActionInitialization : public G4VUserActionInitialization
 {
-public:
-  
-  ActionInitialization(const DetectorConstruction* det);
+  public:
+    ActionInitialization(const DetectorConstruction* det);
 
-  virtual ~ActionInitialization();
+    virtual ~ActionInitialization();
 
-  virtual void Build() const;
+    virtual void Build() const;
 
-  virtual void BuildForMaster() const;
+    virtual void BuildForMaster() const;
 
-private:
-
-  RunAction* fMasterRunAction;
-  const DetectorConstruction* fDetector;
+  private:
+    RunAction* fMasterRunAction;
+    const DetectorConstruction* fDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

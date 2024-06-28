@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,15 +43,15 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction() = default;
-   ~EventAction() override = default;
+    ~EventAction() override = default;
 
     void BeginOfEventAction(const G4Event*) override;
-    void   EndOfEventAction(const G4Event*) override;
-    
-    inline void AddEdep(G4double Edep)    {fTotalEnergyDeposit += Edep;};
-    inline void AddNIEL(G4double Edep)    {fNIEL += Edep;};
-    inline G4double GetEnergyDeposit()    {return fTotalEnergyDeposit;};
-    
+    void EndOfEventAction(const G4Event*) override;
+
+    inline void AddEdep(G4double Edep) { fTotalEnergyDeposit += Edep; };
+    inline void AddNIEL(G4double Edep) { fNIEL += Edep; };
+    inline G4double GetEnergyDeposit() { return fTotalEnergyDeposit; };
+
   private:
     G4double fTotalEnergyDeposit = 0.;
     G4double fNIEL = 0.;
@@ -60,5 +60,3 @@ class EventAction : public G4UserEventAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

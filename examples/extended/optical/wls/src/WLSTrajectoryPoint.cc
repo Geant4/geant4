@@ -48,15 +48,13 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Step* aStep)
   : G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition())
 {
   auto postStepPoint = aStep->GetPostStepPoint();
-  fTime              = postStepPoint->GetGlobalTime();
-  fMomentum          = postStepPoint->GetMomentum();
-  fStepStatus        = postStepPoint->GetStepStatus();
-  if(postStepPoint->GetPhysicalVolume())
-  {
+  fTime = postStepPoint->GetGlobalTime();
+  fMomentum = postStepPoint->GetMomentum();
+  fStepStatus = postStepPoint->GetStepStatus();
+  if (postStepPoint->GetPhysicalVolume()) {
     fVolumeName = postStepPoint->GetPhysicalVolume()->GetName();
   }
-  else
-  {
+  else {
     fVolumeName = G4String(" ");
   }
 }
@@ -66,19 +64,18 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Step* aStep)
 WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Track* aTrack)
   : G4TrajectoryPoint(aTrack->GetPosition())
 {
-  fTime       = aTrack->GetGlobalTime();
-  fMomentum   = aTrack->GetMomentum();
+  fTime = aTrack->GetGlobalTime();
+  fMomentum = aTrack->GetMomentum();
   fStepStatus = fUndefined;
   fVolumeName = aTrack->GetVolume()->GetName();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSTrajectoryPoint::WLSTrajectoryPoint(const WLSTrajectoryPoint& right)
-  : G4TrajectoryPoint(right)
+WLSTrajectoryPoint::WLSTrajectoryPoint(const WLSTrajectoryPoint& right) : G4TrajectoryPoint(right)
 {
-  fTime       = right.fTime;
-  fMomentum   = right.fMomentum;
+  fTime = right.fTime;
+  fMomentum = right.fMomentum;
   fStepStatus = right.fStepStatus;
   fVolumeName = right.fVolumeName;
 }
@@ -88,29 +85,22 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const WLSTrajectoryPoint& right)
 const std::map<G4String, G4AttDef>* WLSTrajectoryPoint::GetAttDefs() const
 {
   G4bool isNew;
-  std::map<G4String, G4AttDef>* store =
-    G4AttDefStore::GetInstance("TrajectoryPoint", isNew);
-  if(isNew)
-  {
+  std::map<G4String, G4AttDef>* store = G4AttDefStore::GetInstance("TrajectoryPoint", isNew);
+  if (isNew) {
     G4String Pos("Pos");
-    (*store)[Pos] =
-      G4AttDef(Pos, "Position", "Physics", "G4BestUnit", "G4ThreeVector");
+    (*store)[Pos] = G4AttDef(Pos, "Position", "Physics", "G4BestUnit", "G4ThreeVector");
 
     G4String Time("Time");
-    (*store)[Time] =
-      G4AttDef(Time, "Time", "Physics", "G4BestUnit", "G4double");
+    (*store)[Time] = G4AttDef(Time, "Time", "Physics", "G4BestUnit", "G4double");
 
     G4String Momentum("Momentum");
-    (*store)[Momentum] =
-      G4AttDef(Momentum, "Momentum", "Physics", "G4BestUnit", "G4ThreeVector");
+    (*store)[Momentum] = G4AttDef(Momentum, "Momentum", "Physics", "G4BestUnit", "G4ThreeVector");
 
     G4String StepStatus("StepStatus");
-    (*store)[StepStatus] =
-      G4AttDef(StepStatus, "StepStatus", "Physics", "", "G4StepStatus");
+    (*store)[StepStatus] = G4AttDef(StepStatus, "StepStatus", "Physics", "", "G4StepStatus");
 
     G4String VolumeName("VolumeName");
-    (*store)[VolumeName] =
-      G4AttDef(VolumeName, "VolumeName", "Physics", "", "G4String");
+    (*store)[VolumeName] = G4AttDef(VolumeName, "VolumeName", "Physics", "", "G4String");
   }
   return store;
 }
@@ -122,8 +112,7 @@ std::vector<G4AttValue>* WLSTrajectoryPoint::CreateAttValues() const
   auto values = new std::vector<G4AttValue>;
 
   values->push_back(G4AttValue("Time", G4BestUnit(fTime, "Time"), ""));
-  values->push_back(
-    G4AttValue("Momentum", G4BestUnit(fMomentum, "Momentum"), ""));
+  values->push_back(G4AttValue("Momentum", G4BestUnit(fMomentum, "Momentum"), ""));
   values->push_back(G4AttValue("StepStatus", G4UIcommand::ConvertToString(fStepStatus), ""));
   values->push_back(G4AttValue("VolumeName", fVolumeName, ""));
 

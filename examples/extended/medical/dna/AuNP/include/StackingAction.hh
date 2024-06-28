@@ -38,15 +38,14 @@
 #ifndef G4ITStackingAction_h
 #define G4ITStackingAction_h 1
 
-#include "globals.hh"
 #include "G4UserStackingAction.hh"
+#include "globals.hh"
 
 class StackingAction : public G4UserStackingAction
-{    
- 
-public:
+{
+  public:
     StackingAction();
-    virtual ~StackingAction(){;}
+    virtual ~StackingAction() { ; }
     virtual void NewStage();
 };
 

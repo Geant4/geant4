@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE
-#ifndef PAR04INFERENCEMESSENGER_H
-#define PAR04INFERENCEMESSENGER_H
+#  ifndef PAR04INFERENCEMESSENGER_H
+#    define PAR04INFERENCEMESSENGER_H
 
-#include "G4UImessenger.hh" // for G4UImessenger
-#include <G4String.hh>      // for G4String
+#    include "G4UImessenger.hh"  // for G4UImessenger
+
+#    include <G4String.hh>  // for G4String
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
@@ -47,62 +48,63 @@ class Par04InferenceSetup;
  *
  */
 
-class Par04InferenceMessenger : public G4UImessenger {
-public:
-  Par04InferenceMessenger(Par04InferenceSetup *);
-  ~Par04InferenceMessenger();
-  /// Invokes appropriate methods based on the typed command
-  virtual void SetNewValue(G4UIcommand *, G4String) final;
-  /// Retrieves the current settings
-  virtual G4String GetCurrentValue(G4UIcommand *) final;
+class Par04InferenceMessenger : public G4UImessenger
+{
+  public:
+    Par04InferenceMessenger(Par04InferenceSetup*);
+    ~Par04InferenceMessenger();
+    /// Invokes appropriate methods based on the typed command
+    virtual void SetNewValue(G4UIcommand*, G4String) final;
+    /// Retrieves the current settings
+    virtual G4String GetCurrentValue(G4UIcommand*) final;
 
-private:
-  /// Inference to setup
-  Par04InferenceSetup *fInference = nullptr;
-  /// Command to set the directory common to all inference messengers in this
-  /// example /Par04
-  G4UIdirectory *fExampleDir = nullptr;
-  /// Command to set the directory for inference settings /Par04/inference
-  G4UIdirectory *fInferenceDir = nullptr;
-  /// Command to set the inference library
-  G4UIcmdWithAString *fInferenceLibraryCmd = nullptr;
-  /// Command to set fModelPathNameCmd
-  G4UIcmdWithAString *fModelPathNameCmd = nullptr;
-  /// Command to set the fSizeLatentVectorCmd
-  G4UIcmdWithAnInteger *fSizeLatentVectorCmd = nullptr;
-  /// Command to set the fSizeConditionVectorCmd
-  G4UIcmdWithAnInteger *fSizeConditionVectorCmd = nullptr;
-  /// Command to set the fProfileFlagCmd
-  G4UIcmdWithAnInteger *fProfileFlagCmd = nullptr;
-  /// Command to set the fOptimizationFlagCmd
-  G4UIcmdWithAnInteger *fOptimizationFlagCmd = nullptr;
-  /// Command to set the number of cells in the cylindrical readout mesh (along
-  /// rho axis)
-  G4UIcmdWithAnInteger *fMeshNbRhoCellsCmd = nullptr;
-  /// Command to set the number of cells in the cylindrical readout mesh (along
-  /// phi axis)
-  G4UIcmdWithAnInteger *fMeshNbPhiCellsCmd = nullptr;
-  /// Command to set the number of cells in the cylindrical readout mesh (along
-  /// z axis)
-  G4UIcmdWithAnInteger *fMeshNbZCellsCmd = nullptr;
-  /// Command to the size of cells in the cylindrical readout mesh (along rho
-  /// axis)
-  G4UIcmdWithADoubleAndUnit *fMeshSizeRhoCellsCmd = nullptr;
-  /// Command to the size of cells in the cylindrical readout mesh (along z
-  /// axis)
-  G4UIcmdWithADoubleAndUnit *fMeshSizeZCellsCmd = nullptr;
-  /// Commands to set execution provider flags
-  /// GPU
-  G4UIcmdWithAnInteger *fCudaFlagCmd = nullptr;
-  /// Cuda Commands
-  G4UIdirectory *fCudaOptionsDir = nullptr;
-  G4UIcmdWithAString *fCudaDeviceIdCmd = nullptr;
-  G4UIcmdWithAString *fCudaGpuMemLimitCmd = nullptr;
-  G4UIcmdWithAString *fCudaArenaExtendedStrategyCmd = nullptr;
-  G4UIcmdWithAString *fCudaCudnnConvAlgoSearchCmd = nullptr;
-  G4UIcmdWithAString *fCudaDoCopyInDefaultStreamCmd = nullptr;
-  G4UIcmdWithAString *fCudaCudnnConvUseMaxWorkspaceCmd = nullptr;
+  private:
+    /// Inference to setup
+    Par04InferenceSetup* fInference = nullptr;
+    /// Command to set the directory common to all inference messengers in this
+    /// example /Par04
+    G4UIdirectory* fExampleDir = nullptr;
+    /// Command to set the directory for inference settings /Par04/inference
+    G4UIdirectory* fInferenceDir = nullptr;
+    /// Command to set the inference library
+    G4UIcmdWithAString* fInferenceLibraryCmd = nullptr;
+    /// Command to set fModelPathNameCmd
+    G4UIcmdWithAString* fModelPathNameCmd = nullptr;
+    /// Command to set the fSizeLatentVectorCmd
+    G4UIcmdWithAnInteger* fSizeLatentVectorCmd = nullptr;
+    /// Command to set the fSizeConditionVectorCmd
+    G4UIcmdWithAnInteger* fSizeConditionVectorCmd = nullptr;
+    /// Command to set the fProfileFlagCmd
+    G4UIcmdWithAnInteger* fProfileFlagCmd = nullptr;
+    /// Command to set the fOptimizationFlagCmd
+    G4UIcmdWithAnInteger* fOptimizationFlagCmd = nullptr;
+    /// Command to set the number of cells in the cylindrical readout mesh (along
+    /// rho axis)
+    G4UIcmdWithAnInteger* fMeshNbRhoCellsCmd = nullptr;
+    /// Command to set the number of cells in the cylindrical readout mesh (along
+    /// phi axis)
+    G4UIcmdWithAnInteger* fMeshNbPhiCellsCmd = nullptr;
+    /// Command to set the number of cells in the cylindrical readout mesh (along
+    /// z axis)
+    G4UIcmdWithAnInteger* fMeshNbZCellsCmd = nullptr;
+    /// Command to the size of cells in the cylindrical readout mesh (along rho
+    /// axis)
+    G4UIcmdWithADoubleAndUnit* fMeshSizeRhoCellsCmd = nullptr;
+    /// Command to the size of cells in the cylindrical readout mesh (along z
+    /// axis)
+    G4UIcmdWithADoubleAndUnit* fMeshSizeZCellsCmd = nullptr;
+    /// Commands to set execution provider flags
+    /// GPU
+    G4UIcmdWithAnInteger* fCudaFlagCmd = nullptr;
+    /// Cuda Commands
+    G4UIdirectory* fCudaOptionsDir = nullptr;
+    G4UIcmdWithAString* fCudaDeviceIdCmd = nullptr;
+    G4UIcmdWithAString* fCudaGpuMemLimitCmd = nullptr;
+    G4UIcmdWithAString* fCudaArenaExtendedStrategyCmd = nullptr;
+    G4UIcmdWithAString* fCudaCudnnConvAlgoSearchCmd = nullptr;
+    G4UIcmdWithAString* fCudaDoCopyInDefaultStreamCmd = nullptr;
+    G4UIcmdWithAString* fCudaCudnnConvUseMaxWorkspaceCmd = nullptr;
 };
 
-#endif
+#  endif
 #endif

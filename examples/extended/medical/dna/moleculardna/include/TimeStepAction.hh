@@ -39,27 +39,26 @@ class G4ITTrackHolder;
 
 class TimeStepAction : public G4UserTimeStepAction
 {
- public:
-  explicit TimeStepAction(EventAction*);
+  public:
+    explicit TimeStepAction(EventAction*);
 
-  ~TimeStepAction() override;
+    ~TimeStepAction() override;
 
-  void StartProcessing() override;
+    void StartProcessing() override;
 
-  void UserReactionAction(const G4Track&, const G4Track&,
-                          const std::vector<G4Track*>*) override;
+    void UserReactionAction(const G4Track&, const G4Track&, const std::vector<G4Track*>*) override;
 
-  void UserPreTimeStepAction() override;
+    void UserPreTimeStepAction() override;
 
-  void UserPostTimeStepAction() override;
+    void UserPostTimeStepAction() override;
 
-  void RadicalKillDistance();
+    void RadicalKillDistance();
 
- protected:
-  EventAction* fEventAction;
-  DNAGeometry* fDNAGeometry = nullptr;
-  G4double fRadicalKillDistance;
-  G4ITTrackHolder* fpChemistryTrackHolder;
+  protected:
+    EventAction* fEventAction;
+    DNAGeometry* fDNAGeometry = nullptr;
+    G4double fRadicalKillDistance;
+    G4ITTrackHolder* fpChemistryTrackHolder;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

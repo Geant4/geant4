@@ -40,7 +40,6 @@
 #include "G4ThreadLocalSingleton.hh"
 #include "G4ThreadPool.hh"
 #include "G4Threading.hh"
-#include "G4TiMemory.hh"
 #include "G4Timer.hh"
 #include "G4TransportationManager.hh"
 #include "G4UImanager.hh"
@@ -148,9 +147,6 @@ G4TaskRunManager::G4TaskRunManager(G4bool useTBB) : G4TaskRunManager(nullptr, us
 
 G4TaskRunManager::~G4TaskRunManager()
 {
-  // finalize profiler before shutting down the threads
-  G4Profiler::Finalize();
-
   // terminate all the workers
   G4TaskRunManager::TerminateWorkers();
 

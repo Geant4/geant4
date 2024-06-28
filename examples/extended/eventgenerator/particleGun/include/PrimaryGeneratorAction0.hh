@@ -27,7 +27,7 @@
 /// \brief Definition of the PrimaryGeneratorAction0 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,18 +45,17 @@ class G4Event;
 class PrimaryGeneratorAction0
 {
   public:
-    PrimaryGeneratorAction0(G4ParticleGun*);    
-   ~PrimaryGeneratorAction0() = default ;
+    PrimaryGeneratorAction0(G4ParticleGun*);
+    ~PrimaryGeneratorAction0() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
 
   private:
-   G4double fCosAlphaMin = 0., fCosAlphaMax = 0.;      //solid angle
-   G4double fPsiMin = 0., fPsiMax = 0.;
-   
+    G4double fCosAlphaMin = 0., fCosAlphaMax = 0.;  // solid angle
+    G4double fPsiMin = 0., fPsiMax = 0.;
 
-    G4ParticleGun*  fParticleGun = nullptr;
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

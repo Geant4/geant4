@@ -31,56 +31,55 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
+
 #include "DetectorConstruction.hh"
 #include "EventAction.hh"
-#include "Run.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
-#include "G4SteppingManager.hh"
 #include "G4RunManager.hh"
+#include "G4SteppingManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* event)
-:fDetector(det), fEventAction(event)
-{ }
+  : fDetector(det), fEventAction(event)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
   // count processes
-  // 
+  //
   const G4StepPoint* endPoint = step->GetPostStepPoint();
-  const G4VProcess* process   = endPoint->GetProcessDefinedStep();
-  Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  const G4VProcess* process = endPoint->GetProcessDefinedStep();
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->CountProcesses(process);
-  
- G4double edep = step->GetTotalEnergyDeposit();
- if (edep <= 0.) return;
- 
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
- 
- //longitudinal profile of deposited energy
- //randomize point of energy deposition
- //
- G4StepPoint* prePoint  = step->GetPreStepPoint();
- G4StepPoint* postPoint = step->GetPostStepPoint(); 
- G4ThreeVector P1 = prePoint ->GetPosition();
- G4ThreeVector P2 = postPoint->GetPosition();
- G4ThreeVector point = P1 + G4UniformRand()*(P2 - P1);
- if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0.) point = P2;
- G4double x = point.x();
- G4double xshifted = x + 0.5*fDetector->GetAbsorSizeX();  
- analysisManager->FillH1(10, xshifted, edep);
 
- //total energy deposit in absorbers
- //
- G4int iabs = prePoint->GetTouchableHandle()->GetCopyNumber(0); 
- if (iabs > 0) fEventAction->AddEdep(iabs, edep);
+  G4double edep = step->GetTotalEnergyDeposit();
+  if (edep <= 0.) return;
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  // longitudinal profile of deposited energy
+  // randomize point of energy deposition
+  //
+  G4StepPoint* prePoint = step->GetPreStepPoint();
+  G4StepPoint* postPoint = step->GetPostStepPoint();
+  G4ThreeVector P1 = prePoint->GetPosition();
+  G4ThreeVector P2 = postPoint->GetPosition();
+  G4ThreeVector point = P1 + G4UniformRand() * (P2 - P1);
+  if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0.) point = P2;
+  G4double x = point.x();
+  G4double xshifted = x + 0.5 * fDetector->GetAbsorSizeX();
+  analysisManager->FillH1(10, xshifted, edep);
+
+  // total energy deposit in absorbers
+  //
+  G4int iabs = prePoint->GetTouchableHandle()->GetCopyNumber(0);
+  if (iabs > 0) fEventAction->AddEdep(iabs, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -41,16 +41,16 @@ class G4Run;
 
 class WLSRunAction : public G4UserRunAction
 {
- public:
-  WLSRunAction();
-  ~WLSRunAction() override = default;
+  public:
+    WLSRunAction();
+    ~WLSRunAction() override = default;
 
-  void BeginOfRunAction(const G4Run*) override;
-  void EndOfRunAction(const G4Run*) override;
-  G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
+    G4Run* GenerateRun() override;
 
- private:
-  WLSRun* fRun = nullptr;
+  private:
+    WLSRun* fRun = nullptr;
 };
 
 #endif

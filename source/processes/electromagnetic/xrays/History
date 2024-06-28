@@ -6,10 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-01-10 Soon Yung Jun (xrays-V11-01-10)
+## 2024-05-16 Vladimir Grichine (xrays-V11-02-02)
+- G4XTRGaussRadModel.hh/.cc class was added with improved account
+  on the origin of theXTR photon
+
+## 2024-01-10 Soon Yung Jun (xrays-V11-02-01)
 - G4Scintillation::sample_time - refactor the scintillation time sampling
 
-## 2023-12-16 Vladimir Grichine
+## 2023-12-16 Vladimir Grichine (xrays-V11-02-00)
 - G4GaussXTRadiator, G4VXTRenergyLoss - flexible summation in
   SpectralXTRdEdx, clean-up in GetStackFactor based on std::complex methods
 

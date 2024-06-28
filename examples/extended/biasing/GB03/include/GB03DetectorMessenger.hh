@@ -30,32 +30,31 @@
 #ifndef GB03DetectorMessenger_h
 #define GB03DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class GB03DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
-class GB03DetectorMessenger: public G4UImessenger
+class GB03DetectorMessenger : public G4UImessenger
 {
   public:
-    GB03DetectorMessenger(GB03DetectorConstruction* );
+    GB03DetectorMessenger(GB03DetectorConstruction*);
     virtual ~GB03DetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    
+    virtual G4String GetCurrentValue(G4UIcommand* command);
+
   private:
     GB03DetectorConstruction* fDetector;
-    
-    G4UIdirectory*             fDirectory;
-    G4UIcmdWithAString*        fAbsMaterialCmd;
-    G4UIcmdWithAString*        fGapMaterialCmd;
-    G4UIcmdWithAnInteger*      fNumLayerCmd;
-    G4UIcmdWithAnInteger*      fVerboseCmd;
+
+    G4UIdirectory* fDirectory;
+    G4UIcmdWithAString* fAbsMaterialCmd;
+    G4UIcmdWithAString* fGapMaterialCmd;
+    G4UIcmdWithAnInteger* fNumLayerCmd;
+    G4UIcmdWithAnInteger* fVerboseCmd;
 };
 
 #endif
-

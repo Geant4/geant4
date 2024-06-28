@@ -30,8 +30,9 @@
 #ifndef GB03BOptrGeometryBasedBiasing_h
 #define GB03BOptrGeometryBasedBiasing_h 1
 
-#include "G4VBiasingOperator.hh"
 #include "GB03BOptnSplitOrKillOnBoundary.hh"
+
+#include "G4VBiasingOperator.hh"
 class G4GenericMessenger;
 
 /// Biasing operator class.
@@ -42,48 +43,51 @@ class GB03BOptrGeometryBasedBiasing : public G4VBiasingOperator
     GB03BOptrGeometryBasedBiasing();
     virtual ~GB03BOptrGeometryBasedBiasing();
 
-public:
-  // ------------------------------
-  // Method added for this example:
-  // ------------------------------
-  GB03BOptnSplitOrKillOnBoundary* GetSplitAndKillOperation() const
-  { return fSplitAndKillOperation; }
+  public:
+    // ------------------------------
+    // Method added for this example:
+    // ------------------------------
+    GB03BOptnSplitOrKillOnBoundary* GetSplitAndKillOperation() const
+    {
+      return fSplitAndKillOperation;
+    }
 
-  // -------------------------
-  // Optional from base class:
-  // -------------------------
-  void StartRun();
-  
-private:
-  // --------------------------
-  // Mandatory from base class:
-  // --------------------------
-  // Used for splitting/killing:
-  virtual G4VBiasingOperation*
-  ProposeNonPhysicsBiasingOperation( const G4Track* track,
-                                     const G4BiasingProcessInterface* callingProcess );
+    // -------------------------
+    // Optional from base class:
+    // -------------------------
+    void StartRun();
 
-  // Not used here:
-  virtual G4VBiasingOperation* 
-  ProposeOccurenceBiasingOperation( const G4Track*,
-                                    const G4BiasingProcessInterface* ) { return 0; }
-  // Not used here:
-  virtual G4VBiasingOperation*
-  ProposeFinalStateBiasingOperation( const G4Track*,
-                                     const G4BiasingProcessInterface* ) { return 0; }
+  private:
+    // --------------------------
+    // Mandatory from base class:
+    // --------------------------
+    // Used for splitting/killing:
+    virtual G4VBiasingOperation*
+    ProposeNonPhysicsBiasingOperation(const G4Track* track,
+                                      const G4BiasingProcessInterface* callingProcess);
 
-private:
-  GB03BOptnSplitOrKillOnBoundary* fSplitAndKillOperation;
-  G4int    fSplittingFactor;
-  G4double fApplyProbability;
-  // Messengers to change the 
-  G4GenericMessenger*  fSplittingFactorMessenger;
-  G4GenericMessenger* fApplyProbabilityMessenger;
+    // Not used here:
+    virtual G4VBiasingOperation* ProposeOccurenceBiasingOperation(const G4Track*,
+                                                                  const G4BiasingProcessInterface*)
+    {
+      return 0;
+    }
+    // Not used here:
+    virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track*,
+                                                                   const G4BiasingProcessInterface*)
+    {
+      return 0;
+    }
 
+  private:
+    GB03BOptnSplitOrKillOnBoundary* fSplitAndKillOperation;
+    G4int fSplittingFactor;
+    G4double fApplyProbability;
+    // Messengers to change the
+    G4GenericMessenger* fSplittingFactorMessenger;
+    G4GenericMessenger* fApplyProbabilityMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

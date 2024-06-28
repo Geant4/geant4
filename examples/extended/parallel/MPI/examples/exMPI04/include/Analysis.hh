@@ -31,59 +31,62 @@
 #define ANALYSIS_MANAGER_H
 
 #include "G4ThreeVector.hh"
+
 #include <tools/histo/h1d>
 #include <tools/histo/h2d>
-
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
   TypeName(const TypeName&);               \
   void operator=(const TypeName&)
 
-class Analysis {
-public:
-  ~Analysis();
+class Analysis
+{
+  public:
+    ~Analysis();
 
-  static Analysis* GetAnalysis();
+    static Analysis* GetAnalysis();
 
-  void Book();
-  void EndOfRun();
+    void Book();
+    void EndOfRun();
 
-  void OpenFile(const G4String& fname);
-  void Save();
-  void Close(G4bool reset = true);
+    void OpenFile(const G4String& fname);
+    void Save();
+    void Close(G4bool reset = true);
 
-  void FillIncident(const G4ThreeVector& p);
-  void FillDose(const G4ThreeVector& p, G4double dedx);
+    void FillIncident(const G4ThreeVector& p);
+    void FillDose(const G4ThreeVector& p, G4double dedx);
 
-  void ClearIncidentFlag();
+    void ClearIncidentFlag();
 
-  void SetUseNtuple(G4bool useNtuple) { 
-    G4cout << "Set useNtuple: " << useNtuple << G4endl;
-    fUseNtuple = useNtuple; 
-  }
+    void SetUseNtuple(G4bool useNtuple)
+    {
+      G4cout << "Set useNtuple: " << useNtuple << G4endl;
+      fUseNtuple = useNtuple;
+    }
 
-  void SetMergeNtuple(G4bool mergeNtuple) { 
-    G4cout << "Set mergeNtuple: " << mergeNtuple << G4endl;
-    fMergeNtuple = mergeNtuple; 
-  }
+    void SetMergeNtuple(G4bool mergeNtuple)
+    {
+      G4cout << "Set mergeNtuple: " << mergeNtuple << G4endl;
+      fMergeNtuple = mergeNtuple;
+    }
 
-private:
-  Analysis();
-  DISALLOW_COPY_AND_ASSIGN(Analysis);
+  private:
+    Analysis();
+    DISALLOW_COPY_AND_ASSIGN(Analysis);
 
-  G4bool fUseNtuple;
-  G4bool fMergeNtuple;
+    G4bool fUseNtuple;
+    G4bool fMergeNtuple;
 
-  //Histograms handlers
-  G4int fincident_x_hist;
-  G4int fincident_map;
-  G4int fdose_hist;
-  G4int fdose_map;
-  G4int fdose_prof;
-  G4int fdose_map_prof;
-  G4int fdose_map3d;
+    // Histograms handlers
+    G4int fincident_x_hist;
+    G4int fincident_map;
+    G4int fdose_hist;
+    G4int fdose_map;
+    G4int fdose_prof;
+    G4int fdose_map_prof;
+    G4int fdose_map3d;
 
-  static G4ThreadLocal G4int fincidentFlag;
+    static G4ThreadLocal G4int fincidentFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

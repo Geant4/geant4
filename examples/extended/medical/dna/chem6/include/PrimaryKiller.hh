@@ -36,13 +36,12 @@
 /// \file PrimaryKiller.hh
 /// \brief Definition of the PrimaryKiller class
 
-
 #ifndef CHEM6_PrimaryKiller_h
 #define CHEM6_PrimaryKiller_h 1
 
-#include <G4VPrimitiveScorer.hh>
-#include <G4UImessenger.hh>
 #include <G4THitsMap.hh>
+#include <G4UImessenger.hh>
+#include <G4VPrimitiveScorer.hh>
 
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
@@ -54,59 +53,50 @@ class G4UIcmdWith3VectorAndUnit;
 //   - either after a given energy loss
 //   - or after the primary particle has reached a given energy
 
-class PrimaryKiller : public G4VPrimitiveScorer,
-                      public G4UImessenger
+class PrimaryKiller : public G4VPrimitiveScorer, public G4UImessenger
 {
-private:
-  double fELoss; // cumulated energy loss by the primary
-  
-  double fELossRange_Min; // fELoss from which the primary is killed
-  double fELossRange_Max; // fELoss from which the event is aborted
-  double fKineticE_Min; // kinetic energy below which the primary is killed
-  G4ThreeVector fPhantomSize;
+  private:
+    double fELoss;  // cumulated energy loss by the primary
 
-  G4UIcmdWithADoubleAndUnit* fpELossUI;
-  G4UIcmdWithADoubleAndUnit* fpAbortEventIfELossUpperThan;
-  G4UIcmdWithADoubleAndUnit* fpMinKineticE;
-  G4UIcmdWith3VectorAndUnit* fpSizeUI;
+    double fELossRange_Min;  // fELoss from which the primary is killed
+    double fELossRange_Max;  // fELoss from which the event is aborted
+    double fKineticE_Min;  // kinetic energy below which the primary is killed
+    G4ThreeVector fPhantomSize;
 
-public:
-  PrimaryKiller(G4String name, G4int depth=0);
+    G4UIcmdWithADoubleAndUnit* fpELossUI;
+    G4UIcmdWithADoubleAndUnit* fpAbortEventIfELossUpperThan;
+    G4UIcmdWithADoubleAndUnit* fpMinKineticE;
+    G4UIcmdWith3VectorAndUnit* fpSizeUI;
 
-  virtual ~PrimaryKiller();
+  public:
+    PrimaryKiller(G4String name, G4int depth = 0);
 
-  /** Set energy under which the particle should be
-   killed*/
-  inline void SetEnergyThreshold(double energy){
-    fKineticE_Min = energy;
-  }
+    virtual ~PrimaryKiller();
 
-  /** Set the energy loss from which the primary is
-   killed*/
-  inline void SetMinLossEnergyLimit(double energy){
-    fELossRange_Min = energy;
-  }
+    /** Set energy under which the particle should be
+     killed*/
+    inline void SetEnergyThreshold(double energy) { fKineticE_Min = energy; }
 
-  /** Set the energy loss from which the event is
-   aborted*/
-  inline void SetMaxLossEnergyLimit(double energy){
-    fELossRange_Max = energy;
-  }
+    /** Set the energy loss from which the primary is
+     killed*/
+    inline void SetMinLossEnergyLimit(double energy) { fELossRange_Min = energy; }
 
-  /** Method related to G4UImessenger
-      used to control energy cuts through macro file
-   */
-  virtual void SetNewValue(G4UIcommand * command,
-                           G4String newValue);
+    /** Set the energy loss from which the event is
+     aborted*/
+    inline void SetMaxLossEnergyLimit(double energy) { fELossRange_Max = energy; }
 
-protected:
-  virtual G4bool ProcessHits(G4Step*,
-                             G4TouchableHistory*);
+    /** Method related to G4UImessenger
+        used to control energy cuts through macro file
+     */
+    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
 
-public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void DrawAll();
-  virtual void PrintAll();
+  protected:
+    virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+
+  public:
+    virtual void Initialize(G4HCofThisEvent*);
+    virtual void EndOfEvent(G4HCofThisEvent*);
+    virtual void DrawAll();
+    virtual void PrintAll();
 };
 #endif

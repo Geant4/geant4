@@ -42,18 +42,17 @@ namespace B3
 /// - G4RadioactiveDecayPhysics
 /// - G4EmStandardPhysics
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  ~PhysicsList() override = default;
+  public:
+    PhysicsList();
+    ~PhysicsList() override = default;
 
-  void SetCuts() override;
+    void SetCuts() override;
 };
 
-}
+}  // namespace B3
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

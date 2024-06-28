@@ -30,8 +30,6 @@
 
 #include "G4ErrorTarget.hh"
 
-G4ErrorTarget::G4ErrorTarget()  {}
-
 G4double G4ErrorTarget::GetDistanceFromPoint( const G4ThreeVector&,
                                               const G4ThreeVector& ) const
 {

@@ -43,14 +43,13 @@ class G4Material;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
+    virtual G4VPhysicalVolume* Construct();
 
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
-  virtual G4VPhysicalVolume* Construct();
-
-private:
-  G4Material* OtherMaterial(G4String materialName);
-  G4VPhysicalVolume* ConstructDetector();
+  private:
+    G4Material* OtherMaterial(G4String materialName);
+    G4VPhysicalVolume* ConstructDetector();
 };
 #endif

@@ -151,6 +151,10 @@ class G4HadronicParameters {
     void SetEnableNeutronGeneralProcess( G4bool val );
     // Neutron general process may be enabled/disabled.
 
+    inline G4bool EnableNUDEX() const;
+    void SetEnableNUDEX( G4bool val );
+    // NUDEX gamma de-excitation is enabled/disabled.
+
     inline G4double GetEPRelativeLevel() const;
     inline G4double GetEPAbsoluteLevel() const;
     inline G4int GetEPReportLevel() const;
@@ -211,6 +215,7 @@ class G4HadronicParameters {
     G4bool fEnableIntegralInelasticXS = true;
     G4bool fEnableIntegralElasticXS = true;
     G4bool fEnableDiffDissociationForBGreater10 = false;
+    G4bool fEnableNUDEX = false;
     G4bool fNeutronGeneral = false;
     G4bool fChargeExchange = false;
     G4bool fBinaryDebug = false;
@@ -313,6 +318,10 @@ inline G4bool G4HadronicParameters::EnableDiffDissociationForBGreater10() const 
 
 inline G4bool G4HadronicParameters::EnableNeutronGeneralProcess() const {
   return fNeutronGeneral;
+}
+
+inline G4bool G4HadronicParameters::EnableNUDEX() const {
+  return fEnableNUDEX;
 }
 
 inline G4bool G4HadronicParameters::EnableCoherentChargeExchange() const {

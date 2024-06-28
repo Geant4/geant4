@@ -32,51 +32,50 @@
 #ifndef TrackInformation_h
 #define TrackInformation_h 1
 
-#include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VUserTrackInformation.hh"
+#include "globals.hh"
 
 class G4Track;
 
 class TrackInformation : public G4VUserTrackInformation
 {
- public:
-  TrackInformation();
-  TrackInformation(const G4Track* aTrack);
-  TrackInformation(const TrackInformation* aTrackInfo);
-  ~TrackInformation() override;
+  public:
+    TrackInformation();
+    TrackInformation(const G4Track* aTrack);
+    TrackInformation(const TrackInformation* aTrackInfo);
+    ~TrackInformation() override;
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* aTrackInfo);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aTrackInfo);
 
-  TrackInformation& operator=(const TrackInformation& right);
+    TrackInformation& operator=(const TrackInformation& right);
 
-  void SetSourceTrackInformation(const G4Track* aTrack);
-  void Print() const override;
+    void SetSourceTrackInformation(const G4Track* aTrack);
+    void Print() const override;
 
-  inline G4bool GetIsFirstTankX() const { return fFirstTankX; }
-  inline void SetIsFirstTankX(G4bool b) { fFirstTankX = b; }
+    inline G4bool GetIsFirstTankX() const { return fFirstTankX; }
+    inline void SetIsFirstTankX(G4bool b) { fFirstTankX = b; }
 
-  inline G4int GetReflectionNumber() const { return fReflectionNumber; }
-  inline void IncrementReflectionNumber() { ++fReflectionNumber; }
+    inline G4int GetReflectionNumber() const { return fReflectionNumber; }
+    inline void IncrementReflectionNumber() { ++fReflectionNumber; }
 
- private:
-  G4bool fFirstTankX = false;
-  G4int fReflectionNumber = 0;
+  private:
+    G4bool fFirstTankX = false;
+    G4int fReflectionNumber = 0;
 };
 
 extern G4ThreadLocal G4Allocator<TrackInformation>* aTrackInformationAllocator;
 
 inline void* TrackInformation::operator new(size_t)
 {
-  if(!aTrackInformationAllocator)
-    aTrackInformationAllocator = new G4Allocator<TrackInformation>;
-  return (void*) aTrackInformationAllocator->MallocSingle();
+  if (!aTrackInformationAllocator) aTrackInformationAllocator = new G4Allocator<TrackInformation>;
+  return (void*)aTrackInformationAllocator->MallocSingle();
 }
 
 inline void TrackInformation::operator delete(void* aTrackInfo)
 {
-  aTrackInformationAllocator->FreeSingle((TrackInformation*) aTrackInfo);
+  aTrackInformationAllocator->FreeSingle((TrackInformation*)aTrackInfo);
 }
 
 #endif

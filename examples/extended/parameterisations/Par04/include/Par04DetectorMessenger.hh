@@ -27,8 +27,9 @@
 #ifndef PAR04DETECTORMESSENGER_H
 #define PAR04DETECTORMESSENGER_H
 
-#include <G4String.hh>       // for G4String
 #include "G4UImessenger.hh"  // for G4UImessenger
+
+#include <G4String.hh>  // for G4String
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
@@ -47,45 +48,45 @@ class Par04DetectorConstruction;
 
 class Par04DetectorMessenger : public G4UImessenger
 {
- public:
-  Par04DetectorMessenger(Par04DetectorConstruction*);
-  ~Par04DetectorMessenger();
+  public:
+    Par04DetectorMessenger(Par04DetectorConstruction*);
+    ~Par04DetectorMessenger();
 
-  /// Invokes appropriate methods based on the typed command
-  virtual void SetNewValue(G4UIcommand*, G4String) final;
-  /// Retrieves the current settings
-  virtual G4String GetCurrentValue(G4UIcommand*) final;
+    /// Invokes appropriate methods based on the typed command
+    virtual void SetNewValue(G4UIcommand*, G4String) final;
+    /// Retrieves the current settings
+    virtual G4String GetCurrentValue(G4UIcommand*) final;
 
- private:
-  /// Detector construction to setup
-  Par04DetectorConstruction* fDetector = nullptr;
-  /// Command to set the directory common to all messengers in this example
-  /// /Par04
-  G4UIdirectory* fExampleDir = nullptr;
-  /// Command to set the directory for detector settings /Par04/detector
-  G4UIdirectory* fDetectorDir = nullptr;
-  /// Command printing current settings
-  G4UIcmdWithoutParameter* fPrintCmd;
-  /// Command to set the detector inner radius
-  G4UIcmdWithADoubleAndUnit* fDetectorInnerRadiusCmd = nullptr;
-  /// Command to set the detector length
-  G4UIcmdWithADoubleAndUnit* fDetectorLengthCmd = nullptr;
-  /// Command to set the number of layers
-  G4UIcmdWithAnInteger* fNbLayersCmd = nullptr;
-  ///  Commanbd to set the absorbers within layers (material, thickness, sensitivity)
-  G4UIcommand* fAbsorCmd = nullptr;
-  /// Command to set the directory for sensitive detector settings /Par04/mesh
-  G4UIdirectory* fMeshDir = nullptr;
-  /// Command to set the number of cells in the cylindrical readout mesh (along rho axis)
-  G4UIcmdWithAnInteger* fMeshNbRhoCellsCmd = nullptr;
-  /// Command to set the number of cells in the cylindrical readout mesh (along phi axis)
-  G4UIcmdWithAnInteger* fMeshNbPhiCellsCmd = nullptr;
-  /// Command to set the number of cells in the cylindrical readout mesh (along z axis)
-  G4UIcmdWithAnInteger* fMeshNbZCellsCmd = nullptr;
-  /// Command to the size of cells in the cylindrical readout mesh (along rho axis)
-  G4UIcmdWithADoubleAndUnit* fMeshSizeRhoCellsCmd = nullptr;
-  /// Command to the size of cells in the cylindrical readout mesh (along z axis)
-  G4UIcmdWithADoubleAndUnit* fMeshSizeZCellsCmd = nullptr;
+  private:
+    /// Detector construction to setup
+    Par04DetectorConstruction* fDetector = nullptr;
+    /// Command to set the directory common to all messengers in this example
+    /// /Par04
+    G4UIdirectory* fExampleDir = nullptr;
+    /// Command to set the directory for detector settings /Par04/detector
+    G4UIdirectory* fDetectorDir = nullptr;
+    /// Command printing current settings
+    G4UIcmdWithoutParameter* fPrintCmd;
+    /// Command to set the detector inner radius
+    G4UIcmdWithADoubleAndUnit* fDetectorInnerRadiusCmd = nullptr;
+    /// Command to set the detector length
+    G4UIcmdWithADoubleAndUnit* fDetectorLengthCmd = nullptr;
+    /// Command to set the number of layers
+    G4UIcmdWithAnInteger* fNbLayersCmd = nullptr;
+    ///  Commanbd to set the absorbers within layers (material, thickness, sensitivity)
+    G4UIcommand* fAbsorCmd = nullptr;
+    /// Command to set the directory for sensitive detector settings /Par04/mesh
+    G4UIdirectory* fMeshDir = nullptr;
+    /// Command to set the number of cells in the cylindrical readout mesh (along rho axis)
+    G4UIcmdWithAnInteger* fMeshNbRhoCellsCmd = nullptr;
+    /// Command to set the number of cells in the cylindrical readout mesh (along phi axis)
+    G4UIcmdWithAnInteger* fMeshNbPhiCellsCmd = nullptr;
+    /// Command to set the number of cells in the cylindrical readout mesh (along z axis)
+    G4UIcmdWithAnInteger* fMeshNbZCellsCmd = nullptr;
+    /// Command to the size of cells in the cylindrical readout mesh (along rho axis)
+    G4UIcmdWithADoubleAndUnit* fMeshSizeRhoCellsCmd = nullptr;
+    /// Command to the size of cells in the cylindrical readout mesh (along z axis)
+    G4UIcmdWithADoubleAndUnit* fMeshSizeZCellsCmd = nullptr;
 };
 
 #endif

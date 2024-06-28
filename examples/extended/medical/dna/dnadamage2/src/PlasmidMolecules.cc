@@ -32,9 +32,10 @@
 /// \brief Implementation of the additional Plasmid DNA molecules
 
 #include "PlasmidMolecules.hh"
+
+#include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 // Deoxyribose
@@ -42,7 +43,6 @@
 G4DNA_Deoxyribose* G4DNA_Deoxyribose::fDeoxyriboseInstance = 0;
 G4DNA_Deoxyribose* G4DNA_Deoxyribose::Definition()
 {
-  
   if (fDeoxyriboseInstance != 0) return fDeoxyriboseInstance;
   const G4String name = "DNA_Deoxyribose";
 
@@ -52,11 +52,11 @@ G4DNA_Deoxyribose* G4DNA_Deoxyribose::Definition()
     const G4String formatedName = "DNA_Deoxy^{0}";
 
     G4double mass = 31.99546 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0,
-                                          1.7 * angstrom, 2);
+    anInstance =
+      new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0, 1.7 * angstrom, 2);
 
-    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
-    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*)anInstance)->SetLevelOccupation(0);
+    ((G4MoleculeDefinition*)anInstance)->SetFormatedName(formatedName);
   }
   fDeoxyriboseInstance = static_cast<G4DNA_Deoxyribose*>(anInstance);
   return fDeoxyriboseInstance;
@@ -65,8 +65,7 @@ G4DNA_Deoxyribose* G4DNA_Deoxyribose::Definition()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 // OH_Damamged_Deoxyribose
 
-G4DNA_DamagedDeoxyriboseOH* 
-  G4DNA_DamagedDeoxyriboseOH::fDamagedDeoxyriboseOHInstance = 0;
+G4DNA_DamagedDeoxyriboseOH* G4DNA_DamagedDeoxyriboseOH::fDamagedDeoxyriboseOHInstance = 0;
 G4DNA_DamagedDeoxyriboseOH* G4DNA_DamagedDeoxyriboseOH::Definition()
 {
   if (fDamagedDeoxyriboseOHInstance != 0) return fDamagedDeoxyriboseOHInstance;
@@ -78,22 +77,20 @@ G4DNA_DamagedDeoxyriboseOH* G4DNA_DamagedDeoxyriboseOH::Definition()
     const G4String formatedName = "DamagedDeoxyriboseOH^{0}";
 
     G4double mass = 31.99546 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0,
-                                          1.7 * angstrom, 2);
+    anInstance =
+      new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0, 1.7 * angstrom, 2);
 
-    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
-    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*)anInstance)->SetLevelOccupation(0);
+    ((G4MoleculeDefinition*)anInstance)->SetFormatedName(formatedName);
   }
-  fDamagedDeoxyriboseOHInstance = 
-    static_cast<G4DNA_DamagedDeoxyriboseOH*>(anInstance);
+  fDamagedDeoxyriboseOHInstance = static_cast<G4DNA_DamagedDeoxyriboseOH*>(anInstance);
   return fDamagedDeoxyriboseOHInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 // H_Damamged_Deoxyribose
 
-G4DNA_DamagedDeoxyriboseH* 
-  G4DNA_DamagedDeoxyriboseH::fDamagedDeoxyriboseHInstance = 0;
+G4DNA_DamagedDeoxyriboseH* G4DNA_DamagedDeoxyriboseH::fDamagedDeoxyriboseHInstance = 0;
 G4DNA_DamagedDeoxyriboseH* G4DNA_DamagedDeoxyriboseH::Definition()
 {
   if (fDamagedDeoxyriboseHInstance != 0) return fDamagedDeoxyriboseHInstance;
@@ -105,22 +102,20 @@ G4DNA_DamagedDeoxyriboseH* G4DNA_DamagedDeoxyriboseH::Definition()
     const G4String formatedName = "DamagedDeoxyriboseH^{0}";
 
     G4double mass = 31.99546 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0,
-                                          1.7 * angstrom, 2);
+    anInstance =
+      new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0, 1.7 * angstrom, 2);
 
-    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
-    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*)anInstance)->SetLevelOccupation(0);
+    ((G4MoleculeDefinition*)anInstance)->SetFormatedName(formatedName);
   }
-  fDamagedDeoxyriboseHInstance = 
-    static_cast<G4DNA_DamagedDeoxyriboseH*>(anInstance);
+  fDamagedDeoxyriboseHInstance = static_cast<G4DNA_DamagedDeoxyriboseH*>(anInstance);
   return fDamagedDeoxyriboseHInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 // Eaq_Damamged_Deoxyribose
 
-G4DNA_DamagedDeoxyriboseEAQ* 
-  G4DNA_DamagedDeoxyriboseEAQ::fDamagedDeoxyriboseEAQInstance = 0;
+G4DNA_DamagedDeoxyriboseEAQ* G4DNA_DamagedDeoxyriboseEAQ::fDamagedDeoxyriboseEAQInstance = 0;
 G4DNA_DamagedDeoxyriboseEAQ* G4DNA_DamagedDeoxyriboseEAQ::Definition()
 {
   if (fDamagedDeoxyriboseEAQInstance != 0) return fDamagedDeoxyriboseEAQInstance;
@@ -132,14 +127,13 @@ G4DNA_DamagedDeoxyriboseEAQ* G4DNA_DamagedDeoxyriboseEAQ::Definition()
     const G4String formatedName = "DamagedDeoxyriboseEAQ^{0}";
 
     G4double mass = 31.99546 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0,
-                                          1.7 * angstrom, 2);
+    anInstance =
+      new G4MoleculeDefinition(name, mass, 1e-150 * (m * m / s), 0, 0, 1.7 * angstrom, 2);
 
-    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
-    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*)anInstance)->SetLevelOccupation(0);
+    ((G4MoleculeDefinition*)anInstance)->SetFormatedName(formatedName);
   }
-  fDamagedDeoxyriboseEAQInstance = 
-    static_cast<G4DNA_DamagedDeoxyriboseEAQ*>(anInstance);
+  fDamagedDeoxyriboseEAQInstance = static_cast<G4DNA_DamagedDeoxyriboseEAQ*>(anInstance);
   return fDamagedDeoxyriboseEAQInstance;
 }
 

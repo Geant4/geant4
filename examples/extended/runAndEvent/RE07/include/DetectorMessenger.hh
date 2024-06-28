@@ -49,21 +49,21 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger : public G4UImessenger
 {
- public:
-  DetectorMessenger(DetectorConstruction*);
-  ~DetectorMessenger();
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  DetectorConstruction* fDetector;
+  private:
+    DetectorConstruction* fDetector;
 
-  std::unique_ptr<G4UIdirectory> fDetDir;
+    std::unique_ptr<G4UIdirectory> fDetDir;
 
-  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSizeYZCmd;
-  std::unique_ptr<G4UIcmdWithAnInteger> fNbLayersCmd;
-  std::unique_ptr<G4UIcmdWithAnInteger> fNbAbsorCmd;
-  std::unique_ptr<G4UIcommand> fAbsorCmd;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fSizeYZCmd;
+    std::unique_ptr<G4UIcmdWithAnInteger> fNbLayersCmd;
+    std::unique_ptr<G4UIcmdWithAnInteger> fNbAbsorCmd;
+    std::unique_ptr<G4UIcommand> fAbsorCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

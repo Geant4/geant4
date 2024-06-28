@@ -36,10 +36,10 @@
 // ------------------------------------------------------------
 //
 // G4MonopoleFieldSetup is responsible for setting up a magnetic field
-// and the ability to use it with two different equation of motions, 
-// one for monopoles and another for the rest of the particles. 
-// 
-// 
+// and the ability to use it with two different equation of motions,
+// one for monopoles and another for the rest of the particles.
+//
+//
 
 // =======================================================================
 // Created:  13 May 2010, B. Bozsogi
@@ -61,45 +61,41 @@ class G4MonopoleFieldMessenger;
 
 class G4MonopoleFieldSetup
 {
-public:  
+  public:
+    G4MonopoleFieldSetup();
+    ~G4MonopoleFieldSetup();
 
-  G4MonopoleFieldSetup();            
-  ~G4MonopoleFieldSetup() ;     
+    void InitialiseAll();  //  Set parameters and call method below
+    //  void SetMagField(G4double fieldValue);
+    void SetStepperAndChordFinder(G4int val);
+    void SetZMagFieldValue(G4double val);
+    void ConstructMagField();
 
-  void InitialiseAll();    //  Set parameters and call method below
-  //  void SetMagField(G4double fieldValue);
-  void SetStepperAndChordFinder(G4int val);
-  void SetZMagFieldValue (G4double val);
-  void ConstructMagField ();
+    //  static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
+    G4double GetZmagFieldValue() const { return fZmagFieldValue; }
 
-  //  static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
-  G4double GetZmagFieldValue() const { return fZmagFieldValue; }
-  
-private:
+  private:
+    G4FieldManager* GetGlobalFieldManager();  // static
 
+    G4FieldManager* fFieldManager;
+    G4ChordFinder* fChordFinder;
+    G4ChordFinder* fUsualChordFinder;
+    G4ChordFinder* fMonopoleChordFinder;
+    G4Mag_UsualEqRhs* fEquation;
+    G4MonopoleEquation* fMonopoleEquation;
 
-  G4FieldManager*         GetGlobalFieldManager() ;   // static 
+    G4MagneticField* fMagneticField;
 
-  G4FieldManager*         fFieldManager ;
-  G4ChordFinder*          fChordFinder ;
-  G4ChordFinder*          fUsualChordFinder ;
-  G4ChordFinder*          fMonopoleChordFinder ;
-  G4Mag_UsualEqRhs*       fEquation ; 
-  G4MonopoleEquation*     fMonopoleEquation ;
+    G4MagIntegratorStepper* fStepper;
+    G4MagIntegratorStepper* fMonopoleStepper;
 
-  G4MagneticField*        fMagneticField ; 
+    G4double fMinStep;
+    G4double fZmagFieldValue;
 
-  G4MagIntegratorStepper* fStepper ;
-  G4MagIntegratorStepper* fMonopoleStepper ;
+    //  G4int                   fStepperIndex;
 
-  G4double                fMinStep ;
-  G4double                fZmagFieldValue;
-
-  //  G4int                   fStepperIndex;
-
-  //  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;  
-  G4MonopoleFieldMessenger*     fMonopoleFieldMessenger;
- 
+    //  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;
+    G4MonopoleFieldMessenger* fMonopoleFieldMessenger;
 };
 
 #endif

@@ -40,28 +40,20 @@
 
 class PhysListEmStandardSSM : public G4VPhysicsConstructor
 {
-public: 
-  PhysListEmStandardSSM(const G4String& name = "standardSSM");
- ~PhysListEmStandardSSM() override = default;
+  public:
+    PhysListEmStandardSSM(const G4String& name = "standardSSM");
+    ~PhysListEmStandardSSM() override = default;
 
-public: 
-  // This method is dummy for physics
-  void ConstructParticle() override {};
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  void ConstructProcess() override;
+  public:
+    // This method is dummy for physics
+    void ConstructParticle() override {};
+
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

@@ -33,27 +33,26 @@
 #include "StackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
 #include "HistoManager.hh"
-#include "G4RunManager.hh"
-#include "StackingMessenger.hh"
 #include "Run.hh"
+#include "RunAction.hh"
+#include "StackingMessenger.hh"
 
-#include "G4Track.hh"
 #include "G4EmCalculator.hh"
+#include "G4RunManager.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(DetectorConstruction* det)
-:fDetector(det),fStackMessenger(0)
+StackingAction::StackingAction(DetectorConstruction* det) : fDetector(det), fStackMessenger(0)
 {
   fMatWall = 0;
-  fZcav = 0.; 
+  fZcav = 0.;
   fEmCal = 0;
   first = true;
-  fKillTrack  = true;
-  
-  //create a messenger for this class  
+  fKillTrack = true;
+
+  // create a messenger for this class
   fStackMessenger = new StackingMessenger(this);
 }
 
@@ -67,51 +66,49 @@ StackingAction::~StackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* track)
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* track)
 {
- //get fDetector informations
- if (first) {
-   fMatWall = fDetector->GetWallMaterial();
-   fZcav    = 0.5*(fDetector->GetCavityThickness());
-   fEmCal   = new G4EmCalculator();
-   first   = false;
- }
+  // get fDetector informations
+  if (first) {
+    fMatWall = fDetector->GetWallMaterial();
+    fZcav = 0.5 * (fDetector->GetCavityThickness());
+    fEmCal = new G4EmCalculator();
+    first = false;
+  }
 
- G4ClassificationOfNewTrack status = fUrgent;  
+  G4ClassificationOfNewTrack status = fUrgent;
 
- //keep primary particle or neutral
- //
- G4ParticleDefinition* particle = track->GetDefinition();
- G4bool neutral = (particle->GetPDGCharge() == 0.);
- if ((track->GetParentID() == 0) || neutral) return status;
+  // keep primary particle or neutral
+  //
+  G4ParticleDefinition* particle = track->GetDefinition();
+  G4bool neutral = (particle->GetPDGCharge() == 0.);
+  if ((track->GetParentID() == 0) || neutral) return status;
 
- Run* run = static_cast<Run*>(
-              G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
- //energy spectrum of charged secondaries
- //
-  G4double energy = track->GetKineticEnergy();  
+  // energy spectrum of charged secondaries
+  //
+  G4double energy = track->GetKineticEnergy();
   run->SumEsecond(energy);
-  
- // kill e- which cannot reach Cavity
- //
- G4double position = (track->GetPosition()).z();
- G4double safe = std::abs(position) - fZcav;
- G4double range = fEmCal->GetRangeFromRestricteDEDX(energy,particle,fMatWall);
- if (fKillTrack) {
-   if (range < 0.8*safe) status = fKill;
- }
 
- //histograms
- //
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
- analysisManager->FillH1(1,position);
- analysisManager->FillH1(2,energy);
- G4ThreeVector direction = track->GetMomentumDirection();
- analysisManager->FillH1(3,std::acos(direction.z()));      
-    
- return status;
+  // kill e- which cannot reach Cavity
+  //
+  G4double position = (track->GetPosition()).z();
+  G4double safe = std::abs(position) - fZcav;
+  G4double range = fEmCal->GetRangeFromRestricteDEDX(energy, particle, fMatWall);
+  if (fKillTrack) {
+    if (range < 0.8 * safe) status = fKill;
+  }
+
+  // histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, position);
+  analysisManager->FillH1(2, energy);
+  G4ThreeVector direction = track->GetMomentumDirection();
+  analysisManager->FillH1(3, std::acos(direction.z()));
+
+  return status;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -164,52 +164,28 @@ class VoxelizedSensitiveDetector
     }
 
     /** Method to get X width of the voxel. */
-    G4double GetVoxelWidthX() const
-    {
-      return fVoxelWidthX;
-    }
+    G4double GetVoxelWidthX() const { return fVoxelWidthX; }
 
     /** Method to get Y width of the voxel. */
-    G4double GetVoxelWidthY() const
-    {
-      return fVoxelWidthY;
-    }
+    G4double GetVoxelWidthY() const { return fVoxelWidthY; }
 
     /** Method to get Z width of the voxel. */
-    G4double GetVoxelWidthZ() const
-    {
-      return fVoxelWidthZ;
-    }
+    G4double GetVoxelWidthZ() const { return fVoxelWidthZ; }
 
     /** Method to get total voxel volume. */
-    G4double GetVoxelVolume() const
-    {
-      return fVoxelVolume;
-    }
+    G4double GetVoxelVolume() const { return fVoxelVolume; }
 
     /** Method to get the voxel number along X axis. */
-    G4double GetVoxelNumberAlongX() const
-    {
-      return fVoxelNumberAlongX;
-    }
+    G4double GetVoxelNumberAlongX() const { return fVoxelNumberAlongX; }
 
     /** Method to get the voxel number along Y axis. */
-    G4double GetVoxelNumberAlongY() const
-    {
-      return fVoxelNumberAlongY;
-    }
+    G4double GetVoxelNumberAlongY() const { return fVoxelNumberAlongY; }
 
     /** Method to get the voxel number along Z axis. */
-    G4double GetVoxelNumberAlongZ() const
-    {
-      return fVoxelNumberAlongZ;
-    }
+    G4double GetVoxelNumberAlongZ() const { return fVoxelNumberAlongZ; }
 
     /** Method to get the total voxel number. */
-    G4int GetTotalVoxelNumber() const
-    {
-      return fTotalVoxelNumber;
-    }
+    G4int GetTotalVoxelNumber() const { return fTotalVoxelNumber; }
 
     /** Method to get the mass of a voxel.
      *
@@ -219,10 +195,7 @@ class VoxelizedSensitiveDetector
      * same shape and dimensions) also share the same
      * mass and density
      */
-    G4double GetVoxelMass() const
-    {
-      return fVoxelMass;
-    }
+    G4double GetVoxelMass() const { return fVoxelMass; }
 
     /** Method to get the density of a voxel.
      *
@@ -232,10 +205,7 @@ class VoxelizedSensitiveDetector
      * same shape and dimensions) also share the same
      * mass and density
      */
-    G4double GetVoxelDensity() const
-    {
-      return fVoxelDensity;
-    }
+    G4double GetVoxelDensity() const { return fVoxelDensity; }
 
     // To get the onedimensional voxel number given the three indexes
     // This function will be used from other classes as well, and

@@ -61,6 +61,7 @@
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4Pow.hh"
+#include "Randomize.hh"
 
 using namespace G4InuclSpecialFunctions;
 
@@ -222,25 +223,25 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
 		  try_again = NEX > 1 && (D[1] > width_cut * D[0] || 
 					  D[2] > width_cut * D[0]);
 		  
-		  if (try_again) {
-		    G4double D5 = D[0] + D[1] + D[2];
-		    G4double SL = D5 * inuclRndm();
-		    G4double S1 = 0.;
+                  if (try_again) {
+                    G4double D5 = D[0] + D[1] + D[2];
+                    G4double SL = D5*G4UniformRand();
+                    G4double S1 = 0.;
 
-		    if (verboseLevel > 3)
-		      G4cout << " D5 " << D5 << " SL " << SL << G4endl;
+                    if (verboseLevel > 3)
+                      G4cout << " D5 " << D5 << " SL " << SL << G4endl;
 
-		    for (G4int i = 0; i < 3; i++) {
-		      S1 += D[i]; 	
-		      if (SL <= S1) {
-			icase = i;
-			break;
-		      }
-		    }
+                    for (G4int i = 0; i < 3; i++) {
+                      S1 += D[i]; 	
+                      if (SL <= S1) {
+                        icase = i;
+                        break;
+                      }
+                    }
 
-		    if (verboseLevel > 3)
-		      G4cout << " got icase " << icase << G4endl;
-		  }				// if (try_again)
+                    if (verboseLevel > 3)
+                      G4cout << " got icase " << icase << G4endl;
+                  }                             // if (try_again)
 		}				// if (NEX >= 2)
 	      } else try_again = false;		// if (D[0] > 0)
 	    } else try_again = false;		// if (F1>0 && F2>0)
@@ -304,16 +305,16 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
 		      itry1++;
 		      G4int itry = 0;		    
 		      
-		      /* Loop checking 08.06.2015 MHK */
-		      while (EEXS_new < 0.0 && itry < itry_max) {
-			itry++;
-			G4double R = inuclRndm();
-			G4double X;
+                      /* Loop checking 08.06.2015 MHK */
+                      while (EEXS_new < 0.0 && itry < itry_max) {
+                        itry++;
+                        G4double R = G4UniformRand();
+                        G4double X;
 			
-			if (NEX == 2) {
-			  X = 1.0 - std::sqrt(R);
+                        if (NEX == 2) {
+                          X = 1.0 - std::sqrt(R);
 			  
-			} else {		         
+                        } else {		         
 			  G4double QEX2 = 1.0 / QEX;
 			  G4double QEX1 = 1.0 / (QEX-1);
 			  X = theG4Pow->powA(0.5*R, QEX2);
@@ -441,18 +442,18 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
 	      QH++;
 	      AR--;
 	      
-	      if (AR > 1) {
-		G4double SL = PW * inuclRndm();
+              if (AR > 1) {
+                G4double SL = PW*G4UniformRand();
 		
-		if (SL > PP) {
-		  QNP++;
-		  QNH++;
-		} else {
-		  QPP++;
-		  QPH++;
-		  ZR--;
-		  if (ZR < 2) try_again = false;
-		}  
+                if (SL > PP) {
+                  QNP++;
+                  QNH++;
+                } else {
+                  QPP++;
+                  QPH++;
+                  ZR--;
+                  if (ZR < 2) try_again = false;
+                }  
 	      } else try_again = false;
 	    }	// if (icase==0 && try_again)
 	  }	// if (try_again)

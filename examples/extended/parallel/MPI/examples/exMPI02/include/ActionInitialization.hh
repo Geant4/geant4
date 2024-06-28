@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// @file ActionInitialization.hh 
+/// @file ActionInitialization.hh
 /// @brief Define action initialization
 
 #ifndef ACTION_INITIALIZATION_H
@@ -32,13 +32,14 @@
 
 #include "G4VUserActionInitialization.hh"
 
-class ActionInitialization : public G4VUserActionInitialization {
-public:
-  ActionInitialization();
-  ~ActionInitialization();
+class ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    ActionInitialization();
+    ~ActionInitialization();
 
-  virtual void BuildForMaster() const;
-  virtual void Build() const;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
 
 #endif

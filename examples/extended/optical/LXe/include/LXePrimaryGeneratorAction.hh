@@ -38,14 +38,14 @@ class G4Event;
 
 class LXePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
- public:
-  LXePrimaryGeneratorAction();
-  ~LXePrimaryGeneratorAction() override;
+  public:
+    LXePrimaryGeneratorAction();
+    ~LXePrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event* anEvent) override;
+    void GeneratePrimaries(G4Event* anEvent) override;
 
- private:
-  G4ParticleGun* fParticleGun = nullptr;
+  private:
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 #endif

@@ -33,35 +33,36 @@
 #ifndef XAluminumElectrodeHit_h
 #define XAluminumElectrodeHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 
 class G4AttDef;
 class G4AttValue;
 
-class XAluminumElectrodeHit : public G4VHit {
-public:                // Treat hit as simple container class
-  G4double fTime;
-  G4double fEdep;
-  G4ThreeVector fLocalPos;
-  G4ThreeVector fWorldPos;
+class XAluminumElectrodeHit : public G4VHit
+{
+  public:  // Treat hit as simple container class
+    G4double fTime;
+    G4double fEdep;
+    G4ThreeVector fLocalPos;
+    G4ThreeVector fWorldPos;
 
-public:
-  XAluminumElectrodeHit();
-  virtual ~XAluminumElectrodeHit();
-  XAluminumElectrodeHit(const XAluminumElectrodeHit &right);
-  const XAluminumElectrodeHit& operator=(const XAluminumElectrodeHit &right);
-  G4bool operator==(const XAluminumElectrodeHit &right) const;
-  
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
-  
-  virtual void Draw();
-  virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-  virtual std::vector<G4AttValue>* CreateAttValues() const;
-  virtual void Print();
+  public:
+    XAluminumElectrodeHit();
+    virtual ~XAluminumElectrodeHit();
+    XAluminumElectrodeHit(const XAluminumElectrodeHit& right);
+    const XAluminumElectrodeHit& operator=(const XAluminumElectrodeHit& right);
+    G4bool operator==(const XAluminumElectrodeHit& right) const;
+
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
+
+    virtual void Draw();
+    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
+    virtual void Print();
 };
 
 typedef G4THitsCollection<XAluminumElectrodeHit> XAluminumElectrodeHitsCollection;
@@ -70,7 +71,7 @@ extern G4ThreadLocal G4Allocator<XAluminumElectrodeHit>* XAluminumElectrodeHitAl
 
 inline void* XAluminumElectrodeHit::operator new(size_t)
 {
-  if (!XAluminumElectrodeHitAllocator)                        // Singleton
+  if (!XAluminumElectrodeHitAllocator)  // Singleton
     XAluminumElectrodeHitAllocator = new G4Allocator<XAluminumElectrodeHit>;
 
   return (void*)XAluminumElectrodeHitAllocator->MallocSingle();
@@ -78,9 +79,7 @@ inline void* XAluminumElectrodeHit::operator new(size_t)
 
 inline void XAluminumElectrodeHit::operator delete(void* aHit)
 {
-  XAluminumElectrodeHitAllocator->FreeSingle((XAluminumElectrodeHit*) aHit);
+  XAluminumElectrodeHitAllocator->FreeSingle((XAluminumElectrodeHit*)aHit);
 }
 
 #endif
-
-

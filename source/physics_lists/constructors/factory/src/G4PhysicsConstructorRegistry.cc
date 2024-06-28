@@ -24,18 +24,12 @@
 // ********************************************************************
 //
 //
-//
-// -------------------------------------------------------------------
-//
 // GEANT4 Class file
 //
-//
-// File name:    G4PhysicsConstructorRegistry
+// File name: G4PhysicsConstructorRegistry.cc
 //
 // Author  W. Pokorski  21.09.2012
-//
-// Modifications:
-//
+// -------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include <iomanip>
@@ -43,19 +37,17 @@
 // force REFERENCE macros _not_ to be expanded here
 // but wherever the class is used (w/ that .hh use)
 #define   G4PhysicsConstructorRegistry_cc 1
+
 #include "G4PhysicsConstructorRegistry.hh"
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
-G4ThreadLocal G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::theInstance = 0;
+G4ThreadLocal G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::theInstance = nullptr;
 
 G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::Instance()
 {
-  if(0 == theInstance) {
-    static G4ThreadLocal G4PhysicsConstructorRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4PhysicsConstructorRegistry  ;  G4PhysicsConstructorRegistry &manager = *manager_G4MT_TLS_;
-    theInstance = &manager;
-  }
+  if(nullptr == theInstance) theInstance = new G4PhysicsConstructorRegistry;
   return theInstance;
 }
 
@@ -69,12 +61,12 @@ G4PhysicsConstructorRegistry::~G4PhysicsConstructorRegistry()
 
 void G4PhysicsConstructorRegistry::Clean()
 {
-  size_t n = physConstr.size();
+  std::size_t n = physConstr.size();
   if(n > 0) {
-    for (size_t i=0; i<n; ++i) {
+    for (std::size_t i=0; i<n; ++i) {
       if(physConstr[i]) {
 	G4VPhysicsConstructor* p = physConstr[i];
-	physConstr[i] = 0;
+	physConstr[i] = nullptr;
 	delete p;
       }
     }
@@ -84,10 +76,10 @@ void G4PhysicsConstructorRegistry::Clean()
 
 void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 {
-  if(!p) return;
-  size_t n = physConstr.size();
+  if(nullptr == p) return;
+  std::size_t n = physConstr.size();
   if(n > 0) {
-    for (size_t i=0; i<n; ++i) {
+    for (std::size_t i=0; i<n; ++i) {
       if(physConstr[i] == p) { return; }
     }
   }
@@ -96,12 +88,12 @@ void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 
 void G4PhysicsConstructorRegistry::DeRegister(G4VPhysicsConstructor* p)
 {
-  if ( !p ) return;
-  size_t n = physConstr.size();
+  if (nullptr == p) return;
+  std::size_t n = physConstr.size();
   if ( n > 0 ) {
-    for (size_t i=0; i<n; ++i) {
+    for (std::size_t i=0; i<n; ++i) {
       if ( physConstr[i] == p ) {
-        physConstr[i] = 0;
+        physConstr[i] = nullptr;
 	return;
       }
     }
@@ -130,7 +122,7 @@ G4VPhysicsConstructor* G4PhysicsConstructorRegistry::GetPhysicsConstructor(const
       G4ExceptionDescription ED;
       ED << "The factory for the physics constructor ["<< name << "] does not exist!" << G4endl;
       G4Exception("G4PhysicsConstructorRegistry::GetPhysicsConstructor", "PhysicsList001", FatalException, ED);
-      return 0;
+      return nullptr;
     }
 }
 
@@ -158,28 +150,24 @@ void G4PhysicsConstructorRegistry::PrintAvailablePhysicsConstructors() const
          << G4endl;
   if ( avail.empty() ) G4cout << "... no registered processes" << G4endl;
   else {
-    size_t n = avail.size();
-    for (size_t i=0; i<n; ++i ) {
+    std::size_t n = avail.size();
+    for (std::size_t i=0; i<n; ++i ) {
       G4cout << " [" << std::setw(3) << i << "] "
              << " \"" << avail[i] << "\"" << G4endl;
     }
   }
 }
 
-//
 // External reference to phy ctor factories for running with 'static'
 // libraries to pull the references of the declared factories into the
 // same compilation unit as the registry itself.
 // No harm having them in the non-static case.
 //
-
 // Ideally we'd do the G4_REFERENCE_PHYSCONSTR_FACTORY() macros
 // here, but this introduces a circular dependence between the
 // ctor_phys_factory library and the other ctor_phys_* libraries
 // when creating granular libraries.
 // Instead we'll make the references in the location(s) where the
 // G4PhysicsConstructorRegistry is _used_ :
-//    G4
-/*
-#include "G4RegisterPhysicsConstructors.icc"
-*/
+//
+//#include "G4RegisterPhysicsConstructors.icc"

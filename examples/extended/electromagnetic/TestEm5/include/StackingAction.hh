@@ -45,20 +45,19 @@ class StackingAction : public G4UserStackingAction
 {
   public:
     StackingAction(EventAction*);
-   ~StackingAction() override;
-   
-    void SetKillStatus(G4int value) { fKillSecondary = value;};
-     
+    ~StackingAction() override;
+
+    void SetKillStatus(G4int value) { fKillSecondary = value; };
+
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
 
   private:
-    EventAction*        fEventAction;    
-    
-    G4bool              fKillSecondary  = false;
-    StackingMessenger*  fStackMessenger = nullptr;
+    EventAction* fEventAction;
+
+    G4bool fKillSecondary = false;
+    StackingMessenger* fStackMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

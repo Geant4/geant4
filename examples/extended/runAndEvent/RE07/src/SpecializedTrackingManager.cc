@@ -99,7 +99,7 @@ void SpecializedTrackingManager::HandOverOneTrack(G4Track* aTrack)
     trackManager->ProcessOneTrack(aTrack);
     if (aTrack->GetTrackStatus() != fStopAndKill) {
       G4Exception("SpecializedTrackingManager::HandOverOneTrack", "NotStopped", FatalException,
-        "track was not stopped");
+                  "track was not stopped");
     }
 
     G4TrackVector* secondaries = trackManager->GimmeSecondaries();

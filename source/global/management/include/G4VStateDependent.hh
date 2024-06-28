@@ -40,6 +40,9 @@
 #include "G4ApplicationState.hh"
 #include "G4Types.hh"
 
+class G4Event;
+class G4Run;
+
 class G4VStateDependent
 {
  public:
@@ -54,6 +57,9 @@ class G4VStateDependent
   // concrete class, false should be returned. But this scheme use is
   // NOT recommended. All commands which are state sensitive MUST assign
   // available state(s).
+
+  virtual void NotifyDeletion(const G4Event*) {}
+  virtual void NotifyDeletion(const G4Run*) {}
 
  private:
   G4VStateDependent(const G4VStateDependent& right);

@@ -44,18 +44,17 @@ class StackingAction : public G4UserStackingAction
 {
   public:
     StackingAction();
-   ~StackingAction() override;
+    ~StackingAction() override;
 
-    void SetTrackSecondaries(G4bool value) { fTrackSecondaries = value;};
+    void SetTrackSecondaries(G4bool value) { fTrackSecondaries = value; };
 
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
 
   private:
-    G4bool              fTrackSecondaries = false;
-    StackingMessenger*  fStackMessenger = nullptr;
+    G4bool fTrackSecondaries = false;
+    StackingMessenger* fStackMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

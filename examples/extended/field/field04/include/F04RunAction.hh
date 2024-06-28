@@ -31,9 +31,8 @@
 #ifndef F04RunAction_h
 #define F04RunAction_h 1
 
-#include "globals.hh"
-
 #include "G4UserRunAction.hh"
+#include "globals.hh"
 
 class F04RunActionMessenger;
 class G4Run;
@@ -41,27 +40,23 @@ class G4Run;
 class F04RunAction : public G4UserRunAction
 {
   public:
-
     F04RunAction();
     ~F04RunAction() override;
 
   public:
-
     void BeginOfRunAction(const G4Run*) override;
     void EndOfRunAction(const G4Run*) override;
 
-    void  SetRndmFreq(G4int val) {fSaveRndm = val;}
-    G4int GetRndmFreq()          {return fSaveRndm;}
+    void SetRndmFreq(G4int val) { fSaveRndm = val; }
+    G4int GetRndmFreq() { return fSaveRndm; }
 
-    inline void SetAutoSeed (const G4bool val) {fAutoSeed = val;}
+    inline void SetAutoSeed(const G4bool val) { fAutoSeed = val; }
 
   private:
-
     F04RunActionMessenger* fRunMessenger = nullptr;
 
     G4int fSaveRndm = 0;
     G4bool fAutoSeed = false;
-
 };
 
 #endif

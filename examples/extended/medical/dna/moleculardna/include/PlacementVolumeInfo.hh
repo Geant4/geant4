@@ -37,44 +37,38 @@ class OctreeNode;
 
 class PlacementVolumeInfo
 {
- public:
-  PlacementVolumeInfo() = default;
+  public:
+    PlacementVolumeInfo() = default;
 
-  PlacementVolumeInfo(OctreeNode*, OctreeNode*, std::map<G4int, int64_t>);
+    PlacementVolumeInfo(OctreeNode*, OctreeNode*, std::map<G4int, int64_t>);
 
-  virtual ~PlacementVolumeInfo() = default;
+    virtual ~PlacementVolumeInfo() = default;
 
-  inline auto GetOctree() const { return fpOctree; };
+    inline auto GetOctree() const { return fpOctree; };
 
-  inline auto GetHistoneOctree() const { return fpHistoneOctree; };
+    inline auto GetHistoneOctree() const { return fpHistoneOctree; };
 
-  int64_t GetPairsOnChain(G4int idx) const;
+    int64_t GetPairsOnChain(G4int idx) const;
 
-  int64_t GetTotalBasePairs() const;
+    int64_t GetTotalBasePairs() const;
 
-  inline int64_t GetTotalHistones() const { return fNHistones; }
+    inline int64_t GetTotalHistones() const { return fNHistones; }
 
-  inline void SetNHistones(G4int histone) { fNHistones += (int64_t) histone; }
+    inline void SetNHistones(G4int histone) { fNHistones += (int64_t)histone; }
 
-  G4int GetNumberOfChains() const
-  {
-    return fBasePairsInChain.size();
-  };
+    G4int GetNumberOfChains() const { return fBasePairsInChain.size(); };
 
-  void SetOctree(OctreeNode* octree) { fpOctree = octree; };
+    void SetOctree(OctreeNode* octree) { fpOctree = octree; };
 
-  void SetHistoneOctree(OctreeNode* octree) { fpHistoneOctree = octree; };
+    void SetHistoneOctree(OctreeNode* octree) { fpHistoneOctree = octree; };
 
-  inline void SetPairsOnChain(G4int chain, int64_t pairs)
-  {
-    fBasePairsInChain[chain] = pairs;
-  };
+    inline void SetPairsOnChain(G4int chain, int64_t pairs) { fBasePairsInChain[chain] = pairs; };
 
- private:
-  int64_t fNHistones          = 0;
-  OctreeNode* fpOctree        = nullptr;
-  OctreeNode* fpHistoneOctree = nullptr;
-  std::map<G4int, int64_t> fBasePairsInChain;
+  private:
+    int64_t fNHistones = 0;
+    OctreeNode* fpOctree = nullptr;
+    OctreeNode* fpHistoneOctree = nullptr;
+    std::map<G4int, int64_t> fBasePairsInChain;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

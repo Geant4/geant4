@@ -24,149 +24,86 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Jose Luis Rodriguez, UDC (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (initial translation of ablav3p)
 // Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
 
-#define ABLAXX_IN_GEANT4_MODE 1
-
+#include "G4AblaVirtualData.hh"
 #include "globals.hh"
 
-#include "G4AblaVirtualData.hh"
-
-#ifdef ABLAXX_IN_GEANT4_MODE
 G4AblaVirtualData::G4AblaVirtualData() {}
-#else
-G4AblaVirtualData::G4AblaVirtualData(G4INCL::Config *) {}
-#endif
-G4AblaVirtualData::~G4AblaVirtualData() {}
 
-bool G4AblaVirtualData::setAlpha(int A, int Z, double value)
+G4bool G4AblaVirtualData::setAlpha(G4int A, G4int Z, G4double value)
 {
-  alpha[A][Z] = value;
+    alpha[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setEcnz(int A, int Z, double value)
+G4bool G4AblaVirtualData::setEcnz(G4int A, G4int Z, G4double value)
 {
-  ecnz[A][Z] = value;
+    ecnz[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setVgsld(int A, int Z, double value)
+G4bool G4AblaVirtualData::setVgsld(G4int A, G4int Z, G4double value)
 {
-  vgsld[A][Z] = value;
+    vgsld[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setPace2(int A, int Z, double value)
+G4bool G4AblaVirtualData::setRms(G4int A, G4int Z, G4double value)
 {
-  pace2[A][Z] = value;
+    rms[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setRms(int A, int Z, double value)
+G4bool G4AblaVirtualData::setMexp(G4int A, G4int Z, G4double value)
 {
-  rms[A][Z] = value;
+    mexp[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setMexp(int A, int Z, double value)
+G4bool G4AblaVirtualData::setMexpID(G4int A, G4int Z, G4int value)
 {
-  mexp[A][Z] = value;
+    mexpid[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setMexpID(int A, int Z, int value)
+G4bool G4AblaVirtualData::setBeta2(G4int A, G4int Z, G4double value)
 {
-  mexpid[A][Z] = value;
+    beta2[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setBeta2(int A, int Z, double value)
+G4bool G4AblaVirtualData::setBeta4(G4int A, G4int Z, G4double value)
 {
-  beta2[A][Z] = value;
+    beta4[A][Z] = value;
 
-  return true;
+    return true;
 }
 
-bool G4AblaVirtualData::setBeta4(int A, int Z, double value)
-{
-  beta4[A][Z] = value;
+G4double G4AblaVirtualData::getAlpha(G4int A, G4int Z) { return alpha[A][Z]; }
 
-  return true;
-}
+G4double G4AblaVirtualData::getEcnz(G4int A, G4int Z) { return ecnz[A][Z]; }
 
+G4double G4AblaVirtualData::getVgsld(G4int A, G4int Z) { return vgsld[A][Z]; }
 
-double G4AblaVirtualData::getAlpha(int A, int Z)
-{
-  return alpha[A][Z];
-}
+G4double G4AblaVirtualData::getRms(G4int A, G4int Z) { return rms[A][Z]; }
 
-double G4AblaVirtualData::getEcnz(int A, int Z)
-{
-  return ecnz[A][Z];
-}
+G4double G4AblaVirtualData::getMexp(G4int A, G4int Z) { return mexp[A][Z]; }
 
-double G4AblaVirtualData::getVgsld(int A, int Z)
-{
-  return vgsld[A][Z];
-}
+G4int G4AblaVirtualData::getMexpID(G4int A, G4int Z) { return mexpid[A][Z]; }
 
-double G4AblaVirtualData::getPace2(int A, int Z)
-{
-  return pace2[A][Z];
-}
+G4double G4AblaVirtualData::getBeta2(G4int A, G4int Z) { return beta2[A][Z]; }
 
-double G4AblaVirtualData::getRms(int A, int Z)
-{
-  return rms[A][Z];
-}
-
-double G4AblaVirtualData::getMexp(int A, int Z)
-{
-  return mexp[A][Z];
-}
-
-int G4AblaVirtualData::getMexpID(int A, int Z)
-{
-  return mexpid[A][Z];
-}
-
-double G4AblaVirtualData::getBeta2(int A, int Z)
-{
-  return beta2[A][Z];
-}
-
-double G4AblaVirtualData::getBeta4(int A, int Z)
-{
-  return beta4[A][Z];
-}
-
-int G4AblaVirtualData::getAlphaRows()
-{
-  return alphaRows;
-}
-
-int G4AblaVirtualData::getAlphaCols()
-{
-  return alphaCols;
-}
-int G4AblaVirtualData::getPaceRows()
-{
-  return paceRows;
-}
-int G4AblaVirtualData::getPaceCols()
-{
-  return paceCols;
-}
+G4double G4AblaVirtualData::getBeta4(G4int A, G4int Z) { return beta4[A][Z]; }

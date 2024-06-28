@@ -27,32 +27,30 @@
 /// \brief Definition of the ExP02GeoTree class
 //
 
-#ifndef INCLUDE_EXP02GEOTREE_H 
+#ifndef INCLUDE_EXP02GEOTREE_H
 #define INCLUDE_EXP02GEOTREE_H 1
 
 // Include files
-#include "G4VPhysicalVolume.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "G4Material.hh"
+#include "G4VPhysicalVolume.hh"
 
 /// Helper class needed for the ROOT I/O. It contains pointers to geometry tree,
 /// element table and material table.
 
-class ExP02GeoTree {
-public: 
+class ExP02GeoTree
+{
+  public:
+    ExP02GeoTree();
+    ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et);
 
-  ExP02GeoTree( ); 
-  ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et);
-  
-  virtual ~ExP02GeoTree( );
+    virtual ~ExP02GeoTree();
 
-  G4VPhysicalVolume* TopVol();
+    G4VPhysicalVolume* TopVol();
 
-private:
-
-  G4VPhysicalVolume* fTopV;
-  const G4ElementTable* fEltab;
-  
+  private:
+    G4VPhysicalVolume* fTopV;
+    const G4ElementTable* fEltab;
 };
-#endif // INCLUDE_EXP02GEOTREE_H
+#endif  // INCLUDE_EXP02GEOTREE_H

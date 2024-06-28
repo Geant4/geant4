@@ -543,9 +543,7 @@ G4UnionSolid::CreatePolyhedron () const
   }
   else
   {
-    return fExternalBoolProcessor
-           ->Union(GetConstituentSolid(0)->GetPolyhedron(),
-                   GetConstituentSolid(1)->GetPolyhedron());
+    return fExternalBoolProcessor->Process(this);
   }
 }
 
@@ -555,30 +553,37 @@ G4UnionSolid::CreatePolyhedron () const
 
 G4double G4UnionSolid::GetCubicVolume()
 {
-  if( fCubicVolume != -1.0 )
+  if( fCubicVolume >= 0. )
   {
     return fCubicVolume;
   }
-  G4double cubVolumeA = fPtrSolidA->GetCubicVolume();
-  G4double cubVolumeB = fPtrSolidB->GetCubicVolume();
-
   G4ThreeVector bminA, bmaxA, bminB, bmaxB;
   fPtrSolidA->BoundingLimits(bminA, bmaxA);
   fPtrSolidB->BoundingLimits(bminB, bmaxB);
+  G4bool noIntersection =
+     bminA.x() >= bmaxB.x() || bminA.y() >= bmaxB.y() || bminA.z() >= bmaxB.z() ||
+     bminB.x() >= bmaxA.x() || bminB.y() >= bmaxA.y() || bminB.z() >= bmaxA.z();
 
-  G4double intersection = 0.;
-  G4bool   canIntersect = 
-     bminA.x() < bmaxB.x() && bminA.y() < bmaxB.y() && bminA.z() < bmaxB.z() &&
-     bminB.x() < bmaxA.x() && bminB.y() < bmaxA.y() && bminB.z() < bmaxA.z();
-  if ( canIntersect )
+  if (noIntersection)
   {
-    G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Union",
-                                      fPtrSolidA, fPtrSolidB );
-    intersectVol.SetCubVolStatistics(100000);
-    intersection = intersectVol.GetCubicVolume();
+    fCubicVolume = fPtrSolidA->GetCubicVolume() + fPtrSolidB->GetCubicVolume();
   }
+  else
+  {
+    if (GetNumOfConstituents() > 10)
+    {
+      fCubicVolume = G4BooleanSolid::GetCubicVolume();
+    }
+    else
+    {
+      G4IntersectionSolid intersectVol("Temporary-Intersection-for-Union",
+                                       fPtrSolidA, fPtrSolidB);
+      intersectVol.SetCubVolStatistics(GetCubVolStatistics());
+      intersectVol.SetCubVolEpsilon(GetCubVolEpsilon());
 
-  fCubicVolume = cubVolumeA + cubVolumeB - intersection;
-
+      fCubicVolume = fPtrSolidA->GetCubicVolume() + fPtrSolidB->GetCubicVolume()
+        - intersectVol.GetCubicVolume();
+    }
+  }
   return fCubicVolume;
 }

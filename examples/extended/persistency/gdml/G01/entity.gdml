@@ -3,7 +3,7 @@
 <!DOCTYPE gdml [ 
 <!ENTITY materials SYSTEM "materials.xml">
 ]>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
  <define>
   <position name="det_163517544inWorld_163515704p" unit="mm" x="0" y="0" z="0" />

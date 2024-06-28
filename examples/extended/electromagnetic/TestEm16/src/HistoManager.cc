@@ -53,8 +53,7 @@ void HistoManager::Book()
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName(fFileName);
   if (analysisManager->GetVerboseLevel() > 1)
-    G4cout << __FILE__ << " line " << __LINE__ << " " << __FUNCTION__
-           << " fFileName=" << fFileName
+    G4cout << __FILE__ << " line " << __LINE__ << " " << __FUNCTION__ << " fFileName=" << fFileName
            << " G4RunManager::GetRunManager()=" << G4RunManager::GetRunManager()
            << G4endl;  // booked once per thread
   analysisManager->SetVerboseLevel(1);

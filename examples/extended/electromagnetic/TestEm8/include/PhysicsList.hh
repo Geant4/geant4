@@ -50,30 +50,31 @@ class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList : public G4VModularPhysicsList {
-public:
-  explicit PhysicsList(DetectorConstruction *);
-  ~PhysicsList() override;
+class PhysicsList : public G4VModularPhysicsList
+{
+  public:
+    explicit PhysicsList(DetectorConstruction*);
+    ~PhysicsList() override;
 
-  void ConstructParticle() override;
-  void ConstructProcess() override;
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
-  void SetCuts() override;
+    void SetCuts() override;
 
-  void AddPhysicsList(const G4String &name);
+    void AddPhysicsList(const G4String& name);
 
-  void AddStepMax();
+    void AddStepMax();
 
-  PhysicsList &operator = (const PhysicsList &right) = delete;
-  PhysicsList(const PhysicsList &) = delete;
+    PhysicsList& operator=(const PhysicsList& right) = delete;
+    PhysicsList(const PhysicsList&) = delete;
 
-private:
-  G4VPhysicsConstructor *fEmPhysicsList;
-  G4VPhysicsConstructor *fDecayPhysicsList;
-  G4String fEmName;
+  private:
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fDecayPhysicsList;
+    G4String fEmName;
 
-  PhysicsListMessenger *fMessenger;
-  DetectorConstruction *fDetectorConstruction;
+    PhysicsListMessenger* fMessenger;
+    DetectorConstruction* fDetectorConstruction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

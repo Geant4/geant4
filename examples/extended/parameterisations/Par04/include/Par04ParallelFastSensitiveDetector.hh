@@ -26,14 +26,16 @@
 #ifndef PAR04PARALLELFASTSENSITIVEDETECTOR_HH
 #define PAR04PARALLELFASTSENSITIVEDETECTOR_HH
 
-#include <CLHEP/Units/SystemOfUnits.h>     // for m, pi
-#include <G4String.hh>                     // for G4String
-#include <G4Types.hh>                      // for G4bool, G4int
-#include "G4SystemOfUnits.hh"              // for m
-#include "G4ThreeVector.hh"                // for G4ThreeVector
+#include "Par04Hit.hh"  // for Par04Hit (ptr only), Par04...
+
+#include "G4SystemOfUnits.hh"  // for m
+#include "G4ThreeVector.hh"  // for G4ThreeVector
 #include "G4VFastSimSensitiveDetector.hh"  // for G4VFastSimSensitiveDetector
-#include "G4VSensitiveDetector.hh"         // for G4VSensitiveDetector
-#include "Par04Hit.hh"                     // for Par04Hit (ptr only), Par04...
+#include "G4VSensitiveDetector.hh"  // for G4VSensitiveDetector
+
+#include <CLHEP/Units/SystemOfUnits.h>  // for m, pi
+#include <G4String.hh>  // for G4String
+#include <G4Types.hh>  // for G4bool, G4int
 #include <unordered_map>
 class G4FastHit;
 class G4FastTrack;
@@ -47,33 +49,30 @@ class G4TouchableHistory;
  *
  */
 
-class Par04ParallelFastSensitiveDetector
-  : public G4VSensitiveDetector,
-    public G4VFastSimSensitiveDetector
+class Par04ParallelFastSensitiveDetector : public G4VSensitiveDetector,
+                                           public G4VFastSimSensitiveDetector
 {
- public:
-  Par04ParallelFastSensitiveDetector(G4String aName);
-  Par04ParallelFastSensitiveDetector(G4String aName,
-                                     G4int aNbOfLayers,
-                                     G4int aNbOfSlices);
-  virtual ~Par04ParallelFastSensitiveDetector();
-  /// Create hit collection
-  virtual void Initialize(G4HCofThisEvent* HCE) final;
-  /// Process energy deposit from the full simulation.
-  virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* aROhist) final;
-  virtual G4bool ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
-                             G4TouchableHistory* aROhist) final;
-  virtual void EndOfEvent(G4HCofThisEvent* aHC) final;
+  public:
+    Par04ParallelFastSensitiveDetector(G4String aName);
+    Par04ParallelFastSensitiveDetector(G4String aName, G4int aNbOfLayers, G4int aNbOfSlices);
+    virtual ~Par04ParallelFastSensitiveDetector();
+    /// Create hit collection
+    virtual void Initialize(G4HCofThisEvent* HCE) final;
+    /// Process energy deposit from the full simulation.
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* aROhist) final;
+    virtual G4bool ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
+                               G4TouchableHistory* aROhist) final;
+    virtual void EndOfEvent(G4HCofThisEvent* aHC) final;
 
- private:
-  /// Collection of hits
-  Par04HitsCollection* fHitsCollection = nullptr;
-  std::unordered_map<G4int, std::unique_ptr<Par04Hit>> fHitsMap;
-  /// ID of collection of hits
-  G4int fHitCollectionID = -1;
-  /// Number of readout cells
-  G4int fNbOfLayers = 1;
-  G4int fNbOfSlices = 1;
+  private:
+    /// Collection of hits
+    Par04HitsCollection* fHitsCollection = nullptr;
+    std::unordered_map<G4int, std::unique_ptr<Par04Hit>> fHitsMap;
+    /// ID of collection of hits
+    G4int fHitCollectionID = -1;
+    /// Number of readout cells
+    G4int fNbOfLayers = 1;
+    G4int fNbOfSlices = 1;
 };
 
 #endif /* PAR04PARALLELSENSITIVEDETECTOR_HH */

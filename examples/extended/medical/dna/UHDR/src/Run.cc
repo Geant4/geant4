@@ -27,38 +27,43 @@
 /// \brief Implementation of the Run class
 
 #include "Run.hh"
+
+#include "Scorer.hh"
+
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
-#include "Scorer.hh"
+
 #include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-Run::Run() : G4Run() {
-  auto mfdet = dynamic_cast<G4MultiFunctionalDetector *>(
-      G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
-  fpDose = mfdet->GetPrimitive(0);//Dose
-  fpGvalues = mfdet->GetPrimitive(1);//G-values
+Run::Run() : G4Run()
+{
+  auto mfdet = dynamic_cast<G4MultiFunctionalDetector*>(
+    G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
+  fpDose = mfdet->GetPrimitive(0);  // Dose
+  fpGvalues = mfdet->GetPrimitive(1);  // G-values
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void Run::RecordEvent(const G4Event *event) {
+void Run::RecordEvent(const G4Event* event)
+{
   if (event->IsAborted()) {
     return;
   }
   // Hits collections
   //
-  G4HCofThisEvent *pHCE = event->GetHCofThisEvent();
+  G4HCofThisEvent* pHCE = event->GetHCofThisEvent();
   if (!pHCE) {
     return;
   }
 
-  auto evtMap = dynamic_cast<Scorer<Gvalues> *>(fpGvalues)->GetEventMap();
+  auto evtMap = dynamic_cast<Scorer<Gvalues>*>(fpGvalues)->GetEventMap();
 
-  std::map<G4int, G4double *>::iterator itr;
+  std::map<G4int, G4double*>::iterator itr;
 
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
     G4double edep = *(itr->second);
@@ -69,14 +74,15 @@ void Run::RecordEvent(const G4Event *event) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void Run::Merge(const G4Run *aRun) {
+void Run::Merge(const G4Run* aRun)
+{
   if (aRun == this) {
     return;
   }
-  const Run *localRun = dynamic_cast<const Run *>(aRun);
+  const Run* localRun = dynamic_cast<const Run*>(aRun);
   fSumEne += localRun->fSumEne;
-  auto masterScorer = dynamic_cast<Scorer<Gvalues> *>(this->fpGvalues);
-  auto localScorer = dynamic_cast<Scorer<Gvalues> *>(localRun->fpGvalues);
+  auto masterScorer = dynamic_cast<Scorer<Gvalues>*>(this->fpGvalues);
+  auto localScorer = dynamic_cast<Scorer<Gvalues>*>(localRun->fpGvalues);
   masterScorer->AbsorbResultsFromWorkerScorer(localScorer);
   G4Run::Merge(aRun);
 }

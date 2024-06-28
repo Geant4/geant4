@@ -50,7 +50,7 @@ class Run : public G4Run
 
   public:
     G4int f_n_gam_sync = 0;  // nb of synchrotron radiation photons generated
-    G4double f_e_gam_sync = 0, f_e_gam_sync2 = 0; // energy of synchrotron
+    G4double f_e_gam_sync = 0, f_e_gam_sync2 = 0;  // energy of synchrotron
     G4double f_e_gam_sync_max = 0;  // radiation photons generated
     G4double f_lam_gam_sync = 0;  // step length between synchr radiation photons
     G4double f_n_Xray_Refl = 0;

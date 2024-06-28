@@ -36,7 +36,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DNAWaterDissociationDisplacer.hh"
 #include "G4DNAChemistryManager.hh"
-#include "G4DNAWaterExcitationStructure.hh"
 #include "G4ProcessManager.hh"
 // *** Processes and models for Geant4-DNA
 
@@ -44,7 +43,6 @@
 
 #include "G4DNAVibExcitation.hh"
 #include "G4DNASancheExcitationModel.hh"
-#include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
 #include "G4DNAMolecularDissociation.hh"
 #include "G4DNABrownianTransportation.hh"
 #include "G4DNAMolecularReactionTable.hh"
@@ -58,7 +56,6 @@
 #include "G4Electron.hh"
 #include "G4MoleculeTable.hh"
 #include "G4H2O.hh"
-#include "G4FakeMolecule.hh"
 #include "G4PhysicsListHelper.hh"
 
 /****/
@@ -69,10 +66,10 @@
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 #include "G4ChemDissociationChannels_option1.hh"
+//Parameter
+#include "G4EmParameters.hh"
 
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAChemistry_option3);
-
-#include "G4Threading.hh"
 
 G4EmDNAChemistry_option3::G4EmDNAChemistry_option3() :
     G4VUserChemistryList(true)
@@ -99,6 +96,7 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
 void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTable*
                                               theReactionTable)
 {
+  auto model = G4EmParameters::Instance()->GetTimeStepModel();
   //-----------------------------------
   //Get the molecular configuration
   G4MolecularConfiguration* OH =
@@ -216,121 +214,84 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   // *OH + *H -> H2O
   reactionData = new G4DNAMolecularReactionData(
       1.55e10 * (1e-3 * m3 / (mole * s)), OH, H);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H + H2O2 -> OH
   reactionData = new G4DNAMolecularReactionData(
       3.50e7 * (1e-3 * m3 / (mole * s)), H, H2O2);
   reactionData->AddProduct(OH);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H + OH- -> eaq-
   reactionData = new G4DNAMolecularReactionData(
       2.51e7 * (1e-3 * m3 / (mole * s)), H, OHm);
   reactionData->AddProduct(e_aq);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H + O2 -> HO2
   reactionData = new G4DNAMolecularReactionData(
       2.10e10 * (1e-3 * m3 / (mole * s)), H, O2);
   reactionData->AddProduct(HO2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H + HO2 -> H2O2
   reactionData = new G4DNAMolecularReactionData(
       1.00e10 * (1e-3 * m3 / (mole * s)), H, HO2);
   reactionData->AddProduct(H2O2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H + O2- -> HO2-
   reactionData = new G4DNAMolecularReactionData(
       1.00e10 * (1e-3 * m3 / (mole * s)), H, O2m);
   reactionData->AddProduct(HO2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // *OH + *OH -> H2O2
   reactionData = new G4DNAMolecularReactionData(
       0.55e10 * (1e-3 * m3 / (mole * s)), OH, OH);
   reactionData->AddProduct(H2O2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
-
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + H2O2 -> HO2
   reactionData = new G4DNAMolecularReactionData(
       2.88e7 * (1e-3 * m3 / (mole * s)), OH, H2O2);
   reactionData->AddProduct(HO2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + H2 -> H
   reactionData = new G4DNAMolecularReactionData(
       3.28e7 * (1e-3 * m3 / (mole * s)), OH, H2);
   reactionData->AddProduct(H);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // e_aq + *OH -> OH-
   reactionData = new G4DNAMolecularReactionData(
       2.95e10 * (1e-3 * m3 / (mole * s)), e_aq, OH);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + OH- -> O-
   reactionData = new G4DNAMolecularReactionData(
       6.30e9 * (1e-3 * m3 / (mole * s)), OH, OHm);
   reactionData->AddProduct(Om);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + HO2 -> O2
   reactionData = new G4DNAMolecularReactionData(
       7.90e9 * (1e-3 * m3 / (mole * s)), OH, HO2);
   reactionData->AddProduct(O2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + O2- -> O2 + OH-
@@ -338,10 +299,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       1.07e10 * (1e-3 * m3 / (mole * s)), OH, O2m);
   reactionData->AddProduct(O2);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + HO2- -> HO2 + OH-
@@ -349,20 +307,14 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       8.32e9 * (1e-3 * m3 / (mole * s)), OH, HO2m);
   reactionData->AddProduct(HO2);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + O- -> HO2-
   reactionData = new G4DNAMolecularReactionData(
       1.00e9 * (1e-3 * m3 / (mole * s)), OH, Om);
   reactionData->AddProduct(HO2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + O3- -> O2- + HO2
@@ -370,10 +322,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       8.50e9 * (1e-3 * m3 / (mole * s)), OH, O3m);
   reactionData->AddProduct(O2m);
   reactionData->AddProduct(HO2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // e_aq + H2O2 -> OH- + *OH
@@ -381,20 +330,14 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       1.10e10 * (1e-3 * m3 / (mole * s)), e_aq, H2O2);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(OH);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H2O2 + OH- -> HO2-
   reactionData = new G4DNAMolecularReactionData(
       4.71e8 * (1e-3 * m3 / (mole * s)), H2O2, OHm);
   reactionData->AddProduct(HO2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H2O2 + O(3p) -> HO2 + OH
@@ -402,10 +345,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       1.60e9 * (1e-3 * m3 / (mole * s)), H2O2, O);
   reactionData->AddProduct(HO2);
   reactionData->AddProduct(OH);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H2O2 + O- -> HO2 + OH-
@@ -413,10 +353,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       5.55e8 * (1e-3 * m3 / (mole * s)), H2O2, Om);
   reactionData->AddProduct(HO2);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H2 + O(3p) -> H + OH
@@ -424,10 +361,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       4.77e3 * (1e-3 * m3 / (mole * s)), H2, O);
   reactionData->AddProduct(H);
   reactionData->AddProduct(OH);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H2 + O- -> H + OH-
@@ -435,70 +369,49 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       1.21e8 * (1e-3 * m3 / (mole * s)), H2, Om);
   reactionData->AddProduct(H);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // eaq- + O2 -> O2-
   reactionData = new G4DNAMolecularReactionData(
       1.74e10 * (1e-3 * m3 / (mole * s)), e_aq, O2);
   reactionData->AddProduct(O2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // eaq + HO2 -> HO2-
   reactionData = new G4DNAMolecularReactionData(
       1.29e10 * (1e-3 * m3 / (mole * s)), e_aq, HO2);
   reactionData->AddProduct(HO2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH- + HO2 -> O2-
   reactionData = new G4DNAMolecularReactionData(
       6.30e9 * (1e-3 * m3 / (mole * s)), OHm, HO2);
   reactionData->AddProduct(O2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH- + O(3p) -> HO2-
   reactionData = new G4DNAMolecularReactionData(
       4.20e8 * (1e-3 * m3 / (mole * s)), OHm, O);
   reactionData->AddProduct(HO2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // O2 + O(3p) -> O3
   reactionData = new G4DNAMolecularReactionData(
       4.00e9 * (1e-3 * m3 / (mole * s)), O2, O);
   reactionData->AddProduct(O3);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // O2 + O- -> O3-
   reactionData = new G4DNAMolecularReactionData(
       3.70e9 * (1e-3 * m3 / (mole * s)), O2, Om);
   reactionData->AddProduct(O3m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // HO2 + HO2 -> H2O2 + O2
@@ -506,10 +419,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       9.80e5 * (1e-3 * m3 / (mole * s)), HO2, HO2);
   reactionData->AddProduct(H2O2);
   reactionData->AddProduct(O2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // HO2 + O2- -> HO2- + O2
@@ -517,10 +427,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       9.70e7 * (1e-3 * m3 / (mole * s)), HO2, O2m);
   reactionData->AddProduct(HO2m);
   reactionData->AddProduct(O2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // HO2- + O(3p) -> O2- + OH
@@ -528,10 +435,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       5.30e9 * (1e-3 * m3 / (mole * s)), HO2m, O);
   reactionData->AddProduct(O2m);
   reactionData->AddProduct(OH);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
 
   // Type IV //
@@ -540,10 +444,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   reactionData = new G4DNAMolecularReactionData(
       2.11e10 * (1e-3 * m3 / (mole * s)), e_aq, H3Op);
   reactionData->AddProduct(H);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // e_aq + O2- -> H2O2 + OH- + OH-
@@ -552,10 +453,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   reactionData->AddProduct(H2O2);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // e_aq + HO2- -> O- + OH-
@@ -563,10 +461,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       3.51e9 * (1e-3 * m3 / (mole * s)), e_aq, HO2m);
   reactionData->AddProduct(Om);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // e_aq + O- -> OH- + OH-
@@ -574,40 +469,28 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       2.31e10 * (1e-3 * m3 / (mole * s)), e_aq, Om);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H3O+ + O2- -> HO2
   reactionData = new G4DNAMolecularReactionData(
       4.78e10 * (1e-3 * m3 / (mole * s)), H3Op, O2m);
   reactionData->AddProduct(HO2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H3O+ + HO2- -> H2O2
   reactionData = new G4DNAMolecularReactionData(
       5.00e10 * (1e-3 * m3 / (mole * s)), H3Op, HO2m);
   reactionData->AddProduct(H2O2);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // H3O+ + O- -> OH
   reactionData = new G4DNAMolecularReactionData(
      4.78e10  * (1e-3 * m3 / (mole * s)), H3Op, Om);
   reactionData->AddProduct(OH);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // O2- + O- -> O2 + OH- + OH-
@@ -616,10 +499,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   reactionData->AddProduct(O2);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // HO2- + O- -> O2- + OH-
@@ -627,10 +507,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       3.50e8 * (1e-3 * m3 / (mole * s)), HO2m, Om);
   reactionData->AddProduct(O2m);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // O- + O- -> H2O2 + OH- + OH-
@@ -639,10 +516,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   reactionData->AddProduct(H2O2);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(OHm);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // O- + O3- -> O2- + O2-
@@ -650,10 +524,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
       7.00e8 * (1e-3 * m3 / (mole * s)), Om, O3m);
   reactionData->AddProduct(O2m);
   reactionData->AddProduct(O2m);
-  if(fTimeStepModel != fSBS)
-  {
-    reactionData->SetReactionType(1);
-  }
+  SetReactionType(reactionData,model);//partially diffusion-controlled
   theReactionTable->SetReaction(reactionData);
 
   // Type VI
@@ -798,6 +669,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
 
 void G4EmDNAChemistry_option3::ConstructProcess()
 {
+  auto ChemModel = G4EmParameters::Instance()->GetTimeStepModel();
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
   //===============================================================
@@ -849,7 +721,7 @@ void G4EmDNAChemistry_option3::ConstructProcess()
 
     if (moleculeDef != G4H2O::Definition())
     {
-      if(fTimeStepModel != fIRT)
+      if(ChemModel != G4ChemTimeStepModel::IRT)
       {
         auto* brown = new G4DNABrownianTransportation();
         ph->RegisterProcess(brown, moleculeDef);
@@ -882,15 +754,21 @@ void G4EmDNAChemistry_option3::ConstructProcess()
 void G4EmDNAChemistry_option3::ConstructTimeStepModel(G4DNAMolecularReactionTable*
                                               /*reactionTable*/)
 {
-  if(fTimeStepModel == fIRT)
+  auto model = G4EmParameters::Instance()->GetTimeStepModel();
+  if(model == G4ChemTimeStepModel::IRT)
   {
     RegisterTimeStepModel(new G4DNAMolecularIRTModel(), 0);
-  }else if(fTimeStepModel == fSBS)
+  }else if(model == G4ChemTimeStepModel::SBS)
   {
     RegisterTimeStepModel(new G4DNAMolecularStepByStepModel(), 0);
-  }else if(fTimeStepModel == fIRT_syn)
+  }else if(model == G4ChemTimeStepModel::IRT_syn)
   {
     RegisterTimeStepModel(new G4DNAIndependentReactionTimeModel(), 0);
   }
+}
 
+void G4EmDNAChemistry_option3::SetReactionType(G4DNAMolecularReactionData* pData,
+                                               G4ChemTimeStepModel model)
+{
+  if(model != G4ChemTimeStepModel::SBS) { pData->SetReactionType(1); }
 }

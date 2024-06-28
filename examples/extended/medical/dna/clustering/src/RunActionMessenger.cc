@@ -36,21 +36,20 @@
 #include "RunActionMessenger.hh"
 
 #include "RunAction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
-:G4UImessenger(),fRun(run),
- fRunDir(0),
- fFactoryCmd(0)
+  : G4UImessenger(), fRun(run), fRunDir(0), fFactoryCmd(0)
 {
   fRunDir = new G4UIdirectory("/clustering/run/");
   fRunDir->SetGuidance("run control");
-  
-  fFactoryCmd = new G4UIcmdWithAString("/clustering/run/setFileName",this);
-  fFactoryCmd->SetGuidance("set name for the histograms file");    
+
+  fFactoryCmd = new G4UIcmdWithAString("/clustering/run/setFileName", this);
+  fFactoryCmd->SetGuidance("set name for the histograms file");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,10 +62,11 @@ RunActionMessenger::~RunActionMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{      
-  if (command == fFactoryCmd)
-   { fRun->SetHistoName(newValue);}
+void RunActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fFactoryCmd) {
+    fRun->SetHistoName(newValue);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -36,45 +36,39 @@
 //
 
 #include "PhysListEmStandard.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4EmParameters.hh"
-#include "G4EmBuilder.hh"
-#include "G4LossTableManager.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
-#include "G4LivermorePhotoElectricModel.hh"
-
-#include "G4eMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-#include "G4CoulombScattering.hh"
-#include "G4eCoulombScatteringModel.hh"
-#include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4GenericIon.hh"
-
-#include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4ComptonScattering.hh"
+#include "G4CoulombScattering.hh"
+#include "G4Electron.hh"
+#include "G4EmBuilder.hh"
 #include "G4EmModelActivator.hh"
+#include "G4EmParameters.hh"
+#include "G4Gamma.hh"
+#include "G4GammaConversion.hh"
+#include "G4GenericIon.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4LossTableManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4PhysicsListHelper.hh"
+#include "G4Positron.hh"
+#include "G4RayleighScattering.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UrbanMscModel.hh"
+#include "G4WentzelVIModel.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eCoulombScatteringModel.hh"
+#include "G4eIonisation.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4eplusAnnihilation.hh"
+#include "G4hIonisation.hh"
+#include "G4hMultipleScattering.hh"
+#include "G4ionIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(G4int verbose)
-  : G4VPhysicsConstructor("local")
+PhysListEmStandard::PhysListEmStandard(G4int verbose) : G4VPhysicsConstructor("local")
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
@@ -85,8 +79,7 @@ PhysListEmStandard::PhysListEmStandard(G4int verbose)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
-{}
+PhysListEmStandard::~PhysListEmStandard() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,7 +93,7 @@ void PhysListEmStandard::ConstructParticle()
 
 void PhysListEmStandard::ConstructProcess()
 {
-  if(verboseLevel > 1) {
+  if (verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();
@@ -135,9 +128,9 @@ void PhysListEmStandard::ConstructProcess()
   msc->SetEmModel(msc1);
   msc->SetEmModel(msc2);
 
-  G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+  G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel();
   G4CoulombScattering* ss = new G4CoulombScattering();
-  ss->SetEmModel(ssm); 
+  ss->SetEmModel(ssm);
   ss->SetMinKinEnergy(highEnergyLimit);
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
@@ -158,9 +151,9 @@ void PhysListEmStandard::ConstructProcess()
   msc->SetEmModel(msc1);
   msc->SetEmModel(msc2);
 
-  ssm = new G4eCoulombScatteringModel(); 
+  ssm = new G4eCoulombScatteringModel();
   ss = new G4CoulombScattering();
-  ss->SetEmModel(ssm); 
+  ss->SetEmModel(ssm);
   ss->SetMinKinEnergy(highEnergyLimit);
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);

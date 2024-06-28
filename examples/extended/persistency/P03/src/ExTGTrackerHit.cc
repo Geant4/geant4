@@ -29,60 +29,55 @@
 /// \brief Implementation of the ExTGTrackerHit class
 
 #include "ExTGTrackerHit.hh"
-#include "G4UnitsTable.hh"
-#include "G4VVisManager.hh"
+
 #include "G4Circle.hh"
 #include "G4Colour.hh"
+#include "G4UnitsTable.hh"
+#include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 
 G4ThreadLocal G4Allocator<ExTGTrackerHit>* ExTGTrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExTGTrackerHit::ExTGTrackerHit()
-{
-}
+ExTGTrackerHit::ExTGTrackerHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExTGTrackerHit::~ExTGTrackerHit()
-{
-}
+ExTGTrackerHit::~ExTGTrackerHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExTGTrackerHit::ExTGTrackerHit(const ExTGTrackerHit& right)
-  : G4VHit()
+ExTGTrackerHit::ExTGTrackerHit(const ExTGTrackerHit& right) : G4VHit()
 {
-  fTrackID   = right.fTrackID;
+  fTrackID = right.fTrackID;
   fChamberNb = right.fChamberNb;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const ExTGTrackerHit& ExTGTrackerHit::operator=(const ExTGTrackerHit& right)
 {
-  fTrackID   = right.fTrackID;
+  fTrackID = right.fTrackID;
   fChamberNb = right.fChamberNb;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExTGTrackerHit::operator==(const ExTGTrackerHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGTrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if (pVVisManager) {
     G4Circle circle(fPos);
     circle.SetScreenSize(2.);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -93,6 +88,6 @@ void ExTGTrackerHit::Draw()
 void ExTGTrackerHit::Print()
 {
   G4cout << "  trackID: " << fTrackID << "  chamberNb: " << fChamberNb
-         << "  energy deposit: " << G4BestUnit(fEdep,"Energy")
-         << "  position: " << G4BestUnit(fPos,"Length") << G4endl;
+         << "  energy deposit: " << G4BestUnit(fEdep, "Energy")
+         << "  position: " << G4BestUnit(fPos, "Length") << G4endl;
 }

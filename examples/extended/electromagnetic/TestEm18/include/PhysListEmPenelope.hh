@@ -38,20 +38,14 @@
 
 class PhysListEmPenelope : public G4VPhysicsConstructor
 {
-public:
-  PhysListEmPenelope(const G4String& name = "Penelope");
- ~PhysListEmPenelope() override = default;
+  public:
+    PhysListEmPenelope(const G4String& name = "Penelope");
+    ~PhysListEmPenelope() override = default;
 
-  void ConstructParticle() override { };
-  void ConstructProcess()  override;
+    void ConstructParticle() override {};
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-

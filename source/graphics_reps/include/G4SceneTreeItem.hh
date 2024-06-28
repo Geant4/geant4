@@ -77,9 +77,11 @@ class G4SceneTreeItem
 
     const G4String& GetModelDescription() const { return fModelDescription; }
     void SetModelDescription(const G4String& modelDescription)
-    {
-      fModelDescription = modelDescription;
-    }
+    { fModelDescription = modelDescription; }
+
+    const G4String& GetFurtherInfo() const { return fFurtherInfo; }
+    void SetFurtherInfo(const G4String& furtherInfo)
+    { fFurtherInfo = furtherInfo; }
 
     const std::map<G4String, G4AttDef>* GetAttDefs() const { return fpAttDefs; }
     void SetAttDefs(const std::map<G4String, G4AttDef>* pAttDefs) { fpAttDefs = pAttDefs; };
@@ -124,6 +126,7 @@ class G4SceneTreeItem
     G4String fDescription;
     G4String fModelType = "none";
     G4String fModelDescription;
+    G4String fFurtherInfo;  // Intended for a tooltip or equivalent?
     G4String fPVPath;
     G4VisAttributes fVisAttributes;
     const std::map<G4String, G4AttDef>* fpAttDefs = nullptr;

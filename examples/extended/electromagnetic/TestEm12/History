@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-02-20 Sebastien Incerti (testem12-V11-02-00)
+- added comments to dna.mac
+
 ## 2023-05-12 Michel Maire (testem12-V11-01-00)
 - revision of all headers
 
@@ -13,7 +16,7 @@ be used as a substitute for writing good git commit messages!
 ---
 
 # History entries prior to 11.0
-     
+
 06-10-21 I. Hrivnacova (testem12-V10-07-04)
 - Migration to new G4AnalysisManager.hh header;
   define the default output file type (root).
@@ -28,16 +31,16 @@ be used as a substitute for writing good git commit messages!
 
 10-02-21 V.Ivanchenko (testem12-V10-07-01)
 - fixed README
-     
+
 18-12-20 mma (testem12-V10-07-00)
 - updated PhysListEmStandard.cc
-     
+
 27-10-20 mma (testem12-V10-06-00)
 - add macros description in Readme
 
 09-09-18 SI (testem12-V10-04-04)
 - updated dna.mac
-	 
+
 04-06-18 mma (testem12-V10-04-03)
 - SteppingAction.cc : Photoelectric, edep at end of step
 
@@ -71,9 +74,9 @@ be used as a substitute for writing good git commit messages!
 - RunAction - added dump of EM parameters
 - TestEm12.cc - set default number of threads 4
 - DetectorConstruction, DetectorMessenger - allow to change number
-    of layers only in the PreInit state; do not clean and 
+    of layers only in the PreInit state; do not clean and
     reinitialise geometry when change sphere radii
-	 
+
 04-07-16 I. Hrivnacova  (testem12-V10-02-03)
 - Fixes for Doxygen documentation
 
@@ -94,7 +97,7 @@ be used as a substitute for writing good git commit messages!
 
 12-05-15 V.Ivant (testem12-V10-01-00)
 - PhysicsList - use G4EmStandardPhysicsGS from physics_list library
-	 
+
 24-10-14 mma (testem12-V10-00-04)
 - PhysListEmStandard : fUseSafetyPlus
 - use G4EmStandardPhysicsSS and WVI
@@ -107,8 +110,8 @@ be used as a substitute for writing good git commit messages!
 - remove PhysicsList::SetCuts(). Update macros
 
 21-04-04 V.Ivanchenko (testem12-V10-00-01)
-- PhysicsList - added emlowenergy and dna_option1 physics lists 
-     
+- PhysicsList - added emlowenergy and dna_option1 physics lists
+
 19-01-14 mma (testem12-V10-00-00)
 - MT: ActionInitialization, TestEm12.cc
 - MT: RunAction, Run, EventAction, TrackingAction, SteppingAction
@@ -116,37 +119,37 @@ be used as a substitute for writing good git commit messages!
 - rm EventActionMessenger. Cleanup all macros
 
 21-11-13 V.Ivanchenko (testem12-V09-06-11)
-- PhysListEmStandardWVI and PhysListEmStandardSS - reduced low-energy 
-    threashold for the single scattering model to 10 eV 
+- PhysListEmStandardWVI and PhysListEmStandardSS - reduced low-energy
+    threashold for the single scattering model to 10 eV
 
 28-07-13 P.Gumplinger (testem12-V09-06-10)
 - fix clang32 compilation warning
 
-11-07-13 I.Hrivnacova (testem12-V09-06-09) 
-- In HistoManager: use new analysis manager method SetH1Activation()   
-     
+11-07-13 I.Hrivnacova (testem12-V09-06-09)
+- In HistoManager: use new analysis manager method SetH1Activation()
+
 20-06-13 mma (testem12-V09-06-08)
 - SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
 
 07-06-13 mma (testem12-V09-06-07)
 - Cosmetic in SteppingAction.
-     
+
 18-04-13 mma (testem12-V09-06-06)
 - use G4AnalysisManager
-     
+
 01-04-13 A.Dotti (testem12-V09-06-03,testem12-V09-06-04,testem12-V09-06-05)
 - New G4VUserPhysicsList interface needed for MT
-     
-22-03-13 mma (testem12-V09-06-02)  
+
+22-03-13 mma (testem12-V09-06-02)
 - PhysListEmStandard: suppress Msc96
-     
-28-02-13 I. Hrivnacova (testem12-V09-06-01) 
+
+28-02-13 I. Hrivnacova (testem12-V09-06-01)
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   (Thanks to V. Ivantchenko for pointing at this.)
 
-13-02-13 I.Hrivnacova 
+13-02-13 I.Hrivnacova
 - Applied coding guidelines (virtual keyword, data members initialization)
 
 11-12-12 V.Ivant (testem12-V09-06-00)
@@ -154,20 +157,20 @@ be used as a substitute for writing good git commit messages!
 
 20-10-12 mma (testem12-V09-05-09)
 - PhysListEmStandard: use G4UrbanMsc96
-      
+
 15-10-12 mma (testem12-V09-05-08)
 - RunAction: do not save random seed
 - coding convention: virtual
 
 12-10-12 V.Ivant (testem12-V09-05-07)
 - Added Opt4 Physics List and decreased limit on cuts
-          
+
 30-04-12 mma (testem12-V09-05-06)
 - StepMaxMessenger : printing correction
-     
+
 12-04-12 mma (testem12-V09-05-04)
 - all classes : apply G4 coding conventions
-       
+
 05-03-12 mma (testem12-V09-05-03)
 - HistoManager.hh and .cc : migrate to new g4tools histogramming system
   Do not need aida anymore, nor G4ANALYSIS_USE
@@ -176,37 +179,37 @@ be used as a substitute for writing good git commit messages!
 
 09-02-12 V.Ivant (testem12-V09-05-02)
 - PhysListEmStandardSS,PhysListEmStandardSSI,
-  PhysListEmStandardWVI - more correct process order  
-     
+  PhysListEmStandardWVI - more correct process order
+
 06-02-12 mma (testem12-V09-05-01)
 - modify StepMax mechanism. Add command /testem/StepMax
 
 29-01-12 S. Incerti, V. Ivantchenko (testem12-V09-05-00)
-- Added new physics list: PhysListEmStandardSSM, which uses 
+- Added new physics list: PhysListEmStandardSSM, which uses
    G4eSingleCoulombScatteringModel
 
 21-11-11 V.Ivant (testem12-V09-04-10)
 - PhysListEmStandardGS, PhysListEmStandardWVI - low energy threshold
    for Coulomb scattering model is reduced to 10 eV for e+- and to
    100 eV for muons and hadrons
-     
+
 08-11-11 mma (testem12-V09-04-09)
 - modify SteppingVerbose for OutOfWorld
-          
+
 06-11-11 mma (testem12-V09-04-08)
 - add back PhysListEmStandardGS, PhysListEmStandardWVI
- 
+
 31-10-11 mma (testem12-V09-04-07)
 - PhysListEmStandard : msc95 by default
-- remove PhysListEmStandardGS, PhysListEmStandardWVI 
-     
+- remove PhysListEmStandardGS, PhysListEmStandardWVI
+
 05-06-11 mma (testem12-V09-04-06)
 - PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
-     
+
 17-05-11 seb-mma (testem12-V09-04-05)
 - PhysicsList : add G4EmDNAPhysics
 - new macro dna.mac
-     
+
 08-04-11 mma (testem12-V09-04-03)
 - PhysicsList : set back default lowest production cut (990 eV)
 - update PhysListEmStandard for msc95 and deexcitation (see ref-03)
@@ -214,7 +217,7 @@ be used as a substitute for writing good git commit messages!
 28-03-11 V.Ivant (testem12-V09-04-02)
 - Reduced statistic in TestEm12.in
 - removed obsolete Set methods in PhysListEmStandard
-     
+
 20-02-11 mma (testem12-V09-04-01)
 - update PhysListEmStandard for deexcitation
 - PhysicsList : set lowest production cut to 100 eV
@@ -223,89 +226,89 @@ be used as a substitute for writing good git commit messages!
 
 05-01-11 V.Ivant (testem12-V09-04-00)
 - Minor cleanup of SS physics constructor
-     
+
 05-12-10 mma (testem12-V09-03-05)
 - subdirectory berger : results of EGSnrc simulation
- 
+
 09-11-10 M.Asai (testem12-V09-03-04)
 - Fix AIDA file option.
-    
+
 06-06-10 J.Perl (testem12-V09-03-03)
 - Remove unused variable in EventAction
 
 03-06-10 J.Perl (testem12-V09-03-02)
-- Updated vis usage 
+- Updated vis usage
 
 25-05-10 mma (testem12-V09-03-01)
-- add PhysListStandardGS, PhysListStandardSS, PhysListStandardWVI 
-    
+- add PhysListStandardGS, PhysListStandardSS, PhysListStandardWVI
+
 20-05-10 mma (testem12-V09-03-00)
 - TestEm12.cc : introduction of G4UIExecutive
-     
+
 16-11-09 mma (testem12-V09-02-01)
 - PhysListEmStandard copied from TestEm5
-     
+
 22-09-09 mma (testem12-V09-02-00)
 - PhysicsList.cc :
-  - renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0" 
+  - renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0"
   - Substituted obsolete low-energy physics builders by builders from
     the physics_list library;
 - updated README and macro files
-     
+
 16-11-08 mma (testem12-V09-01-08)
 - Em options: 20bins/decade  LinLossLimit=default=0.01
-     
+
 29-10-08 mma (testem12-V09-01-07)
 - update PhysListEmStandard : options and hMultipleScattering for muon
-    
+
 26-10-08 mma (testem12-V09-01-06)
 - update PhysListEmStandard and README
-     
+
 23-09-08 mma (testem12-V09-01-05)
-- HistoManager : root format by default 
+- HistoManager : root format by default
 
 12-06-08 mma (testem12-V09-01-04)
-- Remove AIDA from GNUmakefile 
-     
+- Remove AIDA from GNUmakefile
+
 07-05-08 mma (testem12-V09-01-03)
 - README : update Aida informations
-     
+
 11-04-08 mma
 - HistoManager::Scale() : suppress warning
-     
+
 07-04-08 mma (testem12-V09-01-02)
 - PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering;
 - HistoManager::saveAscii() : redefinition of binEdge
-     
-24-01-08 mma (testem12-V09-01-01) 
+
+24-01-08 mma (testem12-V09-01-01)
 - update macro berger.mac : setCuts 2um (=1keV)
 
-14-01-08 jja (testem12-V09-01-00) 
+14-01-08 jja (testem12-V09-01-00)
 - add macro berger/berger.C
 
 10-01-08 jean jacquemier
-- new subdirectory berger/data 
-     
+- new subdirectory berger/data
+
 07-12-07 mma
 - add macro berger.mac
-     
-09-11-07 mma (testem12-V09-00-01) 
+
+09-11-07 mma (testem12-V09-00-01)
 - HistoManager/HistoMessenger : print selected histos on ascii file
-     
-16-08-07 mma  (testem12-V09-00-00) 
-- HistoManager : modify the way to get csdaRange from G4EmCalculator 
+
+16-08-07 mma  (testem12-V09-00-00)
+- HistoManager : modify the way to get csdaRange from G4EmCalculator
   and compute stepMax for histo 8
-    
-27-04-07 mma (testem12-V08-02-01) 
+
+27-04-07 mma (testem12-V08-02-01)
 - HistoManager : by default, get csdaRange from G4EmCalculator
 
 08-01-07  V.Ivant (testem12-V08-02-00)
 - Uncomment hadron ionisation in Livermore builder
-     
-24-10-06 mma (testem12-V08-01-00) 
+
+24-10-06 mma (testem12-V08-01-00)
 - GNUmakefile : LOADLIBS
 - remove PhysicsLists 52 and 71
-     
+
 19-05-06 mma (testem12-V08-00-02)
 - update README
 
@@ -314,25 +317,25 @@ be used as a substitute for writing good git commit messages!
 - RunAction : pass stepMax from HistoManager to StepMax process
 - StepMax : boolean flag : apply
 - SteppingAction : edep randomly distribued along step
-     
-28-03-06 mma (testem12-V08-00-00) 
+
+28-03-06 mma (testem12-V08-00-00)
 - add PhysListEmLivermore and PhysListEmPenelope
 - RunAction : G4EmCalculator::GetCSDARange()
-     
+
 16-02-06 mma
-- migration mum -> um in several macros 
-    
+- migration mum -> um in several macros
+
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 
 22-11-05 mma (testem12-V07-01-04)
 - update README for OpenScientist
-     
+
 14-11-05 Gabriele Cosmo (testem12-V07-01-03)
 - Migration to <sstream> for HistoMessenger.
 
 05-10-05 mma (testem12-V07-01-02)
 - create PhysListEmG4v71 (g4v71) for G4MultipleScattering71
-     
+
 22-07-05 michel maire (testem12-V07-01-00)
 - created, from TestEm11

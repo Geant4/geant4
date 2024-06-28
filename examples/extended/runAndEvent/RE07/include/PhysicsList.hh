@@ -45,16 +45,16 @@ class PhysicsListMessenger;
 
 class PhysicsList : public G4VUserPhysicsList
 {
- public:
-  PhysicsList();
+  public:
+    PhysicsList();
 
-  void ConstructParticle() override;
-  void ConstructProcess() override;
-  void SetMode(const G4String& name);
+    void ConstructParticle() override;
+    void ConstructProcess() override;
+    void SetMode(const G4String& name);
 
- private:
-  std::unique_ptr<PhysicsListMessenger> fMessenger;
-  std::unique_ptr<G4VPhysicsConstructor> fEmPhysicsList;
+  private:
+    std::unique_ptr<PhysicsListMessenger> fMessenger;
+    std::unique_ptr<G4VPhysicsConstructor> fEmPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

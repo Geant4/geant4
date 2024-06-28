@@ -28,20 +28,19 @@
 /// brief: Implementation of class to track chromosomes
 #include "ChromosomeMapper.hh"
 
-#include "VirtualChromosome.hh"
 #include "ChromosomeMessenger.hh"
+#include "DNAHashing.hh"
+#include "VirtualChromosome.hh"
 
 #include <fstream>
 #include <sstream>
-#include "DNAHashing.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChromosomeMapper::ChromosomeMapper()
-  : fChromosomes({})
+ChromosomeMapper::ChromosomeMapper() : fChromosomes({})
 {
   fpChromosomeMessenger = new ChromosomeMessenger(this);
-  fpChromosomeFactory   = new ChromosomeFactory();
+  fpChromosomeFactory = new ChromosomeFactory();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,15 +53,12 @@ ChromosomeMapper::~ChromosomeMapper()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-[[maybe_unused]] G4String ChromosomeMapper::GetCurrentChromosomeKey(
-  const G4ThreeVector& pos) const
+[[maybe_unused]] G4String ChromosomeMapper::GetCurrentChromosomeKey(const G4ThreeVector& pos) const
 {
   G4String key = "";
-  for(const auto& Chromosome : fChromosomes)
-  {
-    if(Chromosome.second->PointInChromosome(pos))
-    {
-      //key = Chromosome.first;
+  for (const auto& Chromosome : fChromosomes) {
+    if (Chromosome.second->PointInChromosome(pos)) {
+      // key = Chromosome.first;
       key = Chromosome.second->GetName();
       break;
     }
@@ -72,13 +68,10 @@ ChromosomeMapper::~ChromosomeMapper()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-[[maybe_unused]] VirtualChromosome* ChromosomeMapper::GetChromosome(
-  const G4ThreeVector& pos) const
+[[maybe_unused]] VirtualChromosome* ChromosomeMapper::GetChromosome(const G4ThreeVector& pos) const
 {
-  for(const auto& fChromosome : fChromosomes)
-  {
-    if(fChromosome.second->PointInChromosome(pos))
-    {
+  for (const auto& fChromosome : fChromosomes) {
+    if (fChromosome.second->PointInChromosome(pos)) {
       return fChromosome.second;
     }
   }
@@ -87,16 +80,14 @@ ChromosomeMapper::~ChromosomeMapper()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-[[maybe_unused]] VirtualChromosome* ChromosomeMapper::GetChromosome(
-  const G4String& key) const
+[[maybe_unused]] VirtualChromosome* ChromosomeMapper::GetChromosome(const G4String& key) const
 {
   uint32_t key_i = G4::hashing::crc32::Hash(key);
 
-  try
-  {
+  try {
     return fChromosomes.at(key_i);
-  } catch(const std::out_of_range& oor)
-  {
+  }
+  catch (const std::out_of_range& oor) {
     G4cout << "Chromosome does not exist with key: " << key << G4endl;
     return nullptr;
   }
@@ -104,21 +95,17 @@ ChromosomeMapper::~ChromosomeMapper()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChromosomeMapper::AddChromosome(const G4String& key,
-                                     const std::vector<G4String>& commands)
+void ChromosomeMapper::AddChromosome(const G4String& key, const std::vector<G4String>& commands)
 {
   uint32_t key_i = G4::hashing::crc32::Hash(key);
 
   auto it = fChromosomes.find(key_i);
 
-  if(it == fChromosomes.end())
-  {
-    auto* newChromosome =
-      ChromosomeFactory::MakeChromosome(key, commands);
+  if (it == fChromosomes.end()) {
+    auto* newChromosome = ChromosomeFactory::MakeChromosome(key, commands);
     fChromosomes.emplace(key_i, newChromosome);
   }
-  else
-  {
+  else {
     G4ExceptionDescription errmsg;
     errmsg << "ChromosomeMapper:: "
            << "Chromosome already exists with key: " << key << G4endl;
@@ -130,22 +117,18 @@ void ChromosomeMapper::AddChromosome(const G4String& key,
 
 void ChromosomeMapper::SavePlotData(const G4String& filename)
 {
-  std::fstream fs(filename,
-                  std::fstream::in | std::fstream::out | std::fstream::trunc);
-  for(auto& fChromosome : fChromosomes)
-  {
+  std::fstream fs(filename, std::fstream::in | std::fstream::out | std::fstream::trunc);
+  for (auto& fChromosome : fChromosomes) {
     fs << fChromosome.second->Plot();
   }
   fs.close();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-[[maybe_unused]] std::vector<G4String> ChromosomeMapper::GetChromosomeKeys()
-                                                            const
+[[maybe_unused]] std::vector<G4String> ChromosomeMapper::GetChromosomeKeys() const
 {
   std::vector<G4String> keys;
-  for(const auto& fChromosome : fChromosomes)
-  {
+  for (const auto& fChromosome : fChromosomes) {
     keys.push_back(fChromosome.second->GetName());
   }
   return keys;
@@ -154,4 +137,6 @@ void ChromosomeMapper::SavePlotData(const G4String& filename)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ChromosomeMapper::Test()
-{ fpChromosomeFactory->Test();}
+{
+  fpChromosomeFactory->Test();
+}

@@ -40,13 +40,13 @@
 
 class PhysicsListEmStandardTracking : public G4VPhysicsConstructor
 {
- public:
-  PhysicsListEmStandardTracking(G4int ver = 1);
-  ~PhysicsListEmStandardTracking();
+  public:
+    PhysicsListEmStandardTracking(G4int ver = 1);
+    ~PhysicsListEmStandardTracking();
 
- public:
-  void ConstructParticle() override;
-  void ConstructProcess() override;
+  public:
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

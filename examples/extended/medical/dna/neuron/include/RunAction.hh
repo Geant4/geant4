@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -42,11 +42,13 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
+#include "DetectorConstruction.hh"
+
+#include "G4ThreeVector.hh"
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+
 #include <iostream>
-#include "DetectorConstruction.hh"
-#include "G4ThreeVector.hh"
 
 class PrimaryGeneratorAction;
 class Run;
@@ -55,118 +57,116 @@ class TrackingAction;
 
 class RunAction : public G4UserRunAction
 {
-public:
-  
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-  ~RunAction() override = default;
+  public:
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    ~RunAction() override = default;
 
-  void BeginOfRunAction(const G4Run*) override;
-  void EndOfRunAction(const G4Run*) override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-  void  SetRndmFreq(G4int val) { fSaveRndm = val; }
-  G4int GetRndmFreq() const { return fSaveRndm; }
-  G4Run* GenerateRun() override;   
-  
-  // Edep in all volume
-  G4double GetEdepALL() const { return fEdepAll; }
-  void SetEdepALL(G4double vall) { fEdepAll = vall; }
-  void AddEdepALL (G4double vall)
-  { 
-    fEdepAll += vall;
-    fEdepAll_err += vall*vall;
-  }
-  // 0. Edep in homogeneous Medium
-  G4double GetEdepMedium() const { return fEdepMedium; }
-  void SetEdepMedium(G4double vall) { fEdepMedium = vall; }
-  void AddEdepMedium (G4double vall)
-  {
-    fEdepMedium += vall; 
-    fEdepMedium_err += vall*vall;
-  }  
-  // 1. Edep in Bounding Slice Volume
-  G4double GetEdepSlice() const { return fEdepSlice; }
-  void SetEdepSlice(G4double vall) { fEdepSlice = vall; }
-  void AddEdepSlice (G4double vall)
-  { 
-    fEdepSlice += vall; 
-    fEdepSlice_err += vall*vall;
-  }
-  // 2. Edep in Soma volume
-  G4double GetEdepSoma() const { return fEdepSoma; }
-  void SetEdepSoma(G4double vall) { fEdepSoma = vall; }
-  void AddEdepSoma (G4double vall)
-  { 
-   fEdepSoma += vall; 
-   fEdepSoma_err += vall*vall;
-  }
-    
-  // 3. Edep in Dendrites volume
-  G4double GetEdepDend() const { return fEdepDend; }
-  void SetEdepDend(G4double vall){ fEdepDend = vall; }
-  void AddEdepDend (G4double vall)
-  { 
-    fEdepDend += vall; 
-    fEdepDend_err += vall*vall;
-  }
-  
-  // 4. Edep in Axon volume
-  G4double GetEdepAxon() const { return fEdepAxon; }
-  void SetEdepAxon(G4double vall) { fEdepAxon = vall; }
-  void AddEdepAxon (G4double vall)
-  { 
-    fEdepAxon += vall;
-    fEdepAxon_err += vall*vall;
-  }
-  
-  // 5. Edep in whole Neuron volume
-  G4double GetEdepNeuron() const { return fEdepNeuron; }
-  void SetEdepNeuron(G4double vall) { fEdepNeuron = vall; }
-  void AddEdepNeuron (G4double vall)
-  { 
-    fEdepNeuron += vall; 
-    fEdepNeuron_err += vall*vall;
-  }  
-  
-  G4int GetNumEvent() const { return fNumEvent; }
-  void SetNumEvent(G4int i) { fNumEvent = i; }  
+    void SetRndmFreq(G4int val) { fSaveRndm = val; }
+    G4int GetRndmFreq() const { return fSaveRndm; }
+    G4Run* GenerateRun() override;
 
-private:
+    // Edep in all volume
+    G4double GetEdepALL() const { return fEdepAll; }
+    void SetEdepALL(G4double vall) { fEdepAll = vall; }
+    void AddEdepALL(G4double vall)
+    {
+      fEdepAll += vall;
+      fEdepAll_err += vall * vall;
+    }
+    // 0. Edep in homogeneous Medium
+    G4double GetEdepMedium() const { return fEdepMedium; }
+    void SetEdepMedium(G4double vall) { fEdepMedium = vall; }
+    void AddEdepMedium(G4double vall)
+    {
+      fEdepMedium += vall;
+      fEdepMedium_err += vall * vall;
+    }
+    // 1. Edep in Bounding Slice Volume
+    G4double GetEdepSlice() const { return fEdepSlice; }
+    void SetEdepSlice(G4double vall) { fEdepSlice = vall; }
+    void AddEdepSlice(G4double vall)
+    {
+      fEdepSlice += vall;
+      fEdepSlice_err += vall * vall;
+    }
+    // 2. Edep in Soma volume
+    G4double GetEdepSoma() const { return fEdepSoma; }
+    void SetEdepSoma(G4double vall) { fEdepSoma = vall; }
+    void AddEdepSoma(G4double vall)
+    {
+      fEdepSoma += vall;
+      fEdepSoma_err += vall * vall;
+    }
 
-  /////////////////
-  // Histogramming
-  //
-  void CreateHistogram();
-  void WriteHistogram();
+    // 3. Edep in Dendrites volume
+    G4double GetEdepDend() const { return fEdepDend; }
+    void SetEdepDend(G4double vall) { fEdepDend = vall; }
+    void AddEdepDend(G4double vall)
+    {
+      fEdepDend += vall;
+      fEdepDend_err += vall * vall;
+    }
 
-  /////////////////
-  // Print Info
-  //
-  void PrintRunInfo(const G4Run* run);
+    // 4. Edep in Axon volume
+    G4double GetEdepAxon() const { return fEdepAxon; }
+    void SetEdepAxon(G4double vall) { fEdepAxon = vall; }
+    void AddEdepAxon(G4double vall)
+    {
+      fEdepAxon += vall;
+      fEdepAxon_err += vall * vall;
+    }
 
-  G4bool fDebug{false};
+    // 5. Edep in whole Neuron volume
+    G4double GetEdepNeuron() const { return fEdepNeuron; }
+    void SetEdepNeuron(G4double vall) { fEdepNeuron = vall; }
+    void AddEdepNeuron(G4double vall)
+    {
+      fEdepNeuron += vall;
+      fEdepNeuron_err += vall * vall;
+    }
 
-  DetectorConstruction* fDetector;
-  PrimaryGeneratorAction* fPrimary;
-  Run* fRun{nullptr}; 
-  
-  //
-  // phys 
-  G4double fEdepAll{0.0};
-  G4double fEdepAll_err{0.0};
-  G4double fEdepMedium{0.0};
-  G4double fEdepMedium_err{0.0};
-  G4double fEdepSlice{0.0};
-  G4double fEdepSlice_err{0.0};
-  G4double fEdepSoma{0.0};
-  G4double fEdepSoma_err{0.0};
-  G4double fEdepDend{0.0};
-  G4double fEdepDend_err{0.0};
-  G4double fEdepAxon{0.0};
-  G4double fEdepAxon_err{0.0};
-  G4double fEdepNeuron{0.0};
-  G4double fEdepNeuron_err{0.0};
-  G4int fNumEvent{0};
-  G4int fSaveRndm{0};
+    G4int GetNumEvent() const { return fNumEvent; }
+    void SetNumEvent(G4int i) { fNumEvent = i; }
+
+  private:
+    /////////////////
+    // Histogramming
+    //
+    void CreateHistogram();
+    void WriteHistogram();
+
+    /////////////////
+    // Print Info
+    //
+    void PrintRunInfo(const G4Run* run);
+
+    G4bool fDebug{false};
+
+    DetectorConstruction* fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    Run* fRun{nullptr};
+
+    //
+    // phys
+    G4double fEdepAll{0.0};
+    G4double fEdepAll_err{0.0};
+    G4double fEdepMedium{0.0};
+    G4double fEdepMedium_err{0.0};
+    G4double fEdepSlice{0.0};
+    G4double fEdepSlice_err{0.0};
+    G4double fEdepSoma{0.0};
+    G4double fEdepSoma_err{0.0};
+    G4double fEdepDend{0.0};
+    G4double fEdepDend_err{0.0};
+    G4double fEdepAxon{0.0};
+    G4double fEdepAxon_err{0.0};
+    G4double fEdepNeuron{0.0};
+    G4double fEdepNeuron_err{0.0};
+    G4int fNumEvent{0};
+    G4int fSaveRndm{0};
 };
 
 #endif

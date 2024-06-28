@@ -43,7 +43,6 @@
 
 #include "globals.hh"
 #include "G4PiData.hh"
-#include "G4Threading.hh"
 #include <vector>
 
 class G4ComponentBarNucleonNucleusXsc : public G4VComponentCrossSection
@@ -51,8 +50,8 @@ class G4ComponentBarNucleonNucleusXsc : public G4VComponentCrossSection
 
 public:
   
-  explicit G4ComponentBarNucleonNucleusXsc();
-  ~G4ComponentBarNucleonNucleusXsc() override;
+  G4ComponentBarNucleonNucleusXsc();
+  ~G4ComponentBarNucleonNucleusXsc() override = default;
 
   G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 				       G4double kinEnergy,
@@ -81,8 +80,6 @@ public:
   void ComputeCrossSections(const G4ParticleDefinition* aParticle,
 			    G4double kinEnergy, G4int Z);
  
-  void BuildPhysicsTable(const G4ParticleDefinition&) final;
-
   void Description(std::ostream&) const final;
 
   inline G4double GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z); 
@@ -91,7 +88,11 @@ public:
   inline G4double GetTotalXsc()     { return fTotalXsc;   };
   inline G4double GetElasticXsc()   { return fElasticXsc; };
   inline G4double GetInelasticXsc() { return fInelasticXsc; };
-  
+
+  G4ComponentBarNucleonNucleusXsc& operator=
+  (const G4ComponentBarNucleonNucleusXsc &right) = delete;
+  G4ComponentBarNucleonNucleusXsc(const G4ComponentBarNucleonNucleusXsc&) = delete;
+
 private:
 
   G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2) const;
@@ -99,35 +100,26 @@ private:
   void LoadData();
 
   // cross sections
-  G4double fTotalXsc;
-  G4double fInelasticXsc;
-  G4double fElasticXsc;
+  G4double fTotalXsc{0.0};
+  G4double fInelasticXsc{0.0};
+  G4double fElasticXsc{0.0};
 
   // particles
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
 
-  G4bool isMaster;
-
-  static G4double theA[93];
   static G4double A75[93];
-
   static const G4int NZ = 17;
   static G4int theZ[NZ];
   static std::vector<G4PiData*>* thePData;
   static std::vector<G4PiData*>* theNData;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex barNNXSMutex;
-#endif
-
 };
 
 inline
 G4double G4ComponentBarNucleonNucleusXsc::GetElementCrossSection(
          const G4DynamicParticle* dp, G4int Z)
 {
-  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(),Z);
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(), Z);
   return fInelasticXsc;
 }
 
@@ -135,7 +127,7 @@ inline
 G4double G4ComponentBarNucleonNucleusXsc::GetElasticCrossSection(
          const G4DynamicParticle* dp, G4int Z)
 {
-  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(),Z);
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(), Z);
   return fElasticXsc;
 }
 

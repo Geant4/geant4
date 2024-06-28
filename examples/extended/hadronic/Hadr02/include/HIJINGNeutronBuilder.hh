@@ -40,41 +40,36 @@
 #ifndef HIJINGNeutronBuilder_h
 #define HIJINGNeutronBuilder_h 1
 
-#include "globals.hh"
-
-#include "G4HadronElasticProcess.hh"
-#include "G4NeutronFissionProcess.hh"
-#include "G4NeutronCaptureProcess.hh"
-#include "G4HadronInelasticProcess.hh"
-#include "G4VNeutronBuilder.hh"
-
 #include "G4HIJING_Model.hh"
-#include "G4NeutronRadCapture.hh"
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4LFission.hh"
-
+#include "G4NeutronCaptureProcess.hh"
+#include "G4NeutronFissionProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4VNeutronBuilder.hh"
+#include "globals.hh"
 
 class HIJINGNeutronBuilder : public G4VNeutronBuilder
 {
-public: 
+  public:
+    HIJINGNeutronBuilder();
+    virtual ~HIJINGNeutronBuilder();
 
-  HIJINGNeutronBuilder();
-  virtual ~HIJINGNeutronBuilder();
+    virtual void Build(G4HadronElasticProcess* aP);
+    virtual void Build(G4NeutronFissionProcess* aP);
+    virtual void Build(G4NeutronCaptureProcess* aP);
+    virtual void Build(G4HadronInelasticProcess* aP);
 
-  virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4NeutronFissionProcess * aP);
-  virtual void Build(G4NeutronCaptureProcess * aP);
-  virtual void Build(G4HadronInelasticProcess * aP);
-    
-  void SetMinEnergy(G4double aM) {fMin = aM;}
-  void SetMaxEnergy(G4double aM) {fMax = aM;}
+    void SetMinEnergy(G4double aM) { fMin = aM; }
+    void SetMaxEnergy(G4double aM) { fMax = aM; }
 
-private:
-  G4double fMin;
-  G4double fMax;
-  G4HIJING_Model * fModel;    
-  G4NeutronRadCapture* captureModel;
-  G4LFission* fissionModel;
+  private:
+    G4double fMin;
+    G4double fMax;
+    G4HIJING_Model* fModel;
+    G4NeutronRadCapture* captureModel;
+    G4LFission* fissionModel;
 };
 
 #endif
-

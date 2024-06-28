@@ -35,26 +35,15 @@
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Neutron.hh"
-#include "G4Proton.hh"
 #include "G4ComponentBarNucleonNucleusXsc.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
- : G4VCrossSectionDataSet(Default_Name()),
-   fTotalXsc(0.0), fInelasticXsc(0.0), fElasticXsc(0.0)
+  : G4VCrossSectionDataSet(Default_Name())
 {
-  theNeutron = G4Neutron::Neutron();
-  theProton  = G4Proton::Proton();
   fBarash = new G4ComponentBarNucleonNucleusXsc();  
 }
-
-///////////////////////////////////////////////////////////////////////////////
-//
-
-G4NucleonNuclearCrossSection::~G4NucleonNuclearCrossSection()
-{}
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -83,13 +72,6 @@ void G4NucleonNuclearCrossSection::ComputeCrossSections(
   fTotalXsc = fBarash->GetTotalXsc();
   fInelasticXsc = fBarash->GetInelasticXsc();
   fElasticXsc = fBarash->GetElasticXsc();
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-void G4NucleonNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& part)
-{
-  fBarash->BuildPhysicsTable(part);
 }
 
 ////////////////////////////////////////////////////////////////////////////

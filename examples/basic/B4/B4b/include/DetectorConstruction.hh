@@ -25,12 +25,14 @@
 //
 //
 /// \file B4/B4b/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \brief Definition of the B4::DetectorConstruction class
 
 #ifndef B4DetectorConstruction_h
 #define B4DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+
+#include "G4Threading.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -76,28 +78,29 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
-                                      // magnetic field messenger
+    static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
+    // magnetic field messenger
 
-    G4VPhysicalVolume* fAbsorberPV = nullptr; // the absorber physical volume
-    G4VPhysicalVolume* fGapPV = nullptr;      // the gap physical volume
+    G4VPhysicalVolume* fAbsorberPV = nullptr;  // the absorber physical volume
+    G4VPhysicalVolume* fGapPV = nullptr;  // the gap physical volume
 
-    G4bool fCheckOverlaps = true; // option to activate checking of volumes overlaps
+    G4bool fCheckOverlaps = true;  // option to activate checking of volumes overlaps
 };
 
 // inline functions
 
-inline const G4VPhysicalVolume* DetectorConstruction::GetAbsorberPV() const {
+inline const G4VPhysicalVolume* DetectorConstruction::GetAbsorberPV() const
+{
   return fAbsorberPV;
 }
 
-inline const G4VPhysicalVolume* DetectorConstruction::GetGapPV() const  {
+inline const G4VPhysicalVolume* DetectorConstruction::GetGapPV() const
+{
   return fGapPV;
 }
 
-}
+}  // namespace B4
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

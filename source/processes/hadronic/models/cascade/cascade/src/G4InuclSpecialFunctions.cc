@@ -121,15 +121,12 @@ G4double G4InuclSpecialFunctions::G4cbrt(G4int n) {
   return n==0 ? 0. : (n<0?-1.:1.)*G4Pow::GetInstance()->Z13(std::abs(n));
 }
 
-G4double G4InuclSpecialFunctions::inuclRndm() { 
-  return G4UniformRand(); 
-} 
 
 G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
   const G4double eps = 1.0e-6;
-  G4double r1 = inuclRndm();
+  G4double r1 = G4UniformRand();
   r1 = r1 > eps ? r1 : eps;
-  G4double r2 = inuclRndm();
+  G4double r2 = G4UniformRand();
   r2 = r2 > eps ? r2 : eps;
   r2 = r2 < 1.0 - eps ? r2 : 1.0 - eps; 
 
@@ -137,11 +134,11 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
 } 
 
 G4double G4InuclSpecialFunctions::randomPHI() { 
-  return twopi * inuclRndm();
+  return twopi*G4UniformRand();
 } 
 
 std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
-  G4double CT = 1.0 - 2.0 * inuclRndm();
+  G4double CT = 1.0 - 2.0*G4UniformRand();
 
   return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT*CT));
 }

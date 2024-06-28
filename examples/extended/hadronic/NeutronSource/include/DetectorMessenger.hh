@@ -45,30 +45,27 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger() override;
-    
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
+
     void SetNewValue(G4UIcommand*, G4String) override;
-    
+
   private:
-  
-    DetectorConstruction*      fDetector = nullptr;
-    
-    G4UIdirectory*             fTesthadrDir = nullptr;
-    G4UIdirectory*             fDetDir      = nullptr;
-    G4UIcmdWithAString*        fMaterCmd1   = nullptr;
-    G4UIcmdWithAString*        fMaterCmd2   = nullptr;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd1    = nullptr;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd2    = nullptr;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd3    = nullptr;
-    G4UIcommand*               fIsotopeCmd  = nullptr;    
+    DetectorConstruction* fDetector = nullptr;
+
+    G4UIdirectory* fTesthadrDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fMaterCmd1 = nullptr;
+    G4UIcmdWithAString* fMaterCmd2 = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd1 = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd2 = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd3 = nullptr;
+    G4UIcommand* fIsotopeCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

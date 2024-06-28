@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-06-21 Gabriele Cosmo (ChargeExchangeMC-V11-01-00)
+## 2024-06-21 Gabriele Cosmo (ChargeExchangeMC-V11-02-01, 00)
 - Disabled GDML schema validation.
 
 ## 2022-05-20 Vladimir Ivanchenko (ChargeExchangeMC-V11-00-01)

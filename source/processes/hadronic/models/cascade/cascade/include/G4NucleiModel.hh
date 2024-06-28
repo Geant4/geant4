@@ -241,6 +241,9 @@ protected:
   G4double generateInteractionLength(const G4CascadParticle& cparticle,
 				     G4double path, G4double invmfp) const;
 
+  // Set scaling factor for effective number of di-nucleons in nucleus
+  void setDinucleonDensityScale();
+
 private:
   G4int verboseLevel;
 
@@ -288,6 +291,11 @@ private:
 
   G4int current_nucl1;
   G4int current_nucl2;
+
+  G4double dinucleonDensityScale;
+  // Ratio of naive to effective number of di-nucleons as predicted in 
+  // local density approximation
+  // O. Benhar et al., arXiv:nucl-th/0301091v1. (2003)
 
   G4CascadeInterpolator<30> gammaQDinterp;	// quasideuteron interpolator
 

@@ -216,7 +216,9 @@ void G4DNAElectronHoleRecombination::MakeReaction(const G4Track& track)
 
 G4bool G4DNAElectronHoleRecombination::FindReactant(const G4Track& track)
 {
-    if (GetMolecule(track)->GetCharge() <= 0)
+    // NOTE(Shogo OKADA, 2024-04-05 Fri.): Changed this branch condition to
+    // select only H2O+ ions involved in electron-hole recombination
+    if (GetMolecule(track)->GetCharge() != 1)
     {
         return false;
     }

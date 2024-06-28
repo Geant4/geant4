@@ -28,21 +28,21 @@
 /// \brief Implementation of the F04EventActionMessenger class
 //
 
-#include "globals.hh"
-
-#include "G4UIcmdWithAnInteger.hh"
+#include "F04EventActionMessenger.hh"
 
 #include "F04EventAction.hh"
-#include "F04EventActionMessenger.hh"
+
+#include "G4UIcmdWithAnInteger.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04EventActionMessenger::F04EventActionMessenger(F04EventAction* eventAction)
- : fEventAction(eventAction)
+  : fEventAction(eventAction)
 {
-  fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
-  fSetVerboseCmd->SetGuidance("Set verbose level ." );
-  fSetVerboseCmd->SetParameterName("level",true);
+  fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose", this);
+  fSetVerboseCmd->SetGuidance("Set verbose level .");
+  fSetVerboseCmd->SetParameterName("level", true);
   fSetVerboseCmd->SetDefaultValue(0);
 }
 
@@ -55,9 +55,8 @@ F04EventActionMessenger::~F04EventActionMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04EventActionMessenger::
-                          SetNewValue(G4UIcommand * command,G4String newValue)
+void F04EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fSetVerboseCmd)
+  if (command == fSetVerboseCmd)
     fEventAction->SetEventVerbose(fSetVerboseCmd->GetNewIntValue(newValue));
 }

@@ -83,14 +83,17 @@ public:
 
 private:
 
+  void LoadData();
+  
   void SetParticle(const G4ParticleDefinition*);
 
   G4int SelectShell(G4double energy);
 
-  G4double SampleElectronEnergy(G4double kine, G4double bindingEnergy, G4int shell);
+  G4double MaxEnergy(G4double kine, G4int shell);
 
-  G4double ProbabilityFunction(G4double kine, G4double deltae,
-                               G4double bindingEnergy, G4int shell);
+  G4double SampleElectronEnergy(G4double kine, G4int shell);
+
+  G4double ProbabilityFunction(G4double kine, G4double deltae, G4int shell);
 
   G4double S_1s(G4double t,
 		G4double energyTransferred,
@@ -148,9 +151,16 @@ private:
   G4double fLimitEnergy;
 
   G4double fMass{0.0};
-  G4double fAmass{0.0};
   G4double fMassRate{1.0};
   G4double fElow{0.0};
+
+  G4double F1{0.0};
+  G4double F2{0.0};
+  G4double alphaConst{0.0};
+  G4double bEnergy{0.0};
+  G4double u{0.0};
+  G4double v{0.0};
+  G4double wc{0.0};
 
   G4double slaterEffectiveCharge[3] = {0.0};
   G4double sCoefficient[3] = {0.0};
@@ -159,6 +169,7 @@ private:
   G4int idx{-1};
   G4int verbose{0};
 
+  G4bool isInitialised{false};
   G4bool isIon{false};
   G4bool isFirst{false};
   G4bool isHelium{false};

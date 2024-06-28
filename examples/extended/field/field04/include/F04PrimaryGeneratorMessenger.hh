@@ -31,8 +31,8 @@
 #ifndef F04PrimaryGeneratorMessenger_h
 #define F04PrimaryGeneratorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
@@ -42,17 +42,15 @@ class F04PrimaryGeneratorAction;
 class F04PrimaryGeneratorMessenger : public G4UImessenger
 {
   public:
-
     F04PrimaryGeneratorMessenger(F04PrimaryGeneratorAction*);
     ~F04PrimaryGeneratorMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
-
     F04PrimaryGeneratorAction* fAction = nullptr;
 
-    G4UIcmdWithAString*        fRndmCmd = nullptr;
+    G4UIcmdWithAString* fRndmCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetXvertexCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetYvertexCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetZvertexCmd = nullptr;

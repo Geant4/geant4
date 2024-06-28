@@ -26,7 +26,7 @@
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,7 @@
 #define DetectorConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"       
+#include "globals.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -44,41 +44,46 @@ class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
   public:
     DetectorConstruction();
     ~DetectorConstruction();
     G4VPhysicalVolume* Construct();
-    void SetMaterial( const G4String name );
+    void SetMaterial(const G4String name);
     inline G4Material* GetMaterial() const;
-    inline void SetRadius( const G4double value );
+    inline void SetRadius(const G4double value);
     inline G4double GetRadius() const;
     void UpdateGeometry();
+
   private:
     G4VPhysicalVolume* ConstructSphere();  // To be invoked each time the geometry needs
                                            // to be updated
     void PrintParameters();
     G4Material* fMaterial;
-    G4LogicalVolume*   fExperimentalHall_log;
+    G4LogicalVolume* fExperimentalHall_log;
     G4VPhysicalVolume* fExperimentalHall_phys;
-    G4LogicalVolume*   fLogicSphere;
+    G4LogicalVolume* fLogicSphere;
     G4VPhysicalVolume* fPhysiSphere;
-    G4LogicalVolume*   fLogicScoringShell;
+    G4LogicalVolume* fLogicScoringShell;
     G4VPhysicalVolume* fPhysiScoringShell;
     DetectorMessenger* fDetectorMessenger;
     G4double fRadius;
     const G4double fScoringThickness = 10.0;  //***LOOKHERE*** thickness of the scoring shell
 };
 
-inline G4Material* DetectorConstruction::GetMaterial() const {
+inline G4Material* DetectorConstruction::GetMaterial() const
+{
   return fMaterial;
 }
 
-inline void DetectorConstruction::SetRadius( const G4double value ) {
+inline void DetectorConstruction::SetRadius(const G4double value)
+{
   fRadius = value;
 }
 
-inline G4double DetectorConstruction::GetRadius() const {
+inline G4double DetectorConstruction::GetRadius() const
+{
   return fRadius;
 }
 

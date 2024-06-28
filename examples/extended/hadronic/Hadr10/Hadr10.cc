@@ -31,54 +31,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Threading.hh"
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh" 
-#include "G4PhysListFactory.hh"
-#include "DetectorConstruction.hh" 
 #include "ActionInitialization.hh"
-#include "CLHEP/Random/Ranlux64Engine.h" 
 #include "CLHEP/Random/MTwistEngine.h"
+#include "CLHEP/Random/Ranlux64Engine.h"
+#include "DetectorConstruction.hh"
 
+#include "G4PhysListFactory.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Threading.hh"
+#include "G4UImanager.hh"
 
-int main( int argc, char** argv ) { 
-
-  CLHEP::Ranlux64Engine defaultEngine( 1234567, 4 );  
-  CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
-  G4int seed = time( NULL ); 
-  CLHEP::HepRandom::setTheSeed( seed ); 
-  G4cout << G4endl 
-         << " ===================================================== " << G4endl 
-         << " Initial seed = " << seed << G4endl 
-         << " ===================================================== " << G4endl 
-         << G4endl;
+int main(int argc, char** argv)
+{
+  CLHEP::Ranlux64Engine defaultEngine(1234567, 4);
+  CLHEP::HepRandom::setTheEngine(&defaultEngine);
+  G4int seed = time(NULL);
+  CLHEP::HepRandom::setTheSeed(seed);
+  G4cout << G4endl << " ===================================================== " << G4endl
+         << " Initial seed = " << seed << G4endl
+         << " ===================================================== " << G4endl << G4endl;
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
-  //runManager->SetNumberOfThreads(4);
-  
-  DetectorConstruction* pDetectorInstance = new DetectorConstruction;  
-  runManager->SetUserInitialization( pDetectorInstance ); 
+  // runManager->SetNumberOfThreads(4);
+
+  DetectorConstruction* pDetectorInstance = new DetectorConstruction;
+  runManager->SetUserInitialization(pDetectorInstance);
 
   // Physics list factory: use the PHYSLIST environmental variable.
   G4PhysListFactory factory;
-  G4VModularPhysicsList* thePL = factory.ReferencePhysList();   
+  G4VModularPhysicsList* thePL = factory.ReferencePhysList();
 
-  runManager->SetUserInitialization( thePL );
-  runManager->SetUserInitialization( new ActionInitialization );
+  runManager->SetUserInitialization(thePL);
+  runManager->SetUserInitialization(new ActionInitialization);
 
-  G4UImanager* UI = G4UImanager::GetUIpointer(); 
-  if ( argc == 1 ) {
-    // Define UI session for interactive mode. 
-  } else {
-    // Batch mode 
-    G4String command = "/control/execute "; 
-    G4String fileName = argv[1]; 
-    UI->ApplyCommand(command+fileName); 
-  } 
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if (argc == 1) {
+    // Define UI session for interactive mode.
+  }
+  else {
+    // Batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command + fileName);
+  }
 
-  // job termination 
-  delete runManager; 
-  return 0; 
+  // job termination
+  delete runManager;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

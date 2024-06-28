@@ -32,11 +32,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
+#include "Run.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
 #include "TrackingAction.hh"
-#include "Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,21 +45,23 @@ ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const {
+void ActionInitialization::BuildForMaster() const
+{
   // This is NOT called in SEQ-mode, while in the MT-mode is called only for the Master thread.
-  SetUserAction( new RunAction );
+  SetUserAction(new RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::Build() const {
+void ActionInitialization::Build() const
+{
   // This is called in the SEQ-mode and in the MT-mode only for Worker threads.
-  SetUserAction( new PrimaryGeneratorAction );
+  SetUserAction(new PrimaryGeneratorAction);
   SteppingAction* steppingAction = new SteppingAction;
-  SetUserAction( steppingAction );
+  SetUserAction(steppingAction);
   TrackingAction* trackingAction = new TrackingAction;
-  SetUserAction( trackingAction );
-  SetUserAction( new RunAction( steppingAction, trackingAction ) );
+  SetUserAction(trackingAction);
+  SetUserAction(new RunAction(steppingAction, trackingAction));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

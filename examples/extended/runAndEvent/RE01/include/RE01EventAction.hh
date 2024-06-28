@@ -38,21 +38,19 @@ class G4PrimaryParticle;
 
 class RE01EventAction : public G4UserEventAction
 {
-public:
-  RE01EventAction();//G4bool);
-  virtual ~RE01EventAction();
+  public:
+    RE01EventAction();  // G4bool);
+    virtual ~RE01EventAction();
 
-public:
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+  public:
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-private:
-  G4int fTrackerCollID;
-  G4int fCalorimeterCollID;
-  
-  void PrintPrimary(G4PrimaryParticle* pp,G4int ind);
+  private:
+    G4int fTrackerCollID;
+    G4int fCalorimeterCollID;
+
+    void PrintPrimary(G4PrimaryParticle* pp, G4int ind);
 };
 
 #endif
-
-    

@@ -40,15 +40,15 @@ class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
     TrackingAction(DetectorConstruction*);
-   ~TrackingAction() override = default;
-   
-    void  PreUserTrackingAction(const G4Track*) override;   
+    ~TrackingAction() override = default;
+
+    void PreUserTrackingAction(const G4Track*) override;
     void PostUserTrackingAction(const G4Track*) override;
-    
+
   private:
     DetectorConstruction* fDetector = nullptr;
 };

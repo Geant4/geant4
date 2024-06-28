@@ -33,17 +33,17 @@
 
 #include "G4VReadOutGeometry.hh"
 
-class ExN04CalorimeterROGeometry : public G4VReadOutGeometry {
-public:
-  ExN04CalorimeterROGeometry();
-  ExN04CalorimeterROGeometry(G4String);
-  ~ExN04CalorimeterROGeometry();
+class ExN04CalorimeterROGeometry : public G4VReadOutGeometry
+{
+  public:
+    ExN04CalorimeterROGeometry();
+    ExN04CalorimeterROGeometry(G4String);
+    ~ExN04CalorimeterROGeometry();
 
-private:
-  virtual G4VPhysicalVolume* Build();
+  private:
+    virtual G4VPhysicalVolume* Build();
 
 #include "ExN04DetectorParameterDef.hh"
-
 };
 
 #endif

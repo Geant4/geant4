@@ -30,10 +30,10 @@
 #ifndef ExTGRCLineProcessor_H
 #define ExTGRCLineProcessor_H 1
 
-#include "globals.hh"
-#include <vector>
-
 #include "G4tgrLineProcessor.hh"
+#include "globals.hh"
+
+#include <vector>
 
 /// Line processor that adds the definition of regions
 ///
@@ -43,11 +43,10 @@
 class ExTGRCLineProcessor : public G4tgrLineProcessor
 {
   public:
-
     ExTGRCLineProcessor();
-   ~ExTGRCLineProcessor();
+    ~ExTGRCLineProcessor();
 
-    G4bool ProcessLine( const std::vector<G4String>& wl );
+    G4bool ProcessLine(const std::vector<G4String>& wl);
 };
 
-#endif 
+#endif

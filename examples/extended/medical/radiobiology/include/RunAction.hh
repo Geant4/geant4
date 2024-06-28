@@ -42,7 +42,6 @@ class RBEAccumulable;
 class LETAccumulable;
 class DoseAccumulable;
 
-
 /// Run action class
 class RunAction : public G4UserRunAction
 {
@@ -54,8 +53,6 @@ class RunAction : public G4UserRunAction
     void EndOfRunAction(const G4Run* run) override;
 
   private:
-    
-
     DoseAccumulable* fDoseAccumulable = nullptr;
     LETAccumulable* fLETAccumulable = nullptr;
     RBEAccumulable* fRBEAccumulable = nullptr;

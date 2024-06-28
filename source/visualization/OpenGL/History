@@ -6,6 +6,44 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-30 Guy Barrand (opengl-V11-02-02)
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: remove the usage of a paintEvent(),
+  the paintGL() should be sufficient. Having an extra paintEvent() is confusing.
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: updateQWidget: use update() to trigger
+  a repaint. It is what is documented.
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: Initialise(): do a:
+    if(G4QGLWidgetType::isValid())
+  before the glDrawBuffer(GL_BACK). It avoids a crash at startup on macOS.
+  Do the same on the ClearView(), SetView().
+- G4OpenGLViewer: have ClearView(), SetView(), ResetView() virtual so that we can do a
+    if(G4QGLWidgetType::isValid())
+  in viewers ClearView(), SetView().
+- G4OpenGLQtViewer: updatePickInfosWidget, G4MouseReleaseEvent: Qt6: have a "makeCurrent,ResizeGL".
+  G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: DrawView(): have a:
+    if(IsGettingPickInfos()) {
+      paintGL();
+      return;
+    }
+  These modifications permit to restore picking. The today code has some "glGetIntegerv(GL_VIEWPORT)"
+  done "out of makeCurrent()" that returns now, with Qt6::QOpenGLWidget, bad sizes. The
+  "makeCurrent(), ResizeGL" restores good values, and the upper modifications in DrawView() enforces
+  a paintGL() within the "makeCurrent()". Picking looks ok with these modifications.
+- G4OpenGLQtViewer: G4OpenGLStoredQtViewer: Qt6: have ResizeWindow using glWidget->devicePixelRatio().
+  To have good size handling on macOS (it looks ok to have this on Linux and Windows, then no need
+  to "#ifdef __APPLE__").
+- G4OpenGLQtViewer: Qt6: DrawText(): we implemented a "2D draw text" (with code found on stackoverflow)
+  since the renderText() method is no more here on the new Qt6 QOpenGLWidget.
+
+## 2024-05-13 Guy Barrand (opengl-V11-02-01)
+- G4OpenGLQtViewer: MT: have the variables mWaitForVisSubThreadQtOpenGLContextMoved,
+  mWaitForVisSubThreadQtOpenGLContextInitialized,
+  c1_VisSubThreadQtOpenGLContextInitialized, c2_VisSubThreadQtOpenGLContextMoved local
+  to the G4OpenGLQtViewer class. It avoids dead-locks in case of multiple OGLI, OGLS viewers
+  if doing a "/run/beamOn" in each of them.
+
+## 2024-01-11 Ben Morgan (opengl-V11-02-00)
+- Make headers of implementation detail classes private.
+
 ## 2023-09-05 Ben Morgan (opengl-V11-01-13)
 - Set AUTOMOC property on module when Qt used.
 

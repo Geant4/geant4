@@ -32,15 +32,16 @@
 
 #include "G4VSensitiveDetector.hh"
 
-class VoxelSD : public G4VSensitiveDetector {
-public:
-  VoxelSD(const G4String& name);
-  ~VoxelSD();
+class VoxelSD : public G4VSensitiveDetector
+{
+  public:
+    VoxelSD(const G4String& name);
+    ~VoxelSD();
 
-  // virtual methods
-  virtual G4bool ProcessHits(G4Step* astep, G4TouchableHistory* rohist);
-  virtual void Initialize(G4HCofThisEvent* HCTE);
-  virtual void EndOfEvent(G4HCofThisEvent* HCTE);
+    // virtual methods
+    virtual G4bool ProcessHits(G4Step* astep, G4TouchableHistory* rohist);
+    virtual void Initialize(G4HCofThisEvent* HCTE);
+    virtual void EndOfEvent(G4HCofThisEvent* HCTE);
 };
 
 #endif

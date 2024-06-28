@@ -38,20 +38,14 @@
 
 class PhysListEmLivermore : public G4VPhysicsConstructor
 {
-public:
-  PhysListEmLivermore(const G4String& name = "Livermore");
- ~PhysListEmLivermore() override = default;
+  public:
+    PhysListEmLivermore(const G4String& name = "Livermore");
+    ~PhysListEmLivermore() override = default;
 
-  void ConstructParticle() override { };
-  void ConstructProcess()  override;
+    void ConstructParticle() override {};
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-

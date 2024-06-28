@@ -26,7 +26,7 @@
 /// \file StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,19 +34,21 @@
 #ifndef StackingAction_H
 #define StackingAction_H 1
 
-#include "globals.hh"
 #include "G4UserStackingAction.hh"
+#include "globals.hh"
+
 #include <fstream>
 
 class G4Track;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingAction : public G4UserStackingAction {
+class StackingAction : public G4UserStackingAction
+{
   public:
     StackingAction();
     virtual ~StackingAction();
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack( const G4Track* aTrack ) override;
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
     virtual void PrepareNewEvent() override;
 };
 

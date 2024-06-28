@@ -620,30 +620,24 @@ G4ShellCorrection* G4NuclearLevelData::GetShellCorrection()
 
 G4double G4NuclearLevelData::GetLevelDensity(G4int Z, G4int A, G4double U)
 {
-  if(fDeexPrecoParameters->GetLevelDensityFlag()) {
+  if (fDeexPrecoParameters->GetLevelDensityFlag()) {
     return A*fDeexPrecoParameters->GetLevelDensity();
   }
   const G4LevelManager* man = GetLevelManager(Z, A);
-  return (man) ? man->LevelDensity(U) 
+  return (nullptr != man) ? man->LevelDensity(U) 
     : 0.058025*A*(1.0 + 5.9059/fG4calc->Z13(A));
 }
 
 G4double G4NuclearLevelData::GetPairingCorrection(G4int Z, G4int A)
 {
-  if(fDeexPrecoParameters->GetLevelDensityFlag()) {
-    return fPairingCorrection->GetPairingCorrection(A, Z);
-  }
-  G4int N = A - Z;
-  const G4double par = 12.*CLHEP::MeV;
-  G4double x = (A <= 36) ? 6.0 : std::sqrt((G4double)A);
-  return (2 - Z + (Z/2)*2 - N + (N/2)*2)*par/x;
+  return fPairingCorrection->GetPairingCorrection(A, Z);
 }
 
 void G4NuclearLevelData::StreamLevels(std::ostream& os, 
                                       G4int Z, G4int A)
 {
   const G4LevelManager* man = GetLevelManager(Z, A);
-  if(man) { 
+  if (man) { 
     os << "Level data for Z= " << Z << " A= " << A << "  " 
        << man->NumberOfTransitions() + 1 << " levels \n";
     man->StreamInfo(os);

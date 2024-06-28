@@ -31,27 +31,26 @@
 #include "ExErrorDetectorMessenger.hh"
 
 #include "ExErrorDetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorDetectorMessenger::ExErrorDetectorMessenger(ExErrorDetectorConstruction* myDet)
-:G4UImessenger(),fMyDetector(myDet),fMydetDir(0),fFieldCmd(0)
-{ 
-
+  : G4UImessenger(), fMyDetector(myDet), fMydetDir(0), fFieldCmd(0)
+{
   fMydetDir = new G4UIdirectory("/exerror/");
   fMydetDir->SetGuidance("ExError control.");
-  
-  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/exerror/setField",this);  
+
+  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/exerror/setField", this);
   fFieldCmd->SetGuidance("Define magnetic field.");
   fFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fFieldCmd->SetParameterName("Bz",false);
+  fFieldCmd->SetParameterName("Bz", false);
   fFieldCmd->SetDefaultUnit("tesla");
   fFieldCmd->SetUnitCategory("Magnetic flux density");
-  fFieldCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);  
-
+  fFieldCmd->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,11 +61,9 @@ ExErrorDetectorMessenger::~ExErrorDetectorMessenger()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExErrorDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{   
-  if( command == fFieldCmd ) { 
+void ExErrorDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fFieldCmd) {
     fMyDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));
   }
-
 }
-

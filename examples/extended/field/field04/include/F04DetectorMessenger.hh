@@ -31,10 +31,10 @@
 #ifndef F04DetectorMessenger_h
 #define F04DetectorMessenger_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
 #include "F04DetectorConstruction.hh"
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4UIdirectory;
 class G4UIcmdWithAString;
@@ -45,19 +45,17 @@ class G4UIcmdWithoutParameter;
 class F04DetectorMessenger : public G4UImessenger
 {
   public:
-
-    F04DetectorMessenger(F04DetectorConstruction* );
+    F04DetectorMessenger(F04DetectorConstruction*);
     ~F04DetectorMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
+    F04DetectorConstruction* fDetector = nullptr;
 
-    F04DetectorConstruction*   fDetector = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
 
-    G4UIdirectory*          fDetDir = nullptr;
-
-    G4UIcmdWithAString*        fWorldMaterCmd = nullptr;
+    G4UIcmdWithAString* fWorldMaterCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fWorldRCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fWorldZCmd = nullptr;
 
@@ -68,13 +66,13 @@ class F04DetectorMessenger : public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fTransferZCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fTransferPCmd = nullptr;
 
-    G4UIcmdWithAString*        fTgtMaterCmd = nullptr;
+    G4UIcmdWithAString* fTgtMaterCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fTgtRadCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fTgtThickCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fTgtPosCmd = nullptr;
-    G4UIcmdWithAnInteger*      fTgtAngCmd = nullptr;
+    G4UIcmdWithAnInteger* fTgtAngCmd = nullptr;
 
-    G4UIcmdWithAString*        fDgrMaterCmd = nullptr;
+    G4UIcmdWithAString* fDgrMaterCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fDgrRadCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fDgrThickCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fDgrPosCmd = nullptr;

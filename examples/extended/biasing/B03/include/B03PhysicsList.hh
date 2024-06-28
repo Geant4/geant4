@@ -30,25 +30,24 @@
 #ifndef B03PhysicsList_h
 #define B03PhysicsList_h 1
 
+#include "G4GeometrySampler.hh"
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
-#include "G4GeometrySampler.hh"
 
 #include <vector>
 
 // taken from Tst12PhysicsList
 
-class B03PhysicsList: public G4VUserPhysicsList
+class B03PhysicsList : public G4VUserPhysicsList
 {
   public:
     B03PhysicsList(G4String);
     virtual ~B03PhysicsList();
 
-  public: 
-    void AddParallelWorldName(G4String& pname)
-         {fParaWorldName.push_back(pname);}
+  public:
+    void AddParallelWorldName(G4String& pname) { fParaWorldName.push_back(pname); }
 
-    // void AddBiasing(G4GeometrySampler *mgs, G4String& pname) 
+    // void AddBiasing(G4GeometrySampler *mgs, G4String& pname)
     //      {fGeomSampler = mgs; fBiasWorldName = pname;}
 
   protected:
@@ -56,33 +55,31 @@ class B03PhysicsList: public G4VUserPhysicsList
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
-    // 
+    //
     virtual void SetCuts();
-    
+
   protected:
-  // these methods Construct physics processes and register them
+    // these methods Construct physics processes and register them
     virtual void ConstructGeneral();
     virtual void ConstructEM();
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
 
-    void AddScoringProcess(); 
-    void AddBiasingProcess(); 
+    void AddScoringProcess();
+    void AddBiasingProcess();
 
- //
-    void  ConstructAllBosons();
-    void  ConstructAllLeptons();
-    void  ConstructAllMesons();
-    void  ConstructAllBaryons();
-    void  ConstructAllIons();
-    void  ConstructAllShortLiveds();
+    //
+    void ConstructAllBosons();
+    void ConstructAllLeptons();
+    void ConstructAllMesons();
+    void ConstructAllBaryons();
+    void ConstructAllIons();
+    void ConstructAllShortLiveds();
 
   private:
-    std::vector<G4String>  fParaWorldName; 
-  G4String fBiasWorldName;
-  // G4GeometrySampler* fGeomSampler;
-
+    std::vector<G4String> fParaWorldName;
+    G4String fBiasWorldName;
+    // G4GeometrySampler* fGeomSampler;
 };
 
 #endif
-

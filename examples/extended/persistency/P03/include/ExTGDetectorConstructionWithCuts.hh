@@ -30,8 +30,8 @@
 #ifndef ExTGDetectorConstructionWithCuts_HH
 #define ExTGDetectorConstructionWithCuts_HH
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class G4tgrMessenger;
 
@@ -40,14 +40,12 @@ class G4tgrMessenger;
 class ExTGDetectorConstructionWithCuts : public G4VUserDetectorConstruction
 {
   public:
-
     ExTGDetectorConstructionWithCuts();
-   ~ExTGDetectorConstructionWithCuts();
+    ~ExTGDetectorConstructionWithCuts();
 
     G4VPhysicalVolume* Construct();
 
   private:
-
     G4tgrMessenger* fMessenger;
 };
 

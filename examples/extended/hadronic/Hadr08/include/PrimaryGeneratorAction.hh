@@ -26,7 +26,7 @@
 /// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,11 +41,12 @@ class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
   public:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction();
-    virtual void GeneratePrimaries( G4Event* anEvent );
+    virtual void GeneratePrimaries(G4Event* anEvent);
     G4ParticleGun* GetParticleGun();
 
   private:
@@ -55,4 +56,3 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

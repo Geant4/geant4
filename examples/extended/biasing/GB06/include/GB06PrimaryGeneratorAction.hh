@@ -38,18 +38,16 @@ class G4ParticleGun;
 
 class GB06PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  GB06PrimaryGeneratorAction();    
-  virtual ~GB06PrimaryGeneratorAction();
-  
-  virtual void GeneratePrimaries(G4Event*);
-  
-private:
-  G4ParticleGun* fParticleGun;
+  public:
+    GB06PrimaryGeneratorAction();
+    virtual ~GB06PrimaryGeneratorAction();
+
+    virtual void GeneratePrimaries(G4Event*);
+
+  private:
+    G4ParticleGun* fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

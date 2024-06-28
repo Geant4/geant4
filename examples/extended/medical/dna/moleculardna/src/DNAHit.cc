@@ -27,70 +27,62 @@
 /// \file DNAHit.cc
 /// \brief Hit class for a hit interacting with a DNA molecule
 
-#include <utility>
-
 #include "DNAHit.hh"
 
-G4ThreadLocal G4Allocator<DNAHit>* MolecularDNAHitAllocator = nullptr;
+#include <utility>
 
+G4ThreadLocal G4Allocator<DNAHit>* MolecularDNAHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DNAHit::DNAHit(const molecule& mol, G4int placement_idx,  // ORG
-               G4int chain, G4int strand,          // ORG
+               G4int chain, G4int strand,  // ORG
                int64_t bp, const G4ThreeVector& pos,
                const G4ThreeVector& localpos,  // dousatsu
                const G4double& energy, const G4double& d, const G4String& chromo,
                const G4MolecularConfiguration* radical)
-  : fMoleculeEnum(mol)
-  , fPlacementIdx(placement_idx)
-  , fChainIdx(chain)
-  , fStrandIdx(strand)
-  , fBasePairIdx(bp)
-  , fPosition(pos)
-  , fLocalPosition(localpos)
-  , fEnergy(energy)
-  , fDistance(d)
-  , fChromosome(chromo)
-  , fRadical(radical)
+  : fMoleculeEnum(mol),
+    fPlacementIdx(placement_idx),
+    fChainIdx(chain),
+    fStrandIdx(strand),
+    fBasePairIdx(bp),
+    fPosition(pos),
+    fLocalPosition(localpos),
+    fEnergy(energy),
+    fDistance(d),
+    fChromosome(chromo),
+    fRadical(radical)
 {
   // Computed quantities
-  if(fStrandIdx == 0)
-  {
-    if((fMoleculeEnum == SUGAR) || (fMoleculeEnum == PHOSPHATE))
-    {
+  if (fStrandIdx == 0) {
+    if ((fMoleculeEnum == SUGAR) || (fMoleculeEnum == PHOSPHATE)) {
       fStrand1Rad = fRadical;
       fStrand1Energy = fEnergy;
     }
-    else if((fMoleculeEnum == CYTOSINE) || (fMoleculeEnum == GUANINE) ||
-            (fMoleculeEnum == ADENINE) || (fMoleculeEnum == THYMINE))
+    else if ((fMoleculeEnum == CYTOSINE) || (fMoleculeEnum == GUANINE) || (fMoleculeEnum == ADENINE)
+             || (fMoleculeEnum == THYMINE))
     {
       fBase1Rad = fRadical;
       fBP1Energy = fEnergy;
     }
-    else
-    {
+    else {
       G4Exception("DNAHit", "ERR_UNKNOWN_MOLECULE", JustWarning,
                   "Chemical Reaction with unknown molecule");
     }
   }
-  else if(fStrandIdx == 1)
-  {
-    if((fMoleculeEnum == SUGAR) || (fMoleculeEnum == PHOSPHATE))
-    {
+  else if (fStrandIdx == 1) {
+    if ((fMoleculeEnum == SUGAR) || (fMoleculeEnum == PHOSPHATE)) {
       fStrand2Rad = fRadical;
       fStrand2Energy = fEnergy;
     }
-    else if((fMoleculeEnum == CYTOSINE) || (fMoleculeEnum == GUANINE) ||
-            (fMoleculeEnum == ADENINE) || (fMoleculeEnum == THYMINE))
+    else if ((fMoleculeEnum == CYTOSINE) || (fMoleculeEnum == GUANINE) || (fMoleculeEnum == ADENINE)
+             || (fMoleculeEnum == THYMINE))
     {
       fBase2Rad = fRadical;
       fBP2Energy = fEnergy;
     }
-    else
-    {
-      G4Exception("DNAHit", "ERR_UNKNOWN_MOLECULE", JustWarning,
-                  "Hit with unknown molecule");
+    else {
+      G4Exception("DNAHit", "ERR_UNKNOWN_MOLECULE", JustWarning, "Hit with unknown molecule");
     }
   }
 }
@@ -107,20 +99,16 @@ void DNAHit::AddHit(const DNAHit& right)
   this->fStrand2Energy += right.GetStrand2Energy();
   this->fBP1Energy += right.GetBP1Energy();
   this->fBP2Energy += right.GetBP2Energy();
-  if(right.GetStrand1Rad() != nullptr)
-  {
+  if (right.GetStrand1Rad() != nullptr) {
     this->fStrand1Rad = right.GetStrand1Rad();
   }
-  if(right.GetBase1Rad() != nullptr)
-  {
+  if (right.GetBase1Rad() != nullptr) {
     this->fBase1Rad = right.GetBase1Rad();
   }
-  if(right.GetStrand2Rad() != nullptr)
-  {
+  if (right.GetStrand2Rad() != nullptr) {
     this->fStrand2Rad = right.GetStrand2Rad();
   }
-  if(right.GetBase2Rad() != nullptr)
-  {
+  if (right.GetBase2Rad() != nullptr) {
     this->fBase2Rad = right.GetBase2Rad();
   }
 }

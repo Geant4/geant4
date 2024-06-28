@@ -30,20 +30,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(){
-    fGPS = new G4GeneralParticleSource();
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+{
+  fGPS = new G4GeneralParticleSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction(){
-    delete fGPS;
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
+{
+  delete fGPS;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
-    fGPS->GeneratePrimaryVertex(anEvent);
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  fGPS->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

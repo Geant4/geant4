@@ -45,11 +45,11 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4Material.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
-#include "G4Material.hh"
-#include "G4VPhysicalVolume.hh"
 
 class G4Tubs;
 class G4LogicalVolume;
@@ -62,65 +62,62 @@ class G4ProductionCuts;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
 
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
+    virtual G4VPhysicalVolume* Construct();
 
-  virtual G4VPhysicalVolume* Construct();
+    void SetEcalMaterial(const G4String&);
+    void SetAbsMaterial(const G4String&);
+    void SetEcalLength(G4double val);
+    void SetEcalWidth(G4double val);
+    void SetVertexLength(G4double val);
+    void SetPadLength(G4double val);
+    void SetPadWidth(G4double val);
+    void SetAbsLength(G4double val);
 
-  void SetEcalMaterial(const G4String&);
-  void SetAbsMaterial(const G4String&);
-  void SetEcalLength(G4double val);
-  void SetEcalWidth(G4double val);
-  void SetVertexLength(G4double val);
-  void SetPadLength(G4double val);
-  void SetPadWidth(G4double val);
-  void SetAbsLength(G4double val);
+    void UpdateGeometry();
 
-  void UpdateGeometry();
+    inline G4double GetWorldSizeZ() { return fWorldZ; }
 
-  inline G4double GetWorldSizeZ()  {return fWorldZ;}
+  private:
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructVolumes();
 
-private:
+    DetectorConstruction& operator=(const DetectorConstruction& right);
+    DetectorConstruction(const DetectorConstruction&);
 
-  void DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
+    G4double fEcalLength;
+    G4double fEcalWidth;
+    G4double fVertexLength;
+    G4double fPadLength;
+    G4double fPadWidth;
+    G4double fAbsLength;
+    G4double fWorldZ;
 
-  DetectorConstruction & operator=(const DetectorConstruction &right);
-  DetectorConstruction(const DetectorConstruction&);
+    G4Material* fCalMaterial;
+    G4Material* fVertMaterial;
+    G4Material* fAbsMaterial;
+    G4Material* fWorldMaterial;
+    G4Material* fYorkMaterial;
 
-  G4double fEcalLength;
-  G4double fEcalWidth;
-  G4double fVertexLength;
-  G4double fPadLength;
-  G4double fPadWidth;
-  G4double fAbsLength;
-  G4double fWorldZ;
+    G4LogicalVolume* fLogicWorld;
+    G4LogicalVolume* fLogicCal;
+    G4LogicalVolume* fLogicA1;
+    G4LogicalVolume* fLogicA2;
+    G4LogicalVolume* fLogicA3;
+    G4LogicalVolume* fLogicA4;
 
-  G4Material* fCalMaterial;
-  G4Material* fVertMaterial;
-  G4Material* fAbsMaterial;
-  G4Material* fWorldMaterial;
-  G4Material* fYorkMaterial;
+    G4Region* fVertexRegion;
+    G4Region* fMuonRegion;
 
-  G4LogicalVolume* fLogicWorld;
-  G4LogicalVolume* fLogicCal;
-  G4LogicalVolume* fLogicA1;
-  G4LogicalVolume* fLogicA2;
-  G4LogicalVolume* fLogicA3;
-  G4LogicalVolume* fLogicA4;
+    G4ProductionCuts* fVertexDetectorCuts;
+    G4ProductionCuts* fMuonDetectorCuts;
 
-  G4Region* fVertexRegion;
-  G4Region* fMuonRegion;
-  
-  G4ProductionCuts* fVertexDetectorCuts;
-  G4ProductionCuts* fMuonDetectorCuts;
-
-  DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
+    DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif
-

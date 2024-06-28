@@ -35,25 +35,24 @@
 
 /// Construction of a physics list.
 ///
-/// A mandatory initialization class of the physics list. 
+/// A mandatory initialization class of the physics list.
 /// For the purposes of fast simulation, only transportation, decays and
-/// parametrisation is used. Based on G4 
+/// parametrisation is used. Based on G4
 /// examples/extended/parametrisations/Par01/include/Par01PhysicsList.hh .
 /// @author Anna Zaborowska
 
-class Par02PhysicsList : public G4VUserPhysicsList {
+class Par02PhysicsList : public G4VUserPhysicsList
+{
   public:
-    
     /// A default constructor. Sets the default cut value.
     Par02PhysicsList();
 
     virtual ~Par02PhysicsList();
 
   protected:
-    
     /// Constructs particles: bosons, leptons, mesons, baryons and ions.
     virtual void ConstructParticle();
-    
+
     /// Constructs physics processes: particle transportation, decays,
     /// parametrisation (for the purpose of fast parametric simulation).
     virtual void ConstructProcess();
@@ -66,13 +65,13 @@ class Par02PhysicsList : public G4VUserPhysicsList {
 
     /// Constructs all leptons.
     virtual void ConstructLeptons();
-    
+
     /// Constructs all mesons.
     virtual void ConstructMesons();
-    
+
     /// Constructs all barions.
     virtual void ConstructBaryons();
-    
+
     /// Constructs light ions.
     virtual void ConstructIons();
 
@@ -81,12 +80,11 @@ class Par02PhysicsList : public G4VUserPhysicsList {
 
     /// Adds decay process.
     virtual void ConstructGeneral();
-    
-    /// Adds the particle transport. 
+
+    /// Adds the particle transport.
     /// G4CoupledTransportation is used to allow the calculation of the expected
     /// position of the particle within a G4VFastSimulationModel.
     virtual void AddTransportation();
 };
 
 #endif
-

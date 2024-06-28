@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -44,14 +44,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -300,7 +307,7 @@ ePairProd:  for e+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -616,8 +623,8 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004678s Sys=0.000000s
-	  User TOT = 0	  Real TOT = 0.00495229
+  User=0.000000s Real=0.005674s Sys=0.000000s
+	  User TOT = 0	  Real TOT = 0.00601004
  Summary of Run 0 :
 /run/geometryModified
 
@@ -686,8 +693,8 @@ Run 1 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003671s Sys=0.000000s
-	  User TOT = 0	  Real TOT = 0.00886057
+  User=0.000000s Real=0.002018s Sys=0.010000s
+	  User TOT = 0	  Real TOT = 0.00814804
  Summary of Run 1 :
 /run/geometryModified
 
@@ -756,8 +763,8 @@ Run 2 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003488s Sys=0.000000s
-	  User TOT = 0	  Real TOT = 0.0132076
+  User=0.000000s Real=0.002105s Sys=0.000000s
+	  User TOT = 0	  Real TOT = 0.0103723
  Summary of Run 2 :
 /run/geometryModified
 
@@ -826,8 +833,8 @@ Run 3 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.006050s Sys=0.010000s
-	  User TOT = 0	  Real TOT = 0.0195128
+  User=0.000000s Real=0.002741s Sys=0.000000s
+	  User TOT = 0	  Real TOT = 0.0132334
  Summary of Run 3 :
 /run/geometryModified
 
@@ -896,8 +903,8 @@ Run 4 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.004410s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.0240423
+  User=0.010000s Real=0.001901s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0164923
  Summary of Run 4 :
 /run/geometryModified
 
@@ -966,8 +973,8 @@ Run 5 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004347s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.0288338
+  User=0.000000s Real=0.002463s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0207157
  Summary of Run 5 :
 /run/geometryModified
 
@@ -1036,8 +1043,8 @@ Run 6 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002777s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.0317287
+  User=0.000000s Real=0.002571s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0246796
  Summary of Run 6 :
 /run/geometryModified
 
@@ -1106,8 +1113,8 @@ Run 7 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002632s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.0345889
+  User=0.000000s Real=0.002027s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.026829
  Summary of Run 7 :
 /run/geometryModified
 
@@ -1176,8 +1183,8 @@ Run 8 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.002497s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0373224
+  User=0.000000s Real=0.002228s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0308465
  Summary of Run 8 :
 /run/geometryModified
 
@@ -1246,8 +1253,8 @@ Run 9 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002125s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0395704
+  User=0.000000s Real=0.002182s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0341438
  Summary of Run 9 :
 /run/geometryModified
 
@@ -1316,8 +1323,8 @@ Run 10 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002295s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0420483
+  User=0.010000s Real=0.002138s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.037632
  Summary of Run 10 :
 /run/geometryModified
 
@@ -1386,8 +1393,8 @@ Run 11 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003472s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0458153
+  User=0.000000s Real=0.002066s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0410941
  Summary of Run 11 :
 /run/geometryModified
 
@@ -1456,8 +1463,8 @@ Run 12 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003189s Sys=0.010000s
-	  User TOT = 0.02	  Real TOT = 0.0502359
+  User=0.000000s Real=0.003282s Sys=0.010000s
+	  User TOT = 0.02	  Real TOT = 0.0447642
  Summary of Run 12 :
 /run/geometryModified
 
@@ -1526,8 +1533,8 @@ Run 13 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003093s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0535541
+  User=0.000000s Real=0.004210s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0493461
  Summary of Run 13 :
 /run/geometryModified
 
@@ -1596,8 +1603,8 @@ Run 14 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003802s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0574845
+  User=0.000000s Real=0.004358s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0540114
  Summary of Run 14 :
 /run/geometryModified
 
@@ -1666,8 +1673,8 @@ Run 15 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005167s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0627772
+  User=0.000000s Real=0.004431s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0587585
  Summary of Run 15 :
 /run/geometryModified
 
@@ -1736,8 +1743,8 @@ Run 16 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003625s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0676128
+  User=0.000000s Real=0.004255s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0633197
  Summary of Run 16 :
 /run/geometryModified
 
@@ -1806,8 +1813,8 @@ Run 17 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002120s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0698428
+  User=0.000000s Real=0.004376s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0680631
  Summary of Run 17 :
 /run/geometryModified
 
@@ -1876,8 +1883,8 @@ Run 18 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002704s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0726571
+  User=0.000000s Real=0.004265s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0727205
  Summary of Run 18 :
 /run/geometryModified
 
@@ -1946,8 +1953,8 @@ Run 19 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003264s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.0760288
+  User=0.000000s Real=0.004303s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0773157
  Summary of Run 19 :
 /run/geometryModified
 
@@ -2016,8 +2023,8 @@ Run 20 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.004174s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0804781
+  User=0.000000s Real=0.004251s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0818759
  Summary of Run 20 :
 /run/geometryModified
 
@@ -2086,8 +2093,8 @@ Run 21 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003598s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0843676
+  User=0.000000s Real=0.004165s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0863987
  Summary of Run 21 :
 /run/geometryModified
 
@@ -2156,8 +2163,8 @@ Run 22 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002952s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0875501
+  User=0.000000s Real=0.004192s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.0938456
  Summary of Run 22 :
 /run/geometryModified
 
@@ -2226,8 +2233,8 @@ Run 23 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001959s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0896209
+  User=0.000000s Real=0.003972s Sys=0.010000s
+	  User TOT = 0.02	  Real TOT = 0.0982762
  Summary of Run 23 :
 /run/geometryModified
 
@@ -2296,8 +2303,8 @@ Run 24 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002048s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0919195
+  User=0.010000s Real=0.004357s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.103001
  Summary of Run 24 :
 /run/geometryModified
 
@@ -2366,8 +2373,8 @@ Run 25 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003019s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0950916
+  User=0.000000s Real=0.004161s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.107512
  Summary of Run 25 :
 /run/geometryModified
 
@@ -2436,8 +2443,8 @@ Run 26 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003749s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.0989644
+  User=0.000000s Real=0.004277s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.112093
  Summary of Run 26 :
 /run/geometryModified
 
@@ -2506,8 +2513,8 @@ Run 27 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002453s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.101589
+  User=0.000000s Real=0.004312s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.116711
  Summary of Run 27 :
 /run/geometryModified
 
@@ -2576,8 +2583,8 @@ Run 28 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002504s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.104207
+  User=0.000000s Real=0.003965s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.12103
  Summary of Run 28 :
 /run/geometryModified
 
@@ -2646,8 +2653,8 @@ Run 29 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002429s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.106767
+  User=0.000000s Real=0.004024s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.125353
  Summary of Run 29 :
 /run/geometryModified
 
@@ -2716,8 +2723,8 @@ Run 30 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003400s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.110289
+  User=0.010000s Real=0.003925s Sys=0.010000s
+	  User TOT = 0.04	  Real TOT = 0.129743
  Summary of Run 30 :
 /run/geometryModified
 
@@ -2786,8 +2793,8 @@ Run 31 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002498s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.112914
+  User=0.000000s Real=0.004930s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.134976
  Summary of Run 31 :
 /run/geometryModified
 
@@ -2856,8 +2863,8 @@ Run 32 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002310s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.115345
+  User=0.000000s Real=0.003974s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.139228
  Summary of Run 32 :
 /run/geometryModified
 
@@ -2926,8 +2933,8 @@ Run 33 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003042s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.119402
+  User=0.000000s Real=0.004414s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.14403
  Summary of Run 33 :
 /run/geometryModified
 
@@ -2996,8 +3003,8 @@ Run 34 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004810s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.125236
+  User=0.000000s Real=0.003879s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.148218
  Summary of Run 34 :
 /run/geometryModified
 
@@ -3066,8 +3073,8 @@ Run 35 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004169s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.130449
+  User=0.000000s Real=0.003370s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.151893
  Summary of Run 35 :
 /run/geometryModified
 
@@ -3136,8 +3143,8 @@ Run 36 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005614s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.136386
+  User=0.000000s Real=0.005001s Sys=0.010000s
+	  User TOT = 0.04	  Real TOT = 0.1572
  Summary of Run 36 :
 /run/geometryModified
 
@@ -3206,8 +3213,8 @@ Run 37 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002727s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.139305
+  User=0.000000s Real=0.004581s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.162152
  Summary of Run 37 :
 /run/geometryModified
 
@@ -3276,8 +3283,8 @@ Run 38 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004901s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.144351
+  User=0.000000s Real=0.004527s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.166995
  Summary of Run 38 :
 /run/geometryModified
 
@@ -3346,8 +3353,8 @@ Run 39 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004526s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.149058
+  User=0.000000s Real=0.004150s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.17145
  Summary of Run 39 :
 /run/geometryModified
 
@@ -3416,8 +3423,8 @@ Run 40 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.003137s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.152477
+  User=0.000000s Real=0.004362s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.176311
  Summary of Run 40 :
 /run/geometryModified
 
@@ -3486,8 +3493,8 @@ Run 41 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003582s Sys=0.010000s
-	  User TOT = 0.04	  Real TOT = 0.156311
+  User=0.000000s Real=0.004289s Sys=0.010000s
+	  User TOT = 0.04	  Real TOT = 0.1809
  Summary of Run 41 :
 /run/geometryModified
 
@@ -3556,8 +3563,8 @@ Run 42 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002696s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.159135
+  User=0.000000s Real=0.003647s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.184916
  Summary of Run 42 :
 /run/geometryModified
 
@@ -3626,8 +3633,8 @@ Run 43 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003204s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.162539
+  User=0.000000s Real=0.004005s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.189215
  Summary of Run 43 :
 /run/geometryModified
 
@@ -3696,8 +3703,8 @@ Run 44 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002532s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.165203
+  User=0.010000s Real=0.004263s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.193773
  Summary of Run 44 :
 /run/geometryModified
 
@@ -3766,8 +3773,8 @@ Run 45 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.003767s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 0.170022
+  User=0.000000s Real=0.005293s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.199378
  Summary of Run 45 :
 /run/geometryModified
 
@@ -3836,8 +3843,8 @@ Run 46 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001885s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 0.172416
+  User=0.000000s Real=0.004405s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.204078
  Summary of Run 46 :
 /run/geometryModified
 
@@ -3906,8 +3913,8 @@ Run 47 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004435s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 0.176971
+  User=0.000000s Real=0.004208s Sys=0.010000s
+	  User TOT = 0.05	  Real TOT = 0.2086
  Summary of Run 47 :
 /run/geometryModified
 
@@ -3976,8 +3983,8 @@ Run 48 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002930s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 0.180602
+  User=0.000000s Real=0.006331s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.215405
  Summary of Run 48 :
 /run/geometryModified
 
@@ -4046,8 +4053,8 @@ Run 49 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003884s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 0.185173
+  User=0.000000s Real=0.005060s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.220764
  Summary of Run 49 :
 /run/geometryModified
 
@@ -4116,8 +4123,8 @@ Run 50 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.002676s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 0.18858
+  User=0.000000s Real=0.004085s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.225226
  Summary of Run 50 :
 /run/geometryModified
 
@@ -4186,8 +4193,8 @@ Run 51 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004344s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 0.19499
+  User=0.000000s Real=0.004087s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.229612
  Summary of Run 51 :
 /run/geometryModified
 
@@ -4256,8 +4263,8 @@ Run 52 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005568s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 0.200725
+  User=0.000000s Real=0.003956s Sys=0.010000s
+	  User TOT = 0.05	  Real TOT = 0.233889
  Summary of Run 52 :
 /run/geometryModified
 
@@ -4326,8 +4333,8 @@ Run 53 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005504s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 0.206363
+  User=0.000000s Real=0.003786s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.237806
  Summary of Run 53 :
 /run/geometryModified
 
@@ -4396,8 +4403,8 @@ Run 54 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.008670s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 0.215155
+  User=0.000000s Real=0.003700s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.241629
  Summary of Run 54 :
 /run/geometryModified
 
@@ -4466,8 +4473,8 @@ Run 55 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005691s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 0.220974
+  User=0.000000s Real=0.004092s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.246112
  Summary of Run 55 :
 /run/geometryModified
 
@@ -4536,8 +4543,8 @@ Run 56 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005496s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 0.226599
+  User=0.000000s Real=0.004142s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.25067
  Summary of Run 56 :
 /run/geometryModified
 
@@ -4606,8 +4613,8 @@ Run 57 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.006356s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 0.233657
+  User=0.000000s Real=0.003826s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.254857
  Summary of Run 57 :
 /run/geometryModified
 
@@ -4676,8 +4683,8 @@ Run 58 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.006776s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 0.241482
+  User=0.000000s Real=0.004234s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.259221
  Summary of Run 58 :
 /run/geometryModified
 
@@ -4746,8 +4753,8 @@ Run 59 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.006285s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 0.247925
+  User=0.000000s Real=0.003846s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.263469
  Summary of Run 59 :
 /run/geometryModified
 
@@ -4816,8 +4823,8 @@ Run 60 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005283s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 0.253462
+  User=0.000000s Real=0.004154s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.26824
  Summary of Run 60 :
 /run/geometryModified
 
@@ -4886,8 +4893,8 @@ Run 61 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003438s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 0.257034
+  User=0.000000s Real=0.004942s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.2736
  Summary of Run 61 :
 /run/geometryModified
 
@@ -4956,8 +4963,8 @@ Run 62 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003439s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 0.260703
+  User=0.000000s Real=0.004102s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.278122
  Summary of Run 62 :
 /run/geometryModified
 
@@ -5026,8 +5033,8 @@ Run 63 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.003482s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.264316
+  User=0.000000s Real=0.003965s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 0.282224
  Summary of Run 63 :
 /run/geometryModified
 
@@ -5096,8 +5103,8 @@ Run 64 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002651s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.267099
+  User=0.010000s Real=0.004824s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 0.287209
  Summary of Run 64 :
 /run/geometryModified
 
@@ -5166,8 +5173,8 @@ Run 65 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003394s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.270625
+  User=0.000000s Real=0.004445s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 0.292068
  Summary of Run 65 :
 /run/geometryModified
 
@@ -5236,8 +5243,8 @@ Run 66 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003198s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.273943
+  User=0.000000s Real=0.003710s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 0.297905
  Summary of Run 66 :
 /run/geometryModified
 
@@ -5306,8 +5313,8 @@ Run 67 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003563s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.277726
+  User=0.000000s Real=0.003721s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 0.302053
  Summary of Run 67 :
 /run/geometryModified
 
@@ -5376,8 +5383,8 @@ Run 68 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002526s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.2804
+  User=0.000000s Real=0.003957s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 0.306792
  Summary of Run 68 :
 /run/geometryModified
 
@@ -5446,8 +5453,8 @@ Run 69 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003294s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.283823
+  User=0.010000s Real=0.004507s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 0.31187
  Summary of Run 69 :
 /run/geometryModified
 
@@ -5516,8 +5523,8 @@ Run 70 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002582s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.286535
+  User=0.000000s Real=0.004237s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 0.316967
  Summary of Run 70 :
 /run/geometryModified
 
@@ -5586,8 +5593,8 @@ Run 71 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003132s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.290014
+  User=0.000000s Real=0.004713s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 0.322514
  Summary of Run 71 :
 /run/geometryModified
 
@@ -5656,8 +5663,8 @@ Run 72 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003489s Sys=0.010000s
-	  User TOT = 0.09	  Real TOT = 0.293622
+  User=0.000000s Real=0.002622s Sys=0.010000s
+	  User TOT = 0.07	  Real TOT = 0.325285
  Summary of Run 72 :
 /run/geometryModified
 
@@ -5726,8 +5733,8 @@ Run 73 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004715s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.299341
+  User=0.000000s Real=0.004107s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 0.329541
  Summary of Run 73 :
 /run/geometryModified
 
@@ -5796,8 +5803,8 @@ Run 74 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005114s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.304795
+  User=0.000000s Real=0.004984s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 0.334923
  Summary of Run 74 :
 /run/geometryModified
 
@@ -5866,8 +5873,8 @@ Run 75 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002181s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.307139
+  User=0.000000s Real=0.004141s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 0.339184
  Summary of Run 75 :
 /run/geometryModified
 
@@ -5936,8 +5943,8 @@ Run 76 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002176s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.309426
+  User=0.010000s Real=0.004246s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 0.343544
  Summary of Run 76 :
 /run/geometryModified
 
@@ -6006,8 +6013,8 @@ Run 77 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003689s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.313318
+  User=0.000000s Real=0.004246s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 0.348921
  Summary of Run 77 :
 /run/geometryModified
 
@@ -6076,8 +6083,8 @@ Run 78 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002554s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 0.315993
+  User=0.000000s Real=0.003445s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 0.3543
  Summary of Run 78 :
 /run/geometryModified
 
@@ -6146,8 +6153,8 @@ Run 79 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.001549s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 0.317655
+  User=0.000000s Real=0.003703s Sys=0.010000s
+	  User TOT = 0.08	  Real TOT = 0.359888
  Summary of Run 79 :
 /run/geometryModified
 
@@ -6216,8 +6223,8 @@ Run 80 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002211s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 0.320596
+  User=0.000000s Real=0.004006s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 0.364315
  Summary of Run 80 :
 /run/geometryModified
 
@@ -6286,8 +6293,8 @@ Run 81 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003054s Sys=0.010000s
-	  User TOT = 0.1	  Real TOT = 0.323776
+  User=0.000000s Real=0.013083s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 0.377526
  Summary of Run 81 :
 /run/geometryModified
 
@@ -6356,8 +6363,8 @@ Run 82 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002917s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 0.328309
+  User=0.010000s Real=0.005725s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 0.383369
  Summary of Run 82 :
 /run/geometryModified
 
@@ -6426,8 +6433,8 @@ Run 83 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003372s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 0.331818
+  User=0.000000s Real=0.017565s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 0.402755
  Summary of Run 83 :
 /run/geometryModified
 
@@ -6496,8 +6503,8 @@ Run 84 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003280s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 0.335217
+  User=0.000000s Real=0.003894s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 0.406788
  Summary of Run 84 :
 /run/geometryModified
 
@@ -6566,8 +6573,8 @@ Run 85 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.003617s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 0.339067
+  User=0.000000s Real=0.004545s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 0.411446
  Summary of Run 85 :
 /run/geometryModified
 
@@ -6636,8 +6643,8 @@ Run 86 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002202s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 0.341387
+  User=0.000000s Real=0.018910s Sys=0.010000s
+	  User TOT = 0.09	  Real TOT = 0.430603
  Summary of Run 86 :
 /run/geometryModified
 
@@ -6706,8 +6713,8 @@ Run 87 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001812s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 0.343303
+  User=0.000000s Real=0.019285s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 0.450221
  Summary of Run 87 :
 /run/geometryModified
 
@@ -6776,8 +6783,8 @@ Run 88 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002073s Sys=0.010000s
-	  User TOT = 0.11	  Real TOT = 0.345492
+  User=0.010000s Real=0.005564s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 0.455918
  Summary of Run 88 :
 /run/geometryModified
 
@@ -6846,8 +6853,8 @@ Run 89 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001986s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 0.347587
+  User=0.000000s Real=0.004020s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 0.460051
  Summary of Run 89 :
 /run/geometryModified
 
@@ -6916,8 +6923,8 @@ Run 90 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002228s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 0.349919
+  User=0.000000s Real=0.007399s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 0.467573
  Summary of Run 90 :
 /run/geometryModified
 
@@ -6986,8 +6993,8 @@ Run 91 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002275s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 0.3523
+  User=0.000000s Real=0.007078s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 0.474762
  Summary of Run 91 :
 /run/geometryModified
 
@@ -7056,8 +7063,8 @@ Run 92 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.001933s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 0.354342
+  User=0.000000s Real=0.005030s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 0.482471
  Summary of Run 92 :
 /run/geometryModified
 
@@ -7126,8 +7133,8 @@ Run 93 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001835s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 0.356283
+  User=0.000000s Real=0.008233s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 0.490857
  Summary of Run 93 :
 /run/geometryModified
 
@@ -7196,8 +7203,8 @@ Run 94 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002177s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 0.358565
+  User=0.010000s Real=0.007055s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.498287
  Summary of Run 94 :
 /run/geometryModified
 
@@ -7266,8 +7273,8 @@ Run 95 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002365s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 0.361058
+  User=0.000000s Real=0.001991s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.500397
  Summary of Run 95 :
 /run/geometryModified
 
@@ -7336,8 +7343,8 @@ Run 96 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002064s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 0.363229
+  User=0.000000s Real=0.002023s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.502552
  Summary of Run 96 :
 /run/geometryModified
 
@@ -7406,8 +7413,8 @@ Run 97 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.002319s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 0.365656
+  User=0.000000s Real=0.002154s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.504822
  Summary of Run 97 :
 /run/geometryModified
 
@@ -7476,8 +7483,8 @@ Run 98 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002314s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 0.368172
+  User=0.000000s Real=0.002194s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.507133
  Summary of Run 98 :
 /run/geometryModified
 
@@ -7546,8 +7553,8 @@ Run 99 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002498s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 0.370776
+  User=0.000000s Real=0.005540s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.512883
  Summary of Run 99 :
 /run/geometryModified
 
@@ -7616,8 +7623,8 @@ Run 100 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002689s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 0.373759
+  User=0.000000s Real=0.002134s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.515141
  Summary of Run 100 :
 /run/geometryModified
 
@@ -7686,8 +7693,8 @@ Run 101 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002616s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 0.376492
+  User=0.000000s Real=0.010151s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 0.525423
  Summary of Run 101 :
 /run/geometryModified
 
@@ -7756,8 +7763,8 @@ Run 102 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003148s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 0.381529
+  User=0.010000s Real=0.004274s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 0.529839
  Summary of Run 102 :
 /run/geometryModified
 
@@ -7826,8 +7833,8 @@ Run 103 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.004706s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 0.386441
+  User=0.000000s Real=0.003821s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 0.534
  Summary of Run 103 :
 /run/geometryModified
 
@@ -7896,8 +7903,8 @@ Run 104 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005550s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 0.392126
+  User=0.000000s Real=0.004658s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 0.53895
  Summary of Run 104 :
 /run/geometryModified
 
@@ -7966,8 +7973,8 @@ Run 105 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003119s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 0.395378
+  User=0.000000s Real=0.004396s Sys=0.010000s
+	  User TOT = 0.12	  Real TOT = 0.543634
  Summary of Run 105 :
 /run/geometryModified
 
@@ -8036,8 +8043,8 @@ Run 106 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005879s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 0.401385
+  User=0.000000s Real=0.005903s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 0.549667
  Summary of Run 106 :
 /run/geometryModified
 
@@ -8106,8 +8113,8 @@ Run 107 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.002777s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 0.404346
+  User=0.010000s Real=0.004672s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 0.554464
  Summary of Run 107 :
 /run/geometryModified
 
@@ -8176,8 +8183,8 @@ Run 108 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.016811s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 0.421314
+  User=0.000000s Real=0.004799s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 0.560029
  Summary of Run 108 :
 /run/geometryModified
 
@@ -8246,8 +8253,8 @@ Run 109 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.033240s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 0.454707
+  User=0.000000s Real=0.004245s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 0.564411
  Summary of Run 109 :
 /run/geometryModified
 
@@ -8316,8 +8323,8 @@ Run 110 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.034455s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 0.489312
+  User=0.000000s Real=0.004085s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 0.569963
  Summary of Run 110 :
 /run/geometryModified
 
@@ -8386,8 +8393,8 @@ Run 111 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026502s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 0.516106
+  User=0.000000s Real=0.005021s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 0.576319
  Summary of Run 111 :
 /run/geometryModified
 
@@ -8456,8 +8463,8 @@ Run 112 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.024724s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 0.541226
+  User=0.010000s Real=0.003929s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 0.581522
  Summary of Run 112 :
 /run/geometryModified
 
@@ -8526,8 +8533,8 @@ Run 113 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026635s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 0.568065
+  User=0.000000s Real=0.003225s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 0.587138
  Summary of Run 113 :
 /run/geometryModified
 
@@ -8596,8 +8603,8 @@ Run 114 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.038425s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 0.606699
+  User=0.000000s Real=0.007233s Sys=0.010000s
+	  User TOT = 0.14	  Real TOT = 0.594542
  Summary of Run 114 :
 /run/geometryModified
 
@@ -8666,8 +8673,8 @@ Run 115 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.022851s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 0.62969
+  User=0.000000s Real=0.015950s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 0.610713
  Summary of Run 115 :
 /run/geometryModified
 
@@ -8736,8 +8743,8 @@ Run 116 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.028145s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 0.657985
+  User=0.010000s Real=0.026707s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.637734
  Summary of Run 116 :
 /run/geometryModified
 
@@ -8806,8 +8813,8 @@ Run 117 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.014359s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 0.672558
+  User=0.000000s Real=0.039222s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.6771
  Summary of Run 117 :
 /run/geometryModified
 
@@ -8876,8 +8883,8 @@ Run 118 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.019097s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 0.691893
+  User=0.000000s Real=0.022684s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.700063
  Summary of Run 118 :
 /run/geometryModified
 
@@ -8946,8 +8953,8 @@ Run 119 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.022868s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 0.714906
+  User=0.000000s Real=0.004493s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.708157
  Summary of Run 119 :
 /run/geometryModified
 
@@ -9016,8 +9023,8 @@ Run 120 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.019929s Sys=0.010000s
-	  User TOT = 0.18	  Real TOT = 0.73497
+  User=0.000000s Real=0.003291s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.711652
  Summary of Run 120 :
 /run/geometryModified
 
@@ -9086,8 +9093,8 @@ Run 121 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030899s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 0.766679
+  User=0.000000s Real=0.004184s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.71722
  Summary of Run 121 :
 /run/geometryModified
 
@@ -9156,8 +9163,8 @@ Run 122 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028142s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 0.795415
+  User=0.000000s Real=0.004032s Sys=0.010000s
+	  User TOT = 0.15	  Real TOT = 0.721649
  Summary of Run 122 :
 /run/geometryModified
 
@@ -9226,8 +9233,8 @@ Run 123 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021991s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 0.817559
+  User=0.000000s Real=0.003603s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.725611
  Summary of Run 123 :
 /run/geometryModified
 
@@ -9296,8 +9303,8 @@ Run 124 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.041022s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 0.863216
+  User=0.000000s Real=0.032780s Sys=0.000000s
+	  User TOT = 0.15	  Real TOT = 0.758574
  Summary of Run 124 :
 /run/geometryModified
 
@@ -9366,8 +9373,8 @@ Run 125 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.023563s Sys=0.010000s
-	  User TOT = 0.19	  Real TOT = 0.886957
+  User=0.010000s Real=0.031305s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.79004
  Summary of Run 125 :
 /run/geometryModified
 
@@ -9436,8 +9443,8 @@ Run 126 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.022425s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 0.909545
+  User=0.000000s Real=0.023033s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.813222
  Summary of Run 126 :
 /run/geometryModified
 
@@ -9506,8 +9513,8 @@ Run 127 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.033570s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 0.943272
+  User=0.000000s Real=0.018029s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.834797
  Summary of Run 127 :
 /run/geometryModified
 
@@ -9576,8 +9583,8 @@ Run 128 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.032207s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 0.975631
+  User=0.000000s Real=0.021480s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.856465
  Summary of Run 128 :
 /run/geometryModified
 
@@ -9646,8 +9653,8 @@ Run 129 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.022762s Sys=0.000000s
-	  User TOT = 0.2	  Real TOT = 0.99863
+  User=0.000000s Real=0.032577s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.889203
  Summary of Run 129 :
 /run/geometryModified
 
@@ -9716,8 +9723,8 @@ Run 130 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.022522s Sys=0.000000s
-	  User TOT = 0.2	  Real TOT = 1.02395
+  User=0.000000s Real=0.024977s Sys=0.010000s
+	  User TOT = 0.16	  Real TOT = 0.914334
  Summary of Run 130 :
 /run/geometryModified
 
@@ -9786,8 +9793,8 @@ Run 131 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.034392s Sys=0.010000s
-	  User TOT = 0.2	  Real TOT = 1.05873
+  User=0.000000s Real=0.023210s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.937717
  Summary of Run 131 :
 /run/geometryModified
 
@@ -9856,8 +9863,8 @@ Run 132 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028575s Sys=0.000000s
-	  User TOT = 0.2	  Real TOT = 1.08747
+  User=0.000000s Real=0.020936s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.958791
  Summary of Run 132 :
 /run/geometryModified
 
@@ -9926,8 +9933,8 @@ Run 133 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.017900s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.10551
+  User=0.000000s Real=0.029153s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 0.988079
  Summary of Run 133 :
 /run/geometryModified
 
@@ -9996,8 +10003,8 @@ Run 134 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030788s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.13645
+  User=0.000000s Real=0.029892s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 1.02084
  Summary of Run 134 :
 /run/geometryModified
 
@@ -10066,8 +10073,8 @@ Run 135 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.027288s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.1639
+  User=0.000000s Real=0.022376s Sys=0.010000s
+	  User TOT = 0.16	  Real TOT = 1.04468
  Summary of Run 135 :
 /run/geometryModified
 
@@ -10136,8 +10143,8 @@ Run 136 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.033377s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.19922
+  User=0.000000s Real=0.027204s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 1.07391
  Summary of Run 136 :
 /run/geometryModified
 
@@ -10206,8 +10213,8 @@ Run 137 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.011501s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.21287
+  User=0.000000s Real=0.020358s Sys=0.000000s
+	  User TOT = 0.16	  Real TOT = 1.09452
  Summary of Run 137 :
 /run/geometryModified
 
@@ -10276,8 +10283,8 @@ Run 138 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.015243s Sys=0.010000s
-	  User TOT = 0.21	  Real TOT = 1.22827
+  User=0.010000s Real=0.019923s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.1146
  Summary of Run 138 :
 /run/geometryModified
 
@@ -10346,8 +10353,8 @@ Run 139 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.027489s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.25601
+  User=0.000000s Real=0.027685s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.14309
  Summary of Run 139 :
 /run/geometryModified
 
@@ -10416,8 +10423,8 @@ Run 140 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.015184s Sys=0.000000s
-	  User TOT = 0.21	  Real TOT = 1.27137
+  User=0.000000s Real=0.039659s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.18314
  Summary of Run 140 :
 /run/geometryModified
 
@@ -10486,8 +10493,8 @@ Run 141 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.032823s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 1.30434
+  User=0.000000s Real=0.035519s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.21883
  Summary of Run 141 :
 /run/geometryModified
 
@@ -10556,8 +10563,8 @@ Run 142 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030439s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 1.33494
+  User=0.000000s Real=0.029803s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.2488
  Summary of Run 142 :
 /run/geometryModified
 
@@ -10626,8 +10633,8 @@ Run 143 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.032848s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 1.36799
+  User=0.000000s Real=0.026261s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.27521
  Summary of Run 143 :
 /run/geometryModified
 
@@ -10696,8 +10703,8 @@ Run 144 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.033674s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 1.40181
+  User=0.000000s Real=0.032638s Sys=0.000000s
+	  User TOT = 0.17	  Real TOT = 1.30871
  Summary of Run 144 :
 /run/geometryModified
 
@@ -10766,8 +10773,8 @@ Run 145 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.028374s Sys=0.010000s
-	  User TOT = 0.23	  Real TOT = 1.43041
+  User=0.010000s Real=0.035727s Sys=0.010000s
+	  User TOT = 0.18	  Real TOT = 1.34461
  Summary of Run 145 :
 /run/geometryModified
 
@@ -10836,8 +10843,8 @@ Run 146 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021659s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 1.45222
+  User=0.000000s Real=0.026367s Sys=0.000000s
+	  User TOT = 0.18	  Real TOT = 1.37198
  Summary of Run 146 :
 /run/geometryModified
 
@@ -10906,8 +10913,8 @@ Run 147 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028603s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 1.48098
+  User=0.000000s Real=0.017143s Sys=0.000000s
+	  User TOT = 0.18	  Real TOT = 1.39036
  Summary of Run 147 :
 /run/geometryModified
 
@@ -10976,8 +10983,8 @@ Run 148 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.034796s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 1.51603
+  User=0.000000s Real=0.028516s Sys=0.000000s
+	  User TOT = 0.18	  Real TOT = 1.41914
  Summary of Run 148 :
 /run/geometryModified
 
@@ -11046,8 +11053,8 @@ Run 149 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030205s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 1.54644
+  User=0.000000s Real=0.028879s Sys=0.000000s
+	  User TOT = 0.18	  Real TOT = 1.44882
  Summary of Run 149 :
 /run/geometryModified
 
@@ -11116,8 +11123,8 @@ Run 150 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.023483s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 1.57008
+  User=0.000000s Real=0.020571s Sys=0.000000s
+	  User TOT = 0.18	  Real TOT = 1.46956
  Summary of Run 150 :
 /run/geometryModified
 
@@ -11186,8 +11193,8 @@ Run 151 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.022117s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 1.59236
+  User=0.000000s Real=0.024598s Sys=0.000000s
+	  User TOT = 0.18	  Real TOT = 1.49498
  Summary of Run 151 :
 /run/geometryModified
 
@@ -11256,8 +11263,8 @@ Run 152 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021958s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 1.61452
+  User=0.010000s Real=0.029949s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.52519
  Summary of Run 152 :
 /run/geometryModified
 
@@ -11326,8 +11333,8 @@ Run 153 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021050s Sys=0.010000s
-	  User TOT = 0.24	  Real TOT = 1.63584
+  User=0.000000s Real=0.034337s Sys=0.010000s
+	  User TOT = 0.19	  Real TOT = 1.55986
  Summary of Run 153 :
 /run/geometryModified
 
@@ -11396,8 +11403,8 @@ Run 154 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.026762s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.66337
+  User=0.000000s Real=0.032997s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.59307
  Summary of Run 154 :
 /run/geometryModified
 
@@ -11466,8 +11473,8 @@ Run 155 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.031202s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.69589
+  User=0.000000s Real=0.022571s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.61579
  Summary of Run 155 :
 /run/geometryModified
 
@@ -11536,8 +11543,8 @@ Run 156 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021541s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.71821
+  User=0.000000s Real=0.020357s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.6363
  Summary of Run 156 :
 /run/geometryModified
 
@@ -11606,8 +11613,8 @@ Run 157 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.027948s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.74635
+  User=0.000000s Real=0.024329s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.66085
  Summary of Run 157 :
 /run/geometryModified
 
@@ -11676,8 +11683,8 @@ Run 158 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.024466s Sys=0.010000s
-	  User TOT = 0.25	  Real TOT = 1.77194
+  User=0.000000s Real=0.022376s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.68338
  Summary of Run 158 :
 /run/geometryModified
 
@@ -11746,8 +11753,8 @@ Run 159 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.039757s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.81197
+  User=0.000000s Real=0.029431s Sys=0.000000s
+	  User TOT = 0.19	  Real TOT = 1.71296
  Summary of Run 159 :
 /run/geometryModified
 
@@ -11816,8 +11823,8 @@ Run 160 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.032236s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.84436
+  User=0.010000s Real=0.033199s Sys=0.000000s
+	  User TOT = 0.2	  Real TOT = 1.7463
  Summary of Run 160 :
 /run/geometryModified
 
@@ -11886,8 +11893,8 @@ Run 161 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.029258s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 1.87432
+  User=0.000000s Real=0.032694s Sys=0.000000s
+	  User TOT = 0.2	  Real TOT = 1.77916
  Summary of Run 161 :
 /run/geometryModified
 
@@ -11956,8 +11963,8 @@ Run 162 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.026001s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 1.90048
+  User=0.000000s Real=0.045133s Sys=0.000000s
+	  User TOT = 0.2	  Real TOT = 1.82443
  Summary of Run 162 :
 /run/geometryModified
 
@@ -12026,8 +12033,8 @@ Run 163 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026111s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 1.9268
+  User=0.010000s Real=0.028667s Sys=0.000000s
+	  User TOT = 0.21	  Real TOT = 1.85329
  Summary of Run 163 :
 /run/geometryModified
 
@@ -12096,8 +12103,8 @@ Run 164 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.023117s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 1.95021
+  User=0.000000s Real=0.030505s Sys=0.000000s
+	  User TOT = 0.21	  Real TOT = 1.88396
  Summary of Run 164 :
 /run/geometryModified
 
@@ -12166,8 +12173,8 @@ Run 165 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028969s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 1.97934
+  User=0.000000s Real=0.031160s Sys=0.000000s
+	  User TOT = 0.21	  Real TOT = 1.91529
  Summary of Run 165 :
 /run/geometryModified
 
@@ -12236,8 +12243,8 @@ Run 166 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.029609s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 2.00931
+  User=0.010000s Real=0.034018s Sys=0.000000s
+	  User TOT = 0.22	  Real TOT = 1.94945
  Summary of Run 166 :
 /run/geometryModified
 
@@ -12306,8 +12313,8 @@ Run 167 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021767s Sys=0.010000s
-	  User TOT = 0.27	  Real TOT = 2.03122
+  User=0.000000s Real=0.018352s Sys=0.000000s
+	  User TOT = 0.22	  Real TOT = 1.96796
  Summary of Run 167 :
 /run/geometryModified
 
@@ -12376,8 +12383,8 @@ Run 168 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.023849s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 2.05537
+  User=0.000000s Real=0.019410s Sys=0.000000s
+	  User TOT = 0.22	  Real TOT = 1.98751
  Summary of Run 168 :
 /run/geometryModified
 
@@ -12446,8 +12453,8 @@ Run 169 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.020970s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 2.07649
+  User=0.010000s Real=0.020272s Sys=0.010000s
+	  User TOT = 0.23	  Real TOT = 2.00812
  Summary of Run 169 :
 /run/geometryModified
 
@@ -12516,8 +12523,8 @@ Run 170 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026763s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 2.10403
+  User=0.000000s Real=0.033094s Sys=0.000000s
+	  User TOT = 0.23	  Real TOT = 2.04139
  Summary of Run 170 :
 /run/geometryModified
 
@@ -12586,8 +12593,8 @@ Run 171 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026362s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 2.13055
+  User=0.000000s Real=0.032862s Sys=0.000000s
+	  User TOT = 0.23	  Real TOT = 2.07441
  Summary of Run 171 :
 /run/geometryModified
 
@@ -12656,8 +12663,8 @@ Run 172 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.027074s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 2.15778
+  User=0.010000s Real=0.031598s Sys=0.000000s
+	  User TOT = 0.24	  Real TOT = 2.10616
  Summary of Run 172 :
 /run/geometryModified
 
@@ -12726,8 +12733,8 @@ Run 173 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.023031s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.18095
+  User=0.000000s Real=0.036844s Sys=0.000000s
+	  User TOT = 0.24	  Real TOT = 2.14317
  Summary of Run 173 :
 /run/geometryModified
 
@@ -12796,8 +12803,8 @@ Run 174 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030257s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.21136
+  User=0.000000s Real=0.024410s Sys=0.000000s
+	  User TOT = 0.24	  Real TOT = 2.16775
  Summary of Run 174 :
 /run/geometryModified
 
@@ -12866,8 +12873,8 @@ Run 175 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.027670s Sys=0.010000s
-	  User TOT = 0.28	  Real TOT = 2.23922
+  User=0.010000s Real=0.029578s Sys=0.000000s
+	  User TOT = 0.25	  Real TOT = 2.19751
  Summary of Run 175 :
 /run/geometryModified
 
@@ -12936,8 +12943,8 @@ Run 176 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.020998s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.26037
+  User=0.000000s Real=0.028458s Sys=0.000000s
+	  User TOT = 0.25	  Real TOT = 2.22612
  Summary of Run 176 :
 /run/geometryModified
 
@@ -13006,8 +13013,8 @@ Run 177 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021573s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.28233
+  User=0.000000s Real=0.021181s Sys=0.000000s
+	  User TOT = 0.25	  Real TOT = 2.24755
  Summary of Run 177 :
 /run/geometryModified
 
@@ -13076,8 +13083,8 @@ Run 178 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.025613s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.30818
+  User=0.000000s Real=0.025841s Sys=0.000000s
+	  User TOT = 0.25	  Real TOT = 2.27394
  Summary of Run 178 :
 /run/geometryModified
 
@@ -13146,8 +13153,8 @@ Run 179 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030939s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.33926
+  User=0.010000s Real=0.016074s Sys=0.000000s
+	  User TOT = 0.26	  Real TOT = 2.2905
  Summary of Run 179 :
 /run/geometryModified
 
@@ -13216,8 +13223,8 @@ Run 180 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028070s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 2.36749
+  User=0.000000s Real=0.027036s Sys=0.010000s
+	  User TOT = 0.26	  Real TOT = 2.31767
  Summary of Run 180 :
 /run/geometryModified
 
@@ -13286,8 +13293,8 @@ Run 181 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.017945s Sys=0.010000s
-	  User TOT = 0.28	  Real TOT = 2.38558
+  User=0.000000s Real=0.035578s Sys=0.000000s
+	  User TOT = 0.26	  Real TOT = 2.35339
  Summary of Run 181 :
 /run/geometryModified
 
@@ -13356,8 +13363,8 @@ Run 182 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.165730s Sys=0.130000s
-	  User TOT = 0.29	  Real TOT = 2.55147
+  User=0.000000s Real=0.020046s Sys=0.000000s
+	  User TOT = 0.26	  Real TOT = 2.3737
  Summary of Run 182 :
 /run/geometryModified
 
@@ -13426,8 +13433,8 @@ Run 183 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.007451s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.55906
+  User=0.000000s Real=0.022894s Sys=0.000000s
+	  User TOT = 0.26	  Real TOT = 2.39697
  Summary of Run 183 :
 /run/geometryModified
 
@@ -13496,8 +13503,8 @@ Run 184 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.006630s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.56591
+  User=0.010000s Real=0.032354s Sys=0.000000s
+	  User TOT = 0.27	  Real TOT = 2.4295
  Summary of Run 184 :
 /run/geometryModified
 
@@ -13566,8 +13573,8 @@ Run 185 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003615s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.5698
+  User=0.000000s Real=0.024440s Sys=0.000000s
+	  User TOT = 0.27	  Real TOT = 2.45408
  Summary of Run 185 :
 /run/geometryModified
 
@@ -13636,8 +13643,8 @@ Run 186 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002779s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.57278
+  User=0.000000s Real=0.032411s Sys=0.000000s
+	  User TOT = 0.27	  Real TOT = 2.48674
  Summary of Run 186 :
 /run/geometryModified
 
@@ -13706,8 +13713,8 @@ Run 187 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002801s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.57578
+  User=0.010000s Real=0.034961s Sys=0.000000s
+	  User TOT = 0.28	  Real TOT = 2.52185
  Summary of Run 187 :
 /run/geometryModified
 
@@ -13776,8 +13783,8 @@ Run 188 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003061s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.57904
+  User=0.000000s Real=0.021464s Sys=0.000000s
+	  User TOT = 0.28	  Real TOT = 2.54345
  Summary of Run 188 :
 /run/geometryModified
 
@@ -13846,8 +13853,8 @@ Run 189 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005382s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.58486
+  User=0.000000s Real=0.030114s Sys=0.010000s
+	  User TOT = 0.28	  Real TOT = 2.5739
  Summary of Run 189 :
 /run/geometryModified
 
@@ -13916,8 +13923,8 @@ Run 190 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.004742s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.58983
+  User=0.000000s Real=0.023125s Sys=0.000000s
+	  User TOT = 0.28	  Real TOT = 2.59717
  Summary of Run 190 :
 /run/geometryModified
 
@@ -13986,8 +13993,8 @@ Run 191 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.018313s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.60846
+  User=0.010000s Real=0.023255s Sys=0.000000s
+	  User TOT = 0.29	  Real TOT = 2.62057
  Summary of Run 191 :
 /run/geometryModified
 
@@ -14056,8 +14063,8 @@ Run 192 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.024553s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.63323
+  User=0.000000s Real=0.032503s Sys=0.000000s
+	  User TOT = 0.29	  Real TOT = 2.65324
  Summary of Run 192 :
 /run/geometryModified
 
@@ -14126,8 +14133,8 @@ Run 193 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.020695s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.65409
+  User=0.000000s Real=0.012626s Sys=0.000000s
+	  User TOT = 0.29	  Real TOT = 2.66605
  Summary of Run 193 :
 /run/geometryModified
 
@@ -14196,8 +14203,8 @@ Run 194 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028393s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.68264
+  User=0.000000s Real=0.021034s Sys=0.000000s
+	  User TOT = 0.29	  Real TOT = 2.68723
  Summary of Run 194 :
 /run/geometryModified
 
@@ -14266,8 +14273,8 @@ Run 195 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.029216s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.712
+  User=0.010000s Real=0.017846s Sys=0.000000s
+	  User TOT = 0.3	  Real TOT = 2.70523
  Summary of Run 195 :
 /run/geometryModified
 
@@ -14336,8 +14343,8 @@ Run 196 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028754s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 2.74096
+  User=0.000000s Real=0.029729s Sys=0.000000s
+	  User TOT = 0.3	  Real TOT = 2.73509
  Summary of Run 196 :
 /run/geometryModified
 
@@ -14406,8 +14413,8 @@ Run 197 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.030653s Sys=0.000000s
-	  User TOT = 0.3	  Real TOT = 2.7718
+  User=0.000000s Real=0.018778s Sys=0.000000s
+	  User TOT = 0.3	  Real TOT = 2.754
  Summary of Run 197 :
 /run/geometryModified
 
@@ -14476,8 +14483,8 @@ Run 198 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.027456s Sys=0.000000s
-	  User TOT = 0.3	  Real TOT = 2.79942
+  User=0.010000s Real=0.021035s Sys=0.000000s
+	  User TOT = 0.31	  Real TOT = 2.77525
  Summary of Run 198 :
 /run/geometryModified
 
@@ -14546,8 +14553,8 @@ Run 199 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.024246s Sys=0.010000s
-	  User TOT = 0.3	  Real TOT = 2.82383
+  User=0.000000s Real=0.019236s Sys=0.000000s
+	  User TOT = 0.31	  Real TOT = 2.79464
  Summary of Run 199 :
 /run/geometryModified
 
@@ -14616,13 +14623,13 @@ Run 200 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.033875s Sys=0.000000s
-	  User TOT = 0.3	  Real TOT = 2.85789
+  User=0.000000s Real=0.028526s Sys=0.000000s
+	  User TOT = 0.31	  Real TOT = 2.82329
  Summary of Run 200 :
 /score/dumpQuantityToFile boxMesh_1 eDep eDep_scorer.out
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.056 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.046 MB
 ============================================================

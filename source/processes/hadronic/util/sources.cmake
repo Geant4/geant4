@@ -31,6 +31,7 @@ geant4_add_module(G4hadronic_util
     G4HadronicParametersMessenger.hh
     G4HadSecondary.hh
     G4HadTmpUtil.hh
+    G4IsotopeList.hh
     G4KineticTrack.hh
     G4KineticTrackVector.hh
     G4LegendrePolynomial.hh

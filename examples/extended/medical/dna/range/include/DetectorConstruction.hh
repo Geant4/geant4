@@ -23,65 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/range/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
 #include "G4LogicalVolume.hh"
+#include "G4VUserDetectorConstruction.hh"
 
-class G4VPhysicalVolume;
-class G4Material;
 class DetectorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class DetectorConstruction: public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-  DetectorConstruction();
-  ~DetectorConstruction();
+    void SetRadius(G4double);
+    void SetMaterial(G4String);
+    void SetTrackingCut(G4double);
 
-  void SetRadius(G4double);
-  void SetMaterial(G4String);
-  void SetTrackingCut(G4double);
-  
-  virtual G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
-  inline G4double GetAbsorRadius() const
-  {
-    return fAbsorRadius;
-  }
-  
-  inline G4Material* GetAbsorMaterial() const
-  {
-    return fAbsorMaterial;
-  }
-  
-  inline G4double GetAbsorMass() const
-  {
-    return fLogicalAbsor->GetMass();
-  }
-  
-  void PrintParameters() const;
+    inline G4double GetAbsorRadius() const { return fAbsorRadius; }
 
-private:
+    inline G4Material* GetAbsorMaterial() const { return fAbsorMaterial; }
 
-  void DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
+    inline G4double GetAbsorMass() const { return fLogicalAbsor->GetMass(); }
 
-  G4double fTrackingCut;
-  G4double fAbsorRadius;
-  G4Material* fAbsorMaterial;
-  G4VPhysicalVolume* fAbsor;
-  G4LogicalVolume* fLogicalAbsor;
-  
-  DetectorMessenger* fDetectorMessenger;
+    void PrintParameters() const;
+
+  private:
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructVolumes();
+
+    G4double fTrackingCut;
+    G4double fAbsorRadius;
+    G4Material* fAbsorMaterial;
+    G4VPhysicalVolume* fAbsor;
+    G4LogicalVolume* fLogicalAbsor;
+    DetectorMessenger* fDetectorMessenger;
 };
 
 #endif
-

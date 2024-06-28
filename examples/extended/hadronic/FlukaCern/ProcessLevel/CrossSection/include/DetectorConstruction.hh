@@ -42,18 +42,15 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
-
-public:
-
-  DetectorConstruction() = default;
-  virtual G4VPhysicalVolume* Construct() override;
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    DetectorConstruction() = default;
+    virtual G4VPhysicalVolume* Construct() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 
 #endif

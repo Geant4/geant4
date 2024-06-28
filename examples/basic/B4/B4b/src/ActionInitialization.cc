@@ -28,12 +28,11 @@
 /// \brief Implementation of the B4b::ActionInitialization class
 
 #include "ActionInitialization.hh"
+
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
-#include "G4MTRunManager.hh"
-#include "DetectorConstruction.hh"
 
 using namespace B4;
 
@@ -43,7 +42,7 @@ namespace B4b
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
- : fDetConstruction(detConstruction)
+  : fDetConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,4 +64,4 @@ void ActionInitialization::Build() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B4b

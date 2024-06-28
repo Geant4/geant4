@@ -27,9 +27,9 @@
 /// \brief Definition of the PrimaryGeneratorAction1 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction1_h
 #define PrimaryGeneratorAction1_h 1
@@ -45,14 +45,14 @@ class G4Event;
 class PrimaryGeneratorAction1
 {
   public:
-    PrimaryGeneratorAction1(G4ParticleGun*);    
-   ~PrimaryGeneratorAction1() = default;
+    PrimaryGeneratorAction1(G4ParticleGun*);
+    ~PrimaryGeneratorAction1() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*  fParticleGun = nullptr;
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

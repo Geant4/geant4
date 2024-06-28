@@ -32,7 +32,8 @@ Idle> /run/beamOn
   
   Macros provided in this example:
   - muon.mac: muon incident
-  - ion.mac: generic ion incident    
+  - ion.mac: generic ion incident
+  - xenonGas: illustrate gas definition    
    
 \section TestEm0_s1  DirectAccess
 			    

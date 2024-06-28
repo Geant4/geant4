@@ -55,6 +55,9 @@ class G4ParticleHPChannelList
     G4HadFinalState* ApplyYourself(const G4Element* theElement,
                                    const G4HadProjectile& aTrack);
 
+    // method added by M.Zmeskal 02/2024 - to be used in G4ParticleHPInelasticURR
+    G4HadFinalState * ApplyYourself(G4int, G4int, G4int, const G4HadProjectile & aTrack);
+
     void Init(G4Element* anElement, const G4String& dirName,
               G4ParticleDefinition* projectile);
 
@@ -65,6 +68,18 @@ class G4ParticleHPChannelList
       G4double result = 0.0;
       for (G4int i = 0; i < nChannels; ++i) {
         result += std::max(0., theChannels[i]->GetXsec(anEnergy));
+      }
+      return result;
+    }
+
+    // method added by M.Zmeskal 02/2024 - to be used in G4ParticleHPIsoProbabilityTable
+    inline G4double GetWeightedXsec( G4double anEnergy, G4int isotopeJ ) {
+      G4double result = 0.0;
+      G4int i;
+      for ( i = 0; i < nChannels; i++ ) {
+        if ( theChannels[i]->HasAnyData( isotopeJ ) ) {
+          result += std::max( 0.0, theChannels[i]->GetWeightedXsec( anEnergy, isotopeJ ) );
+        }
       }
       return result;
     }

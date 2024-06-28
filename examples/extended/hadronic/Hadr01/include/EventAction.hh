@@ -36,13 +36,14 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef EventAction_h
 #define EventAction_h 1
- 
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,30 +54,26 @@ class G4UImanager;
 
 class EventAction : public G4UserEventAction
 {
-public: // Without description
+  public:  // Without description
+    EventAction();
+    ~EventAction() override;
 
-  EventAction();
-  ~EventAction() override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
-  void BeginOfEventAction(const G4Event*) override;
-  void EndOfEventAction(const G4Event*) override;
+    void SetPrintModulo(G4int val) { fPrintModulo = val; };
+    void AddEventToDebug(G4int val) { fSelectedEvents.push_back(val); };
 
-  void SetPrintModulo(G4int val) { fPrintModulo = val; };
-  void AddEventToDebug(G4int val){ fSelectedEvents.push_back(val); };
+    EventAction& operator=(const EventAction& right) = delete;
+    EventAction(const EventAction&) = delete;
 
-  EventAction & operator=(const EventAction &right) = delete;
-  EventAction(const EventAction&) = delete;
+  private:
+    EventActionMessenger* fEventMessenger;
+    G4UImanager* fUI;
+    std::vector<G4int> fSelectedEvents;
 
-private:
-
-  EventActionMessenger* fEventMessenger;
-  G4UImanager* fUI;
-  std::vector<G4int> fSelectedEvents;
-
-  G4int fPrintModulo{100};
-  G4bool fDebugStarted{false};
+    G4int fPrintModulo{100};
+    G4bool fDebugStarted{false};
 };
 
 #endif
-
-

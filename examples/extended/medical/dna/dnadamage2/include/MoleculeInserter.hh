@@ -31,8 +31,8 @@
 // We would be very happy hearing from you, send us your feedback! :)
 //
 // In order for Geant4-DNA to be maintained and still open-source,
-// article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// article citations are crucial.
+// If you use Geant4-DNA chemistry and you publish papers about your software,
 // in addition to the general paper on Geant4-DNA:
 //
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
@@ -53,11 +53,12 @@
 #define DNADAMAGE2_moleculeinserter_h 1
 
 #include "G4ITGun.hh"
-#include "globals.hh"
 #include "G4ThreeVector.hh"
-#include <vector>
-#include <map>
+#include "globals.hh"
+
 #include <G4memory.hh>
+#include <map>
+#include <vector>
 
 class G4Track;
 class MoleculeInserter;
@@ -65,42 +66,43 @@ class G4Molecule;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class MoleculeShoot {
-public:
-  MoleculeShoot();
-  ~MoleculeShoot() = default;
-  void Shoot(MoleculeInserter*);
+class MoleculeShoot
+{
+  public:
+    MoleculeShoot();
+    ~MoleculeShoot() = default;
+    void Shoot(MoleculeInserter*);
 
-public:
-  G4int    fNumber = 0;
-  G4String fMoleculeName = "None";
-  G4double fTime = 1;
-  G4ThreeVector fPosition = G4ThreeVector();
+  public:
+    G4int fNumber = 0;
+    G4String fMoleculeName = "None";
+    G4double fTime = 1;
+    G4ThreeVector fPosition = G4ThreeVector();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class MoleculeInserter : public G4ITGun {
-public:
-  MoleculeInserter();
-  MoleculeInserter(G4bool);
-  ~MoleculeInserter() = default;
-  void DefineTracks() override;
-  void AddMolecule(const G4String& moleculeName, 
-                   const G4ThreeVector& position, double time = 0);
-  void PushToChemistry(G4Molecule*, G4double, G4ThreeVector);
-  void CreateMolecule(G4Molecule*, G4double, G4ThreeVector);
-  void CreateMolecule(G4String, G4double, G4ThreeVector);
-  void Clean();
+class MoleculeInserter : public G4ITGun
+{
+  public:
+    MoleculeInserter();
+    MoleculeInserter(G4bool);
+    ~MoleculeInserter() = default;
+    void DefineTracks() override;
+    void AddMolecule(const G4String& moleculeName, const G4ThreeVector& position, double time = 0);
+    void PushToChemistry(G4Molecule*, G4double, G4ThreeVector);
+    void CreateMolecule(G4Molecule*, G4double, G4ThreeVector);
+    void CreateMolecule(G4String, G4double, G4ThreeVector);
+    void Clean();
 
-  std::vector<G4Track*> const GetInsertedTracks() {return fInsertedTracks;}
+    std::vector<G4Track*> const GetInsertedTracks() { return fInsertedTracks; }
 
-private:
-  G4bool fSaveTrackID = true;
-  std::vector<G4Track*> fInsertedTracks;
+  private:
+    G4bool fSaveTrackID = true;
+    std::vector<G4Track*> fInsertedTracks;
 
-protected:
-  std::vector<MoleculeShoot> fShoots;
+  protected:
+    std::vector<MoleculeShoot> fShoots;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

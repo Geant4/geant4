@@ -39,29 +39,30 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
-class HepMCG4PythiaMessenger : public G4UImessenger {
-private:
-  HepMCG4PythiaInterface* gen;
+class HepMCG4PythiaMessenger : public G4UImessenger
+{
+  private:
+    HepMCG4PythiaInterface* gen;
 
-  G4UIdirectory*           dir;
-  G4UIcmdWithAnInteger*    verbose;
-  G4UIcmdWithAnInteger*    mpylist;
-  G4UIcmdWithoutParameter* print;
-  G4UIcommand*             cpyinit;
-  G4UIcmdWithAnInteger*    cpystat;
-  G4UIcommand*             cpygive;
-  G4UIcommand*             setUserParameters;
-  G4UIcmdWithAnInteger*    setSeed;
-  G4UIcommand*             cpyrget;
-  G4UIcommand*             cpyrset;
-  G4UIcmdWithAString*      printRandomStatus;
+    G4UIdirectory* dir;
+    G4UIcmdWithAnInteger* verbose;
+    G4UIcmdWithAnInteger* mpylist;
+    G4UIcmdWithoutParameter* print;
+    G4UIcommand* cpyinit;
+    G4UIcmdWithAnInteger* cpystat;
+    G4UIcommand* cpygive;
+    G4UIcommand* setUserParameters;
+    G4UIcmdWithAnInteger* setSeed;
+    G4UIcommand* cpyrget;
+    G4UIcommand* cpyrset;
+    G4UIcmdWithAString* printRandomStatus;
 
-public:
-  HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen);
-  ~HepMCG4PythiaMessenger();
+  public:
+    HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen);
+    ~HepMCG4PythiaMessenger();
 
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
 };
 
 #endif

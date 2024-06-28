@@ -39,45 +39,42 @@
 // --------------------------------------------------------------
 
 #ifndef WIN32
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
 #include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#  include "G4MTRunManager.hh"
 #else
-#include "F04SteppingVerbose.hh"
-#include "G4RunManager.hh"
+#  include "F04SteppingVerbose.hh"
+
+#  include "G4RunManager.hh"
 #endif
 
-#include "F04PhysicsList.hh"
-#include "F04DetectorConstruction.hh"
-
 #include "F04ActionInitialization.hh"
+#include "F04DetectorConstruction.hh"
+#include "F04PhysicsList.hh"
 
+#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
-
+#include "G4VisExecutive.hh"
 #include "Randomize.hh"
 
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace {
-  void PrintUsage() {
-    G4cerr << " Usage: " << G4endl;
-    G4cerr << " field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]"
-           << G4endl;
-  }
+namespace
+{
+void PrintUsage()
+{
+  G4cerr << " Usage: " << G4endl;
+  G4cerr << " field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]" << G4endl;
 }
-
-
+}  // namespace
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Evaluate arguments
   // argc holds the number of arguments (including the name) on the command line
@@ -85,7 +82,7 @@ int main(int argc,char** argv)
   // argv[0] is always the name of the program
   // argv[1] points to the first argument, and so on
   //
-  if ( argc > 7 ) {
+  if (argc > 7) {
     PrintUsage();
     return 1;
   }
@@ -94,11 +91,15 @@ int main(int argc,char** argv)
   G4String physicsList = "QGSP_BERT";
   G4int randomSeed = 1234;
   G4String startPhase = "idle";
-  for ( G4int i=1; i<argc; i=i+2 ) {
-    if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
-    else if ( G4String(argv[i]) == "-r" ) randomSeed = atoi(argv[i+1]);
-    else if ( G4String(argv[i]) == "-p" ) physicsList = argv[i+1];
-    else if ( G4String(argv[i]) == "-s" ) startPhase = argv[i+1];
+  for (G4int i = 1; i < argc; i = i + 2) {
+    if (G4String(argv[i]) == "-m")
+      macro = argv[i + 1];
+    else if (G4String(argv[i]) == "-r")
+      randomSeed = atoi(argv[i + 1]);
+    else if (G4String(argv[i]) == "-p")
+      physicsList = argv[i + 1];
+    else if (G4String(argv[i]) == "-s")
+      startPhase = argv[i + 1];
     else {
       PrintUsage();
       return 1;
@@ -107,7 +108,7 @@ int main(int argc,char** argv)
 
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = nullptr;
-  if ( ! macro.size() ) {
+  if (!macro.size()) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -118,10 +119,10 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  G4MTRunManager* runManager = new G4MTRunManager;
 #else
   G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);
-  auto  runManager = new G4RunManager;
+  auto runManager = new G4RunManager;
 #endif
 
   G4Random::setTheSeed(randomSeed);
@@ -129,7 +130,7 @@ int main(int argc,char** argv)
   // Set mandatory initialization classes
   //
   // Detector construction
-  auto  detector = new F04DetectorConstruction();
+  auto detector = new F04DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
   runManager->SetUserInitialization(new F04PhysicsList(physicsList));
@@ -138,7 +139,7 @@ int main(int argc,char** argv)
 
   // Initialize G4 kernel
   //
-  //runManager->Initialize();
+  // runManager->Initialize();
 
   // Initialize visualization
   //
@@ -153,23 +154,23 @@ int main(int argc,char** argv)
 
   // Process macro or start UI session
   //
-  if ( macro.size() ) {
+  if (macro.size()) {
     // batch mode
     G4String command = "/control/execute ";
-    UImanager->ApplyCommand(command+macro);
+    UImanager->ApplyCommand(command + macro);
   }
-  else  {
+  else {
     // interactive mode : define UI session
-    if ( startPhase == "preinit" ) {
+    if (startPhase == "preinit") {
       // start in PreInit> phase if requested
-      G4cout << "At the prompt, issue commands to set up detector & field, then:"
-          << G4endl;
+      G4cout << "At the prompt, issue commands to set up detector & field, then:" << G4endl;
       G4cout << "/run/initialize" << G4endl;
-      G4cout << "Then if you want a viewer:"<< G4endl;
+      G4cout << "Then if you want a viewer:" << G4endl;
       G4cout << "/control/execute vis.mac" << G4endl;
       G4cout << "Then: " << G4endl;
       G4cout << "/run/beamOn … etc." << G4endl;
-    } else {
+    }
+    else {
       // perform initialization and draw geometry
       UImanager->ApplyCommand("/control/execute init_vis.mac");
     }

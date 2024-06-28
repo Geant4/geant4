@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 #include "DicomBeamDeviceRef.hh"
-#include "dcmtk/dcmrt/seq/drtrbs8.h" // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
+#include "dcmtk/dcmrt/seq/drtrbs8.h"  // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,26 +38,28 @@ DicomBeamDeviceRef::DicomBeamDeviceRef(DRTBeamLimitingDeviceSequenceInRTBeamsMod
   OFVector<Float64> fvfloat;
 
   bldsItem.getRTBeamLimitingDeviceType(fstr);
-  G4cout << "   " << " RTBeamLimitingDeviceType " << fstr << G4endl;
+  G4cout << "   "
+         << " RTBeamLimitingDeviceType " << fstr << G4endl;
   SetType(fstr);
   bldsItem.getSourceToBeamLimitingDeviceDistance(ffloat);
-  G4cout << "   " << " SourceToBeamLimitingDeviceDistance " << ffloat << G4endl;
-  SetSourceToBeamLimitingDeviceDistance( ffloat ); 
+  G4cout << "   "
+         << " SourceToBeamLimitingDeviceDistance " << ffloat << G4endl;
+  SetSourceToBeamLimitingDeviceDistance(ffloat);
   bldsItem.getNumberOfLeafJawPairs(fint);
   SetNumberOfLeafJawPairs(fint);
-  G4cout << "   " << " NumberOfLeafJawPairs " << fint << G4endl;
+  G4cout << "   "
+         << " NumberOfLeafJawPairs " << fint << G4endl;
   bldsItem.getLeafPositionBoundaries(fvfloat);
-  if( fint != 1 ) fint++;
-  for( int ii = 0; ii < fint; ii++ ) {
+  if (fint != 1) fint++;
+  for (int ii = 0; ii < fint; ii++) {
     G4cout << "   " << ii << " LeafPositionBoundaries " << fvfloat[ii] << G4endl;
     AddPositionBoundary(fvfloat[ii]);
   }
 }
 
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamDeviceRef::DumpToFile( std::ofstream& fout )
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomBeamDeviceRef::DumpToFile(std::ofstream& fout)
 {
-
   fout << ":P " << theType << "_Z " << theSourceToBeamLimitingDeviceDistance << G4endl;
 
   /*  if( theType == "MLCX" || theType == "MLCY" ) {
@@ -65,11 +69,7 @@ void DicomBeamDeviceRef::DumpToFile( std::ofstream& fout )
            << thePositionBoundaries[jj] << G4endl;
     }
     }*/
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamDeviceRef::Print( std::ostream&  )
-{
-
-}
+void DicomBeamDeviceRef::Print(std::ostream&) {}

@@ -122,6 +122,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   param->SetFluctuationType(fUrbanFluctuation);
   param->SetFluo(true);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
+  param->SetPositronAtRestModelType(fAllisonPositronium);
   SetPhysicsType(bElectromagnetic);
 }
 

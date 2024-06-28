@@ -25,35 +25,41 @@
 //
 
 #ifndef CHEMISTRYWORLD_HH
-#define CHEMISTRYWORLD_HH
+#  define CHEMISTRYWORLD_HH 1
 
-#include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UImessenger.hh"
-#include "G4VChemistryWorld.hh"
-#include "G4DNABoundingBox.hh"
-#include "G4SystemOfUnits.hh"
+#  include "G4DNABoundingBox.hh"
+#  include "G4SystemOfUnits.hh"
+#  include "G4UIcmdWithADouble.hh"
+#  include "G4UIcmdWithADoubleAndUnit.hh"
+#  include "G4UIcmdWithAString.hh"
+#  include "G4UImessenger.hh"
+#  include "G4VChemistryWorld.hh"
 
-class ChemistryWorld : public G4VChemistryWorld, public G4UImessenger {
-public:
-  ChemistryWorld();
+#  include <memory>
 
-  ~ChemistryWorld() override = default;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-  void ConstructChemistryBoundary() override;
+class ChemistryWorld : public G4VChemistryWorld, public G4UImessenger
+{
+  public:
+    ChemistryWorld();
 
-  void ConstructChemistryComponents() override;
+    ~ChemistryWorld() override = default;
 
-  void SetNewValue(G4UIcommand *, G4String) override;
+    void ConstructChemistryBoundary() override;
 
-private:
-  std::unique_ptr<G4UIdirectory> fpChemWoldDir;
-  std::unique_ptr<G4UIcmdWithADouble> fpAddpH;
-  std::unique_ptr<G4UIcmdWithAString> fpAddScavengerName;
-  std::unique_ptr<G4UIcmdWithADoubleAndUnit>  fpTargetVolume;
-  G4double fpH = 7;
-  G4double fHalfBox = 1.6 * um;
+    void ConstructChemistryComponents() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
+
+  private:
+    std::unique_ptr<G4UIdirectory> fpChemWoldDir;
+    std::unique_ptr<G4UIcmdWithADouble> fpAddpH;
+    std::unique_ptr<G4UIcmdWithAString> fpAddScavengerName;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpTargetVolume;
+    G4double fpH = 7;
+    G4double fHalfBox = 1.6 * um;
 };
 
 #endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

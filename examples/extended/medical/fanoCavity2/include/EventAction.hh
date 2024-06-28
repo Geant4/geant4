@@ -44,20 +44,16 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction();
-   ~EventAction();
+    ~EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
-    
-    
-  private:
-    G4int         fEventNumber;
+    virtual void EndOfEventAction(const G4Event*);
 
+  private:
+    G4int fEventNumber;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

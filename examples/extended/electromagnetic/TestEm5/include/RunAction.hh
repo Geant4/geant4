@@ -47,24 +47,21 @@ class HistoManager;
 
 class RunAction : public G4UserRunAction
 {
-
-public:
-
+  public:
     RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim = nullptr);
-   ~RunAction() override;
-   
+    ~RunAction() override;
+
     G4Run* GenerateRun() override;
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
   private:
-    DetectorConstruction*   fDetector = nullptr;
+    DetectorConstruction* fDetector = nullptr;
     PrimaryGeneratorAction* fPrimary = nullptr;
-    Run*                    fRun = nullptr;
-    HistoManager*           fHistoManager = nullptr;
+    Run* fRun = nullptr;
+    HistoManager* fHistoManager = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

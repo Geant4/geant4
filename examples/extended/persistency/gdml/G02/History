@@ -1,9 +1,13 @@
 # Example G02 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-06-05 Gabriele Cosmo (G02-V11-02-00)
+- Updated GDML files to use short URL for schema validation.
 
 ## 2021-12-10 Ben Morgan (G02-V11-00-00)
 - Change to new Markdown History format

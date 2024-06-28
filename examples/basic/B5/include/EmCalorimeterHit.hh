@@ -31,15 +31,16 @@
 #define B5EmCalorimeterHit_h 1
 
 #include "G4VHit.hh"
-#include "G4THitsCollection.hh"
+
 #include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
+#include "G4THitsCollection.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
 
 class G4AttDef;
 class G4AttValue;
+class G4LogicalVolume;
 
 namespace B5
 {
@@ -56,17 +57,17 @@ class EmCalorimeterHit : public G4VHit
   public:
     EmCalorimeterHit() = default;
     EmCalorimeterHit(G4int cellID);
-    EmCalorimeterHit(const EmCalorimeterHit &right) = default;
+    EmCalorimeterHit(const EmCalorimeterHit& right) = default;
     ~EmCalorimeterHit() override = default;
 
-    EmCalorimeterHit& operator=(const EmCalorimeterHit &right) = default;
-    G4bool operator==(const EmCalorimeterHit &right) const;
+    EmCalorimeterHit& operator=(const EmCalorimeterHit& right) = default;
+    G4bool operator==(const EmCalorimeterHit& right) const;
 
-    inline void *operator new(size_t);
-    inline void operator delete(void *aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
     void Draw() override;
-    const std::map<G4String,G4AttDef>* GetAttDefs() const override;
+    const std::map<G4String, G4AttDef>* GetAttDefs() const override;
     std::vector<G4AttValue>* CreateAttValues() const override;
     void Print() override;
 
@@ -101,17 +102,17 @@ extern G4ThreadLocal G4Allocator<EmCalorimeterHit>* EmCalorimeterHitAllocator;
 inline void* EmCalorimeterHit::operator new(size_t)
 {
   if (!EmCalorimeterHitAllocator) {
-       EmCalorimeterHitAllocator = new G4Allocator<EmCalorimeterHit>;
+    EmCalorimeterHitAllocator = new G4Allocator<EmCalorimeterHit>;
   }
   return (void*)EmCalorimeterHitAllocator->MallocSingle();
 }
 
 inline void EmCalorimeterHit::operator delete(void* aHit)
 {
-  EmCalorimeterHitAllocator->FreeSingle((EmCalorimeterHit*) aHit);
+  EmCalorimeterHitAllocator->FreeSingle((EmCalorimeterHit*)aHit);
 }
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -26,11 +26,10 @@
 /// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #ifndef ActionInitialization_h
 #define ActionInitialization_h 1
@@ -41,7 +40,8 @@ class Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ActionInitialization : public G4VUserActionInitialization {
+class ActionInitialization : public G4VUserActionInitialization
+{
   public:
     ActionInitialization();
     virtual ~ActionInitialization();

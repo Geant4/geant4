@@ -29,9 +29,11 @@
 #ifndef SCAVENGER_PhysicsList_h
 #define SCAVENGER_PhysicsList_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "EmDNAChemistry.hh"
+
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+
 #include <memory>
 
 class G4VPhysicsConstructor;
@@ -43,22 +45,23 @@ namespace scavenger
 /// Geant4 modular physics list using G4EmDNAPhysics_option2
 /// and EmDNAChemistry constructors
 
-class PhysicsList : public G4VModularPhysicsList {
-public:
-  PhysicsList();
+class PhysicsList : public G4VModularPhysicsList
+{
+  public:
+    PhysicsList();
 
-  ~PhysicsList() override = default;
+    ~PhysicsList() override = default;
 
-  void ConstructParticle() override;
+    void ConstructParticle() override;
 
-  void ConstructProcess() override;
+    void ConstructProcess() override;
 
-private:
-  std::unique_ptr<G4VPhysicsConstructor> fpEmDNAPhysicsList;
-  std::unique_ptr<EmDNAChemistry> fpEmDNAChemistryList;
+  private:
+    std::unique_ptr<G4VPhysicsConstructor> fpEmDNAPhysicsList;
+    std::unique_ptr<EmDNAChemistry> fpEmDNAChemistryList;
 };
 
-}
+}  // namespace scavenger
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

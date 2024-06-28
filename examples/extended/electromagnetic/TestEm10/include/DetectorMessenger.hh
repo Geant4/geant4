@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -36,26 +36,25 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* detector);
     ~DetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-    DetectorConstruction*  fDetector;    
-    G4UIdirectory*         fDirectory;
-    G4UIcmdWithAString*    fDetectorSetUpCmd;
+    DetectorConstruction* fDetector;
+    G4UIdirectory* fDirectory;
+    G4UIcmdWithAString* fDetectorSetUpCmd;
 };
 
 #endif
-

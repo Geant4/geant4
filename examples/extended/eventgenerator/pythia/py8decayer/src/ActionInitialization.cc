@@ -28,36 +28,28 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "SingleParticleGun.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-   : G4VUserActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 void ActionInitialization::Build() const
 {
-
-   // NOTE: one can also set tau+, or B+/- - for all those particles
-   //       Geant4 native decay tables are overriden with Pythia8-bases ones
-   //
-   //                                prt_name prt_mom
-  SetUserAction( new SingleParticleGun("tau-", 25.0) );
+  // NOTE: one can also set tau+, or B+/- - for all those particles
+  //       Geant4 native decay tables are overriden with Pythia8-bases ones
+  //
+  //                                prt_name prt_mom
+  SetUserAction(new SingleParticleGun("tau-", 25.0));
 
   return;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

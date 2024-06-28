@@ -27,83 +27,72 @@
 /// \brief Implementation of the H02MuonSD class
 //
 //
-#include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4VPhysicalVolume.hh"
-#include "H02MuonHit.hh"
 #include "H02MuonSD.hh"
 
+#include "H02MuonHit.hh"
+
+#include "G4HCofThisEvent.hh"
+#include "G4Step.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Track.hh"
+#include "G4VPhysicalVolume.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-H02MuonSD::H02MuonSD(G4String name)
-  : G4VSensitiveDetector(name),
-    fHitCollection(0)
+H02MuonSD::H02MuonSD(G4String name) : G4VSensitiveDetector(name), fHitCollection(0)
 {
   G4String HCname;
   collectionName.insert("muonHit");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-H02MuonSD::~H02MuonSD()
-{
-}
+H02MuonSD::~H02MuonSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02MuonSD::Initialize(G4HCofThisEvent* HCE)
 {
-  static int HCID=-1;
-  fHitCollection= new H02MuonHitsCollection(SensitiveDetectorName,
-                                          collectionName[0]);
-  if(HCID<0) HCID= GetCollectionID(0);
-  HCE-> AddHitsCollection(HCID, fHitCollection);
+  static int HCID = -1;
+  fHitCollection = new H02MuonHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (HCID < 0) HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, fHitCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool H02MuonSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 {
-  G4ParticleDefinition* particle= astep-> GetTrack()-> GetDefinition();
-  if(particle-> GetPDGCharge() == 0.) return false;
+  G4ParticleDefinition* particle = astep->GetTrack()->GetDefinition();
+  if (particle->GetPDGCharge() == 0.) return false;
 
-  G4StepPoint* prestep= astep-> GetPreStepPoint();
+  G4StepPoint* prestep = astep->GetPreStepPoint();
 
-  if(prestep-> GetStepStatus() != fGeomBoundary) return false;
+  if (prestep->GetStepStatus() != fGeomBoundary) return false;
 
-  G4ThreeVector vmom= prestep-> GetMomentum();
-  G4ThreeVector vpos= prestep-> GetPosition();
-  G4double tof= prestep-> GetGlobalTime();
+  G4ThreeVector vmom = prestep->GetMomentum();
+  G4ThreeVector vpos = prestep->GetPosition();
+  G4double tof = prestep->GetGlobalTime();
 
-  G4VPhysicalVolume* volume= prestep-> GetPhysicalVolume();
-  G4int id= volume-> GetCopyNo();
-  if(volume-> GetName() == "ENDCAP_MUON_PV") id +=10;
+  G4VPhysicalVolume* volume = prestep->GetPhysicalVolume();
+  G4int id = volume->GetCopyNo();
+  if (volume->GetName() == "ENDCAP_MUON_PV") id += 10;
 
-  H02MuonHit* aHit=
-    new H02MuonHit(id, particle-> GetParticleName(), vmom, vpos, tof);
-  fHitCollection-> insert(aHit);
+  H02MuonHit* aHit = new H02MuonHit(id, particle->GetParticleName(), vmom, vpos, tof);
+  fHitCollection->insert(aHit);
   return true;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void H02MuonSD::EndOfEvent(G4HCofThisEvent*)
-{
-}
+void H02MuonSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void H02MuonSD::clear()
-{
-}
+void H02MuonSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void H02MuonSD::DrawAll()
-{
-}
+void H02MuonSD::DrawAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02MuonSD::PrintAll()
 {
-  G4int nHit= fHitCollection-> entries();
+  G4int nHit = fHitCollection->entries();
   G4cout << "------------------------------------------" << G4endl
          << "*** Muon System Hit (#hits=" << nHit << ")" << G4endl;
-  fHitCollection-> PrintAllHits();
+  fHitCollection->PrintAllHits();
 }

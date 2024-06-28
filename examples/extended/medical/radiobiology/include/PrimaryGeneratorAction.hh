@@ -50,10 +50,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
     void GeneratePrimaries(G4Event*) override;
 
-    G4GeneralParticleSource* GetGeneralParticleSource()
-    {
-      return fGPS;
-    }
+    G4GeneralParticleSource* GetGeneralParticleSource() { return fGPS; }
 
   private:
     DetectorConstruction* fDetector = nullptr;

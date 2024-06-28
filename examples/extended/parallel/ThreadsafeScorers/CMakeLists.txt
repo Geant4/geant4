@@ -6,16 +6,6 @@ project(ThreadsafeScorers C CXX)
 find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 
-option(USE_TIMEMORY "Enable timemory if not built at Geant4 level" OFF)
-set(timemory_COMPONENTS "headers;caliper;papi;gotcha;gperftools-cpu;vector"
-    CACHE STRING "timemory components")
-set(timemory_FIND_COMPONENTS_INTERFACE ${PROJECT_NAME}-timemory)
-
-if(USE_TIMEMORY AND NOT TARGET geant4-timemory)
-    find_package(timemory 3.0 REQUIRED COMPONENTS ${timemory_COMPONENTS})
-    set(timemory_LIBRARIES ${PROJECT_NAME}-timemory)
-endif()
-
 include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 
@@ -29,7 +19,7 @@ add_executable(${name} ${name}.cc ${headers}
                                   ${sources}
                                   ${macros})
 
-target_link_libraries(${name} ${Geant4_LIBRARIES} ${timemory_LIBRARIES})
+target_link_libraries(${name} ${Geant4_LIBRARIES})
 
 # For IDEs - specifically Xcode
 source_group("macros" FILES ${macros})

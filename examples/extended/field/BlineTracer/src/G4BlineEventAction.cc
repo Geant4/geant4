@@ -39,49 +39,45 @@
 // --------------------------------------------------------------------
 
 #include "G4BlineEventAction.hh"
-#include "G4BlineTracer.hh"
 
+#include "G4BlineTracer.hh"
 #include "G4Event.hh"
-#include "G4Trajectory.hh"
 #include "G4EventManager.hh"
-#include "G4VisManager.hh"
-#include "G4UImanager.hh"
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"
+#include "G4Trajectory.hh"
+#include "G4UImanager.hh"
+#include "G4VisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BlineEventAction::G4BlineEventAction(G4BlineTracer* aBlineTool)
 {
-  fBlineTool=aBlineTool;
+  fBlineTool = aBlineTool;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BlineEventAction::~G4BlineEventAction()
 {
-  for (size_t i=0; i<fTrajectoryVisAttributes.size(); i++)
+  for (size_t i = 0; i < fTrajectoryVisAttributes.size(); i++)
     delete fTrajectoryVisAttributes[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BlineEventAction::BeginOfEventAction(const G4Event*)
-{
-}
+void G4BlineEventAction::BeginOfEventAction(const G4Event*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BlineEventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-  if(trajectoryContainer)
-  {
+  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+  if (trajectoryContainer) {
     // visualisation
     // -------------
 
-    if (fDrawBline || fDrawPoints)
-    {
+    if (fDrawBline || fDrawPoints) {
       G4int n_point = (*(evt->GetTrajectoryContainer()))[0]->GetPointEntries();
 
       G4Polyline pPolyline;
@@ -92,12 +88,11 @@ void G4BlineEventAction::EndOfEventAction(const G4Event* evt)
       stepPoints.SetFillStyle(G4VMarker::filled);
       stepPoints.SetVisAttributes(fTrajectoryVisAttributes.back());
 
-      for(G4int i=0; i<n_point; i++)
-      {
-        G4ThreeVector pos = ((G4TrajectoryPoint*)
-          ((*(evt->GetTrajectoryContainer()))[0]->GetPoint(i)))->GetPosition();
-        if (fDrawBline)  pPolyline.push_back( pos);
-        if (fDrawPoints)  stepPoints.push_back(pos);
+      for (G4int i = 0; i < n_point; i++) {
+        G4ThreeVector pos =
+          ((G4TrajectoryPoint*)((*(evt->GetTrajectoryContainer()))[0]->GetPoint(i)))->GetPosition();
+        if (fDrawBline) pPolyline.push_back(pos);
+        if (fDrawPoints) stepPoints.push_back(pos);
       }
 
       pPolyline.SetVisAttributes(fTrajectoryVisAttributes.back());
@@ -110,33 +105,29 @@ void G4BlineEventAction::EndOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BlineEventAction::
-DrawFieldLines( G4double, G4double, G4double )
+void G4BlineEventAction::DrawFieldLines(G4double, G4double, G4double)
 {
   size_t nline = fTrajectoryPolyline.size();
-  size_t npoints =fTrajectoryPoints.size();
+  size_t npoints = fTrajectoryPoints.size();
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (!pVVisManager)
-  {
-    G4Exception("G4BlineEventAction::DrawFieldLines()",
-        "NullPointer", JustWarning,
-        "Missing visualisation driver for visualising magnetic field lines!");
+  if (!pVVisManager) {
+    G4Exception("G4BlineEventAction::DrawFieldLines()", "NullPointer", JustWarning,
+                "Missing visualisation driver for visualising magnetic field lines!");
     return;
   }
 
-  if (nline ==0)
-  {
+  if (nline == 0) {
     G4cout << "WARNING - G4BlineEventAction::DrawFieldLines()" << G4endl
            << "          There is nothing to visualise !" << G4endl;
     return;
   }
-  ((G4VisManager*)pVVisManager)->GetCurrentSceneHandler()-> ClearStore ();
-  G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/drawVolume");
+  ((G4VisManager*)pVVisManager)->GetCurrentSceneHandler()->ClearStore();
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/drawVolume");
 
-  for (size_t i=0;i<nline;i++)
+  for (size_t i = 0; i < nline; i++)
     pVVisManager->Draw(fTrajectoryPolyline[i]);
-  for (size_t i=0;i<npoints;i++)
+  for (size_t i = 0; i < npoints; i++)
     pVVisManager->Draw(fTrajectoryPoints[i]);
 
   // ((G4VisManager*)pVVisManager)->GetCurrentViewer()->DrawView();

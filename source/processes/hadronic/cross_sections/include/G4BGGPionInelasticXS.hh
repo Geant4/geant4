@@ -89,14 +89,16 @@ public:
 
   void CrossSectionDescription(std::ostream&) const final;
 
+  G4BGGPionInelasticXS & operator=(const G4BGGPionInelasticXS &right) = delete;
+  G4BGGPionInelasticXS(const G4BGGPionInelasticXS&) = delete;
+
 private:
+
+  void Initialise();
 
   G4double CoulombFactorPiPlus(G4double kinEnergy, G4int Z);
 
   G4double FactorPiMinus(G4double kinEnergy);
-
-  G4BGGPionInelasticXS & operator=(const G4BGGPionInelasticXS &right);
-  G4BGGPionInelasticXS(const G4BGGPionInelasticXS&);
 
   G4double fGlauberEnergy;
   G4double fLowEnergy; 
@@ -106,23 +108,17 @@ private:
   static G4double theGlauberFacPiMinus[93];
   static G4double theLowEPiPlus[93];
   static G4double theLowEPiMinus[93];
-  static G4int    theA[93];
+  static G4int theA[93];
 
-  const G4ParticleDefinition*     theProton;
-  const G4ParticleDefinition*     thePiPlus;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* thePiPlus;
 
-  G4Pow*                          fG4pow;
+  G4Pow* fG4pow;
 
   G4ComponentGGHadronNucleusXsc*  fGlauber;
-  G4UPiNuclearCrossSection*       fPion;
-  G4HadronNucleonXsc*             fHadron;
-  G4bool                          isPiplus;
-  G4bool                          isMaster;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex pionInelasticXSMutex;
-#endif
-
+  G4UPiNuclearCrossSection* fPion;
+  G4HadronNucleonXsc* fHadron;
+  G4bool isPiplus;
 };
 
 #endif

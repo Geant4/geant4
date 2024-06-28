@@ -53,67 +53,67 @@ const G4int kMaxAbsor = 10;  // 0 + 9
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
- public:
-  DetectorConstruction();
+  public:
+    DetectorConstruction();
 
- public:
-  void SetNbOfAbsor(G4int);
-  void SetAbsorMaterial(G4int, const G4String&);
-  void SetAbsorThickness(G4int, G4double);
+  public:
+    void SetNbOfAbsor(G4int);
+    void SetAbsorMaterial(G4int, const G4String&);
+    void SetAbsorThickness(G4int, G4double);
 
-  void SetWorldMaterial(const G4String&);
-  void SetCalorSizeYZ(G4double);
-  void SetNbOfLayers(G4int);
+    void SetWorldMaterial(const G4String&);
+    void SetCalorSizeYZ(G4double);
+    void SetNbOfLayers(G4int);
 
-  G4VPhysicalVolume* Construct() override;
-  void ConstructSDandField() override;
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
- public:
-  void PrintCalorParameters();
+  public:
+    void PrintCalorParameters();
 
-  G4double GetWorldSizeX() const { return fWorldSizeX; };
-  G4double GetWorldSizeYZ() const { return fWorldSizeYZ; };
+    G4double GetWorldSizeX() const { return fWorldSizeX; };
+    G4double GetWorldSizeYZ() const { return fWorldSizeYZ; };
 
-  G4double GetCalorThickness() const { return fCalorThickness; };
-  G4double GetCalorSizeYZ() const { return fCalorSizeYZ; };
+    G4double GetCalorThickness() const { return fCalorThickness; };
+    G4double GetCalorSizeYZ() const { return fCalorSizeYZ; };
 
-  G4int GetNbOfLayers() const { return fNbOfLayers; };
+    G4int GetNbOfLayers() const { return fNbOfLayers; };
 
-  G4int GetNbOfAbsor() const { return fNbOfAbsor; };
-  G4double GetAbsorThickness(G4int i) const { return fAbsorThickness[i]; };
-  const G4Material* GetAbsorMaterial(G4int i) const { return fAbsorMaterial[i]; };
+    G4int GetNbOfAbsor() const { return fNbOfAbsor; };
+    G4double GetAbsorThickness(G4int i) const { return fAbsorThickness[i]; };
+    const G4Material* GetAbsorMaterial(G4int i) const { return fAbsorMaterial[i]; };
 
-  const G4VPhysicalVolume* GetphysiWorld() const { return fPhysiWorld; };
-  const G4Material* GetWorldMaterial() const { return fWorldMaterial; };
+    const G4VPhysicalVolume* GetphysiWorld() const { return fPhysiWorld; };
+    const G4Material* GetWorldMaterial() const { return fWorldMaterial; };
 
- private:
-  void ComputeCalorParameters();
+  private:
+    void ComputeCalorParameters();
 
-  G4int fNbOfAbsor;
-  G4Material* fAbsorMaterial[kMaxAbsor];
-  G4double fAbsorThickness[kMaxAbsor];
+    G4int fNbOfAbsor;
+    G4Material* fAbsorMaterial[kMaxAbsor];
+    G4double fAbsorThickness[kMaxAbsor];
 
-  G4int fNbOfLayers;
-  G4double fLayerThickness;
+    G4int fNbOfLayers;
+    G4double fLayerThickness;
 
-  G4double fCalorSizeYZ;
-  G4double fCalorThickness;
+    G4double fCalorSizeYZ;
+    G4double fCalorThickness;
 
-  G4Material* fWorldMaterial;
-  G4double fWorldSizeYZ;
-  G4double fWorldSizeX;
+    G4Material* fWorldMaterial;
+    G4double fWorldSizeYZ;
+    G4double fWorldSizeX;
 
-  G4LogicalVolume* fLogicWorld;
-  G4VPhysicalVolume* fPhysiWorld;
+    G4LogicalVolume* fLogicWorld;
+    G4VPhysicalVolume* fPhysiWorld;
 
-  G4LogicalVolume* fLogicLayerFront;
-  G4LogicalVolume* fLogicLayerBack;
+    G4LogicalVolume* fLogicLayerFront;
+    G4LogicalVolume* fLogicLayerBack;
 
-  G4LogicalVolume* fLogicAbsorFront[kMaxAbsor];
-  G4LogicalVolume* fLogicAbsorBack[kMaxAbsor];
+    G4LogicalVolume* fLogicAbsorFront[kMaxAbsor];
+    G4LogicalVolume* fLogicAbsorBack[kMaxAbsor];
 
-  std::unique_ptr<DetectorMessenger> fDetectorMessenger;
-  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+    std::unique_ptr<DetectorMessenger> fDetectorMessenger;
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

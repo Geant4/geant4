@@ -126,15 +126,19 @@ public: // With description
 
 private:
 
+  const G4String& GetDefaultGraphicsSystemName() override;
   void SetDefaultsByArgument(const G4String& system);
   void SetDefaultsByEnvironment();
   void SetDefaultsByFile(int argc, char** argv);
   void SetDefaultsByBatch();
   void SetDefaultsByBuildFlags();
-  G4bool fSelected;
-  
-  void RegisterGraphicsSystems();
-  void RegisterModelFactories();
+  int      fUserArgc;
+  char**   fUserArgv;
+  G4String fUserSpecifiedSystem;
+  G4bool   fSelected;
+
+  void RegisterGraphicsSystems() override;
+  void RegisterModelFactories() override;
 
 };
 

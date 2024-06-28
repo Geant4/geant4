@@ -38,39 +38,38 @@
 //----------------------------------------------------------------------------
 //
 #ifdef G4_USE_URQMD
-#include "UrQMDPiKBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4HadronicParameters.hh"
-#include "G4SystemOfUnits.hh"
+#  include "UrQMDPiKBuilder.hh"
+
+#  include "G4HadronicParameters.hh"
+#  include "G4ParticleDefinition.hh"
+#  include "G4ParticleTable.hh"
+#  include "G4ProcessManager.hh"
+#  include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 UrQMDPiKBuilder::UrQMDPiKBuilder()
 {
-  fMin = 0*MeV;
+  fMin = 0 * MeV;
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
-  fModel = new G4UrQMD1_3Model(); 
+  fModel = new G4UrQMD1_3Model();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UrQMDPiKBuilder::~UrQMDPiKBuilder() 
-{}
+UrQMDPiKBuilder::~UrQMDPiKBuilder() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UrQMDPiKBuilder::Build(G4HadronElasticProcess * ) 
-{}
+void UrQMDPiKBuilder::Build(G4HadronElasticProcess*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UrQMDPiKBuilder::Build(G4HadronInelasticProcess * aP)
+void UrQMDPiKBuilder::Build(G4HadronInelasticProcess* aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);
   aP->RegisterMe(fModel);
 }
 
-#endif //G4_USE_URQMD
+#endif  // G4_USE_URQMD

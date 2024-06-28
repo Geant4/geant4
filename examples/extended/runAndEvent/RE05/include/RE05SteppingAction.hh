@@ -31,8 +31,8 @@
 #ifndef RE05SteppingAction_H
 #define RE05SteppingAction_H 1
 
-#include "globals.hh"
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 class RE05SteppingAction : public G4UserSteppingAction
 {

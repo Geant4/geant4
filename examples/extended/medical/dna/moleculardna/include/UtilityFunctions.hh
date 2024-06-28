@@ -27,76 +27,71 @@
 #ifndef MOLECULAR_UTILITY_FUNCTIONS_HH
 #define MOLECULAR_UTILITY_FUNCTIONS_HH
 
+#include "G4ThreeVector.hh"
 #include "globals.hh"
+
+#include <array>
 #include <string>
 #include <vector>
-#include <array>
-#include "G4ThreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace utility
 {
-  std::vector<G4String>& Split(const G4String&, char, std::vector<G4String>&);
+std::vector<G4String>& Split(const G4String&, char, std::vector<G4String>&);
 
-  std::vector<G4String> Split(const G4String&, char);
+std::vector<G4String> Split(const G4String&, char);
 
-  G4String Get_seperated_element(const G4String&, char, G4int);
+G4String Get_seperated_element(const G4String&, char, G4int);
 
-  std::array<G4String, 4> Get_four_elements(const G4String&, char);
+std::array<G4String, 4> Get_four_elements(const G4String&, char);
 
-  G4bool Path_exists(const G4String&);
+G4bool Path_exists(const G4String&);
 
-  G4String Getcwd();
+G4String Getcwd();
 
-  G4double Min(const G4ThreeVector&);
+G4double Min(const G4ThreeVector&);
 
-  // sign function
-  template <typename T>
-  [[maybe_unused]] inline constexpr G4int Signum(T, std::false_type);
+// sign function
+template<typename T>
+[[maybe_unused]] inline constexpr G4int Signum(T, std::false_type);
 
-  template <typename T>
-  inline constexpr int Signum(T, std::true_type);
+template<typename T>
+inline constexpr int Signum(T, std::true_type);
 
-  template <typename T>
-  inline constexpr int Signum(T);
+template<typename T>
+inline constexpr int Signum(T);
 
-  // find last (highest) significant bit
-  // linux implementation, copied for portability
-  // http://lxr.linux.no/#linux+v2.6.26.5/include/asm-generic/bitops/fls.h
-  static inline int Fls(int x)
-  {
-    int r = 32;
+// find last (highest) significant bit
+// linux implementation, copied for portability
+// http://lxr.linux.no/#linux+v2.6.26.5/include/asm-generic/bitops/fls.h
+static inline int Fls(int x)
+{
+  int r = 32;
 
-    if(!x)
-      return 0;
-    if(!(x & 0xffff0000u))
-    {
-      x <<= 16;
-      r -= 16;
-    }
-    if(!(x & 0xff000000u))
-    {
-      x <<= 8;
-      r -= 8;
-    }
-    if(!(x & 0xf0000000u))
-    {
-      x <<= 4;
-      r -= 4;
-    }
-    if(!(x & 0xc0000000u))
-    {
-      x <<= 2;
-      r -= 2;
-    }
-    if(!(x & 0x80000000u))
-    {
-      x <<= 1;
-      r -= 1;
-    }
-    return r;
+  if (!x) return 0;
+  if (!(x & 0xffff0000u)) {
+    x <<= 16;
+    r -= 16;
   }
+  if (!(x & 0xff000000u)) {
+    x <<= 8;
+    r -= 8;
+  }
+  if (!(x & 0xf0000000u)) {
+    x <<= 4;
+    r -= 4;
+  }
+  if (!(x & 0xc0000000u)) {
+    x <<= 2;
+    r -= 2;
+  }
+  if (!(x & 0x80000000u)) {
+    x <<= 1;
+    r -= 1;
+  }
+  return r;
+}
 
 }  // namespace utility
 

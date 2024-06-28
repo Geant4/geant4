@@ -25,91 +25,99 @@
 //
 #ifndef G4MPIRUNMERGER_HH
 #define G4MPIRUNMERGER_HH
-#include "G4Run.hh"
-#include <mpi.h>
 #include "G4MPImanager.hh"
+#include "G4Run.hh"
 
-class G4VUserMPIrunMerger {
-public:
-  G4VUserMPIrunMerger();
-  G4VUserMPIrunMerger( const G4Run* aRun ,
-                  G4int destination = G4MPImanager::kRANK_MASTER ,
-                  G4int verbosity = 0);
-  virtual ~G4VUserMPIrunMerger() { if ( ownsBuffer) DestroyBuffer(); }
-  void SetRun( G4Run* r ) { run = r; }
-  void SetDestinationRank( G4int i ) { destinationRank = i; }
-  void SetVerbosity( G4int ver ) { verbose = ver; }
+#include <mpi.h>
 
-  virtual void Merge();
+class G4VUserMPIrunMerger
+{
+  public:
+    G4VUserMPIrunMerger();
+    G4VUserMPIrunMerger(const G4Run* aRun, G4int destination = G4MPImanager::kRANK_MASTER,
+                        G4int verbosity = 0);
+    virtual ~G4VUserMPIrunMerger()
+    {
+      if (ownsBuffer) DestroyBuffer();
+    }
+    void SetRun(G4Run* r) { run = r; }
+    void SetDestinationRank(G4int i) { destinationRank = i; }
+    void SetVerbosity(G4int ver) { verbose = ver; }
 
-protected:
-  virtual void Pack() = 0;
-  virtual G4Run* UnPack() = 0;
+    virtual void Merge();
 
-  void InputUserData( /*const*/ void* input_data ,const  MPI::Datatype& dt, int count) {
-    input_userdata.push_back( const_registered_data{input_data,dt,count} );
-  }
-  void OutputUserData( void* input_data ,const  MPI::Datatype& dt, int count) {
-    output_userdata.push_back( registered_data{input_data,dt,count} );
-  }
+  protected:
+    virtual void Pack() = 0;
+    virtual G4Run* UnPack() = 0;
 
- // void GetUserData(void* output_data,const MPI::Datatype& dt, int count);
+    void InputUserData(/*const*/ void* input_data, const MPI::Datatype& dt, int count)
+    {
+      input_userdata.push_back(const_registered_data{input_data, dt, count});
+    }
+    void OutputUserData(void* input_data, const MPI::Datatype& dt, int count)
+    {
+      output_userdata.push_back(registered_data{input_data, dt, count});
+    }
 
-  void SetupOutputBuffer(char* buff, G4int size, G4int position) {
-    outputBuffer = buff;
-    outputBufferSize=size;
-    outputBufferPosition=position;
-  }
-  void DestroyBuffer() {
-    delete[] outputBuffer;
-    outputBuffer = nullptr;
-    outputBufferSize=0;
-    outputBufferPosition=0;
-    ownsBuffer = false;
-  }
+    // void GetUserData(void* output_data,const MPI::Datatype& dt, int count);
 
-  G4int GetPosition() const { return outputBufferPosition; }
-  char* GetBuffer() const { return outputBuffer; }
-  G4int GetBufferSize() const { return outputBufferSize; }
+    void SetupOutputBuffer(char* buff, G4int size, G4int position)
+    {
+      outputBuffer = buff;
+      outputBufferSize = size;
+      outputBufferPosition = position;
+    }
+    void DestroyBuffer()
+    {
+      delete[] outputBuffer;
+      outputBuffer = nullptr;
+      outputBufferSize = 0;
+      outputBufferPosition = 0;
+      ownsBuffer = false;
+    }
 
-  void Send(const unsigned int destination);
-  void Receive(const unsigned int source);
-private:
-  char* outputBuffer;
-  G4int outputBufferSize;
-  G4int outputBufferPosition;
-  G4bool ownsBuffer;
-  unsigned int destinationRank;
-  G4Run* run;
-  unsigned int commSize;
-  MPI::Intracomm COMM_G4COMMAND_;
-  G4int verbose;
-  long bytesSent;
+    G4int GetPosition() const { return outputBufferPosition; }
+    char* GetBuffer() const { return outputBuffer; }
+    G4int GetBufferSize() const { return outputBufferSize; }
 
-  //Input data to send (read-only)
-  struct const_registered_data {
-    const_registered_data(const const_registered_data&) = default;
-    const_registered_data& operator=(const const_registered_data&) = default;
-    //const_registered_data(const_registered_data&&) = default;
-    //const_registered_data& operator=(const_registered_data&&) = default;
-    /*const*/ void* p_data;
-    /*const*/ MPI::Datatype dt;
-    /*const*/ int count;
-  };
-  std::vector<const_registered_data> input_userdata;
+    void Send(const unsigned int destination);
+    void Receive(const unsigned int source);
 
-  //Output data
-    struct registered_data {
-    registered_data(const registered_data&) = default;
-    registered_data& operator=(const registered_data&) = default;
-    void* p_data;
-    /*const*/ MPI::Datatype dt;
-    /*const*/ int count;
-  };
+  private:
+    char* outputBuffer;
+    G4int outputBufferSize;
+    G4int outputBufferPosition;
+    G4bool ownsBuffer;
+    unsigned int destinationRank;
+    G4Run* run;
+    unsigned int commSize;
+    MPI::Intracomm COMM_G4COMMAND_;
+    G4int verbose;
+    long bytesSent;
+
+    // Input data to send (read-only)
+    struct const_registered_data
+    {
+        const_registered_data(const const_registered_data&) = default;
+        const_registered_data& operator=(const const_registered_data&) = default;
+        // const_registered_data(const_registered_data&&) = default;
+        // const_registered_data& operator=(const_registered_data&&) = default;
+        /*const*/ void* p_data;
+        /*const*/ MPI::Datatype dt;
+        /*const*/ int count;
+    };
+    std::vector<const_registered_data> input_userdata;
+
+    // Output data
+    struct registered_data
+    {
+        registered_data(const registered_data&) = default;
+        registered_data& operator=(const registered_data&) = default;
+        void* p_data;
+        /*const*/ MPI::Datatype dt;
+        /*const*/ int count;
+    };
     std::vector<registered_data> output_userdata;
-
 };
 
-
-#endif //G4MPIRUNMERGER_HH
-
+#endif  // G4MPIRUNMERGER_HH

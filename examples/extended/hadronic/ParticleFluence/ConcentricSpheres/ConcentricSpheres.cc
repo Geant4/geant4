@@ -31,40 +31,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Threading.hh"
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh" 
-#include "G4PhysListFactory.hh"
-#include "DetectorConstruction.hh" 
 #include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+
+#include "G4PhysListFactory.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Threading.hh"
+#include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) { 
-
+int main(int argc, char** argv)
+{
   auto* runManager = G4RunManagerFactory::CreateRunManager();
- 
-  DetectorConstruction* pDetectorInstance = new DetectorConstruction;  
-  runManager->SetUserInitialization( pDetectorInstance ); 
+
+  DetectorConstruction* pDetectorInstance = new DetectorConstruction;
+  runManager->SetUserInitialization(pDetectorInstance);
 
   // Physics list factory: use the PHYSLIST environmental variable.
   G4PhysListFactory factory;
-  G4VModularPhysicsList* thePL = factory.ReferencePhysList();   
+  G4VModularPhysicsList* thePL = factory.ReferencePhysList();
 
-  runManager->SetUserInitialization( thePL );
-  runManager->SetUserInitialization( new ActionInitialization );
+  runManager->SetUserInitialization(thePL);
+  runManager->SetUserInitialization(new ActionInitialization);
 
-  G4UImanager* UI = G4UImanager::GetUIpointer(); 
-  if ( argc==1 ) {   // Define UI session for interactive mode. 
-  } else {   // Batch mode 
-    G4String command = "/control/execute "; 
-    G4String fileName = argv[1]; 
-    UI->ApplyCommand(command+fileName); 
-  } 
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if (argc == 1) {  // Define UI session for interactive mode.
+  }
+  else {  // Batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command + fileName);
+  }
 
-  // job termination 
-  delete runManager; 
-  return 0; 
+  // job termination
+  delete runManager;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

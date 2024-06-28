@@ -32,6 +32,12 @@
 #include "G4VTrajectory.hh"
 #include "G4Track.hh"
 
+G4Allocator<G4SubEvent>*& aSubEventAllocator()
+{
+  G4ThreadLocalStatic G4Allocator<G4SubEvent>* _instance = nullptr;
+  return _instance;
+}
+
 G4SubEvent::~G4SubEvent()
 {
   clearAndDestroy();

@@ -6,6 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-29 Jose Luis Rodriguez Sanchez (hadr-abla-V11-02-04)
+- Added the dissipation parameter for heavy hypernuclei
+
+## 2024-04-19 Jose Luis Rodriguez Sanchez (hadr-abla-V11-02-03)
+- Cleaning up the classes doing it more general
+
+## 2024-04-07 Jose Luis Rodriguez Sanchez (hadr-abla-V11-02-02)
+- Cleaning up the class G4AblaDataDefs.hh, removed unused data structures
+
+## 2024-03-29 Jose Luis Rodriguez Sanchez (hadr-abla-V11-02-01)
+- Changed int, double and bool to G4 format and cleaning up of ABLA classes
+
+## 2024-03-28 Jose Luis Rodriguez Sanchez (hadr-abla-V11-02-00)
+- Added pragma once for compilation and array extension for super-heavy nuclei
+
 ## 2023-03-24 Alberto Ribon (hadr-abla-V11-01-00)
 - G4AblaInterface : implemented method ApplyYourself to allow the coupling
   between Binary Cascade (BIC) and Abla, i.e. using BIC for the cascade and

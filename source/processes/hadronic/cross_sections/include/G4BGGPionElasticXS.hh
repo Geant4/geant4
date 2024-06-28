@@ -51,7 +51,6 @@
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Threading.hh"
 
 class G4ComponentGGHadronNucleusXsc;
 class G4UPiNuclearCrossSection;
@@ -88,14 +87,16 @@ public:
 
   void CrossSectionDescription(std::ostream&) const final;
 
+  G4BGGPionElasticXS & operator=(const G4BGGPionElasticXS &right) = delete;
+  G4BGGPionElasticXS(const G4BGGPionElasticXS&) = delete;
+
 private:
 
+  void Initialise();
+  
   G4double CoulombFactorPiPlus(G4double kinEnergy, G4int Z);
 
   G4double FactorPiMinus(G4double kinEnergy);
-
-  G4BGGPionElasticXS & operator=(const G4BGGPionElasticXS &right);
-  G4BGGPionElasticXS(const G4BGGPionElasticXS&);
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;
@@ -105,22 +106,17 @@ private:
   static G4double theCoulombFacPiPlus[93];
   static G4double theGlauberFacPiMinus[93];
   static G4double theCoulombFacPiMinus[93];
-  static G4int    theA[93];
+  static G4int theA[93];
 
-  const G4ParticleDefinition*     theProton;
-  const G4ParticleDefinition*     thePiPlus;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* thePiPlus;
 
-  G4Pow*                          fG4pow;
+  G4Pow* fG4pow;
 
-  G4ComponentGGHadronNucleusXsc*  fGlauber;
-  G4UPiNuclearCrossSection*       fPion;
-  G4HadronNucleonXsc*             fHadron;
-  G4bool                          isPiplus;
-  G4bool                          isMaster;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex pionElasticXSMutex;
-#endif
+  G4ComponentGGHadronNucleusXsc* fGlauber;
+  G4UPiNuclearCrossSection* fPion;
+  G4HadronNucleonXsc* fHadron;
+  G4bool isPiplus;
 };
 
 #endif

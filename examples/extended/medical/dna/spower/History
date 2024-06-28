@@ -4,8 +4,15 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-20 Sebastien Incerti (spower-V11-02-01)
+- cleaned example
+
+## 2024-02-27 Sebastien Incerti (spower-V11-02-00)
+- SteppingAction.cc : extended use for ions heavier than helium
+- spower.in : added extra commandes to show how to shoot ions heavier than helium
+
 ## 2023-06-03 Vladimir Ivanchenko (spower-V11-01-01)
-- PhysicsList - simplified 
+- PhysicsList - simplified
 - alpha.in - added extra macro
 - spower.cc - clean-up the code to avoid warnings
 

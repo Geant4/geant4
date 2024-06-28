@@ -40,14 +40,14 @@ class PrimaryGeneratorAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
     TrackingAction(PrimaryGeneratorAction*);
-   ~TrackingAction() override = default;
-   
+    ~TrackingAction() override = default;
+
     void PostUserTrackingAction(const G4Track*) override;
-    
+
   private:
     PrimaryGeneratorAction* fPrimary = nullptr;
 };

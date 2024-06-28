@@ -45,6 +45,6 @@ constexpr G4int kNofHadColumns = 10;
 constexpr G4int kNofHadRows = 2;
 constexpr G4int kNofHadCells = kNofHadColumns * kNofHadRows;
 
-}
+}  // namespace B5
 
 #endif

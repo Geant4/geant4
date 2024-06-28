@@ -49,18 +49,16 @@ void WLSTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
   auto trackInformation = new WLSUserTrackInformation();
 
-  if(aTrack->GetMomentumDirection().z() > 0.0)
-  {
+  if (aTrack->GetMomentumDirection().z() > 0.0) {
     trackInformation->AddStatusFlag(right);
   }
-  else
-  {
+  else {
     trackInformation->AddStatusFlag(left);
   }
 
   G4String PVName = aTrack->GetVolume()->GetName();
 
-  if(PVName == "WLSFiber" || PVName == "Clad1" || PVName == "Clad2")
+  if (PVName == "WLSFiber" || PVName == "Clad1" || PVName == "Clad2")
     trackInformation->AddStatusFlag(InsideOfFiber);
 
   fpTrackingManager->SetUserTrackInformation(trackInformation);

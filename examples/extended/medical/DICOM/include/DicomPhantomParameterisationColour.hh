@@ -31,9 +31,9 @@
 #ifndef DicomPhantomParameterisationColour_HH
 #define DicomPhantomParameterisationColour_HH
 
-#include <map>
-
 #include "G4PhantomParameterisation.hh"
+
+#include <map>
 class G4VisAttributes;
 
 // *********************************************************************
@@ -47,30 +47,27 @@ class G4VisAttributes;
 
 class DicomPhantomParameterisationColour : public G4PhantomParameterisation
 {
-public:
-    typedef std::map<G4String,G4VisAttributes*> ColourMap_t;
+  public:
+    typedef std::map<G4String, G4VisAttributes*> ColourMap_t;
 
     static G4String fDefaultColorFile;
 
-public:  // with description
-    DicomPhantomParameterisationColour(G4String colorFile =
-                                       fDefaultColorFile);
+  public:  // with description
+    DicomPhantomParameterisationColour(G4String colorFile = fDefaultColorFile);
     ~DicomPhantomParameterisationColour();
 
-    virtual G4Material* ComputeMaterial(const G4int repNo,
-                                        G4VPhysicalVolume *currentVol,
-                                        const G4VTouchable *parentTouch=0);
+    virtual G4Material* ComputeMaterial(const G4int repNo, G4VPhysicalVolume* currentVol,
+                                        const G4VTouchable* parentTouch = 0);
 
     const ColourMap_t& GetColourMap() const { return fColours; }
     ColourMap_t& GetColourMap() { return fColours; }
 
-private:
+  private:
     void ReadColourData(G4String colourFile);
 
-private:
+  private:
     ColourMap_t fColours;
     std::map<G4int, G4VisAttributes*> fColours2;
 };
-
 
 #endif

@@ -6,6 +6,26 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-01 Makoto Asai (event-V11-02-04)
+- Initial implementation of creation/processing of SubEvents
+  - Co-working with track-V11-02-03,
+
+## 2024-05-11 Makoto Asai (event-V11-02-03)
+- G4PrimaryTransformer : adding sanity check of 4-momentum
+
+## 2024-05-03 Ben Morgan (event-V11-02-02)
+- Remove use of no longer supported TiMemory.
+
+## 2024-01-30 Makoto Asai (event-V11-02-01)
+- Added UI command to switch on/off the vertex position check (default : on).
+
+## 2024-01-23 Gabriele Cosmo (event-V11-02-00)
+- Added protection in G4VPrimaryGenerator::SetParticlePosition() to avoid
+  and warn for attempts to place vertex position outside or on surface of
+  the world volume.
+- Updated "/gun/position" UI command guidance in G4ParticleGunMessenger.
+  Removed unnecessary setting of gun position to (0, 0, 0).
+
 ## 2023-11-14 Alex Howard (event-V11-01-07)
 - The ListSource command for the G4GeneralParticleSource fails to list the
   correct energy of the sources since they need to be accessed as a

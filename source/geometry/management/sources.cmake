@@ -98,7 +98,6 @@ geant4_add_module(G4geometrymng
     G4RegionStore.cc
     G4SmartVoxelHeader.cc
     G4SmartVoxelNode.cc
-    G4SmartVoxelProxy.cc
     G4SmartVoxelStat.cc
     G4SolidStore.cc
     G4TouchableHistory.cc

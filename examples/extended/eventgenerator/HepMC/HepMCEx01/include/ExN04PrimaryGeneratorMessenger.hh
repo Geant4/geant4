@@ -31,8 +31,8 @@
 #ifndef EXN04_PRIMARY_GENERATOR_MESSENGER_H
 #define EXN04_PRIMARY_GENERATOR_MESSENGER_H
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4UIdirectory;
 class G4UIcommand;
@@ -42,21 +42,21 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 class ExN04PrimaryGeneratorAction;
 
-class ExN04PrimaryGeneratorMessenger : public G4UImessenger {
-public:
-  ExN04PrimaryGeneratorMessenger(ExN04PrimaryGeneratorAction* genaction);
-  ~ExN04PrimaryGeneratorMessenger();
+class ExN04PrimaryGeneratorMessenger : public G4UImessenger
+{
+  public:
+    ExN04PrimaryGeneratorMessenger(ExN04PrimaryGeneratorAction* genaction);
+    ~ExN04PrimaryGeneratorMessenger();
 
-  virtual void SetNewValue(G4UIcommand* command, G4String newValues);
-  virtual G4String GetCurrentValue(G4UIcommand* command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
-private:
-  ExN04PrimaryGeneratorAction* fPrimaryAction;
+  private:
+    ExN04PrimaryGeneratorAction* fPrimaryAction;
 
-  G4UIdirectory* fDir;
-  G4UIdirectory* fMyDetDir;
-  G4UIcmdWithAString* fSelect;
-
+    G4UIdirectory* fDir;
+    G4UIdirectory* fMyDetDir;
+    G4UIcmdWithAString* fSelect;
 };
 
 #endif

@@ -24,32 +24,35 @@
 // ********************************************************************
 //
 //
-#include <ctime>
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4String.hh"
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-#include "ActionInitialization.hh"
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 
+#include <ctime>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv)
+{
   G4UIExecutive* pUi = nullptr;
   if (argc == 1) {
     G4cout << "WARNING! Please specify macro to be used: vis or run, or "
               "specify path to macro file. See README for more detail.\n";
     return 0;
   }
-  if (argc > 1 && strcmp(argv[1], "vis") == 0) { pUi = new G4UIExecutive(argc, argv); }
+  if (argc > 1 && strcmp(argv[1], "vis") == 0) {
+    pUi = new G4UIExecutive(argc, argv);
+  }
 
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::MTwistEngine);
   // set random seed with system time
   G4Random::setTheSeed(time(nullptr));
-  auto runManager= G4RunManagerFactory::CreateRunManager();
+  auto runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
 
   auto detector = new DetectorConstruction();
@@ -67,7 +70,8 @@ int main(int argc, char **argv) {
     visManager->Initialize();
     UImanager->ApplyCommand("/control/execute vis.mac");
     pUi->SessionStart();
-  }else {
+  }
+  else {
     G4String filename = argv[1];
     UImanager->ApplyCommand("/control/execute " + filename);
   }

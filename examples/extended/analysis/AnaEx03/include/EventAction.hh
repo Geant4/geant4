@@ -46,27 +46,33 @@ class HistoManager;
 
 class EventAction : public G4UserEventAction
 {
-public:
-  EventAction();
-  ~EventAction() override;
+  public:
+    EventAction();
+    ~EventAction() override;
 
-  void  BeginOfEventAction(const G4Event*) override;
-  void    EndOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
-  void AddAbs(G4double de, G4double dl) {fEnergyAbs += de; fTrackLAbs += dl;};
-  void AddGap(G4double de, G4double dl) {fEnergyGap += de; fTrackLGap += dl;};
+    void AddAbs(G4double de, G4double dl)
+    {
+      fEnergyAbs += de;
+      fTrackLAbs += dl;
+    };
+    void AddGap(G4double de, G4double dl)
+    {
+      fEnergyGap += de;
+      fTrackLGap += dl;
+    };
 
-private:
-   G4double fEnergyAbs = 0;
-   G4double fEnergyGap = 0;
-   G4double fTrackLAbs = 0;
-   G4double fTrackLGap = 0;
+  private:
+    G4double fEnergyAbs = 0;
+    G4double fEnergyGap = 0;
+    G4double fTrackLAbs = 0;
+    G4double fTrackLGap = 0;
 
-   G4int    fPrintModulo = 100;
+    G4int fPrintModulo = 100;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

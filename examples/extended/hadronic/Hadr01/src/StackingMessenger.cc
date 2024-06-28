@@ -40,25 +40,26 @@
 //
 
 #include "StackingMessenger.hh"
+
 #include "StackingAction.hh"
+
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingMessenger::StackingMessenger(StackingAction* stack)
-  : G4UImessenger(), fStackAction(stack)
+StackingMessenger::StackingMessenger(StackingAction* stack) : G4UImessenger(), fStackAction(stack)
 {
-  fKillCmd = new G4UIcmdWithABool("/testhadr/KillAllSecondaries",this);
+  fKillCmd = new G4UIcmdWithABool("/testhadr/KillAllSecondaries", this);
   fKillCmd->SetGuidance("  Choice : true false");
-  fKillCmd->SetParameterName("choice",true);
+  fKillCmd->SetParameterName("choice", true);
   fKillCmd->SetDefaultValue(false);
 
   fKCmd = new G4UIcmdWithAString("/testhadr/Kill", this);
   fKCmd->SetGuidance("Kill secondary particles of defined type");
   fKCmd->SetParameterName("ch", true);
   fKCmd->SetDefaultValue("none");
-  fKCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fKCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,11 +73,12 @@ StackingMessenger::~StackingMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{     
-  if(command == fKillCmd) {
+{
+  if (command == fKillCmd) {
     fStackAction->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));
-  } else if(command == fKCmd) {
-    fStackAction->SetKill(newValue);               
+  }
+  else if (command == fKCmd) {
+    fStackAction->SetKill(newValue);
   }
 }
 

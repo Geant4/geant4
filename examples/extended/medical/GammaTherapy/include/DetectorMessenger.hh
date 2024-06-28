@@ -34,21 +34,21 @@
 //
 //
 // -------------------------------------------------------------
-//      GEANT4 
+//      GEANT4
 //
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- DetectorMessenger -------
-//              
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of  
-// 
+//
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of
+//
 // -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -60,44 +60,37 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public: // Without description
+  public:  // Without description
+    DetectorMessenger(DetectorConstruction*);
+    virtual ~DetectorMessenger();
 
-  DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
+    void SetNewValue(G4UIcommand*, G4String);
 
-  DetectorConstruction* fDetector;
-    
-  G4UIdirectory*             fDetDir;
-  G4UIdirectory*             fDetDir1;
-  G4UIdirectory*             fDetDir2;
+  private:
+    DetectorConstruction* fDetector;
 
-  G4UIcmdWithAString*        fAbsMaterCmd;
-  G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
-  G4UIcmdWithADoubleAndUnit* fAbsGapCmd;
-  G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
-  G4UIcmdWithAString*        fWorldMaterCmd;
-  G4UIcmdWithADoubleAndUnit* fWorldXCmd;
-  G4UIcmdWithADoubleAndUnit* fXMagFieldCmd;
-  G4UIcmdWithADoubleAndUnit* fYMagFieldCmd;
-  G4UIcmdWithADoubleAndUnit* fZMagFieldCmd;
-  G4UIcmdWithAnInteger*      fNumOfAbsCmd;
-  G4UIcmdWithAnInteger*      fNumOfEvt;
-  G4UIcmdWithAnInteger*      fVerbCmd;
-  G4UIcmdWithAnInteger*      fIntCmd;
-  G4UIcmdWithADoubleAndUnit* fDeltaECmd;
+    G4UIdirectory* fDetDir;
+    G4UIdirectory* fDetDir1;
+    G4UIdirectory* fDetDir2;
+
+    G4UIcmdWithAString* fAbsMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsGapCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
+    G4UIcmdWithAString* fWorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldXCmd;
+    G4UIcmdWithADoubleAndUnit* fXMagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* fYMagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* fZMagFieldCmd;
+    G4UIcmdWithAnInteger* fNumOfAbsCmd;
+    G4UIcmdWithAnInteger* fNumOfEvt;
+    G4UIcmdWithAnInteger* fVerbCmd;
+    G4UIcmdWithAnInteger* fIntCmd;
+    G4UIcmdWithADoubleAndUnit* fDeltaECmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-
-
-
-

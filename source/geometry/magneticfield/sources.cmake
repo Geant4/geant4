@@ -42,9 +42,15 @@ geant4_add_module(G4magneticfield
     G4ExactHelixStepper.hh
     G4ExplicitEuler.hh
     G4Field.hh
+    G4FieldBuilder.hh
+    G4FieldBuilderMessenger.hh
     G4FieldManager.hh
     G4FieldManager.icc
     G4FieldManagerStore.hh
+    G4FieldParameters.hh
+    G4FieldParametersMessenger.hh
+    G4FieldSetup.hh
+    G4FieldSetupMessenger.hh
     G4FieldTrack.hh
     G4FieldTrack.icc
     G4FieldUtils.hh
@@ -156,8 +162,14 @@ geant4_add_module(G4magneticfield
     G4ExactHelixStepper.cc
     G4ExplicitEuler.cc
     G4Field.cc
+    G4FieldBuilder.cc
+    G4FieldBuilderMessenger.cc
     G4FieldManager.cc
     G4FieldManagerStore.cc
+    G4FieldParameters.cc
+    G4FieldParametersMessenger.cc
+    G4FieldSetup.cc
+    G4FieldSetupMessenger.cc
     G4FieldTrack.cc
     G4FieldUtils.cc
     G4FSALBogackiShampine45.cc
@@ -205,7 +217,8 @@ geant4_add_module(G4magneticfield
     G4QSSMessenger.cc
 )
 
-geant4_module_link_libraries(G4magneticfield PUBLIC G4globman G4intercoms)
+geant4_module_link_libraries(G4magneticfield PUBLIC G4globman G4intercoms
+  PRIVATE G4geometrymng)
 # List any source specific properties here
 # For new system, must explicitly add path for generated header
 geant4_module_include_directories(G4magneticfield PUBLIC

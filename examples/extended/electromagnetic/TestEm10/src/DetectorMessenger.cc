@@ -28,25 +28,24 @@
 //
 //
 //
-// 
+//
 
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* detector)
- : G4UImessenger(),
-   fDetector(detector), 
-   fDirectory(0)
-{ 
+  : G4UImessenger(), fDetector(detector), fDirectory(0)
+{
   fDirectory = new G4UIdirectory("/XTRdetector/");
   fDirectory->SetGuidance(" detector control.");
-      
-  fDetectorSetUpCmd = new G4UIcmdWithAString("/XTRdetector/setup",this);
+
+  fDetectorSetUpCmd = new G4UIcmdWithAString("/XTRdetector/setup", this);
   fDetectorSetUpCmd->SetGuidance("Select setup for comparison with experiment");
   fDetectorSetUpCmd->SetParameterName("choice", true);
   fDetectorSetUpCmd->SetDefaultValue("simpleALICE");
@@ -58,15 +57,15 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* detector)
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete fDetectorSetUpCmd; 
+  delete fDetectorSetUpCmd;
   delete fDirectory;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if ( command == fDetectorSetUpCmd ) { 
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fDetectorSetUpCmd) {
     fDetector->SetDetectorSetUp(newValue);
   }
 }

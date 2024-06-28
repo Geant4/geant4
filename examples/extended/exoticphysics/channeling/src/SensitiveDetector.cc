@@ -25,70 +25,66 @@
 //
 
 #include "SensitiveDetector.hh"
+
 #include "SensitiveDetectorHit.hh"
+
 #include "G4HCofThisEvent.hh"
+#include "G4Navigator.hh"
+#include "G4SDManager.hh"
+#include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4SDManager.hh"
-#include "G4Navigator.hh"
 #include "G4ios.hh"
 
-SensitiveDetector::SensitiveDetector(G4String name):
-G4VSensitiveDetector(name){
-    G4String HCname;
-    collectionName.insert(HCname="collection");
-    fHCID = -1;
+SensitiveDetector::SensitiveDetector(G4String name) : G4VSensitiveDetector(name)
+{
+  G4String HCname;
+  collectionName.insert(HCname = "collection");
+  fHCID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SensitiveDetector::~SensitiveDetector(){
+SensitiveDetector::~SensitiveDetector() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void SensitiveDetector::Initialize(G4HCofThisEvent* HCE)
+{
+  fHitsCollection = new SensitiveDetectorHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (fHCID < 0) {
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
+  }
+  HCE->AddHitsCollection(fHCID, fHitsCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SensitiveDetector::Initialize(G4HCofThisEvent*HCE){
-    fHitsCollection =
-        new SensitiveDetectorHitsCollection(SensitiveDetectorName,
-                                                        collectionName[0]);
-    if(fHCID<0){
-        fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
-    }
-    HCE->AddHitsCollection(fHCID,fHitsCollection);
+G4bool SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+{
+  if (aStep->GetTrack()->GetTrackID() > 1) return true;
+
+  G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
+  if (!(postStepPoint->GetStepStatus() == fGeomBoundary)) return true;
+
+  G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
+
+  G4TouchableHistory* theTouchable = (G4TouchableHistory*)(preStepPoint->GetTouchable());
+  G4VPhysicalVolume* thePhysical = theTouchable->GetVolume(0);
+  G4int copyNo = thePhysical->GetCopyNo();
+
+  G4ThreeVector worldPos = preStepPoint->GetPosition();
+
+  SensitiveDetectorHit* aHit = new SensitiveDetectorHit(copyNo);
+  aHit->SetLayerID(copyNo);
+  aHit->SetWorldPos(worldPos);
+
+  fHitsCollection->insert(aHit);
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool SensitiveDetector::ProcessHits(G4Step*aStep,
-                                                  G4TouchableHistory*){
-
-    if(aStep->GetTrack()->GetTrackID()>1) return true;
-    
-    G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
-    if(!(postStepPoint->GetStepStatus() == fGeomBoundary)) return true;
-    
-    G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
-
-    G4TouchableHistory* theTouchable =
-        (G4TouchableHistory*)(preStepPoint->GetTouchable());
-    G4VPhysicalVolume* thePhysical = theTouchable->GetVolume(0);
-    G4int copyNo = thePhysical->GetCopyNo();
-
-    G4ThreeVector worldPos = preStepPoint->GetPosition();
-    
-    SensitiveDetectorHit* aHit =
-        new SensitiveDetectorHit(copyNo);
-    aHit->SetLayerID(copyNo);
-    aHit->SetWorldPos(worldPos);
-    
-    fHitsCollection->insert(aHit);
-    return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void SensitiveDetector::EndOfEvent(G4HCofThisEvent* /*HCE*/){
-}
+void SensitiveDetector::EndOfEvent(G4HCofThisEvent* /*HCE*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

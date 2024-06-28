@@ -47,7 +47,6 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessTable.hh"
 #include "G4ProductionCutsTable.hh"
-#include "G4Profiler.hh"
 #include "G4RegionStore.hh"
 #include "G4Run.hh"
 #include "G4RunManagerKernel.hh"
@@ -60,9 +59,9 @@
 #include "G4SmartVoxelStat.hh"
 #include "G4SolidStore.hh"
 #include "G4StateManager.hh"
-#include "G4TiMemory.hh"
 #include "G4Timer.hh"
 #include "G4TransportationManager.hh"
+#include "G4FieldBuilder.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include "G4UserRunAction.hh"
@@ -180,14 +179,11 @@ G4RunManager::G4RunManager(RMType rmType)
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
-  ConfigureProfilers();
 }
 
 // --------------------------------------------------------------------
 G4RunManager::~G4RunManager()
 {
-  // finalise profiler before shutting down the threads
-  G4Profiler::Finalize();
   G4StateManager* pStateManager = G4StateManager::GetStateManager();
   // set the application state to the quite state
   if (pStateManager->GetCurrentState() != G4State_Quit) {
@@ -196,6 +192,14 @@ G4RunManager::~G4RunManager()
   }
 
   CleanUpPreviousEvents();
+  if (verboseLevel > 1 && currentRun!=nullptr) {
+    G4cout << "Deleting G4Run (id:" << currentRun->GetRunID() << ") ";
+    if(currentRun->GetEventVectorSize()>0) {
+      G4cout << " that has " << currentRun->GetEventVectorSize() 
+             << " events kept in eventVector";
+    }
+    G4cout << G4endl;
+  }
   delete currentRun;
   delete timer;
   delete runMessenger;
@@ -227,25 +231,25 @@ G4RunManager::~G4RunManager()
 // --------------------------------------------------------------------
 void G4RunManager::DeleteUserInitializations()
 {
+  if (verboseLevel > 1) G4cout << "UserDetectorConstruction deleted " << userDetector << G4endl;
   delete userDetector;
   userDetector = nullptr;
-  if (verboseLevel > 1) G4cout << "UserDetectorConstruction deleted." << G4endl;
 
+  if (verboseLevel > 1) G4cout << "UserPhysicsList deleted " << physicsList << G4endl;
   delete physicsList;
   physicsList = nullptr;
-  if (verboseLevel > 1) G4cout << "UserPhysicsList deleted." << G4endl;
 
+  if (verboseLevel > 1) G4cout << "UserActionInitialization deleted " << userActionInitialization << G4endl;
   delete userActionInitialization;
   userActionInitialization = nullptr;
-  if (verboseLevel > 1) G4cout << "UserActionInitialization deleted." << G4endl;
 
+  if (verboseLevel > 1) G4cout << "UserWorkerInitialization deleted " << userWorkerInitialization << G4endl;
   delete userWorkerInitialization;
   userWorkerInitialization = nullptr;
-  if (verboseLevel > 1) G4cout << "UserWorkerInitialization deleted." << G4endl;
 
+  if (verboseLevel > 1) G4cout << "UserWorkerThreadInitialization deleted " << userWorkerThreadInitialization << G4endl;
   delete userWorkerThreadInitialization;
   userWorkerThreadInitialization = nullptr;
-  if (verboseLevel > 1) G4cout << "UserWorkerThreadInitialization deleted." << G4endl;
 }
 
 // --------------------------------------------------------------------
@@ -302,6 +306,14 @@ void G4RunManager::RunInitialization()
   numberOfEventProcessed = 0;
 
   CleanUpPreviousEvents();
+  if (verboseLevel > 2 && currentRun!=nullptr) {
+    G4cout << "Deleting G4Run (id:" << currentRun->GetRunID() << ") ";
+    if(currentRun->GetEventVectorSize()>0) {
+      G4cout << " that has " << currentRun->GetEventVectorSize()
+             << " events kept in eventVector";
+    }
+    G4cout << G4endl;
+  }
   delete currentRun;
   currentRun = nullptr;
 
@@ -340,10 +352,6 @@ void G4RunManager::RunInitialization()
     G4cout << "### Run " << currentRun->GetRunID() << " starts." << G4endl;
   }
   if (userRunAction != nullptr) userRunAction->BeginOfRunAction(currentRun);
-
-#if defined(GEANT4_USE_TIMEMORY)
-  masterRunProfiler.reset(new ProfilerConfig(currentRun));
-#endif
 
   if (isScoreNtupleWriter) {
     G4VScoreNtupleWriter::Instance()->OpenFile();
@@ -487,10 +495,12 @@ void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 void G4RunManager::RunTermination()
 {
   if (!fakeRun) {
-#if defined(GEANT4_USE_TIMEMORY)
-    masterRunProfiler.reset();
-#endif
     CleanUpUnnecessaryEvents(0);
+//    if(G4int(previousEvents->size())>0) {
+//      G4ExceptionDescription ed;
+//      ed << "Run still has " << previousEvents->size() << " unfinished events!!";
+//      G4Exception("G4RunManager::RunTermination()","RM09009",FatalException,ed);
+//    }
     // tasking occasionally will call this function even
     // if there was not a current run
     if (currentRun != nullptr) {
@@ -522,9 +532,13 @@ void G4RunManager::CleanUpPreviousEvents()
   auto evItr = previousEvents->cbegin();
   while (evItr != previousEvents->cend()) {
     G4Event* evt = *evItr;
-    if (evt != nullptr && !(evt->ToBeKept())) delete evt;
+    if (evt != nullptr && !(evt->ToBeKept())) {
+      ReportEventDeletion(evt);
+      delete evt;
+    }
     evItr = previousEvents->erase(evItr);
   }
+
 }
 
 // --------------------------------------------------------------------
@@ -543,7 +557,10 @@ void G4RunManager::CleanUpUnnecessaryEvents(G4int keepNEvents)
     G4Event* evt = *evItr;
     if (evt != nullptr) {
       if (evt->GetNumberOfGrips() == 0) {
-        if (!(evt->ToBeKept())) delete evt;
+        if (!(evt->ToBeKept())) {
+          ReportEventDeletion(evt);
+          delete evt;
+        }
         evItr = previousEvents->erase(evItr);
       }
       else {
@@ -569,9 +586,21 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
       previousEvents->push_back(anEvent);
     }
   }
+
   CleanUpUnnecessaryEvents(n_perviousEventsToBeStored);
 }
 
+// --------------------------------------------------------------------
+void G4RunManager::ReportEventDeletion(const G4Event* evt)
+{
+  if(verboseLevel > 2) {
+    G4cout << "deleting G4Event(" << evt << ") eventID = " << evt->GetEventID();
+    if(evt->GetNumberOfCompletedSubEvent()>0) {
+      G4cout << " -- contains " << evt->GetNumberOfCompletedSubEvent() << " completed sub-events";
+    }
+    G4cout << G4endl;
+  }
+}
 // --------------------------------------------------------------------
 void G4RunManager::Initialize()
 {
@@ -821,19 +850,31 @@ void G4RunManager::ConstructScoringWorlds()
 }
 
 // --------------------------------------------------------------------
-void G4RunManager::UpdateScoring()
+void G4RunManager::UpdateScoring(const G4Event* evt)
 {
+  if(evt==nullptr) evt = currentEvent;
+  
+//MAMAMAMA need revisiting
+  if(evt->ScoresAlreadyRecorded()) return;
+//MAMAMAMA need revisiting
+
   if (isScoreNtupleWriter) {
-    G4VScoreNtupleWriter::Instance()->Fill(currentEvent->GetHCofThisEvent(),
-                                           currentEvent->GetEventID());
+    G4VScoreNtupleWriter::Instance()->Fill(evt->GetHCofThisEvent(), evt->GetEventID());
   }
+
+  if(evt->ScoresAlreadyRecorded()) {
+    G4Exception("G4RunManager::UpdateScoring()","RMSubEvt001",FatalException,
+        "Double-counting!!!");
+  }
+
+  evt->ScoresRecorded();
 
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if (ScM == nullptr) return;
   auto nPar = (G4int)ScM->GetNumberOfMesh();
   if (nPar < 1) return;
 
-  G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if (HCE == nullptr) return;
   auto nColl = (G4int)HCE->GetCapacity();
   for (G4int i = 0; i < nColl; ++i) {
@@ -1002,168 +1043,11 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
       G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
       if (pVVisManager != nullptr) pVVisManager->GeometryHasChanged();
     }
+    // Reinitialize field builder
+    if (G4FieldBuilder::IsInstance()) {
+      G4FieldBuilder::Instance()->Reinitialize();
+    }
   }
 }
-
-// --------------------------------------------------------------------
-void G4RunManager::ConfigureProfilers(G4int argc, char** argv)
-{
-  std::vector<std::string> _args;
-  for (G4int i = 0; i < argc; ++i)
-    _args.emplace_back(argv[i]);
-  ConfigureProfilers(_args);
-}
-
-// --------------------------------------------------------------------
-void G4RunManager::ConfigureProfilers(const std::vector<std::string>& args)
-{
-#ifdef GEANT4_USE_TIMEMORY
-  // parse command line if arguments were passed
-  G4Profiler::Configure(args);
-#else
-  G4ConsumeParameters(args);
-#endif
-}
-
-// --------------------------------------------------------------------
-
-#if !defined(GEANT4_USE_TIMEMORY)
-#  define TIMEMORY_WEAK_PREFIX
-#  define TIMEMORY_WEAK_POSTFIX
-#endif
-
-// --------------------------------------------------------------------
-
-extern "C"
-{
-  // this allows the default setup to be overridden by linking
-  // in an custom extern C function into the application
-  TIMEMORY_WEAK_PREFIX
-  void G4RunProfilerInit(void) TIMEMORY_WEAK_POSTFIX;
-
-  extern void G4ProfilerInit(void);
-
-  // this gets executed when the library gets loaded
-  void G4RunProfilerInit(void)
-  {
-#ifdef GEANT4_USE_TIMEMORY
-    G4ProfilerInit();
-
-    // guard against re-initialization
-    static G4bool _once = false;
-    if (_once) return;
-    _once = true;
-
-    puts(">>> G4RunProfilerInit <<<");
-
-    using RunProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
-    using EventProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
-    using TrackProfilerConfig = G4ProfilerConfig<G4ProfileType::Track>;
-    using StepProfilerConfig = G4ProfilerConfig<G4ProfileType::Step>;
-    using UserProfilerConfig = G4ProfilerConfig<G4ProfileType::User>;
-
-    //
-    // these are the default functions for evaluating whether
-    // to start profiling
-    //
-    RunProfilerConfig::GetFallbackQueryFunctor() = [](const G4Run* _run) {
-      return G4Profiler::GetEnabled(G4ProfileType::Run) && _run;
-    };
-
-    EventProfilerConfig::GetFallbackQueryFunctor() = [](const G4Event* _event) {
-      return G4Profiler::GetEnabled(G4ProfileType::Event) && _event;
-    };
-
-    TrackProfilerConfig::GetFallbackQueryFunctor() = [](const G4Track* _track) {
-      return G4Profiler::GetEnabled(G4ProfileType::Track) && _track && _track->GetDynamicParticle();
-    };
-
-    StepProfilerConfig::GetFallbackQueryFunctor() = [](const G4Step* _step) {
-      return G4Profiler::GetEnabled(G4ProfileType::Step) && _step && _step->GetTrack();
-    };
-
-    UserProfilerConfig::GetFallbackQueryFunctor() = [](const std::string& _user) {
-      return G4Profiler::GetEnabled(G4ProfileType::User) && !_user.empty();
-    };
-
-    //
-    // these are the default functions which encode the profiling label.
-    // Will not be called unless the query returned true
-    //
-    RunProfilerConfig::GetFallbackLabelFunctor() = [](const G4Run* _run) {
-      return TIMEMORY_JOIN('/', "G4Run", _run->GetRunID());
-    };
-
-    EventProfilerConfig::GetFallbackLabelFunctor() = [](const G4Event* _event) -> std::string {
-      if (G4Profiler::GetPerEvent())
-        return TIMEMORY_JOIN('/', "G4Event", _event->GetEventID());
-      else
-        return "G4Event";
-    };
-
-    TrackProfilerConfig::GetFallbackLabelFunctor() = [](const G4Track* _track) {
-      auto pdef = _track->GetDynamicParticle()->GetParticleDefinition();
-      return TIMEMORY_JOIN('/', "G4Track", pdef->GetParticleName());
-    };
-
-    StepProfilerConfig::GetFallbackLabelFunctor() = [](const G4Step* _step) {
-      auto pdef = _step->GetTrack()->GetParticleDefinition();
-      return TIMEMORY_JOIN('/', "G4Step", pdef->GetParticleName());
-    };
-
-    UserProfilerConfig::GetFallbackLabelFunctor() = [](const std::string& _user) {
-      return _user;
-    };
-
-    using RunTool = typename RunProfilerConfig::type;
-    using EventTool = typename EventProfilerConfig::type;
-    using TrackTool = typename TrackProfilerConfig::type;
-    using StepTool = typename StepProfilerConfig::type;
-    using UserTool = typename UserProfilerConfig::type;
-
-    RunProfilerConfig::GetFallbackToolFunctor() = [](const std::string& _label) {
-      return new RunTool{_label};
-    };
-
-    EventProfilerConfig::GetFallbackToolFunctor() = [](const std::string& _label) {
-      return new EventTool{_label};
-    };
-
-    TrackProfilerConfig::GetFallbackToolFunctor() = [](const std::string& _label) {
-      return new TrackTool(_label, tim::scope::config(tim::scope::flat{}));
-    };
-
-    StepProfilerConfig::GetFallbackToolFunctor() = [](const std::string& _label) {
-      return new StepTool(_label, tim::scope::config(tim::scope::flat{}));
-    };
-
-    UserProfilerConfig::GetFallbackToolFunctor() = [](const std::string& _label) {
-      return new UserTool(_label);
-    };
-
-    auto comps = "wall_clock, cpu_clock, cpu_util, peak_rss";
-    auto run_env_comps = tim::get_env<std::string>("G4PROFILE_RUN_COMPONENTS", comps);
-    auto event_env_comps = tim::get_env<std::string>("G4PROFILE_EVENT_COMPONENTS", comps);
-    auto track_env_comps = tim::get_env<std::string>("G4PROFILE_TRACK_COMPONENTS", comps);
-    auto step_env_comps = tim::get_env<std::string>("G4PROFILE_STEP_COMPONENTS", comps);
-    auto user_env_comps = tim::get_env<std::string>("G4PROFILE_USER_COMPONENTS", comps);
-
-    tim::configure<G4RunProfiler>(run_env_comps);
-    tim::configure<G4EventProfiler>(event_env_comps);
-    tim::configure<G4TrackProfiler>(track_env_comps);
-    tim::configure<G4StepProfiler>(step_env_comps);
-    tim::configure<G4UserProfiler>(user_env_comps);
-#endif
-  }
-}  // extern "C"
-
-// --------------------------------------------------------------------
-
-#ifdef GEANT4_USE_TIMEMORY
-namespace
-{
-static G4bool profiler_is_initialized = (G4RunProfilerInit(), true);
-}
-#endif
 
 // --------------------------------------------------------------------

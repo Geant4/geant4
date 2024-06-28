@@ -25,37 +25,34 @@
 //
 
 #include "OpNoviceDetectorMessenger.hh"
+
 #include "OpNoviceDetectorConstruction.hh"
 #include "OpNoviceGDMLDetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceDetectorMessenger::OpNoviceDetectorMessenger(
-  G4VUserDetectorConstruction* detcon)
-  : G4UImessenger()
-  , fOpNoviceDetCon(detcon)
+OpNoviceDetectorMessenger::OpNoviceDetectorMessenger(G4VUserDetectorConstruction* detcon)
+  : G4UImessenger(), fOpNoviceDetCon(detcon)
 {
   fDetConDir = new G4UIdirectory("/OpNovice/DetectorConstruction/");
   fDetConDir->SetGuidance("Configuring Detector Construction");
 
-  fVerboseCmd =
-    new G4UIcmdWithABool("/OpNovice/DetectorConstruction/enableVerbose", this);
+  fVerboseCmd = new G4UIcmdWithABool("/OpNovice/DetectorConstruction/enableVerbose", this);
   fVerboseCmd->SetGuidance("Set flag for enabling verbose diagnostic printout");
   fVerboseCmd->SetDefaultValue(false);
   fVerboseCmd->AvailableForStates(G4State_PreInit);
 
-  fDumpGdmlCmd =
-    new G4UIcmdWithABool("/OpNovice/DetectorConstruction/dumpGdml", this);
-  fDumpGdmlCmd->SetGuidance(
-    "Set flag for enabling dumping the detector to a gdml file");
+  fDumpGdmlCmd = new G4UIcmdWithABool("/OpNovice/DetectorConstruction/dumpGdml", this);
+  fDumpGdmlCmd->SetGuidance("Set flag for enabling dumping the detector to a gdml file");
   fDumpGdmlCmd->SetDefaultValue(false);
   fDumpGdmlCmd->AvailableForStates(G4State_PreInit);
 
-  fDumpGdmlFileNameCmd = new G4UIcmdWithAString(
-    "/OpNovice/DetectorConstruction/dumpGdmlFileName", this);
+  fDumpGdmlFileNameCmd =
+    new G4UIcmdWithAString("/OpNovice/DetectorConstruction/dumpGdmlFileName", this);
   fDumpGdmlFileNameCmd->SetGuidance("Enter file name to dump gdml file ");
   fDumpGdmlFileNameCmd->SetDefaultValue("OpNovice_dump.gdml");
   fDumpGdmlFileNameCmd->AvailableForStates(G4State_PreInit);
@@ -73,28 +70,19 @@ OpNoviceDetectorMessenger::~OpNoviceDetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void OpNoviceDetectorMessenger::SetNewValue(G4UIcommand* command,
-                                            G4String newValue)
+void OpNoviceDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   auto dc1 = dynamic_cast<OpNoviceDetectorConstruction*>(fOpNoviceDetCon);
-  if(dc1 != nullptr)
-  {
-    if(command == fVerboseCmd)
-      dc1->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
-    if(command == fDumpGdmlCmd)
-      dc1->SetDumpGdml(fDumpGdmlCmd->GetNewBoolValue(newValue));
-    if(command == fDumpGdmlFileNameCmd)
-      dc1->SetDumpGdmlFile(newValue);
+  if (dc1 != nullptr) {
+    if (command == fVerboseCmd) dc1->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
+    if (command == fDumpGdmlCmd) dc1->SetDumpGdml(fDumpGdmlCmd->GetNewBoolValue(newValue));
+    if (command == fDumpGdmlFileNameCmd) dc1->SetDumpGdmlFile(newValue);
   }
-  else
-  {
+  else {
     auto dc2 = dynamic_cast<OpNoviceGDMLDetectorConstruction*>(fOpNoviceDetCon);
-    if(command == fVerboseCmd)
-      dc2->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
-    if(command == fDumpGdmlCmd)
-      dc2->SetDumpGdml(fDumpGdmlCmd->GetNewBoolValue(newValue));
-    if(command == fDumpGdmlFileNameCmd)
-      dc2->SetDumpGdmlFile(newValue);
+    if (command == fVerboseCmd) dc2->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
+    if (command == fDumpGdmlCmd) dc2->SetDumpGdml(fDumpGdmlCmd->GetNewBoolValue(newValue));
+    if (command == fDumpGdmlFileNameCmd) dc2->SetDumpGdmlFile(newValue);
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

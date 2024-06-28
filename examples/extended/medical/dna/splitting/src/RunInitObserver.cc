@@ -34,51 +34,46 @@ G4ThreadLocal RunInitManager* RunInitManager::fgInstance(0);
 
 RunInitManager::RunInitManager()
 {
-    fgInstance = this;
+  fgInstance = this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunInitManager::~RunInitManager()
-{
-}
+RunInitManager::~RunInitManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunInitObserver::RunInitObserver()
 {
-    RunInitManager::Instance()->Insert(this);
+  RunInitManager::Instance()->Insert(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunInitObserver::~RunInitObserver()
-{
-}
+RunInitObserver::~RunInitObserver() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunInitManager* RunInitManager::Instance()
 {
-    if(fgInstance == 0) new RunInitManager();
-    return fgInstance;
+  if (fgInstance == 0) new RunInitManager();
+  return fgInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunInitManager::Initialize()
 {
-    std::vector<RunInitObserver*>::iterator it = fObservers.begin();
-    std::vector<RunInitObserver*>::iterator end = fObservers.end();
+  std::vector<RunInitObserver*>::iterator it = fObservers.begin();
+  std::vector<RunInitObserver*>::iterator end = fObservers.end();
 
-    for(; it != end ; it++) 
-        (*it)->Initialize();
+  for (; it != end; it++)
+    (*it)->Initialize();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunInitManager::Insert(RunInitObserver* observer)
 {
-    fObservers.push_back(observer);
+  fObservers.push_back(observer);
 }
-

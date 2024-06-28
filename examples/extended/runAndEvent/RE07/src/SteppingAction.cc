@@ -32,13 +32,13 @@
 
 #include "SteppingAction.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4Positron.hh"
-#include "G4RunManager.hh"
-
 #include "DetectorConstruction.hh"
 #include "EventAction.hh"
 #include "Run.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4Positron.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -53,47 +53,25 @@ class VRadiobiologicalQuantity
         G4Exception("VRadiobiologicalQuantity::VRadiobiologicalQuantity", "NotVoxelized",
                     FatalException,
                     "Trying to create a radiobiological quantity before voxelizing the detector!");
-
     }
 
-    virtual ~VRadiobiologicalQuantity()
-    {
-      ;
-    }
+    virtual ~VRadiobiologicalQuantity() { ; }
 
     // If this is false (set with macro), nothing happens
-    G4bool IsCalculationEnabled() const
-    {
-      return fCalculationEnabled;
-    }
+    G4bool IsCalculationEnabled() const { return fCalculationEnabled; }
 
     // If this is true, calculation is over and values are updated
-    G4bool HasBeenCalculated() const
-    {
-      return fCalculated;
-    }
+    G4bool HasBeenCalculated() const { return fCalculated; }
 
     // Parameter setting
-    void SetCalculationEnabled(G4bool enabled)
-    {
-      fCalculationEnabled = enabled;
-    }
+    void SetCalculationEnabled(G4bool enabled) { fCalculationEnabled = enabled; }
 
     // Verbosity for output
-    void SetVerboseLevel(G4int level)
-    {
-      fVerboseLevel = level;
-    }
-    G4int GetVerboseLevel() const
-    {
-      return fVerboseLevel;
-    }
+    void SetVerboseLevel(G4int level) { fVerboseLevel = level; }
+    G4int GetVerboseLevel() const { return fVerboseLevel; }
 
     // Set path for output file
-    void SetPath(G4String fN)
-    {
-      fPath = fN;
-    }
+    void SetPath(G4String fN) { fPath = fN; }
 
     // Alias for matrix type
     using array_type = std::valarray<G4double>;
@@ -123,10 +101,7 @@ class VRadiobiologicalQuantity
              << "** Calculation enabled = " << (fCalculationEnabled ? "true *" : "false ")
              << "************" << G4endl << "*******************************************" << G4endl;
     }
-    void virtual PrintParameters()
-    {
-      PrintVirtualParameters();
-    }
+    void virtual PrintParameters() { PrintVirtualParameters(); }
 
   protected:
     // Proper messenger
@@ -145,7 +120,7 @@ class VRadiobiologicalQuantity
     G4bool fCalculated = false;
 
     // Output paths
-    G4String fPath ;
+    G4String fPath;
 
     // Boolean for calculation
     G4bool fCalculationEnabled = false;

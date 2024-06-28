@@ -37,18 +37,20 @@
 // 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #include "CheckVolumeSD.hh"
+
 #include "HistoManager.hh"
-#include "G4TouchableHistory.hh"
+
 #include "G4Step.hh"
+#include "G4TouchableHistory.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
- : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
+  : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,10 +58,10 @@ CheckVolumeSD::CheckVolumeSD(const G4String& name)
 G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   const G4Track* track = aStep->GetTrack();
-  if(track->GetTrackID() > 1) { fHisto->AddLeakingParticle(track); }
+  if (track->GetTrackID() > 1) {
+    fHisto->AddLeakingParticle(track);
+  }
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

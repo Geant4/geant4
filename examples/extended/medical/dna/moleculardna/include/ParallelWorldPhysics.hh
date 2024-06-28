@@ -36,22 +36,21 @@
 
 class ParallelWorldPhysics : public G4VPhysicsConstructor
 {
- public:
-  explicit ParallelWorldPhysics(const G4String& name = "ParallelWP",
-                                G4bool layerdMass    = false);
+  public:
+    explicit ParallelWorldPhysics(const G4String& name = "ParallelWP", G4bool layerdMass = false);
 
-  ~ParallelWorldPhysics() override = default;
+    ~ParallelWorldPhysics() override = default;
 
-  void ConstructProcess() override;
+    void ConstructProcess() override;
 
-  void ConstructParticle() override;
+    void ConstructParticle() override;
 
- private:
-  ParallelWorldPhysics& operator=(const ParallelWorldPhysics&);
+  private:
+    ParallelWorldPhysics& operator=(const ParallelWorldPhysics&);
 
-  ParallelWorldPhysics(const ParallelWorldPhysics&);
+    ParallelWorldPhysics(const ParallelWorldPhysics&);
 
-  G4bool fLayeredMass;
+    G4bool fLayeredMass;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

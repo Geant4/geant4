@@ -33,15 +33,15 @@
 
 #include "G4VUserParallelWorld.hh"
 
-class Par01ParallelWorldForPion : public G4VUserParallelWorld {
-public:
-  Par01ParallelWorldForPion(G4String worldName);
-  ~Par01ParallelWorldForPion();
-  
-private:
-  virtual void Construct();
-  virtual void ConstructSD();
+class Par01ParallelWorldForPion : public G4VUserParallelWorld
+{
+  public:
+    Par01ParallelWorldForPion(G4String worldName);
+    ~Par01ParallelWorldForPion();
 
+  private:
+    virtual void Construct();
+    virtual void ConstructSD();
 };
 
 #endif

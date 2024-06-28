@@ -89,9 +89,10 @@ G4RunMessenger::G4RunMessenger(G4RunManager* runMgr) : runManager(runMgr)
   verboseCmd->SetGuidance(" 0 : Silent (default)");
   verboseCmd->SetGuidance(" 1 : Display main topics");
   verboseCmd->SetGuidance(" 2 : Display main topics and run summary");
+  verboseCmd->SetGuidance(" 3 : Display some additional information");
   verboseCmd->SetParameterName("level", true);
   verboseCmd->SetDefaultValue(0);
-  verboseCmd->SetRange("level >=0 && level <=2");
+  verboseCmd->SetRange("level >=0 && level <=3");
 
   printProgCmd = new G4UIcmdWithAnInteger("/run/printProgress", this);
   printProgCmd->SetGuidance("Display begin_of_event information at given frequency.");

@@ -48,7 +48,6 @@
 
 #include "G4VBiasingOperator.hh"
 
-
 class GB06BOptnSplitAndKillByImportance;
 class G4BiasingProcessSharedData;
 class G4ParallelGeometriesLimiterProcess;
@@ -56,63 +55,59 @@ class G4ParticleDefinition;
 class G4VPhysicalVolume;
 #include <map>
 
+class GB06BOptrSplitAndKillByImportance : public G4VBiasingOperator
+{
+  public:
+    // ------------------------------------------------------------
+    // -- Constructor: takes the name of the particle type to bias:
+    // ------------------------------------------------------------
+    GB06BOptrSplitAndKillByImportance(G4String particleToBias,
+                                      G4String name = "SplitAndKillByImportance");
+    virtual ~GB06BOptrSplitAndKillByImportance();
 
-class GB06BOptrSplitAndKillByImportance : public G4VBiasingOperator {
-public:
-  // ------------------------------------------------------------
-  // -- Constructor: takes the name of the particle type to bias:
-  // ------------------------------------------------------------
-  GB06BOptrSplitAndKillByImportance(G4String particleToBias,
-                                    G4String name = "SplitAndKillByImportance");
-  virtual ~GB06BOptrSplitAndKillByImportance();
-  
-  // -- method called at beginning of run:
-  virtual void StartRun();
-  
-private:
-  // -----------------------------
-  // -- Mandatory from base class:
-  // -----------------------------
-  // -- Not used:
-  virtual G4VBiasingOperation*
-  ProposeOccurenceBiasingOperation(const G4Track*,
-                                   const G4BiasingProcessInterface*) final
-  { return 0; }
-  
-  // -- Not used:
-  virtual G4VBiasingOperation*
-  ProposeFinalStateBiasingOperation(const G4Track*,
-                                    const G4BiasingProcessInterface*) final
-  { return 0; }
+    // -- method called at beginning of run:
+    virtual void StartRun();
 
-  // -- Used method : it will return the biasing operation that will split particles
-  // -- with a probabilty depending on the total absorption cross-section.
-  virtual G4VBiasingOperation*
-  ProposeNonPhysicsBiasingOperation(const G4Track*,
-                                    const G4BiasingProcessInterface*) final;
+  private:
+    // -----------------------------
+    // -- Mandatory from base class:
+    // -----------------------------
+    // -- Not used:
+    virtual G4VBiasingOperation*
+    ProposeOccurenceBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    {
+      return 0;
+    }
 
+    // -- Not used:
+    virtual G4VBiasingOperation*
+    ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    {
+      return 0;
+    }
 
-  // ---------------------------------------
-  // -- Method specific to this application:
-  // ---------------------------------------
-public:
-  void SetParallelWorld( G4VPhysicalVolume* parallelWorld )
-  { fParallelWorld = parallelWorld; }
+    // -- Used method : it will return the biasing operation that will split particles
+    // -- with a probabilty depending on the total absorption cross-section.
+    virtual G4VBiasingOperation*
+    ProposeNonPhysicsBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final;
 
-  // -- The importance map, linking a replica number to an volume importance:
-  std::map< G4int, G4int >& GetImportanceMap() { return fImportanceMap; }
+    // ---------------------------------------
+    // -- Method specific to this application:
+    // ---------------------------------------
+  public:
+    void SetParallelWorld(G4VPhysicalVolume* parallelWorld) { fParallelWorld = parallelWorld; }
 
-  
-  
-private:
-  GB06BOptnSplitAndKillByImportance*     fSplitAndKillByImportance;
-  const G4ParticleDefinition*                      fParticleToBias;
-  G4VPhysicalVolume*                                fParallelWorld;
-  G4int                                        fParallelWorldIndex;
-  const G4BiasingProcessSharedData*             fBiasingSharedData;
-  const G4ParallelGeometriesLimiterProcess* fBiasingLimiterProcess;
-  std::map< G4int, G4int >                          fImportanceMap;
+    // -- The importance map, linking a replica number to an volume importance:
+    std::map<G4int, G4int>& GetImportanceMap() { return fImportanceMap; }
 
+  private:
+    GB06BOptnSplitAndKillByImportance* fSplitAndKillByImportance;
+    const G4ParticleDefinition* fParticleToBias;
+    G4VPhysicalVolume* fParallelWorld;
+    G4int fParallelWorldIndex;
+    const G4BiasingProcessSharedData* fBiasingSharedData;
+    const G4ParallelGeometriesLimiterProcess* fBiasingLimiterProcess;
+    std::map<G4int, G4int> fImportanceMap;
 };
 
 #endif

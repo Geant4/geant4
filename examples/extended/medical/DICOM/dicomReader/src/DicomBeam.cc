@@ -24,29 +24,26 @@
 // ********************************************************************
 //
 #include "DicomBeam.hh"
-#include "DicomVBeamDevice.hh"
-#include "DicomBeamControlPoint.hh"
+
 #include "DicomBeamCompensator.hh"
+#include "DicomBeamControlPoint.hh"
+#include "DicomVBeamDevice.hh"
+
 #include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomBeam::DicomBeam()
-{
-}
+DicomBeam::DicomBeam() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeam::Print( std::ostream& )
-{
-
-}
+void DicomBeam::Print(std::ostream&) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomBeam::SetControlPointMetersets()
 {
   G4double prevCumulativeMS = 0.;
-  for( size_t ii = 0; ii < theControlPoints.size(); ii++ ){
+  for (size_t ii = 0; ii < theControlPoints.size(); ii++) {
     G4double cumulativeMS = theControlPoints[ii]->GetCumulativeMetersetWeight();
-    theControlPoints[ii]->SetMetersetWeight( (cumulativeMS - prevCumulativeMS )*theMeterset);
+    theControlPoints[ii]->SetMetersetWeight((cumulativeMS - prevCumulativeMS) * theMeterset);
     prevCumulativeMS = cumulativeMS;
   }
 }
@@ -54,23 +51,20 @@ void DicomBeam::SetControlPointMetersets()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomBeam::DumpToFile()
 {
-  std::ofstream fout("RTPlan_"+std::to_string(theNumber));
+  std::ofstream fout("RTPlan_" + std::to_string(theNumber));
   fout << ":P BeamMeterset " << theMeterset << G4endl;
 
-  for( size_t ii = 0; ii < theDevices.size(); ii++) {
-    theDevices[ii]->DumpToFile( fout );
+  for (size_t ii = 0; ii < theDevices.size(); ii++) {
+    theDevices[ii]->DumpToFile(fout);
   }
 
-  for( size_t ii = 0; ii < theCompensators.size(); ii++) {
-    theCompensators[ii]->DumpToFile( fout );
+  for (size_t ii = 0; ii < theCompensators.size(); ii++) {
+    theCompensators[ii]->DumpToFile(fout);
   }
 
-  for( size_t kk = 0; kk < theControlPoints.size(); kk++ ){
+  for (size_t kk = 0; kk < theControlPoints.size(); kk++) {
     std::string kkstr = std::to_string(theControlPoints[kk]->GetIndex());
-    std::ofstream fout2("RTPlanControlPoint_"+std::to_string(theNumber)+"_"+kkstr);
-    theControlPoints[kk]->DumpToFile( fout2 );
+    std::ofstream fout2("RTPlanControlPoint_" + std::to_string(theNumber) + "_" + kkstr);
+    theControlPoints[kk]->DumpToFile(fout2);
   }
-
 }
-
-

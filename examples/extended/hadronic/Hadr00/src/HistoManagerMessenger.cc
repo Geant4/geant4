@@ -43,70 +43,69 @@
 #include "HistoManagerMessenger.hh"
 
 #include "HistoManager.hh"
-#include "G4UIdirectory.hh"
+
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWith3Vector.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "HistoManager.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManagerMessenger::HistoManagerMessenger(HistoManager * p)
-:G4UImessenger(), fHisto(p)
+HistoManagerMessenger::HistoManagerMessenger(HistoManager* p) : G4UImessenger(), fHisto(p)
 {
-  fbinCmd = new G4UIcmdWithAnInteger("/testhadr/nBinsE",this);
+  fbinCmd = new G4UIcmdWithAnInteger("/testhadr/nBinsE", this);
   fbinCmd->SetGuidance("Set number of bins for energy");
-  fbinCmd->SetParameterName("NEbins",false);
-  fbinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fbinCmd->SetParameterName("NEbins", false);
+  fbinCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fnOfAbsCmd = new G4UIcmdWithAnInteger("/testhadr/nBinsP",this);
+  fnOfAbsCmd = new G4UIcmdWithAnInteger("/testhadr/nBinsP", this);
   fnOfAbsCmd->SetGuidance("Set number of bins for momentum");
-  fnOfAbsCmd->SetParameterName("NPbins",false);
-  fnOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fnOfAbsCmd->SetParameterName("NPbins", false);
+  fnOfAbsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpartCmd = new G4UIcmdWithAString("/testhadr/particle",this);
+  fpartCmd = new G4UIcmdWithAString("/testhadr/particle", this);
   fpartCmd->SetGuidance("Set particle name");
-  fpartCmd->SetParameterName("Particle",false);
-  fpartCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fpartCmd->SetParameterName("Particle", false);
+  fpartCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fcsCmd = new G4UIcmdWithAString("/testhadr/targetElm",this);
+  fcsCmd = new G4UIcmdWithAString("/testhadr/targetElm", this);
   fcsCmd->SetGuidance("Set element name");
-  fcsCmd->SetParameterName("Elm",false);
-  fcsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fcsCmd->SetParameterName("Elm", false);
+  fcsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fe1Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/minEnergy",this);
+  fe1Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/minEnergy", this);
   fe1Cmd->SetGuidance("Set min kinetic energy");
-  fe1Cmd->SetParameterName("eMin",false);
+  fe1Cmd->SetParameterName("eMin", false);
   fe1Cmd->SetUnitCategory("Energy");
-  fe1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fe1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fe2Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/maxEnergy",this);
+  fe2Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/maxEnergy", this);
   fe2Cmd->SetGuidance("Set max kinetic energy");
-  fe2Cmd->SetParameterName("eMax",false);
+  fe2Cmd->SetParameterName("eMax", false);
   fe2Cmd->SetUnitCategory("Energy");
-  fe2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fe2Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fp1Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/minMomentum",this);
+  fp1Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/minMomentum", this);
   fp1Cmd->SetGuidance("Set min momentum");
-  fp1Cmd->SetParameterName("pMin",false);
+  fp1Cmd->SetParameterName("pMin", false);
   fp1Cmd->SetUnitCategory("Energy");
-  fp1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fp1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fp2Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/maxMomentum",this);
+  fp2Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/maxMomentum", this);
   fp2Cmd->SetGuidance("Set max momentum");
-  fp2Cmd->SetParameterName("pMax",false);
+  fp2Cmd->SetParameterName("pMax", false);
   fp2Cmd->SetUnitCategory("Energy");
-  fp2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fp2Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fverbCmd = new G4UIcmdWithAnInteger("/testhadr/verbose",this);
+  fverbCmd = new G4UIcmdWithAnInteger("/testhadr/verbose", this);
   fverbCmd->SetGuidance("Set verbose for ");
-  fverbCmd->SetParameterName("verb",false);
-  fverbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fverbCmd->SetParameterName("verb", false);
+  fverbCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fFCmd = new G4UIcmdWithAString("/testhadr/fileName",this);
+  fFCmd = new G4UIcmdWithAString("/testhadr/fileName", this);
   fFCmd->SetGuidance("set name for the histograms file");
 }
 
@@ -130,28 +129,36 @@ HistoManagerMessenger::~HistoManagerMessenger()
 
 void HistoManagerMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == fbinCmd ) {
+  if (command == fbinCmd) {
     fHisto->SetNumberOfBinsE(fbinCmd->GetNewIntValue(newValue));
-  } else if( command == fnOfAbsCmd ) { 
+  }
+  else if (command == fnOfAbsCmd) {
     fHisto->SetNumberOfBinsP(fnOfAbsCmd->GetNewIntValue(newValue));
-  } else if( command == fverbCmd ) {
+  }
+  else if (command == fverbCmd) {
     fHisto->SetVerbose(fverbCmd->GetNewIntValue(newValue));
-  } else if( command == fpartCmd ) {
+  }
+  else if (command == fpartCmd) {
     fHisto->SetParticleName(newValue);
-  } else if( command == fcsCmd ) {
+  }
+  else if (command == fcsCmd) {
     fHisto->SetElementName(newValue);
-  } else if( command == fe1Cmd ) { 
+  }
+  else if (command == fe1Cmd) {
     fHisto->SetMinKinEnergy(fe1Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fe2Cmd ) { 
+  }
+  else if (command == fe2Cmd) {
     fHisto->SetMaxKinEnergy(fe2Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fp1Cmd ) { 
+  }
+  else if (command == fp1Cmd) {
     fHisto->SetMinMomentum(fp1Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fp2Cmd ) { 
+  }
+  else if (command == fp2Cmd) {
     fHisto->SetMaxMomentum(fp2Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fFCmd ) {
+  }
+  else if (command == fFCmd) {
     fHisto->SetHistoName(newValue);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

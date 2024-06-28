@@ -33,30 +33,26 @@
 #ifndef Py8Decayer_H
 #define Py8Decayer_H
 
+#include "Pythia8/Pythia.h"
+
 #include "G4VExtDecayer.hh"
 #include "globals.hh"
-
-#include "Pythia8/Pythia.h"
 
 class G4Track;
 class G4DecayProducts;
 
 class Py8Decayer : public G4VExtDecayer
 {
-  
-   public:
+  public:
+    // ctor & dtor
+    Py8Decayer();
+    virtual ~Py8Decayer();
 
-      //ctor & dtor
-      Py8Decayer();
-      virtual ~Py8Decayer();
+    virtual G4DecayProducts* ImportDecayProducts(const G4Track&);
 
-      virtual G4DecayProducts* ImportDecayProducts(const G4Track&);
-    
-   private:
-   
-      // data members
-      Pythia8::Pythia* fDecayer;
-
+  private:
+    // data members
+    Pythia8::Pythia* fDecayer;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

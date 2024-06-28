@@ -1079,7 +1079,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     if (existingViewer) {
       // ...bring view parameters up to date...
       fExistingVP = existingViewer->GetViewParameters();
-      fExistingSceneTree = existingViewer->AccessSceneTree();
+      fExistingSceneTree = existingViewer->GetSceneTree();
     }
   }
 
@@ -1112,7 +1112,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     fThereWasAViewer = true;
     auto viewer = fpVisManager->GetCurrentViewer();
     fExistingVP = viewer->GetViewParameters();
-    fExistingSceneTree = viewer->AccessSceneTree();
+    fExistingSceneTree = viewer->GetSceneTree();
   } else {
     G4ExceptionDescription ed;
     if (newViewer) {

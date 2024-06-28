@@ -27,30 +27,29 @@
 /// \brief Implementation of the GB07PrimaryGeneratorAction class
 //
 #include "GB07PrimaryGeneratorAction.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB07PrimaryGeneratorAction::GB07PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
+GB07PrimaryGeneratorAction::GB07PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle = particleTable->FindParticle(particleName="proton");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "proton");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(10.*GeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-50*cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(10. * GeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -50 * cm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

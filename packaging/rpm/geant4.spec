@@ -1,10 +1,10 @@
-%global geant4_version 11.2.2
+%global geant4_version 11.3.0
 
 %global NEUTRONHPDATA G4NDL.4.7.1
-%global LEDATA G4EMLOW.8.5
+%global LEDATA G4EMLOW.8.6
 %global LEVELGAMMADATA G4PhotonEvaporation.5.7
 %global RADIOACTIVEDATA G4RadioactiveDecay.5.6
-%global PARTICLEXSDATA G4PARTICLEXS.4.0
+%global PARTICLEXSDATA G4PARTICLEXS.4.1
 %global PIIDATA G4PII.1.3
 %global REALSURFACEDATA G4RealSurface.2.2
 %global SAIDXSDATA G4SAIDDATA.2.0
@@ -12,6 +12,8 @@
 %global INCLDATA G4INCL.1.2
 %global ENSDFSTATEDATA G4ENSDFSTATE.2.3
 %global TENDLDATA G4TENDL.1.4
+%global NUDEXLIBDATA G4NUDEXLIB.1.0
+%global URRPTDATA G4URRPT.1.0
 
 Name: geant4
 Version: %{geant4_version}
@@ -32,6 +34,8 @@ Source9:  https://geant4-data.web.cern.ch/datasets/%{ABLADATA}.tar.gz
 Source10: https://geant4-data.web.cern.ch/datasets/%{INCLDATA}.tar.gz
 Source11: https://geant4-data.web.cern.ch/datasets/%{ENSDFSTATEDATA}.tar.gz
 Source12: https://geant4-data.web.cern.ch/datasets/%{TENDLDATA}.tar.gz
+Source13: https://geant4-data.web.cern.ch/datasets/%{NUDEXLIBDATA}.tar.gz
+Source14: https://geant4-data.web.cern.ch/datasets/%{URRPTDATA}.tar.gz
 
 %undefine __cmake_in_source_build
 %undefine __cmake3_in_source_build
@@ -200,7 +204,6 @@ Geant4 user examples
   -DGEANT4_USE_SYSTEM_PTL:BOOL=OFF \
   -DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
   -DGEANT4_USE_TBB:BOOL=%{with tbb} \
-  -DGEANT4_USE_TIMEMORY:BOOL=OFF \
   -DGEANT4_USE_VTK:BOOL=%{with vtk} \
   -DGEANT4_USE_XM:BOOL=ON
 
@@ -231,6 +234,7 @@ tar xzf %{SOURCE9} -C %{buildroot}/%{_datadir}/%{name}/data
 tar xzf %{SOURCE10} -C %{buildroot}/%{_datadir}/%{name}/data
 tar xzf %{SOURCE11} -C %{buildroot}/%{_datadir}/%{name}/data
 tar xzf %{SOURCE12} -C %{buildroot}/%{_datadir}/%{name}/data
+tar xzf %{SOURCE13} -C %{buildroot}/%{_datadir}/%{name}/data
 
 %files
 # Empty
@@ -258,8 +262,17 @@ tar xzf %{SOURCE12} -C %{buildroot}/%{_datadir}/%{name}/data
 %endif
 
 %changelog
+* Fri Jun 28 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.3.0-b
+- Update to version 11.3.0-beta
+
 * Fri Jun 21 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.2.2
 - Update to version 11.2.2
+
+* Fri June 7 2024 Ben Morgan <bmorgan@cern.ch> - 11.2.1-2
+- Add install of new URRPT dataset
+
+* Fri May 17 2024 Ben Morgan <bmorgan@cern.ch> - 11.2.1-1
+- Add install of new NuDEXLib dataset
 
 * Fri Feb 16 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.2.1
 - Update to version 11.2.1

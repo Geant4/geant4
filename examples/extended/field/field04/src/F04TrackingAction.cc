@@ -28,16 +28,15 @@
 /// \brief Implementation of the F04TrackingAction class
 //
 
-#include "globals.hh"
-#include "G4RunManager.hh"
+#include "F04TrackingAction.hh"
 
 #include "F04UserTrackInformation.hh"
 
-#include "G4Track.hh"
 #include "G4ParticleTypes.hh"
+#include "G4RunManager.hh"
+#include "G4Track.hh"
 #include "G4TrackingManager.hh"
-
-#include "F04TrackingAction.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,25 +46,25 @@ void F04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
   fpTrackingManager->SetUserTrackInformation(trackInformation);
 
-  if (aTrack->GetMomentumDirection().z()>0.0) {
-     trackInformation->SetTrackStatusFlag(right);
-  } else {
-     trackInformation->SetTrackStatusFlag(left);
+  if (aTrack->GetMomentumDirection().z() > 0.0) {
+    trackInformation->SetTrackStatusFlag(right);
   }
-
+  else {
+    trackInformation->SetTrackStatusFlag(left);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04TrackingAction::PostUserTrackingAction(const G4Track* aTrack){
-
+void F04TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+{
   auto trackInformation = (F04UserTrackInformation*)aTrack->GetUserInformation();
 
-  if ( aTrack->GetDefinition()==G4MuonPlus::MuonPlusDefinition() ||
-       aTrack->GetDefinition()==G4PionPlus::PionPlusDefinition() ) {
+  if (aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition()
+      || aTrack->GetDefinition() == G4PionPlus::PionPlusDefinition())
+  {
     if (trackInformation->GetTrackStatusFlag() == reverse) {
-//       G4RunManager::GetRunManager()->rndmSaveThisEvent();
+      //       G4RunManager::GetRunManager()->rndmSaveThisEvent();
     }
   }
-
 }

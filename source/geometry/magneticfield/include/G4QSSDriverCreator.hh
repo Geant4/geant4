@@ -27,10 +27,10 @@
 //
 // QSS driver creator
 
-// Author: J.Apostolakis - October 2021
+// Author: J.Apostolakis (CERN) - October 2021
 // -------------------------------------------------------------------
 #ifndef QSS_DriverCreator_HH
-#define QSS_DriverCreator_HH
+#define QSS_DriverCreator_HH 1
 
 #include "G4QSStepper.hh"
 #include "G4QSSDriver.hh"

@@ -30,12 +30,12 @@
 #ifndef B2aDetectorMessenger_h
 #define B2aDetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcommand;
 
 namespace B2a
 {
@@ -49,26 +49,26 @@ class DetectorConstruction;
 /// - /B2/det/setChamberMaterial name
 /// - /B2/det/stepMax value unit
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-    DetectorMessenger(DetectorConstruction* );
+    DetectorMessenger(DetectorConstruction*);
     ~DetectorMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
-    DetectorConstruction*  fDetectorConstruction = nullptr;
+    DetectorConstruction* fDetectorConstruction = nullptr;
 
-    G4UIdirectory*         fDirectory = nullptr;
-    G4UIdirectory*         fDetDirectory = nullptr;
+    G4UIdirectory* fDirectory = nullptr;
+    G4UIdirectory* fDetDirectory = nullptr;
 
-    G4UIcmdWithAString*    fTargMatCmd = nullptr;
-    G4UIcmdWithAString*    fChamMatCmd = nullptr;
+    G4UIcmdWithAString* fTargMatCmd = nullptr;
+    G4UIcmdWithAString* fChamMatCmd = nullptr;
 
     G4UIcmdWithADoubleAndUnit* fStepMaxCmd = nullptr;
 };
 
-}
+}  // namespace B2a
 
 #endif

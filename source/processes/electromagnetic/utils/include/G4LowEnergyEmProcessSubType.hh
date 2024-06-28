@@ -40,8 +40,8 @@
 #ifndef G4LowEnergyEmProcessSubType_h
 #define G4LowEnergyEmProcessSubType_h 1
 
-enum G4LowEnergyEmProcessSubType 
-{ 
+enum G4LowEnergyEmProcessSubType
+{
   fLowEnergyElastic = 51,
   fLowEnergyExcitation = 52,
   fLowEnergyIonisation = 53,
@@ -57,7 +57,9 @@ enum G4LowEnergyEmProcessSubType
   fLowEnergyDoubleCap = 63,
   fLowEnergyIoniTransfer = 64,
   fLowEnergyStaticMol = 65,
-  fLowEnergyScavenger = 66
+  fLowEnergyScavenger = 66,
+  fLowEnergyTripleIonisation = 67,
+  fLowEnergyQuadrupleIonisation = 68
 };
 
 #endif

@@ -36,7 +36,7 @@
 
 class Dicom2ActionInitialization : public G4VUserActionInitialization
 {
-public:
+  public:
     Dicom2ActionInitialization();
     virtual ~Dicom2ActionInitialization();
 
@@ -47,5 +47,3 @@ public:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

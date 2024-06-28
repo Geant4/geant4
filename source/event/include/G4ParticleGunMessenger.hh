@@ -48,6 +48,7 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3Vector;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithABool;
 
 class G4ParticleGunMessenger : public G4UImessenger
 {
@@ -84,6 +85,7 @@ class G4ParticleGunMessenger : public G4UImessenger
     G4UIcmdWithAnInteger*       numberCmd;
     G4UIcommand*                ionCmd;
     G4UIcommand*                ionLvlCmd;
+    G4UIcmdWithABool*           volChkCmd;
 
     // For ion shooting
     //

@@ -37,8 +37,8 @@
 #include "G4GenericMessenger.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,10 +50,10 @@ RunAction::RunAction()
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetVerboseLevel(1);
-  // Only merge in MT mode to avoid warning when running in Sequential mode
-  #ifdef G4MULTITHREADED
-    analysisManager->SetNtupleMerging(true);
-  #endif
+// Only merge in MT mode to avoid warning when running in Sequential mode
+#ifdef G4MULTITHREADED
+  analysisManager->SetNtupleMerging(true);
+#endif
 
   // Create directories
   analysisManager->SetHistoDirectoryName("histo");
@@ -65,13 +65,13 @@ RunAction::RunAction()
   // analysisManager->SetFirstHistoId(1);
 
   // id = 0
-  analysisManager->CreateH1("EAbs","Edep in absorber (MeV)", 100, 0., 800*MeV);
+  analysisManager->CreateH1("EAbs", "Edep in absorber (MeV)", 100, 0., 800 * MeV);
   // id = 1
-  analysisManager->CreateH1("EGap","Edep in gap (MeV)", 100, 0., 100*MeV);
+  analysisManager->CreateH1("EGap", "Edep in gap (MeV)", 100, 0., 100 * MeV);
   // id = 2
-  analysisManager->CreateH1("LAbs","trackL in absorber (mm)", 100, 0., 1*m);
+  analysisManager->CreateH1("LAbs", "trackL in absorber (mm)", 100, 0., 1 * m);
   // id = 3
-  analysisManager->CreateH1("LGap","trackL in gap (mm)", 100, 0., 50*cm);
+  analysisManager->CreateH1("LGap", "trackL in gap (mm)", 100, 0., 50 * cm);
 
   // Create ntuples.
   // Ntuples ids are generated automatically starting from 0.
@@ -80,15 +80,15 @@ RunAction::RunAction()
 
   // Create 1st ntuple (id = 0)
   analysisManager->CreateNtuple("Ntuple1", "Edep");
-  analysisManager->CreateNtupleDColumn("Eabs"); // column Id = 0
-  analysisManager->CreateNtupleDColumn("Egap"); // column Id = 1
+  analysisManager->CreateNtupleDColumn("Eabs");  // column Id = 0
+  analysisManager->CreateNtupleDColumn("Egap");  // column Id = 1
   analysisManager->FinishNtuple();
 
   // Create 2nd ntuple (id = 1)
   //
   analysisManager->CreateNtuple("Ntuple2", "TrackL");
-  analysisManager->CreateNtupleDColumn("Labs"); // column Id = 0
-  analysisManager->CreateNtupleDColumn("Lgap"); // column Id = 1
+  analysisManager->CreateNtupleDColumn("Labs");  // column Id = 0
+  analysisManager->CreateNtupleDColumn("Lgap");  // column Id = 1
   analysisManager->FinishNtuple();
 
   DefineCommands();
@@ -107,8 +107,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* /*run*/)
-{}
+void RunAction::EndOfRunAction(const G4Run* /*run*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,22 +116,24 @@ void RunAction::PrintStatistic()
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   G4cout << "\n ----> print histograms statistic \n" << G4endl;
-  for ( G4int i=0; i<analysisManager->GetNofH1s(); ++i ) {
+  for (G4int i = 0; i < analysisManager->GetNofH1s(); ++i) {
     auto h1 = analysisManager->GetH1(i);
     // skip if histogram was deleted
     if (h1 == nullptr) continue;
 
     G4String name = analysisManager->GetH1Name(i);
     G4String unitCategory;
-    if (name[0U] == 'E' ) { unitCategory = "Energy"; }
-    if (name[0U] == 'L' ) { unitCategory = "Length"; }
-         // we use an explicit unsigned int type for operator [] argument
-         // to avoid problems with windows compiler
+    if (name[0U] == 'E') {
+      unitCategory = "Energy";
+    }
+    if (name[0U] == 'L') {
+      unitCategory = "Length";
+    }
+    // we use an explicit unsigned int type for operator [] argument
+    // to avoid problems with windows compiler
 
-    G4cout << name
-           << ": mean = " << G4BestUnit(h1->mean(), unitCategory)
-           << " rms = " << G4BestUnit(h1->rms(), unitCategory )
-           << G4endl;
+    G4cout << name << ": mean = " << G4BestUnit(h1->mean(), unitCategory)
+           << " rms = " << G4BestUnit(h1->rms(), unitCategory) << G4endl;
   }
 }
 
@@ -141,18 +142,12 @@ void RunAction::PrintStatistic()
 void RunAction::DefineCommands()
 {
   // Define /AnaEx03/runAction command directory using generic messenger class
-  fMessenger
-    = new G4GenericMessenger(this,
-                             "/AnaEx03/runAction/",
-                             "Run action commands");
+  fMessenger = new G4GenericMessenger(this, "/AnaEx03/runAction/", "Run action commands");
 
   // printStatistic command
-  auto& printStatisticCmd
-    = fMessenger->DeclareMethod("printStatistic",
-                                &RunAction::PrintStatistic,
-                                "Print statistic at the end of Run.");
+  auto& printStatisticCmd = fMessenger->DeclareMethod("printStatistic", &RunAction::PrintStatistic,
+                                                      "Print statistic at the end of Run.");
   printStatisticCmd.SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

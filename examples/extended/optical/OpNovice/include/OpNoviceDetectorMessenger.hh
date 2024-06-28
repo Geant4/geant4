@@ -32,8 +32,8 @@
 #ifndef OpNoviceDetectorMessenger_h
 #define OpNoviceDetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4VUserDetectorConstruction;
 class G4UIdirectory;
@@ -44,12 +44,12 @@ class G4UIcmdWithAString;
 
 class OpNoviceDetectorMessenger : public G4UImessenger
 {
-public:
+  public:
     OpNoviceDetectorMessenger(G4VUserDetectorConstruction*);
     ~OpNoviceDetectorMessenger() override;
     void SetNewValue(G4UIcommand*, G4String) override;
 
-private:
+  private:
     G4VUserDetectorConstruction* fOpNoviceDetCon = nullptr;
     G4UIdirectory* fDetConDir = nullptr;
     G4UIcmdWithABool* fVerboseCmd = nullptr;

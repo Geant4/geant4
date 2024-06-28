@@ -39,23 +39,21 @@
 //
 //-------------------------------------------------------------------
 
-#include "G4Types.hh"
-
-#include "G4UImanager.hh"
-#include "G4RunManagerFactory.hh"
-
+#include "Par02ActionInitialization.hh"
 #include "Par02DetectorConstruction.hh"
 #include "Par02PhysicsList.hh"
-#include "Par02ActionInitialization.hh"
 
-#include "G4VisExecutive.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
-int main( int argc, char** argv ) {
-
+int main(int argc, char** argv)
+{
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -67,16 +65,16 @@ int main( int argc, char** argv ) {
 
   // Detector/mass geometry:
   auto detector = new Par02DetectorConstruction();
-  runManager->SetUserInitialization( detector );
+  runManager->SetUserInitialization(detector);
 
   // PhysicsList (including G4FastSimulationManagerProcess)
   auto physicsList = new Par02PhysicsList;
-  runManager->SetUserInitialization( physicsList );
+  runManager->SetUserInitialization(physicsList);
 
   //-------------------------------
   // UserAction classes
   //-------------------------------
-  runManager->SetUserInitialization( new Par02ActionInitialization );
+  runManager->SetUserInitialization(new Par02ActionInitialization);
 
   // Initialize Run manager
   runManager->Initialize();
@@ -88,17 +86,18 @@ int main( int argc, char** argv ) {
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
-  if ( ui ) {
+  if (ui) {
     //--------------------------
     // Define (G)UI
     //--------------------------
     ui->SessionStart();
     delete ui;
-  } else {
+  }
+  else {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    G4UImanager * UImanager = G4UImanager::GetUIpointer();
-    UImanager->ApplyCommand( command+fileName );
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    UImanager->ApplyCommand(command + fileName);
   }
 
   // Free the store: user actions, physics_list and detector_description are

@@ -27,51 +27,52 @@
 /// \brief Implementation of the ExP01DetectorMessenger class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExP01DetectorMessenger.hh"
 
 #include "ExP01DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01DetectorMessenger::ExP01DetectorMessenger(ExP01DetectorConstruction* myDet)
-: G4UImessenger(),
-  fDetector(myDet),
-  fN02Dir(0),
-  fDetDir(0),
-  fTargMatCmd(0),
-  fChamMatCmd(0),    
-  fFieldCmd(0)
-{ 
+  : G4UImessenger(),
+    fDetector(myDet),
+    fN02Dir(0),
+    fDetDir(0),
+    fTargMatCmd(0),
+    fChamMatCmd(0),
+    fFieldCmd(0)
+{
   fN02Dir = new G4UIdirectory("/P01/");
   fN02Dir->SetGuidance("UI commands specific to this example.");
-  
+
   fDetDir = new G4UIdirectory("/P01/det/");
   fDetDir->SetGuidance("detector control.");
-  
-  fTargMatCmd = new G4UIcmdWithAString("/P01/det/setTargetMate",this);
+
+  fTargMatCmd = new G4UIcmdWithAString("/P01/det/setTargetMate", this);
   fTargMatCmd->SetGuidance("Select Material of the Target.");
-  fTargMatCmd->SetParameterName("choice",false);
-  fTargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  fChamMatCmd = new G4UIcmdWithAString("/P01/det/setChamberMate",this);
+  fTargMatCmd->SetParameterName("choice", false);
+  fTargMatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fChamMatCmd = new G4UIcmdWithAString("/P01/det/setChamberMate", this);
   fChamMatCmd->SetGuidance("Select Material of the Target.");
-  fChamMatCmd->SetParameterName("choice",false);
-  fChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-  
-  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/P01/det/setField",this);  
+  fChamMatCmd->SetParameterName("choice", false);
+  fChamMatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/P01/det/setField", this);
   fFieldCmd->SetGuidance("Define magnetic field.");
   fFieldCmd->SetGuidance("Magnetic field will be in X direction.");
-  fFieldCmd->SetParameterName("Bx",false);
+  fFieldCmd->SetParameterName("Bx", false);
   fFieldCmd->SetUnitCategory("Magnetic flux density");
-  fFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fFieldCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,16 +88,19 @@ ExP01DetectorMessenger::~ExP01DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExP01DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fTargMatCmd )
-   { fDetector->SetTargetMaterial(newValue);}
-   
-  if( command == fChamMatCmd )
-   { fDetector->SetChamberMaterial(newValue);}  
-  
-  if( command == fFieldCmd )
-   { fDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));}
+void ExP01DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fTargMatCmd) {
+    fDetector->SetTargetMaterial(newValue);
+  }
+
+  if (command == fChamMatCmd) {
+    fDetector->SetChamberMaterial(newValue);
+  }
+
+  if (command == fFieldCmd) {
+    fDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

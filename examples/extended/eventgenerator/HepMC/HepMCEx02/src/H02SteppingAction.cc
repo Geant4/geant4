@@ -27,44 +27,40 @@
 /// \brief Implementation of the H02SteppingAction class
 //
 //
+#include "H02SteppingAction.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-#include "G4SteppingManager.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
+#include "G4SteppingManager.hh"
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
 #include "G4VPhysicalVolume.hh"
-#include "H02SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-H02SteppingAction::H02SteppingAction()
- : G4UserSteppingAction()
-{
-}
-
+H02SteppingAction::H02SteppingAction() : G4UserSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-H02SteppingAction::~H02SteppingAction()
-{
-}
+H02SteppingAction::~H02SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02SteppingAction::UserSteppingAction(const G4Step* astep)
 {
-  G4Track* atrack= astep-> GetTrack();
+  G4Track* atrack = astep->GetTrack();
 
-  if(atrack-> GetTrackStatus() != fAlive) return;
-  if(atrack-> GetParentID() == 0) return;
+  if (atrack->GetTrackStatus() != fAlive) return;
+  if (atrack->GetParentID() == 0) return;
 
-  G4ParticleDefinition* particleType= atrack-> GetDefinition();
-  if((particleType == G4MuonPlus::MuonPlusDefinition())
-     || (particleType == G4MuonMinus::MuonMinusDefinition())) return;
+  G4ParticleDefinition* particleType = atrack->GetDefinition();
+  if ((particleType == G4MuonPlus::MuonPlusDefinition())
+      || (particleType == G4MuonMinus::MuonMinusDefinition()))
+    return;
 
-  G4StepPoint* prestep= astep-> GetPreStepPoint();
-  G4VPhysicalVolume* pv= prestep-> GetPhysicalVolume();
-  G4String pvname= pv-> GetName();
-  if(pvname=="BARREL_CAL_PV" || pvname=="ENDCAP_CAL_PV" ) {
-    atrack-> SetTrackStatus(fKillTrackAndSecondaries);
+  G4StepPoint* prestep = astep->GetPreStepPoint();
+  G4VPhysicalVolume* pv = prestep->GetPhysicalVolume();
+  G4String pvname = pv->GetName();
+  if (pvname == "BARREL_CAL_PV" || pvname == "ENDCAP_CAL_PV") {
+    atrack->SetTrackStatus(fKillTrackAndSecondaries);
   }
 }

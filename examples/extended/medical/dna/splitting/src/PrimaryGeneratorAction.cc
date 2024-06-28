@@ -28,32 +28,32 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction():
-G4VUserPrimaryGeneratorAction()
+PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
-    G4int n_particle = 1;
-    fpParticleGun  = new G4ParticleGun(n_particle);
+  G4int n_particle = 1;
+  fpParticleGun = new G4ParticleGun(n_particle);
 
-    // default gun parameters
-    fpParticleGun->SetParticleEnergy(500.*keV);
-    fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-    fpParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0));
+  // default gun parameters
+  fpParticleGun->SetParticleEnergy(500. * keV);
+  fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fpParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-    delete fpParticleGun;
+  delete fpParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    fpParticleGun->GeneratePrimaryVertex(anEvent);
+  fpParticleGun->GeneratePrimaryVertex(anEvent);
 }

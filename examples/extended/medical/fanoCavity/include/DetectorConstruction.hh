@@ -45,55 +45,51 @@ class DetectorMessenger;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
     DetectorConstruction();
-   ~DetectorConstruction();
+    ~DetectorConstruction();
 
   public:
-  
-     void SetWallThickness   (G4double);
-     void SetWallMaterial    (const G4String&);
-       
-     void SetCavityThickness (G4double);
-     void SetCavityRadius    (G4double);           
-     void SetCavityMaterial  (const G4String&);
-          
-     virtual G4VPhysicalVolume* Construct();
-     
-     G4double     GetWallThickness()   {return fWallThickness;};
-     G4double     GetWallRadius()      {return fWallRadius;};           
-     G4Material*  GetWallMaterial()    {return fWallMaterial;};
-     G4VPhysicalVolume* GetWall()      {return fWall;};
-                     
-     G4double     GetCavityThickness() {return fCavityThickness;};
-     G4double     GetCavityRadius()    {return fCavityRadius;};           
-     G4Material*  GetCavityMaterial()  {return fCavityMaterial;}; 
-     G4VPhysicalVolume* GetCavity()    {return fCavity;};
-          
-     G4double     GetTotalThickness()  {return fTotalThickness;};     
-     
-     void         PrintParameters();
-                       
+    void SetWallThickness(G4double);
+    void SetWallMaterial(const G4String&);
+
+    void SetCavityThickness(G4double);
+    void SetCavityRadius(G4double);
+    void SetCavityMaterial(const G4String&);
+
+    virtual G4VPhysicalVolume* Construct();
+
+    G4double GetWallThickness() { return fWallThickness; };
+    G4double GetWallRadius() { return fWallRadius; };
+    G4Material* GetWallMaterial() { return fWallMaterial; };
+    G4VPhysicalVolume* GetWall() { return fWall; };
+
+    G4double GetCavityThickness() { return fCavityThickness; };
+    G4double GetCavityRadius() { return fCavityRadius; };
+    G4Material* GetCavityMaterial() { return fCavityMaterial; };
+    G4VPhysicalVolume* GetCavity() { return fCavity; };
+
+    G4double GetTotalThickness() { return fTotalThickness; };
+
+    void PrintParameters();
+
   private:
+    void DefineMaterials();
 
-     void         DefineMaterials();
-   
-     G4double            fWallThickness;
-     G4double            fWallRadius;     
-     G4Material*         fWallMaterial;
-     G4VPhysicalVolume*  fWall;
-     
-     G4double            fCavityThickness;
-     G4double            fCavityRadius;     
-     G4Material*         fCavityMaterial;
-     G4VPhysicalVolume*  fCavity;
-     
-     G4double            fTotalThickness;
+    G4double fWallThickness;
+    G4double fWallRadius;
+    G4Material* fWallMaterial;
+    G4VPhysicalVolume* fWall;
 
-     DetectorMessenger*  fDetectorMessenger;
+    G4double fCavityThickness;
+    G4double fCavityRadius;
+    G4Material* fCavityMaterial;
+    G4VPhysicalVolume* fCavity;
+
+    G4double fTotalThickness;
+
+    DetectorMessenger* fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -31,22 +31,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
 #include "FTFP_INCLXX.hh"
-#include "G4UImanager.hh"
-#include "G4RunManagerFactory.hh"
-#include "ActionInitialization.hh"
-#include "G4UIExecutive.hh"
+
 #include "G4GenericBiasingPhysics.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main( int argc, char** argv ) {
-
+int main(int argc, char** argv)
+{
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -54,29 +55,30 @@ int main( int argc, char** argv ) {
   runManager->SetNumberOfThreads(4);
 
   G4VUserDetectorConstruction* detector = new DetectorConstruction;
-  runManager->SetUserInitialization( detector );
+  runManager->SetUserInitialization(detector);
 
   FTFP_BERT* physicsList = new FTFP_BERT;
-  //FTFP_INCLXX* physicsList = new FTFP_INCLXX;
+  // FTFP_INCLXX* physicsList = new FTFP_INCLXX;
 
   G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics;
-  biasingPhysics->Bias( "proton" );
-  biasingPhysics->Bias( "neutron" );
-  biasingPhysics->Bias( "pi+" );
-  biasingPhysics->Bias( "pi-" );
-  physicsList->RegisterPhysics( biasingPhysics );
+  biasingPhysics->Bias("proton");
+  biasingPhysics->Bias("neutron");
+  biasingPhysics->Bias("pi+");
+  biasingPhysics->Bias("pi-");
+  physicsList->RegisterPhysics(biasingPhysics);
 
-  runManager->SetUserInitialization( physicsList );
-  runManager->SetUserInitialization( new ActionInitialization );
+  runManager->SetUserInitialization(physicsList);
+  runManager->SetUserInitialization(new ActionInitialization);
 
-  if ( ui ) {
+  if (ui) {
     ui->SessionStart();
     delete ui;
-  } else {
+  }
+  else {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    G4UImanager * UImanager = G4UImanager::GetUIpointer();
-    UImanager->ApplyCommand(command+fileName);
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    UImanager->ApplyCommand(command + fileName);
   }
 
   delete runManager;

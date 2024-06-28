@@ -6,7 +6,46 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-12-09 Vladimir Ivanchenko (hadr-cross-V11-01-17)
+## 2024-06-18 Vladimir Ivanchenko (hadr-cross-V11-02-06)
+- G4BGGNucleonInelasticXS - fixed proton x-section below 14 MeV
+
+## 2024-03-12 Gabriele Cosmo (hadr-cross-V11-02-05)
+- In G4NeutronInelasticXS::SelectIsotope(), fixed compilation warnings for
+  implicit type conversions detected with macOS/XCode.
+
+## 2024-03-09 Vladimir Ivanchenko (hadr-cross-V11-02-04)
+- G4ComponentGGNuclNuclXsc - removed debug printout, added check of G4VERBOSE
+- G4BGGPionElasticXS, G4BGGNucleonInelasticXS, G4BGGNucleonElasticXS - added
+    check of G4VERBOSE compilation flag
+- G4vCrossSectionDataSet - cosmetic change
+
+## 2024-03-07 Vladimir Ivanchenko (hadr-cross-V11-02-03)
+- G4HadronXSDataTable - make this class to be a singleton for registration
+    and destruction of sttic objects with cross section data, data are deleted
+    only end of run
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS, G4BGGPionElasticXS,
+  G4BGGPionInelasticXS, G4ComponentBarNucleonNucleusXsc,
+  G4UPiNuclearCrossSection, G4HadronNucleonXsc, G4CrossSectionDataSetRegistry
+    - code clean-up: removed "isMaster" checks, removed mutex locks,
+    removed unused variables and format the code
+
+## 2024-03-05 Vladimir Ivanchenko (hadr-cross-V11-02-02)
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS, G4NeutronInelasticXS,
+  G4ComponentBarNucleonNucleusXsc, G4ComponentGGNuclNuclXsc, G4PiData,
+  G4NucleonNuclearCrossSection - general clean-up of proton and neutron
+    cross sections: removed unused methods, removed not needed mutex locks,
+    improved printouts, cross sections outside data tables are equal to
+    low or high edge of a table (not zero).
+
+## 2024-02-22 Vladimir Ivanchenko (hadr-cross-V11-02-01)
+- G4NeutronCapture - lowest energy limit is set to 10^-5 eV, below this
+    energy no computations to avoid numerical problems, improved comments to 
+    the code
+- G4NeutronInelastic - implement 1/v cross section dependence below low-energy
+    limit of a cross section vector if cross section does not start from null
+- G4IsotopeList.hh - moved to util sublibrary 
+
+## 2023-12-09 Vladimir Ivanchenko (hadr-cross-V11-02-00)
 - G4KokoulinMuonNuclearXS - use faster interface to G4PhysicsVector
 - G4ElectroNuclearCrossSection - added low-energy limit 100 MeV for x-section
 

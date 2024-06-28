@@ -31,22 +31,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSSM.hh"
+#include "PhysicsListMessenger.hh"
 
-#include "G4EmStandardPhysics.hh"
-#include "G4EmStandardPhysics_option1.hh"
-#include "G4EmStandardPhysics_option2.hh"
-#include "G4EmStandardPhysics_option3.hh"
-#include "G4EmStandardPhysics_option4.hh"
-#include "G4EmStandardPhysicsWVI.hh"
-#include "G4EmStandardPhysicsGS.hh"
-#include "G4EmStandardPhysicsSS.hh"
-#include "G4EmLivermorePhysics.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLowEPPhysics.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option1.hh"
 #include "G4EmDNAPhysics_option2.hh"
@@ -55,21 +44,30 @@
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
-
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4LossTableManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 // particles
 
+#include "G4BaryonConstructor.hh"
 #include "G4BosonConstructor.hh"
+#include "G4DNAGenericIonsManager.hh"
+#include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
-#include "G4DNAGenericIonsManager.hh"
 
 G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = nullptr;
 
@@ -88,7 +86,7 @@ PhysicsList::PhysicsList()
   //
   G4EmParameters::Instance()->SetBuildCSDARange(true);
 
-  SetDefaultCutValue(1.*mm);
+  SetDefaultCutValue(1. * mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,31 +101,31 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-    G4BosonConstructor  pBosonConstructor;
-    pBosonConstructor.ConstructParticle();
+  G4BosonConstructor pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
 
-    G4LeptonConstructor pLeptonConstructor;
-    pLeptonConstructor.ConstructParticle();
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
 
-    G4MesonConstructor pMesonConstructor;
-    pMesonConstructor.ConstructParticle();
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
 
-    G4BaryonConstructor pBaryonConstructor;
-    pBaryonConstructor.ConstructParticle();
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
 
-    G4IonConstructor pIonConstructor;
-    pIonConstructor.ConstructParticle();
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 
-    G4ShortLivedConstructor pShortLivedConstructor;
-    pShortLivedConstructor.ConstructParticle();
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();
 
-// DNA
+  // DNA
   G4DNAGenericIonsManager* genericIonsManager;
-  genericIonsManager=G4DNAGenericIonsManager::Instance();
+  genericIonsManager = G4DNAGenericIonsManager::Instance();
   genericIonsManager->GetIon("alpha++");
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
-  genericIonsManager->GetIon("hydrogen");  
+  genericIonsManager->GetIon("hydrogen");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -139,17 +137,17 @@ void PhysicsList::ConstructProcess()
   // transportation
   //
   AddTransportation();
-  
+
   // electromagnetic physics list
   //
   fEmPhysicsList->ConstructProcess();
-  
+
   // decay process
   //
   AddDecay();
-  
+
   // step limitation (as a full process)
-  //  
+  //
   AddStepMax();
 }
 
@@ -157,132 +155,120 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == fEmName) return;
 
   if (name == "local") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(name);
-    
-  } else if (name == "emstandard_opt0") {
-
+  }
+  else if (name == "emstandard_opt0") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
-    
-  } else if (name == "emstandard_opt1") {
-
+  }
+  else if (name == "emstandard_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1();
-
-  } else if (name == "emstandard_opt2") {
-
+  }
+  else if (name == "emstandard_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2();
-        
-  } else if (name == "emstandard_opt3") {
-
+  }
+  else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
-    
-  } else if (name == "emstandard_opt4") {
-
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-    
-  } else if (name == "emstandardSS") {
-
+  }
+  else if (name == "emstandardSS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
-
-  } else if (name == "standardSSM") {
-
+  }
+  else if (name == "standardSSM") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandardSSM(name);
-
-  } else if (name == "emstandardWVI") {
-
+  }
+  else if (name == "emstandardWVI") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsWVI();
-
-  } else if (name == "standardGS") {
-
+  }
+  else if (name == "standardGS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsGS();
-                    
-  } else if (name == "emlivermore") {
+  }
+  else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics();
-    
-  } else if (name == "empenelope") {
+  }
+  else if (name == "empenelope") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
-
-  } else if (name == "emlowenergy") {
+  }
+  else if (name == "emlowenergy") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics();
-
-  } else if (name == "dna") {
+  }
+  else if (name == "dna") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics();
-         
-  } else if (name == "dna_opt1") {
+  }
+  else if (name == "dna_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option1();
-         
-  } else if (name == "dna_opt2") {
+  }
+  else if (name == "dna_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option2();
-         
-  } else if (name == "dna_opt3") {
+  }
+  else if (name == "dna_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option3();
-         
-  } else if (name == "dna_opt4") {
+  }
+  else if (name == "dna_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option4();
-         
-  } else if (name == "dna_opt5") {
+  }
+  else if (name == "dna_opt5") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option5();
-         
-  } else if (name == "dna_opt6") {
+  }
+  else if (name == "dna_opt6") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option6();
-         
-  } else if (name == "dna_opt7") {
+  }
+  else if (name == "dna_opt7") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option7();
-         
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
   G4EmParameters::Instance()->SetBuildCSDARange(true);
 }
@@ -297,20 +283,18 @@ void PhysicsList::AddDecay()
   //
   G4Decay* fDecayProcess = new G4Decay();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while( (*particleIterator)() ){
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
+      pmanager->AddProcess(fDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
+      pmanager->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager->SetProcessOrdering(fDecayProcess, idxAtRest);
     }
   }
 }
@@ -324,16 +308,15 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   fStepMaxProcess = new StepMax();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)()){
-      G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+  while ((*particleIterator)()) {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (fStepMaxProcess->IsApplicable(*particle))
-        {
-          pmanager ->AddDiscreteProcess(fStepMaxProcess);
-        }
+    if (fStepMaxProcess->IsApplicable(*particle)) {
+      pmanager->AddDiscreteProcess(fStepMaxProcess);
+    }
   }
 }
 

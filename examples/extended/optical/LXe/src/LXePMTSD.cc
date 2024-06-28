@@ -34,7 +34,6 @@
 #include "LXePMTHit.hh"
 #include "LXeUserTrackInformation.hh"
 
-#include "G4ios.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -44,11 +43,11 @@
 #include "G4Track.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VTouchable.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXePMTSD::LXePMTSD(G4String name)
-  : G4VSensitiveDetector(name)
+LXePMTSD::LXePMTSD(G4String name) : G4VSensitiveDetector(name)
 {
   collectionName.insert("pmtHitCollection");
 }
@@ -66,14 +65,10 @@ LXePMTSD::~LXePMTSD()
 
 void LXePMTSD::SetPmtPositions(const std::vector<G4ThreeVector>& positions)
 {
-  for(size_t i = 0; i < positions.size(); ++i)
-  {
-    if(fPMTPositionsX)
-      fPMTPositionsX->push_back(positions[i].x());
-    if(fPMTPositionsY)
-      fPMTPositionsY->push_back(positions[i].y());
-    if(fPMTPositionsZ)
-      fPMTPositionsZ->push_back(positions[i].z());
+  for (size_t i = 0; i < positions.size(); ++i) {
+    if (fPMTPositionsX) fPMTPositionsX->push_back(positions[i].x());
+    if (fPMTPositionsY) fPMTPositionsY->push_back(positions[i].y());
+    if (fPMTPositionsZ) fPMTPositionsZ->push_back(positions[i].z());
   }
 }
 
@@ -81,11 +76,9 @@ void LXePMTSD::SetPmtPositions(const std::vector<G4ThreeVector>& positions)
 
 void LXePMTSD::Initialize(G4HCofThisEvent* hitsCE)
 {
-  fPMTHitCollection =
-    new LXePMTHitsCollection(SensitiveDetectorName, collectionName[0]);
+  fPMTHitCollection = new LXePMTHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-  if(fHitCID < 0)
-  {
+  if (fHitCID < 0) {
     fHitCID = G4SDManager::GetSDMpointer()->GetCollectionID(fPMTHitCollection);
   }
   hitsCE->AddHitsCollection(fHitCID, fPMTHitCollection);
@@ -93,7 +86,10 @@ void LXePMTSD::Initialize(G4HCofThisEvent* hitsCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool LXePMTSD::ProcessHits(G4Step*, G4TouchableHistory*) { return false; }
+G4bool LXePMTSD::ProcessHits(G4Step*, G4TouchableHistory*)
+{
+  return false;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -104,31 +100,25 @@ G4bool LXePMTSD::ProcessHits(G4Step*, G4TouchableHistory*) { return false; }
 G4bool LXePMTSD::ProcessHits_boundary(const G4Step* aStep, G4TouchableHistory*)
 {
   // need to know if this is an optical photon
-  if(aStep->GetTrack()->GetDefinition() !=
-     G4OpticalPhoton::OpticalPhotonDefinition())
+  if (aStep->GetTrack()->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition())
     return false;
 
   // User replica number 1 since photocathode is a daughter volume
   // to the pmt which was replicated
-  G4int pmtNumber =
-    aStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber(1);
-  G4VPhysicalVolume* physVol =
-    aStep->GetPostStepPoint()->GetTouchable()->GetVolume(1);
+  G4int pmtNumber = aStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber(1);
+  G4VPhysicalVolume* physVol = aStep->GetPostStepPoint()->GetTouchable()->GetVolume(1);
 
   // Find the correct hit collection
-  size_t n       = fPMTHitCollection->entries();
+  size_t n = fPMTHitCollection->entries();
   LXePMTHit* hit = nullptr;
-  for(size_t i = 0; i < n; ++i)
-  {
-    if((*fPMTHitCollection)[i]->GetPMTNumber() == pmtNumber)
-    {
+  for (size_t i = 0; i < n; ++i) {
+    if ((*fPMTHitCollection)[i]->GetPMTNumber() == pmtNumber) {
       hit = (*fPMTHitCollection)[i];
       break;
     }
   }
 
-  if(hit == nullptr)
-  {                         // this pmt wasn't previously hit in this event
+  if (hit == nullptr) {  // this pmt wasn't previously hit in this event
     hit = new LXePMTHit();  // so create new hit
     hit->SetPMTNumber(pmtNumber);
     hit->SetPMTPhysVol(physVol);
@@ -139,16 +129,13 @@ G4bool LXePMTSD::ProcessHits_boundary(const G4Step* aStep, G4TouchableHistory*)
 
   hit->IncPhotonCount();  // increment hit for the selected pmt
 
-  if(!LXeDetectorConstruction::GetSphereOn())
-  {
+  if (!LXeDetectorConstruction::GetSphereOn()) {
     hit->SetDrawit(true);
     // If the sphere is disabled then this hit is automaticaly drawn
   }
-  else
-  {  // sphere enabled
-    auto trackInfo =
-      (LXeUserTrackInformation*) aStep->GetTrack()->GetUserInformation();
-    if(trackInfo->GetTrackStatus() & hitSphere)
+  else {  // sphere enabled
+    auto trackInfo = (LXeUserTrackInformation*)aStep->GetTrack()->GetUserInformation();
+    if (trackInfo->GetTrackStatus() & hitSphere)
       // only draw this hit if the photon has hit the sphere first
       hit->SetDrawit(true);
   }

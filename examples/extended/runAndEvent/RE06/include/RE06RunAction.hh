@@ -49,4 +49,3 @@ class RE06RunAction : public G4UserRunAction
 };
 
 #endif
-

@@ -23,6 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/range/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 
@@ -30,32 +40,25 @@
 #define PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
-#include "globals.hh"
 
 class PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  ~PhysicsList();
+  public:
+    PhysicsList();
+    ~PhysicsList();
 
-  virtual void ConstructParticle();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
-  void AddPhysicsList(const G4String& name);
-  
-  virtual void ConstructProcess();
+    void AddPhysicsList(const G4String& name);
+    void AddTrackingCut();
 
-  void AddTrackingCut();
-
-private:
-  G4String fEmName;
-  G4VPhysicsConstructor*        fEmPhysicsList;    
-
-  PhysicsListMessenger* fMessenger;
+  private:
+    G4String fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList;
+    PhysicsListMessenger* fMessenger;
 };
 
 #endif
-

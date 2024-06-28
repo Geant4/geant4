@@ -38,15 +38,13 @@ G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 // Cannot Add Undefine or a flag that conflicts with another flag
 // Return true if the addition of flag is successful, false otherwise
 {
-  switch(s)
-  {
+  switch (s) {
     case left:
     case right:
 
       // Allow the user to set left or right
       // only if the track is undefined
-      if(fStatus == undefined)
-        return fStatus |= s;
+      if (fStatus == undefined) return fStatus |= s;
 
       return false;
 
@@ -56,8 +54,7 @@ G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
       // Allow the user to set escaped flag
       // only if the photon hasn't exited the fiber yet
 
-      if((fStatus == undefined) || (fStatus & OutsideOfFiber))
-        return false;
+      if ((fStatus == undefined) || (fStatus & OutsideOfFiber)) return false;
 
       return fStatus |= s;
 
@@ -69,9 +66,7 @@ G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 
     case InsideOfFiber:
 
-      return (fStatus = (fStatus & ~(EscapedFromSide + EscapedFromReadOut +
-                                     OutsideOfFiber)) |
-                        s);
+      return (fStatus = (fStatus & ~(EscapedFromSide + EscapedFromReadOut + OutsideOfFiber)) | s);
 
     case OutsideOfFiber:
 

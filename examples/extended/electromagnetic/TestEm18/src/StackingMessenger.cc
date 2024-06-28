@@ -33,16 +33,16 @@
 #include "StackingMessenger.hh"
 
 #include "StackingAction.hh"
+
 #include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingMessenger::StackingMessenger(StackingAction* stack)
-: fStackAction(stack)
+StackingMessenger::StackingMessenger(StackingAction* stack) : fStackAction(stack)
 {
-  fTrackCmd = new G4UIcmdWithABool("/testem/trackSecondaries",this);
+  fTrackCmd = new G4UIcmdWithABool("/testem/trackSecondaries", this);
   fTrackCmd->SetGuidance(" kill or keep secondary tracks");
-  fTrackCmd->SetParameterName("flag",true);
+  fTrackCmd->SetParameterName("flag", true);
   fTrackCmd->SetDefaultValue(true);
 }
 
@@ -56,9 +56,10 @@ StackingMessenger::~StackingMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{     
-  if (command == fTrackCmd)
-    {fStackAction->SetTrackSecondaries(fTrackCmd->GetNewBoolValue(newValue));}
+{
+  if (command == fTrackCmd) {
+    fStackAction->SetTrackSecondaries(fTrackCmd->GetNewBoolValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

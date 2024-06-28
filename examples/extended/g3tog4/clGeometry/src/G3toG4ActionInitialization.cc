@@ -36,25 +36,21 @@ using namespace Common;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G3toG4ActionInitialization::G3toG4ActionInitialization()
- : G4VUserActionInitialization()
-{}
+G3toG4ActionInitialization::G3toG4ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G3toG4ActionInitialization::~G3toG4ActionInitialization()
-{}
+G3toG4ActionInitialization::~G3toG4ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G3toG4ActionInitialization::BuildForMaster() const
-{}
+void G3toG4ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G3toG4ActionInitialization::Build() const
 {
   SetUserAction(new GunPrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

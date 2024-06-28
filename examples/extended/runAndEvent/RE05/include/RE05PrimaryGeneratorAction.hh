@@ -54,10 +54,8 @@ class RE05PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4bool fUseHEPEvt;
 
   public:
-    inline void SetHEPEvtGenerator(G4bool option)
-    { fUseHEPEvt = option; }
-    inline G4bool GetHEPEvtGenerator()
-    { return fUseHEPEvt; }
+    inline void SetHEPEvtGenerator(G4bool option) { fUseHEPEvt = option; }
+    inline G4bool GetHEPEvtGenerator() { return fUseHEPEvt; }
 };
 
 #endif

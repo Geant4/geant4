@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -42,14 +42,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -86,7 +93,7 @@ Some /vis commands (optionally) take a string to specify colour.
 Command is ignored.
 WARNING: There is no world volume!
 WARNING: There is no world volume!
-PhysicsList::AddPhysicsList: <dna>
+PhysicsList::AddPhysicsList: <dna_opt2>
 
 ---------------------------------------------------------
 ---> The tracking cut to all particles is set to 10 eV 
@@ -121,7 +128,7 @@ Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
-Max kinetic energy for tables                      300 MeV
+Max kinetic energy for tables                      600 MeV
 Number of bins per decade of a table               20
 Verbose level                                      1
 Verbose level for worker thread                    0
@@ -190,7 +197,7 @@ Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 ======                 DNA Physics Parameters                  ========
 =======================================================================
-Use fast sampling in DNA models                    0
+Use fast sampling in DNA models                    1
 Use Stationary option in DNA models                0
 Use DNA with multiple scattering of e-             0
 Use DNA e- solvation model type                    11003
@@ -202,110 +209,122 @@ Use DNA e- solvation model type                    11003
 ### ===  Ignore cuts flag:   1
 
 phot:  for gamma SubType=12 BuildTable=0
-      LambdaPrime table from 200 keV to 300 MeV in 59 bins 
+      LambdaPrime table from 200 keV to 600 MeV in 72 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric : Emin=    0 eV  Emax=  300 MeV  SauterGavrila Fluo
+ LivermorePhElectric : Emin=    0 eV  Emax=  600 MeV  SauterGavrila Fluo
 
 compt:  for gamma SubType=13 BuildTable=1
-      Lambda table from 10 eV  to 1 MeV, 19 bins/decade, spline: 1
-      LambdaPrime table from 1 MeV to 300 MeV in 46 bins 
+      Lambda table from 10 eV  to 1 MeV, 21 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 600 MeV in 57 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LowEPComptonModel : Emin=    0 eV  Emax=   20 MeV Fluo
-        KleinNishina : Emin=   20 MeV Emax=  300 MeV Fluo
+        KleinNishina : Emin=   20 MeV Emax=  600 MeV Fluo
 
 conv:  for gamma SubType=14 BuildTable=1
-      Lambda table from 1.022 MeV to 300 MeV, 30 bins/decade, spline: 1
+      Lambda table from 1.022 MeV to 600 MeV, 28 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-     BetheHeitlerLPM : Emin=    0 eV  Emax=  300 MeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  600 MeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 10 eV  to 150 keV, 19 bins/decade, spline: 0
-      LambdaPrime table from 150 keV to 300 MeV in 62 bins 
+      Lambda table from 10 eV  to 150 keV, 21 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 600 MeV in 74 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh : Emin=    0 eV  Emax=  300 MeV  CullenGenerator
+   LivermoreRayleigh : Emin=    0 eV  Emax=  600 MeV  CullenGenerator
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson : Emin=    1 MeV Emax=  300 MeV Nbins=40   1 MeV - 300 MeV
+  GoudsmitSaunderson : Emin=    1 MeV Emax=  600 MeV Nbins=60   1 MeV - 600 MeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    1 MeV Emax=  300 MeV  deltaVI
+        MollerBhabha : Emin=    1 MeV Emax=  600 MeV  deltaVI
 
 eBrem:  for e-  XStype:4  SubType=3
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
-      LPM flag: 1 for E > 0.3 GeV,  VertexHighEnergyTh(GeV)= 100000
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 0.6 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    1 MeV Emax=  300 MeV  AngularGen2BS
+             eBremSB : Emin=    1 MeV Emax=  600 MeV  AngularGen2BS
 
 e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=  7.4 eV 
-          DummyModel : Emin=  7.4 eV  Emax=  300 MeV
+          DummyModel : Emin=  7.4 eV  Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornIonisationModel : Emin=    0 eV  Emax=    1 MeV  deltaBorn Fluo
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
-          DummyModel : Emin=  100 eV  Emax=  300 MeV
+          DummyModel : Emin=  100 eV  Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
-          DummyModel : Emin=   13 eV  Emax=  300 MeV
+          DummyModel : Emin=   13 eV  Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson : Emin=    0 eV  Emax=  300 MeV Nbins=120 100 eV  - 300 MeV
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  600 MeV Nbins=140 100 eV  - 600 MeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 eIoni:  for e+  XStype:1  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 eV  Emax=  300 MeV  deltaVI
+        MollerBhabha : Emin=    0 eV  Emax=  600 MeV  deltaVI
 
 eBrem:  for e+  XStype:4  SubType=3
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
-      LPM flag: 1 for E > 0.3 GeV,  VertexHighEnergyTh(GeV)= 100000
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 0.6 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 eV  Emax=  300 MeV  AngularGen2BS
+             eBremSB : Emin=    0 eV  Emax=  600 MeV  AngularGen2BS
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 eV  Emax=  300 MeV
+            eplus2gg : Emin=    0 eV  Emax=  600 MeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    1 MeV Emax=  600 MeV Nbins=60   1 MeV - 600 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for proton  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          BetheBloch : Emin=  300 MeV Emax=  600 MeV  deltaVI
 
 proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
@@ -313,196 +332,249 @@ proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
 DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
 DNABornExcitationModel : Emin=  500 keV Emax=  100 MeV
 DNARPWBAExcitationModel : Emin=  100 MeV Emax=  300 MeV
+          DummyModel : Emin=  300 MeV Emax=  600 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
 DNABornIonisationModel : Emin=  500 keV Emax=  100 MeV  deltaBorn Fluo
 DNARPWBAIonisationModel : Emin=  100 MeV Emax=  300 MeV  deltaBorn Fluo
+          DummyModel : Emin=  300 MeV Emax=  600 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  300 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  600 MeV
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    1 MeV Emax=  600 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+ionIoni:  for GenericIon  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.001 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          BetheBloch : Emin=  300 MeV Emax=  600 MeV  deltaVI
 
 GenericIon_G4DNAIonisation:  for GenericIon SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 eV 
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  300 MeV  deltaRudd Fluo
+          DummyModel : Emin=  300 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-DNARuddIonisationExtendedModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
+
+nuclearStopping:  for GenericIon SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    1 MeV Emax=  600 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+ionIoni:  for alpha  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          BetheBloch : Emin=  300 MeV Emax=  600 MeV  deltaVI
 
 alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+          DummyModel : Emin=  400 MeV Emax=  600 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 eV 
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+          DummyModel : Emin=  400 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-DNARuddIonisationModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
 
 alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  300 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  600 MeV
+
+msc:  for alpha+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    1 MeV Emax=  600 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for alpha+  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          BetheBloch : Emin=  300 MeV Emax=  600 MeV  deltaVI
 
 alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+          DummyModel : Emin=  400 MeV Emax=  600 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 eV 
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+          DummyModel : Emin=  400 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-DNARuddIonisationModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
 
 alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  300 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  600 MeV
 
 alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  300 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  600 MeV
 
 msc:  for anti_proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
-hIoni:  for anti_proton  XStype:1  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+hIoni:  for anti_proton  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
-          BetheBloch : Emin=    2 MeV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  600 MeV  deltaVI
 
 helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+          DummyModel : Emin=  400 MeV Emax=  600 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 eV 
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+          DummyModel : Emin=  400 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-DNARuddIonisationModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
 
 helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  300 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  600 MeV
 
 hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          DummyModel : Emin=    1 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+          DummyModel : Emin=  300 MeV Emax=  600 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 eV 
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  300 MeV  deltaRudd Fluo
+          DummyModel : Emin=  300 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
-DNARuddIonisationModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
 
 hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  300 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  600 MeV
 
 msc:  for kaon+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
 hIoni:  for kaon+  XStype:3  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
-          BetheBloch : Emin=1.05231 MeV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  600 MeV  deltaVI
 
 msc:  for kaon-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
 hIoni:  for kaon-  XStype:3  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
-          BetheBloch : Emin=1.05231 MeV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  600 MeV  deltaVI
 
 msc:  for mu+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
 hIoni:  for mu+  XStype:3  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=225.219 keV  deltaVI
-          BetheBloch : Emin=225.219 keV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=225.219 keV Emax=  600 MeV  deltaVI
 
 msc:  for mu-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
-hIoni:  for mu-  XStype:1  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+hIoni:  for mu-  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=225.219 keV  deltaVI
-          BetheBloch : Emin=225.219 keV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=225.219 keV Emax=  600 MeV  deltaVI
 
 msc:  for pi+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
 hIoni:  for pi+  XStype:3  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
-          BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
 
 msc:  for pi-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+        WentzelVIUni : Emin=    0 eV  Emax=  600 MeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
 
 hIoni:  for pi-  XStype:3  SubType=2
-      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
-      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      dE/dx and range tables from 10 eV  to 600 MeV in 160 bins
+      Lambda tables from threshold to 600 MeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
-          BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 
@@ -510,9 +582,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  The run is 1000 e- of 12.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 29.002 nm  +- 17.889 nm 
- Projected range               = 3.820 Ang +- 2.748 nm 
- Penetration                   = 4.224 nm  +- 2.525 nm 
+ Track length of primary track = 29.220 nm  +- 18.567 nm 
+ Projected range               = 4.101 Ang +- 2.834 nm 
+ Penetration                   = 4.215 nm  +- 2.500 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -525,9 +597,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 14.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 21.951 nm  +- 23.987 nm 
- Projected range               = 4.067 Ang +- 2.479 nm 
- Penetration                   = 3.440 nm  +- 2.612 nm 
+ Track length of primary track = 22.553 nm  +- 24.131 nm 
+ Projected range               = 4.200 Ang +- 2.376 nm 
+ Penetration                   = 3.362 nm  +- 2.542 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -540,9 +612,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 16.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 11.147 nm  +- 14.647 nm 
- Projected range               = 5.337 Ang +- 1.882 nm 
- Penetration                   = 2.419 nm  +- 1.932 nm 
+ Track length of primary track = 11.417 nm  +- 14.117 nm 
+ Projected range               = 4.492 Ang +- 1.770 nm 
+ Penetration                   = 2.472 nm  +- 1.892 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -555,9 +627,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 18.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 7.016 nm  +- 7.440 nm 
- Projected range               = 3.868 Ang +- 1.448 nm 
- Penetration                   = 1.972 nm  +- 1.518 nm 
+ Track length of primary track = 7.196 nm  +- 8.459 nm 
+ Projected range               = 3.957 Ang +- 1.515 nm 
+ Penetration                   = 1.968 nm  +- 1.567 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -570,9 +642,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 20.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 6.373 nm  +- 8.381 nm 
- Projected range               = 5.391 Ang +- 1.496 nm 
- Penetration                   = 1.861 nm  +- 1.630 nm 
+ Track length of primary track = 6.014 nm  +- 7.027 nm 
+ Projected range               = 5.169 Ang +- 1.290 nm 
+ Penetration                   = 1.850 nm  +- 1.409 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -585,9 +657,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 25.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 15.038 nm  +- 18.804 nm 
- Projected range               = 5.255 Ang +- 2.146 nm 
- Penetration                   = 2.780 nm  +- 2.277 nm 
+ Track length of primary track = 14.440 nm  +- 18.297 nm 
+ Projected range               = 6.272 Ang +- 2.032 nm 
+ Penetration                   = 2.690 nm  +- 2.195 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -600,9 +672,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 30.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 17.395 nm  +- 18.125 nm 
- Projected range               = 5.239 Ang +- 2.353 nm 
- Penetration                   = 3.293 nm  +- 2.397 nm 
+ Track length of primary track = 16.707 nm  +- 17.975 nm 
+ Projected range               = 6.884 Ang +- 2.208 nm 
+ Penetration                   = 3.161 nm  +- 2.191 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -615,9 +687,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 35.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 15.580 nm  +- 17.445 nm 
- Projected range               = 5.842 Ang +- 2.199 nm 
- Penetration                   = 3.042 nm  +- 2.142 nm 
+ Track length of primary track = 15.503 nm  +- 16.550 nm 
+ Projected range               = 6.016 Ang +- 2.309 nm 
+ Penetration                   = 3.173 nm  +- 2.126 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -630,9 +702,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 40.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 12.725 nm  +- 13.684 nm 
- Projected range               = 6.585 Ang +- 1.986 nm 
- Penetration                   = 2.914 nm  +- 2.017 nm 
+ Track length of primary track = 13.227 nm  +- 15.333 nm 
+ Projected range               = 6.003 Ang +- 2.042 nm 
+ Penetration                   = 2.898 nm  +- 2.040 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -645,9 +717,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 45.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 13.662 nm  +- 14.860 nm 
- Projected range               = 8.018 Ang +- 2.132 nm 
- Penetration                   = 3.023 nm  +- 2.007 nm 
+ Track length of primary track = 14.013 nm  +- 14.612 nm 
+ Projected range               = 7.569 Ang +- 2.181 nm 
+ Penetration                   = 3.040 nm  +- 2.015 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -660,9 +732,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 50.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 15.223 nm  +- 17.136 nm 
- Projected range               = 7.398 Ang +- 2.380 nm 
- Penetration                   = 3.215 nm  +- 2.278 nm 
+ Track length of primary track = 15.268 nm  +- 17.518 nm 
+ Projected range               = 8.265 Ang +- 2.299 nm 
+ Penetration                   = 3.169 nm  +- 2.193 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -675,9 +747,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 60.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 15.509 nm  +- 15.605 nm 
- Projected range               = 9.015 Ang +- 2.487 nm 
- Penetration                   = 3.394 nm  +- 2.132 nm 
+ Track length of primary track = 16.527 nm  +- 17.191 nm 
+ Projected range               = 9.162 Ang +- 2.433 nm 
+ Penetration                   = 3.432 nm  +- 2.187 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -690,9 +762,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 70.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 16.108 nm  +- 16.355 nm 
- Projected range               = 9.540 Ang +- 2.513 nm 
- Penetration                   = 3.558 nm  +- 2.205 nm 
+ Track length of primary track = 17.653 nm  +- 16.979 nm 
+ Projected range               = 1.144 nm  +- 2.497 nm 
+ Penetration                   = 3.702 nm  +- 2.281 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -705,9 +777,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 80.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 16.193 nm  +- 14.905 nm 
- Projected range               = 1.294 nm  +- 2.449 nm 
- Penetration                   = 3.695 nm  +- 2.120 nm 
+ Track length of primary track = 17.993 nm  +- 16.915 nm 
+ Projected range               = 1.165 nm  +- 2.739 nm 
+ Penetration                   = 3.813 nm  +- 2.241 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -720,9 +792,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 90.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 17.086 nm  +- 15.614 nm 
- Projected range               = 1.441 nm  +- 2.641 nm 
- Penetration                   = 3.832 nm  +- 2.185 nm 
+ Track length of primary track = 16.702 nm  +- 16.373 nm 
+ Projected range               = 1.355 nm  +- 2.676 nm 
+ Penetration                   = 3.772 nm  +- 2.208 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -735,9 +807,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 100.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 18.346 nm  +- 17.721 nm 
- Projected range               = 1.347 nm  +- 2.760 nm 
- Penetration                   = 3.990 nm  +- 2.241 nm 
+ Track length of primary track = 17.453 nm  +- 16.545 nm 
+ Projected range               = 1.511 nm  +- 2.707 nm 
+ Penetration                   = 4.044 nm  +- 2.132 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -750,9 +822,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 150.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 20.729 nm  +- 17.414 nm 
- Projected range               = 2.042 nm  +- 3.359 nm 
- Penetration                   = 4.955 nm  +- 2.598 nm 
+ Track length of primary track = 19.605 nm  +- 16.475 nm 
+ Projected range               = 2.164 nm  +- 3.201 nm 
+ Penetration                   = 4.813 nm  +- 2.502 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -765,9 +837,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 200.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 22.820 nm  +- 17.248 nm 
- Projected range               = 2.869 nm  +- 3.882 nm 
- Penetration                   = 5.923 nm  +- 2.897 nm 
+ Track length of primary track = 22.630 nm  +- 16.625 nm 
+ Projected range               = 2.822 nm  +- 3.733 nm 
+ Penetration                   = 5.925 nm  +- 2.869 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -780,9 +852,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 250.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 24.655 nm  +- 16.269 nm 
- Projected range               = 3.955 nm  +- 4.253 nm 
- Penetration                   = 6.973 nm  +- 3.187 nm 
+ Track length of primary track = 25.082 nm  +- 17.121 nm 
+ Projected range               = 3.773 nm  +- 4.494 nm 
+ Penetration                   = 7.244 nm  +- 3.416 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -795,9 +867,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 300.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 27.959 nm  +- 17.884 nm 
- Projected range               = 4.542 nm  +- 5.080 nm 
- Penetration                   = 8.393 nm  +- 3.677 nm 
+ Track length of primary track = 27.752 nm  +- 16.770 nm 
+ Projected range               = 4.637 nm  +- 5.224 nm 
+ Penetration                   = 8.612 nm  +- 3.925 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -810,9 +882,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 350.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 30.216 nm  +- 17.613 nm 
- Projected range               = 6.020 nm  +- 5.880 nm 
- Penetration                   = 10.092 nm  +- 4.375 nm 
+ Track length of primary track = 30.516 nm  +- 17.459 nm 
+ Projected range               = 6.037 nm  +- 5.863 nm 
+ Penetration                   = 10.188 nm  +- 4.646 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -825,9 +897,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 400.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 32.679 nm  +- 18.083 nm 
- Projected range               = 6.712 nm  +- 6.739 nm 
- Penetration                   = 11.690 nm  +- 5.089 nm 
+ Track length of primary track = 34.265 nm  +- 18.493 nm 
+ Projected range               = 7.162 nm  +- 6.559 nm 
+ Penetration                   = 11.698 nm  +- 5.098 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -840,9 +912,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 450.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 36.117 nm  +- 18.561 nm 
- Projected range               = 8.213 nm  +- 7.413 nm 
- Penetration                   = 13.440 nm  +- 5.834 nm 
+ Track length of primary track = 36.157 nm  +- 18.228 nm 
+ Projected range               = 7.812 nm  +- 7.537 nm 
+ Penetration                   = 13.304 nm  +- 5.721 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -855,9 +927,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 500.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 39.325 nm  +- 18.495 nm 
- Projected range               = 9.566 nm  +- 8.304 nm 
- Penetration                   = 15.494 nm  +- 6.215 nm 
+ Track length of primary track = 39.556 nm  +- 18.568 nm 
+ Projected range               = 9.559 nm  +- 8.433 nm 
+ Penetration                   = 15.353 nm  +- 6.765 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -870,9 +942,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 600.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 47.208 nm  +- 20.676 nm 
- Projected range               = 12.115 nm  +- 10.540 nm 
- Penetration                   = 19.354 nm  +- 7.964 nm 
+ Track length of primary track = 46.545 nm  +- 19.241 nm 
+ Projected range               = 12.824 nm  +- 10.422 nm 
+ Penetration                   = 19.786 nm  +- 8.492 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -885,9 +957,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 700.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 53.861 nm  +- 20.324 nm 
- Projected range               = 15.223 nm  +- 12.696 nm 
- Penetration                   = 23.771 nm  +- 9.860 nm 
+ Track length of primary track = 54.090 nm  +- 20.563 nm 
+ Projected range               = 15.139 nm  +- 12.679 nm 
+ Penetration                   = 23.953 nm  +- 9.802 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -900,9 +972,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 800.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 63.082 nm  +- 21.675 nm 
- Projected range               = 19.698 nm  +- 15.607 nm 
- Penetration                   = 29.837 nm  +- 11.756 nm 
+ Track length of primary track = 62.025 nm  +- 21.311 nm 
+ Projected range               = 19.664 nm  +- 15.093 nm 
+ Penetration                   = 29.401 nm  +- 11.693 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -915,9 +987,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 900.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 71.176 nm  +- 23.369 nm 
- Projected range               = 23.688 nm  +- 17.909 nm 
- Penetration                   = 35.120 nm  +- 13.668 nm 
+ Track length of primary track = 71.510 nm  +- 23.999 nm 
+ Projected range               = 22.081 nm  +- 18.155 nm 
+ Penetration                   = 34.768 nm  +- 13.662 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -930,9 +1002,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 80.835 nm  +- 26.248 nm 
- Projected range               = 27.336 nm  +- 19.412 nm 
- Penetration                   = 40.156 nm  +- 15.309 nm 
+ Track length of primary track = 80.466 nm  +- 25.373 nm 
+ Projected range               = 26.586 nm  +- 19.453 nm 
+ Penetration                   = 39.855 nm  +- 15.824 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -945,9 +1017,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 2.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 205.471 nm  +- 53.650 nm 
- Projected range               = 83.424 nm  +- 54.462 nm 
- Penetration                   = 122.233 nm  +- 43.688 nm 
+ Track length of primary track = 205.214 nm  +- 51.952 nm 
+ Projected range               = 81.173 nm  +- 56.027 nm 
+ Penetration                   = 121.022 nm  +- 41.077 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -960,9 +1032,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 3.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 379.112 nm  +- 97.994 nm 
- Projected range               = 157.614 nm  +- 106.343 nm 
- Penetration                   = 230.086 nm  +- 81.104 nm 
+ Track length of primary track = 383.593 nm  +- 90.412 nm 
+ Projected range               = 172.109 nm  +- 107.237 nm 
+ Penetration                   = 244.500 nm  +- 76.611 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -975,9 +1047,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 4.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 595.181 nm  +- 142.317 nm 
- Projected range               = 265.667 nm  +- 164.188 nm 
- Penetration                   = 379.507 nm  +- 121.351 nm 
+ Track length of primary track = 611.317 nm  +- 141.441 nm 
+ Projected range               = 274.104 nm  +- 167.158 nm 
+ Penetration                   = 392.311 nm  +- 124.119 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".
@@ -990,9 +1062,9 @@ There are histograms that can be viewed with visualization:
 
  The run is 1000 e- of 5.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 862.628 nm  +- 202.525 nm 
- Projected range               = 396.862 nm  +- 238.211 nm 
- Penetration                   = 559.410 nm  +- 183.300 nm 
+ Track length of primary track = 862.229 nm  +- 194.765 nm 
+ Projected range               = 406.769 nm  +- 234.365 nm 
+ Penetration                   = 565.711 nm  +- 174.613 nm 
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".

@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -43,15 +43,14 @@
 #ifndef G4ITStackingAction_h
 #define G4ITStackingAction_h 1
 
-#include "globals.hh"
 #include "G4UserStackingAction.hh"
+#include "globals.hh"
 
 class StackingAction : public G4UserStackingAction
-{    
- 
-public:
+{
+  public:
     StackingAction();
-    virtual ~StackingAction(){;}
+    virtual ~StackingAction() { ; }
     virtual void NewStage();
 };
 

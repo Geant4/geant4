@@ -34,18 +34,19 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class ExN04EventAction : public G4UserEventAction {
-public:
-  ExN04EventAction();
-  ~ExN04EventAction();
+class ExN04EventAction : public G4UserEventAction
+{
+  public:
+    ExN04EventAction();
+    ~ExN04EventAction();
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-private:
-  G4int ftrackerCollID;
-  G4int fcalorimeterCollID;
-  G4int fmuonCollID;
+  private:
+    G4int ftrackerCollID;
+    G4int fcalorimeterCollID;
+    G4int fmuonCollID;
 };
 
 #endif

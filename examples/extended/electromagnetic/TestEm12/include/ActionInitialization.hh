@@ -41,8 +41,8 @@ class PhysicsList;
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization(DetectorConstruction*, PhysicsList* );
-   ~ActionInitialization() override = default;
+    ActionInitialization(DetectorConstruction*, PhysicsList*);
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
@@ -53,5 +53,3 @@ class ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-
-    

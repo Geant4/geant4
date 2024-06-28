@@ -76,15 +76,15 @@ class G4BooleanSolid : public G4VSolid
     G4double GetCubicVolume() override;
     inline G4double GetSurfaceArea() override;
 
-    G4GeometryType  GetEntityType() const override;
-    G4Polyhedron* GetPolyhedron () const override;
+    G4GeometryType GetEntityType() const override;
+    G4Polyhedron* GetPolyhedron() const override;
 
     std::ostream& StreamInfo(std::ostream& os) const override;
 
     inline G4int GetCubVolStatistics() const;
     inline G4double GetCubVolEpsilon() const;
-    inline void SetCubVolStatistics(G4int st);
-    inline void SetCubVolEpsilon(G4double ep);
+    void SetCubVolStatistics(G4int st);
+    void SetCubVolEpsilon(G4double ep);
    
     inline G4int GetAreaStatistics() const;
     inline G4double GetAreaAccuracy() const;
@@ -92,6 +92,9 @@ class G4BooleanSolid : public G4VSolid
     inline void SetAreaAccuracy(G4double ep);
    
     G4ThreeVector GetPointOnSurface() const override;
+
+    G4int GetNumOfConstituents() const override;
+    G4bool IsFaceted() const override;
 
     G4BooleanSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -123,7 +126,7 @@ class G4BooleanSolid : public G4VSolid
     G4VSolid* fPtrSolidB = nullptr;
 
     G4double fCubicVolume = -1.0;
-      // Cached value of fCubicVolume 
+      // Cached value of Cubic Volume 
     G4double fSurfaceArea = -1.0;
       // Cached value of Surface Area
 

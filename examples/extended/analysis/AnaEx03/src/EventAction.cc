@@ -34,6 +34,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
+
 #include "RunAction.hh"
 
 #include "G4AnalysisManager.hh"
@@ -52,7 +53,7 @@ EventAction::~EventAction() = default;
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {
   G4int evtNb = evt->GetEventID();
-  if (evtNb%fPrintModulo == 0) {
+  if (evtNb % fPrintModulo == 0) {
     G4cout << "\n---> Begin of event: " << evtNb << G4endl;
   }
 
@@ -78,9 +79,9 @@ void EventAction::EndOfEventAction(const G4Event*)
     analysisManager->FillH1(3, fTrackLGap);
   }
 
-  //fill ntuple
+  // fill ntuple
   //
-  // Fill 1st ntuple ( id = 0)
+  //  Fill 1st ntuple ( id = 0)
   analysisManager->FillNtupleDColumn(0, 0, fEnergyAbs);
   analysisManager->FillNtupleDColumn(0, 1, fEnergyGap);
   analysisManager->AddNtupleRow(0);

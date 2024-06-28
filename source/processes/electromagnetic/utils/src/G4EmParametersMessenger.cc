@@ -438,6 +438,20 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fluc1Cmd->AvailableForStates(G4State_PreInit);
   fluc1Cmd->SetToBeBroadcasted(false);
 
+  posiCmd = new G4UIcmdWithAString("/process/em/setPositronAtRestModel",this);
+  posiCmd->SetGuidance("Define model of positron annihilation at rest");
+  posiCmd->SetParameterName("Posi",true);
+  posiCmd->SetCandidates("Simple Allison");
+  posiCmd->AvailableForStates(G4State_PreInit);
+  posiCmd->SetToBeBroadcasted(false);
+
+  ortoCmd = new G4UIcmdWithADouble("/process/em/setOrtoPositronFraction",this);
+  ortoCmd->SetGuidance("Define model of positron annihilation at rest");
+  ortoCmd->SetParameterName("frac",false);
+  ortoCmd->SetRange("frac >= 0.0 && frac <= 1.0");
+  ortoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ortoCmd->SetToBeBroadcasted(false);
+
   tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
   tripletCmd->SetGuidance("gamma conversion triplet/nuclear generation type:");
   tripletCmd->SetGuidance("0 - (default) both triplet and nuclear");
@@ -526,6 +540,8 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete nffCmd;
   delete ssCmd;
   delete fluc1Cmd;
+  delete posiCmd;
+  delete ortoCmd;
 
   delete dumpCmd;
 }
@@ -715,6 +731,12 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     if(newValue == "Dummy") { x = fDummyFluctuation; }
     else if(newValue == "Urban") { x = fUrbanFluctuation; }
     theParameters->SetFluctuationType(x);
+  } else if (command == posiCmd) {
+    G4PositronAtRestModelType x = fSimplePositronium;
+    if(newValue == "Allison") { x = fAllisonPositronium; }
+    theParameters->SetPositronAtRestModelType(x);
+  } else if ( command==ortoCmd ) {
+    theParameters->SetOrtoPsFraction(ortoCmd->GetNewDoubleValue(newValue));
   } else if ( command==tripletCmd ) {
     theParameters->SetConversionType(tripletCmd->GetNewIntValue(newValue));
   } else if ( command==onIsolatedCmd ) {

@@ -32,92 +32,82 @@
 //
 //*******************************************************
 
-#include "globals.hh"
+#include "DicomNestedParamDetectorConstruction.hh"
+
+#include "DicomNestedPhantomParameterisation.hh"
 
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
-
-#include "DicomNestedParamDetectorConstruction.hh"
-#include "DicomNestedPhantomParameterisation.hh"
-
+#include "G4PVPlacement.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4VisAttributes.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomNestedParamDetectorConstruction::DicomNestedParamDetectorConstruction()
- : DicomDetectorConstruction()
-{
-}
+  : DicomDetectorConstruction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomNestedParamDetectorConstruction::~DicomNestedParamDetectorConstruction()
-{
-}
+DicomNestedParamDetectorConstruction::~DicomNestedParamDetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomNestedParamDetectorConstruction::ConstructPhantom()
 {
 #ifdef G4VERBOSE
-    G4cout << "DicomNestedParamDetectorConstruction::ConstructPhantom " 
-    << G4endl;
+  G4cout << "DicomNestedParamDetectorConstruction::ConstructPhantom " << G4endl;
 #endif
 
-    //----- Replication of Water Phantom Volume.
-    //--- Y Slice
-    G4String yRepName("RepY");
-    G4VSolid* solYRep = new G4Box(yRepName,fNoVoxelsX*fVoxelHalfDimX,
-                                  fVoxelHalfDimY,
-                  fNoVoxelsZ*fVoxelHalfDimZ);
-    G4LogicalVolume* logYRep = new G4LogicalVolume(solYRep,fAir,yRepName);
-    new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis,
-    fNoVoxelsY,fVoxelHalfDimY*2.);
+  //----- Replication of Water Phantom Volume.
+  //--- Y Slice
+  G4String yRepName("RepY");
+  G4VSolid* solYRep =
+    new G4Box(yRepName, fNoVoxelsX * fVoxelHalfDimX, fVoxelHalfDimY, fNoVoxelsZ * fVoxelHalfDimZ);
+  G4LogicalVolume* logYRep = new G4LogicalVolume(solYRep, fAir, yRepName);
+  new G4PVReplica(yRepName, logYRep, fContainer_logic, kYAxis, fNoVoxelsY, fVoxelHalfDimY * 2.);
 
-    logYRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
+  logYRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
 
-    //--- X Slice
-    G4String xRepName("RepX");
-    G4VSolid* solXRep = new G4Box(xRepName,fVoxelHalfDimX,fVoxelHalfDimY,
-                                  fNoVoxelsZ*fVoxelHalfDimZ);
-    G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep,fAir,xRepName);
-    new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNoVoxelsX,fVoxelHalfDimX*2.);
+  //--- X Slice
+  G4String xRepName("RepX");
+  G4VSolid* solXRep =
+    new G4Box(xRepName, fVoxelHalfDimX, fVoxelHalfDimY, fNoVoxelsZ * fVoxelHalfDimZ);
+  G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep, fAir, xRepName);
+  new G4PVReplica(xRepName, logXRep, logYRep, kXAxis, fNoVoxelsX, fVoxelHalfDimX * 2.);
 
-    logXRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
-    
-    //----- Voxel solid and logical volumes
-    //--- Z Slice
-    G4VSolid* solVoxel = new G4Box("phantom",fVoxelHalfDimX,
-    fVoxelHalfDimY,fVoxelHalfDimZ);
-    G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,fAir,"phantom");
+  logXRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
 
-    logicVoxel->
-    SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
+  //----- Voxel solid and logical volumes
+  //--- Z Slice
+  G4VSolid* solVoxel = new G4Box("phantom", fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
+  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel, fAir, "phantom");
 
-    //
-    // Parameterisation for transformation of voxels.
-    //  (voxel size is fixed in this example.
-    //    e.g. nested parameterisation handles material 
-    //    and transfomation of voxels.)
-    G4ThreeVector voxelSize(fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
-    DicomNestedPhantomParameterisation* param =
+  logicVoxel->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
+
+  //
+  // Parameterisation for transformation of voxels.
+  //  (voxel size is fixed in this example.
+  //    e.g. nested parameterisation handles material
+  //    and transfomation of voxels.)
+  G4ThreeVector voxelSize(fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
+  DicomNestedPhantomParameterisation* param =
     new DicomNestedPhantomParameterisation(voxelSize, fMaterials);
 
-    new G4PVParameterised("phantom",    // their name
-                          logicVoxel, // their logical volume
-                          logXRep,      // Mother logical volume
-                          kZAxis,       // Are placed along this axis
-                          //kUndefined,
-                          // Are placed along this axis
-                          fNoVoxelsZ,      // Number of cells
-                          param);       // Parameterisation.
+  new G4PVParameterised("phantom",  // their name
+                        logicVoxel,  // their logical volume
+                        logXRep,  // Mother logical volume
+                        kZAxis,  // Are placed along this axis
+                        // kUndefined,
+                        //  Are placed along this axis
+                        fNoVoxelsZ,  // Number of cells
+                        param);  // Parameterisation.
 
-    param->SetMaterialIndices( fMateIDs );
-    param->SetNoVoxels( fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ );
+  param->SetMaterialIndices(fMateIDs);
+  param->SetNoVoxels(fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ);
 
-    //phantom_phys->SetRegularStructureId(0);
+  // phantom_phys->SetRegularStructureId(0);
 
-    // Z logical volume
-    SetScorer(logicVoxel);
-
+  // Z logical volume
+  SetScorer(logicVoxel);
 }

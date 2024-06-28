@@ -27,15 +27,16 @@
 /// \brief Definition of the PrimaryGeneratorAction4 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction4_h
 #define PrimaryGeneratorAction4_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 class G4ParticleGun;
@@ -46,24 +47,24 @@ class G4Event;
 class PrimaryGeneratorAction4
 {
   public:
-    PrimaryGeneratorAction4(G4ParticleGun*);    
-   ~PrimaryGeneratorAction4() = default;
+    PrimaryGeneratorAction4(G4ParticleGun*);
+    ~PrimaryGeneratorAction4() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
 
-    G4double GetRmin3() {return fRmin3;};
-    G4double GetRmax3() {return fRmax3;};
-    G4double GetCosAlphaMin() {return fCosAlphaMin;};
-    G4double GetCosAlphaMax() {return fCosAlphaMax;};
-            
+    G4double GetRmin3() { return fRmin3; };
+    G4double GetRmax3() { return fRmax3; };
+    G4double GetCosAlphaMin() { return fCosAlphaMin; };
+    G4double GetCosAlphaMax() { return fCosAlphaMax; };
+
   private:
     G4double fRmin3 = 0.;
-    G4double fRmax3 = 0.;              //vertex volume
+    G4double fRmax3 = 0.;  // vertex volume
     G4double fCosAlphaMin = 0.;
-    G4double fCosAlphaMax = 0.;        //opening angle
+    G4double fCosAlphaMax = 0.;  // opening angle
 
-    G4ParticleGun*  fParticleGun = nullptr;
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

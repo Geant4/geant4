@@ -66,6 +66,9 @@
 #include "G4TrajectoryPoint.hh"
 #include "G4AttHolder.hh"
 #include "G4AttCheck.hh"
+#if 0x060000 <= QT_VERSION
+#include "G4StateManager.hh"
+#endif
 
 #include <Inventor/nodes/SoCallback.h>
 #include <Inventor/nodes/SoSwitch.h>
@@ -104,7 +107,9 @@
 
 #define G4warn G4cout
 
+#if QT_VERSION < 0x060000
 G4OpenInventorQtExaminerViewer* G4OpenInventorQtExaminerViewer::viewer = 0;
+#endif
 
 #define MIN_SPEED  2.1        // Lower number means faster
 #define START_STEP 0.3
@@ -120,6 +125,9 @@ G4OpenInventorQtExaminerViewer(QWidget* parent, const char* name, SbBool embed,
                                SoQtFullViewer::BuildFlag flag,
                                SoQtViewer::Type type)
    : SoQtExaminerViewer(parent, name, embed, flag, type),
+#if 0x060000 <= QT_VERSION
+     fName(name),
+#endif
      externalQtApp(0), processSoEventCount(0)
 {
    // FWJ DEBUG
@@ -129,8 +137,10 @@ G4OpenInventorQtExaminerViewer(QWidget* parent, const char* name, SbBool embed,
    // FWJ THIS DOESN'T WORK APPARENTLY NO MAINWINDOW
    //   QMenuBar* menubar = ((QMainWindow*)parent)->menuBar();
 
+#if QT_VERSION < 0x060000
    fName = new QString(name);
    viewer = this;
+#endif
    construct(TRUE);
 }
 
@@ -149,7 +159,11 @@ G4OpenInventorQtExaminerViewer::~G4OpenInventorQtExaminerViewer()
    //   delete[] curViewPtName;
    //   delete searcher;
 
+#if QT_VERSION < 0x060000
    viewer = 0;
+#else
+   delete hookBeamOn;
+#endif
 }
 
 
@@ -173,7 +187,11 @@ void G4OpenInventorQtExaminerViewer::construct(const SbBool)
    myCam = new SoPerspectiveCamera;
    MAX_VP_IDX = 3;
    MAX_VP_NAME = 35; // Max length of a viewpoint name, padded with spaces
+#if QT_VERSION < 0x060000
    curViewPtName = new char[MAX_VP_NAME + 1];
+#else
+   curViewPtName.clear();
+#endif
    left_right = up_down = 0; // For movements around the beam during animation
    speedStep = START_STEP; // For smoother animation speed increase/decrease
    rotUpVec = false; // Used during scene element rotations
@@ -444,7 +462,13 @@ void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
 
 // MENU BAR
 
+#if QT_VERSION < 0x060000
    menubar = new QMenuBar(getRenderAreaWidget());
+#else
+   menubar = new QMenuBar();
+   menubar->setNativeMenuBar(false);
+   addAppPushButton(menubar);
+#endif
    // FWJ DEBUG
    //   G4cout << "G4OpenInventorQtExaminerViewer: GOT A menubar=" <<
    //      menubar << G4endl; 
@@ -524,7 +548,9 @@ void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
    connect(HelpControls, SIGNAL(triggered()), this, SLOT(HelpControlsCB()));
    helpmenu->addAction(HelpControls);
 
+#if QT_VERSION < 0x060000
    menubar->show();
+#endif
 
    //   SoQtExaminerViewer::buildWidget(parent);
 
@@ -661,12 +687,16 @@ FLY mode (requires Reference Path):\n\n\
 }
 
 
+#if QT_VERSION < 0x060000
 // Called right after buttons and widgets get realized.
 // It sets the viewpoint last accessed.
 void G4OpenInventorQtExaminerViewer::afterRealizeHook()
 {
    SoQtExaminerViewer::afterRealizeHook();
-
+#else
+void G4OpenInventorQtExaminerViewer::setupSceneGraph()
+{
+#endif
    // Default height is used when selecting and viewing scene elements
    // FWJ Added defaultHeight for Ortho camera
    SoCamera *cam = getCamera();
@@ -731,6 +761,9 @@ void G4OpenInventorQtExaminerViewer::afterRealizeHook()
       root->addChild(myCam); // For position/orientation calculation during animation
    }
 
+#if 0x060000 <= QT_VERSION
+   if(root!=nullptr) {
+#endif
    sceneChangeSensor = new SoNodeSensor;
    sceneChangeSensor->setFunction(sceneChangeCB);
    sceneChangeSensor->attach(root);
@@ -755,9 +788,13 @@ void G4OpenInventorQtExaminerViewer::afterRealizeHook()
                             SoMouseButtonEvent::getClassTypeId(),
                             pickingCB, static_cast<void *>(this));
    root->addChild(pickCB);
+#if 0x060000 <= QT_VERSION
+   }
+#endif
 
    ///////////////////////////// MOUSEOVER & PICK /////////////////////
 
+#if QT_VERSION < 0x060000
    AuxWindow->show();
    AuxWindow->raise();
    AuxWindow->activateWindow();
@@ -773,8 +810,27 @@ void G4OpenInventorQtExaminerViewer::afterRealizeHook()
       //      attached = TRUE;
       addAppPushButton(detachButton);
    }
+#else
+   //G.Barrand: map the AuxWindow "at need", it is done in the SaveViewPtCB.
+   //           Having one appearing for each viewer creation is cumbersome.
+   //           Also, if "closing" the AuxWindow with the mouse, we have no
+   //           way to map it again. Moreover, if done here, on macOS at sartup,
+   //           it inactivates the Apple menu bar. An idea: since there is one
+   //           AuxWindow per viewer, why not having them as tabs in the UI
+   //           tab widget? It will go toward a more compact GUI.
+#endif
 }
 
+#if 0x060000 <= QT_VERSION
+void G4OpenInventorQtExaminerViewer::addInTab() {
+  auto UI = G4UImanager::GetUIpointer();
+  uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
+  if(uiQt) {
+    uiQt->AddTabWidget(getParentWidget(),fName);
+    addAppPushButton(detachButton);
+  }
+}
+#endif
 
 // This method locates a named node in the superimposed or original scene.
 // FWJ RENAME THIS
@@ -885,7 +941,11 @@ void G4OpenInventorQtExaminerViewer::superimpositionEvent(SoAction * action)
    if (currentState == VIEWPOINT) { // Displaying viewpoint name
       curInfoFont->size.setValue(15);
       curInfoFont->name.setValue("defaultFont:Italic");
+#if QT_VERSION < 0x060000
       curInfoText->string.setValue(SbString(curViewPtName));
+#else
+      curInfoText->string.setValue(SbString(curViewPtName.c_str()));
+#endif
    }
    else if(currentState == GENERAL) { // Displaying longitudinal distance
       curInfoFont->size.setValue(16);
@@ -926,9 +986,13 @@ bool G4OpenInventorQtExaminerViewer::loadViewPts()
       std::size_t end = token.find_last_not_of(' '); // Remove padded spaces
       token = token.substr(0, end + 1);
 
+#if QT_VERSION < 0x060000
       char *vpName = new char[token.size() + 1];
       strcpy(vpName, token.c_str());
       tmp.viewPtName = vpName;
+#else
+      tmp.viewPtName = token;
+#endif
       fileIn >> token;
 
       parseString<float>(x, token, error);
@@ -971,7 +1035,11 @@ bool G4OpenInventorQtExaminerViewer::loadViewPts()
       getline(fileIn, token);
 
       if (error) {
+#if QT_VERSION < 0x060000
          viewPtIdx = 0;
+#else
+         viewPtIdx = -1;
+#endif
          viewPtList.clear();
          return false;
       }
@@ -2575,11 +2643,12 @@ void G4OpenInventorQtExaminerViewer::animateRefParticle()
 }
 
 
+#if QT_VERSION < 0x060000
 void G4OpenInventorQtExaminerViewer::addEscapeCallback(void (*callback)())
 {
    escapeCallback = callback;
 }
-
+#endif
 
 void G4OpenInventorQtExaminerViewer::sceneChangeCB(void* userData, SoSensor*)
 {
@@ -2606,8 +2675,13 @@ void G4OpenInventorQtExaminerViewer::addViewPoints()
    if (!size) return;
 
    for (std::size_t i = 0; i < size; ++i) {
+#if QT_VERSION < 0x060000
       new QListWidgetItem(viewPtList[i].viewPtName,
-                          AuxWindowDialog->listWidget); 
+                          AuxWindowDialog->listWidget);
+#else
+      new QListWidgetItem(viewPtList[i].viewPtName.c_str(),
+                          AuxWindowDialog->listWidget);
+#endif
    }
 }
 
@@ -2786,7 +2860,16 @@ G4OpenInventorQtExaminerViewer::SaveViewPtCB()
    // EMULATING getViewPtNameCB ...
    //   bool ok;
    // Note QString() returns an empty string
-   
+#if 0x060000 <= QT_VERSION
+   //G.Barrand: map the AuxWindow here. Then it is mapped "at need"
+   //           and not systematically when creating a new viewer.
+   //           Moreover, if "closing" the AuxWindow with the mouse,
+   //           it permits to map it back.
+   AuxWindow->show();
+   AuxWindow->raise();
+   AuxWindow->activateWindow();
+#endif
+
    // NONE OF THE FOLLOWING CHANGES THE FONT: FORGET IT FOR NOW
    QInputDialog* inputdialog = new QInputDialog(getParentWidget());
    inputdialog->setFont(*font);
@@ -2817,7 +2900,11 @@ G4OpenInventorQtExaminerViewer::SaveViewPtCB()
    //   G4cout << "char[] is  " << name << G4endl;
 
    for (int i = 0; i < (int)viewPtList.size(); i++) {
+#if QT_VERSION < 0x060000
       if (!strcmp(name, viewPtList[i].viewPtName)) {
+#else
+      if (!strcmp(name, viewPtList[i].viewPtName.c_str())) {
+#endif
          QMessageBox msgbox;
          msgbox.setText("Bookmark name is already in use");
          msgbox.exec();
@@ -2857,7 +2944,11 @@ void G4OpenInventorQtExaminerViewer::saveViewPt(char *name)
       writeViewPtIdx();
    }
 
+#if QT_VERSION < 0x060000
    tmp.viewPtName = name;
+#else
+   tmp.viewPtName = std::string(name);
+#endif
    tmp.viewportMapping = camera->viewportMapping.getValue();
    tmp.position = camera->position.getValue();
    tmp.orientation = camera->orientation.getValue();
@@ -2946,7 +3037,11 @@ void G4OpenInventorQtExaminerViewer::LoadBookmarkCB(QListWidgetItem* item)
    //   G4cout << "AuxWindow: listWidget LoadBookmark CALLBACK" << G4endl;
 
    for (int i = 0; i < (int)viewPtList.size(); i++) {
+#if QT_VERSION < 0x060000
       if (!strcmp(viewPtList[i].viewPtName, qPrintable(item->text()))) {
+#else
+      if (!strcmp(viewPtList[i].viewPtName.c_str(), qPrintable(item->text()))) {
+#endif
          viewPtIdx = i;
          break;
       }
@@ -3002,6 +3097,14 @@ void G4OpenInventorQtExaminerViewer::setViewPt()
       ///////////////////////////////////////////////////////////////
    }
 
+#if QT_VERSION < 0x060000
+#else
+   if((viewPtIdx<0)||(viewPtIdx>=int(viewPtList.size()))) {
+     G4warn << "setViewPt: inconsitent viewPtIdx " << viewPtIdx << ", viewPtList.size() " << viewPtList.size() << G4endl;
+     return;
+   }
+#endif
+
    curViewPtName = viewPtList[viewPtIdx].viewPtName;
    camera->viewportMapping = viewPtList[viewPtIdx].viewportMapping;
    camera->position = viewPtList[viewPtIdx].position;
@@ -3047,13 +3150,21 @@ void G4OpenInventorQtExaminerViewer::NextViewPtCB()
    if (!viewPtList.size()) return;
    if (viewPtIdx >= (int)viewPtList.size() - 1)
       viewPtIdx = 0;
+#if 0x060000 <= QT_VERSION
+   else if (viewPtIdx<0)
+      viewPtIdx = 0;
+#endif
    else
       viewPtIdx++;
 
    writeViewPtIdx();
    setViewPt();
+#if QT_VERSION < 0x060000
    char* viewptname = viewPtList[viewPtIdx].viewPtName;
    AuxWindowDialog->lineEdit->setText(QString(viewptname));
+#else
+   AuxWindowDialog->lineEdit->setText(QString(viewPtList[viewPtIdx].viewPtName.c_str()));
+#endif
 }
 
 void G4OpenInventorQtExaminerViewer::PrevViewPtCB()
@@ -3062,15 +3173,23 @@ void G4OpenInventorQtExaminerViewer::PrevViewPtCB()
    //   G4cout << "App Button: prevViewPt CALLBACK" << G4endl;
 
    if (!viewPtList.size()) return;
+#if QT_VERSION < 0x060000
    if (viewPtIdx == 0)
+#else
+   if (viewPtIdx <= 0)
+#endif
       viewPtIdx = (int) viewPtList.size() - 1;
    else
       viewPtIdx--;
 
    writeViewPtIdx();
    setViewPt();
+#if QT_VERSION < 0x060000
    char* viewptname = viewPtList[viewPtIdx].viewPtName;
    AuxWindowDialog->lineEdit->setText(QString(viewptname));
+#else
+   AuxWindowDialog->lineEdit->setText(QString(viewPtList[viewPtIdx].viewPtName.c_str()));
+#endif
 }
 
 
@@ -3129,12 +3248,46 @@ void G4OpenInventorQtExaminerViewer::SwitchAxesCB(bool checked)
 
 void G4OpenInventorQtExaminerViewer::DetachCB()
 {
+#if QT_VERSION < 0x060000
    //   FWJ DEBUG
    //   G4cout << "App Button: detach CALLBACK" << G4endl;
    uiQt->GetViewerTabWidget()->removeTab(uiQtTabIndex);
    viewerParent->setParent(viewerParent2);
    removeAppPushButton(detachButton);
    show();
+#else
+   //G.Barrand: have the viewer in a detached window.
+   //           We have the title window reflecting from where
+   //           it comes from, then "Detached <viewer name>".
+   //           Ask to destroy the detached viewer in case
+   //           of closing the window with the mouse; if not
+   //           we have a dandling hidden viewer without a way
+   //           to map it again.
+   G4int index = -1;
+  {int tabn = uiQt->GetViewerTabWidget()->count();
+   for (G4int c = 0; c < tabn; ++c) {
+     if (uiQt->GetViewerTabWidget()->tabText(c)==fName) {
+       index = c;
+     }
+   }}
+   if(index==(-1)) return;
+   removeAppPushButton(detachButton);
+   uiQt->GetViewerTabWidget()->removeTab(index);
+  {short w,h;
+   getSize().getValue(w,h);
+   QWidget* dialog = new QDialog();
+   dialog->setWindowTitle(QString("Detached "+fName));
+   dialog->setAttribute(Qt::WA_DeleteOnClose);
+  {QHBoxLayout* layout = new QHBoxLayout();
+   layout->setContentsMargins(0,0,0,0);
+   layout->setSpacing(0);
+   layout->addWidget(getParentWidget());
+   dialog->setLayout(layout);}
+   dialog->resize(w,h);
+   getParentWidget()->show();
+   dialog->show();
+  }
+#endif
 }
 
 
@@ -3168,8 +3321,10 @@ void G4OpenInventorQtExaminerViewer::deleteViewPt(char *vpName)
    fileIn.open(fileName.c_str());
    std::ofstream out("temporaryFile.txt");
 
+#if QT_VERSION < 0x060000
    if (!vpName)
       vpName = viewPtList[viewPtIdx].viewPtName;
+#endif
 
    getline(fileIn, line); // Printing the viewpoint idx
    out << line << "\n";
@@ -3196,7 +3351,11 @@ void G4OpenInventorQtExaminerViewer::deleteViewPt(char *vpName)
    std::size_t idx = 0; // Remove viewpoint from the vector
    std::size_t size = viewPtList.size();
    while (idx < size) {
+#if QT_VERSION < 0x060000
       if (!strcmp(viewPtList[idx].viewPtName, vpName)) {
+#else
+      if (!strcmp(viewPtList[idx].viewPtName.c_str(), vpName)) {
+#endif
          viewPtList.erase(viewPtList.begin() + idx);
          break;
       }
@@ -3233,7 +3392,11 @@ void G4OpenInventorQtExaminerViewer::deleteViewPt(char *vpName)
    fileOut.seekp(0, std::ios::end);
 
    if (!viewPtList.size()) { // viewPtList is empty
+#if QT_VERSION < 0x060000
       curViewPtName = (char *) empty.c_str();
+#else
+      curViewPtName.clear();
+#endif
       scheduleRedraw();
    } else {
       if (viewPtIdx >= (int) viewPtList.size())
@@ -3271,7 +3434,11 @@ void G4OpenInventorQtExaminerViewer::RenameBookmarkCB()
 
    std::size_t size = viewPtList.size();
    for (std::size_t i = 0; i < size; ++i) {
+#if QT_VERSION < 0x060000
       if (!strcmp(newname, viewPtList[i].viewPtName)) {
+#else
+      if (!strcmp(newname, viewPtList[i].viewPtName.c_str())) {
+#endif
          QMessageBox msgbox;
          msgbox.setFont(*font);
          msgbox.setText("Bookmark name is already in use");
@@ -3307,7 +3474,11 @@ void G4OpenInventorQtExaminerViewer::renameViewPt(char *vpName)
    while (getline(fileIn, line)) {
       end = line.find_last_not_of(' ');
       line = line.substr(0, end + 1);
+#if QT_VERSION < 0x060000
       if (!strcmp(line.c_str(), curViewPtName)) {
+#else
+      if (!strcmp(line.c_str(), curViewPtName.c_str())) {
+#endif
          fileOut.seekp(pos);
          fileOut << newName;
          fileOut.seekp(0, std::ios::end); // Set the file pointer to the end of the file
@@ -3322,8 +3493,13 @@ void G4OpenInventorQtExaminerViewer::renameViewPt(char *vpName)
    fileIn.clear();
 
    while (idx < size) {
+#if QT_VERSION < 0x060000
       if (!strcmp(viewPtList[idx].viewPtName, curViewPtName)) {
          strcpy(viewPtList[idx].viewPtName, vpName);
+#else
+      if (!strcmp(viewPtList[idx].viewPtName.c_str(), curViewPtName.c_str())) {
+         viewPtList[idx].viewPtName = std::string(vpName);
+#endif
          break;
       }
       idx++;
@@ -3361,7 +3537,11 @@ void G4OpenInventorQtExaminerViewer::SortBookmarksCB()
 
    for (int i = 0; i < (int)viewPtList.size(); i++) {
       // viewPtIdx has to be changed to account for a different order in viewPtList
+#if QT_VERSION < 0x060000
       if (!strcmp(charList[i].c_str(), curViewPtName))
+#else
+      if (!strcmp(charList[i].c_str(), curViewPtName.c_str()))
+#endif
          viewPtIdx = i;
       new QListWidgetItem(charList[i].c_str(), AuxWindowDialog->listWidget); 
 
@@ -3389,7 +3569,11 @@ void G4OpenInventorQtExaminerViewer::sortViewPts(std::vector<std::string> sorted
    std::size_t size = sortedViewPts.size();
    while (sortIdx < size) {
       while (strcmp(sortedViewPts[sortIdx].c_str(),
+#if QT_VERSION < 0x060000
                     viewPtList[unsortIdx].viewPtName))
+#else
+                    viewPtList[unsortIdx].viewPtName.c_str()))
+#endif
          unsortIdx++;
 
       std::string vpName = viewPtList[unsortIdx].viewPtName;
@@ -4065,6 +4249,23 @@ HookEventProcState::~HookEventProcState()
 
 G4bool HookEventProcState::Notify(G4ApplicationState requestedState)
 {
+#if QT_VERSION < 0x060000
    if (requestedState == G4State_EventProc) viewer->newEvents = true;
+#else
+#ifdef G4MULTITHREADED
+   //G.Barrand: on the master thread, we are not notified of end of events,
+   //           we raise the newEvents flag on the end of run.
+   G4StateManager* stateManager = G4StateManager::GetStateManager();
+   G4ApplicationState previousState = stateManager->GetPreviousState();
+ //if (previousState == G4State_Idle       &&  requestedState == G4State_GeomClosed)  //BeginOfRun
+ //if (previousState == G4State_GeomClosed &&  requestedState == G4State_EventProc)   //BeginOfEvent
+ //if (previousState == G4State_EventProc  &&  requestedState == G4State_GeomClosed)  //EndOfEvent
+   if (previousState == G4State_GeomClosed &&  requestedState == G4State_Idle) {      //EndOfRun
+     viewer->newEvents = true;
+   }
+#else
+   if (requestedState == G4State_EventProc) viewer->newEvents = true;
+#endif
+#endif
    return true;
 }

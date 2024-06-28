@@ -79,6 +79,7 @@ class QToolButton;
 //
 // Class description - end :
 
+#if QT_VERSION < 0x060000
 class G4QTabWidget : public QTabWidget
 {
  public:
@@ -99,6 +100,7 @@ class G4QTabWidget : public QTabWidget
   }
   inline QSize sizeHint() const override { return QSize(fPreferedSizeX, fPreferedSizeY); }
 };
+#endif
 
 class G4UIOutputString
 {
@@ -346,7 +348,11 @@ public:
   QWidget* fViewerPropertiesWidget;
   QWidget* fPickInfosWidget;
   QLineEdit* fHelpLine;
+#if QT_VERSION < 0x060000
   G4QTabWidget* fViewerTabWidget;
+#else
+  QTabWidget* fViewerTabWidget;
+#endif
   QString fCoutText;
   QTextBrowser* fStartPage;
   QSplitter* fHelpVSplitter;

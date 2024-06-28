@@ -33,13 +33,13 @@
 #ifndef DetectorWatase86_h
 #define DetectorWatase86_h 1
 
-#include "globals.hh"
-
 #include "RadiatorDescription.hh"
+
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 
-class DetectorWatase86 
+class DetectorWatase86
 {
   public:
     DetectorWatase86();
@@ -53,7 +53,7 @@ class DetectorWatase86
 
   private:
     // data members
-    RadiatorDescription* fRadiatorDescription; 
+    RadiatorDescription* fRadiatorDescription;
 };
 
 #endif

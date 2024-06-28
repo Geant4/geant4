@@ -36,31 +36,25 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                               DetectorConstruction* DC)
-:G4VUserPrimaryGeneratorAction(),                                              
- fParticleGun(0),
- fDetector(DC),
- fRndmBeam(0),       
- fGunMessenger(0)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fDetector(DC), fRndmBeam(0), fGunMessenger(0)
 {
-  fParticleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+  fParticleGun = new G4ParticleGun(1);
+  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(100*TeV);  
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-    
-  //create a messenger for this class
-  fGunMessenger = new PrimaryGeneratorMessenger(this);  
+  fParticleGun->SetParticleEnergy(100 * TeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
+
+  // create a messenger for this class
+  fGunMessenger = new PrimaryGeneratorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,29 +62,27 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete fParticleGun;
-  delete fGunMessenger;  
+  delete fGunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  // this function is called at the begining of event
   //
-  G4double x0 = -0.5*(fDetector->GetSize());
-  G4double y0 = 0.*cm, z0 = 0.*cm;
-    
-  //randomize the beam, if requested.
+  G4double x0 = -0.5 * (fDetector->GetSize());
+  G4double y0 = 0. * cm, z0 = 0. * cm;
+
+  // randomize the beam, if requested.
   //
-  if (fRndmBeam > 0.) 
-    {
-      G4double rbeam = 0.5*(fDetector->GetSize())*fRndmBeam;
-      y0 = (2*G4UniformRand()-1.)*rbeam;
-      z0 = (2*G4UniformRand()-1.)*rbeam;
-    }
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
-  fParticleGun->GeneratePrimaryVertex(anEvent); 
+  if (fRndmBeam > 0.) {
+    G4double rbeam = 0.5 * (fDetector->GetSize()) * fRndmBeam;
+    y0 = (2 * G4UniformRand() - 1.) * rbeam;
+    z0 = (2 * G4UniformRand() - 1.) * rbeam;
+  }
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

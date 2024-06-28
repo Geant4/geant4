@@ -46,37 +46,36 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction* detector);
-   ~Run() override = default;
+    ~Run() override = default;
 
   public:
-    void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-    void AddEdep (G4double e);
-    void AddTrackLength (G4double t);
-    void AddProjRange   (G4double x);
-    void AddStepSize    (G4int nb, G4double st);
-    
-    void     SetCsdaRange (G4double value);                                 
+    void AddEdep(G4double e);
+    void AddTrackLength(G4double t);
+    void AddProjRange(G4double x);
+    void AddStepSize(G4int nb, G4double st);
+
+    void SetCsdaRange(G4double value);
     G4double GetCsdaRange();
-            
+
     void Merge(const G4Run*) override;
     void EndOfRun();
-    
+
   private:
-    DetectorConstruction*  fDetector = nullptr;
-    G4ParticleDefinition*  fParticle = nullptr;
-    G4double  fEkin = 0.; 
-       
-    G4double   fEdeposit  = 0., fEdeposit2  = 0.;
-    G4double   fTrackLen  = 0., fTrackLen2  = 0.;
-    G4double   fProjRange = 0., fProjRange2 = 0.;
-    G4int      fNbOfSteps = 0,  fNbOfSteps2 = 0;
-    G4double   fStepSize  = 0., fStepSize2  = 0.;
-    
-    G4double   fCsdaRange = 0.;
+    DetectorConstruction* fDetector = nullptr;
+    G4ParticleDefinition* fParticle = nullptr;
+    G4double fEkin = 0.;
+
+    G4double fEdeposit = 0., fEdeposit2 = 0.;
+    G4double fTrackLen = 0., fTrackLen2 = 0.;
+    G4double fProjRange = 0., fProjRange2 = 0.;
+    G4int fNbOfSteps = 0, fNbOfSteps2 = 0;
+    G4double fStepSize = 0., fStepSize2 = 0.;
+
+    G4double fCsdaRange = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

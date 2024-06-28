@@ -41,9 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMaxBuilder::StepMaxBuilder(const G4String& name)
-:  G4VPhysicsConstructor(name)
-{ }
+StepMaxBuilder::StepMaxBuilder(const G4String& name) : G4VPhysicsConstructor(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,9 +50,9 @@ void StepMaxBuilder::ConstructProcess()
   // Step limitation seen as a process
   StepMaxProcess* process = new StepMaxProcess();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)()){
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (process->IsApplicable(*particle)) pmanager->AddDiscreteProcess(process);

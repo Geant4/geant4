@@ -44,17 +44,18 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "TestParameters.hh"
+
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "TestParameters.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::PhysicsListMessenger(PhysicsList *pPhys)
-  : fPhysicsList(pPhys) {
+PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys) : fPhysicsList(pPhys)
+{
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
 
@@ -88,8 +89,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList *pPhys)
   fListCmd->SetParameterName("PList", false);
   fListCmd->AvailableForStates(G4State_PreInit);
 
-  fADCCmd =
-      new G4UIcmdWithADoubleAndUnit("/testem/phys/setEnergyPerChannel", this);
+  fADCCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setEnergyPerChannel", this);
   fADCCmd->SetGuidance("Set energy per ADC channel");
   fADCCmd->SetParameterName("enadc", false, false);
   fADCCmd->SetUnitCategory("Energy");
@@ -113,7 +113,8 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList *pPhys)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::~PhysicsListMessenger() {
+PhysicsListMessenger::~PhysicsListMessenger()
+{
   delete fECmd;
   delete fEBCmd;
   delete fCBCmd;
@@ -127,9 +128,9 @@ PhysicsListMessenger::~PhysicsListMessenger() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand *command,
-                                       G4String newValue) {
-  TestParameters *man = TestParameters::GetPointer();
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  TestParameters* man = TestParameters::GetPointer();
 
   if (command == fECmd) {
     man->SetMaxEnergy(fECmd->GetNewDoubleValue(newValue));

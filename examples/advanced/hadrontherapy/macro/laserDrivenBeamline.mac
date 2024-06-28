@@ -39,10 +39,18 @@
 /gps/pos/radius 0.0 mm   
 /gps/pos/sigma_r 0.1 mm  
 
+# the incident surface is in the y-z plane
+#
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
 /gps/ang/rot1 0 0 1
 /gps/ang/rot2 0 1 0
-/gps/pos/rot1 0 0 1
-/gps/pos/rot2 0 1 0
+/gps/ang/type beam1d
+/gps/ang/sigma_r 0.028 deg
+
 # ###########the beam energy is in gaussian profile
 #/gps/ene/type Gauss
 #/gps/ene/mono 7 MeV  
@@ -67,9 +75,14 @@
 /gps/ene/ezero 2.272727273
 
 ######################################################################
-###/vis/scene/create 
-###/vis/open OGL 
-####/vis/open  ## open the default viewer
+/vis/open OGLI 600x600-0+0
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+/vis/drawVolume
 /vis/viewer/set/background white
 /vis/viewer/set/viewpointThetaPhi 60 130
 /vis/viewer/zoom 1.0

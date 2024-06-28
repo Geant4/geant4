@@ -31,7 +31,6 @@
 #define B1DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -55,7 +54,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fScoringVolume = nullptr;
 };
 
-}
+}  // namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

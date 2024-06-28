@@ -32,34 +32,31 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
-
 #include "ExP01DetectorConstruction.hh"
+#include "ExP01EventAction.hh"
 #include "ExP01PrimaryGeneratorAction.hh"
 #include "ExP01RunAction.hh"
-#include "ExP01EventAction.hh"
 #include "ExP01SteppingAction.hh"
 #include "ExP01SteppingVerbose.hh"
-
 #include "FTFP_BERT.hh"
 
 #include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
-
+int main(int argc, char** argv)
+{
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  //my Verbose output class
+  // my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExP01SteppingVerbose);
 
   // Run manager
@@ -82,13 +79,13 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new ExP01EventAction);
   runManager->SetUserAction(new ExP01SteppingAction);
 
-  //Initialize G4 kernel
+  // Initialize G4 kernel
   runManager->Initialize();
 
-  //get the pointer to the User Interface manager
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(ui)
+  if (ui)
   // Define (G)UI terminal for interactive mode
   {
     UImanager->ApplyCommand("/control/execute vis.mac");
@@ -100,7 +97,7 @@ int main(int argc,char** argv) {
   {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
 
   delete visManager;
@@ -111,4 +108,3 @@ int main(int argc,char** argv) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

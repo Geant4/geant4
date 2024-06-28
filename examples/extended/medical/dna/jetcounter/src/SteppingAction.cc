@@ -35,25 +35,27 @@
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
+
 #include "EventAction.hh"
+
 #include "G4SteppingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingAction::SteppingAction(EventAction *event)
-  : G4UserSteppingAction()
-  , fEventAction(event) {}
+SteppingAction::SteppingAction(EventAction* event) : G4UserSteppingAction(), fEventAction(event) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void SteppingAction::UserSteppingAction(const G4Step *step) {
+void SteppingAction::UserSteppingAction(const G4Step* step)
+{
   // /////////////////////////////////////////
   // killing primary particles (any heavy charged particle) that hit the
   // collimator
   auto part_name = step->GetTrack()->GetParticleDefinition()->GetParticleName();
-  if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "collPhys" &&
-      step->GetTrack()->GetParticleDefinition()->GetParticleName() == "alpha") {
+  if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "collPhys"
+      && step->GetTrack()->GetParticleDefinition()->GetParticleName() == "alpha")
+  {
     step->GetTrack()->SetTrackStatus(fStopAndKill);
     fEventAction->InvalidEvent();
-    return; // nothing more to do in such case
+    return;  // nothing more to do in such case
   }
 
   // /////////////////////////////////////////
@@ -67,16 +69,14 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
 
   if (step->GetTrack()->GetParticleDefinition()->GetParticleName() == "alpha") {
     // 1. and 2. - particle crossing the boundary between World volume
-    if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() ==
-        "worldPhys") {
+    if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "worldPhys") {
       auto physVol = step->GetPostStepPoint()->GetPhysicalVolume();
       // the above may be a null pointer as the particle can leave world, so it
       // has to be tested:
       if (physVol) {
         // 1. to Mylar wall
         if (physVol->GetName() == "wallPhys") {
-          fEventAction->RecordInitialEnergy(
-              step->GetTrack()->GetKineticEnergy());
+          fEventAction->RecordInitialEnergy(step->GetTrack()->GetKineticEnergy());
         }
         // 2. to silicon detector
         if (physVol->GetName() == "enDetPhys") {
@@ -86,12 +86,9 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
     }
 
     // 3. - particle crossing the boundary from wall inner layer to the target
-    if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() ==
-        "innerWallPhys") {
-      if (step->GetPostStepPoint()->GetPhysicalVolume()->GetName() ==
-          "targetPhys") {
-        fEventAction->RecordInteractionEnergy(
-            step->GetTrack()->GetKineticEnergy());
+    if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "innerWallPhys") {
+      if (step->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "targetPhys") {
+        fEventAction->RecordInteractionEnergy(step->GetTrack()->GetKineticEnergy());
       }
     }
   }
@@ -101,8 +98,7 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
   // only ionisations in the target will be recorded
   if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "targetPhys") {
     if (step->GetTotalEnergyDeposit() != 0) {
-      G4String process_name =
-          step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+      G4String process_name = step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
 
       // counting ionisations caused only by electrons and alpha particles:
       //            if(process_name=="e-_G4DNAIonisation" ||
@@ -111,10 +107,10 @@ void SteppingAction::UserSteppingAction(const G4Step *step) {
 
       // more general approach - counting ionisations caused by any particle
       // (including also protons, GenericIons, etc.):
-      auto pos = process_name.find(
-          "Ionisation"); // looking for "Ionisation" substring in process_name
-      if (pos != std::string::npos)    // found!
-        fEventAction->AddIonisation(); // increase cluster size
+      auto pos =
+        process_name.find("Ionisation");  // looking for "Ionisation" substring in process_name
+      if (pos != std::string::npos)  // found!
+        fEventAction->AddIonisation();  // increase cluster size
     }
   }
 }

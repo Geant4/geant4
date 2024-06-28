@@ -38,22 +38,22 @@ class G4UIcmdWithAString;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class RE05PrimaryGeneratorMessenger: public G4UImessenger
+class RE05PrimaryGeneratorMessenger : public G4UImessenger
 {
   public:
     RE05PrimaryGeneratorMessenger(RE05PrimaryGeneratorAction* mpga);
     virtual ~RE05PrimaryGeneratorMessenger();
-    
+
   public:
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
   private:
-    RE05PrimaryGeneratorAction * fMyAction;
-    
-    //commands
-    G4UIdirectory *             fMydetDirectory;
-    G4UIcmdWithAString *        fGenCmd;
+    RE05PrimaryGeneratorAction* fMyAction;
+
+    // commands
+    G4UIdirectory* fMydetDirectory;
+    G4UIcmdWithAString* fGenCmd;
 };
 
 #endif

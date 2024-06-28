@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
+## 2024-06-04 Evgueni Tcherniaev (geom-bool-V11-02-02)
+- G4BooleanSolid::SetCubVolStatistics(st), G4BooleanSolid::SetCubVolEpsilon(ep):
+  propagate parameter to all constituents.
+- G4UnionSolid::GetCubicVolume(), G4SubtractionSolid::GetCubicVolume():
+  limit calculations with construction of temporary G4IntersectionSolid by 10 constituents.
+
+## 2024-05-29 Evgueni Tcherniaev (geom-bool-V11-02-01)
+- Added new methods GetNumOfConstituents() and IsFaceted().
+
+## 2023-12-22 Stewart Boogert (geom-bool-V11-02-00)
+- Added extra external processor method to process solid. Added to void using G4Polyhedron 
+  under any circumstances (floating point math as in G4Polyhedron is almost always going to
+  fail)
+
 ## 2023-10-28 Stewart Boogert (geom-bool-V11-01-05)
 - Fix problem with downcast in external boolean processor, could result incorrect nullptr
 

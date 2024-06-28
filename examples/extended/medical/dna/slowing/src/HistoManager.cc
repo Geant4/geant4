@@ -24,33 +24,30 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 
 #include "HistoManager.hh"
 
-#include "G4UnitsTable.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager():
-fFileName("slowing")
+HistoManager::HistoManager() : fFileName("slowing")
 {
   Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager()
-{
-}
+HistoManager::~HistoManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,26 +61,22 @@ void HistoManager::Book()
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
-  // enable inactivation of histograms
 
   // Define histograms start values
   const G4int kMaxHisto = 4;
   const G4String id[] = {"0", "1", "2", "3"};
+  const G4String title[] = {"dummy",  // 0
+                            "Electrons", "Primary e-", "Secondary e-"};
 
-  const G4String title[] = {"dummy",                                       //0
-                            "Electrons","Primary e-","Secondary e-"};
-
-  // Default values (to be reset via /analysis/h1/set command)               
+  // Default values (to be reset via /analysis/h1/set command)
   G4int nbins = 500;
   G4double vmin = 10.;
   G4double vmax = 1.e6;
 
-  // Create all histograms as inactivated 
+  // Create all histograms as inactivated
   // as we have not yet set nbins, vmin, vmax
-  for (G4int k = 0; k < kMaxHisto; k++)
-  {
+  for (G4int k = 0; k < kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);
   }
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

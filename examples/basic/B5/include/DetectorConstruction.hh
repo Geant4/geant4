@@ -30,16 +30,16 @@
 #ifndef B5DetectorConstruction_h
 #define B5DetectorConstruction_h 1
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+
 #include "G4RotationMatrix.hh"
-#include "G4FieldManager.hh"
+#include "G4Threading.hh"
+#include "globals.hh"
 
-#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
 
+class G4FieldManager;
 class G4VPhysicalVolume;
-class G4Material;
-class G4VSensitiveDetector;
 class G4GenericMessenger;
 
 namespace B5
@@ -79,12 +79,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fHadCalScintiLogical = nullptr;
     G4LogicalVolume* fMagneticLogical = nullptr;
 
-    G4double fArmAngle = 30.*CLHEP::deg;
+    G4double fArmAngle = 30. * CLHEP::deg;
     G4RotationMatrix* fArmRotation = nullptr;
     G4VPhysicalVolume* fSecondArmPhys = nullptr;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

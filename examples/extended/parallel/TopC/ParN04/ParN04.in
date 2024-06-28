@@ -1,8 +1,0 @@
-#
-/mydet/RoIangle 10 deg
-/mydet/reqmuon 1
-/mydet/isomuon 1
-/run/beamOn 3
-#
-exit
-

@@ -23,10 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file Run.cc
 /// \brief Implementation of the Run class
 
 #include "Run.hh"
+
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 
@@ -37,31 +48,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(const DetectorConstruction* detector)
-: G4Run(),
-  fDetector(detector),
-  fParticle(0), fEkin(0.),  
-  fSP(0.),  fSP2(0.)
+  : G4Run(), fDetector(detector), fParticle(0), fEkin(0.), fSP(0.), fSP2(0.)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::~Run()
-{}
+Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
-{ 
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+{
   fParticle = particle;
-  fEkin     = energy;
+  fEkin = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddSP (G4double t) 
+
+void Run::AddSP(G4double t)
 {
-  fSP  += t;
-  fSP2 += t*t;
+  fSP += t;
+  fSP2 += t * t;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,71 +76,63 @@ void Run::AddSP (G4double t)
 void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
-  
-  // pass information about primary particle
+
+  // Pass information about primary particle
   fParticle = localRun->fParticle;
-  fEkin     = localRun->fEkin;
+  fEkin = localRun->fEkin;
 
-  // accumulate sums
-  fSP   += localRun->fSP;
-  fSP2  += localRun->fSP2;
+  // Accumulate sums
+  fSP += localRun->fSP;
+  fSP2 += localRun->fSP2;
 
-  G4Run::Merge(run); 
-} 
+  G4Run::Merge(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun() 
+void Run::EndOfRun()
 {
   std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
+  G4cout.setf(std::ios::fixed, std::ios::floatfield);
   G4int prec = G4cout.precision(2);
-  
-  //run conditions  
-  //
+
+  // Run conditions
   G4Material* material = fDetector->GetAbsorMaterial();
-  G4double density  = material->GetDensity();       
+  G4double density = material->GetDensity();
   G4String partName = fParticle->GetParticleName();
-  
-  G4cout << "\n ======================== run summary =====================\n";  
-  G4cout 
-    << "\n The run is " << numberOfEvent << " "<< partName << " of "
-    << G4BestUnit(fEkin,"Energy") << " through a sphere of radius "
-    << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << "of "
-    << material->GetName() << " (density: " 
-    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;    
+
+  G4cout << "\n ======================== run summary =====================\n";
+  G4cout << "\n The run is " << numberOfEvent << " " << partName << " of "
+         << G4BestUnit(fEkin, "Energy") << " through a sphere of radius "
+         << G4BestUnit(fDetector->GetAbsorRadius(), "Length") << "of " << material->GetName()
+         << " (density: " << G4BestUnit(density, "Volumic Mass") << ")" << G4endl;
 
   if (numberOfEvent == 0) {
-    G4cout.setf(mode,std::ios::floatfield);
-    G4cout.precision(prec);  
+    G4cout.setf(mode, std::ios::floatfield);
+    G4cout.precision(prec);
     return;
   }
-                    
-  //compute stopping power
-  //
-  fSP /= numberOfEvent; fSP2 /= numberOfEvent;
-  G4double rms = fSP2 - fSP*fSP;      
-        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4cout 
-  << "\n total Stopping Power (keV/um)   = "<< fSP/(keV/um)
-  << " +- "                                << rms/(keV/um)    
-  << G4endl;
-    
-  //output file
-  //
+  // Compute stopping power
+  fSP /= numberOfEvent;
+  fSP2 /= numberOfEvent;
+  G4double rms = fSP2 - fSP * fSP;
+
+  if (rms > 0.)
+    rms = std::sqrt(rms);
+  else
+    rms = 0.;
+
+  G4cout << "\n total Stopping Power (keV/um)   = " << fSP / (keV / um) << " +- "
+         << rms / (keV / um) << G4endl;
+
+  // Output file
   FILE* myFile;
-  myFile=fopen("spower.txt","a");
-  fprintf(myFile,"%e %e %e \n",
-     fEkin/eV,
-     fSP/(keV/um),
-     rms/(keV/um));
+  myFile = fopen("spower.txt", "a");
+  fprintf(myFile, "%e %e %e \n", fEkin / eV, fSP / (keV / um), rms / (keV / um));
   fclose(myFile);
 
-  //reset default formats
-  //
-  G4cout.setf(mode,std::ios::floatfield);
+  // Reset default formats
+  G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);
-
 }

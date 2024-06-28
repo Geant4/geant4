@@ -46,32 +46,31 @@
 
 #include "G4RootAnalysisManager.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4H1Wrapper::G4H1Wrapper(G4VAnalysisManager* const analysisManager,
-                         const G4int histoIndex) :
-  fAnalysisManager(analysisManager),
-  fHistoIndex(histoIndex),
-  fHisto(dynamic_cast<G4RootAnalysisManager*>(analysisManager)->GetH1(histoIndex)),
-  //fAxis(fHisto->axis()),
-  fNumBins(fHisto->axis().bins()),
-  fIsSet(false),
-  fUnderflow(0.),
-  fOverflow(0.),
-  fSumSquaredEventTotals(0.),
-  fSumSquaredEventInRangeTotals(0.)
+G4H1Wrapper::G4H1Wrapper(G4VAnalysisManager* const analysisManager, const G4int histoIndex)
+  : fAnalysisManager(analysisManager),
+    fHistoIndex(histoIndex),
+    fHisto(dynamic_cast<G4RootAnalysisManager*>(analysisManager)->GetH1(histoIndex)),
+    // fAxis(fHisto->axis()),
+    fNumBins(fHisto->axis().bins()),
+    fIsSet(false),
+    fUnderflow(0.),
+    fOverflow(0.),
+    fSumSquaredEventTotals(0.),
+    fSumSquaredEventInRangeTotals(0.)
 {
   fEventData.assign(fNumBins, 0.);
 }
 
-
 // ***************************************************************************
 // Fill data WITHIN THE EVENT. Can be called an arbitrary number of times.
 // ***************************************************************************
-void G4H1Wrapper::Fill(const G4double abscissaValue, 
-                       const G4double weight) {
-  if (!fIsSet) { fIsSet = true; }
+void G4H1Wrapper::Fill(const G4double abscissaValue, const G4double weight)
+{
+  if (!fIsSet) {
+    fIsSet = true;
+  }
 
   const G4int binIndex = fHisto->axis().coord_to_index(abscissaValue);
 
@@ -91,30 +90,24 @@ void G4H1Wrapper::Fill(const G4double abscissaValue,
   }
 }
 
-
 // ***************************************************************************
-// End of event: flush all data collected during the event 
+// End of event: flush all data collected during the event
 // to G4VAnalysisManager's G4H1, then reset event data.
 // ***************************************************************************
-void G4H1Wrapper::EndOfEvent() {
-
+void G4H1Wrapper::EndOfEvent()
+{
   // Only do the flush if there was at least one fill during the event.
   if (fIsSet) {
-
     G4double eventTotal = 0.;
     // FLUSH IN RANGE DATA.
     for (G4int binIndex = 0; binIndex < fNumBins; ++binIndex) {
-
       if (fEventData[binIndex] > 0.) {
-
         const G4double binKineticEnergy = fHisto->axis().bin_center(binIndex);
         const G4double binEventWeight = fEventData[binIndex];
-        fAnalysisManager->FillH1(fHistoIndex, 
-                                 binKineticEnergy, 
-                                 binEventWeight);
+        fAnalysisManager->FillH1(fHistoIndex, binKineticEnergy, binEventWeight);
         eventTotal += binEventWeight;
 
-        fEventData[binIndex] = 0.;        
+        fEventData[binIndex] = 0.;
       }
     }
     // Also keep track of the event's total (INTEGRAL over abscissa range).
@@ -124,18 +117,14 @@ void G4H1Wrapper::EndOfEvent() {
 
     // FLUSH UNDERFLOW DATA.
     if (fUnderflow > 0.) {
-      fAnalysisManager->FillH1(fHistoIndex, 
-                               fHisto->axis().lower_edge() - 1., 
-                               fUnderflow);
+      fAnalysisManager->FillH1(fHistoIndex, fHisto->axis().lower_edge() - 1., fUnderflow);
       fSumSquaredEventTotals += fUnderflow;
       fUnderflow = 0.;
     }
 
     // FLUSH OVERFLOW DATA.
     if (fOverflow > 0.) {
-      fAnalysisManager->FillH1(fHistoIndex, 
-                               fHisto->axis().upper_edge() + 1., 
-                               fOverflow);
+      fAnalysisManager->FillH1(fHistoIndex, fHisto->axis().upper_edge() + 1., fOverflow);
       fSumSquaredEventTotals += fOverflow;
       fOverflow = 0.;
     }

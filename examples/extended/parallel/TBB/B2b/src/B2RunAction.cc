@@ -34,29 +34,26 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B2RunAction::B2RunAction()
- : G4UserRunAction()
-{ 
+B2RunAction::B2RunAction() : G4UserRunAction()
+{
   // set printing event number per each 100 events
-  G4RunManager::GetRunManager()->SetPrintProgress(1000);     
+  G4RunManager::GetRunManager()->SetPrintProgress(1000);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B2RunAction::~B2RunAction()
-{}
+B2RunAction::~B2RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B2RunAction::BeginOfRunAction(const G4Run*)
-{ 
-  //inform the runManager to save random number seed
+{
+  // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B2RunAction::EndOfRunAction(const G4Run* )
-{}
+void B2RunAction::EndOfRunAction(const G4Run*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

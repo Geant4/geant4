@@ -31,45 +31,34 @@
 
 #include "G4VEmissionProbability.hh"
 
-//const G4int NPOINTSGEM = 10;
-
 class G4LevelManager;
 
-class G4GEMProbabilityVI final: public G4VEmissionProbability
+class G4GEMProbabilityVI : public G4VEmissionProbability
 {
 public:
 
   explicit G4GEMProbabilityVI(G4int anA, G4int aZ, const G4LevelManager*); 
 
-  ~G4GEMProbabilityVI() final;
+  ~G4GEMProbabilityVI() override = default;
 
-  G4double ComputeTotalProbability(const G4Fragment&, G4double CB);
+  G4double TotalProbability(const G4Fragment&,
+                            const G4double tmin, const G4double tmax, 
+                            const G4double CB, const G4double exEnergy,
+                            const G4double exEvap);
 
   // compute probability for evaporated fragment in ground state
   G4double ComputeProbability(G4double ekin, G4double CB) override;
 
-  G4Fragment* SampleEvaporationFragment();
+  G4double SampleEnergy(const G4double tmin, const G4double tmax, 
+			const G4double CB, const G4double exEnergy,
+			const G4double exEvap);
+
+  G4GEMProbabilityVI(const G4GEMProbabilityVI& right) = delete;
+  const G4GEMProbabilityVI & operator=(const G4GEMProbabilityVI& right) = delete;
+  G4bool operator==(const G4GEMProbabilityVI& right) const = delete;
+  G4bool operator!=(const G4GEMProbabilityVI& right) const = delete;
 
 private:
-
-  // compute probability for evaporated fragment may be excited
-  G4double Integrated2DProbability();
-
-  // probability as a function of excitations
-  G4double ProbabilityDistributionFunction(G4double exc, G4double resExc);
-
-  G4Fragment* Sample2DDistribution();
-
-  G4double I0(G4double t);
-  G4double I1(G4double t, G4double tx);
-  G4double I2(G4double s0, G4double sx);
-  G4double I3(G4double s0, G4double sx);
-
-  // Copy constructor
-  G4GEMProbabilityVI(const G4GEMProbabilityVI &right);
-  const G4GEMProbabilityVI & operator=(const G4GEMProbabilityVI &right);
-  G4bool operator==(const G4GEMProbabilityVI &right) const;
-  G4bool operator!=(const G4GEMProbabilityVI &right) const;
 
   const G4LevelManager* lManager;
 

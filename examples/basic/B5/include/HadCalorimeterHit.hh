@@ -31,12 +31,16 @@
 #define B5HadCalorimeterHit_h 1
 
 #include "G4VHit.hh"
-#include "G4THitsCollection.hh"
+
 #include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
+#include "G4THitsCollection.hh"
+#include "G4Threading.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
+
+#include <map>
+#include <vector>
 
 class G4AttDef;
 class G4AttValue;
@@ -55,18 +59,18 @@ class HadCalorimeterHit : public G4VHit
 {
   public:
     HadCalorimeterHit() = default;
-    HadCalorimeterHit(G4int iCol,G4int iRow);
-    HadCalorimeterHit(const HadCalorimeterHit &right) = default;
+    HadCalorimeterHit(G4int iCol, G4int iRow);
+    HadCalorimeterHit(const HadCalorimeterHit& right) = default;
     ~HadCalorimeterHit() override = default;
 
-    HadCalorimeterHit& operator=(const HadCalorimeterHit &right) = default;
-    G4bool operator==(const HadCalorimeterHit &right) const;
+    HadCalorimeterHit& operator=(const HadCalorimeterHit& right) = default;
+    G4bool operator==(const HadCalorimeterHit& right) const;
 
-    inline void *operator new(size_t);
-    inline void operator delete(void *aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
     void Draw() override;
-    const std::map<G4String,G4AttDef>* GetAttDefs() const override;
+    const std::map<G4String, G4AttDef>* GetAttDefs() const override;
     std::vector<G4AttValue>* CreateAttValues() const override;
     void Print() override;
 
@@ -101,17 +105,17 @@ extern G4ThreadLocal G4Allocator<HadCalorimeterHit>* HadCalorimeterHitAllocator;
 inline void* HadCalorimeterHit::operator new(size_t)
 {
   if (!HadCalorimeterHitAllocator) {
-       HadCalorimeterHitAllocator = new G4Allocator<HadCalorimeterHit>;
+    HadCalorimeterHitAllocator = new G4Allocator<HadCalorimeterHit>;
   }
   return (void*)HadCalorimeterHitAllocator->MallocSingle();
 }
 
 inline void HadCalorimeterHit::operator delete(void* aHit)
 {
-  HadCalorimeterHitAllocator->FreeSingle((HadCalorimeterHit*) aHit);
+  HadCalorimeterHitAllocator->FreeSingle((HadCalorimeterHit*)aHit);
 }
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

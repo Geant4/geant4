@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -201,7 +201,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -757,7 +757,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -813,7 +813,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=53.750000s Real=55.732532s Sys=0.020000s
+  User=51.080000s Real=53.726586s Sys=0.030000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 0
@@ -827,143 +827,143 @@ Run Summary
  Number of events = 100
  Conversion factor: fluence from mm^-2 to cm^-2 = 100
  Particle fluence in unit of cm^-2 :
-   case=  0     downstream                           all   0.000400327
-   case=  1     downstream                      electron   1.61974e-06
-   case=  2     downstream                         gamma   0.000105871
-   case=  3     downstream                          muon          0
-   case=  4     downstream                      neutrino   6.06967e-05
-   case=  5     downstream                          pion   2.39828e-06
-   case=  6     downstream                       neutron   0.000229169
-   case=  7     downstream                        proton   5.7134e-07
+   case=  0     downstream                           all   0.00049729
+   case=  1     downstream                      electron   6.28804e-07
+   case=  2     downstream                         gamma   8.94493e-05
+   case=  3     downstream                          muon   5.72179e-07
+   case=  4     downstream                      neutrino   0.000103405
+   case=  5     downstream                          pion   2.70245e-06
+   case=  6     downstream                       neutron   0.000300533
+   case=  7     downstream                        proton          0
    case=  8     downstream                           ion          0
    case=  9     downstream                    otherMeson          0
    case= 10     downstream                   otherBaryon          0
-   case= 11     downstream   below 20 MeV            all   0.000317628
-   case= 12     downstream   below 20 MeV       electron   7.19645e-07
-   case= 13     downstream   below 20 MeV          gamma   0.000104368
+   case= 11     downstream   below 20 MeV            all   0.000372263
+   case= 12     downstream   below 20 MeV       electron   6.28804e-07
+   case= 13     downstream   below 20 MeV          gamma   8.94493e-05
    case= 14     downstream   below 20 MeV           muon          0
-   case= 15     downstream   below 20 MeV       neutrino   4.98397e-06
-   case= 16     downstream   below 20 MeV           pion          0
-   case= 17     downstream   below 20 MeV        neutron   0.000207557
+   case= 15     downstream   below 20 MeV       neutrino   9.32666e-06
+   case= 16     downstream   below 20 MeV           pion   8.20331e-07
+   case= 17     downstream   below 20 MeV        neutron   0.000272038
    case= 18     downstream   below 20 MeV         proton          0
    case= 19     downstream   below 20 MeV            ion          0
    case= 20     downstream   below 20 MeV     otherMeson          0
    case= 21     downstream   below 20 MeV    otherBaryon          0
-   case= 22     downstream   above 20 MeV            all   8.26981e-05
-   case= 23     downstream   above 20 MeV       electron   9.00099e-07
-   case= 24     downstream   above 20 MeV          gamma   1.50333e-06
-   case= 25     downstream   above 20 MeV           muon          0
-   case= 26     downstream   above 20 MeV       neutrino   5.57127e-05
-   case= 27     downstream   above 20 MeV           pion   2.39828e-06
-   case= 28     downstream   above 20 MeV        neutron   2.16124e-05
-   case= 29     downstream   above 20 MeV         proton   5.7134e-07
+   case= 22     downstream   above 20 MeV            all   0.000125027
+   case= 23     downstream   above 20 MeV       electron          0
+   case= 24     downstream   above 20 MeV          gamma          0
+   case= 25     downstream   above 20 MeV           muon   5.72179e-07
+   case= 26     downstream   above 20 MeV       neutrino   9.40781e-05
+   case= 27     downstream   above 20 MeV           pion   1.88212e-06
+   case= 28     downstream   above 20 MeV        neutron   2.84943e-05
+   case= 29     downstream   above 20 MeV         proton          0
    case= 30     downstream   above 20 MeV            ion          0
    case= 31     downstream   above 20 MeV     otherMeson          0
    case= 32     downstream   above 20 MeV    otherBaryon          0
-   case= 33           side                           all   0.000678759
-   case= 34           side                      electron   1.47359e-06
-   case= 35           side                         gamma   0.000129418
+   case= 33           side                           all   0.000676203
+   case= 34           side                      electron   8.08103e-07
+   case= 35           side                         gamma   0.000109726
    case= 36           side                          muon          0
-   case= 37           side                      neutrino   0.000123799
+   case= 37           side                      neutrino   0.000164799
    case= 38           side                          pion          0
-   case= 39           side                       neutron   0.000423817
-   case= 40           side                        proton   1.45012e-07
+   case= 39           side                       neutron   0.000400462
+   case= 40           side                        proton   1.44228e-07
    case= 41           side                           ion          0
-   case= 42           side                    otherMeson   1.06938e-07
+   case= 42           side                    otherMeson   2.63913e-07
    case= 43           side                   otherBaryon          0
-   case= 44           side   below 20 MeV            all   0.000531645
-   case= 45           side   below 20 MeV       electron   1.47359e-06
-   case= 46           side   below 20 MeV          gamma   0.000129418
+   case= 44           side   below 20 MeV            all   0.000500353
+   case= 45           side   below 20 MeV       electron   8.08103e-07
+   case= 46           side   below 20 MeV          gamma   0.000109621
    case= 47           side   below 20 MeV           muon          0
-   case= 48           side   below 20 MeV       neutrino   1.23079e-05
+   case= 48           side   below 20 MeV       neutrino   1.26961e-05
    case= 49           side   below 20 MeV           pion          0
-   case= 50           side   below 20 MeV        neutron   0.000388446
+   case= 50           side   below 20 MeV        neutron   0.000377227
    case= 51           side   below 20 MeV         proton          0
    case= 52           side   below 20 MeV            ion          0
    case= 53           side   below 20 MeV     otherMeson          0
    case= 54           side   below 20 MeV    otherBaryon          0
-   case= 55           side   above 20 MeV            all   0.000147114
+   case= 55           side   above 20 MeV            all   0.00017585
    case= 56           side   above 20 MeV       electron          0
-   case= 57           side   above 20 MeV          gamma          0
+   case= 57           side   above 20 MeV          gamma   1.0451e-07
    case= 58           side   above 20 MeV           muon          0
-   case= 59           side   above 20 MeV       neutrino   0.000111491
+   case= 59           side   above 20 MeV       neutrino   0.000152103
    case= 60           side   above 20 MeV           pion          0
-   case= 61           side   above 20 MeV        neutron   3.53709e-05
-   case= 62           side   above 20 MeV         proton   1.45012e-07
+   case= 61           side   above 20 MeV        neutron   2.32343e-05
+   case= 62           side   above 20 MeV         proton   1.44228e-07
    case= 63           side   above 20 MeV            ion          0
-   case= 64           side   above 20 MeV     otherMeson   1.06938e-07
+   case= 64           side   above 20 MeV     otherMeson   2.63913e-07
    case= 65           side   above 20 MeV    otherBaryon          0
-   case= 66       upstream                           all   0.00526068
-   case= 67       upstream                      electron   2.33163e-05
-   case= 68       upstream                         gamma   0.00131229
+   case= 66       upstream                           all   0.00571877
+   case= 67       upstream                      electron   4.20574e-05
+   case= 68       upstream                         gamma   0.00160983
    case= 69       upstream                          muon          0
-   case= 70       upstream                      neutrino   0.000265139
-   case= 71       upstream                          pion   5.30172e-06
-   case= 72       upstream                       neutron   0.00365215
-   case= 73       upstream                        proton   2.48272e-06
-   case= 74       upstream                           ion          0
+   case= 70       upstream                      neutrino   0.00037909
+   case= 71       upstream                          pion   8.83523e-06
+   case= 72       upstream                       neutron   0.00367594
+   case= 73       upstream                        proton   2.33017e-06
+   case= 74       upstream                           ion   6.8213e-07
    case= 75       upstream                    otherMeson          0
    case= 76       upstream                   otherBaryon          0
-   case= 77       upstream   below 20 MeV            all   0.00480468
-   case= 78       upstream   below 20 MeV       electron   2.2125e-05
-   case= 79       upstream   below 20 MeV          gamma   0.00130451
+   case= 77       upstream   below 20 MeV            all   0.00514525
+   case= 78       upstream   below 20 MeV       electron   3.23201e-05
+   case= 79       upstream   below 20 MeV          gamma   0.00159218
    case= 80       upstream   below 20 MeV           muon          0
-   case= 81       upstream   below 20 MeV       neutrino   2.09278e-05
+   case= 81       upstream   below 20 MeV       neutrino   2.24726e-05
    case= 82       upstream   below 20 MeV           pion          0
-   case= 83       upstream   below 20 MeV        neutron   0.00345712
+   case= 83       upstream   below 20 MeV        neutron   0.00349827
    case= 84       upstream   below 20 MeV         proton          0
    case= 85       upstream   below 20 MeV            ion          0
    case= 86       upstream   below 20 MeV     otherMeson          0
    case= 87       upstream   below 20 MeV    otherBaryon          0
-   case= 88       upstream   above 20 MeV            all   0.000456002
-   case= 89       upstream   above 20 MeV       electron   1.1913e-06
-   case= 90       upstream   above 20 MeV          gamma   7.77779e-06
+   case= 88       upstream   above 20 MeV            all   0.000573519
+   case= 89       upstream   above 20 MeV       electron   9.73724e-06
+   case= 90       upstream   above 20 MeV          gamma   1.76437e-05
    case= 91       upstream   above 20 MeV           muon          0
-   case= 92       upstream   above 20 MeV       neutrino   0.000244211
-   case= 93       upstream   above 20 MeV           pion   5.30172e-06
-   case= 94       upstream   above 20 MeV        neutron   0.000195037
-   case= 95       upstream   above 20 MeV         proton   2.48272e-06
-   case= 96       upstream   above 20 MeV            ion          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000356618
+   case= 93       upstream   above 20 MeV           pion   8.83523e-06
+   case= 94       upstream   above 20 MeV        neutron   0.000177673
+   case= 95       upstream   above 20 MeV         proton   2.33017e-06
+   case= 96       upstream   above 20 MeV            ion   6.8213e-07
    case= 97       upstream   above 20 MeV     otherMeson          0
    case= 98       upstream   above 20 MeV    otherBaryon          0
  ------------------------------------------------------------- 
  Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
-   case=  0    calorimeter                           all    65852.8    4.06954     267990
-   case=  1    calorimeter                      electron    48766.8    1.58539    77314.5
-   case=  2    calorimeter                         gamma    14288.1    5.29283    75624.4
-   case=  3    calorimeter                          muon       4.68    25.5183    119.426
-   case=  4    calorimeter                      neutrino      13.94    38.3338    534.373
-   case=  5    calorimeter                          pion      50.87    1218.05    61962.3
-   case=  6    calorimeter                       neutron    1057.33    19.6397    20765.6
-   case=  7    calorimeter                        proton     240.99     62.738    15119.2
-   case=  8    calorimeter                           ion    1424.29   0.932492    1328.14
-   case=  9    calorimeter                    otherMeson       4.53    2918.82    13222.3
-   case= 10    calorimeter                   otherBaryon       1.32    1515.32    2000.23
-   case= 11    calorimeter   below 20 MeV            all    64738.9   0.662399      42883
-   case= 12    calorimeter   below 20 MeV       electron    48344.7    0.44789    21653.1
-   case= 13    calorimeter   below 20 MeV          gamma    13907.7    1.21332    16874.5
-   case= 14    calorimeter   below 20 MeV           muon       4.19    4.14722    17.3768
-   case= 15    calorimeter   below 20 MeV       neutrino       1.25    14.3861    17.9826
-   case= 16    calorimeter   below 20 MeV           pion       0.84    11.3984    9.57466
-   case= 17    calorimeter   below 20 MeV        neutron     913.69    2.65531    2426.13
-   case= 18    calorimeter   below 20 MeV         proton     154.86    8.12345       1258
-   case= 19    calorimeter   below 20 MeV            ion    1411.37   0.441769      623.5
-   case= 20    calorimeter   below 20 MeV     otherMeson       0.22    6.88811    1.51538
-   case= 21    calorimeter   below 20 MeV    otherBaryon       0.09    14.3896    1.29506
-   case= 22    calorimeter   above 20 MeV            all    1113.95     202.08     225107
-   case= 23    calorimeter   above 20 MeV       electron     422.11    131.865    55661.4
-   case= 24    calorimeter   above 20 MeV          gamma      380.4    154.442    58749.9
-   case= 25    calorimeter   above 20 MeV           muon       0.49    208.263    102.049
-   case= 26    calorimeter   above 20 MeV       neutrino      12.69    40.6927    516.391
-   case= 27    calorimeter   above 20 MeV           pion      50.03    1238.31    61952.7
-   case= 28    calorimeter   above 20 MeV        neutron     143.64    127.677    18339.5
-   case= 29    calorimeter   above 20 MeV         proton      86.13    160.934    13861.2
-   case= 30    calorimeter   above 20 MeV            ion      12.92    54.5386    704.639
-   case= 31    calorimeter   above 20 MeV     otherMeson       4.31    3067.46    13220.8
-   case= 32    calorimeter   above 20 MeV    otherBaryon       1.23    1625.15    1998.93
+   case=  0    calorimeter                           all      66015     4.1131     271526
+   case=  1    calorimeter                      electron    48963.5    1.63513    80061.6
+   case=  2    calorimeter                         gamma      14389    5.44851    78398.4
+   case=  3    calorimeter                          muon       6.45    18.7028    120.633
+   case=  4    calorimeter                      neutrino      19.22    36.9023    709.262
+   case=  5    calorimeter                          pion      58.29    1086.23    63316.6
+   case=  6    calorimeter                       neutron     997.11    18.5749    18521.2
+   case=  7    calorimeter                        proton     228.79    61.7313    14123.5
+   case=  8    calorimeter                           ion    1346.71   0.899364    1211.18
+   case=  9    calorimeter                    otherMeson       4.83    2877.64      13899
+   case= 10    calorimeter                   otherBaryon       1.07     1088.9    1165.13
+   case= 11    calorimeter   below 20 MeV            all    64885.4   0.663806    43071.3
+   case= 12    calorimeter   below 20 MeV       electron    48526.7   0.450875    21879.5
+   case= 13    calorimeter   below 20 MeV          gamma    13997.5    1.21494      17006
+   case= 14    calorimeter   below 20 MeV           muon       5.96    4.17254    24.8684
+   case= 15    calorimeter   below 20 MeV       neutrino       1.51    14.6329    22.0957
+   case= 16    calorimeter   below 20 MeV           pion       1.17    12.1547     14.221
+   case= 17    calorimeter   below 20 MeV        neutron     866.33     2.6441    2290.67
+   case= 18    calorimeter   below 20 MeV         proton     150.76    8.05407    1214.23
+   case= 19    calorimeter   below 20 MeV            ion    1335.32   0.462032    616.961
+   case= 20    calorimeter   below 20 MeV     otherMeson       0.23    9.02507    2.07577
+   case= 21    calorimeter   below 20 MeV    otherBaryon       0.05     13.688   0.684401
+   case= 22    calorimeter   above 20 MeV            all    1129.53    202.257     228455
+   case= 23    calorimeter   above 20 MeV       electron     436.87     133.18    58182.2
+   case= 24    calorimeter   above 20 MeV          gamma     391.52    156.805    61392.3
+   case= 25    calorimeter   above 20 MeV           muon       0.49    195.438    95.7648
+   case= 26    calorimeter   above 20 MeV       neutrino      17.71     38.801    687.166
+   case= 27    calorimeter   above 20 MeV           pion      57.12    1108.23    63302.3
+   case= 28    calorimeter   above 20 MeV        neutron     130.78    124.106    16230.5
+   case= 29    calorimeter   above 20 MeV         proton      78.03     165.44    12909.3
+   case= 30    calorimeter   above 20 MeV            ion      11.39    52.1704    594.221
+   case= 31    calorimeter   above 20 MeV     otherMeson        4.6    3021.07    13896.9
+   case= 32    calorimeter   above 20 MeV    otherBaryon       1.02    1141.61    1164.44
  ============================================================= 
 
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.25 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.23 MB
 ============================================================

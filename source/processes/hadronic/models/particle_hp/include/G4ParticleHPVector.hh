@@ -145,6 +145,9 @@ class G4ParticleHPVector
     }
 
     G4double GetXsec(G4double e);
+
+    G4int GetEnergyIndex(G4double &e);  // method added by M. Zmeskal 02/2024
+
     G4double GetXsec(G4double e, G4int min)
     {
       G4int i;

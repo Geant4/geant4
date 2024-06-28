@@ -28,11 +28,12 @@
 /// \brief Implementation of the B4a::SteppingAction class
 
 #include "SteppingAction.hh"
-#include "EventAction.hh"
+
 #include "DetectorConstruction.hh"
+#include "EventAction.hh"
 
 #include "G4Step.hh"
-#include "G4RunManager.hh"
+#include "globals.hh"
 
 using namespace B4;
 
@@ -43,15 +44,14 @@ namespace B4a
 
 SteppingAction::SteppingAction(const DetectorConstruction* detConstruction,
                                EventAction* eventAction)
-  : fDetConstruction(detConstruction),
-    fEventAction(eventAction)
+  : fDetConstruction(detConstruction), fEventAction(eventAction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-// Collect energy and track length step by step
+  // Collect energy and track length step by step
 
   // get volume of the current step
   auto volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
@@ -61,19 +61,19 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   // step length
   G4double stepLength = 0.;
-  if ( step->GetTrack()->GetDefinition()->GetPDGCharge() != 0. ) {
+  if (step->GetTrack()->GetDefinition()->GetPDGCharge() != 0.) {
     stepLength = step->GetStepLength();
   }
 
-  if ( volume == fDetConstruction->GetAbsorberPV() ) {
-    fEventAction->AddAbs(edep,stepLength);
+  if (volume == fDetConstruction->GetAbsorberPV()) {
+    fEventAction->AddAbs(edep, stepLength);
   }
 
-  if ( volume == fDetConstruction->GetGapPV() ) {
-    fEventAction->AddGap(edep,stepLength);
+  if (volume == fDetConstruction->GetGapPV()) {
+    fEventAction->AddGap(edep, stepLength);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B4a

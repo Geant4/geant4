@@ -24,42 +24,41 @@
 // ********************************************************************
 #ifdef G4_USE_FLUKA
 
+#  include "string_print.h"
 
-#include "string_print.h"
+#  include <cstring>
+#  include <memory>
+#  include <stdarg.h>
+#  include <stdlib.h>
 
-#include <stdlib.h>
-#include <stdarg.h>
-#include <cstring>
-#include <memory>
+namespace cpp_utils
+{
 
-
-namespace cpp_utils {
-
-  // ***************************************************************************
-  // String format like printf() for strings.
-  // ***************************************************************************
-  std::string sformat(const char* fmt, ...) {
-    std::unique_ptr<char[]> formatted;
-    int n = (int)strlen(fmt) * 2;	// Reserve two times as much as the length of the fmt_str
-    while (true) {
-      // Wrap the plain char array into the unique_ptr
-      formatted.reset(new char[n]);
-      strcpy(&formatted[0], fmt);
-      va_list ap;
-      va_start(ap, fmt);
-      int final_n = vsnprintf(&formatted[0], n, fmt, ap);
-      va_end(ap);
-      if (final_n < 0 || final_n >= n) {
-        n += std::abs(final_n - n + 1);
-      }
-      else {
-        break;
-      }
+// ***************************************************************************
+// String format like printf() for strings.
+// ***************************************************************************
+std::string sformat(const char* fmt, ...)
+{
+  std::unique_ptr<char[]> formatted;
+  int n = (int)strlen(fmt) * 2;  // Reserve two times as much as the length of the fmt_str
+  while (true) {
+    // Wrap the plain char array into the unique_ptr
+    formatted.reset(new char[n]);
+    strcpy(&formatted[0], fmt);
+    va_list ap;
+    va_start(ap, fmt);
+    int final_n = vsnprintf(&formatted[0], n, fmt, ap);
+    va_end(ap);
+    if (final_n < 0 || final_n >= n) {
+      n += std::abs(final_n - n + 1);
     }
-    return std::string(formatted.get());
+    else {
+      break;
+    }
   }
+  return std::string(formatted.get());
+}
 
-} // namespace cpp_utils
+}  // namespace cpp_utils
 
-
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

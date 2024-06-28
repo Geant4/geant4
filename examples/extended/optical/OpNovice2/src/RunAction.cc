@@ -42,17 +42,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(PrimaryGeneratorAction* prim)
-  : G4UserRunAction()
-  , fRun(nullptr)
-  , fHistoManager(nullptr)
-  , fPrimary(prim)
+  : G4UserRunAction(), fRun(nullptr), fHistoManager(nullptr), fPrimary(prim)
 {
   fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction() { delete fHistoManager; }
+RunAction::~RunAction()
+{
+  delete fHistoManager;
+}
 
 G4Run* RunAction::GenerateRun()
 {
@@ -64,20 +64,17 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  if(fPrimary)
-  {
-    G4ParticleDefinition* particle =
-      fPrimary->GetParticleGun()->GetParticleDefinition();
-    G4double energy       = fPrimary->GetParticleGun()->GetParticleEnergy();
-    G4bool polarized      = fPrimary->GetPolarized();
+  if (fPrimary) {
+    G4ParticleDefinition* particle = fPrimary->GetParticleGun()->GetParticleDefinition();
+    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
+    G4bool polarized = fPrimary->GetPolarized();
     G4double polarization = fPrimary->GetPolarization();
     fRun->SetPrimary(particle, energy, polarized, polarization);
   }
 
   // histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(analysisManager->IsActive())
-  {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
   }
 }
@@ -86,198 +83,149 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if(isMaster)
-    fRun->EndOfRun();
+  if (isMaster) fRun->EndOfRun();
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   G4cout << G4endl << " Histogram statistics for the ";
-  if(isMaster)
-  {
+  if (isMaster) {
     G4cout << "entire run:" << G4endl << G4endl;
   }
-  else
-  {
+  else {
     G4cout << "local thread:" << G4endl << G4endl;
   }
 
   G4int id = analysisManager->GetH1Id("Cerenkov spectrum");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Cerenkov spectrum: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Cerenkov spectrum: mean = " << analysisManager->GetH1(id)->mean()
+           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV." << G4endl;
   }
   id = analysisManager->GetH1Id("Scintillation spectrum");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Scintillation spectrum: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Scintillation spectrum: mean = " << analysisManager->GetH1(id)->mean()
+           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV." << G4endl;
   }
   id = analysisManager->GetH1Id("Scintillation time");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Scintillation time: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Scintillation time: mean = " << analysisManager->GetH1(id)->mean()
+           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns." << G4endl;
   }
   id = analysisManager->GetH1Id("WLS abs");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " WLS absorption spectrum: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " WLS absorption spectrum: mean = " << analysisManager->GetH1(id)->mean()
+           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV." << G4endl;
   }
   id = analysisManager->GetH1Id("WLS em");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " WLS emission spectrum: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " WLS emission spectrum: mean = " << analysisManager->GetH1(id)->mean()
+           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV." << G4endl;
   }
   id = analysisManager->GetH1Id("WLS time");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " WLS emission time: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " WLS emission time: mean = " << analysisManager->GetH1(id)->mean()
+           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns." << G4endl;
   }
   id = analysisManager->GetH1Id("WLS2 abs");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " WLS emission time: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " WLS emission time: mean = " << analysisManager->GetH1(id)->mean()
+           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns." << G4endl;
   }
   id = analysisManager->GetH1Id("WLS2 em");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " WLS2 emission spectrum: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " WLS2 emission spectrum: mean = " << analysisManager->GetH1(id)->mean()
+           << " eV; rms = " << analysisManager->GetH1(id)->rms() << " eV." << G4endl;
   }
   id = analysisManager->GetH1Id("WLS2 time");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " WLS2 emission time: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns."
-           << G4endl;
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " WLS2 emission time: mean = " << analysisManager->GetH1(id)->mean()
+           << " ns; rms = " << analysisManager->GetH1(id)->rms() << " ns." << G4endl;
   }
   id = analysisManager->GetH1Id("x_backward");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " X momentum dir of backward-going photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("y_backward");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Y momentum dir of backward-going photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("z_backward");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Z momentum dir of backward-going photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("x_forward");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " X momentum dir of forward-going photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("y_forward");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Y momentum dir of forward-going photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("z_forward");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Z momentum dir of forward-going photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("x_fresnel");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " X momentum dir of Fresnel-refracted photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("y_fresnel");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Y momentum dir of Fresnel-refracted photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("z_fresnel");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Z momentum dir of Fresnel-refracted photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
   id = analysisManager->GetH1Id("Transmitted");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Angle of transmitted photons: mean = "
-           << analysisManager->GetH1(id)->mean()
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Angle of transmitted photons: mean = " << analysisManager->GetH1(id)->mean()
            << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
   }
   id = analysisManager->GetH1Id("Fresnel reflection");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Angle of Fresnel-reflected photons: mean = "
-           << analysisManager->GetH1(id)->mean()
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Angle of Fresnel-reflected photons: mean = " << analysisManager->GetH1(id)->mean()
            << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
   }
   id = analysisManager->GetH1Id("Total internal reflection");
-  if(analysisManager->GetH1Activation(id))
-  {
+  if (analysisManager->GetH1Activation(id)) {
     G4cout << " Angle of total internal reflected photons: mean = "
-           << analysisManager->GetH1(id)->mean()
-           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+           << analysisManager->GetH1(id)->mean() << "; rms = " << analysisManager->GetH1(id)->rms()
+           << G4endl;
   }
 
   id = analysisManager->GetH1Id("Fresnel refraction");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Angle of Fresnel-refracted photons: mean = "
-           << analysisManager->GetH1(id)->mean()
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Angle of Fresnel-refracted photons: mean = " << analysisManager->GetH1(id)->mean()
            << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
   }
 
   id = analysisManager->GetH1Id("Absorption");
-  if(analysisManager->GetH1Activation(id))
-  {
-    G4cout << " Angle of absorbed photons: mean = "
-           << analysisManager->GetH1(id)->mean()
+  if (analysisManager->GetH1Activation(id)) {
+    G4cout << " Angle of absorbed photons: mean = " << analysisManager->GetH1(id)->mean()
            << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
   }
 
   G4cout << G4endl;
 
-  if(analysisManager->IsActive())
-  {
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
   }

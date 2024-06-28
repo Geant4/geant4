@@ -28,30 +28,25 @@
 //
 //
 
+#include "ExN04CalorimeterHit.hh"
+
 #include "G4Colour.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
-#include "ExN04CalorimeterHit.hh"
+#include "G4VisAttributes.hh"
 
 G4Allocator<ExN04CalorimeterHit> ExN04CalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04CalorimeterHit::ExN04CalorimeterHit()
- : G4VHit(), fpLogV(NULL)
-{
-}
+ExN04CalorimeterHit::ExN04CalorimeterHit() : G4VHit(), fpLogV(NULL) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04CalorimeterHit::ExN04CalorimeterHit(G4LogicalVolume* logVol,
-                                         G4int z, G4int phi)
+ExN04CalorimeterHit::ExN04CalorimeterHit(G4LogicalVolume* logVol, G4int z, G4int phi)
   : fZCellID(z), fPhiCellID(phi), fpLogV(logVol)
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04CalorimeterHit::ExN04CalorimeterHit(const ExN04CalorimeterHit &right)
-  : G4VHit()
+ExN04CalorimeterHit::ExN04CalorimeterHit(const ExN04CalorimeterHit& right) : G4VHit()
 {
   fZCellID = right.fZCellID;
   fPhiCellID = right.fPhiCellID;
@@ -62,13 +57,10 @@ ExN04CalorimeterHit::ExN04CalorimeterHit(const ExN04CalorimeterHit &right)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04CalorimeterHit::~ExN04CalorimeterHit()
-{
-}
+ExN04CalorimeterHit::~ExN04CalorimeterHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-const ExN04CalorimeterHit& ExN04CalorimeterHit::operator=
-                           (const ExN04CalorimeterHit &right)
+const ExN04CalorimeterHit& ExN04CalorimeterHit::operator=(const ExN04CalorimeterHit& right)
 {
   fZCellID = right.fZCellID;
   fPhiCellID = right.fPhiCellID;
@@ -81,10 +73,9 @@ const ExN04CalorimeterHit& ExN04CalorimeterHit::operator=
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit &right) const
+G4bool ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit& right) const
 {
-  return ( (fZCellID == right.fZCellID) &&
-           (fPhiCellID == right.fPhiCellID) );
+  return ((fZCellID == right.fZCellID) && (fPhiCellID == right.fPhiCellID));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,20 +83,18 @@ void ExN04CalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
-  if(pVVisManager) {
+  if (pVVisManager) {
     G4Transform3D trans(frot, fpos);
     G4VisAttributes attribs;
-    const G4VisAttributes* pVA = fpLogV-> GetVisAttributes();
-    if ( pVA ) attribs = *pVA;
+    const G4VisAttributes* pVA = fpLogV->GetVisAttributes();
+    if (pVA) attribs = *pVA;
     G4Colour colour(1., 0., 0.);
     attribs.SetColour(colour);
     attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
-    pVVisManager-> Draw(*fpLogV, attribs, trans);
+    pVVisManager->Draw(*fpLogV, attribs, trans);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04CalorimeterHit::Print()
-{
-}
+void ExN04CalorimeterHit::Print() {}

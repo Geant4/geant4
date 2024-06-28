@@ -38,34 +38,32 @@
 /// Describes the information that can be associated with a G4Event class object.
 /// @author Anna Zaborowska
 
-class Par02EventInformation : public G4VUserEventInformation {
+class Par02EventInformation : public G4VUserEventInformation
+{
   public:
-    
     /// A default constructor. Sets flag fDoSmearing to true.
     Par02EventInformation();
-    
+
     /// A constructor.
     /// @param aSmear The flag indicating if smearing should be done.
-    Par02EventInformation( G4bool aSmear );
+    Par02EventInformation(G4bool aSmear);
 
     virtual ~Par02EventInformation();
-    
+
     /// Prints event information.
     virtual void Print() const;
-    
+
     /// Sets the flag indicating if smearing should be done.
     /// @param aSmear A boolean flag.
-    void SetDoSmearing( G4bool aSmear );
-    
+    void SetDoSmearing(G4bool aSmear);
+
     /// Gets the flag indicating if smearing should be done.
     G4bool GetDoSmearing();
 
   private:
-    
-    /// A flag indicating if smearing should be performed. 
+    /// A flag indicating if smearing should be performed.
     /// It is read by implementations of G4VFastSimulationModel.
     G4bool fDoSmearing;
 };
 
 #endif
-

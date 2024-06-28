@@ -32,38 +32,35 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
+#include "DrawGeometryVisAction.hh"
+#include "StandaloneVisAction.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4VisExtent.hh"
-#include "G4UImanager.hh"
-#include "G4UIExecutive.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "StandaloneVisAction.hh"
-#include "DrawGeometryVisAction.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
-
+int main(int argc, char** argv)
+{
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
   G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize ();
+  visManager->Initialize();
 
   auto standaloneVisAction = new StandaloneVisAction;
-  visManager->RegisterRunDurationUserVisAction
-  ("A standalone example - 3 boxes, 2 with boolean subtracted cutout",
-   standaloneVisAction,
-   G4VisExtent(-10*cm,10*cm,-10*cm,10*cm,-10*cm,10*cm));
+  visManager->RegisterRunDurationUserVisAction(
+    "A standalone example - 3 boxes, 2 with boolean subtracted cutout", standaloneVisAction,
+    G4VisExtent(-10 * cm, 10 * cm, -10 * cm, 10 * cm, -10 * cm, 10 * cm));
 
   auto geometryVisAction = new DrawGeometryVisAction;
-  visManager->RegisterRunDurationUserVisAction
-  ("A detector geometry",
-   geometryVisAction,
-   geometryVisAction->GetVisxtent());
+  visManager->RegisterRunDurationUserVisAction("A detector geometry", geometryVisAction,
+                                               geometryVisAction->GetVisxtent());
 
-  G4UImanager::GetUIpointer()->ApplyCommand ("/control/execute standalone.mac");
+  G4UImanager::GetUIpointer()->ApplyCommand("/control/execute standalone.mac");
   ui->SessionStart();
 
   delete geometryVisAction;
@@ -73,4 +70,3 @@ int main(int argc,char** argv) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

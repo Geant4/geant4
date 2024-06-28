@@ -68,6 +68,8 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     G4UGenericTrap(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -100,6 +102,11 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
 inline G4GeometryType G4UGenericTrap::GetEntityType() const
 {
   return "G4GenericTrap";
+}
+
+inline G4bool G4UGenericTrap::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

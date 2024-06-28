@@ -30,9 +30,10 @@
 #ifndef DetectorConstruction0_h
 #define DetectorConstruction0_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4ThreeVector.hh"
 #include "CLHEP/Units/SystemOfUnits.h"
+
+#include "G4ThreeVector.hh"
+#include "G4VUserDetectorConstruction.hh"
 
 class G4LogicalVolume;
 class G4Material;
@@ -46,11 +47,8 @@ namespace Common
 class DetectorConstruction0 : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction0(
-       const G4String& materialName = "G4_AIR",
-       G4double hx = 50*CLHEP::cm,
-       G4double hy = 50*CLHEP::cm,
-       G4double hz = 50*CLHEP::cm);
+    DetectorConstruction0(const G4String& materialName = "G4_AIR", G4double hx = 50 * CLHEP::cm,
+                          G4double hy = 50 * CLHEP::cm, G4double hz = 50 * CLHEP::cm);
     ~DetectorConstruction0() override;
 
   public:
@@ -58,21 +56,20 @@ class DetectorConstruction0 : public G4VUserDetectorConstruction
     G4VPhysicalVolume* Construct() override;
 
     // set methods
-    void  SetMaterial(const G4String& materialName);
-    void  SetDimensions(G4ThreeVector dimensions);
+    void SetMaterial(const G4String& materialName);
+    void SetDimensions(G4ThreeVector dimensions);
 
   private:
     void DefineCommands();
 
-    G4GenericMessenger*  fMessenger = nullptr;
-    G4String             fMaterialName;
-    G4ThreeVector        fDimensions;
-    G4LogicalVolume*     fWorldVolume = nullptr;
+    G4GenericMessenger* fMessenger = nullptr;
+    G4String fMaterialName;
+    G4ThreeVector fDimensions;
+    G4LogicalVolume* fWorldVolume = nullptr;
 };
 
-}
+}  // namespace Common
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

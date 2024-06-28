@@ -29,27 +29,26 @@
 
 #include "DetectorConstruction.hh"
 
+#include "G4Box.hh"
+#include "G4GenericMessenger.hh"
+#include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4GenericMessenger.hh"
 
 namespace Common
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::DetectorConstruction(
-                              const G4String& boxMaterialName,
-                              G4double boxHx, G4double boxHy, G4double boxHz,
-                              const G4String& worldMaterialName,
-                              G4double worldSizeFactor)
- : fBoxMaterialName(boxMaterialName),
-   fWorldMaterialName(worldMaterialName),
-   fBoxDimensions(boxHx*2, boxHy*2, boxHz*2),
-   fWorldSizeFactor(worldSizeFactor)
+DetectorConstruction::DetectorConstruction(const G4String& boxMaterialName, G4double boxHx,
+                                           G4double boxHy, G4double boxHz,
+                                           const G4String& worldMaterialName,
+                                           G4double worldSizeFactor)
+  : fBoxMaterialName(boxMaterialName),
+    fWorldMaterialName(worldMaterialName),
+    fBoxDimensions(boxHx * 2, boxHy * 2, boxHz * 2),
+    fWorldSizeFactor(worldSizeFactor)
 {
   DefineCommands();
 }
@@ -78,48 +77,41 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // World
   //
-  auto sWorld
-    = new G4Box("World",                        //name
-                 worldDimensions.x(),           //dimensions (half-lentghs)
-                 worldDimensions.y(),
-                 worldDimensions.z());
+  auto sWorld = new G4Box("World",  // name
+                          worldDimensions.x(),  // dimensions (half-lentghs)
+                          worldDimensions.y(), worldDimensions.z());
 
-  fWorldVolume
-    = new G4LogicalVolume(sWorld,               //shape
-                          worldMaterial,        //material
-                          "World");             //name
+  fWorldVolume = new G4LogicalVolume(sWorld,  // shape
+                                     worldMaterial,  // material
+                                     "World");  // name
 
-  auto pWorld
-    = new G4PVPlacement(0,                      //no rotation
-                        G4ThreeVector(),        //at (0,0,0)
-                        fWorldVolume,           //logical volume
-                        "World",                //name
-                        0,                      //mother  volume
-                        false,                  //no boolean operation
-                        0);                     //copy number
+  auto pWorld = new G4PVPlacement(0,  // no rotation
+                                  G4ThreeVector(),  // at (0,0,0)
+                                  fWorldVolume,  // logical volume
+                                  "World",  // name
+                                  0,  // mother  volume
+                                  false,  // no boolean operation
+                                  0);  // copy number
 
   // Box
   //
-  auto sBox
-    = new G4Box("Box",                          //its name
-                 fBoxDimensions.x(),            //dimensions (half-lengths)
-                 fBoxDimensions.y(),
-                 fBoxDimensions.z());
+  auto sBox = new G4Box("Box",  // its name
+                        fBoxDimensions.x(),  // dimensions (half-lengths)
+                        fBoxDimensions.y(), fBoxDimensions.z());
 
-  fBoxVolume
-    = new G4LogicalVolume(sBox,                 //its shape
-                          boxMaterial,          //its material
-                          "Box");               //its name
+  fBoxVolume = new G4LogicalVolume(sBox,  // its shape
+                                   boxMaterial,  // its material
+                                   "Box");  // its name
 
-  new G4PVPlacement(0,                          //no rotation
-                    G4ThreeVector(),            //at (0,0,0)
-                    fBoxVolume,                 //its logical volume
-                    "Box",                      //its name
-                    fWorldVolume,               //its mother  volume
-                    false,                      //no boolean operation
-                    0);                         //copy number
+  new G4PVPlacement(0,  // no rotation
+                    G4ThreeVector(),  // at (0,0,0)
+                    fBoxVolume,  // its logical volume
+                    "Box",  // its name
+                    fWorldVolume,  // its mother  volume
+                    false,  // no boolean operation
+                    0);  // copy number
 
-  //always return the root volume
+  // always return the root volume
   //
   return pWorld;
 }
@@ -131,13 +123,13 @@ void DetectorConstruction::SetBoxMaterial(const G4String& materialName)
   auto nistManager = G4NistManager::Instance();
 
   auto newMaterial = nistManager->FindOrBuildMaterial(materialName);
-  if ( ! newMaterial ) {
+  if (!newMaterial) {
     G4cerr << "Material " << materialName << " not found." << G4endl;
     G4cerr << "The box material was not changed." << G4endl;
     return;
   }
 
-  if ( fBoxVolume ) fBoxVolume->SetMaterial(newMaterial);
+  if (fBoxVolume) fBoxVolume->SetMaterial(newMaterial);
   G4cout << "Material of box changed to " << materialName << G4endl;
 }
 
@@ -148,13 +140,13 @@ void DetectorConstruction::SetWorldMaterial(const G4String& materialName)
   auto nistManager = G4NistManager::Instance();
 
   auto newMaterial = nistManager->FindOrBuildMaterial(materialName);
-  if ( ! newMaterial ) {
+  if (!newMaterial) {
     G4cerr << "Material " << materialName << " not found." << G4endl;
     G4cerr << "The box material was not changed." << G4endl;
     return;
   }
 
-  if ( fWorldVolume ) fWorldVolume->SetMaterial(newMaterial);
+  if (fWorldVolume) fWorldVolume->SetMaterial(newMaterial);
   G4cout << "Material of box changed to " << materialName << G4endl;
 }
 
@@ -162,8 +154,8 @@ void DetectorConstruction::SetWorldMaterial(const G4String& materialName)
 
 void DetectorConstruction::SetBoxDimensions(G4ThreeVector dimensions)
 {
-/// Set box dimension (in half lengths).
-/// This setting has effect only if called in PreInit> phase
+  /// Set box dimension (in half lengths).
+  /// This setting has effect only if called in PreInit> phase
 
   fBoxDimensions = dimensions;
 }
@@ -172,8 +164,8 @@ void DetectorConstruction::SetBoxDimensions(G4ThreeVector dimensions)
 
 void DetectorConstruction::SetWorldSizeFactor(G4double factor)
 {
-/// Set the multiplication factor from box dimensions to world dimensions.
-/// This setting has effect only if called in PreInit> phase
+  /// Set the multiplication factor from box dimensions to world dimensions.
+  /// This setting has effect only if called in PreInit> phase
 
   fWorldSizeFactor = factor;
 }
@@ -183,39 +175,31 @@ void DetectorConstruction::SetWorldSizeFactor(G4double factor)
 void DetectorConstruction::DefineCommands()
 {
   // Define /B5/detector command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this,
-                                      "/detector/",
-                                      "Detector control");
+  fMessenger = new G4GenericMessenger(this, "/detector/", "Detector control");
 
   // setBoxMaterial command
-  auto& setBoxMaterialCmd
-    = fMessenger->DeclareMethod("setBoxMaterial",
-        &DetectorConstruction::SetBoxMaterial,
-        "Set box material name.");
+  auto& setBoxMaterialCmd = fMessenger->DeclareMethod(
+    "setBoxMaterial", &DetectorConstruction::SetBoxMaterial, "Set box material name.");
   setBoxMaterialCmd.SetParameterName("boxMaterialName", false);
   setBoxMaterialCmd.SetDefaultValue("G4_AIR");
 
   // setWorldMaterial command
-  auto& setWorldMaterialCmd
-    = fMessenger->DeclareMethod("setWorldMaterial",
-        &DetectorConstruction::SetWorldMaterial,
-        "Set world material name.");
+  auto& setWorldMaterialCmd = fMessenger->DeclareMethod(
+    "setWorldMaterial", &DetectorConstruction::SetWorldMaterial, "Set world material name.");
   setWorldMaterialCmd.SetParameterName("worldMaterialName", false);
   setWorldMaterialCmd.SetDefaultValue("G4_AIR");
 
   // setBoxDimensions command
-  auto& setBoxDimensionsCmd
-    = fMessenger->DeclareMethodWithUnit("setBoxDimensions", "mm",
-        &DetectorConstruction::SetBoxDimensions,
-        "Set box dimensions (in half lentgh).");
+  auto& setBoxDimensionsCmd = fMessenger->DeclareMethodWithUnit(
+    "setBoxDimensions", "mm", &DetectorConstruction::SetBoxDimensions,
+    "Set box dimensions (in half lentgh).");
   setBoxDimensionsCmd.SetParameterName("boxDimensions", false);
   setBoxDimensionsCmd.SetStates(G4State_PreInit);
 
   // setWorldSizeFactor command
-  auto& setWorldSizeFactorCmd
-    = fMessenger->DeclareMethod("setWorldSizeFactor",
-        &DetectorConstruction::SetWorldSizeFactor,
-        "Set the multiplication factor from box dimensions to world dimensions.");
+  auto& setWorldSizeFactorCmd = fMessenger->DeclareMethod(
+    "setWorldSizeFactor", &DetectorConstruction::SetWorldSizeFactor,
+    "Set the multiplication factor from box dimensions to world dimensions.");
   setWorldSizeFactorCmd.SetParameterName("worldSizeFactor", false);
   setWorldSizeFactorCmd.SetRange("WorldSizeFactor >= 1");
   setWorldSizeFactorCmd.SetStates(G4State_PreInit);
@@ -223,4 +207,4 @@ void DetectorConstruction::DefineCommands()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace Common

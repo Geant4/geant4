@@ -26,7 +26,7 @@
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,7 @@
 #define DetectorConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"       
+#include "globals.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -44,20 +44,22 @@ class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
   public:
     DetectorConstruction();
     ~DetectorConstruction();
- 
+
     G4VPhysicalVolume* Construct();
 
-    void SetMaterial( const G4String name );
+    void SetMaterial(const G4String name);
     inline G4Material* GetMaterial() const;
-    inline void SetThickness( const G4double value );
+    inline void SetThickness(const G4double value);
     inline G4double GetThickness() const;
-    inline void SetDiameter( const G4double value );
+    inline void SetDiameter(const G4double value);
     inline G4double GetDiameter() const;
     void UpdateGeometry();
+
   private:
     G4VPhysicalVolume* ConstructLayer();  // To be invoked each time the geometry needs to be
                                           // updated.
@@ -65,12 +67,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     G4Material* fMaterial;
     G4LogicalVolume* fExperimentalHall_log;
     G4VPhysicalVolume* fExperimentalHall_phys;
-    G4LogicalVolume*  fLogicLayer;
+    G4LogicalVolume* fLogicLayer;
     G4VPhysicalVolume* fPhysiLayer;
-    G4LogicalVolume*  fLogicScoringUpDown;
+    G4LogicalVolume* fLogicScoringUpDown;
     G4VPhysicalVolume* fPhysiScoringUpstream;
     G4VPhysicalVolume* fPhysiScoringDownstream;
-    G4LogicalVolume*  fLogicScoringSide;
+    G4LogicalVolume* fLogicScoringSide;
     G4VPhysicalVolume* fPhysiScoringSide;
     DetectorMessenger* fDetectorMessenger;
     G4double fThickness;
@@ -78,23 +80,28 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     const G4double fScoringThickness = 10.0;  //***LOOKHERE*** thickness of the scoring shell
 };
 
-inline G4Material* DetectorConstruction::GetMaterial() const {
+inline G4Material* DetectorConstruction::GetMaterial() const
+{
   return fMaterial;
 }
 
-inline void DetectorConstruction::SetThickness( const G4double value ) {
+inline void DetectorConstruction::SetThickness(const G4double value)
+{
   fThickness = value;
 }
 
-inline G4double DetectorConstruction::GetThickness() const {
+inline G4double DetectorConstruction::GetThickness() const
+{
   return fThickness;
 }
 
-inline void DetectorConstruction::SetDiameter( const G4double value ) {
+inline void DetectorConstruction::SetDiameter(const G4double value)
+{
   fDiameter = value;
 }
 
-inline G4double DetectorConstruction::GetDiameter() const {
+inline G4double DetectorConstruction::GetDiameter() const
+{
   return fDiameter;
 }
 

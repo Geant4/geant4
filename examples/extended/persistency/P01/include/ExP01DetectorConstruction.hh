@@ -34,9 +34,10 @@
 #ifndef ExP01DetectorConstruction_h
 #define ExP01DetectorConstruction_h 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "ExP01MagneticField.hh"
+
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -51,54 +52,50 @@ class ExP01DetectorMessenger;
 class ExP01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
-     ExP01DetectorConstruction();
+    ExP01DetectorConstruction();
     ~ExP01DetectorConstruction();
 
   public:
-  
-     virtual G4VPhysicalVolume* Construct();
-     
-     const 
-     G4VPhysicalVolume* GetTracker() {return fPhysiTracker;};
-     G4double GetTrackerFullLength() {return fTrackerLength;};
-     G4double GetTargetFullLength()  {return fTargetLength;};
-     G4double GetWorldFullLength()   {return fWorldLength;}; 
-     
-     void SetTargetMaterial (G4String);
-     void SetChamberMaterial(G4String);
-     void SetMagField(G4double);
-     
-  private:
+    virtual G4VPhysicalVolume* Construct();
 
-     G4Box*             fSolidWorld;    // pointer to the solid envelope 
-     G4LogicalVolume*   fLogicWorld;    // pointer to the logical envelope
-     G4VPhysicalVolume* fPhysiWorld;    // pointer to the physical envelope
-     
-     G4Box*             fSolidTarget;   // pointer to the solid Target
-     G4LogicalVolume*   fLogicTarget;   // pointer to the logical Target
-     G4VPhysicalVolume* fPhysiTarget;   // pointer to the physical Target
-               
-     G4Box*             fSolidTracker;  // pointer to the solid Tracker
-     G4LogicalVolume*   fLogicTracker;  // pointer to the logical Tracker
-     G4VPhysicalVolume* fPhysiTracker;  // pointer to the physical Tracker
-     
-     G4Box*             fSolidChamber;  // pointer to the solid Chamber
-     G4LogicalVolume*   fLogicChamber;  // pointer to the logical Chamber
-     G4VPhysicalVolume* fPhysiChamber;  // pointer to the physical Chamber
-     
-     G4Material*         fTargetMater;  // pointer to the target  material
-     G4Material*         fChamberMater; // pointer to the chamber material     
-     ExP01MagneticField* fPMagField;   // pointer to the magnetic field 
-     
-     ExP01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
-       
-     G4double fWorldLength;            // Full length of the world volume
-     G4double fTargetLength;           // Full length of Target
-     G4double fTrackerLength;          // Full length of Tracker
-     G4int    fNbOfChambers;            // Nb of chambers in the tracker region
-     G4double fChamberWidth;            // width of the chambers
-     G4double fChamberSpacing;          // distance between chambers
+    const G4VPhysicalVolume* GetTracker() { return fPhysiTracker; };
+    G4double GetTrackerFullLength() { return fTrackerLength; };
+    G4double GetTargetFullLength() { return fTargetLength; };
+    G4double GetWorldFullLength() { return fWorldLength; };
+
+    void SetTargetMaterial(G4String);
+    void SetChamberMaterial(G4String);
+    void SetMagField(G4double);
+
+  private:
+    G4Box* fSolidWorld;  // pointer to the solid envelope
+    G4LogicalVolume* fLogicWorld;  // pointer to the logical envelope
+    G4VPhysicalVolume* fPhysiWorld;  // pointer to the physical envelope
+
+    G4Box* fSolidTarget;  // pointer to the solid Target
+    G4LogicalVolume* fLogicTarget;  // pointer to the logical Target
+    G4VPhysicalVolume* fPhysiTarget;  // pointer to the physical Target
+
+    G4Box* fSolidTracker;  // pointer to the solid Tracker
+    G4LogicalVolume* fLogicTracker;  // pointer to the logical Tracker
+    G4VPhysicalVolume* fPhysiTracker;  // pointer to the physical Tracker
+
+    G4Box* fSolidChamber;  // pointer to the solid Chamber
+    G4LogicalVolume* fLogicChamber;  // pointer to the logical Chamber
+    G4VPhysicalVolume* fPhysiChamber;  // pointer to the physical Chamber
+
+    G4Material* fTargetMater;  // pointer to the target  material
+    G4Material* fChamberMater;  // pointer to the chamber material
+    ExP01MagneticField* fPMagField;  // pointer to the magnetic field
+
+    ExP01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
+
+    G4double fWorldLength;  // Full length of the world volume
+    G4double fTargetLength;  // Full length of Target
+    G4double fTrackerLength;  // Full length of Tracker
+    G4int fNbOfChambers;  // Nb of chambers in the tracker region
+    G4double fChamberWidth;  // width of the chambers
+    G4double fChamberSpacing;  // distance between chambers
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -33,21 +33,21 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
-                                                   PrimaryGeneratorAction* Gun)
-:fAction(Gun), fGunDir(0), fBeam(0)
-{ 
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun)
+  : fAction(Gun), fGunDir(0), fBeam(0)
+{
   fGunDir = new G4UIdirectory("/testem/gun/");
   fGunDir->SetGuidance("gun control");
 
-  fBeam = new G4UIcmdWithADouble("/testem/gun/beamRadius",this);
+  fBeam = new G4UIcmdWithADouble("/testem/gun/beamRadius", this);
   fBeam->SetGuidance("radius on the beam");
-  fBeam->SetParameterName("rBeam",false);
+  fBeam->SetParameterName("rBeam", false);
   fBeam->SetRange("rBeam>=0 && rBeam<=1");
 }
 
@@ -61,12 +61,11 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
-{ 
-  if (command == fBeam)
-   {fAction->SetBeamRadius(fBeam->GetNewDoubleValue(newValue));}   
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fBeam) {
+    fAction->SetBeamRadius(fBeam->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

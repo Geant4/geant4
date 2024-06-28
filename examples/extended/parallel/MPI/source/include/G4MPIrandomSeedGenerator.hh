@@ -30,14 +30,15 @@
 
 #include "G4VMPIseedGenerator.hh"
 
-class G4MPIrandomSeedGenerator : public G4VMPIseedGenerator {
-public:
-  G4MPIrandomSeedGenerator();
-  ~G4MPIrandomSeedGenerator();
+class G4MPIrandomSeedGenerator : public G4VMPIseedGenerator
+{
+  public:
+    G4MPIrandomSeedGenerator();
+    ~G4MPIrandomSeedGenerator();
 
-protected:
-  G4bool CheckDoubleCount();
-  virtual void GenerateSeeds();
+  protected:
+    G4bool CheckDoubleCount();
+    virtual void GenerateSeeds();
 };
 
 #endif

@@ -29,25 +29,25 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingAction_h
-#define SteppingAction_h 1
+#  define SteppingAction_h 1
 
-#include "G4UserSteppingAction.hh"
-#include "globals.hh"
+#  include "G4UserSteppingAction.hh"
+#  include "globals.hh"
 
 class EventAction;
 class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class SteppingAction : public G4UserSteppingAction //, public RunInitObserver
+class SteppingAction : public G4UserSteppingAction  //, public RunInitObserver
 {
-public:
+  public:
     SteppingAction();
     ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
 
-private:
+  private:
     EventAction* fpEventAction;
     G4Region* fRegion;
 };

@@ -28,36 +28,31 @@
 /// \brief Implementation of the GB03BOptrGeometryBasedBiasing class
 
 #include "GB03BOptrGeometryBasedBiasing.hh"
-#include "G4Track.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4GenericMessenger.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB03BOptrGeometryBasedBiasing::GB03BOptrGeometryBasedBiasing()
-: G4VBiasingOperator("GB03BOptrGeometryBasedBiasing"),
-  fSplittingFactor(2),
-  fApplyProbability(1.0)
+  : G4VBiasingOperator("GB03BOptrGeometryBasedBiasing"), fSplittingFactor(2), fApplyProbability(1.0)
 {
   fSplitAndKillOperation = new GB03BOptnSplitOrKillOnBoundary("splitAndkill");
-  
-  // -- Define messengers:
-  fSplittingFactorMessenger = 
-    new G4GenericMessenger(this, "/GB03/biasing/","Biasing control" );
-  
-  G4GenericMessenger::Command& splittingFactorCmd = 
-    fSplittingFactorMessenger->DeclareProperty("setSplittingFactor", fSplittingFactor,
-                                "Define the splitting factor." );
-  splittingFactorCmd.SetStates(G4State_Idle);
-  
-  fApplyProbabilityMessenger = 
-    new G4GenericMessenger(this, "/GB03/biasing/","Biasing control" );
-  
-  G4GenericMessenger::Command& applyProbCmd = 
-    fApplyProbabilityMessenger->DeclareProperty("setApplyProbability", fApplyProbability,
-                                "Define the probability to apply the splitting/killing." );
-  applyProbCmd.SetStates(G4State_Idle);
 
+  // -- Define messengers:
+  fSplittingFactorMessenger = new G4GenericMessenger(this, "/GB03/biasing/", "Biasing control");
+
+  G4GenericMessenger::Command& splittingFactorCmd = fSplittingFactorMessenger->DeclareProperty(
+    "setSplittingFactor", fSplittingFactor, "Define the splitting factor.");
+  splittingFactorCmd.SetStates(G4State_Idle);
+
+  fApplyProbabilityMessenger = new G4GenericMessenger(this, "/GB03/biasing/", "Biasing control");
+
+  G4GenericMessenger::Command& applyProbCmd = fApplyProbabilityMessenger->DeclareProperty(
+    "setApplyProbability", fApplyProbability,
+    "Define the probability to apply the splitting/killing.");
+  applyProbCmd.SetStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,19 +66,16 @@ GB03BOptrGeometryBasedBiasing::~GB03BOptrGeometryBasedBiasing()
 
 void GB03BOptrGeometryBasedBiasing::StartRun()
 {
-  fSplitAndKillOperation->SetSplittingFactor ( fSplittingFactor  );
-  fSplitAndKillOperation->SetApplyProbability( fApplyProbability );
+  fSplitAndKillOperation->SetSplittingFactor(fSplittingFactor);
+  fSplitAndKillOperation->SetApplyProbability(fApplyProbability);
   G4cout << GetName() << " : starting run with splitting factor = " << fSplittingFactor
-         << ", and probability for applying the technique " << fApplyProbability
-         << " . " << G4endl;
+         << ", and probability for applying the technique " << fApplyProbability << " . " << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VBiasingOperation*
-GB03BOptrGeometryBasedBiasing::
-ProposeNonPhysicsBiasingOperation( const G4Track*                   /* track */,
-                                   const G4BiasingProcessInterface* /* callingProcess */ )
+G4VBiasingOperation* GB03BOptrGeometryBasedBiasing::ProposeNonPhysicsBiasingOperation(
+  const G4Track* /* track */, const G4BiasingProcessInterface* /* callingProcess */)
 {
   // Here, we always return the split and kill biasing operation:
   return fSplitAndKillOperation;

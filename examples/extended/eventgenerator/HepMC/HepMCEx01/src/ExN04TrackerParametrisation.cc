@@ -28,36 +28,33 @@
 //
 //
 
+#include "ExN04TrackerParametrisation.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
 #include "G4VPhysicalVolume.hh"
-#include "ExN04TrackerParametrisation.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerParametrisation::ExN04TrackerParametrisation()
- : G4VPVParameterisation()
+ExN04TrackerParametrisation::ExN04TrackerParametrisation() : G4VPVParameterisation()
 {
 #include "ExN04DetectorParameterDef.icc"
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerParametrisation::~ExN04TrackerParametrisation()
-{
-}
+ExN04TrackerParametrisation::~ExN04TrackerParametrisation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerParametrisation::ComputeTransformation
-                        (const G4int, G4VPhysicalVolume* physVol) const
+void ExN04TrackerParametrisation::ComputeTransformation(const G4int,
+                                                        G4VPhysicalVolume* physVol) const
 {
   G4ThreeVector origin;
-  physVol-> SetTranslation(origin);
+  physVol->SetTranslation(origin);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerParametrisation::ComputeDimensions
-     (G4Tubs& trackerLayer, const G4int copyNo, const G4VPhysicalVolume*) const
+void ExN04TrackerParametrisation::ComputeDimensions(G4Tubs& trackerLayer, const G4int copyNo,
+                                                    const G4VPhysicalVolume*) const
 {
   trackerLayer.SetInnerRadius(ftracker_radius[copyNo]);
   trackerLayer.SetOuterRadius(ftracker_radius[copyNo] + ftracker_thick);

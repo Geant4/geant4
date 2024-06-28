@@ -34,37 +34,33 @@
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
 //
 // -------------------------------------------------------------
 
 #ifndef FFACTIONINITIALIZATION
 #define FFACTIONINITIALIZATION
 
-#include "G4VUserActionInitialization.hh"
-
 #include "FFRunAction.hh"
 
+#include "G4VUserActionInitialization.hh"
 
-class FFActionInitialization
-:   public G4VUserActionInitialization
+class FFActionInitialization : public G4VUserActionInitialization
 {
-public:
-// Constructor
+  public:
+    // Constructor
     FFActionInitialization();
 
-// Functions
+    // Functions
     virtual void BuildForMaster() const;
     virtual void Build() const;
 
-// Destructor
+    // Destructor
     virtual ~FFActionInitialization();
-    
-private:
-// Fields
+
+  private:
+    // Fields
     FFRunAction* const fMasterRunAction;
 };
 
-#endif // FFACTIONINITIALIZATION
-
-
+#endif  // FFACTIONINITIALIZATION

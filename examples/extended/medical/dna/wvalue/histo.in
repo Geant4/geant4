@@ -1,19 +1,28 @@
-#
+# MT mode
 /run/numberOfThreads 2
 #
+# Material
 /w/det/setMat G4_WATER
 #
+# Sphere radius
 /w/det/setRadius 1 m
 #
+# Tracking cut
 /w/det/setTrackingCut 7.4 eV
 #
-/w/phys/addPhysics dna	        
+# Geant4-DNA Physics constructor
+/w/phys/addPhysics dna
 #
+# Run initialization
 /run/initialize
 #
+# Incident particle type
 /gun/particle e-
 #
+# Histogram file name
 /analysis/setFileName wvalue
+#
+# Definition of histograms
 /analysis/h1/set 1 100  0.    1000 none	#nb of ionisation interactions per event
 /analysis/h1/set 2 100  0.    2.   keV	#total energy deposited in absorber
 /analysis/h1/set 3 100  0.    1. um	#true track length of the primary particle
@@ -22,7 +31,11 @@
 /analysis/h1/set 6 100  0.    1. um	#true track length of charged secondaries
 /analysis/h1/set 7 100  0.    0.1 um	#true track length of charged secondaries
 #
+# Verbosity
 /run/printProgress 100
 #
+# Incident particle energy
 /gun/energy 1 keV
+#
+# Beam on
 /run/beamOn 1000

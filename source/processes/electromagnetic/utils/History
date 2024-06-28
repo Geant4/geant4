@@ -6,28 +6,69 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-05-22 V.Ivanchenko (emutils-V11-01-28)
+## 2024-06-19 S.Johnson (emutils-V11-02-10)
+- G4EmParameters - fix segmentation fault when data is unavailable
+
+## 2024-06-06 I.Semeniouk & D.Bernard (emutils-V11-02-09)
+- G4EmParameters, G4EmParametersMessenger - added orto Positronion fraction flag
+
+## 2024-05-27 V.Ivanchenko (emutils-V11-02-08)
+- G4VEmProcess - extended info printout for e+ annihilation at rest
+- G4VEmProcess, G4VEnergyLossProcess - improved identification of model ID
+    for atomic de-excitation (fluorescence, Auger e-, PIXE).
+
+## 2024-05-22 V.Ivanchenko (emutils-V11-02-07)
 - G4EmUtility - simplify computation of cross section maximum for discrete 
     processes to fix the problem of FPE if -O3 compiler option is used.
 
-## 2024-04-21 Gabriele Cosmo (emutils-V11-01-27)
+## 2024-05-20 H. Tran (emutils-V11-02-06)
+- G4EmParameters, G4EmLowEParameters, G4EmLowEParametersMessenger - added dna
+chemistry time step model
+
+## 2024-05-14 V.Ivanchenko (emutils-V11-02-05)
+- G4EmParameters, G4EmParametersMessenger - added enumerator and a new flag
+    G4PositronAtRestModel, which allows selectrion and configuration of
+    the model of positron annihilation at rest.
+- G4VPositronAtRestModel - new virtual interface
+- G4EmBiasingManager - cosmetic change
+
+## 2024-05-04 V.Ivanchenko (emutils-V11-02-04)
+- G4EmDataRegistry - new class to keep EM data tables
+- G4EmDataHandler - extended functionality
+- G4LossTableManager - identify master thread using std method
+- G4LossTableBUilder - more accurate use of static members and methods
+- G4VEmModel, G4VEmProcess, G4VEnergyLossProcess, G4EmTableUtil - update
+    according to change in the data
+- G4VMscModel - move initialisation of tables for model to G4EmTableUtil
+
+## 2024-04-21 Gabriele Cosmo (emutils-V11-02-03)
 - Fixed compilation error in G4EmConfigurator on Windows VC++ with
   C++20 Standard enabled.
   Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
 
-## 2023-12-15 V.Ivanchenko (emutils-V11-01-26)
-- G4VEmProcess, G4VEnergyLossProcess - minor CPU optimisation by reduction
-    of number of calls for Log of kinetic energy 
+## 2023-04-04 V.Ivanchenko (emutils-V11-02-02)
+- G4EmParameters - increased low-limit on maxKinEnergy parameter from
+    10 MeV to 600 MeV in order to have standard ionisation and
+    multiple scattering always defined for DNA physics configurations. 
 
-## 2023-12-01 John Allison (emutils-V11-01-25)
+## 2024-04-03 S.Okada (emutils-V11-02-01)
+- G4LowEnergyEmProcessSubType
+  - add fLowEnergyTripleIonisation and fLowEnergyQuadrupleIonisation
+    for implementing multiple-ionization processes in Geant4-DNA
+
+## 2023-12-15 V.Ivanchenko (emutils-V11-02-00)
+- G4VEmProcess, G4VEnergyLossProcess - minor CPU optimisation by reduction
+    of number of calls for Log of kinetic energy
+
+## 2022-12-01 John Allison (emutils-V11-01-25)
 - G4EmParametersMessenger:
   - Fix "/process/eloss/setFluctModel" - change "eloss" to "eLoss".
 
 ## 2023-11-08 V.Ivanchenko (emutils-V11-01-24)
-- G4VEmModel - fixed memory leak at exit 
+- G4VEmModel - fixed memory leak at exit
 
 ## 2023-11-07 V.Ivanchenko (emutils-V11-01-23)
-- G4EmSaturation - fixed problem #2572 (txenglish@lanl.gov) 
+- G4EmSaturation - fixed problem #2572 (txenglish@lanl.gov)
 
 ## 2023-11-03 J.Hahnfeld (emutils-V11-01-22)
 - `G4TransportationWithMsc`: Initialize all members.
@@ -42,8 +83,8 @@ It must **not** be used as a substitute for writing good git commit messages!
 - `G4TransportationWithMsc`: Always update momentum direction.
 
 ## 2023-10-10 V.Ivanchenko (emutils-V11-01-18)
-- G4VEmModel - restore SetLPMFlag(..) method to allow build of CMSSW with the 
-    Geant4 master and G4HepEm version of CMSSW; no change of any result 
+- G4VEmModel - restore SetLPMFlag(..) method to allow build of CMSSW with the
+    Geant4 master and G4HepEm version of CMSSW; no change of any result
     is expected; added warning about use of obsolete method.
 
 ## 2023-10-06 V.Ivanchenko (emutils-V11-01-17)
@@ -66,7 +107,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 -  G4EmProcessSubType - new fGammaReflection = 26
 
 ## 2023-09-04 V.Ivanchenko (emutils-V11-01-14)
-- G4VEmModel - do not destruct G4ElementData, do not define LPM flag 
+- G4VEmModel - do not destruct G4ElementData, do not define LPM flag
 
 ## 2023-06-16 V.Ivanchenko (emutils-V11-01-13)
 - G4LossTableManager - fixed trivial Coverity report
@@ -119,14 +160,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ## 2023-02-21 V.Ivanchenko (emutils-V11-01-02)
 - G4EmExtraParameters - fixed AddPAIModel(...) method and improved comments
-- G4EmExtraParametersMessenger - fixed broadcasting  
+- G4EmExtraParametersMessenger - fixed broadcasting
 
 ## 2023-01-10 V.Ivanchenko (emutils-V11-01-01)
 - G4EmParameters - added extra member and access method to G4LEDATA path
     allowing check environment variable for the EM data only once
 
 ## 2022-12-11 V.Ivanchenko (emutils-V11-01-00)
-- G4EmParameters, G4EmParametersMessenger, added parameter, UI command, 
+- G4EmParameters, G4EmParametersMessenger, added parameter, UI command,
     GetSet methods - MscPositronCorrection
 
 ## 2022-11-23 Gabriele Cosmo (emutils-V11-00-38)
@@ -160,11 +201,11 @@ It must **not** be used as a substitute for writing good git commit messages!
     number of bins per decade
 
 ## 2022-08-25 V.Ivanchenko (emutils-V11-00-33)
-- G4EmExtraParameters - safe definition of StepFuction for the 
+- G4EmExtraParameters - safe definition of StepFuction for the
     G4GenericIon, related to problem #2495
 
 ## 2022-07-08 J.Apostolakis (emutils-V11-00-32)
-- Fix in `G4TransportationWithMsc`: StartTracking now calls 
+- Fix in `G4TransportationWithMsc`: StartTracking now calls
     corresponding method of G4Transportation (to initialise values
     used for propagation in field.)
 
@@ -187,7 +228,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ## 2022-06-07 V.Ivanchenko (emutils-V11-00-27)
 - G4VEnergyLossProcess - moved out common computations to G4EmTableUtil,
-    use G4EmDataHandler, removed unused headers and methods 
+    use G4EmDataHandler, removed unused headers and methods
 
 ## 2022-05-31 V.Ivanchenko (emutils-V11-00-26)
 - G4VEmModel - fixed Coverity warning
@@ -200,23 +241,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4EmTableUtil - added extra methods
 - G4VEmModel, G4VEmProcess, G4VEnergyLossProcess,
   G4VMultipleScattering, G4LossTableManager - use new utiity methods,
-    updated sampling of random element in compounds and random 
+    updated sampling of random element in compounds and random
     isotopes, code cleanup
 - G4EmParameters - added extra parameter: type for of fluctuation model
 
 ## 2022-05-20 Z.Li (emutils-V11-00-23)
 - G4EmLowEParameters, change default photon database to EPICS2017
 
-## 2022-05-13 V.Ivanchenko (emutils-V11-00-22) 
+## 2022-05-13 V.Ivanchenko (emutils-V11-00-22)
 - G4EmUtility - added methods to sample isotopes or element
 - G4VEmModel, G4EmCalculator, G4EmConfigurator - use G4EmUtility
 
 ## 2022-05-12 V.Ivanchenko (emutils-V11-00-21)
-- G4EmUtility - removed precision lost in energy value at 
+- G4EmUtility - removed precision lost in energy value at
     initialisation of integral method
 - G4VEmProcess, G4VEnergyLossProcess - for integral method
     use master thread cross section type and pointers directly
-    simplifing initialisation 
+    simplifing initialisation
 
 ## 2022-05-11 J.Hahnfeld (emutils-V11-00-20)
 - Remove dependency on `G4magneticfield`
@@ -235,22 +276,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 - many files: run clang-tidy. Use default ctors; keywords nullptr, auto, using
 
 ## 2022-04-23 V.Ivanchenko (emutils-V11-00-16)
-- G4EmConfigurator - implement model per region for G4TransportationWithMsc 
+- G4EmConfigurator - implement model per region for G4TransportationWithMsc
 - GNUmakefile, source.cmake - updated accordingly
 
 ## 2022-04-19 J.Hahnfeld (emutil-V11-00-15)
 - Create `G4TransportationWithMsc` process, add flag to `G4EmParameters`
 
 ## 2022-04-13 V.Ivanchenko (emutils-V11-00-14)
-- G4VEnergyLossProcess, G4VEmProcess - use G4EmUtility to compute cross 
-    section shape parameters 
+- G4VEnergyLossProcess, G4VEmProcess - use G4EmUtility to compute cross
+    section shape parameters
 - G4VMultipleScattering - updated arguments for AddEmModel, SetEmModel,
     and EmModel methods from G4VEmModel* to G4VMscModel*
 - G4EmConfigurator - updated interfaces
 
 ## 2022-04-10 V.Ivanchenko (emutils-V11-00-13)
-- G4EmUtility - added new static methods to prepare data structures for 
-    integral method using EM tables or using GetCrossSection(..) method 
+- G4EmUtility - added new static methods to prepare data structures for
+    integral method using EM tables or using GetCrossSection(..) method
     from G4VDiscreteProcess based class, this will allow using it for hadronics
 - G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - minor clean-up
 
@@ -265,7 +306,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4LowEnergyEmProcessSubType - add fLowEnergyScavenger (66) for DNAScavenger process
 
 ## 2022-03-24 V.Ivanchenko (emutils-V11-00-09)
-- G4VEnergyLossProcess - fix fluctuation model pointer if an extra 
+- G4VEnergyLossProcess - fix fluctuation model pointer if an extra
     model is added on top of the default list of models
 
 ## 2022-03-17 V.Ivanchenko (emutils-V11-00-08)
@@ -297,7 +338,7 @@ It must **not** be used as a substitute for writing good git commit messages!
     the lambda table defined for full energy range: LambdaPhysicsVector(..),
     CrossSEctionPerVolume(...), FindLambdaMax(...). No change is expected for
     the default physics configuration, fix mainly affect positron annihilation
-    processes at high energies. 
+    processes at high energies.
 
 ## 2022-01-05 V.Ivanchenko (emutils-V11-00-02)
 - Complete internal redesign started in 2021, results are identical
@@ -324,11 +365,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 10 November 21: S. Guatelli (emutils-V10-07-37)
 - changed ANSTO parameters in  UI interface commands
-    
+
 30 October 21: V.Ivanchenko (emutils-V10-07-36)
 - G4VEnergyLossProcess - exclude ion corrections only from d, t, alpha
     in order to fix #2440
-- G4ionEffectiveCharge - return back limit on effective charge 
+- G4ionEffectiveCharge - return back limit on effective charge
     from 0.5 to 1 (used in previous releases)
 
 25 October 21: V.Ivanchenko (emutils-V10-07-35)
@@ -343,7 +384,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 12 October 21: V.Ivanchenko (emutils-V10-07-33)
 - G4ionEffectiveCharge - code clean-up
 - G4EmCorrections - do not use spline in various internal vectors,
-    because correction values are small and smooth, clean-up ion 
+    because correction values are small and smooth, clean-up ion
     correction computations
 - G4VEnergyLossProcess - code clean-up for ions
 
@@ -356,8 +397,8 @@ It must **not** be used as a substitute for writing good git commit messages!
   G4LossTableBuilder - implemented updated numbering scheme for
     secondary particle production, deprecate duplicate printout
     of processes and models, move list of EM parameters printout
-    before printout on processes, code format improved 
-  G4EmParameters, G4EmParametersMessenger - removed obsolete 
+    before printout on processes, code format improved
+  G4EmParameters, G4EmParametersMessenger - removed obsolete
     methods, added protection agains duplicate printout
 
 23 September 21: A.Ribon (emutils-V10-07-30)
@@ -387,19 +428,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 18 July 21: V.Ivanchenko (emutils-V10-07-24)
 - G4VEmFluctuationModel - changed interface - both cut value and
-    max energy transfer are parameters of main methods; this 
+    max energy transfer are parameters of main methods; this
     is needed in order to fix problem #2390
 - G4VEnergyLossProcess, G4EmModelManager - adopted above interface
-    change 
+    change
 
 11 July 21: V.Ivanchenko (emutils-V10-07-23)
-- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering, 
-  G4LossTableBuilder, G4VEmModel, G4VMscModel, G4LossTableManager 
-    implement and use base material approach only if base materials 
-    are defined, this should bring a minor speed-up of the code and little 
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering,
+  G4LossTableBuilder, G4VEmModel, G4VMscModel, G4LossTableManager
+    implement and use base material approach only if base materials
+    are defined, this should bring a minor speed-up of the code and little
     reduction of memory; fixed problems for the case, when materials
     are changed between runs
-- G4LossTableBuilder - base material flag may be disabled 
+- G4LossTableBuilder - base material flag may be disabled
 
 08 June 21: V.Ivanchenko (emutils-V10-07-22)
 - G4VEmProcess, G4VEnergyLossProcess - fixed computation of cross
@@ -408,19 +449,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4LossTableBuilder - fixed debug printout
 
 01 June 21: V.Ivanchenko (emutils-V10-07-21)
-- G4VEmProcess, G4VEnergyLossProcess - an attempt to improve 
-    integral option 
+- G4VEmProcess, G4VEnergyLossProcess - an attempt to improve
+    integral option
 
 26 May 21: V.Ivanchenko (emutils-V10-07-20)
-- G4VEmProcess, G4VEnergyLossProcess, G4EmDataHandler - updated 
+- G4VEmProcess, G4VEnergyLossProcess, G4EmDataHandler - updated
   method RetrievePhysicsTable(...)
 
 15 May 21: V.Ivanchenko (emutils-V10-07-19)
 - G4VEmProcess, G4VEnergyLossProcess, G4EmTableType, G4EmBiasingManager,
   G4LossTableManager - updated integral approach by introduction of a
-  cross section shape type and different actions depending on the type; 
-  addition of cache for cross section and range; removed unused methods; 
-  attempt to reduce number of "if" operators in the run time; integral 
+  cross section shape type and different actions depending on the type;
+  addition of cache for cross section and range; removed unused methods;
+  attempt to reduce number of "if" operators in the run time; integral
   and spline flags are set to each process individually
 - G4VMultipleScattering - fixed problem observed by CMS for specific
   Physics List

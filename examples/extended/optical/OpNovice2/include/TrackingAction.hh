@@ -37,12 +37,12 @@
 
 class TrackingAction : public G4UserTrackingAction
 {
- public:
-  TrackingAction() = default;
-  ~TrackingAction() override = default;
+  public:
+    TrackingAction() = default;
+    ~TrackingAction() override = default;
 
-  void PreUserTrackingAction(const G4Track*) override;
-  void PostUserTrackingAction(const G4Track*) override;
+    void PreUserTrackingAction(const G4Track*) override;
+    void PostUserTrackingAction(const G4Track*) override;
 };
 
 #endif

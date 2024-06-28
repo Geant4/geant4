@@ -44,34 +44,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
 
+#include "PhysicsListMessenger.hh"
+#include "StepLimiterBuilder.hh"
+
+#include "G4DecayPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4EmParameters.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmLivermorePhysics.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLowEPPhysics.hh"
-#include "StepLimiterBuilder.hh"
-#include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4StoppingPhysics.hh"
-
-#include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
-#include "G4EmParameters.hh"
-
 #include "G4PhysicalConstants.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(): G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   fHelIsRegisted = false;
   fBicIsRegisted = false;
@@ -80,7 +79,7 @@ PhysicsList::PhysicsList(): G4VModularPhysicsList()
   fStopIsRegisted = false;
   fVerbose = 1;
 
-  SetDefaultCutValue(1*mm);
+  SetDefaultCutValue(1 * mm);
 
   fMessenger = new PhysicsListMessenger(this);
 
@@ -101,7 +100,7 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  if(fVerbose > 0) {
+  if (fVerbose > 0) {
     G4cout << "### PhysicsList Construte Particles" << G4endl;
   }
   G4VModularPhysicsList::ConstructParticle();
@@ -111,7 +110,7 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  if(fVerbose > 0) {
+  if (fVerbose > 0) {
     G4cout << "### PhysicsList Construte Processes" << G4endl;
   }
 
@@ -120,8 +119,8 @@ void PhysicsList::ConstructProcess()
   // Define energy interval for loss processes
   // from 10 eV to 10 GeV
   G4EmParameters* param = G4EmParameters::Instance();
-  param->SetMinEnergy(0.01*keV);
-  param->SetMaxEnergy(10.*GeV);
+  param->SetMinEnergy(0.01 * keV);
+  param->SetMaxEnergy(10. * GeV);
   param->SetNumberOfBinsPerDecade(10);
   param->SetVerbose(1);
 }
@@ -130,56 +129,55 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if(fVerbose > 0) {
-    G4cout << "### PhysicsList Add Physics <" << name 
-           << "> " << G4endl;
+  if (fVerbose > 0) {
+    G4cout << "### PhysicsList Add Physics <" << name << "> " << G4endl;
   }
   if (name == "emstandard") {
     ReplacePhysics(new G4EmStandardPhysics());
-
-  } else if (name == "emstandard_opt1") {
+  }
+  else if (name == "emstandard_opt1") {
     ReplacePhysics(new G4EmStandardPhysics_option1());
-
-  } else if (name == "emstandard_opt2") {
+  }
+  else if (name == "emstandard_opt2") {
     ReplacePhysics(new G4EmStandardPhysics_option2());
-
-  } else if (name == "emstandard_opt3") {
+  }
+  else if (name == "emstandard_opt3") {
     ReplacePhysics(new G4EmStandardPhysics_option3());
-
-  } else if (name == "emstandard_opt4") {
+  }
+  else if (name == "emstandard_opt4") {
     ReplacePhysics(new G4EmStandardPhysics_option4());
-
-  } else if (name == "emlivermore") {
+  }
+  else if (name == "emlivermore") {
     ReplacePhysics(new G4EmLivermorePhysics());
-
-  } else if (name == "empenelope") {
+  }
+  else if (name == "empenelope") {
     ReplacePhysics(new G4EmPenelopePhysics());
-
-  } else if (name == "emlowenergy") {
+  }
+  else if (name == "emlowenergy") {
     ReplacePhysics(new G4EmLowEPPhysics());
-
-  } else if (name == "elastic" && !fHelIsRegisted) {
+  }
+  else if (name == "elastic" && !fHelIsRegisted) {
     RegisterPhysics(new G4HadronElasticPhysics());
     fHelIsRegisted = true;
-    
-  } else if (name == "binary" && !fBicIsRegisted) {
+  }
+  else if (name == "binary" && !fBicIsRegisted) {
     RegisterPhysics(new G4HadronInelasticQBBC());
     fBicIsRegisted = true;
-    
-  } else if (name == "binary_ion" && !fIonIsRegisted) {
+  }
+  else if (name == "binary_ion" && !fIonIsRegisted) {
     RegisterPhysics(new G4IonBinaryCascadePhysics());
     fIonIsRegisted = true;
-
-  } else if (name == "gamma_nuc" && !fGnucIsRegisted) {
+  }
+  else if (name == "gamma_nuc" && !fGnucIsRegisted) {
     RegisterPhysics(new G4EmExtraPhysics());
     fGnucIsRegisted = true;
-
-  } else if (name == "stopping" && !fStopIsRegisted) {
+  }
+  else if (name == "stopping" && !fStopIsRegisted) {
     RegisterPhysics(new G4StoppingPhysics());
     fStopIsRegisted = true;
-    
-  } else {
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
+  }
+  else {
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">"
            << " fail - module is already regitered or is unknown " << G4endl;
   }
 }

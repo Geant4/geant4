@@ -440,29 +440,16 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
   // 1. Trying all unlimited cartesian axes
   // 2. Select axis which gives greatest no slices
 
-  G4ProxyVector *pGoodSlices=nullptr, *pTestSlices, *tmpSlices;
+  G4ProxyVector *pGoodSlices=nullptr, *pTestSlices;
   G4double goodSliceScore=kInfinity, testSliceScore;
   EAxis goodSliceAxis = kXAxis;
-  EAxis testAxis      = kXAxis;
-  std::size_t node, maxNode, iaxis;
+  std::size_t node, maxNode; 
   G4VoxelLimits noLimits;
 
   // Try all non-limited cartesian axes
   //
-  for (iaxis=0; iaxis<3; ++iaxis)
+  for ( EAxis testAxis : { kXAxis, kYAxis, kZAxis } )
   {
-    switch(iaxis)
-    {
-      case 0:
-        testAxis = kXAxis;
-        break;
-      case 1:
-        testAxis = kYAxis;
-        break;
-      case 2:
-        testAxis = kZAxis;
-        break;
-    }
     if (!pLimits.IsLimited(testAxis))
     {
       pTestSlices = BuildNodes(pVolume,pLimits,pCandidates,testAxis);
@@ -471,9 +458,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
       {
         goodSliceAxis  = testAxis;
         goodSliceScore = testSliceScore;
-        tmpSlices      = pGoodSlices;
-        pGoodSlices    = pTestSlices;
-        pTestSlices    = tmpSlices;
+        std::swap( pGoodSlices, pTestSlices);
       }
       if (pTestSlices != nullptr)
       {

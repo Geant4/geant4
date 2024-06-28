@@ -31,35 +31,30 @@
 //
 
 #ifndef UrQMDProtonBuilder_h
-#define UrQMDProtonBuilder_h 
-
-#include "globals.hh"
+#define UrQMDProtonBuilder_h
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
-#include "G4VProtonBuilder.hh"
-
 #include "G4UrQMD1_3Model.hh"
+#include "G4VProtonBuilder.hh"
+#include "globals.hh"
 
 class UrQMDProtonBuilder : public G4VProtonBuilder
 {
-public: 
+  public:
+    UrQMDProtonBuilder();
+    virtual ~UrQMDProtonBuilder();
 
-  UrQMDProtonBuilder();
-  virtual ~UrQMDProtonBuilder();
+    virtual void Build(G4HadronElasticProcess* aP);
+    virtual void Build(G4HadronInelasticProcess* aP);
 
-  virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4HadronInelasticProcess * aP);
-    
-  inline void SetMinEnergy(G4double aM) {fMin = aM;}
-  inline void SetMaxEnergy(G4double aM) {fMax = aM;}
+    inline void SetMinEnergy(G4double aM) { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) { fMax = aM; }
 
-private:
-
-  G4UrQMD1_3Model * fModel;    
-  G4double fMin;
-  G4double fMax;
-
+  private:
+    G4UrQMD1_3Model* fModel;
+    G4double fMin;
+    G4double fMax;
 };
 
 #endif

@@ -6,12 +6,6 @@
 /tracking/verbose 1
 /run/verbose 1
 #
-# Field parameters (default values)
-#/field/setStepperType 4
-#/field/setMinStep 10 mm
-#/field/setField 3 0 0 tesla
-#/field/update
-#
 /run/initialize
 #
 /run/particle/dumpCutValues

@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01RunAction class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,7 +47,7 @@ class ExP01RunAction : public G4UserRunAction
 {
   public:
     ExP01RunAction();
-   ~ExP01RunAction();
+    ~ExP01RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
@@ -57,4 +57,3 @@ class ExP01RunAction : public G4UserRunAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

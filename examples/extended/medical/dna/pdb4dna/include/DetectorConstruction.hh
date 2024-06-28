@@ -31,7 +31,7 @@
 //                  Bank (PDB) description for Geant4-DNA Monte-Carlo
 //                  simulations (submitted to Comput. Phys. Commun.)
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // --------------------------------------------------------------
 // Authors: E. Delage
 // november 2013
@@ -60,60 +60,59 @@ class G4VPhysicalVolume;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
-private:
-  //! PDB filename
-  G4String fPdbFileName;
+  private:
+    //! PDB filename
+    G4String fPdbFileName;
 
-  //! Option for the visualisation
-  unsigned short int fChosenOption;
+    //! Option for the visualisation
+    unsigned short int fChosenOption;
 
-  //! Check if PDB file loaded
-  unsigned short int fPdbFileStatus;
+    //! Check if PDB file loaded
+    unsigned short int fPdbFileStatus;
 
-  PDBlib fPDBlib;
-  Molecule *fpMoleculeList;
-  Barycenter *fpBarycenterList;
-  G4Material *fpDefaultMaterial;
-  G4Material *fpWaterMaterial;
+    PDBlib fPDBlib;
+    Molecule* fpMoleculeList;
+    Barycenter* fpBarycenterList;
+    G4Material* fpDefaultMaterial;
+    G4Material* fpWaterMaterial;
 
-  void   ConstructMaterials();
-  void   CheckMaterials();
-  G4VPhysicalVolume* ConstructWorld();
-  G4VPhysicalVolume* DefineVolumes(G4String filename,unsigned short int option);
+    void ConstructMaterials();
+    void CheckMaterials();
+    G4VPhysicalVolume* ConstructWorld();
+    G4VPhysicalVolume* DefineVolumes(G4String filename, unsigned short int option);
 
-  void AtomisticView(G4LogicalVolume*,Molecule *,double atomSizeFactor);
-  void BarycenterView(G4LogicalVolume* ,Barycenter *);
-  void ResiduesView(G4LogicalVolume* ,Barycenter *);
-  void DrawBoundingVolume(G4LogicalVolume* ,Molecule *);
+    void AtomisticView(G4LogicalVolume*, Molecule*, double atomSizeFactor);
+    void BarycenterView(G4LogicalVolume*, Barycenter*);
+    void ResiduesView(G4LogicalVolume*, Barycenter*);
+    void DrawBoundingVolume(G4LogicalVolume*, Molecule*);
 
-  DetectorMessenger* fpMessenger; // messenger
+    DetectorMessenger* fpMessenger;  // messenger
 
-  G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
+    G4bool fCheckOverlaps;  // option to activate checking of volumes overlaps
 
-public:
-  //accessed by steppingAction.cc :
-  Barycenter *GetBarycenterList();
-  PDBlib GetPDBlib();
-  Molecule *GetMoleculeList();
+  public:
+    // accessed by steppingAction.cc :
+    Barycenter* GetBarycenterList();
+    PDBlib GetPDBlib();
+    Molecule* GetMoleculeList();
 
-  //accessed by DetectorConstruction.cc :
-  void LoadPDBfile(G4String fileName);
-  void DrawAtoms_();
-  void DrawNucleotides_();
-  void DrawResidues_();
-  void BuildBoundingVolume();
-  void DrawAtomsWithBounding_();
-  void DrawNucleotidesWithBounding_();
-  void DrawResiduesWithBounding_();
+    // accessed by DetectorConstruction.cc :
+    void LoadPDBfile(G4String fileName);
+    void DrawAtoms_();
+    void DrawNucleotides_();
+    void DrawResidues_();
+    void BuildBoundingVolume();
+    void DrawAtomsWithBounding_();
+    void DrawNucleotidesWithBounding_();
+    void DrawResiduesWithBounding_();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

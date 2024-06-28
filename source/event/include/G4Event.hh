@@ -51,16 +51,12 @@
 #include "G4DCofThisEvent.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4VUserEventInformation.hh"
-#include "G4Profiler.hh"
 
 class G4VHitsCollection;
 class G4SubEvent;
 
 class G4Event 
 {
-  public:
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
-
   public:
     G4Event() = default;
     explicit G4Event(G4int evID);
@@ -104,8 +100,15 @@ class G4Event
       }
     inline void KeepTheEvent(G4bool vl=true)
       { keepTheEvent = vl; }
+    inline G4bool KeepTheEventFlag() const
+      { return keepTheEvent; }
     inline G4bool ToBeKept() const
-      { return keepTheEvent || GetNumberOfRemainingSubEvents()>0; }
+      {
+        /* TODO (PHASE-II): consider grips for subevents
+        { return keepTheEvent || grips>0 || GetNumberOfRemainingSubEvents()>0; }
+        */
+        return keepTheEvent || GetNumberOfRemainingSubEvents()>0;
+      }
     inline void KeepForPostProcessing() const
       { ++grips; }
     inline void PostProcessingFinished() const
@@ -113,7 +116,7 @@ class G4Event
         --grips;
         if (grips<0)
         {
-          G4Exception("G4Event::Release()", "EVENT91001", FatalException,
+          G4Exception("G4Event::Release()", "EVENT91001", JustWarning,
                       "Number of grips is negative. This cannot be correct.");
         }
       }
@@ -251,21 +254,26 @@ class G4Event
 
     G4int SpawnSubEvent(G4SubEvent*);
       // Registering sub-event when it is sent to a worker thread.
-    inline G4int GetNumberOfRemainingSubEvents() const
-      // Number of sub-events that have been sent to worker threads but not yet
-      // completed.
-    {
-      auto  tot = (G4int)fSubEvtVector.size(); 
-      for(auto& sem : fSubEvtStackMap)
-      { tot += (G4int)sem.second->size(); }
-      return tot;
-    }
+    G4int GetNumberOfRemainingSubEvents() const;
+      // Number of sub-events that are either still waiting to be processed by worker
+      // threads or sent to worker threads but not yet completed
+    inline G4int GetNumberOfCompletedSubEvent() const
+    { return (G4int)fSubEventGarbageBin.size(); }
 
     void MergeSubEventResults(const G4Event* se);
 
   private:
+  // These containers are for sub-event objects.
+  // - fSubEvtStackMap stores sub-events that are yet to be sent to the worker thread
+  //   it stores sub-events sorted separately to sub-event types
+  // - fSubEvtVector stores sub-events that are sent to worther thread for processing
+  // - fSubEventGarbageBin stores sub-events that have already been processed by worker thread
+  //   these sub-events are deleted at the time the G4Event of the master thread is deleted
+  //   - TODO (PHASE-II): we may need to consider better way to delete sub-events stored in this garbase bin
+  //     at earlier timing to reduce amount of memory used for storing these garbages
     std::map<G4int,std::set<G4SubEvent*>*> fSubEvtStackMap;
     std::set<G4SubEvent*> fSubEvtVector;
+    std::set<G4SubEvent*> fSubEventGarbageBin;
 
   // motherEvent pointer is non-null for an event created in the worker
   // thread of sub-event parallelism.
@@ -285,6 +293,15 @@ class G4Event
     { return motherEvent; }
     G4int GetSubEventType() const
     { return subEventType; }
+
+  private:
+    mutable G4bool scoresRecorded = false;
+    mutable G4bool eventCompleted = false;
+  public:
+    void ScoresRecorded() const { scoresRecorded = true; }
+    G4bool ScoresAlreadyRecorded() const { return scoresRecorded; }
+    void EventCompleted() const { eventCompleted = true; }
+    G4bool IsEventCompleted() const { return eventCompleted; }
 };
 
 extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();

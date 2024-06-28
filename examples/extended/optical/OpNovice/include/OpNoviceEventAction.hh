@@ -33,30 +33,30 @@
 #ifndef OpNoviceEventAction_h
 #define OpNoviceEventAction_h 1
 
-#include "globals.hh"
 #include "G4UserEventAction.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class OpNoviceEventAction : public G4UserEventAction
 {
- public:
-  OpNoviceEventAction() = default;
-  ~OpNoviceEventAction() override = default;
+  public:
+    OpNoviceEventAction() = default;
+    ~OpNoviceEventAction() override = default;
 
-  void BeginOfEventAction(const G4Event*) override;
-  void EndOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
-  void AddRayleigh() { ++fRayleigh; }
-  void AddAbsorption() { ++fAbsorption; }
-  void AddMie() { ++fMie; }
-  void AddBoundary() { ++fBoundary; }
+    void AddRayleigh() { ++fRayleigh; }
+    void AddAbsorption() { ++fAbsorption; }
+    void AddMie() { ++fMie; }
+    void AddBoundary() { ++fBoundary; }
 
- private:
-  G4int fRayleigh = 0;
-  G4int fAbsorption = 0;
-  G4int fMie = 0;
-  G4int fBoundary = 0;
+  private:
+    G4int fRayleigh = 0;
+    G4int fAbsorption = 0;
+    G4int fMie = 0;
+    G4int fBoundary = 0;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

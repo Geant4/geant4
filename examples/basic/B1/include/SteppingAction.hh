@@ -31,9 +31,9 @@
 #define B1SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
-#include "globals.hh"
 
 class G4LogicalVolume;
+class G4Step;
 
 namespace B1
 {
@@ -56,7 +56,7 @@ class SteppingAction : public G4UserSteppingAction
     G4LogicalVolume* fScoringVolume = nullptr;
 };
 
-}
+}  // namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

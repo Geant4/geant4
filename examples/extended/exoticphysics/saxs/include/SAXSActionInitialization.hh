@@ -31,25 +31,24 @@
 #ifndef SAXSActionInitialization_h
 #define SAXSActionInitialization_h 1
 
-#include "G4VUserActionInitialization.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4VUserActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 /// Action initialization class.
 
-class SAXSActionInitialization : public G4VUserActionInitialization {
-public:
+class SAXSActionInitialization : public G4VUserActionInitialization
+{
+  public:
     SAXSActionInitialization();
     ~SAXSActionInitialization();
-    
-private:
+
+  private:
     virtual void Build() const;
     virtual void BuildForMaster() const;
-    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

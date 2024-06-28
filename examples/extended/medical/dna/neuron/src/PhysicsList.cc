@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -41,10 +41,14 @@
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "CommandLineParser.hh"
+
 #include "G4EmParameters.hh"
+#include "G4SystemOfUnits.hh"
 // for discrete physics constructors!
+#include "G4EmDNAChemistry.hh"
+#include "G4EmDNAChemistry_option1.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option1.hh"
 #include "G4EmDNAPhysics_option2.hh"
@@ -54,8 +58,6 @@
 #include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
 #include "G4EmDNAPhysics_option8.hh"
-#include "G4EmDNAChemistry.hh"
-#include "G4EmDNAChemistry_option1.hh"
 // for condensed physics constructors!
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
@@ -63,41 +65,40 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
 // for hadronic physics constructors!
+#include "G4DecayPhysics.hh"
+#include "G4EmDNAPhysicsActivator.hh"
+#include "G4EmExtraPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronPhysicsQGSP_BIC.hh"
-#include "G4StoppingPhysics.hh"  
 #include "G4IonPhysics.hh"
-#include "G4EmExtraPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
-#include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"  
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
-#include "G4EmDNAPhysicsActivator.hh"
-
-using namespace G4DNAPARSER ;
+using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
+PhysicsList::PhysicsList()
   : G4VModularPhysicsList(),
     fEmPhysicsList(nullptr),
     fDNAActivator(nullptr),
     fEmDNAChemistryList(nullptr),
     fEmDNAChemistryList1(nullptr),
-    fEmName(""), fHadronic(false)
+    fEmName(""),
+    fHadronic(false)
 {
-  G4double currentDefaultCut = 1.*micrometer; 
-  SetDefaultCutValue(currentDefaultCut); 
+  G4double currentDefaultCut = 1. * micrometer;
+  SetDefaultCutValue(currentDefaultCut);
   SetVerboseLevel(1);
   // fixe lower limit for cut
-  G4ProductionCutsTable::GetProductionCutsTable()->
-                         SetEnergyRange(100*eV, 1*GeV);
- 
-  // Options of combination Geant4-DNA processes (Physics/Chemistry) 
-  // with Standard and Hadronic Physics: 
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV, 1 * GeV);
 
-  // a) DNAphysics and Livermore physics inside and outside neuron 
-  G4cout<< "Livermore + DNAphysics is activated!"<<G4endl;
+  // Options of combination Geant4-DNA processes (Physics/Chemistry)
+  // with Standard and Hadronic Physics:
+
+  // a) DNAphysics and Livermore physics inside and outside neuron
+  G4cout << "Livermore + DNAphysics is activated!" << G4endl;
   RegisterConstructor("emlivermore");
 
   // 'G4EmParameters' works together with 'G4EmDNAPhysicsActivator'
@@ -109,17 +110,15 @@ PhysicsList::PhysicsList()
   G4EmParameters::Instance()->AddDNA("Dendrites","Opt4");
   G4EmParameters::Instance()->AddDNA("Axon","Opt4");
   */
-  //  b) Livermore + DNAPhysics + DNAChemistry 
-  if(CommandLineParser::GetParser()->GetCommandIfActive("-dnachemON"))
-  {
-    G4cout<< "DNAChemistry is activated!"<<G4endl;
+  //  b) Livermore + DNAPhysics + DNAChemistry
+  if (CommandLineParser::GetParser()->GetCommandIfActive("-dnachemON")) {
+    G4cout << "DNAChemistry is activated!" << G4endl;
     RegisterPhysics(new G4EmDNAChemistry());
   }
 
   //  d) "QGSP_BIC_EMY" package from hadrontherapy advanced example
-  if(CommandLineParser::GetParser()->GetCommandIfActive("-dnahad"))
-  {
-    G4cout << "QGSP_BIC is activated!"<<G4endl;
+  if (CommandLineParser::GetParser()->GetCommandIfActive("-dnahad")) {
+    G4cout << "QGSP_BIC is activated!" << G4endl;
     RegisterConstructor("QGSP_BIC");
     fHadronic = true;
   }
@@ -127,17 +126,24 @@ PhysicsList::PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()
-{}
+PhysicsList::~PhysicsList() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  if(fEmPhysicsList)       { fEmPhysicsList->ConstructParticle(); }
-  if(fDNAActivator)        { fDNAActivator->ConstructParticle(); }
-  if(fEmDNAChemistryList)  { fEmDNAChemistryList->ConstructParticle(); }
-  if(fEmDNAChemistryList1) { fEmDNAChemistryList1->ConstructParticle(); }
+  if (fEmPhysicsList) {
+    fEmPhysicsList->ConstructParticle();
+  }
+  if (fDNAActivator) {
+    fDNAActivator->ConstructParticle();
+  }
+  if (fEmDNAChemistryList) {
+    fEmDNAChemistryList->ConstructParticle();
+  }
+  if (fEmDNAChemistryList1) {
+    fEmDNAChemistryList1->ConstructParticle();
+  }
   G4VModularPhysicsList::ConstructParticle();
 }
 
@@ -145,10 +151,18 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  if(fEmPhysicsList)       { fEmPhysicsList->ConstructProcess(); }
-  if(fDNAActivator)        { fDNAActivator->ConstructProcess(); }
-  if(fEmDNAChemistryList)  { fEmDNAChemistryList->ConstructProcess(); }
-  if(fEmDNAChemistryList1) { fEmDNAChemistryList1->ConstructProcess(); }
+  if (fEmPhysicsList) {
+    fEmPhysicsList->ConstructProcess();
+  }
+  if (fDNAActivator) {
+    fDNAActivator->ConstructProcess();
+  }
+  if (fEmDNAChemistryList) {
+    fEmDNAChemistryList->ConstructProcess();
+  }
+  if (fEmDNAChemistryList1) {
+    fEmDNAChemistryList1->ConstructProcess();
+  }
   G4VModularPhysicsList::ConstructProcess();
 }
 
@@ -156,108 +170,115 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::RegisterConstructor(const G4String& name)
 {
-  if(name == fEmName) { return; }
-  if (name == "emstandard_opt0"){
+  if (name == fEmName) {
+    return;
+  }
+  if (name == "emstandard_opt0") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
-
-  } else if (name == "emstandard_opt3"){
+  }
+  else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
-
-  } else if (name == "emstandard_opt4"){
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-    
-  } else if (name == "empenelope"){
+  }
+  else if (name == "empenelope") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
-
-  } else if (name == "emlivermore"){
+  }
+  else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics();
-
-  } else if(name == "G4EmDNAPhysics") {
+  }
+  else if (name == "G4EmDNAPhysics") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option1") {
+  }
+  else if (name == "G4EmDNAPhysics_option1") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option1(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option2") {
+  }
+  else if (name == "G4EmDNAPhysics_option2") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option2(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option3") {
+  }
+  else if (name == "G4EmDNAPhysics_option3") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option3(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option4") {
+  }
+  else if (name == "G4EmDNAPhysics_option4") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option4(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option5") {
+  }
+  else if (name == "G4EmDNAPhysics_option5") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option5(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option6") {
+  }
+  else if (name == "G4EmDNAPhysics_option6") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option6(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option7") {
+  }
+  else if (name == "G4EmDNAPhysics_option7") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option7(verboseLevel);
     fEmName = name;
-
-  } else if(name == "G4EmDNAPhysics_option8") {
+  }
+  else if (name == "G4EmDNAPhysics_option8") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option8(verboseLevel);
     fEmName = name;
-
-  } else if(name == "QGSP_BIC") {
-    if(fHadronic) { return; }
+  }
+  else if (name == "QGSP_BIC") {
+    if (fHadronic) {
+      return;
+    }
     // Hadron Elastic Physics
     RegisterConstructor("G4HadronElasticPhysics");
     // Hadron Inelastic Physics
-    RegisterConstructor("G4HadronPhysicsQGSP_BIC"); 
+    RegisterConstructor("G4HadronPhysicsQGSP_BIC");
     // Stopping
     RegisterConstructor("G4StoppingPhysics");
     // Ion Physics
     RegisterConstructor("G4IonBinaryCascadePhysics");
-    // Gamma-Lepto nuclear 
+    // Gamma-Lepto nuclear
     RegisterConstructor("G4EmExtraPhysics");
     // Limiters
-    RegisterConstructor("G4NeutronTrackingCut"); 
+    RegisterConstructor("G4NeutronTrackingCut");
     // Decay
     RegisterConstructor("G4DecayPhysics");
     // Radioactive decay
-    RegisterConstructor("G4RadioactiveDecayPhysics");  
-
-  } else if(name == "G4EmDNAChemistry") {
-    if(fEmDNAChemistryList || fEmDNAChemistryList1) { return; }
+    RegisterConstructor("G4RadioactiveDecayPhysics");
+  }
+  else if (name == "G4EmDNAChemistry") {
+    if (fEmDNAChemistryList || fEmDNAChemistryList1) {
+      return;
+    }
     fEmDNAChemistryList = new G4EmDNAChemistry();
-
-  } else if(name == "G4EmDNAChemistry_option1") {
-    if(fEmDNAChemistryList || fEmDNAChemistryList1) { return; }
+  }
+  else if (name == "G4EmDNAChemistry_option1") {
+    if (fEmDNAChemistryList || fEmDNAChemistryList1) {
+      return;
+    }
     fEmDNAChemistryList1 = new G4EmDNAChemistry_option1();
-
-  } else {
+  }
+  else {
     G4cout << "PhysicsList::RegisterConstructor: <" << name << ">"
-           << " fails - name is not defined"
-           << G4endl;    
+           << " fails - name is not defined" << G4endl;
   }
 }
 

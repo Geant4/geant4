@@ -428,15 +428,13 @@ G4HadFinalState* G4NuTauNucleusCcModel::ApplyYourself(
   }
   */
   G4Nucleus recoil;
-  G4double rM(0.), ratio = G4double(Z)/G4double(A);
+  G4double ratio = G4double(Z)/G4double(A);
 
   if( ratio > G4UniformRand() ) // proton is excited
   {
     fProton = true;
     recoil = G4Nucleus(A-1,Z-1);
     fRecoil = &recoil;
-    rM = recoil.AtomicMass(A-1,Z-1);
-
     if( pName == "nu_tau" ) // (++) state -> p + pi+
     { 
       fMt = G4ParticleTable::GetParticleTable()->FindParticle(2212)->GetPDGMass()
@@ -453,8 +451,6 @@ G4HadFinalState* G4NuTauNucleusCcModel::ApplyYourself(
     fProton = false;
     recoil = G4Nucleus(A-1,Z);
     fRecoil = &recoil;
-    rM = recoil.AtomicMass(A-1,Z);
-
     if( pName == "nu_tau" ) // (+) state -> n + pi+
     {      
       fMt = G4ParticleTable::GetParticleTable()->FindParticle(2112)->GetPDGMass()
@@ -482,6 +478,7 @@ G4HadFinalState* G4NuTauNucleusCcModel::ApplyYourself(
   {  
     fString = false;
 
+    G4double rM;
     if( fProton ) 
     {  
       fPDGencoding = 2212;

@@ -167,6 +167,7 @@ class G4TessellatedSolid : public G4VSolid
                                              G4bool aAccurate = false) const;
 
     G4GeometryType GetEntityType () const override;
+    G4bool IsFaceted () const override;
     std::ostream& StreamInfo(std::ostream& os) const override;
 
     G4VSolid* Clone() const override;

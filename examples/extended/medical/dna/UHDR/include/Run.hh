@@ -27,30 +27,33 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "G4Run.hh"
-#include "G4THitsMap.hh"
 #include "Scorer.hh"
 
-class Run : public G4Run {
-public:
-  Run();
+#include "G4Run.hh"
+#include "G4THitsMap.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  ~Run() override = default;
+class Run : public G4Run
+{
+  public:
+    Run();
 
-  void RecordEvent(const G4Event *) override;
+    ~Run() override = default;
 
-  void Merge(const G4Run *) final;
+    void RecordEvent(const G4Event*) override;
 
-  inline G4double GetSumDose() const { return fSumEne; }
+    void Merge(const G4Run*) final;
 
-  inline G4VPrimitiveScorer *GetSumDoseLimit() const { return fpDose; }
+    inline G4double GetSumDose() const { return fSumEne; }
 
-  inline G4VPrimitiveScorer *GetGvaluesScorer() const { return fpGvalues; }
+    inline G4VPrimitiveScorer* GetSumDoseLimit() const { return fpDose; }
 
-private:
-  G4double fSumEne = 0;
-  G4VPrimitiveScorer *fpGvalues = nullptr;
-  G4VPrimitiveScorer *fpDose = nullptr;
+    inline G4VPrimitiveScorer* GetGvaluesScorer() const { return fpGvalues; }
+
+  private:
+    G4double fSumEne = 0;
+    G4VPrimitiveScorer* fpGvalues = nullptr;
+    G4VPrimitiveScorer* fpDose = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

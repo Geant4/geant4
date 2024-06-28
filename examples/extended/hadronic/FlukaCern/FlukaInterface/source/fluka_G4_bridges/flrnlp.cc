@@ -28,7 +28,7 @@
 // The idea is to provide a function with the same signature as the FLUKA one,
 // but that relies on G4 random engine.
 //
-// The FLUKA flrnlp object file is replaced 
+// The FLUKA flrnlp object file is replaced
 // by the object generated after compilation of this file
 // (see FlukaInterface GNUmakefile).
 //
@@ -37,18 +37,15 @@
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
 
-#include "flrnlp.hh"
+#  include "flrnlp.hh"
 // G4
-#include "Randomize.hh"
+#  include "Randomize.hh"
 
-
-void flrnlp_(G4double rndvec[], const G4int& nvect) {
-
-	for (G4int randomNumberIndex = 0; randomNumberIndex < nvect; ++randomNumberIndex) {
-		rndvec[randomNumberIndex] = G4UniformRand();
-	}
-
+void flrnlp_(G4double rndvec[], const G4int& nvect)
+{
+  for (G4int randomNumberIndex = 0; randomNumberIndex < nvect; ++randomNumberIndex) {
+    rndvec[randomNumberIndex] = G4UniformRand();
+  }
 }
 
-
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

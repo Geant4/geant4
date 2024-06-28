@@ -44,27 +44,24 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger() override;
-    
-   void SetNewValue(G4UIcommand*, G4String) override;
-    
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
-  
-    DetectorConstruction*      fDetector  = nullptr;
-    
-    G4UIdirectory*             fTestemDir = nullptr;
-    G4UIdirectory*             fDetDir    = nullptr;    
-    G4UIcmdWithAString*        fMaterCmd  = nullptr;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd   = nullptr;
-    G4UIcmdWithoutParameter*   fUpdateCmd = nullptr;
+    DetectorConstruction* fDetector = nullptr;
+
+    G4UIdirectory* fTestemDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd = nullptr;
+    G4UIcmdWithoutParameter* fUpdateCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

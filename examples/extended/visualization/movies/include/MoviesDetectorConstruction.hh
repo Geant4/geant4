@@ -25,7 +25,7 @@
 //
 /// \file MoviesDetectorConstruction.hh
 /// \brief Definition of the MoviesDetectorConstruction class
-// 
+//
 
 #ifndef MoviesDetectorConstruction_h
 #define MoviesDetectorConstruction_h 1
@@ -36,15 +36,14 @@ class G4VPhysicalVolume;
 
 class MoviesDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  MoviesDetectorConstruction() {}
-  virtual ~MoviesDetectorConstruction() {}
-  virtual G4VPhysicalVolume* Construct();
+  public:
+    MoviesDetectorConstruction() {}
+    virtual ~MoviesDetectorConstruction() {}
+    virtual G4VPhysicalVolume* Construct();
 
-private:
-  void DefineMaterials();
-  G4VPhysicalVolume* DefineVolumes();
+  private:
+    void DefineMaterials();
+    G4VPhysicalVolume* DefineVolumes();
 };
 
 #endif
-

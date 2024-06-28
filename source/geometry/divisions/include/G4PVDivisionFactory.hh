@@ -42,9 +42,9 @@ class G4LogicalVolume;
 
 class G4PVDivisionFactory : public G4VPVDivisionFactory
 {
-  public:  // with description
+  public:
 
-    ~G4PVDivisionFactory() override;
+    ~G4PVDivisionFactory() override = default;
     
     G4VPhysicalVolume* CreatePVDivision(
                              const G4String& pName,
@@ -89,7 +89,7 @@ class G4PVDivisionFactory : public G4VPVDivisionFactory
 
   protected:
 
-    G4PVDivisionFactory();
+    G4PVDivisionFactory() = default;
 };
 
 #endif

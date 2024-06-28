@@ -23,22 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// FLUKA hadron nucleus inelastic XS. 
+// FLUKA hadron nucleus inelastic XS.
 //
 // Author: G.Hugo, 01 August 2022
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef FLUKA_INELASTIC_SCATTERING_XS_HH
-#define FLUKA_INELASTIC_SCATTERING_XS_HH
-
+#  ifndef FLUKA_INELASTIC_SCATTERING_XS_HH
+#    define FLUKA_INELASTIC_SCATTERING_XS_HH
 
 // G4
-#include "globals.hh"
-#include "G4VCrossSectionDataSet.hh"
-#include "G4ElementData.hh"
-#include "G4PhysicsVector.hh"
-
+#    include "G4ElementData.hh"
+#    include "G4PhysicsVector.hh"
+#    include "G4VCrossSectionDataSet.hh"
+#    include "globals.hh"
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -46,36 +44,29 @@ class G4Element;
 class G4Meterial;
 class G4Isotope;
 
+class FLUKAInelasticScatteringXS final : public G4VCrossSectionDataSet
+{
+  public:
+    explicit FLUKAInelasticScatteringXS();
 
-class FLUKAInelasticScatteringXS final : public G4VCrossSectionDataSet {
+    void CrossSectionDescription(std::ostream&) const;
 
- public: 
-  explicit FLUKAInelasticScatteringXS();
+    virtual G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+                                       const G4Material*) override;
 
-  void CrossSectionDescription(std::ostream&) const;
-    
-  virtual G4bool IsElementApplicable(const G4DynamicParticle*, 
-                                     G4int Z,
-                                     const G4Material*) override;
+    virtual G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A, const G4Element*,
+                                   const G4Material*) override;
 
-  virtual G4bool IsIsoApplicable(const G4DynamicParticle*, 
-                                 G4int Z, G4int A,
-                                 const G4Element*, const G4Material*) override;
+    virtual G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+                                            const G4Material*) override;
 
-  virtual G4double GetElementCrossSection(const G4DynamicParticle*, 
-                                          G4int Z, 
-                                          const G4Material*) override;
+    virtual G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+                                        const G4Isotope* iso, const G4Element* elm,
+                                        const G4Material* mat) override;
 
-  virtual G4double GetIsoCrossSection(const G4DynamicParticle*, 
-                                      G4int Z, G4int A,
-                                      const G4Isotope* iso,
-                                      const G4Element* elm,
-                                      const G4Material* mat) override;	
-
-  FLUKAInelasticScatteringXS & operator=(const FLUKAInelasticScatteringXS &right) = delete;
-  FLUKAInelasticScatteringXS(const FLUKAInelasticScatteringXS&) = delete;
+    FLUKAInelasticScatteringXS& operator=(const FLUKAInelasticScatteringXS& right) = delete;
+    FLUKAInelasticScatteringXS(const FLUKAInelasticScatteringXS&) = delete;
 };
 
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

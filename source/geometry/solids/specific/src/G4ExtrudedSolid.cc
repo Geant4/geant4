@@ -837,6 +837,13 @@ G4GeometryType G4ExtrudedSolid::GetEntityType () const
 
 //_____________________________________________________________________________
 
+G4bool G4ExtrudedSolid::IsFaceted () const
+{
+  return true;
+}
+
+//_____________________________________________________________________________
+
 G4VSolid* G4ExtrudedSolid::Clone() const
 {
   return new G4ExtrudedSolid(*this);

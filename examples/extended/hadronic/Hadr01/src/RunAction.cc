@@ -28,7 +28,7 @@
 //
 //
 // -------------------------------------------------------------
-//  
+//
 //    GEANT4 class file
 //    RunAction
 //
@@ -38,18 +38,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "HistoManager.hh"
+
+#include "G4CascadeChannelTables.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4Timer.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4Timer.hh"
-#include "G4NuclearLevelData.hh"
-#include "G4CascadeChannelTables.hh"
+
 #include <iosfwd>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
- : G4UserRunAction()
+RunAction::RunAction() : G4UserRunAction()
 {
   fTimer = new G4Timer();
   fTimer->Start();
@@ -62,7 +64,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4int id = aRun->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
   fTimer->Stop();
-  G4cout << "Initialisation time:  "  << *fTimer << G4endl;
+  G4cout << "Initialisation time:  " << *fTimer << G4endl;
 
   delete fTimer;
   fTimer = new G4Timer();
@@ -75,9 +77,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-
   fTimer->Stop();
-  G4cout << "RunAction::EndOfRunAction:  "  << *fTimer << G4endl;
+  G4cout << "RunAction::EndOfRunAction:  " << *fTimer << G4endl;
   G4cout << "RunAction: End of run actions are started" << G4endl;
   auto man = HistoManager::GetPointer();
   man->EndOfRun();
@@ -85,7 +86,8 @@ void RunAction::EndOfRunAction(const G4Run*)
   if (0 == key) {
     G4cout << "RunAction: Print all Bertini cross sections" << G4endl;
     G4CascadeChannelTables::Print();
-  } else if (0 < key) {
+  }
+  else if (0 < key) {
     G4cout << "RunAction: Print Bertini cross section key=" << key << G4endl;
     G4CascadeChannelTables::PrintTable(key, G4cout);
   }

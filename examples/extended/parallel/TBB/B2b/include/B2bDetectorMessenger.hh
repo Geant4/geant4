@@ -30,8 +30,8 @@
 #ifndef B2bDetectorMessenger_h
 #define B2bDetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class B2bDetectorConstruction;
 class G4UIdirectory;
@@ -47,22 +47,22 @@ class G4UIcmdWithADoubleAndUnit;
 /// - /B2/det/setChamberMaterial name
 /// - /B2/det/stepMax value unit
 
-class B2bDetectorMessenger: public G4UImessenger
+class B2bDetectorMessenger : public G4UImessenger
 {
   public:
-    B2bDetectorMessenger(B2bDetectorConstruction* );
+    B2bDetectorMessenger(B2bDetectorConstruction*);
     virtual ~B2bDetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-    B2bDetectorConstruction*  fDetectorConstruction;
+    B2bDetectorConstruction* fDetectorConstruction;
 
-    G4UIdirectory*           fB2Directory;
-    G4UIdirectory*           fDetDirectory;
+    G4UIdirectory* fB2Directory;
+    G4UIdirectory* fDetDirectory;
 
-    G4UIcmdWithAString*      fTargMatCmd;
-    G4UIcmdWithAString*      fChamMatCmd;
+    G4UIcmdWithAString* fTargMatCmd;
+    G4UIcmdWithAString* fChamMatCmd;
 
     G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };

@@ -137,6 +137,7 @@
  	Idle> exit
 	
  Macros provided in this example:
+  - hadr06.in: macro used in Geant4 testing to produce hadr06.out
   - graphite.mac: neutron,14 MeV, in graphite
   - run1.mac: neutron,14 MeV, in Li7
   - singleFission.mac: single fission in U235

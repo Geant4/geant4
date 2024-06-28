@@ -46,8 +46,9 @@
 #ifdef GEANT4_USE_GDML
 #  include "OpNoviceGDMLDetectorConstruction.hh"
 #endif
-#include "OpNoviceActionInitialization.hh"
 #include "FTFP_BERT.hh"
+#include "OpNoviceActionInitialization.hh"
+
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4OpticalPhysics.hh"
 #include "G4RunManagerFactory.hh"
@@ -59,20 +60,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace
 {
-  void PrintUsage()
-  {
-    G4cerr << " Usage: " << G4endl;
+void PrintUsage()
+{
+  G4cerr << " Usage: " << G4endl;
 #ifdef GEANT4_USE_GDML
-    G4cerr << " OpNovice [-g gdmlfile] [-m macro ] [-u UIsession] [-t "
-              "nThreads] [-r seed] "
-           << G4endl;
+  G4cerr << " OpNovice [-g gdmlfile] [-m macro ] [-u UIsession] [-t "
+            "nThreads] [-r seed] "
+         << G4endl;
 #else
-    G4cerr << " OpNovice  [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
-           << G4endl;
+  G4cerr << " OpNovice  [-m macro ] [-u UIsession] [-t nThreads] [-r seed] " << G4endl;
 #endif
-    G4cerr << "   note: -t option is available only for multi-threaded mode."
-           << G4endl;
-  }
+  G4cerr << "   note: -t option is available only for multi-threaded mode." << G4endl;
+}
 }  // namespace
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,8 +80,7 @@ int main(int argc, char** argv)
 {
   // Evaluate arguments
   //
-  if(argc > 9)
-  {
+  if (argc > 9) {
     PrintUsage();
     return 1;
   }
@@ -94,24 +92,21 @@ int main(int argc, char** argv)
 #endif
 
   G4long myseed = 345354;
-  for(G4int i = 1; i < argc; i = i + 2)
-  {
-    if(G4String(argv[i]) == "-g")
+  for (G4int i = 1; i < argc; i = i + 2) {
+    if (G4String(argv[i]) == "-g")
       gdmlfile = argv[i + 1];
-    else if(G4String(argv[i]) == "-m")
+    else if (G4String(argv[i]) == "-m")
       macro = argv[i + 1];
-    else if(G4String(argv[i]) == "-u")
+    else if (G4String(argv[i]) == "-u")
       session = argv[i + 1];
-    else if(G4String(argv[i]) == "-r")
+    else if (G4String(argv[i]) == "-r")
       myseed = atoi(argv[i + 1]);
 #ifdef G4MULTITHREADED
-    else if(G4String(argv[i]) == "-t")
-    {
+    else if (G4String(argv[i]) == "-t") {
       nThreads = G4UIcommand::ConvertToInt(argv[i + 1]);
     }
 #endif
-    else
-    {
+    else {
       PrintUsage();
       return 1;
     }
@@ -119,16 +114,14 @@ int main(int argc, char** argv)
 
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if(macro.size() == 0)
-  {
+  if (macro.size() == 0) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   // Construct the default run manager
   auto runManager = G4RunManagerFactory::CreateRunManager();
 #ifdef G4MULTITHREADED
-  if(nThreads > 0)
-    runManager->SetNumberOfThreads(nThreads);
+  if (nThreads > 0) runManager->SetNumberOfThreads(nThreads);
 #endif
 
   // Seed the random number generator manually
@@ -137,19 +130,16 @@ int main(int argc, char** argv)
   // Set mandatory initialization classes
   //
   // Detector construction
-  if(gdmlfile != "")
-  {
+  if (gdmlfile != "") {
 #ifdef GEANT4_USE_GDML
-    runManager->SetUserInitialization(
-      new OpNoviceGDMLDetectorConstruction(gdmlfile));
+    runManager->SetUserInitialization(new OpNoviceGDMLDetectorConstruction(gdmlfile));
 #else
     G4cout << "Error! Input gdml file specified, but Geant4 wasn't" << G4endl
            << "built with gdml support." << G4endl;
     return 1;
 #endif
   }
-  else
-  {
+  else {
     runManager->SetUserInitialization(new OpNoviceDetectorConstruction());
   }
   // Physics list
@@ -166,16 +156,14 @@ int main(int argc, char** argv)
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(macro.size())
-  {
+  if (macro.size()) {
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command + macro);
   }
   else  // Define UI session for interactive mode
   {
     UImanager->ApplyCommand("/control/execute vis.mac");
-    if(ui->IsGUI())
-      UImanager->ApplyCommand("/control/execute gui.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();
     delete ui;
   }

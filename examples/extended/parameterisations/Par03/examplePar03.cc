@@ -36,18 +36,19 @@
 //
 //-------------------------------------------------------------------
 
-#include "Par03DetectorConstruction.hh"
-#include "Par03ActionInitialisation.hh"
-
-#include "G4RunManagerFactory.hh"
-#include "G4Types.hh"
-#include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
-#include "G4HadronicProcessStore.hh"
+#include "Par03ActionInitialisation.hh"
+#include "Par03DetectorConstruction.hh"
+
 #include "G4EmParameters.hh"
 #include "G4FastSimulationPhysics.hh"
-#include "G4VisExecutive.hh"
+#include "G4HadronicProcessStore.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+
 #include <sstream>
 
 int main(int argc, char** argv)
@@ -60,32 +61,27 @@ int main(int argc, char** argv)
     " [option(s)] \n No additional arguments triggers an interactive mode "
     "executing vis.mac macro. \n Options:\n\t-h\t\tdisplay this help "
     "message\n\t-m MACRO\ttriggers a batch mode executing MACRO\n");
-  for(G4int i = 1; i < argc; ++i)
-  {
+  for (G4int i = 1; i < argc; ++i) {
     G4String argument(argv[i]);
-    if(argument == "-h" || argument == "--help")
-    {
+    if (argument == "-h" || argument == "--help") {
       G4cout << helpMsg << G4endl;
       return 0;
     }
-    else if(argument == "-m")
-    {
-      batchMacroName     = G4String(argv[i + 1]);
+    else if (argument == "-m") {
+      batchMacroName = G4String(argv[i + 1]);
       useInteractiveMode = false;
       ++i;
     }
-    else
-    {
-      G4Exception("main", "Unknown argument", FatalErrorInArgument,
-                  ("Unknown argument passed to " + G4String(argv[0]) + " : " +
-                   argument + "\n" + helpMsg)
-                    .c_str());
+    else {
+      G4Exception(
+        "main", "Unknown argument", FatalErrorInArgument,
+        ("Unknown argument passed to " + G4String(argv[0]) + " : " + argument + "\n" + helpMsg)
+          .c_str());
     }
   }
 
   // Initialization of default Run manager
-  auto* runManager =
-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Detector geometry:
   auto detector = new Par03DetectorConstruction();
@@ -118,15 +114,13 @@ int main(int argc, char** argv)
   visManager->Initialize();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(useInteractiveMode)
-  {
-    auto  ui = new G4UIExecutive(argc, argv);
+  if (useInteractiveMode) {
+    auto ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
+  else {
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command + batchMacroName);
   }

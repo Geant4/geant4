@@ -25,7 +25,9 @@
 //
 //
 #include "OctreeNode.hh"
+
 #include "G4VPhysicalVolume.hh"
+
 #include <cassert>
 #include <utility>
 
@@ -33,11 +35,11 @@
 
 OctreeNode::OctreeNode(const G4ThreeVector& position, const G4ThreeVector& halfLengths,
                        G4int maxContents, OctreeNode* parent)
-  : fPosition(position)
-  , fHalfLengths(halfLengths)
-  , fMaxContents(maxContents)
-  , fParent(parent)
-  , fChildren(std::array<OctreeNode*, 8>())
+  : fPosition(position),
+    fHalfLengths(halfLengths),
+    fMaxContents(maxContents),
+    fParent(parent),
+    fChildren(std::array<OctreeNode*, 8>())
 {
   fHalfLengthsMag = fHalfLengths.mag();
 }
@@ -45,16 +47,14 @@ OctreeNode::OctreeNode(const G4ThreeVector& position, const G4ThreeVector& halfL
 OctreeNode::~OctreeNode()
 {
   // Delete children
-  for(auto& it : fChildren)
-  {
+  for (auto& it : fChildren) {
     delete it;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const OctreeNode* OctreeNode::GetChildFromPosition(
-  const G4ThreeVector& pos) const
+const OctreeNode* OctreeNode::GetChildFromPosition(const G4ThreeVector& pos) const
 {
   G4ThreeVector localPosition = pos - fPosition;
 
@@ -90,9 +90,9 @@ OctreeNode* OctreeNode::GetChildFromPosition(const G4ThreeVector& pos)
   int bit2 = (localPosition.getX() < 0) ? 4 : 0;
   int bit1 = (localPosition.getY() < 0) ? 2 : 0;
   int bit0 = (localPosition.getZ() < 0) ? 1 : 0;
-  int idx  = bit0 + bit1 + bit2;
+  int idx = bit0 + bit1 + bit2;
 
-  assert(idx < (int) fChildren.size());
+  assert(idx < (int)fChildren.size());
   return fChildren[idx];
 }
 
@@ -101,22 +101,18 @@ OctreeNode* OctreeNode::GetChildFromPosition(const G4ThreeVector& pos)
 void OctreeNode::AddPhysicalVolume(G4VPhysicalVolume* pv)
 {
   // Consider adding test for the validity of the PV position
-  if(this->HasChildren())
-  {
+  if (this->HasChildren()) {
     OctreeNode* child = this->GetChildFromPosition(pv->GetTranslation());
     child->AddPhysicalVolume(pv);
   }
-  else
-  {
+  else {
     // if there are fMaxContents elements in the bin, we need to split
     // the bin before adding a new element.
-    if((G4int) fContents.size() == fMaxContents)
-    {
+    if ((G4int)fContents.size() == fMaxContents) {
       this->Split();
       this->AddPhysicalVolume(pv);
     }
-    else
-    {
+    else {
       fContents.push_back(pv);
     }
   }
@@ -127,38 +123,37 @@ void OctreeNode::AddPhysicalVolume(G4VPhysicalVolume* pv)
 void OctreeNode::Split()
 {
   G4ThreeVector hl = 0.5 * fHalfLengths;
-  G4double xp      = fPosition.getX();
-  G4double yp      = fPosition.getY();
-  G4double zp      = fPosition.getZ();
-  G4double xl      = hl.getX();
-  G4double yl      = hl.getY();
-  G4double zl      = hl.getZ();
+  G4double xp = fPosition.getX();
+  G4double yp = fPosition.getY();
+  G4double zp = fPosition.getZ();
+  G4double xl = hl.getX();
+  G4double yl = hl.getY();
+  G4double zl = hl.getZ();
   G4ThreeVector newpos;
 
   // Construct children
-  newpos       = G4ThreeVector(xp + xl, yp + yl, zp + zl);
+  newpos = G4ThreeVector(xp + xl, yp + yl, zp + zl);
   fChildren[0] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp + xl, yp + yl, zp - zl);
+  newpos = G4ThreeVector(xp + xl, yp + yl, zp - zl);
   fChildren[1] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp + xl, yp - yl, zp + zl);
+  newpos = G4ThreeVector(xp + xl, yp - yl, zp + zl);
   fChildren[2] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp + xl, yp - yl, zp - zl);
+  newpos = G4ThreeVector(xp + xl, yp - yl, zp - zl);
   fChildren[3] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp - xl, yp + yl, zp + zl);
+  newpos = G4ThreeVector(xp - xl, yp + yl, zp + zl);
   fChildren[4] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp - xl, yp + yl, zp - zl);
+  newpos = G4ThreeVector(xp - xl, yp + yl, zp - zl);
   fChildren[5] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp - xl, yp - yl, zp + zl);
+  newpos = G4ThreeVector(xp - xl, yp - yl, zp + zl);
   fChildren[6] = new OctreeNode(newpos, hl, fMaxContents, this);
-  newpos       = G4ThreeVector(xp - xl, yp - yl, zp - zl);
+  newpos = G4ThreeVector(xp - xl, yp - yl, zp - zl);
   fChildren[7] = new OctreeNode(newpos, hl, fMaxContents, this);
 
   // Distribute contents to children
 
-  for(int i = fContents.size() - 1; i >= 0; --i)
-  {
+  for (int i = fContents.size() - 1; i >= 0; --i) {
     G4VPhysicalVolume* pv = fContents[i];
-    OctreeNode* child     = this->GetChildFromPosition(pv->GetTranslation());
+    OctreeNode* child = this->GetChildFromPosition(pv->GetTranslation());
     assert(child != this);
     child->AddPhysicalVolume(pv);
   }
@@ -169,15 +164,13 @@ void OctreeNode::Split()
 
 std::vector<G4VPhysicalVolume*> OctreeNode::GetContents() const
 {
-  if(this->HasChildren())  // if has sub-nodes
+  if (this->HasChildren())  // if has sub-nodes
   {
     std::vector<G4VPhysicalVolume*> vec;
     std::vector<G4VPhysicalVolume*> childCont;
-    for(auto it = fChildren.begin(); it != fChildren.end(); ++it)
-    {
+    for (auto it = fChildren.begin(); it != fChildren.end(); ++it) {
       childCont = (*it)->GetContents();
-      for(auto jt = childCont.begin(); jt != childCont.end(); ++jt)
-      {
+      for (auto jt = childCont.begin(); jt != childCont.end(); ++jt) {
         vec.push_back(*jt);
       }
     }
@@ -192,8 +185,8 @@ std::vector<G4VPhysicalVolume*> OctreeNode::GetContents() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Search for Octree nodes in a volume
-const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(
-  const G4ThreeVector& pos, G4double _rad) const
+const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(const G4ThreeVector& pos,
+                                                               G4double _rad) const
 {
   // Need to search based on absolute position of each volume rather than
   // relative  position, and maintain a list of candidate nodes and
@@ -204,39 +197,29 @@ const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(
   nodes.reserve(512);
   candidates.reserve(512);
 
-  if(this->HasChildren())
-  {
-    for(auto it = this->GetChildren().begin(); it != this->GetChildren().end();
-        it++)
-    {
+  if (this->HasChildren()) {
+    for (auto it = this->GetChildren().begin(); it != this->GetChildren().end(); it++) {
       candidates.push_back(*it);
     }
   }
-  else
-  {
+  else {
     candidates.push_back(this);
   }
 
   const OctreeNode* aNode;
   G4double d;
-  while(!candidates.empty())
-  {
+  while (!candidates.empty()) {
     aNode = candidates.back();
     candidates.pop_back();
     d = (aNode->GetPosition() - pos).mag() - aNode->GetHalfLengthsMag();
     // if node within circle
-    if(d < _rad)
-    {
-      if(aNode->HasChildren())
-      {
-        for(auto it = aNode->GetChildren().begin();
-            it != aNode->GetChildren().end(); ++it)
-        {
+    if (d < _rad) {
+      if (aNode->HasChildren()) {
+        for (auto it = aNode->GetChildren().begin(); it != aNode->GetChildren().end(); ++it) {
           candidates.push_back(*it);
         }
       }
-      else
-      {
+      else {
         nodes.push_back(aNode);
       }
     }
@@ -247,13 +230,12 @@ const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(
   // Get the physical volumes
   G4double r2 = _rad * _rad;
   std::vector<G4VPhysicalVolume*> pvols;
-  for(auto it = nodes.begin(); it != nodes.end(); ++it)
-  {
+  for (auto it = nodes.begin(); it != nodes.end(); ++it) {
     std::vector<G4VPhysicalVolume*> conts = (*it)->GetContents();
-    for(auto jt = conts.begin(); jt != conts.end(); ++jt)
-    {
-      if((pos - (*jt)->GetTranslation()).mag2() < r2) {
-        pvols.push_back((*jt));}
+    for (auto jt = conts.begin(); jt != conts.end(); ++jt) {
+      if ((pos - (*jt)->GetTranslation()).mag2() < r2) {
+        pvols.push_back((*jt));
+      }
     }
   }
   // G4cout << "Found " << pvols.size() << " candidates" << G4endl;
@@ -263,8 +245,7 @@ const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Search for Octree nodes in a volume
-void OctreeNode::SearchOctree(const G4ThreeVector& pos,
-                              std::vector<G4VPhysicalVolume*>& out,
+void OctreeNode::SearchOctree(const G4ThreeVector& pos, std::vector<G4VPhysicalVolume*>& out,
                               G4double _rad) const
 {
   // Need to search based on absolute position of each volume rather than
@@ -276,39 +257,29 @@ void OctreeNode::SearchOctree(const G4ThreeVector& pos,
   nodes.reserve(512);
   candidates.reserve(512);
 
-  if(this->HasChildren())
-  {
-    for(auto it = this->GetChildren().begin(); it != this->GetChildren().end();
-        ++it)
-    {
+  if (this->HasChildren()) {
+    for (auto it = this->GetChildren().begin(); it != this->GetChildren().end(); ++it) {
       candidates.push_back(*it);
     }
   }
-  else
-  {
+  else {
     candidates.push_back(this);
   }
 
   const OctreeNode* aNode;
   G4double d;
-  while(!candidates.empty())
-  {
+  while (!candidates.empty()) {
     aNode = candidates.back();
     candidates.pop_back();
     d = (aNode->GetPosition() - pos).mag() - aNode->GetHalfLengthsMag();
     // if node within circle
-    if(d < _rad)
-    {
-      if(aNode->HasChildren())
-      {
-        for(auto it = aNode->GetChildren().begin();
-            it != aNode->GetChildren().end(); it++)
-        {
+    if (d < _rad) {
+      if (aNode->HasChildren()) {
+        for (auto it = aNode->GetChildren().begin(); it != aNode->GetChildren().end(); it++) {
           candidates.push_back(*it);
         }
       }
-      else
-      {
+      else {
         nodes.push_back(aNode);
       }
     }
@@ -316,21 +287,19 @@ void OctreeNode::SearchOctree(const G4ThreeVector& pos,
 
   // Get the physical volumes
   G4double r2 = _rad * _rad;
-  for(auto it = nodes.begin(); it != nodes.end(); ++it)
-  {
+  for (auto it = nodes.begin(); it != nodes.end(); ++it) {
     std::vector<G4VPhysicalVolume*> conts = (*it)->GetContents();
-    for(auto jt = conts.begin(); jt != conts.end(); ++jt)
-    {
-      if((pos - (*jt)->GetTranslation()).mag2() < r2) {
-        out.push_back((*jt));}
+    for (auto jt = conts.begin(); jt != conts.end(); ++jt) {
+      if ((pos - (*jt)->GetTranslation()).mag2() < r2) {
+        out.push_back((*jt));
+      }
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(
-  const G4ThreeVector& pos) const
+const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(const G4ThreeVector& pos) const
 {
   const OctreeNode* child = GetChildFromPosition(pos);
   return child->GetContents();
@@ -340,14 +309,12 @@ const std::vector<G4VPhysicalVolume*> OctreeNode::SearchOctree(
 
 G4int OctreeNode::GetNumberOfTerminalNodes()
 {
-  if(!this->HasChildren()) {
+  if (!this->HasChildren()) {
     return 1;
-}
+  }
   // sum the number of nodes of each child
   G4int n = 0;
-  for(auto it = this->GetChildren().begin(); it != this->GetChildren().end();
-      ++it)
-  {
+  for (auto it = this->GetChildren().begin(); it != this->GetChildren().end(); ++it) {
     n = n + (*it)->GetNumberOfTerminalNodes();
   }
 

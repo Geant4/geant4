@@ -39,23 +39,23 @@
 #ifndef tsprimarygeneratoraction_hh
 #define tsprimarygeneratoraction_hh 1
 
-#include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4Event;
 class G4ParticleGun;
 
 class TSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
- public:
-  TSPrimaryGeneratorAction();
-  virtual ~TSPrimaryGeneratorAction();
+  public:
+    TSPrimaryGeneratorAction();
+    virtual ~TSPrimaryGeneratorAction();
 
- public:
-  void GeneratePrimaries(G4Event*);
+  public:
+    void GeneratePrimaries(G4Event*);
 
- private:
-  G4ParticleGun* fGun;
+  private:
+    G4ParticleGun* fGun;
 };
 
 #endif

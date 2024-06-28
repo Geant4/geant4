@@ -33,9 +33,9 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "globals.hh"
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4Event;
 class PrimaryGeneratorMessenger;
@@ -44,26 +44,26 @@ class PrimaryGeneratorMessenger;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
- public:
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction() override;
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event*) override;
+    void GeneratePrimaries(G4Event*) override;
 
-  G4ParticleGun* GetParticleGun() { return fParticleGun; };
+    G4ParticleGun* GetParticleGun() { return fParticleGun; };
 
-  void SetOptPhotonPolar();
-  void SetOptPhotonPolar(G4double);
-  void SetRandomDirection(G4bool val = true);
-  G4bool GetPolarized() { return fPolarized; };
-  G4double GetPolarization() { return fPolarization; }
+    void SetOptPhotonPolar();
+    void SetOptPhotonPolar(G4double);
+    void SetRandomDirection(G4bool val = true);
+    G4bool GetPolarized() { return fPolarized; };
+    G4double GetPolarization() { return fPolarization; }
 
- private:
-  G4ParticleGun* fParticleGun = nullptr;
-  PrimaryGeneratorMessenger* fGunMessenger = nullptr;
-  G4bool fRandomDirection = false;
-  G4bool fPolarized = false;
-  G4double fPolarization = 0.;
+  private:
+    G4ParticleGun* fParticleGun = nullptr;
+    PrimaryGeneratorMessenger* fGunMessenger = nullptr;
+    G4bool fRandomDirection = false;
+    G4bool fPolarized = false;
+    G4double fPolarization = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,12 +1,12 @@
 *** microprox example ***
 
 Author: S. Incerti et al.
-Date: MArch 2nd, 2019
-Email: incerti@cenbg.in2p3.fr
+Date: March 2nd, 2019
+Email: incerti@lp2ib.in2p3.fr
 
 (c) The Geant4-DNA collaboration.
 
-This examples shows how to compute proximity functions
+This example shows how to compute proximity functions
 in liquid water using exclusively Geant4-DNA
 physics processes and models.
 
@@ -15,10 +15,10 @@ This example is provided by the Geant4-DNA collaboration.
 These processes and models are further described at:
 http://geant4-dna.org
 
-Any report or published results obtained using the Geant4-DNA software shall 
+Any report or published results obtained using the Geant4-DNA software shall
 cite the following Geant4-DNA collaboration publications:
 
-J. Appl. Phys. (2019) in press
+J. Appl. Phys. 125 (2019) 104301
 Med. Phys. 45  (2018) e722-e739
 Phys. Med. 31  (2015) 861-874
 Med. Phys. 37  (2010) 4692-4708
@@ -49,4 +49,3 @@ The user can select the dimensions of the shells as well as radius steps in Trac
 root plot.C
 
 The distribution of t is shown by default.
-

@@ -61,7 +61,13 @@
 G4OpenInventorQtViewer::G4OpenInventorQtViewer(
    G4OpenInventorSceneHandler& sceneHandler, const G4String& name)
    : G4OpenInventorViewer(sceneHandler, name), fViewer(0)
+#if 0x060000 <= QT_VERSION
+   ,fDestroyCallback(0)
+#endif
 {
+#if 0x060000 <= QT_VERSION
+  fDestroyCallback = new G4OpenInventorQtDestroyCallback(this);
+#endif
    // FWJ fName is in G4VViewer parent of G4OpenInventorViewer
    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
      G4cout << "Window name: " << fName << G4endl;
@@ -71,14 +77,23 @@ G4OpenInventorQtViewer::G4OpenInventorQtViewer(
 void G4OpenInventorQtViewer::Initialise()
 {
 
+#if QT_VERSION < 0x060000
    QWidget* parent = SoQt::getTopLevelWidget();
+#else
+   QWidget* parent = new QWidget;
+   QObject::connect(parent,SIGNAL(destroyed()),fDestroyCallback,SLOT(execute()));
+#endif
 
    // FWJ DEBUG
    //  G4cout << "G4OIQtViewer: Creating G4OIQtExaminerViewer with parent " <<
    //     parent << G4endl;
 
    fViewer = new G4OpenInventorQtExaminerViewer(parent, fName, TRUE);
-  
+
+#if 0x060000 <= QT_VERSION
+   fViewer->addInTab();
+#endif
+
    // FWJ tried this to replace sensors, but it misses some camera changes.
    //   fGroupCameraSensor->detach();
    //   fCameraSensor->detach();
@@ -104,6 +119,7 @@ void G4OpenInventorQtViewer::Initialise()
    //
    //  QWidget parent = (QWidget)fInteractorManager->GetParentInteractor();
 
+#if QT_VERSION < 0x060000
    int width = fVP.GetWindowSizeHintX();
    int height = fVP.GetWindowSizeHintY();
 
@@ -119,6 +135,10 @@ void G4OpenInventorQtViewer::Initialise()
 
    fViewer->setSize(SbVec2s(width, height));
    fViewer->setOrigWindowSize(width, height);
+#else
+   //G.Barrand: if in a QTabViewer, it is better to let the QTabWidget and
+   //           SoQt set the size and position of the fViewer SoQtExaminerViewer.
+#endif
 
    // Add common menu items...
 
@@ -238,6 +258,7 @@ void G4OpenInventorQtViewer::Initialise()
   fViewer->saveHomePosition();
   // SOMEHOW this also the OIQt main window title
   if (!uiQt) fViewer->setTitle(fName);
+#if QT_VERSION < 0x060000
   fViewer->show();
 
   // This SHOULD invoke the event loop:
@@ -254,6 +275,9 @@ void G4OpenInventorQtViewer::Initialise()
 
   //  }
   fInteractorManager->SetCreatedInteractor(fViewer->getWidget());
+#else
+  fViewer->setupSceneGraph();
+#endif
 }
 
 
@@ -263,10 +287,13 @@ G4OpenInventorQtViewer::~G4OpenInventorQtViewer()
   if(fViewer) {
     fViewer->setSceneGraph(0);
     //FIXME : SGI : the below "delete" block things.
-    //FIXME : CoinXt : the below "delete" crashe in ~SoXtRenderArea.
-    //FIXME : delete fViewer;
+#if 0x060000 <= QT_VERSION
+    delete fViewer;
+#endif
   }
-  //  if(fShell) XtDestroyWidget(fShell);
+#if 0x060000 <= QT_VERSION
+  delete fDestroyCallback;
+#endif
 }
 
 void G4OpenInventorQtViewer::FinishView()

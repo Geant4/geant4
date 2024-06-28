@@ -69,6 +69,12 @@
 //      G4double G4Colour::GetGreen () const ; // Get the green component.
 //      G4double G4Colour::GetBlue  () const ; // Get the blue  component.
 //
+// You may add colours to a map. They can then be retrieved with a string.
+// Standard colours are added to map by default when static functions AddToMap,
+// GetMap or GetColour are called. The G4 Vis Manager adds a copious additional
+// set of colours on instantiation - see G4VisManager::InitialiseG4ColourMap.
+// (Issue "/vis/list" to see available colours.)
+//
 // Class Description - End:
 
 #ifndef G4COLOUR_HH
@@ -127,14 +133,26 @@ public: // With description
   static G4Colour Yellow();
 
   static G4bool GetColour(const G4String& key, G4Colour& result);
-  // Get colour for given key, placing it in result.
+  static G4bool GetColor(const G4String& key, G4Colour& result);
+  // Find colour in colour map, placing it in result.
   // The key is usually the name of the colour.
-  // The key is not case sensitive.
+  // The key is case insensitive.
   // Returns false if key doesn't exist, leaving result unchanged.
+  // Usage:
+  //   G4Colour c;  // A successful GetColour will place the colour here
+  //   if (G4Colour::GetColour("pink", c)) {
+  //     logical->SetVisAttributes(c);
+  //   } else {
+  //     logical->SetVisAttributes(G4Colour::Green());
+  //   }
+  // or more simply:
+  //   G4Colour c(G4Colour::Green());  // Default if colour not found
+  //   G4Colour::GetColour("pink", c);
+  //   logical->SetVisAttributes(c);
 
   static void AddToMap(const G4String& key, const G4Colour& colour);
   // Add user defined colour to colour map with given key. Standard
-  // colours are added to map by default.
+  // colours are added to map by default. The G4 Vis Manager adds more.
 
   static void InitialiseColourMap();
   static const std::map<G4String, G4Colour>& GetMap();
@@ -164,5 +182,8 @@ inline G4Colour G4Colour::Blue()    {return G4Colour(0.0, 0.0, 1.0);}
 inline G4Colour G4Colour::Cyan()    {return G4Colour(0.0, 1.0, 1.0);}
 inline G4Colour G4Colour::Magenta() {return G4Colour(1.0, 0.0, 1.0);}
 inline G4Colour G4Colour::Yellow()  {return G4Colour(1.0, 1.0, 0.0);}
+
+inline G4bool G4Colour::GetColor(const G4String& key, G4Colour& result)
+{return G4Colour::GetColour(key, result);}
 
 #endif

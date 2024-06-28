@@ -29,31 +29,33 @@
 
 #include "G4Event.hh"
 #include "G4UserEventAction.hh"
+
 #include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventAction : public G4UserEventAction {
-public:
-  EventAction();
-  ~EventAction() override = default;
-  void BeginOfEventAction(const G4Event *) override;
-  void EndOfEventAction(const G4Event *) override;
-  void AddIonisation();
-  void InvalidEvent();
+class EventAction : public G4UserEventAction
+{
+  public:
+    EventAction();
+    ~EventAction() override = default;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
+    void AddIonisation();
+    void InvalidEvent();
 
-  void RecordInitialEnergy(const G4double&);
-  void RecordInteractionEnergy(const G4double&);
-  void RecordFinalEnergy(const G4double&);
+    void RecordInitialEnergy(const G4double&);
+    void RecordInteractionEnergy(const G4double&);
+    void RecordFinalEnergy(const G4double&);
 
-private:
-  std::ofstream fTextFile;
-  G4int fClusterSize = 0;
-  G4bool fValidEvent = true;
+  private:
+    std::ofstream fTextFile;
+    G4int fClusterSize = 0;
+    G4bool fValidEvent = true;
 
-  G4double fInitialEnergy = 0;
-  G4double fInteractionEnergy = 0;
-  G4double fFinalEnergy = 0;
+    G4double fInitialEnergy = 0;
+    G4double fInteractionEnergy = 0;
+    G4double fFinalEnergy = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

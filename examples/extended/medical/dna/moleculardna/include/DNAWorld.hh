@@ -44,10 +44,9 @@
 #ifndef MOLECULAR_DNA_WORLD_HH
 #define MOLECULAR_DNA_WORLD_HH
 
-#include "G4VUserParallelWorld.hh"
-
-#include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VUserParallelWorld.hh"
 
 class G4LogicalVolume;
 
@@ -55,29 +54,23 @@ class G4LogicalVolume;
 
 class DNAWorld : public G4VUserParallelWorld
 {
- public:
-  DNAWorld();
+  public:
+    DNAWorld();
 
-  ~DNAWorld() override;
+    ~DNAWorld() override;
 
-  void Construct() override;
+    void Construct() override;
 
-  void SetDNAVolumePointer(G4LogicalVolume* lv) { fpDNAVolumePointer = lv; };
+    void SetDNAVolumePointer(G4LogicalVolume* lv) { fpDNAVolumePointer = lv; };
 
-  void SetDNAVolumeTranslation(G4ThreeVector* t)
-  {
-    fpDNAVolumeTranslation = t;
-  };
+    void SetDNAVolumeTranslation(G4ThreeVector* t) { fpDNAVolumeTranslation = t; };
 
-  void SetDNAVolumeRotation(G4RotationMatrix* rot)
-  {
-    fpDNAVolumeRotation = rot;
-  };
+    void SetDNAVolumeRotation(G4RotationMatrix* rot) { fpDNAVolumeRotation = rot; };
 
- private:
-  G4LogicalVolume* fpDNAVolumePointer = nullptr;
-  G4ThreeVector* fpDNAVolumeTranslation = nullptr;
-  G4RotationMatrix* fpDNAVolumeRotation = nullptr;
+  private:
+    G4LogicalVolume* fpDNAVolumePointer = nullptr;
+    G4ThreeVector* fpDNAVolumeTranslation = nullptr;
+    G4RotationMatrix* fpDNAVolumeRotation = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

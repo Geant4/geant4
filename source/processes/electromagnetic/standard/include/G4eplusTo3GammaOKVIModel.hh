@@ -38,8 +38,11 @@
 //
 // Class Description:
 //
-// Implementation of e+ annihilation into 3 gamma
-
+// Implementation of e+ annihilation into 3 gamma on fly
+//
+// V.N.Baier, V.S. Fadin, V.A. Khose, E.A. Kuraev,
+// Physics Reports 78 (1981) 293-393.
+// 
 // -------------------------------------------------------------------
 //
 
@@ -60,7 +63,7 @@ public:
 
   ~G4eplusTo3GammaOKVIModel() override;
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   G4double ComputeCrossSectionPerElectron(G4double kinEnergy);
   
@@ -100,8 +103,7 @@ public:
 private:
 
   G4double fDelta;
-  const G4ParticleDefinition*  theGamma;
-  G4ParticleChangeForGamma* fParticleChange;
+  const G4ParticleDefinition* theGamma;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

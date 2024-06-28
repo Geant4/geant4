@@ -41,19 +41,19 @@ class Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
+    TrackingAction(DetectorConstruction*);
+    ~TrackingAction() {};
 
-  public:  
-    TrackingAction(DetectorConstruction* );
-   ~TrackingAction() {};
-   
-    virtual void  PreUserTrackingAction(const G4Track*);   
+    virtual void PreUserTrackingAction(const G4Track*);
     virtual void PostUserTrackingAction(const G4Track*);
-    
+
   private:
     DetectorConstruction* fDetector;
-    
-    G4double              fZend;
+
+    G4double fZend;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

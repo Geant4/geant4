@@ -35,9 +35,10 @@
 
 #include "G4VAccumulable.hh"
 #include "globals.hh"
+
 #include <vector>
 
-template <typename T>
+template<typename T>
 class VectorAccumulable : public G4VAccumulable
 {
   public:
@@ -56,26 +57,29 @@ class VectorAccumulable : public G4VAccumulable
 
 // inline functions
 
-template <typename T>
-inline void VectorAccumulable<T>::AddValue(T value) { 
-  fTVector.push_back(value); 
+template<typename T>
+inline void VectorAccumulable<T>::AddValue(T value)
+{
+  fTVector.push_back(value);
 }
 
-template <typename T>
+template<typename T>
 inline const std::vector<T>& VectorAccumulable<T>::GetVector() const
 {
   return fTVector;
 }
 
-template <typename T>
-inline void VectorAccumulable<T>::Merge(const G4VAccumulable& other) { 
-  for (const auto& value : static_cast<const VectorAccumulable<T>&>(other).fTVector )  {
+template<typename T>
+inline void VectorAccumulable<T>::Merge(const G4VAccumulable& other)
+{
+  for (const auto& value : static_cast<const VectorAccumulable<T>&>(other).fTVector) {
     fTVector.push_back(value);
   }
 }
 
-template <typename T>
-inline void VectorAccumulable<T>::Reset() { 
+template<typename T>
+inline void VectorAccumulable<T>::Reset()
+{
   fTVector.clear();
 }
 

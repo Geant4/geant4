@@ -43,8 +43,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -56,36 +56,33 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
 
-  DetectorMessenger(DetectorConstruction* );
-  ~DetectorMessenger() override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+  private:
+    DetectorConstruction* fDetector;
 
-private:
-
-  DetectorConstruction* fDetector;
-
-  G4UIdirectory*             fTestDir;
-  G4UIcmdWithAString*        fMatCmd;
-  G4UIcmdWithAString*        fMat1Cmd;
-  G4UIcmdWithADoubleAndUnit* fRCmd;
-  G4UIcmdWithADoubleAndUnit* fLCmd;
-  G4UIcmdWithADoubleAndUnit* fEdepCmd;
-  G4UIcmdWithAnInteger*      fBinCmd;
-  G4UIcmdWithAnInteger*      fNOfAbsCmd;
-  G4UIcmdWithAnInteger*      fVerbCmd;
-  G4UIcmdWithAnInteger*      fBertCmd;
-  G4UIcmdWithABool*          fBeamCmd;
-  G4UIcmdWithABool*          fBCCmd;
-  G4UIcmdWithABool*          fHNCmd;
-  G4UIcmdWithABool*          fNGPCmd;
+    G4UIdirectory* fTestDir;
+    G4UIcmdWithAString* fMatCmd;
+    G4UIcmdWithAString* fMat1Cmd;
+    G4UIcmdWithADoubleAndUnit* fRCmd;
+    G4UIcmdWithADoubleAndUnit* fLCmd;
+    G4UIcmdWithADoubleAndUnit* fEdepCmd;
+    G4UIcmdWithAnInteger* fBinCmd;
+    G4UIcmdWithAnInteger* fNOfAbsCmd;
+    G4UIcmdWithAnInteger* fVerbCmd;
+    G4UIcmdWithAnInteger* fBertCmd;
+    G4UIcmdWithABool* fBeamCmd;
+    G4UIcmdWithABool* fBCCmd;
+    G4UIcmdWithABool* fHNCmd;
+    G4UIcmdWithABool* fNGPCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

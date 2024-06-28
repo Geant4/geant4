@@ -28,18 +28,14 @@
 /// @brief Define action initialization
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ActionInitialization::ActionInitialization()
- : G4VUserActionInitialization()
-{
-}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ActionInitialization::~ActionInitialization()
-{
-}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ActionInitialization::Build() const

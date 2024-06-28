@@ -44,19 +44,18 @@ class G4UIcmdWithABool;
 
 class SAXSSensitiveDetectorMessenger : public G4UImessenger
 {
-public:
-  SAXSSensitiveDetectorMessenger(SAXSSensitiveDetector*);
-  ~SAXSSensitiveDetectorMessenger();
-  
-  virtual void SetNewValue(G4UIcommand*,G4String);
-    
-private: 
-  SAXSSensitiveDetector* fSenDet;  
-  G4UIdirectory* fSenDetDir; 
-  G4UIcmdWithABool* fUserStopAndKillCmd;
+  public:
+    SAXSSensitiveDetectorMessenger(SAXSSensitiveDetector*);
+    ~SAXSSensitiveDetectorMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    SAXSSensitiveDetector* fSenDet;
+    G4UIdirectory* fSenDetDir;
+    G4UIcmdWithABool* fUserStopAndKillCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

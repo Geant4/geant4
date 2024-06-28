@@ -29,18 +29,23 @@
 //
 
 #include "RE06ActionInitialization.hh"
+
 #include "RE06PrimaryGeneratorAction.hh"
 #include "RE06RunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE06ActionInitialization::RE06ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE06ActionInitialization::~RE06ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,7 +55,6 @@ void RE06ActionInitialization::Build() const
   SetUserAction(new RE06PrimaryGeneratorAction);
   //
   SetUserAction(new RE06RunAction);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

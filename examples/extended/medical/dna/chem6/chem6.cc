@@ -40,15 +40,14 @@
 /// \file chem6.cc
 /// \brief Chem6 example
 
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
-
-#include "G4RunManagerFactory.hh"
 
 #include "G4DNAChemistryManager.hh"
-#include "G4UImanager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
 /*
@@ -69,33 +68,33 @@ long seed = 0;
 
 int main(int argc, char** argv)
 {
-  out.open("Species.txt",std::ios::app);
+  out.open("Species.txt", std::ios::app);
 
   G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  auto* runManager= G4RunManagerFactory::CreateRunManager();
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // Set mandatory initialization classes
   runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new ActionInitialization());
 
-  //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
 
-  if (argc>1) // batch mode
+  if (argc > 1)  // batch mode
   {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    UI->ApplyCommand(command + fileName);
   }
 
-  else        //define visualization and UI terminal for interactive mode
+  else  // define visualization and UI terminal for interactive mode
   {
     UI->ApplyCommand("/control/execute beam.in");
     delete ui;

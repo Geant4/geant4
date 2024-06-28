@@ -19,6 +19,7 @@ geant4_add_module(G4xrays
     G4VTransitionRadiation.hh
     G4VXTRenergyLoss.hh
     G4XTRGammaRadModel.hh
+    G4XTRGaussRadModel.hh
     G4XTRRegularRadModel.hh
     G4XTRTransparentRegRadModel.hh
     G4XrayReflection.hh
@@ -38,6 +39,7 @@ geant4_add_module(G4xrays
     G4VTransitionRadiation.cc
     G4VXTRenergyLoss.cc
     G4XTRGammaRadModel.cc
+    G4XTRGaussRadModel.cc
     G4XTRRegularRadModel.cc
     G4XTRTransparentRegRadModel.cc
     G4XrayReflection.cc)

@@ -33,6 +33,8 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+class G4Event;
+
 namespace B4b
 {
 
@@ -48,19 +50,17 @@ class EventAction : public G4UserEventAction
     EventAction() = default;
     ~EventAction() override = default;
 
-    void  BeginOfEventAction(const G4Event* event) override;
-    void    EndOfEventAction(const G4Event* event) override;
+    void BeginOfEventAction(const G4Event* event) override;
+    void EndOfEventAction(const G4Event* event) override;
 
   private:
     // methods
-    void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
-                              G4double gapEdep, G4double gapTrackLength) const;
+    void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength, G4double gapEdep,
+                              G4double gapTrackLength) const;
 };
 
-}
+}  // namespace B4b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

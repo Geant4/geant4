@@ -59,7 +59,6 @@
 #include "G4SDManager.hh"
 #include "G4ScoreSplittingProcess.hh"
 #include "G4StateManager.hh"
-#include "G4TiMemory.hh"
 #include "G4TransportationManager.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
@@ -683,6 +682,12 @@ void G4RunManagerKernel::RunTermination()
 void G4RunManagerKernel::ResetNavigator()
 {
   if (runManagerKernelType == workerRMK) {
+    // To ensure that it is called when using G4TaskRunManagerKernel
+    if( G4GeometryManager::IsParallelOptimisationConfigured() &&
+       !G4GeometryManager::IsParallelOptimisationFinished() )
+    {
+      G4GeometryManager::GetInstance()->UndertakeOptimisation();
+    }
     geometryNeedsToBeClosed = false;
     return;
   }

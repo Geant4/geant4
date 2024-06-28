@@ -45,48 +45,52 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "G4PhysListFactory.hh"
-#include "G4VModularPhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "G4HadronicParameters.hh"
-
-#include "RunAction.hh"
 #include "EventAction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
 #include "StackingAction.hh"
 
+#include "G4HadronicParameters.hh"
+#include "G4PhysListFactory.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VModularPhysicsList.hh"
 #include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
-
-  //detect interactive mode (if no arguments) and define UI session
+int main(int argc, char** argv)
+{
+  // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
-  //Construct a serial run manager
+  // Construct a serial run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
-  //set mandatory initialization classes
+  // set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = nullptr;
   G4String physName = "";
 
-  //Physics List name defined via 3nd argument
-  if (argc >= 3) { physName = argv[2]; }
+  // Physics List name defined via 3nd argument
+  if (argc >= 3) {
+    physName = argv[2];
+  }
 
   // Physics List name defined via environment variable
-  if("" == physName) {
+  if ("" == physName) {
     char* path = std::getenv("PHYSLIST");
-    if (nullptr != path) { physName = G4String(path); }
+    if (nullptr != path) {
+      physName = G4String(path);
+    }
   }
 
   G4cout << "PhysicsList: " << physName << G4endl;
@@ -97,48 +101,56 @@ int main(int argc,char** argv) {
   }
 
   // local Physics List
-  if (nullptr == phys) { phys = new PhysicsList(); }
+  if (nullptr == phys) {
+    phys = new PhysicsList();
+  }
 
   // optional change of overlap cascade/string
   if (argc >= 5) {
     auto param = G4HadronicParameters::Instance();
-    G4double e1 = CLHEP::GeV*std::strtod(argv[3], 0);
-    G4double e2 = CLHEP::GeV*std::strtod(argv[4], 0);
-    G4cout << "### Bertini/FTFP limits: e1(GeV)=" << e1/CLHEP::GeV 
-           << "  e2(GeV)=" << e2/CLHEP::GeV << G4endl;
+    G4double e1 = CLHEP::GeV * std::strtod(argv[3], 0);
+    G4double e2 = CLHEP::GeV * std::strtod(argv[4], 0);
+    G4cout << "### Bertini/FTFP limits: e1(GeV)=" << e1 / CLHEP::GeV
+           << "  e2(GeV)=" << e2 / CLHEP::GeV << G4endl;
     param->SetMinEnergyTransitionFTF_Cascade(e1);
     param->SetMaxEnergyTransitionFTF_Cascade(e2);
+  }
+
+  if (argc >= 6) {
+    auto param = G4HadronicParameters::Instance();
+    param->SetEnableNUDEX(true);
   }
 
   // define physics
   runManager->SetUserInitialization(phys);
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
-  //set user action classes
+  // set user action classes
   runManager->SetUserAction(new RunAction());
   runManager->SetUserAction(new EventAction());
   runManager->SetUserAction(new StackingAction());
 
-  //initialize visualization
+  // initialize visualization
   G4VisManager* visManager = nullptr;
 
-  //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)  {
-    //interactive mode
+  if (ui) {
+    // interactive mode
     visManager = new G4VisExecutive;
     visManager->Initialize();
     ui->SessionStart();
     delete ui;
-  } else  {
-    //batch mode
+  }
+  else {
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
 
-  //job termination
+  // job termination
   delete visManager;
   delete runManager;
 }

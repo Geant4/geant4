@@ -33,8 +33,8 @@
 #ifndef SteppingMessenger_h
 #define SteppingMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class SteppingAction;
 class G4UIdirectory;
@@ -44,16 +44,16 @@ class G4UIcmdWithABool;
 
 class SteppingMessenger : public G4UImessenger
 {
- public:
-  SteppingMessenger(SteppingAction*);
-  ~SteppingMessenger() override;
+  public:
+    SteppingMessenger(SteppingAction*);
+    ~SteppingMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  G4UIdirectory* fSteppingDir = nullptr;
-  G4UIcmdWithABool* fKillOnSecondSurfaceCmd = nullptr;
-  SteppingAction* fSteppingAction = nullptr;
+  private:
+    G4UIdirectory* fSteppingDir = nullptr;
+    G4UIcmdWithABool* fKillOnSecondSurfaceCmd = nullptr;
+    SteppingAction* fSteppingAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

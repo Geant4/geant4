@@ -31,21 +31,20 @@
 #ifndef RE04ActionInitialization_H
 #define RE04ActionInitialization_H 1
 
-#include "globals.hh"
 #include "G4VUserActionInitialization.hh"
+#include "globals.hh"
 
 class RE04ActionInitialization : public G4VUserActionInitialization
 {
   public:
-  RE04ActionInitialization();//G4bool bParallelWorld);
+    RE04ActionInitialization();  // G4bool bParallelWorld);
     virtual ~RE04ActionInitialization();
 
     virtual void Build() const;
     virtual void BuildForMaster() const;
 
-private:
-  //G4bool m_bParallelWorld;
+  private:
+    // G4bool m_bParallelWorld;
 };
 
 #endif
-

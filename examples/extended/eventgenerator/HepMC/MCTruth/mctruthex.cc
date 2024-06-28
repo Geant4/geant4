@@ -27,17 +27,15 @@
 /// \brief Main program of the eventgenerator/HepMC/MCTruth example
 //
 //
+#include "DetectorConstruction.hh"
+#include "FTFP_BERT.hh"
+#include "MCTruthEventAction.hh"
+#include "MCTruthManager.hh"
+#include "MCTruthTrackingAction.hh"
+#include "PrimaryGeneratorAction.hh"
+
 #include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
-
-#include "FTFP_BERT.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "DetectorConstruction.hh"
-
-#include "MCTruthTrackingAction.hh"
-#include "MCTruthEventAction.hh"
-
-#include "MCTruthManager.hh"
 
 int main()
 {
@@ -77,5 +75,3 @@ int main()
   // job termination
   delete runManager;
 }
-
-

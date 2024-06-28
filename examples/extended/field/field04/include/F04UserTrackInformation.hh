@@ -33,7 +33,13 @@
 
 #include "G4VUserTrackInformation.hh"
 
-enum TrackStatus { undefined, left, right, reverse };
+enum TrackStatus
+{
+  undefined,
+  left,
+  right,
+  reverse
+};
 
 /*TrackStatus:
   undefined:
@@ -44,19 +50,15 @@ enum TrackStatus { undefined, left, right, reverse };
 
 class F04UserTrackInformation : public G4VUserTrackInformation
 {
-
   public:
-
     F04UserTrackInformation() = default;
-    ~F04UserTrackInformation() override  = default;
+    ~F04UserTrackInformation() override = default;
 
-    void SetTrackStatusFlag(TrackStatus s){ fStatus = s; }
-    TrackStatus GetTrackStatusFlag()const { return fStatus; }
+    void SetTrackStatusFlag(TrackStatus s) { fStatus = s; }
+    TrackStatus GetTrackStatusFlag() const { return fStatus; }
 
   private:
-
     TrackStatus fStatus = undefined;
-
 };
 
 #endif

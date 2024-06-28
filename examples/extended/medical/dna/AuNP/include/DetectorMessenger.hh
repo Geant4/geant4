@@ -34,8 +34,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -45,29 +45,27 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
-  DetectorMessenger(DetectorConstruction*);
-  ~DetectorMessenger();
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger();
 
-  virtual void SetNewValue(G4UIcommand*,
-                           G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-private:
-  DetectorConstruction* fDetector;
+  private:
+    DetectorConstruction* fDetector;
 
-  G4UIdirectory* fTestemDir;
-  G4UIdirectory* fDetDir;
-  G4UIcmdWithAString* fNPMaterCmd;
-  G4UIcmdWithAnInteger* fNReplicaRCmd;
-  G4UIcmdWithAnInteger* fNReplicaAzmCmd;
-  G4UIcmdWithADoubleAndUnit* fAbsRadiusCmd;
-  G4UIcmdWithADoubleAndUnit* fNPRadiusCmd;
-  G4UIcmdWithADoubleAndUnit* fTrackingCutCmd;
+    G4UIdirectory* fTestemDir;
+    G4UIdirectory* fDetDir;
+    G4UIcmdWithAString* fNPMaterCmd;
+    G4UIcmdWithAnInteger* fNReplicaRCmd;
+    G4UIcmdWithAnInteger* fNReplicaAzmCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsRadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fNPRadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fTrackingCutCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

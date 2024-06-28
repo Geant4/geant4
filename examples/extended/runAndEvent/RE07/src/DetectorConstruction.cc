@@ -32,6 +32,8 @@
 
 #include "DetectorConstruction.hh"
 
+#include "DetectorMessenger.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
@@ -44,8 +46,6 @@
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-
-#include "DetectorMessenger.hh"
 
 #include <iomanip>
 
@@ -110,20 +110,20 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // World
   //
   auto* solidWorld = new G4Box("World",  // its name
-    fWorldSizeX / 2, fWorldSizeYZ / 2,
-    fWorldSizeYZ / 2);  // its size
+                               fWorldSizeX / 2, fWorldSizeYZ / 2,
+                               fWorldSizeYZ / 2);  // its size
 
   fLogicWorld = new G4LogicalVolume(solidWorld,  // its solid
-    fWorldMaterial,  // its material
-    "World");  // its name
+                                    fWorldMaterial,  // its material
+                                    "World");  // its name
 
   fPhysiWorld = new G4PVPlacement(0,  // no rotation
-    G4ThreeVector(),  // at (0,0,0)
-    fLogicWorld,  // its fLogical volume
-    "World",  // its name
-    0,  // its mother  volume
-    false,  // no boolean operation
-    0);  // copy number
+                                  G4ThreeVector(),  // at (0,0,0)
+                                  fLogicWorld,  // its fLogical volume
+                                  "World",  // its name
+                                  0,  // its mother  volume
+                                  false,  // no boolean operation
+                                  0);  // copy number
   //
   // Calorimeter
   //
@@ -134,12 +134,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   auto* logicCalor = new G4LogicalVolume(solidCalor, fWorldMaterial, "Calorimeter");
 
   new G4PVPlacement(0,  // no rotation
-    G4ThreeVector(),  // at (0,0,0)
-    logicCalor,  // its fLogical volume
-    "Calorimeter",  // its name
-    fLogicWorld,  // its mother  volume
-    false,  // no boolean operation
-    0);  // copy number
+                    G4ThreeVector(),  // at (0,0,0)
+                    logicCalor,  // its fLogical volume
+                    "Calorimeter",  // its name
+                    fLogicWorld,  // its mother  volume
+                    false,  // no boolean operation
+                    0);  // copy number
 
   //
   // Layers
@@ -181,23 +181,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   xfront = -0.5 * fLayerThickness;
   for (G4int k = 1; k <= fNbOfAbsor; ++k) {
     auto* solidAbsor = new G4Box("Absorber",  // its name
-      fAbsorThickness[k] / 2, fCalorSizeYZ / 2, fCalorSizeYZ / 2);
+                                 fAbsorThickness[k] / 2, fCalorSizeYZ / 2, fCalorSizeYZ / 2);
 
     fLogicAbsorFront[k] = new G4LogicalVolume(solidAbsor,  // its solid
-      fAbsorMaterial[k],  // its material
-      fAbsorMaterial[k]->GetName());
+                                              fAbsorMaterial[k],  // its material
+                                              fAbsorMaterial[k]->GetName());
     fLogicAbsorBack[k] = new G4LogicalVolume(solidAbsor,  // its solid
-      fAbsorMaterial[k],  // its material
-      fAbsorMaterial[k]->GetName());
+                                             fAbsorMaterial[k],  // its material
+                                             fAbsorMaterial[k]->GetName());
 
     G4double xcenter = xfront + 0.5 * fAbsorThickness[k];
     xfront += fAbsorThickness[k];
     new G4PVPlacement(0, G4ThreeVector(xcenter, 0., 0.), fLogicAbsorFront[k],
-      fAbsorMaterial[k]->GetName(), fLogicLayerFront, false,
-      k);  // copy number
+                      fAbsorMaterial[k]->GetName(), fLogicLayerFront, false,
+                      k);  // copy number
     new G4PVPlacement(0, G4ThreeVector(xcenter, 0., 0.), fLogicAbsorBack[k],
-      fAbsorMaterial[k]->GetName(), fLogicLayerBack, false,
-      k);  // copy number
+                      fAbsorMaterial[k]->GetName(), fLogicLayerBack, false,
+                      k);  // copy number
   }
 
   PrintCalorParameters();

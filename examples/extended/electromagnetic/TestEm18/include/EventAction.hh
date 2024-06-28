@@ -35,6 +35,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
 #include <map>
 
 class RunAction;
@@ -46,25 +47,23 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction(RunAction*);
-   ~EventAction() override = default;
+    ~EventAction() override = default;
 
   public:
     void BeginOfEventAction(const G4Event*) override;
-    void   EndOfEventAction(const G4Event*) override;
-    
+    void EndOfEventAction(const G4Event*) override;
+
     void SumEnergyDeposited(G4int trackID, G4double edep);
     void SumEnergyTransfered(const G4VProcess*, G4double);
 
   private:
-    RunAction*    fRunAction = nullptr;
-    
-    G4double      fEdepPrimary = 0., fEdepSecondary = 0.;
-    std::map<G4String,G4double> fEnergyTransfered;
-    std::map<G4String,G4int> fProcessSubType;
+    RunAction* fRunAction = nullptr;
+
+    G4double fEdepPrimary = 0., fEdepSecondary = 0.;
+    std::map<G4String, G4double> fEnergyTransfered;
+    std::map<G4String, G4int> fProcessSubType;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

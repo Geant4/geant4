@@ -31,8 +31,8 @@
 #ifndef RE05ActionInitialization_H
 #define RE05ActionInitialization_H 1
 
-#include "globals.hh"
 #include "G4VUserActionInitialization.hh"
+#include "globals.hh"
 
 class RE05ActionInitialization : public G4VUserActionInitialization
 {
@@ -45,4 +45,3 @@ class RE05ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-

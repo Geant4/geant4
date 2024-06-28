@@ -131,6 +131,8 @@ class G4Trd : public G4CSGSolid
 
     G4ThreeVector GetPointOnSurface() const override;
 
+    G4bool IsFaceted() const override;
+
     G4VSolid* Clone() const override;
 
     std::ostream& StreamInfo( std::ostream& os ) const override;

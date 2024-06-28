@@ -41,24 +41,24 @@ class TrackingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
     TrackingAction(EventAction*);
-   ~TrackingAction() override;
-   
-    void  PreUserTrackingAction(const G4Track*) override;   
+    ~TrackingAction() override;
+
+    void PreUserTrackingAction(const G4Track*) override;
     void PostUserTrackingAction(const G4Track*) override;
-    
-    void SetParticleCount(G4bool flag) { fParticleCount = flag;};
-    void SetKillNeutrons(G4bool flag)  { fKillNeutron = flag;};
-    
+
+    void SetParticleCount(G4bool flag) { fParticleCount = flag; };
+    void SetKillNeutrons(G4bool flag) { fKillNeutron = flag; };
+
   private:
-    EventAction*        fEventAction    = nullptr;
-    TrackingMessenger*  fTrackMessenger = nullptr;
-        
+    EventAction* fEventAction = nullptr;
+    TrackingMessenger* fTrackMessenger = nullptr;
+
     G4bool fParticleCount = true;
-    G4bool fKillNeutron   = false;    
+    G4bool fKillNeutron = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

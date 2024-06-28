@@ -26,11 +26,10 @@
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #ifndef RunAction_h
 #define RunAction_h
@@ -42,13 +41,15 @@ class SteppingAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction: public G4UserRunAction {
+class RunAction : public G4UserRunAction
+{
   public:
-    RunAction( SteppingAction* steppingAction = nullptr );
+    RunAction(SteppingAction* steppingAction = nullptr);
     virtual ~RunAction();
-    virtual void BeginOfRunAction( const G4Run* aRun ) override;
-    virtual void EndOfRunAction(   const G4Run* aRun ) override;
+    virtual void BeginOfRunAction(const G4Run* aRun) override;
+    virtual void EndOfRunAction(const G4Run* aRun) override;
     virtual G4Run* GenerateRun() override;
+
   private:
     SteppingAction* fSteppingAction;
 };

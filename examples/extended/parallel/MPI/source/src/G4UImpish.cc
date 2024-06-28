@@ -28,15 +28,10 @@
 #include "G4UImpish.hh"
 
 // --------------------------------------------------------------------------
-G4UImpish::G4UImpish()
-  : G4VUIshell("")
-{
-}
+G4UImpish::G4UImpish() : G4VUIshell("") {}
 
 // --------------------------------------------------------------------------
-G4UImpish::~G4UImpish()
-{
-}
+G4UImpish::~G4UImpish() {}
 
 // --------------------------------------------------------------------------
 G4String G4UImpish::GetCommandLineString(const char*)

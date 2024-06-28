@@ -30,47 +30,42 @@
 
 #include "RE05EventAction.hh"
 
-#include "RE05TrackerHit.hh"
 #include "RE05CalorimeterHit.hh"
 #include "RE05MuonHit.hh"
+#include "RE05TrackerHit.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4SDManager.hh"
-#include "G4UImanager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Trajectory.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4UImanager.hh"
+#include "G4VHitsCollection.hh"
+#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05EventAction::RE05EventAction()
-: G4UserEventAction(),
-  fTrackerCollID(-1),
-  fCalorimeterCollID(-1),
-  fMuonCollID(-1)
+  : G4UserEventAction(), fTrackerCollID(-1), fCalorimeterCollID(-1), fMuonCollID(-1)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05EventAction::~RE05EventAction()
-{}
+RE05EventAction::~RE05EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05EventAction::BeginOfEventAction(const G4Event*)
 {
-  G4SDManager * SDman = G4SDManager::GetSDMpointer();
-  if(fTrackerCollID<0||fCalorimeterCollID<0||fMuonCollID<0)
-  {
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  if (fTrackerCollID < 0 || fCalorimeterCollID < 0 || fMuonCollID < 0) {
     G4String colNam;
-    fTrackerCollID = SDman->GetCollectionID(colNam="trackerCollection");
-    fCalorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
-    fMuonCollID = SDman->GetCollectionID(colNam="muonCollection");
+    fTrackerCollID = SDman->GetCollectionID(colNam = "trackerCollection");
+    fCalorimeterCollID = SDman->GetCollectionID(colNam = "calCollection");
+    fMuonCollID = SDman->GetCollectionID(colNam = "muonCollection");
   }
 }
 
@@ -79,42 +74,35 @@ void RE05EventAction::BeginOfEventAction(const G4Event*)
 void RE05EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-  
-  if(fTrackerCollID<0||fCalorimeterCollID<0||fMuonCollID<0) return;
 
-  G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
+  if (fTrackerCollID < 0 || fCalorimeterCollID < 0 || fMuonCollID < 0) return;
+
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   RE05TrackerHitsCollection* THC = 0;
   RE05CalorimeterHitsCollection* CHC = 0;
   RE05MuonHitsCollection* MHC = 0;
-  if(HCE)
-  {
+  if (HCE) {
     THC = (RE05TrackerHitsCollection*)(HCE->GetHC(fTrackerCollID));
     CHC = (RE05CalorimeterHitsCollection*)(HCE->GetHC(fCalorimeterCollID));
     MHC = (RE05MuonHitsCollection*)(HCE->GetHC(fMuonCollID));
   }
 
-  if(THC)
-  {
+  if (THC) {
     int n_hit = THC->entries();
-    G4cout << "     " << n_hit
-         << " hits are stored in RE05TrackerHitsCollection." << G4endl;
+    G4cout << "     " << n_hit << " hits are stored in RE05TrackerHitsCollection." << G4endl;
   }
-  if(CHC)
-  {
+  if (CHC) {
     int n_hit = CHC->entries();
-    G4cout << "     " << n_hit
-         << " hits are stored in RE05CalorimeterHitsCollection." << G4endl;
+    G4cout << "     " << n_hit << " hits are stored in RE05CalorimeterHitsCollection." << G4endl;
     G4double totE = 0;
-    for(int i=0;i<n_hit;i++)
-    { totE += (*CHC)[i]->GetEdep(); }
-    G4cout << "     Total energy deposition in calorimeter : "
-         << totE / GeV << " (GeV)" << G4endl;
+    for (int i = 0; i < n_hit; i++) {
+      totE += (*CHC)[i]->GetEdep();
+    }
+    G4cout << "     Total energy deposition in calorimeter : " << totE / GeV << " (GeV)" << G4endl;
   }
-  if(MHC)
-  {
+  if (MHC) {
     int n_hit = MHC->entries();
-    G4cout << "     " << n_hit
-         << " hits are stored in RE05MuonHitsCollection." << G4endl;
+    G4cout << "     " << n_hit << " hits are stored in RE05MuonHitsCollection." << G4endl;
   }
 }
 

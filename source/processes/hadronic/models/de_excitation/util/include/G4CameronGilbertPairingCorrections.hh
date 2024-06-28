@@ -40,25 +40,31 @@ class G4CameronGilbertPairingCorrections
 {
 public:
 
-  explicit G4CameronGilbertPairingCorrections();
+  G4CameronGilbertPairingCorrections();
 
-  inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
+  ~G4CameronGilbertPairingCorrections() = default;
+
+  G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
     G4bool res = false;
-    if(Z >= ZTableMin && Z <= ZTableMax && N >= NTableMin && N <= NTableMax) { 
-      result = PairingZTable[Z-ZTableMin] + PairingNTable[N-NTableMin];
+    if (Z >= TableMin && Z <= ZTableMax && N >= TableMin && N <= NTableMax) { 
+      result = PairingZTable[Z - TableMin] + PairingNTable[N - TableMin];
       res = true; 
     }
     return res;
   }
 
-  enum  { ZTableSize = 88, NTableSize = 140, ZTableMin = 11, ZTableMax = 98,
-	  NTableMin = 11, NTableMax = 150 };
+  G4CameronGilbertPairingCorrections(const G4CameronGilbertPairingCorrections& right) = delete;
+  const G4CameronGilbertPairingCorrections& operator=
+  (const G4CameronGilbertPairingCorrections& right) = delete;
 
 private:
 
-  G4CameronGilbertPairingCorrections(const G4CameronGilbertPairingCorrections & right) = delete;
-  const G4CameronGilbertPairingCorrections & operator=(const G4CameronGilbertPairingCorrections & right) = delete;
+  const G4int TableMin{11};
+  const G4int ZTableMax{98};
+  const G4int NTableMax{150};
+  static const G4int ZTableSize{88};
+  static const G4int NTableSize{140};
 
   static G4double PairingZTable[ZTableSize];
   static G4double PairingNTable[NTableSize];

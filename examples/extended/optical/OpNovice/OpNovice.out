@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -548,9 +548,9 @@ ePairProd:  for e+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+        eplus2ggOKVI : Emin=    0 eV  Emax=  100 TeV
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
@@ -1146,7 +1146,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -13681,8 +13681,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.943    -0.64    0.127     0.511        0        0         0        Tank initStep
     1     24.9     85.1     34.5     0.182 1.36e-05     95.4      95.4        Tank compt
-    2     23.5     81.4     35.5     0.167 0.000537     4.02      99.4        Tank compt
-    3     23.8 
+    2     23.5     81.4     35.5     0.167 0.000537     4.02      99.4        Tank com
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
@@ -13696,19 +13695,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.570000s Real=1.604672s Sys=0.010000s
+  User=1.720000s Real=1.813910s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.
 Number of events: 1000
-Average number of Cerenkov photons created per event: 17.4 +- 5.38
-Average number of scintillation photons created per event: 67.6 +- 8.16
-Average number of optical Rayleigh interactions per event: 8.11 +- 3.28
-Average number of optical absorption interactions per event: 35.3 +- 6.03
-Average number of optical Mie interactions per event: 0.111 +- 0.327
-Average number of optical boundary interactions per event: 194 +- 28.5
+Average number of Cerenkov photons created per event: 16.9 +- 5.87
+Average number of scintillation photons created per event: 66.8 +- 8.36
+Average number of optical Rayleigh interactions per event: 8.12 +- 3.11
+Average number of optical absorption interactions per event: 35 +- 6.37
+Average number of optical Mie interactions per event: 0.1 +- 0.31
+Average number of optical boundary interactions per event: 190 +- 30.2
 
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.032 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.035 MB
 ============================================================

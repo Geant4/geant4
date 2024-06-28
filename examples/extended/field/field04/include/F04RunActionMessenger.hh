@@ -31,9 +31,8 @@
 #ifndef F04RunActionMessenger_h
 #define F04RunActionMessenger_h 1
 
-#include "globals.hh"
-
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class F04RunAction;
 
@@ -45,21 +44,18 @@ class G4UIcmdWithABool;
 class F04RunActionMessenger : public G4UImessenger
 {
   public:
-
-    F04RunActionMessenger(F04RunAction* );
+    F04RunActionMessenger(F04RunAction*);
     ~F04RunActionMessenger() override;
 
-    void SetNewValue(G4UIcommand* ,G4String ) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
+    F04RunAction* fRunAction = nullptr;
 
-    F04RunAction*              fRunAction = nullptr;
-
-    G4UIdirectory*             fRndmDir = nullptr;
-    G4UIcmdWithAnInteger*      fRndmSaveCmd = nullptr;
-    G4UIcmdWithAString*        fRndmReadCmd = nullptr;
-    G4UIcmdWithABool*          fSetAutoSeedCmd = nullptr;
-
+    G4UIdirectory* fRndmDir = nullptr;
+    G4UIcmdWithAnInteger* fRndmSaveCmd = nullptr;
+    G4UIcmdWithAString* fRndmReadCmd = nullptr;
+    G4UIcmdWithABool* fSetAutoSeedCmd = nullptr;
 };
 
 #endif

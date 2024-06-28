@@ -35,6 +35,9 @@
 
 #include <cctype>
 
+class G4UIparameter;
+class G4UIcommand;
+
 namespace G4UIparsing
 {
 // Convert G4String to value of type T
@@ -307,6 +310,13 @@ inline G4int CompareDouble(G4double arg1, G4int op, G4double arg2, G4int& errCod
   }
   return result;
 }
+
+// --------------------------------------------------------------------
+// Return true if parameter is within range expression value
+G4bool RangeCheck(const G4UIparameter& p, const char* value);
+
+// Return true if command's parameters are within range expression value
+G4bool RangeCheck(const G4UIcommand& p, const char* value);
 
 }  // namespace G4UIparsing
 

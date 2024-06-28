@@ -33,25 +33,24 @@
 #include "PrimaryGeneratorAction.hh"
 
 #include "DetectorConstruction.hh"
+
 #include "G4Event.hh"
-#include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
-:fDetector(det)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det) : fDetector(det)
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
-  G4ParticleDefinition* particle
-    = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(5.*GeV);  
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-1*cm));  
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(5. * GeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -1 * cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,12 +64,11 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begin of event
+  // this function is called at the begin of event
   //
-  G4double position = -0.5*(fDetector->GetfullLength());
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,position));
+  G4double position = -0.5 * (fDetector->GetfullLength());
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., position));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

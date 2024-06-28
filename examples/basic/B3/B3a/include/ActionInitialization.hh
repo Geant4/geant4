@@ -47,10 +47,9 @@ class ActionInitialization : public G4VUserActionInitialization
 
     void BuildForMaster() const override;
     void Build() const override;
-
 };
 
-}
+}  // namespace B3a
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

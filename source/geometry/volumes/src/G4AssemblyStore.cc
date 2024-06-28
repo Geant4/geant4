@@ -87,7 +87,7 @@ void G4AssemblyStore::Clean()
   for(const auto & pos : *store)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    if (pos != nullptr) { delete pos; }
+    delete pos;
   }
 
   locked = false;

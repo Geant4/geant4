@@ -53,13 +53,11 @@ class EventAction : public G4UserEventAction
 
   private:
     RunAction* fRunAction = nullptr;
-    G4double   fEdep = 0.;
+    G4double fEdep = 0.;
 };
 
-}
+}  // namespace VtkVis
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

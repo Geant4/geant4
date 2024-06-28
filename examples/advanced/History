@@ -1,0 +1,12 @@
+# Example advanced History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2024-06-10 Gabriele Cosmo (exadvanced-V11-02-00)
+- Updated GDML files to use short URL for schema validation.
+- Initial overall History file for extended examples, used for global changes
+  affecting all examples under here.

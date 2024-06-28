@@ -29,19 +29,18 @@
 #include "DicomVFileImage.hh"
 
 class DicomFilePET : public DicomVFileImage
-{ 
-public:
-  DicomFilePET();
-  DicomFilePET(DcmDataset* dset);
-  ~DicomFilePET(){};
+{
+  public:
+    DicomFilePET();
+    DicomFilePET(DcmDataset* dset);
+    ~DicomFilePET() {};
 
-public:
-  void BuildActivities();
-  void DumpActivitiesToTextFile(std::ofstream& fout);
+  public:
+    void BuildActivities();
+    void DumpActivitiesToTextFile(std::ofstream& fout);
 
-private:
-  std::vector<size_t> fActivities;
-
+  private:
+    std::vector<size_t> fActivities;
 };
 
 #endif

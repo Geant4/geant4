@@ -44,55 +44,52 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PDBlib_h
-#define PDBlib_h 1
+#  define PDBlib_h 1
 
-#include "PDBbarycenter.hh"
-#include "PDBmolecule.hh"
+#  include "PDBbarycenter.hh"
+#  include "PDBmolecule.hh"
 
 //! PDBlib Class
 /*!
- * This Class define Molecule model ... 
+ * This Class define Molecule model ...
  */
 class PDBlib
 {
-public:
-  //! First constructor
-  PDBlib();
-  //! Destructor
-  ~PDBlib() {};
+  public:
+    //! First constructor
+    PDBlib();
+    //! Destructor
+    ~PDBlib() {};
 
-  //! Load PDB file into memory
-  Molecule* Load(const std::string&filename,
-                 unsigned short int &isDNA,
-                 unsigned short int verbose);
+    //! Load PDB file into memory
+    Molecule* Load(const std::string& filename, unsigned short int& isDNA,
+                   unsigned short int verbose);
 
-  // All declarations below are 'DNA specific'
-  // Just comment those lines if you need to use this code elsewhere.
+    // All declarations below are 'DNA specific'
+    // Just comment those lines if you need to use this code elsewhere.
 
-  //! Compute nucleotide barycenter from memory
-  Barycenter* ComputeNucleotideBarycenters(Molecule *moleculeListTemp);
+    //! Compute nucleotide barycenter from memory
+    Barycenter* ComputeNucleotideBarycenters(Molecule* moleculeListTemp);
 
-  //! Compute the corresponding bounding volume parameters
-  void ComputeBoundingVolumeParams(Molecule *moleculeListTemp,
-      double &dX,double &dY,double &dZ,       //Dimensions for bounding volume
-      double &tX,double &tY,double &tZ);      //Translation for bounding volume
+    //! Compute the corresponding bounding volume parameters
+    void ComputeBoundingVolumeParams(Molecule* moleculeListTemp, double& dX, double& dY,
+                                     double& dZ,  // Dimensions for bounding volume
+                                     double& tX, double& tY,
+                                     double& tZ);  // Translation for bounding volume
 
-  //! Compute number of nucleotide per strand
-  void ComputeNbNucleotidsPerStrand(Molecule * moleculeListTemp);
+    //! Compute number of nucleotide per strand
+    void ComputeNbNucleotidsPerStrand(Molecule* moleculeListTemp);
 
-  //! Compute if energy is deposited in per atom
-  unsigned short int ComputeMatchEdepDNA(Barycenter *,Molecule *,
-      double x, double y,double z,
-      int &numStrand, int &numNucleotid, int &codeResidue);
+    //! Compute if energy is deposited in per atom
+    unsigned short int ComputeMatchEdepDNA(Barycenter*, Molecule*, double x, double y, double z,
+                                           int& numStrand, int& numNucleotid, int& codeResidue);
 
-private:
-  //! return distance between two 3D points
-  double DistanceTwo3Dpoints(double xA,double xB,
-      double yA,double yB,
-      double zA,double zB);
+  private:
+    //! return distance between two 3D points
+    double DistanceTwo3Dpoints(double xA, double xB, double yA, double yB, double zA, double zB);
 
-  //! Number of nucleotid per strand
-  int fNbNucleotidsPerStrand;
+    //! Number of nucleotid per strand
+    int fNbNucleotidsPerStrand;
 };
 
 #endif

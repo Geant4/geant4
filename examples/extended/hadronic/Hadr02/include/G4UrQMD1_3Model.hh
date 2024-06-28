@@ -43,7 +43,7 @@
 // Version:          0.B
 // Date:             20/10/12
 // Author:           Kh. Abdel-Waged and Nuha Felemban
-// Revised by:       V.V. Uzhinskii        
+// Revised by:       V.V. Uzhinskii
 //                   SPONSERED BY
 // Customer:         KAUST/NCMP
 // Contract:         31-465
@@ -58,49 +58,45 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "G4FragmentVector.hh"
+#include "G4IntraNucleiCascader.hh"
+#include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
-#include "G4VIntraNuclearTransportModel.hh"
-#include "G4KineticTrackVector.hh"
-#include "G4FragmentVector.hh"
 #include "G4ParticleChange.hh"
-#include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
-#include "G4IntraNucleiCascader.hh"
+#include "G4ReactionProductVector.hh"
 #include "G4Track.hh"
+#include "G4VIntraNuclearTransportModel.hh"
 
-#include <fstream>                
+#include <fstream>
 #include <string>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-class G4UrQMD1_3Model : public G4VIntraNuclearTransportModel {
+class G4UrQMD1_3Model : public G4VIntraNuclearTransportModel
+{
+  public:
+    G4UrQMD1_3Model(const G4String& name = "UrQMD1_3");
 
-public:
+    virtual ~G4UrQMD1_3Model();
 
-  G4UrQMD1_3Model(const G4String& name = "UrQMD1_3");
-    
-  virtual ~G4UrQMD1_3Model ();
-    
-  G4ReactionProductVector* Propagate(G4KineticTrackVector* 
-                                     theSecondaries, 
-                                     G4V3DNucleus* theTarget);
+    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
+                                       G4V3DNucleus* theTarget);
 
-  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, 
-                                         G4Nucleus&);
-    
-private: 
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, G4Nucleus&);
 
-  G4bool operator==(G4UrQMD1_3Model& right);
-  G4bool operator!=(G4UrQMD1_3Model& right);
-                                    
-  void InitialiseDataTables();
+  private:
+    G4bool operator==(G4UrQMD1_3Model& right);
+    G4bool operator!=(G4UrQMD1_3Model& right);
 
-  void WelcomeMessage () const;                         
-   
-  G4int CurrentEvent;
-  G4int verbose;
+    void InitialiseDataTables();
 
-  G4HadFinalState theResult; 
+    void WelcomeMessage() const;
+
+    G4int CurrentEvent;
+    G4int verbose;
+
+    G4HadFinalState theResult;
 };
 
 #endif

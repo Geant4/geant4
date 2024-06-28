@@ -35,6 +35,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 class G4VPhysicalVolume;
@@ -48,43 +49,37 @@ class DetectorMessenger;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
     DetectorConstruction();
-   ~DetectorConstruction() override;
+    ~DetectorConstruction() override;
 
   public:
-       
-     void SetRadius     (G4double);
-     void SetMaterial   (G4String);
-     void SetNbOfLayers (G4int nb);                    
-          
-     G4VPhysicalVolume* Construct() override;
-     
-  public:  
-                    
-     G4double     GetAbsorRadius()   {return fAbsorRadius;};           
-     G4Material*  GetAbsorMaterial() {return fAbsorMaterial;};
-     G4int        GetNbOfLayers()    {return fNbOfLayers;};   
-     
-     void         PrintParameters();
-     void         DefineMaterials();
-                       
+    void SetRadius(G4double);
+    void SetMaterial(G4String);
+    void SetNbOfLayers(G4int nb);
+
+    G4VPhysicalVolume* Construct() override;
+
+  public:
+    G4double GetAbsorRadius() { return fAbsorRadius; };
+    G4Material* GetAbsorMaterial() { return fAbsorMaterial; };
+    G4int GetNbOfLayers() { return fNbOfLayers; };
+
+    void PrintParameters();
+    void DefineMaterials();
+
   private:
+    G4double fAbsorRadius = 0.;
+    G4Material* fAbsorMaterial = nullptr;
+    G4int fNbOfLayers = 0;
+    G4double fLayerThickness = 0.;
+    G4VPhysicalVolume* fAbsor = nullptr;
 
-     G4double            fAbsorRadius = 0.;
-     G4Material*         fAbsorMaterial = nullptr;
-     G4int               fNbOfLayers = 0;
-     G4double            fLayerThickness = 0.;
-     G4VPhysicalVolume*  fAbsor = nullptr;
+    DetectorMessenger* fDetectorMessenger = nullptr;
 
-     DetectorMessenger*  fDetectorMessenger = nullptr;
-
-     std::vector<G4LogicalVolume*> fLVolumes;
-     std::vector<G4Sphere*> fSpheres;
-    
+    std::vector<G4LogicalVolume*> fLVolumes;
+    std::vector<G4Sphere*> fSpheres;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

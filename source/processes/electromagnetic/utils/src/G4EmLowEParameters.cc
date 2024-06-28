@@ -76,6 +76,7 @@ void G4EmLowEParameters::Initialise()
   dnaStationary = false;
   dnaMsc = false;
   dnaElectronSolvation = fMeesungnoen2002eSolvation;
+  fTimeStepModel = G4ChemTimeStepModel::Unknown;
 
   fFluoDirectory = fluoDefault;
   namePIXE = "Empirical";
@@ -193,6 +194,16 @@ void G4EmLowEParameters::SetDNAeSolvationSubType(G4DNAModelSubType val)
 G4DNAModelSubType G4EmLowEParameters::DNAeSolvationSubType() const
 {
   return dnaElectronSolvation;
+}
+
+void G4EmLowEParameters::SetChemTimeStepModel(G4ChemTimeStepModel val)
+{
+  fTimeStepModel = val;
+}
+
+G4ChemTimeStepModel G4EmLowEParameters::GetChemTimeStepModel() const
+{
+  return fTimeStepModel;
 }
 
 void G4EmLowEParameters::SetPIXECrossSectionModel(const G4String& sss)

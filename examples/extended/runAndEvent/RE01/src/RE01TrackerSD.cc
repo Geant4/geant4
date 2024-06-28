@@ -29,56 +29,63 @@
 //
 
 #include "RE01TrackerSD.hh"
-#include "RE01TrackerHit.hh"
-#include "RE01TrackInformation.hh"
 
-#include "G4Step.hh"
+#include "RE01TrackInformation.hh"
+#include "RE01TrackerHit.hh"
+
 #include "G4HCofThisEvent.hh"
+#include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-RE01TrackerSD::RE01TrackerSD(G4String name)
-  :G4VSensitiveDetector(name),fTrackerCollection(0)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE01TrackerSD::RE01TrackerSD(G4String name) : G4VSensitiveDetector(name), fTrackerCollection(0)
 {
   G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
+  collectionName.insert(HCname = "trackerCollection");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-RE01TrackerSD::~RE01TrackerSD(){;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE01TrackerSD::~RE01TrackerSD()
+{
+  ;
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  fTrackerCollection = new RE01TrackerHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,fTrackerCollection);
+  fTrackerCollection = new RE01TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, fTrackerCollection);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool RE01TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.) return false;
+  if (edep == 0.) return false;
 
   RE01TrackerHit* newHit = new RE01TrackerHit();
-  newHit->SetEdep( edep );
-  newHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  RE01TrackInformation* trackInfo = 
+  newHit->SetEdep(edep);
+  newHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+  RE01TrackInformation* trackInfo =
     (RE01TrackInformation*)(aStep->GetTrack()->GetUserInformation());
-  if(trackInfo->GetTrackingStatus()>0)
-  { newHit->SetTrackID( aStep->GetTrack()->GetTrackID() ); }
-  else
-  { newHit->SetTrackID( -1 ); }
-  fTrackerCollection->insert( newHit );
+  if (trackInfo->GetTrackingStatus() > 0) {
+    newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
+  }
+  else {
+    newHit->SetTrackID(-1);
+  }
+  fTrackerCollection->insert(newHit);
 
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01TrackerSD::EndOfEvent(G4HCofThisEvent*)
-{;}
+{
+  ;
+}

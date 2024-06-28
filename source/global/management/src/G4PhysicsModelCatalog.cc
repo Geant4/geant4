@@ -317,9 +317,6 @@ void G4PhysicsModelCatalog::Initialize() {
     // Class: G4EvaporationChannel
     InsertModel( 24100, "model_G4EvaporationChannel" );
 
-    // Classes that use it: G4NeutronRadCapture and G4ExcitationHandler
-    InsertModel( 24110, "model_e-InternalConversion" );
-    
     // Class: G4UnstableFragmentBreakUp
     InsertModel( 24120, "model_G4UnstableFragmentBreakUp" );
 
@@ -598,6 +595,12 @@ void G4PhysicsModelCatalog::Initialize() {
 
     // Class: G4LightIonQMDReaction
     InsertModel( 23310, "model_LightIonQMDModel" );
+
+    // Class: G4NuDEXEvaporation (to be added in the future)
+    // InsertModel( 24700, "model_nuDEX_evaporation" );
+
+    // Class: G4NuDEXNeutronCapture
+    InsertModel( 25300, "model_nuDEX_neutronCapture" );
 
     // ...
     

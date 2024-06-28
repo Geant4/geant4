@@ -477,8 +477,8 @@ void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) { return; }
   }
-  G4HadronicProcess* hproc = static_cast<G4HadronicProcess*>(proc);
-  if(hproc) {
+  G4HadronicProcess* hproc = dynamic_cast<G4HadronicProcess*>(proc);
+  if (nullptr != hproc) {
     for(G4int i=0; i<n_proc; ++i) {
       if(process[i] == hproc) { return; }
     }

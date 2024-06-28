@@ -25,7 +25,7 @@
 // 
 // G4QSStepper implementation
 //
-// Authors: Lucio Santi, Rodrigo Castro - 2018-2021.
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
 // --------------------------------------------------------------------
 
 #include "G4QSStepper.hh"

@@ -27,10 +27,10 @@
 /// \brief Definition of the B02Run class
 //
 //
-// 
+//
 //---------------------------------------------------------------------
-// (Purpose) 
-//    Example implementation for multi-functional-detector and 
+// (Purpose)
+//    Example implementation for multi-functional-detector and
 //   primitive scorer.
 //    This B02Run class has collections which accumulate
 //   a event information into a run information.
@@ -40,46 +40,45 @@
 #ifndef B02Run_h
 #define B02Run_h 1
 
-#include "G4Run.hh"
 #include "G4Event.hh"
-
+#include "G4Run.hh"
 #include "G4THitsMap.hh"
+
 #include <vector>
 //
-class B02Run : public G4Run {
+class B02Run : public G4Run
+{
+  public:
+    // constructor and destructor.
+    //  vector of multifunctionaldetector name has to given to constructor.
+    B02Run(const std::vector<G4String> mfdName);
+    virtual ~B02Run();
 
-public:
-  // constructor and destructor.
-  //  vector of multifunctionaldetector name has to given to constructor.
-  B02Run(const std::vector<G4String> mfdName);
-  virtual ~B02Run();
+  public:
+    // virtual method from G4Run.
+    // The method is overriden in this class for scoring.
+    virtual void RecordEvent(const G4Event*);
 
-public:
-  // virtual method from G4Run. 
-  // The method is overriden in this class for scoring.
-  virtual void RecordEvent(const G4Event*);
+    // Access methods for scoring information.
+    // - Number of HitsMap for this RUN.
+    //   This is equal to number of collections.
+    G4int GetNumberOfHitsMap() const { return fRunMap.size(); }
+    // - Get HitsMap of this RUN.
+    //   by sequential number, by multifucntional name and collection name,
+    //   and by collection name with full path.
+    G4THitsMap<G4double>* GetHitsMap(G4int i) { return fRunMap[i]; }
+    G4THitsMap<G4double>* GetHitsMap(const G4String& detName, const G4String& colName);
+    G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
+    // - Dump All HitsMap of this RUN.
+    //   This method calls G4THisMap::PrintAll() for individual HitsMap.
+    void DumpAllScorer();
 
-  // Access methods for scoring information.
-  // - Number of HitsMap for this RUN. 
-  //   This is equal to number of collections.
-  G4int GetNumberOfHitsMap() const {return fRunMap.size();}
-  // - Get HitsMap of this RUN.
-  //   by sequential number, by multifucntional name and collection name,
-  //   and by collection name with full path.
-  G4THitsMap<G4double>* GetHitsMap(G4int i){return fRunMap[i];}
-  G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
-                                  const G4String& colName);
-  G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
-  // - Dump All HitsMap of this RUN.
-  //   This method calls G4THisMap::PrintAll() for individual HitsMap.
-  void DumpAllScorer();
+    virtual void Merge(const G4Run*);
 
-  virtual void Merge(const G4Run*);
-
-private:
-  std::vector<G4String> fCollName;
-  std::vector<G4int> fCollID;
-  std::vector<G4THitsMap<G4double>*> fRunMap;
+  private:
+    std::vector<G4String> fCollName;
+    std::vector<G4int> fCollID;
+    std::vector<G4THitsMap<G4double>*> fRunMap;
 };
 
 //

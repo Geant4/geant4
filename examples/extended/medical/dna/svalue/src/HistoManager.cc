@@ -24,37 +24,37 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 
 #include "HistoManager.hh"
-#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager() :
-fFileName("svalue")
+HistoManager::HistoManager() : fFileName("svalue")
 {
   Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager()
-{
-}
+HistoManager::~HistoManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::Book()
 {
   // Create or get analysis manager
+
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName(fFileName);
@@ -62,32 +62,33 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);
 
   // Define histograms start values
+
   const G4int kMaxHisto = 11;
   const G4String id[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-  const G4String title[] = {
-                            "kinetic energy of new e- track",              //0
-                            "kinetic energy of new e- track (log)",        //1
-                            "kinetic energy of new gamma track",           //2
-                            "kinetic energy of new gamma track (log)",     //3
-                            "charge of new track",                         //4
-                            "total energy deposited in cytoplasm",         //5
-                            "total energy deposited in nucleus",           //6
-                            "true track length of the primary particle",   //7
-                            "true step size of the primary particle",      //8
-                            "projected range of the primary particle",     //9
-                            "true track length of charged secondaries",    //10
+  const G4String title[] = {"kinetic energy of new e- track",  // 0
+                            "kinetic energy of new e- track (log)",  // 1
+                            "kinetic energy of new gamma track",  // 2
+                            "kinetic energy of new gamma track (log)",  // 3
+                            "charge of new track",  // 4
+                            "total energy deposited in cytoplasm",  // 5
+                            "total energy deposited in nucleus",  // 6
+                            "true track length of the primary particle",  // 7
+                            "true step size of the primary particle",  // 8
+                            "projected range of the primary particle",  // 9
+                            "true track length of charged secondaries",  // 10
                             "true step size of charged secondaries"};
 
-  // Default values (to be reset via /analysis/h1/set command)               
+  // Default values (to be reset via /analysis/h1/set command)
+
   G4int nbins = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;
 
-  // Create all histograms as inactivated 
+  // Create all histograms as inactivated
   // as we have not yet set nbins, vmin, vmax
-  for (G4int k = 0; k < kMaxHisto; k++)
-  {
+
+  for (G4int k = 0; k < kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);
   }

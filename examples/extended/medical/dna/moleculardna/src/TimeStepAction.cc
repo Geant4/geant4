@@ -25,24 +25,26 @@
 //
 //
 #include "TimeStepAction.hh"
-#include "EventAction.hh"
-#include "DetectorConstruction.hh"
+
+#include "ChromosomeMapper.hh"
 #include "DNAGeometry.hh"
 #include "DNAHit.hh"
-#include "ChromosomeMapper.hh"
+#include "DetectorConstruction.hh"
+#include "EventAction.hh"
 #include "OctreeNode.hh"
-#include "G4RunManager.hh"
-#include "G4Molecule.hh"
+
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4ITTrackHolder.hh"
 #include "G4ITTrackingManager.hh"
+#include "G4Molecule.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TimeStepAction::TimeStepAction(EventAction* event)
   : G4UserTimeStepAction(),
-  fEventAction(event),
-  fRadicalKillDistance(4.5 * nm),
-  fpChemistryTrackHolder(G4ITTrackHolder::Instance())
+    fEventAction(event),
+    fRadicalKillDistance(4.5 * nm),
+    fpChemistryTrackHolder(G4ITTrackHolder::Instance())
 {
   AddTimeStep(1 * picosecond, 0.5 * nanosecond);
   // ctor
@@ -55,15 +57,16 @@ TimeStepAction::~TimeStepAction() = default;
 
 void TimeStepAction::StartProcessing()
 {
-  auto det = dynamic_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  auto det = dynamic_cast<const DetectorConstruction*>(
+    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   fDNAGeometry = det->GetDNAGeometry();
-  if(fDNAGeometry == nullptr)
-  {
+  if (fDNAGeometry == nullptr) {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "fDNAGeometry is null";
-    G4Exception("TimeStepAction"
-                "StartProcessing",
-                "no fDNAGeometry", FatalException, exceptionDescription);
+    G4Exception(
+      "TimeStepAction"
+      "StartProcessing",
+      "no fDNAGeometry", FatalException, exceptionDescription);
   }
 
   fRadicalKillDistance = fDNAGeometry->GetRadicalKillDistance();
@@ -71,7 +74,10 @@ void TimeStepAction::StartProcessing()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TimeStepAction::UserPostTimeStepAction() { RadicalKillDistance(); }
+void TimeStepAction::UserPostTimeStepAction()
+{
+  RadicalKillDistance();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,67 +93,55 @@ void TimeStepAction::UserReactionAction(const G4Track&, const G4Track&,
 
 void TimeStepAction::RadicalKillDistance()
 {
-  if(fpChemistryTrackHolder == nullptr)
-  {
+  if (fpChemistryTrackHolder == nullptr) {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "fpChemistryTrackHolder is null";
-    G4Exception("TimeStepAction"
-                "RadicalKillDistance",
-                "NO_fpChemistryTrackHolder", FatalException,
-                exceptionDescription);
+    G4Exception(
+      "TimeStepAction"
+      "RadicalKillDistance",
+      "NO_fpChemistryTrackHolder", FatalException, exceptionDescription);
   }
   G4Track* trackToKill;
   G4TrackManyList::iterator it_begin = fpChemistryTrackHolder->GetMainList()->begin();
   G4TrackManyList::iterator it_end = fpChemistryTrackHolder->GetMainList()->end();
-  while(it_begin != it_end)
-  {
+  while (it_begin != it_end) {
     trackToKill = nullptr;
 
     const G4VTouchable* touchable = it_begin->GetTouchable();
-    if(touchable == nullptr)
-    {
+    if (touchable == nullptr) {
       ++it_begin;
       continue;
     }
 
-    G4LogicalVolume* trackLV  = touchable->GetVolume()->GetLogicalVolume();
+    G4LogicalVolume* trackLV = touchable->GetVolume()->GetLogicalVolume();
     G4LogicalVolume* motherLV = touchable->GetVolume()->GetMotherLogical();
 
-    OctreeNode* octree_track  = fDNAGeometry->GetTopOctreeNode(trackLV);
+    OctreeNode* octree_track = fDNAGeometry->GetTopOctreeNode(trackLV);
     OctreeNode* octree_mother = fDNAGeometry->GetTopOctreeNode(motherLV);
 
-    if((octree_track == nullptr) && (octree_mother == nullptr))
-    {
+    if ((octree_track == nullptr) && (octree_mother == nullptr)) {
       trackToKill = *it_begin;
     }
-    else if(octree_track != nullptr)
-    {
-      const G4AffineTransform& trans =
-        it_begin->GetTouchable()->GetHistory()->GetTopTransform();
+    else if (octree_track != nullptr) {
+      const G4AffineTransform& trans = it_begin->GetTouchable()->GetHistory()->GetTopTransform();
       G4ThreeVector pos = trans.TransformPoint(it_begin->GetPosition());
       size_t n = octree_track->SearchOctree(pos, fRadicalKillDistance).size();
-      if(n == 0)
-      {
+      if (n == 0) {
         trackToKill = *it_begin;
       }
-      if(fDNAGeometry->IsInsideHistone(trackLV, pos))
-      {
+      if (fDNAGeometry->IsInsideHistone(trackLV, pos)) {
         trackToKill = *it_begin;
       }
     }
-    else
-    {
-      const G4AffineTransform& trans =
-        it_begin->GetTouchable()->GetHistory()->GetTopTransform();
+    else {
+      const G4AffineTransform& trans = it_begin->GetTouchable()->GetHistory()->GetTopTransform();
       G4ThreeVector pos = trans.TransformPoint(it_begin->GetPosition());
-      if(fDNAGeometry->IsInsideHistone(trackLV, pos))
-      {
+      if (fDNAGeometry->IsInsideHistone(trackLV, pos)) {
         trackToKill = *it_begin;
       }
     }
     ++it_begin;
-    if(trackToKill != nullptr)
-    {
+    if (trackToKill != nullptr) {
       fpChemistryTrackHolder->PushToKill(trackToKill);
     }
   }

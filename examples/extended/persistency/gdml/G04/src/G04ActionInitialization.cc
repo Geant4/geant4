@@ -28,18 +28,16 @@
 /// \brief Implementation of the G04ActionInitialization class
 
 #include "G04ActionInitialization.hh"
+
 #include "G04PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G04ActionInitialization::G04ActionInitialization()
- : G4VUserActionInitialization()
-{}
+G04ActionInitialization::G04ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G04ActionInitialization::~G04ActionInitialization()
-{}
+G04ActionInitialization::~G04ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,11 +52,11 @@ void G04ActionInitialization::Build() const
 {
   SetUserAction(new G04PrimaryGeneratorAction);
   //  SetUserAction(new G04RunAction);
-  
+
   //  G04EventAction* eventAction = new G04EventAction;
   //  SetUserAction(eventAction);
-  
+
   //  SetUserAction(new G04SteppingAction(eventAction));
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

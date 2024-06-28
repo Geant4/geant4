@@ -87,7 +87,8 @@
     --------------
  
   - Execute rdecay01 in 'batch' mode from macro files
- 	% rdecay01   singleDecay.mac
+ 	% rdecay01  singleDecay.mac
+ 	% rdecay01  rdecay01.in > rdecay01.out	
  		
   - Execute rdecay01 in 'interactive mode' with visualization
  	% rdecay01

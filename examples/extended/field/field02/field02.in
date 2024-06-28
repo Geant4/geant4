@@ -5,12 +5,14 @@
 #
 /tracking/verbose 1
 /run/verbose 1
+/control/verbose 2
+#/control/cout/ignoreThreadsExcept 0
 #
-/field/setStepperType 4
-/field/setMinStep 10 mm
-/field/update
+/field/stepperType ClassicalRK4
+/field/setMinimumStep 10 mm
 #
 /run/initialize
+/field/printParameters
 #
 /run/particle/dumpCutValues
 #
@@ -39,4 +41,3 @@
 /gun/zvertex  10 mm    # default 0
 #
 /run/beamOn 1
-

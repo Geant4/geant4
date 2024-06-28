@@ -30,9 +30,9 @@
 #ifndef B2aDetectorConstruction_h
 #define B2aDetectorConstruction_h 1
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "tls.hh"
+#include "G4Threading.hh"
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -59,10 +59,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructSDandField() override;
 
     // Set methods
-    void SetTargetMaterial (G4String );
-    void SetChamberMaterial(G4String );
-    void SetMaxStep (G4double );
-    void SetCheckOverlaps(G4bool );
+    void SetTargetMaterial(G4String);
+    void SetChamberMaterial(G4String);
+    void SetMaxStep(G4double);
+    void SetCheckOverlaps(G4bool);
 
   private:
     // methods
@@ -70,24 +70,24 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* DefineVolumes();
 
     // static data members
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
-                                         // magnetic field messenger
+    static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
+    // magnetic field messenger
     // data members
     G4int fNbOfChambers = 0;
 
-    G4LogicalVolume*  fLogicTarget = nullptr;  // pointer to the logical Target
-    G4LogicalVolume** fLogicChamber = nullptr; // pointer to the logical Chamber
+    G4LogicalVolume* fLogicTarget = nullptr;  // pointer to the logical Target
+    G4LogicalVolume** fLogicChamber = nullptr;  // pointer to the logical Chamber
 
-    G4Material*       fTargetMaterial = nullptr;  // pointer to the target  material
-    G4Material*       fChamberMaterial = nullptr; // pointer to the chamber material
+    G4Material* fTargetMaterial = nullptr;  // pointer to the target  material
+    G4Material* fChamberMaterial = nullptr;  // pointer to the chamber material
 
-    G4UserLimits* fStepLimit = nullptr; // pointer to user step limits
+    G4UserLimits* fStepLimit = nullptr;  // pointer to user step limits
 
-    DetectorMessenger* fMessenger = nullptr; // messenger
+    DetectorMessenger* fMessenger = nullptr;  // messenger
 
-    G4bool fCheckOverlaps = true; // option to activate checking of volumes overlaps
+    G4bool fCheckOverlaps = true;  // option to activate checking of volumes overlaps
 };
 
-}
+}  // namespace B2a
 
 #endif

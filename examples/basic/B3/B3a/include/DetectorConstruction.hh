@@ -34,7 +34,6 @@
 #include "globals.hh"
 
 class G4VPhysicalVolume;
-class G4LogicalVolume;
 
 namespace B3
 {
@@ -60,9 +59,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4bool fCheckOverlaps = true;
 };
 
-}
+}  // namespace B3
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

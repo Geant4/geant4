@@ -33,15 +33,15 @@
 
 #include "G4VUserParallelWorld.hh"
 
-class GB06ParallelWorldForSlices : public G4VUserParallelWorld {
-public:
-  GB06ParallelWorldForSlices(G4String worldName);
-  ~GB06ParallelWorldForSlices();
-  
-private:
-  virtual void Construct();
-  virtual void ConstructSD();
-  
+class GB06ParallelWorldForSlices : public G4VUserParallelWorld
+{
+  public:
+    GB06ParallelWorldForSlices(G4String worldName);
+    ~GB06ParallelWorldForSlices();
+
+  private:
+    virtual void Construct();
+    virtual void ConstructSD();
 };
 
 #endif

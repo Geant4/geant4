@@ -24,26 +24,23 @@
 // ********************************************************************
 //
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
-#include "G4UImanager.hh"
-
+#include "FTFP_BERT.hh"
+#include "GB03ActionInitialization.hh"
 #include "GB03DetectorConstruction.hh"
 #include "GB03PrimaryGeneratorAction.hh"
-#include "GB03ActionInitialization.hh"
-#include "FTFP_BERT.hh"
-#include "G4GenericBiasingPhysics.hh"
 
-int main(int argc,char** argv)
+#include "G4GenericBiasingPhysics.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -80,18 +77,18 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)   // Define UI session for interactive mode
-    {
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
-    }
-  else           // Batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+  if (ui)  // Define UI session for interactive mode
+  {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
+  else  // Batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
 
   delete visManager;
   delete runManager;

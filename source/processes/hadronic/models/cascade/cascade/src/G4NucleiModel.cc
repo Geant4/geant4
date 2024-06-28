@@ -179,6 +179,7 @@
 #include "G4Neutron.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleLargerBeta.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4Proton.hh"
 #include "G4SystemOfUnits.hh"
@@ -377,6 +378,8 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   zone_potentials.push_back(vp);
   zone_potentials.push_back(kp);
   zone_potentials.push_back(hp);
+
+  setDinucleonDensityScale();
 
   nuclei_radius = zone_radii.back();
   nuclei_volume = std::accumulate(zone_volumes.begin(),zone_volumes.end(),0.);
@@ -646,7 +649,7 @@ G4double G4NucleiModel::getFermiKinetic(G4int ip, G4int izone) const {
 
 G4LorentzVector 
 G4NucleiModel::generateNucleonMomentum(G4int type, G4int zone) const {
-  G4double pmod = getFermiMomentum(type, zone) * G4cbrt(inuclRndm());
+  G4double pmod = getFermiMomentum(type, zone) * G4cbrt(G4UniformRand() );
   G4double mass = G4InuclElementaryParticle::getParticleMass(type);
 
   return generateWithRandomAngles(pmod, mass);
@@ -830,7 +833,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       G4double apath = generateInteractionLength(cparticle, path, tot_invmfp);
       
       if (path<small || apath < path) {		// choose the qdeutron
-	G4double sl = inuclRndm() * tot_invmfp;
+        G4double sl = G4UniformRand()*tot_invmfp;
 	G4double as = 0.0;
 	
 	for (std::size_t i = 0; i < qdeutrons.size(); i++) {
@@ -1394,9 +1397,49 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
   return 0.;
 }
 
+void G4NucleiModel::setDinucleonDensityScale() {
+  if (A < 5) {
+    dinucleonDensityScale = 1.0;
+    // No scaling for light nuclei
+    return;
+  } 
+
+  // At what A should LDA start to be applied?
+  // Not satisfactory for medium nuclei according to Benhar et al., and a
+  // sizable experimental uncertainty
+
+  // Levinger factor 
+  const G4double Levinger_LDA {10.83 - 9.73/G4Pow::GetInstance()->A13(A)};
+
+  // Effective number of quasi-deuterons in a nucleus according to 
+  // local density approximation 
+  const G4double num_LDA_QDs {(Levinger_LDA*Z*(A-Z))/A};
+
+  // Number of quasi-deuterons expected from proton and neutron nuclear 
+  // shell densities alone
+  G4double num_Naive_QDs{0.};
+  for (G4int zone = 0; zone < number_of_zones; ++zone) {
+    num_Naive_QDs += getVolume(zone)*getDensity(proton, zone)*
+                     getVolume(zone)*getDensity(neutron, zone); 
+  }
+
+  // Density scaling factor determined for quasi-deuterons to be used
+  // for pp, nn, pn  
+  dinucleonDensityScale = num_LDA_QDs/num_Naive_QDs;
+
+  if (verboseLevel > 4) {
+    G4cout << " >>> G4NucleiModel::setDinucleonDensityScale()" << G4endl;
+    G4cout << " >>> Naive number of quasi-deuterons in nucleus ("
+           << Z << ", " << A << ") = " << num_Naive_QDs << G4endl;
+    G4cout << " >>> Number of quasi-deuterons expected from Levinger LDA is " 
+           << num_LDA_QDs << G4endl;
+    G4cout << "Rescaling dinucleon densities by " << dinucleonDensityScale << G4endl; 
+  }
+}
+
 G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
-  const G4double pn_spec = 1.0;		// Scale factor for pn vs. pp/nn
-  //const G4double pn_spec = 0.5;
+//  const G4double pn_spec = 1.0;		// Scale factor for pn vs. pp/nn
+  const G4double combinatoric_factor = 0.5;
 
   G4double dens = 0.;
 
@@ -1404,13 +1447,16 @@ G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
   else {	// For dibaryons, remove extra 1/volume term in density product
     switch (ip) {
     case diproton:  
-      dens = getDensity(proton,izone) * getDensity(proton,izone);
+      dens = getDensity(proton,izone) * getDensity(proton,izone)
+             * dinucleonDensityScale * combinatoric_factor;
       break;
     case unboundPN: 
-      dens = getDensity(proton,izone) * getDensity(neutron,izone) * pn_spec;
+      dens = getDensity(proton,izone) * getDensity(neutron,izone)
+             * dinucleonDensityScale;
       break;
     case dineutron:
-      dens = getDensity(neutron,izone) * getDensity(neutron,izone);
+      dens = getDensity(neutron,izone) * getDensity(neutron,izone)
+             * dinucleonDensityScale * combinatoric_factor;
       break;
     default: dens = 0.;
     }
@@ -1430,7 +1476,7 @@ G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle) {
   // FIXME:  Previous version generated random sin(theta), then used -cos(theta)
   //         Using generateWithRandomAngles changes result!
   // G4ThreeVector pos = generateWithRandomAngles(nuclei_radius).vect();
-  G4double costh = std::sqrt(1.0 - inuclRndm());
+  G4double costh = std::sqrt(1.0 - G4UniformRand() );
   G4ThreeVector pos = generateWithFixedTheta(-costh, nuclei_radius);
 
   // Start particle outside nucleus, unless capture-at-rest
@@ -1490,31 +1536,31 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {
       G4int itryg = 0;
 
-	/* Loop checking 08.06.2015 MHK */
+      /* Loop checking 08.06.2015 MHK */
       while (casparticles.size() == 0 && itryg < itry_max) {      
-	itryg++;
-	particles.clear();
+        itryg++;
+        particles.clear();
       
-	//    nucleons coordinates and momenta in nuclei rest frame
-	coordinates.clear();
-	momentums.clear();
+        // nucleons coordinates and momenta in nuclei rest frame
+        coordinates.clear();
+        momentums.clear();
      
-	if (ab < 3) { // deuteron, simplest case
-	  G4double r = 2.214 - 3.4208 * G4Log(1.0 - 0.981 * inuclRndm());
-	  G4ThreeVector coord1 = generateWithRandomAngles(r).vect();
-	  coordinates.push_back(coord1);
-	  coordinates.push_back(-coord1);
+        if (ab < 3) { // deuteron, simplest case
+          G4double r = 2.214 - 3.4208 * G4Log(1.0 - 0.981*G4UniformRand() );
+          G4ThreeVector coord1 = generateWithRandomAngles(r).vect();
+          coordinates.push_back(coord1);
+          coordinates.push_back(-coord1);
 
-	  G4double p = 0.0;
-	  G4bool bad = true;
-	  G4int itry = 0;
+          G4double p = 0.0;
+          G4bool bad = true;
+          G4int itry = 0;
 
-	  while (bad && itry < itry_max) {  /* Loop checking 08.06.2015 MHK */
-	    itry++;
-	    p = 456.0 * inuclRndm();
+          while (bad && itry < itry_max) {  /* Loop checking 08.06.2015 MHK */
+            itry++;
+            p = 456.0*G4UniformRand();
 
-	    if (p * p / (p * p + 2079.36) / (p * p + 2079.36) > 1.2023e-4 * inuclRndm() &&
-	       p * r > 312.0) bad = false;
+            if (p*p / (p*p + 2079.36) / (p*p + 2079.36) > 1.2023e-4 *G4UniformRand()
+                && p*r > 312.0) bad = false;
 	  }
 
 	  if (itry == itry_max)
@@ -1540,41 +1586,41 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	  G4int itry = 0;
         
-	  if (ab == 3) {
-	    while (badco && itry < itry_max) {/* Loop checking 08.06.2015 MHK */
-	      if (itry > 0) coordinates.clear();
-	      itry++;	
-	      G4int i(0);    
+          if (ab == 3) {
+            while (badco && itry < itry_max) {/* Loop checking 08.06.2015 MHK */
+              if (itry > 0) coordinates.clear();
+              itry++;	
+              G4int i(0);    
 
-	      for (i = 0; i < 2; i++) {
-		G4int itry1 = 0;
-		G4double ss, u, rho; 
-		G4double fmax = G4Exp(-0.5) / std::sqrt(0.5);
+              for (i = 0; i < 2; i++) {
+                G4int itry1 = 0;
+                G4double ss, u, rho; 
+                G4double fmax = G4Exp(-0.5) / std::sqrt(0.5);
 
-		while (itry1 < itry_max) {  /* Loop checking 08.06.2015 MHK */
-		  itry1++;
-		  ss = -G4Log(inuclRndm());
-		  u = fmax * inuclRndm();
-		  rho = std::sqrt(ss) * G4Exp(-ss);
+                while (itry1 < itry_max) {  /* Loop checking 08.06.2015 MHK */
+                  itry1++;
+                  ss = -G4Log(G4UniformRand() );
+                  u = fmax*G4UniformRand();
+                  rho = std::sqrt(ss) * G4Exp(-ss);
 
-		  if (rho > u && ss < s3max) {
-		    ss = r0forAeq3 * std::sqrt(ss);
-		    coord1 = generateWithRandomAngles(ss).vect();
-		    coordinates.push_back(coord1);
+                  if (rho > u && ss < s3max) {
+                    ss = r0forAeq3 * std::sqrt(ss);
+                    coord1 = generateWithRandomAngles(ss).vect();
+                    coordinates.push_back(coord1);
 
-		    if (verboseLevel > 2){
-		      G4cout << " i " << i << " r " << coord1.mag() << G4endl;
-		    }
-		    break;
-		  }
-		}
+                    if (verboseLevel > 2){
+                      G4cout << " i " << i << " r " << coord1.mag() << G4endl;
+                    }
+                    break;
+                  }
+                }
 
-		if (itry1 == itry_max) { // bad case
-		  coord1.set(10000.,10000.,10000.);
-		  coordinates.push_back(coord1);
-		  break;
-		}
-	      }
+                if (itry1 == itry_max) { // bad case
+                  coord1.set(10000.,10000.,10000.);
+                  coordinates.push_back(coord1);
+                  break;
+                }
+              }
 
 	      coord1 = -coordinates[0] - coordinates[1]; 
 	      if (verboseLevel > 2) {
@@ -1623,24 +1669,24 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		G4int itry1 = 0;
 		G4double ss; 
 
-		while (itry1 < itry_max) {  /* Loop checking 08.06.2015 MHK */
-		  itry1++;
-		  ss = -G4Log(inuclRndm());
-		  u = fmax * inuclRndm();
+                while (itry1 < itry_max) {  /* Loop checking 08.06.2015 MHK */
+                  itry1++;
+                  ss = -G4Log(G4UniformRand() );
+                  u = fmax*G4UniformRand();
 
-		  if (std::sqrt(ss) * G4Exp(-ss) * (1.0 + ss/b) > u
-		      && ss < s4max) {
-		    ss = r0forAeq4 * std::sqrt(ss);
-		    coord1 = generateWithRandomAngles(ss).vect();
-		    coordinates.push_back(coord1);
+                  if (std::sqrt(ss) * G4Exp(-ss) * (1.0 + ss/b) > u
+                      && ss < s4max) {
+                    ss = r0forAeq4 * std::sqrt(ss);
+                    coord1 = generateWithRandomAngles(ss).vect();
+                    coordinates.push_back(coord1);
 
-		    if (verboseLevel > 2) {
-		      G4cout << " i " << i << " r " << coord1.mag() << G4endl;
-		    }
+                    if (verboseLevel > 2) {
+                      G4cout << " i " << i << " r " << coord1.mag() << G4endl;
+                    }
 
-		    break;
-		  }
-		}
+                    break;
+                  }
+                }
 
 		if (itry1 == itry_max) { // bad case
 		  coord1.set(10000.,10000.,10000.);
@@ -1701,10 +1747,10 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	      while(itry2 < itry_max) {	/* Loop checking 08.06.2015 MHK */
 		itry2++;
-		u = -G4Log(0.879853 - 0.8798502 * inuclRndm());
+                u = -G4Log(0.879853 - 0.8798502*G4UniformRand() );
 		x = u * G4Exp(-u);
 
-		if(x > inuclRndm()) {
+                if(x > G4UniformRand() ) {
 		  p = std::sqrt(0.01953 * u);
 		  mom = generateWithRandomAngles(p, massb);
 		  momentums.push_back(mom);
@@ -1744,7 +1790,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	}
 
 	// nuclei i.p. as a whole
-	G4double s1 = std::sqrt(inuclRndm()); 
+        G4double s1 = std::sqrt(G4UniformRand() );
 	G4double phi = randomPHI();
 	G4double rz = (nuclei_radius + rb) * s1;
 	G4ThreeVector global_pos(rz*std::cos(phi), rz*std::sin(phi),
@@ -1905,8 +1951,8 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
     G4cout << " mfp " << 1./invmfp << " pw " << pw << G4endl;
     
   // Primary particle(s) should always interact at least once
-  if (forceFirst(cparticle) || (inuclRndm() < pw)) {
-    spath = -G4Log(1.0 - pw * inuclRndm()) / invmfp;
+  if (forceFirst(cparticle) || (G4UniformRand() < pw) ) {
+    spath = -G4Log(1.0 - pw*G4UniformRand() )/invmfp;
     if (cparticle.young(young_cut, spath)) spath = large;
     
     if (verboseLevel > 2) 

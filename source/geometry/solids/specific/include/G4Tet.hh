@@ -113,6 +113,8 @@ class G4Tet : public G4VSolid
 
     G4GeometryType GetEntityType() const override;
 
+    G4bool IsFaceted () const override;
+
     G4VSolid* Clone() const override;
 
     std::ostream& StreamInfo(std::ostream& os) const override;

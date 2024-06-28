@@ -25,17 +25,19 @@
 //
 
 #ifndef ChemNO2_NO3ScavengerBuilder_hh
-#define ChemNO2_NO3ScavengerBuilder_hh
+#  define ChemNO2_NO3ScavengerBuilder_hh 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4DNAMolecularReactionTable;
 
-class ChemNO2_NO3ScavengerBuilder {
-public:
-  ChemNO2_NO3ScavengerBuilder() = default;
-  ~ChemNO2_NO3ScavengerBuilder() = default;
+class ChemNO2_NO3ScavengerBuilder
+{
+  public:
+    ChemNO2_NO3ScavengerBuilder() = default;
+    ~ChemNO2_NO3ScavengerBuilder() = default;
 
-  static void NO2_NO3ScavengerReaction(
-      G4DNAMolecularReactionTable *pReactionTable);
+    static void NO2_NO3ScavengerReaction(G4DNAMolecularReactionTable* pReactionTable);
 };
 
-#endif //
+#endif  //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

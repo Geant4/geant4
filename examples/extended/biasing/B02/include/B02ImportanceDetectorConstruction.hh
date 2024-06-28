@@ -29,16 +29,17 @@
 //
 //
 
-#ifndef B02ImportanceDetectorConstruction_hh 
-#define B02ImportanceDetectorConstruction_hh  B02ImportanceDetectorConstruction_hh 
+#ifndef B02ImportanceDetectorConstruction_hh
+#define B02ImportanceDetectorConstruction_hh B02ImportanceDetectorConstruction_hh
 
-#include "globals.hh"
-#include <map>
-#include <vector>
-#include "G4GeometryCell.hh"
 #include "B02PVolumeStore.hh"
 
+#include "G4GeometryCell.hh"
 #include "G4VUserParallelWorld.hh"
+#include "globals.hh"
+
+#include <map>
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -47,40 +48,39 @@ class G4VWeightWindowStore;
 
 class B02ImportanceDetectorConstruction : public G4VUserParallelWorld
 {
-public:
-  B02ImportanceDetectorConstruction(G4String worldName);
-  virtual ~B02ImportanceDetectorConstruction();
+  public:
+    B02ImportanceDetectorConstruction(G4String worldName);
+    virtual ~B02ImportanceDetectorConstruction();
 
-  const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
-  G4VPhysicalVolume &GetWorldVolumeAddress() const;
-  G4String ListPhysNamesAsG4String();
-  G4String GetCellName(G4int i);
-  G4GeometryCell GetGeometryCell(G4int i);
+    const G4VPhysicalVolume& GetPhysicalVolumeByName(const G4String& name) const;
+    G4VPhysicalVolume& GetWorldVolumeAddress() const;
+    G4String ListPhysNamesAsG4String();
+    G4String GetCellName(G4int i);
+    G4GeometryCell GetGeometryCell(G4int i);
 
-  G4VPhysicalVolume* GetWorldVolume();
+    G4VPhysicalVolume* GetWorldVolume();
 
-  void SetSensitive();
+    void SetSensitive();
 
-  virtual void Construct();
-  virtual void ConstructSD();
+    virtual void Construct();
+    virtual void ConstructSD();
 
-  G4VIStore* CreateImportanceStore();
+    G4VIStore* CreateImportanceStore();
     // create an importance store, caller is responsible for deleting it
 
-  G4VWeightWindowStore *CreateWeightWindowStore();
-    // create an weight window  store, caller is responsible for 
+    G4VWeightWindowStore* CreateWeightWindowStore();
+    // create an weight window  store, caller is responsible for
     // deleting it
 
-private:
-  B02PVolumeStore fPVolumeStore;
+  private:
+    B02PVolumeStore fPVolumeStore;
 
-  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+    //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+    std::vector<G4LogicalVolume*> fLogicalVolumeVector;
 
-  //  G4VPhysicalVolume *fWorldVolume;
+    //  G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* fGhostWorld;
-
+    G4VPhysicalVolume* fGhostWorld;
 };
 
 #endif

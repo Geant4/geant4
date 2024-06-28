@@ -27,20 +27,17 @@
 /// \file parallel/TBB/B2b/exampleB2b.cc
 /// \brief Main program of the B2b example
 
-#include "B2bDetectorConstruction.hh"
 #include "B2ActionInitialization.hh"
-
-#include "G4Threading.hh"
-#include "G4TaskRunManager.hh"
-
-#include "G4UImanager.hh"
+#include "B2bDetectorConstruction.hh"
 #include "FTFP_BERT.hh"
+
 #include "G4StepLimiterPhysics.hh"
-
-#include "Randomize.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4TaskRunManager.hh"
+#include "G4Threading.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,8 +45,7 @@ int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = 0;
-  if(argc == 1)
-  {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -57,8 +53,7 @@ int main(int argc, char** argv)
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  auto runManager =
-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::TBB);
+  auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::TBB);
 
   //==== Geant4 specific stuff, from now up to END-G4 comment is copy from MT
   // example
@@ -81,18 +76,16 @@ int main(int argc, char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(!ui)  // batch mode
+  if (!ui)  // batch mode
   {
-    G4String command  = "/control/execute ";
+    G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command + fileName);
   }
-  else
-  {
+  else {
     // interactive mode : define UI session
     UImanager->ApplyCommand("/control/execute init.mac");
-    if(ui->IsGUI())
-      UImanager->ApplyCommand("/control/execute gui.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();
     delete ui;
   }

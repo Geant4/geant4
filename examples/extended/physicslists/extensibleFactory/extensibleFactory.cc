@@ -49,8 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4RunManagerFactory.hh"
@@ -60,9 +60,9 @@
 // the non-extensible factory to the exensible factory.  All other changes
 // relative to the "factory" example are there to demonstrate new features.
 /////////////////////////////////////////////////////////////////////////////
-//non-extensible:  #include "G4PhysListFactory.hh"
+// non-extensible:  #include "G4PhysListFactory.hh"
 #include "G4PhysListFactoryAlt.hh"
-//use this for drop-in replacement:  using namespace g4alt;
+// use this for drop-in replacement:  using namespace g4alt;
 
 /////////////////////////////////////////////////////////////////////////////
 // headers needed to demonstrate new featues
@@ -78,63 +78,63 @@
 // pull in a user defined physics list definition into the main program
 // and register it with the factory (doesn't have to be the main program
 // but the .o containing the declaration _must_ get linked/loaded)
-#include "G4PhysListStamper.hh"  // defines macro for factory registration
 #include "MySpecialPhysList.hh"
+
+#include "G4PhysListStamper.hh"  // defines macro for factory registration
 G4_DECLARE_PHYSLIST_FACTORY(MySpecialPhysList);
 
 /////////////////////////////////////////////////////////////////////////////
 
-#include "G4VModularPhysicsList.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-#include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VModularPhysicsList.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace {
+namespace
+{
 
-  void PrintAvailable(G4int verbosity) {
+void PrintAvailable(G4int verbosity)
+{
+  G4cout << G4endl;
+  G4cout << "extensibleFactory: here are the available physics lists:" << G4endl;
+  g4alt::G4PhysListFactory factory;
+  factory.PrintAvailablePhysLists();
+
+  // if user asked for extra verbosity then print physics ctors as well
+  if (verbosity > 1) {
     G4cout << G4endl;
-    G4cout << "extensibleFactory: here are the available physics lists:"
-           << G4endl;
-    g4alt::G4PhysListFactory factory;
-    factory.PrintAvailablePhysLists();
-
-    // if user asked for extra verbosity then print physics ctors as well
-    if ( verbosity > 1 ) {
-      G4cout << G4endl;
-      G4cout << "extensibleFactory: "
-             << "here are the available physics ctors that can be added:"
-             << G4endl;
-      G4PhysicsConstructorRegistry* g4pctorFactory =
-        G4PhysicsConstructorRegistry::Instance();
-      g4pctorFactory->PrintAvailablePhysicsConstructors();
-    }
+    G4cout << "extensibleFactory: "
+           << "here are the available physics ctors that can be added:" << G4endl;
+    G4PhysicsConstructorRegistry* g4pctorFactory = G4PhysicsConstructorRegistry::Instance();
+    g4pctorFactory->PrintAvailablePhysicsConstructors();
   }
-
-  void PrintUsage(G4int verbosity) {
-    G4cerr << " Usage: " << G4endl;
-    G4cerr << " extensibleFactory [-m macro ] [-p physList ]"
-           << " [-u UIsession] [-t nThreads]" << G4endl
-           << " [-v | --verbose] [-h | --help]" << G4endl;
-    G4cerr << "   note: -t option is available only for multi-threaded mode."
-           << G4endl;
-    G4cerr << "   note: -v can be repeated to increase verbosity." << G4endl;
-    G4cerr << G4endl;
-
-    if (verbosity>0) PrintAvailable(verbosity);
-  }
-
 }
 
+void PrintUsage(G4int verbosity)
+{
+  G4cerr << " Usage: " << G4endl;
+  G4cerr << " extensibleFactory [-m macro ] [-p physList ]"
+         << " [-u UIsession] [-t nThreads]" << G4endl << " [-v | --verbose] [-h | --help]"
+         << G4endl;
+  G4cerr << "   note: -t option is available only for multi-threaded mode." << G4endl;
+  G4cerr << "   note: -v can be repeated to increase verbosity." << G4endl;
+  G4cerr << G4endl;
+
+  if (verbosity > 0) PrintAvailable(verbosity);
+}
+
+}  // namespace
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Evaluate arguments
   //
-  if ( argc > 13 ) {
+  if (argc > 13) {
     PrintUsage(0);
     return 1;
   }
@@ -142,29 +142,32 @@ int main(int argc,char** argv)
   G4String macro;
   G4String session;
   G4String physListName;
-  char*    physListNameEnv = nullptr;
+  char* physListNameEnv = nullptr;
   G4String gdmlFileName;
 #ifdef G4MULTITHREADED
   G4int nofThreads = 0;
 #endif
   G4int verbosity = 0;
 
-  for ( G4int i=1; i<argc; i=i+2 ) {
+  for (G4int i = 1; i < argc; i = i + 2) {
     G4String g4argv(argv[i]);  // convert only once
-    if      ( g4argv == "-m" ) macro = argv[i+1];
-    else if ( g4argv == "-u" ) session = argv[i+1];
-    else if ( g4argv == "-p" ) physListName = argv[i+1];
+    if (g4argv == "-m")
+      macro = argv[i + 1];
+    else if (g4argv == "-u")
+      session = argv[i + 1];
+    else if (g4argv == "-p")
+      physListName = argv[i + 1];
 #ifdef G4MULTITHREADED
-    else if ( g4argv == "-t" ) {
-      nofThreads = G4UIcommand::ConvertToInt(argv[i+1]);
+    else if (g4argv == "-t") {
+      nofThreads = G4UIcommand::ConvertToInt(argv[i + 1]);
     }
 #endif
-    else if ( g4argv == "-v" || g4argv == "--verbose" ) {
+    else if (g4argv == "-v" || g4argv == "--verbose") {
       ++verbosity;  // verbose flag doesn't take an argument
-      --i ;         // don't increment argc by two, just the one
+      --i;  // don't increment argc by two, just the one
     }
-    else if ( g4argv == "-h" || g4argv == "--help" ) {
-      PrintUsage(verbosity+1);
+    else if (g4argv == "-h" || g4argv == "--help") {
+      PrintUsage(verbosity + 1);
       return 1;
     }
     else {
@@ -176,7 +179,7 @@ int main(int argc,char** argv)
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = nullptr;
-  if ( ! macro.size() ) {
+  if (!macro.size()) {
     ui = new G4UIExecutive(argc, argv, session);
   }
 
@@ -186,7 +189,7 @@ int main(int argc,char** argv)
   // Construct the run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager();
 #ifdef G4MULTITHREADED
-  if ( nofThreads > 0 ) {
+  if (nofThreads > 0) {
     runManager->SetNumberOfThreads(nofThreads);
   }
 #endif
@@ -204,67 +207,60 @@ int main(int argc,char** argv)
   // This is what is used when no -p flag is given and $PHYSLIST
   // is not defined in the environment.
   G4String defaultPhysListName = "FTFP_BERT";
-  if ( verbosity > 0 ) {
-    G4cout << "extensibleFactory: SetDefaultReferencePhysList to '"
-           << defaultPhysListName << "' ('' = system default)"
-           << G4endl << G4endl;
+  if (verbosity > 0) {
+    G4cout << "extensibleFactory: SetDefaultReferencePhysList to '" << defaultPhysListName
+           << "' ('' = system default)" << G4endl << G4endl;
   }
   factory.SetDefaultReferencePhysList(defaultPhysListName);
 
   // set a short name for G4RadioactiveDecayPhysics
   G4PhysListRegistry* plreg = G4PhysListRegistry::Instance();
-  plreg->AddPhysicsExtension("RADIO","G4RadioactiveDecayPhysics");
-  plreg->AddPhysicsExtension("MYPHYSICS","MyG4PhysicsPhysics");
-  if ( verbosity > 0 ) {
+  plreg->AddPhysicsExtension("RADIO", "G4RadioactiveDecayPhysics");
+  plreg->AddPhysicsExtension("MYPHYSICS", "MyG4PhysicsPhysics");
+  if (verbosity > 0) {
     G4cout << "extensibleFactory: adding extensions" << G4endl
            << "   RADIO     ===> G4RadioactiveDecayPhysics" << G4endl
-           << "   MYPHYSICS ===> MyG4PhysicsPhysics" << G4endl
-           << G4endl;
+           << "   MYPHYSICS ===> MyG4PhysicsPhysics" << G4endl << G4endl;
   }
 
   // Get Reference PhysicsList via its name, or if none given
   //    from environment varialb e$PHYSLIST, with fall back to a default
-  if ( physListName.size() ) {
-    if ( verbosity > 0 ) {
-      G4cout << "extensibleFactory: explicitly using '"
-             << physListName << "'" << G4endl;
+  if (physListName.size()) {
+    if (verbosity > 0) {
+      G4cout << "extensibleFactory: explicitly using '" << physListName << "'" << G4endl;
     }
     physList = factory.GetReferencePhysList(physListName);
-  } else {
-    if ( verbosity > 0 ) {
+  }
+  else {
+    if (verbosity > 0) {
       G4cout << "extensibleFactory: no -p flag;"
              << " using ReferencePhysList() ($PHYSLIST or default)" << G4endl;
     }
     physList = factory.ReferencePhysList();
 
-    if ( ! physList ) {
+    if (!physList) {
       // failed?  get what the user set, but we couldn't find
       physListNameEnv = std::getenv("PHYSLIST");
-      if ( physListNameEnv ) {
-        G4cout << "extensibleFactory: $PHYSLIST="
-               << physListNameEnv << G4endl;
+      if (physListNameEnv) {
+        G4cout << "extensibleFactory: $PHYSLIST=" << physListNameEnv << G4endl;
       }
     }
-
   }
 
   // deal with failure to get what the user wanted
   // print what they _could_ use
-  if ( ! physList ) {
+  if (!physList) {
     G4cerr << "extensibleFactory: PhysicsList '"
-           << ( physListNameEnv ? physListNameEnv : physListName )
+           << (physListNameEnv ? physListNameEnv : physListName)
            << "' was not available in g4alt::PhysListFactory." << G4endl;
     PrintAvailable(verbosity);
 
     // if we can't get what the user asked for...
     //    don't go on to use something else, that's confusing
     G4ExceptionDescription ED;
-    ED << "The factory for the physicslist ["
-       << ( physListNameEnv ? physListNameEnv : physListName )
-       << "] does not exist!"
-       << G4endl;
-    G4Exception("extensibleFactory",
-                "extensibleFactory001", FatalException, ED);
+    ED << "The factory for the physicslist [" << (physListNameEnv ? physListNameEnv : physListName)
+       << "] does not exist!" << G4endl;
+    G4Exception("extensibleFactory", "extensibleFactory001", FatalException, ED);
     exit(42);
   }
 
@@ -273,11 +269,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physList);
 
   // set user action classes
-  auto  actinit =
-    new ActionInitialization("extensibleFactory");
+  auto actinit = new ActionInitialization("extensibleFactory");
   runManager->SetUserInitialization(actinit);
 
-// Initialize visualization
+  // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
@@ -286,10 +281,10 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( macro.size() ) {
+  if (macro.size()) {
     // batch mode
     G4String command = "/control/execute ";
-    UImanager->ApplyCommand(command+macro);
+    UImanager->ApplyCommand(command + macro);
   }
   else {
     // interactive mode : define UI session

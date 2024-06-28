@@ -24,20 +24,21 @@
 // ********************************************************************
 //
 #include "Par04RunAction.hh"
-#include <G4GenericAnalysisManager.hh>   // for G4GenericAnalysisManager
-#include <G4ThreeVector.hh>              // for G4ThreeVector
-#include <G4Types.hh>                    // for G4int, G4double
-#include <G4UserRunAction.hh>            // for G4UserRunAction
-#include "G4AnalysisManager.hh"          // for G4AnalysisManager
+
 #include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
-#include "Par04EventAction.hh"           // for Par04EventAction
+#include "Par04EventAction.hh"  // for Par04EventAction
+
+#include "G4AnalysisManager.hh"  // for G4AnalysisManager
+
+#include <G4GenericAnalysisManager.hh>  // for G4GenericAnalysisManager
+#include <G4ThreeVector.hh>  // for G4ThreeVector
+#include <G4Types.hh>  // for G4int, G4double
+#include <G4UserRunAction.hh>  // for G4UserRunAction
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04RunAction::Par04RunAction(Par04DetectorConstruction* aDetector, Par04EventAction* aEventAction)
-  : G4UserRunAction()
-  , fDetector(aDetector)
-  , fEventAction(aEventAction)
+  : G4UserRunAction(), fDetector(aDetector), fEventAction(aEventAction)
 {
   // Create analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -63,10 +64,10 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->SetVerboseLevel(0);
 
   // Get detector dimensions
-  G4int cellNumZ       = fDetector->GetMeshNbOfCells().z();
-  G4int cellNumRho     = fDetector->GetMeshNbOfCells().x();
-  G4int cellNumPhi     = fDetector->GetMeshNbOfCells().y();
-  G4double cellSizeZ   = fDetector->GetMeshSizeOfCells().z();
+  G4int cellNumZ = fDetector->GetMeshNbOfCells().z();
+  G4int cellNumRho = fDetector->GetMeshNbOfCells().x();
+  G4int cellNumPhi = fDetector->GetMeshNbOfCells().y();
+  G4double cellSizeZ = fDetector->GetMeshSizeOfCells().z();
   G4double cellSizeRho = fDetector->GetMeshSizeOfCells().x();
   G4double cellSizePhi = fDetector->GetMeshSizeOfCells().y();
   // Default max value of energy stored in histogram (in GeV)
@@ -77,9 +78,9 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
                             1.1 * maxEnergy);
   analysisManager->CreateH1("energyDepositedInVirtual", "Deposited energy;E_{MC} (GeV);Entries",
                             1024, 0, 1.1 * maxEnergy);
-  analysisManager->CreateH1(
-    "energyRatioInVirtual", "Ratio of energy deposited to primary;E_{dep} /  E_{MC};Entries",
-    1024, 0, 1);
+  analysisManager->CreateH1("energyRatioInVirtual",
+                            "Ratio of energy deposited to primary;E_{dep} /  E_{MC};Entries", 1024,
+                            0, 1);
   analysisManager->CreateH1("time", "Simulation time; time (s);Entries", 2048, 0, 100);
   analysisManager->CreateH1("longProfile", "Longitudinal profile;t (mm);#LTE#GT (MeV)", cellNumZ,
                             -0.5 * cellSizeZ, (cellNumZ - 0.5) * cellSizeZ);
@@ -93,8 +94,8 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
                             "First moment of transverse distribution;#LTr#GT "
                             "(mm);Entries",
                             1024, -0.5 * cellSizeRho,
-                            cellNumRho * cellSizeRho /
-                              1);  // arbitrary scaling of max value on axis
+                            cellNumRho * cellSizeRho
+                              / 1);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1(
     "longSecondMoment",
     "Second moment of longitudinal distribution;#LT#lambda^{2}#GT "
@@ -104,13 +105,12 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
     "transSecondMoment", "Second moment of transverse distribution;#LTr^{2}#GT (mm^{2});Entries",
     1024, 0, std::pow(cellNumRho * cellSizeRho, 2) / 5);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1("hitType", "hit type;type (0=full, 1= fast);Entries", 2, -0.5, 1.5);
-  analysisManager->CreateH1("phiProfile",
-                            "Azimuthal angle profile, centred at mean;phi;#LTE#GT (MeV)",
-                            cellNumPhi, - (cellNumPhi - 0.5) * cellSizePhi,
-                            (cellNumPhi - 0.5) * cellSizePhi);
+  analysisManager->CreateH1(
+    "phiProfile", "Azimuthal angle profile, centred at mean;phi;#LTE#GT (MeV)", cellNumPhi,
+    -(cellNumPhi - 0.5) * cellSizePhi, (cellNumPhi - 0.5) * cellSizePhi);
   analysisManager->CreateH1("numHitsInVirtual", "Number of hits above 0.5 keV", 4048, 0, 20000);
-  analysisManager->CreateH1("cellEnergy", "Cell energy distribution;log10(E/MeV);Entries",
-                            1024, -4, 2);
+  analysisManager->CreateH1("cellEnergy", "Cell energy distribution;log10(E/MeV);Entries", 1024, -4,
+                            2);
   analysisManager->CreateH1("numDepositsInVirtual", "Number of deposits in all cells per event",
                             4048, 0, 40000);
   analysisManager->CreateH1("cellDepositsInVirtual",
@@ -118,9 +118,10 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateH1("energyDepositedInPhysical",
                             "Deposited energy in physical detector readout;E_{MC} (GeV);Entries",
                             1024, 0, 1.1 * maxEnergy);
-  analysisManager->CreateH1("energyRatioInPhysical",
-  "Ratio of energy deposited in physical readout to primary; E_{dep} /  E_{MC};Entries",
-                            1024, 0, 1);
+  analysisManager->CreateH1(
+    "energyRatioInPhysical",
+    "Ratio of energy deposited in physical readout to primary; E_{dep} /  E_{MC};Entries", 1024, 0,
+    1);
   analysisManager->CreateH1("numHitsInPhysical", "Number of hits in physical readout above 0.5 keV",
                             4048, 0, 5000);
   analysisManager->CreateH1("cellEnergyInPhysical",
@@ -128,8 +129,8 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateH1("numDepositsInPhysical",
                             "Number of deposits in all physical cells per event", 4048, 0, 40000);
   analysisManager->CreateH1("cellDepositsInPhysical",
-                            "Distribution of number of deposits per physical cell per event",
-                            4048, 0, 1024);
+                            "Distribution of number of deposits per physical cell per event", 4048,
+                            0, 1024);
 
   // Creating ntuple
   analysisManager->CreateNtuple("global", "Event data");

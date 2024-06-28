@@ -33,30 +33,28 @@
 #ifndef StepLimiterMessenger_h
 #define StepLimiterMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class StepLimiter;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepLimiterMessenger: public G4UImessenger
+class StepLimiterMessenger : public G4UImessenger
 {
-public:
+  public:
+    StepLimiterMessenger(StepLimiter*);
+    virtual ~StepLimiterMessenger();
 
-  StepLimiterMessenger(StepLimiter*);
-  virtual ~StepLimiterMessenger();
+    void SetNewValue(G4UIcommand*, G4String);
 
-  void SetNewValue(G4UIcommand*, G4String);
+  private:
+    StepLimiterMessenger& operator=(const StepLimiterMessenger& right);
+    StepLimiterMessenger(const StepLimiterMessenger&);
 
-private:
-
-  StepLimiterMessenger & operator=(const StepLimiterMessenger &right);
-  StepLimiterMessenger(const StepLimiterMessenger&);
-
-  StepLimiter* fStepLimiter;
-  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+    StepLimiter* fStepLimiter;
+    G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

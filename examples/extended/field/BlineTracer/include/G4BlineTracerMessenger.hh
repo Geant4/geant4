@@ -61,14 +61,12 @@ class G4UIcmdWith3Vector;
 class G4BlineTracerMessenger : public G4UImessenger
 {
   public:  // with description
-
     G4BlineTracerMessenger(G4BlineTracer* aBlineTool);
-     ~G4BlineTracerMessenger() override;
+    ~G4BlineTracerMessenger() override;
 
-    void SetNewValue(G4UIcommand * command,G4String newValues) override;
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
   private:
-
     G4BlineTracer* fTheBlineTool = nullptr;
     G4UIdirectory* fBlineToolDir = nullptr;
 
@@ -77,8 +75,8 @@ class G4BlineTracerMessenger : public G4UImessenger
     G4UIcmdWithAnInteger* fBlineCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetMaxTrackingStepCmd = nullptr;
     G4UIcmdWith3Vector* fSetDrawColourCmd = nullptr;
-    G4UIcmdWithABool*   fSetDrawBlineCmd = nullptr;
-    G4UIcmdWithABool*  fSetDrawPointsCmd = nullptr;
+    G4UIcmdWithABool* fSetDrawBlineCmd = nullptr;
+    G4UIcmdWithABool* fSetDrawPointsCmd = nullptr;
     G4UIcmdWithADouble* fSetPointSizeCmd = nullptr;
     G4UIcmdWithoutParameter* fDrawCmd = nullptr;
     G4UIcmdWithoutParameter* fResetCmd = nullptr;

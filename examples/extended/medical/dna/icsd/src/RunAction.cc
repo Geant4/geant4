@@ -41,73 +41,68 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-: G4UserRunAction()
-{ 
+RunAction::RunAction() : G4UserRunAction()
+{
+  // book histograms, ntuple
 
-   // book histograms, ntuple
+  // create analysis manager
 
-    // create analysis manager
+  G4cout << "##### Create analysis manager "
+         << "  " << this << G4endl;
+  auto analysisManager = G4AnalysisManager::Instance();
 
-    G4cout << "##### Create analysis manager " << "  " << this << G4endl;
-    auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
+  analysisManager->SetNtupleMerging(true);
 
-    analysisManager->SetDefaultFileType("root");
-    analysisManager->SetNtupleMerging(true);
+  G4cout << "Using " << analysisManager->GetType() << " analysis manager" << G4endl;
 
-    G4cout << "Using " << analysisManager->GetType()
-           << " analysis manager"
-           << G4endl;
+  analysisManager->SetVerboseLevel(1);
 
-    analysisManager->SetVerboseLevel(1);
+  // creating ntuple
+  analysisManager->SetFirstNtupleId(1);
 
-    // creating ntuple
-    analysisManager->SetFirstNtupleId(1);
+  // Creating ntuple
+  analysisManager->CreateNtuple("ntuple_1", "ICSD");
+  analysisManager->CreateNtupleDColumn(1, "ionisations");
+  analysisManager->FinishNtuple(1);
 
-    // Creating ntuple
-    analysisManager->CreateNtuple("ntuple_1", "ICSD");
-    analysisManager->CreateNtupleDColumn(1,"ionisations");
-    analysisManager->FinishNtuple(1);
-
-    // Creating ntuple
-    analysisManager->CreateNtuple("ntuple_2", "physics");
-    analysisManager->CreateNtupleDColumn(2,"EventID");
-    analysisManager->CreateNtupleDColumn(2,"flagProcess");
-    analysisManager->CreateNtupleDColumn(2,"x");
-    analysisManager->CreateNtupleDColumn(2,"y");
-    analysisManager->CreateNtupleDColumn(2,"z");
-    analysisManager->CreateNtupleDColumn(2,"totalEnergyDeposit");
-    analysisManager->FinishNtuple(2);}
+  // Creating ntuple
+  analysisManager->CreateNtuple("ntuple_2", "physics");
+  analysisManager->CreateNtupleDColumn(2, "EventID");
+  analysisManager->CreateNtupleDColumn(2, "flagProcess");
+  analysisManager->CreateNtupleDColumn(2, "x");
+  analysisManager->CreateNtupleDColumn(2, "y");
+  analysisManager->CreateNtupleDColumn(2, "z");
+  analysisManager->CreateNtupleDColumn(2, "totalEnergyDeposit");
+  analysisManager->FinishNtuple(2);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{
-}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{ 
-    auto analysisManager = G4AnalysisManager::Instance();
+{
+  auto analysisManager = G4AnalysisManager::Instance();
 
-    // open an output file
-    G4String fileName = "ICSD";
-    analysisManager->OpenFile(fileName);
-
+  // open an output file
+  G4String fileName = "ICSD";
+  analysisManager->OpenFile(fileName);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* )
+void RunAction::EndOfRunAction(const G4Run*)
 {
-    // print histogram statistics
+  // print histogram statistics
 
-    auto analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
 
-    // save histograms
+  // save histograms
 
-    analysisManager->Write();
-    analysisManager->CloseFile();
+  analysisManager->Write();
+  analysisManager->CloseFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,28 +26,27 @@
 /// \file electromagnetic/TestEm12/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 #include "PhysicsList.hh"
-#include "StepMax.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
-#include "HistoManager.hh"
+#include "StepMax.hh"
 
 #include "G4EmCalculator.hh"
 #include "G4EmParameters.hh"
-
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
-                     PrimaryGeneratorAction* kin)
-: fDetector(det),fPhysics(phys),fPrimary(kin)
+RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys, PrimaryGeneratorAction* kin)
+  : fDetector(det), fPhysics(phys), fPrimary(kin)
 {
   // Book predefined histograms
   fHistoManager = new HistoManager();
@@ -57,84 +56,83 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 
 RunAction::~RunAction()
 {
-  delete fHistoManager; 
+  delete fHistoManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
-  fRun = new Run(fDetector); 
+{
+  fRun = new Run(fDetector);
   return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{    
+{
   // show Rndm status
-  if (isMaster) { 
+  if (isMaster) {
     G4Random::showEngineStatus();
     G4EmParameters::Instance()->Dump();
-  } 
-  //histograms
+  }
+  // histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
   }
-  
+
   if (!fPrimary) return;
-      
+
   // keep run condition
-  G4ParticleDefinition* particle 
-      = fPrimary->GetParticleGun()->GetParticleDefinition();
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()->GetParticleDefinition();
   G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   fRun->SetPrimary(particle, energy);
-     
-  //get CsdaRange from EmCalculator
+
+  // get CsdaRange from EmCalculator
   //
   G4EmCalculator emCalculator;
   G4Material* material = fDetector->GetAbsorMaterial();
 
   G4double csdaRange = DBL_MAX;
   if (particle->GetPDGCharge() != 0.) {
-    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
+    csdaRange = emCalculator.GetCSDARange(energy, particle, material);
     fRun->SetCsdaRange(csdaRange);
   }
-     
-  //set StepMax from histos 1 and 8
+
+  // set StepMax from histos 1 and 8
   //
   G4double stepMax = csdaRange;
   G4int ih = 1;
   if (analysisManager->GetH1Activation(ih))
-    stepMax = analysisManager->GetH1Width(ih)*analysisManager->GetH1Unit(ih);
+    stepMax = analysisManager->GetH1Width(ih) * analysisManager->GetH1Unit(ih);
   ih = 8;
   if (analysisManager->GetH1Activation(ih)) {
     G4double width = analysisManager->GetH1Width(ih);
-    stepMax = std::min(stepMax, width*csdaRange);        
-  }                                        
+    stepMax = std::min(stepMax, width * csdaRange);
+  }
   fPhysics->GetStepMaxProcess()->SetMaxStep2(stepMax);
-  
-  ///G4cout << "\n---> stepMax from histos 1 and 8 = " 
-  ///       << G4BestUnit(stepMax,"Length") << G4endl;  
+
+  /// G4cout << "\n---> stepMax from histos 1 and 8 = "
+  ///        << G4BestUnit(stepMax,"Length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if (isMaster) fRun->EndOfRun(); 
-  
+  if (isMaster) fRun->EndOfRun();
+
   // save histograms
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-  if ( analysisManager->IsActive() ) {  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
-  }      
- 
+  }
+
   // show Rndm status
-  if (isMaster) G4Random::showEngineStatus();  
+  if (isMaster) G4Random::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -37,37 +37,35 @@
 ///
 /// Defines the action at the beginning and at the end of each event.
 /// It is invoked by a G4EventManager when a G4Event object is sent
-/// (which contains primary vertices and particles created by the 
+/// (which contains primary vertices and particles created by the
 /// Par02PrimaryGeneratorAction).
 /// @author Anna Zaborowska
 
-class Par02EventAction : public G4UserEventAction {
+class Par02EventAction : public G4UserEventAction
+{
   public:
-    
-    /// A default constructor. 
+    /// A default constructor.
     /// Sets the flag fSmear to true indicating that smearing will be performed.
     Par02EventAction();
-    
+
     /// A constructor.
     /// @param aSmear The flag indicating if smearing has to be done.
-    Par02EventAction( G4bool aSmear );
+    Par02EventAction(G4bool aSmear);
 
     virtual ~Par02EventAction();
 
-    /// Defines the actions at the beginning of the event. 
-    /// It sets the Par02EventInformation with fSmear flag. 
+    /// Defines the actions at the beginning of the event.
+    /// It sets the Par02EventInformation with fSmear flag.
     /// It creates all the ntuples defined in Par02Output singleton class.
-    virtual void BeginOfEventAction( const G4Event* );
-    
+    virtual void BeginOfEventAction(const G4Event*);
+
     /// Defines the actions at the end of the event.
-    virtual void EndOfEventAction( const G4Event* );
+    virtual void EndOfEventAction(const G4Event*);
 
   private:
-    
-    /// A flag indicating if smearing should be performed. 
+    /// A flag indicating if smearing should be performed.
     /// Passed to Par02EventInformation in BeginOfEventAction(const G4Event*).
     G4bool fSmear;
 };
 
 #endif
-

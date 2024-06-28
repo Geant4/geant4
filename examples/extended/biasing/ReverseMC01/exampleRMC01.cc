@@ -42,43 +42,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
-#include "Randomize.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
-#include "G4AdjointSimManager.hh"
-#include "RMC01DetectorConstruction.hh"
-#include "RMC01PrimaryGeneratorAction.hh"
-#include "RMC01EventAction.hh"
-#include "RMC01RunAction.hh"
-#include "G4AdjointPhysicsList.hh"
-
-#include "G4AdjointSimManager.hh"
 #include "RMC01AdjointEventAction.hh"
+#include "RMC01DetectorConstruction.hh"
+#include "RMC01EventAction.hh"
+#include "RMC01PrimaryGeneratorAction.hh"
+#include "RMC01RunAction.hh"
+
+#include "G4AdjointPhysicsList.hh"
+#include "G4AdjointSimManager.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
-
+int main(int argc, char** argv)
+{
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   // Construct a serial run manager
   auto* theRunManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
-
   RMC01DetectorConstruction* detector = new RMC01DetectorConstruction();
 
-  //Physics and geometry are declared as in a normal G4 application
+  // Physics and geometry are declared as in a normal G4 application
   //--------------------------------------------
   theRunManager->SetUserInitialization(detector);
   theRunManager->SetUserInitialization(new G4AdjointPhysicsList);
@@ -88,17 +82,16 @@ int main(int argc,char** argv) {
   RMC01RunAction* theRunAction = new RMC01RunAction;
   theRunManager->SetUserAction(theRunAction);
 
-  //The adjoint simulation manager will control the Reverse MC mode
+  // The adjoint simulation manager will control the Reverse MC mode
   //---------------------------------------------------------------
 
-  G4AdjointSimManager* theAdjointSimManager
-                            = G4AdjointSimManager::GetInstance();
+  G4AdjointSimManager* theAdjointSimManager = G4AdjointSimManager::GetInstance();
 
-  //It is possible to define action that will be used during
-  //                                        the adjoint tracking phase
+  // It is possible to define action that will be used during
+  //                                         the adjoint tracking phase
 
   theAdjointSimManager->SetAdjointRunAction(theRunAction);
-  //theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
+  // theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
   theAdjointSimManager->SetAdjointEventAction(new RMC01EventAction);
 
   // visualization manager
@@ -108,17 +101,16 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (!ui)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
-  else
-    {  // interactive mode : define UI session
-      ui->SessionStart();
-      delete ui;
-    }
+  if (!ui)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else {  // interactive mode : define UI session
+    ui->SessionStart();
+    delete ui;
+  }
 
   // job termination
   delete visManager;

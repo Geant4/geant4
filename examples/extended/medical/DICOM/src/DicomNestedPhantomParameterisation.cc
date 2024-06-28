@@ -29,74 +29,71 @@
 //
 
 #include "DicomNestedPhantomParameterisation.hh"
+
 #include "DicomHandler.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4VTouchable.hh"
-#include "G4ThreeVector.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
-
-#include "G4VisAttributes.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 #include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String DicomNestedPhantomParameterisation::fDefaultColorFile =
-        DicomHandler::GetDicomDataPath() + "/ColourMap.dat";
+  DicomHandler::GetDicomDataPath() + "/ColourMap.dat";
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomNestedPhantomParameterisation::
-DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
-                                   std::vector<G4Material*>& mat,
-                                   G4int fnZ_, G4int fnY_, G4int fnX_,
-                                   G4String colorfile)
-:
-  //G4VNestedParameterisation(),
-  fdX(voxelSize.x()), fdY(voxelSize.y()), fdZ(voxelSize.z()),
-  fnX(fnX_), fnY(fnY_), fnZ(fnZ_),
-  fMaterials(mat),
-  fMaterialIndices(0)
+DicomNestedPhantomParameterisation::DicomNestedPhantomParameterisation(
+  const G4ThreeVector& voxelSize, std::vector<G4Material*>& mat, G4int fnZ_, G4int fnY_, G4int fnX_,
+  G4String colorfile)
+  :  // G4VNestedParameterisation(),
+    fdX(voxelSize.x()),
+    fdY(voxelSize.y()),
+    fdZ(voxelSize.z()),
+    fnX(fnX_),
+    fnY(fnY_),
+    fnZ(fnZ_),
+    fMaterials(mat),
+    fMaterialIndices(0)
 {
-    ReadColourData(colorfile);
+  ReadColourData(colorfile);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation()
-{
-}
+DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomNestedPhantomParameterisation::ReadColourData(G4String colourFile)
 {
-    //----- Add a G4VisAttributes for materials not defined in file;
-    G4VisAttributes* blankAtt = new G4VisAttributes;
-    blankAtt->SetVisibility( FALSE );
-    fColours["Default"] = blankAtt;
+  //----- Add a G4VisAttributes for materials not defined in file;
+  G4VisAttributes* blankAtt = new G4VisAttributes;
+  blankAtt->SetVisibility(FALSE);
+  fColours["Default"] = blankAtt;
 
-    std::ifstream fin(colourFile.c_str());
-    G4int nMate;
-    G4String mateName;
-    G4double cred, cgreen, cblue, copacity;
-    fin >> nMate;
-    for( G4int ii = 0; ii < nMate; ii++ )
-    {
-        fin >> mateName;
-        if(fin.eof())
-            break;
-        fin >> cred >> cgreen >> cblue >> copacity;
-        G4Colour colour( cred, cgreen, cblue, copacity );
-        G4VisAttributes* visAtt = new G4VisAttributes( colour );
-        visAtt->SetVisibility(true);
-        fColours[mateName] = visAtt;
-        fColours2[ii] = new G4VisAttributes(*visAtt);
-    }
+  std::ifstream fin(colourFile.c_str());
+  G4int nMate;
+  G4String mateName;
+  G4double cred, cgreen, cblue, copacity;
+  fin >> nMate;
+  for (G4int ii = 0; ii < nMate; ii++) {
+    fin >> mateName;
+    if (fin.eof()) break;
+    fin >> cred >> cgreen >> cblue >> copacity;
+    G4Colour colour(cred, cgreen, cblue, copacity);
+    G4VisAttributes* visAtt = new G4VisAttributes(colour);
+    visAtt->SetVisibility(true);
+    fColours[mateName] = visAtt;
+    fColours2[ii] = new G4VisAttributes(*visAtt);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomNestedPhantomParameterisation::
-SetNoVoxels( unsigned int nx, unsigned int ny, unsigned int nz )
+void DicomNestedPhantomParameterisation::SetNoVoxels(unsigned int nx, unsigned int ny,
+                                                     unsigned int nz)
 {
   fnX = nx;
   fnY = ny;
@@ -104,81 +101,64 @@ SetNoVoxels( unsigned int nx, unsigned int ny, unsigned int nz )
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4Material* DicomNestedPhantomParameterisation::
-ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
-                const G4VTouchable* parentTouch)
+G4Material* DicomNestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume* physVol,
+                                                                const G4int iz,
+                                                                const G4VTouchable* parentTouch)
 {
+  // protection for initialization and vis at idle state
+  //
+  if (parentTouch == nullptr) return fMaterials[0];
 
-    // protection for initialization and vis at idle state
-    //
-    if(parentTouch == nullptr)
-        return fMaterials[0];
+  // Copy number of voxels.
+  // Copy number of X and Y are obtained from replication number.
+  // Copy nymber of Z is the copy number of current voxel.
+  G4int ix = parentTouch->GetReplicaNumber(0);
+  G4int iy = parentTouch->GetReplicaNumber(1);
 
-    // Copy number of voxels.
-    // Copy number of X and Y are obtained from replication number.
-    // Copy nymber of Z is the copy number of current voxel.
-    G4int ix = parentTouch->GetReplicaNumber(0);
-    G4int iy = parentTouch->GetReplicaNumber(1);
+  G4int copyID = ix + fnX * iy + fnX * fnY * iz;
 
-    G4int copyID = ix + fnX*iy + fnX*fnY*iz;
+  std::size_t matIndex = GetMaterialIndex(copyID);
+  G4Material* mate = fMaterials[matIndex];
 
-    std::size_t matIndex = GetMaterialIndex(copyID);
-    G4Material* mate = fMaterials[matIndex];
+  if (G4VVisManager::GetConcreteInstance() && physVol) {
+    G4String mateName = fMaterials.at(matIndex)->GetName();
+    std::string::size_type iuu = mateName.find("__");
+    if (iuu != std::string::npos) mateName = mateName.substr(0, iuu);
 
-    if(G4VVisManager::GetConcreteInstance() && physVol)
-    {
-        G4String mateName = fMaterials.at(matIndex)->GetName();
-        std::string::size_type iuu = mateName.find("__");
-        if( iuu != std::string::npos )
-            mateName = mateName.substr( 0, iuu );
-
-        if(0 < fColours.count(mateName))
-            physVol->GetLogicalVolume()->SetVisAttributes(
-                fColours.find(mateName)->second);
-        else
-        {
-            bool found = false;
-            for(const auto& itr : fColours)
-            {
-                G4String mat_color = itr.first;
-                auto len = mat_color.length();
-                if(mateName.find(mat_color) == 0 &&
-                   mateName.length() > len && mateName[len] == '_')
-                {
-                    physVol->GetLogicalVolume()->SetVisAttributes(
-                        fColours.find(mat_color)->second);
-                    found = true;
-                }
-                if(found)
-                    break;
-            }
-            if(!found)
-            {
-
-                static uintmax_t n = 0;
-                if(n++ < 100)
-                    G4cout << "Unknown material name " << mateName
-                           << " for index " << matIndex << G4endl;
-                if(fColours2.find(matIndex) != fColours2.end())
-                    physVol->GetLogicalVolume()->SetVisAttributes(
-                        fColours2.find(matIndex)->second);
-                else
-                    physVol->GetLogicalVolume()->SetVisAttributes(
-                        fColours.begin()->second);
-            }
+    if (0 < fColours.count(mateName))
+      physVol->GetLogicalVolume()->SetVisAttributes(fColours.find(mateName)->second);
+    else {
+      bool found = false;
+      for (const auto& itr : fColours) {
+        G4String mat_color = itr.first;
+        auto len = mat_color.length();
+        if (mateName.find(mat_color) == 0 && mateName.length() > len && mateName[len] == '_') {
+          physVol->GetLogicalVolume()->SetVisAttributes(fColours.find(mat_color)->second);
+          found = true;
         }
-        physVol -> GetLogicalVolume()->SetMaterial(mate);
+        if (found) break;
+      }
+      if (!found) {
+        static uintmax_t n = 0;
+        if (n++ < 100)
+          G4cout << "Unknown material name " << mateName << " for index " << matIndex << G4endl;
+        if (fColours2.find(matIndex) != fColours2.end())
+          physVol->GetLogicalVolume()->SetVisAttributes(fColours2.find(matIndex)->second);
+        else
+          physVol->GetLogicalVolume()->SetVisAttributes(fColours.begin()->second);
+      }
     }
+    physVol->GetLogicalVolume()->SetMaterial(mate);
+  }
 
-    return mate;
+  return mate;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-unsigned int DicomNestedPhantomParameterisation::
-GetMaterialIndex( unsigned int copyNo ) const
+unsigned int DicomNestedPhantomParameterisation::GetMaterialIndex(unsigned int copyNo) const
 {
-    //return *(fMaterialIndices+copyNo);
-    return unsigned(fMaterialIndices[copyNo]);
+  // return *(fMaterialIndices+copyNo);
+  return unsigned(fMaterialIndices[copyNo]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -188,7 +168,7 @@ GetMaterialIndex( unsigned int copyNo ) const
 //
 G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const
 {
-    return G4int(fMaterials.size());
+  return G4int(fMaterials.size());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,30 +178,30 @@ G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const
 //
 G4Material* DicomNestedPhantomParameterisation::GetMaterial(G4int i) const
 {
-    return fMaterials[i];
+  return fMaterials[i];
 }
 
 //
 // Transformation of voxels.
 //
-void DicomNestedPhantomParameterisation::
-ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
+void DicomNestedPhantomParameterisation::ComputeTransformation(const G4int copyNo,
+                                                               G4VPhysicalVolume* physVol) const
 {
-    // Position of voxels.
-    // x and y positions are already defined in DetectorConstruction by using
-    // replicated volume. Here only we need to define is z positions of voxels.
-    physVol->SetTranslation(G4ThreeVector(0.,0.,(2.*static_cast<double>(copyNo)
-                                                +1.)*fdZ - fdZ*fnZ));
+  // Position of voxels.
+  // x and y positions are already defined in DetectorConstruction by using
+  // replicated volume. Here only we need to define is z positions of voxels.
+  physVol->SetTranslation(
+    G4ThreeVector(0., 0., (2. * static_cast<double>(copyNo) + 1.) * fdZ - fdZ * fnZ));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Dimensions are always same in this RE02 example.
 //
-void DicomNestedPhantomParameterisation::
-ComputeDimensions( G4Box& box, const G4int, const G4VPhysicalVolume* ) const
+void DicomNestedPhantomParameterisation::ComputeDimensions(G4Box& box, const G4int,
+                                                           const G4VPhysicalVolume*) const
 {
-    box.SetXHalfLength(fdX);
-    box.SetYHalfLength(fdY);
-    box.SetZHalfLength(fdZ);
+  box.SetXHalfLength(fdX);
+  box.SetYHalfLength(fdY);
+  box.SetZHalfLength(fdZ);
 }

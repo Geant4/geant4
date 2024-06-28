@@ -27,28 +27,25 @@
 /// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
 /// \brief Main program of the pythia6Decayer example
 
-#include "P6DExtDecayerPhysics.hh"
-
 #include "DetectorConstruction.hh"
 #include "GunPrimaryGeneratorAction.hh"
+#include "P6DExtDecayerPhysics.hh"
+#include "QGSP_BERT.hh"
 
 #include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-#include "QGSP_BERT.hh"
-#include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4ThreeVector.hh"
 #include "G4UIExecutive.hh"
-
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 #include "Randomize.hh"
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -71,9 +68,8 @@ int main(int argc,char** argv)
 
   // Set user action classes
   //
-  runManager->SetUserAction(
-    new Common::GunPrimaryGeneratorAction("B-", 50.*MeV));
-    // B- meson has not defined decay in Geant4
+  runManager->SetUserAction(new Common::GunPrimaryGeneratorAction("B-", 50. * MeV));
+  // B- meson has not defined decay in Geant4
 
   // Initialize visualization
   //
@@ -87,11 +83,11 @@ int main(int argc,char** argv)
 
   // Process macro or start UI session
   //
-  if ( ! ui ) {
+  if (!ui) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
   else {
     // interactive mode

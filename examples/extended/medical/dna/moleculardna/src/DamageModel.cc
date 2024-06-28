@@ -41,16 +41,13 @@ DamageModel::DamageModel()
 G4bool DamageModel::IsDirectStrandBreak(const G4double& d) const
 {
   G4bool bool_val = false;
-  if(d < fDirectDmgLower)
-  {
+  if (d < fDirectDmgLower) {
     bool_val = false;
   }
-  else if(d >= fDirectDmgUpper)
-  {
+  else if (d >= fDirectDmgUpper) {
     bool_val = true;
   }
-  else 
-  {
+  else {
     bool_val = (G4UniformRand() < ((d - fDirectDmgLower) / (fDirectDmgUpper - fDirectDmgLower)));
   }
   return bool_val;
@@ -61,20 +58,16 @@ G4bool DamageModel::IsDirectStrandBreak(const G4double& d) const
 G4bool DamageModel::IsIndirectBaseDamage(const G4MolecularConfiguration* mol) const
 {
   G4bool bool_val = false;
-  if(mol->GetDefinition() == fOH)
-  {
-    bool_val = (G4UniformRand() < fBaseOH); 
+  if (mol->GetDefinition() == fOH) {
+    bool_val = (G4UniformRand() < fBaseOH);
   }
-  else if(mol->GetDefinition() == fH)
-  {
+  else if (mol->GetDefinition() == fH) {
     bool_val = (G4UniformRand() < fBaseH);
   }
-  else if(mol->GetDefinition() == fe_aq)
-  {
+  else if (mol->GetDefinition() == fe_aq) {
     bool_val = (G4UniformRand() < fBaseEaq);
   }
-  else
-  {
+  else {
     bool_val = false;
   }
   return bool_val;
@@ -85,20 +78,16 @@ G4bool DamageModel::IsIndirectBaseDamage(const G4MolecularConfiguration* mol) co
 G4bool DamageModel::IsIndirectStrandDamage(const G4MolecularConfiguration* mol) const
 {
   G4bool bool_val = false;
-  if(mol->GetDefinition() == fOH)
-  {
+  if (mol->GetDefinition() == fOH) {
     bool_val = (G4UniformRand() < fStrandOH);
   }
-  else if(mol->GetDefinition() == G4Hydrogen::Definition())
-  {
+  else if (mol->GetDefinition() == G4Hydrogen::Definition()) {
     bool_val = (G4UniformRand() < fStrandH);
   }
-  else if(mol->GetDefinition() == G4Electron_aq::Definition())
-  {
+  else if (mol->GetDefinition() == G4Electron_aq::Definition()) {
     bool_val = (G4UniformRand() < fStrandEaq);
   }
-  else
-  {
+  else {
     bool_val = false;
   }
   return bool_val;
@@ -106,24 +95,19 @@ G4bool DamageModel::IsIndirectStrandDamage(const G4MolecularConfiguration* mol) 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool DamageModel::IsInducedStrandBreak(
-    const G4MolecularConfiguration* mol) const
+G4bool DamageModel::IsInducedStrandBreak(const G4MolecularConfiguration* mol) const
 {
   G4bool bool_val = false;
-  if(mol->GetDefinition() == fOH)
-  {
+  if (mol->GetDefinition() == fOH) {
     bool_val = (G4UniformRand() < fInductionOH);
   }
-  else if(mol->GetDefinition() == G4Hydrogen::Definition())
-  {
+  else if (mol->GetDefinition() == G4Hydrogen::Definition()) {
     bool_val = (G4UniformRand() < fInductionH);
   }
-  else if(mol->GetDefinition() == G4Electron_aq::Definition())
-  {
+  else if (mol->GetDefinition() == G4Electron_aq::Definition()) {
     bool_val = (G4UniformRand() < fInductionEaq);
   }
-  else
-  {
+  else {
     bool_val = false;
   }
   return bool_val;
@@ -133,8 +117,7 @@ G4bool DamageModel::IsInducedStrandBreak(
 
 void DamageModel::CheckValidProbability(const G4String& str, G4double p)
 {
-  if((p < 0) || (p > 1))
-  {
+  if ((p < 0) || (p > 1)) {
     G4ExceptionDescription errmsg;
     errmsg << "Invalid probability for " << str;
     G4Exception("DamageModel", "ERR_INVALID_PROB", FatalException, errmsg);

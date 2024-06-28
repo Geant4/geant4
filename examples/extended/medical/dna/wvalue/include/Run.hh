@@ -23,13 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/wvalue/include/Run.hh
 /// \brief Definition of the Run class
 
 #ifndef Run_h
 #define Run_h 1
-
-#include "DetectorConstruction.hh"
 
 #include "G4Run.hh"
 
@@ -42,35 +50,33 @@ class Run : public G4Run
 {
   public:
     Run(const DetectorConstruction* detector);
-   ~Run();
+    ~Run();
 
-  public:
-    void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-    void AddInelastic (G4int nb);
-    void AddEdep (G4double e);
-    void AddTrackLength (G4double t);
-    void AddProjRange   (G4double x);
-    void AddStepSize    (G4int nb, G4double st);
+    void AddInelastic(G4int nb);
+    void AddEdep(G4double e);
+    void AddTrackLength(G4double t);
+    void AddProjRange(G4double x);
+    void AddStepSize(G4int nb, G4double st);
 
-    G4double GetEdep()      const {return fEdeposit;};
-    G4double GetInelastic() const {return fNbInelastic;};
-        
+    G4double GetEdep() const { return fEdeposit; };
+    G4double GetInelastic() const { return fNbInelastic; };
+
     virtual void Merge(const G4Run*);
     void EndOfRun();
-    
+
   private:
-    const DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin; 
-       
-    G4double   fNbInelastic, fNbInelastic2;
-    G4double   fEdeposit,    fEdeposit2;
-    G4double   fTrackLen,    fTrackLen2;
-    G4double   fProjRange,   fProjRange2;
-    G4int      fNbOfSteps,   fNbOfSteps2;
-    G4double   fStepSize,    fStepSize2;
+    const DetectorConstruction* fDetector;
+    G4ParticleDefinition* fParticle;
+    G4double fEkin;
+
+    G4double fNbInelastic, fNbInelastic2;
+    G4double fEdeposit, fEdeposit2;
+    G4double fTrackLen, fTrackLen2;
+    G4double fProjRange, fProjRange2;
+    G4int fNbOfSteps, fNbOfSteps2;
+    G4double fStepSize, fStepSize2;
 };
 
 #endif
-

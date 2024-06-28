@@ -46,5 +46,3 @@ class G3toG4ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-
-    

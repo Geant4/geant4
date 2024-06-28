@@ -45,12 +45,12 @@
 #ifndef G4TAtomicHitsCollection_h
 #define G4TAtomicHitsCollection_h 1
 
-#include "G4VHitsCollection.hh"
 #include "G4Allocator.hh"
-#include "globals.hh"
-#include "G4Threading.hh"
 #include "G4AutoLock.hh"
+#include "G4Threading.hh"
+#include "G4VHitsCollection.hh"
 #include "G4atomic.hh"
+#include "globals.hh"
 
 #include <deque>
 #include <type_traits>
@@ -77,114 +77,110 @@
       void* theCollection;
 };*/
 
-template <class T>
+template<class T>
 class G4TAtomicHitsCollection : public G4VHitsCollection
 {
- protected:
-  static_assert(std::is_fundamental<T>::value,
-                "G4TAtomicHitsCollection must use fundamental type");
+  protected:
+    static_assert(std::is_fundamental<T>::value,
+                  "G4TAtomicHitsCollection must use fundamental type");
 
- public:
-  typedef T base_type;
-  typedef G4atomic<T> value_type;
-  typedef typename std::deque<value_type*> container_type;
+  public:
+    typedef T base_type;
+    typedef G4atomic<T> value_type;
+    typedef typename std::deque<value_type*> container_type;
 
- public:
-  G4TAtomicHitsCollection();
+  public:
+    G4TAtomicHitsCollection();
 
- public:
-  // with description
-  G4TAtomicHitsCollection(G4String detName, G4String colNam);
+  public:
+    // with description
+    G4TAtomicHitsCollection(G4String detName, G4String colNam);
 
-  // constructor.
- public:
-  virtual ~G4TAtomicHitsCollection();
-  G4bool operator==(const G4TAtomicHitsCollection<T>& right) const;
+    // constructor.
+  public:
+    virtual ~G4TAtomicHitsCollection();
+    G4bool operator==(const G4TAtomicHitsCollection<T>& right) const;
 
-  // inline void *operator new(size_t);
-  // inline void operator delete(void* anHC);
+    // inline void *operator new(size_t);
+    // inline void operator delete(void* anHC);
 
- public:  // with description
-  virtual void DrawAllHits();
-  virtual void PrintAllHits();
-  //  These two methods invokes Draw() and Print() methods of all of
-  // hit objects stored in this collection, respectively.
+  public:  // with description
+    virtual void DrawAllHits();
+    virtual void PrintAllHits();
+    //  These two methods invokes Draw() and Print() methods of all of
+    // hit objects stored in this collection, respectively.
 
- public:  // with description
-  inline value_type* operator[](size_t i) const { return (*theCollection)[i]; }
-  //  Returns a pointer to a concrete hit object.
-  inline container_type* GetVector() const { return theCollection; }
-  //  Returns a collection vector.
-  inline G4int insert(T* aHit)
-  {
-    G4AutoLock l(&fMutex);
-    theCollection->push_back(aHit);
-    return theCollection->size();
-  }
-  //  Insert a hit object. Total number of hit objects stored in this
-  // collection is returned.
-  inline G4int entries() const
-  {
-    G4AutoLock l(&fMutex);
-    return theCollection->size();
-  }
-  //  Returns the number of hit objects stored in this collection
+  public:  // with description
+    inline value_type* operator[](size_t i) const { return (*theCollection)[i]; }
+    //  Returns a pointer to a concrete hit object.
+    inline container_type* GetVector() const { return theCollection; }
+    //  Returns a collection vector.
+    inline G4int insert(T* aHit)
+    {
+      G4AutoLock l(&fMutex);
+      theCollection->push_back(aHit);
+      return theCollection->size();
+    }
+    //  Insert a hit object. Total number of hit objects stored in this
+    // collection is returned.
+    inline G4int entries() const
+    {
+      G4AutoLock l(&fMutex);
+      return theCollection->size();
+    }
+    //  Returns the number of hit objects stored in this collection
 
- public:
-  virtual G4VHit* GetHit(size_t i) const { return (*theCollection)[i]; }
-  virtual size_t GetSize() const
-  {
-    G4AutoLock l(&fMutex);
-    return theCollection->size();
-  }
+  public:
+    virtual G4VHit* GetHit(size_t i) const { return (*theCollection)[i]; }
+    virtual size_t GetSize() const
+    {
+      G4AutoLock l(&fMutex);
+      return theCollection->size();
+    }
 
- protected:
-  container_type* theCollection;
-  G4Mutex fMutex;
+  protected:
+    container_type* theCollection;
+    G4Mutex fMutex;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T>
-G4TAtomicHitsCollection<T>::G4TAtomicHitsCollection()
-  : theCollection(new container_type)
+template<class T>
+G4TAtomicHitsCollection<T>::G4TAtomicHitsCollection() : theCollection(new container_type)
 {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T>
-G4TAtomicHitsCollection<T>::G4TAtomicHitsCollection(G4String detName,
-                                                    G4String colNam)
-  : G4VHitsCollection(detName, colNam)
-  , theCollection(new container_type)
+template<class T>
+G4TAtomicHitsCollection<T>::G4TAtomicHitsCollection(G4String detName, G4String colNam)
+  : G4VHitsCollection(detName, colNam), theCollection(new container_type)
 {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T>
+template<class T>
 G4TAtomicHitsCollection<T>::~G4TAtomicHitsCollection()
 {
-  for(size_t i = 0; i < theCollection->size(); i++)
-    delete(*theCollection)[i];
+  for (size_t i = 0; i < theCollection->size(); i++)
+    delete (*theCollection)[i];
   theCollection->clear();
   delete theCollection;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T>
-G4bool G4TAtomicHitsCollection<T>::operator==(
-  const G4TAtomicHitsCollection<T>& right) const
+template<class T>
+G4bool G4TAtomicHitsCollection<T>::operator==(const G4TAtomicHitsCollection<T>& right) const
 {
   return (collectionName == right.collectionName);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T>
+template<class T>
 void G4TAtomicHitsCollection<T>::DrawAllHits()
 {
   G4AutoLock l(&fMutex);
-  for(size_t i = 0; i < theCollection->size(); i++)
+  for (size_t i = 0; i < theCollection->size(); i++)
     (*theCollection)[i]->Draw();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T>
+template<class T>
 void G4TAtomicHitsCollection<T>::PrintAllHits()
 {
   G4AutoLock l(&fMutex);
-  for(size_t i = 0; i < theCollection->size(); i++)
+  for (size_t i = 0; i < theCollection->size(); i++)
     (*theCollection)[i]->Print();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

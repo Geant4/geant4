@@ -26,13 +26,13 @@
 /// \file electromagnetic/TestEm12/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
-#include "DetectorConstruction.hh"
 
+#include "DetectorConstruction.hh"
 #include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 
@@ -42,199 +42,203 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run(DetectorConstruction* detector)
-: fDetector(detector)
-{ }
+Run::Run(DetectorConstruction* detector) : fDetector(detector) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
-{ 
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+{
   fParticle = particle;
-  fEkin     = energy;
+  fEkin = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEdep (G4double e)        
+void Run::AddEdep(G4double e)
 {
-  fEdeposit  += e;
-  fEdeposit2 += e*e;
+  fEdeposit += e;
+  fEdeposit2 += e * e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddTrackLength (G4double t) 
+
+void Run::AddTrackLength(G4double t)
 {
-  fTrackLen  += t;
-  fTrackLen2 += t*t;
+  fTrackLen += t;
+  fTrackLen2 += t * t;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddProjRange (G4double x) 
+
+void Run::AddProjRange(G4double x)
 {
-  fProjRange  += x;
-  fProjRange2 += x*x;
+  fProjRange += x;
+  fProjRange2 += x * x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddStepSize (G4int nb, G4double st)
+
+void Run::AddStepSize(G4int nb, G4double st)
 {
-  fNbOfSteps  += nb; 
-  fNbOfSteps2 += nb*nb;
-  fStepSize   += st ; 
-  fStepSize2  += st*st;  
+  fNbOfSteps += nb;
+  fNbOfSteps2 += nb * nb;
+  fStepSize += st;
+  fStepSize2 += st * st;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-                                      
-void Run::SetCsdaRange(G4double value) 
+
+void Run::SetCsdaRange(G4double value)
 {
   fCsdaRange = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-                                      
-G4double Run::GetCsdaRange() 
+
+G4double Run::GetCsdaRange()
 {
   return fCsdaRange;
 }
-       
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
-  
+
   // pass information about primary particle
   fParticle = localRun->fParticle;
-  fEkin     = localRun->fEkin;
+  fEkin = localRun->fEkin;
 
   // accumulate sums
-  fEdeposit   += localRun->fEdeposit;
-  fEdeposit2  += localRun->fEdeposit2;
-  fTrackLen   += localRun->fTrackLen;  
-  fTrackLen2  += localRun->fTrackLen2;
-  fProjRange  += localRun->fProjRange; 
+  fEdeposit += localRun->fEdeposit;
+  fEdeposit2 += localRun->fEdeposit2;
+  fTrackLen += localRun->fTrackLen;
+  fTrackLen2 += localRun->fTrackLen2;
+  fProjRange += localRun->fProjRange;
   fProjRange2 += localRun->fProjRange2;
-  fNbOfSteps  += localRun->fNbOfSteps ;
+  fNbOfSteps += localRun->fNbOfSteps;
   fNbOfSteps2 += localRun->fNbOfSteps2;
-  fStepSize   += localRun->fStepSize;  
-  fStepSize2  += localRun->fStepSize2;
-  
-  fCsdaRange   = localRun->fCsdaRange;
+  fStepSize += localRun->fStepSize;
+  fStepSize2 += localRun->fStepSize2;
 
-  G4Run::Merge(run); 
-} 
+  fCsdaRange = localRun->fCsdaRange;
+
+  G4Run::Merge(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun() 
+void Run::EndOfRun()
 {
   std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
+  G4cout.setf(std::ios::fixed, std::ios::floatfield);
   G4int prec = G4cout.precision(2);
-  
-  //run conditions  
+
+  // run conditions
   //
   G4Material* material = fDetector->GetAbsorMaterial();
-  G4double density  = material->GetDensity();       
+  G4double density = material->GetDensity();
   G4String partName = fParticle->GetParticleName();
-  
-  G4cout << "\n ======================== run summary =====================\n";  
-  G4cout 
-    << "\n The run is " << numberOfEvent << " "<< partName << " of "
-    << G4BestUnit(fEkin,"Energy") << " through "
-    << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << " of "
-    << material->GetName() << " (density: " 
-    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;    
+
+  G4cout << "\n ======================== run summary =====================\n";
+  G4cout << "\n The run is " << numberOfEvent << " " << partName << " of "
+         << G4BestUnit(fEkin, "Energy") << " through "
+         << G4BestUnit(fDetector->GetAbsorRadius(), "Length") << " of " << material->GetName()
+         << " (density: " << G4BestUnit(density, "Volumic Mass") << ")" << G4endl;
 
   if (numberOfEvent == 0) {
-    G4cout.setf(mode,std::ios::floatfield);
-    G4cout.precision(prec);  
+    G4cout.setf(mode, std::ios::floatfield);
+    G4cout.precision(prec);
     return;
   }
-      
-  fEdeposit /= numberOfEvent; fEdeposit2 /= numberOfEvent;
-  G4double rms = fEdeposit2 - fEdeposit*fEdeposit;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4cout.precision(3);       
-  G4cout 
-    << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit,"Energy")
-    << " +- "                                << G4BestUnit( rms,"Energy")
-    << G4endl;
-              
-  //compute track length of primary track
-  //
-  fTrackLen /= numberOfEvent; fTrackLen2 /= numberOfEvent;
-  rms = fTrackLen2 - fTrackLen*fTrackLen;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+  fEdeposit /= numberOfEvent;
+  fEdeposit2 /= numberOfEvent;
+  G4double rms = fEdeposit2 - fEdeposit * fEdeposit;
+  if (rms > 0.)
+    rms = std::sqrt(rms);
+  else
+    rms = 0.;
 
-  G4cout.precision(3);       
-  G4cout 
-    << "\n Track length of primary track = " << G4BestUnit(fTrackLen,"Length")
-    << " +- "                                << G4BestUnit( rms,"Length");
-    
-  //compare with csda range
-  //
-  G4cout 
-    << "\n Range from EmCalculator = " << G4BestUnit(fCsdaRange,"Length")
-    << " (from full dE/dx)" << G4endl;
+  G4cout.precision(3);
+  G4cout << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit, "Energy") << " +- "
+         << G4BestUnit(rms, "Energy") << G4endl;
 
-                     
-  //compute projected range of primary track
+  // compute track length of primary track
   //
-  fProjRange /= numberOfEvent; fProjRange2 /= numberOfEvent;
-  rms = fProjRange2 - fProjRange*fProjRange;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
-   
-  G4cout 
-    << "\n Projected range               = " << G4BestUnit(fProjRange,"Length")
-    << " +- "                                << G4BestUnit( rms,"Length")    
-    << G4endl;
-    
-  //nb of steps and step size of primary track
+  fTrackLen /= numberOfEvent;
+  fTrackLen2 /= numberOfEvent;
+  rms = fTrackLen2 - fTrackLen * fTrackLen;
+  if (rms > 0.)
+    rms = std::sqrt(rms);
+  else
+    rms = 0.;
+
+  G4cout.precision(3);
+  G4cout << "\n Track length of primary track = " << G4BestUnit(fTrackLen, "Length") << " +- "
+         << G4BestUnit(rms, "Length");
+
+  // compare with csda range
+  //
+  G4cout << "\n Range from EmCalculator = " << G4BestUnit(fCsdaRange, "Length")
+         << " (from full dE/dx)" << G4endl;
+
+  // compute projected range of primary track
+  //
+  fProjRange /= numberOfEvent;
+  fProjRange2 /= numberOfEvent;
+  rms = fProjRange2 - fProjRange * fProjRange;
+  if (rms > 0.)
+    rms = std::sqrt(rms);
+  else
+    rms = 0.;
+
+  G4cout << "\n Projected range               = " << G4BestUnit(fProjRange, "Length") << " +- "
+         << G4BestUnit(rms, "Length") << G4endl;
+
+  // nb of steps and step size of primary track
   //
   G4double dNofEvents = double(numberOfEvent);
-  G4double fNbSteps  = fNbOfSteps/dNofEvents, 
-           fNbSteps2 = fNbOfSteps2/dNofEvents;
-  rms = fNbSteps2 - fNbSteps*fNbSteps;       
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+  G4double fNbSteps = fNbOfSteps / dNofEvents, fNbSteps2 = fNbOfSteps2 / dNofEvents;
+  rms = fNbSteps2 - fNbSteps * fNbSteps;
+  if (rms > 0.)
+    rms = std::sqrt(rms);
+  else
+    rms = 0.;
 
-  G4cout.precision(2);       
+  G4cout.precision(2);
   G4cout << "\n Nb of steps of primary track  = " << fNbSteps << " +- " << rms;
-    
-  fStepSize /= numberOfEvent; fStepSize2 /= numberOfEvent;
-  rms = fStepSize2 - fStepSize*fStepSize;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4cout.precision(3);       
-  G4cout 
-    << "\t Step size= " << G4BestUnit(fStepSize,"Length")
-    << " +- "           << G4BestUnit( rms,"Length")
-    << G4endl;
+  fStepSize /= numberOfEvent;
+  fStepSize2 /= numberOfEvent;
+  rms = fStepSize2 - fStepSize * fStepSize;
+  if (rms > 0.)
+    rms = std::sqrt(rms);
+  else
+    rms = 0.;
+
+  G4cout.precision(3);
+  G4cout << "\t Step size= " << G4BestUnit(fStepSize, "Length") << " +- "
+         << G4BestUnit(rms, "Length") << G4endl;
 
   // normalize histograms of longitudinal energy profile
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   G4int ih = 1;
-  G4double binWidth = analysisManager->GetH1Width(ih)
-                     *analysisManager->GetH1Unit(ih);
-  G4double fac = (1./(numberOfEvent*binWidth))*(mm/MeV);
-  analysisManager->ScaleH1(ih,fac);
-    
+  G4double binWidth = analysisManager->GetH1Width(ih) * analysisManager->GetH1Unit(ih);
+  G4double fac = (1. / (numberOfEvent * binWidth)) * (mm / MeV);
+  analysisManager->ScaleH1(ih, fac);
+
   // normalize histogram d(E/E0)/d(r/r0)
-  //    
+  //
   ih = 8;
   binWidth = analysisManager->GetH1Width(ih);
-  fac = 1./(numberOfEvent*binWidth*fEkin);
-  analysisManager->ScaleH1(ih,fac);
-    
+  fac = 1. / (numberOfEvent * binWidth * fEkin);
+  analysisManager->ScaleH1(ih, fac);
+
   // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
+  G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);
 }
 

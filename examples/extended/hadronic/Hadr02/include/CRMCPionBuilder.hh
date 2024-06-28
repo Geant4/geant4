@@ -44,21 +44,21 @@
 #ifndef CRMCPionBuilder_h
 #define CRMCPionBuilder_h 1
 
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VPionBuilder.hh"
+#include "globals.hh"
 
 class HadronicInelasticModelCRMC;
 
-
-class CRMCPionBuilder : public G4VPionBuilder {
+class CRMCPionBuilder : public G4VPionBuilder
+{
   public:
-    CRMCPionBuilder( const G4int crmcModelId, const std::string & crmcModelName );
+    CRMCPionBuilder(const G4int crmcModelId, const std::string& crmcModelName);
     virtual ~CRMCPionBuilder();
-    virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4HadronInelasticProcess* aP ) final override;
-    inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
-    inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
+    virtual void Build(G4HadronElasticProcess* aP) final override;
+    virtual void Build(G4HadronInelasticProcess* aP) final override;
+    inline void SetMinEnergy(G4double aM) final override { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) final override { fMax = aM; }
     using G4VPionBuilder::Build;  // Prevent compiler warning
   private:
     HadronicInelasticModelCRMC* fModel;

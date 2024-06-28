@@ -26,17 +26,17 @@
 /// \file scavenger.cc
 /// \brief Scavenger example
 
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#  include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+#  include "G4RunManager.hh"
 #endif
-#include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
 using namespace scavenger;
@@ -46,21 +46,22 @@ using namespace scavenger;
 int main(int argc, char** argv)
 {
   G4UIExecutive* pUi = nullptr;
-  if ( argc == 1 ) { pUi = new G4UIExecutive(argc, argv); }
+  if (argc == 1) {
+    pUi = new G4UIExecutive(argc, argv);
+  }
 
-  if(argc > 2)
-  {
+  if (argc > 2) {
     G4int change_seed(0);
     change_seed = std::stoi(argv[2]);
     long enterseed = change_seed;
     G4Random::setTheSeed(enterseed);
     G4Random::showEngineStatus();
-    G4cout<<"Used seed : "<<change_seed<<G4endl;
+    G4cout << "Used seed : " << change_seed << G4endl;
   }
 
 #ifdef G4MULTITHREADED
   std::unique_ptr<G4MTRunManager> pRunManager(new G4MTRunManager);
-  pRunManager->SetNumberOfThreads(2);//by default
+  pRunManager->SetNumberOfThreads(2);  // by default
 #else
   std::unique_ptr<G4RunManager> pRunManager(new G4RunManager);
 #endif
@@ -69,8 +70,8 @@ int main(int argc, char** argv)
   pRunManager->SetUserInitialization(new PhysicsList());
   pRunManager->SetUserInitialization(new DetectorConstruction());
   pRunManager->SetUserInitialization(new ActionInitialization());
-  
-  //visualization
+
+  // visualization
   std::unique_ptr<G4VisManager> pVisuManager(new G4VisExecutive);
   pVisuManager->Initialize();
 
@@ -78,16 +79,14 @@ int main(int argc, char** argv)
   auto pUImanager = G4UImanager::GetUIpointer();
 
   // Bash mode : define UI session
-  if ( pUi == nullptr )
-  {
+  if (pUi == nullptr) {
     // batch mode
     pUImanager->ApplyCommand("/control/macroPath ../");
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    pUImanager->ApplyCommand(command+fileName);
+    pUImanager->ApplyCommand(command + fileName);
   }
-  else
-  {
+  else {
     // interactive mode
     pUImanager->ApplyCommand("/control/execute vis.mac");
     pUi->SessionStart();

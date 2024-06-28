@@ -31,30 +31,31 @@
 #ifndef ExN04CalorimeterSD_h
 #define ExN04CalorimeterSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "ExN04CalorimeterHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-class ExN04CalorimeterSD : public G4VSensitiveDetector {
-public:
-  ExN04CalorimeterSD(G4String name);
-  ~ExN04CalorimeterSD();
+class ExN04CalorimeterSD : public G4VSensitiveDetector
+{
+  public:
+    ExN04CalorimeterSD(G4String name);
+    ~ExN04CalorimeterSD();
 
-  virtual void Initialize(G4HCofThisEvent*HCE);
-  virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-  virtual void EndOfEvent(G4HCofThisEvent*HCE);
-  virtual void clear();
-  virtual void DrawAll();
-  virtual void PrintAll();
+    virtual void Initialize(G4HCofThisEvent* HCE);
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent* HCE);
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
 
-private:
-  ExN04CalorimeterHitsCollection* fCalCollection;
-  int fCellID[20][48];
-  const int fnumberOfCellsInZ;
-  const int fnumberOfCellsInPhi;
-
+  private:
+    ExN04CalorimeterHitsCollection* fCalCollection;
+    int fCellID[20][48];
+    const int fnumberOfCellsInZ;
+    const int fnumberOfCellsInPhi;
 };
 
 #endif

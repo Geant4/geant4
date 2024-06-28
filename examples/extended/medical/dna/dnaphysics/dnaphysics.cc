@@ -25,40 +25,43 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file dnaphysics.cc
 /// \brief Implementation of the dnaphysics example
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
-#include "G4UIExecutive.hh"
-#include "G4VisExecutive.hh"
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc, char **argv) {
-
+int main(int argc, char** argv)
+{
   // Detect interactive mode (if no arguments) and define UI session
-  //
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   // Construct the default run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager();
-  if(argc==3) runManager->SetNumberOfThreads(atoi(argv[2]));
-  else runManager->SetNumberOfThreads(2);
+  if (argc == 3)
+    runManager->SetNumberOfThreads(atoi(argv[2]));
+  else
+    runManager->SetNumberOfThreads(2);
 
   // Set mandatory user initialization classes
   auto physlist = new PhysicsList();
@@ -72,13 +75,14 @@ int main(int argc, char **argv) {
   G4VisExecutive* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
-  G4UImanager *UImanager = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (nullptr == ui) {
-    // batch mode
+    // Batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  } else {
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else {
     visManager = new G4VisExecutive;
     visManager->Initialize();
     UImanager->ApplyCommand("/control/execute vis.mac");

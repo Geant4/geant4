@@ -27,49 +27,43 @@
 /// \brief Definition of the scavenger::TimeStepAction class
 
 #ifndef TimeStepAction_h
-#define TimeStepAction_h 1
+#  define TimeStepAction_h 1
 
-#include "G4UserTimeStepAction.hh"
+#  include "G4UserTimeStepAction.hh"
 
 namespace scavenger
 {
 
 class TimeStepAction : public G4UserTimeStepAction
 {
-public:
-  TimeStepAction();
-  virtual ~TimeStepAction();
-  TimeStepAction(const TimeStepAction& other);
-  TimeStepAction& operator=(const TimeStepAction& other);
+  public:
+    TimeStepAction();
+    virtual ~TimeStepAction();
+    TimeStepAction(const TimeStepAction& other);
+    TimeStepAction& operator=(const TimeStepAction& other);
 
-  virtual void StartProcessing(){;}
+    virtual void StartProcessing() { ; }
 
-  /** In this method, the user can use :
-   * G4ITTimeStepper::Instance()->GetGlobalTime(),
-   *    to know the current simulation time
-   * G4ITTimeStepper::Instance()->GetTimeStep(),
-   *    to know the selected minimum time
-   * WARNING :
-   *    The call of this method happens before the call of DoIT methods
-   */
-  virtual void UserPreTimeStepAction();
-  virtual void UserPostTimeStepAction();
+    /** In this method, the user can use :
+     * G4ITTimeStepper::Instance()->GetGlobalTime(),
+     *    to know the current simulation time
+     * G4ITTimeStepper::Instance()->GetTimeStep(),
+     *    to know the selected minimum time
+     * WARNING :
+     *    The call of this method happens before the call of DoIT methods
+     */
+    virtual void UserPreTimeStepAction();
+    virtual void UserPostTimeStepAction();
 
-  /**
-   * Inform about a reaction
-   */
-  virtual void UserReactionAction(const G4Track& /*trackA*/,
-                                  const G4Track& /*trackB*/,
-                                  const std::vector<G4Track*>* /*products*/);
+    /**
+     * Inform about a reaction
+     */
+    virtual void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                                    const std::vector<G4Track*>* /*products*/);
 
-  virtual void EndProcessing(){;}
-  void Clear();
-
+    virtual void EndProcessing() { ; }
+    void Clear();
 };
 
-
-
-#endif // TimeStepAction_h
-
-
+#endif  // TimeStepAction_h
 }

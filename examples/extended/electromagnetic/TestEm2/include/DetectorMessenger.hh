@@ -26,15 +26,15 @@
 /// \file electromagnetic/TestEm2/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -45,25 +45,24 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
-  DetectorMessenger(DetectorConstruction* );
- ~DetectorMessenger() override;
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-private:
-  DetectorConstruction*   fDetector  = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
 
-  G4UIdirectory*          fTestemDir = nullptr;
-  G4UIdirectory*          fDetDir    = nullptr;
-  G4UIcmdWithAString*     fMaterCmd  = nullptr;
-  G4UIcmdWith3Vector*     fLBinCmd   = nullptr;
-  G4UIcmdWith3Vector*     fRBinCmd   = nullptr;
+    G4UIdirectory* fTestemDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fMaterCmd = nullptr;
+    G4UIcmdWith3Vector* fLBinCmd = nullptr;
+    G4UIcmdWith3Vector* fRBinCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

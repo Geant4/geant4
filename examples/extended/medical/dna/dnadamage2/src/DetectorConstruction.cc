@@ -44,42 +44,39 @@
 
 #include "DetectorConstruction.hh"
 
-#include "G4NistManager.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-
-#include "G4VisAttributes.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4GeometryManager.hh"
-#include "G4RunManager.hh"
-#include "G4LogicalVolumeStore.hh"
-
-#include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-
-#include "ScoreSpecies.hh"
 #include "ScoreLET.hh"
+#include "ScoreSpecies.hh"
 #include "ScoreStrandBreaks.hh"
+
+#include "G4Box.hh"
+#include "G4GeometryManager.hh"
+#include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-DetectorConstruction::DetectorConstruction()
-: G4VUserDetectorConstruction()
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction()
 {
   fDetDir = new G4UIdirectory("/det/");
   fDetDir->SetGuidance("Detector control.");
 
-  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/det/setSize",this);
+  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/det/setSize", this);
   fSizeCmd->SetDefaultUnit("um");
 
   fpOffSetFileUI = new G4UIcmdWithAString("/det/OffSetFile", this);
-  fpPlasmidNbUI  = new G4UIcmdWithAnInteger("/det/NbOfPlasmids", this);
+  fpPlasmidNbUI = new G4UIcmdWithAnInteger("/det/NbOfPlasmids", this);
 
   fpPlasmidFile = new G4UIcmdWithAString("/det/PlasmidFile", this);
-  fpUseDNA      = new G4UIcmdWithABool("/det/UseDNAVolumes", this);
+  fpUseDNA = new G4UIcmdWithABool("/det/UseDNAVolumes", this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -96,30 +93,25 @@ DetectorConstruction::~DetectorConstruction()
 
 void DetectorConstruction::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fSizeCmd)
-  {
+  if (command == fSizeCmd) {
     G4double size = fSizeCmd->GetNewDoubleValue(newValue);
     SetSize(size);
   }
 
-  if (command == fpPlasmidNbUI)
-  {
+  if (command == fpPlasmidNbUI) {
     fNbOfPlasmids = fpPlasmidNbUI->GetNewIntValue(newValue);
   }
 
-  if (command == fpOffSetFileUI) 
-  {
+  if (command == fpOffSetFileUI) {
     G4String File = newValue;
     ReadOffsetFile(File);
   }
 
-  if (command == fpPlasmidFile)
-  {
+  if (command == fpPlasmidFile) {
     fPlasmidFile = newValue;
   }
 
-  if (command == fpUseDNA)
-  {
+  if (command == fpUseDNA) {
     fUseDNAVolumes = fpUseDNA->GetNewBoolValue(newValue);
   }
 }
@@ -128,9 +120,8 @@ void DetectorConstruction::SetNewValue(G4UIcommand* command, G4String newValue)
 
 void DetectorConstruction::SetSize(G4double size)
 {
-
   G4GeometryManager::GetInstance()->OpenGeometry();
-  fPlasmidEnvelope->SetRadius(size/2);
+  fPlasmidEnvelope->SetRadius(size / 2);
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4cout << "#### the geometry has been modified " << G4endl;
 }
@@ -148,42 +139,27 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   fDNADetails.clear();
 
   // Water is defined from NIST material database
-  G4NistManager * man = G4NistManager::Instance();
-  G4Material*   normalWater = man->FindOrBuildMaterial("G4_WATER");
-  G4Material*   waterWorld  = man->BuildMaterialWithNewDensity("G4_WATER_WORLD",
-                                                               "G4_WATER",
-                                                               1.0*g/cm/cm/cm);
+  G4NistManager* man = G4NistManager::Instance();
+  G4Material* normalWater = man->FindOrBuildMaterial("G4_WATER");
+  G4Material* waterWorld =
+    man->BuildMaterialWithNewDensity("G4_WATER_WORLD", "G4_WATER", 1.0 * g / cm / cm / cm);
 
   //
   // World
-  G4Box* solidWenvelope        = new G4Box("SWorld", 1 * um, 1 * um, 1 * um);
-  G4LogicalVolume* logicWorld  = new G4LogicalVolume(solidWenvelope, 
-                                                     waterWorld, 
-                                                     "LWorld");
-  G4VPhysicalVolume* physWorld = new G4PVPlacement(0, 
-                                                   G4ThreeVector(), 
-                                                   "PWorld", 
-                                                   logicWorld, 
-                                                   0, 
-                                                   false, 
-                                                   0);
+  G4Box* solidWenvelope = new G4Box("SWorld", 1 * um, 1 * um, 1 * um);
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWenvelope, waterWorld, "LWorld");
+  G4VPhysicalVolume* physWorld =
+    new G4PVPlacement(0, G4ThreeVector(), "PWorld", logicWorld, 0, false, 0);
 
   // Molecule
-  fPlasmidEnvelope = new G4Orb("plasmidEnvelope", 0.5*fWorldSize);
+  fPlasmidEnvelope = new G4Orb("plasmidEnvelope", 0.5 * fWorldSize);
 
-  G4LogicalVolume* tlogicPlasmid = new G4LogicalVolume(fPlasmidEnvelope, 
-                                                       normalWater,
-                                                       "PlasmidVolume");
-  new G4PVPlacement(0,
-                    G4ThreeVector(), 
-                    tlogicPlasmid, 
-                    "plasmid", 
-                    logicWorld, 
-                    false, 
-                    0);
+  G4LogicalVolume* tlogicPlasmid =
+    new G4LogicalVolume(fPlasmidEnvelope, normalWater, "PlasmidVolume");
+  new G4PVPlacement(0, G4ThreeVector(), tlogicPlasmid, "plasmid", logicWorld, false, 0);
 
   // World Vis Attributes
-  G4VisAttributes worldVis(G4Colour(0.0, 0.0, 1.0) );
+  G4VisAttributes worldVis(G4Colour(0.0, 0.0, 1.0));
   logicWorld->SetVisAttributes(worldVis);
 
   PhysGeoImport GeoImport = PhysGeoImport();
@@ -192,23 +168,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   logicStraightVoxel = GeoImport.CreateLogicVolumeXYZ(fPlasmidFile);
 
-  fSampleDNANames     = GeoImport.GetMoleculesNames();
+  fSampleDNANames = GeoImport.GetMoleculesNames();
   fSampleDNAPositions = GeoImport.GetMoleculesPositions();
-  fSampleDNADetails   = GeoImport.GetMoleculesDetails();
+  fSampleDNADetails = GeoImport.GetMoleculesDetails();
 
-  for ( int i = 0; i < fNbOfPlasmids; i++ ) {
+  for (int i = 0; i < fNbOfPlasmids; i++) {
     if (fUseDNAVolumes)
-      new G4PVPlacement(0, 
-                        fVOffset[i], 
-                        logicStraightVoxel, 
-                        "VoxelStraight", 
-                        logicWorld, 
-                        true, 
-                        i);
-    AddDNAInformation(i,fVOffset[i]);
+      new G4PVPlacement(0, fVOffset[i], logicStraightVoxel, "VoxelStraight", logicWorld, true, i);
+    AddDNAInformation(i, fVOffset[i]);
   }
 
-  //always return the physical World
+  // always return the physical World
   return physWorld;
 }
 
@@ -220,8 +190,7 @@ void DetectorConstruction::ConstructSDandField()
 
   // declare World as a MultiFunctionalDetector scorer
   //
-  G4MultiFunctionalDetector* mfDetector =
-  new G4MultiFunctionalDetector("mfDetector");
+  G4MultiFunctionalDetector* mfDetector = new G4MultiFunctionalDetector("mfDetector");
 
   // LET scorer:
   //  - scores restricted or unrestricted LET
@@ -240,27 +209,25 @@ void DetectorConstruction::ConstructSDandField()
   //  - scores number of Direct SB
   //  - scores number of Indirect SB
 
-  G4VPrimitiveScorer* primitiveSB = new ScoreStrandBreaks("StrandBreaks",
-                                                         this,&fWorldSize);
+  G4VPrimitiveScorer* primitiveSB = new ScoreStrandBreaks("StrandBreaks", this, &fWorldSize);
   mfDetector->RegisterPrimitive(primitiveSB);
 
   // Attach Detectors to Plasmid Volumes
   G4LogicalVolumeStore* theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
-  for ( size_t t = 0; t < theLogicalVolumes->size(); t++ ) {
+  for (size_t t = 0; t < theLogicalVolumes->size(); t++) {
     G4String lVolumeName = (*theLogicalVolumes)[t]->GetName();
     if (lVolumeName != "LWorld") {
       (*theLogicalVolumes)[t]->SetSensitiveDetector(mfDetector);
     }
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(mfDetector);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void DetectorConstruction::ReadOffsetFile(G4String file) {
-  if (fVOffset.size() > 0)
-    fVOffset.clear();
+void DetectorConstruction::ReadOffsetFile(G4String file)
+{
+  if (fVOffset.size() > 0) fVOffset.clear();
 
   std::ifstream OffSetFile;
   OffSetFile.open(file);
@@ -273,15 +240,16 @@ void DetectorConstruction::ReadOffsetFile(G4String file) {
 
   else {
     while (OffSetFile >> x >> y >> z) {
-      fVOffset.push_back(G4ThreeVector(x*nm,y*nm,z*nm));
+      fVOffset.push_back(G4ThreeVector(x * nm, y * nm, z * nm));
     }
-  }  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void DetectorConstruction::AddDNAInformation(G4int copy, G4ThreeVector offset) {
-  for(size_t i = 0; i < fSampleDNANames.size(); i++) {
+void DetectorConstruction::AddDNAInformation(G4int copy, G4ThreeVector offset)
+{
+  for (size_t i = 0; i < fSampleDNANames.size(); i++) {
     fDNANames.push_back(fSampleDNANames[i]);
     fDNAPositions.push_back(fSampleDNAPositions[i] + offset);
 

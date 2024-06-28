@@ -40,7 +40,7 @@ namespace Common
 
 GpsPrimaryGeneratorAction::GpsPrimaryGeneratorAction()
 {
-  fGeneralParticleSource  = new G4GeneralParticleSource();
+  fGeneralParticleSource = new G4GeneralParticleSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,5 +61,4 @@ void GpsPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
-
+}  // namespace Common

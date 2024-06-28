@@ -29,63 +29,59 @@
 //
 
 #include "ExN04TrackerSD.hh"
+
 #include "ExN04TrackerHit.hh"
-#include "G4Step.hh"
+
 #include "G4HCofThisEvent.hh"
+#include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerSD::ExN04TrackerSD(G4String name)
-  : G4VSensitiveDetector(name)
+ExN04TrackerSD::ExN04TrackerSD(G4String name) : G4VSensitiveDetector(name)
 {
   G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
+  collectionName.insert(HCname = "trackerCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerSD::~ExN04TrackerSD(){;}
+ExN04TrackerSD::~ExN04TrackerSD()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  fTrackerCollection = new ExN04TrackerHitsCollection
-                      (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,fTrackerCollection);
+  fTrackerCollection = new ExN04TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, fTrackerCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExN04TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.) return false;
+  if (edep == 0.) return false;
 
   ExN04TrackerHit* newHit = new ExN04TrackerHit();
-  newHit->SetEdep( edep );
-  newHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  fTrackerCollection->insert( newHit );
+  newHit->SetEdep(edep);
+  newHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+  fTrackerCollection->insert(newHit);
 
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerSD::EndOfEvent(G4HCofThisEvent*)
-{
-}
+void ExN04TrackerSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerSD::clear()
-{
-}
+void ExN04TrackerSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerSD::DrawAll()
-{
-}
+void ExN04TrackerSD::DrawAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerSD::PrintAll()
-{
-}
+void ExN04TrackerSD::PrintAll() {}

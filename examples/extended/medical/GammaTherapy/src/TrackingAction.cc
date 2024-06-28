@@ -45,47 +45,39 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "TrackingAction.hh"
-#include "G4RunManager.hh"
+
 #include "Run.hh"
 
-#include "G4Track.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-TrackingAction::TrackingAction()
-{
-}
+TrackingAction::TrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-TrackingAction::~TrackingAction()
-{}
+TrackingAction::~TrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   run->ScoreNewTrack(aTrack);
 
-  if(run->GetVerbose()) {
-    G4cout << "New track #"
-           << aTrack->GetTrackID() << " of " 
+  if (run->GetVerbose()) {
+    G4cout << "New track #" << aTrack->GetTrackID() << " of "
            << aTrack->GetParticleDefinition()->GetParticleName()
-           << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
-           << " parent # " << aTrack->GetParentID()
-           << G4endl;
+           << " Ekin(MeV)= " << aTrack->GetKineticEnergy() / MeV << " parent # "
+           << aTrack->GetParentID() << G4endl;
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void TrackingAction::PostUserTrackingAction(const G4Track*)
-{}
+void TrackingAction::PostUserTrackingAction(const G4Track*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -41,82 +41,71 @@
 #include "RMC01DetectorMessenger.hh"
 
 #include "RMC01DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RMC01DetectorMessenger::RMC01DetectorMessenger(
-                                         RMC01DetectorConstruction* GeneralDet)
-: G4UImessenger(),
-  fTheDetector(GeneralDet),
-  fGeneralDir(0),
-  fDetDir(0),
-  fSetSensitiveVolumeHeightCmd(0),
-  fSetSensitiveVolumeRadiusCmd(0),
-  fSetShieldingThicknessCmd(0)
-{ 
-  
-  fGeneralDir= new G4UIdirectory("/RMC01/");
-  fGeneralDir->SetGuidance(
-          "Control of the Geant4 Reverse Monte Carlo example1");
-  
-  
+RMC01DetectorMessenger::RMC01DetectorMessenger(RMC01DetectorConstruction* GeneralDet)
+  : G4UImessenger(),
+    fTheDetector(GeneralDet),
+    fGeneralDir(0),
+    fDetDir(0),
+    fSetSensitiveVolumeHeightCmd(0),
+    fSetSensitiveVolumeRadiusCmd(0),
+    fSetShieldingThicknessCmd(0)
+{
+  fGeneralDir = new G4UIdirectory("/RMC01/");
+  fGeneralDir->SetGuidance("Control of the Geant4 Reverse Monte Carlo example1");
 
   fDetDir = new G4UIdirectory("/RMC01/geometry/");
   fDetDir->SetGuidance("Geometry control");
-  
-  
-  fSetSensitiveVolumeHeightCmd = new G4UIcmdWithADoubleAndUnit(
-                             "/RMC01/geometry/SetSensitiveVolumeHeight",this);
-  fSetSensitiveVolumeHeightCmd->SetGuidance(
-                                 "Set the height of the sensitive cylinder");
-  fSetSensitiveVolumeHeightCmd->AvailableForStates(G4State_PreInit);
-   
-  fSetSensitiveVolumeRadiusCmd = new G4UIcmdWithADoubleAndUnit(
-                             "/RMC01/geometry/SetSensitiveVolumeRadius",this);
-  fSetSensitiveVolumeRadiusCmd->SetGuidance(
-                                 "Set the radius of the sensitive cylinder");
-  fSetSensitiveVolumeRadiusCmd->AvailableForStates(G4State_PreInit);
-  
-  fSetShieldingThicknessCmd = new G4UIcmdWithADoubleAndUnit(
-                               "/RMC01/geometry/SetShieldingThickness",this);
-  fSetShieldingThicknessCmd->SetGuidance(
-                        "Set the thickness of the Aluminum Shielding sphere");
-  fSetShieldingThicknessCmd->AvailableForStates(G4State_PreInit);
 
+  fSetSensitiveVolumeHeightCmd =
+    new G4UIcmdWithADoubleAndUnit("/RMC01/geometry/SetSensitiveVolumeHeight", this);
+  fSetSensitiveVolumeHeightCmd->SetGuidance("Set the height of the sensitive cylinder");
+  fSetSensitiveVolumeHeightCmd->AvailableForStates(G4State_PreInit);
+
+  fSetSensitiveVolumeRadiusCmd =
+    new G4UIcmdWithADoubleAndUnit("/RMC01/geometry/SetSensitiveVolumeRadius", this);
+  fSetSensitiveVolumeRadiusCmd->SetGuidance("Set the radius of the sensitive cylinder");
+  fSetSensitiveVolumeRadiusCmd->AvailableForStates(G4State_PreInit);
+
+  fSetShieldingThicknessCmd =
+    new G4UIcmdWithADoubleAndUnit("/RMC01/geometry/SetShieldingThickness", this);
+  fSetShieldingThicknessCmd->SetGuidance("Set the thickness of the Aluminum Shielding sphere");
+  fSetShieldingThicknessCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01DetectorMessenger::~RMC01DetectorMessenger()
 {
-  if (fGeneralDir ) delete fGeneralDir;
+  if (fGeneralDir) delete fGeneralDir;
   if (fDetDir) delete fDetDir;
-  if (fSetSensitiveVolumeHeightCmd) delete  fSetSensitiveVolumeHeightCmd;
-  if (fSetSensitiveVolumeRadiusCmd) delete  fSetSensitiveVolumeRadiusCmd;
-  if (fSetShieldingThicknessCmd) delete  fSetShieldingThicknessCmd;
-  
+  if (fSetSensitiveVolumeHeightCmd) delete fSetSensitiveVolumeHeightCmd;
+  if (fSetSensitiveVolumeRadiusCmd) delete fSetSensitiveVolumeRadiusCmd;
+  if (fSetShieldingThicknessCmd) delete fSetShieldingThicknessCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01DetectorMessenger::SetNewValue(G4UIcommand* command,
-                                                         G4String newValue)
-{  if( command == fSetSensitiveVolumeHeightCmd ){ 
-          fTheDetector->SetSensitiveVolumeHeight(
-                   fSetSensitiveVolumeHeightCmd->GetNewDoubleValue(newValue));
+void RMC01DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fSetSensitiveVolumeHeightCmd) {
+    fTheDetector->SetSensitiveVolumeHeight(
+      fSetSensitiveVolumeHeightCmd->GetNewDoubleValue(newValue));
   }
-  
-  else if( command == fSetSensitiveVolumeRadiusCmd ){ 
-          fTheDetector->SetSensitiveVolumeRadius(
-                    fSetSensitiveVolumeRadiusCmd->GetNewDoubleValue(newValue));
+
+  else if (command == fSetSensitiveVolumeRadiusCmd) {
+    fTheDetector->SetSensitiveVolumeRadius(
+      fSetSensitiveVolumeRadiusCmd->GetNewDoubleValue(newValue));
   }
-  
-  else if( command == fSetShieldingThicknessCmd ){ 
-          fTheDetector->SetShieldingThickness(
-                      fSetShieldingThicknessCmd->GetNewDoubleValue(newValue));
+
+  else if (command == fSetShieldingThicknessCmd) {
+    fTheDetector->SetShieldingThickness(fSetShieldingThicknessCmd->GetNewDoubleValue(newValue));
   }
 }
 

@@ -35,16 +35,15 @@
 
 namespace G4FermiBreakUpUtil {
 
-  const G4double deltaR = 0.6*CLHEP::fermi;
-  const G4double coeff = 0.9;
+  const G4double coeff = 0.6;
 
   // Coulomb barrier
   G4double CoulombBarrier(const G4int Z1, const G4int A1,
                           const G4int Z2, const G4int A2, const G4double exc) {
     const G4double r1 = G4NuclearRadii::RadiusCB(Z1, A1);
     const G4double r2 = G4NuclearRadii::RadiusCB(Z2, A2);
-    G4double CB = coeff*CLHEP::elm_coupling*(Z1*Z2)/(r1 + r2 - deltaR);
-    if(exc > 0.0) { CB /= (1.0 + std::sqrt(exc/((2*(A1 + A2))*CLHEP::MeV))); }
+    G4double CB = CLHEP::elm_coupling*(Z1*Z2)/(coeff*r1 + r2);
+    if (exc > 0.0) { CB /= (1.0 + std::sqrt(exc/((2*(A1 + A2))*CLHEP::MeV))); }
     return CB;
   }
 

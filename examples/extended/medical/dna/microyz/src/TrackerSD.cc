@@ -24,29 +24,28 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file TrackerSD.cc
 /// \brief Implementation of the TrackerSD class
 
 #include "TrackerSD.hh"
-#include "Randomize.hh"
+
 #include "G4AnalysisManager.hh"
 #include "G4SDManager.hh"
-
-#include "G4RandomDirection.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackerSD::TrackerSD(const G4String& name,
-                     const G4String& hitsCollectionName)
-:G4VSensitiveDetector(name),
-fHitsCollection(nullptr)
+TrackerSD::TrackerSD(const G4String& name, const G4String& hitsCollectionName)
+  : G4VSensitiveDetector(name), fHitsCollection(nullptr)
 {
   collectionName.insert(hitsCollectionName);
 }
@@ -60,38 +59,34 @@ TrackerSD::~TrackerSD() = default;
 void TrackerSD::Initialize(G4HCofThisEvent* hce)
 {
   // Create hits collection
-  fHitsCollection
-    = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
+  fHitsCollection = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
 
   // Add this collection in hce
+  G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
 
-  G4int hcID
-    = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
-
-  hce->AddHitsCollection( hcID, fHitsCollection );
+  hce->AddHitsCollection(hcID, fHitsCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool TrackerSD::ProcessHits(G4Step* aStep,
-                                     G4TouchableHistory*)
+G4bool TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  // energy deposit
+  // Energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
 
-  if (edep==0.) return false;
+  if (edep == 0.) return false;
 
   auto newHit = new TrackerHit();
 
-  newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
+  newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
   newHit->SetEdep(edep);
-  newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
 
-  if (aStep->GetTrack()->GetTrackID()==1&&aStep->GetTrack()->GetParentID()==0){
+  if (aStep->GetTrack()->GetTrackID() == 1 && aStep->GetTrack()->GetParentID() == 0) {
     newHit->SetIncidentEnergy(aStep->GetTrack()->GetVertexKineticEnergy());
   }
-  fHitsCollection->insert( newHit );
-  //newHit->Print();
+  fHitsCollection->insert(newHit);
+  // newHit->Print();
 
   return true;
 }
@@ -107,7 +102,7 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int nofHits = fHitsCollection->entries();
 
-  G4double Einc=0;
+  G4double Einc = 0;
 
   /*
   G4cout << G4endl
@@ -123,7 +118,6 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
   // the radius of the target sphere:
   // variable name = radius
   // it is set to 5 nm by default)
-  //
 
   G4double radius = fRadius;
 
@@ -133,9 +127,9 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
   // y and z
   //***************
 
-  // select random hit
-  G4int randHit=0; // Runs from 0 to number of hits - 1
-  randHit = static_cast<G4int>( G4UniformRand()*nofHits );
+  // Select random hit
+  G4int randHit = 0;  // Runs from 0 to number of hits - 1
+  randHit = static_cast<G4int>(G4UniformRand() * nofHits);
 
   /*
   G4cout
@@ -143,51 +137,46 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
   << randHit << G4endl;
   */
 
-  // get selected random hit position
-  G4ThreeVector hitPos =  (*fHitsCollection)[randHit]->GetPos();
-//G4cout << "======> random hit position x/nm =" << hitPos.x()/nm << G4endl; 
-//G4cout << "======> random hit position y/nm =" << hitPos.y()/nm << G4endl; 
-//G4cout << "======> random hit position z/nm =" << hitPos.z()/nm << G4endl; 
+  // Get selected random hit position
+  G4ThreeVector hitPos = (*fHitsCollection)[randHit]->GetPos();
+  // G4cout << "======> random hit position x/nm =" << hitPos.x()/nm << G4endl;
+  // G4cout << "======> random hit position y/nm =" << hitPos.y()/nm << G4endl;
+  // G4cout << "======> random hit position z/nm =" << hitPos.z()/nm << G4endl;
 
-  // set random position of center of sphere within radius
-  G4double chord = 4.*radius/3;
-  G4double density = 1 * g/cm3;
-  G4double mass = (4./3)*CLHEP::pi*radius*radius*radius*density;
+  // Set random position of center of sphere within radius
+  G4double chord = 4. * radius / 3;
+  G4double density = 1 * g / cm3;
+  G4double mass = (4. / 3) * CLHEP::pi * radius * radius * radius * density;
 
-  // random placement of sphere: method 1
+  // Random placement of sphere: method 1
   /*
   G4ThreeVector randDir = G4RandomDirection();
   G4double randRadius = G4UniformRand()*radius;
   G4ThreeVector randCenterPos = randRadius*randDir + hitPos;
   */
 
-  // random placement of sphere: method 2
+  // Random placement of sphere: method 2
 
-  G4double xRand = 1.01*radius;
-  G4double yRand = 1.01*radius;
-  G4double zRand = 1.01*radius;
-  G4double randRad = 1.01*radius;
-  do
-  {
-    xRand = (2*G4UniformRand()-1)*radius;
-    yRand = (2*G4UniformRand()-1)*radius;
-    zRand = (2*G4UniformRand()-1)*radius;
-    randRad = std::sqrt( xRand*xRand+yRand*yRand+zRand*zRand );
-  }
-  while (randRad>radius);
+  G4double xRand = 1.01 * radius;
+  G4double yRand = 1.01 * radius;
+  G4double zRand = 1.01 * radius;
+  G4double randRad = 1.01 * radius;
+  do {
+    xRand = (2 * G4UniformRand() - 1) * radius;
+    yRand = (2 * G4UniformRand() - 1) * radius;
+    zRand = (2 * G4UniformRand() - 1) * radius;
+    randRad = std::sqrt(xRand * xRand + yRand * yRand + zRand * zRand);
+  } while (randRad > radius);
 
-  G4ThreeVector
-    randCenterPos(xRand+hitPos.x(),yRand+hitPos.y(),zRand+hitPos.z());
+  G4ThreeVector randCenterPos(xRand + hitPos.x(), yRand + hitPos.y(), zRand + hitPos.z());
 
-  // search for neighbouring hits in the sphere and cumulate deposited energy
+  // Search for neighbouring hits in the sphere and cumulate deposited energy
   //  in epsilon
   G4double epsilon = 0;
   G4int nbEdep = 0;
 
-  for ( G4int i=0; i<nofHits; i++ )
-  {
-
-    if ((*fHitsCollection)[i]->GetIncidentEnergy()>0)
+  for (G4int i = 0; i < nofHits; i++) {
+    if ((*fHitsCollection)[i]->GetIncidentEnergy() > 0)
       Einc = (*fHitsCollection)[i]->GetIncidentEnergy();
 
     G4ThreeVector localPos = (*fHitsCollection)[i]->GetPos();
@@ -195,21 +184,18 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
     // G4cout << i << " " << (*fHitsCollection)[i] << G4endl;
     // G4cout << i << " " << (*fHitsCollection)[i]->GetEdep()/eV << G4endl;
 
-    if (
-        (localPos.x()-randCenterPos.x()) * (localPos.x()-randCenterPos.x()) +
-        (localPos.y()-randCenterPos.y()) * (localPos.y()-randCenterPos.y()) +
-        (localPos.z()-randCenterPos.z()) * (localPos.z()-randCenterPos.z())
-         <= radius*radius
-       )
+    if ((localPos.x() - randCenterPos.x()) * (localPos.x() - randCenterPos.x())
+          + (localPos.y() - randCenterPos.y()) * (localPos.y() - randCenterPos.y())
+          + (localPos.z() - randCenterPos.z()) * (localPos.z() - randCenterPos.z())
+        <= radius * radius)
 
     {
-      epsilon = epsilon + (*fHitsCollection)[i]->GetEdep() ;
-      nbEdep = nbEdep+1;
+      epsilon = epsilon + (*fHitsCollection)[i]->GetEdep();
+      nbEdep = nbEdep + 1;
     }
-
   }
 
-  // for testing only
+  // For testing only
   /*
   G4cout << "======> for hit number #" << randHit <<
   ", we collect "
@@ -229,18 +215,17 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
   fclose(myFile);
   */
 
-  // get analysis manager
+  // Get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  // fill ntuple including weighting
-  analysisManager->FillNtupleDColumn(0, radius/nm);
+  // Fill ntuple including weighting
+  analysisManager->FillNtupleDColumn(0, radius / nm);
   analysisManager->FillNtupleDColumn(2, nofHits);
   analysisManager->FillNtupleDColumn(3, nbEdep);
-  analysisManager->FillNtupleDColumn(4, (epsilon/eV)/(chord/nm));
-  analysisManager->FillNtupleDColumn(5, (epsilon/mass)/gray);
-  analysisManager->FillNtupleDColumn(6, Einc/eV);
+  analysisManager->FillNtupleDColumn(4, (epsilon / eV) / (chord / nm));
+  analysisManager->FillNtupleDColumn(5, (epsilon / mass) / gray);
+  analysisManager->FillNtupleDColumn(6, Einc / eV);
   analysisManager->AddNtupleRow();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

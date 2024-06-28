@@ -29,8 +29,8 @@
 #ifndef MOLECULAR_DAMAGE_MESSENGER_HH
 #define MOLECULAR_DAMAGE_MESSENGER_HH
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DamageModel;
 
@@ -56,33 +56,33 @@ class G4UIcmdWithoutParameter;
 
 class DamageModelMessenger : public G4UImessenger
 {
- public:
-  explicit DamageModelMessenger(DamageModel*);
+  public:
+    explicit DamageModelMessenger(DamageModel*);
 
-  ~DamageModelMessenger() override;
+    ~DamageModelMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- protected:
- private:
-  DamageModel* fpDamageModel;
-  G4UIdirectory* fpDamageDirectory;
-  // interaction model
-  G4UIcmdWithADoubleAndUnit* fpIntRangeDirect;
-  G4UIcmdWithADoubleAndUnit* fpIntEnergyLower;
-  G4UIcmdWithADoubleAndUnit* fpIntEnergyUpper;
+  protected:
+  private:
+    DamageModel* fpDamageModel;
+    G4UIdirectory* fpDamageDirectory;
+    // interaction model
+    G4UIcmdWithADoubleAndUnit* fpIntRangeDirect;
+    G4UIcmdWithADoubleAndUnit* fpIntEnergyLower;
+    G4UIcmdWithADoubleAndUnit* fpIntEnergyUpper;
 
-  G4UIcmdWithADouble* fpOHBaseChance;
-  G4UIcmdWithADouble* fpOHStrandChance;
-  G4UIcmdWithADouble* fpOHInductionChance;
+    G4UIcmdWithADouble* fpOHBaseChance;
+    G4UIcmdWithADouble* fpOHStrandChance;
+    G4UIcmdWithADouble* fpOHInductionChance;
 
-  G4UIcmdWithADouble* fpHBaseChance;
-  G4UIcmdWithADouble* fpHStrandChance;
-  G4UIcmdWithADouble* fpHInductionChance;
+    G4UIcmdWithADouble* fpHBaseChance;
+    G4UIcmdWithADouble* fpHStrandChance;
+    G4UIcmdWithADouble* fpHInductionChance;
 
-  G4UIcmdWithADouble* fpEaqBaseChance;
-  G4UIcmdWithADouble* fpEaqStrandChance;
-  G4UIcmdWithADouble* fpEaqInductionChance;
+    G4UIcmdWithADouble* fpEaqBaseChance;
+    G4UIcmdWithADouble* fpEaqStrandChance;
+    G4UIcmdWithADouble* fpEaqInductionChance;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

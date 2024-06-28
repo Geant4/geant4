@@ -27,10 +27,10 @@
 //
 // QSS Integrator Stepper
 
-// Authors: Lucio Santi, Rodrigo Castro - 2018-2021.
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
 // --------------------------------------------------------------------
 #ifndef QSS_Stepper_HH
-#define QSS_Stepper_HH
+#define QSS_Stepper_HH 1
 
 #include "G4FieldTrack.hh"
 #include "G4FieldUtils.hh"
@@ -428,7 +428,7 @@ template <class QSS>
 inline void G4QSStepper<QSS>::initialize_data_structs()
 {
   auto sim = this->simulator;
-  auto  states = (G4int*)calloc(Qss_misc::VAR_IDX_END, sizeof(G4int));
+  auto states = (G4int*)calloc(Qss_misc::VAR_IDX_END, sizeof(G4int));
 
   sim->states = Qss_misc::VAR_IDX_END;
   sim->it = 0.;

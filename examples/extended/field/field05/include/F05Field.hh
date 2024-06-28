@@ -34,26 +34,24 @@
 #ifndef F05Field_h
 #define F05Field_h 1
 
-#include "globals.hh"
 #include "G4ElectroMagneticField.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F05Field : public G4ElectroMagneticField
 {
+  public:
+    F05Field() = default;
+    ~F05Field() override = default;
 
-public:
+    /// DoesFieldChangeEnergy() returns true.
+    G4bool DoesFieldChangeEnergy() const override { return true; };
 
-  F05Field() = default;
-  ~F05Field() override = default;
-
-  /// DoesFieldChangeEnergy() returns true.
-  G4bool DoesFieldChangeEnergy() const override { return true; };
-
-  /// GetFieldValue() returns the field value at a given point[].
-  /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
-  /// point[] is in global coordinates: x,y,z,t.
-  void GetFieldValue(const G4double Point[4], G4double* Bfield) const override;
+    /// GetFieldValue() returns the field value at a given point[].
+    /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
+    /// point[] is in global coordinates: x,y,z,t.
+    void GetFieldValue(const G4double Point[4], G4double* Bfield) const override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

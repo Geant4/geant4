@@ -31,27 +31,30 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
-#include "G4Step.hh"
-#include "G4Run.hh"
-#include "G4LossTableManager.hh"
-#include "G4ElectronIonPair.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
+
 #include "TestParameters.hh"
+
+#include "G4ElectronIonPair.hh"
+#include "G4LossTableManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4Run.hh"
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run() : G4Run(), fElIonPair(0), fParam(TestParameters::GetPointer()) {
+Run::Run() : G4Run(), fElIonPair(0), fParam(TestParameters::GetPointer())
+{
   fElIonPair = G4LossTableManager::Instance()->ElectronIonPair();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::BeginOfRun() {
+void Run::BeginOfRun()
+{
   // initilise scoring
-  fTotStepGas = fTotCluster = fMeanCluster = fOverflow = fTotEdep = fStepGas =
-      fCluster = 0.0;
+  fTotStepGas = fTotCluster = fMeanCluster = fOverflow = fTotEdep = fStepGas = fCluster = 0.0;
   fEvt = 0;
 
   fFactorALICE = fParam->GetFactorALICE();
@@ -69,14 +72,15 @@ void Run::BeginOfRun() {
     G4int binsCluster = fParam->GetNumberBinsCluster();
     G4cout << " BinsCluster= " << binsCluster << "    BinsE= " << fNbins
            << "   Emax(keV)= " << fMaxEnergy / keV << G4endl;
-    G4cout << " WidthALICE(keV)= " << fWidthALICE / keV
-           << "      FactorALICE= " << fFactorALICE << G4endl;
+    G4cout << " WidthALICE(keV)= " << fWidthALICE / keV << "      FactorALICE= " << fFactorALICE
+           << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun() {
+void Run::EndOfRun()
+{
   G4int nEvt = GetNumberOfEvent();
   G4double norm = (nEvt > 0) ? 1.0 / (G4double)nEvt : 0.0;
 
@@ -94,26 +98,24 @@ void Run::EndOfRun() {
   fFactorALICE = fParam->GetFactorALICE();
 
   G4cout << " ====================================================" << G4endl;
-  G4cout << "   Beam Particle: " << fParam->GetBeamParticle()->GetParticleName()
-         << G4endl << "   Ekin(MeV)    = " << fParam->GetBeamEnergy() / MeV
-         << G4endl << "   Z(mm)        = " << fParam->GetPositionZ() / mm
-         << G4endl;
+  G4cout << "   Beam Particle: " << fParam->GetBeamParticle()->GetParticleName() << G4endl
+         << "   Ekin(MeV)    = " << fParam->GetBeamEnergy() / MeV << G4endl
+         << "   Z(mm)        = " << fParam->GetPositionZ() / mm << G4endl;
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(5);
   G4cout << "   End of Run TotNbofEvents    = " << nEvt << G4endl;
-  G4cout << "   Energy(keV) per ADC channel = " << 1.0 / (keV * fFactorALICE)
-         << G4endl;
+  G4cout << "   Energy(keV) per ADC channel = " << 1.0 / (keV * fFactorALICE) << G4endl;
 
   G4cout << G4endl;
   G4cout << "   Mean energy deposit in absorber = " << y1 / keV << " +- "
-         << y2 *std::sqrt(norm) / keV << " keV; ";
+         << y2 * std::sqrt(norm) / keV << " keV; ";
   if (y1 > 0.0) {
     G4cout << "   RMS/Emean = " << y2 / y1;
   }
   G4cout << G4endl;
   G4cout << "   Mean number of steps in absorber= " << fTotStepGas
-         << ";  mean number of ion-clusters = " << fTotCluster
-         << " MeanCluster= " << fMeanCluster << G4endl;
+         << ";  mean number of ion-clusters = " << fTotCluster << " MeanCluster= " << fMeanCluster
+         << G4endl;
   G4cout << G4endl;
 
   G4cout << " ====== Energy deposit distribution   Noverflows= " << fOverflow
@@ -128,14 +130,14 @@ void Run::EndOfRun() {
   fileOut << fNbins << G4endl;
 
   for (G4int j = 0; j < fNbins; ++j) {
-    G4cout << std::setw(5) << j << std::setw(10) << x1 / keV << std::setw(12)
-           << fEgas[j] << std::setw(12) << fEgas[j] * norm << G4endl;
+    G4cout << std::setw(5) << j << std::setw(10) << x1 / keV << std::setw(12) << fEgas[j]
+           << std::setw(12) << fEgas[j] * norm << G4endl;
     fileOut << x1 / keV << "\t" << fEgas[j] << G4endl;
     x1 += de;
   }
   G4cout.precision(prec);
 
-  G4AnalysisManager *analysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   // normalize histograms
   G4double normf = fParam->GetNormFactor();
   analysisManager->ScaleH1(1, norm);
@@ -147,7 +149,8 @@ void Run::EndOfRun() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::BeginOfEvent() {
+void Run::BeginOfEvent()
+{
   fTotEdep = 0.0;
   fStepGas = 0;
   fCluster = 0;
@@ -156,7 +159,8 @@ void Run::BeginOfEvent() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfEvent() {
+void Run::EndOfEvent()
+{
   fTotStepGas += fStepGas;
   fTotCluster += fCluster;
 
@@ -173,11 +177,12 @@ void Run::EndOfEvent() {
   }
   if (idx >= fNbins) {
     fOverflow += 1.0;
-  } else {
+  }
+  else {
     fEgas[idx] += 1.0;
   }
 
-  G4AnalysisManager *analysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   // fill histo
   analysisManager->FillH1(1, fTotEdep / keV, 1.0);
   analysisManager->FillH1(2, fCluster, 1.0);
@@ -187,15 +192,16 @@ void Run::EndOfEvent() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::Merge(const G4Run *run) {
-  const Run *localRun = static_cast<const Run *>(run);
+void Run::Merge(const G4Run* run)
+{
+  const Run* localRun = static_cast<const Run*>(run);
 
   fTotStepGas += localRun->fTotStepGas;
   fTotCluster += localRun->fTotCluster;
   fMeanCluster += localRun->fMeanCluster;
   fOverflow += localRun->fOverflow;
 
-  G4StatDouble *stat = const_cast<G4StatDouble *>(localRun->GetStat());
+  G4StatDouble* stat = const_cast<G4StatDouble*>(localRun->GetStat());
 
   fEdep.add(stat);
 
@@ -208,7 +214,8 @@ void Run::Merge(const G4Run *run) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEnergy(G4double edep, const G4Step *step) {
+void Run::AddEnergy(G4double edep, const G4Step* step)
+{
   if (1 < fVerbose) {
     G4cout << "Run::AddEnergy: e(keV)= " << edep / keV << G4endl;
   }

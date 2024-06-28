@@ -371,8 +371,6 @@ public:
 
   inline void SetFluctuationFlag(G4bool val);
 
-  inline void SetMasterThread(G4bool val);
-
   inline G4bool IsMaster() const;
 
   inline void SetUseBaseMaterials(G4bool val);
@@ -389,9 +387,11 @@ public:
 
   inline void SetLocked(G4bool);
 
-  // obsolete method
+  // obsolete methods
   [[deprecated("Use G4EmParameters::Instance()->SetLPM instead")]]
   void SetLPMFlag(G4bool);
+
+  void SetMasterThread(G4bool);
 
   //  hide assignment operator
   G4VEmModel & operator=(const  G4VEmModel &right) = delete;
@@ -703,13 +703,6 @@ inline void G4VEmModel::SetAngularGeneratorFlag(G4bool val)
 inline void G4VEmModel::SetFluctuationFlag(G4bool val)
 {
   lossFlucFlag = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmModel::SetMasterThread(G4bool val)
-{
-  isMaster = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

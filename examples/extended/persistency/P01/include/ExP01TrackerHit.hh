@@ -34,10 +34,10 @@
 #ifndef ExP01TrackerHit_h
 #define ExP01TrackerHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,37 +46,34 @@
 class ExP01TrackerHit : public G4VHit
 {
   public:
+    ExP01TrackerHit();
+    ~ExP01TrackerHit();
+    ExP01TrackerHit(const ExP01TrackerHit&);
+    const ExP01TrackerHit& operator=(const ExP01TrackerHit&);
+    G4bool operator==(const ExP01TrackerHit&) const;
 
-      ExP01TrackerHit();
-     ~ExP01TrackerHit();
-      ExP01TrackerHit(const ExP01TrackerHit&);
-      const ExP01TrackerHit& operator=(const ExP01TrackerHit&);
-      G4bool operator==(const ExP01TrackerHit&) const;
+    inline void* operator new(size_t);
+    inline void operator delete(void*);
 
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
-
-      virtual void Draw();
-      virtual void Print();
+    virtual void Draw();
+    virtual void Print();
 
   public:
-  
-      void SetTrackID  (G4int track)      { fTrackID = track; };
-      void SetChamberNb(G4int chamb)      { fChamberNb = chamb; };  
-      void SetEdep     (G4double de)      { fEdep = de; };
-      void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
-      
-      G4int GetTrackID()    { return fTrackID; };
-      G4int GetChamberNb()  { return fChamberNb; };
-      G4double GetEdep()    { return fEdep; };      
-      G4ThreeVector GetPos(){ return fPos; };
-      
+    void SetTrackID(G4int track) { fTrackID = track; };
+    void SetChamberNb(G4int chamb) { fChamberNb = chamb; };
+    void SetEdep(G4double de) { fEdep = de; };
+    void SetPos(G4ThreeVector xyz) { fPos = xyz; };
+
+    G4int GetTrackID() { return fTrackID; };
+    G4int GetChamberNb() { return fChamberNb; };
+    G4double GetEdep() { return fEdep; };
+    G4ThreeVector GetPos() { return fPos; };
+
   private:
-  
-      G4int         fTrackID;
-      G4int         fChamberNb;
-      G4double      fEdep;
-      G4ThreeVector fPos;
+    G4int fTrackID;
+    G4int fChamberNb;
+    G4double fEdep;
+    G4ThreeVector fPos;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,18 +86,17 @@ extern G4ThreadLocal G4Allocator<ExP01TrackerHit>* ExP01TrackerHitAllocator;
 
 inline void* ExP01TrackerHit::operator new(size_t)
 {
-  if (!ExP01TrackerHitAllocator)
-  {
+  if (!ExP01TrackerHitAllocator) {
     ExP01TrackerHitAllocator = new G4Allocator<ExP01TrackerHit>;
   }
-  return (void *) ExP01TrackerHitAllocator->MallocSingle();
+  return (void*)ExP01TrackerHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void ExP01TrackerHit::operator delete(void *aHit)
+inline void ExP01TrackerHit::operator delete(void* aHit)
 {
-  ExP01TrackerHitAllocator->FreeSingle((ExP01TrackerHit*) aHit);
+  ExP01TrackerHitAllocator->FreeSingle((ExP01TrackerHit*)aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

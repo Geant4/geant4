@@ -45,12 +45,13 @@
 #ifndef CHEM6_ScoreSpecies_h
 #define CHEM6_ScoreSpecies_h 1
 
-#include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
-#include <set>
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UImessenger.hh"
+#include "G4VPrimitiveScorer.hh"
+
+#include <set>
 
 class G4VAnalysisManager;
 class G4MolecularConfiguration;
@@ -64,99 +65,88 @@ class G4MolecularConfiguration;
 // Created: 2015-10-27  by M. Karamitros,
 // modified: 2016-03-16 by P. Piersimoni
 
-class ScoreSpecies : public G4VPrimitiveScorer,
-                     public G4UImessenger
+class ScoreSpecies : public G4VPrimitiveScorer, public G4UImessenger
 {
-public:
-  ScoreSpecies(G4String name, G4int depth=0);
+  public:
+    ScoreSpecies(G4String name, G4int depth = 0);
 
-  virtual ~ScoreSpecies();
-  
-  /** Add a time at which the number of species should be recorded.
-      Default times are set up to 1 microsecond.*/
-  inline void AddTimeToRecord(double time)
-  {
-    fTimeToRecord.insert(time);
-  }
-  
-  /**  Remove all times to record, must be reset by user.*/
-  inline void ClearTimeToRecord()
-  {
-    fTimeToRecord.clear();
-  }
+    virtual ~ScoreSpecies();
 
-  /** Get number of recorded events*/
-  inline int GetNumberOfRecordedEvents() const
-  {
-    return fNEvent;
-  }
+    /** Add a time at which the number of species should be recorded.
+        Default times are set up to 1 microsecond.*/
+    inline void AddTimeToRecord(double time) { fTimeToRecord.insert(time); }
 
-  /** Write results to whatever chosen file format*/
-  void WriteWithAnalysisManager(G4VAnalysisManager*);
-  
-  struct SpeciesInfo
-  {
-    SpeciesInfo()
+    /**  Remove all times to record, must be reset by user.*/
+    inline void ClearTimeToRecord() { fTimeToRecord.clear(); }
+
+    /** Get number of recorded events*/
+    inline int GetNumberOfRecordedEvents() const { return fNEvent; }
+
+    /** Write results to whatever chosen file format*/
+    void WriteWithAnalysisManager(G4VAnalysisManager*);
+
+    struct SpeciesInfo
     {
-      fNumber = 0;
-      fG = 0.;
-      fG2 = 0.;
-    }
-    SpeciesInfo(const SpeciesInfo& right) // Species A(B);
-    {
-      fNumber = right.fNumber;
-      fG = right.fG;
-      fG2 = right.fG2;
-    }
-    SpeciesInfo& operator=(const SpeciesInfo& right) // A = B
-    {
-      if(&right == this) return *this;
-      fNumber = right.fNumber;
-      fG = right.fG;
-      fG2 = right.fG2;
-      return *this;
-    }
-    int fNumber;
-    double fG;
-    double fG2;
-  };
-  
-  
-private:
-  typedef const G4MolecularConfiguration Species;
-  typedef std::map<Species*, SpeciesInfo>  InnerSpeciesMap;
-  typedef std::map<double, InnerSpeciesMap> SpeciesMap;
-  SpeciesMap fSpeciesInfoPerTime;
+        SpeciesInfo()
+        {
+          fNumber = 0;
+          fG = 0.;
+          fG2 = 0.;
+        }
+        SpeciesInfo(const SpeciesInfo& right)  // Species A(B);
+        {
+          fNumber = right.fNumber;
+          fG = right.fG;
+          fG2 = right.fG2;
+        }
+        SpeciesInfo& operator=(const SpeciesInfo& right)  // A = B
+        {
+          if (&right == this) return *this;
+          fNumber = right.fNumber;
+          fG = right.fG;
+          fG2 = right.fG2;
+          return *this;
+        }
+        int fNumber;
+        double fG;
+        double fG2;
+    };
 
-  std::set<G4double> fTimeToRecord;
-  
-  int fNEvent; // number of processed events
-  double fEdep; // total energy deposition
-  G4String fOutputType; // output type 
+  private:
+    typedef const G4MolecularConfiguration Species;
+    typedef std::map<Species*, SpeciesInfo> InnerSpeciesMap;
+    typedef std::map<double, InnerSpeciesMap> SpeciesMap;
+    SpeciesMap fSpeciesInfoPerTime;
 
-protected:
-  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+    std::set<G4double> fTimeToRecord;
 
-public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void DrawAll();
-  virtual void PrintAll();
-  /** Method used in multithreading mode in order to merge 
-      the results*/
-  virtual void AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* );
-  virtual void OutputAndClear();
-  virtual void SetNewValue(G4UIcommand*, G4String);
-  
-  SpeciesMap GetSpeciesInfo() {return fSpeciesInfoPerTime;}
+    int fNEvent;  // number of processed events
+    double fEdep;  // total energy deposition
+    G4String fOutputType;  // output type
 
-private:
-  G4int fHCID;
-  G4THitsMap<G4double>* fEvtMap;
+  protected:
+    virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  G4int fRunID;
-  G4UIdirectory* fSpeciesdir;
-  G4UIcmdWithAnInteger* fTimeBincmd;
-  G4UIcmdWithADoubleAndUnit* fAddTimeToRecordcmd;
+  public:
+    virtual void Initialize(G4HCofThisEvent*);
+    virtual void EndOfEvent(G4HCofThisEvent*);
+    virtual void DrawAll();
+    virtual void PrintAll();
+    /** Method used in multithreading mode in order to merge
+        the results*/
+    virtual void AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer*);
+    virtual void OutputAndClear();
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+    SpeciesMap GetSpeciesInfo() { return fSpeciesInfoPerTime; }
+
+  private:
+    G4int fHCID;
+    G4THitsMap<G4double>* fEvtMap;
+
+    G4int fRunID;
+    G4UIdirectory* fSpeciesdir;
+    G4UIcmdWithAnInteger* fTimeBincmd;
+    G4UIcmdWithADoubleAndUnit* fAddTimeToRecordcmd;
 };
 #endif

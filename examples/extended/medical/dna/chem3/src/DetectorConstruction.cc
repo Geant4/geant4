@@ -35,31 +35,25 @@
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
-#include "G4SystemOfUnits.hh"
 
-#include "G4ProductionCuts.hh"
-
-#include "G4NistManager.hh"
-#include "G4Material.hh"
-
-#include "G4Orb.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4Orb.hh"
 #include "G4PVPlacement.hh"
+#include "G4ProductionCuts.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UserLimits.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::DetectorConstruction() :
-G4VUserDetectorConstruction()
-{}
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::~DetectorConstruction()
-{}
+DetectorConstruction::~DetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,13 +65,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material *
-DetectorConstruction::OtherMaterial(G4String materialName)
+G4Material* DetectorConstruction::OtherMaterial(G4String materialName)
 {
-  G4Material * material(0);
+  G4Material* material(0);
 
   // Water is defined from NIST material database
-  G4NistManager * man = G4NistManager::Instance();
+  G4NistManager* man = G4NistManager::Instance();
   material = man->FindOrBuildMaterial(materialName);
 
   // If one wishes to test other density value for water material,
@@ -96,31 +89,28 @@ DetectorConstruction::OtherMaterial(G4String materialName)
 
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
-  G4Material *water = OtherMaterial("G4_WATER");
+  G4Material* water = OtherMaterial("G4_WATER");
 
   // WORLD VOLUME = an G4ORB FULL OF LIQUID WATER
 
-  double worldRadius = 0.3*micrometer;
+  double worldRadius = 0.3 * micrometer;
 
   G4Orb* solidWorld = new G4Orb("World", worldRadius);
 
-  G4LogicalVolume* logicWorld =
-      new G4LogicalVolume(solidWorld,  //its solid
-          water,  //its material
-          "World");  //its name
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+                                                    water,  // its material
+                                                    "World");  // its name
 
-  G4VPhysicalVolume* physiWorld =
-      new G4PVPlacement(0,  //no rotation
-          G4ThreeVector(),  //at (0,0,0)
-          "World",  //its name
-          logicWorld,  //its logical volume
-          0,  //its mother  volume
-          false,  //no boolean operation
-          0);  //copy number
+  G4VPhysicalVolume* physiWorld = new G4PVPlacement(0,  // no rotation
+                                                    G4ThreeVector(),  // at (0,0,0)
+                                                    "World",  // its name
+                                                    logicWorld,  // its logical volume
+                                                    0,  // its mother  volume
+                                                    false,  // no boolean operation
+                                                    0);  // copy number
 
   // Visualization attributes = semitransparent navy blue
-  G4VisAttributes* worldVisAtt =
-      new G4VisAttributes(G4Colour(0.0,0.4,0.8,0.5));
+  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(0.0, 0.4, 0.8, 0.5));
   worldVisAtt->SetForceSolid(true);
   worldVisAtt->SetVisibility(true);
   logicWorld->SetVisAttributes(worldVisAtt);

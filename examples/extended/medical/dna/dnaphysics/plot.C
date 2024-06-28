@@ -2,7 +2,7 @@
 // -------------------------------------------------------------------
 //
 // *********************************************************************
-// To execute this macro under ROOT after your simulation ended, 
+// To execute this macro under ROOT after your simulation ended,
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
 // *********************************************************************
@@ -14,27 +14,30 @@ void plot()
   gROOT->Reset();
   gStyle->SetPalette(1);
   gROOT->SetStyle("Plain");
-  	
-  TCanvas* c1 = new TCanvas ("c1","",20,20,1500,500);
-  c1->Divide(3,1);
-  
-  // Uncomment if merging should be done 
+
+  TCanvas* c1 = new TCanvas ("c1","",20,20,2000,500);
+  c1->Divide(4,1);
+
+  // Uncomment if merging should be done
   //system ("rm -rf dna.root");
   //system ("hadd dna.root dna_*.root");
-  
-  TFile* f = new TFile("dna.root"); 
-  
+
+  TFile* f = new TFile("dna.root");
+
   TNtuple* ntuple;
-  ntuple = (TNtuple*)f->Get("dna"); 
+  ntuple = (TNtuple*)f->Get("step");
   bool rowWise = true;
   TBranch* eventBranch = ntuple->FindBranch("row_wise_branch");
   if ( ! eventBranch ) rowWise = false;
-  // std::cout <<  "rowWise: " << rowWise << std::endl; 
-       
+  // std::cout <<  "rowWise: " << rowWise << std::endl;
+
+  //*********************************************************************
   // canvas tab 1
+  //*********************************************************************
+
   c1->cd(1);
   gStyle->SetOptStat(000000);
-  
+
   // All
   ntuple->SetFillStyle(1001);
   ntuple->SetFillColor(2);
@@ -49,12 +52,12 @@ void plot()
   ntuple->SetFillStyle(1001);
   ntuple->SetFillColor(4);
   ntuple->Draw("flagProcess","flagProcess==11||flagProcess==21||flagProcess==31||flagProcess==41||flagProcess==51||flagProcess==61||flagProcess==110||flagProcess==210||flagProcess==410||flagProcess==510||flagProcess==710||flagProcess==120||flagProcess==220||flagProcess==420||flagProcess==520||flagProcess==720","Bsame");
-  
+
   // Ionisation
   ntuple->SetFillStyle(1001);
   ntuple->SetFillColor(5);
   ntuple->Draw("flagProcess","flagProcess==13||flagProcess==23||flagProcess==33||flagProcess==43||flagProcess==53||flagProcess==63||flagProcess==73||flagProcess==130||flagProcess==230||flagProcess==430||flagProcess==530||flagProcess==730","Bsame");
-  
+
   // Charge decrease
   //ntuple->SetFillStyle(1001);
   //ntuple->SetFillColor(6);
@@ -64,10 +67,13 @@ void plot()
   //ntuple->SetFillStyle(1001);
   //ntuple->SetFillColor(7);
   //ntuple->Draw("flagProcess","flagProcess==35||flagProcess==55||flagProcess==65","Bsame");
-  
+
   gPad->SetLogy();
-  
+
+  //*********************************************************************
   // canvas tab 2
+  //*********************************************************************
+
   c1->cd(2);
 
   ntuple->SetMarkerColor(2);
@@ -78,7 +84,10 @@ void plot()
   //ntuple->SetMarkerSize(4);
   //ntuple->Draw("x:y:z/1000","flagParticle==4 || flagParticle==5 || flagParticle==6","same");
 
+  //*********************************************************************
   // canvas tab 3
+  //*********************************************************************
+
   c1->cd(3);
 
   Double_t flagParticle;
@@ -135,8 +144,8 @@ void plot()
   TH1F* hioniE = new TH1F ("hiioniE","ioniE",100,0,2000);
   TH1F* hattE = new TH1F ("hattE","attE",100,0,2000);
   TH1F* hvibE = new TH1F ("hvibE","vibE",100,0,2000);
- 
-  for (Int_t j=0;j<ntuple->GetEntries(); j++) 
+
+  for (Int_t j=0;j<ntuple->GetEntries(); j++)
   {
     ntuple->GetEntry(j);
     if (flagProcess==10) hsolvE->Fill(x);
@@ -165,6 +174,27 @@ void plot()
   hattE->Draw("SAME");
   hvibE->Draw("SAME");
   hsolvE->Draw("SAME");
+
+  //*********************************************************************
+  // canvas tab 4
+  //*********************************************************************
+
+  TNtuple* ntuple2;
+  ntuple2 = (TNtuple*)f->Get("track");
+  bool rowWise2 = true;
+  TBranch* eventBranch2 = ntuple2->FindBranch("row_wise_branch");
+  if ( ! eventBranch2 ) rowWise2 = false;
+
+  c1->cd(4);
+  gStyle->SetOptStat(000000);
+
+  // All
+  ntuple2->SetFillStyle(1001);
+  ntuple2->SetFillColor(2);
+  ntuple2->Draw("kineticEnergy","flagParticle==1","B");
+
+  gPad->SetLogy();
+
 }
 
 void SetLeafAddress(TNtuple* ntuple, const char* name, void* address) {

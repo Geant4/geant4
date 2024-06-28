@@ -29,9 +29,11 @@
 #define G4MPI_MANAGER_H
 
 #include "mpi.h"
+
+#include "globals.hh"
+
 #include <fstream>
 #include <pthread.h>
-#include "globals.hh"
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
   TypeName(const TypeName&);               \
@@ -43,143 +45,149 @@ class G4MPIstatus;
 class G4VMPIseedGenerator;
 class G4VMPIextraWorker;
 
-class G4MPImanager {
-public:
-  // MPI master rank
-  enum { kRANK_MASTER = 0 };
+class G4MPImanager
+{
+  public:
+    // MPI master rank
+    enum
+    {
+      kRANK_MASTER = 0
+    };
 
-  enum { // MPI tag
-    kTAG_G4COMMAND = 100,
-    kTAG_G4STATUS = 200,
-    kTAG_G4SEED = 300,
-    kTAG_DATA = 1000,
-    kTAG_HISTO = 1001,
-    kTAG_RUN = 1002,
-    kTAG_CMDSCR = 1003,
-    kTAG_NTUPLE = 1004
-  };
+    enum
+    {  // MPI tag
+      kTAG_G4COMMAND = 100,
+      kTAG_G4STATUS = 200,
+      kTAG_G4SEED = 300,
+      kTAG_DATA = 1000,
+      kTAG_HISTO = 1001,
+      kTAG_RUN = 1002,
+      kTAG_CMDSCR = 1003,
+      kTAG_NTUPLE = 1004
+    };
 
-  G4MPImanager(int nof_extra_workers = 0);
-  G4MPImanager(int argc, char** argv, int nof_extra_workers = 0);
-  ~G4MPImanager();
+    G4MPImanager(int nof_extra_workers = 0);
+    G4MPImanager(int argc, char** argv, int nof_extra_workers = 0);
+    ~G4MPImanager();
 
-  static G4MPImanager* GetManager();
+    static G4MPImanager* GetManager();
 
-  // set/get methods
-  G4MPIsession* GetMPIsession() const;
+    // set/get methods
+    G4MPIsession* GetMPIsession() const;
 
-  G4int GetVerbose() const;
-  void SetVerbose(G4int iverbose);
+    G4int GetVerbose() const;
+    void SetVerbose(G4int iverbose);
 
-  G4int GetTotalSize() const;    // get size of all ranks
-  G4int GetActiveSize() const;   // get size of ranks wher RunBeamOn is called
-  G4int GetRank() const;
+    G4int GetTotalSize() const;  // get size of all ranks
+    G4int GetActiveSize() const;  // get size of ranks wher RunBeamOn is called
+    G4int GetRank() const;
 
-  G4bool IsMaster() const;
-  G4bool IsSlave() const;
-  G4bool IsExtraWorker() const;
+    G4bool IsMaster() const;
+    G4bool IsSlave() const;
+    G4bool IsExtraWorker() const;
 
-  G4bool IsInitMacro() const;
-  const G4String& GetInitFileName() const;
+    G4bool IsInitMacro() const;
+    const G4String& GetInitFileName() const;
 
-  G4bool IsBatchMode() const;
-  const G4String& GetMacroFileName() const;
+    G4bool IsBatchMode() const;
+    const G4String& GetMacroFileName() const;
 
-  void SetMasterWeight(G4double aweight);
-  G4double GetMasterWeight() const;
+    void SetMasterWeight(G4double aweight);
+    G4double GetMasterWeight() const;
 
-  void SetExtraWorker(G4VMPIextraWorker* extraWorker);
-  G4VMPIextraWorker* GetExtraWorker() const;
+    void SetExtraWorker(G4VMPIextraWorker* extraWorker);
+    G4VMPIextraWorker* GetExtraWorker() const;
 
-  G4VMPIseedGenerator* GetSeedGenerator() const;
+    G4VMPIseedGenerator* GetSeedGenerator() const;
 
-  // MPI methods
-  G4String BcastCommand(const G4String& command);
-  void ShowStatus();
-  void ShowSeeds();
-  void SetSeed(G4int inode, G4long seed);
-  void WaitBeamOn();
+    // MPI methods
+    G4String BcastCommand(const G4String& command);
+    void ShowStatus();
+    void ShowSeeds();
+    void SetSeed(G4int inode, G4long seed);
+    void WaitBeamOn();
 
-  // methods for MPI environment
-  void DistributeSeeds();
-  void ExecuteMacroFile(const G4String& fname, G4bool qbatch=false);
-  G4bool CheckThreadStatus();
-  void ExecuteThreadCommand(const G4String& command);
-  void ExecuteBeamOnThread(const G4String& command);
-  void JoinBeamOnThread();
+    // methods for MPI environment
+    void DistributeSeeds();
+    void ExecuteMacroFile(const G4String& fname, G4bool qbatch = false);
+    G4bool CheckThreadStatus();
+    void ExecuteThreadCommand(const G4String& command);
+    void ExecuteBeamOnThread(const G4String& command);
+    void JoinBeamOnThread();
 
-  void BeamOn(G4int nevent, G4bool qdivide=true);
-  void Print(const G4String& message);
-  G4int GetEventsInMaster() const {return fevents_in_master;}
-  G4int GetEventsInSlave() const {return fevents_in_slave;}
+    void BeamOn(G4int nevent, G4bool qdivide = true);
+    void Print(const G4String& message);
+    G4int GetEventsInMaster() const { return fevents_in_master; }
+    G4int GetEventsInSlave() const { return fevents_in_slave; }
 
-  // misc
-  void ShowHelp() const;
+    // misc
+    void ShowHelp() const;
 
-  const MPI::Intracomm* GetComm() const { return &COMM_G4COMMAND_; }
-  const MPI_Comm* GetProcessingComm() const { return &processing_comm_; }
-  const MPI_Comm* GetCollectingComm() const { return &collecting_comm_; }
-  const MPI_Comm* GetAllComm() const { return &all_comm_; }
-private:
-  DISALLOW_COPY_AND_ASSIGN(G4MPImanager);
+    const MPI::Intracomm* GetComm() const { return &COMM_G4COMMAND_; }
+    const MPI_Comm* GetProcessingComm() const { return &processing_comm_; }
+    const MPI_Comm* GetCollectingComm() const { return &collecting_comm_; }
+    const MPI_Comm* GetAllComm() const { return &all_comm_; }
 
-  // internal use
-  void Initialize();
-  void ParseArguments(G4int argc, char** argv);
-  void UpdateStatus();
+  private:
+    DISALLOW_COPY_AND_ASSIGN(G4MPImanager);
 
-  static G4MPImanager* g4mpi_;
-  G4MPImessenger* messenger_;
-  G4MPIsession* session_;
-  G4VMPIextraWorker* extra_worker_;
+    // internal use
+    void Initialize();
+    void ParseArguments(G4int argc, char** argv);
+    void UpdateStatus();
 
-  // seed generator
-  G4VMPIseedGenerator* seed_generator_;
+    static G4MPImanager* g4mpi_;
+    G4MPImessenger* messenger_;
+    G4MPIsession* session_;
+    G4VMPIextraWorker* extra_worker_;
 
-  G4MPIstatus* status_; // status for each node
+    // seed generator
+    G4VMPIseedGenerator* seed_generator_;
 
-  G4int verbose_;
+    G4MPIstatus* status_;  // status for each node
 
-  // MPI rank
-  G4bool is_master_;
-  G4bool is_slave_;
-  G4bool is_extra_worker_;
-  G4int rank_;
-  G4int size_;  // processing comm size
-  G4int world_size_;  // world comm size
+    G4int verbose_;
 
-  // MPI communicator (when no extra ranks)
-  MPI::Intracomm COMM_G4COMMAND_;
-  // MPI communicator (processing ranks - if ntuple merging)
-  MPI_Comm processing_comm_;
-  // MPI communicator (collecting ranks - if ntuple merging)
-  MPI_Comm collecting_comm_;
-  // MPI communicator (all ranks - if ntuple mergins)
-  MPI_Comm all_comm_;
-  // Interim data - need to be freed
-  MPI_Group world_group_;
-  MPI_Group processing_group_;
-  MPI_Group collecting_group_;
-  MPI_Group all_group_;
+    // MPI rank
+    G4bool is_master_;
+    G4bool is_slave_;
+    G4bool is_extra_worker_;
+    G4int rank_;
+    G4int size_;  // processing comm size
+    G4int world_size_;  // world comm size
 
-  // cout/cerr control
-  G4bool qfcout_;
-  std::ofstream fscout_;
+    // MPI communicator (when no extra ranks)
+    MPI::Intracomm COMM_G4COMMAND_;
+    // MPI communicator (processing ranks - if ntuple merging)
+    MPI_Comm processing_comm_;
+    // MPI communicator (collecting ranks - if ntuple merging)
+    MPI_Comm collecting_comm_;
+    // MPI communicator (all ranks - if ntuple mergins)
+    MPI_Comm all_comm_;
+    // Interim data - need to be freed
+    MPI_Group world_group_;
+    MPI_Group processing_group_;
+    MPI_Group collecting_group_;
+    MPI_Group all_group_;
 
-  // init/macro file
-  G4bool qinitmacro_;
-  G4String init_file_name_;
-  G4bool qbatchmode_;
-  G4String macro_file_name_;
+    // cout/cerr control
+    G4bool qfcout_;
+    std::ofstream fscout_;
 
-  // for beamOn
-  pthread_t thread_id_;
-  G4int fevents_in_master = 0;
-  G4int fevents_in_slave = 0;
+    // init/macro file
+    G4bool qinitmacro_;
+    G4String init_file_name_;
+    G4bool qbatchmode_;
+    G4String macro_file_name_;
 
-  // parallel parameters
-  G4double master_weight_;
-  G4int nof_extra_workers_;
+    // for beamOn
+    pthread_t thread_id_;
+    G4int fevents_in_master = 0;
+    G4int fevents_in_slave = 0;
+
+    // parallel parameters
+    G4double master_weight_;
+    G4int nof_extra_workers_;
 };
 
 // ====================================================================
@@ -196,8 +204,8 @@ inline G4int G4MPImanager::GetVerbose() const
 inline void G4MPImanager::SetVerbose(G4int iverbose)
 {
   G4int lv = iverbose;
-  if( iverbose > 1 ) lv = 1;
-  if( iverbose < 0 ) lv = 0;
+  if (iverbose > 1) lv = 1;
+  if (iverbose < 0) lv = 0;
 
   verbose_ = lv;
   return;
@@ -236,13 +244,11 @@ inline G4bool G4MPImanager::IsExtraWorker() const
 inline G4bool G4MPImanager::IsInitMacro() const
 {
   return qinitmacro_;
-
 }
 
 inline const G4String& G4MPImanager::GetInitFileName() const
 {
   return init_file_name_;
-
 }
 
 inline G4bool G4MPImanager::IsBatchMode() const
@@ -259,8 +265,8 @@ inline void G4MPImanager::SetMasterWeight(G4double aweight)
 {
   master_weight_ = aweight;
 
-  if( aweight < 0. ) master_weight_ = 0.;
-  if( aweight > 1. ) master_weight_ = 1.;
+  if (aweight < 0.) master_weight_ = 0.;
+  if (aweight > 1.) master_weight_ = 1.;
 }
 
 inline G4double G4MPImanager::GetMasterWeight() const

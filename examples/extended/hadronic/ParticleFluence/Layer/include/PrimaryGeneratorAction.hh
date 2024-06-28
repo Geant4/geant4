@@ -26,7 +26,7 @@
 /// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,12 +42,14 @@ class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
   public:
-    PrimaryGeneratorAction( const DetectorConstruction* );
+    PrimaryGeneratorAction(const DetectorConstruction*);
     ~PrimaryGeneratorAction();
-    void GeneratePrimaries( G4Event* anEvent ) override;
+    void GeneratePrimaries(G4Event* anEvent) override;
     void SetGunPosition() const;
+
   private:
     G4ParticleGun* fParticleGun;
     const DetectorConstruction* fPointerDetectorConstruction = nullptr;

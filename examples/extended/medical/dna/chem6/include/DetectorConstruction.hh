@@ -52,15 +52,15 @@ class G4LogicalVolume;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  DetectorConstruction();
-  ~DetectorConstruction() override;
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction() override;
 
-public:
-  G4VPhysicalVolume* Construct() override;
-  void ConstructSDandField() override;
+  public:
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
-private:
+  private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -34,38 +34,33 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
-#include "globals.hh"
 #include "G4VStateDependent.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4Event;
 class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction,
-                              public G4VStateDependent
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4VStateDependent
 {
-public:
-  PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
-  virtual G4bool Notify(G4ApplicationState requestedState);
+  public:
+    PrimaryGeneratorAction();
+    virtual ~PrimaryGeneratorAction();
+    virtual G4bool Notify(G4ApplicationState requestedState);
 
-public:
-  virtual void GeneratePrimaries(G4Event*);
+  public:
+    virtual void GeneratePrimaries(G4Event*);
 
-  G4ParticleGun* GetParticleGun() const
-  {
-    return fParticleGun;
-  }
+    G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
-private:
-  G4ParticleGun* fParticleGun;
-  const DetectorConstruction* fDetector;
+  private:
+    G4ParticleGun* fParticleGun;
+    const DetectorConstruction* fDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

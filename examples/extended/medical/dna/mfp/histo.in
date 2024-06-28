@@ -1,36 +1,47 @@
-#
+# MT mode
 /run/numberOfThreads 8
 #
+# Sphere material
 /mfp/det/setMat G4_WATER
+#
+# Sphere radius
 /mfp/det/setRadius 10 m
 #
-# Register physics constructor
+# Physics constructor
 #/mfp/phys/addPhysics  G4EmDNAPhysics
 /mfp/phys/addPhysics  G4EmDNAPhysics_option2
 #/mfp/phys/addPhysics  G4EmDNAPhysics_option4
 #/mfp/phys/addPhysics  G4EmDNAPhysics_option6
 #
+# Run initialization
 /run/initialize
 #
+# Run progress
 #/run/printProgress 10000
 #
+# Tracking verbosity
 /tracking/verbose 0
-# 
-/analysis/h1/set 1  100 0.  1.1 keV	#energy  of primary  
-/analysis/h1/set 2  100 -1.1   +1.1 none	#costeta of primary
-/analysis/h1/set 3  100 0.  1.1 keV	#energy  of ch. secondary  
-/analysis/h1/set 4  100 -1.1   +1.1 none	#costeta of ch. secondary
-/analysis/h1/set 5  100 0.  1.1 keV	#energy  of ne. secondary  
-/analysis/h1/set 6  100 -1.1  +1.1 none	#costeta of ne. secondary
 #
+# Definition of histogramps
+/analysis/h1/set 1 100 0. 1.1 keV #energy of primary
+/analysis/h1/set 2 100 -1.1 +1.1 none #costeta of primary
+/analysis/h1/set 3 100 0. 1.1 keV #energy of ch. secondary
+/analysis/h1/set 4 100 -1.1 +1.1 none #costeta of ch. secondary
+/analysis/h1/set 5 100 0. 1.1 keV #energy of ne. secondary
+/analysis/h1/set 6 100 -1.1 +1.1 none #costeta of ne. secondary
+#
+# Primary particle type
 /gun/particle e-
 #
+# Inactivation of some processes (if needed)
 #/process/inactivate e-_G4DNAExcitation
 #/process/inactivate e-_G4DNAIonisation
 #/process/inactivate e-_G4DNAElastic
 /process/inactivate e-_G4DNAVibExcitation
 /process/inactivate e-_G4DNAAttachment
 #
+# Primary particle energy
 /gun/energy 1 keV
+#
+# Beam on
 /run/beamOn 10000000
-

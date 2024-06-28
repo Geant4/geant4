@@ -32,10 +32,10 @@
 
 #include "PhysicsListMessenger.hh"
 
+#include "PhysicsList.hh"
+
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
-
-#include "PhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

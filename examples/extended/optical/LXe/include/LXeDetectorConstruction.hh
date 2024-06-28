@@ -35,6 +35,7 @@
 
 #include "G4Cache.hh"
 #include "G4VUserDetectorConstruction.hh"
+
 #include <CLHEP/Units/SystemOfUnits.h>
 
 class LXeMainVolume;
@@ -52,102 +53,102 @@ class G4VPhysicalVolume;
 
 class LXeDetectorConstruction : public G4VUserDetectorConstruction
 {
- public:
-  LXeDetectorConstruction();
-  ~LXeDetectorConstruction() override;
+  public:
+    LXeDetectorConstruction();
+    ~LXeDetectorConstruction() override;
 
-  G4VPhysicalVolume* Construct() override;
-  void ConstructSDandField() override;
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
-  // Functions to modify the geometry
-  void SetDimensions(G4ThreeVector);
-  void SetHousingThickness(G4double);
-  void SetNX(G4int);
-  void SetNY(G4int);
-  void SetNZ(G4int);
-  void SetPMTRadius(G4double);
-  void SetDefaults();
-  void SetSaveThreshold(G4int);
+    // Functions to modify the geometry
+    void SetDimensions(G4ThreeVector);
+    void SetHousingThickness(G4double);
+    void SetNX(G4int);
+    void SetNY(G4int);
+    void SetNZ(G4int);
+    void SetPMTRadius(G4double);
+    void SetDefaults();
+    void SetSaveThreshold(G4int);
 
-  // Get values
-  G4int GetNX() const { return fNx; };
-  G4int GetNY() const { return fNy; };
-  G4int GetNZ() const { return fNz; };
-  G4int GetSaveThreshold() const { return fSaveThreshold; };
-  G4double GetScintX() const { return fScint_x; }
-  G4double GetScintY() const { return fScint_y; }
-  G4double GetScintZ() const { return fScint_z; }
-  G4double GetHousingThickness() const { return fD_mtl; }
-  G4double GetPMTRadius() const { return fOuterRadius_pmt; }
-  G4double GetSlabZ() const { return fSlab_z; }
+    // Get values
+    G4int GetNX() const { return fNx; };
+    G4int GetNY() const { return fNy; };
+    G4int GetNZ() const { return fNz; };
+    G4int GetSaveThreshold() const { return fSaveThreshold; };
+    G4double GetScintX() const { return fScint_x; }
+    G4double GetScintY() const { return fScint_y; }
+    G4double GetScintZ() const { return fScint_z; }
+    G4double GetHousingThickness() const { return fD_mtl; }
+    G4double GetPMTRadius() const { return fOuterRadius_pmt; }
+    G4double GetSlabZ() const { return fSlab_z; }
 
-  void SetSphereOn(G4bool);
-  static G4bool GetSphereOn() { return fSphereOn; }
+    void SetSphereOn(G4bool);
+    static G4bool GetSphereOn() { return fSphereOn; }
 
-  void SetHousingReflectivity(G4double);
-  G4double GetHousingReflectivity() const { return fRefl; }
+    void SetHousingReflectivity(G4double);
+    G4double GetHousingReflectivity() const { return fRefl; }
 
-  void SetWLSSlabOn(G4bool b);
-  G4bool GetWLSSlabOn() const { return fWLSslab; }
+    void SetWLSSlabOn(G4bool b);
+    G4bool GetWLSSlabOn() const { return fWLSslab; }
 
-  void SetMainVolumeOn(G4bool b);
-  G4bool GetMainVolumeOn() const { return fMainVolumeOn; }
+    void SetMainVolumeOn(G4bool b);
+    G4bool GetMainVolumeOn() const { return fMainVolumeOn; }
 
-  void SetNFibers(G4int n);
-  G4int GetNFibers() const { return fNfibers; }
+    void SetNFibers(G4int n);
+    G4int GetNFibers() const { return fNfibers; }
 
-  void SetMainScintYield(G4double);
-  void SetWLSScintYield(G4double);
+    void SetMainScintYield(G4double);
+    void SetWLSScintYield(G4double);
 
- private:
-  void DefineMaterials();
+  private:
+    void DefineMaterials();
 
-  LXeDetectorMessenger* fDetectorMessenger = nullptr;
+    LXeDetectorMessenger* fDetectorMessenger = nullptr;
 
-  G4Box* fExperimentalHall_box = nullptr;
-  G4LogicalVolume* fExperimentalHall_log = nullptr;
-  G4VPhysicalVolume* fExperimentalHall_phys = nullptr;
+    G4Box* fExperimentalHall_box = nullptr;
+    G4LogicalVolume* fExperimentalHall_log = nullptr;
+    G4VPhysicalVolume* fExperimentalHall_phys = nullptr;
 
-  // Materials & Elements
-  G4Element* fN = nullptr;
-  G4Element* fO = nullptr;
-  G4Element* fC = nullptr;
-  G4Element* fH = nullptr;
-  G4Material* fLXe = nullptr;
-  G4Material* fAl = nullptr;
-  G4Material* fAir = nullptr;
-  G4Material* fVacuum = nullptr;
-  G4Material* fGlass = nullptr;
-  G4Material* fPstyrene = nullptr;
-  G4Material* fPMMA = nullptr;
-  G4Material* fPethylene1 = nullptr;
-  G4Material* fPethylene2 = nullptr;
+    // Materials & Elements
+    G4Element* fN = nullptr;
+    G4Element* fO = nullptr;
+    G4Element* fC = nullptr;
+    G4Element* fH = nullptr;
+    G4Material* fLXe = nullptr;
+    G4Material* fAl = nullptr;
+    G4Material* fAir = nullptr;
+    G4Material* fVacuum = nullptr;
+    G4Material* fGlass = nullptr;
+    G4Material* fPstyrene = nullptr;
+    G4Material* fPMMA = nullptr;
+    G4Material* fPethylene1 = nullptr;
+    G4Material* fPethylene2 = nullptr;
 
-  // Geometry
-  G4double fScint_x = 17.8 * CLHEP::cm;
-  G4double fScint_y = 17.8 * CLHEP::cm;
-  G4double fScint_z = 22.6 * CLHEP::cm;
-  G4double fD_mtl = 0.0635 * CLHEP::cm;
-  G4int fNx = 2;
-  G4int fNy = 2;
-  G4int fNz = 3;
-  G4int fSaveThreshold = 0;
-  G4double fOuterRadius_pmt = 2.3 * CLHEP::cm;
-  G4int fNfibers = 15;
-  static G4bool fSphereOn;
-  G4double fRefl = 1.;
-  G4bool fWLSslab = false;
-  G4bool fMainVolumeOn = true;
-  G4double fSlab_z = 2.5 * CLHEP::mm;
+    // Geometry
+    G4double fScint_x = 17.8 * CLHEP::cm;
+    G4double fScint_y = 17.8 * CLHEP::cm;
+    G4double fScint_z = 22.6 * CLHEP::cm;
+    G4double fD_mtl = 0.0635 * CLHEP::cm;
+    G4int fNx = 2;
+    G4int fNy = 2;
+    G4int fNz = 3;
+    G4int fSaveThreshold = 0;
+    G4double fOuterRadius_pmt = 2.3 * CLHEP::cm;
+    G4int fNfibers = 15;
+    static G4bool fSphereOn;
+    G4double fRefl = 1.;
+    G4bool fWLSslab = false;
+    G4bool fMainVolumeOn = true;
+    G4double fSlab_z = 2.5 * CLHEP::mm;
 
-  LXeMainVolume* fMainVolume = nullptr;
+    LXeMainVolume* fMainVolume = nullptr;
 
-  G4MaterialPropertiesTable* fLXe_mt = nullptr;
-  G4MaterialPropertiesTable* fMPTPStyrene = nullptr;
+    G4MaterialPropertiesTable* fLXe_mt = nullptr;
+    G4MaterialPropertiesTable* fMPTPStyrene = nullptr;
 
-  // Sensitive Detectors
-  G4Cache<LXeScintSD*> fScint_SD;
-  G4Cache<LXePMTSD*> fPmt_SD;
+    // Sensitive Detectors
+    G4Cache<LXeScintSD*> fScint_SD;
+    G4Cache<LXePMTSD*> fPmt_SD;
 };
 
 #endif

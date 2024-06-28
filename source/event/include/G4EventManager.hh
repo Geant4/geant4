@@ -56,9 +56,6 @@ class G4VUserEventInformation;
 class G4EventManager 
 {
  public:
-  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
-
- public:
     static G4EventManager* GetEventManager();
       // This method returns the singleton pointer of G4EventManager.
 
@@ -70,6 +67,10 @@ class G4EventManager
 
     void ProcessOneEvent(G4Event* anEvent);
       // This method is the main entry to this class for simulating an event.
+
+    void ProcessOneEventForSERM(G4Event* anEvent);
+      // This method must be invoked by G4SubEventRunManager for processing
+      // an event in the master thread, with Mutex lock
 
     void ProcessOneEvent(G4TrackVector* trackVector, G4Event* anEvent= nullptr);
       // This is an alternative entry for HEP experiments which create G4Track
@@ -154,8 +155,11 @@ class G4EventManager
     inline void StoreRandomNumberStatusToG4Event(G4int vl)
       { storetRandomNumberStatusToG4Event = vl; }
 
-    inline void UseSubEventParallelism()
-      { subEventPara = true; }
+    inline void UseSubEventParallelism(G4bool worker = false)
+      {
+        subEventPara = true; 
+        subEventParaWorker = worker;
+      }
     G4SubEvent* PopSubEvent(G4int ty);
       // If this method is invoked by the G4RunManager while an event is still 
       // in process. Null is returned if the sub-event does not have enough tracks.
@@ -169,7 +173,8 @@ class G4EventManager
 
   private:
 
-    void DoProcessing(G4Event* anEvent);
+    void DoProcessing(G4Event* anEvent,
+           G4TrackVector* trackVector = nullptr, G4bool IDhasAlreadySet= false);
   
   private:
 
@@ -187,6 +192,8 @@ class G4EventManager
     G4bool tracking = false;
     G4bool abortRequested = false;
     G4bool subEventPara = false;
+    G4bool subEventParaWorker = false;
+    G4int evID_inSubEv = -1;
 
     G4EvManMessenger* theMessenger = nullptr;
 
@@ -199,9 +206,6 @@ class G4EventManager
     G4String randomNumberStatusToG4Event;
 
     G4StateManager* stateManager = nullptr;
-
- private:
-  std::unique_ptr<ProfilerConfig> eventProfiler;
 };
 
 #endif

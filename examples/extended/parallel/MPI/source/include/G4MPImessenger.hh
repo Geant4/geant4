@@ -42,36 +42,37 @@ class G4UIcmdWithAString;
 class G4UIcmdWithADouble;
 class G4UIcommand;
 
-class G4MPImessenger : public G4UImessenger {
-public:
-  G4MPImessenger();
-  ~G4MPImessenger();
+class G4MPImessenger : public G4UImessenger
+{
+  public:
+    G4MPImessenger();
+    ~G4MPImessenger();
 
-  virtual void SetNewValue(G4UIcommand* command, G4String newValue);
-  virtual G4String GetCurrentValue(G4UIcommand* command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
-  void SetTargetObject(G4MPImanager* mpi_manager);
+    void SetTargetObject(G4MPImanager* mpi_manager);
 
-private:
-  DISALLOW_COPY_AND_ASSIGN(G4MPImessenger);
+  private:
+    DISALLOW_COPY_AND_ASSIGN(G4MPImessenger);
 
-  G4MPImanager* g4mpi_;
+    G4MPImanager* g4mpi_;
 
-  // /mpi
-  G4UIdirectory* dir_;
+    // /mpi
+    G4UIdirectory* dir_;
 
-  G4UIcmdWithAnInteger* verbose_;
-  G4UIcmdWithoutParameter* status_;
+    G4UIcmdWithAnInteger* verbose_;
+    G4UIcmdWithoutParameter* status_;
 
-  G4UIcmdWithAString* execute_;
+    G4UIcmdWithAString* execute_;
 
-  G4UIcommand* beam_on_;
-  G4UIcommand* dot_beam_on_;
-  G4UIcmdWithADouble* master_weight_;
+    G4UIcommand* beam_on_;
+    G4UIcommand* dot_beam_on_;
+    G4UIcmdWithADouble* master_weight_;
 
-  G4UIcmdWithoutParameter* show_seeds_;
-  G4UIcmdWithAnInteger* set_master_seed_;
-  G4UIcommand* set_seed_;
+    G4UIcmdWithoutParameter* show_seeds_;
+    G4UIcmdWithAnInteger* set_master_seed_;
+    G4UIcommand* set_seed_;
 };
 
 // ====================================================================

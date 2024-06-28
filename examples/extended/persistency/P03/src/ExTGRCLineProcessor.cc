@@ -28,61 +28,51 @@
 /// \brief Implementation of the ExTGRCLineProcessor class
 
 #include "ExTGRCLineProcessor.hh"
+
 #include "ExTGRCRegionCutsMgr.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExTGRCLineProcessor::ExTGRCLineProcessor() : G4tgrLineProcessor()
-{
-}
+ExTGRCLineProcessor::ExTGRCLineProcessor() : G4tgrLineProcessor() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExTGRCLineProcessor::~ExTGRCLineProcessor()
-{
-}
+ExTGRCLineProcessor::~ExTGRCLineProcessor() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool ExTGRCLineProcessor::ProcessLine( const std::vector<G4String>& wl )
+G4bool ExTGRCLineProcessor::ProcessLine(const std::vector<G4String>& wl)
 {
-
-  G4bool iret = G4tgrLineProcessor::ProcessLine( wl );
+  G4bool iret = G4tgrLineProcessor::ProcessLine(wl);
 
   G4String wl0 = wl[0];
-  for( size_t ii = 0; ii < wl0.length(); ii++ )
-  {
-    wl0[ii] = toupper( wl0[ii] );
+  for (size_t ii = 0; ii < wl0.length(); ii++) {
+    wl0[ii] = toupper(wl0[ii]);
   }
 
-  if( !iret )
-  {
+  if (!iret) {
     //------------------------------- parameter number
-    if( wl0 == ":REGION" )
-    {
-      std::vector<G4String>::const_iterator ite = wl.begin()+1;
+    if (wl0 == ":REGION") {
+      std::vector<G4String>::const_iterator ite = wl.begin() + 1;
       std::vector<G4String> wlc;
-      for( ; ite != wl.end(); ite++ )   //loop skipping the first one
+      for (; ite != wl.end(); ite++)  // loop skipping the first one
       {
-        wlc.push_back( *ite );
+        wlc.push_back(*ite);
       }
       //      wlc = wlc.erase( wlc.begin() );
-      ExTGRCRegionCutsMgr::GetInstance()->AddRegionData( wlc );
-      iret = 1; 
-
+      ExTGRCRegionCutsMgr::GetInstance()->AddRegionData(wlc);
+      iret = 1;
     }
-    else if( wl0 == ":CUTS" )
-    {
-      std::vector<G4String>::const_iterator ite = wl.begin()+1;
+    else if (wl0 == ":CUTS") {
+      std::vector<G4String>::const_iterator ite = wl.begin() + 1;
       std::vector<G4String> wlc;
-      for( ; ite != wl.end(); ite++ )   //loop skipping the first one
+      for (; ite != wl.end(); ite++)  // loop skipping the first one
       {
-        wlc.push_back( *ite );
+        wlc.push_back(*ite);
       }
-      ExTGRCRegionCutsMgr::GetInstance()->AddRegionCuts( wlc );
-      iret = 1; 
+      ExTGRCRegionCutsMgr::GetInstance()->AddRegionCuts(wlc);
+      iret = 1;
     }
-    else
-    {
-      iret = 0; 
-    } 
+    else {
+      iret = 0;
+    }
   }
 
   return iret;

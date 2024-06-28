@@ -28,27 +28,26 @@
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
 
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(
-                           DetectorConstruction* detectorConstruction)
- : fDetectorConstruction(detectorConstruction)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* detectorConstruction)
+  : fDetectorConstruction(detectorConstruction)
 {
   fDirectory = new G4UIdirectory("/placement/");
   fDirectory->SetGuidance("Transform example detector control");
 
-  fSetMethodCmd
-    = new G4UIcmdWithAString("/placement/setMethod",this);
+  fSetMethodCmd = new G4UIcmdWithAString("/placement/setMethod", this);
   fSetMethodCmd->SetGuidance("Select method for definition of transformations.");
   fSetMethodCmd->SetParameterName("Method", false);
   fSetMethodCmd->SetCandidates(
     "WithDirectMatrix WithInverseMatrix WithAxialRotations WithEulerAngles WithReflections");
-  fSetMethodCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetMethodCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,22 +60,22 @@ DetectorMessenger::~DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,
-                                                     G4String newValue)
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == fSetMethodCmd ) {
+  if (command == fSetMethodCmd) {
     DetectorConstruction::EMethod method;
-    if ( newValue == "WithDirectMatrix" )
+    if (newValue == "WithDirectMatrix")
       method = DetectorConstruction::kWithDirectMatrix;
-    else if ( newValue == "WithInverseMatrix" )
+    else if (newValue == "WithInverseMatrix")
       method = DetectorConstruction::kWithInverseMatrix;
-    else if ( newValue == "WithAxialRotations" )
+    else if (newValue == "WithAxialRotations")
       method = DetectorConstruction::kWithAxialRotations;
-    else if ( newValue == "WithEulerAngles" )
+    else if (newValue == "WithEulerAngles")
       method = DetectorConstruction::kWithEulerAngles;
-    else if ( newValue == "WithReflections" )
+    else if (newValue == "WithReflections")
       method = DetectorConstruction::kWithReflections;
-    else return;
+    else
+      return;
     fDetectorConstruction->SetMethod(method);
   }
 }

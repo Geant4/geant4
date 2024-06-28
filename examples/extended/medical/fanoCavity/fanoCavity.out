@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -170,7 +170,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model for leptons and hadrons  Universal
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -182,12 +182,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for e+-           3
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -223,7 +223,7 @@ conv:  for gamma SubType=14 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -236,7 +236,7 @@ eIoni:  for e-  XStype:1  SubType=2
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -246,7 +246,7 @@ eIoni:  for e+  XStype:1  SubType=2
       myMollerBhabha : Emin=    0 eV  Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=   10 GeV
 
@@ -286,18 +286,18 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
- ---> NbofEvents= 1000   NbOfelectr= 70412   Tkin= 588.048 keV (0.000 %)   NbOfelec in cav= 4661   Dose/EnFluence= 28.936 cm2/g (0.000 %) 
+ ---> NbofEvents= 1000   NbOfelectr= 70472   Tkin= 587.833 keV (0.000 %)   NbOfelec in cav= 4882   Dose/EnFluence= 29.487 cm2/g (0.000 %) 
 
 --> Event 2000 starts.
- ---> NbofEvents= 2000   NbOfelectr= 141062   Tkin= 588.463 keV (0.071 %)   NbOfelec in cav= 9597   Dose/EnFluence= 31.202 cm2/g (7.829 %) 
+ ---> NbofEvents= 2000   NbOfelectr= 140752   Tkin= 587.532 keV (-0.051 %)   NbOfelec in cav= 9647   Dose/EnFluence= 29.645 cm2/g (0.538 %) 
 
 --> Event 3000 starts.
- ---> NbofEvents= 3000   NbOfelectr= 212079   Tkin= 588.710 keV (0.042 %)   NbOfelec in cav= 14443   Dose/EnFluence= 30.413 cm2/g (-2.527 %) 
+ ---> NbofEvents= 3000   NbOfelectr= 211683   Tkin= 587.487 keV (-0.008 %)   NbOfelec in cav= 14584   Dose/EnFluence= 28.703 cm2/g (-3.180 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=7.460000s Real=7.850660s Sys=0.000000s
+  User=8.790000s Real=9.084049s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -307,29 +307,29 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 283107  Transportation= 77147  msc= 448973  eIoni= 2234482
+ Process calls frequency --->  compt= 282020  Transportation= 78385  msc= 1049116  eIoni= 2098867
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 588.4069 keV +- 0.1026 %  (--> range in wall material = 2.2220 mm )
- Mass_energy_transfer coef: 29.8740 cm2/g
+ Mean energy of secondary e- = 587.9031 keV +- 0.1030 %  (--> range in wall material = 2.2194 mm )
+ Mass_energy_transfer coef: 29.8484 cm2/g
 
- StoppingPower in wall   = 1.9643 MeV*cm2/g
-               in cavity = 1.9643 MeV*cm2/g
+ StoppingPower in wall   = 1.9646 MeV*cm2/g
+               in cavity = 1.9646 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19138	 Energy = 9.6281 GeV
-      Exit  --> nbParticles = 19151	 Energy = 9.6320 GeV
+      Enter --> nbParticles = 19379	 Energy = 9.8581 GeV
+      Exit  --> nbParticles = 19382	 Energy = 9.8562 GeV
 
- Total edep in cavity = 13.1072 MeV +- 2.8093 %	 Total charged trackLength = 52.9837 m     (mean value = 2.7685 mm )
- Total dose in cavity = 20.8607 MeV/mg
- Dose/EnergyFluence   = 29.4912 cm2/g
+ Total edep in cavity = 12.9357 MeV +- 3.2874 %	 Total charged trackLength = 53.5865 m     (mean value = 2.7652 mm )
+ Total dose in cavity = 20.5879 MeV/mg
+ Dose/EnergyFluence   = 29.1054 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.98719 +- 0.02775
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.97511 +- 0.03207
 
- StepSize of ch. tracks in wall   = 174.9550 um  +- 188.4556 um 	 (nbSteps/track = 9.6539)
- StepSize of ch. tracks in cavity = 2.6481 mm  +- 2.0419 mm 	 (nbSteps/track = 1.0455)
+ StepSize of ch. tracks in wall   = 148.8790 um  +- 150.7159 um 	 (nbSteps/track = 11.2614)
+ StepSize of ch. tracks in cavity = 1.2519 mm  +- 1.6595 mm 	 (nbSteps/track = 2.2087)
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.071 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.074 MB
 ============================================================

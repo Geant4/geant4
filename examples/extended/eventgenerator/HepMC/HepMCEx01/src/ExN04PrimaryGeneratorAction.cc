@@ -29,19 +29,19 @@
 //
 
 #include "ExN04PrimaryGeneratorAction.hh"
-#include "ExN04PrimaryGeneratorMessenger.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
+#include "ExN04PrimaryGeneratorMessenger.hh"
 #include "HepMCG4AsciiReader.hh"
 #include "HepMCG4PythiaInterface.hh"
 
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction()
+ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
   // default generator is particle gun.
-  fCurrentGenerator = fParticleGun= new G4ParticleGun();
+  fCurrentGenerator = fParticleGun = new G4ParticleGun();
   fCurrentGeneratorName = "fParticleGun";
   fHepmcAscii = new HepMCG4AsciiReader();
 #ifdef G4LIB_USE_PYTHIA
@@ -53,7 +53,7 @@ ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
   fGentypeMap["hepmcAscii"] = fHepmcAscii;
   fGentypeMap["pythia"] = fPythiaGen;
 
-  fMessenger= new ExN04PrimaryGeneratorMessenger(this);
+  fMessenger = new ExN04PrimaryGeneratorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,10 +65,9 @@ ExN04PrimaryGeneratorAction::~ExN04PrimaryGeneratorAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(fCurrentGenerator)
-    fCurrentGenerator-> GeneratePrimaryVertex(anEvent);
+  if (fCurrentGenerator)
+    fCurrentGenerator->GeneratePrimaryVertex(anEvent);
   else
-    G4Exception("ExN04PrimaryGeneratorAction::GeneratePrimaries",
-                "PrimaryGeneratorAction001", FatalException,
-                "generator is not instanciated." );
+    G4Exception("ExN04PrimaryGeneratorAction::GeneratePrimaries", "PrimaryGeneratorAction001",
+                FatalException, "generator is not instanciated.");
 }

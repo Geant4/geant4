@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,36 +48,30 @@ class DetectorMessenger;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
     DetectorConstruction();
-   ~DetectorConstruction() override;
+    ~DetectorConstruction() override;
 
   public:
+    G4VPhysicalVolume* Construct() override;
+    void SetMaterial(const G4String&);
 
-     G4VPhysicalVolume* Construct() override;
-     void SetMaterial (const G4String&);
-     
-     const
-     G4VPhysicalVolume* GetWorld() const     {return fBox;};
-     G4double           GetSize()  const     {return fBoxSize;};
-     const G4Material*  GetMaterial() const  {return fMaterial;};
+    const G4VPhysicalVolume* GetWorld() const { return fBox; };
+    G4double GetSize() const { return fBoxSize; };
+    const G4Material* GetMaterial() const { return fMaterial; };
 
-     void               PrintParameters() const;
-                       
-  private:
-  
-     G4VPhysicalVolume*    fBox      = nullptr;
-     G4double              fBoxSize  = 0.;
-     G4Material*           fMaterial = nullptr;
-     
-     DetectorMessenger*    fDetectorMessenger = nullptr;
+    void PrintParameters() const;
 
   private:
-    
-     void               DefineMaterials();
+    G4VPhysicalVolume* fBox = nullptr;
+    G4double fBoxSize = 0.;
+    G4Material* fMaterial = nullptr;
+
+    DetectorMessenger* fDetectorMessenger = nullptr;
+
+  private:
+    void DefineMaterials();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

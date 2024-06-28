@@ -36,6 +36,8 @@
 
 class G4Polyhedron;
 class G4PolyhedronArbitrary;
+class G4BooleanSolid;
+class G4VSolid;
 
 class G4VBooleanProcessor
 {
@@ -52,6 +54,9 @@ class G4VBooleanProcessor
       { return nullptr; }
     virtual G4PolyhedronArbitrary* Subtraction(G4Polyhedron* /*p1*/,
                                                G4Polyhedron* /*p2*/)
+      { return nullptr; }
+
+    virtual G4PolyhedronArbitrary* Process(const G4VSolid* /*bs*/)
       { return nullptr; }
 };
 

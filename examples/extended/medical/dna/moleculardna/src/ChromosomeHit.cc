@@ -27,24 +27,20 @@
 /// \file ChromosomeHit.cc
 /// \brief Hit class for a hit interacting with a DNA molecule
 
-#include <utility>
-
 #include "ChromosomeHit.hh"
+
+#include <utility>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal G4Allocator<ChromosomeHit>* MolecularChromosomeHitAllocator = nullptr;
 
-ChromosomeHit::ChromosomeHit(const G4String& name)
-  : fName(name)
-{}
+ChromosomeHit::ChromosomeHit(const G4String& name) : fName(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ChromosomeHit::ChromosomeHit(const ChromosomeHit& right)
-  : fName(right.GetName())
-  , fEdepChromosome(right.GetChromosomeEdep())
-  , fEdepDNA(right.GetDNAEdep())
+  : fName(right.GetName()), fEdepChromosome(right.GetChromosomeEdep()), fEdepDNA(right.GetDNAEdep())
 {
   // consider setters?
 }

@@ -27,34 +27,36 @@
 /// \brief Implementation of the scavenger::ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "StackingAction.hh"
+#include "TimeStepAction.hh"
+
 #include "G4DNAChemistryManager.hh"
+#include "G4H2O.hh"
 #include "G4MoleculeCounter.hh"
 #include "G4Scheduler.hh"
-#include "G4H2O.hh"
-#include "TimeStepAction.hh"
 
 namespace scavenger
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ActionInitialization::ActionInitialization()
-  : G4VUserActionInitialization() {
-}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ActionInitialization::BuildForMaster() const {
+void ActionInitialization::BuildForMaster() const
+{
   SetUserAction(new RunAction());
   G4DNAChemistryManager::Instance()->ResetCounterWhenRunEnds(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ActionInitialization::Build() const {
+void ActionInitialization::Build() const
+{
   G4MoleculeCounter::Instance()->Use();
   G4MoleculeCounter::Instance()->SetVerbose(0);
   G4MoleculeCounter::Instance()->DontRegister(G4H2O::Definition());
@@ -71,4 +73,4 @@ void ActionInitialization::Build() const {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-}
+}  // namespace scavenger

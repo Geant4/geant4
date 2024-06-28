@@ -26,32 +26,30 @@
 #ifndef DicomBeamWedge__HH
 #define DicomBeamWedge__HH
 
-#include "dcmtk/dcmrt/seq/drtws.h"   
+#include "dcmtk/dcmrt/seq/drtws.h"
 
-#include <vector>
 #include <iostream>
+#include <vector>
 
-class DicomBeamWedge 
-{ 
-public:
-  DicomBeamWedge(DRTWedgeSequence::Item bcompItem);
-  ~DicomBeamWedge(){};
+class DicomBeamWedge
+{
+  public:
+    DicomBeamWedge(DRTWedgeSequence::Item bcompItem);
+    ~DicomBeamWedge() {};
 
-public:
+  public:
+    void Print(std::ostream& out);
 
-  void Print( std::ostream& out );
+    void DumpToFile(std::ofstream& out);
 
-  void DumpToFile( std::ofstream& out );
-  
-private:
-  OFString theWedgeID;
-  Sint32 theWedgeNumber;
-  OFString theWedgeType;
-  Float64 theSourceToWedgeTrayDistance;
-  Sint32 theWedgeAngle;
-  Float64 theWedgeFactor;
-  Float64 theWedgeOrientation;
-
+  private:
+    OFString theWedgeID;
+    Sint32 theWedgeNumber;
+    OFString theWedgeType;
+    Float64 theSourceToWedgeTrayDistance;
+    Sint32 theWedgeAngle;
+    Float64 theWedgeFactor;
+    Float64 theWedgeOrientation;
 };
 
-#endif  
+#endif

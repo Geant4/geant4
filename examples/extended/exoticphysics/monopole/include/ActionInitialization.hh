@@ -31,7 +31,6 @@
 #define ActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
-
 #include "globals.hh"
 
 class DetectorConstruction;
@@ -42,7 +41,7 @@ class DetectorConstruction;
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-  ActionInitialization(DetectorConstruction*);
+    ActionInitialization(DetectorConstruction*);
     virtual ~ActionInitialization();
 
     virtual void BuildForMaster() const;
@@ -53,4 +52,3 @@ class ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-

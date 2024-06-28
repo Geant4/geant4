@@ -29,10 +29,9 @@
 #ifndef MOLECULAR_STEPPING_ACTION_HH
 #define MOLECULAR_STEPPING_ACTION_HH
 
-#include "G4UserSteppingAction.hh"
-
-#include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 class EventAction;
 
@@ -46,26 +45,24 @@ class PlacementVolumeInfo;
 
 class SteppingAction : public G4UserSteppingAction
 {
- public:
-  explicit SteppingAction(EventAction*);
+  public:
+    explicit SteppingAction(EventAction*);
 
-  ~SteppingAction() override = default;
+    ~SteppingAction() override = default;
 
-  void UserSteppingAction(const G4Step*) override;
+    void UserSteppingAction(const G4Step*) override;
 
- protected:
-  void ProcessDNARegionHit(const G4Step*);
+  protected:
+    void ProcessDNARegionHit(const G4Step*);
 
-  void DoChromosomeRegionHit(const G4ThreeVector&, const G4double&,
-                             const G4bool&);
+    void DoChromosomeRegionHit(const G4ThreeVector&, const G4double&, const G4bool&);
 
-  void DoChromosomeDNAHit(const G4ThreeVector&, const G4ThreeVector&,
-                          const G4double&, const G4double&, const G4String&,
-                          const G4String&);
+    void DoChromosomeDNAHit(const G4ThreeVector&, const G4ThreeVector&, const G4double&,
+                            const G4double&, const G4String&, const G4String&);
 
- private:
-  EventAction* fEventAction;
-  DNAGeometry* fDNAGeometry;
+  private:
+    EventAction* fEventAction;
+    DNAGeometry* fDNAGeometry;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

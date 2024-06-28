@@ -37,13 +37,14 @@
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef EventAction_h
 #define EventAction_h 1
- 
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,26 +54,21 @@ class EventActionMessenger;
 
 class EventAction : public G4UserEventAction
 {
-public: // Without description
+  public:  // Without description
+    EventAction();
+    virtual ~EventAction();
 
-  EventAction();
-  virtual ~EventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
+    void AddEventToDebug(G4int val);
 
-  void AddEventToDebug(G4int val);
+  private:
+    EventActionMessenger* fEventMessenger;
+    std::vector<G4int> fSelectedEvents;
 
-private:
-
-  EventActionMessenger* fEventMessenger;
-  std::vector<G4int>    fSelectedEvents;
-
-  G4int        fNSelected;
-  G4bool       fDebugStarted;
-
+    G4int fNSelected;
+    G4bool fDebugStarted;
 };
 
 #endif
-
-

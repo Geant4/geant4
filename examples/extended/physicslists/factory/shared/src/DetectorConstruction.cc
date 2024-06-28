@@ -28,25 +28,24 @@
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+
 #include "ScreenSD.hh"
 
+#include "G4AutoDelete.hh"
+#include "G4Box.hh"
+#include "G4Colour.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4GlobalMagFieldMessenger.hh"
 #include "G4SDManager.hh"
-
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4AutoDelete.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal
-G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
+G4ThreadLocal G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,9 +57,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Build materials
   G4Material* air = nistManager->FindOrBuildMaterial("G4_AIR");
   G4Material* csi = nistManager->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-       // There is no need to test if materials were built/found
-       // as G4NistManager would issue an error otherwise
-       // Try the code with "XYZ".
+  // There is no need to test if materials were built/found
+  // as G4NistManager would issue an error otherwise
+  // Try the code with "XYZ".
 
   // Print all materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -73,62 +72,59 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
 
   // The world dimensions
-  G4double worldHxyz = 2.*m;
+  G4double worldHxyz = 2. * m;
 
   // world volume
-  auto  worldS = new G4Box("World", worldHxyz, worldHxyz, worldHxyz);
+  auto worldS = new G4Box("World", worldHxyz, worldHxyz, worldHxyz);
 
-  auto  worldLV = new G4LogicalVolume(worldS, air, "World");
+  auto worldLV = new G4LogicalVolume(worldS, air, "World");
 
-  G4VPhysicalVolume* worldPV
-    = new G4PVPlacement(
-            nullptr, G4ThreeVector(), worldLV, "World", nullptr, false, 0, checkOverlaps);
+  G4VPhysicalVolume* worldPV =
+    new G4PVPlacement(nullptr, G4ThreeVector(), worldLV, "World", nullptr, false, 0, checkOverlaps);
 
   //
   // Box
   //
 
   // The box dimensions
-  G4double boxHxy = 1.*m;
-  G4double boxHz = 10.*cm;
+  G4double boxHxy = 1. * m;
+  G4double boxHz = 10. * cm;
 
   // box volume
-  auto  boxS = new G4Box("World", boxHxy, boxHxy, boxHz);
+  auto boxS = new G4Box("World", boxHxy, boxHxy, boxHz);
 
-  auto  boxLV = new G4LogicalVolume(boxS, csi, "Box");
+  auto boxLV = new G4LogicalVolume(boxS, csi, "Box");
 
   // The box position
-  G4double posz = 0.*m;
+  G4double posz = 0. * m;
 
-  new G4PVPlacement(
-        nullptr, G4ThreeVector(0, 0, posz),
-        boxLV, "Box", worldLV, false, 0, checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0, 0, posz), boxLV, "Box", worldLV, false, 0,
+                    checkOverlaps);
 
   //
   // Scoring screen
   //
   // The screen dimensions
-  G4double screenHxy = 1.999*m;
-  G4double screenHz = 1.*mm;
+  G4double screenHxy = 1.999 * m;
+  G4double screenHz = 1. * mm;
 
   // Screen volume
-  auto  screenS = new G4Box("World", screenHxy, screenHxy, screenHz);
+  auto screenS = new G4Box("World", screenHxy, screenHxy, screenHz);
 
-  auto  screenLV = new G4LogicalVolume(screenS, air, "Screen");
+  auto screenLV = new G4LogicalVolume(screenS, air, "Screen");
 
   // The screen position
   posz += boxHz + screenHz;
 
-  new G4PVPlacement(
-        nullptr, G4ThreeVector(0, 0, posz),
-        screenLV, "Screen", worldLV, false, 0, checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0, 0, posz), screenLV, "Screen", worldLV, false, 0,
+                    checkOverlaps);
 
   //
   // Visualization attributes
   //
   worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
 
-  auto simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+  auto simpleBoxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   simpleBoxVisAtt->SetVisibility(true);
   boxLV->SetVisAttributes(simpleBoxVisAtt);
   screenLV->SetVisAttributes(simpleBoxVisAtt);

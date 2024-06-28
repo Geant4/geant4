@@ -23,67 +23,68 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Derived from 
+// Derived from
 //  https://twiki.cern.ch/twiki/bin/view/Geant4/QuickMigrationGuideForGeant4V10
 // Courtesy of A. Dotti
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/src/MyFileReader.cc
 /// \brief Implementation of the MyFileReader class
 
 #include "MyFileReader.hh"
-#include "G4ThreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyFileReader::MyFileReader()
-{ 
+{
   //******************************************************************
   //*** Specify file name containing list of incident energies (in eV)
   //******************************************************************
-  G4String fileName= "spectrum.txt";
+  G4String fileName = "spectrum.txt";
   //
-  
-  fInputFile.open(fileName.data()); 
+
+  fInputFile.open(fileName.data());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyFileReader::~MyFileReader()
-{ fInputFile.close(); }
+{
+  fInputFile.close();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double MyFileReader::GetAnEvent()
 {
-  
   //*******************************************
   //*** Specify number of lines to read at once
   //*******************************************
   G4int numberOfLinesToRead = 100;
   //
-  
-  if( fEvList.size() == 0 )
-  {
-    for(G4int i=0;i<numberOfLinesToRead;i++)
-    {
+
+  if (fEvList.size() == 0) {
+    for (G4int i = 0; i < numberOfLinesToRead; i++) {
       G4double nrj;
       fInputFile >> nrj;
       fEvList.push_back(nrj);
     }
   }
 
-  //get first element from list
+  // Get first element from list
   G4double ev = fEvList.front();
-  
-  //remove this element from list
+
+  // Remove this element from list
   fEvList.pop_front();
-  
+
   return ev;
 }

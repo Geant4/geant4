@@ -30,11 +30,11 @@
 //   An abstract class inherited from G4VSolid for Constructed Solids.
 //   Used primarily to structure inheritance tree.
 
-// 27.03.98 J.Apostolakis - Created first version.
+// 27.03.98 J.Apostolakis (CERN) - Created first version.
 // --------------------------------------------------------------------
 
 #ifndef G4CSGSOLID_HH
-#define G4CSGSOLID_HH
+#define G4CSGSOLID_HH 1
 
 #include "G4VSolid.hh"
 
@@ -43,7 +43,7 @@ class G4CSGSolid : public G4VSolid
   public:
 
     G4CSGSolid(const G4String& pName);
-    virtual ~G4CSGSolid();
+    ~G4CSGSolid() override;
 
     std::ostream& StreamInfo(std::ostream& os) const override;
 

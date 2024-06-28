@@ -70,6 +70,8 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
@@ -98,6 +100,11 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
 inline G4GeometryType G4UBox::GetEntityType() const
 {
   return "G4Box";
+}
+
+inline G4bool G4UBox::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

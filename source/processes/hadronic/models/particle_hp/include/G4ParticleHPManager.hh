@@ -42,6 +42,7 @@ class G4ParticleHPChannel;
 class G4ParticleHPChannelList;
 class G4ParticleHPMessenger;
 class G4ParticleHPVector;
+class G4ParticleHPIsoProbabilityTable;
 class G4PhysicsTable;
 struct E_isoAng;
 struct E_P_E_isoAng;
@@ -205,6 +206,17 @@ class G4ParticleHPManager
       theTSInelasticFinalStates = val;
     };
 
+    std::vector< std::map< G4int, G4ParticleHPIsoProbabilityTable* > >* GetProbabilityTables() 
+      { return theProbabilityTables; };
+    void RegisterProbabilityTables( std::vector< std::map< G4int, G4ParticleHPIsoProbabilityTable* > >* val ) 
+      { theProbabilityTables = val; };
+
+    std::vector< std::pair< G4double, G4double > >* GetURRlimits() { return theURRlimits; };
+    void RegisterURRlimits( std::vector< std::pair< G4double, G4double > >* val ) { theURRlimits = val; };
+
+    G4String GetUsedPTformat() { return USE_PROBABILITY_TABLE_FROM; };
+    void SetUsedPTformat( G4String val ) { USE_PROBABILITY_TABLE_FROM = val; };
+
     G4double GetMinADBRC() const { return theMinADBRC; };
     G4double GetMinEnergyDBRC() const { return theMinEnergyDBRC; };
     G4double GetMaxEnergyDBRC() const { return theMaxEnergyDBRC; };
@@ -271,5 +283,10 @@ class G4ParticleHPManager
     G4double theMaxEnergyDoppler;
 
     G4String fDataPath[6]{""};
+
+    std::vector< std::map< G4int, G4ParticleHPIsoProbabilityTable* > >* theProbabilityTables{ nullptr };
+    std::vector< std::pair< G4double, G4double > >* theURRlimits{ nullptr };
+
+    G4String USE_PROBABILITY_TABLE_FROM{ "njoy" };
 };
 #endif

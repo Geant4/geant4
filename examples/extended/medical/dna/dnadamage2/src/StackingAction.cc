@@ -44,35 +44,30 @@
 /// \brief Implementation of the StackingAction class
 
 #include "StackingAction.hh"
+
 #include "DetectorConstruction.hh"
 
-#include "G4StackManager.hh"
 #include "G4DNAChemistryManager.hh"
-#include "G4SDManager.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Track.hh"
 #include "G4ITTrackHolder.hh"
 #include "G4ManyFastLists.hh"
+#include "G4SDManager.hh"
+#include "G4StackManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-StackingAction::StackingAction()
- : G4UserStackingAction()
-{
-}
+StackingAction::StackingAction() : G4UserStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-StackingAction::~StackingAction()
-{
-}
+StackingAction::~StackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void StackingAction::NewStage()
 {
-  if(stackManager->GetNTotalTrack() == 0)
-  {
+  if (stackManager->GetNTotalTrack() == 0) {
     // Run Chemistry
     G4DNAChemistryManager::Instance()->Run();
   }

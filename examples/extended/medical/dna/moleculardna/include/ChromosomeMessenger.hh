@@ -27,10 +27,10 @@
 #ifndef MOLECULAR_CHROMOSOME_MESSENGER_HH
 #define MOLECULAR_CHROMOSOME_MESSENGER_HH
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 #include <memory>
 
@@ -40,20 +40,20 @@ class ChromosomeMapper;
 
 class ChromosomeMessenger : public G4UImessenger
 {
- public:
-  explicit ChromosomeMessenger(ChromosomeMapper*);
+  public:
+    explicit ChromosomeMessenger(ChromosomeMapper*);
 
-  ~ChromosomeMessenger() override = default;
+    ~ChromosomeMessenger() override = default;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  ChromosomeMapper* fpChromosomeMapper;
+  private:
+    ChromosomeMapper* fpChromosomeMapper;
 
-  // Related to the chromosome
-  std::unique_ptr<G4UIdirectory> fpChromosomeDirectory;
-  std::unique_ptr<G4UIcmdWithAString> fpAddChromosome;
-  std::unique_ptr<G4UIcmdWithAString> fpSavePlotData;
+    // Related to the chromosome
+    std::unique_ptr<G4UIdirectory> fpChromosomeDirectory;
+    std::unique_ptr<G4UIcmdWithAString> fpAddChromosome;
+    std::unique_ptr<G4UIcmdWithAString> fpSavePlotData;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

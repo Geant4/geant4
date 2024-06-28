@@ -27,6 +27,7 @@
 #define PAR04PARALLELFULLWORLD_HH
 
 #include "Par04DetectorConstruction.hh"
+
 #include "G4VUserParallelWorld.hh"
 #include "globals.hh"
 
@@ -36,36 +37,35 @@ class G4VPhysicalVolume;
 
 class Par04ParallelFullWorld : public G4VUserParallelWorld
 {
-public:
-  Par04ParallelFullWorld(G4String aWorldName, const Par04DetectorConstruction* aMassDetector);
-  ~Par04ParallelFullWorld();
-  
-  virtual void Construct() final;
-  virtual void ConstructSD() final;
+  public:
+    Par04ParallelFullWorld(G4String aWorldName, const Par04DetectorConstruction* aMassDetector);
+    ~Par04ParallelFullWorld();
 
-  
-  ///  Set number of slices
-  inline void SetNbOfSlices(G4int aNumber) { fNbOfSlices = aNumber; };
-  ///  Get number of slices
-  inline G4int GetNbOfSlices() const { return fNbOfSlices; };
-  ///  Set number of rows
-  inline void SetNbOfRows(G4int aNumber) { fNbOfRows = aNumber; };
-  ///  Get number of rows
-  inline G4int GetNbOfRows() const { return fNbOfRows; };
-  ///  Get number of layers
-  inline G4int GetNbOfLayers() const { return fNbOfLayers; };
-  
-  void Print();
+    virtual void Construct() final;
+    virtual void ConstructSD() final;
 
-private:
-  ///  Messenger that allows to modify geometry
-  Par04ParallelMessenger* fParallelMessenger = nullptr;
-  const Par04DetectorConstruction* fMassDetector;
-  std::vector<G4LogicalVolume*> fLogicalCell;
-  G4int fNbOfLayers = 1;
-  G4int fNbOfSlices = 1;
-  G4int fNbOfRows = 1;
-  G4double fLayerThickness = 0;
+    ///  Set number of slices
+    inline void SetNbOfSlices(G4int aNumber) { fNbOfSlices = aNumber; };
+    ///  Get number of slices
+    inline G4int GetNbOfSlices() const { return fNbOfSlices; };
+    ///  Set number of rows
+    inline void SetNbOfRows(G4int aNumber) { fNbOfRows = aNumber; };
+    ///  Get number of rows
+    inline G4int GetNbOfRows() const { return fNbOfRows; };
+    ///  Get number of layers
+    inline G4int GetNbOfLayers() const { return fNbOfLayers; };
+
+    void Print();
+
+  private:
+    ///  Messenger that allows to modify geometry
+    Par04ParallelMessenger* fParallelMessenger = nullptr;
+    const Par04DetectorConstruction* fMassDetector;
+    std::vector<G4LogicalVolume*> fLogicalCell;
+    G4int fNbOfLayers = 1;
+    G4int fNbOfSlices = 1;
+    G4int fNbOfRows = 1;
+    G4double fLayerThickness = 0;
 };
 
 #endif

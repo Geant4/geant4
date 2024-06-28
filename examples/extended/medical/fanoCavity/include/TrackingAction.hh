@@ -38,19 +38,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
     TrackingAction();
-   ~TrackingAction();
-   
-    virtual void  PreUserTrackingAction(const G4Track*);
+    ~TrackingAction();
+
+    virtual void PreUserTrackingAction(const G4Track*);
     virtual void PostUserTrackingAction(const G4Track*);
-    
-    void AddEdepCavity(G4double de) { fEdepCavity += de;};
-        
+
+    void AddEdepCavity(G4double de) { fEdepCavity += de; };
+
   private:
-    G4double       fEdepCavity;            
+    G4double fEdepCavity;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

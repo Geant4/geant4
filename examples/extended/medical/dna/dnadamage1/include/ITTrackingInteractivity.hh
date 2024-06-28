@@ -28,15 +28,19 @@
 /// \brief Definition of the ITTrackingInteractivity class
 
 #pragma once
+
 #include "G4ITTrackingInteractivity.hh"
-#include <vector>
+#include "G4UserSteppingAction.hh"
+#include "G4UserTrackingAction.hh"
+
 #include <memory>
+#include <vector>
 
 class G4VTrajectory;
 
-class ITTrackingInteractivity: public G4ITTrackingInteractivity
+class ITTrackingInteractivity : public G4ITTrackingInteractivity
 {
-public:
+  public:
     ITTrackingInteractivity();
     ~ITTrackingInteractivity() override;
 
@@ -47,45 +51,34 @@ public:
     void Finalize() override;
 
     void SetUserAction(G4UserTrackingAction*);
-    inline std::unique_ptr<G4UserTrackingAction> 
-    GetUserTrackingAction();
+    inline std::unique_ptr<G4UserTrackingAction> GetUserTrackingAction();
 
     void SetUserAction(G4UserSteppingAction*);
-    inline std::unique_ptr<G4UserSteppingAction> 
-    GetUserSteppingAction();
+    inline std::unique_ptr<G4UserSteppingAction> GetUserSteppingAction();
 
-private:
+  private:
     int fStoreTrajectory;
     std::vector<G4VTrajectory*> fTrajectories;
-    std::unique_ptr<G4UserTrackingAction> 
-    fpUserTrackingAction;
-    std::unique_ptr<G4UserSteppingAction> 
-    fpUserSteppingAction;
+    std::unique_ptr<G4UserTrackingAction> fpUserTrackingAction;
+    std::unique_ptr<G4UserSteppingAction> fpUserSteppingAction;
 };
 
-inline
-void ITTrackingInteractivity::SetUserAction(
-    G4UserTrackingAction* trackAct)
+inline void ITTrackingInteractivity::SetUserAction(G4UserTrackingAction* trackAct)
 {
-    fpUserTrackingAction.reset(trackAct);
+  fpUserTrackingAction.reset(trackAct);
 }
 
-inline
-void ITTrackingInteractivity::SetUserAction(
-    G4UserSteppingAction* stepAct)
+inline void ITTrackingInteractivity::SetUserAction(G4UserSteppingAction* stepAct)
 {
-    fpUserSteppingAction.reset(stepAct);
+  fpUserSteppingAction.reset(stepAct);
 }
 
-inline std::unique_ptr<G4UserSteppingAction>
-ITTrackingInteractivity::GetUserSteppingAction()
+inline std::unique_ptr<G4UserSteppingAction> ITTrackingInteractivity::GetUserSteppingAction()
 {
-    return std::move(fpUserSteppingAction);
+  return std::move(fpUserSteppingAction);
 }
 
-inline std::unique_ptr<G4UserTrackingAction>
-ITTrackingInteractivity::GetUserTrackingAction()
+inline std::unique_ptr<G4UserTrackingAction> ITTrackingInteractivity::GetUserTrackingAction()
 {
-    return std::move(fpUserTrackingAction);
+  return std::move(fpUserTrackingAction);
 }
-

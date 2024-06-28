@@ -41,17 +41,17 @@ class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingMessenger: public G4UImessenger
+class StackingMessenger : public G4UImessenger
 {
   public:
     StackingMessenger(StackingAction*);
-   ~StackingMessenger() override;
-    
+    ~StackingMessenger() override;
+
     void SetNewValue(G4UIcommand*, G4String) override;
-    
+
   private:
-    StackingAction*     fStackAction = nullptr;
-    G4UIcmdWithABool*   fTrackCmd = nullptr;
+    StackingAction* fStackAction = nullptr;
+    G4UIcmdWithABool* fTrackCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

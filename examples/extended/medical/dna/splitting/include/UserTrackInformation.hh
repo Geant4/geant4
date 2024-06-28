@@ -39,17 +39,14 @@
 
 class UserTrackInformation : public G4VUserTrackInformation
 {
-
   public:
     UserTrackInformation();
     virtual ~UserTrackInformation();
 
     void SetSplitTrackID(G4int splitTrackID);
     G4int GetSplitTrackID();
- 
+
   private:
     G4int fSplitTrackID;
-
 };
 #endif
-

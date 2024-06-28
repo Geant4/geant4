@@ -28,34 +28,32 @@
 //
 //
 
-#include "G4Event.hh"
-#include "G4SDManager.hh"
 #include "H02EventAction.hh"
+
 #include "H02MuonSD.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-H02EventAction::H02EventAction()
- : G4UserEventAction()
-{
-}
+#include "G4Event.hh"
+#include "G4SDManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-H02EventAction::~H02EventAction()
-{
-}
+H02EventAction::H02EventAction() : G4UserEventAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+H02EventAction::~H02EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02EventAction::BeginOfEventAction(const G4Event* anEvent)
 {
-  const G4Event* ev = anEvent; ev=0;
+  const G4Event* ev = anEvent;
+  ev = 0;
 #ifdef DEBUG_HEPMC
   // printout primary information
   G4cout << "Print out primary information" << G4endl;
-  G4int nVtx= anEvent-> GetNumberOfPrimaryVertex();
+  G4int nVtx = anEvent->GetNumberOfPrimaryVertex();
   G4int i;
-  for(i=0; i< nVtx; i++) {
-    const G4PrimaryVertex* primaryVertex= anEvent-> GetPrimaryVertex(i);
-    primaryVertex-> Print();
+  for (i = 0; i < nVtx; i++) {
+    const G4PrimaryVertex* primaryVertex = anEvent->GetPrimaryVertex(i);
+    primaryVertex->Print();
   }
 #endif
 }
@@ -64,10 +62,9 @@ void H02EventAction::BeginOfEventAction(const G4Event* anEvent)
 void H02EventAction::EndOfEventAction(const G4Event*)
 {
   G4cout << " Print out hit information" << G4endl;
-  G4SDManager* SDManager= G4SDManager::GetSDMpointer();
-  H02MuonSD* muonSD=
-    (H02MuonSD*)SDManager-> FindSensitiveDetector("/mydet/muon");
-  muonSD-> PrintAll();
-  muonSD-> DrawAll();
+  G4SDManager* SDManager = G4SDManager::GetSDMpointer();
+  H02MuonSD* muonSD = (H02MuonSD*)SDManager->FindSensitiveDetector("/mydet/muon");
+  muonSD->PrintAll();
+  muonSD->DrawAll();
   G4cout << G4endl;
 }

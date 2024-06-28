@@ -26,101 +26,96 @@
 /// \file medical/fanoCavity2/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 
+#include "DetectorConstruction.hh"
+#include "HistoManager.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
+
+#include "G4Electron.hh"
+#include "G4EmCalculator.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4EmCalculator.hh"
-#include "G4Electron.hh"
-
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "Randomize.hh"
+
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:fDetector(det),fKinematic(kin),fRun(0),fHistoManager(0)
+  : fDetector(det), fKinematic(kin), fRun(0), fHistoManager(0)
 {
- fHistoManager = new HistoManager();
+  fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
- delete fHistoManager; 
+  delete fHistoManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Run* RunAction::GenerateRun()
 {
-  fRun = new Run(fDetector,fKinematic,isMaster);
+  fRun = new Run(fDetector, fKinematic, isMaster);
   return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
-{    
+{
   // do not save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  if (isMaster)
-  {
+  if (isMaster) {
     CLHEP::HepRandom::showEngineStatus();
-      G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+    G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   }
-    
-  //G4int NbofEvents = aRun->GetNumberOfEventToBeProcessed();
-  //if (NbofEvents == 0) return;
-  
 
-  //run conditions
-  //     
-  G4ParticleDefinition* particleGun
-                    = fKinematic->GetParticleGun()->GetParticleDefinition();
-  G4String partName = particleGun->GetParticleName();
-  //G4double energyGun = fKinematic->GetParticleGun()->GetParticleEnergy();
+  // G4int NbofEvents = aRun->GetNumberOfEventToBeProcessed();
+  // if (NbofEvents == 0) return;
 
-
-  //histograms
+  // run conditions
   //
-/*
+  G4ParticleDefinition* particleGun = fKinematic->GetParticleGun()->GetParticleDefinition();
+  G4String partName = particleGun->GetParticleName();
+  // G4double energyGun = fKinematic->GetParticleGun()->GetParticleEnergy();
 
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
-    analysisManager->OpenFile();
-  }
-*/
+  // histograms
+  //
+  /*
+
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    if ( analysisManager->IsActive() ) {
+      analysisManager->OpenFile();
+    }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* )
+void RunAction::EndOfRunAction(const G4Run*)
 {
   // compute and print statistic
   if (isMaster) fRun->EndOfRun();
-  
+
   // save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
-  }        
- 
+  }
+
   // show Rndm status
-   if ( isMaster )CLHEP::HepRandom::showEngineStatus();
+  if (isMaster) CLHEP::HepRandom::showEngineStatus();
 }
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

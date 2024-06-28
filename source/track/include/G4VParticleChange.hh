@@ -231,9 +231,6 @@ class G4VParticleChange
 
     const G4Track* theCurrentTrack = nullptr;
 
-    std::vector<G4Track*> theListOfSecondaries;
-      // The vector of secondaries
-
     G4TrackStatus theStatusChange = fAlive;
       // The changed (final) track status of a given particle
 
@@ -284,6 +281,9 @@ class G4VParticleChange
       // Flag for setting weight of secondaries
 
     G4bool debugFlag = false;
+
+    std::vector<G4Track*> theListOfSecondaries;
+      // The vector of secondaries
 };
 
 #include "G4VParticleChange.icc"

@@ -24,18 +24,19 @@
 // ********************************************************************
 //
 
-
 #ifndef CHEMFRICKEREACTIONBUILDER_HH
-#define CHEMFRICKEREACTIONBUILDER_HH
+#  define CHEMFRICKEREACTIONBUILDER_HH 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4DNAMolecularReactionTable;
 
-class ChemFrickeReactionBuilder {
-public:
-  ChemFrickeReactionBuilder() = default;
-  ~ChemFrickeReactionBuilder() = default;
+class ChemFrickeReactionBuilder
+{
+  public:
+    ChemFrickeReactionBuilder() = default;
+    ~ChemFrickeReactionBuilder() = default;
 
-  static void FrickeDosimeterReaction(
-      G4DNAMolecularReactionTable *pReactionTable);
+    static void FrickeDosimeterReaction(G4DNAMolecularReactionTable* pReactionTable);
 };
 #endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

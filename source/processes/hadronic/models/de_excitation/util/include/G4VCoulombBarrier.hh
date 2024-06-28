@@ -33,8 +33,6 @@
 
 #include "globals.hh"
 
-class G4Pow;
-
 class G4VCoulombBarrier
 {
 public:
@@ -54,14 +52,11 @@ public:
 
 protected:
 	
-  G4Pow* g4calc;
-
   G4int theA;
   G4int theZ;
 
-  G4double theR0;
-  G4double theRho = 0.0;
-  G4double factor = 0.0;
+  G4double theRho{0.0};
+  G4double factor{0.0};
 };
 
 #endif

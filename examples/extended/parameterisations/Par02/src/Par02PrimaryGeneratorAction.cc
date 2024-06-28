@@ -28,41 +28,45 @@
 /// \brief Implementation of the Par02PrimaryGeneratorAction class
 
 #include "Par02PrimaryGeneratorAction.hh"
+
+#include "Par02PrimaryParticleInformation.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "Par02PrimaryParticleInformation.hh"
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02PrimaryGeneratorAction::Par02PrimaryGeneratorAction() {
+Par02PrimaryGeneratorAction::Par02PrimaryGeneratorAction()
+{
   G4int n_particle = 1;
-  fParticleGun = new G4ParticleGun( n_particle );
+  fParticleGun = new G4ParticleGun(n_particle);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle = 
-    particleTable->FindParticle( particleName = "geantino" );
-  fParticleGun->SetParticleDefinition( particle );
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "geantino");
+  fParticleGun->SetParticleDefinition(particle);
 
-  fParticleGun->SetParticleMomentumDirection( G4ThreeVector( 0.0, 1.0, 0.0 ) );
-  fParticleGun->SetParticleEnergy( 100.0*GeV );
-  fParticleGun->SetParticlePosition( G4ThreeVector( 0.0, 0.0, 0.0 ) );
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 1.0, 0.0));
+  fParticleGun->SetParticleEnergy(100.0 * GeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, 0.0));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02PrimaryGeneratorAction::~Par02PrimaryGeneratorAction() {
+Par02PrimaryGeneratorAction::~Par02PrimaryGeneratorAction()
+{
   delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02PrimaryGeneratorAction::GeneratePrimaries( G4Event* anEvent ) {
-  fParticleGun->GeneratePrimaryVertex( anEvent );
+void Par02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 
   // Loop over the vertices, and then over primary particles,
   // and for each primary particle create an info object, in
@@ -71,26 +75,23 @@ void Par02PrimaryGeneratorAction::GeneratePrimaries( G4Event* anEvent ) {
   // of a trivial particle gun generator, but it is useful in the more
   // realistic case of a Monte Carlo event generator like Pythia8.
   G4int count_particles = 0;
-  for ( G4int ivtx = 0; ivtx < anEvent->GetNumberOfPrimaryVertex(); ivtx++ ) {
-    for ( G4int ipp = 0; ipp < anEvent->GetPrimaryVertex( ivtx )->GetNumberOfParticle();
-          ipp++ ) {
-      G4PrimaryParticle* primary_particle = 
-        anEvent->GetPrimaryVertex( ivtx )->GetPrimary( ipp );
-      if ( primary_particle ) {
-        primary_particle->SetUserInformation( new Par02PrimaryParticleInformation( 
-          count_particles, primary_particle->GetPDGcode(), 
-          primary_particle->GetMomentum() ) );
-        count_particles++;              
+  for (G4int ivtx = 0; ivtx < anEvent->GetNumberOfPrimaryVertex(); ivtx++) {
+    for (G4int ipp = 0; ipp < anEvent->GetPrimaryVertex(ivtx)->GetNumberOfParticle(); ipp++) {
+      G4PrimaryParticle* primary_particle = anEvent->GetPrimaryVertex(ivtx)->GetPrimary(ipp);
+      if (primary_particle) {
+        primary_particle->SetUserInformation(new Par02PrimaryParticleInformation(
+          count_particles, primary_particle->GetPDGcode(), primary_particle->GetMomentum()));
+        count_particles++;
       }
-    } 
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ParticleGun* Par02PrimaryGeneratorAction::GetParticleGun() {
+G4ParticleGun* Par02PrimaryGeneratorAction::GetParticleGun()
+{
   return fParticleGun;
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

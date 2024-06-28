@@ -139,7 +139,6 @@ void G4ExcitationHandler::SetParameters()
   minEForMultiFrag = param->GetMinExPerNucleounForMF();
   minExcitation = param->GetMinExcitation();
   maxExcitation = param->GetPrecoHighEnergy();
-  icID = G4PhysicsModelCatalog::GetModelID("model_e-InternalConversion");
 
   // allowing local debug printout 
   fVerbose = std::max(fVerbose, param->GetVerbose());
@@ -506,7 +505,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   // in memory for the vector
   theReactionProductVector->reserve( theResults.size() );
 
-  if (fVerbose > 2) { 	
+  if (fVerbose > 1) {
     G4cout << "### ExcitationHandler provides " << theResults.size() 
 	   << " evaporated products:" << G4endl;
   }
@@ -587,6 +586,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	G4cout << "### EXCH: Find ion Z= " << fragmentZ 
                << " A= " << fragmentA
 	       << " Eexc(MeV)= " << eexc/MeV << " idx= " << idxf 
+	       << " " << theKindOfFragment->GetParticleName() 
 	       << G4endl;
       }
     }
@@ -608,11 +608,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       }
       theNew->SetTotalEnergy(etot);
       theNew->SetFormationTime(frag->GetCreationTime());
-      if (theKindOfFragment == theElectron) {
-	theNew->SetCreatorModelID(icID);
-      } else {
-	theNew->SetCreatorModelID(frag->GetCreatorModelID());
-      }
+      theNew->SetCreatorModelID(frag->GetCreatorModelID());
       theReactionProductVector->push_back(theNew);
 
       // fragment not found out ground state is created

@@ -32,10 +32,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "SteppingAction.hh"
 #include "StackingAction.hh"
+#include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,20 +48,22 @@ ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const {
+void ActionInitialization::BuildForMaster() const
+{
   // Called only in MT-mode for the Master thread only.
-  SetUserAction( new RunAction );
+  SetUserAction(new RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::Build() const {
+void ActionInitialization::Build() const
+{
   // Called in the SEQ-mode and in the MT-mode for Worker threads only.
-  SetUserAction( new PrimaryGeneratorAction );
+  SetUserAction(new PrimaryGeneratorAction);
   SteppingAction* steppingAction = new SteppingAction;
-  SetUserAction( steppingAction );
-  SetUserAction( new RunAction( steppingAction ) );
-  SetUserAction( new StackingAction );
+  SetUserAction(steppingAction);
+  SetUserAction(new RunAction(steppingAction));
+  SetUserAction(new StackingAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -33,8 +33,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4UserRunAction.hh"
 #include "G4Run.hh"
+#include "G4UserRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -46,19 +46,19 @@ class HistoManager;
 
 class RunAction : public G4UserRunAction
 {
- public:
-  RunAction(DetectorConstruction*);
-  virtual ~RunAction();
+  public:
+    RunAction(DetectorConstruction*);
+    virtual ~RunAction();
 
-  virtual G4Run* GenerateRun();
+    virtual G4Run* GenerateRun();
 
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
 
- private:
-  DetectorConstruction* fDetector;
-  Run* fRun;
-  HistoManager* fHistoManager;
+  private:
+    DetectorConstruction* fDetector;
+    Run* fRun;
+    HistoManager* fHistoManager;
 };
 
 #endif

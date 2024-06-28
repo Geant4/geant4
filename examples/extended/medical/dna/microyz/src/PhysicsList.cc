@@ -24,19 +24,24 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
-#include <memory>
-
 #include "PhysicsList.hh"
+
 #include "PhysicsListMessenger.hh"
+
+#include "G4BaryonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4DNAGenericIonsManager.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option1.hh"
 #include "G4EmDNAPhysics_option2.hh"
@@ -49,15 +54,14 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4UserSpecialCuts.hh"
-#include "G4StepLimiter.hh"
-#include "G4BosonConstructor.hh"
+#include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
-#include "G4DNAGenericIonsManager.hh"
+#include "G4StepLimiter.hh"
+#include "G4UserSpecialCuts.hh"
+
+#include <memory>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,70 +70,64 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   fMessenger = std::make_unique<PhysicsListMessenger>(this);
   SetVerboseLevel(1);
   fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option2>();
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()= default;
+PhysicsList::~PhysicsList() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-    G4BosonConstructor  pBosonConstructor;
-    pBosonConstructor.ConstructParticle();
+  G4BosonConstructor pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
 
-    G4LeptonConstructor pLeptonConstructor;
-    pLeptonConstructor.ConstructParticle();
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
 
-    G4MesonConstructor pMesonConstructor;
-    pMesonConstructor.ConstructParticle();
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
 
-    G4BaryonConstructor pBaryonConstructor;
-    pBaryonConstructor.ConstructParticle();
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
 
-    G4IonConstructor pIonConstructor;
-    pIonConstructor.ConstructParticle();
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 
-    G4ShortLivedConstructor pShortLivedConstructor;
-    pShortLivedConstructor.ConstructParticle();
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();
 
-    G4DNAGenericIonsManager* genericIonsManager;
-    genericIonsManager=G4DNAGenericIonsManager::Instance();
-    genericIonsManager->GetIon("alpha++");
-    genericIonsManager->GetIon("alpha+");
-    genericIonsManager->GetIon("helium");
-    genericIonsManager->GetIon("hydrogen");  
+  G4DNAGenericIonsManager* genericIonsManager;
+  genericIonsManager = G4DNAGenericIonsManager::Instance();
+  genericIonsManager->GetIon("alpha++");
+  genericIonsManager->GetIon("alpha+");
+  genericIonsManager->GetIon("helium");
+  genericIonsManager->GetIon("hydrogen");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
-  // transportation
-  //
+  // Transportation
   AddTransportation();
-  
-  // electromagnetic physics list
-  //
+
+  // Electromagnetic physics list
   fEmPhysicsList->ConstructProcess();
-      
-  // tracking cut
-  //
+
+  // Tracking cut
   AddTrackingCut();
 
-  // maximum step size
-  //
+  // Maximum step size
   AddMaxStepSize();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -138,56 +136,54 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == "dna") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics>();
-         
-  } else if (name == "dna_opt1") {
+  }
+  else if (name == "dna_opt1") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option1>();
-         
-  } else if (name == "dna_opt2") {
+  }
+  else if (name == "dna_opt2") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option2>();
-         
-  } else if (name == "dna_opt3") {
+  }
+  else if (name == "dna_opt3") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option3>();
-         
-  } else if (name == "dna_opt4") {
+  }
+  else if (name == "dna_opt4") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option4>();
-         
-  } else if (name == "dna_opt5") {
+  }
+  else if (name == "dna_opt5") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option5>();
-         
-  } else if (name == "dna_opt6") {
+  }
+  else if (name == "dna_opt6") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option6>();
-         
-  } else if (name == "dna_opt7") {
+  }
+  else if (name == "dna_opt7") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option7>();
-         
-  } else if (name == "dna_opt8") {
+  }
+  else if (name == "dna_opt8") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option8>();
-         
-  } else if (name == "liv") {
+  }
+  else if (name == "liv") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmLivermorePhysics>();
-         
-  } else if (name == "pene") {
+  }
+  else if (name == "pene") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmPenelopePhysics>();
-         
-  } else if (name == "emstandard_opt4") {
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     fEmPhysicsList = std::make_unique<G4EmStandardPhysics_option4>();
-         
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -195,41 +191,36 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::AddTrackingCut()
 {
-
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
 
-    if (particleName == "e-") 
-    {
-      ph->RegisterProcess(new G4UserSpecialCuts(), particle); 
+    if (particleName == "e-") {
+      ph->RegisterProcess(new G4UserSpecialCuts(), particle);
     }
   }
 }
-      
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddMaxStepSize()
 {
-
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
 
-    if (particleName == "e-") 
-    {
-      ph->RegisterProcess(new G4StepLimiter(), particle); 
+    if (particleName == "e-") {
+      ph->RegisterProcess(new G4StepLimiter(), particle);
     }
   }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,7 +45,7 @@ List of fixes included in this public patch since the public release 11.2.0:
     + dna
       o G4DNABornAngle: fixed numerical problem; added protection for cosTheta;
         use relativistic formula for maximum energy transfer to delta-electrons.
-    + loweneegy
+    + lowenergy
       o G4MicroElecInelasticModel_new: fixed Coverity report for memory leak at
         exit. Minor code cleanup.
       o G4MicroElecLOPhononModel: minor code cleanup.

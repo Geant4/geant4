@@ -24,11 +24,10 @@
 // ********************************************************************
 //
 #include "DicomVBeamDevice.hh"
-#include "dcmtk/dcmrt/seq/drtrbs8.h" // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
+#include "dcmtk/dcmrt/seq/drtrbs8.h"  // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomVBeamDevice::DicomVBeamDevice()
-{
-
-}
+DicomVBeamDevice::DicomVBeamDevice() {}

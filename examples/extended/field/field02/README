@@ -18,9 +18,15 @@
 	the stepper and driver for the integration, and the
 	chord finder.
 
-        The class that does these is F02ElectricFieldSetup. Its object
-    is created in the ConstructSDandField() function in the F02DetectorConstruction
-    class. The interactive commands are implemented in F02FieldMessenger.
+        The class that does these is G4FieldBuilder. Its object
+        is created in the F02DetectorConstruction constructor and 
+        its instantiation adds the /field UI commands that allow user
+        to choose the field configuration parameters.
+
+        The electric field (G4UniformElectricField) is then created in 
+        F02DetectorConstruction::ConstructSDanField() and passed to
+        G4FieldBuilder, that constructs all necessary objects according
+        to the user defined (or default) configuration parameters.
 
  1- GEOMETRY DEFINITION
 

@@ -30,12 +30,11 @@
 #ifndef MOLECULAR_DETECTOR_CONSTRUCTION_HH
 #define MOLECULAR_DETECTOR_CONSTRUCTION_HH
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4VDNAMolecularGeometry.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 #include <map>
 
@@ -53,41 +52,41 @@ class G4Material;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
- public:
-  DetectorConstruction();
+  public:
+    DetectorConstruction();
 
-  ~DetectorConstruction() override;
+    ~DetectorConstruction() override;
 
-  G4VPhysicalVolume* Construct() override;
+    G4VPhysicalVolume* Construct() override;
 
-  void ConstructSDandField() override{};
+    void ConstructSDandField() override {};
 
-  void SetWorldSideLength(const G4double& length) { fWorldSideLength = length; }
+    void SetWorldSideLength(const G4double& length) { fWorldSideLength = length; }
 
-  void SetCellRadius(const G4ThreeVector& length) { fCellRadius = length; }
+    void SetCellRadius(const G4ThreeVector& length) { fCellRadius = length; }
 
-  [[maybe_unused]] auto GetWorld() const { return fWorld; };
+    [[maybe_unused]] auto GetWorld() const { return fWorld; };
 
-  auto GetDNAGeometry() const { return fpDNAGeometry; };
+    auto GetDNAGeometry() const { return fpDNAGeometry; };
 
- protected:
-  G4VPhysicalVolume* ConstructDetector();
+  protected:
+    G4VPhysicalVolume* ConstructDetector();
 
-  void BuildMaterials();
+    void BuildMaterials();
 
- private:
-  // G4bool fCheckOverlaps;
-  G4VPhysicalVolume* fWorld = nullptr;
-  DNAGeometry* fpDNAGeometry;
+  private:
+    // G4bool fCheckOverlaps;
+    G4VPhysicalVolume* fWorld = nullptr;
+    DNAGeometry* fpDNAGeometry;
 
-  // Misc messenger values
-  DetectorMessenger* fpDetectorMessenger;
-  G4double fWorldSideLength = 6 * um;
-  G4ThreeVector fCellRadius;
+    // Misc messenger values
+    DetectorMessenger* fpDetectorMessenger;
+    G4double fWorldSideLength = 6 * um;
+    G4ThreeVector fCellRadius;
 
-  // materials
-  G4Material* fpWorld = nullptr;  // dousatsu
-  G4Material* fpWater = nullptr;
+    // materials
+    G4Material* fpWorld = nullptr;  // dousatsu
+    G4Material* fpWater = nullptr;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

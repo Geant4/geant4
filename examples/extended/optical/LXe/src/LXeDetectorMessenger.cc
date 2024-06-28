@@ -34,11 +34,11 @@
 
 #include "G4RunManager.hh"
 #include "G4Scintillation.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 
@@ -55,24 +55,21 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fVolumesDir->SetGuidance("Enable/disable volumes");
 
   // Various commands for modifying detector geometry
-  fDimensionsCmd =
-    new G4UIcmdWith3VectorAndUnit("/LXe/detector/dimensions", this);
+  fDimensionsCmd = new G4UIcmdWith3VectorAndUnit("/LXe/detector/dimensions", this);
   fDimensionsCmd->SetGuidance("Set the dimensions of the detector volume.");
   fDimensionsCmd->SetParameterName("scint_x", "scint_y", "scint_z", false);
   fDimensionsCmd->SetDefaultUnit("cm");
   fDimensionsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fDimensionsCmd->SetToBeBroadcasted(false);
 
-  fHousingThicknessCmd =
-    new G4UIcmdWithADoubleAndUnit("/LXe/detector/housingThickness", this);
+  fHousingThicknessCmd = new G4UIcmdWithADoubleAndUnit("/LXe/detector/housingThickness", this);
   fHousingThicknessCmd->SetGuidance("Set the thickness of the housing.");
   fHousingThicknessCmd->SetParameterName("d_mtl", false);
   fHousingThicknessCmd->SetDefaultUnit("cm");
   fHousingThicknessCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fHousingThicknessCmd->SetToBeBroadcasted(false);
 
-  fPmtRadiusCmd =
-    new G4UIcmdWithADoubleAndUnit("/LXe/detector/pmtRadius", this);
+  fPmtRadiusCmd = new G4UIcmdWithADoubleAndUnit("/LXe/detector/pmtRadius", this);
   fPmtRadiusCmd->SetGuidance("Set the radius of the PMTs.");
   fPmtRadiusCmd->SetParameterName("radius", false);
   fPmtRadiusCmd->SetDefaultUnit("cm");
@@ -122,8 +119,7 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fNFibersCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fNFibersCmd->SetToBeBroadcasted(false);
 
-  fMainScintYield =
-    new G4UIcmdWithADouble("/LXe/detector/MainScintYield", this);
+  fMainScintYield = new G4UIcmdWithADouble("/LXe/detector/MainScintYield", this);
   fMainScintYield->SetGuidance("Set scinitillation yield of main volume.");
   fMainScintYield->SetGuidance("Specified in photons/MeV");
   fMainScintYield->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -175,67 +171,49 @@ LXeDetectorMessenger::~LXeDetectorMessenger()
 
 void LXeDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fDimensionsCmd)
-  {
+  if (command == fDimensionsCmd) {
     fLXeDetector->SetDimensions(fDimensionsCmd->GetNew3VectorValue(newValue));
   }
-  else if(command == fHousingThicknessCmd)
-  {
-    fLXeDetector->SetHousingThickness(
-      fHousingThicknessCmd->GetNewDoubleValue(newValue));
+  else if (command == fHousingThicknessCmd) {
+    fLXeDetector->SetHousingThickness(fHousingThicknessCmd->GetNewDoubleValue(newValue));
   }
-  else if(command == fPmtRadiusCmd)
-  {
+  else if (command == fPmtRadiusCmd) {
     fLXeDetector->SetPMTRadius(fPmtRadiusCmd->GetNewDoubleValue(newValue));
   }
-  else if(command == fNxCmd)
-  {
+  else if (command == fNxCmd) {
     fLXeDetector->SetNX(fNxCmd->GetNewIntValue(newValue));
   }
-  else if(command == fNyCmd)
-  {
+  else if (command == fNyCmd) {
     fLXeDetector->SetNY(fNyCmd->GetNewIntValue(newValue));
   }
-  else if(command == fNzCmd)
-  {
+  else if (command == fNzCmd) {
     fLXeDetector->SetNZ(fNzCmd->GetNewIntValue(newValue));
   }
-  else if(command == fSphereCmd)
-  {
+  else if (command == fSphereCmd) {
     fLXeDetector->SetSphereOn(fSphereCmd->GetNewBoolValue(newValue));
   }
-  else if(command == fReflectivityCmd)
-  {
-    fLXeDetector->SetHousingReflectivity(
-      fReflectivityCmd->GetNewDoubleValue(newValue));
+  else if (command == fReflectivityCmd) {
+    fLXeDetector->SetHousingReflectivity(fReflectivityCmd->GetNewDoubleValue(newValue));
   }
-  else if(command == fWlsCmd)
-  {
+  else if (command == fWlsCmd) {
     fLXeDetector->SetWLSSlabOn(fWlsCmd->GetNewBoolValue(newValue));
   }
-  else if(command == fLxeCmd)
-  {
+  else if (command == fLxeCmd) {
     fLXeDetector->SetMainVolumeOn(fLxeCmd->GetNewBoolValue(newValue));
   }
-  else if(command == fNFibersCmd)
-  {
+  else if (command == fNFibersCmd) {
     fLXeDetector->SetNFibers(fNFibersCmd->GetNewIntValue(newValue));
   }
-  else if(command == fMainScintYield)
-  {
-    fLXeDetector->SetMainScintYield(
-      fMainScintYield->GetNewDoubleValue(newValue));
+  else if (command == fMainScintYield) {
+    fLXeDetector->SetMainScintYield(fMainScintYield->GetNewDoubleValue(newValue));
   }
-  else if(command == fWLSScintYield)
-  {
+  else if (command == fWLSScintYield) {
     fLXeDetector->SetWLSScintYield(fWLSScintYield->GetNewDoubleValue(newValue));
   }
-  else if(command == fSaveThresholdCmd)
-  {
+  else if (command == fSaveThresholdCmd) {
     fLXeDetector->SetSaveThreshold(fSaveThresholdCmd->GetNewIntValue(newValue));
   }
-  else if(command == fDefaultsCmd)
-  {
+  else if (command == fDefaultsCmd) {
     fLXeDetector->SetDefaults();
     G4RunManager::GetRunManager()->ReinitializeGeometry();
   }

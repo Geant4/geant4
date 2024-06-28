@@ -144,10 +144,10 @@ G4double G4GaussXTRadiator::GetStackFactor(G4double energy,
 
   G4complex ordernn = ( order1 + order2 )*nn;
 
-  G4complex Ha = exp( order1 );
-  G4complex Hb = exp( order2 );
+  G4complex Ha = std::exp( order1 );
+  G4complex Hb = std::exp( order2 );
   G4complex H  = Ha * Hb;
-  G4complex Hn = exp( ordernn );
+  G4complex Hn = std::exp( ordernn );
   
   G4complex F1 = ( 1.0 - Ha ) * ( 1.0 - Hb ) * nn / ( 1. - H );
   

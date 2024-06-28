@@ -30,42 +30,45 @@
 
 #include "RE03DetectorConstruction.hh"
 
-#include "G4NistManager.hh"
-#include "G4Material.hh"
 #include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-
-#include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
-#include "G4SDManager.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
+#include "G4NistManager.hh"
 #include "G4PSEnergyDeposit.hh"
-#include "G4PSTrackLength.hh"
 #include "G4PSNofStep.hh"
+#include "G4PSTrackLength.hh"
+#include "G4PVPlacement.hh"
+#include "G4SDManager.hh"
 #include "G4SDParticleFilter.hh"
-
-#include "G4SystemOfUnits.hh"    
+#include "G4SystemOfUnits.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4VisAttributes.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03DetectorConstruction::RE03DetectorConstruction()
-  :G4VUserDetectorConstruction(),
-   fAir(0),fWater(0),fWorldPhys(0),fPhantomPhys(0),
-   fConstructed(false)
-{;}
+  : G4VUserDetectorConstruction(),
+    fAir(0),
+    fWater(0),
+    fWorldPhys(0),
+    fPhantomPhys(0),
+    fConstructed(false)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03DetectorConstruction::~RE03DetectorConstruction()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* RE03DetectorConstruction::Construct()
 {
-  if(!fConstructed)
-  { 
+  if (!fConstructed) {
     fConstructed = true;
     DefineMaterials();
     SetupGeometry();
@@ -75,41 +78,41 @@ G4VPhysicalVolume* RE03DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03DetectorConstruction::DefineMaterials()
-{ 
+{
   //-------- NIST Materials -----------------------------------------------
-  //  Material Information imported from NIST database. 
+  //  Material Information imported from NIST database.
   G4NistManager* NISTman = G4NistManager::Instance();
   fWater = NISTman->FindOrBuildMaterial("G4_WATER");
-  fAir   = NISTman->FindOrBuildMaterial("G4_AIR");
+  fAir = NISTman->FindOrBuildMaterial("G4_AIR");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03DetectorConstruction::SetupGeometry()
 {
-  //     
+  //
   // World
   //
-  G4VSolid* worldSolid = new G4Box("World",2.*m,2.*m,2.*m);
-  G4LogicalVolume* worldLogical = new G4LogicalVolume(worldSolid,fAir,"World");
-  fWorldPhys = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"World",
-                        0,false,0);
-  
-  //                               
+  G4VSolid* worldSolid = new G4Box("World", 2. * m, 2. * m, 2. * m);
+  G4LogicalVolume* worldLogical = new G4LogicalVolume(worldSolid, fAir, "World");
+  fWorldPhys = new G4PVPlacement(0, G4ThreeVector(), worldLogical, "World", 0, false, 0);
+
+  //
   // Phantom
-  //  
-  G4VSolid* phantomSolid = new G4Box("Calor",1.*m,1.*m,1.*m);
-  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid,fWater,"Phantom");
-  fPhantomPhys = new G4PVPlacement(0,G4ThreeVector(),phantomLogical,"Phantom",
-                         worldLogical,false,0);
-  //                                        
+  //
+  G4VSolid* phantomSolid = new G4Box("Calor", 1. * m, 1. * m, 1. * m);
+  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, fWater, "Phantom");
+  fPhantomPhys =
+    new G4PVPlacement(0, G4ThreeVector(), phantomLogical, "Phantom", worldLogical, false, 0);
+  //
   // Visualization attributes
   //
   // worldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   simpleBoxVisAtt->SetVisibility(true);
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);
 }
 
 void RE03DetectorConstruction::ConstructSDandField()
-{;}
-
+{
+  ;
+}

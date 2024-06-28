@@ -30,9 +30,9 @@
 // Note that this is just a test and NOT A PROPER G4 APPLICATION
 // (no UI, no G4 event loop, NO CALL TO run/initialize etc).
 //
-// It relies on the fact that the physics processes are created 
+// It relies on the fact that the physics processes are created
 // at physics list construction time anyway,
-// and that the physics initialization happens 
+// and that the physics initialization happens
 // with runManager->SetUserInitialization(physicsList).
 //
 // Author: G.Hugo, 01 August 2022
@@ -40,45 +40,43 @@
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
 
-
 // G4
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Nucleus.hh"
-#include "G4HadFinalState.hh"
-#include "G4DynamicParticle.hh"
-//#include "G4ParticleDefinition.hh"
-#include "G4HadProjectile.hh"
+#  include "G4DynamicParticle.hh"
+#  include "G4HadFinalState.hh"
+#  include "G4Nucleus.hh"
+#  include "G4SystemOfUnits.hh"
+#  include "G4ThreeVector.hh"
+#  include "globals.hh"
+// #include "G4ParticleDefinition.hh"
+#  include "G4HadProjectile.hh"
 // G4
-//#include "G4PionMinus.hh"
-#include "G4Proton.hh"
+// #include "G4PionMinus.hh"
+#  include "G4Proton.hh"
 // G4
-#include "G4RunManagerFactory.hh"
-#include "G4RunManager.hh"
-#include "G4VModularPhysicsList.hh"
+#  include "FLUKAParticleTable.hh"
+#  include "fluka_interface.hh"
 
-#include "fluka_interface.hh"
-#include "FLUKAParticleTable.hh"
-#include "G4_HP_CernFLUKAHadronInelastic_PhysicsList.hh"
+#  include "G4RunManager.hh"
+#  include "G4RunManagerFactory.hh"
+#  include "G4VModularPhysicsList.hh"
+#  include "G4_HP_CernFLUKAHadronInelastic_PhysicsList.hh"
 
-
-G4int main() {
-
+G4int main()
+{
   G4cout << "Starting test_interface" << G4endl;
 
   // Construct a serial RUN MANAGER.
-  std::unique_ptr<G4RunManager> runManager(G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly));
-        
+  std::unique_ptr<G4RunManager> runManager(
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly));
+
   // Create physics list with hadron inelastic processes from FLUKA.
   G4VModularPhysicsList* physicsList = new G4_HP_CernFLUKAHadronInelastic_PhysicsList();
   runManager->SetUserInitialization(physicsList);
   fluka_particle_table::initialize();
-  //const auto& ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-
+  // const auto& ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
 
   // TUNE HERE: PARTICLE
-  //const auto particleKind = G4PionMinus::PionMinus();
+  // const auto particleKind = G4PionMinus::PionMinus();
   const auto particleKind = G4Proton::Proton();
 
   // TUNE HERE: KINETIC ENERGY
@@ -86,18 +84,18 @@ G4int main() {
   const G4double minKineticEnergy = 1. * CLHEP::GeV;
   const G4double maxKineticEnergy = 1. * CLHEP::GeV;
 
-  const G4double deltaKineticEnergy = (numEvents == 1 ? 0.
-                                     : (maxKineticEnergy - minKineticEnergy) / (numEvents - 1));
+  const G4double deltaKineticEnergy =
+    (numEvents == 1 ? 0. : (maxKineticEnergy - minKineticEnergy) / (numEvents - 1));
   G4double kineticEnergy = minKineticEnergy;
 
   // TUNE HERE: DIRECTION
   const G4ThreeVector momentumDirection = G4ThreeVector(0., 0., 1.);
-	
+
   // TUNE HERE: TARGET MATERIAL
   const G4int targetA = 28;
   const G4int targetZ = 14;
   const G4Nucleus targetNucleus = G4Nucleus(targetA, targetZ);
-		
+
   G4HadFinalState finalState = G4HadFinalState();
 
   // PRINTOUT REQUESTED INTERACTION(S)
@@ -109,38 +107,31 @@ G4int main() {
   G4cout << "momentumDirection = " << momentumDirection << G4endl;
   G4cout << "targetA = " << targetA << G4endl;
   G4cout << "targetZ = " << targetZ << G4endl;
-			   
 
-  // Event loop		
+  // Event loop
   for (G4int eventIndex = 0; eventIndex < numEvents; ++eventIndex) {
-
     G4cout << "Start event index = " << eventIndex << G4endl;
 
-    const G4DynamicParticle dynamicParticle = G4DynamicParticle(particleKind, 
-                                                                momentumDirection,
-                                                                kineticEnergy);
+    const G4DynamicParticle dynamicParticle =
+      G4DynamicParticle(particleKind, momentumDirection, kineticEnergy);
 
     // XS
-    const G4double inelasticXS = fluka_interface::computeInelasticScatteringXS(&dynamicParticle, 
-                                                                             targetZ, 
-                                                                             targetA);
+    const G4double inelasticXS =
+      fluka_interface::computeInelasticScatteringXS(&dynamicParticle, targetZ, targetA);
 
-    G4cout << "fluka_interface::computeInelasticScatteringXS, inelasticXS = " << inelasticXS/barn << " [barn]." << G4endl;
+    G4cout << "fluka_interface::computeInelasticScatteringXS, inelasticXS = " << inelasticXS / barn
+           << " [barn]." << G4endl;
 
     // FS
     finalState.Clear();
     finalState.SetStatusChange(stopAndKill);
     const G4HadProjectile projectile = G4HadProjectile(dynamicParticle);
 
-    fluka_interface::setNuclearInelasticFinalState(&finalState,
-                                                   projectile,
-                                                   targetNucleus);
+    fluka_interface::setNuclearInelasticFinalState(&finalState, projectile, targetNucleus);
 
     // Update kinetic energy for the next event
     kineticEnergy += deltaKineticEnergy;
   }
-
 }
 
-
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

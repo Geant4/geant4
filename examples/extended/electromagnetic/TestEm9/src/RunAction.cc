@@ -31,13 +31,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "RunAction.hh"
+
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction()
- : G4UserRunAction()
-{}
+RunAction::RunAction() : G4UserRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,7 +51,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* run)
 {
-
   G4cout << "RunAction: End of run actions are started" << G4endl;
   (HistoManager::GetPointer())->EndOfRun(run->GetRunID());
 }

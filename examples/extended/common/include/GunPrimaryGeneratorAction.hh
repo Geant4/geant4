@@ -30,11 +30,11 @@
 #ifndef GunPrimaryGeneratorAction_h
 #define GunPrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
-
 #include "CLHEP/Units/SystemOfUnits.h"
+
+#include "G4ThreeVector.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -49,11 +49,10 @@ namespace Common
 class GunPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    GunPrimaryGeneratorAction(
-      const G4String& particleName = "geantino",
-      G4double energy = 1.*CLHEP::MeV,
-      G4ThreeVector position= G4ThreeVector(0,0,0),
-      G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));
+    GunPrimaryGeneratorAction(const G4String& particleName = "geantino",
+                              G4double energy = 1. * CLHEP::MeV,
+                              G4ThreeVector position = G4ThreeVector(0, 0, 0),
+                              G4ThreeVector momentumDirection = G4ThreeVector(0, 0, 1));
     ~GunPrimaryGeneratorAction() override;
 
     // methods
@@ -61,9 +60,9 @@ class GunPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     // data members
-    G4ParticleGun*  fParticleGun = nullptr;
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
-}
+}  // namespace Common
 
 #endif

@@ -59,48 +59,51 @@ const G4int kDim = 2;
 
 class RunData : public G4Run
 {
-public:
-  RunData() = default;
-  ~RunData() override = default;
+  public:
+    RunData() = default;
+    ~RunData() override = default;
 
-  void Add(G4int id, G4double de, G4double dl);
-  void FillPerEvent();
+    void Add(G4int id, G4double de, G4double dl);
+    void FillPerEvent();
 
-  void Reset();
+    void Reset();
 
-  // Get methods
-  G4String  GetVolumeName(G4int id) const;
-  G4double  GetEdep(G4int id) const;
-  G4double  GetTrackLength(G4int id) const;
+    // Get methods
+    G4String GetVolumeName(G4int id) const;
+    G4double GetEdep(G4int id) const;
+    G4double GetTrackLength(G4int id) const;
 
-private:
-  std::array<G4String, kDim>  fVolumeNames = { "Absorber", "Gap" };
-  std::array<G4double, kDim>  fEdep = { 0., 0. };
-  std::array<G4double, kDim>  fTrackLength = { 0., 0. };
+  private:
+    std::array<G4String, kDim> fVolumeNames = {"Absorber", "Gap"};
+    std::array<G4double, kDim> fEdep = {0., 0.};
+    std::array<G4double, kDim> fTrackLength = {0., 0.};
 };
 
 // inline functions
 
-inline void RunData::Add(G4int id, G4double de, G4double dl) {
+inline void RunData::Add(G4int id, G4double de, G4double dl)
+{
   fEdep[id] += de;
   fTrackLength[id] += dl;
 }
 
-inline G4String  RunData::GetVolumeName(G4int id) const {
+inline G4String RunData::GetVolumeName(G4int id) const
+{
   return fVolumeNames[id];
 }
 
-inline G4double  RunData::GetEdep(G4int id) const {
+inline G4double RunData::GetEdep(G4int id) const
+{
   return fEdep[id];
 }
 
-inline G4double  RunData::GetTrackLength(G4int id) const {
+inline G4double RunData::GetTrackLength(G4int id) const
+{
   return fTrackLength[id];
 }
 
-}
+}  // namespace B4b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

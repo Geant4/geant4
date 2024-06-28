@@ -29,7 +29,6 @@
 
 #include "RunAction.hh"
 
-#include "G4Run.hh"
 #include "G4RunManager.hh"
 
 namespace B2
@@ -47,16 +46,14 @@ RunAction::RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  //inform the runManager to save random number seed
+  // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* )
-{}
+void RunAction::EndOfRunAction(const G4Run*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
-
+}  // namespace B2

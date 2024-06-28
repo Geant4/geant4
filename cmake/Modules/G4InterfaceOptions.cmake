@@ -64,8 +64,6 @@ if(GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_QT)
   set(GEANT4_USE_QT ON CACHE BOOL "Build Geant4 with Qt support" FORCE)
   message(STATUS "Forcing GEANT4_USE_QT to ON, required by selection of GEANT4_USE_INVENTOR_QT as ON")
 endif()
-set(GEANT4_USE_TOOLSSG_QT_GLES ${GEANT4_USE_QT})
-set(GEANT4_USE_TOOLSSG_QT_ZB   ${GEANT4_USE_QT})
 
 # TEMPORARY for 11.2 Beta Development
 # Decision still required on whether to allow selection of 5/6 in production
@@ -76,15 +74,15 @@ mark_as_advanced(GEANT4_USE_QT_QT6)
 option(GEANT4_USE_VTK "Build Geant4 with VTK visualisation" OFF)
 if(GEANT4_USE_VTK)
   find_package(VTK 9 REQUIRED COMPONENTS
-          CommonColor
-          InteractionStyle
-          IOExport
-          IOGeometry
-          IOLegacy
-          IOPLY
-          GUISupportQt
-          RenderingVolumeOpenGL2
-          )
+    CommonColor
+    InteractionStyle
+    IOExport
+    IOGeometry
+    IOLegacy
+    IOPLY
+    GUISupportQt
+    RenderingVolumeOpenGL2
+    )
   geant4_save_package_variables(VTK VTK_DIR)
 endif()
 geant4_add_feature(GEANT4_USE_VTK "Using VTK for visualisation")
@@ -100,18 +98,12 @@ if(UNIX)
     set(GEANT4_USE_XM ON CACHE BOOL "Build Geant4 with Motif (X11) support" FORCE)
     message(STATUS "Forcing GEANT4_USE_XM to ON, required by Inventor driver")
   endif()
-  set(GEANT4_USE_TOOLSSG_XT_GLES ${GEANT4_USE_XM})
-  set(GEANT4_USE_TOOLSSG_XT_ZB ${GEANT4_USE_XM})
   geant4_add_feature(GEANT4_USE_XM "Build Geant4 with Xm Support")
 
   # - OpenGL/X11 Vis Driver
   # Selection also enables ToolsSG driver X11 backend
   option(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support" OFF)
-  set(GEANT4_USE_TOOLSSG_X11_GLES ${GEANT4_USE_OPENGL_X11})
   geant4_add_feature(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support")
-
-  # tools/zb X11 Vis Driver
-  set(GEANT4_USE_TOOLSSG_X11_ZB ${X11_FOUND})
 
   # RayTracer driver with X11 support
   option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
@@ -121,10 +113,7 @@ endif()
 # Windows only
 if(WIN32)
   option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support" OFF)
-  set(GEANT4_USE_TOOLSSG_WINDOWS_GLES ${GEANT4_USE_OPENGL_WIN32})
   geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
-
-  set(GEANT4_USE_TOOLSSG_WINDOWS_ZB ON)
 endif()
 
 #-----------------------------------------------------------------------

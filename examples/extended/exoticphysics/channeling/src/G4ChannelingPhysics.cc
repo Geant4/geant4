@@ -28,45 +28,49 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ChannelingPhysics.hh"
-#include "G4Channeling.hh"
-#include "G4ProcessManager.hh"
-#include "G4LogicalCrystalVolume.hh"
 
-#include "G4BosonConstructor.hh"
-#include "G4LeptonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4Channeling.hh"
 #include "G4IonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4LogicalCrystalVolume.hh"
+#include "G4MesonConstructor.hh"
+#include "G4ProcessManager.hh"
 #include "G4ProcessTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ChannelingPhysics::G4ChannelingPhysics(const G4String& name):G4VPhysicsConstructor(name){;}
+G4ChannelingPhysics::G4ChannelingPhysics(const G4String& name) : G4VPhysicsConstructor(name)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ChannelingPhysics::~G4ChannelingPhysics(){;}
+G4ChannelingPhysics::~G4ChannelingPhysics()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4ChannelingPhysics::ConstructParticle(){
-    
-    G4BosonConstructor  pBosonConstructor;
-    pBosonConstructor.ConstructParticle();
-    
-    G4LeptonConstructor pLeptonConstructor;
-    pLeptonConstructor.ConstructParticle();
-    
-    G4MesonConstructor pMesonConstructor;
-    pMesonConstructor.ConstructParticle();
-    
-    G4BaryonConstructor pBaryonConstructor;
-    pBaryonConstructor.ConstructParticle();
-    
-    G4IonConstructor pIonConstructor;
-    pIonConstructor.ConstructParticle();
-    
+void G4ChannelingPhysics::ConstructParticle()
+{
+  G4BosonConstructor pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
+
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
+
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
+
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
+
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,21 +83,21 @@ void G4ChannelingPhysics::ConstructProcess()
   ptable->SetProcessActivation("CoulombScat", false);
   ptable->SetVerboseLevel(verb);
 
-    G4Channeling* channeling = new G4Channeling();
+  G4Channeling* channeling = new G4Channeling();
 
-    G4ParticleTable::G4PTblDicIterator* aParticleIterator =
-        G4ParticleTable::GetParticleTable()->GetIterator();
-    aParticleIterator->reset();
-    
-    while( (*aParticleIterator)() ){
-        G4ParticleDefinition* particle = aParticleIterator->value();
-        G4double particleCharge = particle->GetPDGCharge();
-        G4ProcessManager* pManager = particle->GetProcessManager();
+  G4ParticleTable::G4PTblDicIterator* aParticleIterator =
+    G4ParticleTable::GetParticleTable()->GetIterator();
+  aParticleIterator->reset();
 
-        if (particleCharge !=0) {
-            pManager->AddDiscreteProcess(channeling);
-        }
+  while ((*aParticleIterator)()) {
+    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4double particleCharge = particle->GetPDGCharge();
+    G4ProcessManager* pManager = particle->GetProcessManager();
+
+    if (particleCharge != 0) {
+      pManager->AddDiscreteProcess(channeling);
     }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

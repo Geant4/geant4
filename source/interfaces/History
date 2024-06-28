@@ -6,12 +6,41 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-03-13 Gabriele Cosmo (interfaces-V11-01-32)
+## 2024-05-30 Guy Barrand (interfaces-V11-02-05)
+- G4UIQt.cc: Qt6: modifications to avoid the G4QTabWidget::paintEvent logic
+  and have the "ApplyCommand(/vis/viewer/select)" logic done on the
+  "currentChanged signal/slot" mechanism.
+  Then have the "ApplyCommand(/vis/viewer/select)" done on the
+  G4UIQt::UpdateTabWidget() method. We commented out the usage of the
+  G4QTabWidget that does not look needed anymore.
+  These modifications, along the ones aroun G4OpenGL[Immediate,Stored]QtViewer::paintGL()
+  (see vis/OpenGL/History), permit to avoid crash and bad rendering behaviour on
+  most platforms, by using the Qt6/QOpenGLWidget. These modifications in G4UIQt are
+  also ok with the TSG, Qt3D, Vtk viewers used within the tab viewer widget.
+  Tested on macOS, Linux, Windows for the OGLI/OGLS, TSG, Qt3D viewer; and
+  macOS, Linux for the Vtk viewer.
+
+## 2024-05-08 Ben Morgan (interfaces-V11-02-04)
+- Remove use of no longer supported TiMemory
+
+## 2024-03-13 Gabriele Cosmo (interfaces-V11-02-03)
 - Fixed string assignments in G4Win32 and G4UIWin32, to support either UNICODE
   or UTF-16 encoding on Windows. Addressing problem report #2599.
   
-## 2024-02-02 Gabriele Cosmo
+## 2024-02-02 Gabriele Cosmo (interfaces-V11-02-02)
 - Use std::size_t as arrays size in G4InteractorMessenger and G4UIArrayString.
+
+## 2024-01-22 John Allison (interfaces-V11-02-01)
+- Co-works with visman-V11-02-04, modeling-V11-02-01 and greps-V11-02-00.
+- G4UIQt.cc:
+  - Load tooltip with "further information", if any.
+    - Informs user if scene tree is suppressed because of too many touchables.
+
+## 2024-01-16 John Allison (interfaces-V11-02-00)
+- Co-works with visman-V11-02-02 and modeling-V11-02-00.
+- Improve identification of scene tree models - use full description, including
+  embedded blanks.
+- G4UIQt.cc: Now all models treated alike.
 
 ## 2023-11-06 John Allison (interfaces-V11-01-31)
 - Requires visman-V11-01-31.

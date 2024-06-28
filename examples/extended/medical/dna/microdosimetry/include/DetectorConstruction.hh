@@ -24,10 +24,14 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45, (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 // The Geant4-DNA web site is available at http://geant4-dna.org
+//
 //
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
@@ -35,40 +39,35 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
 #include "G4Box.hh"
-#include "G4Sphere.hh"
-#include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
-#include "G4UserLimits.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "G4VisAttributes.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class G4Region;
+class DetectorMessenger;
+class PhysicsList;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction(PhysicsList*);
 
-  DetectorConstruction();
+    ~DetectorConstruction() override;
+    G4VPhysicalVolume* Construct() override;
 
-  virtual ~DetectorConstruction();
+    void SetMaterial(const G4String&);
 
-  virtual G4VPhysicalVolume* Construct();
+  private:
+    void DefineMaterials();
 
-  G4Region* GetTargetRegion() {return fpRegion;}
-                         
-private:
+    DetectorMessenger* fDetectorMessenger;
 
-  G4Material*        fpWaterMaterial;
-  G4Region*          fpRegion;
+    G4Material* fpWaterMaterial;
 
-  void DefineMaterials();
-
-  G4VPhysicalVolume* ConstructDetector();     
+    G4LogicalVolume* fLogicWorld;
+    G4LogicalVolume* fLogicTarget;
+    G4PVPlacement* fPhysiWorld;
+    G4PVPlacement* fPhysiTarget;
 };
 #endif

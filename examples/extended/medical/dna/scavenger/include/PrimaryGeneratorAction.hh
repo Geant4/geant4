@@ -29,8 +29,8 @@
 #ifndef SCAVENGER_PrimaryGeneratorAction_h
 #define SCAVENGER_PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4GeneralParticleSource;
 
@@ -40,19 +40,20 @@ namespace scavenger
 
 /// Generates primaries
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-public:
-  PrimaryGeneratorAction();
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    PrimaryGeneratorAction();
 
-  ~PrimaryGeneratorAction() override = default;
+    ~PrimaryGeneratorAction() override = default;
 
-  void GeneratePrimaries(G4Event *) override;
+    void GeneratePrimaries(G4Event*) override;
 
-private:
-  std::unique_ptr<G4GeneralParticleSource> fpGeneralParticleSource;
+  private:
+    std::unique_ptr<G4GeneralParticleSource> fpGeneralParticleSource;
 };
 
-}
+}  // namespace scavenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

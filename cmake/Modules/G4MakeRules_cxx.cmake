@@ -51,8 +51,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   # - TestRelease
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-g -DG4DEBUG_VERBOSE -DG4FPE_DEBUG")
 
-  # - Maintainer
-  set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
+  # - Full optimization plus debug info (basically -O3 -g)
+  set(CMAKE_CXX_FLAGS_FULLRELWITHDEBINFO_INIT "${CMAKE_CXX_FLAGS_RELEASE_INIT} -g")
 
   # - Multithreading
   __configure_tls_models()
@@ -72,7 +72,6 @@ if(MSVC)
 
   # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-MDd -Zi -G4DEBUG_VERBOSE")
-  set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-MDd -Zi")
 endif()
 
 #-----------------------------------------------------------------------
@@ -92,7 +91,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
   # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-g -G4DEBUG_VERBOSE")
-  set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
 
   # - Multithreading
   __configure_tls_models()

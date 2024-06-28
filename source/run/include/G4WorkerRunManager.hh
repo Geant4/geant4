@@ -48,9 +48,6 @@ class G4WorkerRunManagerKernel;
 class G4WorkerRunManager : public G4RunManager
 {
   public:
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
-
-  public:
     static G4WorkerRunManager* GetWorkerRunManager();
     static G4WorkerRunManagerKernel* GetWorkerRunManagerKernel();
 
@@ -95,7 +92,7 @@ class G4WorkerRunManager : public G4RunManager
 
     // This method will merge (reduce) the results
     // of this run into the global run
-    virtual void MergePartialResults();
+    virtual void MergePartialResults(G4bool mergeEvents = true);
 
   protected:
     G4WorkerThread* workerContext = nullptr;
@@ -111,11 +108,8 @@ class G4WorkerRunManager : public G4RunManager
     G4SeedsQueue seedsQueue;
     G4bool readStatusFromFile = false;
 
-  private:
-    void SetupDefaultRNGEngine();
-
-  private:
-    std::unique_ptr<ProfilerConfig> workerRunProfiler;
+  protected:
+    virtual void SetupDefaultRNGEngine();
 };
 
 #endif  // G4WorkerRunManager_hh

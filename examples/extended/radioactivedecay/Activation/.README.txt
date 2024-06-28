@@ -160,7 +160,9 @@
  
    Execute Activation in 'batch' mode from macro files :
 \verbatim
-% ./Activation   run.mac
+% ./Activation  run.mac
+% ./Activation  Activation.in > Activation.out
+
 \endverbatim
  		
    Execute Activation in 'interactive mode' with visualization :

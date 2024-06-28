@@ -210,6 +210,134 @@ G4GeometryType G4BooleanSolid::GetEntityType() const
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Set number of random points to be used for computing cubic volume
+
+void G4BooleanSolid::SetCubVolStatistics(G4int st)
+{
+  if (st != fCubVolStatistics) { fCubicVolume = -1.; }
+  fCubVolStatistics = st;
+
+  // Propagate st to all components of the 1st solid
+  if (fPtrSolidA->GetNumOfConstituents() > 1)
+  {
+    G4VSolid* ptr = fPtrSolidA;
+    while(true)
+    {
+      G4String type = ptr->GetEntityType();
+      if (type == "G4DisplacedSolid")
+      {
+        ptr = ((G4DisplacedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ReflectedSolid")
+      {
+        ptr = ((G4ReflectedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ScaledSolid")
+      {
+        ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
+        continue;
+      }
+      ((G4BooleanSolid*)ptr)->SetCubVolStatistics(st);
+      break;
+    }
+  }
+
+  // Propagate st to all components of the 2nd solid
+  if (fPtrSolidB->GetNumOfConstituents() > 1)
+  {
+    G4VSolid* ptr = fPtrSolidB;
+    while(true)
+    {
+      G4String type = ptr->GetEntityType();
+      if (type == "G4DisplacedSolid")
+      {
+        ptr = ((G4DisplacedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ReflectedSolid")
+      {
+        ptr = ((G4ReflectedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ScaledSolid")
+      {
+        ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
+        continue;
+      }
+      ((G4BooleanSolid*)ptr)->SetCubVolStatistics(st);
+      break;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Set epsilon for computing cubic volume
+
+void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
+{
+  if (ep != fCubVolEpsilon) { fCubicVolume = -1.; }
+  fCubVolEpsilon = ep;
+
+  // Propagate ep to all components of the 1st solid
+  if (fPtrSolidA->GetNumOfConstituents() > 1)
+  {
+    G4VSolid* ptr = fPtrSolidA;
+    while(true)
+    {
+      G4String type = ptr->GetEntityType();
+      if (type == "G4DisplacedSolid")
+      {
+        ptr = ((G4DisplacedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ReflectedSolid")
+      {
+        ptr = ((G4ReflectedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ScaledSolid")
+      {
+        ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
+        continue;
+      }
+      ((G4BooleanSolid*)ptr)->SetCubVolEpsilon(ep);
+      break;
+    }
+  }
+
+  // Propagate ep to all components of the 2nd solid
+  if (fPtrSolidB->GetNumOfConstituents() > 1)
+  {
+    G4VSolid* ptr = fPtrSolidB;
+    while(true)
+    {
+      G4String type = ptr->GetEntityType();
+      if (type == "G4DisplacedSolid")
+      {
+        ptr = ((G4DisplacedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ReflectedSolid")
+      {
+        ptr = ((G4ReflectedSolid*)ptr)->GetConstituentMovedSolid();
+        continue;
+      }
+      if (type == "G4ScaledSolid")
+      {
+        ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
+        continue;
+      }
+      ((G4BooleanSolid*)ptr)->SetCubVolEpsilon(ep);
+      break;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Stream object contents to an output stream
 
 std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
@@ -338,6 +466,24 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
   G4Exception("G4BooleanSolid::GetPointOnSurface()",
               "GeomSolids1001", JustWarning, message);
   return p;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return total number of constituents used for construction of the solid
+
+G4int G4BooleanSolid::GetNumOfConstituents() const
+{
+  return (fPtrSolidA->GetNumOfConstituents() + fPtrSolidB->GetNumOfConstituents());
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return true if the resulting solid has only planar faces
+
+G4bool G4BooleanSolid::IsFaceted() const
+{
+  return (fPtrSolidA->IsFaceted() && fPtrSolidB->IsFaceted());  
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -28,17 +28,20 @@
 
 #include <G4Run.hh>
 
-//Dummy class to show how to use MPI merging of
-//user defined G4Run. The dummycounter it's a unique number among threads.
-//Merge actually sums the dummyCounter so for the global run that is  Sum(i, 0<i<Nt)
-class Run : public G4Run {
-  friend class RunMerger;
-public:
-  Run();
-  virtual ~Run() {}
-  void Merge(const G4Run*);
-  G4int GetCounter() const { return fDummyCounter; }
-private:
-  G4int fDummyCounter;
+// Dummy class to show how to use MPI merging of
+// user defined G4Run. The dummycounter it's a unique number among threads.
+// Merge actually sums the dummyCounter so for the global run that is  Sum(i, 0<i<Nt)
+class Run : public G4Run
+{
+    friend class RunMerger;
+
+  public:
+    Run();
+    virtual ~Run() {}
+    void Merge(const G4Run*);
+    G4int GetCounter() const { return fDummyCounter; }
+
+  private:
+    G4int fDummyCounter;
 };
-#endif //RUN_HH
+#endif  // RUN_HH

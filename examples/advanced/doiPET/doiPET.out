@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -318,91 +318,6 @@ Type of PIXE cross section for e+-                 Livermore
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
 ### ===  Auger flag: 1
 ### ===  Ignore cuts flag:   1
-=======================================================================
-======                 Electromagnetic Physics Parameters      ========
-=======================================================================
-LPM effect enabled                                 1
-Enable creation and use of sampling tables         0
-Apply cuts on all EM processes                     0
-Use combined TransportationWithMsc                 Disabled
-Use general process                                1
-Enable linear polarisation for gamma               0
-Enable photoeffect sampling below K-shell          1
-Enable sampling of quantum entanglement            0
-X-section factor for integral approach             0.8
-Min kinetic energy for tables                      10 eV 
-Max kinetic energy for tables                      100 TeV
-Number of bins per decade of a table               20
-Verbose level                                      1
-Verbose level for worker thread                    0
-Bremsstrahlung energy threshold above which 
-  primary e+- is added to the list of secondary    100 TeV
-Bremsstrahlung energy threshold above which primary
-  muon/hadron is added to the list of secondary    100 TeV
-Lowest triplet kinetic energy                      1 MeV
-Enable sampling of gamma linear polarisation       0
-5D gamma conversion model type                     0
-5D gamma conversion model on isolated ion          0
-Livermore data directory                           epics_2017
-=======================================================================
-======                 Ionisation Parameters                   ========
-=======================================================================
-Step function for e+-                              (0.2, 0.1 mm)
-Step function for muons/hadrons                    (0.2, 0.05 mm)
-Step function for light ions                       (0.1, 0.02 mm)
-Step function for general ions                     (0.1, 0.001 mm)
-Lowest e+e- kinetic energy                         100 eV 
-Lowest muon/hadron kinetic energy                  1 keV
-Use ICRU90 data                                    1
-Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
-Build CSDA range enabled                           0
-Use cut as a final range enabled                   0
-Enable angular generator interface                 1
-Max kinetic energy for CSDA tables                 1 GeV
-Max kinetic energy for NIEL computation            1 MeV
-Linear loss limit                                  0.01
-Read data from file for e+e- pair production by mu 0
-=======================================================================
-======                 Multiple Scattering Parameters          ========
-=======================================================================
-Type of msc step limit algorithm for e+-           3
-Type of msc step limit algorithm for muons/hadrons 0
-Msc lateral displacement for e+- enabled           1
-Msc lateral displacement for muons and hadrons     1
-Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
-Range factor for msc step limit for muons/hadrons  0.2
-Geometry factor for msc step limitation of e+-     2.5
-Safety factor for msc step limit for e+-           0.6
-Skin parameter for msc step limitation of e+-      1
-Lambda limit for msc step limit for e+-            1 mm
-Use Mott correction for e- scattering              1
-Factor used for dynamic computation of angular 
-  limit between single and multiple scattering     1
-Fixed angular limit between single 
-  and multiple scattering                          3.1416 rad
-Upper energy limit for e+- multiple scattering     100 MeV
-Type of electron single scattering model           0
-Type of nuclear form-factor                        1
-Screening factor                                   1
-=======================================================================
-======                 Atomic Deexcitation Parameters          ========
-=======================================================================
-Fluorescence enabled                               1
-Directory in G4LEDATA for fluorescence data files  fluor
-Auger electron cascade enabled                     1
-PIXE atomic de-excitation enabled                  0
-De-excitation module ignores cuts                  1
-Type of PIXE cross section for hadrons             Empirical
-Type of PIXE cross section for e+-                 Livermore
-=======================================================================
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld  1  1  0
-### ===  Auger flag: 1
-### ===  Ignore cuts flag:   1
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 174 bins 
@@ -480,7 +395,7 @@ ePairProd:  for e+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -535,7 +450,7 @@ Threshold for very long decay time at rest        1e+60 y
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 -------------------------------------------------------------------------
                            Hadronic Processes for GenericIon
-  Process: Radioactivation
+  Process: RadioactiveDecay
 
 msc:  for GenericIon  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -806,14 +721,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00          406k airBox_logicalV
-       0.00         0.00         0.00           69k world_logicalV
+     100.00         0.01         0.00           69k world_logicalV
+       0.00         0.00         0.00          406k airBox_logicalV
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      85.51        406k       931     5788       8898         0.01    airBox_logicalV
-      14.49         68k       182      683       3080         0.00    world_logicalV
+      85.51        406k       931     5788       8898         0.00    airBox_logicalV
+      14.49         68k       182      683       3080         0.01    world_logicalV
 ### Run 0 starts.
 ### Begin of Run 0 start.
 
@@ -855,15 +770,16 @@ N=17 V[N]={87900885656017340, 2136126672992718976, 110623987125446578, 176001763
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=131.120000s Real=142.438038s Sys=1.930000s
+  User=85.540000s Real=89.963477s Sys=1.630000s
 
 ### End of Run (1000000 events)
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
+Deleting G4Run (id:0) 
+UserDetectorConstruction deleted 0x1b813c0
+UserPhysicsList deleted 0x1bbd6c8
+UserActionInitialization deleted 0x1d4ba50
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
@@ -871,23 +787,21 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 14
+Total navigation history collections cleaned: 13
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0202 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0183 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0115 MB
-Pool ID '16G4SmartVoxelNode', size : 0.201 MB
-Pool ID '17G4SmartVoxelProxy', size : 0.116 MB
+Pool ID '17G4DynamicParticle', size : 0.00865 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '19G4ElectronOccupancy', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.0231 MB
+Pool ID '7G4Track', size : 0.0173 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.38 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.052 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

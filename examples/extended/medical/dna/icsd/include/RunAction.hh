@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
@@ -48,7 +48,7 @@ class RunAction : public G4UserRunAction
     virtual ~RunAction();
 
     virtual void BeginOfRunAction(const G4Run* run);
-    virtual void   EndOfRunAction(const G4Run* run);
+    virtual void EndOfRunAction(const G4Run* run);
 };
 
 #endif

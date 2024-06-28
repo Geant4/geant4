@@ -243,3 +243,17 @@ G4String G4StateManager::GetStateString(const G4ApplicationState& aState) const
 
 // --------------------------------------------------------------------
 void G4StateManager::SetVerboseLevel(G4int val) { verboseLevel = val; }
+
+// --------------------------------------------------------------------
+void G4StateManager::NotifyDeletion(const G4Event* evt)
+{
+  for(auto& d : theDependentsList) 
+  { d->NotifyDeletion(evt); }
+}
+
+// --------------------------------------------------------------------
+void G4StateManager::NotifyDeletion(const G4Run* rn)
+{
+  for(auto& d : theDependentsList)
+  { d->NotifyDeletion(rn); }
+}

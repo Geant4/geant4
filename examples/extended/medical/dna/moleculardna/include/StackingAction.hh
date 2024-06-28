@@ -32,18 +32,17 @@
 
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
-#include "G4UserStackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
- public:
-  StackingAction() = default;
+  public:
+    StackingAction() = default;
 
-  ~StackingAction() override = default;
+    ~StackingAction() override = default;
 
-  void NewStage() override;
+    void NewStage() override;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

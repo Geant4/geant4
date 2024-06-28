@@ -47,26 +47,23 @@
 
 // --------------------------------------------------------------
 
-#include <iostream>
+#include "G4GeometryManager.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UImanager.hh"
+#include "G4VPhysicalVolume.hh"
 
+#include <iostream>
 #include <stdlib.h>
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4VPhysicalVolume.hh"
-#include "G4UImanager.hh"
-#include "G4GeometryManager.hh"
-
 // user classes
+#include "B02ActionInitialization.hh"
 #include "B02DetectorConstruction.hh"
 #include "B02ImportanceDetectorConstruction.hh"
 #include "FTFP_BERT.hh"
+
 #include "G4ImportanceBiasing.hh"
 #include "G4ParallelWorldPhysics.hh"
-
-#include "B02ActionInitialization.hh"
 // #include "B02PrimaryGeneratorAction.hh"
 // #include "B02RunAction.hh"
 
@@ -78,13 +75,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   G4int mode = 0;
-  if (argc>1)  mode = atoi(argv[1]);
-  if(mode != 0) {
-    G4cout << " mode not used yet, refer to B01 to see WeightWindow technique "
-           << mode << G4endl;
+  if (argc > 1) mode = atoi(argv[1]);
+  if (mode != 0) {
+    G4cout << " mode not used yet, refer to B01 to see WeightWindow technique " << mode << G4endl;
   }
 
   G4int numberOfEvents = 100;
@@ -100,22 +96,21 @@ int main(int argc, char **argv)
   runManager->SetUserInitialization(detector);
 
   G4String parallelName("ParallelBiasingWorld");
-  B02ImportanceDetectorConstruction* pdet =
-                   new B02ImportanceDetectorConstruction(parallelName);
+  B02ImportanceDetectorConstruction* pdet = new B02ImportanceDetectorConstruction(parallelName);
   detector->RegisterParallelWorld(pdet);
 
-  G4GeometrySampler pgs(pdet->GetWorldVolume(),"neutron");
+  G4GeometrySampler pgs(pdet->GetWorldVolume(), "neutron");
 
   pgs.SetParallel(true);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
-  physicsList->RegisterPhysics(new G4ImportanceBiasing(&pgs,parallelName));
+  physicsList->RegisterPhysics(new G4ImportanceBiasing(&pgs, parallelName));
   physicsList->RegisterPhysics(new G4ParallelWorldPhysics(parallelName));
 
   runManager->SetUserInitialization(physicsList);
 
- // Set user action classes through Worker Initialization
- //
+  // Set user action classes through Worker Initialization
+  //
   B02ActionInitialization* actions = new B02ActionInitialization;
   runManager->SetUserInitialization(actions);
 
@@ -123,12 +118,11 @@ int main(int argc, char **argv)
 
   pdet->CreateImportanceStore();
 
-  //temporary fix before runManager->BeamOn works...
+  // temporary fix before runManager->BeamOn works...
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String command1 = "/control/cout/setCoutFile threadOut";
   UImanager->ApplyCommand(command1);
-  G4String command2 = "/run/beamOn " +
-                      G4UIcommand::ConvertToString(numberOfEvents);
+  G4String command2 = "/run/beamOn " + G4UIcommand::ConvertToString(numberOfEvents);
   UImanager->ApplyCommand(command2);
 
   // open geometry for clean biasing stores clean-up

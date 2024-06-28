@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
@@ -36,36 +39,33 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "G4Box.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "G4VisAttributes.hh"
 
-class G4Region;
 class DetectorMessenger;
+class PhysicsList;
 class G4LogicalVolume;
 class G4PVPlacement;
-class PhysicsList;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction(PhysicsList*);
 
-  DetectorConstruction(PhysicsList*);
+    ~DetectorConstruction() override;
+    G4VPhysicalVolume* Construct() override;
 
-  ~DetectorConstruction() override;
-  G4VPhysicalVolume* Construct() override;
+    void SetMaterial(const G4String&);
 
-  void SetMaterial(const G4String&);
+  private:
+    void DefineMaterials();
 
-private:
-
-  void DefineMaterials();
-
-  DetectorMessenger* fDetectorMessenger;
-  G4Material*        fpWaterMaterial;
-  G4LogicalVolume*   fLogicWorld;
-  G4PVPlacement*     fPhysiWorld;
+    DetectorMessenger* fDetectorMessenger;
+    G4Material* fpWaterMaterial;
+    G4LogicalVolume* fLogicWorld;
+    G4PVPlacement* fPhysiWorld;
 };
 #endif

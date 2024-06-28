@@ -34,19 +34,18 @@
 
 #include "Run.hh"
 #include "StackingMessenger.hh"
-#include "G4LDMPhoton.hh"
+
 #include "G4LDMHi.hh"
 #include "G4LDMHiBar.hh"
-
-#include "G4Track.hh"
-#include "G4Step.hh"
+#include "G4LDMPhoton.hh"
 #include "G4RunManager.hh"
+#include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction()
-  : G4UserStackingAction(), fKillSecondary(false)
+StackingAction::StackingAction() : G4UserStackingAction(), fKillSecondary(false)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -60,29 +59,30 @@ StackingAction::~StackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
-  //stack or delete secondaries
+  // stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
 
-  //keep primary particle
-  if(aTrack->GetParentID() == 0) { return status; }
-  
-  const G4ParticleDefinition* part = aTrack->GetDefinition();
-  if(part == G4LDMPhoton::LDMPhoton() ||
-     part == G4LDMHi::LDMHi() ||
-     part == G4LDMHiBar::LDMHiBar()) { 
-    G4cout << "### New exotic particle produced: " 
-           << part->GetParticleName()
-           << " Ekin(GeV)= " << aTrack->GetKineticEnergy()/CLHEP::GeV
-           << " Mass(GeV)= " << part->GetPDGMass()/CLHEP::GeV
-           << " TrackId= " << aTrack->GetTrackID() 
-           << G4endl;
-    return status; 
+  // keep primary particle
+  if (aTrack->GetParentID() == 0) {
+    return status;
   }
 
-  if(fKillSecondary) { status = fKill; }
+  const G4ParticleDefinition* part = aTrack->GetDefinition();
+  if (part == G4LDMPhoton::LDMPhoton() || part == G4LDMHi::LDMHi()
+      || part == G4LDMHiBar::LDMHiBar())
+  {
+    G4cout << "### New exotic particle produced: " << part->GetParticleName()
+           << " Ekin(GeV)= " << aTrack->GetKineticEnergy() / CLHEP::GeV
+           << " Mass(GeV)= " << part->GetPDGMass() / CLHEP::GeV
+           << " TrackId= " << aTrack->GetTrackID() << G4endl;
+    return status;
+  }
+
+  if (fKillSecondary) {
+    status = fKill;
+  }
   return status;
 }
 

@@ -29,32 +29,28 @@
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef FLUKA_NuclearInelasticModel_hh
-#define FLUKA_NuclearInelasticModel_hh
-
+#  ifndef FLUKA_NuclearInelasticModel_hh
+#    define FLUKA_NuclearInelasticModel_hh
 
 // G4
-#include "globals.hh"
-#include "G4HadronicInteraction.hh"
-
+#    include "G4HadronicInteraction.hh"
+#    include "globals.hh"
 
 class G4HadFinalState;
 class G4HadProjectile;
 class G4Nucleus;
 
+class FLUKANuclearInelasticModel final : public G4HadronicInteraction
+{
+  public:
+    FLUKANuclearInelasticModel();
 
-class FLUKANuclearInelasticModel final : public G4HadronicInteraction {
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& projectile,
+                                           G4Nucleus& targetNucleus) override;
 
- public:
-  FLUKANuclearInelasticModel();
-
-  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& projectile, 
-                                         G4Nucleus& targetNucleus) override;
-
- private:
-  std::unique_ptr<G4HadFinalState> finalState_;
+  private:
+    std::unique_ptr<G4HadFinalState> finalState_;
 };
 
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

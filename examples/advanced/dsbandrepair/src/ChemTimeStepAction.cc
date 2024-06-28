@@ -36,13 +36,13 @@
 #include "G4MoleculeTable.hh"
 #include "G4Scheduler.hh"
 #include "UserMolecule.hh"
-
+#include "G4ChemTimeStepModel.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChemTimeStepAction::ChemTimeStepAction(ChemNtupleManager* histo, TimeStepModel timeStepModel) 
+ChemTimeStepAction::ChemTimeStepAction(ChemNtupleManager* histo, G4ChemTimeStepModel timeStepModel)
 : G4UserTimeStepAction(),fpHisto(histo)
 {
-    if (timeStepModel == fSBS) {
+    if (timeStepModel == G4ChemTimeStepModel::SBS) {
         AddTimeStep(1*picosecond,0.1*picosecond);
         AddTimeStep(10*picosecond,1*picosecond);
         AddTimeStep(100*picosecond,3*picosecond);

@@ -25,7 +25,6 @@
 // class G4ReplicaNavigation Implementation
 //
 // Author: P.Kent, 1996
-//
 // --------------------------------------------------------------------
 
 #include "G4ReplicaNavigation.hh"
@@ -60,12 +59,6 @@ G4ReplicaNavigation::G4ReplicaNavigation()
   halfkAngTolerance = kAngTolerance*0.5;
   fMinStep = 0.05*kCarTolerance;
 }
-
-// ********************************************************************
-// Destructor
-// ********************************************************************
-//
-G4ReplicaNavigation::~G4ReplicaNavigation() = default;
 
 // ********************************************************************
 // Inside

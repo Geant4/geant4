@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-15 Sebastien Incerti (range-V11-02-00)
+- Cleaned example
+
 ## 2023-06-03 Vladimir Ivanchenko (range-V11-01-01)
 - PhysicsList - simplified
 - range.cc - use G4RunManagerFactory
@@ -53,7 +56,7 @@ be used as a substitute for writing good git commit messages!
 14-10-16 G.Folger (range-V10-02-04)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
-	 
+
 14-10-16 SI (range-V10-02-03)
 - updated README
 

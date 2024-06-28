@@ -43,23 +43,22 @@ class ClusteringAlgo;
 
 class EventAction : public G4UserEventAction
 {
-public:
-  EventAction();
-  ~EventAction();
+  public:
+    EventAction();
+    ~EventAction();
 
-public:
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+  public:
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-  G4double GetEdep() {return fEdep;};
-  void SetEdep(G4double pVal) {fEdep=pVal;};
-  void AddEdep(G4double pVal) {fEdep+=pVal;};
+    G4double GetEdep() { return fEdep; };
+    void SetEdep(G4double pVal) { fEdep = pVal; };
+    void AddEdep(G4double pVal) { fEdep += pVal; };
 
-  ClusteringAlgo* fpClustering;
+    ClusteringAlgo* fpClustering;
 
-private:
-  G4double  fEdep;
+  private:
+    G4double fEdep;
 };
 
 #endif
-

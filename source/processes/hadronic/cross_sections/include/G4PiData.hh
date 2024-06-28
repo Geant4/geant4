@@ -24,6 +24,15 @@
 // ********************************************************************
 //
 // by J.P Wellisch, Sun Sep 15 2002.
+//
+// Revision by V.Ivanchenko 04.03.2024
+//
+// This code keep data for proton and neutron Barashenkov evaluation
+// for the total and reaction (inelastic) cross sections.
+// The elastic cross section is a difference sigma(el) = sigma(total) - sigma(inel).
+// The low-energy limit 14 MeV, high energy limit 1 TeV. Below energy limit
+// the cross sections at 14 MeV is used, above maximum energy a cross section
+// at 1 TeV is given.
 
 #ifndef G4PiData_h
 #define G4PiData_h
@@ -40,12 +49,20 @@ class G4PiData : public std::vector<std::pair<G4double, std::pair<G4double, G4do
 
     ~G4PiData() = default;
 
-    G4bool AppliesTo(G4double kineticEnergy);
-
     G4double ReactionXSection(G4double kineticEnergy);
     G4double ElasticXSection(G4double kineticEnergy);
     G4double TotalXSection(G4double kineticEnergy);
-    
+
+    G4PiData& operator = (const G4PiData &right) = delete;
+    G4PiData(const G4PiData&) = delete;
+  
+  private:
+    G4double fMinE{0.0};
+    G4double fTot0{0.0};
+    G4double fInel0{0.0};
+    G4double fMaxE{0.0};
+    G4double fTot1{0.0};
+    G4double fInel1{0.0};
 };
 
 #endif

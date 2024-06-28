@@ -120,6 +120,9 @@ public:
   static G4LowECapture*
   FindOrBuildCapture(const G4double elim, G4ParticleDefinition* part);
 
+  static void FindOrBuildNuclearStopping(G4ParticleDefinition* part,
+					 const G4double elim);
+
 private:
 
   static void StandardHadronPhysics(G4ParticleDefinition*,

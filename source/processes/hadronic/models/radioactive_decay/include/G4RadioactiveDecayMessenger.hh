@@ -27,14 +27,18 @@
 #define G4RadioactiveDecayMessenger_h 1
 
 ////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  File:   G4RadioactiveDecayMessenger.hh                                    //
-//  Author: D.H. Wright (SLAC)                                                //
-//  Date:   29 August 2017                                                    //
-//  Description: messenger class for the non-biased version of                //
-//               G4RadioactiveDecay.  Based on the code of F. Lei and         //
-//               P.R. Truscott.                                               //
-//                                                                            //
+//
+//  GEANT4 Class header file
+//
+//  G4RadioactiveDecayMessenger
+//
+//  Author: D.H. Wright (SLAC)
+//  Date:   29 August 2017
+//
+//  Description: messenger class for definition of the simulation in
+//               non-biased mode by G4VRadioactiveDecay process.
+//               Based on the code of F. Lei and P.R. Truscott.
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4UImessenger.hh"
@@ -49,21 +53,20 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
 
-#include "G4RadioactiveDecay.hh"
 #include "G4UIcmdWithNucleusLimits.hh"
 
-class G4RadioactiveDecay;
+class G4VRadioactiveDecay;
 
 class G4RadioactiveDecayMessenger: public G4UImessenger
 {
   public: //with description
-    G4RadioactiveDecayMessenger(G4RadioactiveDecay* theRadioactiveDecayContainer);
-    ~G4RadioactiveDecayMessenger();
+    G4RadioactiveDecayMessenger(G4VRadioactiveDecay*);
+    ~G4RadioactiveDecayMessenger() override;
 
-    void SetNewValue (G4UIcommand *command, G4String newValues);
+    void SetNewValue (G4UIcommand *command, G4String newValues) override;
 
   private:
-    G4RadioactiveDecay* theRadioactiveDecayContainer;
+    G4VRadioactiveDecay* theRadDecay;
   
     G4UIdirectory* rdmDirectory;
     G4UIcmdWithNucleusLimits* nucleuslimitsCmd;

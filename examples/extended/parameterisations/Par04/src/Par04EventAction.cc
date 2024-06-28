@@ -26,47 +26,47 @@
 #include "Par04EventAction.hh"
 
 #include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
-#include "Par04Hit.hh"                   // for Par04Hit, Par04HitsCollection
+#include "Par04Hit.hh"  // for Par04Hit, Par04HitsCollection
 #include "Par04ParallelFullWorld.hh"
 
-#include "G4AnalysisManager.hh"          // for G4AnalysisManager
-#include "G4Event.hh"                    // for G4Event
-#include "G4EventManager.hh"             // for G4EventManager
-#include "G4HCofThisEvent.hh"            // for G4HCofThisEvent
-#include "G4SDManager.hh"                // for G4SDManager
+#include "G4AnalysisManager.hh"  // for G4AnalysisManager
+#include "G4Event.hh"  // for G4Event
+#include "G4EventManager.hh"  // for G4EventManager
+#include "G4Exception.hh"  // for G4Exception, G4ExceptionDesc...
+#include "G4ExceptionSeverity.hh"  // for FatalException
+#include "G4GenericAnalysisManager.hh"  // for G4GenericAnalysisManager
+#include "G4HCofThisEvent.hh"  // for G4HCofThisEvent
+#include "G4PrimaryParticle.hh"  // for G4PrimaryParticle
+#include "G4PrimaryVertex.hh"  // for G4PrimaryVertex
+#include "G4SDManager.hh"  // for G4SDManager
+#include "G4SystemOfUnits.hh"  // for GeV
+#include "G4THitsCollection.hh"  // for G4THitsCollection
+#include "G4ThreeVector.hh"  // for G4ThreeVector
+#include "G4Timer.hh"  // for G4Timer
+#include "G4UserEventAction.hh"  // for G4UserEventAction
 
-#include <CLHEP/Units/SystemOfUnits.h>   // for GeV
-#include <CLHEP/Vector/ThreeVector.h>    // for Hep3Vector
-#include "G4Exception.hh"                // for G4Exception, G4ExceptionDesc...
-#include "G4ExceptionSeverity.hh"        // for FatalException
-#include "G4GenericAnalysisManager.hh"   // for G4GenericAnalysisManager
-#include "G4PrimaryParticle.hh"          // for G4PrimaryParticle
-#include "G4PrimaryVertex.hh"            // for G4PrimaryVertex
-#include "G4SystemOfUnits.hh"            // for GeV
-#include "G4THitsCollection.hh"          // for G4THitsCollection
-#include "G4ThreeVector.hh"              // for G4ThreeVector
-#include "G4Timer.hh"                    // for G4Timer
-#include "G4UserEventAction.hh"          // for G4UserEventAction
-#include <algorithm>                     // for max
-#include <cmath>                         // for log10
-#include <cstddef>                      // for size_t
-#include <ostream>                       // for basic_ostream::operator<<
+#include <CLHEP/Units/SystemOfUnits.h>  // for GeV
+#include <CLHEP/Vector/ThreeVector.h>  // for Hep3Vector
+#include <algorithm>  // for max
+#include <cmath>  // for log10
+#include <cstddef>  // for size_t
+#include <ostream>  // for basic_ostream::operator<<
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04EventAction::Par04EventAction(Par04DetectorConstruction* aDetector,
                                    Par04ParallelFullWorld* aParallel)
-  : G4UserEventAction()
-  , fHitCollectionID(-1)
-  , fPhysicalFullHitCollectionID(-1)
-  , fPhysicalFastHitCollectionID(-1)
-  , fTimer()
-  , fDetector(aDetector)
-  , fParallel(aParallel)
+  : G4UserEventAction(),
+    fHitCollectionID(-1),
+    fPhysicalFullHitCollectionID(-1),
+    fPhysicalFastHitCollectionID(-1),
+    fTimer(),
+    fDetector(aDetector),
+    fParallel(aParallel)
 {
   fCellNbRho = aDetector->GetMeshNbOfCells().x();
   fCellNbPhi = aDetector->GetMeshNbOfCells().y();
-  fCellNbZ   = aDetector->GetMeshNbOfCells().z();
+  fCellNbZ = aDetector->GetMeshNbOfCells().z();
   fCalEdep.reserve(fCellNbRho * fCellNbPhi * fCellNbZ);
   fCalRho.reserve(fCellNbRho * fCellNbPhi * fCellNbZ);
   fCalPhi.reserve(fCellNbRho * fCellNbPhi * fCellNbZ);
@@ -83,19 +83,22 @@ Par04EventAction::~Par04EventAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04EventAction::BeginOfEventAction(const G4Event*) {
+void Par04EventAction::BeginOfEventAction(const G4Event*)
+{
   StartTimer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04EventAction::StartTimer() {
+void Par04EventAction::StartTimer()
+{
   fTimer.Start();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04EventAction::StopTimer() {
+void Par04EventAction::StopTimer()
+{
   fTimer.Stop();
 }
 
@@ -107,44 +110,36 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
   StopTimer();
 
   // Get hits collection ID (only once)
-  if(fHitCollectionID == -1)
-  {
+  if (fHitCollectionID == -1) {
     fHitCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID("hits");
   }
-  if(fPhysicalFullHitCollectionID == -1)
-  {
+  if (fPhysicalFullHitCollectionID == -1) {
     fPhysicalFullHitCollectionID =
       G4SDManager::GetSDMpointer()->GetCollectionID("physicalCellsFullSim");
   }
-  if(fPhysicalFastHitCollectionID == -1)
-  {
+  if (fPhysicalFastHitCollectionID == -1) {
     fPhysicalFastHitCollectionID =
       G4SDManager::GetSDMpointer()->GetCollectionID("physicalCellsFastSim");
   }
   // Get hits collection
   auto hitsCollection =
     static_cast<Par04HitsCollection*>(aEvent->GetHCofThisEvent()->GetHC(fHitCollectionID));
-  auto physicalFullHitsCollection =
-    static_cast<Par04HitsCollection*>(aEvent->GetHCofThisEvent()
-                                      ->GetHC(fPhysicalFullHitCollectionID));
-  auto physicalFastHitsCollection =
-    static_cast<Par04HitsCollection*>(aEvent->GetHCofThisEvent()
-                                      ->GetHC(fPhysicalFastHitCollectionID));
+  auto physicalFullHitsCollection = static_cast<Par04HitsCollection*>(
+    aEvent->GetHCofThisEvent()->GetHC(fPhysicalFullHitCollectionID));
+  auto physicalFastHitsCollection = static_cast<Par04HitsCollection*>(
+    aEvent->GetHCofThisEvent()->GetHC(fPhysicalFastHitCollectionID));
 
-  if(hitsCollection == nullptr)
-  {
+  if (hitsCollection == nullptr) {
     G4ExceptionDescription msg;
     msg << "Cannot access hitsCollection ID " << fHitCollectionID;
     G4Exception("Par04EventAction::GetHitsCollection()", "MyCode0001", FatalException, msg);
   }
-  if(physicalFullHitsCollection == nullptr)
-  {
+  if (physicalFullHitsCollection == nullptr) {
     G4ExceptionDescription msg;
     msg << "Cannot access physical full sim hitsCollection ID " << fPhysicalFullHitCollectionID;
     G4Exception("Par04EventAction::GetHitsCollection()", "MyCode0001", FatalException, msg);
   }
-  if(physicalFastHitsCollection == nullptr)
-  {
+  if (physicalFastHitsCollection == nullptr) {
     G4ExceptionDescription msg;
     msg << "Cannot access physical fast sim hitsCollection ID " << fPhysicalFastHitCollectionID;
     G4Exception("Par04EventAction::GetHitsCollection()", "MyCode0001", FatalException, msg);
@@ -152,17 +147,15 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
   // Retrieve only once detector dimensions
-  if(fCellSizeZ == 0)
-  {
-    fCellSizeZ   = fDetector->GetMeshSizeOfCells().z();
+  if (fCellSizeZ == 0) {
+    fCellSizeZ = fDetector->GetMeshSizeOfCells().z();
     fCellSizePhi = fDetector->GetMeshSizeOfCells().y();
     fCellSizeRho = fDetector->GetMeshSizeOfCells().x();
-    fCellNbRho   = fDetector->GetMeshNbOfCells().x();
-    fCellNbPhi   = fDetector->GetMeshNbOfCells().y();
-    fCellNbZ     = fDetector->GetMeshNbOfCells().z();
+    fCellNbRho = fDetector->GetMeshNbOfCells().x();
+    fCellNbPhi = fDetector->GetMeshNbOfCells().y();
+    fCellNbZ = fDetector->GetMeshNbOfCells().z();
   }
-  if(fPhysicalNbLayers == 0)
-  {
+  if (fPhysicalNbLayers == 0) {
     fPhysicalNbLayers = fParallel->GetNbOfLayers();
     fPhysicalNbSlices = fParallel->GetNbOfSlices();
     fPhysicalNbRows = fParallel->GetNbOfRows();
@@ -172,7 +165,7 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
   // To calculate shower axis and entry point to the detector
   auto primaryVertex =
     G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetPrimaryVertex();
-  auto primaryParticle   = primaryVertex->GetPrimary(0);
+  auto primaryParticle = primaryVertex->GetPrimary(0);
   G4double primaryEnergy = primaryParticle->GetTotalEnergy();
   // Estimate from vertex and particle direction the entry point to the detector
   // Calculate entrance point to the detector located at z = 0
@@ -181,41 +174,39 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
     primaryVertex->GetPosition() - primaryVertex->GetPosition().z() * primaryDirection;
 
   // Resize back to initial mesh size
-  fCalEdep.resize(fCellNbRho * fCellNbPhi * fCellNbZ,0);
-  fCalRho.resize(fCellNbRho * fCellNbPhi * fCellNbZ,0);
-  fCalPhi.resize(fCellNbRho * fCellNbPhi * fCellNbZ,0);
-  fCalZ.resize(fCellNbRho * fCellNbPhi * fCellNbZ,0);
-  fCalPhysicalEdep.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices,0);
-  fCalPhysicalLayer.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices,0);
-  fCalPhysicalSlice.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices,0);
-  fCalPhysicalRow.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices,0);
+  fCalEdep.resize(fCellNbRho * fCellNbPhi * fCellNbZ, 0);
+  fCalRho.resize(fCellNbRho * fCellNbPhi * fCellNbZ, 0);
+  fCalPhi.resize(fCellNbRho * fCellNbPhi * fCellNbZ, 0);
+  fCalZ.resize(fCellNbRho * fCellNbPhi * fCellNbZ, 0);
+  fCalPhysicalEdep.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices, 0);
+  fCalPhysicalLayer.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices, 0);
+  fCalPhysicalSlice.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices, 0);
+  fCalPhysicalRow.resize(fPhysicalNbLayers * fPhysicalNbRows * fPhysicalNbSlices, 0);
 
   // Fill histograms
-  Par04Hit* hit                  = nullptr;
-  G4double hitEn                 = 0;
-  G4double totalEnergy           = 0;
-  G4int hitNum                   = 0;
-  G4int totalNum                 = 0;
-  G4int hitZ                     = -1;
-  G4int hitRho                   = -1;
-  G4int hitPhi                   = -1;
-  G4int hitType                  = -1;
+  Par04Hit* hit = nullptr;
+  G4double hitEn = 0;
+  G4double totalEnergy = 0;
+  G4int hitNum = 0;
+  G4int totalNum = 0;
+  G4int hitZ = -1;
+  G4int hitRho = -1;
+  G4int hitPhi = -1;
+  G4int hitType = -1;
   G4int numNonZeroThresholdCells = 0;
   G4double tDistance = 0., rDistance = 0., phiDistance = 0.;
   G4double tFirstMoment = 0., tSecondMoment = 0.;
   G4double rFirstMoment = 0., rSecondMoment = 0.;
   G4double phiMean = 0.;
-  for(size_t iHit = 0; iHit < hitsCollection->entries(); iHit++)
-  {
-    hit     = static_cast<Par04Hit*>(hitsCollection->GetHit(iHit));
-    hitZ    = hit->GetZid();
-    hitRho  = hit->GetRhoId();
-    hitPhi  = hit->GetPhiId();
-    hitEn   = hit->GetEdep();
-    hitNum  = hit->GetNdep();
+  for (size_t iHit = 0; iHit < hitsCollection->entries(); iHit++) {
+    hit = static_cast<Par04Hit*>(hitsCollection->GetHit(iHit));
+    hitZ = hit->GetZid();
+    hitRho = hit->GetRhoId();
+    hitPhi = hit->GetPhiId();
+    hitEn = hit->GetEdep();
+    hitNum = hit->GetNdep();
     hitType = hit->GetType();
-    if(hitEn > 0)
-    {
+    if (hitEn > 0) {
       totalEnergy += hitEn;
       totalNum += hitNum;
       tDistance = hitZ * fCellSizeZ;
@@ -227,12 +218,11 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
       analysisManager->FillH1(4, tDistance, hitEn);
       analysisManager->FillH1(5, rDistance, hitEn);
       analysisManager->FillH1(10, hitType);
-      if(hitEn > 0.0005)
-      {  // e > 0.5 keV
+      if (hitEn > 0.0005) {  // e > 0.5 keV
         fCalEdep[numNonZeroThresholdCells] = hitEn;
-        fCalRho[numNonZeroThresholdCells]  = hitRho;
-        fCalPhi[numNonZeroThresholdCells]  = hitPhi;
-        fCalZ[numNonZeroThresholdCells]    = hitZ;
+        fCalRho[numNonZeroThresholdCells] = hitRho;
+        fCalPhi[numNonZeroThresholdCells] = hitPhi;
+        fCalZ[numNonZeroThresholdCells] = hitZ;
         numNonZeroThresholdCells++;
         analysisManager->FillH1(13, std::log10(hitEn));
         analysisManager->FillH1(15, hitNum);
@@ -258,15 +248,13 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
   analysisManager->FillNtupleDColumn(0, 0, primaryEnergy);
   analysisManager->FillNtupleDColumn(0, 1, fTimer.GetRealElapsed());
   // Second loop over hits to calculate second moments
-  for(size_t iHit = 0; iHit < hitsCollection->entries(); iHit++)
-  {
-    hit    = static_cast<Par04Hit*>(hitsCollection->GetHit(iHit));
-    hitEn  = hit->GetEdep();
-    hitZ   = hit->GetZid();
+  for (size_t iHit = 0; iHit < hitsCollection->entries(); iHit++) {
+    hit = static_cast<Par04Hit*>(hitsCollection->GetHit(iHit));
+    hitEn = hit->GetEdep();
+    hitZ = hit->GetZid();
     hitRho = hit->GetRhoId();
     hitPhi = hit->GetPhiId();
-    if(hitEn > 0)
-    {
+    if (hitEn > 0) {
       tDistance = hitZ * fCellSizeZ;
       rDistance = hitRho * fCellSizeRho;
       phiDistance = hitPhi * fCellSizePhi;
@@ -281,55 +269,50 @@ void Par04EventAction::EndOfEventAction(const G4Event* aEvent)
   analysisManager->FillH1(9, rSecondMoment);
 
   // Fill ntuple with physical readout data
-  G4double totalPhysicalEnergy   = 0;
+  G4double totalPhysicalEnergy = 0;
   totalNum = 0;
   hitEn = 0;
   hitNum = 0;
-  G4int hitLayer                 = -1;
-  G4int hitRow                   = -1;
-  G4int hitSlice                 = -1;
+  G4int hitLayer = -1;
+  G4int hitRow = -1;
+  G4int hitSlice = -1;
   numNonZeroThresholdCells = 0;
-  for(size_t iHit = 0; iHit < physicalFullHitsCollection->entries(); iHit++)
-  {
-    hit     = static_cast<Par04Hit*>(physicalFullHitsCollection->GetHit(iHit));
+  for (size_t iHit = 0; iHit < physicalFullHitsCollection->entries(); iHit++) {
+    hit = static_cast<Par04Hit*>(physicalFullHitsCollection->GetHit(iHit));
     hitLayer = hit->GetRhoId();
-    hitRow  = hit->GetZid();
-    hitSlice  = hit->GetPhiId();
-    hitEn   = hit->GetEdep();
-    hitNum  = hit->GetNdep();
-    if(hitEn > 0)
-    {
+    hitRow = hit->GetZid();
+    hitSlice = hit->GetPhiId();
+    hitEn = hit->GetEdep();
+    hitNum = hit->GetNdep();
+    if (hitEn > 0) {
       totalPhysicalEnergy += hitEn;
       totalNum += hitNum;
-      if(hitEn > 0.0005)
-      {  // e > 0.5 keV
+      if (hitEn > 0.0005) {  // e > 0.5 keV
         fCalPhysicalEdep[numNonZeroThresholdCells] = hitEn;
-        fCalPhysicalLayer[numNonZeroThresholdCells]  = hitLayer;
-        fCalPhysicalRow[numNonZeroThresholdCells]  = hitRow;
-        fCalPhysicalSlice[numNonZeroThresholdCells]    = hitSlice;
+        fCalPhysicalLayer[numNonZeroThresholdCells] = hitLayer;
+        fCalPhysicalRow[numNonZeroThresholdCells] = hitRow;
+        fCalPhysicalSlice[numNonZeroThresholdCells] = hitSlice;
         numNonZeroThresholdCells++;
         analysisManager->FillH1(19, std::log10(hitEn));
         analysisManager->FillH1(21, hitNum);
       }
     }
-  }for(size_t iHit = 0; iHit < physicalFastHitsCollection->entries(); iHit++)
-  {
-    hit     = static_cast<Par04Hit*>(physicalFastHitsCollection->GetHit(iHit));
+  }
+  for (size_t iHit = 0; iHit < physicalFastHitsCollection->entries(); iHit++) {
+    hit = static_cast<Par04Hit*>(physicalFastHitsCollection->GetHit(iHit));
     hitLayer = hit->GetRhoId();
-    hitRow  = hit->GetZid();
-    hitSlice  = hit->GetPhiId();
-    hitEn   = hit->GetEdep();
-    hitNum  = hit->GetNdep();
-    if(hitEn > 0)
-    {
+    hitRow = hit->GetZid();
+    hitSlice = hit->GetPhiId();
+    hitEn = hit->GetEdep();
+    hitNum = hit->GetNdep();
+    if (hitEn > 0) {
       totalPhysicalEnergy += hitEn;
       totalNum += hitNum;
-      if(hitEn > 0.0005)
-      {  // e > 0.5 keV
+      if (hitEn > 0.0005) {  // e > 0.5 keV
         fCalPhysicalEdep[numNonZeroThresholdCells] = hitEn;
-        fCalPhysicalLayer[numNonZeroThresholdCells]  = hitLayer;
-        fCalPhysicalRow[numNonZeroThresholdCells]  = hitRow;
-        fCalPhysicalSlice[numNonZeroThresholdCells]    = hitSlice;
+        fCalPhysicalLayer[numNonZeroThresholdCells] = hitLayer;
+        fCalPhysicalRow[numNonZeroThresholdCells] = hitRow;
+        fCalPhysicalSlice[numNonZeroThresholdCells] = hitSlice;
         numNonZeroThresholdCells++;
         analysisManager->FillH1(19, std::log10(hitEn));
         analysisManager->FillH1(21, hitNum);

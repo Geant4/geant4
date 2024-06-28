@@ -29,90 +29,84 @@
 //
 
 #include "RE05MuonSD.hh"
+
 #include "RE05MuonHit.hh"
+
 #include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
-#include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Track.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05MuonSD::RE05MuonSD(G4String name)
-:G4VSensitiveDetector(name), 
- fMuonCollection(0), fPositionResolution(0.)
+  : G4VSensitiveDetector(name), fMuonCollection(0), fPositionResolution(0.)
 {
   G4String HCname;
-  collectionName.insert(HCname="muonCollection");
-  fPositionResolution = 5*cm;
+  collectionName.insert(HCname = "muonCollection");
+  fPositionResolution = 5 * cm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05MuonSD::~RE05MuonSD()
-{}
+RE05MuonSD::~RE05MuonSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05MuonSD::Initialize(G4HCofThisEvent*HCE)
+void RE05MuonSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  fMuonCollection = new RE05MuonHitsCollection
-                   (SensitiveDetectorName,collectionName[0]); 
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,fMuonCollection);
+  fMuonCollection = new RE05MuonHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, fMuonCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool RE05MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
+G4bool RE05MuonSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
 
-  if(edep==0.) return true;
+  if (edep == 0.) return true;
 
   RE05MuonHit* aHit;
   int nHit = fMuonCollection->entries();
   G4ThreeVector hitpos = aStep->GetPreStepPoint()->GetPosition();
-  for(int i=0;i<nHit;i++)
-  {
+  for (int i = 0; i < nHit; i++) {
     aHit = (*fMuonCollection)[i];
     G4ThreeVector pos = aHit->GetPos();
-    G4double dist2 = sqr(pos.x()-hitpos.x())
-                    +sqr(pos.y()-hitpos.y())+sqr(pos.z()-hitpos.z());
-    if(dist2<=sqr(fPositionResolution))
-    aHit->AddEdep(edep);
+    G4double dist2 =
+      sqr(pos.x() - hitpos.x()) + sqr(pos.y() - hitpos.y()) + sqr(pos.z() - hitpos.z());
+    if (dist2 <= sqr(fPositionResolution)) aHit->AddEdep(edep);
     return true;
   }
 
   aHit = new RE05MuonHit();
-  aHit->SetEdep( edep );
-  aHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  fMuonCollection->insert( aHit );
+  aHit->SetEdep(edep);
+  aHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+  fMuonCollection->insert(aHit);
 
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05MuonSD::EndOfEvent(G4HCofThisEvent*)
-{}
+void RE05MuonSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05MuonSD::clear()
-{} 
+void RE05MuonSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05MuonSD::DrawAll()
-{} 
+void RE05MuonSD::DrawAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05MuonSD::PrintAll()
-{} 
+void RE05MuonSD::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -43,59 +43,58 @@
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+#include "HistoManager.hh"
+
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWith3Vector.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "HistoManager.hh"
-#include "G4RadioactiveDecayPhysics.hh"
+#include "G4UIdirectory.hh"
 #include "G4VModularPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(), fDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fDetector(Det)
 {
   ftestDir = new G4UIdirectory("/testhadr/");
   ftestDir->SetGuidance(" Hadronic Extended Example.");
 
-  fmatCmd = new G4UIcmdWithAString("/testhadr/TargetMat",this);
+  fmatCmd = new G4UIcmdWithAString("/testhadr/TargetMat", this);
   fmatCmd->SetGuidance("Select Material for the target");
-  fmatCmd->SetParameterName("tMaterial",false);
-  fmatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fmatCmd->SetParameterName("tMaterial", false);
+  fmatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fmatCmd->SetToBeBroadcasted(false);
 
-  fmat1Cmd = new G4UIcmdWithAString("/testhadr/WorldMat",this);
+  fmat1Cmd = new G4UIcmdWithAString("/testhadr/WorldMat", this);
   fmat1Cmd->SetGuidance("Select Material for world");
-  fmat1Cmd->SetParameterName("wMaterial",false);
-  fmat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fmat1Cmd->SetParameterName("wMaterial", false);
+  fmat1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fmat1Cmd->SetToBeBroadcasted(false);
 
-  fRDCmd = new G4UIcmdWithABool("/testhadr/RadDecay",this);
+  fRDCmd = new G4UIcmdWithABool("/testhadr/RadDecay", this);
   fRDCmd->SetGuidance("Enable radioactive decay");
-  fRDCmd->SetParameterName("RD",false);
+  fRDCmd->SetParameterName("RD", false);
   fRDCmd->AvailableForStates(G4State_PreInit);
   fRDCmd->SetToBeBroadcasted(false);
 
-  frCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetRadius",this);
+  frCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetRadius", this);
   frCmd->SetGuidance("Set radius of the target");
-  frCmd->SetParameterName("radius",false);
+  frCmd->SetParameterName("radius", false);
   frCmd->SetUnitCategory("Length");
   frCmd->SetRange("radius>0");
-  frCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  frCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   frCmd->SetToBeBroadcasted(false);
 
-  flCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength",this);
+  flCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength", this);
   flCmd->SetGuidance("Set length of the target");
-  flCmd->SetParameterName("length",false);
+  flCmd->SetParameterName("length", false);
   flCmd->SetUnitCategory("Length");
   flCmd->SetRange("length>0");
-  flCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  flCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   flCmd->SetToBeBroadcasted(false);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,21 +113,23 @@ DetectorMessenger::~DetectorMessenger()
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == fmatCmd ) {
+  if (command == fmatCmd) {
     fDetector->SetTargetMaterial(newValue);
-  } else if( command == fmat1Cmd ) {
+  }
+  else if (command == fmat1Cmd) {
     fDetector->SetWorldMaterial(newValue);
-  } else if( command == frCmd ) {
+  }
+  else if (command == frCmd) {
     fDetector->SetTargetRadius(frCmd->GetNewDoubleValue(newValue));
-  } else if( command == flCmd ) { 
+  }
+  else if (command == flCmd) {
     fDetector->SetTargetLength(flCmd->GetNewDoubleValue(newValue));
-  } else if( command == fRDCmd ) { 
-    if(fRDCmd->GetNewBoolValue(newValue)) {
-      fDetector->GetPhysicsList()
-        ->RegisterPhysics(new G4RadioactiveDecayPhysics(1));
+  }
+  else if (command == fRDCmd) {
+    if (fRDCmd->GetNewBoolValue(newValue)) {
+      fDetector->GetPhysicsList()->RegisterPhysics(new G4RadioactiveDecayPhysics(1));
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

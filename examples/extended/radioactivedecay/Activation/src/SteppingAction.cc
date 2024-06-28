@@ -26,52 +26,52 @@
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
+
 #include "DetectorConstruction.hh"
-#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
-                           
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* event)
-: fDetector(det), fEventAction(event)
-{ }
+  : fDetector(det), fEventAction(event)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // count processes
-  // 
+  //
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4VProcess* process   = endPoint->GetProcessDefinedStep();
-  Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  const G4VProcess* process = endPoint->GetProcessDefinedStep();
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->CountProcesses(process);
-  
+
   // energy deposit
   //
   G4double edepStep = aStep->GetTotalEnergyDeposit();
-  if (edepStep <= 0.) return; 
+  if (edepStep <= 0.) return;
   fEventAction->AddEdep(edepStep);
-  
- //longitudinal profile of deposited energy
- //randomize point of energy deposition
- //
- G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
- G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
- G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
- G4double x = point.x();
- G4double xshifted = x + 0.5*fDetector->GetAbsorThickness();
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
- analysisManager->FillH1(2, xshifted, edepStep);   
+
+  // longitudinal profile of deposited energy
+  // randomize point of energy deposition
+  //
+  G4ThreeVector prePoint = aStep->GetPreStepPoint()->GetPosition();
+  G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
+  G4ThreeVector point = prePoint + G4UniformRand() * (postPoint - prePoint);
+  G4double x = point.x();
+  G4double xshifted = x + 0.5 * fDetector->GetAbsorThickness();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(2, xshifted, edepStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

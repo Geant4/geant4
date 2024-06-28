@@ -33,6 +33,8 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+class G4Event;
+
 namespace B1
 {
 
@@ -53,13 +55,11 @@ class EventAction : public G4UserEventAction
 
   private:
     RunAction* fRunAction = nullptr;
-    G4double   fEdep = 0.;
+    G4double fEdep = 0.;
 };
 
-}
+}  // namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

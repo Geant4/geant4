@@ -24,20 +24,18 @@
 // ********************************************************************
 //
 #include "Par03EventAction.hh"
-#include "Par03Hit.hh"
+
 #include "Par03DetectorConstruction.hh"
+#include "Par03Hit.hh"
 
 #include "G4AnalysisManager.hh"
-#include "G4SDManager.hh"
-#include "G4HCofThisEvent.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
 
 Par03EventAction::Par03EventAction(Par03DetectorConstruction* aDetector)
-  : G4UserEventAction()
-  , fHitCollectionID(-1)
-  , fTimer()
-  , fDetector(aDetector)
+  : G4UserEventAction(), fHitCollectionID(-1), fTimer(), fDetector(aDetector)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +44,10 @@ Par03EventAction::~Par03EventAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par03EventAction::BeginOfEventAction(const G4Event*) { fTimer.Start(); }
+void Par03EventAction::BeginOfEventAction(const G4Event*)
+{
+  fTimer.Start();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,71 +55,62 @@ void Par03EventAction::EndOfEventAction(const G4Event* aEvent)
 {
   fTimer.Stop();
   // Get hits collection ID (only once)
-  if(fHitCollectionID == -1)
-  {
+  if (fHitCollectionID == -1) {
     fHitCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID("hits");
   }
   // Get hits collection
-  auto hitsCollection = static_cast<Par03HitsCollection*>(
-    aEvent->GetHCofThisEvent()->GetHC(fHitCollectionID));
+  auto hitsCollection =
+    static_cast<Par03HitsCollection*>(aEvent->GetHCofThisEvent()->GetHC(fHitCollectionID));
 
-  if(hitsCollection == nullptr)
-  {
+  if (hitsCollection == nullptr) {
     G4ExceptionDescription msg;
     msg << "Cannot access hitsCollection ID " << fHitCollectionID;
-    G4Exception("Par03EventAction::GetHitsCollection()", "MyCode0001",
-                FatalException, msg);
+    G4Exception("Par03EventAction::GetHitsCollection()", "MyCode0001", FatalException, msg);
   }
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
   // Retrieve only once detector dimensions
-  if(fCellSizeZ == 0)
-  {
-    fCellSizeZ   = fDetector->GetLength() / fDetector->GetNbOfLayers();
+  if (fCellSizeZ == 0) {
+    fCellSizeZ = fDetector->GetLength() / fDetector->GetNbOfLayers();
     fCellSizeRho = fDetector->GetRadius() / fDetector->GetNbOfRhoCells();
   }
 
   // Retrieve information from primary vertex and primary particle
   // To calculate shower axis and entry point to the detector
-  auto primaryVertex = G4EventManager::GetEventManager()
-                         ->GetConstCurrentEvent()
-                         ->GetPrimaryVertex();
-  auto primaryParticle   = primaryVertex->GetPrimary(0);
+  auto primaryVertex =
+    G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetPrimaryVertex();
+  auto primaryParticle = primaryVertex->GetPrimary(0);
   G4double primaryEnergy = primaryParticle->GetTotalEnergy();
   // Estimate from vertex and particle direction the entry point to the detector
   // Calculate entrance point to the detector located at z = 0
   auto primaryDirection = primaryParticle->GetMomentumDirection();
-  auto primaryEntrance  = primaryVertex->GetPosition() -
-                         primaryVertex->GetPosition().z() * primaryDirection;
+  auto primaryEntrance =
+    primaryVertex->GetPosition() - primaryVertex->GetPosition().z() * primaryDirection;
   G4double cosDirection = std::cos(primaryDirection.theta());
   G4double sinDirection = std::sin(primaryDirection.theta());
 
   // Fill histograms
-  Par03Hit* hit        = nullptr;
-  G4double hitEn       = 0;
+  Par03Hit* hit = nullptr;
+  G4double hitEn = 0;
   G4double totalEnergy = 0;
-  G4int hitZ           = -1;
-  G4int hitRho         = -1;
-  G4int hitType        = -1;
+  G4int hitZ = -1;
+  G4int hitRho = -1;
+  G4int hitType = -1;
   G4double tDistance = 0., rDistance = 0.;
   G4double tFirstMoment = 0., tSecondMoment = 0.;
   G4double rFirstMoment = 0., rSecondMoment = 0.;
-  for(size_t iHit = 0; iHit < hitsCollection->entries(); iHit++)
-  {
-    hit     = static_cast<Par03Hit*>(hitsCollection->GetHit(iHit));
-    hitZ    = hit->GetZid();
-    hitRho  = hit->GetRhoId();
-    hitEn   = hit->GetEdep();
+  for (size_t iHit = 0; iHit < hitsCollection->entries(); iHit++) {
+    hit = static_cast<Par03Hit*>(hitsCollection->GetHit(iHit));
+    hitZ = hit->GetZid();
+    hitRho = hit->GetRhoId();
+    hitEn = hit->GetEdep();
     hitType = hit->GetType();
-    if(hitEn > 0)
-    {
+    if (hitEn > 0) {
       totalEnergy += hitEn;
-      tDistance =
-        hitZ * fCellSizeZ * cosDirection +
-        (hitRho * fCellSizeRho - primaryEntrance.perp()) * sinDirection;
-      rDistance =
-        hitZ * fCellSizeZ * (-sinDirection) +
-        (hitRho * fCellSizeRho - primaryEntrance.perp()) * cosDirection;
+      tDistance = hitZ * fCellSizeZ * cosDirection
+                  + (hitRho * fCellSizeRho - primaryEntrance.perp()) * sinDirection;
+      rDistance = hitZ * fCellSizeZ * (-sinDirection)
+                  + (hitRho * fCellSizeRho - primaryEntrance.perp()) * cosDirection;
       tFirstMoment += hitEn * tDistance;
       rFirstMoment += hitEn * rDistance;
       analysisManager->FillH1(4, tDistance, hitEn);
@@ -136,18 +128,16 @@ void Par03EventAction::EndOfEventAction(const G4Event* aEvent)
   analysisManager->FillH1(7, rFirstMoment);
 
   // Second loop over hits to calculate second moments
-  for(size_t iHit = 0; iHit < hitsCollection->entries(); iHit++)
-  {
-    hit    = static_cast<Par03Hit*>(hitsCollection->GetHit(iHit));
-    hitEn  = hit->GetEdep();
-    hitZ   = hit->GetZid();
+  for (size_t iHit = 0; iHit < hitsCollection->entries(); iHit++) {
+    hit = static_cast<Par03Hit*>(hitsCollection->GetHit(iHit));
+    hitEn = hit->GetEdep();
+    hitZ = hit->GetZid();
     hitRho = hit->GetRhoId();
-    if(hitEn > 0)
-    {
-      tDistance = hitZ * fCellSizeZ * cosDirection +
-                  (hitRho * fCellSizeRho - primaryEntrance.r()) * sinDirection;
-      rDistance = hitZ * fCellSizeZ * (-sinDirection) +
-                  (hitRho * fCellSizeRho - primaryEntrance.r()) * cosDirection;
+    if (hitEn > 0) {
+      tDistance = hitZ * fCellSizeZ * cosDirection
+                  + (hitRho * fCellSizeRho - primaryEntrance.r()) * sinDirection;
+      rDistance = hitZ * fCellSizeZ * (-sinDirection)
+                  + (hitRho * fCellSizeRho - primaryEntrance.r()) * cosDirection;
       tSecondMoment += hitEn * std::pow(tDistance - tFirstMoment, 2);
       rSecondMoment += hitEn * std::pow(rDistance - rFirstMoment, 2);
     }

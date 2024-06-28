@@ -178,7 +178,7 @@ public: //with description
 
 protected:
 
-  G4int verboseLevel;
+  G4int verboseLevel{0};
 
   G4String name;
 
@@ -186,10 +186,10 @@ private:
 
   G4CrossSectionDataSetRegistry* registry;
 
-  G4double minKinEnergy;
+  G4double minKinEnergy{0.0};
   G4double maxKinEnergy;
 
-  G4bool isForAllAtomsAndEnergies;
+  G4bool isForAllAtomsAndEnergies{false};
 
 };
 

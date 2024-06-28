@@ -31,29 +31,28 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "DetectorConstruction.hh"
 
 #include "G4Event.hh"
-#include "G4ParticleTable.hh"
+#include "G4Geantino.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Geantino.hh"
+#include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-: fDetector(det)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det) : fDetector(det)
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
-  fParticleGun->SetParticleEnergy(0*eV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));  
-
+  fParticleGun->SetParticleEnergy(0 * eV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,45 +66,40 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //particle type
+  // particle type
   if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino()) {
     G4int Z = 95, A = 241;
-    G4double ionCharge   = 0.*eplus;
-    G4double excitEnergy = 0.*keV;
+    G4double ionCharge = 0. * eplus;
+    G4double excitEnergy = 0. * keV;
 
-    G4ParticleDefinition* ion
-       = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
+    G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z, A, excitEnergy);
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(ionCharge);
   }
 
-  //vertex position uniform within the absorber
+  // vertex position uniform within the absorber
   //
   G4double Rmax = fDetector->GetAbsorRadius();
-  G4double Rmax2 = Rmax*Rmax;
-  G4double R2 = G4UniformRand()*Rmax2;
-  G4double R  = std::sqrt(R2);
-  
-  G4double phi = twopi*G4UniformRand();
-  G4double ux = R*std::cos(phi),
-           uy = R*std::sin(phi);
-  G4double uz = (fDetector->GetAbsorLength())*(G4UniformRand() - 0.5);
-  
-  fParticleGun->SetParticlePosition(G4ThreeVector(ux,uy,uz));
+  G4double Rmax2 = Rmax * Rmax;
+  G4double R2 = G4UniformRand() * Rmax2;
+  G4double R = std::sqrt(R2);
 
-  //distribution uniform in solid angle
+  G4double phi = twopi * G4UniformRand();
+  G4double ux = R * std::cos(phi), uy = R * std::sin(phi);
+  G4double uz = (fDetector->GetAbsorLength()) * (G4UniformRand() - 0.5);
+
+  fParticleGun->SetParticlePosition(G4ThreeVector(ux, uy, uz));
+
+  // distribution uniform in solid angle
   //
-  G4double cosTheta = 2*G4UniformRand() - 1.;
-  G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
-  phi = twopi*G4UniformRand(); 
-  G4double vx = sinTheta*std::cos(phi),
-           vy = sinTheta*std::sin(phi),
-           vz = cosTheta;
+  G4double cosTheta = 2 * G4UniformRand() - 1.;
+  G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
+  phi = twopi * G4UniformRand();
+  G4double vx = sinTheta * std::cos(phi), vy = sinTheta * std::sin(phi), vz = cosTheta;
 
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(vx,vy,vz));
-  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(vx, vy, vz));
+
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

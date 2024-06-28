@@ -32,54 +32,59 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "DetectorConstruction.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::
-PrimaryGeneratorAction( const DetectorConstruction* pDetector ) :
-  fPointerDetectorConstruction( pDetector )
+PrimaryGeneratorAction::PrimaryGeneratorAction(const DetectorConstruction* pDetector)
+  : fPointerDetectorConstruction(pDetector)
 {
   G4int n_particle = 1;
-  fParticleGun = new G4ParticleGun( n_particle );
+  fParticleGun = new G4ParticleGun(n_particle);
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   //***LOOKHERE*** Default particle and energy
-  fParticleGun->SetParticleDefinition( particleTable->FindParticle( "geantino" ) );
-  fParticleGun->SetParticleEnergy( 10.0*GeV );
+  fParticleGun->SetParticleDefinition(particleTable->FindParticle("geantino"));
+  fParticleGun->SetParticleEnergy(10.0 * GeV);
   SetGunPosition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction() {
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
+{
   delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::SetGunPosition() const {
+void PrimaryGeneratorAction::SetGunPosition() const
+{
   // Shoot the particle in the middle between the world and the target layer
   G4double targetThickness =
-    ( fPointerDetectorConstruction ? fPointerDetectorConstruction->GetThickness() : 0.0 );
-  G4double gunPosition = -0.55*targetThickness;  //***LOOKHERE*** default gun position
-                                                 //               along the z-axis
-  G4cout << G4endl << "PrimaryGenerationAction::SetGunPosition() : gun position along z = " 
-         << gunPosition << " mm " << G4endl << G4endl;  
-  fParticleGun->SetParticlePosition( G4ThreeVector( 0.0, 0.0, gunPosition ) );
+    (fPointerDetectorConstruction ? fPointerDetectorConstruction->GetThickness() : 0.0);
+  G4double gunPosition = -0.55 * targetThickness;  //***LOOKHERE*** default gun position
+                                                   //               along the z-axis
+  G4cout << G4endl
+         << "PrimaryGenerationAction::SetGunPosition() : gun position along z = " << gunPosition
+         << " mm " << G4endl << G4endl;
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, gunPosition));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries( G4Event* anEvent ) {
-  G4ThreeVector v( 0.0, 0.0, 1.0 );  //***LOOKHERE*** default shoot along the z-axis
-  fParticleGun->SetParticleMomentumDirection( v );
-  fParticleGun->GeneratePrimaryVertex( anEvent );
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  G4ThreeVector v(0.0, 0.0, 1.0);  //***LOOKHERE*** default shoot along the z-axis
+  fParticleGun->SetParticleMomentumDirection(v);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

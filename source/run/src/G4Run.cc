@@ -44,13 +44,22 @@ G4Run::G4Run()
 // --------------------------------------------------------------------
 G4Run::~G4Run()
 {
-  // Objects made by local thread should not be deleted by the master thread
-  G4RunManager::RMType rmType =
-    G4RunManager::GetRunManager()->GetRunManagerType();
-  if(rmType != G4RunManager::masterRM)
+  if(G4RunManager::GetRunManager()->GetRunManagerType()!=G4RunManager::masterRM)
   {
     for(auto& itr : *eventVector)
-    { delete itr; }
+    {
+//      if(itr->ToBeKept()) {
+//        G4ExceptionDescription ede;
+//        ede << "Deleting G4Event (id:" << itr->GetEventID()
+//          << ") that has ToBeKept() flag on.\n"
+//          << " KeepEventFlag : " << itr->KeepTheEventFlag()
+//          << " NoOfGrip : " << itr->GetNumberOfGrips()
+//          << " NoOfSubEvt : " << itr->GetNumberOfRemainingSubEvents();
+//        G4Exception("G4Run::~G4Run()","Run0002",JustWarning,ede);
+//      }
+//      G4RunManager::GetRunManager()->ReportEventDeletion(itr);
+      delete itr;
+    }
   }
   delete eventVector;
 }

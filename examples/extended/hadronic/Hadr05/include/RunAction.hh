@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Run; 
+class Run;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
 class HistoManager;
@@ -48,22 +48,20 @@ class G4Timer;
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim = 0);
+    ~RunAction() override = default;
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim=0);
- ~RunAction() override = default;
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-  G4Run* GenerateRun() override;
-  void BeginOfRunAction(const G4Run*) override;
-  void   EndOfRunAction(const G4Run*) override;
-
-private:
-  
-  DetectorConstruction*   fDetector     = nullptr;
-  PrimaryGeneratorAction* fPrimary      = nullptr;
-  Run*                    fRun          = nullptr;      
-  HistoManager*           fHistoManager = nullptr;
-  G4Timer*                fTimer        = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary = nullptr;
+    Run* fRun = nullptr;
+    HistoManager* fHistoManager = nullptr;
+    G4Timer* fTimer = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

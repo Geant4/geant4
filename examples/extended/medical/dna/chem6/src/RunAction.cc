@@ -43,27 +43,23 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+
 #include "Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 extern std::ofstream out;
 
-RunAction::RunAction()
- : G4UserRunAction()
-{
-}
+RunAction::RunAction() : G4UserRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-RunAction::~RunAction()
-{
-}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -93,26 +89,18 @@ void RunAction::EndOfRunAction(const G4Run* run)
   // results
   //
   const Run* chem6Run = static_cast<const Run*>(run);
-  G4double sumDose   = chem6Run->GetSumDose();
+  G4double sumDose = chem6Run->GetSumDose();
 
   // print
   //
-  if (IsMaster())
-  {
+  if (IsMaster()) {
+    G4cout << G4endl << "--------------------End of Global Run-----------------------" << G4endl
+           << "  The run has " << nofEvents << " events " << G4endl;
 
-    G4cout
-      << G4endl
-      << "--------------------End of Global Run-----------------------"
-      << G4endl
-      << "  The run has " << nofEvents << " events "
-      << G4endl;
-
-    ScoreSpecies* masterScorer=
-      dynamic_cast<ScoreSpecies*>(chem6Run->GetPrimitiveScorer());
+    ScoreSpecies* masterScorer = dynamic_cast<ScoreSpecies*>(chem6Run->GetPrimitiveScorer());
 
     G4cout << "Number of events recorded by the species scorer = "
-      << masterScorer->GetNumberOfRecordedEvents()
-      << G4endl;
+           << masterScorer->GetNumberOfRecordedEvents() << G4endl;
 
     // LET
     Run* aRun = (Run*)run;
@@ -120,46 +108,35 @@ void RunAction::EndOfRunAction(const G4Run* run)
     G4int nOfEvent = totLET->entries();
     G4double LET_mean = 0;
     G4double LET_square = 0;
-    for(G4int i=0;i<nOfEvent;i++){
+    for (G4int i = 0; i < nOfEvent; i++) {
       G4double* LET = (*totLET)[i];
-      if(!LET) continue;
+      if (!LET) continue;
       LET_mean += *LET;
-      LET_square += (*LET)*(*LET);
+      LET_square += (*LET) * (*LET);
     }
     LET_mean /= nOfEvent;
-    LET_square = std::sqrt(LET_square/nOfEvent - std::pow(LET_mean,2));
+    LET_square = std::sqrt(LET_square / nOfEvent - std::pow(LET_mean, 2));
 
-    if(nOfEvent > 1)
-    {
-      out<<std::setw(12)<<"LET"<<std::setw(12)<<LET_mean
-          <<std::setw(12)<<"LET_SD"<<std::setw(12)<<LET_square/(nOfEvent-1)<<'\n';
-    }else
-    {
-      out<<std::setw(12)<<"LET"<<std::setw(12)<<LET_mean
-          <<std::setw(12)<<"LET_SD"<<std::setw(12)<<LET_square<<'\n';
+    if (nOfEvent > 1) {
+      out << std::setw(12) << "LET" << std::setw(12) << LET_mean << std::setw(12) << "LET_SD"
+          << std::setw(12) << LET_square / (nOfEvent - 1) << '\n';
+    }
+    else {
+      out << std::setw(12) << "LET" << std::setw(12) << LET_mean << std::setw(12) << "LET_SD"
+          << std::setw(12) << LET_square << '\n';
     }
 
     masterScorer->OutputAndClear();
 
-    out<<'\n';
-
+    out << '\n';
   }
-  else
-  {
-    G4cout
-      << G4endl
-      << "--------------------End of Local Run------------------------"
-      << G4endl
-      << "  The run has " << nofEvents << " events"
-      << G4endl;
+  else {
+    G4cout << G4endl << "--------------------End of Local Run------------------------" << G4endl
+           << "  The run has " << nofEvents << " events" << G4endl;
   }
 
-  G4cout
-    << " Total energy deposited in the world volume : " << sumDose/eV << " eV"
-    << G4endl
-    << " ------------------------------------------------------------"
-    << G4endl
-    << G4endl;
+  G4cout << " Total energy deposited in the world volume : " << sumDose / eV << " eV" << G4endl
+         << " ------------------------------------------------------------" << G4endl << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

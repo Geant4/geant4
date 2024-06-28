@@ -47,24 +47,23 @@ class StackingAction : public G4UserStackingAction
 {
   public:
     StackingAction(DetectorConstruction*);
-   ~StackingAction();
-   
-    virtual void SetKillStatus(G4bool value) {fKillTrack = value;};
-     
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
-  private:
-    DetectorConstruction* fDetector;  
-    StackingMessenger*    fStackMessenger;
+    ~StackingAction();
 
-    G4Material*           fMatWall;
-    G4double              fZcav;
-    G4EmCalculator*       fEmCal;
-    G4bool                first;
-    G4bool                fKillTrack;               
+    virtual void SetKillStatus(G4bool value) { fKillTrack = value; };
+
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+
+  private:
+    DetectorConstruction* fDetector;
+    StackingMessenger* fStackMessenger;
+
+    G4Material* fMatWall;
+    G4double fZcav;
+    G4EmCalculator* fEmCal;
+    G4bool first;
+    G4bool fKillTrack;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -92,6 +92,9 @@ G4int G4Qt3DSceneHandler::fSceneIdCount = 0;
 G4Qt3DSceneHandler::G4Qt3DSceneHandler
  (G4VGraphicsSystem& system, const G4String& name)
 : G4VSceneHandler(system, fSceneIdCount++, name)
+,fpQt3DScene(nullptr)
+,fpTransientObjects(nullptr)
+,fpPersistentObjects(nullptr)
 {
 #ifdef G4QT3DDEBUG
   G4cout << "G4Qt3DSceneHandler::G4Qt3DSceneHandler called" << G4endl;
@@ -103,19 +106,10 @@ G4Qt3DSceneHandler::G4Qt3DSceneHandler
 
 G4Qt3DSceneHandler::~G4Qt3DSceneHandler()
 {
-  // Doesn't like this - it gives BAD_ACCESS in delete_entity_recursively.
-  // Curiously the delete traceback shows three calls to this recursively:
-  /*#1  0x0000000100411906 in (anonymous namespace)::delete_entity_recursively(Qt3DCore::QNode*) at /Users/johna/Geant4/geant4-dev/source/visualization/Qt3D/src/G4Qt3DSceneHandler.cc:60
-  #2  0x0000000100411840 in G4Qt3DSceneHandler::~G4Qt3DSceneHandler() at /Users/johna/Geant4/geant4-dev/source/visualization/Qt3D/src/G4Qt3DSceneHandler.cc:169
-  #3  0x0000000100411fc5 in G4Qt3DSceneHandler::~G4Qt3DSceneHandler() at /Users/johna/Geant4/geant4-dev/source/visualization/Qt3D/src/G4Qt3DSceneHandler.cc:168
-  #4  0x0000000100411fe9 in G4Qt3DSceneHandler::~G4Qt3DSceneHandler() at /Users/johna/Geant4/geant4-dev/source/visualization/Qt3D/src/G4Qt3DSceneHandler.cc:168
-  #5  0x0000000101032510 in G4VisManager::~G4VisManager() at /Users/johna/Geant4/geant4-dev/source/visualization/management/src/G4VisManager.cc:214
-  #6  0x0000000100013885 in G4VisExecutive::~G4VisExecutive() at /Users/johna/Geant4/geant4-dev/source/visualization/management/include/G4VisExecutive.hh:119
-  #7  0x00000001000119a5 in G4VisExecutive::~G4VisExecutive() at /Users/johna/Geant4/geant4-dev/source/visualization/management/include/G4VisExecutive.hh:119
-  #8  0x00000001000119c9 in G4VisExecutive::~G4VisExecutive() at /Users/johna/Geant4/geant4-dev/source/visualization/management/include/G4VisExecutive.hh:119
-  #9  0x00000001000117dd in main at /Users/johna/Geant4/geant4-dev/examples/basic/B1/exampleB1.cc:108
-  */
-  //if (fpQt3DScene) delete_entity_recursively(fpQt3DScene);
+  if (fpQt3DScene) {
+    G4Qt3DUtils::delete_components_and_children_of_entity_recursively(fpQt3DScene);
+    delete fpQt3DScene;
+  }
 }
 
 void G4Qt3DSceneHandler::EstablishG4Qt3DQEntities()
@@ -126,6 +120,7 @@ void G4Qt3DSceneHandler::EstablishG4Qt3DQEntities()
   fpPersistentObjects ->setObjectName("G4Qt3DPORoot");
 
   // Physical volume objects hang from POs
+  fpPhysicalVolumeObjects.clear();
   if (fpScene) {
     const auto& sceneModels = fpScene->GetRunDurationModelList();
     for (const auto& sceneModel : sceneModels) {

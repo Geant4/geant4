@@ -45,8 +45,8 @@
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PhysicsList;
 class G4UIdirectory;
@@ -57,28 +57,29 @@ class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger : public G4UImessenger {
-public:
-  explicit PhysicsListMessenger(PhysicsList *);
-  ~PhysicsListMessenger() override;
+class PhysicsListMessenger : public G4UImessenger
+{
+  public:
+    explicit PhysicsListMessenger(PhysicsList*);
+    ~PhysicsListMessenger() override;
 
-  void SetNewValue(G4UIcommand *, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  PhysicsListMessenger &operator = (const PhysicsListMessenger &right) = delete;
-  PhysicsListMessenger(const PhysicsListMessenger &) = delete;
+    PhysicsListMessenger& operator=(const PhysicsListMessenger& right) = delete;
+    PhysicsListMessenger(const PhysicsListMessenger&) = delete;
 
-private:
-  PhysicsList *fPhysicsList;
+  private:
+    PhysicsList* fPhysicsList;
 
-  G4UIdirectory *fPhysDir;
-  G4UIcmdWithADoubleAndUnit *fECmd;
-  G4UIcmdWithAnInteger *fEBCmd;
-  G4UIcmdWithAnInteger *fCBCmd;
-  G4UIcmdWithAnInteger *fCMCmd;
-  G4UIcmdWithAString *fListCmd;
-  G4UIcmdWithADoubleAndUnit *fADCCmd;
-  G4UIcmdWithADouble *fNorCmd;
-  G4UIcmdWithADoubleAndUnit *fSmCmd;
+    G4UIdirectory* fPhysDir;
+    G4UIcmdWithADoubleAndUnit* fECmd;
+    G4UIcmdWithAnInteger* fEBCmd;
+    G4UIcmdWithAnInteger* fCBCmd;
+    G4UIcmdWithAnInteger* fCMCmd;
+    G4UIcmdWithAString* fListCmd;
+    G4UIcmdWithADoubleAndUnit* fADCCmd;
+    G4UIcmdWithADouble* fNorCmd;
+    G4UIcmdWithADoubleAndUnit* fSmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

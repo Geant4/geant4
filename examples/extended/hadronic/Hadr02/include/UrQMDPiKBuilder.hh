@@ -40,35 +40,29 @@
 #ifndef UrQMDPiKBuilder_h
 #define UrQMDPiKBuilder_h 1
 
-#include "globals.hh"
-#include "G4SystemOfUnits.hh"
-
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
-#include "G4VPiKBuilder.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4UrQMD1_3Model.hh"
+#include "G4VPiKBuilder.hh"
+#include "globals.hh"
 
 class UrQMDPiKBuilder : public G4VPiKBuilder
 {
-public: 
+  public:
+    UrQMDPiKBuilder();
+    virtual ~UrQMDPiKBuilder();
 
-  UrQMDPiKBuilder();
-  virtual ~UrQMDPiKBuilder();
- 
-  virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4HadronInelasticProcess * aP);
-    
-  inline void SetMinEnergy(G4double aM) {fMin = aM;}
-  inline void SetMaxEnergy(G4double aM) {fMax = aM;}
+    virtual void Build(G4HadronElasticProcess* aP);
+    virtual void Build(G4HadronInelasticProcess* aP);
 
-private:
+    inline void SetMinEnergy(G4double aM) { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) { fMax = aM; }
 
-  G4UrQMD1_3Model * fModel;
-  G4double fMin;
-  G4double fMax;
-
+  private:
+    G4UrQMD1_3Model* fModel;
+    G4double fMin;
+    G4double fMax;
 };
 
 #endif
-

@@ -38,17 +38,14 @@
 
 class ExUCNExtraPhysics : public G4VPhysicsConstructor
 {
-public:
-
+  public:
     ExUCNExtraPhysics();
     virtual ~ExUCNExtraPhysics();
 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
-private:
-
+  private:
     void ConstructUCN();
-
 };
 #endif

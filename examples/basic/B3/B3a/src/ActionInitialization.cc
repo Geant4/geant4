@@ -28,9 +28,10 @@
 /// \brief Implementation of the B3a::ActionInitialization class
 
 #include "ActionInitialization.hh"
-#include "RunAction.hh"
+
 #include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
 #include "StackingAction.hh"
 
 using namespace B3;
@@ -59,5 +60,4 @@ void ActionInitialization::Build() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
-
+}  // namespace B3a

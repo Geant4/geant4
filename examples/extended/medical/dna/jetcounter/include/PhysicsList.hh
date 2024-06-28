@@ -40,10 +40,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList : public G4VModularPhysicsList {
-public:
-  PhysicsList();
-  ~PhysicsList() override = default;
+class PhysicsList : public G4VModularPhysicsList
+{
+  public:
+    PhysicsList();
+    ~PhysicsList() override = default;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

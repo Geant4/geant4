@@ -27,16 +27,16 @@
 /// \brief Definition of the PrimaryGeneratorAction3 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction3_h
 #define PrimaryGeneratorAction3_h 1
 
+#include "G4ThreeVector.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -46,21 +46,21 @@ class G4Event;
 class PrimaryGeneratorAction3
 {
   public:
-    PrimaryGeneratorAction3(G4ParticleGun* );    
-   ~PrimaryGeneratorAction3() = default;
+    PrimaryGeneratorAction3(G4ParticleGun*);
+    ~PrimaryGeneratorAction3() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
 
   public:
     G4ThreeVector GetNewUz() { return fNewUz; };
-    G4double GetAlphaMax()   { return fAlphaMax; };
-    
+    G4double GetAlphaMax() { return fAlphaMax; };
+
   private:
-    G4ThreeVector          fNewUz;   
-    G4double               fAlphaMax = 0.;     //max angle
-    
-    G4ParticleGun*         fParticleGun = nullptr;
+    G4ThreeVector fNewUz;
+    G4double fAlphaMax = 0.;  // max angle
+
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

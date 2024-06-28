@@ -28,11 +28,12 @@
 
 #include <G4UserTrackingAction.hh>
 
-class TrackingAction: public G4UserTrackingAction{
-public:
-  TrackingAction();
-  virtual ~TrackingAction(){}
-  virtual void PostUserTrackingAction(const G4Track*);
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
+    TrackingAction();
+    virtual ~TrackingAction() {}
+    virtual void PostUserTrackingAction(const G4Track*);
 };
 
 #endif

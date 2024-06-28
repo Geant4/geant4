@@ -29,85 +29,80 @@
 //
 
 #include "RE05CalorimeterSD.hh"
+
 #include "RE05CalorimeterHit.hh"
-#include "G4VPhysicalVolume.hh"
+
 #include "G4LogicalVolume.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
+#include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Track.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05CalorimeterSD::RE05CalorimeterSD(G4String name)
-:G4VSensitiveDetector(name),
- fNumberOfCellsInZ(20),fNumberOfCellsInPhi(48)
+  : G4VSensitiveDetector(name), fNumberOfCellsInZ(20), fNumberOfCellsInPhi(48)
 {
   G4String HCname;
-  collectionName.insert(HCname="calCollection");
+  collectionName.insert(HCname = "calCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05CalorimeterSD::~RE05CalorimeterSD()
-{}
+RE05CalorimeterSD::~RE05CalorimeterSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  fCalCollection = new RE05CalorimeterHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for(G4int j=0;j<fNumberOfCellsInZ;j++)
-  for(G4int k=0;k<fNumberOfCellsInPhi;k++)
-  {
-    fCellID[j][k] = -1;
-  }
+  fCalCollection = new RE05CalorimeterHitsCollection(SensitiveDetectorName, collectionName[0]);
+  for (G4int j = 0; j < fNumberOfCellsInZ; j++)
+    for (G4int k = 0; k < fNumberOfCellsInPhi; k++) {
+      fCellID[j][k] = -1;
+    }
   verboseLevel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
+G4bool RE05CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-//***** RE05CalorimeterSD has been migrated to Geant4 version 10 that does not
-//***** support Readout Geometry in multi-threaded mode. Now RE05CalorimeterSD
-//***** is assigned to a dedicated parallel world. The pointer "aStep" points to
-//***** a G4Step object for the parallel world.
+  //***** RE05CalorimeterSD has been migrated to Geant4 version 10 that does not
+  //***** support Readout Geometry in multi-threaded mode. Now RE05CalorimeterSD
+  //***** is assigned to a dedicated parallel world. The pointer "aStep" points to
+  //***** a G4Step object for the parallel world.
 
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(verboseLevel>1) G4cout << "Next step edep(MeV) = " << edep/MeV << G4endl;
-  if(edep==0.) return false;
+  if (verboseLevel > 1) G4cout << "Next step edep(MeV) = " << edep / MeV << G4endl;
+  if (edep == 0.) return false;
 
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
   G4int copyIDinZ = touchable->GetReplicaNumber(0);
   G4int copyIDinPhi = touchable->GetReplicaNumber(1);
 
-  if(fCellID[copyIDinZ][copyIDinPhi]==-1)
-  {
-    RE05CalorimeterHit* calHit
-      = new RE05CalorimeterHit
-          (touchable->GetVolume()->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
-    calHit->SetEdep( edep );
+  if (fCellID[copyIDinZ][copyIDinPhi] == -1) {
+    RE05CalorimeterHit* calHit =
+      new RE05CalorimeterHit(touchable->GetVolume()->GetLogicalVolume(), copyIDinZ, copyIDinPhi);
+    calHit->SetEdep(edep);
     G4AffineTransform aTrans = touchable->GetHistory()->GetTopTransform();
     aTrans.Invert();
     calHit->SetPos(aTrans.NetTranslation());
     calHit->SetRot(aTrans.NetRotation());
-    G4int icell = fCalCollection->insert( calHit );
+    G4int icell = fCalCollection->insert(calHit);
     fCellID[copyIDinZ][copyIDinPhi] = icell - 1;
-    if(verboseLevel>0)
-    { G4cout << " New Calorimeter Hit on fCellID " 
-           << copyIDinZ << " " << copyIDinPhi << G4endl; }
+    if (verboseLevel > 0) {
+      G4cout << " New Calorimeter Hit on fCellID " << copyIDinZ << " " << copyIDinPhi << G4endl;
+    }
   }
-  else
-  { 
+  else {
     (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
-    if(verboseLevel>0)
-    { G4cout << " Energy added to fCellID " 
-           << copyIDinZ << " " << copyIDinPhi << G4endl; }
+    if (verboseLevel > 0) {
+      G4cout << " Energy added to fCellID " << copyIDinZ << " " << copyIDinPhi << G4endl;
+    }
   }
 
   return true;
@@ -115,27 +110,25 @@ G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05CalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
+void RE05CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection( HCID, fCalCollection );
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, fCalCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05CalorimeterSD::clear()
-{} 
+void RE05CalorimeterSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05CalorimeterSD::DrawAll()
-{} 
+void RE05CalorimeterSD::DrawAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05CalorimeterSD::PrintAll()
-{} 
+void RE05CalorimeterSD::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

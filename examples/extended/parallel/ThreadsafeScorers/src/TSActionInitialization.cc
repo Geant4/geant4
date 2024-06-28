@@ -38,6 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TSActionInitialization.hh"
+
 #include "TSDetectorConstruction.hh"
 #include "TSPrimaryGeneratorAction.hh"
 #include "TSRunAction.hh"
@@ -55,11 +56,17 @@ TSActionInitialization* TSActionInitialization::Instance()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSActionInitialization::TSActionInitialization() { fgInstance = this; }
+TSActionInitialization::TSActionInitialization()
+{
+  fgInstance = this;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSActionInitialization::~TSActionInitialization() { fgInstance = 0; }
+TSActionInitialization::~TSActionInitialization()
+{
+  fgInstance = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -121,6 +121,8 @@ private:
   std::vector<G4double> temp;
 
   G4double elimit;
+  G4double lowElimit;
+  G4double loglowElimit;
 
   G4bool isInitializer{false};
 
@@ -134,7 +136,7 @@ inline
 const G4PhysicsVector* G4NeutronInelasticXS::GetPhysicsVector(G4int Z)
 {
   const G4PhysicsVector* pv = data->GetElementData(Z);
-  if(pv == nullptr) { 
+  if (pv == nullptr) { 
     InitialiseOnFly(Z);
     pv = data->GetElementData(Z);
   }

@@ -41,15 +41,6 @@
 #include <list>
 
 //------------------------------------------------------------------
-G4PartialPhantomParameterisation::G4PartialPhantomParameterisation()
-{
-}
-
-
-//------------------------------------------------------------------
-G4PartialPhantomParameterisation::~G4PartialPhantomParameterisation() = default;
-
-//------------------------------------------------------------------
 void G4PartialPhantomParameterisation::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 {

@@ -30,36 +30,37 @@
 
 #include "G4VBasicShell.hh"
 
-typedef void* (*Func_t)(void *);  // for thread function
+typedef void* (*Func_t)(void*);  // for thread function
 
 class G4MPImanager;
 class G4VUIshell;
 
-class G4VMPIsession : public G4VBasicShell {
-public:
-  G4VMPIsession();
-  ~G4VMPIsession();
+class G4VMPIsession : public G4VBasicShell
+{
+  public:
+    G4VMPIsession();
+    ~G4VMPIsession();
 
-  virtual void PauseSessionStart(const G4String& msg);
+    virtual void PauseSessionStart(const G4String& msg);
 
-  virtual G4int ReceiveG4cout(const G4String& coutString);
-  virtual G4int ReceiveG4cerr(const G4String& cerrString);
+    virtual G4int ReceiveG4cout(const G4String& coutString);
+    virtual G4int ReceiveG4cerr(const G4String& cerrString);
 
-protected:
-  G4MPImanager* g4mpi_;
+  protected:
+    G4MPImanager* g4mpi_;
 
-  // MPI node info (cache)
-  G4bool is_master_;
-  G4bool is_slave_;
-  G4int rank_;
+    // MPI node info (cache)
+    G4bool is_master_;
+    G4bool is_slave_;
+    G4int rank_;
 
-  G4int ExecCommand(const G4String& acommand);
-  G4String TruncateCommand(const G4String& command) const;
-  G4String BypassCommand(const G4String& command) const;
+    G4int ExecCommand(const G4String& acommand);
+    G4String TruncateCommand(const G4String& command) const;
+    G4String BypassCommand(const G4String& command) const;
 
-  // for help operation
-  virtual G4bool GetHelpChoice(G4int& aval);
-  virtual void ExitHelp() const;
+    // for help operation
+    virtual G4bool GetHelpChoice(G4int& aval);
+    virtual void ExitHelp() const;
 };
 
 #endif

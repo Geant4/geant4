@@ -64,6 +64,7 @@
 #include "G4ionIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4NuclearStopping.hh"
 
 // standard models
 #include "G4LivermorePhotoElectricModel.hh"
@@ -536,7 +537,11 @@ G4EmDNABuilder::ConstructDNAIonPhysics(const G4double emaxIonDNA,
   mod->SetHighEnergyLimit(emaxIonDNA);
   theDNAIoni->AddEmModel(-1, mod, reg);
 
-  FindOrBuildCapture(0.1*CLHEP::keV, part);
+  // *** NIEL ***
+  FindOrBuildNuclearStopping(part, CLHEP::MeV);
+
+  // *** Tracking cut ***
+  FindOrBuildCapture(1*CLHEP::keV, part);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -605,6 +610,8 @@ G4EmDNABuilder::ConstructDNALightIonPhysics(G4ParticleDefinition* part,
     modDCD->SetHighEnergyLimit(emax);
     theDNAChargeDecrease->AddEmModel(-1, modDCD, reg);
   }
+
+  // *** Tracking cut ***
   FindOrBuildCapture(1*CLHEP::keV, part);
 }
 
@@ -750,7 +757,7 @@ G4EmDNABuilder::FindOrBuildCapture(const G4double elim, G4ParticleDefinition* pa
 {
   auto p = G4PhysListUtil::FindProcess(part, -1);
   G4LowECapture* ptr = dynamic_cast<G4LowECapture*>(p);
-  if(nullptr == ptr) { 
+  if (nullptr == ptr) { 
     ptr = new G4LowECapture(elim);
     auto mng = part->GetProcessManager();
     mng->AddDiscreteProcess(ptr);
@@ -758,4 +765,19 @@ G4EmDNABuilder::FindOrBuildCapture(const G4double elim, G4ParticleDefinition* pa
   return ptr;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNABuilder::FindOrBuildNuclearStopping(G4ParticleDefinition* part,
+                                                const G4double elim)
+{
+  auto p = G4PhysListUtil::FindProcess(part, fNuclearStopping);
+  auto ptr = dynamic_cast<G4NuclearStopping*>(p);
+  if (nullptr == ptr) {
+    ptr = new G4NuclearStopping();
+  }
+  ptr->SetMaxKinEnergy(elim);
+  auto ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  ph->RegisterProcess(ptr, part);
+}
+  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

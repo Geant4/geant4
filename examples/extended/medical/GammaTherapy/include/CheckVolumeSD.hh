@@ -40,34 +40,31 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4VSensitiveDetector.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
 #include "G4Step.hh"
+#include "G4TouchableHistory.hh"
+#include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class CheckVolumeSD : public G4VSensitiveDetector
 {
-public: 
+  public:
+    CheckVolumeSD(const G4String&);
+    virtual ~CheckVolumeSD();
 
-  CheckVolumeSD(const G4String&);
-  virtual ~CheckVolumeSD();
+    void Initialize(G4HCofThisEvent*);
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+    void EndOfEvent(G4HCofThisEvent*);
+    void clear();
+    void PrintAll();
 
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  void EndOfEvent(G4HCofThisEvent*);
-  void clear();
-  void PrintAll();
-
-private:
-
-  CheckVolumeSD & operator=(const CheckVolumeSD &right);
-  CheckVolumeSD(const CheckVolumeSD&);
+  private:
+    CheckVolumeSD& operator=(const CheckVolumeSD& right);
+    CheckVolumeSD(const CheckVolumeSD&);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

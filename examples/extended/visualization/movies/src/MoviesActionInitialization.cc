@@ -31,6 +31,8 @@
 
 #include "MoviesPrimaryGeneratorAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void MoviesActionInitialization::Build() const
 {
   SetUserAction(new MoviesPrimaryGeneratorAction);

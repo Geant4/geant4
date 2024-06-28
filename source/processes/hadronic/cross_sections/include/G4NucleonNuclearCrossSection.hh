@@ -29,7 +29,8 @@
 // Preprint JINR P2-89-770, p. 12, Dubna 1989 (scanned version from KEK)
 // Based on G. Folger version of G4PiNuclearCrossSection class
 //
-// Modified: V.Ivanchenko 
+// Modified:
+// 05.03.2024 V.Ivanchenko removed obsolete methods and calls
 //
 
 #ifndef G4NucleonNuclearCrossSection_h
@@ -46,28 +47,33 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
   
-  explicit G4NucleonNuclearCrossSection();
-  ~G4NucleonNuclearCrossSection() override;
+  G4NucleonNuclearCrossSection();
+  ~G4NucleonNuclearCrossSection() override = default;
     
-  static const char* Default_Name() {return "BarashenkovNucleonXS";}
+  static const char* Default_Name() { return "BarashenkovNucleonXS"; }
 
   G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
 			     G4int Z, const G4Material* mat) final;
 
+  // return inelastic x-section
   G4double GetElementCrossSection(const G4DynamicParticle* aParticle, 
                                   G4int Z, const G4Material* mat=nullptr) final;
 
-  void BuildPhysicsTable(const G4ParticleDefinition&) final;
-
   void CrossSectionDescription(std::ostream&) const final;
 
-  inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
+  // return elastic x-section
+  inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle,
 					 G4int Z);
 
-  inline G4double GetTotalXsc()     { return fTotalXsc;   };
+  // access methods should be called after ComputeCrossSection(...)
+  inline G4double GetTotalXsc()     { return fTotalXsc; };
   inline G4double GetInelasticXsc() { return fInelasticXsc; };
   inline G4double GetElasticXsc()   { return fElasticXsc; };
-  
+
+  G4NucleonNuclearCrossSection& operator=
+  (const G4NucleonNuclearCrossSection &right) = delete;
+  G4NucleonNuclearCrossSection(const G4NucleonNuclearCrossSection&) = delete;
+
 private:
 
   void ComputeCrossSections(const G4ParticleDefinition*, 
@@ -75,13 +81,9 @@ private:
 
   G4ComponentBarNucleonNucleusXsc* fBarash;
 
-  const G4ParticleDefinition* theProton;
-  const G4ParticleDefinition* theNeutron;
-
-  G4double fTotalXsc;
-  G4double fInelasticXsc;
-  G4double fElasticXsc;
-
+  G4double fTotalXsc{0.0};
+  G4double fInelasticXsc{0.0};
+  G4double fElasticXsc{0.0};
 };
 
 inline

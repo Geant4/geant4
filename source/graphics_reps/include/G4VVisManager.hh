@@ -87,6 +87,7 @@ class G4VTrajectory;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4VisAttributes;
+class G4Event;
 
 class G4VVisManager {
 
@@ -227,6 +228,9 @@ public: // With description
   // This method is invoked by G4WorkerRunManager
 
 #endif
+
+  virtual void EventReadyForVis(const G4Event*) {}
+  // This is invoked by G4SubEvtRunManager
 
 protected:
 

@@ -42,22 +42,22 @@
 //----------------------------------------------------------------------------
 //
 #ifndef CRMCProtonBuilder_h
-#define CRMCProtonBuilder_h 
+#define CRMCProtonBuilder_h
 
-#include "globals.hh"
 #include "G4VProtonBuilder.hh"
+#include "globals.hh"
 
 class HadronicInelasticModelCRMC;
 
-
-class CRMCProtonBuilder : public G4VProtonBuilder {
+class CRMCProtonBuilder : public G4VProtonBuilder
+{
   public:
-    CRMCProtonBuilder( const G4int crmcModelId, const std::string & crmcModelName );
+    CRMCProtonBuilder(const G4int crmcModelId, const std::string& crmcModelName);
     virtual ~CRMCProtonBuilder();
-    virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4HadronInelasticProcess* aP ) final override;
-    inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
-    inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
+    virtual void Build(G4HadronElasticProcess* aP) final override;
+    virtual void Build(G4HadronInelasticProcess* aP) final override;
+    inline void SetMinEnergy(G4double aM) final override { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) final override { fMax = aM; }
     using G4VProtonBuilder::Build;  // Prevent compiler warning
   private:
     HadronicInelasticModelCRMC* fModel;

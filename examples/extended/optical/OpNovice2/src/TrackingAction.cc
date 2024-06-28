@@ -39,10 +39,9 @@
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   // Create trajectory only for track in tracking region
-  auto trackInfo = (TrackInformation*) (aTrack->GetUserInformation());
+  auto trackInfo = (TrackInformation*)(aTrack->GetUserInformation());
 
-  if(!trackInfo)
-  {
+  if (!trackInfo) {
     trackInfo = new TrackInformation(aTrack);
     trackInfo->SetIsFirstTankX(true);
     aTrack->SetUserInformation(trackInfo);
@@ -55,14 +54,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
-  if(secondaries)
-  {
-    auto info = (TrackInformation*) (aTrack->GetUserInformation());
+  if (secondaries) {
+    auto info = (TrackInformation*)(aTrack->GetUserInformation());
     size_t nSeco = secondaries->size();
-    if(nSeco > 0)
-    {
-      for(size_t i = 0; i < nSeco; ++i)
-      {
+    if (nSeco > 0) {
+      for (size_t i = 0; i < nSeco; ++i) {
         auto infoNew = new TrackInformation(info);
         (*secondaries)[i]->SetUserInformation(infoNew);
       }

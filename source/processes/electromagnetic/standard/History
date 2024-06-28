@@ -6,14 +6,46 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-06-06 V.Ivanchenko (emstand-V11-01-26)
+## 2024-06-06 I.Semeniouk & D.Bernard (emstand-V11-02-09)
+- new G4OrePowellAtRestModel - Orel & Powell orto positronium decay model AtRest
+- new G4SimpleoPsAtRestModel - simples orto para positronium chooser
+
+## 2024-06-06 V.Ivanchenko (emstand-V11-02-08)
 - G4BetheHeitler5DModel - fixed computation of sinTheta
 
-## 2024-05-28 V.Ivanchenko
+## 2024-06-04 Gabriele Cosmo (emstand-V11-02-07)
+- Fixed compilation warning on macOS/XCode for implicit type conversion
+  on G4eplusAnnihilation.
+
+## 2024-05-28 V.Ivanchenko (emstand-V11-02-06)
 - G4BetheHeitler5DModel - added checks on arguments of G4Exp in SampleSecondaries(..)
     method to avoid FPE problems in the case of -O3 optimisation
+- G4eplusAnnihilation - use more const class members, changed model ID definition
+    for produced tracks
 
-## 2024-01-23 V.Ivanchenko (emstand-V11-01-25)
+## 2024-05-23 V.Ivanchenko (emstand-V11-02-05)
+- G4UrbanMscModel - L.Urban optimized DistanceToBoundary step limitation
+    algorithm currently used only in Opt3 EM physics
+
+## 2024-05-14 V.Ivanchenko (emstand-V11-02-04)
+- G4SimplePositronAtRestModel, G4AllisonAtRestModel - new classes to sample
+    positron annihilation
+- G4eeToTwoGammaModel - cosmetic change
+- G4eplusTo2GammaOKVIModel - removed sampling at rest
+- G4eplusAnnihilation - added selection of AtRest model, implement ApplyCuts
+    for AtRest, implement choice of positron annihilation model at rest
+
+## 2024-02-20 V.Ivanchenko (emstand-V11-02-03)
+- G4eeToTwoGammaModel - fixed precision lost in sampling of final state
+    for the very high energy (ATLAS report)
+
+## 2024-02-06 V.Ivanchenko (emstand-V11-02-02)
+- G4IonFluctuations - disable previous MR - return to 11.2 version
+
+## 2024-01-27 V.Ivanchenko (emstand-V11-02-01)
+- G4IonFluctuations - fixed problem report #2580 - ion fluctuations at high energy
+
+## 2024-01-23 V.Ivanchenko (emstand-V11-02-00)
 - G4IonICRU73Data - fixed bug #2586 for the case if target material has
     an element with Z>92, improve debug printouts. In the Lindhard-Sorensen 
     model to compute dEdx the first try is to take it from ICRU73 or ICRU90 

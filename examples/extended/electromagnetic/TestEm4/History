@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-22 Vladimir Ivantchenko (testem4-V11-02-01)
+- PhysicsLists - fixed annoyng warnings on decay table,
+    removed obsolete methods.
+
+## 2024-04-05 Michel Maire (testem4-V11-02-00)
+- Run.cc: remove Tabs
+- Readme: document verbose.mac
+
 ## 2023-04-06 Michel Maire (testem4-V11-01-00)
 - revision of all headers
 - RunAction: print run conditions and histograms statistic

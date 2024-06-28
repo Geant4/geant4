@@ -31,29 +31,26 @@
 #include "RE06PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE06PrimaryGeneratorAction::RE06PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0),
-   fSerial(false)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fSerial(false)
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
-  
+  fParticleGun = new G4ParticleGun(n_particle);
+
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="mu-");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "mu-");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(100.*GeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(100. * GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,17 +64,13 @@ RE06PrimaryGeneratorAction::~RE06PrimaryGeneratorAction()
 
 void RE06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(fSerial)
-  {
-    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-3.5*m));
+  if (fSerial) {
+    fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -3.5 * m));
     fParticleGun->GeneratePrimaryVertex(anEvent);
   }
-  else
-  {
-    for(G4int i=0;i<3;i++)
-    {
-      fParticleGun
-        ->SetParticlePosition(G4ThreeVector(0.,G4double(i-1)*m,-1.5*m));
+  else {
+    for (G4int i = 0; i < 3; i++) {
+      fParticleGun->SetParticlePosition(G4ThreeVector(0., G4double(i - 1) * m, -1.5 * m));
       fParticleGun->GeneratePrimaryVertex(anEvent);
     }
   }

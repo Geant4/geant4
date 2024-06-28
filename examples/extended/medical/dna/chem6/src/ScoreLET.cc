@@ -43,11 +43,11 @@
 /// \brief Implementation of the ScoreLET class
 
 #include "ScoreLET.hh"
+
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 
-ScoreLET::ScoreLET(G4String name)
-  :G4VPrimitiveScorer(name),G4UImessenger(),fEvtMap(0)
+ScoreLET::ScoreLET(G4String name) : G4VPrimitiveScorer(name), G4UImessenger(), fEvtMap(0)
 {
   fLET = 0;
   fEdep = 0;
@@ -73,48 +73,48 @@ ScoreLET::~ScoreLET()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreLET::SetNewValue(G4UIcommand* command, G4String newValue){
-  if(command == fpCutoff) fCutoff = atof(newValue);
+void ScoreLET::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fpCutoff) fCutoff = atof(newValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool ScoreLET::ProcessHits(G4Step* aStep,G4TouchableHistory* /*TH*/)
+G4bool ScoreLET::ProcessHits(G4Step* aStep, G4TouchableHistory* /*TH*/)
 {
   // In order to follow the primary track
   // regardless charge increasing or decreasing
-  if(aStep->GetTrack()->GetTrackID() != 1 &&
-     aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding() != 11){
-    G4int subType = aStep->GetTrack()->GetCreatorProcess()
-                    ->GetProcessSubType();
-    if(subType == 56 || subType == 57){
-       fTrackID = aStep->GetTrack()->GetTrackID();
+  if (aStep->GetTrack()->GetTrackID() != 1
+      && aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding() != 11)
+  {
+    G4int subType = aStep->GetTrack()->GetCreatorProcess()->GetProcessSubType();
+    if (subType == 56 || subType == 57) {
+      fTrackID = aStep->GetTrack()->GetTrackID();
     }
   }
 
   // Ignore the step if it is not primary.
-  if(aStep->GetTrack()->GetTrackID() != fTrackID) return false;
-  else{
-    fStepL += aStep->GetStepLength()/um;
-    fEdep += aStep->GetTotalEnergyDeposit()/keV;
+  if (aStep->GetTrack()->GetTrackID() != fTrackID)
+    return false;
+  else {
+    fStepL += aStep->GetStepLength() / um;
+    fEdep += aStep->GetTotalEnergyDeposit() / keV;
 
-    G4int subType = aStep->GetPostStepPoint()->
-                    GetProcessDefinedStep()->GetProcessSubType();
+    G4int subType = aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessSubType();
 
     // Don't add the kinetic energy of primary particle
-    if(subType == 56 || subType == 57) return false;
+    if (subType == 56 || subType == 57) return false;
 
-    const std::vector<const G4Track*>* secondary =
-                                       aStep->GetSecondaryInCurrentStep();
+    const std::vector<const G4Track*>* secondary = aStep->GetSecondaryInCurrentStep();
 
     size_t nbtrk = (*secondary).size();
 
-    if(nbtrk){
-      for(size_t lp=0;lp<nbtrk;lp++){
+    if (nbtrk) {
+      for (size_t lp = 0; lp < nbtrk; lp++) {
         // Store the kinetic energy of secondaries
         // which less than cutoff energy.
-        if((*secondary)[lp]->GetKineticEnergy()/eV<fCutoff){
-          fEdep += (*secondary)[lp]->GetKineticEnergy()/keV;
+        if ((*secondary)[lp]->GetKineticEnergy() / eV < fCutoff) {
+          fEdep += (*secondary)[lp]->GetKineticEnergy() / keV;
         }
       }
     }
@@ -126,13 +126,14 @@ G4bool ScoreLET::ProcessHits(G4Step* aStep,G4TouchableHistory* /*TH*/)
 
 void ScoreLET::Initialize(G4HCofThisEvent* HCE)
 {
-  fEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(),
-                                     GetName());
+  fEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(), GetName());
 
   fEvtMap->clear();
   fNEvent = 0;
-static G4int HCID = -1;
-  if(HCID < 0) {HCID = GetCollectionID(0);}
+  static G4int HCID = -1;
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*)fEvtMap);
 }
 
@@ -141,9 +142,8 @@ static G4int HCID = -1;
 void ScoreLET::EndOfEvent(G4HCofThisEvent*)
 {
   fLET = fEdep / fStepL;
-  if(!G4RunManager::GetRunManager()->GetCurrentEvent()->IsAborted())
-  {
-    fEvtMap->add(fNEvent,fLET);
+  if (!G4RunManager::GetRunManager()->GetCurrentEvent()->IsAborted()) {
+    fEvtMap->add(fNEvent, fLET);
     fNEvent++;
   }
   fTrackID = 1;

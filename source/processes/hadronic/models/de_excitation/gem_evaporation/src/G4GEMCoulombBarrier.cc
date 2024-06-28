@@ -36,6 +36,7 @@
 G4GEMCoulombBarrier::G4GEMCoulombBarrier(G4int anA, G4int aZ) :
   G4CoulombBarrier(anA, aZ) 
 {
+  g4calc = G4Pow::GetInstance();
   AejectOneThird = g4calc->Z13(anA);
 }
 
@@ -44,7 +45,7 @@ G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes,
 {
   // Calculation of Coulomb potential energy (barrier) for outgoing fragment
   G4double Barrier = 0.0;
-  if (theZ > 0 && ZRes > 0) {
+  if (theZ > 0) {
 
     G4double CompoundRadius = CalcCompoundRadius(ARes);
     Barrier = CLHEP::elm_coupling * (theZ * ZRes)/CompoundRadius;

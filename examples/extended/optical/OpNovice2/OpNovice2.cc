@@ -31,9 +31,9 @@
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
+#include "FTFP_BERT.hh"
 #include "SteppingVerbose.hh"
 
-#include "FTFP_BERT.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4OpticalPhysics.hh"
 #include "G4RunManagerFactory.hh"
@@ -49,8 +49,7 @@ int main(int argc, char** argv)
 {
   // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if(argc == 1)
-    ui = new G4UIExecutive(argc, argv);
+  if (argc == 1) ui = new G4UIExecutive(argc, argv);
 
   // application-specific SteppingVerbose
   auto steppingVerbose = new SteppingVerbose;
@@ -76,17 +75,15 @@ int main(int argc, char** argv)
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(ui)
-  {
+  if (ui) {
     // interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
+  else {
     // batch mode
-    G4String command  = "/control/execute ";
+    G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command + fileName);
   }

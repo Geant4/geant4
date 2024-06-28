@@ -25,7 +25,14 @@
 //
 // author: hoang tran
 
+#ifndef PULSEACTIONMESSENGER_H
+#define PULSEACTIONMESSENGER_H 1
+
 #include "G4UImessenger.hh"
+
+#include <memory>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4UIdirectory;
 
@@ -33,21 +40,20 @@ class G4UIcmdWithABool;
 
 class PulseAction;
 
-#ifndef PULSEACTIONMESSENGER_H
-#define PULSEACTIONMESSENGER_H
+class PulseActionMessenger : public G4UImessenger
+{
+  public:
+    explicit PulseActionMessenger(PulseAction*);
 
-class PulseActionMessenger : public G4UImessenger {
-public:
-  explicit PulseActionMessenger(PulseAction *);
+    ~PulseActionMessenger() override;
 
-  ~PulseActionMessenger() override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  void SetNewValue(G4UIcommand *, G4String) override;
-
-private:
-  PulseAction *fpPulse = nullptr;
-  std::unique_ptr<G4UIcmdWithABool> fListCmd;
+  private:
+    PulseAction* fpPulse = nullptr;
+    std::unique_ptr<G4UIcmdWithABool> fListCmd;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif

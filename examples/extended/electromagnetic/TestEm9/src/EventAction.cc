@@ -31,6 +31,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
+
 #include "HistoManager.hh"
 
 #include "G4UImanager.hh"
@@ -38,10 +39,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction():
-  G4UserEventAction(),
-  fVerbose(0)
-{}
+EventAction::EventAction() : G4UserEventAction(), fVerbose(0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,14 +52,14 @@ void EventAction::BeginOfEventAction(const G4Event* event)
 
   // Switch on verbose mode
 
-  if(hi->FirstEventToDebug() == n) {
+  if (hi->FirstEventToDebug() == n) {
     fVerbose = 2;
     hi->SetVerbose(2);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
   }
 
   // Switch off verbose mode
-  if(hi->LastEventToDebug() == n+1) {
+  if (hi->LastEventToDebug() == n + 1) {
     fVerbose = 0;
     hi->SetVerbose(0);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
@@ -74,9 +72,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
 {
   (HistoManager::GetPointer())->EndOfEvent();
 
-  if(fVerbose > 0) {
-    G4cout << "EventAction: Event # " << event->GetEventID() 
-           << " ended" << G4endl;
+  if (fVerbose > 0) {
+    G4cout << "EventAction: Event # " << event->GetEventID() << " ended" << G4endl;
   }
 }
 

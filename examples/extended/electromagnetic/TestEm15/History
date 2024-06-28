@@ -4,6 +4,8 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-16 Michel Maire (testem15-V11-02-00)
+ - SteppingAction.cc: remove a TABS
 
 ## 2022-12-15 Igor Semeniouk (testem15-V11-01-00)
  - README, README.gamma - changes from D.Bernard, cleanup

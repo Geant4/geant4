@@ -48,12 +48,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "globals.hh"
-#include <vector>
-#include "G4DynamicParticle.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
+#include "G4DynamicParticle.hh"
 #include "G4Track.hh"
+#include "G4VPhysicalVolume.hh"
+#include "globals.hh"
+
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -61,102 +62,98 @@ class Histo;
 
 class HistoManager
 {
+  public:
+    // With description
 
-public:
-  // With description
+    static HistoManager* GetPointer();
 
-  static HistoManager* GetPointer();
+  private:
+    HistoManager();
 
-private:
+  public:  // Without description
+    ~HistoManager();
 
-  HistoManager();
+    void BookHisto();
 
-public: // Without description
+    void BeginOfRun();
+    void EndOfRun(G4int runID);
 
-  ~HistoManager();
+    void BeginOfEvent();
+    void EndOfEvent();
 
-  void BookHisto();
+    void ScoreNewTrack(const G4Track* aTrack);
+    void AddEnergy(G4double edep, G4int idx, G4int copyNo);
 
-  void BeginOfRun();
-  void EndOfRun(G4int runID);
+    void AddDeltaElectron(const G4DynamicParticle*);
+    void AddPhoton(const G4DynamicParticle*);
 
-  void BeginOfEvent();
-  void EndOfEvent();
+    inline void ResetTrackLength() { fTrackLength = 0.0, fTrackAbs = true; };
+    inline void AddPositron(const G4DynamicParticle*) { ++fPosit; };
+    inline void SetVerbose(G4int val) { fVerbose = val; };
+    inline G4int GetVerbose() const { return fVerbose; };
+    inline void SetHistoNumber(G4int val) { fNHisto = val; };
 
-  void ScoreNewTrack(const G4Track* aTrack);
-  void AddEnergy(G4double edep, G4int idx, G4int copyNo);
+    inline void SetFirstEventToDebug(G4int val) { fEvt1 = val; };
+    inline G4int FirstEventToDebug() const { return fEvt1; };
+    inline void SetLastEventToDebug(G4int val) { fEvt2 = val; };
+    inline G4int LastEventToDebug() const { return fEvt2; };
 
-  void AddDeltaElectron(const G4DynamicParticle*);
-  void AddPhoton(const G4DynamicParticle*);
+    inline void SetMaxEnergy(G4double val) { fMaxEnergy = val; };
+    inline G4double GetMaxEnergy() const { return fMaxEnergy; };
+    inline void AddStep() { fStep += 1.0; };
 
-  inline void ResetTrackLength() {fTrackLength = 0.0, fTrackAbs = true;};
-  inline void AddPositron(const G4DynamicParticle*) {++fPosit;};
-  inline void SetVerbose(G4int val) {fVerbose = val;};
-  inline G4int GetVerbose() const {return fVerbose;};
-  inline void SetHistoNumber(G4int val) {fNHisto = val;};
+    // Acceptance parameters
+    inline void SetBeamEnergy(G4double val) { fBeamEnergy = val; };
 
-  inline void SetFirstEventToDebug(G4int val) {fEvt1 = val;};
-  inline G4int FirstEventToDebug() const {return fEvt1;};
-  inline void SetLastEventToDebug(G4int val) {fEvt2 = val;};
-  inline G4int LastEventToDebug() const {return fEvt2;};
+    void SetEdepAndRMS(G4int, const G4ThreeVector&);
 
-  inline void SetMaxEnergy(G4double val) {fMaxEnergy = val;};
-  inline G4double  GetMaxEnergy() const {return fMaxEnergy;};
-  inline void AddStep() {fStep += 1.0;};
+  private:
+    // MEMBERS
+    static HistoManager* fManager;
 
-  // Acceptance parameters
-  inline void SetBeamEnergy(G4double val) {fBeamEnergy = val;};
+    const G4ParticleDefinition* fGamma;
+    const G4ParticleDefinition* fElectron;
+    const G4ParticleDefinition* fPositron;
 
-  void SetEdepAndRMS(G4int, const G4ThreeVector&);
+    Histo* fHisto;
 
-private:
+    G4int fNHisto;
+    G4int fVerbose;
+    G4int fEvt1;
+    G4int fEvt2;
 
-  // MEMBERS
-  static HistoManager* fManager;
+    G4double fBeamEnergy;
+    G4double fMaxEnergy;
+    G4double fMaxEnergyAbs;
 
-  const G4ParticleDefinition* fGamma;
-  const G4ParticleDefinition* fElectron;
-  const G4ParticleDefinition* fPositron;
+    G4double fTrackLength;
+    G4double fStep;
+    G4bool fTrackAbs;  // Track is in absorber
+    G4int fEvt;
+    G4int fElec;
+    G4int fPosit;
+    G4int fGam;
+    G4int fLowe;
+    G4int fBinsE, fBinsEA, fBinsED;
 
-  Histo*    fHisto;
+    G4double fEabs1, fEabs2, fEabs3, fEabs4;
+    G4double fE[25];
+    G4DataVector fEvertex;
+    G4DataVector fNvertex;
+    G4DataVector fBrem;
+    G4DataVector fPhot;
+    G4DataVector fComp;
+    G4DataVector fConv;
 
-  G4int fNHisto;
-  G4int fVerbose;
-  G4int fEvt1;
-  G4int fEvt2;
-
-  G4double fBeamEnergy;
-  G4double fMaxEnergy;
-  G4double fMaxEnergyAbs;
-
-  G4double fTrackLength;
-  G4double fStep;
-  G4bool fTrackAbs;        // Track is in absorber
-  G4int fEvt;
-  G4int fElec;
-  G4int fPosit;
-  G4int fGam;
-  G4int fLowe;
-  G4int fBinsE, fBinsEA, fBinsED;
-
-  G4double fEabs1, fEabs2, fEabs3, fEabs4;
-  G4double     fE[25];
-  G4DataVector fEvertex;
-  G4DataVector fNvertex;
-  G4DataVector fBrem;
-  G4DataVector fPhot;
-  G4DataVector fComp;
-  G4DataVector fConv;
-
-  G4double  fEdeptrue[3];
-  G4double  fRmstrue[3];
-  G4double  fLimittrue[3];
-  G4double  fEdep[6];
-  G4double  fErms[6];
-  G4double  fEdeptr[6];
-  G4double  fErmstr[6];
-  G4int     fStat[6];
-  G4int     fNmax;
+    G4double fEdeptrue[3];
+    G4double fRmstrue[3];
+    G4double fLimittrue[3];
+    G4double fEdep[6];
+    G4double fErms[6];
+    G4double fEdeptr[6];
+    G4double fErmstr[6];
+    G4int fStat[6];
+    G4int fNmax;
 };
 
 #endif

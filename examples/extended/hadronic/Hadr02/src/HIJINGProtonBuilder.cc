@@ -32,38 +32,36 @@
 //
 
 #ifdef G4_USE_HIJING
-#include "HIJINGProtonBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4HadronicParameters.hh"
-#include "G4SystemOfUnits.hh"
+#  include "HIJINGProtonBuilder.hh"
+
+#  include "G4HadronicParameters.hh"
+#  include "G4ParticleDefinition.hh"
+#  include "G4ParticleTable.hh"
+#  include "G4ProcessManager.hh"
+#  include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HIJINGProtonBuilder::HIJINGProtonBuilder() 
+HIJINGProtonBuilder::HIJINGProtonBuilder()
 {
-  fMin = 0*MeV;
+  fMin = 0 * MeV;
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   fModel = new G4HIJING_Model();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HIJINGProtonBuilder::~HIJINGProtonBuilder() 
-{}
+HIJINGProtonBuilder::~HIJINGProtonBuilder() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HIJINGProtonBuilder::Build(G4HadronElasticProcess * )
-{}
+void HIJINGProtonBuilder::Build(G4HadronElasticProcess*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HIJINGProtonBuilder::Build(G4HadronInelasticProcess * aP)
+void HIJINGProtonBuilder::Build(G4HadronInelasticProcess* aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);
   aP->RegisterMe(fModel);
 }
-#endif //G4_USE_HIJING
-
+#endif  // G4_USE_HIJING

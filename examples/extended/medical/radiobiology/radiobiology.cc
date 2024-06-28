@@ -52,13 +52,13 @@
 #include "RBE.hh"
 #include <time.h>
 
-//#ifdef G4VIS_USE
+// #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-//#endif
+// #endif
 
-//#ifdef G4UI_USE
+// #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-//#endif
+// #endif
 
 using namespace RadioBio;
 
@@ -121,10 +121,10 @@ int main(int argc, char** argv)
   G4ScoringManager::GetScoringManager();
 
   // Initialise the Visualisation
-  //#ifdef G4VIS_USE
+  // #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-  //#endif
+  // #endif
 
   //** Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

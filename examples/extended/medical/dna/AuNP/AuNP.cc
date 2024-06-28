@@ -27,82 +27,85 @@
 /// \brief Main program of the medical/dna/AuNP example
 //
 // $Id: w.cc 85260 2014-10-27 08:53:35Z gcosmo $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4Types.hh"
 
-//#ifdef G4MULTITHREADED
-//#include "G4MTRunManager.hh"
-//#else
-//#include "G4RunManager.hh"
-//#endif
+// #ifdef G4MULTITHREADED
+// #include "G4MTRunManager.hh"
+// #else
+// #include "G4RunManager.hh"
+// #endif
 
-#include "Randomize.hh"
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-int main(int argc,char** argv) {
-  //delete output file
-  remove ("outputAuNP.root");
+#include "G4RunManagerFactory.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
-  //choose the Random engine
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+int main(int argc, char** argv)
+{
+  // delete output file
+  remove("outputAuNP.root");
+
+  // choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  //detect interactive mode (if no arguments) and define UI session
+  // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
-auto* runManager = G4RunManagerFactory::CreateRunManager();
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // Number of threads can be defined via 3rd argument
-  if (argc==4) {
+  if (argc == 4) {
     G4int nThreads = G4UIcommand::ConvertToInt(argv[3]);
     runManager->SetNumberOfThreads(nThreads);
   }
-  G4cout << "##### AuNP started for " << runManager->GetNumberOfThreads()
-         << " threads" << " #####" << G4endl;
+  G4cout << "##### AuNP started for " << runManager->GetNumberOfThreads() << " threads"
+         << " #####" << G4endl;
 
-  //set mandatory initialization classes
+  // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction;
   runManager->SetUserInitialization(det);
-     
+
   PhysicsList* phys = new PhysicsList;
   runManager->SetUserInitialization(phys);
 
   runManager->SetUserInitialization(new ActionInitialization());
 
-  //runManager->Initialize(); //execute in macro file
+  // runManager->Initialize(); //execute in macro file
 
-  //initialize visualization
+  // initialize visualization
   G4VisManager* visManager = nullptr;
 
-  //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)  {
-    //interactive mode
+  if (ui) {
+    // interactive mode
     visManager = new G4VisExecutive;
     visManager->Initialize();
     ui->SessionStart();
     delete ui;
-  } else  {
-    //batch mode
+  }
+  else {
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
 
-  //job termination
+  // job termination
   delete visManager;
   delete runManager;
 

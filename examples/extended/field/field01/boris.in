@@ -10,9 +10,6 @@
 #
 # /field/setMinStep 0.1 mm  
 #
-# Initialise the field classes - parameters, stepper, ...
-#
-# /field/update
 #
 # ******  Initialisation of classes for field propagation is done
 #
@@ -40,7 +37,6 @@
 #
 # Change the value of the B-field
 #
-/field/update
 /field/setField 0.1 0 0 tesla
 /run/beamOn 1
 #

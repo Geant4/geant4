@@ -54,11 +54,7 @@ G4double G4BGGNucleonElasticXS::theGlauberFacP[93] = {0.0};
 G4double G4BGGNucleonElasticXS::theCoulombFacP[93] = {0.0};
 G4double G4BGGNucleonElasticXS::theGlauberFacN[93] = {0.0};
 G4double G4BGGNucleonElasticXS::theCoulombFacN[93] = {0.0};
-G4int    G4BGGNucleonElasticXS::theA[93] = {0};
-
-#ifdef G4MULTITHREADED
-G4Mutex G4BGGNucleonElasticXS::nucleonElasticXSMutex = G4MUTEX_INITIALIZER;
-#endif
+G4int G4BGGNucleonElasticXS::theA[93] = {0};
 
 G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
  : G4VCrossSectionDataSet("BarashenkovGlauberGribov") 
@@ -66,14 +62,15 @@ G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
   fLowEnergy = 14.0*MeV;
-  fNucleon = nullptr;
-  fGlauber = nullptr;
-  fHadron  = nullptr;
+  fNucleon = new G4NucleonNuclearCrossSection();
+  fGlauber = new G4ComponentGGHadronNucleusXsc();
+  fHadron = new G4HadronNucleonXsc();
 
-  theProton= G4Proton::Proton();
+  theProton = G4Proton::Proton();
   isProton = (theProton == p);
-  isMaster = false;
   SetForAllAtomsAndEnergies(true);
+
+  if (0 == theA[0]) { Initialise(); } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,7 +123,8 @@ G4BGGNucleonElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
       cross = fNucleon->GetElasticCrossSection(dp, Z);
     }
   }
-  if(verboseLevel > 1) {
+#ifdef G4VERBOSE
+  if (verboseLevel > 1) {
     G4cout << "G4BGGNucleonElasticXS::GetElementCrossSection  for "
            << dp->GetDefinition()->GetParticleName()
            << "  Ekin(GeV)= " << dp->GetKineticEnergy()/CLHEP::GeV
@@ -134,6 +132,7 @@ G4BGGNucleonElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
            << " XS(b)= " << cross/barn 
            << G4endl;
   }
+#endif
   return cross;
 }
 
@@ -141,7 +140,7 @@ G4BGGNucleonElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
 
 G4double
 G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp, 
-                                          G4int Z, G4int A, 
+                                          G4int, G4int A, 
                                           const G4Isotope*,
                                           const G4Element*,
                                           const G4Material*)
@@ -151,14 +150,16 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
                               dp->GetKineticEnergy());
   G4double cross = A*fHadron->GetElasticHadronNucleonXsc();
 
-  if(verboseLevel > 1) {
+#ifdef G4VERBOSE
+  if (verboseLevel > 1) {
     G4cout << "G4BGGNucleonElasticXS::GetIsoCrossSection  for "
            << dp->GetDefinition()->GetParticleName()
            << "  Ekin(GeV)= " << dp->GetKineticEnergy()/CLHEP::GeV
-           << " in nucleus Z= " << Z << "  A= " << A
+           << " in nucleus  Z=1  A=" << A
            << " XS(b)= " << cross/barn 
            << G4endl;
   }
+#endif
   return cross;
 }
 
@@ -166,7 +167,6 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 
 void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(nullptr != fNucleon) { return; }
   if(&p == theProton || &p == G4Neutron::Neutron()) {
     isProton = (theProton == &p);
 
@@ -176,83 +176,59 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
        << p.GetParticleName() << G4endl; 
     G4Exception("G4BGGNucleonElasticXS::BuildPhysicsTable", "had001", 
                 FatalException, ed);
-    return;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4BGGNucleonElasticXS::Initialise()
+{
+  theA[0] = theA[1] = 1;
+  G4ThreeVector mom(0.0,0.0,1.0);
+  G4DynamicParticle dp(theProton, mom, fGlauberEnergy);
+
+  G4NistManager* nist = G4NistManager::Instance();
+  G4double csup, csdn;
+
+  for (G4int iz=2; iz<93; ++iz) {
+    G4int A = G4lrint(nist->GetAtomicMassAmu(iz));
+    theA[iz] = A;
+
+    csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);
+    csdn = fNucleon->GetElasticCrossSection(&dp, iz);
+    theGlauberFacP[iz] = csdn/csup;
   }
 
-  fNucleon = new G4NucleonNuclearCrossSection();
-  fGlauber = new G4ComponentGGHadronNucleusXsc();
-  fHadron  = new G4HadronNucleonXsc();
+  dp.SetDefinition(G4Neutron::Neutron());
+  for (G4int iz=2; iz<93; ++iz) {
+    csup = fGlauber->GetElasticGlauberGribov(&dp, iz, theA[iz]);
+    csdn = fNucleon->GetElasticCrossSection(&dp, iz);
+    theGlauberFacN[iz] = csdn/csup;
 
-  fNucleon->BuildPhysicsTable(p);
-
-  if(0 == theA[0]) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&nucleonElasticXSMutex);
-    if(0 == theA[0]) { 
-#endif
-      isMaster = true;
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&nucleonElasticXSMutex);
-#endif
-  } else {
-    return;
+    if (verboseLevel > 1) { 
+        G4cout << "G4BGGNucleonElasticXS::Initialise Z=" << iz <<  "  A=" << theA[iz] 
+               << " GFactorP=" << theGlauberFacP[iz]
+               << " GFactorN=" << theGlauberFacN[iz] << G4endl;
+    } 
   }
 
-  if(isMaster && 0 == theA[0]) {
-
-    theA[0] = theA[1] = 1;
-    G4ThreeVector mom(0.0,0.0,1.0);
-    G4DynamicParticle dp(theProton, mom, fGlauberEnergy);
-
-    G4NistManager* nist = G4NistManager::Instance();
-    G4double csup, csdn;
-
-    if(verboseLevel > 0) {
-      G4cout << "### G4BGGNucleonElasticXS::Initialise for "
-             << p.GetParticleName() << G4endl;
-    }
-
-    for(G4int iz=2; iz<93; ++iz) {
-      G4int A = G4lrint(nist->GetAtomicMassAmu(iz));
-      theA[iz] = A;
-
-      csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);
-      csdn = fNucleon->GetElasticCrossSection(&dp, iz);
-      theGlauberFacP[iz] = csdn/csup;
-    }
-
-    dp.SetDefinition(G4Neutron::Neutron());
-    for(G4int iz=2; iz<93; ++iz) {
-      csup = fGlauber->GetElasticGlauberGribov(&dp, iz, theA[iz]);
-      csdn = fNucleon->GetElasticCrossSection(&dp, iz);
-      theGlauberFacN[iz] = csdn/csup;
-
-      if(verboseLevel > 0) { 
-        G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
-               << " GFactorP= " << theGlauberFacP[iz]
-               << " GFactorN= " << theGlauberFacN[iz] << G4endl;
-      } 
-    }
-
-    theCoulombFacP[0] = theCoulombFacP[1] = 
+  theCoulombFacP[0] = theCoulombFacP[1] = 
     theCoulombFacN[0] = theCoulombFacN[1] = 1.0; 
-    dp.SetDefinition(theProton);
-    dp.SetKineticEnergy(fLowEnergy);
-    for(G4int iz=2; iz<93; ++iz) {
-      theCoulombFacP[iz] = fNucleon->GetElasticCrossSection(&dp, iz)
-        /CoulombFactor(fLowEnergy, iz);
-    }
-    dp.SetDefinition(G4Neutron::Neutron());
-    for(G4int iz=2; iz<93; ++iz) {
-      theCoulombFacN[iz] = fNucleon->GetElasticCrossSection(&dp, iz)
-        /CoulombFactor(fLowEnergy, iz);
+  dp.SetDefinition(theProton);
+  dp.SetKineticEnergy(fLowEnergy);
+  for (G4int iz=2; iz<93; ++iz) {
+    theCoulombFacP[iz] = fNucleon->GetElasticCrossSection(&dp, iz)
+      /CoulombFactor(fLowEnergy, iz);
+  }
+  dp.SetDefinition(G4Neutron::Neutron());
+  for(G4int iz=2; iz<93; ++iz) {
+    theCoulombFacN[iz] = fNucleon->GetElasticCrossSection(&dp, iz)
+      /CoulombFactor(fLowEnergy, iz);
 
-      if(verboseLevel > 0) {
-        G4cout << "Z= " << iz <<  "  A= " << theA[iz]
-               << " CFactorP= " << theCoulombFacP[iz] 
-               << " CFactorN= " << theCoulombFacN[iz] << G4endl; 
-      }
+    if (verboseLevel > 1) {
+      G4cout << "G4BGGNucleonElasticXS::Initialise Z=" << iz <<  "  A=" << theA[iz]
+	     << " CFactorP=" << theCoulombFacP[iz] 
+	     << " CFactorN=" << theCoulombFacN[iz] << G4endl;
     }
   }
 }
@@ -261,11 +237,8 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 G4double G4BGGNucleonElasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
 {
-  G4double res= 1.0;
-  if(isProton) {
-    res = G4NuclearRadii::CoulombFactor(Z, theA[Z], theProton, kinEnergy);
-  }
-  return res;  
+  return (isProton) ?
+    G4NuclearRadii::CoulombFactor(Z, theA[Z], theProton, kinEnergy) : 1.0;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

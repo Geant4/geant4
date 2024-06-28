@@ -29,36 +29,32 @@
 
 #include "DicomActionInitialization.hh"
 
-#include "DicomActionInitialization.hh"
+#include "DicomEventAction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomRunAction.hh"
-#include "DicomEventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DicomActionInitialization::DicomActionInitialization()
-: G4VUserActionInitialization()
-{  }
+DicomActionInitialization::DicomActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DicomActionInitialization::~DicomActionInitialization()
-{  }
+DicomActionInitialization::~DicomActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DicomActionInitialization::BuildForMaster() const
 {
-    SetUserAction(new DicomRunAction);
+  SetUserAction(new DicomRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DicomActionInitialization::Build() const
 {
-    SetUserAction(new DicomPrimaryGeneratorAction);
-    SetUserAction(new DicomRunAction);
-    SetUserAction(new DicomEventAction);
+  SetUserAction(new DicomPrimaryGeneratorAction);
+  SetUserAction(new DicomRunAction);
+  SetUserAction(new DicomEventAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -34,9 +34,10 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include <vector>
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+
+#include <vector>
 
 class Run;
 class DetectorConstruction;
@@ -45,29 +46,27 @@ class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction: public G4UserRunAction
+class RunAction : public G4UserRunAction
 {
-public:
-  RunAction();
-  ~RunAction();
+  public:
+    RunAction();
+    ~RunAction();
 
-public:
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
-  virtual G4Run* GenerateRun();
+  public:
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
+    virtual G4Run* GenerateRun();
 
-private:
-  const DetectorConstruction* fpDetector;
-  Run*                        fpRun;
-  HistoManager*               fpHistoManager;
+  private:
+    const DetectorConstruction* fpDetector;
+    Run* fpRun;
+    HistoManager* fpHistoManager;
 
-  std::vector<G4String> fSDName;
-  G4int fNazm,fNz;
-  G4int CopyNo(G4int ix, G4int iy, G4int iz)
-               {return iy*fNazm*fNz+ix*fNz+iz;}
+    std::vector<G4String> fSDName;
+    G4int fNazm, fNz;
+    G4int CopyNo(G4int ix, G4int iy, G4int iz) { return iy * fNazm * fNz + ix * fNz + iz; }
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

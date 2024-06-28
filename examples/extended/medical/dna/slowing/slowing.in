@@ -1,33 +1,45 @@
+# Verbosity
 /tracking/verbose 0
 /run/verbose 0
 #
+# MT
 /run/numberOfThreads 8
 #
+# Material
 /slowing/det/setMat G4_WATER
 #
+# Tracking cut
 /slowing/det/setTrackingCut 9 eV
 #
-/slowing/phys/addPhysics  dna	        
+# Physics
+/slowing/phys/addPhysics  dna
 #
+# Initialization
 /run/initialize
 #
+# Atomic deexcitation activation
 /process/em/fluo true
 /process/em/auger true
 /process/em/augerCascade true
-/process/em/deexcitationIgnoreCut true 
+/process/em/deexcitationIgnoreCut true
 #
+# Inactivation of some Geant4-DNA processes
 /process/inactivate e-_G4DNAElastic
 #/process/inactivate e-_G4DNAVibExcitation
 #/process/inactivate e-_G4DNAAttachment
 #
+# Primary particle
 /gun/particle e-
 /gun/energy 10000 eV
 #
+# Histograms
 /analysis/setFileName slowing
 /analysis/h1/set 1 500  10.  1.E6 none log10
 /analysis/h1/set 2 500  10.  1.E6 none log10
 /analysis/h1/set 3 500  10.  1.E6 none log10
 #
+# Run progress
 /run/printProgress 100
 #
+# Beam on
 /run/beamOn 800

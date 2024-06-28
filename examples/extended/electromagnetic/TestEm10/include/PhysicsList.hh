@@ -52,38 +52,35 @@ class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
+  public:
+    PhysicsList(DetectorConstruction* ptr);
+    virtual ~PhysicsList();
 
-  PhysicsList(DetectorConstruction* ptr);
-  virtual ~PhysicsList();
+    virtual void ConstructParticle();
 
-  virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
-  virtual void ConstructProcess();
-    
-  void AddPhysicsList(const G4String& name);
+    void AddPhysicsList(const G4String& name);
 
-  void SetXTRModel(const G4String& name);
+    void SetXTRModel(const G4String& name);
 
-private:
+  private:
+    void AddStepMax();
 
-  void AddStepMax(); 
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fDecayPhysicsList;
 
-  G4VPhysicsConstructor*  fEmPhysicsList;
-  G4VPhysicsConstructor*  fDecayPhysicsList;
+    TransitionRadiationPhysics* fXTRPhysicsList;
 
-  TransitionRadiationPhysics* fXTRPhysicsList;
+    G4String fEmName;
+    G4int fVerbose;
 
-  G4String fEmName;
-  G4int    fVerbose;
-
-  PhysicsListMessenger* fMessenger;
-  static G4ThreadLocal StepMax* fStepMaxProcess;  
+    PhysicsListMessenger* fMessenger;
+    static G4ThreadLocal StepMax* fStepMaxProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -31,22 +31,22 @@
 #ifndef DicomRunAction_h
 #define DicomRunAction_h 1
 
-#include <vector>
-
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+
+#include <vector>
 
 class G4Run;
 class DicomRun;
 
 class DicomRunAction : public G4UserRunAction
 {
-public:
+  public:
     // constructor and destructor
     DicomRunAction();
-   ~DicomRunAction();
+    ~DicomRunAction();
 
-public:
+  public:
     // virtual method from G4UserRunAction.
     G4Run* GenerateRun();
     void BeginOfRunAction(const G4Run*);
@@ -54,16 +54,16 @@ public:
 
     DicomRun* GetDicomRun() const { return fDcmrun; }
 
-public:
-    void PrintHeader(std::ostream *out);
-    std::string FillString(const std::string &name, char c,
-                           G4int n, G4bool back=true);
-protected:
+  public:
+    void PrintHeader(std::ostream* out);
+    std::string FillString(const std::string& name, char c, G4int n, G4bool back = true);
+
+  protected:
     DicomRun* fDcmrun;
     // - vector of MultiFunctionalDetecor names.
     std::vector<G4String> fSDName;
 
-private:
+  private:
     // Data member
     G4int fFieldValue;
 };

@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include <TrackingAction.hh>
 #include <G4Track.hh>
 #include <G4UnitsTable.hh>
+#include <TrackingAction.hh>
 
-TrackingAction::TrackingAction(): G4UserTrackingAction(){
-  
-}
+TrackingAction::TrackingAction() : G4UserTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PostUserTrackingAction(const G4Track* track){
-  if(track->GetTrackID() == 1){
-    G4cout << "Energy of primary: "
-    << G4BestUnit(track->GetKineticEnergy(), "Energy") << G4endl;
+void TrackingAction::PostUserTrackingAction(const G4Track* track)
+{
+  if (track->GetTrackID() == 1) {
+    G4cout << "Energy of primary: " << G4BestUnit(track->GetKineticEnergy(), "Energy") << G4endl;
   }
 }

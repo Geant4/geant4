@@ -39,6 +39,7 @@
 #include "EventActionMessenger.hh"
 
 #include "EventAction.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
@@ -46,23 +47,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:G4UImessenger(),fpEventAction(EvAct)
+  : G4UImessenger(), fpEventAction(EvAct)
 {
   fpPDBDir = new G4UIdirectory("/PDB4DNA/");
   fpPDBDir->SetGuidance("commands specific to this example");
 
-  fpThresEdepCmd = new G4UIcmdWithADoubleAndUnit(
-      "/PDB4DNA/event/setEnergyThres",
-      this);
+  fpThresEdepCmd = new G4UIcmdWithADoubleAndUnit("/PDB4DNA/event/setEnergyThres", this);
   fpThresEdepCmd->SetGuidance("Set energy threshold for SSB");
-  fpThresEdepCmd->SetParameterName("EnergyThres",false);
+  fpThresEdepCmd->SetParameterName("EnergyThres", false);
   fpThresEdepCmd->SetRange("EnergyThres>0");
   fpThresEdepCmd->AvailableForStates(G4State_Idle);
 
-  fpThresDistCmd = new G4UIcmdWithAnInteger("/PDB4DNA/event/setDistanceThres",
-                                            this);
+  fpThresDistCmd = new G4UIcmdWithAnInteger("/PDB4DNA/event/setDistanceThres", this);
   fpThresDistCmd->SetGuidance("Set distance threshold for DSB");
-  fpThresDistCmd->SetParameterName("DistanceThres",false);
+  fpThresDistCmd->SetParameterName("DistanceThres", false);
   fpThresDistCmd->SetRange("DistanceThres>0");
   fpThresDistCmd->AvailableForStates(G4State_Idle);
 }
@@ -79,18 +77,12 @@ EventActionMessenger::~EventActionMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if(command==fpThresEdepCmd)
-  {
-    fpEventAction->SetEnergyThresForSSB(fpThresEdepCmd->GetNewDoubleValue(
-        newValue));
+{
+  if (command == fpThresEdepCmd) {
+    fpEventAction->SetEnergyThresForSSB(fpThresEdepCmd->GetNewDoubleValue(newValue));
   }
 
-  if(command==fpThresDistCmd)
-  {
-    fpEventAction->SetDistanceThresForDSB(fpThresDistCmd->GetNewIntValue(
-        newValue));
+  if (command == fpThresDistCmd) {
+    fpEventAction->SetDistanceThresForDSB(fpThresDistCmd->GetNewIntValue(newValue));
   }
-
 }
-

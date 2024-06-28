@@ -45,59 +45,59 @@ class G4Track;
 
 class TrackingManagerHelper
 {
- public:
-  class Physics
-  {
-   public:
-    virtual void StartTracking(G4Track*) {}
-    virtual void EndTracking() {}
-
-    // Combines AlongStep and PostStep; the implementation needs to remember
-    // the right value to pass as previousStepSize to G4VProcess.
-    virtual G4double GetPhysicalInteractionLength(const G4Track& track) = 0;
-
-    // This method is called for every step after navigation. The updated
-    // position is stored in the G4Step's post-step point. Any particle change
-    // should be applied directly to the step, UpdateTrack() will be called
-    // automatically after this method returns. If secondaries should be given
-    // back to the G4EventManager, put them into the container passed as the
-    // last argument.
-    virtual void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) = 0;
-
-    // This method is called unless the track has been killed during this step.
-    // If secondaries should be given back to the G4EventManager, put them into
-    // the container passed as the last argument.
-    virtual void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) = 0;
-
-    virtual bool HasAtRestProcesses() { return false; }
-
-    // This method is called when a track is stopped, but still alive. If
-    // secondaries should be given back to the G4EventManager, put them into
-    // the container passed as the last argument.
-    virtual void AtRestDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries)
+  public:
+    class Physics
     {
-      (void)track;
-      (void)step;
-      (void)secondaries;
-    }
-  };
+      public:
+        virtual void StartTracking(G4Track*) {}
+        virtual void EndTracking() {}
 
-  class Navigation
-  {
-   public:
-    virtual G4double MakeStep(G4Track& track, G4Step& step, G4double physicalStep) = 0;
+        // Combines AlongStep and PostStep; the implementation needs to remember
+        // the right value to pass as previousStepSize to G4VProcess.
+        virtual G4double GetPhysicalInteractionLength(const G4Track& track) = 0;
 
-    virtual void FinishStep(G4Track& track, G4Step& step) = 0;
-  };
+        // This method is called for every step after navigation. The updated
+        // position is stored in the G4Step's post-step point. Any particle change
+        // should be applied directly to the step, UpdateTrack() will be called
+        // automatically after this method returns. If secondaries should be given
+        // back to the G4EventManager, put them into the container passed as the
+        // last argument.
+        virtual void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) = 0;
 
-  template <typename PhysicsImpl, typename NavigationImpl>
-  static void TrackParticle(G4Track* aTrack, PhysicsImpl& physics, NavigationImpl& navigation);
+        // This method is called unless the track has been killed during this step.
+        // If secondaries should be given back to the G4EventManager, put them into
+        // the container passed as the last argument.
+        virtual void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) = 0;
 
-  template <typename PhysicsImpl>
-  static void TrackChargedParticle(G4Track* aTrack, PhysicsImpl& physics);
+        virtual bool HasAtRestProcesses() { return false; }
 
-  template <typename PhysicsImpl>
-  static void TrackNeutralParticle(G4Track* aTrack, PhysicsImpl& physics);
+        // This method is called when a track is stopped, but still alive. If
+        // secondaries should be given back to the G4EventManager, put them into
+        // the container passed as the last argument.
+        virtual void AtRestDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries)
+        {
+          (void)track;
+          (void)step;
+          (void)secondaries;
+        }
+    };
+
+    class Navigation
+    {
+      public:
+        virtual G4double MakeStep(G4Track& track, G4Step& step, G4double physicalStep) = 0;
+
+        virtual void FinishStep(G4Track& track, G4Step& step) = 0;
+    };
+
+    template<typename PhysicsImpl, typename NavigationImpl>
+    static void TrackParticle(G4Track* aTrack, PhysicsImpl& physics, NavigationImpl& navigation);
+
+    template<typename PhysicsImpl>
+    static void TrackChargedParticle(G4Track* aTrack, PhysicsImpl& physics);
+
+    template<typename PhysicsImpl>
+    static void TrackNeutralParticle(G4Track* aTrack, PhysicsImpl& physics);
 };
 
 #include "TrackingManagerHelper.icc"

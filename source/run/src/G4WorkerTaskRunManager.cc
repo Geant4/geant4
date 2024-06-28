@@ -36,7 +36,6 @@
 #include "G4SDManager.hh"
 #include "G4ScoringManager.hh"
 #include "G4TaskRunManager.hh"
-#include "G4TiMemory.hh"
 #include "G4Timer.hh"
 #include "G4TransportationManager.hh"
 #include "G4UImanager.hh"
@@ -140,10 +139,6 @@ void G4WorkerTaskRunManager::RunInitialization()
   }
 
   if (userRunAction != nullptr) userRunAction->BeginOfRunAction(currentRun);
-
-#if defined(GEANT4_USE_TIMEMORY)
-  workerRunProfiler.reset(new ProfilerConfig(currentRun));
-#endif
 
   if (isScoreNtupleWriter) {
     G4VScoreNtupleWriter::Instance()->OpenFile();
@@ -259,6 +254,7 @@ G4Event* G4WorkerTaskRunManager::GenerateEvent(G4int i_event)
     }
 
     if (!eventLoopOnGoing) {
+      anEvent->ScoresRecorded();
       delete anEvent;
       return nullptr;
     }
@@ -331,9 +327,6 @@ G4Event* G4WorkerTaskRunManager::GenerateEvent(G4int i_event)
 void G4WorkerTaskRunManager::RunTermination()
 {
   if (!fakeRun && (currentRun != nullptr)) {
-#if defined(GEANT4_USE_TIMEMORY)
-    workerRunProfiler.reset();
-#endif
     MergePartialResults();
 
     // Call a user hook: note this is before the next barrier

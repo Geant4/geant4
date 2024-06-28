@@ -32,12 +32,13 @@
 
 #include "G4UserSteppingAction.hh"
 
-class H02SteppingAction : public G4UserSteppingAction {
-public:
-  H02SteppingAction();
-  virtual ~H02SteppingAction();
+class H02SteppingAction : public G4UserSteppingAction
+{
+  public:
+    H02SteppingAction();
+    virtual ~H02SteppingAction();
 
-  virtual void UserSteppingAction(const G4Step* astep);
+    virtual void UserSteppingAction(const G4Step* astep);
 };
 
 #endif

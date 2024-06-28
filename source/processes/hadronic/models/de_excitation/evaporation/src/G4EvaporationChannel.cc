@@ -88,18 +88,17 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
     { return 0.0; }
 
   G4double exEnergy = fragment->GetExcitationEnergy();
-  G4double delta0 = theLevelData->GetPairingCorrection(fragZ,fragA);
   /*  
   G4cout << "G4EvaporationChannel::Initialize Z= "<<theZ<<" A= "<<theA 
   	 << " FragZ= " << fragZ << " FragA= " << fragA 
 	 << " exEnergy= " << exEnergy << " d0= " << delta0 << G4endl;
   */
-  if(exEnergy < delta0) { return 0.0; }
 
   G4double fragMass = fragment->GetGroundStateMass();
   mass = fragMass + exEnergy;
-
   resMass = G4NucleiProperties::GetNuclearMass(resA, resZ);
+  if (mass <= evapMass + resMass) { return 0.0; } 
+
   ekinmax = 0.5*((mass-resMass)*(mass+resMass) + evapMass2)/mass - evapMass;
 
   G4double elim = 0.0;
@@ -107,7 +106,7 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
     bCoulomb = theCoulombBarrier->GetCoulombBarrier(resA, resZ, 0.0);
 
     // for OPTxs >0 penetration under the barrier is taken into account
-    elim = (0 != OPTxs) ? bCoulomb*0.6 : bCoulomb;
+    elim = (0 != OPTxs) ? bCoulomb*0.5 : bCoulomb;
   }
   /*
   G4cout << "exEnergy= " << exEnergy << " Ec= " << bCoulomb
@@ -115,14 +114,12 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 	 << " Free= " << mass - resMass - evapMass 
 	 << G4endl;
   */
-  if(mass <= resMass + evapMass + elim) { return 0.0; }
+  // Coulomb barrier compound at rest
+  G4double resM = mass - evapMass - elim;
+  if (resM < resMass) { return 0.0; }
+  G4double ekinmin = 
+    std::max(0.5*((mass-resM)*(mass+resM) + evapMass2)/mass - evapMass, 0.0);
 
-  G4double ekinmin = 0.0;
-  if(elim > 0.0) {
-    G4double resM = mass - evapMass - elim;
-    ekinmin = 
-      std::max(0.5*((mass-resM)*(mass+resM) + evapMass2)/mass - evapMass, 0.0);
-  }
   /*  
   G4cout << "Emin= " <<ekinmin<<" Emax= "<<ekinmax
 	 << " mass= " << mass << " resM= " << resMass 
@@ -133,7 +130,7 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
   theProbability->SetDecayKinematics(resZ, resA, resMass, mass);
   G4double prob = theProbability->TotalProbability(*fragment, ekinmin,
                                                    ekinmax, bCoulomb,
-                                                   exEnergy - delta0);
+                                                   exEnergy);
   return prob;
 }
 

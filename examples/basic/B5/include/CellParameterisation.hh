@@ -30,10 +30,11 @@
 #ifndef B5CellParameterisation_H
 #define B5CellParameterisation_H 1
 
+#include "G4VPVParameterisation.hh"
+
 #include "Constants.hh"
 
 #include "globals.hh"
-#include "G4VPVParameterisation.hh"
 
 #include <array>
 
@@ -50,15 +51,14 @@ class CellParameterisation : public G4VPVParameterisation
     CellParameterisation();
     ~CellParameterisation() override = default;
 
-    void ComputeTransformation(
-                   const G4int copyNo,G4VPhysicalVolume *physVol) const override;
+    void ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const override;
 
   private:
     std::array<G4double, kNofEmCells> fXCell;
     std::array<G4double, kNofEmCells> fYCell;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -34,31 +34,28 @@
 
 #include "Par01CalorimeterHit.hh"
 
-#include "G4VSensitiveDetector.hh"
 #include "G4Step.hh"
+#include "G4VSensitiveDetector.hh"
 
 class Par01CalorimeterSD : public G4VSensitiveDetector
 {
-  
-public:
-  Par01CalorimeterSD(G4String name, G4int nCells, G4String colName);
-  ~Par01CalorimeterSD();
-  
-  virtual void   Initialize(G4HCofThisEvent*HCE);
-  virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-  virtual void   EndOfEvent(G4HCofThisEvent*HCE);
-  virtual void   clear();
-  virtual void   DrawAll();
-  virtual void   PrintAll();
-  
-private:
-  Par01CalorimeterHitsCollection *fCalCollection;
-  
-  int* fCellID;
-  int  fNumberOfCells;
-  int  fHCID;
+  public:
+    Par01CalorimeterSD(G4String name, G4int nCells, G4String colName);
+    ~Par01CalorimeterSD();
+
+    virtual void Initialize(G4HCofThisEvent* HCE);
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent* HCE);
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
+
+  private:
+    Par01CalorimeterHitsCollection* fCalCollection;
+
+    int* fCellID;
+    int fNumberOfCells;
+    int fHCID;
 };
 
-
 #endif
-

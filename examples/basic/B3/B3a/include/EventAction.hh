@@ -50,8 +50,8 @@ class EventAction : public G4UserEventAction
     EventAction(RunAction* runAction);
     ~EventAction() override = default;
 
-    void  BeginOfEventAction(const G4Event*) override;
-    void    EndOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
   private:
     RunAction* fRunAction = nullptr;
@@ -59,10 +59,8 @@ class EventAction : public G4UserEventAction
     G4int fCollID_patient = -1;
 };
 
-}
+}  // namespace B3a
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

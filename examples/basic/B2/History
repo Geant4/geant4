@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-01-22 Gabriele Cosmo (exampleB2-V11-01-04)
+## 2024-01-22 Gabriele Cosmo (exampleB2-V11-02-00)
 - Updated PrimaryGeneratorAction::GeneratePrimaries() in all B2 examples to
   avoid nonsense placing of the initial position on the world boundary.
 

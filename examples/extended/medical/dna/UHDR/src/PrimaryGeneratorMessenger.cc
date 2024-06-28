@@ -25,17 +25,20 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "PrimaryGeneratorMessenger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4SingleParticleSource.hh"
+
+#include "PrimaryGeneratorAction.hh"
+
 #include "G4ParticleTable.hh"
+#include "G4SingleParticleSource.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction *pPrimaryGenerator)
-    : G4UImessenger(), fpPrimaryGenerator(pPrimaryGenerator) {
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pPrimaryGenerator)
+  : G4UImessenger(), fpPrimaryGenerator(pPrimaryGenerator)
+{
   fparticle = std::make_unique<G4UIcmdWithAString>("/UHDR/source/particle", this);
   fparticle->SetGuidance("Add time structure.");
   fparticle->SetGuidance("e-, proton, alpha");
@@ -52,18 +55,21 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   auto particleGun = fpPrimaryGenerator->GetSPGun();
   if (command == fparticle.get()) {
     G4ExceptionDescription ed;
-    G4ParticleDefinition *pd = G4ParticleTable::GetParticleTable()->FindParticle(newValue);
+    G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->FindParticle(newValue);
     if (pd != nullptr) {
       particleGun->SetParticleDefinition(pd);
-    } else {
+    }
+    else {
       ed << "Particle [" << newValue << "] is not found.";
       command->CommandFailed(ed);
     }
-  } else if (command == fenergy.get()) {
+  }
+  else if (command == fenergy.get()) {
     auto pEnergyDis = particleGun->GetEneDist();
     pEnergyDis->SetMonoEnergy(fenergy->GetNewDoubleValue(newValue));
   }

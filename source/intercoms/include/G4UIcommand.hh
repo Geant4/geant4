@@ -41,7 +41,6 @@
 #include "G4ApplicationState.hh"
 #include "G4ThreeVector.hh"
 #include "G4UIparameter.hh"
-#include "G4UItokenNum.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -137,7 +136,6 @@ class G4UIcommand
     inline void SetParameter(G4UIparameter* const newParameter)
     {
       parameter.push_back(newParameter);
-      newVal.resize(parameter.size());
     }
 
     // Adds a guidance line. Unlimited times of invokation of this method is
@@ -198,10 +196,6 @@ class G4UIcommand
     inline void SetDefaultSortFlag(G4bool val) { ifSort = val; }
 
   protected:
-    // --- the following is used by CheckNewValue() --------
-    using yystype = G4UItokenNum::yystype;
-    using tokenNum = G4UItokenNum::tokenNum;
-
     G4int CheckNewValue(const char* newValue);
 
     G4bool toBeBroadcasted = false;
@@ -216,31 +210,6 @@ class G4UIcommand
   private:
     void G4UIcommandCommonConstructorCode(const char* theCommandPath);
 
-    G4bool RangeCheck(const char* t);
-
-    //  syntax nodes
-    yystype Expression();
-    yystype LogicalORExpression();
-    yystype LogicalANDExpression();
-    yystype EqualityExpression();
-    yystype RelationalExpression();
-    yystype AdditiveExpression();
-    yystype MultiplicativeExpression();
-    yystype UnaryExpression();
-    yystype PrimaryExpression();
-    //  semantics routines
-    G4int Eval2(const yystype& arg1, G4int op, const yystype& arg2);
-    //  utility
-    tokenNum Yylex();  // returns next token
-    unsigned IndexOf(const char*);  // returns the index of the var name
-    unsigned IsParameter(const char*);  // returns 1 or 0
-    G4int G4UIpGetc();  // read one char from rangeBuf
-    G4int G4UIpUngetc(G4int c);  // put back
-    G4int Backslash(G4int c);
-    G4int Follow(G4int expect, G4int ifyes, G4int ifno);
-
-    // Data -----------------------------------------------------------
-
   private:
     CommandType commandType = BaseClassCmd;
     G4UImessenger* messenger = nullptr;
@@ -250,12 +219,6 @@ class G4UIcommand
     std::vector<G4UIparameter*> parameter;
     std::vector<G4String> commandGuidance;
     std::vector<G4ApplicationState> availabelStateList;
-
-    G4int bp = 0;  // current index into rangeExpression
-    tokenNum token = G4UItokenNum::IDENTIFIER;
-    yystype yylval;
-    std::vector<yystype> newVal;
-    G4int paramERR = 0;
 };
 
 #endif

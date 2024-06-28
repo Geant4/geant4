@@ -45,15 +45,15 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction();
-   ~SteppingAction();
+    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
+
   private:
     const DetectorConstruction* fpDetector;
     G4double fRNP;
     G4double fRAbs;
     G4double fTrackCut;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

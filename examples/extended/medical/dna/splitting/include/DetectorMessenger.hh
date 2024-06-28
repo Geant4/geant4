@@ -29,28 +29,26 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithADoubleAndUnit;
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-
     DetectorMessenger(DetectorConstruction*);
     virtual ~DetectorMessenger();
 
     virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
-    DetectorConstruction*             fpDetector;
-    G4UIcmdWithADoubleAndUnit*        fpDiameterCmd;
-    G4UIcmdWithADoubleAndUnit*        fpLengthCmd;
+    DetectorConstruction* fpDetector;
+    G4UIcmdWithADoubleAndUnit* fpDiameterCmd;
+    G4UIcmdWithADoubleAndUnit* fpLengthCmd;
 };
 
 #endif
-

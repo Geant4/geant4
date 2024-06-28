@@ -29,39 +29,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSActionInitialization.hh"
+
+#include "SAXSEventAction.hh"
 #include "SAXSPrimaryGeneratorAction.hh"
 #include "SAXSRunAction.hh"
-#include "SAXSEventAction.hh"
 #include "SAXSSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSActionInitialization::SAXSActionInitialization() :
-  G4VUserActionInitialization()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SAXSActionInitialization::~SAXSActionInitialization() 
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void SAXSActionInitialization::Build() const 
+SAXSActionInitialization::SAXSActionInitialization() : G4VUserActionInitialization()
 {
-  SetUserAction(new SAXSPrimaryGeneratorAction());   
+  ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SAXSActionInitialization::~SAXSActionInitialization()
+{
+  ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SAXSActionInitialization::Build() const
+{
+  SetUserAction(new SAXSPrimaryGeneratorAction());
   SetUserAction(new SAXSRunAction());
   SAXSEventAction* eventAction = new SAXSEventAction();
-  SetUserAction(eventAction);        
+  SetUserAction(eventAction);
   SetUserAction(new SAXSSteppingAction(eventAction));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SAXSActionInitialization::BuildForMaster() const 
+void SAXSActionInitialization::BuildForMaster() const
 {
   SetUserAction(new SAXSRunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

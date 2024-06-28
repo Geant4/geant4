@@ -25,18 +25,20 @@
 //
 // author: hoang tran
 
-#include <memory>
-
 #include "PulseAction.hh"
-#include "G4Track.hh"
-#include "Randomize.hh"
+
 #include "PulseActionMessenger.hh"
+
+#include "G4Track.hh"
 #include "G4UnitsTable.hh"
+#include "Randomize.hh"
+
+#include <memory>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PulseAction::PulseAction() :
-    G4UserTrackingAction() {
+PulseAction::PulseAction() : G4UserTrackingAction()
+{
   fpPulseInfo = std::make_unique<PulseInfo>(0);
   fpMessenger = std::make_unique<PulseActionMessenger>(this);
   Initialize();
@@ -44,13 +46,12 @@ PulseAction::PulseAction() :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PulseInfo::PulseInfo(G4double delayedTime)
-    : G4VUserPulseInfo(), fDelayedTime(delayedTime) {
-}
+PulseInfo::PulseInfo(G4double delayedTime) : G4VUserPulseInfo(), fDelayedTime(delayedTime) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double PulseInfo::GetDelayedTime() const {
+G4double PulseInfo::GetDelayedTime() const
+{
   return fDelayedTime;
 }
 
@@ -64,26 +65,28 @@ PulseAction::~PulseAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PulseAction::PreUserTrackingAction(const G4Track *pTrack) {
-  if(fActivePulse)
-  {
+void PulseAction::PreUserTrackingAction(const G4Track* pTrack)
+{
+  if (fActivePulse) {
     if (pTrack->GetParentID() == 0) {
       fDelayedTime = RandomizeInPulse();
       fpPulseInfo = std::make_unique<PulseInfo>(fDelayedTime);
 
-      G4cout<<"Particle comes at : "<<G4BestUnit(fpPulseInfo->GetDelayedTime(),"Time")<<G4endl;
+      G4cout << "Particle comes at : " << G4BestUnit(fpPulseInfo->GetDelayedTime(), "Time")
+             << G4endl;
       if (fLonggestDelayedTime < fDelayedTime) {
         fLonggestDelayedTime = fDelayedTime;
       }
     }
     auto pPulseInfo = new PulseInfo(*fpPulseInfo);
-    ((G4Track *) pTrack)->SetUserInformation(pPulseInfo);
+    ((G4Track*)pTrack)->SetUserInformation(pPulseInfo);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double PulseAction::Interpolate(const std::array<G4double,5>& data){
+G4double PulseAction::Interpolate(const std::array<G4double, 5>& data)
+{
   G4double e1 = data[0];
   G4double e2 = data[1];
   G4double e = data[2];
@@ -91,8 +94,7 @@ G4double PulseAction::Interpolate(const std::array<G4double,5>& data){
   G4double xs2 = data[4];
   G4double value = 0.;
   if ((std::log10(e2) - std::log10(e1)) != 0) {
-    G4double a = (std::log10(xs2) - std::log10(xs1))
-                 / (std::log10(e2) - std::log10(e1));
+    G4double a = (std::log10(xs2) - std::log10(xs1)) / (std::log10(e2) - std::log10(e1));
     G4double b = std::log10(xs2) - a * std::log10(e2);
     G4double sigma = a * std::log10(e) + b;
     value = (std::pow(10., sigma));
@@ -108,7 +110,8 @@ G4double PulseAction::Interpolate(const std::array<G4double,5>& data){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PulseAction::Initialize() {
+void PulseAction::Initialize()
+{
   std::ostringstream FileName;
   FileName << "pulseShape.dat";
   std::ifstream input(FileName.str().c_str());
@@ -116,8 +119,7 @@ void PulseAction::Initialize() {
   if (!input.is_open()) {
     G4ExceptionDescription exception;
     exception << "pulseShape.dat file not found. Please, provide";
-    G4Exception("PulseAction::Initialize()", "PulseAction01",
-                FatalException, exception);
+    G4Exception("PulseAction::Initialize()", "PulseAction01", FatalException, exception);
   }
 
   fPulseVector.clear();
@@ -136,10 +138,10 @@ void PulseAction::Initialize() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-G4double PulseAction::RandomizeInPulse() {
+G4double PulseAction::RandomizeInPulse()
+{
   const G4double minTime = 0.;
-  const G4double maxTime = fPulseLarger;// ns
+  const G4double maxTime = fPulseLarger;  // ns
 
   G4double MaximumPulse = 0.;
   G4int nSteps = 50;
@@ -163,7 +165,8 @@ G4double PulseAction::RandomizeInPulse() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-double PulseAction::PulseSpectrum(G4double time) {
+double PulseAction::PulseSpectrum(G4double time)
+{
   G4double pulse = 0.;
   G4double valueT1 = 0;
   G4double valueT2 = 0;
@@ -177,7 +180,7 @@ double PulseAction::PulseSpectrum(G4double time) {
   xs2 = fPulseData[valueT2];
   G4double xsProduct = xs1 * xs2;
   if (xsProduct != 0.) {
-    std::array<G4double, 5> a = {valueT1, valueT2, time,xs1,xs2};
+    std::array<G4double, 5> a = {valueT1, valueT2, time, xs1, xs2};
     pulse = Interpolate(a);
   }
   return pulse;
@@ -185,9 +188,9 @@ double PulseAction::PulseSpectrum(G4double time) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double PulseAction::GetLonggestDelayedTime() const {
+G4double PulseAction::GetLonggestDelayedTime() const
+{
   return fLonggestDelayedTime;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

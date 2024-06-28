@@ -42,22 +42,21 @@ class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorMessenger: public G4UImessenger
+class PrimaryGeneratorMessenger : public G4UImessenger
 {
   public:
     PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
-   ~PrimaryGeneratorMessenger() override;
-    
+    ~PrimaryGeneratorMessenger() override;
+
     void SetNewValue(G4UIcommand*, G4String) override;
-    
+
   private:
     PrimaryGeneratorAction* fAction = nullptr;
-    
-    G4UIdirectory*        fDir = nullptr;       
+
+    G4UIdirectory* fDir = nullptr;
     G4UIcmdWithAnInteger* fSelectActionCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

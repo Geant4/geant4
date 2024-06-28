@@ -29,12 +29,12 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName: CRMC_FTFP_BERT  
+// ClassName: CRMC_FTFP_BERT
 //
 // Author:    2018 Alberto Ribon
 //
-// This is a variant of the FTFP_BERT physics list, whereby CRMC is used 
-// for modeling final-state pion- , kaon- , proton- , neutron- and 
+// This is a variant of the FTFP_BERT physics list, whereby CRMC is used
+// for modeling final-state pion- , kaon- , proton- , neutron- and
 // ion-nuclear inelastic interactions at very high energies (above a
 // threshold defined in HadronPhysicsCRMC_FTFP_BERT and IonCRMCPhysics).
 // For the remaining inelastic interactions (i.e. hyperon- , antihyperon- ,
@@ -51,17 +51,17 @@
 #ifndef CRMC_FTFP_BERT_h
 #define CRMC_FTFP_BERT_h 1
 
-#include "globals.hh"
 #include "G4VModularPhysicsList.hh"
+#include "globals.hh"
 
-
-class CRMC_FTFP_BERT : public G4VModularPhysicsList {
+class CRMC_FTFP_BERT : public G4VModularPhysicsList
+{
   public:
-    CRMC_FTFP_BERT( G4int ver = 1 );
+    CRMC_FTFP_BERT(G4int ver = 1);
     virtual ~CRMC_FTFP_BERT() = default;
 
-    CRMC_FTFP_BERT( const CRMC_FTFP_BERT & ) = delete;
-    CRMC_FTFP_BERT & operator=( const CRMC_FTFP_BERT & ) = delete;  
+    CRMC_FTFP_BERT(const CRMC_FTFP_BERT&) = delete;
+    CRMC_FTFP_BERT& operator=(const CRMC_FTFP_BERT&) = delete;
 };
 
 #endif

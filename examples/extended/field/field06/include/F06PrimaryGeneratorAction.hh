@@ -34,8 +34,8 @@
 #ifndef F06PrimaryGeneratorAction_h
 #define F06PrimaryGeneratorAction_h 1
 
-#include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4Event;
 class G4ParticleGun;
@@ -45,14 +45,12 @@ class G4ParticleGun;
 class F06PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-
     F06PrimaryGeneratorAction();
     ~F06PrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event*) override;
+    void GeneratePrimaries(G4Event*) override;
 
   private:
-
     G4ParticleGun* fParticleGun = nullptr;
 };
 

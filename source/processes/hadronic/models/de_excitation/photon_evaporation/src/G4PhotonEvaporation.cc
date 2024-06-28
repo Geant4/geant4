@@ -396,7 +396,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 	    ntrans = level->NumberOfTransitions();
 	  }
 	}
-        JP1 = fLevelManager->TwoSpinParity(fIndex); 
+        JP1 = std::abs(fLevelManager->TwoSpinParity(fIndex)); 
       }
     }
     // if a level has no defined transitions
@@ -500,7 +500,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     }
     if(fVerbose > 2) {
       G4cout << "Ntrans= " << ntrans << " idx= " << idx
-	     << " ICM= " << fICM << "  JP1= " << JP1 << G4endl;
+	     << " ICM= " << fICM << "  abs(JP1)= " << JP1 << G4endl;
     }
     G4double prob = level->GammaProbability(idx);
     // prob = 0 means that there is only internal conversion
@@ -518,7 +518,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     ratio  = level->MultipolarityRatio(idx);
     multiP = level->TransitionType(idx);
     fIndex = level->FinalExcitationIndex(idx);
-    JP2 = fLevelManager->TwoSpinParity(fIndex); 
+    JP2 = std::abs(fLevelManager->TwoSpinParity(fIndex)); 
 
     // final energy and time
     efinal = fLevelManager->LevelEnergy(fIndex);
@@ -561,7 +561,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
            << " idxFinal= " << fIndex << " isDiscrete: " << isDiscrete
            << " isGamma: " << isGamma << " multiP= " << multiP 
            << " shell= " << vShellNumber 
-           << " JP1= " << JP1 << " JP2= " << JP2 << G4endl;
+           << " abs(JP1)= " << JP1 << " abs(JP2)= " << JP2 << G4endl;
   }
   return result;
 }

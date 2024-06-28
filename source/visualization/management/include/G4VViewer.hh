@@ -171,25 +171,25 @@ public: // With description
   class SceneTreeScene: public G4PseudoScene {
     // G4PhysicalVolumeModel sends touchables to this scene
   public:
-    SceneTreeScene() = default;
+    SceneTreeScene(G4VViewer*, G4PhysicalVolumeModel*);
     ~SceneTreeScene() = default;
-    void SetViewer(G4VViewer* pViewer) {fpViewer = pViewer;}
-    void SetModel(G4VModel* pModel);  // ...and more (see .cc)
   private:
     void ProcessVolume(const G4VSolid& solid) override;
-    std::list<G4SceneTreeItem>::iterator FindOrInsertModel
-    (const G4String& modelType,const G4String& modelID);
     std::list<G4SceneTreeItem>::iterator FindOrInsertTouchable
     (const G4String& modelID, G4SceneTreeItem& mother,
      G4int depth, const G4String& partialPathString, const G4String& fullPathString);
     G4VViewer* fpViewer = nullptr;
-    G4VModel* fpModel = nullptr;
-    G4int fMaximumExpandedDepth = 0;  // To be calculated in SetModel
+    G4PhysicalVolumeModel* fpPVModel = nullptr;
+    std::list<G4SceneTreeItem>::iterator  fModelIter;  // Points to scene tree item for this model
+    G4int fMaximumExpandedDepth = 0;    // To be calculated in constructor
     const G4int fMaximumExpanded = 30;  // So as not to swamp the GUI
   };
-  SceneTreeScene& AccessSceneTreeScene() {return fSceneTreeScene;}
+  void InsertModelInSceneTree(G4VModel*);
+  const G4SceneTreeItem& GetSceneTree() {return fSceneTree;}
   G4SceneTreeItem& AccessSceneTree() {return fSceneTree;}
   void UpdateGUISceneTree();  // A utility
+  const G4int fMaxNTouchables = 10000;  // Limits memory to about 50 MB
+  G4bool fCurtailDescent = false;  // Flag to curtail descent into PV model for scene tree
 
   //////////////////////////////////////////////////////////////
   // Access functions.
@@ -258,7 +258,6 @@ protected:
   G4ViewParameters fDefaultVP; // Default view parameters.
   G4double         fKernelVisitElapsedTimeSeconds = 999.;  // Default to a large number
   // Note: fKernelVisitElapsedTimeSeconds is measured in ProcessView().
-  SceneTreeScene   fSceneTreeScene;  // G4PhysicalVolumeModel sends touchables to this scene
   G4SceneTreeItem  fSceneTree;
 
   //////////////////////////////////////////////////////////////

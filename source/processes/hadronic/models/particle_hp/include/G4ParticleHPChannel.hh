@@ -127,6 +127,9 @@ public:
 
   G4ParticleHPFinalState** GetFinalStates() const { return theFinalStates; }
 
+  // method added by M.Zmeskal 02/2024 - to be used in G4ParticleHPFissionURR
+  G4WendtFissionFragmentGenerator* GetWendtFissionGenerator();
+
   G4ParticleHPChannel(G4ParticleHPChannel &) = delete;
   G4ParticleHPChannel & operator=
   (const G4ParticleHPChannel &right) = delete;

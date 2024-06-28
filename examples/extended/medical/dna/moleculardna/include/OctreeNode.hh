@@ -27,11 +27,11 @@
 #ifndef MOLECULAR_OCTREE_NODE_HH
 #define MOLECULAR_OCTREE_NODE_HH
 
-#include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "globals.hh"
 
-#include <vector>
 #include <array>
+#include <vector>
 
 class G4VPhysicalVolume;
 
@@ -39,78 +39,63 @@ class G4VPhysicalVolume;
 
 class OctreeNode
 {
- public:
-  // Uniform divisions constructor along each axis
-  OctreeNode(const G4ThreeVector&, const G4ThreeVector&, G4int, OctreeNode* parent = nullptr);
+  public:
+    // Uniform divisions constructor along each axis
+    OctreeNode(const G4ThreeVector&, const G4ThreeVector&, G4int, OctreeNode* parent = nullptr);
 
-  ~OctreeNode();
+    ~OctreeNode();
 
-  inline G4bool HasChildren() const
-  {
-    return (fChildren[0] != nullptr);
-  }
+    inline G4bool HasChildren() const { return (fChildren[0] != nullptr); }
 
-  inline OctreeNode* GetParent() const { return fParent; };
+    inline OctreeNode* GetParent() const { return fParent; };
 
-  inline const auto& GetHalfLengths() const
-  {
-    return fHalfLengths;
-  };
+    inline const auto& GetHalfLengths() const { return fHalfLengths; };
 
-  inline G4double GetHalfLengthsMag() const
-  {
-    return fHalfLengthsMag;
-  };
+    inline G4double GetHalfLengthsMag() const { return fHalfLengthsMag; };
 
-  inline const G4ThreeVector& GetPosition() const
-  {
-    return fPosition;
-  };
+    inline const G4ThreeVector& GetPosition() const { return fPosition; };
 
-  inline const auto& GetChildren() const { return fChildren; };
+    inline const auto& GetChildren() const { return fChildren; };
 
-  const std::vector<G4VPhysicalVolume*> SearchOctree(
-    const G4ThreeVector&, G4double _rad = 0) const;
+    const std::vector<G4VPhysicalVolume*> SearchOctree(const G4ThreeVector&,
+                                                       G4double _rad = 0) const;
 
-  void SearchOctree(const G4ThreeVector& pos,
-                    std::vector<G4VPhysicalVolume*>& out,
-                    G4double _rad = 0) const;
+    void SearchOctree(const G4ThreeVector& pos, std::vector<G4VPhysicalVolume*>& out,
+                      G4double _rad = 0) const;
 
-  const std::vector<G4VPhysicalVolume*> SearchOctree(
-    const G4ThreeVector&) const;
+    const std::vector<G4VPhysicalVolume*> SearchOctree(const G4ThreeVector&) const;
 
-  G4int GetNumberOfTerminalNodes();
+    G4int GetNumberOfTerminalNodes();
 
-  void AddPhysicalVolume(G4VPhysicalVolume*);
+    void AddPhysicalVolume(G4VPhysicalVolume*);
 
-  std::vector<G4VPhysicalVolume*> GetContents() const;
+    std::vector<G4VPhysicalVolume*> GetContents() const;
 
-  inline G4int GetMaxContents() const { return fMaxContents; };
+    inline G4int GetMaxContents() const { return fMaxContents; };
 
- protected:
-  void Split();
+  protected:
+    void Split();
 
-  const OctreeNode* GetChildFromPosition(
-    G4ThreeVector const&) const;
+    const OctreeNode* GetChildFromPosition(G4ThreeVector const&) const;
 
-  OctreeNode* GetChildFromPosition(G4ThreeVector const& pos);
+    OctreeNode* GetChildFromPosition(G4ThreeVector const& pos);
 
- private:
-  G4ThreeVector fPosition, fHalfLengths;
-  G4int fMaxContents;
+  private:
+    G4ThreeVector fPosition, fHalfLengths;
+    G4int fMaxContents;
 
-  std::vector<G4VPhysicalVolume*> fContents;
+    std::vector<G4VPhysicalVolume*> fContents;
 
-  OctreeNode* fParent;
-  // fChildren is arranged logically to save on queries
-  // The scheme is defined by quadrant as follows:
-  // X Y Z Index | X Y Z Index
-  // + + +   0   | - + +   4
-  // + + -   1   | - + -   5
-  // + - +   2   | - - +   6
-  // + - -   3   | - - -   7
-  std::array<OctreeNode*, 8> fChildren;
-  G4double fHalfLengthsMag;
+    OctreeNode* fParent;
+    // fChildren is arranged logically to save on queries
+    // The scheme is defined by quadrant as follows:
+    // X Y Z Index | X Y Z Index
+    // + + +   0   | - + +   4
+    // + + -   1   | - + -   5
+    // + - +   2   | - - +   6
+    // + - -   3   | - - -   7
+    std::array<OctreeNode*, 8> fChildren;
+    G4double fHalfLengthsMag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

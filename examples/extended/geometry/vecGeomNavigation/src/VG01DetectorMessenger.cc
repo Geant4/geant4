@@ -29,60 +29,58 @@
 
 //  Authors: J. Apostolakis & S. Wenzel (CERN)  2018-2021
 //
-//  Started from FullCMS code by Mihaly Novak (CERN) 2017  
+//  Started from FullCMS code by Mihaly Novak (CERN) 2017
 
 #include "VG01DetectorMessenger.hh"
 
 #include "VG01DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 #include "globals.hh"
 
-
-VG01DetectorMessenger::
-VG01DetectorMessenger( VG01DetectorConstruction* myDet )
-  : G4UImessenger(), fDetector( myDet ) 
+VG01DetectorMessenger::VG01DetectorMessenger(VG01DetectorConstruction* myDet)
+  : G4UImessenger(), fDetector(myDet)
 {
+  fDetectorDir = new G4UIdirectory("/mydet/");
+  fDetectorDir->SetGuidance("Detector control.");
 
-  fDetectorDir = new G4UIdirectory( "/mydet/" );
-  fDetectorDir->SetGuidance( "Detector control." );
+  fFieldCommand = new G4UIcmdWithADoubleAndUnit("/mydet/setField", this);
+  fFieldCommand->SetGuidance("Define uniform magnetic field along Z.");
+  fFieldCommand->SetGuidance(" -> in unit of  [Tesla]");
+  fFieldCommand->SetParameterName("By", false);
+  fFieldCommand->SetDefaultValue(0.0);
+  fFieldCommand->SetUnitCategory("Magnetic flux density");
+  fFieldCommand->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fFieldCommand = new G4UIcmdWithADoubleAndUnit( "/mydet/setField", this );
-  fFieldCommand->SetGuidance( "Define uniform magnetic field along Z." );
-  fFieldCommand->SetGuidance( " -> in unit of  [Tesla]" );
-  fFieldCommand->SetParameterName( "By", false );
-  fFieldCommand->SetDefaultValue( 0.0 );
-  fFieldCommand->SetUnitCategory( "Magnetic flux density" );
-  fFieldCommand->AvailableForStates( G4State_PreInit, G4State_Idle );
-
-  fGDMLCommand = new G4UIcmdWithAString( "/mydet/setGdmlFile", this );
-  fGDMLCommand->SetGuidance( "Set the GDML file." );
-  fGDMLCommand->SetDefaultValue( "TestNTST.gdml" );
-  fGDMLCommand->AvailableForStates( G4State_PreInit, G4State_Idle );
-
+  fGDMLCommand = new G4UIcmdWithAString("/mydet/setGdmlFile", this);
+  fGDMLCommand->SetGuidance("Set the GDML file.");
+  fGDMLCommand->SetDefaultValue("TestNTST.gdml");
+  fGDMLCommand->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-VG01DetectorMessenger::~VG01DetectorMessenger() {
+VG01DetectorMessenger::~VG01DetectorMessenger()
+{
   delete fFieldCommand;
   delete fDetectorDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void VG01DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue) 
+void VG01DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if ( command == fFieldCommand ) {
+  if (command == fFieldCommand) {
     fDetector->SetMagFieldValue(fFieldCommand->GetNewDoubleValue(newValue));
   }
-  else
-  {
-    if ( command == fGDMLCommand ) {
-      fDetector->SetGDMLFileName( newValue );
-    } else {
+  else {
+    if (command == fGDMLCommand) {
+      fDetector->SetGDMLFileName(newValue);
+    }
+    else {
       G4cerr << "VG01DetectorMessenger: ERROR> Unknown command " << G4endl;
     }
-  } 
+  }
 }

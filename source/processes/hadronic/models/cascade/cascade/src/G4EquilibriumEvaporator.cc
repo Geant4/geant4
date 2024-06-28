@@ -400,13 +400,13 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	  G4cout << " T04 " << T04 << " FMAX (EEXS^4) " << FMAX << G4endl;
 
 	G4double S(0), X1(0);
-	while (itry < itry_max) {
-	  itry++;
-	  S = EEXS * inuclRndm();
-	  X1 = (S*S*S*S) * G4Exp((EEXS - S) / T00);
+        while (itry < itry_max) {
+          itry++;
+          S = EEXS*G4UniformRand();
+          X1 = (S*S*S*S) * G4Exp((EEXS - S) / T00);
 
-	  if (X1 > FMAX * inuclRndm()) break;
-	};
+          if (X1 > FMAX*G4UniformRand() ) break;
+        }
 
         if (itry == itry_max) {	    // Maximum attempts exceeded
           try_again = false;
@@ -448,7 +448,8 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
       }		// while (EEXS > cut_off
       try_again = false;
     } else {			// if (prob_sum < prob_cut_off)
-      G4double SL = prob_sum * inuclRndm();
+      G4double SL = prob_sum*G4UniformRand();
+
       if (verboseLevel > 3) G4cout << " random SL " << SL << G4endl;
 
       G4double S1 = 0.0;

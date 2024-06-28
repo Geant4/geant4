@@ -40,6 +40,7 @@
 #include "G4ParticleTable.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ExceptionSeverity.hh"
 
 class G4Event;
 class G4PrimaryVertex;
@@ -101,6 +102,13 @@ class G4PrimaryTransformer
     G4int nWarn = 0;
     G4bool unknownParticleDefined = false;
     G4bool opticalphotonDefined = false;
+
+    static G4double kETolerance;
+    static G4ExceptionSeverity kETSeverity;
+  public:
+    static void SetKETolerance(G4double val, G4ExceptionSeverity sev = JustWarning)
+    { kETolerance = val; kETSeverity = sev; }
+
 };
 
 #endif

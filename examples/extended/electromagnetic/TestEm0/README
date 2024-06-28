@@ -31,7 +31,8 @@
   
   Macros provided in this example:
   - muon.mac: muon incident
-  - ion.mac: generic ion incident  
+  - ion.mac: generic ion incident
+  - xenonGas.mac: illustrate gas definition  
    
                             DirectAccess
                             ------------

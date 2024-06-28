@@ -27,7 +27,9 @@
 //
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
-//   Adapted from Root Arb8 implementation by Andrei Gheata, CERN 
+//   Adapted from Root Arb8 implementation by Andrei Gheata, CERN
+//
+//   27.05.2024 - Evgueni Tcherniaev, complete revision, speed up
 // --------------------------------------------------------------------
 
 #include "G4GenericTrap.hh"
@@ -38,12 +40,12 @@
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4TriangularFacet.hh"
-#include "G4QuadrangularFacet.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
+
+#include "G4GeomTools.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -53,1148 +55,831 @@
 
 namespace
 {
-  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4Mutex polyhedronMutex  = G4MUTEX_INITIALIZER;
+  G4Mutex lateralareaMutex = G4MUTEX_INITIALIZER;
 }
 
-const G4int    G4GenericTrap::fgkNofVertices = 8;
-const G4double G4GenericTrap::fgkTolerance = 1E-3;
-
-// --------------------------------------------------------------------
-
-G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
-                              const std::vector<G4TwoVector>&  vertices )
-  : G4VSolid(name), fDz(halfZ), fVertices(),
-    fMinBBoxVector(G4ThreeVector(0,0,0)), fMaxBBoxVector(G4ThreeVector(0,0,0))
+////////////////////////////////////////////////////////////////////////
+//
+// Constructor
+//
+G4GenericTrap::G4GenericTrap(const G4String& name, G4double halfZ,
+                             const std::vector<G4TwoVector>& vertices)
+  : G4VSolid(name)
 {
-  // General constructor
-  const G4double min_length=5*1.e-6;
-  G4double length = 0.;
-  G4int k=0;
-  G4String errorDescription = "InvalidSetup in \" ";
-  errorDescription += name;
-  errorDescription += "\""; 
-
-  halfCarTolerance = kCarTolerance*0.5;
-
-  // Check vertices size
-
-  if ( G4int(vertices.size()) != fgkNofVertices )
-  {
-    G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids0002",
-                FatalErrorInArgument, "Number of vertices != 8");
-  }            
-  
-  // Check dZ
-  // 
-  if (halfZ < kCarTolerance)
-  {
-     G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids0002",
-                FatalErrorInArgument, "dZ is too small or negative");
-  }           
- 
-  // Check Ordering and Copy vertices 
-  //
-  if(CheckOrder(vertices))
-  {
-    for (G4int i=0; i<fgkNofVertices; ++i) {fVertices.push_back(vertices[i]);}
-  }
-  else
-  { 
-    for (auto i=0; i <4; ++i) {fVertices.push_back(vertices[3-i]);}
-    for (auto i=0; i <4; ++i) {fVertices.push_back(vertices[7-i]);}
-  }
-
-   // Check length of segments and Adjust
-  // 
-  for (auto j=0; j<2; ++j)
-  {
-    for (auto i=1; i<4; ++i)
-    {
-      k = j*4+i;
-      length = (fVertices[k]-fVertices[k-1]).mag();
-      if ( ( length < min_length) && ( length > kCarTolerance ) )
-      {
-        std::ostringstream message;
-        message << "Length segment is too small." << G4endl
-                << "Distance between " << fVertices[k-1] << " and "
-                << fVertices[k] << " is only " << length << " mm !"; 
-        G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids1001",
-                    JustWarning, message, "Vertices will be collapsed.");
-        fVertices[k]=fVertices[k-1];
-      }
-    }
-  }
-
-  // Compute Twist
-  //
-  for(G4double & i : fTwist) { i=0.; }
-  fIsTwisted = ComputeIsTwisted();
-
-  // Compute Bounding Box 
-  //
-  ComputeBBox();
-  
-  // If not twisted - create tessellated solid 
-  // (an alternative implementation for testing)
-  //
-#ifdef G4TESS_TEST
-   if ( !fIsTwisted )  { fTessellatedSolid = CreateTessellatedSolid(); }
-#endif
+  halfTolerance = 0.5*kCarTolerance;
+  CheckParameters(halfZ, vertices);
+  ComputeLateralSurfaces();
+  ComputeBoundingBox();
+  ComputeScratchLength();
 }
 
-// --------------------------------------------------------------------
-
-G4GenericTrap::G4GenericTrap( __void__& a )
-  : G4VSolid(a), halfCarTolerance(0.), fDz(0.), fVertices(),
-    fMinBBoxVector(G4ThreeVector(0,0,0)), fMaxBBoxVector(G4ThreeVector(0,0,0))
+////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+G4GenericTrap::G4GenericTrap(__void__& a)
+  : G4VSolid(a)
 {
-  // Fake default constructor - sets only member data and allocates memory
-  //                            for usage restricted to object persistency.
 }
 
-// --------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////
+//
+// Destructor
 
 G4GenericTrap::~G4GenericTrap()
 {
-  delete fTessellatedSolid;
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+//
 G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
   : G4VSolid(rhs),
-    halfCarTolerance(rhs.halfCarTolerance),
-    fDz(rhs.fDz), fVertices(rhs.fVertices),
-    fIsTwisted(rhs.fIsTwisted),
-    fMinBBoxVector(rhs.fMinBBoxVector), fMaxBBoxVector(rhs.fMaxBBoxVector),
+    halfTolerance(rhs.halfTolerance), fScratch(rhs.fScratch),
+    fDz(rhs.fDz), fVertices(rhs.fVertices), fIsTwisted(rhs.fIsTwisted),
+    fMinBBox(rhs.fMinBBox), fMaxBBox(rhs.fMaxBBox),
     fVisSubdivisions(rhs.fVisSubdivisions),
-    fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume) 
+    fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume)
 {
-   for (auto i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
-#ifdef G4TESS_TEST
-   if (rhs.fTessellatedSolid && !fIsTwisted )
-   { fTessellatedSolid = CreateTessellatedSolid(); } 
-#endif
+  for (auto i = 0; i < 5; ++i) { fTwist[i] = rhs.fTwist[i]; }
+  for (auto i = 0; i < 4; ++i) { fDelta[i] = rhs.fDelta[i]; }
+  for (auto i = 0; i < 8; ++i) { fPlane[i] = rhs.fPlane[i]; }
+  for (auto i = 0; i < 4; ++i) { fSurf[i] = rhs.fSurf[i]; }
+  for (auto i = 0; i < 4; ++i) { fArea[i] = rhs.fArea[i]; }
 }
 
-// --------------------------------------------------------------------
-
-G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs) 
+////////////////////////////////////////////////////////////////////////
+//
+// Assignment
+//
+G4GenericTrap& G4GenericTrap::operator=(const G4GenericTrap& rhs)
 {
-   // Check assignment to self
-   //
-   if (this == &rhs)  { return *this; }
+  // Check assignment to self
+  if (this == &rhs)  { return *this; }
 
-   // Copy base class data
-   //
-   G4VSolid::operator=(rhs);
+  // Copy base class data
+  G4VSolid::operator=(rhs);
 
-   // Copy data
-   //
-   halfCarTolerance = rhs.halfCarTolerance;
-   fDz = rhs.fDz; fVertices = rhs.fVertices;
-   fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = nullptr;
-   fMinBBoxVector = rhs.fMinBBoxVector; fMaxBBoxVector = rhs.fMaxBBoxVector;
-   fVisSubdivisions = rhs.fVisSubdivisions;
-   fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
+  // Copy data
+  halfTolerance = rhs.halfTolerance; fScratch = rhs.fScratch;
+  fDz = rhs.fDz; fVertices = rhs.fVertices; fIsTwisted = rhs.fIsTwisted;
+  fMinBBox = rhs.fMinBBox; fMaxBBox = rhs.fMaxBBox;
+  fVisSubdivisions = rhs.fVisSubdivisions;
+  fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
 
-   for (auto i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
-#ifdef G4TESS_TEST
-   if (rhs.fTessellatedSolid && !fIsTwisted )
-   { delete fTessellatedSolid; fTessellatedSolid = CreateTessellatedSolid(); } 
-#endif
-   fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = nullptr;
+  for (auto i = 0; i < 8; ++i) { fVertices[i] = rhs.fVertices[i]; }
+  for (auto i = 0; i < 5; ++i) { fTwist[i] = rhs.fTwist[i]; }
+  for (auto i = 0; i < 4; ++i) { fDelta[i] = rhs.fDelta[i]; }
+  for (auto i = 0; i < 8; ++i) { fPlane[i] = rhs.fPlane[i]; }
+  for (auto i = 0; i < 4; ++i) { fSurf[i] = rhs.fSurf[i]; }
+  for (auto i = 0; i < 4; ++i) { fArea[i] = rhs.fArea[i]; }
 
-   return *this;
+  fRebuildPolyhedron = false;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
+
+  return *this;
 }
 
-// --------------------------------------------------------------------
-
-EInside
-G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
-                              const std::vector<G4TwoVector>& poly) const 
-{
-  EInside  in = kInside;
-  G4double cross, len2;
-  G4int count=0;
-
-  for (G4int i=0; i<4; ++i)
-  {
-    G4int j = (i+1) % 4;
-
-    cross = (p.x()-poly[i].x())*(poly[j].y()-poly[i].y())-
-            (p.y()-poly[i].y())*(poly[j].x()-poly[i].x());
-
-    len2=(poly[i]-poly[j]).mag2();
-    if (len2 > kCarTolerance)
-    {
-      if(cross*cross<=len2*halfCarTolerance*halfCarTolerance)  // Surface check
-      {
-        G4double test;
-
-        // Check if p lies between the two extremes of the segment
-        //
-        G4int iMax;
-        G4int iMin;
-
-        if (poly[j].x() > poly[i].x())
-        {
-          iMax = j;
-          iMin = i;
-        }
-        else {
-          iMax = i;
-          iMin = j;
-        }
-        if ( p.x() > poly[iMax].x()+halfCarTolerance
-          || p.x() < poly[iMin].x()-halfCarTolerance )
-        {
-          return kOutside;
-        }
-
-        if (poly[j].y() > poly[i].y())
-        {
-          iMax = j;
-          iMin = i;
-        }
-        else
-        {
-          iMax = i;
-          iMin = j;
-        }
-        if ( p.y() > poly[iMax].y()+halfCarTolerance
-          || p.y() < poly[iMin].y()-halfCarTolerance )
-        {
-          return kOutside;
-        }
-
-        if ( poly[iMax].x() != poly[iMin].x() )
-        {
-          test = (p.x()-poly[iMin].x())/(poly[iMax].x()-poly[iMin].x())
-               * (poly[iMax].y()-poly[iMin].y())+poly[iMin].y();
-        }
-        else
-        {
-          test = p.y();
-        }
-
-        // Check if point is Inside Segment
-        // 
-        if( (test>=(poly[iMin].y()-halfCarTolerance))
-         && (test<=(poly[iMax].y()+halfCarTolerance)) )
-        { 
-          return kSurface;
-        }
-        else
-        {
-          return kOutside;
-        }
-      }
-      else if (cross<0.)  { return kOutside; }
-    }
-    else
-    {
-      ++count;
-    }
-  }
-
-  // All collapsed vertices, Tet like
-  //
-  if(count==4)
-  { 
-    if ( (std::fabs(p.x()-poly[0].x())
-         +std::fabs(p.y()-poly[0].y())) > halfCarTolerance )
-    {
-      in = kOutside;
-    }
-  }
-  return in;
-}
-
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Returns position of the point (inside/outside/surface)
+//
 EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
 {
-  // Test if point is inside this shape
+  G4double px = p.x(), py = p.y(), pz = p.z();
 
-#ifdef G4TESS_TEST
-   if ( fTessellatedSolid )
-   { 
-     return fTessellatedSolid->Inside(p);
-   }
-#endif  
+  // intersect edges by z = pz plane
+  G4TwoVector pp[4];
+  G4double z = (pz + fDz);
+  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*z; }
 
-  EInside innew=kOutside;
-  std::vector<G4TwoVector> xy;
- 
-  if (std::fabs(p.z()) <= fDz+halfCarTolerance)  // First check Z range
+  // estimate distance to the solid
+  G4double dist = std::abs(pz) - fDz;
+  for (auto i = 0; i < 4; ++i)
   {
-    // Compute intersection between Z plane containing point and the shape
-    //
-    G4double cf = 0.5*(fDz-p.z())/fDz;
-    for (auto i=0; i<4; ++i)
+    if (fTwist[i] == 0.)
     {
-      xy.push_back(fVertices[i+4]+cf*( fVertices[i]-fVertices[i+4]));
+      G4double dd = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
+      dist = std::max(dd, dist);
     }
-
-    innew=InsidePolygone(p,xy);
-
-    if( (innew==kInside) || (innew==kSurface) )
-    { 
-      if(std::fabs(p.z()) > fDz-halfCarTolerance)  { innew=kSurface; }
+    else
+    {
+      auto j = (i + 1)%4;
+      G4TwoVector a = pp[i];
+      G4TwoVector b = pp[j];
+      G4double dx = b.x() - a.x();
+      G4double dy = b.y() - a.y();
+      G4double leng = std::sqrt(dx*dx + dy*dy);
+      G4double dd = (dx*(py - a.y()) - dy*(px - a.x()))/leng;
+      dist = std::max(dd, dist);
     }
   }
-  return innew;    
-} 
+  return (dist > halfTolerance) ? kOutside :
+    ((dist > -halfTolerance) ? kSurface : kInside);
+}
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Return unit normal to surface at p
+//
 G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  // Calculate side nearest to p, and return normal
-  // If two sides are equidistant, sum of the Normal is returned
+  G4double halfToleranceSquared = halfTolerance*halfTolerance;
+  G4double px = p.x(), py = p.y(), pz = p.z();
+  G4double nx = 0, ny = 0, nz = 0;
 
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  {
-    return fTessellatedSolid->SurfaceNormal(p);
-  }  
-#endif   
- 
-  G4ThreeVector lnorm, sumnorm(0.,0.,0.), apprnorm(0.,0.,1.),
-                p0, p1, p2, r1, r2, r3, r4;
-  G4int noSurfaces = 0; 
-  G4double distxy,distz;
-  G4bool zPlusSide=false;
+  // intersect edges by z = pz plane
+  G4TwoVector pp[4];
+  G4double tz = (pz + fDz);
+  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*tz; }
 
-  distz = fDz-std::fabs(p.z());
-  if (distz < halfCarTolerance)
+  // check bottom and top faces
+  G4double dz = std::abs(pz) - fDz;
+  nz = std::copysign(G4double(std::abs(dz) <= halfTolerance), pz);
+
+  // check lateral faces
+  for (auto i = 0; i < 4; ++i)
   {
-    if(p.z()>0)
+    if (fTwist[i] == 0.)
     {
-      zPlusSide=true;
-      sumnorm=G4ThreeVector(0,0,1);
+      G4double dd = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
+      if (std::abs(dd) <= halfTolerance)
+      {
+        nx += fSurf[i].D;
+        ny += fSurf[i].E;
+        nz += fSurf[i].F;
+      }
     }
     else
     {
-      sumnorm=G4ThreeVector(0,0,-1);
+      auto j = (i + 1)%4;
+      G4TwoVector a = pp[i];
+      G4TwoVector b = pp[j];
+      G4double dx = b.x() - a.x();
+      G4double dy = b.y() - a.y();
+      G4double ll = dx*dx + dy*dy;
+      G4double dd = dx*(py - a.y()) - dy*(px - a.x());
+      if (dd*dd <= halfToleranceSquared*ll)
+      {
+        G4double x = fSurf[i].A*pz + fSurf[i].D;
+        G4double y = fSurf[i].B*pz + fSurf[i].E;
+        G4double z = fSurf[i].A*px + fSurf[i].B*py + 2.*fSurf[i].C*pz + fSurf[i].F;
+        G4double inv = 1./std::sqrt(x*x + y*y + z*z);
+        nx += x*inv;
+        ny += y*inv;
+        nz += z*inv;
+      }
     }
-    ++noSurfaces;
-  } 
-
-  // Check lateral planes
-  //
-  std:: vector<G4TwoVector> vertices;  
-  G4double cf = 0.5*(fDz-p.z())/fDz;
-  for (auto i=0; i<4; ++i)
-  {
-    vertices.push_back(fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]));
   }
 
-  // Compute distance for lateral planes
-  //
-  for (G4int q=0; q<4; ++q)
-  {
-    p0=G4ThreeVector(vertices[q].x(),vertices[q].y(),p.z());
-    if(zPlusSide)
-    {
-      p1=G4ThreeVector(fVertices[q].x(),fVertices[q].y(),-fDz);
-    }
-    else
-    {
-      p1=G4ThreeVector(fVertices[q+4].x(),fVertices[q+4].y(),fDz); 
-    }
-    p2=G4ThreeVector(vertices[(q+1)%4].x(),vertices[(q+1)%4].y(),p.z());
+  // return normal
+  G4double mag2 = nx*nx + ny*ny + nz*nz;
+  if (mag2 == 0.) return ApproxSurfaceNormal(p); // point is not on the surface
+  G4double mag = std::sqrt(mag2);
+  G4double inv = (mag == 1.) ? 1. : 1./mag;
+  return { nx*inv, ny*inv, nz*inv };
+}
 
-    // Collapsed vertices
-    //
-    if ( (p2-p0).mag2() < kCarTolerance )
-    {
-      if ( std::fabs(p.z()+fDz) > kCarTolerance )
-      {
-        p2=G4ThreeVector(fVertices[(q+1)%4].x(),fVertices[(q+1)%4].y(),-fDz);
-      }
-      else
-      {
-        p2=G4ThreeVector(fVertices[(q+1)%4+4].x(),fVertices[(q+1)%4+4].y(),fDz);
-      }
-    }
-    lnorm = (p1-p0).cross(p2-p0);
-    lnorm = lnorm.unit();
-    if(zPlusSide)  { lnorm=-lnorm; }
-
-    // Adjust Normal for Twisted Surface
-    //
-    if ( (fIsTwisted) && (GetTwistAngle(q)!=0) )
-    {
-      G4double normP=(p2-p0).mag();
-      if(normP != 0.0)
-      {
-        G4double proj=(p-p0).dot(p2-p0)/normP;
-        if(proj<0)     { proj=0; }
-        if(proj>normP) { proj=normP; }
-        G4int j=(q+1)%4;
-        r1=G4ThreeVector(fVertices[q+4].x(),fVertices[q+4].y(),fDz);
-        r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
-        r3=G4ThreeVector(fVertices[q].x(),fVertices[q].y(),-fDz);
-        r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
-        r1=r1+proj*(r2-r1)/normP;
-        r3=r3+proj*(r4-r3)/normP;
-        r2=r1-r3;
-        r4=r2.cross(p2-p0); r4=r4.unit();
-        lnorm=r4;
-      }
-    }   // End if fIsTwisted
-
-    distxy=std::fabs((p0-p).dot(lnorm));
-    if ( distxy<halfCarTolerance )
-    {
-      ++noSurfaces;
-
-      // Negative sign for Normal is taken for Outside Normal
-      //
-      sumnorm=sumnorm+lnorm;
-    }
-
-    // For ApproxSurfaceNormal
-    //
-    if (distxy<distz)
-    {
-      distz=distxy;
-      apprnorm=lnorm;
-    }      
-  }  // End for loop
-
-  // Calculate final Normal, add Normal in the Corners and Touching Sides
-  //
-  if ( noSurfaces == 0 )
-  {
+////////////////////////////////////////////////////////////////////////
+//
+// Find surface nearest to the point and return corresponding normal
+// Normally this method should not be called
+//
+G4ThreeVector G4GenericTrap::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+{
 #ifdef G4SPECSDEBUG
-    G4Exception("G4GenericTrap::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, "Point p is not on surface !?" );
+  std::ostringstream message;
+  message.precision(16);
+  message << "Point p is not on surface of solid: " << GetName() << " !?\n"
+          << "Position: " << p << " is "
+          << ((Inside(p) == kInside) ? "inside" : "outside") << "\n";
+  StreamInfo(message);
+  G4Exception("G4GenericTrap::ApproxSurfaceNormal(p)", "GeomSolids1002",
+              JustWarning, message );
 #endif
-    sumnorm=apprnorm;
-    // Add Approximative Surface Normal Calculation?
-  }
-  else if ( noSurfaces == 1 )  { ; }
-  else                         { sumnorm = sumnorm.unit(); }
+  G4double px = p.x(), py = p.y(), pz = p.z();
+  G4double dist = -DBL_MAX;
+  auto iside = 0;
 
-  return sumnorm ; 
-}    
+  // intersect edges by z = pz plane
+  G4TwoVector pp[4];
+  G4double tz = (pz + fDz);
+  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*tz; }
 
-// --------------------------------------------------------------------
-
-G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
-                                            const G4int ipl ) const
-{
-  // Return normal to given lateral plane ipl
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->SurfaceNormal(p);
-  }  
-#endif   
-
-  G4ThreeVector lnorm, norm(0.,0.,0.), p0,p1,p2;
- 
-  G4double  distz = fDz-p.z();
-  G4int i=ipl;  // current plane index
- 
-  G4TwoVector u,v;  
-  G4ThreeVector r1,r2,r3,r4;
-  G4double cf = 0.5*(fDz-p.z())/fDz;
-  G4int j=(i+1)%4;
-
-  u=fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]);
-  v=fVertices[j+4]+cf*(fVertices[j]-fVertices[j+4]);
-
-  // Compute cross product
-  //
-  p0=G4ThreeVector(u.x(),u.y(),p.z());
-      
-  if (std::fabs(distz)<halfCarTolerance)
+  // check lateral faces
+  for (auto i = 0; i < 4; ++i)
   {
-    p1=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
-    distz=-1;
-  }
-  else
-  {
-    p1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
-  }  
-  p2=G4ThreeVector(v.x(),v.y(),p.z());
-
-  // Collapsed vertices
-  //
-  if ( (p2-p0).mag2() < kCarTolerance )
-  {
-    if ( std::fabs(p.z()+fDz) > halfCarTolerance )
+    if (fTwist[i] == 0.)
     {
-      p2=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
+      G4double d = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
+      if (d > dist) { dist = d; iside = i; }
     }
     else
     {
-      p2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
+      auto j = (i + 1)%4;
+      G4TwoVector a = pp[i];
+      G4TwoVector b = pp[j];
+      G4double dx = b.x() - a.x();
+      G4double dy = b.y() - a.y();
+      G4double leng = std::sqrt(dx*dx + dy*dy);
+      G4double d = (dx*(py - a.y()) - dy*(px - a.x()))/leng;
+      if (d > dist) { dist = d; iside = i; }
     }
   }
-  lnorm=-(p1-p0).cross(p2-p0);
-  if (distz>-halfCarTolerance)  { lnorm=-lnorm.unit(); }
-  else                          { lnorm=lnorm.unit();  }
- 
-  // Adjust Normal for Twisted Surface
-  //
-  if( (fIsTwisted) && (GetTwistAngle(ipl)!=0) )
-  {
-    G4double normP=(p2-p0).mag();
-    if(normP != 0.0)
-    {
-      G4double proj=(p-p0).dot(p2-p0)/normP;
-      if (proj<0)     { proj=0; }
-      if (proj>normP) { proj=normP; }
+  // check bottom and top faces
+  G4double distz = std::abs(pz) - fDz;
+  if (distz >= dist) return { 0., 0., std::copysign(1., pz) };
 
-      r1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
-      r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
-      r3=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
-      r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
-      r1=r1+proj*(r2-r1)/normP;
-      r3=r3+proj*(r4-r3)/normP;
-      r2=r1-r3;
-      r4=r2.cross(p2-p0);r4=r4.unit();
-      lnorm=r4;
-    }
-  }  // End if fIsTwisted
+  G4double x = fSurf[iside].A*pz + fSurf[iside].D;
+  G4double y = fSurf[iside].B*pz + fSurf[iside].E;
+  G4double z = fSurf[iside].A*px + fSurf[iside].B*py + 2.*fSurf[iside].C*pz + fSurf[iside].F;
+  G4double inv = 1./std::sqrt(x*x + y*y + z*z);
+  return { x*inv, y*inv, z*inv };
+}
 
-  return lnorm;
-}    
-
-// --------------------------------------------------------------------
-
-G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
-                                    const G4ThreeVector& v,
-                                    const G4int ipl) const 
-{
-  // Computes distance to plane ipl :
-  // ipl=0 : points 0,4,1,5
-  // ipl=1 : points 1,5,2,6
-  // ipl=2 : points 2,6,3,7
-  // ipl=3 : points 3,7,0,4
-
-  G4double xa,xb,xc,xd,ya,yb,yc,yd;
-  
-  G4int j = (ipl+1)%4;
-  
-  xa=fVertices[ipl].x();
-  ya=fVertices[ipl].y();
-  xb=fVertices[ipl+4].x();
-  yb=fVertices[ipl+4].y();
-  xc=fVertices[j].x();
-  yc=fVertices[j].y();
-  xd=fVertices[4+j].x();
-  yd=fVertices[4+j].y();
- 
-  G4double dz2 =0.5/fDz;
-  G4double tx1 =dz2*(xb-xa);
-  G4double ty1 =dz2*(yb-ya);
-  G4double tx2 =dz2*(xd-xc);
-  G4double ty2 =dz2*(yd-yc);
-  G4double dzp =fDz+p.z();
-  G4double xs1 =xa+tx1*dzp;
-  G4double ys1 =ya+ty1*dzp;
-  G4double xs2 =xc+tx2*dzp;
-  G4double ys2 =yc+ty2*dzp;
-  G4double dxs =xs2-xs1;
-  G4double dys =ys2-ys1;
-  G4double dtx =tx2-tx1;
-  G4double dty =ty2-ty1;
-
-  G4double a = (dtx*v.y()-dty*v.x()+(tx1*ty2-tx2*ty1)*v.z())*v.z();
-  G4double b = dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
-             + tx1*ys2-tx2*ys1)*v.z();
-  G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
-  G4double q=kInfinity;
-  G4double x1,x2,y1,y2,xp,yp,zi;
-
-  if (std::fabs(a)<kCarTolerance)
-  {           
-    if (std::fabs(b)<kCarTolerance)  { return kInfinity; }
-    q=-c/b;
-
-    // Check if Point is on the Surface
-
-    if (q>-halfCarTolerance)
-    {
-      if (q<halfCarTolerance)
-      {
-        if (NormalToPlane(p,ipl).dot(v)<=0)
-          { if(Inside(p) != kOutside) { return 0.; } }
-        else
-          { return kInfinity; }
-      }
-
-      // Check the Intersection
-      //
-      zi=p.z()+q*v.z();
-      if (std::fabs(zi)<fDz)
-      {
-        x1=xs1+tx1*v.z()*q;
-        x2=xs2+tx2*v.z()*q;
-        xp=p.x()+q*v.x();
-        y1=ys1+ty1*v.z()*q;
-        y2=ys2+ty2*v.z()*q;
-        yp=p.y()+q*v.y();
-        zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-        if (zi<=halfCarTolerance)  { return q; }
-      }
-    }
-    return kInfinity;
-  }      
-  G4double d=b*b-4*a*c;
-  if (d>=0)
-  {
-    if (a>0) { q=0.5*(-b-std::sqrt(d))/a; }
-    else     { q=0.5*(-b+std::sqrt(d))/a; }
-
-    // Check if Point is on the Surface
-    //
-    if (q>-halfCarTolerance)
-    {
-      if(q<halfCarTolerance)
-      {
-        if (NormalToPlane(p,ipl).dot(v)<=0)
-        {
-          if(Inside(p)!= kOutside) { return 0.; }
-        }
-        else  // Check second root; return kInfinity
-        {
-          if (a>0) { q=0.5*(-b+std::sqrt(d))/a; }
-          else     { q=0.5*(-b-std::sqrt(d))/a; }
-          if (q<=halfCarTolerance) { return kInfinity; }
-        }
-      }
-      // Check the Intersection
-      //
-      zi=p.z()+q*v.z();
-      if (std::fabs(zi)<fDz)
-      {
-        x1=xs1+tx1*v.z()*q;
-        x2=xs2+tx2*v.z()*q;
-        xp=p.x()+q*v.x();
-        y1=ys1+ty1*v.z()*q;
-        y2=ys2+ty2*v.z()*q;
-        yp=p.y()+q*v.y();
-        zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-        if (zi<=halfCarTolerance)  { return q; }
-      }
-    }
-    if (a>0)  { q=0.5*(-b+std::sqrt(d))/a; }
-    else      { q=0.5*(-b-std::sqrt(d))/a; }
-
-    // Check if Point is on the Surface
-    //
-    if (q>-halfCarTolerance)
-    {
-      if(q<halfCarTolerance)
-      {
-        if (NormalToPlane(p,ipl).dot(v)<=0)
-        {
-          if(Inside(p) != kOutside)  { return 0.; }
-        }
-        else   // Check second root; return kInfinity.
-        {
-          if (a>0) { q=0.5*(-b-std::sqrt(d))/a; }
-          else     { q=0.5*(-b+std::sqrt(d))/a; }
-          if (q<=halfCarTolerance)  { return kInfinity; }
-        }
-      }
-      // Check the Intersection
-      //
-      zi=p.z()+q*v.z();
-      if (std::fabs(zi)<fDz)
-      {
-        x1=xs1+tx1*v.z()*q;
-        x2=xs2+tx2*v.z()*q;
-        xp=p.x()+q*v.x();
-        y1=ys1+ty1*v.z()*q;
-        y2=ys2+ty2*v.z()*q;
-        yp=p.y()+q*v.y();
-        zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-        if (zi<=halfCarTolerance)  { return q; }
-      }
-    }
-  }
-  return kInfinity;
-}      
-
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Compute distance to the surface from outside,
+// return kInfinity if no intersection
+//
 G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
                                      const G4ThreeVector& v) const
 {
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->DistanceToIn(p, v);
-  }  
-#endif
-    
-  G4double dist[5];
-  G4ThreeVector n;
+  G4double px = p.x(), py = p.y(), pz = p.z();
+  G4double vx = v.x(), vy = v.y(), vz = v.z();
 
-  // Check lateral faces
+  // Find intersections with the bounding polyhedron
   //
-  G4int i;
-  for (i=0; i<4; ++i)
-  {
-    dist[i]=DistToPlane(p, v, i);  
-  }
+  if (std::abs(pz) - fDz >= -halfTolerance && pz*vz >= 0) { return kInfinity; }
+  G4double invz = (vz == 0) ? kInfinity : -1./vz;
+  G4double dz = std::copysign(fDz,invz);
+  G4double xin  = (pz - dz)*invz;
+  G4double xout = (pz + dz)*invz;
 
-  // Check Z planes
-  //
-  dist[4]=kInfinity;
-  if (std::fabs(p.z())>fDz-halfCarTolerance)
+  // Check plane faces
+  for (auto k = 0; k < 4; ++k)
   {
-    if (v.z() != 0.0)
+    if (fTwist[k] != 0) continue; // skip twisted faces
+    const G4GenericTrapPlane& surf = fPlane[2*k];
+    G4double cosa = surf.A*vx + surf.B*vy + surf.C*vz;
+    G4double dist = surf.A*px + surf.B*py + surf.C*pz + surf.D;
+    if (dist >= -halfTolerance)
     {
-      G4ThreeVector pt;
-      if (p.z()>0)
-      {
-        dist[4] = (fDz-p.z())/v.z();
-      }
-      else
-      {   
-        dist[4] = (-fDz-p.z())/v.z();
-      }   
-      if (dist[4]<-halfCarTolerance)
-      {
-        dist[4]=kInfinity;
-      }
-      else
-      {
-        if(dist[4]<halfCarTolerance)
-        {
-          if(p.z()>0)  { n=G4ThreeVector(0,0,1); }
-          else         { n=G4ThreeVector(0,0,-1); }
-          if (n.dot(v)<0) { dist[4]=0.; }
-          else            { dist[4]=kInfinity; }
-        }
-        pt=p+dist[4]*v;
-        if (Inside(pt)==kOutside)  { dist[4]=kInfinity; }
-      }
-    }
-  }   
-  G4double distmin = dist[0];
-  for (i=1; i<5 ; ++i)
-  {
-    if (dist[i] < distmin)  { distmin = dist[i]; }
-  }
-
-  if (distmin<halfCarTolerance)  { distmin=0.; }
-
-  return distmin;
-}    
-  
-// --------------------------------------------------------------------
-
-G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p) const
-{
-  // Computes the closest distance from given point to this shape
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  {
-    return fTessellatedSolid->DistanceToIn(p);
-  }  
-#endif
- 
-  G4double safz = std::fabs(p.z())-fDz;
-  if(safz<0) { safz=0; }
-
-  G4int iseg;
-  G4double safe  = safz;
-  G4double safxy = safz;
- 
-  for (iseg=0; iseg<4; ++iseg)
-  { 
-    safxy = SafetyToFace(p,iseg);
-    if (safxy>safe)  { safe=safxy; }
-  }
-
-  return safe;
-}
-
-// --------------------------------------------------------------------
-
-G4double
-G4GenericTrap::SafetyToFace(const G4ThreeVector& p, const G4int iseg) const
-{
-  // Estimate distance to lateral plane defined by segment iseg in range [0,3]
-  // Might be negative: plane seen only from inside
-
-  G4ThreeVector p1,norm;
-  G4double safe;
-
-  p1=G4ThreeVector(fVertices[iseg].x(),fVertices[iseg].y(),-fDz);
-  
-  norm=NormalToPlane(p,iseg);
-  safe = (p-p1).dot(norm); // Can be negative
- 
-  return safe;
-}
-
-// --------------------------------------------------------------------
-
-G4double
-G4GenericTrap::DistToTriangle(const G4ThreeVector& p,
-                              const G4ThreeVector& v, const G4int ipl) const
-{
-  G4double xa=fVertices[ipl].x();
-  G4double ya=fVertices[ipl].y();
-  G4double xb=fVertices[ipl+4].x();
-  G4double yb=fVertices[ipl+4].y();
-  G4int j=(ipl+1)%4;
-  G4double xc=fVertices[j].x();
-  G4double yc=fVertices[j].y();
-  G4double zab=2*fDz;
-  G4double zac=0;
-  
-  if ( (std::fabs(xa-xc)+std::fabs(ya-yc)) < halfCarTolerance )
-  {
-    xc=fVertices[j+4].x();
-    yc=fVertices[j+4].y();
-    zac=2*fDz;
-    zab=2*fDz;
-
-    //Line case
-    //
-    if ( (std::fabs(xb-xc)+std::fabs(yb-yc)) < halfCarTolerance )
-    {
-      return kInfinity;
-    }
-  }
-  G4double a=(yb-ya)*zac-(yc-ya)*zab;
-  G4double b=(xc-xa)*zab-(xb-xa)*zac;
-  G4double c=(xb-xa)*(yc-ya)-(xc-xa)*(yb-ya);
-  G4double d=-xa*a-ya*b+fDz*c;
-  G4double t=a*v.x()+b*v.y()+c*v.z();
-
-  if (t!=0)
-  {
-    t=-(a*p.x()+b*p.y()+c*p.z()+d)/t;
-  }
-  if ( (t<halfCarTolerance) && (t>-halfCarTolerance) )
-  {
-    if (NormalToPlane(p,ipl).dot(v)<kCarTolerance)
-    {
-      t=kInfinity;
+      if (cosa >= 0.) { return kInfinity; } // point flies away
+      G4double tmp  = -dist/cosa;
+      xin = std::max(tmp, xin);
     }
     else
     {
-      t=0;
+      if (cosa > 0) { xout = std::min(-dist/cosa, xout); }
+      if (cosa < 0) { xin = std::max(-dist/cosa, xin); }
     }
   }
-  if (Inside(p+v*t) != kSurface)  { t=kInfinity; }
- 
-  return t;
-} 
 
-// --------------------------------------------------------------------
+  // Check planes around twisted faces, each twisted face is bounded by two planes
+  G4double tin  = xin;
+  G4double tout = xout;
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] == 0) continue; // skip plane faces
 
+    // check intersection with 1st bounding plane
+    const G4GenericTrapPlane& surf1 = fPlane[2*i];
+    G4double cosa = surf1.A*vx + surf1.B*vy + surf1.C*vz;
+    G4double dist = surf1.A*px + surf1.B*py + surf1.C*pz + surf1.D;
+    if (dist >= -halfTolerance)
+    {
+      if (cosa >= 0.) { return kInfinity; } // point flies away
+      G4double tmp  = -dist/cosa;
+      tin = std::max(tmp, tin);
+    }
+    else
+    {
+      if (cosa > 0) { tout = std::min(-dist/cosa, tout); }
+      if (cosa < 0) { tin = std::max(-dist/cosa, tin); }
+    }
+
+    // check intersection with 2nd bounding plane
+    const G4GenericTrapPlane& surf2 = fPlane[2*i + 1];
+    cosa = surf2.A*vx + surf2.B*vy + surf2.C*vz;
+    dist = surf2.A*px + surf2.B*py + surf2.C*pz + surf2.D;
+    if (dist >= -halfTolerance)
+    {
+      if (cosa >= 0.) { return kInfinity; } // point flies away
+      G4double tmp  = -dist/cosa;
+      tin = std::max(tmp, tin);
+    }
+    else
+    {
+      if (cosa > 0) { tout = std::min(-dist/cosa, tout); }
+      if (cosa < 0) { tin = std::max(-dist/cosa, tin); }
+    }
+  }
+  if (tout - tin <= halfTolerance) { return kInfinity; } // touch or no hit
+
+  // if point is outside of the bounding box
+  // then move it to the surface of the bounding polyhedron
+  G4double t0 = 0., x0 = px, y0 = py, z0 = pz;
+  if (x0 < fMinBBox.x() - halfTolerance ||
+      y0 < fMinBBox.y() - halfTolerance ||
+      z0 < fMinBBox.z() - halfTolerance ||
+      x0 > fMaxBBox.x() + halfTolerance ||
+      y0 > fMaxBBox.y() + halfTolerance ||
+      z0 > fMaxBBox.z() + halfTolerance)
+  {
+    t0 = tin;
+    x0 += vx*t0;
+    y0 += vy*t0;
+    z0 += vz*t0;
+   }
+
+  // Check intersections with twisted faces
+  //
+  G4double ttin[2] = { DBL_MAX, DBL_MAX };
+  G4double ttout[2] = { tout, tout };
+
+  if (tin - xin < halfTolerance) ttin[0] = xin;
+  if (xout - tout < halfTolerance) ttout[0] = xout;
+  G4double tminimal = tin - halfTolerance;
+  G4double tmaximal = tout + halfTolerance;
+
+  constexpr G4double EPSILON = 1000.*DBL_EPSILON;
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] == 0) continue; // skip plane faces
+
+    // twisted face, solve quadratic equation
+    G4double ABC  = fSurf[i].A*vx + fSurf[i].B*vy + fSurf[i].C*vz;
+    G4double ABCF = fSurf[i].A*x0 + fSurf[i].B*y0 + fSurf[i].C*z0 + fSurf[i].F;
+    G4double A = ABC*vz;
+    G4double B = 0.5*(fSurf[i].D*vx + fSurf[i].E*vy + ABCF*vz + ABC*z0);
+    G4double C = fSurf[i].D*x0 + fSurf[i].E*y0 + ABCF*z0 + fSurf[i].G;
+    if (std::abs(A) <= EPSILON)
+    {
+      // case 1: track is parallel to the surface
+      if (std::abs(B) <= EPSILON)
+      {
+        // check position of the track relative to the surface,
+        // for the reason of precision it's better to use (x0,y0,z0) instead of (px,py,pz)
+        auto j = (i + 1)%4;
+        G4double z = (z0 + fDz);
+        G4TwoVector a = fVertices[i] + fDelta[i]*z;
+        G4TwoVector b = fVertices[j] + fDelta[j]*z;
+        G4double dx = b.x() - a.x();
+        G4double dy = b.y() - a.y();
+        G4double leng = std::sqrt(dx*dx + dy*dy);
+        G4double dist = dx*(y0 - a.y()) - dy*(x0 - a.x());
+        if (dist >= -halfTolerance*leng) { return kInfinity; }
+        continue;
+      }
+
+      // case 2: single root
+      G4double tmp = t0 - 0.5*C/B;
+      // compute normal at the intersection point and check direction
+      G4double x = px + vx*tmp;
+      G4double y = py + vy*tmp;
+      G4double z = pz + vz*tmp;
+      const G4GenericTrapSurface& surf = fSurf[i];
+      G4double nx = surf.A*z + surf.D;
+      G4double ny = surf.B*z + surf.E;
+      G4double nz = surf.A*x + surf.B*y + 2.*surf.C*z + surf.F;
+
+      if (nx*vx + ny*vy + nz*vz >= 0.) // point is flying to outside
+      {
+        auto k = (i == 3) ? 0 : i + 1;
+        G4double tz = (pz + fDz);
+        G4TwoVector a = fVertices[i] + fDelta[i]*tz;
+        G4TwoVector b = fVertices[k] + fDelta[k]*tz;
+        G4double dx = b.x() - a.x();
+        G4double dy = b.y() - a.y();
+        G4double leng = std::sqrt(dx*dx + dy*dy);
+        G4double dist = dx*(py - a.y()) - dy*(px - a.x());
+        if (dist >= -halfTolerance*leng) { return kInfinity; } // point is flies away
+
+        if (tmp < tminimal || tmp > tmaximal) continue;
+        if (std::abs(tmp - ttout[0]) < halfTolerance) continue;
+        if (tmp < ttout[0])
+        {
+          ttout[1] = ttout[0];
+          ttout[0] = tmp;
+        }
+        else { ttout[1] = std::min(tmp, ttout[1]); }
+      }
+      else // point is flying to inside
+      {
+        if (tmp < tminimal || tmp > tmaximal) continue;
+        if (std::abs(tmp - ttin[0]) < halfTolerance) continue;
+        if (tmp < ttin[0])
+        {
+          ttin[1] = ttin[0];
+          ttin[0] = tmp;
+        }
+        else { ttin[1] = std::min(tmp, ttin[1]); }
+      }
+      continue;
+    }
+
+    // case 3: scratch or no intersection
+    G4double D = B*B - A*C;
+    if (D < 0.25*fScratch*fScratch*A*A)
+    {
+      if (A > 0) return kInfinity;
+      continue;
+    }
+
+    // case 4: two intersection points
+    G4double tmp = -B - std::copysign(std::sqrt(D), B);
+    G4double t1 = tmp/A + t0;
+    G4double t2 = C/tmp + t0;
+    G4double tsurfin = std::min(t1, t2);
+    G4double tsurfout = std::max(t1, t2);
+    if (A < 0) std::swap(tsurfin, tsurfout);
+
+    if (tsurfin >= tminimal && tsurfin <= tmaximal)
+    {
+      if (std::abs(tsurfin - ttin[0]) >= halfTolerance)
+      {
+        if (tsurfin < ttin[0])
+        {
+          ttin[1] = ttin[0];
+          ttin[0] = tsurfin;
+        }
+        else { ttin[1] = std::min(tsurfin, ttin[1]); }
+      }
+    }
+    if (tsurfout >= tminimal && tsurfout <= tmaximal)
+    {
+      if (std::abs(tsurfout - ttout[0]) >= halfTolerance)
+      {
+        if (tsurfout < ttout[0])
+        {
+          ttout[1] = ttout[0];
+          ttout[0] = tsurfout;
+        }
+        else { ttout[1] = std::min(tsurfout, ttout[1]); }
+      }
+    }
+  }
+
+  // Compute distance to In
+  //
+  if (ttin[0] == DBL_MAX) { return kInfinity; } // no entry point
+
+  // single entry point
+  if (ttin[1] == DBL_MAX)
+  {
+    G4double distin = ttin[0];
+    G4double distout = (distin >= ttout[0] - halfTolerance) ? ttout[1] : ttout[0];
+    G4double dist = (distout <= halfTolerance || distout - distin <= halfTolerance) ? kInfinity : distin;
+    return (dist < halfTolerance) ? 0. : dist;
+  }
+
+  // two entry points
+  if (ttin[1] < ttout[0])
+  {
+    G4double distin = ttin[1], distout = ttout[0];
+    G4double dist = (distout <= halfTolerance || distout - distin <= halfTolerance) ? kInfinity : distin;
+    return (dist < halfTolerance) ? 0. : dist;
+  }
+
+  // check 1st pair of in-out points
+  G4double distin1 = ttin[0], distout1 = ttout[0];
+  G4double dist1 = (distout1 <= halfTolerance || distout1 - distin1 <= halfTolerance) ? kInfinity : distin1;
+  if (dist1 != kInfinity) { return (dist1 < halfTolerance) ? 0. : dist1; }
+
+  // check 2nd pair of in-out points
+  G4double distin2 = ttin[1], distout2 = ttout[1];
+  G4double dist2 = (distout2 <= halfTolerance || distout2 - distin2 <= halfTolerance) ? kInfinity : distin2;
+  return (dist2 < halfTolerance) ? 0. : dist2;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Estimate safety distance to the surface from outside
+//
+G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p) const
+{
+  G4double px = p.x(), py = p.y(), pz = p.z();
+
+  // intersect edges by z = pz plane
+  G4TwoVector pp[4];
+  G4double z = (pz + fDz);
+  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*z; }
+
+  // estimate distance to the solid
+  G4double dist = std::abs(pz) - fDz;
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] == 0.)
+    {
+      G4double dd = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
+      dist = std::max(dd, dist);
+    }
+    else
+    {
+      // comptute distance to the wedge (two planes) in front of the surface
+      auto j = (i + 1)%4;
+      G4double cx = pp[j].x() - pp[i].x();
+      G4double cy = pp[j].y() - pp[i].y();
+      G4double d = (pp[i].x() - px)*cy + (py - pp[i].y())*cx;
+      G4ThreeVector na(-cy, cx, fDelta[i].x()*cy - fDelta[i].y()*cx);
+      G4ThreeVector nb(-cy, cx, fDelta[j].x()*cy - fDelta[j].y()*cx);
+      G4double amag2 = na.mag2();
+      G4double bmag2 = nb.mag2();
+      G4double distab = (amag2 > bmag2) ? d/std::sqrt(amag2) : d/std::sqrt(bmag2); // d > 0
+      dist = std::max(distab, dist);
+    }
+  }
+  return (dist > 0.) ? dist : 0.; // return safety distance
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculate distance to surface from inside
+//
 G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
                                       const G4ThreeVector& v,
                                       const G4bool calcNorm,
                                             G4bool* validNorm,
                                             G4ThreeVector* n) const
 {
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->DistanceToOut(p, v, calcNorm, validNorm, n);
-  }
-#endif
+  G4double px = p.x(), py = p.y(), pz = p.z();
+  G4double vx = v.x(), vy = v.y(), vz = v.z();
 
-  G4double distmin;
-  G4bool lateral_cross = false;
-  ESide side = kUndef;
- 
-  if (calcNorm)  { *validNorm = true; } // All normals are valid
-
-  if (v.z() < 0)
+  // Check intersections with plane faces
+  //
+  if ((std::abs(pz) - fDz) >= -halfTolerance && pz*vz > 0.)
   {
-    distmin=(-fDz-p.z())/v.z();
-    if (calcNorm) { side=kMZ; *n=G4ThreeVector(0,0,-1); }
-  }
-  else
-  {
-    if (v.z() > 0)
-    { 
-      distmin = (fDz-p.z())/v.z(); 
-      if (calcNorm) { side=kPZ; *n=G4ThreeVector(0,0,1); } 
-    }
-    else            { distmin = kInfinity; }
-  }      
-
-  G4double dz2 =0.5/fDz;
-  G4double xa,xb,xc,xd;
-  G4double ya,yb,yc,yd;
-
-  for (G4int ipl=0; ipl<4; ++ipl)
-  {
-    G4int j = (ipl+1)%4;
-    xa=fVertices[ipl].x();
-    ya=fVertices[ipl].y();
-    xb=fVertices[ipl+4].x();
-    yb=fVertices[ipl+4].y();
-    xc=fVertices[j].x();
-    yc=fVertices[j].y();
-    xd=fVertices[4+j].x();
-    yd=fVertices[4+j].y();
-
-    if ( ((std::fabs(xb-xd)+std::fabs(yb-yd))<halfCarTolerance)
-      || ((std::fabs(xa-xc)+std::fabs(ya-yc))<halfCarTolerance) )
+    if (calcNorm)
     {
-      G4double q=DistToTriangle(p,v,ipl) ;
-      if ( (q>=0) && (q<distmin) )
+      *validNorm = true;
+      n->set(0., 0., std::copysign(1., pz));
+    }
+    return 0.;
+  }
+  G4double tout = (vz == 0) ? DBL_MAX : (std::copysign(fDz, vz) - pz)/vz;
+  G4int iface = (vz < 0) ? -4 : -2; // little trick for z-normal: (-4+3)=-1, (-2+3)=+1
+
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] != 0) continue; // skip twisted faces
+    const G4GenericTrapPlane& surf = fPlane[2*i];
+    G4double cosa = surf.A*vx + surf.B*vy + surf.C*vz;
+    if (cosa > 0)
+    {
+      G4double dist = surf.A*px + surf.B*py + surf.C*pz + surf.D;
+      if (dist >= -halfTolerance)
       {
-        distmin=q;
-        lateral_cross=true;
-        side=ESide(ipl+1);
+        if (calcNorm)
+        {
+           *validNorm = true;
+           n->set(surf.A, surf.B, surf.C);
+        }
+        return 0.;
+      }
+      G4double tmp = -dist/cosa;
+      if (tout > tmp) { tout = tmp; iface = i; }
+    }
+  }
+
+  // Check intersections with twisted faces
+  //
+  constexpr G4double EPSILON = 1000.*DBL_EPSILON;
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] == 0) continue; // skip plane faces
+
+    // twisted face, solve quadratic equation
+    const G4GenericTrapSurface& surf = fSurf[i];
+    G4double ABC  = surf.A*vx + surf.B*vy + surf.C*vz;
+    G4double ABCF = surf.A*px + surf.B*py + surf.C*pz + surf.F;
+    G4double A = ABC*vz;
+    G4double B = 0.5*(surf.D*vx + surf.E*vy + ABCF*vz + ABC*pz);
+    G4double C = surf.D*px + surf.E*py + ABCF*pz + surf.G;
+
+    if (std::abs(A) <= EPSILON)
+    {
+      // case 1: track is parallel to the surface
+      if (std::abs(B) <= EPSILON) { continue; }
+
+      // case 2: single root
+      G4double tmp = -0.5*C/B;
+      // compute normal at intersection point and check direction
+      G4double x = px + vx*tmp;
+      G4double y = py + vy*tmp;
+      G4double z = pz + vz*tmp;
+      G4double nx = surf.A*z + surf.D;
+      G4double ny = surf.B*z + surf.E;
+      G4double nz = surf.A*x + surf.B*y + 2.*surf.C*z + surf.F;
+
+      if (nx*vx + ny*vy + nz*vz > 0.) // point is flying to outside
+      {
+        auto k = (i + 1)%4;
+        G4double tz = (pz + fDz);
+        G4TwoVector a = fVertices[i] + fDelta[i]*tz;
+        G4TwoVector b = fVertices[k] + fDelta[k]*tz;
+        G4double dx = b.x() - a.x();
+        G4double dy = b.y() - a.y();
+        G4double leng = std::sqrt(dx*dx + dy*dy);
+        G4double dist = dx*(py - a.y()) - dy*(px - a.x());
+        if (dist >= -halfTolerance*leng) // point is on the surface
+        {
+          if (calcNorm)
+          {
+            *validNorm = false;
+            G4double normx = surf.A*pz + surf.D;
+            G4double normy = surf.B*pz + surf.E;
+            G4double normz = surf.A*px + surf.B*py + 2.*surf.C*pz + surf.F;
+            G4double inv = 1./std::sqrt(normx*normx + normy*normy + normz*normz);
+            n->set(normx*inv, normy*inv, normz*inv);
+          }
+          return 0.;
+        }
+        if (tout > tmp) { tout = tmp; iface = i; }
       }
       continue;
     }
-    G4double tx1 =dz2*(xb-xa);
-    G4double ty1 =dz2*(yb-ya);
-    G4double tx2 =dz2*(xd-xc);
-    G4double ty2 =dz2*(yd-yc);
-    G4double dzp =fDz+p.z();
-    G4double xs1 =xa+tx1*dzp;
-    G4double ys1 =ya+ty1*dzp;
-    G4double xs2 =xc+tx2*dzp;
-    G4double ys2 =yc+ty2*dzp;
-    G4double dxs =xs2-xs1;
-    G4double dys =ys2-ys1;
-    G4double dtx =tx2-tx1;
-    G4double dty =ty2-ty1;
-    G4double a = (dtx*v.y()-dty*v.x()+(tx1*ty2-tx2*ty1)*v.z())*v.z();
-    G4double b = dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
-               + tx1*ys2-tx2*ys1)*v.z();
-    G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
-    G4double q=kInfinity;
 
-    if (std::fabs(a) < kCarTolerance)
-    {           
-      if (std::fabs(b) < kCarTolerance) { continue; }
-      q=-c/b;
-         
-      // Check for Point on the Surface
-      //
-      if ((q > -halfCarTolerance) && (q < distmin))
+    // case 3: scratch or no intersection
+    G4double D = B*B - A*C;
+    if (D < 0.25*fScratch*fScratch*A*A)
+    {
+      // check position of the point
+      auto j = (i + 1)%4;
+      G4double tz = pz + fDz;
+      G4TwoVector a = fVertices[i] + fDelta[i]*tz;
+      G4TwoVector b = fVertices[j] + fDelta[j]*tz;
+      G4double dx = b.x() - a.x();
+      G4double dy = b.y() - a.y();
+      G4double leng = std::sqrt(dx*dx + dy*dy);
+      G4double dist = dx*(py - a.y()) - dy*(px - a.x());
+      if  (dist <= -halfTolerance*leng) { continue; } // point is inside
+      if  (A > 0 || dist > halfTolerance*leng) // convex surface (or point is outside)
       {
-        if (q < halfCarTolerance)
+        if (calcNorm)
         {
-          if (NormalToPlane(p,ipl).dot(v)<0.)  { continue; }
+          *validNorm = false;
+          G4double nx = surf.A*pz + surf.D;
+          G4double ny = surf.B*pz + surf.E;
+          G4double nz = surf.A*px + surf.B*py + 2.*surf.C*pz + surf.F;
+          G4double inv = 1./std::sqrt(nx*nx + ny*ny + nz*nz);
+          n->set(nx*inv, ny*inv, nz*inv);
         }
-        distmin =q;
-        lateral_cross=true;
-        side=ESide(ipl+1);
-      }   
+        return 0.;
+      }
       continue;
     }
-    G4double d=b*b-4*a*c;
-    if (d >= 0.)
+
+    // case 4: two intersection points
+    G4double tmp = -B - std::copysign(std::sqrt(D), B);
+    G4double t1 = tmp / A;
+    G4double t2 = C / tmp;
+    G4double tmin = std::min(t1, t2);
+    G4double tmax = std::max(t1, t2);
+
+    if (A < 0) // concave profile: tmin(out) -> tmax(in)
     {
-      if (a > 0)  { q=0.5*(-b-std::sqrt(d))/a; }
-      else        { q=0.5*(-b+std::sqrt(d))/a; }
-
-      // Check for Point on the Surface
-      //
-      if (q > -halfCarTolerance )
+      if (std::abs(tmax) < std::abs(tmin)) continue; // point flies inside
+      if (tmin <= halfTolerance) // point is on external side of the surface
       {
-        if (q < distmin)
+        G4double t = 0.5*(tmin + tmax);
+        G4double x = px + vx*t;
+        G4double y = py + vy*t;
+        G4double z = pz + vz*t;
+
+        auto j = (i + 1)%4;
+        G4double tz = z + fDz;
+        G4TwoVector a = fVertices[i] + fDelta[i]*tz;
+        G4TwoVector b = fVertices[j] + fDelta[j]*tz;
+        G4double dx = b.x() - a.x();
+        G4double dy = b.y() - a.y();
+        G4double leng = std::sqrt(dx*dx + dy*dy);
+        G4double dist = dx*(y - a.y()) - dy*(x - a.x());
+        if  (dist <= -halfTolerance*leng) continue; // scratch
+        if (calcNorm)
         {
-          if(q < halfCarTolerance)
-          {
-            if (NormalToPlane(p,ipl).dot(v)<0.)  // Check second root
-            {
-              if (a > 0)  { q=0.5*(-b+std::sqrt(d))/a; }
-              else        { q=0.5*(-b-std::sqrt(d))/a; }
-              if (( q > halfCarTolerance) && (q < distmin))
-              {
-                distmin=q;
-                lateral_cross = true;
-                side=ESide(ipl+1);
-              }
-              continue;
-            }
-          }
-          distmin = q;
-          lateral_cross = true;
-          side=ESide(ipl+1);
+          *validNorm = false;
+          G4double nx = surf.A*pz + surf.D;
+          G4double ny = surf.B*pz + surf.E;
+          G4double nz = surf.A*px + surf.B*py + 2.*surf.C*pz + surf.F;
+          G4double inv = 1./std::sqrt(nx*nx + ny*ny + nz*nz);
+          n->set(nx*inv, ny*inv, nz*inv);
         }
+        return 0.;
       }
-      else
+      if (tout > tmin) { tout = tmin; iface = i; }
+    }
+    else // convex profile: tmin(in) -> tmax(out)
+    {
+      if (tmax < halfTolerance) // point is on the surface
       {
-        if (a > 0)  { q=0.5*(-b+std::sqrt(d))/a; }
-        else        { q=0.5*(-b-std::sqrt(d))/a; }
-
-        // Check for Point on the Surface
-        //
-        if ((q > -halfCarTolerance) && (q < distmin))
+        if (calcNorm)
         {
-          if (q < halfCarTolerance)
-          {
-            if (NormalToPlane(p,ipl).dot(v)<0.)  // Check second root
-            {
-              if (a > 0)  { q=0.5*(-b-std::sqrt(d))/a; }
-              else        { q=0.5*(-b+std::sqrt(d))/a; }
-              if ( ( q > halfCarTolerance) && (q < distmin) )
-              {
-                distmin=q;
-                lateral_cross = true;
-                side=ESide(ipl+1);
-              }
-              continue;
-            }  
-          }
-          distmin =q;
-          lateral_cross = true;
-          side=ESide(ipl+1);
-        }   
+          *validNorm = false;
+          G4double nx = surf.A*pz + surf.D;
+          G4double ny = surf.B*pz + surf.E;
+          G4double nz = surf.A*px + surf.B*py + 2.*surf.C*pz + surf.F;
+          G4double inv = 1./std::sqrt(nx*nx + ny*ny + nz*nz);
+          n->set(nx*inv, ny*inv, nz*inv);
+        }
+        return 0.;
       }
+      if (tout > tmax) { tout = tmax; iface = i; }
     }
   }
-  if (!lateral_cross)  // Make sure that track crosses the top or bottom
-  {
-    if (distmin >= kInfinity)  { distmin=kCarTolerance; }
-    G4ThreeVector pt=p+distmin*v;
-    
-    // Check if propagated point is in the polygon
-    //
-    G4int i=0;
-    if (v.z()>0.) { i=4; }
-    std::vector<G4TwoVector> xy;
-    for ( G4int j=0; j<4; j++)  { xy.push_back(fVertices[i+j]); }
 
-    // Check Inside
-    //
-    if (InsidePolygone(pt,xy)==kOutside)
-    { 
-      if(calcNorm)
-      {
-        if (v.z()>0) {side= kPZ; *n = G4ThreeVector(0,0,1);}
-        else         { side=kMZ; *n = G4ThreeVector(0,0,-1);}
-      } 
-      return 0.;
+  // Compute normal, if required, and return distance to out
+  //
+  if (tout < halfTolerance) tout = 0.;
+  if (calcNorm)
+  {
+    if (iface < 0)
+    {
+      *validNorm = true;
+      n->set(0., 0., G4double(iface + 3)); // little trick: (-4+3)=-1, (-2+3)=+1
     }
     else
     {
-      if(v.z()>0) {side=kPZ;}
-      else        {side=kMZ;}
+      const G4GenericTrapSurface& surf = fSurf[iface];
+      if (fTwist[iface] == 0)
+      {
+        *validNorm = true;
+        n->set(surf.D, surf.E, surf.F);
+      }
+      else
+      {
+        *validNorm = false;
+        G4double x = px + vx*tout;
+        G4double y = py + vy*tout;
+        G4double z = pz + vz*tout;
+        G4double nx = surf.A*z + surf.D;
+        G4double ny = surf.B*z + surf.E;
+        G4double nz = surf.A*x + surf.B*y + 2.*surf.C*z + surf.F;
+        G4double inv = 1./std::sqrt(nx*nx + ny*ny + nz*nz);
+        n->set(nx*inv, ny*inv, nz*inv);
+      }
     }
   }
+  return tout;
+}
 
-  if (calcNorm)
-  {
-    G4ThreeVector pt=p+v*distmin;     
-    switch (side)
-    {
-      case kXY0:
-        *n=NormalToPlane(pt,0);
-        break;
-      case kXY1:
-        *n=NormalToPlane(pt,1);
-        break;
-      case kXY2:
-        *n=NormalToPlane(pt,2);
-        break;
-      case kXY3:
-        *n=NormalToPlane(pt,3);
-        break;
-      case kPZ:
-        *n=G4ThreeVector(0,0,1);
-        break;
-      case kMZ:
-        *n=G4ThreeVector(0,0,-1);
-        break;
-      default:
-        DumpInfo();
-        std::ostringstream message;
-        G4long oldprc = message.precision(16);
-        message << "Undefined side for valid surface normal to solid." << G4endl
-                << "Position:" << G4endl
-                << "  p.x() = "   << p.x()/mm << " mm" << G4endl
-                << "  p.y() = "   << p.y()/mm << " mm" << G4endl
-                << "  p.z() = "   << p.z()/mm << " mm" << G4endl
-                << "Direction:" << G4endl
-                << "  v.x() = "   << v.x() << G4endl
-                << "  v.y() = "   << v.y() << G4endl
-                << "  v.z() = "   << v.z() << G4endl
-                << "Proposed distance :" << G4endl
-                << "  distmin = " << distmin/mm << " mm";
-        message.precision(oldprc);
-        G4Exception("G4GenericTrap::DistanceToOut(p,v,..)",
-                    "GeomSolids1002", JustWarning, message);
-        break;
-     }
-  }
- 
-  if (distmin<halfCarTolerance)  { distmin=0.; }
- 
-  return distmin;
-}    
-
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Estimate safety distance to the surface from inside
+//
 G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
 {
+  G4double px = p.x(), py = p.y(), pz = p.z();
 
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->DistanceToOut(p);
-  }  
-#endif
+  // intersect edges by z = pz plane
+  G4TwoVector pp[4];
+  G4double z = (pz + fDz);
+  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*z; }
 
-  G4double safz = fDz-std::fabs(p.z());
-  if (safz<0) { safz = 0; }
-
-  G4double safe  = safz;
-  G4double safxy = safz;
- 
-  for (G4int iseg=0; iseg<4; ++iseg)
-  { 
-    safxy = std::fabs(SafetyToFace(p,iseg));
-    if (safxy < safe)  { safe = safxy; }
+  // estimate distance to the solid
+  G4double dist =  std::abs(pz) - fDz;
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] == 0.)
+    {
+      G4double dd = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
+      dist = std::max(dd, dist);
+    }
+    else
+    {
+      // comptute distance to the wedge (two planes) in front of the surface
+      auto j = (i + 1)%4;
+      G4double cx = pp[j].x() - pp[i].x();
+      G4double cy = pp[j].y() - pp[i].y();
+      G4double d = (pp[i].x() - px)*cy + (py - pp[i].y())*cx;
+      G4ThreeVector na(-cy, cx, fDelta[i].x()*cy - fDelta[i].y()*cx);
+      G4ThreeVector nb(-cy, cx, fDelta[j].x()*cy - fDelta[j].y()*cx);
+      G4double amag2 = na.mag2();
+      G4double bmag2 = nb.mag2();
+      G4double distab = (amag2 > bmag2) ? d/std::sqrt(amag2) : d/std::sqrt(bmag2); // d < 0
+      dist = std::max(distab, dist);
+    }
   }
+  return (dist < 0.) ? -dist : 0.; // return safety distance
+}
 
-  return safe;
-}    
-
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Return bounding box
+//
 void G4GenericTrap::BoundingLimits(G4ThreeVector& pMin,
                                    G4ThreeVector& pMax) const
 {
-  pMin = GetMinimumBBox();
-  pMax = GetMaximumBBox();
-
-  // Check correctness of the bounding box
-  //
-  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
-  {
-    std::ostringstream message;
-    message << "Bad bounding box (min >= max) for solid: "
-            << GetName() << " !"
-            << "\npMin = " << pMin
-            << "\npMax = " << pMax;
-    G4Exception("G4GenericTrap::BoundingLimits()", "GeomMgt0001",
-                JustWarning, message);
-    DumpInfo();
-  }
+  pMin = fMinBBox;
+  pMax = fMaxBBox;
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limits
+//
 G4bool
 G4GenericTrap::CalculateExtent(const EAxis pAxis,
                                const G4VoxelLimits& pVoxelLimit,
@@ -1218,27 +903,27 @@ G4GenericTrap::CalculateExtent(const EAxis pAxis,
 
   // Set bounding envelope (benv) and calculate extent
   //
-  // To build the bounding envelope with plane faces each side face of
-  // the trapezoid is subdivided in triangles. Subdivision is done by
+  // To build the bounding envelope with plane faces, each lateral face of
+  // the trapezoid is subdivided in two triangles. Subdivision is done by
   // duplication of vertices in the bases in a way that the envelope be
-  // a convex polyhedron (some faces of the envelope can be degenerate)
+  // a convex polyhedron (some faces of the envelope can be degenerated)
   //
   G4double dz = GetZHalfLength();
   G4ThreeVectorList baseA(8), baseB(8);
-  for (G4int i=0; i<4; ++i)
+  for (G4int i = 0; i < 4; ++i)
   {
     G4TwoVector va = GetVertex(i);
     G4TwoVector vb = GetVertex(i+4);
-    baseA[2*i].set(va.x(),va.y(),-dz);
-    baseB[2*i].set(vb.x(),vb.y(), dz);
+    baseA[2*i].set(va.x(), va.y(),-dz);
+    baseB[2*i].set(vb.x(), vb.y(), dz);
   }
-  for (G4int i=0; i<4; ++i)
+  for (G4int i = 0; i < 4; ++i)
   {
-    G4int k1=2*i, k2=(2*i+2)%8;
-    G4double ax = (baseA[k2].x()-baseA[k1].x());
-    G4double ay = (baseA[k2].y()-baseA[k1].y());
-    G4double bx = (baseB[k2].x()-baseB[k1].x());
-    G4double by = (baseB[k2].y()-baseB[k1].y());
+    G4int k1 = 2*i, k2 = (2*i + 2)%8;
+    G4double ax = (baseA[k2].x() - baseA[k1].x());
+    G4double ay = (baseA[k2].y() - baseA[k1].y());
+    G4double bx = (baseB[k2].x() - baseB[k1].x());
+    G4double by = (baseB[k2].y() - baseB[k1].y());
     G4double znorm = ax*by - ay*bx;
     baseA[k1+1] = (znorm < 0.0) ? baseA[k2] : baseA[k1];
     baseB[k1+1] = (znorm < 0.0) ? baseB[k1] : baseB[k2];
@@ -1248,137 +933,140 @@ G4GenericTrap::CalculateExtent(const EAxis pAxis,
   polygons[0] = &baseA;
   polygons[1] = &baseB;
 
-  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  G4BoundingEnvelope benv(bmin, bmax, polygons);
   exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
   return exist;
 }
-  
-// --------------------------------------------------------------------
 
+////////////////////////////////////////////////////////////////////////
+//
+// Return type of the solid
+//
 G4GeometryType G4GenericTrap::GetEntityType() const
 {
-  return {"G4GenericTrap"};
+  return { "G4GenericTrap" };
 }
-  
-// --------------------------------------------------------------------
 
+////////////////////////////////////////////////////////////////////////
+//
+// Return true if not twisted, false otherwise
+//
+G4bool G4GenericTrap::IsFaceted() const
+{
+  return (!fIsTwisted);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the solid
+//
 G4VSolid* G4GenericTrap::Clone() const
 {
   return new G4GenericTrap(*this);
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Write parameters of the solid to the specified output stream
+//
 std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
 {
   G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-     << "    *** Dump for solid - " << GetName() << " *** \n"
-     << "    =================================================== \n"
-     << " Solid geometry type: " << GetEntityType()  << G4endl
-     << "   half length Z: " << fDz/mm << " mm \n"
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << "Solid geometry type: " << GetEntityType() << "\n"
+     << "   half length Z: " << fDz/mm << "\n"
      << "   list of vertices:\n";
-     
-  for ( G4int i=0; i<fgkNofVertices; ++i )
+  for (G4int i = 0; i < 8; ++i)
   {
-    os << std::setw(5) << "#" << i 
-       << "   vx = " << fVertices[i].x()/mm << " mm" 
-       << "   vy = " << fVertices[i].y()/mm << " mm" << G4endl;
+    os << "    #" << i << " " << fVertices[i] << "\n";
   }
+  os << "-----------------------------------------------------------\n";
   os.precision(oldprc);
-
   return os;
-} 
+}
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Pick up a random point on the surface
+//
 G4ThreeVector G4GenericTrap::GetPointOnSurface() const
 {
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->GetPointOnSurface();
-  }  
-#endif
-
-  G4ThreeVector point;
-  G4TwoVector u,v,w;
-  G4double rand,area,chose,cf,lambda0,lambda1,alfa,beta,zp;
-  G4int ipl,j;
- 
-  std::vector<G4ThreeVector> vertices;
-  for (auto i=0; i<4; ++i)
+  if (fArea[0] + fArea[1] + fArea[2] + fArea[3] == 0.)
   {
-    vertices.emplace_back(fVertices[i].x(),fVertices[i].y(),-fDz);
-  }
-  for (auto i=4; i<8; ++i)
-  {
-    vertices.emplace_back(fVertices[i].x(),fVertices[i].y(),fDz);
+    G4AutoLock l(&lateralareaMutex);
+    fArea[0] = GetLateralFaceArea(0);
+    fArea[1] = GetLateralFaceArea(1);
+    fArea[2] = GetLateralFaceArea(2);
+    fArea[3] = GetLateralFaceArea(3);
+    l.unlock();
   }
 
-  // Surface Area of Planes
-  //
+  constexpr G4int iface[6][4] =
+    { {0,1,2,3}, {0,4,5,1}, {1,5,6,2}, {2,6,7,3}, {3,7,4,0}, {4,5,6,7} };
+
+  G4bool isTwisted[6] = {false};
+  for (auto i = 0; i < 4; ++i) { isTwisted[i + 1] = (fTwist[i] != 0.0); }
+
+  G4double ssurf[6];
   G4TwoVector A = fVertices[3] - fVertices[1];
   G4TwoVector B = fVertices[2] - fVertices[0];
   G4TwoVector C = fVertices[7] - fVertices[5];
   G4TwoVector D = fVertices[6] - fVertices[4];
-  G4double Surface0 = 0.5*(A.x()*B.y() - A.y()*B.x()); //-fDz plane
-  G4double Surface1 = GetLateralFaceArea(0);
-  G4double Surface2 = GetLateralFaceArea(1);
-  G4double Surface3 = GetLateralFaceArea(2);
-  G4double Surface4 = GetLateralFaceArea(3);
-  G4double Surface5 = 0.5*(C.x()*D.y() - C.y()*D.x()); // fDz plane
+  ssurf[0] = (A.x()*B.y() - A.y()*B.x())*0.5; // -fDz face
+  ssurf[1] = ssurf[0] + fArea[0];
+  ssurf[2] = ssurf[1] + fArea[1];
+  ssurf[3] = ssurf[2] + fArea[2];
+  ssurf[4] = ssurf[3] + fArea[3];
+  ssurf[5] = ssurf[4] + (C.x()*D.y() - C.y()*D.x())*.5; // +fDz face
 
-  rand = G4UniformRand();
-  area = Surface0+Surface1+Surface2+Surface3+Surface4+Surface5;
-  chose = rand*area;
+  G4double select = ssurf[5]*G4QuickRand();
+  G4int k;
+  for (k = 0; k < 5; ++k) { if (select <= ssurf[k]) break; }
 
-  if ( ( chose < Surface0)
-    || ( chose > (Surface0+Surface1+Surface2+Surface3+Surface4)) )
-  {                                        // fDz or -fDz Plane
-    ipl = G4int(G4UniformRand()*4);
-    j = (ipl+1)%4;
-    if(chose < Surface0)
-    { 
-      zp = -fDz;
-      u = fVertices[ipl]; v = fVertices[j];
-      w = fVertices[(ipl+3)%4]; 
-    }
-    else
+  G4int i0 = iface[k][0];
+  G4int i1 = iface[k][1];
+  G4int i2 = iface[k][2];
+  G4int i3 = iface[k][3];
+  G4ThreeVector pp[4];
+  pp[0].set(fVertices[i0].x(), fVertices[i0].y(), ((k == 5) ?  fDz : -fDz));
+  pp[1].set(fVertices[i1].x(), fVertices[i1].y(), ((k == 0) ? -fDz :  fDz));
+  pp[2].set(fVertices[i2].x(), fVertices[i2].y(), ((k == 0) ? -fDz :  fDz));
+  pp[3].set(fVertices[i3].x(), fVertices[i3].y(), ((k == 5) ?  fDz : -fDz));
+
+  G4ThreeVector point;
+  if (isTwisted[k])
+  { // twisted face, rejection sampling
+    G4double maxlength = std::max((pp[2] - pp[1]).mag(), (pp[3] - pp[0]).mag());
+    point = (pp[0] + pp[1] + pp[2] + pp[3])*0.25;
+    for (auto i = 0; i < 10000; ++i)
     {
-      zp = fDz;
-      u = fVertices[ipl+4]; v = fVertices[j+4];
-      w = fVertices[(ipl+3)%4+4]; 
+      G4double u = G4QuickRand();
+      G4ThreeVector p0 = pp[0] + (pp[1] - pp[0])*u;
+      G4ThreeVector p1 = pp[3] + (pp[2] - pp[3])*u;
+      G4double v = G4QuickRand()*(maxlength/(p1 - p0).mag());
+      if (v >= 1.) continue;
+      point = p0 + (p1 - p0)*v;
+      break;
     }
-    alfa = G4UniformRand();
-    beta = G4UniformRand();
-    lambda1=alfa*beta;
-    lambda0=alfa-lambda1;
-    v = v-u;
-    w = w-u;
-    v = u+lambda0*v+lambda1*w;
   }
-  else                                     // Lateral Plane Twisted or Not
-  {
-    if (chose < Surface0+Surface1) { ipl=0; }
-    else if (chose < Surface0+Surface1+Surface2) { ipl=1; }
-    else if (chose < Surface0+Surface1+Surface2+Surface3) { ipl=2; }
-    else { ipl=3; }
-    j = (ipl+1)%4;
-    zp = -fDz+G4UniformRand()*2*fDz;
-    cf = 0.5*(fDz-zp)/fDz;
-    u = fVertices[ipl+4]+cf*( fVertices[ipl]-fVertices[ipl+4]);
-    v = fVertices[j+4]+cf*(fVertices[j]-fVertices[j+4]); 
-    v = u+(v-u)*G4UniformRand();
+  else
+  { // plane face
+    G4double u = G4QuickRand();
+    G4double v = G4QuickRand();
+    if (u + v > 1.) { u = 1. - u; v = 1. - v; }
+    G4double ss = (((pp[2] - pp[0]).cross(pp[3] - pp[0])).mag())*0.5;
+    G4int j = (select > ssurf[k] - ss) ? 3 : 1;
+    point = pp[0] + (pp[2] - pp[0])*u + (pp[j] - pp[0])*v;
   }
-  point=G4ThreeVector(v.x(),v.y(),zp);
-
   return point;
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Return volume of the solid
+//
 G4double G4GenericTrap::GetCubicVolume()
 {
   if (fCubicVolume == 0.0)
@@ -1400,15 +1088,27 @@ G4double G4GenericTrap::GetCubicVolume()
   return fCubicVolume;
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Compute lateral face area
+//
 G4double G4GenericTrap::GetLateralFaceArea(G4int iface) const
 {
+  G4int i1 = iface, i2 = (i1 + 1)%4, i3 = i1 + 4, i4 = i2 + 4;
+
+  // plane face
+  if (fTwist[iface] == 0.0)
+  {
+    G4ThreeVector p1(fVertices[i1].x(), fVertices[i1].y(),-fDz);
+    G4ThreeVector p2(fVertices[i2].x(), fVertices[i2].y(),-fDz);
+    G4ThreeVector p3(fVertices[i3].x(), fVertices[i3].y(), fDz);
+    G4ThreeVector p4(fVertices[i4].x(), fVertices[i4].y(), fDz);
+    return ((p4 - p1).cross(p3 - p2)).mag()*0.5;
+  }
+
+  // twisted face
   constexpr G4int NSTEP = 250;
   constexpr G4double dt = 1./NSTEP;
-
-  G4int i1 = iface, i2 = (iface + 1)%4;
-  G4int i3 = i1 + 4, i4 = i2 + 4;
 
   G4double x21 = fVertices[i2].x() - fVertices[i1].x();
   G4double y21 = fVertices[i2].y() - fVertices[i1].y();
@@ -1420,19 +1120,6 @@ G4double G4GenericTrap::GetLateralFaceArea(G4int iface) const
   G4double y43 = fVertices[i4].y() - fVertices[i3].y();
 
   G4double A = x21*y43 - y21*x43;
-  G4double lmax = std::max(std::max(std::abs(x21),std::abs(y21)),
-                           std::max(std::abs(x43),std::abs(y43)));
-  G4double eps = lmax*kCarTolerance;
-  if (std::abs(A) < eps) // plane face
-  {
-    G4ThreeVector p1(fVertices[i1].x(), fVertices[i1].y(),-fDz);
-    G4ThreeVector p2(fVertices[i2].x(), fVertices[i2].y(),-fDz);
-    G4ThreeVector p3(fVertices[i3].x(), fVertices[i3].y(), fDz);
-    G4ThreeVector p4(fVertices[i4].x(), fVertices[i4].y(), fDz);
-    return ((p4 - p1).cross(p3 - p2)).mag()*0.5;
-  }
-
-  // twisted face
   G4double B0 = x21*y31 - y21*x31;
   G4double B1 = x42*y31 - y42*x31;
   G4double HH = 4*fDz*fDz;
@@ -1463,8 +1150,10 @@ G4double G4GenericTrap::GetLateralFaceArea(G4int iface) const
   return area*dt;
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Return surface area of the solid
+//
 G4double G4GenericTrap::GetSurfaceArea()
 {
   if (fSurfaceArea == 0.0)
@@ -1473,491 +1162,325 @@ G4double G4GenericTrap::GetSurfaceArea()
     G4TwoVector B = fVertices[2] - fVertices[0];
     G4TwoVector C = fVertices[7] - fVertices[5];
     G4TwoVector D = fVertices[6] - fVertices[4];
-    G4double S_bot = 0.5*(A.x()*B.y() - A.y()*B.x());
-    G4double S_top = 0.5*(C.x()*D.y() - C.y()*D.x());
-    fSurfaceArea = S_bot + S_top +
-                   GetLateralFaceArea(0) +
-                   GetLateralFaceArea(1) +
-                   GetLateralFaceArea(2) +
-                   GetLateralFaceArea(3);
+    G4double S_bot = (A.x()*B.y() - A.y()*B.x())*0.5;
+    G4double S_top = (C.x()*D.y() - C.y()*D.x())*0.5;
+    fArea[0] = GetLateralFaceArea(0);
+    fArea[1] = GetLateralFaceArea(1);
+    fArea[2] = GetLateralFaceArea(2);
+    fArea[3] = GetLateralFaceArea(3);
+    fSurfaceArea = S_bot + S_top + fArea[0] + fArea[1] + fArea[2] + fArea[3];
   }
   return fSurfaceArea;
 }
 
-// --------------------------------------------------------------------
-
-G4bool G4GenericTrap::ComputeIsTwisted() 
+////////////////////////////////////////////////////////////////////////
+//
+// Check parameters of the solid
+//
+void
+G4GenericTrap::CheckParameters(G4double halfZ,
+                               const std::vector<G4TwoVector>& vertices)
 {
-  // Computes tangents of twist angles (angles between projections on XY plane 
-  // of corresponding -dz +dz edges). 
-
-  G4bool twisted = false;
-  G4double dx1, dy1, dx2, dy2;
-  G4int nv = fgkNofVertices/2;
-
-  for ( G4int i=0; i<4; ++i )
+  // Check number of vertices
+  //
+  if (vertices.size() != 8)
   {
-    dx1 = fVertices[(i+1)%nv].x()-fVertices[i].x();
-    dy1 = fVertices[(i+1)%nv].y()-fVertices[i].y();
-    if ( (dx1 == 0) && (dy1 == 0) ) { continue; }
-
-    dx2 = fVertices[nv+(i+1)%nv].x()-fVertices[nv+i].x();
-    dy2 = fVertices[nv+(i+1)%nv].y()-fVertices[nv+i].y();
-
-    if ( dx2 == 0 && dy2 == 0 ) { continue; }
-    G4double twist_angle = std::fabs(dy1*dx2 - dx1*dy2);        
-    if ( twist_angle < fgkTolerance ) { continue; }
-    twisted = true;
-    SetTwistAngle(i,twist_angle);
-
-    // Check on big angles, potentially navigation problem
-
-    twist_angle = std::acos( (dx1*dx2 + dy1*dy2)
-                           / (std::sqrt(dx1*dx1+dy1*dy1)
-                             * std::sqrt(dx2*dx2+dy2*dy2)) );
-   
-    if ( std::fabs(twist_angle) > 0.5*pi+kCarTolerance )
-    {
-      std::ostringstream message;
-      message << "Twisted Angle is bigger than 90 degrees - " << GetName()
-              << G4endl
-              << "     Potential problem of malformed Solid !" << G4endl
-              << "     TwistANGLE = " << twist_angle
-              << "*rad  for lateral plane N= " << i;
-      G4Exception("G4GenericTrap::ComputeIsTwisted()", "GeomSolids1002",
-                  JustWarning, message);
-    }
-  }
-
-  return twisted;
-}
-
-// --------------------------------------------------------------------
-
-G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
-{
-  // Test if the vertices are in a clockwise order, if not reorder them.
-  // Also test if they're well defined without crossing opposite segments
-
-  G4bool clockwise_order=true;
-  G4double sum1 = 0.;
-  G4double sum2 = 0.;
-  G4int j;
-
-  for (G4int i=0; i<4; ++i)
-  {
-    j = (i+1)%4;
-    sum1 += vertices[i].x()*vertices[j].y() - vertices[j].x()*vertices[i].y();
-    sum2 += vertices[i+4].x()*vertices[j+4].y()
-          - vertices[j+4].x()*vertices[i+4].y();
-  }
-  if (sum1*sum2 < -fgkTolerance)
-  {
-     std::ostringstream message;
-     message << "Lower/upper faces defined with opposite clockwise - "
-             << GetName();
-     G4Exception("G4GenericTrap::CheckOrder()", "GeomSolids0002",
+    std::ostringstream message;
+    message << "Number of vertices is " << vertices.size()
+            << " instead of 8 for Solid: " << GetName() << " !";
+    G4Exception("G4GenericTrap::CheckParameters()", "GeomSolids0002",
                 FatalException, message);
-   }
-   
-   if ((sum1 > 0.)||(sum2 > 0.))
-   {
-     std::ostringstream message;
-     message << "Vertices must be defined in clockwise XY planes - "
-             << GetName();
-     G4Exception("G4GenericTrap::CheckOrder()", "GeomSolids1001",
-                 JustWarning,message, "Re-ordering...");
-     clockwise_order = false;
+  }
+
+  // Check dZ
+  //
+  if ((fDz = halfZ) < 2.*kCarTolerance)
+  {
+    std::ostringstream message;
+    message << "Z-dimension is too small or negative (dZ = " << fDz << " mm)"
+            << " for Solid: " << GetName() << " !";
+    G4Exception("G4GenericTrap::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+  }
+
+  // Check order of vertices
+  //
+  for (auto i = 0; i < 8; ++i) { fVertices.at(i) = vertices[i]; }
+
+  // Bottom polygon area
+  G4TwoVector diag1 = fVertices[2] - fVertices[0];
+  G4TwoVector diag2 = fVertices[3] - fVertices[1];
+  G4double ldiagbot = std::max(diag1.mag(), diag2.mag());
+  G4double zbot = diag1.x()*diag2.y() - diag1.y()*diag2.x();
+  if (std::abs(zbot) < ldiagbot*kCarTolerance) zbot = 0.;
+
+  // Top polygon area
+  G4TwoVector diag3 = fVertices[6] - fVertices[4];
+  G4TwoVector diag4 = fVertices[7] - fVertices[5];
+  G4double ldiagtop = std::max(diag3.mag(), diag4.mag());
+  G4double ztop = diag3.x()*diag4.y() - diag3.y()*diag4.x();
+  if (std::abs(ztop) < ldiagtop*kCarTolerance) ztop = 0.;
+
+  if (zbot*ztop < 0.)
+  {
+    std::ostringstream message;
+    message << "Vertices of the bottom and top polygons are defined in opposite directions !\n";
+    StreamInfo(message);
+    G4Exception("G4GenericTrap::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+  }
+  if ((zbot > 0.) || (ztop > 0.))
+  {
+    std::swap(fVertices[1], fVertices[3]);
+    std::swap(fVertices[5], fVertices[7]);
+    std::ostringstream message;
+    message << "Vertices re-ordered in Solid: " << GetName() << " !\n"
+            << "Vertices of the bottom and top polygons must be defined in a clockwise direction.";
+    G4Exception("G4GenericTrap::CheckParameters()", "GeomSolids1001",
+                JustWarning, message);
    }
 
-   // Check for illegal crossings
-   //
-   G4bool illegal_cross = false;
-   illegal_cross = IsSegCrossingZ(vertices[0],vertices[4],
-                                  vertices[1],vertices[5]);
-     
-   if (!illegal_cross)
-   {
-     illegal_cross = IsSegCrossingZ(vertices[2],vertices[6],
-                                    vertices[3],vertices[7]);
-   }
-   // +/- dZ planes
-   if (!illegal_cross)
-   {
-     illegal_cross = IsSegCrossing(vertices[0],vertices[1],
-                                   vertices[2],vertices[3]);
-   }
-   if (!illegal_cross)
-   {
-     illegal_cross = IsSegCrossing(vertices[0],vertices[3],
-                                   vertices[1],vertices[2]);
-   }
-   if (!illegal_cross)
-   {
-     illegal_cross = IsSegCrossing(vertices[4],vertices[5],
-                                   vertices[6],vertices[7]);
-   }
-   if (!illegal_cross)
-   {
-     illegal_cross = IsSegCrossing(vertices[4],vertices[7],
-                                   vertices[5],vertices[6]);
-   }
+  // Check for degeneracy
+  //
+  G4int ndegenerated = 0;
+  for (auto i = 0; i < 4; ++i)
+  {
+    auto j = (i + 1)%4;
+    G4double lbot = (fVertices[j] - fVertices[i]).mag();
+    G4double ltop = (fVertices[j + 4] - fVertices[i + 4]).mag();
+    ndegenerated += (std::max(lbot, ltop) < kCarTolerance);
+  }
+  if (ndegenerated > 1 ||
+      GetCubicVolume() < fDz*std::max(ldiagbot, ldiagtop)*kCarTolerance)
+  {
+    std::ostringstream message;
+    message << "Degenerated solid !\n";
+    StreamInfo(message);
+    G4Exception("G4GenericTrap::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+  }
 
-   if (illegal_cross)
-   {
-      std::ostringstream message;
-      message << "Malformed polygone with opposite sides - " << GetName();
-      G4Exception("G4GenericTrap::CheckOrderAndSetup()",
-                  "GeomSolids0002", FatalException, message);
-   }
-   return clockwise_order;
+  // Check that the polygons are convex
+  //
+  G4bool isConvex = true;
+  for (auto i = 0; i < 4; ++i)
+  {
+    auto j = (i + 1)%4;
+    auto k = (j + 1)%4;
+    G4TwoVector edge1 = fVertices[j] - fVertices[i];
+    G4TwoVector edge2 = fVertices[k] - fVertices[j];
+    isConvex = ((edge1.x()*edge2.y() - edge1.y()*edge2.x()) < kCarTolerance);
+    if (!isConvex) break;
+    G4TwoVector edge3 = fVertices[j + 4] - fVertices[i + 4];
+    G4TwoVector edge4 = fVertices[k + 4] - fVertices[j + 4];
+    isConvex = ((edge3.x()*edge4.y() - edge3.y()*edge4.x()) < kCarTolerance);
+    if (!isConvex) break;
+  }
+  if (!isConvex)
+  {
+    std::ostringstream message;
+    message << "The bottom and top faces must be convex polygons !\n";
+    StreamInfo(message);
+    G4Exception("G4GenericTrap::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+  }
 }
 
-// --------------------------------------------------------------------
-
-void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
+////////////////////////////////////////////////////////////////////////
+//
+// Compute surface equations and twist angles of lateral faces
+//
+void G4GenericTrap::ComputeLateralSurfaces()
 {
-  // Reorder the vector of vertices 
-
-  std::vector<G4ThreeVector> oldVertices(vertices);
-
-  for ( std::size_t i=0; i<oldVertices.size(); ++i )
+  for (auto i = 0; i < 4; ++i)
   {
-    vertices[i] = oldVertices[oldVertices.size()-1-i];
-  }  
-} 
- 
-// --------------------------------------------------------------------
-
-G4bool
-G4GenericTrap::IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
-                             const G4TwoVector& c, const G4TwoVector& d) const
-{ 
-  // Check if segments [A,B] and [C,D] are crossing
-
-  G4bool stand1 = false;
-  G4bool stand2 = false;
-  G4double dx1,dx2,xm=0.,ym=0.,a1=0.,a2=0.,b1=0.,b2=0.;
-  dx1=(b-a).x();
-  dx2=(d-c).x();
-
-  if( std::fabs(dx1) < fgkTolerance )  { stand1 = true; }
-  if( std::fabs(dx2) < fgkTolerance )  { stand2 = true; }
-  if (!stand1)
-  {
-    a1 = (b.x()*a.y()-a.x()*b.y())/dx1;
-    b1 = (b-a).y()/dx1;
-  }
-  if (!stand2)
-  {
-    a2 = (d.x()*c.y()-c.x()*d.y())/dx2;
-    b2 = (d-c).y()/dx2;
-  }   
-  if (stand1 && stand2)
-  {
-    // Segments parallel and vertical
-    //
-    if (std::fabs(a.x()-c.x())<fgkTolerance)
-    {
-       // Check if segments are overlapping
-       //
-       return ((c.y()-a.y())*(c.y()-b.y())<-fgkTolerance)
-           || ((d.y()-a.y())*(d.y()-b.y())<-fgkTolerance)
-           || ((a.y()-c.y())*(a.y()-d.y())<-fgkTolerance)
-           || ((b.y()-c.y())*(b.y()-d.y())<-fgkTolerance);
-    }
-    // Different x values
-    //
-    return false;
-  }
-   
-  if (stand1)    // First segment vertical
-  {
-    xm = a.x();
-    ym = a2+b2*xm; 
-  }
-  else
-  {
-    if (stand2)  // Second segment vertical
-    {
-      xm = c.x();
-      ym = a1+b1*xm;
-    }
-    else  // Normal crossing
-    {
-      if (std::fabs(b1-b2) < fgkTolerance)
+    auto j = (i + 1)%4;
+    G4ThreeVector p1(fVertices[j].x(), fVertices[j].y(), -fDz);
+    G4ThreeVector p2(fVertices[i].x(), fVertices[i].y(), -fDz);
+    G4ThreeVector p3(fVertices[j + 4].x(), fVertices[j + 4].y(), fDz);
+    G4ThreeVector p4(fVertices[i + 4].x(), fVertices[i + 4].y(), fDz);
+    G4ThreeVector ebot = p2 - p1;
+    G4ThreeVector etop = p4 - p3;
+    G4double lbot = ebot.mag();
+    G4double ltop = etop.mag();
+    G4double zcross = ebot.x()*etop.y() - ebot.y()*etop.x();
+    G4double eps = kCarTolerance*std::max(lbot,ltop);
+    if (std::min(lbot, ltop) < kCarTolerance || std::abs(zcross) < eps)
+    { // plane surface: Dx + Ey + Fz + G = 0
+      G4ThreeVector normal;
+      if (std::max(lbot, ltop) < kCarTolerance) // degenerated face
       {
-        // Parallel segments, are they aligned
-        //
-        if (std::fabs(c.y()-(a1+b1*c.x())) > fgkTolerance)  { return false; }
-
-        // Aligned segments, are they overlapping
-        //
-        if ( ((c.x()-a.x())*(c.x()-b.x())<-fgkTolerance)
-          || ((d.x()-a.x())*(d.x()-b.x())<-fgkTolerance)
-          || ((a.x()-c.x())*(a.x()-d.x())<-fgkTolerance)
-          || ((b.x()-c.x())*(b.x()-d.x())<-fgkTolerance) )  { return true; }
-
-        return false;
+        auto k = (j + 1)%4;                               //      N
+        auto l = (k + 1)%4;                               //   i  |  j
+        G4TwoVector vl = fVertices[l] + fVertices[l + 4]; //    +---+
+        G4TwoVector vi = fVertices[i] + fVertices[i + 4]; // l /     \ k
+        G4TwoVector vj = fVertices[j] + fVertices[j + 4]; //  +-------+
+        G4TwoVector vk = fVertices[k] + fVertices[k + 4]; //
+        G4TwoVector vij = (vi - vl).unit() + (vj - vk).unit();
+        G4ThreeVector epar = (p4 + p3 - p2 - p1);
+        G4ThreeVector eort = epar.cross(G4ThreeVector(vij.x(), vij.y(), 0.0));
+        normal = (eort.cross(epar)).unit();
       }
-      xm = (a1-a2)/(b2-b1);
-      ym = (a1*b2-a2*b1)/(b2-b1);
+      else
+      {
+        normal = ((p4 - p1).cross(p3 - p2)).unit();
+      }
+      fSurf[i].D = fPlane[2*i].A = fPlane[2*i + 1].A = normal.x();
+      fSurf[i].E = fPlane[2*i].B = fPlane[2*i + 1].B = normal.y();
+      fSurf[i].F = fPlane[2*i].C = fPlane[2*i + 1].C = normal.z();
+      fSurf[i].G = fPlane[2*i].D = fPlane[2*i + 1].D = -normal.dot((p1 + p2 + p3 + p4)/4.);
     }
+    else
+    { // hyperbolic paraboloid: Axz + Byz + Czz + Dx + Ey + Fz + G = 0
+      fIsTwisted = true;
+      G4double angle = std::acos(ebot.dot(etop)/(lbot*ltop));
+      if (angle > CLHEP::halfpi)
+      {
+        std::ostringstream message;
+        message << "Twist on " << angle/CLHEP::deg
+                << " degrees, should not be more than 90 degrees !";
+        StreamInfo(message);
+        G4Exception("G4GenericTrap::ComputeLateralSurfaces()", "GeomSolids0002",
+                    FatalException, message);
+      }
+      fTwist[i] = std::copysign(angle, zcross);
+      // set equation of twisted surface (hyperbolic paraboloid)
+      fSurf[i].A = 2.*fDz*(p4.y() - p3.y() - p2.y() + p1.y());
+      fSurf[i].B =-2.*fDz*(p4.x() - p3.x() - p2.x() + p1.x());
+      fSurf[i].C = ((p4.x() - p2.x())*(p3.y() - p1.y()) - (p4.y() - p2.y())*(p3.x() - p1.x()));
+      fSurf[i].D = 2.*fDz*fDz*(p4.y() - p3.y() + p2.y() - p1.y());
+      fSurf[i].E =-2.*fDz*fDz*(p4.x() - p3.x() + p2.x() - p1.x());
+      fSurf[i].F = 2.*fDz*(p4.x()*p3.y() - p3.x()*p4.y() - p2.x()*p1.y() + p1.x()*p2.y());
+      fSurf[i].G = fDz*fDz*((p4.x() + p2.x())*(p3.y() + p1.y()) - (p3.x() + p1.x())*(p4.y() + p2.y()));
+      G4double magnitude =  G4ThreeVector(fSurf[i].D, fSurf[i].E, fSurf[i].F).mag();
+      if (magnitude < kCarTolerance) continue;
+      fSurf[i].A /= magnitude;
+      fSurf[i].B /= magnitude;
+      fSurf[i].C /= magnitude;
+      fSurf[i].D /= magnitude;
+      fSurf[i].E /= magnitude;
+      fSurf[i].F /= magnitude;
+      fSurf[i].G /= magnitude;
+      // set planes of bounding polyhedron
+      G4ThreeVector normal1, normal2;
+      G4ThreeVector c1, c2;
+      if (fTwist[i] < 0.)
+      {
+        normal1 = ((p2 - p1).cross(p4 - p1)).unit();
+        normal2 = ((p3 - p4).cross(p1 - p4)).unit();
+        c1 = p1;
+        c2 = p4;
+      }
+      else
+      {
+        normal1 = ((p3 - p2).cross(p1 - p2)).unit();
+        normal2 = ((p2 - p3).cross(p4 - p3)).unit();
+        c1 = p2;
+        c2 = p3;
+      }
+      fPlane[2*i].A = normal1.x();
+      fPlane[2*i].B = normal1.y();
+      fPlane[2*i].C = normal1.z();
+      fPlane[2*i].D = -normal1.dot(c1);
+      fPlane[2*i + 1].A = normal2.x();
+      fPlane[2*i + 1].B = normal2.y();
+      fPlane[2*i + 1].C = normal2.z();
+      fPlane[2*i + 1].D = -normal2.dot(c2);
+    }
+    fDelta[i] = (fVertices[i + 4] - fVertices[i])/(2*fDz);
   }
-
-  // Check if crossing point is both between A,B and C,D
-  //
-  G4double check = (xm-a.x())*(xm-b.x())+(ym-a.y())*(ym-b.y());
-  if (check > -fgkTolerance)  { return false; }
-  check = (xm-c.x())*(xm-d.x())+(ym-c.y())*(ym-d.y());
-  return check <= -fgkTolerance;
 }
 
-// --------------------------------------------------------------------
-
-G4bool
-G4GenericTrap::IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b, 
-                              const G4TwoVector& c, const G4TwoVector& d) const
-{ 
-  // Check if segments [A,B] and [C,D] are crossing when
-  // A and C are on -dZ and B and D are on +dZ
-
-  // Calculate the Intersection point between two lines in 3D
-  //
-  G4ThreeVector temp1,temp2;
-  G4ThreeVector v1,v2,p1,p2,p3,p4,dv;
-  G4double q,det;
-  p1=G4ThreeVector(a.x(),a.y(),-fDz);
-  p2=G4ThreeVector(c.x(),c.y(),-fDz);
-  p3=G4ThreeVector(b.x(),b.y(),fDz);
-  p4=G4ThreeVector(d.x(),d.y(),fDz);
-  v1=p3-p1;
-  v2=p4-p2;
-  dv=p2-p1;
-
-  // In case of Collapsed Vertices No crossing
-  //
-  if( (std::fabs(dv.x()) < kCarTolerance )&&
-      (std::fabs(dv.y()) < kCarTolerance ) )  { return false; }
-    
-  if( (std::fabs((p4-p3).x()) < kCarTolerance )&&
-      (std::fabs((p4-p3).y()) < kCarTolerance ) )  { return false; }
- 
-  // First estimate if Intersection is possible( if det is 0)
-  //
-  det = dv.x()*v1.y()*v2.z()+dv.y()*v1.z()*v2.x()
-      - dv.x()*v1.z()*v2.y()-dv.y()*v1.x()*v2.z();
-   
-  if (std::fabs(det)<kCarTolerance)  //Intersection
-  {
-    temp1 = v1.cross(v2);
-    temp2 = (p2-p1).cross(v2);
-    if (temp1.dot(temp2) < 0)  { return false; } // intersection negative
-    q = temp1.mag();
-
-    if ( q < kCarTolerance )  { return false; }  // parallel lines
-    q = ((dv).cross(v2)).mag()/q;
-   
-    if(q < 1.-kCarTolerance)  { return true; }
-  }
-  return false;
-}
-
-// --------------------------------------------------------------------
-
-G4VFacet*
-G4GenericTrap::MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                             G4int ind1, G4int ind2, G4int ind3) const 
+////////////////////////////////////////////////////////////////////////
+//
+// Set bounding box
+//
+void G4GenericTrap::ComputeBoundingBox()
 {
-  // Create a triangular facet from the polygon points given by indices
-  // forming the down side ( the normal goes in -z)
-  // Do not create facet if 2 vertices are the same
-
-  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
-       (fromVertices[ind2] == fromVertices[ind3]) ||
-       (fromVertices[ind1] == fromVertices[ind3]) )  { return nullptr; }
-
-  std::vector<G4ThreeVector> vertices;
-  vertices.push_back(fromVertices[ind1]);
-  vertices.push_back(fromVertices[ind2]);
-  vertices.push_back(fromVertices[ind3]);
-  
-  // first vertex most left
-  //
-  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
-
-  if ( cross.z() > 0.0 )
-  {
-    // Should not happen, as vertices should have been reordered at this stage
-
-    std::ostringstream message;
-    message << "Vertices in wrong order - " << GetName();
-    G4Exception("G4GenericTrap::MakeDownFacet", "GeomSolids0002",
-                FatalException, message);
-  }
-  
-  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
-}
-
-// --------------------------------------------------------------------
-
-G4VFacet*
-G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                           G4int ind1, G4int ind2, G4int ind3) const     
-{
-  // Create a triangular facet from the polygon points given by indices
-  // forming the upper side ( z>0 )
-
-  // Do not create facet if 2 vertices are the same
-  //
-  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
-       (fromVertices[ind2] == fromVertices[ind3]) ||
-       (fromVertices[ind1] == fromVertices[ind3]) )  { return nullptr; }
-
-  std::vector<G4ThreeVector> vertices;
-  vertices.push_back(fromVertices[ind1]);
-  vertices.push_back(fromVertices[ind2]);
-  vertices.push_back(fromVertices[ind3]);
-  
-  // First vertex most left
-  //
-  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
-
-  if ( cross.z() < 0.0 )
-  {
-    // Should not happen, as vertices should have been reordered at this stage
-
-    std::ostringstream message;
-    message << "Vertices in wrong order - " << GetName();
-    G4Exception("G4GenericTrap::MakeUpFacet", "GeomSolids0002",
-                FatalException, message);
-  }
-  
-  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
-}      
-
-// --------------------------------------------------------------------
-
-G4VFacet*
-G4GenericTrap::MakeSideFacet(const G4ThreeVector& downVertex0,
-                             const G4ThreeVector& downVertex1,
-                             const G4ThreeVector& upVertex1,
-                             const G4ThreeVector& upVertex0) const      
-{
-  // Creates a triangular facet from the polygon points given by indices
-  // forming the upper side ( z>0 )
-
-  if ( (downVertex0 == downVertex1) && (upVertex0 == upVertex1) )
-  {
-    return nullptr;
-  }
-
-  if ( downVertex0 == downVertex1 )
-  {
-    return new G4TriangularFacet(downVertex0, upVertex1, upVertex0, ABSOLUTE);
-  }
-
-  if ( upVertex0 == upVertex1 )
-  {
-    return new G4TriangularFacet(downVertex0, downVertex1, upVertex0, ABSOLUTE);
-  }
-
-  return new G4QuadrangularFacet(downVertex0, downVertex1, 
-                                 upVertex1, upVertex0, ABSOLUTE);   
-}    
-
-// --------------------------------------------------------------------
-
-G4TessellatedSolid* G4GenericTrap::CreateTessellatedSolid() const
-{
-  // 3D vertices
-  //
-  G4int nv = fgkNofVertices/2;
-  std::vector<G4ThreeVector> downVertices;
-  for ( G4int i=0; i<nv; ++i )
-  { 
-    downVertices.emplace_back(fVertices[i].x(), fVertices[i].y(), -fDz);
-  }
-
-  std::vector<G4ThreeVector> upVertices;
-  for ( G4int i=nv; i<2*nv; ++i )
-  { 
-    upVertices.emplace_back(fVertices[i].x(), fVertices[i].y(), fDz);
-  }
-                                         
-  // Reorder vertices if they are not ordered anti-clock wise
-  //
-  G4ThreeVector cross 
-    = (downVertices[1]-downVertices[0]).cross(downVertices[2]-downVertices[1]);
-   G4ThreeVector cross1 
-    = (upVertices[1]-upVertices[0]).cross(upVertices[2]-upVertices[1]);
-  if ( (cross.z() > 0.0) || (cross1.z() > 0.0) )
-  {
-    ReorderVertices(downVertices);
-    ReorderVertices(upVertices);
-  }
-    
-  auto tessellatedSolid = new G4TessellatedSolid(GetName());
-  
-  G4VFacet* facet = nullptr;
-  facet = MakeDownFacet(downVertices, 0, 1, 2);
-  if (facet != nullptr)  { tessellatedSolid->AddFacet( facet ); }
-  facet = MakeDownFacet(downVertices, 0, 2, 3);
-  if (facet != nullptr)  { tessellatedSolid->AddFacet( facet ); }
-  facet = MakeUpFacet(upVertices, 0, 2, 1);
-  if (facet != nullptr)  { tessellatedSolid->AddFacet( facet ); }
-  facet = MakeUpFacet(upVertices, 0, 3, 2);
-  if (facet != nullptr)  { tessellatedSolid->AddFacet( facet ); }
-
-  // The quadrangular sides
-  //
-  for ( G4int i = 0; i < nv; ++i )
-  {
-    G4int j = (i+1) % nv;
-    facet = MakeSideFacet(downVertices[j], downVertices[i], 
-                          upVertices[i], upVertices[j]);
-
-    if ( facet != nullptr )  { tessellatedSolid->AddFacet( facet ); }
-  }
-
-  tessellatedSolid->SetSolidClosed(true);
-
-  return tessellatedSolid;
-}  
-
-// --------------------------------------------------------------------
-
-void G4GenericTrap::ComputeBBox() 
-{
-  // Computes bounding box for a shape.
-
   G4double minX, maxX, minY, maxY;
   minX = maxX = fVertices[0].x();
   minY = maxY = fVertices[0].y();
-   
-  for (G4int i=1; i< fgkNofVertices; i++)
+  for (auto i = 1; i < 8; ++i)
   {
-    if (minX>fVertices[i].x()) { minX=fVertices[i].x(); }
-    if (maxX<fVertices[i].x()) { maxX=fVertices[i].x(); }
-    if (minY>fVertices[i].y()) { minY=fVertices[i].y(); }
-    if (maxY<fVertices[i].y()) { maxY=fVertices[i].y(); }
+    minX = std::min(minX, fVertices[i].x());
+    maxX = std::max(maxX, fVertices[i].x());
+    minY = std::min(minY, fVertices[i].y());
+    maxY = std::max(maxY, fVertices[i].y());
   }
-  fMinBBoxVector = G4ThreeVector(minX,minY,-fDz);
-  fMaxBBoxVector = G4ThreeVector(maxX,maxY, fDz);
+  fMinBBox = G4ThreeVector(minX, minY,-fDz);
+  fMaxBBox = G4ThreeVector(maxX, maxY, fDz);
+
+  // Check correctness of the bounding box
+  //
+  if (minX >= maxX || minY >= maxY || -fDz >= fDz)
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << fMinBBox
+            << "\npMax = " << fMaxBBox;
+    G4Exception("G4GenericTrap::ComputeBoundingBox()", "GeomSolids1001",
+                JustWarning, message);
+    DumpInfo();
+  }
 }
 
-// --------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////
+//
+// Set max length of a scratch
+//
+void G4GenericTrap::ComputeScratchLength()
+{
+  G4double scratch = kInfinity;
+  for (auto i = 0; i < 4; ++i)
+  {
+    if (fTwist[i] == 0.) continue; // skip plane face
+    auto k = (i + 1)%4;
+    G4ThreeVector p1(fVertices[i].x(), fVertices[i].y(), -fDz);
+    G4ThreeVector p2(fVertices[k].x(), fVertices[k].y(), -fDz);
+    G4ThreeVector p3(fVertices[i + 4].x(), fVertices[i + 4].y(), fDz);
+    G4ThreeVector p4(fVertices[k + 4].x(), fVertices[k + 4].y(), fDz);
+    G4ThreeVector p0 = (p1 + p2 + p3 + p4)*0.25; // center of the face
+    G4ThreeVector norm = SurfaceNormal(p0);
+    G4ThreeVector pp[2]; // points inside and outside the surface
+    pp[0] = p0 - norm * halfTolerance;
+    pp[1] = p0 + norm * halfTolerance;
+    G4ThreeVector vv[2]; // unit vectors along the diagonals
+    vv[0] = (p4 - p1).unit();
+    vv[1] = (p3 - p2).unit();
+    // find intersection points and compute the scratch
+    for (auto ip = 0; ip < 2; ++ip)
+    {
+      G4double px = pp[ip].x();
+      G4double py = pp[ip].y();
+      G4double pz = pp[ip].z();
+      for (auto iv = 0; iv < 2; ++iv)
+      {
+        G4double vx = vv[iv].x();
+        G4double vy = vv[iv].y();
+        G4double vz = vv[iv].z();
+        // solve quadratic equation
+        G4double ABC  = fSurf[i].A*vx + fSurf[i].B*vy + fSurf[i].C*vz;
+        G4double ABCF = fSurf[i].A*px + fSurf[i].B*py + fSurf[i].C*pz + fSurf[i].F;
+        G4double A = ABC*vz;
+        G4double B = 0.5*(fSurf[i].D*vx + fSurf[i].E*vy + ABCF*vz + ABC*pz);
+        G4double C = fSurf[i].D*px + fSurf[i].E*py + ABCF*pz + fSurf[i].G;
+        G4double D = B*B - A*C;
+        if (D < 0) continue;
+        G4double leng = 2.*std::sqrt(D)/std::abs(A);
+        scratch = std::min(leng, scratch);
+      }
+    }
+  }
+  fScratch = std::max(kCarTolerance, scratch);
+}
 
+////////////////////////////////////////////////////////////////////////
+//
+// GetPolyhedron
+//
 G4Polyhedron* G4GenericTrap::GetPolyhedron () const
 {
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->GetPolyhedron();
-  }
-#endif  
-  
   if ( (fpPolyhedron == nullptr)
     || fRebuildPolyhedron
     || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
@@ -1970,55 +1493,32 @@ G4Polyhedron* G4GenericTrap::GetPolyhedron () const
     l.unlock();
   }
   return fpPolyhedron;
-}    
+}
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Method for visualisation
+//
 void G4GenericTrap::DescribeYourselfTo(G4VGraphicsScene& scene) const
 {
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->DescribeYourselfTo(scene);
-  }
-#endif  
-  
   scene.AddSolid(*this);
 }
 
-// --------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
+// Return VisExtent
+//
 G4VisExtent G4GenericTrap::GetExtent() const
 {
-  // Computes bounding vectors for the shape
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid != nullptr )
-  { 
-    return fTessellatedSolid->GetExtent();
-  } 
-#endif
-   
-  G4ThreeVector minVec = GetMinimumBBox();
-  G4ThreeVector maxVec = GetMaximumBBox();
-  return { minVec.x(), maxVec.x(),
-           minVec.y(), maxVec.y(),
-           minVec.z(), maxVec.z() }; 
-}    
+  return { fMinBBox.x(), fMaxBBox.x(),
+           fMinBBox.y(), fMaxBBox.y(),
+           fMinBBox.z(), fMaxBBox.z() };
+}
 
 // --------------------------------------------------------------------
 
 G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 {
-
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid != nullptr )
-  { 
-    return fTessellatedSolid->CreatePolyhedron();
-  }  
-#endif 
-
   // Approximation of Twisted Side
   // Construct extra Points, if Twisted Side
   //
@@ -2045,10 +1545,8 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
       // Computes bounding vectors for the shape
       //
       G4double Dx, Dy;
-      G4ThreeVector minVec = GetMinimumBBox();
-      G4ThreeVector maxVec = GetMaximumBBox();
-      Dx = 0.5*(maxVec.x() - minVec.y());
-      Dy = 0.5*(maxVec.y() - minVec.y());
+      Dx = 0.5*(fMaxBBox.x() - fMinBBox.y());
+      Dy = 0.5*(fMaxBBox.y() - fMinBBox.y());
       if (Dy > Dx) { Dx = Dy; }
 
       subdivisions = 8*G4int(maxTwist/(Dx*Dx*Dx)*fDz);
@@ -2105,6 +1603,97 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
   return polyhedron;
 }
 
-// --------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////
+//
+// Print out a warning if A has an unexpected sign
+//
+void G4GenericTrap::WarningSignA(const G4String& method, const G4String& icase, G4double A,
+                                 const G4ThreeVector& p, const G4ThreeVector& v) const
+{
+  std::ostringstream message;
+  message.precision(16);
+  message << icase << " in " << GetName() << "\n"
+          << "   p" << p << "\n"
+          << "   v" << v << "\n"
+          << "   A = " << A << " (is "
+          << ((A < 0) ? "negative, instead of positive)" : "positive, instead of negative)") << " !?\n";
+  StreamInfo(message);
+  const G4String function = "G4GenericTrap::DistanceTo" + method + "(p,v)";
+  G4Exception(function, "GeomSolids1002", JustWarning, message );
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Print out a warning if B has an unexpected sign
+//
+void G4GenericTrap::WarningSignB(const G4String& method, const G4String& icase,
+                                 G4double f, G4double B,
+                                 const G4ThreeVector& p, const G4ThreeVector& v) const
+{
+  std::ostringstream message;
+  message.precision(16);
+  message << icase << " in " << GetName() << "\n"
+          << "   p" << p << "\n"
+          << "   v" << v << "\n"
+          << "   f = " << f << " B = " << B << " (is "
+          << ((B < 0) ? "negative, instead of positive)" : "positive, instead of negative)") << " !?\n";
+  StreamInfo(message);
+  const G4String function = "G4GenericTrap::DistanceTo" + method + "(p,v)";
+  G4Exception(function, "GeomSolids1002", JustWarning, message );
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Print out a warning in DistanceToIn(p,v)
+//
+void G4GenericTrap::WarningDistanceToIn(G4int k, const G4ThreeVector& p, const G4ThreeVector& v,
+                                        G4double tmin, G4double tmax,
+                                        const G4double ttin[2], const G4double ttout[2]) const
+{
+  G4String check = "";
+  if (ttin[1] != DBL_MAX)
+  {
+    G4double tcheck = 0.5*(ttout[0] + ttin[1]);
+    if (Inside(p + v*tcheck) != kOutside) check = "\n   !!! check point 0.5*(ttout[0] + ttin[1]) is NOT outside !!!";
+  }
+
+  auto position = Inside(p);
+  std::ostringstream message;
+  message.precision(16);
+  message << k << "_Unexpected sequence of intersections in solid: " << GetName() << " !?\n"
+          << "   position = " << ((position == kInside) ? "kInside" : ((position == kOutside) ? "kOutside" : "kSurface")) << "\n"
+          << "   p" << p << "\n"
+          << "   v" << v << "\n"
+          << "   range    : [" << tmin << ", " << tmax << "]\n"
+          << "   ttin[2]  : "
+          << ((ttin[0] == DBL_MAX) ? kInfinity : ttin[0]) << ", "
+          << ((ttin[1] == DBL_MAX) ? kInfinity : ttin[1]) << "\n"
+          << "   ttout[2] : "
+          << ((ttout[0] == DBL_MAX) ? kInfinity : ttout[0]) << ", "
+          << ((ttout[1] == DBL_MAX) ? kInfinity : ttout[1]) << check << "\n";
+  StreamInfo(message);
+  G4Exception("G4GenericTrap::DistanceToIn(p,v)", "GeomSolids1002",
+              JustWarning, message );
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Print out a warning in DistanceToOut(p,v)
+//
+void G4GenericTrap::WarningDistanceToOut(const G4ThreeVector& p,
+                                         const G4ThreeVector& v,
+                                         G4double tout) const
+{
+  auto position = Inside(p);
+  std::ostringstream message;
+  message.precision(16);
+  message << "Unexpected final tout = " << tout << " in solid: " << GetName() << " !?\n"
+          << "   position = " << ((position == kInside) ? "kInside" : ((position == kOutside) ? "kOutside" : "kSurface")) << "\n"
+          << "   p" << p << "\n"
+          << "   v" << v << "\n";
+  StreamInfo(message);
+  G4Exception("G4GenericTrap::DistanceToOut(p,v)", "GeomSolids1002",
+              JustWarning, message );
+}
 
 #endif

@@ -25,11 +25,14 @@
 //
 
 #include "ChemistryWorld.hh"
+
 #include "G4DNABoundingBox.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4MoleculeTable.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChemistryWorld::ChemistryWorld() : G4VChemistryWorld(), G4UImessenger() {
+ChemistryWorld::ChemistryWorld() : G4VChemistryWorld(), G4UImessenger()
+{
   fpChemWoldDir = std::make_unique<G4UIdirectory>("/UHDR/env/", false);
   fpChemWoldDir->SetGuidance("chemistry environment commands");
 
@@ -38,8 +41,7 @@ ChemistryWorld::ChemistryWorld() : G4VChemistryWorld(), G4UImessenger() {
   fpAddpH->SetParameterName("pH", false);
   fpAddpH->SetToBeBroadcasted(false);
 
-  fpAddScavengerName =
-      std::make_unique<G4UIcmdWithAString>("/UHDR/env/scavenger", this);
+  fpAddScavengerName = std::make_unique<G4UIcmdWithAString>("/UHDR/env/scavenger", this);
   fpAddScavengerName->SetToBeBroadcasted(false);
 
   fpTargetVolume = std::make_unique<G4UIcmdWithADoubleAndUnit>("/UHDR/env/volume", this);
@@ -48,19 +50,23 @@ ChemistryWorld::ChemistryWorld() : G4VChemistryWorld(), G4UImessenger() {
   fpTargetVolume->AvailableForStates(G4State_PreInit);
   fpTargetVolume->SetToBeBroadcasted(false);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChemistryWorld::ConstructChemistryBoundary() {
-  fHalfBox = 1.6 * um; // halfBox
-  std::initializer_list<G4double> l{fHalfBox,  -fHalfBox, fHalfBox,
-                                    -fHalfBox, fHalfBox,  -fHalfBox};
+void ChemistryWorld::ConstructChemistryBoundary()
+{
+  fHalfBox = 1.6 * um;  // halfBox
+  std::initializer_list<G4double> l{fHalfBox, -fHalfBox, fHalfBox, -fHalfBox, fHalfBox, -fHalfBox};
   fpChemistryBoundary = std::make_unique<G4DNABoundingBox>(l);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChemistryWorld::SetNewValue(G4UIcommand *command, G4String newValue) {
+void ChemistryWorld::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   if (command == fpAddpH.get()) {
     fpH = fpAddpH->GetNewDoubleValue(newValue);
     ConstructChemistryComponents();
-  } else if (command == fpAddScavengerName.get()) {
+  }
+  else if (command == fpAddScavengerName.get()) {
     std::istringstream iss(newValue);
     G4String species;
     iss >> species;
@@ -72,53 +78,59 @@ void ChemistryWorld::SetNewValue(G4UIcommand *command, G4String newValue) {
     if (unit == "M") {
       G4double ConcentrationInM = concentraion / (mole * liter);
       fpChemicalComponent[scavengerConf] = ConcentrationInM;
-    } else if (unit == "mM") {
+    }
+    else if (unit == "mM") {
       G4double ConcentrationInM = concentraion / (mole * liter * 1e3);
       fpChemicalComponent[scavengerConf] = ConcentrationInM;
-    } else if (unit == "uM") {
+    }
+    else if (unit == "uM") {
       G4double ConcentrationInM = concentraion / (mole * liter * 1e6);
       fpChemicalComponent[scavengerConf] = ConcentrationInM;
-    } else if (unit == "%") // only for O2
+    }
+    else if (unit == "%")  // only for O2
     {
-      G4double ConcentrationInM =
-          (concentraion / 100) * 0.0013 / (mole * liter);
+      G4double ConcentrationInM = (concentraion / 100) * 0.0013 / (mole * liter);
       fpChemicalComponent[scavengerConf] = ConcentrationInM;
-    } else {
+    }
+    else {
       throw std::runtime_error("Unit should be in Molarity");
     }
-  }else if (command == fpTargetVolume.get()) {
+  }
+  else if (command == fpTargetVolume.get()) {
     fHalfBox = G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(newValue);
     std::initializer_list<G4double> l{fHalfBox,  -fHalfBox, fHalfBox,
                                       -fHalfBox, fHalfBox,  -fHalfBox};
     fpChemistryBoundary = std::make_unique<G4DNABoundingBox>(l);
   }
-
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChemistryWorld::ConstructChemistryComponents() {
+void ChemistryWorld::ConstructChemistryComponents()
+{
   auto O2 = G4MoleculeTable::Instance()->GetConfiguration("O2");
   auto H2O = G4MoleculeTable::Instance()->GetConfiguration("H2O");
   auto H3Op = G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
   auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
 
-////////////////////////////////////////////////////////////////////
-// Water is defined from NIST material database
-// water 55.3 M, 9.9x10-8 M, and 9.9x10-8 M
-// water density =  18.01528 g/mol * 55.3 M = 996.24498 g/l
-// H3OpB density = 1 g/mol * 9.9x10-8 M
-// OHmB density = 17.01528 g/mol * 9.9x10-8 M
-// O2B density = 15.999 g/mol * 2.58e-4 M
-/////////////////////////////////////////////////////////////////
-  G4double pKw = 14; // at 25°C pK of water is 14
-  G4double waterMolarity = 55.3 / (mole * liter); // 55.3 M
+  ////////////////////////////////////////////////////////////////////
+  // Water is defined from NIST material database
+  // water 55.3 M, 9.9x10-8 M, and 9.9x10-8 M
+  // water density =  18.01528 g/mol * 55.3 M = 996.24498 g/l
+  // H3OpB density = 1 g/mol * 9.9x10-8 M
+  // OHmB density = 17.01528 g/mol * 9.9x10-8 M
+  // O2B density = 15.999 g/mol * 2.58e-4 M
+  /////////////////////////////////////////////////////////////////
+  G4double pKw = 14;  // at 25°C pK of water is 14
+  G4double waterMolarity = 55.3 / (mole * liter);  // 55.3 M
   fpChemicalComponent[H2O] = waterMolarity;
 
-  G4double H3OpBMolarity = std::pow(10, -fpH) / (mole * liter); // pH = 7
+  G4double H3OpBMolarity = std::pow(10, -fpH) / (mole * liter);  // pH = 7
   fpChemicalComponent[H3Op] = H3OpBMolarity;
 
-  G4double OHmBMolarity = std::pow(10, -(pKw - fpH)) / (mole * liter); // pH = 7
+  G4double OHmBMolarity = std::pow(10, -(pKw - fpH)) / (mole * liter);  // pH = 7
   fpChemicalComponent[OHm] = OHmBMolarity;
   // oxygen
   G4double O2Molarity = (0. / 100) * 0.0013 / (mole * liter);
   fpChemicalComponent[O2] = O2Molarity;
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,11 +27,12 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
+
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,32 +54,32 @@ void HistoManager::Book()
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
-      // enable inactivation of histograms
+  // enable inactivation of histograms
 
   // Define histograms start values
   const G4int kMaxHisto = 9;
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8" };
-  
-  const G4String title[] = 
-                { "dummy",                                       //0
-                  "Edep (MeV/mm) along absorber",                //1
-                  "total Energy deposited in absorber",          //2
-                  "true track length of the primary particle",   //3
-                  "true step size of the primary particle",      //4
-                  "projected range of the primary particle",     //5
-                  "true track length of charged secondaries",    //6
-                  "true step size of charged secondaries",       //7
-                  "d(E/E0)/d(r/r0) along r/r0"                   //8
-                 };
+  const G4String id[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
 
-  // Default values (to be reset via /analysis/h1/set command)               
+  const G4String title[] = {
+    "dummy",  // 0
+    "Edep (MeV/mm) along absorber",  // 1
+    "total Energy deposited in absorber",  // 2
+    "true track length of the primary particle",  // 3
+    "true step size of the primary particle",  // 4
+    "projected range of the primary particle",  // 5
+    "true track length of charged secondaries",  // 6
+    "true step size of charged secondaries",  // 7
+    "d(E/E0)/d(r/r0) along r/r0"  // 8
+  };
+
+  // Default values (to be reset via /analysis/h1/set command)
   G4int nbins = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;
 
-  // Create all histograms as inactivated 
+  // Create all histograms as inactivated
   // as we have not yet set nbins, vmin, vmax
-  for (G4int k=0; k<kMaxHisto; k++) {
+  for (G4int k = 0; k < kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);
   }

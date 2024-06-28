@@ -39,12 +39,12 @@
 class DetectorMessenger;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
     DetectorConstruction();
     virtual ~DetectorConstruction();
 
@@ -55,16 +55,14 @@ public:
 
     void UpdateGeometry();
 
-private:
+  private:
     DetectorMessenger* fDetectorMessenger;
     G4VPhysicalVolume* ConstructVolumes();
 
     G4double fDiameter;
-    G4double fLength; 
-
+    G4double fLength;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

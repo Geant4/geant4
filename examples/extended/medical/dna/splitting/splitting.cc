@@ -36,65 +36,60 @@
 /// \file splitting.cc
 /// \brief Main program of the splitting example
 
-#include "G4Types.hh"
-
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
-
 #include "G4UImanager.hh"
-
+#include "G4VisExecutive.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
-    // Instantiate G4UIExecutive if interactive mode
-    G4UIExecutive* ui = nullptr;
-    if ( argc == 1 ) {
-      ui = new G4UIExecutive(argc, argv);
-    }
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
-    auto* runManager= G4RunManagerFactory::CreateRunManager();
-    G4int nThreads = 2;
-    runManager->SetNumberOfThreads(nThreads);
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 2;
+  runManager->SetNumberOfThreads(nThreads);
 
-    // Set user classes
-    //
-    runManager->SetUserInitialization(new DetectorConstruction());
-    PhysicsList* physList = new PhysicsList();
-    runManager->SetUserInitialization(physList);
-    runManager->SetUserInitialization(new ActionInitialization(physList));
+  // Set user classes
+  //
+  runManager->SetUserInitialization(new DetectorConstruction());
+  PhysicsList* physList = new PhysicsList();
+  runManager->SetUserInitialization(physList);
+  runManager->SetUserInitialization(new ActionInitialization(physList));
 
-    // Initialize G4 kernel
-    G4UImanager* UI = G4UImanager::GetUIpointer();
+  // Initialize G4 kernel
+  G4UImanager* UI = G4UImanager::GetUIpointer();
 
-    G4VisManager* visManager = new G4VisExecutive;
-    visManager->Initialize();
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 
-    if (!ui)   // batch mode
-    {
-        G4String command = "/control/execute ";
-        G4String fileName = argv[1];
-        UI->ApplyCommand(command+fileName);
-    }
+  if (!ui)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command + fileName);
+  }
 
-    else           //define visualization and UI terminal for interactive mode
-    {
-        ui->SessionStart();
-        delete ui;
-    }
+  else  // define visualization and UI terminal for interactive mode
+  {
+    ui->SessionStart();
+    delete ui;
+  }
 
-    // Job termination
-    delete visManager;
-    delete runManager;
+  // Job termination
+  delete visManager;
+  delete runManager;
 
-    return 0;
+  return 0;
 }
-

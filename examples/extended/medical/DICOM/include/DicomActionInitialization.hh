@@ -27,7 +27,6 @@
 /// \file DicomActionInitialization.hh
 /// \brief Definition of the DicomActionInitialization class
 
-
 #ifndef dicomactioninitialization_hh_
 #define dicomactioninitialization_hh_
 
@@ -35,17 +34,14 @@
 
 class DicomActionInitialization : public G4VUserActionInitialization
 {
-public:
+  public:
     // Constructor and Destructors
     DicomActionInitialization();
     virtual ~DicomActionInitialization();
 
-public:
+  public:
     virtual void BuildForMaster() const;
     virtual void Build() const;
-
-
 };
-
 
 #endif

@@ -52,22 +52,21 @@
 
 class TimeStepAction : public G4UserTimeStepAction
 {
-public:
-  TimeStepAction();
-  ~TimeStepAction() override = default;
-  TimeStepAction(const TimeStepAction& other);
-  TimeStepAction& operator=(const TimeStepAction& other);
+  public:
+    TimeStepAction();
+    ~TimeStepAction() override = default;
+    TimeStepAction(const TimeStepAction& other);
+    TimeStepAction& operator=(const TimeStepAction& other);
 
-  void StartProcessing() override {}
-  void UserPreTimeStepAction() override;
-  void UserPostTimeStepAction() override;
+    void StartProcessing() override {}
+    void UserPreTimeStepAction() override;
+    void UserPostTimeStepAction() override;
 
-  void UserReactionAction(const G4Track& /*trackA*/,
-                          const G4Track& /*trackB*/,
-                          const std::vector<G4Track*>* /*products*/) override;
+    void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                            const std::vector<G4Track*>* /*products*/) override;
 
-  void EndProcessing() override {}
-  void Clear() {}
+    void EndProcessing() override {}
+    void Clear() {}
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

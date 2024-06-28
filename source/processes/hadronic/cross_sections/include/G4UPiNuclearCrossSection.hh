@@ -38,7 +38,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
-#include "G4Threading.hh"
 
 class G4PhysicsTable;
 
@@ -48,7 +47,7 @@ public:
   
   explicit G4UPiNuclearCrossSection();
 
-  ~G4UPiNuclearCrossSection() override;
+  ~G4UPiNuclearCrossSection() override = default;
 
   G4bool IsElementApplicable(const G4DynamicParticle* aParticle, 
 			     G4int Z, const G4Material*) final;
@@ -92,15 +91,10 @@ private:
   static G4PhysicsTable* piMinusElastic;
   static G4PhysicsTable* piMinusInelastic;
 
-  G4double aPower;
+  G4double aPower{0.75};
   G4double elow;
 
-  G4bool isMaster;
-  G4bool spline;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex pionUXSMutex;
-#endif
+  G4bool spline{false};
 };
 
 inline G4double 

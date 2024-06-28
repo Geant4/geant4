@@ -30,13 +30,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class ParallelWorld: public G4VUserParallelWorld
+class ParallelWorld : public G4VUserParallelWorld
 {
-public:
+  public:
     ParallelWorld(G4String);
     ~ParallelWorld() override;
     void Construct() override;
 
-private:
+  private:
     void SetupChemistryGeometry();
 };

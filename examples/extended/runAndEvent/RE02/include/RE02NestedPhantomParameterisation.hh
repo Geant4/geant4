@@ -31,10 +31,11 @@
 #ifndef RE02NESTEDPARAMETERISATION_HH
 #define RE02NESTEDPARAMETERISATION_HH
 
-#include "G4Types.hh"
-#include "G4VNestedParameterisation.hh" 
 #include "G4ThreeVector.hh"
+#include "G4Types.hh"
+#include "G4VNestedParameterisation.hh"
 #include "G4VTouchable.hh"
+
 #include <vector>
 
 class G4VPhysicalVolume;
@@ -82,88 +83,67 @@ class G4Hype;
 ///     according to copyNo
 ///     Its position is defined as G4ThreeVector(0.,0.,fpZ[copyNo]).
 ///
-/// - void ComputeDimensions(G4Box &, const G4int, 
+/// - void ComputeDimensions(G4Box &, const G4int,
 ///                          const G4VPhysicalVolume *) const
-///     returns dimensions of this parameterized volume with the physical 
+///     returns dimensions of this parameterized volume with the physical
 ///     volume of the 3rd argument.
 ///
 //
-class RE02NestedPhantomParameterisation: public G4VNestedParameterisation
+class RE02NestedPhantomParameterisation : public G4VNestedParameterisation
 {
   public:  // with description
-
-    RE02NestedPhantomParameterisation(const G4ThreeVector& voxelSize,
-                                      G4int nz,
+    RE02NestedPhantomParameterisation(const G4ThreeVector& voxelSize, G4int nz,
                                       std::vector<G4Material*>& mat);
-   ~RE02NestedPhantomParameterisation(); 
+    ~RE02NestedPhantomParameterisation();
 
     // Methods required in derived classes
     // -----------------------------------
-    G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
-                                const G4int repNo, 
-                                const G4VTouchable *parentTouch=0
-                                        );
-  // Required method, as it is the reason for this class.
-  //   Must cope with parentTouch=0 for navigator's SetupHierarchy
+    G4Material* ComputeMaterial(G4VPhysicalVolume* currentVol, const G4int repNo,
+                                const G4VTouchable* parentTouch = 0);
+    // Required method, as it is the reason for this class.
+    //   Must cope with parentTouch=0 for navigator's SetupHierarchy
 
-    G4int       GetNumberOfMaterials() const;
+    G4int GetNumberOfMaterials() const;
     G4Material* GetMaterial(G4int idx) const;
-      // Needed to define materials for instances of Nested Parameterisation 
-      //   Current convention: each call should return the materials 
-      //   of all instances with the same mother/ancestor volume.
+    // Needed to define materials for instances of Nested Parameterisation
+    //   Current convention: each call should return the materials
+    //   of all instances with the same mother/ancestor volume.
 
-    void ComputeTransformation(const G4int no,
-                               G4VPhysicalVolume *currentPV) const;
+    void ComputeTransformation(const G4int no, G4VPhysicalVolume* currentPV) const;
 
     // Methods optional in derived classes
     // -----------------------------------
 
-    // Additional standard Parameterisation methods, 
+    // Additional standard Parameterisation methods,
     //   which can be optionally defined, in case solid is used.
 
-    void ComputeDimensions(G4Box &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const;
+    void ComputeDimensions(G4Box&, const G4int, const G4VPhysicalVolume*) const;
 
-private:  // Dummy declarations to get rid of warnings ...
+  private:  // Dummy declarations to get rid of warnings ...
+    void ComputeDimensions(G4Trd&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Trap&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Cons&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Sphere&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Orb&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Ellipsoid&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Torus&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Para&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Hype&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Tubs&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Polycone&, const G4int, const G4VPhysicalVolume*) const {}
+    void ComputeDimensions(G4Polyhedra&, const G4int, const G4VPhysicalVolume*) const {}
+    //  G4Material* ComputeMaterial(const G4int repNo,
+    //                              G4VPhysicalVolume* currentVol,
+    //                              const G4VTouchable* parentTouch)
+    //  { return ComputeMaterial( currentVol, repNo, parentTouch ); }
+    using G4VNestedParameterisation::ComputeMaterial;
 
-  void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*)
-    const {}
-  void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-//  G4Material* ComputeMaterial(const G4int repNo,
-//                              G4VPhysicalVolume* currentVol,
-//                              const G4VTouchable* parentTouch)
-//  { return ComputeMaterial( currentVol, repNo, parentTouch ); }
-  using G4VNestedParameterisation::ComputeMaterial;
-
-private:
-
-  G4double fdX,fdY,fdZ;
-  G4int fNz;
-  //
-  std::vector<G4double>  fpZ;
-  std::vector<G4Material*> fMat;
+  private:
+    G4double fdX, fdY, fdZ;
+    G4int fNz;
+    //
+    std::vector<G4double> fpZ;
+    std::vector<G4Material*> fMat;
 };
 
 #endif

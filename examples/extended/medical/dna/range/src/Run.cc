@@ -23,13 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/range/src/Run.cc
 /// \brief Implementation of the Run class
 
 #include "Run.hh"
-#include "DetectorConstruction.hh"
 
-#include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Material.hh"
@@ -39,70 +47,76 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(const DetectorConstruction* detector)
-: G4Run(),
-  fDetector(detector),
-  fParticle(0), fEkin(0.),  
-  fEdeposit(0.),  fEdeposit2(0.),
-  fTrackLen(0.),  fTrackLen2(0.),
-  fProjRange(0.), fProjRange2(0.),
-  fPenetration(0.), fPenetration2(0.),
-  fNbOfSteps(0),  fNbOfSteps2(0),
-  fStepSize(0.),  fStepSize2(0.)
+  : G4Run(),
+    fDetector(detector),
+    fParticle(0),
+    fEkin(0.),
+    fEdeposit(0.),
+    fEdeposit2(0.),
+    fTrackLen(0.),
+    fTrackLen2(0.),
+    fProjRange(0.),
+    fProjRange2(0.),
+    fPenetration(0.),
+    fPenetration2(0.),
+    fNbOfSteps(0),
+    fNbOfSteps2(0),
+    fStepSize(0.),
+    fStepSize2(0.)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::~Run()
-{}
+Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
-{ 
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+{
   fParticle = particle;
-  fEkin     = energy;
+  fEkin = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEdep (G4double e)        
+void Run::AddEdep(G4double e)
 {
-  fEdeposit  += e;
-  fEdeposit2 += e*e;
+  fEdeposit += e;
+  fEdeposit2 += e * e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddTrackLength (G4double t) 
+
+void Run::AddTrackLength(G4double t)
 {
-  fTrackLen  += t;
-  fTrackLen2 += t*t;
+  fTrackLen += t;
+  fTrackLen2 += t * t;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddProjRange (G4double x) 
+
+void Run::AddProjRange(G4double x)
 {
-  fProjRange  += x;
-  fProjRange2 += x*x;
+  fProjRange += x;
+  fProjRange2 += x * x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddPenetration (G4double x) 
+
+void Run::AddPenetration(G4double x)
 {
-  fPenetration  += x;
-  fPenetration2 += x*x;
+  fPenetration += x;
+  fPenetration2 += x * x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
-void Run::AddStepSize (G4int nb, G4double st)
+
+void Run::AddStepSize(G4int nb, G4double st)
 {
-  fNbOfSteps  += nb; 
-  fNbOfSteps2 += nb*nb;
-  fStepSize   += st ; 
-  fStepSize2  += st*st;  
+  fNbOfSteps += nb;
+  fNbOfSteps2 += nb * nb;
+  fStepSize += st;
+  fStepSize2 += st * st;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,111 +124,101 @@ void Run::AddStepSize (G4int nb, G4double st)
 void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
-  
-  // pass information about primary particle
+
+  // Pass information about primary particle
   fParticle = localRun->fParticle;
-  fEkin     = localRun->fEkin;
+  fEkin = localRun->fEkin;
 
-  // accumulate sums
-  fEdeposit   += localRun->fEdeposit;
-  fEdeposit2  += localRun->fEdeposit2;
-  fTrackLen   += localRun->fTrackLen;  
-  fTrackLen2  += localRun->fTrackLen2;
-  fProjRange  += localRun->fProjRange; 
+  // Accumulate sums
+  fEdeposit += localRun->fEdeposit;
+  fEdeposit2 += localRun->fEdeposit2;
+  fTrackLen += localRun->fTrackLen;
+  fTrackLen2 += localRun->fTrackLen2;
+  fProjRange += localRun->fProjRange;
   fProjRange2 += localRun->fProjRange2;
-  fPenetration  += localRun->fPenetration; 
+  fPenetration += localRun->fPenetration;
   fPenetration2 += localRun->fPenetration2;
-  fNbOfSteps  += localRun->fNbOfSteps ;
+  fNbOfSteps += localRun->fNbOfSteps;
   fNbOfSteps2 += localRun->fNbOfSteps2;
-  fStepSize   += localRun->fStepSize;  
-  fStepSize2  += localRun->fStepSize2;
+  fStepSize += localRun->fStepSize;
+  fStepSize2 += localRun->fStepSize2;
 
-  G4Run::Merge(run); 
-} 
+  G4Run::Merge(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun() 
+void Run::EndOfRun()
 {
   std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
+  G4cout.setf(std::ios::fixed, std::ios::floatfield);
   G4int prec = G4cout.precision(2);
-  
-  //run conditions  
-  //
+
+  // Run conditions
   G4Material* material = fDetector->GetAbsorMaterial();
-  G4double density  = material->GetDensity();       
+  G4double density = material->GetDensity();
   G4String partName = fParticle->GetParticleName();
-  
-  G4cout << "\n ======================= run summary ====================\n";  
-  G4cout 
-    << "\n The run is " << numberOfEvent << " "<< partName << " of "
-    << G4BestUnit(fEkin,"Energy") << " through a sphere of radius "
-    << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << "of "
-    << material->GetName() << " (density: " 
-    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;    
+
+  G4cout << "\n ======================= run summary ====================\n";
+  G4cout << "\n The run is " << numberOfEvent << " " << partName << " of "
+         << G4BestUnit(fEkin, "Energy") << " through a sphere of radius "
+         << G4BestUnit(fDetector->GetAbsorRadius(), "Length") << "of " << material->GetName()
+         << " (density: " << G4BestUnit(density, "Volumic Mass") << ")" << G4endl;
 
   if (numberOfEvent == 0) {
-    G4cout.setf(mode,std::ios::floatfield);
-    G4cout.precision(prec);  
+    G4cout.setf(mode, std::ios::floatfield);
+    G4cout.precision(prec);
     return;
   }
-                    
-  //compute track length of primary track
-  //
-  fTrackLen /= numberOfEvent; fTrackLen2 /= numberOfEvent;
-  G4double rmsTrack = fTrackLen2 - fTrackLen*fTrackLen;      
-        
-  if (rmsTrack>0.) rmsTrack = std::sqrt(rmsTrack); else rmsTrack = 0.;
 
-  G4cout.precision(3);       
-  G4cout 
-    << "\n Track length of primary track = " << G4BestUnit(fTrackLen,"Length")
-    << " +- "                                
-    << G4BestUnit( rmsTrack,"Length");
-    
-  //compute projected range of primary track
-  //
-  fProjRange /= numberOfEvent; fProjRange2 /= numberOfEvent;
-  G4double rmsProj = fProjRange2 - fProjRange*fProjRange;        
-  if (rmsProj>0.) rmsProj = std::sqrt(rmsProj); else rmsProj = 0.;
-   
-  G4cout 
-    << "\n Projected range               = " 
-    << G4BestUnit(fProjRange,"Length")
-    << " +- "                                << G4BestUnit( rmsProj,"Length");    
-    
-  //compute penetration of primary track
-  //
-  fPenetration /= numberOfEvent; fPenetration2 /= numberOfEvent;
-  G4double rmsPene = fPenetration2 - fPenetration*fPenetration;        
-  if (rmsPene>0.) rmsPene = std::sqrt(rmsPene); else rmsPene = 0.;
-   
-  G4cout 
-    << "\n Penetration                   = " 
-    << G4BestUnit(fPenetration,"Length")
-    << " +- "                                << G4BestUnit( rmsPene,"Length")    
-    << G4endl;
-    
+  // Compute track length of primary track
+  fTrackLen /= numberOfEvent;
+  fTrackLen2 /= numberOfEvent;
+  G4double rmsTrack = fTrackLen2 - fTrackLen * fTrackLen;
+
+  if (rmsTrack > 0.)
+    rmsTrack = std::sqrt(rmsTrack);
+  else
+    rmsTrack = 0.;
+
+  G4cout.precision(3);
+  G4cout << "\n Track length of primary track = " << G4BestUnit(fTrackLen, "Length") << " +- "
+         << G4BestUnit(rmsTrack, "Length");
+
+  // Compute projected range of primary track
+  fProjRange /= numberOfEvent;
+  fProjRange2 /= numberOfEvent;
+  G4double rmsProj = fProjRange2 - fProjRange * fProjRange;
+  if (rmsProj > 0.)
+    rmsProj = std::sqrt(rmsProj);
+  else
+    rmsProj = 0.;
+
+  G4cout << "\n Projected range               = " << G4BestUnit(fProjRange, "Length") << " +- "
+         << G4BestUnit(rmsProj, "Length");
+
+  // Compute penetration of primary track
+  fPenetration /= numberOfEvent;
+  fPenetration2 /= numberOfEvent;
+  G4double rmsPene = fPenetration2 - fPenetration * fPenetration;
+  if (rmsPene > 0.)
+    rmsPene = std::sqrt(rmsPene);
+  else
+    rmsPene = 0.;
+
+  G4cout << "\n Penetration                   = " << G4BestUnit(fPenetration, "Length") << " +- "
+         << G4BestUnit(rmsPene, "Length") << G4endl;
+
   //
 
-  //output file
-    FILE *myFile;
-    myFile = fopen ("range.txt","a");
-    fprintf (myFile, "%e %e %e %e %e %e %e\n", 
-     fEkin/eV, 
-     fTrackLen/nm,
-     rmsTrack/nm,
-     fProjRange/nm,
-     rmsProj/nm,
-     fPenetration/nm,
-     rmsPene/nm     
-     );
-    fclose (myFile);
+  // Output file
+  FILE* myFile;
+  myFile = fopen("range.txt", "a");
+  fprintf(myFile, "%e %e %e %e %e %e %e\n", fEkin / eV, fTrackLen / nm, rmsTrack / nm,
+          fProjRange / nm, rmsProj / nm, fPenetration / nm, rmsPene / nm);
+  fclose(myFile);
 
-  // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
+  // Reset default formats
+  G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);
-    
 }
-

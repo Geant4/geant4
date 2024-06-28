@@ -28,7 +28,7 @@
 // The idea is to provide a function with the same signature as the FLUKA one,
 // but that relies on G4 random engine.
 //
-// The FLUKA flrndm object file is replaced 
+// The FLUKA flrndm object file is replaced
 // by the object generated after compilation of this file
 // (see FlukaInterface GNUmakefile).
 //
@@ -37,16 +37,13 @@
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
 
+#  include "flrndm.hh"
 
-#include "flrndm.hh"
+#  include "Randomize.hh"
 
-#include "Randomize.hh"
-
-
-G4double flrndm_(const G4double&) {
-
-	return G4UniformRand();
+G4double flrndm_(const G4double&)
+{
+  return G4UniformRand();
 }
 
-
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

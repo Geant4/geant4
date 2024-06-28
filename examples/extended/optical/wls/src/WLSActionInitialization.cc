@@ -40,8 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSActionInitialization::WLSActionInitialization(WLSDetectorConstruction* det)
-  : G4VUserActionInitialization()
-  , fDetector(det)
+  : G4VUserActionInitialization(), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +59,7 @@ void WLSActionInitialization::Build() const
 
   auto eventAction = new WLSEventAction();
   SetUserAction(eventAction);
-  
+
   SetUserAction(new WLSTrackingAction());
   SetUserAction(new WLSSteppingAction(fDetector, eventAction));
   SetUserAction(new WLSStackingAction());

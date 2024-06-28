@@ -32,7 +32,6 @@
 #include "G4AccumulableManager.hh"
 
 #include <map>
-
 #include <mutex>
 
 std::mutex init_mutex;
@@ -78,7 +77,6 @@ Manager::~Manager()
 
 void Manager::InitializeAll()
 {
-
   std::lock_guard<std::mutex> lock(init_mutex);
   for (auto const& q : fQuantities)
     (q.second)->Initialize();

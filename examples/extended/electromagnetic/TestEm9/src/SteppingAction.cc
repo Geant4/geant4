@@ -41,13 +41,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
+
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction():
-  G4UserSteppingAction(),fHisto(HistoManager::GetPointer())
-{}
+SteppingAction::SteppingAction() : G4UserSteppingAction(), fHisto(HistoManager::GetPointer()) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,14 +54,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   fHisto->AddStep();
   auto tracks = aStep->GetSecondaryInCurrentStep();
-  if(nullptr != tracks) {
-    for(auto track : *tracks) {
+  if (nullptr != tracks) {
+    for (auto track : *tracks) {
       fHisto->ScoreNewTrack(track);
     }
   }
 
-  G4double edep = aStep->GetTotalEnergyDeposit()*aStep->GetTrack()->GetWeight();
-  if(edep == 0.) { return; }
+  G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
+  if (edep == 0.) {
+    return;
+  }
 
   const G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
   const G4LogicalVolume* lv = pv->GetLogicalVolume();
@@ -74,16 +75,28 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // comparison of strings is not effective
   // this method left only for simplicity of the code
   G4String name = lv->GetName();
-  if(name == "Ecal")      { volumeIndex = 0; }
-  else if(name == "Abs1") { volumeIndex = 1; }
-  else if(name == "Abs2") { volumeIndex = 2; }
-  else if(name == "Abs3") { volumeIndex = 3; }
-  else if(name == "Abs4") { volumeIndex = 4; }
-  else if(name == "Vert") { volumeIndex = 5; }
+  if (name == "Ecal") {
+    volumeIndex = 0;
+  }
+  else if (name == "Abs1") {
+    volumeIndex = 1;
+  }
+  else if (name == "Abs2") {
+    volumeIndex = 2;
+  }
+  else if (name == "Abs3") {
+    volumeIndex = 3;
+  }
+  else if (name == "Abs4") {
+    volumeIndex = 4;
+  }
+  else if (name == "Vert") {
+    volumeIndex = 5;
+  }
   // G4cout << "   vIndx= " << volumeIndex << " copyNo= " << copyNo << G4endl;
-  if(volumeIndex>=0) { fHisto->AddEnergy(edep, volumeIndex, copyNo); }
+  if (volumeIndex >= 0) {
+    fHisto->AddEnergy(edep, volumeIndex, copyNo);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

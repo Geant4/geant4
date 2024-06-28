@@ -32,14 +32,14 @@
 
 #include "DetectorMessenger.hh"
 
+#include "DetectorConstruction.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIparameter.hh"
-
-#include "DetectorConstruction.hh"
 
 #include <sstream>
 

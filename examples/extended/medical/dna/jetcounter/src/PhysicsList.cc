@@ -35,21 +35,20 @@
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
-#include "G4EmParameters.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "G4DecayPhysics.hh"
-#include "G4EmLivermorePhysics.hh"
-
 #include "G4EmDNAPhysicsActivator.hh"
-
 #include "G4EmDNAPhysics_option2.hh"
 #include "G4EmDNAPhysics_option4.hh"
 #include "G4EmDNAPhysics_option6.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmParameters.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList() {
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
+{
   SetDefaultCutValue(1.0 * nanometer);
   SetVerboseLevel(1);
 
@@ -57,5 +56,3 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList() {
   RegisterPhysics(new G4EmDNAPhysicsActivator());
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

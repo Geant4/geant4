@@ -50,9 +50,9 @@
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
-#include "globals.hh"
-#include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4Material.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,99 +63,99 @@ class G4ParticleDefinition;
 
 class HistoManager
 {
-public:
+  public:
+    static HistoManager* GetPointer();
 
-  static HistoManager* GetPointer();
+  private:
+    HistoManager();
 
-private:
+  public:
+    ~HistoManager();
 
-  HistoManager();
+    void BookHisto();
 
-public: 
+    void BeginOfRun();
+    void EndOfRun();
+    void BeginOfEvent();
+    void EndOfEvent();
+    void Fill(G4int id, G4double x, G4double w);
 
-  ~HistoManager();
+    void ScoreNewTrack(const G4Track*);
+    void AddTargetStep(const G4Step*);
+    void AddLeakingParticle(const G4Track*);
 
-  void BookHisto();
+    void SetVerbose(G4int val);
 
-  void BeginOfRun();
-  void EndOfRun();
-  void BeginOfEvent();
-  void EndOfEvent();
-  void Fill(G4int id, G4double x, G4double w);
+    inline void SetTargetRadius(G4double val)
+    {
+      fRadius = val;
+      fR2 = val * val;
+    };
+    inline void SetTargetLength(G4double val) { fLength = val; };
+    inline void SetNumberOfSlices(G4int val) { fNSlices = val; };
+    inline void SetNumberOfBinsE(G4int val) { fNBinsE = val; };
+    inline void SetDefaultBeamPositionFlag(G4bool f) { fBeamFlag = f; };
+    inline void SetMaxEnergyDeposit(G4double val) { fEdepMax = val; };
 
-  void ScoreNewTrack(const G4Track*);
-  void AddTargetStep(const G4Step*);
-  void AddLeakingParticle(const G4Track*);
+    inline G4double Radius() const { return fRadius; };
+    inline G4double Length() const { return fLength; };
+    inline G4bool DefaultBeamPosition() const { return fBeamFlag; };
+    inline G4int NumberOfSlices() const { return fNSlices; };
+    inline G4int GetVerbose() const { return fVerbose; };
 
-  void SetVerbose(G4int val);        
+    inline G4int PrintBertiniXS() const { return fPrintBertiniXS; };
+    inline void SetPrintBertiniXS(G4int key) { fPrintBertiniXS = key; };
 
-  inline void SetTargetRadius(G4double val) { fRadius = val; fR2 = val*val; };
-  inline void SetTargetLength(G4double val) { fLength = val; };
-  inline void SetNumberOfSlices(G4int val)  { fNSlices = val; };
-  inline void SetNumberOfBinsE(G4int val)   { fNBinsE = val; };
-  inline void SetDefaultBeamPositionFlag(G4bool f) { fBeamFlag = f; };        
-  inline void SetMaxEnergyDeposit(G4double val) { fEdepMax = val; };
+  private:
+    static HistoManager* fManager;
 
-  inline G4double Radius() const { return fRadius; };
-  inline G4double Length() const { return fLength; };
-  inline G4bool   DefaultBeamPosition() const { return fBeamFlag; };
-  inline G4int    NumberOfSlices() const { return fNSlices; };
-  inline G4int    GetVerbose() const { return fVerbose; };
+    const G4ParticleDefinition* fPrimaryDef;
+    const G4ParticleDefinition* fNeutron;
 
-  inline G4int PrintBertiniXS() const { return fPrintBertiniXS; };
-  inline void SetPrintBertiniXS(G4int key) { fPrintBertiniXS = key; };
+    G4double fR2 = 0.0;
+    G4double fRadius;
+    G4double fLength;
+    G4double fEdepMax;
+    G4double fEdepEvt = 0.0;
+    G4double fEdepEM = 0.0;
+    G4double fEdepPI = 0.0;
+    G4double fEdepP = 0.0;
+    G4double fEdepSum = 0.0;
+    G4double fEdepSum2 = 0.0;
+    G4double fAbsZ0 = 0.0;
+    G4double fPrimaryKineticEnergy = 0.0;
 
-private:
+    G4int fVerbose = 0;
+    G4int fNBinsE = 100;
+    G4int fNSlices = 300;
 
-  static HistoManager* fManager;
+    G4int fNevt = 0;
+    G4int fNelec = 0;
+    G4int fNposit = 0;
+    G4int fNgam = 0;
+    G4int fNprot_leak = 0;
+    G4int fNpiofNleak = 0;
+    G4int fNcpions = 0;
+    G4int fNpi0 = 0;
+    G4int fNkaons = 0;
+    G4int fNmuons = 0;
+    G4int fNions = 0;
+    G4int fNdeut = 0;
+    G4int fNalpha = 0;
+    G4int fNneutron = 0;
+    G4int fNproton = 0;
+    G4int fNaproton = 0;
+    G4int fNneu_forw = 0;
+    G4int fNneu_leak = 0;
+    G4int fNneu_back = 0;
+    G4int fNstep = 0;
+    G4int fNHisto = 28;
+    G4int fPrintBertiniXS = -1;  // 0 - all
 
-  const G4ParticleDefinition* fPrimaryDef;
-  const G4ParticleDefinition* fNeutron;
+    G4bool fBeamFlag = true;
+    G4bool fHistoBooked = false;
 
-  G4double fR2 = 0.0;
-  G4double fRadius;
-  G4double fLength;
-  G4double fEdepMax;
-  G4double fEdepEvt = 0.0;
-  G4double fEdepEM = 0.0;
-  G4double fEdepPI = 0.0;
-  G4double fEdepP = 0.0;
-  G4double fEdepSum = 0.0;
-  G4double fEdepSum2 = 0.0;
-  G4double fAbsZ0 = 0.0;
-  G4double fPrimaryKineticEnergy = 0.0;
-
-  G4int fVerbose = 0;
-  G4int fNBinsE = 100;
-  G4int fNSlices = 300;
-
-  G4int fNevt = 0;
-  G4int fNelec = 0;
-  G4int fNposit = 0;
-  G4int fNgam = 0;
-  G4int fNprot_leak = 0;
-  G4int fNpiofNleak = 0;
-  G4int fNcpions = 0;
-  G4int fNpi0 = 0;
-  G4int fNkaons = 0;
-  G4int fNmuons = 0;
-  G4int fNions = 0;
-  G4int fNdeut = 0;
-  G4int fNalpha = 0;
-  G4int fNneutron = 0;
-  G4int fNproton = 0;
-  G4int fNaproton = 0;
-  G4int fNneu_forw = 0;
-  G4int fNneu_leak = 0;
-  G4int fNneu_back = 0;
-  G4int fNstep = 0;
-  G4int fNHisto = 28;
-  G4int fPrintBertiniXS = -1; // 0 - all
-
-  G4bool fBeamFlag = true;
-  G4bool fHistoBooked = false;
-
-  Histo* fHisto;
+    Histo* fHisto;
 };
 
 #endif

@@ -42,22 +42,19 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class PhysicsListMessenger : public G4UImessenger
 {
-public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  
-  PhysicsList*               fPhysicsList;
-    
-  G4UIdirectory*             fPhysDir;
-  G4UIcmdWithAString*        fListCmd;
-    
+  public:
+    PhysicsListMessenger(PhysicsList*);
+    virtual ~PhysicsListMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    PhysicsList* fPhysicsList;
+
+    G4UIdirectory* fPhysDir;
+    G4UIcmdWithAString* fListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

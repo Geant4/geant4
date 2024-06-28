@@ -112,3 +112,13 @@
  		....
  		Idle> exit
   
+  Macros provided in this example:
+  - anni.mac:      e+ (100 MeV) on Aluminium
+  - atomicDeexcitation: gamma (80 keV) on Tellurium 
+  - compton.mac:   gamma (300 keV) on Aluminium
+  - conv.mac:      gamma (20 MeV) on Lead
+  - convtomu.mac:  gamma (100 TeV) on Iron  
+  - electron.mac:  e- (100 MeV) on Aluminium
+  - gamma.mac:     gamma (100 keV) on Water
+  - photoelec.mac: gamma (80 keV) on Gold
+  - proton.mac:    proton (100 MeV) on Water

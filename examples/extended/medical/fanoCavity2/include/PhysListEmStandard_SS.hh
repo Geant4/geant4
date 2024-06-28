@@ -36,35 +36,26 @@
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysListEmStandard_SS : public G4VPhysicsConstructor
 {
-public: 
-  PhysListEmStandard_SS(const G4String& name);
- ~PhysListEmStandard_SS();
+  public:
+    PhysListEmStandard_SS(const G4String& name);
+    ~PhysListEmStandard_SS();
 
-public: 
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-  
-private:
+  public:
+    // This method is dummy for physics
+    virtual void ConstructParticle() {};
+
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type
+    virtual void ConstructProcess();
+
+  private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

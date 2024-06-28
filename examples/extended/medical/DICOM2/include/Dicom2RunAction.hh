@@ -31,9 +31,11 @@
 #ifndef Dicom2RunAction_h
 #define Dicom2RunAction_h 1
 
-#include "DicomRunAction.hh"
 #include "Dicom2Run.hh"
+#include "DicomRunAction.hh"
+
 #include "globals.hh"
+
 #include <vector>
 
 class G4Run;
@@ -41,15 +43,15 @@ class Dicom2Run;
 
 class Dicom2RunAction : public DicomRunAction
 {
-public:
+  public:
     typedef Dicom2Run::Dicom2RunVector Dicom2RunVector;
 
-public:
+  public:
     // constructor and destructor
     Dicom2RunAction();
     virtual ~Dicom2RunAction();
 
-public:
+  public:
     // virtual method from G4UserRunAction.
     virtual G4Run* GenerateRun() override;
     virtual void EndOfRunAction(const G4Run* aRun) override;

@@ -40,28 +40,20 @@
 
 class MuNuclearBuilder : public G4VPhysicsConstructor
 {
-  public: 
+  public:
     MuNuclearBuilder(const G4String& name = "muNucl");
-   ~MuNuclearBuilder();
+    ~MuNuclearBuilder();
 
-  public: 
+  public:
     // This method is dummy for physics
     virtual void ConstructParticle() {};
- 
+
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
+    // registered to the process manager of each particle type
     virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

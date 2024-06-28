@@ -6,13 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-06-18 Gabriele Cosmo (expar04-V11-01-04)
+## 2024-06-18 Gabriele Cosmo (expar04-V11-02-02)
 - Bump scikit-learn version from [GitHub Dependabot PR](https://github.com/Geant4/geant4/pull/73)
 
-## 2024-06-13 Gabriele Cosmo (expar04-V11-01-03)
+## 2024-06-13 Gabriele Cosmo (expar04-V11-02-01)
 - Bump pymysql version from [GitHub Dependabot PR](https://github.com/Geant4/geant4/pull/72)
 
-## 2024-03-11 Ben Morgan
+## 2024-03-11 Ben Morgan (expar04-V11-02-00)
 - Bump scipy version from [GitHub Dependabot PR](https://github.com/Geant4/geant4/pull/66)
 
 ## 2023-10-25 Dalila Salamani (expar04-V11-01-02)

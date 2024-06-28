@@ -31,8 +31,9 @@
 #ifndef DicomNestedParamDetectorConstruction_h
 #define DicomNestedParamDetectorConstruction_h 1
 
-#include "globals.hh"
 #include "DicomDetectorConstruction.hh"
+
+#include "globals.hh"
 
 //*******************************************************
 /// Construct the phantom using DicomPhantomParameterisationColour
@@ -43,19 +44,15 @@
 
 class DicomNestedParamDetectorConstruction : public DicomDetectorConstruction
 {
-public:
+  public:
+    DicomNestedParamDetectorConstruction();
+    ~DicomNestedParamDetectorConstruction();
 
-  DicomNestedParamDetectorConstruction();
-  ~DicomNestedParamDetectorConstruction();
+  protected:
+    // virtual void ConstructSDandField();
 
-protected:
-    //virtual void ConstructSDandField();
-    
-private:
-
-  virtual void ConstructPhantom();
-
+  private:
+    virtual void ConstructPhantom();
 };
 
 #endif
-

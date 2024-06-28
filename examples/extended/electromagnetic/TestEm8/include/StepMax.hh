@@ -30,46 +30,44 @@
 #ifndef StepMax_h
 #define StepMax_h 1
 
-#include "globals.hh"
-#include "G4VEmProcess.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
+#include "G4VEmProcess.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4VPhysicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMax : public G4VEmProcess {
-public:
-  explicit StepMax(DetectorConstruction *ptr,
-                   const G4String &processName = "UserMaxStep");
-  ~StepMax() override = default;
+class StepMax : public G4VEmProcess
+{
+  public:
+    explicit StepMax(DetectorConstruction* ptr, const G4String& processName = "UserMaxStep");
+    ~StepMax() override = default;
 
-  G4bool IsApplicable(const G4ParticleDefinition &) override;
+    G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  void PreparePhysicsTable(const G4ParticleDefinition &) override;
+    void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
-  void BuildPhysicsTable(const G4ParticleDefinition &) override;
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  void InitialiseProcess(const G4ParticleDefinition *) override;
+    void InitialiseProcess(const G4ParticleDefinition*) override;
 
-  G4double
-  PostStepGetPhysicalInteractionLength(const G4Track &track,
-                                       G4double previousStep,
-                                       G4ForceCondition *cond) override;
+    G4double PostStepGetPhysicalInteractionLength(const G4Track& track, G4double previousStep,
+                                                  G4ForceCondition* cond) override;
 
-  G4VParticleChange *PostStepDoIt(const G4Track &, const G4Step &) override;
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  StepMax &operator = (const StepMax &right) = delete;
-  StepMax(const StepMax &) = delete;
+    StepMax& operator=(const StepMax& right) = delete;
+    StepMax(const StepMax&) = delete;
 
-private:
-  G4double fMaxChargedStep = DBL_MAX;
+  private:
+    G4double fMaxChargedStep = DBL_MAX;
 
-  DetectorConstruction *fDetector;
-  G4VPhysicalVolume *fWorld = nullptr;
-  G4bool fIsInitialised = false;
+    DetectorConstruction* fDetector;
+    G4VPhysicalVolume* fWorld = nullptr;
+    G4bool fIsInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

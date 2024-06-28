@@ -40,16 +40,16 @@ class G4ParticleGun;
 
 class Par04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
- public:
-  Par04PrimaryGeneratorAction();
-  virtual ~Par04PrimaryGeneratorAction();
+  public:
+    Par04PrimaryGeneratorAction();
+    virtual ~Par04PrimaryGeneratorAction();
 
-  /// Generate primary particles
-  virtual void GeneratePrimaries(G4Event*) final;
+    /// Generate primary particles
+    virtual void GeneratePrimaries(G4Event*) final;
 
- private:
-  /// Particle gun
-  G4ParticleGun* fParticleGun = nullptr;
+  private:
+    /// Particle gun
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 #endif /* PAR04PRIMARYGENERATORACTION_HH */

@@ -1,27 +1,34 @@
-#
+# MT
 /run/numberOfThreads 2
 #
+# Atomic deexcitation activation
 /process/em/deexcitationIgnoreCut true
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
 /process/em/augerCascade true
 #
+# Materials
 #/svalue/det/setWorldMat G4_Galactic
 /svalue/det/setWorldMat G4_WATER
 /svalue/det/setCytoMat G4_WATER
 /svalue/det/setNuclMat G4_WATER
 #
+# Geometry
 /svalue/det/setNuclRadius 50 nm
 /svalue/det/setCytoThickness 3 nm
 #
+# Tracking cut
 /svalue/det/setTrackingCut 12 eV
 #
-/svalue/phys/addPhysics  dna_opt2	        
+# Physics
+/svalue/phys/addPhysics dna_opt2
 #
+# Run initialization
 /run/initialize
 #
+# Incident particle type
 /gun/particle e-
 #
+# Beam on
 /run/beamOn 100
-

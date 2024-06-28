@@ -80,6 +80,8 @@ class G4UTrd : public G4UAdapter<vecgeom::GenericUnplacedTrd>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
@@ -108,6 +110,11 @@ class G4UTrd : public G4UAdapter<vecgeom::GenericUnplacedTrd>
 inline G4GeometryType G4UTrd::GetEntityType() const
 {
   return "G4Trd";
+}
+
+inline G4bool G4UTrd::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

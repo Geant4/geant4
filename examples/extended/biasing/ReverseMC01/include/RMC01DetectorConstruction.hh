@@ -57,30 +57,28 @@ class RMC01DetectorMessenger;
 class RMC01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-
-    RMC01DetectorConstruction();       
+    RMC01DetectorConstruction();
     virtual ~RMC01DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
     void UpdateGeometry();
-    
+
     void SetSensitiveVolumeHeight(G4double h);
     void SetSensitiveVolumeRadius(G4double r);
-    
+
     void SetShieldingThickness(G4double d);
-    
+
   private:
-     
-    RMC01DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
-    
-    //Geometrical parameters
-    //---------------------- 
+    RMC01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
+
+    // Geometrical parameters
+    //----------------------
     G4double fShield_Thickness;
     G4double fSensitive_cylinder_H;
     G4double fSensitive_cylinder_Rout;
-      
+
     void DefineMaterials();
-    G4VPhysicalVolume* ConstructSimpleGeometry(); 
+    G4VPhysicalVolume* ConstructSimpleGeometry();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

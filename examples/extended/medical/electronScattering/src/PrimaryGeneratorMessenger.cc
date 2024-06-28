@@ -33,24 +33,24 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
-                                                  PrimaryGeneratorAction* Gun)
-:fAction(Gun), fGunDir(0), fRndmCmd(0)
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun)
+  : fAction(Gun), fGunDir(0), fRndmCmd(0)
 {
   fGunDir = new G4UIdirectory("/testem/gun/");
   fGunDir->SetGuidance("gun control");
-  
-  fRndmCmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/rndm",this);
+
+  fRndmCmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/rndm", this);
   fRndmCmd->SetGuidance("random lateral extension on the beam");
   fRndmCmd->SetGuidance("sigma of a gaussian");
-  fRndmCmd->SetParameterName("rBeam",false);
+  fRndmCmd->SetParameterName("rBeam", false);
   fRndmCmd->SetRange("rBeam>=0.");
-  fRndmCmd->SetUnitCategory("Length");  
+  fRndmCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,17 +58,16 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
   delete fRndmCmd;
-  delete fGunDir;    
+  delete fGunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
-{    
-  if (command == fRndmCmd)
-   { fAction->SetRndmBeam(fRndmCmd->GetNewDoubleValue(newValue));}       
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fRndmCmd) {
+    fAction->SetRndmBeam(fRndmCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

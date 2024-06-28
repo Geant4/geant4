@@ -28,7 +28,7 @@
 /// \brief Definition of the EDecayType enumeration
 
 #ifndef E_DECAY_TYPE_H
-#define E_DECAY_TYPE_H 
+#define E_DECAY_TYPE_H
 
 /// Enum of decay mode types
 ///
@@ -39,29 +39,29 @@
 
 enum EDecayType
 {
-   kSemiElectronic,    
-   kDiElectron,
-   kSemiMuonic,
-   kDiMuon,
-   kBJpsiDiMuon,
-   kBJpsiDiElectron,
-   kBPsiPrimeDiMuon,
-   kBPsiPrimeDiElectron,
-   kPiToMu,
-   kKaToMu,
-   kNoDecay,
-   kHadronicD,
-   kOmega,
-   kPhiKK,
-   kAll,
-   kNoDecayHeavy,
-   kHardMuons,
-   kBJpsi,
-   kWToMuon,
-   kWToCharm,
-   kWToCharmToMuon,
-   kZDiMuon,
-   kMaxDecay
+  kSemiElectronic,
+  kDiElectron,
+  kSemiMuonic,
+  kDiMuon,
+  kBJpsiDiMuon,
+  kBJpsiDiElectron,
+  kBPsiPrimeDiMuon,
+  kBPsiPrimeDiElectron,
+  kPiToMu,
+  kKaToMu,
+  kNoDecay,
+  kHadronicD,
+  kOmega,
+  kPhiKK,
+  kAll,
+  kNoDecayHeavy,
+  kHardMuons,
+  kBJpsi,
+  kWToMuon,
+  kWToCharm,
+  kWToCharmToMuon,
+  kZDiMuon,
+  kMaxDecay
 };
 
 // ----------------------------------------------------------------------------

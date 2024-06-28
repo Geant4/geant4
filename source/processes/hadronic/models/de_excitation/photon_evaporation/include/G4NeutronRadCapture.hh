@@ -52,27 +52,25 @@ class G4NeutronRadCapture : public G4HadronicInteraction
 {
 public:
 
-  explicit G4NeutronRadCapture();
+  G4NeutronRadCapture();
 
-  virtual ~G4NeutronRadCapture();
+  ~G4NeutronRadCapture() override;
  
-  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile & aTrack, 
-					 G4Nucleus & targetNucleus) final;
+  G4HadFinalState* ApplyYourself(const G4HadProjectile & aTrack, 
+				 G4Nucleus & targetNucleus) override;
 
-  virtual void InitialiseModel() final;
-
-private:
+  void InitialiseModel() override;
 
   G4NeutronRadCapture & operator=(const G4NeutronRadCapture &right) = delete;
   G4NeutronRadCapture(const G4NeutronRadCapture&) = delete;
 
-  G4int icID;   // creator model ID for electrons produced by internal conversion
-  G4int secID;  // creator model ID for the other secondaries produced by this model
-  const G4ParticleDefinition* electron;
+private:
+
+  G4int secID;  // creator model ID for secondaries produced by this model
   G4double lowestEnergyLimit;
   G4double minExcitation;
   G4VEvaporationChannel* photonEvaporation;
-  G4IonTable*  theTableOfIons;
+  G4IonTable* theTableOfIons;
   G4LorentzVector lab4mom;
 
 };

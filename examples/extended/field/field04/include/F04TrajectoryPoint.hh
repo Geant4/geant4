@@ -31,77 +31,71 @@
 #ifndef F04TrajectoryPoint_h
 #define F04TrajectoryPoint_h 1
 
-#include "globals.hh"
-
 #include "G4Allocator.hh"
+#include "G4StepStatus.hh"
 #include "G4ThreeVector.hh"
 #include "G4TrajectoryPoint.hh"
-
-#include "G4StepStatus.hh"
+#include "globals.hh"
 
 class G4Track;
 class G4Step;
 class G4VProcess;
 
-class F04TrajectoryPoint : public G4TrajectoryPoint {
+class F04TrajectoryPoint : public G4TrajectoryPoint
+{
+    //--------
+  public:  // without description
+    //--------
 
-//--------
-  public: // without description
-//--------
-
-// Constructor/Destructor
+    // Constructor/Destructor
 
     F04TrajectoryPoint();
     F04TrajectoryPoint(const G4Track* aTrack);
     F04TrajectoryPoint(const G4Step* aStep);
-    F04TrajectoryPoint(const F04TrajectoryPoint &right);
+    F04TrajectoryPoint(const F04TrajectoryPoint& right);
     ~F04TrajectoryPoint() override = default;
 
-// Operators
+    // Operators
 
-    inline void *operator new(size_t);
-    inline void operator delete(void *aTrajectoryPoint);
-    inline G4bool operator==(const F04TrajectoryPoint& right) const
-    { return (this==&right); };
+    inline void* operator new(size_t);
+    inline void operator delete(void* aTrajectoryPoint);
+    inline G4bool operator==(const F04TrajectoryPoint& right) const { return (this == &right); };
 
-// Get/Set functions
+    // Get/Set functions
 
     inline G4double GetTime() const { return fTime; };
     inline const G4ThreeVector GetMomentum() const { return fMomentum; };
     inline G4StepStatus GetStepStatus() const { return fStepStatus; };
     inline G4String GetVolumeName() const { return fVolumeName; };
 
-// Get method for HEPRep style attributes
+    // Get method for HEPRep style attributes
 
-   const std::map<G4String,G4AttDef>* GetAttDefs() const override;
-   std::vector<G4AttValue>* CreateAttValues() const override;
+    const std::map<G4String, G4AttDef>* GetAttDefs() const override;
+    std::vector<G4AttValue>* CreateAttValues() const override;
 
-//---------
+    //---------
   private:
-//---------
+    //---------
 
-// Member data
+    // Member data
 
-    G4double      fTime = 0;
+    G4double fTime = 0;
     G4ThreeVector fMomentum;
-    G4StepStatus  fStepStatus = fUndefined;
-    G4String      fVolumeName;
-
+    G4StepStatus fStepStatus = fUndefined;
+    G4String fVolumeName;
 };
 
 extern G4ThreadLocal G4Allocator<F04TrajectoryPoint>* F04TrajPointAllocator;
 
 inline void* F04TrajectoryPoint::operator new(size_t)
 {
-    if(!F04TrajPointAllocator)
-      F04TrajPointAllocator = new G4Allocator<F04TrajectoryPoint>;
-    return (void *) F04TrajPointAllocator->MallocSingle();
+  if (!F04TrajPointAllocator) F04TrajPointAllocator = new G4Allocator<F04TrajectoryPoint>;
+  return (void*)F04TrajPointAllocator->MallocSingle();
 }
 
-inline void F04TrajectoryPoint::operator delete(void *aTrajectoryPoint)
+inline void F04TrajectoryPoint::operator delete(void* aTrajectoryPoint)
 {
-    F04TrajPointAllocator->FreeSingle(
-        (F04TrajectoryPoint *) aTrajectoryPoint);
+  F04TrajPointAllocator->FreeSingle((F04TrajectoryPoint*)aTrajectoryPoint);
 }
 
 #endif

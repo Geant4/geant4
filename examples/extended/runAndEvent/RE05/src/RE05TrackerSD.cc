@@ -29,37 +29,36 @@
 //
 
 #include "RE05TrackerSD.hh"
+
 #include "RE05TrackerHit.hh"
-#include "G4Step.hh"
+
 #include "G4HCofThisEvent.hh"
+#include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05TrackerSD::RE05TrackerSD(G4String name)
-: G4VSensitiveDetector(name),
-  fTrackerCollection(0)
+RE05TrackerSD::RE05TrackerSD(G4String name) : G4VSensitiveDetector(name), fTrackerCollection(0)
 {
   G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
+  collectionName.insert(HCname = "trackerCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05TrackerSD::~RE05TrackerSD()
-{}
+RE05TrackerSD::~RE05TrackerSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  fTrackerCollection = new RE05TrackerHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,fTrackerCollection);
+  fTrackerCollection = new RE05TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, fTrackerCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,34 +66,30 @@ void RE05TrackerSD::Initialize(G4HCofThisEvent* HCE)
 G4bool RE05TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.) return false;
+  if (edep == 0.) return false;
 
   RE05TrackerHit* newHit = new RE05TrackerHit();
-  newHit->SetEdep( edep );
-  newHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  fTrackerCollection->insert( newHit );
+  newHit->SetEdep(edep);
+  newHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+  fTrackerCollection->insert(newHit);
 
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerSD::EndOfEvent(G4HCofThisEvent*)
-{}
+void RE05TrackerSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerSD::clear()
-{} 
+void RE05TrackerSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerSD::DrawAll()
-{} 
+void RE05TrackerSD::DrawAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerSD::PrintAll()
-{} 
+void RE05TrackerSD::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

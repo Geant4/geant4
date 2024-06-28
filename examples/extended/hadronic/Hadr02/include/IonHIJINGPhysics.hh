@@ -33,9 +33,9 @@
 //
 // Author:    2012 Andrea Dotti
 //
-// 
 //
-// Modified:     
+//
+// Modified:
 //
 // ------------------------------------------------------------
 //
@@ -55,37 +55,26 @@ class G4HadronicInteraction;
 
 class IonHIJINGPhysics : public G4VHadronPhysics
 {
-public:
+  public:
+    IonHIJINGPhysics(G4int ver = 0);
+    virtual ~IonHIJINGPhysics();
 
-  IonHIJINGPhysics(G4int ver = 0);
-  virtual ~IonHIJINGPhysics();
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type
+    void ConstructProcess();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  void ConstructProcess();
+  private:
+    void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
 
-private:
+    G4VCrossSectionDataSet* theNuclNuclData;
 
-  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
-
-  G4VCrossSectionDataSet* theNuclNuclData;
-  
-  G4HIJING_Model * fModel;
-  G4BinaryLightIonReaction* theIonBC;
-  G4FTFBuilder* theBuilder;
-  G4HadronicInteraction* theFTFP;
-  G4int  fVerbose;
-  G4bool fWasActivated;
+    G4HIJING_Model* fModel;
+    G4BinaryLightIonReaction* theIonBC;
+    G4FTFBuilder* theBuilder;
+    G4HadronicInteraction* theFTFP;
+    G4int fVerbose;
+    G4bool fWasActivated;
 };
 
-
 #endif
-
-
-
-
-
-
-
-

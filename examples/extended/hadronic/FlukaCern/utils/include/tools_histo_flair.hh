@@ -34,8 +34,8 @@
 //
 ///  Tools to dump any G4H1 into Flair-compatible format.
 ///
-///  These tools are fully application-agnostic, 
-///  and could also be placed outside of the G4 examples, 
+///  These tools are fully application-agnostic,
+///  and could also be placed outside of the G4 examples,
 ///  as a core G4 Analysis Manager extension.
 //
 // ***************************************************************************
@@ -43,67 +43,56 @@
 #ifndef TOOLS_HISTO_FLAIR_HH
 #define TOOLS_HISTO_FLAIR_HH
 
-#include "globals.hh"
 #include "g4hntools_defs.hh"
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-namespace tools {
-  namespace histo {
-    namespace flair {
-
-      // Supported abscissa types (can be extended)
-      enum Abscissa {
-        KineticEnergy,
-        Z,
-        A
-      };
-      
-      G4String getAbscissaName(const Abscissa abscissaKind);
-      G4String getAbscissaUnit(const Abscissa abscissaKind);
-      G4double getAbscissaUnitValue(const Abscissa abscissaKind);
-
-      G4String sformat(const char* fmt, ...);
-
-      G4double computeError(const G4double mean, 
-                          const G4double sumSquares, 
-                          const G4int numEvents);
-
-      // Dump G4H1 (histo mode) to a Flair-compatible format.
-      void dumpG4H1HistoInFlairFormat(std::ofstream& output,
-                                      const G4int indexInOutputFile,
-                                      const G4String& histoName,
-                                      G4H1* const histo,
-                                      const Abscissa abscissaKind,
-                                      const G4String& binSchemeName,
-                                      const G4int numEvents,
-                                      const G4double sumSquaredEventTotals = 0.,
-                                      const G4double sumSquaredEventInRangeTotals = 0.);
-
-      // Dump G4H1 (profile mode, ie no stats) to a Flair-compatible format.
-      void dumpG4H1ProfileInFlairFormat(std::ofstream& output,
-                                        const G4int indexInOutputFile,
-                                        const G4String& histoName,
-                                        G4H1* const histo,
-                                        const Abscissa abscissaKind,
-                                        const G4String& binSchemeName);
-
-      void dumpG4H1InFlairFormat(std::ofstream& output,
-                                 const G4int indexInOutputFile,
-                                 const G4String& histoName,
-                                 G4H1* const histo,
-                                 const Abscissa abscissaKind,
-                                 const G4String& binSchemeName,
-                                 const G4int numEvents,
-                                 const G4bool isProfile = false,
-                                 const G4double sumSquaredEventTotals = 0.,
-                                 const G4double sumSquaredEventInRangeTotals = 0.);
-    }
-  }
-}
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+namespace tools
+{
+namespace histo
+{
+namespace flair
+{
+
+// Supported abscissa types (can be extended)
+enum Abscissa
+{
+  KineticEnergy,
+  Z,
+  A
+};
+
+G4String getAbscissaName(const Abscissa abscissaKind);
+G4String getAbscissaUnit(const Abscissa abscissaKind);
+G4double getAbscissaUnitValue(const Abscissa abscissaKind);
+
+G4String sformat(const char* fmt, ...);
+
+G4double computeError(const G4double mean, const G4double sumSquares, const G4int numEvents);
+
+// Dump G4H1 (histo mode) to a Flair-compatible format.
+void dumpG4H1HistoInFlairFormat(std::ofstream& output, const G4int indexInOutputFile,
+                                const G4String& histoName, G4H1* const histo,
+                                const Abscissa abscissaKind, const G4String& binSchemeName,
+                                const G4int numEvents, const G4double sumSquaredEventTotals = 0.,
+                                const G4double sumSquaredEventInRangeTotals = 0.);
+
+// Dump G4H1 (profile mode, ie no stats) to a Flair-compatible format.
+void dumpG4H1ProfileInFlairFormat(std::ofstream& output, const G4int indexInOutputFile,
+                                  const G4String& histoName, G4H1* const histo,
+                                  const Abscissa abscissaKind, const G4String& binSchemeName);
+
+void dumpG4H1InFlairFormat(std::ofstream& output, const G4int indexInOutputFile,
+                           const G4String& histoName, G4H1* const histo,
+                           const Abscissa abscissaKind, const G4String& binSchemeName,
+                           const G4int numEvents, const G4bool isProfile = false,
+                           const G4double sumSquaredEventTotals = 0.,
+                           const G4double sumSquaredEventInRangeTotals = 0.);
+}  // namespace flair
+}  // namespace histo
+}  // namespace tools
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

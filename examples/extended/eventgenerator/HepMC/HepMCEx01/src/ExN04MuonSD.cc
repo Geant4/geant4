@@ -28,82 +28,77 @@
 //
 //
 
+#include "ExN04MuonSD.hh"
+
+#include "ExN04MuonHit.hh"
+
 #include "G4HCofThisEvent.hh"
-#include "G4ios.hh"
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Track.hh"
-#include "ExN04MuonSD.hh"
-#include "ExN04MuonHit.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonSD::ExN04MuonSD(G4String name)
-  : G4VSensitiveDetector(name), 
-    fMuonCollection(NULL), fPositionResolution(5*cm)
+  : G4VSensitiveDetector(name), fMuonCollection(NULL), fPositionResolution(5 * cm)
 {
   G4String HCname;
-  collectionName.insert(HCname="muonCollection");
+  collectionName.insert(HCname = "muonCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04MuonSD::~ExN04MuonSD(){;}
+ExN04MuonSD::~ExN04MuonSD()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04MuonSD::Initialize(G4HCofThisEvent*HCE)
+void ExN04MuonSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  fMuonCollection = new ExN04MuonHitsCollection
-                   (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,fMuonCollection);
+  fMuonCollection = new ExN04MuonHitsCollection(SensitiveDetectorName, collectionName[0]);
+  if (HCID < 0) {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, fMuonCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
+G4bool ExN04MuonSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
 
-  if(edep==0.) return true;
+  if (edep == 0.) return true;
 
   ExN04MuonHit* aHit;
   int nHit = fMuonCollection->entries();
   G4ThreeVector hitpos = aStep->GetPreStepPoint()->GetPosition();
-  for(int i=0;i<nHit;i++) {
+  for (int i = 0; i < nHit; i++) {
     aHit = (*fMuonCollection)[i];
     G4ThreeVector pos = aHit->GetPos();
-    G4double dist2 = sqr(pos.x()-hitpos.x())
-                    +sqr(pos.y()-hitpos.y())+sqr(pos.z()-hitpos.z());
-    if(dist2<=sqr(fPositionResolution))
-    aHit->AddEdep(edep);
+    G4double dist2 =
+      sqr(pos.x() - hitpos.x()) + sqr(pos.y() - hitpos.y()) + sqr(pos.z() - hitpos.z());
+    if (dist2 <= sqr(fPositionResolution)) aHit->AddEdep(edep);
     return true;
   }
 
   aHit = new ExN04MuonHit();
-  aHit->SetEdep( edep );
-  aHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  fMuonCollection->insert( aHit );
+  aHit->SetEdep(edep);
+  aHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+  fMuonCollection->insert(aHit);
 
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04MuonSD::EndOfEvent(G4HCofThisEvent*)
-{
-}
+void ExN04MuonSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04MuonSD::clear()
-{
-}
+void ExN04MuonSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04MuonSD::DrawAll()
-{
-}
+void ExN04MuonSD::DrawAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04MuonSD::PrintAll()
-{
-}
+void ExN04MuonSD::PrintAll() {}

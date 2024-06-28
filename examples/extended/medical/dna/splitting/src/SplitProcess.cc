@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -35,98 +35,99 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SplitProcess.hh"
+
 #include "UserTrackInformation.hh"
 
-#include "G4Track.hh"
-#include "G4VParticleChange.hh"
 #include "G4LogicalVolume.hh"
-#include "G4TouchableHandle.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4TouchableHandle.hh"
+#include "G4Track.hh"
+#include "G4VParticleChange.hh"
 
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SplitProcess::SplitProcess(G4String regName, G4int nsplit)
-:fRegionName(regName), fNSplit(nsplit)
+SplitProcess::SplitProcess(G4String regName, G4int nsplit) : fRegionName(regName), fNSplit(nsplit)
 {
-    fRegion = G4RegionStore::GetInstance()->FindOrCreateRegion(fRegionName);
+  fRegion = G4RegionStore::GetInstance()->FindOrCreateRegion(fRegionName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SplitProcess::~SplitProcess() {
-}
+SplitProcess::~SplitProcess() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* SplitProcess::PostStepDoIt(const G4Track& track, const G4Step& step) {
-    G4VParticleChange* particleChange(0);
-    
-    if ( step.GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()
-                                                          ->GetRegion() != fRegion ) {
-        particleChange = pRegProcess->PostStepDoIt(track, step);
-        assert ( 0 != particleChange);
-        return particleChange;
-    }
-    
-    if (  fNSplit == 1 ) {
-        particleChange = pRegProcess->PostStepDoIt(track, step);
-        assert ( 0 != particleChange);
-        return particleChange;
-    }
-    
-    UserTrackInformation* parentInformation = 
-                          (UserTrackInformation*)(step.GetTrack()->GetUserInformation());
-    G4int initialSplitTrackID = parentInformation->GetSplitTrackID();
-    
-    if ( initialSplitTrackID > 1 ) {
-        particleChange = pRegProcess->PostStepDoIt(track, step);
-        assert ( 0 != particleChange);
-        return particleChange;
-    }
-    
-    G4double weight = track.GetWeight()/fNSplit;
-    G4int splitTrackID = 3;
-    
-    std::vector<G4Track*> secondaries;
-    std::vector<G4int> vSplitTrack;
-    
-    for ( int i = 0; i < fNSplit; i++ ) {
-        particleChange = pRegProcess->PostStepDoIt(track, step);
-        assert( 0 !=  particleChange);
-        particleChange->SetVerboseLevel(0);
-        G4Track* newTrack = new G4Track(*(particleChange->GetSecondary(0)));
+G4VParticleChange* SplitProcess::PostStepDoIt(const G4Track& track, const G4Step& step)
+{
+  G4VParticleChange* particleChange(0);
 
-        secondaries.push_back( newTrack );
-        vSplitTrack.push_back( splitTrackID );
-        
-        splitTrackID++;
-    }
-    
-    parentInformation->SetSplitTrackID(2);
-    
-    particleChange->SetNumberOfSecondaries(secondaries.size());
-    particleChange->SetSecondaryWeightByProcess(true);
-    
-    std::vector<G4Track*>::iterator iter = secondaries.begin();
-    G4int i = 0;
-    while( iter != secondaries.end() ) {
-        G4Track* newTrack = *iter;
-        newTrack->SetWeight(weight);
-        
-        UserTrackInformation* secondaryInformation = new UserTrackInformation();
-        secondaryInformation->SetSplitTrackID(vSplitTrack[i]);
-        newTrack->SetUserInformation(secondaryInformation);
-        
-        particleChange->AddSecondary(newTrack);
-
-        iter++;
-        i++;
-    }
-    
+  if (step.GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()->GetRegion()
+      != fRegion)
+  {
+    particleChange = pRegProcess->PostStepDoIt(track, step);
+    assert(0 != particleChange);
     return particleChange;
+  }
+
+  if (fNSplit == 1) {
+    particleChange = pRegProcess->PostStepDoIt(track, step);
+    assert(0 != particleChange);
+    return particleChange;
+  }
+
+  UserTrackInformation* parentInformation =
+    (UserTrackInformation*)(step.GetTrack()->GetUserInformation());
+  G4int initialSplitTrackID = parentInformation->GetSplitTrackID();
+
+  if (initialSplitTrackID > 1) {
+    particleChange = pRegProcess->PostStepDoIt(track, step);
+    assert(0 != particleChange);
+    return particleChange;
+  }
+
+  G4double weight = track.GetWeight() / fNSplit;
+  G4int splitTrackID = 3;
+
+  std::vector<G4Track*> secondaries;
+  std::vector<G4int> vSplitTrack;
+
+  for (int i = 0; i < fNSplit; i++) {
+    particleChange = pRegProcess->PostStepDoIt(track, step);
+    assert(0 != particleChange);
+    particleChange->SetVerboseLevel(0);
+    G4Track* newTrack = new G4Track(*(particleChange->GetSecondary(0)));
+
+    secondaries.push_back(newTrack);
+    vSplitTrack.push_back(splitTrackID);
+
+    splitTrackID++;
+  }
+
+  parentInformation->SetSplitTrackID(2);
+
+  particleChange->SetNumberOfSecondaries(secondaries.size());
+  particleChange->SetSecondaryWeightByProcess(true);
+
+  std::vector<G4Track*>::iterator iter = secondaries.begin();
+  G4int i = 0;
+  while (iter != secondaries.end()) {
+    G4Track* newTrack = *iter;
+    newTrack->SetWeight(weight);
+
+    UserTrackInformation* secondaryInformation = new UserTrackInformation();
+    secondaryInformation->SetSplitTrackID(vSplitTrack[i]);
+    newTrack->SetUserInformation(secondaryInformation);
+
+    particleChange->AddSecondary(newTrack);
+
+    iter++;
+    i++;
+  }
+
+  return particleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

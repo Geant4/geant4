@@ -34,11 +34,11 @@
 
 #include "DetectorConstruction.hh"
 
-#include "G4Material.hh"
-#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,46 +46,42 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   //
   // define a material from its elements.   case 1: chemical molecule
-  // 
+  //
   G4double a, z;
-  G4double density;  
+  G4double density;
   G4int ncomponents, natoms;
- 
-  G4Element* C = new G4Element("Carbon"  ,"C" , z= 6., a= 12.01*g/mole);
-  G4Element* F = new G4Element("Fluorine","F" , z= 9., a= 18.99*g/mole);
- 
-  G4Material* C6F6 = 
-  new G4Material("FluorCarbonate", density= 1.61*g/cm3, ncomponents=2);
-  C6F6->AddElement(C, natoms=6);
-  C6F6->AddElement(F, natoms=6);
-  
+
+  G4Element* C = new G4Element("Carbon", "C", z = 6., a = 12.01 * g / mole);
+  G4Element* F = new G4Element("Fluorine", "F", z = 9., a = 18.99 * g / mole);
+
+  G4Material* C6F6 = new G4Material("FluorCarbonate", density = 1.61 * g / cm3, ncomponents = 2);
+  C6F6->AddElement(C, natoms = 6);
+  C6F6->AddElement(F, natoms = 6);
+
   G4cout << C6F6 << G4endl;
-  
-  //     
-  // Container
-  //  
-  G4double Rmin=0., Rmax=5*cm, deltaZ= 5*cm, Phimin=0., deltaPhi=360*degree;
-
-  G4Tubs*  
-  solidWorld = new G4Tubs("C6F6",                        //its name
-                   Rmin,Rmax,deltaZ,Phimin,deltaPhi);        //its size
-
-  G4LogicalVolume*                         
-  logicWorld = new G4LogicalVolume(solidWorld,                //its solid
-                                   C6F6,                //its material
-                                   "C6F6");                //its name
-  G4VPhysicalVolume*                                   
-  physiWorld = new G4PVPlacement(0,                        //no rotation
-                                   G4ThreeVector(),        //at (0,0,0)
-                                 logicWorld,                //its logical volume
-                                 "C6F6",                //its name
-                                 0,                        //its mother  volume
-                                 false,                        //no boolean operation
-                                 0);                        //copy number
 
   //
-  //always return the physical World
-  //  
+  // Container
+  //
+  G4double Rmin = 0., Rmax = 5 * cm, deltaZ = 5 * cm, Phimin = 0., deltaPhi = 360 * degree;
+
+  G4Tubs* solidWorld = new G4Tubs("C6F6",  // its name
+                                  Rmin, Rmax, deltaZ, Phimin, deltaPhi);  // its size
+
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+                                                    C6F6,  // its material
+                                                    "C6F6");  // its name
+  G4VPhysicalVolume* physiWorld = new G4PVPlacement(0,  // no rotation
+                                                    G4ThreeVector(),  // at (0,0,0)
+                                                    logicWorld,  // its logical volume
+                                                    "C6F6",  // its name
+                                                    0,  // its mother  volume
+                                                    false,  // no boolean operation
+                                                    0);  // copy number
+
+  //
+  // always return the physical World
+  //
   return physiWorld;
 }
 

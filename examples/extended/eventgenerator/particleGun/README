@@ -11,16 +11,17 @@
   10-06-2010 : Makoto Asai - merge into one example
   13-05-2010 : Michel Maire - create as three examples
   
- This example demonstrates 5 ways of the usage of G4ParticleGun shooting
+ This example demonstrates 5 ways of the use of G4ParticleGun shooting
  primary particles in different cases. These are
   0) uniform particle direction in a given solid angle
   1) Generate several vertices and particles per event
   2) Show how to sample a tabulated function (eg. energy spectrum)  
   3) Divergent beam in an arbitrary direction 
   4) Shooting primaries in spherical coordinates with rotation matrix.
- These usages can be chosen by a UI command
+  
+ These use cases can be chosen by a UI command
   /gunExample/selectGunAction <actionID>
- where <actionID> corresponds to above cases.
+ where <actionID> corresponds to the above cases.
  	
  1- Geometry construction
     ---------------------
@@ -110,14 +111,22 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
   - execute particleGun in 'batch' mode from macro files
  	% ParticleGun   run1.mac
  		
-  - execute particleGun2 in 'interactive mode' with visualization
+  - execute particleGun in 'interactive mode' with visualization
  	% particleGun
  	....
  	Idle>      ---> type your commands. For instance:
-    Idle> /gunExample/selectGunAction 1
+        Idle> /gunExample/selectGunAction 1
 	Idle> /run/beamOn 10
 	....
  	Idle> exit
+	
+  - Macros provided in this example:
+      - run0.mac: see above primaryGenerator, case 0
+      - run1.mac: see above primaryGenerator, case 1
+      - run2.mac: see above primaryGenerator, case 2
+      - run3.mac: see above primaryGenerator, case 3
+      - run4.mac: see above primaryGenerator, case 4
+      - particleGun.in: macro used in Geant4 testing (similar to run0.mac)
 	
  6- Histograms
     ----------

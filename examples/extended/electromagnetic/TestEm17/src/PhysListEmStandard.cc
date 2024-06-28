@@ -29,44 +29,39 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
 
 #include "PhysListEmStandard.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4Proton.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-#include "G4MuonToMuonPairProduction.hh"
-#include "G4hIonisation.hh"
-#include "G4hBremsstrahlung.hh"
-#include "G4hPairProduction.hh"
-
 #include "G4EmParameters.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuIonisation.hh"
+#include "G4MuPairProduction.hh"
+#include "G4MuonMinus.hh"
+#include "G4MuonPlus.hh"
+#include "G4MuonToMuonPairProduction.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4PionMinus.hh"
+#include "G4PionPlus.hh"
+#include "G4ProcessManager.hh"
+#include "G4Proton.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hIonisation.hh"
+#include "G4hPairProduction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(const G4String& name)
-   :  G4VPhysicsConstructor(name)
+PhysListEmStandard::PhysListEmStandard(const G4String& name) : G4VPhysicsConstructor(name)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetMinEnergy(100*eV);  
-  param->SetMaxEnergy(1000*PeV);
+  param->SetMinEnergy(100 * eV);
+  param->SetMaxEnergy(1000 * PeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
-{}
+PhysListEmStandard::~PhysListEmStandard() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,42 +69,40 @@ void PhysListEmStandard::ConstructProcess()
 {
   // mu+
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
-  G4ProcessManager* pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4MuIonisation(),     -1, 2, 2);
+  G4ProcessManager* pmanager = particle->GetProcessManager();
+  pmanager->AddProcess(new G4MuIonisation(), -1, 2, 2);
   pmanager->AddProcess(new G4MuBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4MuPairProduction(), -1, 4, 4);
   pmanager->AddProcess(new G4MuonToMuonPairProduction(), -1, 5, 5);
 
   // mu-
   particle = G4MuonMinus::MuonMinus();
-  pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4MuIonisation(),     -1, 2, 2);
+  pmanager = particle->GetProcessManager();
+  pmanager->AddProcess(new G4MuIonisation(), -1, 2, 2);
   pmanager->AddProcess(new G4MuBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4MuPairProduction(), -1, 4, 4);
   pmanager->AddProcess(new G4MuonToMuonPairProduction(), -1, 5, 5);
 
   // pi+
   particle = G4PionPlus::PionPlus();
-  pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4hIonisation(),     -1, 2, 2);
+  pmanager = particle->GetProcessManager();
+  pmanager->AddProcess(new G4hIonisation(), -1, 2, 2);
   pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
 
   // pi-
   particle = G4PionMinus::PionMinus();
-  pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4hIonisation(),     -1, 2, 2);
+  pmanager = particle->GetProcessManager();
+  pmanager->AddProcess(new G4hIonisation(), -1, 2, 2);
   pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
 
   // proton
   particle = G4Proton::Proton();
-  pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4hIonisation(),     -1, 2, 2);
+  pmanager = particle->GetProcessManager();
+  pmanager->AddProcess(new G4hIonisation(), -1, 2, 2);
   pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

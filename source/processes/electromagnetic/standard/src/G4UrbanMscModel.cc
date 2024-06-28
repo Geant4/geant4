@@ -124,7 +124,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
 G4UrbanMscModel::~G4UrbanMscModel()
 {
   if(isFirstInstance) {
-    for(auto & ptr : msc) { delete ptr; }
+    for(auto const & ptr : msc) { delete ptr; }
     msc.clear();
   } 
 }
@@ -504,8 +504,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       smallstep += 1.;
       insideskin = false;
+      tgeom = geombig;
 
-      // initialisation at firs step and at the boundary
+      // initialisation at first step and at the boundary
       if(firstStep || (stepStatus == fGeomBoundary))
         {
           rangeinit = currentRange;
@@ -520,22 +521,17 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
                  << " tlimitmin= " << tlimitmin << " geomlimit= " 
                  << geomlimit <<G4endl;
         */
-          // constraint from the geometry
-
-          if((geomlimit < geombig) && (geomlimit > geommin))
-            {
-              // geomlimit is a geometrical step length
-              // transform it to true path length (estimation)
-              if(lambda0 > geomlimit) {
-                geomlimit = -lambda0*G4Log(1.-geomlimit/lambda0)+tlimitmin;
-	      }
-              tgeom = (stepStatus == fGeomBoundary)
-                ? geomlimit/facgeom : 2.*geomlimit/facgeom;
-            }
-          else
-	    {
-	      tgeom = geombig;
-	    }
+        }
+      // constraint from the geometry
+      if((geomlimit < geombig) && (geomlimit > geommin))
+        {
+          // geomlimit is a geometrical step length
+          // transform it to true path length (estimation)
+          if(lambda0 > geomlimit) {
+            geomlimit = -lambda0*G4Log(1.-geomlimit/lambda0)+tlimitmin;
+          }
+          tgeom = (stepStatus == fGeomBoundary) ? geomlimit/facgeom
+	    : facrange*rangeinit + stepmin;
         }
 
       //step limit 

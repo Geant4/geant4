@@ -43,76 +43,62 @@
 
 #include "DetectorConstruction.hh"
 
-#include "G4NistManager.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-
-#include "G4VisAttributes.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-
-#include "ScoreSpecies.hh"
 #include "PrimaryKiller.hh"
 #include "ScoreLET.hh"
+#include "ScoreSpecies.hh"
+
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-DetectorConstruction::DetectorConstruction()
-: G4VUserDetectorConstruction()
-{
-}
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-DetectorConstruction::~DetectorConstruction()
-{
-}
+DetectorConstruction::~DetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Water is defined from NIST material database
-  G4NistManager * man = G4NistManager::Instance();
+  G4NistManager* man = G4NistManager::Instance();
   G4Material* water = man->FindOrBuildMaterial("G4_WATER");
-  
+
   //
   // World
   //
   double world_sizeXYZ = 1 * km;
-  
+
   G4Box* solidWorld =
-  new G4Box("World",
-            0.5*world_sizeXYZ,
-            0.5*world_sizeXYZ,
-            0.5*world_sizeXYZ);
-  
-  G4LogicalVolume* logicWorld =
-  new G4LogicalVolume(solidWorld,
-                      water,
-                      "World");
-  
-  G4VPhysicalVolume* physWorld =
-  new G4PVPlacement(0,                     //no rotation
-                    G4ThreeVector(),       //its position at (0,0,0)
-                    logicWorld,            //its logical volume
-                    "World",               //its name
-                    0,                     //its mother  volume
-                    false,                 //no boolean operation
-                    0,                     //copy number
-                    true);                 //checking overlaps
+    new G4Box("World", 0.5 * world_sizeXYZ, 0.5 * world_sizeXYZ, 0.5 * world_sizeXYZ);
+
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, water, "World");
+
+  G4VPhysicalVolume* physWorld = new G4PVPlacement(0,  // no rotation
+                                                   G4ThreeVector(),  // its position at (0,0,0)
+                                                   logicWorld,  // its logical volume
+                                                   "World",  // its name
+                                                   0,  // its mother  volume
+                                                   false,  // no boolean operation
+                                                   0,  // copy number
+                                                   true);  // checking overlaps
 
   // Visualization attributes
   G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(.5, 1.0, .5));
   worldVisAtt->SetVisibility(true);
   logicWorld->SetVisAttributes(worldVisAtt);
 
-  //always return the physical World
+  // always return the physical World
   return physWorld;
 }
 
@@ -124,16 +110,15 @@ void DetectorConstruction::ConstructSDandField()
 
   // declare World as a MultiFunctionalDetector scorer
   //
-  G4MultiFunctionalDetector* mfDetector =
-  new G4MultiFunctionalDetector("mfDetector");
+  G4MultiFunctionalDetector* mfDetector = new G4MultiFunctionalDetector("mfDetector");
 
   //--
   // Kill primary track after a chosen energy loss OR under a chosen
   // kinetic energy
 
   PrimaryKiller* primaryKiller = new PrimaryKiller("PrimaryKiller");
-  primaryKiller->SetMinLossEnergyLimit(500*eV); // default value
-  primaryKiller->SetMaxLossEnergyLimit(1*eV); // default value
+  primaryKiller->SetMinLossEnergyLimit(500 * eV);  // default value
+  primaryKiller->SetMaxLossEnergyLimit(1 * eV);  // default value
   mfDetector->RegisterPrimitive(primaryKiller);
 
   // LET scorer
@@ -151,9 +136,8 @@ void DetectorConstruction::ConstructSDandField()
   G4VPrimitiveScorer* primitivSpecies = new ScoreSpecies("Species");
   mfDetector->RegisterPrimitive(primitivSpecies);
 
-  G4SDManager::GetSDMpointer()->AddNewDetector(mfDetector); 
+  G4SDManager::GetSDMpointer()->AddNewDetector(mfDetector);
   SetSensitiveDetector("World", mfDetector);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

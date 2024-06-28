@@ -30,9 +30,10 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4ThreeVector.hh"
 #include "CLHEP/Units/SystemOfUnits.h"
+
+#include "G4ThreeVector.hh"
+#include "G4VUserDetectorConstruction.hh"
 
 class G4LogicalVolume;
 class G4Material;
@@ -46,13 +47,11 @@ namespace Common
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction(
-       const G4String& boxMaterialName = "G4_AIR",
-       G4double boxHx = 40*CLHEP::cm,
-       G4double boxHy = 40*CLHEP::cm,
-       G4double boxHz = 40*CLHEP::cm,
-       const G4String& worldMaterialName = "G4_AIR",
-       G4double worldSizeFactor = 1.25);
+    DetectorConstruction(const G4String& boxMaterialName = "G4_AIR",
+                         G4double boxHx = 40 * CLHEP::cm, G4double boxHy = 40 * CLHEP::cm,
+                         G4double boxHz = 40 * CLHEP::cm,
+                         const G4String& worldMaterialName = "G4_AIR",
+                         G4double worldSizeFactor = 1.25);
     ~DetectorConstruction() override;
 
   public:
@@ -60,26 +59,25 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* Construct() override;
 
     // set methods
-    void  SetBoxMaterial(const G4String& materialName);
-    void  SetWorldMaterial(const G4String& materialName);
-    void  SetBoxDimensions(G4ThreeVector dimensions);
-    void  SetWorldSizeFactor(G4double factor);
+    void SetBoxMaterial(const G4String& materialName);
+    void SetWorldMaterial(const G4String& materialName);
+    void SetBoxDimensions(G4ThreeVector dimensions);
+    void SetWorldSizeFactor(G4double factor);
 
   private:
     void DefineCommands();
 
-    G4GenericMessenger*  fMessenger = nullptr;
-    G4String             fBoxMaterialName;
-    G4String             fWorldMaterialName;
-    G4ThreeVector        fBoxDimensions;
-    G4double             fWorldSizeFactor = 0.;
-    G4LogicalVolume*     fBoxVolume = nullptr;
-    G4LogicalVolume*     fWorldVolume = nullptr;
+    G4GenericMessenger* fMessenger = nullptr;
+    G4String fBoxMaterialName;
+    G4String fWorldMaterialName;
+    G4ThreeVector fBoxDimensions;
+    G4double fWorldSizeFactor = 0.;
+    G4LogicalVolume* fBoxVolume = nullptr;
+    G4LogicalVolume* fWorldVolume = nullptr;
 };
 
-}
+}  // namespace Common
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

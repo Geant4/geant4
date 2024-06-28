@@ -47,37 +47,37 @@ class G4UIcmdWithAString;
 
 class Par03DetectorMessenger : public G4UImessenger
 {
- public:
-  Par03DetectorMessenger(Par03DetectorConstruction*);
-  ~Par03DetectorMessenger();
+  public:
+    Par03DetectorMessenger(Par03DetectorConstruction*);
+    ~Par03DetectorMessenger();
 
-  /// Invokes appropriate methods based on the typed command
-  virtual void SetNewValue(G4UIcommand*, G4String) final;
-  /// Retrieves the current settings
-  virtual G4String GetCurrentValue(G4UIcommand*) final;
+    /// Invokes appropriate methods based on the typed command
+    virtual void SetNewValue(G4UIcommand*, G4String) final;
+    /// Retrieves the current settings
+    virtual G4String GetCurrentValue(G4UIcommand*) final;
 
- private:
-  /// Detector construction to setup
-  Par03DetectorConstruction* fDetector = nullptr;
-  /// Command to set the directory common to all messengers in this example
-  /// /Par03
-  G4UIdirectory* fExampleDir = nullptr;
-  /// Command to set the directory for detector settings /Par03/detector
-  G4UIdirectory* fDetectorDir = nullptr;
-  /// Command printing current settings
-  G4UIcmdWithoutParameter* fPrintCmd;
-  /// Command to set the detector radius
-  G4UIcmdWithADoubleAndUnit* fDetectorRadiusCmd = nullptr;
-  /// Command to set the detector length
-  G4UIcmdWithADoubleAndUnit* fDetectorLengthCmd = nullptr;
-  /// Command to set the detector material
-  G4UIcmdWithAString* fDetectorMaterialCmd = nullptr;
-  /// Command to set the number of layers
-  G4UIcmdWithAnInteger* fNbLayersCmd = nullptr;
-  /// Command to set the number of radial cells
-  G4UIcmdWithAnInteger* fNbRhoCellsCmd = nullptr;
-  /// Command to set the number of cells in azimuthal angle
-  G4UIcmdWithAnInteger* fNbPhiCellsCmd = nullptr;
+  private:
+    /// Detector construction to setup
+    Par03DetectorConstruction* fDetector = nullptr;
+    /// Command to set the directory common to all messengers in this example
+    /// /Par03
+    G4UIdirectory* fExampleDir = nullptr;
+    /// Command to set the directory for detector settings /Par03/detector
+    G4UIdirectory* fDetectorDir = nullptr;
+    /// Command printing current settings
+    G4UIcmdWithoutParameter* fPrintCmd;
+    /// Command to set the detector radius
+    G4UIcmdWithADoubleAndUnit* fDetectorRadiusCmd = nullptr;
+    /// Command to set the detector length
+    G4UIcmdWithADoubleAndUnit* fDetectorLengthCmd = nullptr;
+    /// Command to set the detector material
+    G4UIcmdWithAString* fDetectorMaterialCmd = nullptr;
+    /// Command to set the number of layers
+    G4UIcmdWithAnInteger* fNbLayersCmd = nullptr;
+    /// Command to set the number of radial cells
+    G4UIcmdWithAnInteger* fNbRhoCellsCmd = nullptr;
+    /// Command to set the number of cells in azimuthal angle
+    G4UIcmdWithAnInteger* fNbPhiCellsCmd = nullptr;
 };
 
 #endif

@@ -42,26 +42,26 @@
 #ifndef tsphysicslist_hh
 #define tsphysicslist_hh 1
 
-#include "globals.hh"
-#include "G4VUserPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
 #include <deque>
 class TSPhysicsList : public G4VUserPhysicsList
 {
- public:
-  typedef std::deque<G4VPhysicsConstructor*> PhysicsSet_t;
+  public:
+    typedef std::deque<G4VPhysicsConstructor*> PhysicsSet_t;
 
- public:
-  TSPhysicsList();
-  virtual ~TSPhysicsList();
+  public:
+    TSPhysicsList();
+    virtual ~TSPhysicsList();
 
- public:
-  void ConstructParticle() override;
-  void ConstructProcess() override;
+  public:
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
- private:
-  PhysicsSet_t fConstructors;
+  private:
+    PhysicsSet_t fConstructors;
 };
 
 #endif

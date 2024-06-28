@@ -38,23 +38,23 @@
 // --------------------------------------------------------------------
 
 #include "G4BlineTracerMessenger.hh"
-#include "G4BlineTracer.hh"
-#include "G4BlineEventAction.hh"
 
-#include "G4UImessenger.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
+#include "G4BlineEventAction.hh"
+#include "G4BlineTracer.hh"
+#include "G4UIcmdWith3Vector.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWith3Vector.hh"
-#include "G4UIcmdWithABool.hh"
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4BlineTracerMessenger::G4BlineTracerMessenger( G4BlineTracer* aBlineTool )
- : fTheBlineTool(aBlineTool)
+G4BlineTracerMessenger::G4BlineTracerMessenger(G4BlineTracer* aBlineTool)
+  : fTheBlineTool(aBlineTool)
 {
   fBlineToolDir = new G4UIdirectory("/vis/blineTracer/");
   fBlineToolDir->SetGuidance("Commands to trace and visualise magnetic field lines.");
@@ -63,47 +63,45 @@ G4BlineTracerMessenger::G4BlineTracerMessenger( G4BlineTracer* aBlineTool )
 
   // commands
 
-  fBlineCmd = new G4UIcmdWithAnInteger("/vis/blineTracer/computeBline",this);
+  fBlineCmd = new G4UIcmdWithAnInteger("/vis/blineTracer/computeBline", this);
   fBlineCmd->SetGuidance("Compute magnetic field lines for visualisation.");
-  fBlineCmd->SetParameterName("nb_of_lines",false);
-  fBlineCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fBlineCmd->SetParameterName("nb_of_lines", false);
+  fBlineCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSetMaxTrackingStepCmd =
-    new G4UIcmdWithADoubleAndUnit("/vis/blineTracer/setMaxStepLength",this);
+  fSetMaxTrackingStepCmd = new G4UIcmdWithADoubleAndUnit("/vis/blineTracer/setMaxStepLength", this);
   fSetMaxTrackingStepCmd->SetGuidance("Set the maximum length of tracking step");
   fSetMaxTrackingStepCmd->SetGuidance("when integrating magnetic field line.");
-  fSetMaxTrackingStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetMaxTrackingStepCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSetDrawColourCmd = new G4UIcmdWith3Vector("/vis/blineTracer/setColour",this);
+  fSetDrawColourCmd = new G4UIcmdWith3Vector("/vis/blineTracer/setColour", this);
   fSetDrawColourCmd->SetGuidance("Set the colour drawing trajectories");
   fSetDrawColourCmd->SetGuidance("and magnetic field lines.");
-  fSetDrawColourCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetDrawColourCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSetDrawBlineCmd = new G4UIcmdWithABool("/vis/blineTracer/stockLines",this);
+  fSetDrawBlineCmd = new G4UIcmdWithABool("/vis/blineTracer/stockLines", this);
   fSetDrawBlineCmd->SetGuidance("If true field lines are stocked in lines");
   fSetDrawBlineCmd->SetGuidance("to be drawn.");
-  fSetDrawBlineCmd->SetParameterName("StockLines",false);
-  fSetDrawBlineCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetDrawBlineCmd->SetParameterName("StockLines", false);
+  fSetDrawBlineCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSetDrawPointsCmd = new G4UIcmdWithABool("/vis/blineTracer/stockPoints",this);
+  fSetDrawPointsCmd = new G4UIcmdWithABool("/vis/blineTracer/stockPoints", this);
   fSetDrawPointsCmd->SetGuidance("If true step field line points are stocked");
   fSetDrawPointsCmd->SetGuidance("in vector of points to be drawn.");
-  fSetDrawPointsCmd->SetParameterName("StockPoints",false);
-  fSetDrawPointsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetDrawPointsCmd->SetParameterName("StockPoints", false);
+  fSetDrawPointsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSetPointSizeCmd = new G4UIcmdWithADouble("/vis/blineTracer/setPointSize",this);
+  fSetPointSizeCmd = new G4UIcmdWithADouble("/vis/blineTracer/setPointSize", this);
   fSetPointSizeCmd->SetGuidance("Set the size of points for drawing.");
-  fSetPointSizeCmd->SetParameterName("StepSize",false);
-  fSetPointSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetPointSizeCmd->SetParameterName("StepSize", false);
+  fSetPointSizeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fDrawCmd = new G4UIcmdWithoutParameter("/vis/blineTracer/show",this);
+  fDrawCmd = new G4UIcmdWithoutParameter("/vis/blineTracer/show", this);
   fDrawCmd->SetGuidance("Show the stored magnetic field lines.");
-  fDrawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDrawCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fResetCmd =
-    new G4UIcmdWithoutParameter("/vis/blineTracer/resetMaterialToBeDrawn",this);
+  fResetCmd = new G4UIcmdWithoutParameter("/vis/blineTracer/resetMaterialToBeDrawn", this);
   fResetCmd->SetGuidance("Clear the vectors of lines and points to be drawn.");
-  fResetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fResetCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,31 +121,24 @@ G4BlineTracerMessenger::~G4BlineTracerMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BlineTracerMessenger::SetNewValue( G4UIcommand * command,
-                                          G4String newValues )
+void G4BlineTracerMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if (command == fBlineCmd)
     fTheBlineTool->ComputeBlines(1);
-  else if( command == fSetMaxTrackingStepCmd )
-    fTheBlineTool->SetMaxTrackingStep(fSetMaxTrackingStepCmd
-                                   ->GetNewDoubleValue(newValues));
-  else if( command == fSetDrawBlineCmd )
-    fTheBlineTool->GetEventAction()->SetDrawBline(fSetDrawBlineCmd
-                                   ->GetNewBoolValue(newValues));
-  else if( command == fSetDrawColourCmd )
-  {
-    G4ThreeVector vec=fSetDrawColourCmd->GetNew3VectorValue(newValues);
-    fTheBlineTool->GetEventAction()->
-                  SetDrawColour(G4Colour(vec.x(),vec.y(),vec.z()));
+  else if (command == fSetMaxTrackingStepCmd)
+    fTheBlineTool->SetMaxTrackingStep(fSetMaxTrackingStepCmd->GetNewDoubleValue(newValues));
+  else if (command == fSetDrawBlineCmd)
+    fTheBlineTool->GetEventAction()->SetDrawBline(fSetDrawBlineCmd->GetNewBoolValue(newValues));
+  else if (command == fSetDrawColourCmd) {
+    G4ThreeVector vec = fSetDrawColourCmd->GetNew3VectorValue(newValues);
+    fTheBlineTool->GetEventAction()->SetDrawColour(G4Colour(vec.x(), vec.y(), vec.z()));
   }
-  else if( command == fSetDrawPointsCmd )
-    fTheBlineTool->GetEventAction()->SetDrawPoints(fSetDrawPointsCmd
-                                   ->GetNewBoolValue(newValues));
-  else if( command == fSetPointSizeCmd )
-    fTheBlineTool->GetEventAction()->SetPointSize(fSetPointSizeCmd
-                                   ->GetNewDoubleValue(newValues));
-  else if( command == fDrawCmd )
-    fTheBlineTool->GetEventAction()->DrawFieldLines(.5,45.,45.);
-  else if( command == fResetCmd )
+  else if (command == fSetDrawPointsCmd)
+    fTheBlineTool->GetEventAction()->SetDrawPoints(fSetDrawPointsCmd->GetNewBoolValue(newValues));
+  else if (command == fSetPointSizeCmd)
+    fTheBlineTool->GetEventAction()->SetPointSize(fSetPointSizeCmd->GetNewDoubleValue(newValues));
+  else if (command == fDrawCmd)
+    fTheBlineTool->GetEventAction()->DrawFieldLines(.5, 45., 45.);
+  else if (command == fResetCmd)
     fTheBlineTool->GetEventAction()->ResetVectorObjectToBeDrawn();
 }

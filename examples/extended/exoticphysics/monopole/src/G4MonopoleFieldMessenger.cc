@@ -38,25 +38,22 @@
 #include "G4MonopoleFieldMessenger.hh"
 
 #include "G4MonopoleFieldSetup.hh"
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MonopoleFieldMessenger::G4MonopoleFieldMessenger(G4MonopoleFieldSetup * fld)
-:G4UImessenger(),
- fField(fld),
- fFieldDir(0),
- fSetFieldCmd(0)
- 
-{ 
+G4MonopoleFieldMessenger::G4MonopoleFieldMessenger(G4MonopoleFieldSetup* fld)
+  : G4UImessenger(), fField(fld), fFieldDir(0), fSetFieldCmd(0)
+
+{
   fFieldDir = new G4UIdirectory("/testex/fld/");
   fFieldDir->SetGuidance("field setup commands");
-      
-  fSetFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/fld/setField",this);
+
+  fSetFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/fld/setField", this);
   fSetFieldCmd->SetGuidance("Define magnetic field.");
   fSetFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fSetFieldCmd->SetParameterName("Bz",false);
+  fSetFieldCmd->SetParameterName("Bz", false);
   fSetFieldCmd->SetUnitCategory("Magnetic flux density");
   fSetFieldCmd->AvailableForStates(G4State_Idle);
 }
@@ -66,15 +63,16 @@ G4MonopoleFieldMessenger::G4MonopoleFieldMessenger(G4MonopoleFieldSetup * fld)
 G4MonopoleFieldMessenger::~G4MonopoleFieldMessenger()
 {
   delete fSetFieldCmd;
-  delete fFieldDir;  
+  delete fFieldDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MonopoleFieldMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fSetFieldCmd )
-   { fField->SetZMagFieldValue(fSetFieldCmd->GetNewDoubleValue(newValue));}
+void G4MonopoleFieldMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fSetFieldCmd) {
+    fField->SetZMagFieldValue(fSetFieldCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

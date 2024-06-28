@@ -31,21 +31,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingMessenger.hh"
+
 #include "SteppingAction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithABool.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingMessenger::SteppingMessenger(SteppingAction* steppingAction)
-  : G4UImessenger(),
-    fSteppingAction(steppingAction)
+  : G4UImessenger(), fSteppingAction(steppingAction)
 {
   fSteppingDir = new G4UIdirectory("/opnovice2/stepping/");
   fSteppingDir->SetGuidance("Stepping control");
 
-  fKillOnSecondSurfaceCmd =
-    new G4UIcmdWithABool("/opnovice2/stepping/killOnSecondSurface", this);
+  fKillOnSecondSurfaceCmd = new G4UIcmdWithABool("/opnovice2/stepping/killOnSecondSurface", this);
   fKillOnSecondSurfaceCmd->SetGuidance(
     "Kill the optical photon when it reaches a second surface. "
     "Useful for visualizing boundary scattering.");
@@ -63,13 +63,10 @@ SteppingMessenger::~SteppingMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingMessenger::SetNewValue(G4UIcommand* command,
-                                    G4String newValue)
+void SteppingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fKillOnSecondSurfaceCmd)
-  {
-    fSteppingAction->SetKillOnSecondSurface(
-      G4UIcmdWithABool::GetNewBoolValue(newValue));
+  if (command == fKillOnSecondSurfaceCmd) {
+    fSteppingAction->SetKillOnSecondSurface(G4UIcmdWithABool::GetNewBoolValue(newValue));
   }
 }
 

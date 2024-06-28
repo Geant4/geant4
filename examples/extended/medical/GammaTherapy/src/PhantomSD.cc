@@ -31,7 +31,7 @@
 //
 //
 //      ---------- PhantomSD -------------
-//              
+//
 //  Modified:
 //
 // -------------------------------------------------------------
@@ -40,33 +40,32 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "PhantomSD.hh"
-#include "G4RunManager.hh"
+
 #include "Run.hh"
+
 #include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
+#include "G4RunManager.hh"
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4TouchableHistory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PhantomSD::PhantomSD(const G4String& name)
-  : G4VSensitiveDetector(name), fShiftZ(0.0),fCounter(0)
+PhantomSD::PhantomSD(const G4String& name) : G4VSensitiveDetector(name), fShiftZ(0.0), fCounter(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PhantomSD::~PhantomSD()
-{}
+PhantomSD::~PhantomSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PhantomSD::Initialize(G4HCofThisEvent*)
 {
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   ++fCounter;
-  if(run->GetVerbose()) {
+  if (run->GetVerbose()) {
     G4cout << "PhantomSD: Begin Of Event # " << fCounter << G4endl;
   }
 }
@@ -75,36 +74,33 @@ void PhantomSD::Initialize(G4HCofThisEvent*)
 
 G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   G4double edep = aStep->GetTotalEnergyDeposit();
 
   // only if there is energy deposition
-  if(0.0 < edep) {
-
+  if (0.0 < edep) {
     G4ThreeVector p1 = aStep->GetPreStepPoint()->GetPosition();
     G4ThreeVector p2 = aStep->GetPostStepPoint()->GetPosition();
     G4double x1 = p1.x();
     G4double y1 = p1.y();
     G4double z1 = p1.z() - fShiftZ;
-    G4double r1 = std::sqrt(x1*x1 + y1*y1);
+    G4double r1 = std::sqrt(x1 * x1 + y1 * y1);
     G4double x2 = p2.x();
     G4double y2 = p2.y();
     G4double z2 = p2.z() - fShiftZ;
-    G4double r2 = std::sqrt(x2*x2 + y2*y2);
-    G4double x0 = 0.5*(x1 + x2);
-    G4double y0 = 0.5*(y1 + y2);
-    G4double z0 = 0.5*(z1 + z2);
-    G4double r0 = std::sqrt(x0*x0 + y0*y0);
+    G4double r2 = std::sqrt(x2 * x2 + y2 * y2);
+    G4double x0 = 0.5 * (x1 + x2);
+    G4double y0 = 0.5 * (y1 + y2);
+    G4double z0 = 0.5 * (z1 + z2);
+    G4double r0 = std::sqrt(x0 * x0 + y0 * y0);
 
-    run->AddPhantomStep(edep,r1,z1,r2,z2,r0,z0);
+    run->AddPhantomStep(edep, r1, z1, r2, z2, r0, z0);
 
-    if(run->GetVerbose()) {
-      G4cout << "PhantomSD: energy = " << edep/MeV
-             << " MeV is deposited at the step at r1,z1= " << r1 << " " << z1
-             << "; r2,z2= " << r2 <<  " " << z2 << G4endl;
+    if (run->GetVerbose()) {
+      G4cout << "PhantomSD: energy = " << edep / MeV
+             << " MeV is deposited at the step at r1,z1= " << r1 << " " << z1 << "; r2,z2= " << r2
+             << " " << z2 << G4endl;
     }
   }
 
@@ -113,19 +109,14 @@ G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhantomSD::EndOfEvent(G4HCofThisEvent*)
-{}
+void PhantomSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhantomSD::clear()
-{}
+void PhantomSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-void PhantomSD::PrintAll()
-{}
+void PhantomSD::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

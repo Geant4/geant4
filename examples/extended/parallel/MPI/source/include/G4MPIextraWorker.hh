@@ -33,20 +33,20 @@
 
 #ifndef G4MPIEXTRAWORKER_HH
 
-#include "G4VMPIextraWorker.hh"
+#  include "G4VMPIextraWorker.hh"
 
 class G4UserRunAction;
 
-class G4MPIextraWorker : public G4VMPIextraWorker 
+class G4MPIextraWorker : public G4VMPIextraWorker
 {
-public:
-  G4MPIextraWorker(G4UserRunAction* runAction) : fRunAction(runAction) {}
-  virtual ~G4MPIextraWorker() {}
+  public:
+    G4MPIextraWorker(G4UserRunAction* runAction) : fRunAction(runAction) {}
+    virtual ~G4MPIextraWorker() {}
 
-  virtual void BeamOn();
-private:
-  G4UserRunAction* fRunAction;
+    virtual void BeamOn();
+
+  private:
+    G4UserRunAction* fRunAction;
 };
 
-#endif //G4MPIEXTRAWORKER_HH
-
+#endif  // G4MPIEXTRAWORKER_HH

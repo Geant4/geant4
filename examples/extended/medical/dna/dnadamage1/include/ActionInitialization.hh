@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 
 #pragma once
 #include "G4VUserActionInitialization.hh"
@@ -33,14 +33,14 @@ class PhysicsList;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class ActionInitialization: public G4VUserActionInitialization
+class ActionInitialization : public G4VUserActionInitialization
 {
-public:
+  public:
     ActionInitialization(DetectorConstruction* pDetector);
     ~ActionInitialization() override;
     void BuildForMaster() const override;
     void Build() const override;
 
-private:
+  private:
     DetectorConstruction* fpDetector;
 };

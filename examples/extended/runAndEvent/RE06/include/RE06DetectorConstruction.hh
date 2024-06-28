@@ -26,7 +26,7 @@
 /// \file RE06/include/RE06DetectorConstruction.hh
 /// \brief Definition of the RE06DetectorConstruction class
 //
-// 
+//
 
 #ifndef RE06DetectorConstruction_h
 #define RE06DetectorConstruction_h 1
@@ -48,65 +48,62 @@ class RE06DetectorConstruction : public G4VUserDetectorConstruction
     virtual ~RE06DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
-  
+
     void ConstructSDandField();
-  
+
     void PrintCalorParameters() const;
-    void SetAbsorberMaterial(G4String materialChoice);     
+    void SetAbsorberMaterial(G4String materialChoice);
     G4String GetAbsorberMaterial() const;
-    void SetGapMaterial(G4String materialChoice);     
+    void SetGapMaterial(G4String materialChoice);
     G4String GetGapMaterial() const;
     void SetSerialGeometry(G4bool ser);
     void SetNumberOfLayers(G4int nl);
     G4int GetNumberOfLayers() const { return fNumberOfLayers; }
     G4bool IsSerial() const { return fSerial; }
 
-    void  AddMaterial();
-  
-    G4int GetVerboseLevel() const { return  fVerboseLevel; }
+    void AddMaterial();
+
+    G4int GetVerboseLevel() const { return fVerboseLevel; }
     void SetVerboseLevel(G4int val) { fVerboseLevel = val; }
-     
+
   private:
     void DefineMaterials();
     void SetupGeometry();
     void SetupDetectors();
 
     // data members
-    G4int              fNumberOfLayers;
+    G4int fNumberOfLayers;
 
-    G4double           fTotalThickness; ///< total thinkness of one calorimeter
-    G4double           fLayerThickness; ///< = fTotalThickness / fNumberOfLayers
+    G4double fTotalThickness;  ///< total thinkness of one calorimeter
+    G4double fLayerThickness;  ///< = fTotalThickness / fNumberOfLayers
 
-    G4bool             fConstructed;
+    G4bool fConstructed;
     static G4ThreadLocal G4bool fConstructedSDandField;
-  
-    G4String           fCalName[3];
 
-    G4Material*        fWorldMaterial;
-    G4Material*        fAbsorberMaterial;
-    G4Material*        fGapMaterial;
+    G4String fCalName[3];
 
-    G4Box*             fLayerSolid;
-    G4Box*             fGapSolid;
+    G4Material* fWorldMaterial;
+    G4Material* fAbsorberMaterial;
+    G4Material* fGapMaterial;
 
-    G4LogicalVolume*   fWorldLogical;
-    G4LogicalVolume*   fCalorLogical[3];
-    G4LogicalVolume*   fLayerLogical[3];
-    G4LogicalVolume*   fGapLogical[3];
+    G4Box* fLayerSolid;
+    G4Box* fGapSolid;
+
+    G4LogicalVolume* fWorldLogical;
+    G4LogicalVolume* fCalorLogical[3];
+    G4LogicalVolume* fLayerLogical[3];
+    G4LogicalVolume* fGapLogical[3];
 
     G4VPhysicalVolume* fWorldPhysical;
     G4VPhysicalVolume* fCalorPhysical[3];
-    G4PVReplica*       fLayerPhysical[3];
+    G4PVReplica* fLayerPhysical[3];
     G4VPhysicalVolume* fGapPhysical[3];
 
-    G4bool             fSerial;
+    G4bool fSerial;
 
-    RE06DetectorMessenger* fDetectorMessenger; 
-    
-    G4int              fVerboseLevel;
-      
+    RE06DetectorMessenger* fDetectorMessenger;
+
+    G4int fVerboseLevel;
 };
 
-
 #endif
-

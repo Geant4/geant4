@@ -26,85 +26,85 @@
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
+#include "DetectorConstruction.hh"
+#include "HistoManager.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
 #include "RunMessenger.hh"
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 
 #include "G4Run.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4UnitsTable.hh"
 #include "Randomize.hh"
+
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : fDetector(det), fPrimary(prim)    
+  : fDetector(det), fPrimary(prim)
 {
- fHistoManager = new HistoManager();
- fRunMessenger = new RunMessenger(this);  
+  fHistoManager = new HistoManager();
+  fRunMessenger = new RunMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
- delete fHistoManager;
- delete fRunMessenger;
+  delete fHistoManager;
+  delete fRunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
-  fRun = new Run(fDetector); 
+{
+  fRun = new Run(fDetector);
   return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{    
+{
   // show Rndm status
   if (isMaster) G4Random::showEngineStatus();
-    
+
   // keep run condition
-  if (fPrimary) { 
-    G4ParticleDefinition* particle 
-      = fPrimary->GetParticleGun()->GetParticleDefinition();
+  if (fPrimary) {
+    G4ParticleDefinition* particle = fPrimary->GetParticleGun()->GetParticleDefinition();
     G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
     fRun->SetPrimary(particle, energy);
   }
-       
-  //histograms
+
+  // histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
-  }     
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if (isMaster) fRun->EndOfRun(fPrint);    
-  
-  //save histograms      
+  if (isMaster) fRun->EndOfRun(fPrint);
+
+  // save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
   }
-      
+
   // show Rndm status
   if (isMaster) G4Random::showEngineStatus();
 }
@@ -112,8 +112,8 @@ void RunAction::EndOfRunAction(const G4Run*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::SetPrintFlag(G4bool flag)
-{ 
+{
   fPrint = flag;
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

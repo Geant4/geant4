@@ -31,111 +31,107 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "MyKleinNishinaCompton.hh"
-#include "MyKleinNishinaMessenger.hh"
-#include "DetectorConstruction.hh"
 
+#include "DetectorConstruction.hh"
+#include "MyKleinNishinaMessenger.hh"
+
+#include "G4DataVector.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
-#include "Randomize.hh"
-#include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
-MyKleinNishinaCompton::MyKleinNishinaCompton(DetectorConstruction* det,
-                                             const G4ParticleDefinition*,
+MyKleinNishinaCompton::MyKleinNishinaCompton(DetectorConstruction* det, const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4KleinNishinaCompton(0,nam), fDetector(det), fMessenger(0)
+  : G4KleinNishinaCompton(0, nam), fDetector(det), fMessenger(0)
 {
   fCrossSectionFactor = 1.;
-  fMessenger = new MyKleinNishinaMessenger(this);    
+  fMessenger = new MyKleinNishinaMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MyKleinNishinaCompton::~MyKleinNishinaCompton()
-{  
-  delete fMessenger;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double MyKleinNishinaCompton::CrossSectionPerVolume(
-                                       const G4Material* mat,
-                                       const G4ParticleDefinition* part,
-                                             G4double GammaEnergy,
-                                             G4double, G4double)
 {
-  G4double xsection = G4VEmModel::CrossSectionPerVolume(mat,part,GammaEnergy);
+  delete fMessenger;
+}
 
-  return xsection*fCrossSectionFactor;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double MyKleinNishinaCompton::CrossSectionPerVolume(const G4Material* mat,
+                                                      const G4ParticleDefinition* part,
+                                                      G4double GammaEnergy, G4double, G4double)
+{
+  G4double xsection = G4VEmModel::CrossSectionPerVolume(mat, part, GammaEnergy);
+
+  return xsection * fCrossSectionFactor;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void MyKleinNishinaCompton::SampleSecondaries(
-                             std::vector<G4DynamicParticle*>* fvect,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* aDynamicGamma,
-                                   G4double,
-                                   G4double)
+void MyKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+                                              const G4MaterialCutsCouple*,
+                                              const G4DynamicParticle* aDynamicGamma, G4double,
+                                              G4double)
 {
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
-  // The random number techniques of Butcher & Messel are used 
+  // The random number techniques of Butcher & Messel are used
   // (Nuc Phys 20(1960),15).
   // Note : Effects due to binding of atomic electrons are negliged.
- 
+
   G4double gamEnergy0 = aDynamicGamma->GetKineticEnergy();
-  G4double E0_m = gamEnergy0 / electron_mass_c2 ;
+  G4double E0_m = gamEnergy0 / electron_mass_c2;
 
   G4ThreeVector gamDirection0 = aDynamicGamma->GetMomentumDirection();
 
   //
-  // sample the energy rate of the scattered gamma 
+  // sample the energy rate of the scattered gamma
   //
 
-  G4double epsilon, epsilonsq, onecost, sint2, greject ;
+  G4double epsilon, epsilonsq, onecost, sint2, greject;
 
-  G4double eps0   = 1./(1. + 2.*E0_m);
-  G4double eps0sq = eps0*eps0;
-  G4double alpha1     = - log(eps0);
-  G4double alpha2     = 0.5*(1.- eps0sq);
+  G4double eps0 = 1. / (1. + 2. * E0_m);
+  G4double eps0sq = eps0 * eps0;
+  G4double alpha1 = -log(eps0);
+  G4double alpha2 = 0.5 * (1. - eps0sq);
 
   do {
-    if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-      epsilon   = exp(-alpha1*G4UniformRand());   // eps0**r
-      epsilonsq = epsilon*epsilon; 
-
-    } else {
-      epsilonsq = eps0sq + (1.- eps0sq)*G4UniformRand();
-      epsilon   = sqrt(epsilonsq);
+    if (alpha1 / (alpha1 + alpha2) > G4UniformRand()) {
+      epsilon = exp(-alpha1 * G4UniformRand());  // eps0**r
+      epsilonsq = epsilon * epsilon;
+    }
+    else {
+      epsilonsq = eps0sq + (1. - eps0sq) * G4UniformRand();
+      epsilon = sqrt(epsilonsq);
     };
 
-    onecost = (1.- epsilon)/(epsilon*E0_m);
-    sint2   = onecost*(2.-onecost);
-    greject = 1. - epsilon*sint2/(1.+ epsilonsq);
+    onecost = (1. - epsilon) / (epsilon * E0_m);
+    sint2 = onecost * (2. - onecost);
+    greject = 1. - epsilon * sint2 / (1. + epsilonsq);
 
   } while (greject < G4UniformRand());
- 
+
   //
   // scattered gamma angles. ( Z - axis along the parent gamma)
   //
 
-  G4double cosTeta = 1. - onecost; 
-  G4double sinTeta = sqrt (sint2);
-  G4double Phi     = twopi * G4UniformRand();
-  G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
+  G4double cosTeta = 1. - onecost;
+  G4double sinTeta = sqrt(sint2);
+  G4double Phi = twopi * G4UniformRand();
+  G4double dirx = sinTeta * cos(Phi), diry = sinTeta * sin(Phi), dirz = cosTeta;
 
   //
   // update G4VParticleChange for the scattered gamma
   //
   // beam regeneration trick : restore incident beam
-   
-  G4ThreeVector gamDirection1 ( dirx,diry,dirz );
+
+  G4ThreeVector gamDirection1(dirx, diry, dirz);
   gamDirection1.rotateUz(gamDirection0);
-  G4double gamEnergy1 = epsilon*gamEnergy0;
+  G4double gamEnergy1 = epsilon * gamEnergy0;
   fParticleChange->SetProposedKineticEnergy(gamEnergy0);
   fParticleChange->ProposeMomentumDirection(gamDirection0);
 
@@ -145,17 +141,14 @@ void MyKleinNishinaCompton::SampleSecondaries(
 
   G4double eKinEnergy = gamEnergy0 - gamEnergy1;
 
-  if(eKinEnergy > DBL_MIN) {
-    G4ThreeVector eDirection 
-                   = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
+  if (eKinEnergy > DBL_MIN) {
+    G4ThreeVector eDirection = gamEnergy0 * gamDirection0 - gamEnergy1 * gamDirection1;
     eDirection = eDirection.unit();
 
     // create G4DynamicParticle object for the electron.
-    G4DynamicParticle* dp 
-                   = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
+    G4DynamicParticle* dp = new G4DynamicParticle(theElectron, eDirection, eKinEnergy);
     fvect->push_back(dp);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

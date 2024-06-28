@@ -44,7 +44,7 @@ namespace Common
 ///
 /// \author I. Hrivnacova; IPN Orsay
 
-class GpsPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction
+class GpsPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     GpsPrimaryGeneratorAction();
@@ -55,10 +55,9 @@ class GpsPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction
 
   private:
     // data members
-    G4GeneralParticleSource*  fGeneralParticleSource = nullptr;
+    G4GeneralParticleSource* fGeneralParticleSource = nullptr;
 };
 
-}
+}  // namespace Common
 
 #endif
-

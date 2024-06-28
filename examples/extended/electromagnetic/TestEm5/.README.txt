@@ -252,7 +252,6 @@ Macros provided in this example:
  - shen2.mac: proton 175 GeV/c, transmitted through 8.004 mm Al
       (G. Shen et al. Phys.Rev. D20 (1979) page 1584.)
  - stepMax.mac: to test the command /testem/stepMax
- - subcut.mac: to test the control sub-cutoff production
  - tavora.mac: Back scattering of  35 keV electrons in Silver.
       (L.M. Tavora et al. J.Phys.D: Appl. Phys. 33 (2000) page 2497,
        Fig. 7)

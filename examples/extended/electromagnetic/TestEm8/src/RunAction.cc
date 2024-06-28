@@ -40,8 +40,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "Run.hh"
 #include "TestParameters.hh"
+
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
@@ -49,7 +51,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction() {
+RunAction::RunAction()
+{
   TestParameters::GetPointer();
   fAnalysisManager = G4AnalysisManager::Instance();
   fAnalysisManager->SetDefaultFileType("root");
@@ -60,9 +63,10 @@ RunAction::RunAction() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::Book() {
+void RunAction::Book()
+{
   // Always creating analysis manager
-  TestParameters *param = TestParameters::GetPointer();
+  TestParameters* param = TestParameters::GetPointer();
   G4int nBinsE = param->GetNumberBins();
   G4int nBinsCluster = param->GetNumberBinsCluster();
   G4int nMaxCluster = param->GetMaxCluster();
@@ -74,28 +78,29 @@ void RunAction::Book() {
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   fAnalysisManager->SetFirstHistoId(1);
-  fAnalysisManager->CreateH1("h1", "Energy deposition in detector (keV)",
-                             nBinsE, 0.0, maxEnergy / keV);
-  fAnalysisManager->CreateH1("h2", "Number of primary clusters", nBinsCluster,
-                             0.0, G4double(nMaxCluster));
-  fAnalysisManager->CreateH1("h3", "Energy deposition in detector (ADC)",
-                             nBinsE, 0.0, maxEnergy * factorALICE);
+  fAnalysisManager->CreateH1("h1", "Energy deposition in detector (keV)", nBinsE, 0.0,
+                             maxEnergy / keV);
+  fAnalysisManager->CreateH1("h2", "Number of primary clusters", nBinsCluster, 0.0,
+                             G4double(nMaxCluster));
+  fAnalysisManager->CreateH1("h3", "Energy deposition in detector (ADC)", nBinsE, 0.0,
+                             maxEnergy * factorALICE);
   fAnalysisManager->OpenFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Run *RunAction::GenerateRun() {
+G4Run* RunAction::GenerateRun()
+{
   fRun = new Run();
   return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run *aRun) {
+void RunAction::BeginOfRunAction(const G4Run* aRun)
+{
   G4int id = aRun->GetRunID();
-  G4cout << "### Run " << id
-         << " start analysis activation; rand= " << G4UniformRand() << G4endl;
+  G4cout << "### Run " << id << " start analysis activation; rand= " << G4UniformRand() << G4endl;
 
   fRun->BeginOfRun();
 
@@ -105,11 +110,12 @@ void RunAction::BeginOfRunAction(const G4Run *aRun) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run *) {
+void RunAction::EndOfRunAction(const G4Run*)
+{
   // print Run summary
   G4cout << "RunAction: End of run actions are started " << isMaster
-         << "  Nevt=  " << fRun->GetNumberOfEvent()
-         << "  Edep= " << fRun->GetStat()->mean() << G4endl;
+         << "  Nevt=  " << fRun->GetNumberOfEvent() << "  Edep= " << fRun->GetStat()->mean()
+         << G4endl;
   if (isMaster) {
     fRun->EndOfRun();
   }

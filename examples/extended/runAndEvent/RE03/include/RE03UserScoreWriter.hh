@@ -31,28 +31,24 @@
 #ifndef RE03UserScoreWriter_h
 #define RE03UserScoreWriter_h 1
 
-#include "globals.hh"
 #include "G4VScoreWriter.hh"
+#include "globals.hh"
 
 // class description:
 //
 //  This class represents storing the scored quantity into a file.
 //
 
-class RE03UserScoreWriter : public G4VScoreWriter {
+class RE03UserScoreWriter : public G4VScoreWriter
+{
+  public:
+    RE03UserScoreWriter();
+    virtual ~RE03UserScoreWriter();
 
-public:
-  RE03UserScoreWriter();
-  virtual ~RE03UserScoreWriter();
-
-public:
-  // store a quantity into a file
-  virtual void DumpQuantityToFile(const G4String & psName, 
-                                  const G4String & fileName, 
-                                  const G4String & option);
-
+  public:
+    // store a quantity into a file
+    virtual void DumpQuantityToFile(const G4String& psName, const G4String& fileName,
+                                    const G4String& option);
 };
 
 #endif
-
-

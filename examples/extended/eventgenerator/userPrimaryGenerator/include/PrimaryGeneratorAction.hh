@@ -26,7 +26,7 @@
 /// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,8 +43,8 @@ class PrimaryGenerator;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();    
-   ~PrimaryGeneratorAction() override;
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
   public:
     void GeneratePrimaries(G4Event*) override;

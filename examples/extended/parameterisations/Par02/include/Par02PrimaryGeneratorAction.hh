@@ -42,12 +42,13 @@ class G4Event;
 /// event generator Pythia8 is used as generator and it is interfaced
 /// to Geant4 via HepMC.
 
-class Par02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class Par02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
   public:
     Par02PrimaryGeneratorAction();
     ~Par02PrimaryGeneratorAction();
 
-    virtual void GeneratePrimaries( G4Event* anEvent );
+    virtual void GeneratePrimaries(G4Event* anEvent);
     G4ParticleGun* GetParticleGun();
 
   private:
@@ -55,4 +56,3 @@ class Par02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 };
 
 #endif
-

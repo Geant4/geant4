@@ -35,33 +35,32 @@ class OpNoviceDetectorMessenger;
 
 class OpNoviceGDMLDetectorConstruction : public G4VUserDetectorConstruction
 {
- public:
-  OpNoviceGDMLDetectorConstruction(G4String fname);
-  ~OpNoviceGDMLDetectorConstruction() override;
-  G4VPhysicalVolume* Construct() override;
-  void ConstructSDandField() override;
+  public:
+    OpNoviceGDMLDetectorConstruction(G4String fname);
+    ~OpNoviceGDMLDetectorConstruction() override;
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
-  void ReadGDML();
-  void UpdateGeometry();
-  void SetDumpGdml(G4bool);
-  G4bool IsDumpGdml() const;
-  void SetVerbose(G4bool fverbose);
-  G4bool IsVerbose() const;
-  void SetDumpGdmlFile(G4String fDumpGdmlFile);
-  G4String GetDumpGdmlFileName() const;
+    void ReadGDML();
+    void UpdateGeometry();
+    void SetDumpGdml(G4bool);
+    G4bool IsDumpGdml() const;
+    void SetVerbose(G4bool fverbose);
+    G4bool IsVerbose() const;
+    void SetDumpGdmlFile(G4String fDumpGdmlFile);
+    G4String GetDumpGdmlFileName() const;
 
- private:
-  OpNoviceGDMLDetectorConstruction& operator=(
-    const OpNoviceGDMLDetectorConstruction& right);
-  OpNoviceGDMLDetectorConstruction(const OpNoviceGDMLDetectorConstruction&);
+  private:
+    OpNoviceGDMLDetectorConstruction& operator=(const OpNoviceGDMLDetectorConstruction& right);
+    OpNoviceGDMLDetectorConstruction(const OpNoviceGDMLDetectorConstruction&);
 
-  OpNoviceDetectorMessenger* fDetectorMessenger = nullptr;
-  G4GDMLParser* fParser = nullptr;
+    OpNoviceDetectorMessenger* fDetectorMessenger = nullptr;
+    G4GDMLParser* fParser = nullptr;
 
-  G4String fGdmlFile;
-  G4String fDumpGdmlFileName = "OpNovice_dump.gdml";
-  G4bool fVerbose = false;
-  G4bool fDumpGdml = false;
+    G4String fGdmlFile;
+    G4String fDumpGdmlFileName = "OpNovice_dump.gdml";
+    G4bool fVerbose = false;
+    G4bool fDumpGdml = false;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 #endif

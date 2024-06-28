@@ -142,6 +142,8 @@ private:
   G4UIcmdWithAString*        nffCmd;
   G4UIcmdWithAString*        ssCmd;
   G4UIcmdWithAString*        fluc1Cmd;
+  G4UIcmdWithAString*        posiCmd;
+  G4UIcmdWithADouble*        ortoCmd;
 
   G4UIcommand*               dumpCmd;
 

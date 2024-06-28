@@ -39,15 +39,15 @@ class G4UIcmdWithABool;
 
 class LXeSteppingMessenger : public G4UImessenger
 {
- public:
-  LXeSteppingMessenger(LXeSteppingAction*);
-  ~LXeSteppingMessenger() override;
+  public:
+    LXeSteppingMessenger(LXeSteppingAction*);
+    ~LXeSteppingMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  LXeSteppingAction* fStepping = nullptr;
-  G4UIcmdWithABool* fOneStepPrimariesCmd = nullptr;
+  private:
+    LXeSteppingAction* fStepping = nullptr;
+    G4UIcmdWithABool* fOneStepPrimariesCmd = nullptr;
 };
 
 #endif

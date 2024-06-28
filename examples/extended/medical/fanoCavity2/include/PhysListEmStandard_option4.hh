@@ -40,30 +40,22 @@
 
 class PhysListEmStandard_option4 : public G4VPhysicsConstructor
 {
-public: 
-  PhysListEmStandard_option4(const G4String& name);
- ~PhysListEmStandard_option4();
+  public:
+    PhysListEmStandard_option4(const G4String& name);
+    ~PhysListEmStandard_option4();
 
-public: 
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-  
-private:
+  public:
+    // This method is dummy for physics
+    virtual void ConstructParticle() {};
+
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type
+    virtual void ConstructProcess();
+
+  private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

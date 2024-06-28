@@ -150,7 +150,7 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   parameter -> SetCurrentAsDefault(true);
   const G4GraphicsSystemList& gslist =
   fpVisManager -> GetAvailableGraphicsSystems ();
-  G4String candidates;
+  G4String candidates = "NO_UI_SESSION ";  // A dummy candidate to catch issue
   for (const auto gs: gslist) {
     const G4String& name = gs -> GetName ();
     candidates += name + ' ';
@@ -212,7 +212,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     " no graphics systems available."
     "\n  Did you instantiate any in"
     " YourVisManager::RegisterGraphicsSystems()?";
-    command->CommandFailed(JustWarning,ed);
+    command->CommandFailed(ed);
     return;
   }
   std::size_t iGS;  // Selector index.
@@ -237,6 +237,23 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     }
   }
   if (!found) {
+    if (graphicsSystem == "NO_UI_SESSION") {
+      G4Exception
+      ("G4VisCommandSceneHandlerCreate::SetNewValue","visman1001",JustWarning,
+       "This looks like an attempt to use run-time vis driver selection."
+       "\nYou have issued \"/vis/open\" or \"/vis/sceneHandler/create\" without"
+       "\na parameter for the vis driver. This is allowed only if you instantiate"
+       "\na UI session, and only if it is instantiated *before* the first"
+       "\n\"/vis/open\" command. So:"
+       "\na) It is not allowed in batch mode. If you really want to create"
+       "\n   some graphics with a file-writing driver in batch mode, you must"
+       "\n   request a specific driver on the \"/vis/open\" command line, e.g.,"
+       "\n   \"/vis/open TSG_OFFSCREEN\". See, examples/basic/B1/tsg_offscreen.mac."
+       "\nb) If you want to exploit this feature in interactive mode, simply move"
+       "\n   the instantiation of the UI session earlier. In any case, this is good"
+       "\n   practice in order to capture output in a GUI session.");
+      return;
+    }
     // Shouldn't happen, since graphicsSystem should be a candidate
     G4ExceptionDescription ed;
     ed <<
@@ -246,7 +263,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << "\" requested."
     << "\n  Candidates are:";
     fpVisManager->PrintAvailableGraphicsSystems(verbosity,ed);
-    command->CommandFailed(JustWarning,ed);
+    command->CommandFailed(ed);
     return;
   }
 
@@ -274,9 +291,11 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     if (iGS >= nSystems || loopCounter >=3) {
       G4ExceptionDescription ed;
       ed << "\"" << gsl[iGSBeingTested]->GetNickname()
-      << "\" is not compatible with your chosen session,"
-      " and no fallback system found.";
-      command->CommandFailed(JustWarning,ed);
+      << "\" is not compatible with the session,"
+      "\nand no fallback system found. Make sure your session is"
+      "\ninstantiated _before_ you create a graphics system.";
+      G4Exception("G4VisCommandSceneHandlerCreate::SetNewValue",
+                  "visman1002", JustWarning, ed);
       return;
     }
     //  A fallback system found...but go back and check this too.
@@ -312,7 +331,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
       ed <<
       "ERROR: Scene handler \"" << newName
       << "\" already exists.";
-      command->CommandFailed(JustWarning,ed);
+      command->CommandFailed(ed);
       return;
     }
   }
@@ -349,7 +368,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << "\" is not the new name \""
     << newName
     << "\".\n  Please report to vis coordinator.";
-    command->CommandFailed(JustWarning,ed);
+    command->CommandFailed(ed);
     return;
   }
 

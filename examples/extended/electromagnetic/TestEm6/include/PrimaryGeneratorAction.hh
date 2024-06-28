@@ -46,22 +46,20 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+    PrimaryGeneratorAction(DetectorConstruction*);
+    ~PrimaryGeneratorAction();
 
   public:
-    void SetRndmBeam(G4double val)  {fRndmBeam = val;}   
+    void SetRndmBeam(G4double val) { fRndmBeam = val; }
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*             fParticleGun;
-    DetectorConstruction*      fDetector;
-    G4double                   fRndmBeam;       
-    PrimaryGeneratorMessenger* fGunMessenger;     
+    G4ParticleGun* fParticleGun;
+    DetectorConstruction* fDetector;
+    G4double fRndmBeam;
+    PrimaryGeneratorMessenger* fGunMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

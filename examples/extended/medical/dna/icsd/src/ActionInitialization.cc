@@ -35,51 +35,50 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
+
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-: G4VUserActionInitialization()
-{}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-// In MT mode, to be clearer, the RunAction class for the master thread might be
-// different than the one used for the workers.
-// This RunAction will be called before and after starting the
-// workers.
-// For more details, please refer to :
-// https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
-//
-    RunAction* runAction= new RunAction();
-    SetUserAction(runAction);
+  // In MT mode, to be clearer, the RunAction class for the master thread might be
+  // different than the one used for the workers.
+  // This RunAction will be called before and after starting the
+  // workers.
+  // For more details, please refer to :
+  // https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
+  //
+  RunAction* runAction = new RunAction();
+  SetUserAction(runAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
 {
-    SetUserAction(new PrimaryGeneratorAction);
+  SetUserAction(new PrimaryGeneratorAction);
 
-    RunAction* runAction= new RunAction();
-    SetUserAction(runAction);
+  RunAction* runAction = new RunAction();
+  SetUserAction(runAction);
 
-    EventAction* event=new EventAction();
-    SetUserAction(event);
+  EventAction* event = new EventAction();
+  SetUserAction(event);
 
-    SetUserAction(new SteppingAction(event));
-}  
+  SetUserAction(new SteppingAction(event));
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

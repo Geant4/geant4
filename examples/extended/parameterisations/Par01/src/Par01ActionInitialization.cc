@@ -28,31 +28,29 @@
 /// \brief Implementation of the Par01ActionInitialization class
 
 #include "Par01ActionInitialization.hh"
-#include "Par01PrimaryGeneratorAction.hh"
 
+#include "Par01PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par01ActionInitialization::Par01ActionInitialization()
- : G4VUserActionInitialization()
-{}
+Par01ActionInitialization::Par01ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01ActionInitialization::~Par01ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par01ActionInitialization::BuildForMaster() const
-{
-}
+void Par01ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01ActionInitialization::Build() const
 {
   SetUserAction(new Par01PrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

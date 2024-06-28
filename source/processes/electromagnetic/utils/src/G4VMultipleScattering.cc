@@ -141,25 +141,24 @@ void
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   G4bool master = emManager->IsMaster();
-  if(nullptr == firstParticle) { firstParticle = &part; }
+  if (nullptr == firstParticle) { firstParticle = &part; }
 
   emManager->PreparePhysicsTable(&part, this);
   currParticle = nullptr;
 
   if(firstParticle == &part) {
     baseMat = emManager->GetTableBuilder()->GetBaseMaterialFlag();
-
     G4EmTableUtil::PrepareMscProcess(this, part, modelManager,
-                                     stepLimit, facrange,
-                                     latDisplacement, master,
-                                     isIon, baseMat);
+ 				     stepLimit, facrange,
+				     latDisplacement, master,
+				     isIon, baseMat);
 
     numberOfModels = modelManager->NumberOfModels();
     currentModel = GetModelByIndex(0);
 
-    if(nullptr == safetyHelper) {
+    if (nullptr == safetyHelper) {
       safetyHelper = G4TransportationManager::GetTransportationManager()
-        ->GetSafetyHelper();
+	->GetSafetyHelper();
       safetyHelper->InitialiseHelper();
     }
   }
@@ -171,8 +170,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   G4bool master = emManager->IsMaster();
 
-  if(firstParticle == &part) { 
-    emManager->BuildPhysicsTable(firstParticle);
+  if(firstParticle == &part) {
+    emManager->BuildPhysicsTable(&part);
   }
   const G4VMultipleScattering* ptr = this;
   if(!master) {

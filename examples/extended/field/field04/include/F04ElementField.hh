@@ -31,15 +31,13 @@
 #ifndef F04ElementField_h
 #define F04ElementField_h 1
 
-#include "globals.hh"
+#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
-
 #include "G4UserLimits.hh"
 #include "G4VisAttributes.hh"
-
-#include "CLHEP/Units/SystemOfUnits.h"
+#include "globals.hh"
 
 //  class F04ElementField - interface for the EM field of one element
 
@@ -53,9 +51,7 @@
 
 class F04ElementField
 {
-
   public:
-
     ///  Constructor.
     F04ElementField(const G4ThreeVector, G4LogicalVolume*);
 
@@ -97,21 +93,21 @@ class F04ElementField
     ///  BEWARE: if called only once, the bounding box is just a point.
     void SetGlobalPoint(const G4double point[4])
     {
-      if(fMinX == -DBL_MAX || fMinX > point[0]) fMinX = point[0];
-      if(fMinY == -DBL_MAX || fMinY > point[1]) fMinY = point[1];
-      if(fMinZ == -DBL_MAX || fMinZ > point[2]) fMinZ = point[2];
-      if(fMaxX ==  DBL_MAX || fMaxX < point[0]) fMaxX = point[0];
-      if(fMaxY ==  DBL_MAX || fMaxY < point[1]) fMaxY = point[1];
-      if(fMaxZ ==  DBL_MAX || fMaxZ < point[2]) fMaxZ = point[2];
+      if (fMinX == -DBL_MAX || fMinX > point[0]) fMinX = point[0];
+      if (fMinY == -DBL_MAX || fMinY > point[1]) fMinY = point[1];
+      if (fMinZ == -DBL_MAX || fMinZ > point[2]) fMinZ = point[2];
+      if (fMaxX == DBL_MAX || fMaxX < point[0]) fMaxX = point[0];
+      if (fMaxY == DBL_MAX || fMaxY < point[1]) fMaxY = point[1];
+      if (fMaxZ == DBL_MAX || fMaxZ < point[2]) fMaxZ = point[2];
     }
 
     ///  IsInBoundingBox() returns true if the point is within the
     ///  global bounding box - global coordinates.
     bool IsInBoundingBox(const G4double point[4]) const
     {
-      if(point[2] < fMinZ || point[2] > fMaxZ) return false;
-      if(point[0] < fMinX || point[0] > fMaxX) return false;
-      if(point[1] < fMinY || point[1] > fMaxY) return false;
+      if (point[2] < fMinZ || point[2] > fMaxZ) return false;
+      if (point[0] < fMinX || point[0] > fMaxX) return false;
+      if (point[1] < fMinY || point[1] > fMaxY) return false;
       return true;
     }
 
@@ -123,20 +119,18 @@ class F04ElementField
     ///  For efficiency, the caller may (but need not) call
     ///  IsInBoundingBox(point), and only call this function if that
     ///  returns true.
-    virtual void
-        AddFieldValue(const G4double point[4], G4double field[6]) const = 0;
+    virtual void AddFieldValue(const G4double point[4], G4double field[6]) const = 0;
 
     virtual G4double GetLength() = 0;
-    virtual G4double GetWidth()  = 0;
+    virtual G4double GetWidth() = 0;
     virtual G4double GetHeight() = 0;
 
   protected:
-
     G4LogicalVolume* fVolume = nullptr;
 
     G4AffineTransform fGlobal2local;
 
-//    F04ElementField(const F04ElementField&);
+    //    F04ElementField(const F04ElementField&);
 
   private:
     F04ElementField& operator=(const F04ElementField&);
@@ -155,7 +149,6 @@ class F04ElementField
 
     G4double fMaxStep = 1. * CLHEP::mm;
     G4UserLimits* fUserLimits = nullptr;
-
 };
 
 #endif

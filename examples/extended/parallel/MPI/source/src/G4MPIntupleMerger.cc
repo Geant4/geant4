@@ -28,16 +28,15 @@
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)
 
 #include "G4MPIntupleMerger.hh"
-#include "G4RootMpiAnalysisManager.hh"
-#include "G4ios.hh"
 
 #include "toolx/mpi/wrmpi"
 
+#include "G4RootMpiAnalysisManager.hh"
+#include "G4ios.hh"
+
 #include <mpi.h>
 
-
-G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
-                                     G4bool rowWise, G4bool rowMode)
+G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles, G4bool rowWise, G4bool rowMode)
 {
   // Configure MPI using  G4MPImanager
 
@@ -45,8 +44,7 @@ G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
 
   // Create MPI Root analysis manager
   G4bool isMaster = true;
-  auto analysisManager
-    = new G4RootMpiAnalysisManager(isMaster);
+  auto analysisManager = new G4RootMpiAnalysisManager(isMaster);
   analysisManager->SetVerboseLevel(1);
   // G4cout << "Start configure ntuple MPI merging" << G4endl;
 
@@ -54,13 +52,12 @@ G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
   G4MPImanager* mpiManager = G4MPImanager::GetManager();
   G4int mpiRank = mpiManager->GetRank();
   G4int mpiSize = mpiManager->GetActiveSize();
-  auto comm  = mpiManager->GetAllComm();
+  auto comm = mpiManager->GetAllComm();
 
   // G4int tag = G4MPImanager::kTAG_NTUPLE;
   fWrmpi = new toolx::mpi::wrmpi(G4cout, *comm);
 
-  analysisManager->SetMpiNtupleMerging(
-    fWrmpi, mpiRank, mpiSize, nofReducedNtupleFiles);
+  analysisManager->SetMpiNtupleMerging(fWrmpi, mpiRank, mpiSize, nofReducedNtupleFiles);
   analysisManager->SetNtupleRowWise(rowWise, rowMode);
 
   // G4cout << "End configure ntuple MPI merging" << G4endl;

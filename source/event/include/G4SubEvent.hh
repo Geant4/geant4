@@ -36,6 +36,9 @@
 
 class G4Event;
 
+#include "globals.hh"
+#include "evtdefs.hh"
+#include "G4Allocator.hh"
 #include "G4StackedTrack.hh"
 #include "G4Types.hh"
 
@@ -49,6 +52,10 @@ class G4SubEvent : public std::vector<G4StackedTrack>
    ~G4SubEvent();
   
     G4SubEvent& operator=(const G4SubEvent&) = delete;
+
+    inline void *operator new(std::size_t);
+    inline void operator delete(void* anEvent);
+
     G4bool operator==(const G4SubEvent&) const = delete;
     G4bool operator!=(const G4SubEvent&) const = delete;
   
@@ -75,5 +82,21 @@ class G4SubEvent : public std::vector<G4StackedTrack>
     G4Event* fpEvent = nullptr;
 
 };
+
+extern G4EVENT_DLL G4Allocator<G4SubEvent>*& aSubEventAllocator();
+
+inline void* G4SubEvent::operator new(std::size_t)
+{
+  if (aSubEventAllocator() == nullptr)
+  {
+    aSubEventAllocator() = new G4Allocator<G4SubEvent>;
+  }
+  return (void*)aSubEventAllocator()->MallocSingle();
+}
+
+inline void G4SubEvent::operator delete(void* aSubEvent)
+{
+  aSubEventAllocator()->FreeSingle((G4SubEvent*)aSubEvent);
+}
 
 #endif

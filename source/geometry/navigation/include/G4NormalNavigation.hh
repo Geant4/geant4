@@ -56,7 +56,7 @@ class G4NormalNavigation : public G4VNavigation
     G4NormalNavigation();
       // Constructor
 
-    ~G4NormalNavigation();
+    ~G4NormalNavigation() override;
       // Destructor
 
     inline G4bool LevelLocate( G4NavigationHistory &history,
@@ -89,8 +89,8 @@ class G4NormalNavigation : public G4VNavigation
                             const G4NavigationHistory &history,
                             const G4double pMaxLength=DBL_MAX ) final;
 
-    virtual G4int GetVerboseLevel() const final;
-    virtual void  SetVerboseLevel(G4int level) final;
+    G4int GetVerboseLevel() const final;
+    void  SetVerboseLevel(G4int level) final;
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 

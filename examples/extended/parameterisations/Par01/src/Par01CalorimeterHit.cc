@@ -31,13 +31,13 @@
 
 #include "Par01CalorimeterHit.hh"
 
-#include "G4VVisManager.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<Par01CalorimeterHit>* Par01CalorimeterHitAllocator=nullptr;
+G4ThreadLocal G4Allocator<Par01CalorimeterHit>* Par01CalorimeterHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,42 +48,44 @@ Par01CalorimeterHit::Par01CalorimeterHit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par01CalorimeterHit::Par01CalorimeterHit(G4LogicalVolume* logVol)
- :fLogV(logVol)
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Par01CalorimeterHit::~Par01CalorimeterHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Par01CalorimeterHit::Par01CalorimeterHit(const Par01CalorimeterHit &right)
-  : G4VHit()
+Par01CalorimeterHit::Par01CalorimeterHit(G4LogicalVolume* logVol) : fLogV(logVol)
 {
-  fEdep     = right.fEdep;
-  fPosition = right.fPosition;
-  fRot      = right.fRot;
-  fLogV     = right.fLogV;
+  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const Par01CalorimeterHit& Par01CalorimeterHit::operator=(const Par01CalorimeterHit &right)
+Par01CalorimeterHit::~Par01CalorimeterHit()
 {
-  fEdep     = right.fEdep;
+  ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Par01CalorimeterHit::Par01CalorimeterHit(const Par01CalorimeterHit& right) : G4VHit()
+{
+  fEdep = right.fEdep;
   fPosition = right.fPosition;
-  fRot      = right.fRot;
-  fLogV     = right.fLogV;
+  fRot = right.fRot;
+  fLogV = right.fLogV;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const Par01CalorimeterHit& Par01CalorimeterHit::operator=(const Par01CalorimeterHit& right)
+{
+  fEdep = right.fEdep;
+  fPosition = right.fPosition;
+  fRot = right.fRot;
+  fLogV = right.fLogV;
   return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
+G4bool Par01CalorimeterHit::operator==(const Par01CalorimeterHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,24 +93,19 @@ G4bool Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
 void Par01CalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Transform3D trans(fRot,fPosition);
+  if (pVVisManager) {
+    G4Transform3D trans(fRot, fPosition);
     G4VisAttributes attribs;
     const G4VisAttributes* pVA = fLogV->GetVisAttributes();
-    if(pVA) attribs = *pVA;
-    G4Colour colour(1.,0.,0.);
+    if (pVA) attribs = *pVA;
+    G4Colour colour(1., 0., 0.);
     attribs.SetColour(colour);
     attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*fLogV,attribs,trans);
+    pVVisManager->Draw(*fLogV, attribs, trans);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par01CalorimeterHit::Print()
-{
-}
-
-
+void Par01CalorimeterHit::Print() {}

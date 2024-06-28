@@ -8,7 +8,7 @@
  - 10-06-2010 : Makoto Asai - merge into one example
  - 13-05-2010 : Michel Maire - create as three examples
   
- This example demonstrates 5 ways of the usage of G4ParticleGun shooting
+ This example demonstrates 5 ways of the use of G4ParticleGun shooting
  primary particles in different cases. These are
  -#  uniform particle direction in a given solid angle
  -#  Generate several vertices and particles per event
@@ -16,11 +16,11 @@
  -#  Divergent beam in an arbitrary direction 
  -#  Shooting primaries in spherical coordinates with rotation matrix.
 
- These usages can be chosen by a UI command
+ These use cases can be chosen by a UI command
 \verbatim 
 /gunExample/selectGunAction actionID
 \endverbatim 
- where <i>actionID</i> corresponds to above cases.
+ where <i>actionID</i> corresponds to the above cases.
  	
 \section ParticleGun_s1 Geometry construction
 
@@ -117,6 +117,14 @@ Idle> /run/beamOn 10
 ....
 Idle> exit
 \endverbatim 
+
+  - Macros provided in this example:
+      - run0.mac: see above primaryGenerator, case 0
+      - run1.mac: see above primaryGenerator, case 1
+      - run2.mac: see above primaryGenerator, case 2
+      - run3.mac: see above primaryGenerator, case 3
+      - run4.mac: see above primaryGenerator, case 4
+      - particleGun.in: macro used in Geant4 testing (similar to run0.mac)
 	
 \section ParticleGun_s6 Histograms
  

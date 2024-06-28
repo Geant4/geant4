@@ -42,8 +42,8 @@
 #ifndef HistoManagerMessenger_h
 #define HistoManagerMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class HistoManager;
 class G4UIdirectory;
@@ -55,32 +55,29 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManagerMessenger: public G4UImessenger
+class HistoManagerMessenger : public G4UImessenger
 {
-public:
+  public:
+    HistoManagerMessenger(HistoManager*);
+    virtual ~HistoManagerMessenger();
 
-  HistoManagerMessenger(HistoManager* );
-  virtual ~HistoManagerMessenger();
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  private:
+    HistoManager* fHisto;
 
-private:
-
-  HistoManager*              fHisto;
-
-  G4UIcmdWithAnInteger*      fbinCmd;
-  G4UIcmdWithAnInteger*      fnOfAbsCmd;
-  G4UIcmdWithAnInteger*      fverbCmd;
-  G4UIcmdWithAString*        fcsCmd;
-  G4UIcmdWithAString*        fpartCmd;
-  G4UIcmdWithADoubleAndUnit* fe1Cmd;
-  G4UIcmdWithADoubleAndUnit* fe2Cmd;
-  G4UIcmdWithADoubleAndUnit* fp1Cmd;
-  G4UIcmdWithADoubleAndUnit* fp2Cmd;
-  G4UIcmdWithAString*        fFCmd;
+    G4UIcmdWithAnInteger* fbinCmd;
+    G4UIcmdWithAnInteger* fnOfAbsCmd;
+    G4UIcmdWithAnInteger* fverbCmd;
+    G4UIcmdWithAString* fcsCmd;
+    G4UIcmdWithAString* fpartCmd;
+    G4UIcmdWithADoubleAndUnit* fe1Cmd;
+    G4UIcmdWithADoubleAndUnit* fe2Cmd;
+    G4UIcmdWithADoubleAndUnit* fp1Cmd;
+    G4UIcmdWithADoubleAndUnit* fp2Cmd;
+    G4UIcmdWithAString* fFCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

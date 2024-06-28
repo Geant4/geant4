@@ -4,13 +4,13 @@ cmake_minimum_required(VERSION 3.16...3.27)
 project(microdosimetry)
 
 #----------------------------------------------------------------------------
-# Find Geant4 package, activating all available UI and Vis drivers by default
-# You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
+# Find Geant4 package, activating all available Vis drivers by default
+# You can set WITH_GEANT4_VIS to OFF via the command line or ccmake/cmake-gui
 # to build a batch mode only executable
 #
-option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
-if(WITH_GEANT4_UIVIS)
-  find_package(Geant4 REQUIRED ui_all vis_all)
+option(WITH_GEANT4_VIS "Build example with Geant4 Vis drivers" ON)
+if(WITH_GEANT4_VIS)
+  find_package(Geant4 REQUIRED vis_all)
 else()
   find_package(Geant4 REQUIRED)
 endif()
@@ -23,7 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -39,11 +39,10 @@ target_link_libraries(microdosimetry ${Geant4_LIBRARIES} )
 # build microdosimetry. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/*.mac 
-                    ${PROJECT_SOURCE_DIR}/*.in
-                    ${PROJECT_SOURCE_DIR}/*.C
-                    ${PROJECT_SOURCE_DIR}/README
-                    )
+
+file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/*.mac
+     ${PROJECT_SOURCE_DIR}/*.in
+     ${PROJECT_SOURCE_DIR}/*.C)
 
 foreach(_script ${MAC_FILES})
   configure_file(
@@ -57,4 +56,3 @@ endforeach()
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS microdosimetry DESTINATION bin)
-

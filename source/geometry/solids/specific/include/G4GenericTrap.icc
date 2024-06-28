@@ -26,7 +26,7 @@
 // Implementation of inline methods of G4GenericTrap
 // --------------------------------------------------------------------
 
-inline 
+inline
 G4double G4GenericTrap::GetZHalfLength() const
 {
   return fDz;
@@ -34,44 +34,48 @@ G4double G4GenericTrap::GetZHalfLength() const
 
 // --------------------------------------------------------------------
 
-inline 
+inline
 G4int G4GenericTrap::GetNofVertices() const
 {
   return G4int(fVertices.size());
-}  
+}
 
 // --------------------------------------------------------------------
 
 inline
 G4TwoVector G4GenericTrap::GetVertex(G4int index) const
 {
-  if ( index<0 || index >= G4int(fVertices.size()) )
+  if (index < 0 || index > 7)
   {
-    G4Exception ("G4GenericTrap::GetVertex()", "GeomSolids0003",
-                 FatalException, "Index outside range.");
-    return {};
+    std::ostringstream message;
+    message << "Index = "<< index << " is out of range [0, 7]"
+            << " for Solid: " << GetName() << " !";
+    G4Exception("G4GenericTrap::GetVertex()", "GeomSolids0003",
+                FatalException, message);
   }
   return fVertices[index];
-}  
+}
 
 // --------------------------------------------------------------------
 
-inline 
+inline
 const std::vector<G4TwoVector>& G4GenericTrap::GetVertices() const
 {
   return fVertices;
-}  
+}
 
 // --------------------------------------------------------------------
 
-inline 
+inline
 G4double G4GenericTrap::GetTwistAngle(G4int index) const
 {
-  if ( (index<0) || (index >= G4int(fVertices.size())) )
+  if (index < 0 || index > 3)
   {
-    G4Exception ("G4GenericTrap::GetTwistAngle()", "GeomSolids0003",
-                 FatalException, "Index outside range.");
-    return 0.;
+    std::ostringstream message;
+    message << "Index = "<< index << " is out of range [0, 3]"
+            << " for Solid: " << GetName() << " !";
+    G4Exception("G4GenericTrap::GetTwistAngle()", "GeomSolids0003",
+                FatalException, message);
   }
   return fTwist[index];
 }
@@ -82,22 +86,6 @@ inline
 G4bool G4GenericTrap::IsTwisted() const
 {
   return fIsTwisted;
-}
-
-// --------------------------------------------------------------------
-
-inline
-void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
-{
-  if ( (index<0) || (index >= G4int(fVertices.size())) )
-  {
-    G4Exception ("G4GenericTrap::SetTwistAngle()", "GeomSolids0003",
-                 FatalException, "Index outside range.");
-  }
-  else
-  {
-    fTwist[index]=twist;
-  }
 }
 
 // --------------------------------------------------------------------
@@ -115,22 +103,3 @@ void G4GenericTrap::SetVisSubdivisions(G4int subdiv)
 {
   fVisSubdivisions=subdiv;
 }
-
-// --------------------------------------------------------------------
-
-inline
-G4ThreeVector G4GenericTrap::GetMinimumBBox() const
-{
-  return fMinBBoxVector;
-}
-
-// --------------------------------------------------------------------
-
-inline
-G4ThreeVector G4GenericTrap::GetMaximumBBox() const
-{
-  return fMaxBBoxVector;
-}
-
-// --------------------------------------------------------------------
-

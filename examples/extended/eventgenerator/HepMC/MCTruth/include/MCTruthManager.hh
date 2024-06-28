@@ -37,61 +37,55 @@
 // Date  : 2006-02-28
 //
 // --------------------------------------------------------------
-#ifndef INCLUDE_MCTRUTHMANAGER_H 
+#ifndef INCLUDE_MCTRUTHMANAGER_H
 #define INCLUDE_MCTRUTHMANAGER_H 1
-
-#include "G4Types.hh"
-#include "G4LorentzVector.hh"
 
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
-
 #include "MCTruthConfig.hh"
+
+#include "G4LorentzVector.hh"
+#include "G4Types.hh"
 
 class MCTruthManager
 {
+  public:
+    static MCTruthManager* GetInstance();
 
-public:
+    void NewEvent();
+    HepMC::GenEvent* GetCurrentEvent() const { return fEvent; }
+    void PrintEvent();
 
-  static MCTruthManager* GetInstance();
+    void AddParticle(G4LorentzVector&, G4LorentzVector&, G4LorentzVector&, G4int, G4int, G4int,
+                     G4bool);
 
-  void NewEvent();
-  HepMC::GenEvent* GetCurrentEvent() const {return fEvent;}
-  void PrintEvent();
+    void SetConfig(MCTruthConfig* c) { fConfig = c; }
+    MCTruthConfig* GetConfig() const { return fConfig; }
 
-  void AddParticle(G4LorentzVector&, G4LorentzVector&, G4LorentzVector&, 
-                   G4int, G4int, G4int, G4bool);
+  protected:
+    MCTruthManager();
 
-  void SetConfig(MCTruthConfig* c) {fConfig=c;}
-  MCTruthConfig* GetConfig() const {return fConfig;}
+    virtual ~MCTruthManager();
 
-protected:
+  private:
+    HepMC::GenEvent* fEvent;
 
-  MCTruthManager( ); 
+    // vector containing barcodes of primary particles (not having any mother)
+    //
+    std::vector<G4int> fPrimarybarcodes;
 
-  virtual ~MCTruthManager( ); 
+    // map containing number of 'segmentations' for each particle (i.e. number
+    // of additional vertices introduced in order to attach secondary particles
+    // which were created 'in-flight', for instance bremstrahlung gammas, etc)
+    //
+    std::map<G4int, G4int> fSegmentations;
 
-private:
+    // different criteria for storing (or not) particles
+    //
+    MCTruthConfig* fConfig;
 
-  HepMC::GenEvent* fEvent;
-
-  // vector containing barcodes of primary particles (not having any mother)
-  //
-  std::vector<G4int> fPrimarybarcodes;
-
-  // map containing number of 'segmentations' for each particle (i.e. number
-  // of additional vertices introduced in order to attach secondary particles
-  // which were created 'in-flight', for instance bremstrahlung gammas, etc)
-  //
-  std::map<G4int,G4int> fSegmentations;
-
-  // different criteria for storing (or not) particles
-  //
-  MCTruthConfig* fConfig;
-
-  // recursive printing of the tree
-  //
-  void PrintTree(HepMC::GenParticle*, G4String);
-  
+    // recursive printing of the tree
+    //
+    void PrintTree(HepMC::GenParticle*, G4String);
 };
-#endif // INCLUDE_MCTRUTHMANAGER_H
+#endif  // INCLUDE_MCTRUTHMANAGER_H

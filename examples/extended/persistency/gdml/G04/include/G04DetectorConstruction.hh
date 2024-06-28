@@ -41,12 +41,12 @@ class G4GDMLParser;
 
 class G04DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public: 
+  public:
     G04DetectorConstruction(const G4GDMLParser& parser);
 
-    virtual G4VPhysicalVolume *Construct();  
+    virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-  
+
   private:
     const G4GDMLParser& fParser;
 };

@@ -31,19 +31,20 @@
 #define OpNoviceSteppingAction_h 1
 
 #include "OpNoviceEventAction.hh"
-#include "globals.hh"
+
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 class OpNoviceSteppingAction : public G4UserSteppingAction
 {
- public:
-  OpNoviceSteppingAction(OpNoviceEventAction*);
-  ~OpNoviceSteppingAction() override = default;
+  public:
+    OpNoviceSteppingAction(OpNoviceEventAction*);
+    ~OpNoviceSteppingAction() override = default;
 
-  void UserSteppingAction(const G4Step*) override;
+    void UserSteppingAction(const G4Step*) override;
 
- private:
-  OpNoviceEventAction* fEventAction = nullptr;
+  private:
+    OpNoviceEventAction* fEventAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

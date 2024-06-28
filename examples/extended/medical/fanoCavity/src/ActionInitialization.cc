@@ -27,35 +27,34 @@
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
-//fanoCavity
+// fanoCavity
 
 #include "ActionInitialization.hh"
+
 #include "DetectorConstruction.hh"
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
 #include "StackingAction.hh"
+#include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* det)
- : G4VUserActionInitialization(),fDetector(det)
-{ }
+  : G4VUserActionInitialization(), fDetector(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{ }
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  RunAction* ra = 
-    new RunAction(fDetector,new PrimaryGeneratorAction(fDetector));
-  ///ra->SetMaster(true);
+  RunAction* ra = new RunAction(fDetector, new PrimaryGeneratorAction(fDetector));
+  /// ra->SetMaster(true);
   SetUserAction(ra);
 }
 
@@ -65,20 +64,19 @@ void ActionInitialization::Build() const
 {
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
   SetUserAction(prim);
-  RunAction* ra = new RunAction(fDetector,prim);
-  ///ra->SetMaster(false);
+  RunAction* ra = new RunAction(fDetector, prim);
+  /// ra->SetMaster(false);
   SetUserAction(ra);
 
   SetUserAction(new EventAction());
 
-  TrackingAction *track = new TrackingAction();
+  TrackingAction* track = new TrackingAction();
 
   SetUserAction(track);
 
-  SetUserAction(new SteppingAction(fDetector,track));
+  SetUserAction(new SteppingAction(fDetector, track));
 
   SetUserAction(new StackingAction(fDetector));
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

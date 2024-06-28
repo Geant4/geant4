@@ -33,8 +33,8 @@
 #ifndef G4MonopolePhysicsMessenger_h
 #define G4MonopolePhysicsMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4MonopolePhysics;
 class G4UIdirectory;
@@ -44,21 +44,19 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MonopolePhysicsMessenger: public G4UImessenger
+class G4MonopolePhysicsMessenger : public G4UImessenger
 {
-public:
+  public:
+    G4MonopolePhysicsMessenger(G4MonopolePhysics*);
+    ~G4MonopolePhysicsMessenger();
 
-  G4MonopolePhysicsMessenger(G4MonopolePhysics*);
-  ~G4MonopolePhysicsMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-  G4MonopolePhysics*         fPhys;
-    
-  G4UIdirectory*             fPhysicsDir;    
-  G4UIcommand*               fPhysicsCmd;
+  private:
+    G4MonopolePhysics* fPhys;
+
+    G4UIdirectory* fPhysicsDir;
+    G4UIcommand* fPhysicsCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

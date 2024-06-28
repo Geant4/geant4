@@ -28,25 +28,27 @@
 /// \brief Detector Construction for a DNA molecule in a cell
 
 #include "DetectorConstruction.hh"
+
 #include "DNAGeometry.hh"
 #include "DetectorMessenger.hh"
 #include "OctreeNode.hh"
-#include "G4VPhysicalVolume.hh"
+
 #include "G4Box.hh"
+#include "G4Color.hh"
 #include "G4Ellipsoid.hh"
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4VisAttributes.hh"
-#include "G4Color.hh"
 #include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
 #include "G4SDManager.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
+
 #include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-  : fpDNAGeometry(new DNAGeometry()),
-  fpDetectorMessenger(new DetectorMessenger(this))
+  : fpDNAGeometry(new DNAGeometry()), fpDetectorMessenger(new DetectorMessenger(this))
 {
   G4bool useParallelPhysicsWorld = false;
   if (useParallelPhysicsWorld) {
@@ -56,7 +58,10 @@ DetectorConstruction::DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::~DetectorConstruction() { delete fpDetectorMessenger; }
+DetectorConstruction::~DetectorConstruction()
+{
+  delete fpDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,8 +76,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::BuildMaterials()
 {
   G4NistManager* man = G4NistManager::Instance();
-  fpWorld            = man->FindOrBuildMaterial("G4_Galactic");
-  fpWater            = man->FindOrBuildMaterial("G4_WATER");
+  fpWorld = man->FindOrBuildMaterial("G4_Galactic");
+  fpWater = man->FindOrBuildMaterial("G4_WATER");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,35 +98,28 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   G4double dnasx = fCellRadius.getX();
   G4double dnasy = fCellRadius.getY();
   G4double dnasz = fCellRadius.getZ();
-  if((dnasx <= 0) || (dnasy <= 0) || (dnasz <= 0))
-  {
+  if ((dnasx <= 0) || (dnasy <= 0) || (dnasz <= 0)) {
     // Experiment in the world only
-    G4cout
-      << "No cell radius has been specified (or the radii are less than 0)."
-      << G4endl;
+    G4cout << "No cell radius has been specified (or the radii are less than 0)." << G4endl;
     G4cout << "This will fill the entire world with water" << G4endl;
 
-    G4double wsize     = 1.01 * fWorldSideLength / 2.;
+    G4double wsize = 1.01 * fWorldSideLength / 2.;
     auto worldPhysical = new G4Box("WorldPhysical", wsize, wsize, wsize);
-    auto worldLogical  = new G4LogicalVolume(worldPhysical, fpWater, "world");
-    fWorld = new G4PVPlacement(nullptr, G4ThreeVector(0), worldLogical, "world",
-                               nullptr, false, 0);
+    auto worldLogical = new G4LogicalVolume(worldPhysical, fpWater, "world");
+    fWorld = new G4PVPlacement(nullptr, G4ThreeVector(0), worldLogical, "world", nullptr, false, 0);
     pDnaRegionLogical = worldLogical;
   }
-  else
-  {
+  else {
     // experiment inside a cell.
-    G4double wsize     = 1.01 * fWorldSideLength / 2.;
+    G4double wsize = 1.01 * fWorldSideLength / 2.;
     auto worldPhysical = new G4Box("WorldPhysical", wsize, wsize, wsize);
-    auto worldLogical  = new G4LogicalVolume(worldPhysical, fpWorld, "world");
+    auto worldLogical = new G4LogicalVolume(worldPhysical, fpWorld, "world");
 
-    fWorld = new G4PVPlacement(nullptr, G4ThreeVector(0), worldLogical, "world",
-                               nullptr, false, 0);
+    fWorld = new G4PVPlacement(nullptr, G4ThreeVector(0), worldLogical, "world", nullptr, false, 0);
     auto dnaPhysical = new G4Ellipsoid("CellPhysical", dnasx, dnasy, dnasz);
-    auto dnaLogical  = new G4LogicalVolume(dnaPhysical, fpWater, "CellLogical");
+    auto dnaLogical = new G4LogicalVolume(dnaPhysical, fpWater, "CellLogical");
 
-    new G4PVPlacement(nullptr, G4ThreeVector(0), "CellVolume", dnaLogical,
-                      fWorld, false, 0, false);
+    new G4PVPlacement(nullptr, G4ThreeVector(0), "CellVolume", dnaLogical, fWorld, false, 0, false);
     pDnaRegionLogical = dnaLogical;
   }
   // we build DNA geometry for physical stage

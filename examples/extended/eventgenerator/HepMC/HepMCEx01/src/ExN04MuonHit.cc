@@ -29,35 +29,29 @@
 //
 
 #include "ExN04MuonHit.hh"
-#include "G4VVisManager.hh"
+
 #include "G4Circle.hh"
 #include "G4Colour.hh"
+#include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
-
 
 G4Allocator<ExN04MuonHit> ExN04MuonHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04MuonHit::ExN04MuonHit()
- : G4VHit(), fedep(0.), fpos()
-{
-}
+ExN04MuonHit::ExN04MuonHit() : G4VHit(), fedep(0.), fpos() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04MuonHit::~ExN04MuonHit()
-{
-}
+ExN04MuonHit::~ExN04MuonHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04MuonHit::ExN04MuonHit(const ExN04MuonHit &right)
-  : G4VHit()
+ExN04MuonHit::ExN04MuonHit(const ExN04MuonHit& right) : G4VHit()
 {
   fedep = right.fedep;
   fpos = right.fpos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit &right)
+const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit& right)
 {
   fedep = right.fedep;
   fpos = right.fpos;
@@ -65,20 +59,20 @@ const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit &right)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool ExN04MuonHit::operator==(const ExN04MuonHit &right) const
+G4bool ExN04MuonHit::operator==(const ExN04MuonHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager) {
+  if (pVVisManager) {
     G4Circle circle(fpos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -86,6 +80,4 @@ void ExN04MuonHit::Draw()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04MuonHit::Print()
-{
-}
+void ExN04MuonHit::Print() {}

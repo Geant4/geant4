@@ -49,9 +49,7 @@ RunInitManager::RunInitManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunInitManager::~RunInitManager()
-{
-}
+RunInitManager::~RunInitManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,24 +69,23 @@ RunInitObserver::~RunInitObserver()
 
 RunInitManager* RunInitManager::Instance()
 {
-  if(fgInstance == 0) new RunInitManager();
+  if (fgInstance == 0) new RunInitManager();
   return fgInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-RunInitManager::Initialize()
+void RunInitManager::Initialize()
 {
   std::vector<RunInitObserver*>::iterator it = fObservers.begin();
   std::vector<RunInitObserver*>::iterator end = fObservers.end();
-  for(; it != end ; it++) (*it)->Initialize();
+  for (; it != end; it++)
+    (*it)->Initialize();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-RunInitManager::Insert(RunInitObserver* observer)
+void RunInitManager::Insert(RunInitObserver* observer)
 {
   fObservers.push_back(observer);
 }

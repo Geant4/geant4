@@ -28,7 +28,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:
 //
 // Author: 2012  Andrea Dotti
 //   created from FTFP_BERT
@@ -38,47 +38,55 @@
 //
 //----------------------------------------------------------------------------
 //
-#include <iomanip>   
-#include <CLHEP/Units/SystemOfUnits.h>
-#include "globals.hh"
-#include "G4ios.hh"
 #include "UrQMD.hh"
+
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+#include <iomanip>
 
 #ifdef G4_USE_URQMD
 
-#include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4StoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
-#include "G4NeutronTrackingCut.hh"
-#include "HadronPhysicsUrQMD.hh"
-#include "IonUrQMDPhysics.hh"
+#  include "HadronPhysicsUrQMD.hh"
+#  include "IonUrQMDPhysics.hh"
 
+#  include "G4DecayPhysics.hh"
+#  include "G4EmExtraPhysics.hh"
+#  include "G4EmStandardPhysics.hh"
+#  include "G4HadronElasticPhysics.hh"
+#  include "G4NeutronTrackingCut.hh"
+#  include "G4StoppingPhysics.hh"
 
-UrQMD::UrQMD( G4int ver ) {
-  if ( ver > 0 ) {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+UrQMD::UrQMD(G4int ver)
+{
+  if (ver > 0) {
     G4cout << "<<< Geant4 Physics List simulation engine: UrQMD" << G4endl << G4endl;
   }
-  defaultCutValue = 0.7*CLHEP::mm;  
-  SetVerboseLevel( ver );
-  RegisterPhysics( new G4EmStandardPhysics( ver ) );     // EM Physics
-  RegisterPhysics( new G4EmExtraPhysics( ver ) );        // Synchroton Radiation & GN Physics
-  RegisterPhysics( new G4DecayPhysics( ver ) );          // Decays
-  RegisterPhysics( new G4HadronElasticPhysics( ver ) );  // Hadron Elastic physics  
-  RegisterPhysics( new HadronPhysicsUrQMD( ver ) );      // Hadron Inelastic physics
-  RegisterPhysics( new G4StoppingPhysics( ver ) );       // Stopping Physics
-  RegisterPhysics( new IonUrQMDPhysics( ver ) );         // Ion Physics
-  RegisterPhysics( new G4NeutronTrackingCut( ver ) );    // Neutron tracking cut
+  defaultCutValue = 0.7 * CLHEP::mm;
+  SetVerboseLevel(ver);
+  RegisterPhysics(new G4EmStandardPhysics(ver));  // EM Physics
+  RegisterPhysics(new G4EmExtraPhysics(ver));  // Synchroton Radiation & GN Physics
+  RegisterPhysics(new G4DecayPhysics(ver));  // Decays
+  RegisterPhysics(new G4HadronElasticPhysics(ver));  // Hadron Elastic physics
+  RegisterPhysics(new HadronPhysicsUrQMD(ver));  // Hadron Inelastic physics
+  RegisterPhysics(new G4StoppingPhysics(ver));  // Stopping Physics
+  RegisterPhysics(new IonUrQMDPhysics(ver));  // Ion Physics
+  RegisterPhysics(new G4NeutronTrackingCut(ver));  // Neutron tracking cut
 }
 
-#else  //i.e. G4_USE_URQMD not defined
+#else  // i.e. G4_USE_URQMD not defined
 
-UrQMD::UrQMD( G4int ) {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+UrQMD::UrQMD(G4int)
+{
   G4ExceptionDescription de;
   de << "Support for UrQMD not enabled" << G4endl;
-  G4Exception( __FILE__, "UrQMD-01", FatalException, de,
-               "Code should be compiled with G4_USE_URQMD environment variable set." );
+  G4Exception(__FILE__, "UrQMD-01", FatalException, de,
+              "Code should be compiled with G4_USE_URQMD environment variable set.");
 }
 
-#endif  //G4_USE_URQMD
+#endif  // G4_USE_URQMD

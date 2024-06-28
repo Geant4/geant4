@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-06-06 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-02-00)
+- G4HadrocPhysicsQGSP_BERT_HP - used alternative NUDEX model of gamma de-excitation
+
 ## 2023-10-20 Jean-Christophe David (phys-ctor-hinelastic-V11-01-02)
 - Call G4HadronicBuilder::BuildAntiLightIonsINCLXX() to treat antiproton with INCLXX
 

@@ -55,25 +55,22 @@
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include <iostream>
+#include "G4GeometryManager.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UImanager.hh"
+#include "G4VPhysicalVolume.hh"
 
+#include <iostream>
 #include <stdlib.h>
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4VPhysicalVolume.hh"
-#include "G4UImanager.hh"
-#include "G4GeometryManager.hh"
-
 // user classes
+#include "B01ActionInitialization.hh"
 #include "B01DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
+
 #include "G4ImportanceBiasing.hh"
 #include "G4WeightWindowBiasing.hh"
-
-#include "B01ActionInitialization.hh"
 // #include "B01PrimaryGeneratorAction.hh"
 // #include "B01RunAction.hh"
 
@@ -85,10 +82,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   G4int mode = 0;
-  if (argc>1)  mode = atoi(argv[1]);
+  if (argc > 1) mode = atoi(argv[1]);
 
   G4int numberOfEvents = 100;
   G4long myseed = 345354;
@@ -98,54 +95,49 @@ int main(int argc, char **argv)
 
   G4Random::setTheSeed(myseed);
 
-  G4VWeightWindowAlgorithm *wwAlg = 0; // pointer for WeightWindow (mode>0)
+  G4VWeightWindowAlgorithm* wwAlg = 0;  // pointer for WeightWindow (mode>0)
 
   // create the detector      ---------------------------
   B01DetectorConstruction* detector = new B01DetectorConstruction();
   runManager->SetUserInitialization(detector);
-  G4GeometrySampler mgs(detector->GetWorldVolume(),"neutron");
+  G4GeometrySampler mgs(detector->GetWorldVolume(), "neutron");
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
-  if(mode == 0)
-    {
-      physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
-    }
-  else
-    {
-      wwAlg = new G4WeightWindowAlgorithm(1,    // upper limit factor
-                                          1,    // survival factor
-                                          100); // max. number of splitting
+  if (mode == 0) {
+    physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
+  }
+  else {
+    wwAlg = new G4WeightWindowAlgorithm(1,  // upper limit factor
+                                        1,  // survival factor
+                                        100);  // max. number of splitting
 
-      physicsList->RegisterPhysics(new G4WeightWindowBiasing
-                                  (&mgs, wwAlg, onBoundary));
-                                    // place of action
-    }
+    physicsList->RegisterPhysics(new G4WeightWindowBiasing(&mgs, wwAlg, onBoundary));
+    // place of action
+  }
   runManager->SetUserInitialization(physicsList);
 
- // Set user action classes through Worker Initialization
- //
+  // Set user action classes through Worker Initialization
+  //
   B01ActionInitialization* actions = new B01ActionInitialization;
   runManager->SetUserInitialization(actions);
 
   runManager->Initialize();
 
-  if (mode == 0)
-    {
-      detector->CreateImportanceStore();
-    }
-  else
-    {
-      detector->CreateWeightWindowStore();
-    }
+  if (mode == 0) {
+    detector->CreateImportanceStore();
+  }
+  else {
+    detector->CreateWeightWindowStore();
+  }
 
   //  runManager->BeamOn(numberOfEvents);
 
-  //temporary fix before runManager->BeamOn works...
+  // temporary fix before runManager->BeamOn works...
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String command1 = "/control/cout/setCoutFile threadOut";
   UImanager->ApplyCommand(command1);
-  G4String command2 = "/run/beamOn " +
-                      G4UIcommand::ConvertToString(numberOfEvents);;
+  G4String command2 = "/run/beamOn " + G4UIcommand::ConvertToString(numberOfEvents);
+  ;
   UImanager->ApplyCommand(command2);
 
   // open geometry for clean biasing stores clean-up

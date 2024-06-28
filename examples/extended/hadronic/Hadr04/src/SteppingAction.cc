@@ -26,46 +26,42 @@
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
+
+#include "HistoManager.hh"
 #include "Run.hh"
 #include "TrackingAction.hh"
-#include "HistoManager.hh"
 
 #include "G4RunManager.hh"
-                           
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(TrackingAction* TrAct)
-: fTrackingAction(TrAct)
-{ }
+SteppingAction::SteppingAction(TrackingAction* TrAct) : fTrackingAction(TrAct) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // count processes
-  // 
+  //
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4VProcess* process   = endPoint->GetProcessDefinedStep();
-  Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  const G4VProcess* process = endPoint->GetProcessDefinedStep();
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->CountProcesses(process);
 
   // incident neutron
   //
-  if (aStep->GetTrack()->GetTrackID() == 1) { 
-    G4double ekin  = endPoint->GetKineticEnergy();
+  if (aStep->GetTrack()->GetTrackID() == 1) {
+    G4double ekin = endPoint->GetKineticEnergy();
     G4double trackl = aStep->GetTrack()->GetTrackLength();
-    G4double time   = aStep->GetTrack()->GetLocalTime();           
-    fTrackingAction->UpdateTrackInfo(ekin,trackl,time);
-    G4AnalysisManager::Instance()->FillH1(7,ekin);
-  }    
+    G4double time = aStep->GetTrack()->GetLocalTime();
+    fTrackingAction->UpdateTrackInfo(ekin, trackl, time);
+    G4AnalysisManager::Instance()->FillH1(7, ekin);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

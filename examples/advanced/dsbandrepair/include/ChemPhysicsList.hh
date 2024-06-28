@@ -34,7 +34,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include <memory>
-#include "G4VUserChemistryList.hh"
+#include "G4ChemTimeStepModel.hh"
 #include "ChemPhysicsMessenger.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4EmDNAChemistry_option2.hh"
@@ -52,7 +52,7 @@ public:
     void ConstructProcess() override;
     void RegisterPhysListConstructor(const G4String& name);
     void RegisterChemListConstructor(const G4String& name);
-    TimeStepModel GetTimeStepModel() {return fTimeStepModel;}
+    G4ChemTimeStepModel GetTimeStepModel() {return fTimeStepModel;}
 private:
     G4String ExtractPhysDNAName(); 
     std::unique_ptr<G4VPhysicsConstructor>    fDNAPhysicsList{nullptr};
@@ -61,7 +61,7 @@ private:
     ChemPhysicsMessenger *fmsg{nullptr};
     G4String                                  fPhysDNAName{""};
     G4String                                  fChemListName{""};
-    TimeStepModel fTimeStepModel{fSBS};
+    G4ChemTimeStepModel fTimeStepModel{G4ChemTimeStepModel::SBS};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

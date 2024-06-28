@@ -34,9 +34,9 @@
 #ifndef OpNovicePrimaryGeneratorAction_h
 #define OpNovicePrimaryGeneratorAction_h 1
 
-#include "globals.hh"
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4Event;
 class OpNovicePrimaryGeneratorMessenger;
@@ -45,20 +45,20 @@ class OpNovicePrimaryGeneratorMessenger;
 
 class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
- public:
-  OpNovicePrimaryGeneratorAction();
-  ~OpNovicePrimaryGeneratorAction() override;
+  public:
+    OpNovicePrimaryGeneratorAction();
+    ~OpNovicePrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event*) override;
+    void GeneratePrimaries(G4Event*) override;
 
-  void SetOptPhotonPolar();
-  void SetOptPhotonPolar(G4double);
+    void SetOptPhotonPolar();
+    void SetOptPhotonPolar(G4double);
 
-  G4ParticleGun* GetParticleGun() { return fParticleGun; }
+    G4ParticleGun* GetParticleGun() { return fParticleGun; }
 
- private:
-  G4ParticleGun* fParticleGun = nullptr;
-  OpNovicePrimaryGeneratorMessenger* fGunMessenger = nullptr;
+  private:
+    G4ParticleGun* fParticleGun = nullptr;
+    OpNovicePrimaryGeneratorMessenger* fGunMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,7 +30,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #ifndef ExP01EventAction_h
 #define ExP01EventAction_h 1
 
@@ -46,7 +46,7 @@ class ExP01EventAction : public G4UserEventAction
 {
   public:
     ExP01EventAction();
-   ~ExP01EventAction();
+    ~ExP01EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
@@ -56,5 +56,3 @@ class ExP01EventAction : public G4UserEventAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

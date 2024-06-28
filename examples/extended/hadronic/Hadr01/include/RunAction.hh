@@ -35,14 +35,14 @@
 //
 //      GEANT4 Header file
 //      RunAction
-// 
+//
 // -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4UserRunAction.hh"
 #include "G4Run.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -51,19 +51,16 @@ class G4Timer;
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
+    RunAction();
+    ~RunAction() override = default;
 
-  RunAction();
-  ~RunAction() override = default;
+    void BeginOfRunAction(const G4Run*) override;
 
-  void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-  void EndOfRunAction(const G4Run*) override;
-
-private:
-
-  G4Timer* fTimer;
+  private:
+    G4Timer* fTimer;
 };
 
 #endif
-

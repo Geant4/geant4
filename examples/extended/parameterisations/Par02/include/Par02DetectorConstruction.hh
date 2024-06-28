@@ -30,31 +30,31 @@
 #ifndef PAR02_DETECTOR_CONSTRUCTION_H
 #define PAR02_DETECTOR_CONSTRUCTION_H
 
-#include "Par02FastSimModelTracker.hh"
 #include "Par02FastSimModelEMCal.hh"
 #include "Par02FastSimModelHCal.hh"
+#include "Par02FastSimModelTracker.hh"
+#include "tls.hh"
 
+#include "G4GlobalMagFieldMessenger.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "tls.hh"
-#include "G4GlobalMagFieldMessenger.hh"
 
 /// Construction of detector geometry.
 ///
-/// A mandatory initialization class of the detector setup. 
-/// Detector construction allows to use the geometry read from a GDML file. 
+/// A mandatory initialization class of the detector setup.
+/// Detector construction allows to use the geometry read from a GDML file.
 /// Based on G4 examples/persistency/gdml/G01/include/G01DetectorConstruction.hh .
 /// @author Anna Zaborowska
 
-class Par02DetectorConstruction : public G4VUserDetectorConstruction {
+class Par02DetectorConstruction : public G4VUserDetectorConstruction
+{
   public:
-    
     /// A default constructor.
     Par02DetectorConstruction();
 
     virtual ~Par02DetectorConstruction();
-    
+
     /// A method invoked by G4RunManager::Initialize()
     /// @return A pointer to the world volume.
     virtual G4VPhysicalVolume* Construct();
@@ -63,20 +63,19 @@ class Par02DetectorConstruction : public G4VUserDetectorConstruction {
     virtual void ConstructSDandField();
 
     /// A vector of the tracking detector regions
-    std::vector< G4Region* > fTrackerList;
+    std::vector<G4Region*> fTrackerList;
 
     /// A vector of the the electromagnetic calorimeter regions
-    std::vector< G4Region* > fECalList;
+    std::vector<G4Region*> fECalList;
 
     /// A vector of the the hadronic calorimeter regions
-    std::vector< G4Region* > fHCalList;
+    std::vector<G4Region*> fHCalList;
 
     /// A vector of the muon detector regions
-    std::vector< G4Region* > fMuonList;
+    std::vector<G4Region*> fMuonList;
 
     /// Messenger of the magnetic field
     G4GlobalMagFieldMessenger* fMagFieldMessenger;
 };
 
 #endif
-

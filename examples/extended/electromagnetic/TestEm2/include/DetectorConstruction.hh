@@ -33,12 +33,12 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4ThreeVector.hh"
-#include "G4Material.hh"
-#include "G4VPhysicalVolume.hh"
-#include "globals.hh"
 #include "G4Cache.hh"
+#include "G4Material.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class G4Tubs;
 class G4LogicalVolume;
@@ -51,60 +51,54 @@ const G4int kMaxBin = 500;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction() override;
 
-  DetectorConstruction();
- ~DetectorConstruction() override;
+  public:
+    void SetMaterial(const G4String&);
+    void SetLBining(G4ThreeVector);
+    void SetRBining(G4ThreeVector);
 
-public:
+    G4VPhysicalVolume* Construct() override;
 
-  void SetMaterial(const G4String&);
-  void SetLBining (G4ThreeVector);
-  void SetRBining (G4ThreeVector);
+    void ConstructSDandField() override;
 
-  G4VPhysicalVolume* Construct() override;
+    const G4VPhysicalVolume* GetEcal() const { return fPhysiEcal; };
+    const G4Material* GetMaterial() const { return fMaterial; };
 
-  void ConstructSDandField() override;
+    // Subdivision of absorber
+    G4int GetnLtot() const { return fNLtot; };
+    G4int GetnRtot() const { return fNRtot; };
+    G4double GetdLradl() const { return fDLradl; };
+    G4double GetdRradl() const { return fDRradl; };
+    G4double GetdLlength() const { return fDLlength; };
+    G4double GetdRlength() const { return fDRlength; };
+    G4double GetfullLength() const { return fEcalLength; };
+    G4double GetfullRadius() const { return fEcalRadius; };
 
-  const
-  G4VPhysicalVolume* GetEcal() const    {return fPhysiEcal;};
-  const G4Material* GetMaterial() const {return fMaterial;};
+  private:
+    void DefineMaterials();
+    void UpdateParameters();
 
-  // Subdivision of absorber
-  G4int    GetnLtot() const      {return fNLtot;};
-  G4int    GetnRtot() const      {return fNRtot;};
-  G4double GetdLradl() const     {return fDLradl;};
-  G4double GetdRradl() const     {return fDRradl;};
-  G4double GetdLlength() const   {return fDLlength;};
-  G4double GetdRlength() const   {return fDRlength;};     
-  G4double GetfullLength() const {return fEcalLength;};
-  G4double GetfullRadius() const {return fEcalRadius;};
+    G4int fNLtot = 40, fNRtot = 50;  // nb of bins: longitudinal and radial
+    G4double fDLradl = 0.5, fDRradl = 0.1;  // bin thickness (in radl unit)
+    G4double fDLlength = 0., fDRlength = 0.;  // bin thickness (in length unit)
 
-private:
+    G4Material* fMaterial = nullptr;  // pointer to the material
 
-  void DefineMaterials();
-  void UpdateParameters();
+    G4double fEcalLength = 0.;  // full length of the Calorimeter
+    G4double fEcalRadius = 0.;  // radius  of the Calorimeter
 
-  G4int    fNLtot = 40,    fNRtot = 50;     // nb of bins: longitudinal and radial
-  G4double fDLradl = 0.5,  fDRradl = 0.1;   // bin thickness (in radl unit)
-  G4double fDLlength = 0., fDRlength = 0.;  // bin thickness (in length unit)
+    G4Tubs* fSolidEcal = nullptr;  // pointer to the solid calorimeter
+    G4LogicalVolume* fLogicEcal = nullptr;  // pointer to the logical calorimeter
+    G4VPhysicalVolume* fPhysiEcal = nullptr;  // pointer to the physical calorimeter
 
-  G4Material* fMaterial = nullptr;       //pointer to the material
-    
-  G4double fEcalLength = 0.;             //full length of the Calorimeter
-  G4double fEcalRadius = 0.;             //radius  of the Calorimeter
+    DetectorMessenger* fDetectorMessenger = nullptr;  // pointer to the Messenger
 
-  G4Tubs*            fSolidEcal = nullptr;  //pointer to the solid calorimeter
-  G4LogicalVolume*   fLogicEcal = nullptr;  //pointer to the logical calorimeter
-  G4VPhysicalVolume* fPhysiEcal = nullptr;  //pointer to the physical calorimeter
-
-  DetectorMessenger* fDetectorMessenger = nullptr;  //pointer to the Messenger
-
-  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
-    
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

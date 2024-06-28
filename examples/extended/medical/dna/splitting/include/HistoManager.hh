@@ -31,18 +31,18 @@
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
-#include "globals.hh"
 #include "G4AnalysisManager.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
-public:
+  public:
     HistoManager();
     ~HistoManager();
 
-private:
+  private:
     void Book();
     G4String fFileName;
 };
@@ -50,4 +50,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

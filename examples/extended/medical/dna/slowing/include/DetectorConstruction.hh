@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
@@ -37,50 +39,37 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "G4Box.hh"
-#include "G4PVPlacement.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4VisAttributes.hh"
 
 class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
+    virtual G4VPhysicalVolume* Construct();
 
-  DetectorConstruction();
+    void SetMaterial(G4String);
+    void SetTrackingCut(G4double);
+    void PrintParameters() const;
 
-  virtual ~DetectorConstruction();
-  virtual G4VPhysicalVolume* Construct();
+    inline G4double GetAbsorMass() const { return fLogicWorld->GetMass(); }
 
-  void SetMaterial(G4String);
-  void SetTrackingCut(G4double);
-  void PrintParameters() const;
-  
-  inline G4double GetAbsorMass() const
-  {
-    return fLogicWorld->GetMass();
-  }
-  
-  inline G4Material* GetAbsorMaterial() const
-  {
-    return fWaterMaterial;
-  }
-    
-private:
+    inline G4Material* GetAbsorMaterial() const { return fWaterMaterial; }
 
-  G4Material* fWaterMaterial;
-  G4LogicalVolume* fLogicWorld;
-  
-  void DefineMaterials();
+  private:
+    G4Material* fWaterMaterial;
+    G4LogicalVolume* fLogicWorld;
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructDetector();
 
-  G4VPhysicalVolume* ConstructDetector();
-  DetectorMessenger* fDetectorMessenger;
-
-  G4double fTrackingCut;
+    DetectorMessenger* fDetectorMessenger;
+    G4double fTrackingCut;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

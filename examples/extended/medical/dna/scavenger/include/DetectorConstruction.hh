@@ -41,18 +41,19 @@ namespace scavenger
 
 /// Defines the geometry and scorers for calculating chemical species yields
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
-public:
-  DetectorConstruction();
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    DetectorConstruction();
 
-  ~DetectorConstruction() override = default;
+    ~DetectorConstruction() override = default;
 
-  G4VPhysicalVolume *Construct() override;
+    G4VPhysicalVolume* Construct() override;
 
-  void ConstructSDandField() override;
+    void ConstructSDandField() override;
 };
 
-}
+}  // namespace scavenger
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

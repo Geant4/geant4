@@ -23,11 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file Run.cc
 /// \brief Implementation of the Run class
 
 #include "Run.hh"
-#include "DetectorConstruction.hh"
+
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Material.hh"
@@ -37,50 +47,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(const DetectorConstruction* detector)
-: G4Run(),
-  fDetector(detector),
-  fParticle(0), fEkin(0.),  
-  fTotalCount(0), fSumTrack(0.), fSumTrack2(0.), fEnTransfer(0.)
+  : G4Run(),
+    fDetector(detector),
+    fParticle(0),
+    fEkin(0.),
+    fTotalCount(0),
+    fSumTrack(0.),
+    fSumTrack2(0.),
+    fEnTransfer(0.)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::~Run()
-{}
+Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
-{ 
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+{
   fParticle = particle;
-  fEkin     = energy;
+  fEkin = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::CountProcesses(G4String procName) 
+void Run::CountProcesses(G4String procName)
 {
-  std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
-  if ( it == fProcCounter.end()) {
+  std::map<G4String, G4int>::iterator it = fProcCounter.find(procName);
+  if (it == fProcCounter.end()) {
     fProcCounter[procName] = 1;
   }
   else {
-    fProcCounter[procName]++; 
+    fProcCounter[procName]++;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SumTrack (G4double track)
+void Run::SumTrack(G4double track)
 {
   fTotalCount++;
   fSumTrack += track;
-  fSumTrack2 += track*track;
+  fSumTrack2 += track * track;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SumeTransf (G4double energy)
+void Run::SumeTransf(G4double energy)
 {
   fEnTransfer += energy;
 }
@@ -90,124 +103,108 @@ void Run::SumeTransf (G4double energy)
 void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
-  
-  // pass information about primary particle
+
+  // Pass information about primary particle
   fParticle = localRun->fParticle;
-  fEkin     = localRun->fEkin;
+  fEkin = localRun->fEkin;
 
   // map: processes count
-  std::map<G4String,G4int>::const_iterator it;
-  for (it = localRun->fProcCounter.begin(); 
-       it !=localRun->fProcCounter.end(); ++it) {
-       
+  std::map<G4String, G4int>::const_iterator it;
+  for (it = localRun->fProcCounter.begin(); it != localRun->fProcCounter.end(); ++it) {
     G4String procName = it->first;
-    G4int localCount  = it->second;
-    if ( fProcCounter.find(procName) == fProcCounter.end()) {
+    G4int localCount = it->second;
+
+    if (fProcCounter.find(procName) == fProcCounter.end()) {
       fProcCounter[procName] = localCount;
     }
     else {
       fProcCounter[procName] += localCount;
     }
   }
-  
+
   fTotalCount += localRun->fTotalCount;
-  fSumTrack   += localRun->fSumTrack;
-  fSumTrack2  += localRun->fSumTrack2;
+  fSumTrack += localRun->fSumTrack;
+  fSumTrack2 += localRun->fSumTrack2;
   fEnTransfer += localRun->fEnTransfer;
 
-  G4Run::Merge(run); 
-} 
+  G4Run::Merge(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun() 
+void Run::EndOfRun()
 {
   std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
+  G4cout.setf(std::ios::fixed, std::ios::floatfield);
   G4int prec = G4cout.precision(2);
-  
-  // run conditions  
+
+  // Run conditions
   G4Material* material = fDetector->GetAbsorMaterial();
-  G4double density  = material->GetDensity();       
+  G4double density = material->GetDensity();
   G4String partName = fParticle->GetParticleName();
-  
-  G4cout << 
-   "\n ======================== run summary =====================\n";  
-  G4cout 
-    << "\n The run is " << numberOfEvent << " "<< partName << " of "
-    << G4BestUnit(fEkin,"Energy") << " through a sphere of radius "
-    << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << "of "
-    << material->GetName() << " (density: " 
-    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;    
+
+  G4cout << "\n ======================== run summary =====================\n";
+  G4cout << "\n The run is " << numberOfEvent << " " << partName << " of "
+         << G4BestUnit(fEkin, "Energy") << " through a sphere of radius "
+         << G4BestUnit(fDetector->GetAbsorRadius(), "Length") << "of " << material->GetName()
+         << " (density: " << G4BestUnit(density, "Volumic Mass") << ")" << G4endl;
 
   if (numberOfEvent == 0) {
-    G4cout.setf(mode,std::ios::floatfield);
-    G4cout.precision(prec);  
+    G4cout.setf(mode, std::ios::floatfield);
+    G4cout.precision(prec);
     return;
   }
-                    
-  // frequency of processes
-  G4int survive = 0;  
+
+  // Frequency of processes
+  G4int survive = 0;
   G4cout << "\n Process calls frequency --->";
-  std::map<G4String,G4int>::iterator it;  
+  std::map<G4String, G4int>::iterator it;
   for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-     G4String procName = it->first;
-     G4int    count    = it->second;
-     G4cout << "\t" << procName << " = " << count;
-     if (procName == "Transportation") survive = count;
+    G4String procName = it->first;
+    G4int count = it->second;
+    G4cout << "\t" << procName << " = " << count;
+    if (procName == "Transportation") survive = count;
   }
 
   if (survive > 0) {
     G4cout << "\n\n Nb of incident particles surviving after "
-           << "a radius of "
-           << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << " of "
+           << "a radius of " << G4BestUnit(fDetector->GetAbsorRadius(), "Length") << " of "
            << material->GetName() << " : " << survive << G4endl;
   }
 
-  if (fTotalCount == 0) fTotalCount = 1;   //force printing anyway
+  if (fTotalCount == 0) fTotalCount = 1;  // force printing anyway
 
-  // compute mean free path and related quantities
-  G4double MeanFreePath = fSumTrack /fTotalCount;     
-  G4double MeanTrack2   = fSumTrack2/fTotalCount;     
-  G4double rmsBis = 
-    std::sqrt(std::fabs(MeanTrack2 - MeanFreePath*MeanFreePath));
-  G4double CrossSection = 1./MeanFreePath;     
-  G4double massicMFP = MeanFreePath*density;
-  G4double massicCS  = 1./massicMFP;
+  // Compute mean free path and related quantities
+  G4double MeanFreePath = fSumTrack / fTotalCount;
+  G4double MeanTrack2 = fSumTrack2 / fTotalCount;
+  G4double rmsBis = std::sqrt(std::fabs(MeanTrack2 - MeanFreePath * MeanFreePath));
+  G4double CrossSection = 1. / MeanFreePath;
+  G4double massicMFP = MeanFreePath * density;
+  G4double massicCS = 1. / massicMFP;
 
-  G4cout << "\n\n MeanFreePath:\t"   << G4BestUnit(MeanFreePath,"Length")
-         << " +- "                   << G4BestUnit(rmsBis,"Length")
-         << "\t\t\tmassic: "         << G4BestUnit(massicMFP, "Mass/Surface")
-         << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
-         << "\t\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
-         << G4endl;
-         
-  // compute energy transfer coefficient
-  G4double MeanTransfer   = fEnTransfer/fTotalCount;
-  G4double massTransfCoef = massicCS*MeanTransfer/fEkin;
-   
-  G4cout << "\n mean energy of charged secondaries: " 
-         << G4BestUnit(MeanTransfer, "Energy")
-         << "\tmass_energy_transfer coef: "          
-         << G4BestUnit(massTransfCoef, "Surface/Mass")
-         << G4endl;       
+  G4cout << "\n\n MeanFreePath:\t" << G4BestUnit(MeanFreePath, "Length") << " +- "
+         << G4BestUnit(rmsBis, "Length")
+         << "\t\t\tmassic: " << G4BestUnit(massicMFP, "Mass/Surface") << "\n CrossSection:\t"
+         << CrossSection * cm << " cm^-1 "
+         << "\t\t\tmassic: " << G4BestUnit(massicCS, "Surface/Mass") << G4endl;
 
-  //output file
-  //
+  // Compute energy transfer coefficient
+  G4double MeanTransfer = fEnTransfer / fTotalCount;
+  G4double massTransfCoef = massicCS * MeanTransfer / fEkin;
+
+  G4cout << "\n mean energy of charged secondaries: " << G4BestUnit(MeanTransfer, "Energy")
+         << "\tmass_energy_transfer coef: " << G4BestUnit(massTransfCoef, "Surface/Mass") << G4endl;
+
+  // Output file
   FILE* myFile;
-  myFile=fopen("mfp.txt","a");
-  fprintf(myFile,"%e %e %e \n",
-     fEkin/eV,
-     MeanFreePath/nm,
-     rmsBis/nm);
+  myFile = fopen("mfp.txt", "a");
+  fprintf(myFile, "%e %e %e \n", fEkin / eV, MeanFreePath / nm, rmsBis / nm);
   fclose(myFile);
 
-  // remove all contents in fProcCounter 
+  // Remove all contents in fProcCounter
   fProcCounter.clear();
 
-  //reset default formats
-  //
-  G4cout.setf(mode,std::ios::floatfield);
+  // Reset default formats
+  G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);
-
 }

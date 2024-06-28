@@ -87,7 +87,10 @@ class G4ScaledSolid : public G4VSolid
 
     G4ThreeVector GetPointOnSurface() const override;
 
-    G4Scale3D GetScaleTransform() const; 
+    G4int GetNumOfConstituents() const override;
+    G4bool IsFaceted() const override;
+
+  G4Scale3D GetScaleTransform() const; 
     void SetScaleTransform(const G4Scale3D& scale); 
 
     G4VSolid* GetUnscaledSolid() const;

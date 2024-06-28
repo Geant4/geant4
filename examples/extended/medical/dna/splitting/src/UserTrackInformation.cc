@@ -30,30 +30,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UserTrackInformation::UserTrackInformation()
-{
-}
+UserTrackInformation::UserTrackInformation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UserTrackInformation::~UserTrackInformation()
-{
-}
+UserTrackInformation::~UserTrackInformation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void UserTrackInformation::SetSplitTrackID(G4int splitTrackID)
 {
-    // Define extra track information: the flag
-    fSplitTrackID = splitTrackID;
+  // Define extra track information: the flag
+  fSplitTrackID = splitTrackID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int UserTrackInformation::GetSplitTrackID()
 {
-    return fSplitTrackID;
+  return fSplitTrackID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

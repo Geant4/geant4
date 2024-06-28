@@ -23,32 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-
 #pragma once
 
 enum DNAVolumeType
 {
-    deoxyribose1 = 1, 
-    phosphate1, 
-    deoxyribose2, 
-    phosphate2,
-            
-    base_cytosine, 
-    base_guanine, 
-    base_thymine, 
-    base_adenine,
-            
-    deoxyribose1_water, 
-    phosphate1_water, 
-    deoxyribose2_water, 
-    phosphate2_water, 
-            
-    base_adenine_water, 
-    base_guanine_water,
-    base_cytosine_water, 
-    base_thymine_water, 
-            
-    histone, 
-    physWorld, 
-    VoxelStraight
+  deoxyribose1 = 1,
+  phosphate1,
+  deoxyribose2,
+  phosphate2,
+
+  base_cytosine,
+  base_guanine,
+  base_thymine,
+  base_adenine,
+
+  deoxyribose1_water,
+  phosphate1_water,
+  deoxyribose2_water,
+  phosphate2_water,
+
+  base_adenine_water,
+  base_guanine_water,
+  base_cytosine_water,
+  base_thymine_water,
+
+  histone,
+  physWorld,
+  VoxelStraight
 };

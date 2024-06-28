@@ -3,6 +3,8 @@
 #
 /process/em/verbose 0
 #
-/tracking/verbose 6
+/tracking/verbose 2
+/run/beamOn 1
 #
+/tracking/verbose 6
 /run/beamOn 1

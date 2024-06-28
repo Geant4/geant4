@@ -37,8 +37,9 @@
 #include "G4VPhysicsConstructor.hh"
 #include "G4VUserChemistryList.hh"
 #include "globals.hh"
-
+#include "G4ChemTimeStepModel.hh"
 class G4DNAMolecularReactionTable;
+class G4DNAMolecularReactionData;
 
 class G4EmDNAChemistry_option3 : public G4VUserChemistryList,
                          public G4VPhysicsConstructor
@@ -59,12 +60,8 @@ public:
   void ConstructDissociationChannels() override;
   void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable) override;
   void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable) override;
-  inline void SetTimeStepModel(const TimeStepModel& model)
-  {
-    fTimeStepModel = model;
-  }
  private:
-  TimeStepModel fTimeStepModel = fIRT;
+   static void SetReactionType(G4DNAMolecularReactionData* pData, G4ChemTimeStepModel model);
 };
 
 #endif

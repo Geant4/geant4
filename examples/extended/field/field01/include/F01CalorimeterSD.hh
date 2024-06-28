@@ -35,8 +35,9 @@
 #ifndef F01CalorimeterSD_h
 #define F01CalorimeterSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "F01CalorHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 
 class F01DetectorConstruction;
 class G4HCofThisEvent;
@@ -47,19 +48,17 @@ class G4Step;
 class F01CalorimeterSD : public G4VSensitiveDetector
 {
   public:
+    F01CalorimeterSD(G4String, F01DetectorConstruction*);
+    ~F01CalorimeterSD() override;
 
-      F01CalorimeterSD(G4String, F01DetectorConstruction* );
-      ~F01CalorimeterSD() override;
-
-      void Initialize(G4HCofThisEvent*) override;
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
-      void EndOfEvent(G4HCofThisEvent*) override;
+    void Initialize(G4HCofThisEvent*) override;
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
 
   private:
-
-      F01CalorHitsCollection*  fCalCollection = nullptr;
-      F01DetectorConstruction* fDetector = nullptr;
-      G4int*                   fHitID = nullptr;
+    F01CalorHitsCollection* fCalCollection = nullptr;
+    F01DetectorConstruction* fDetector = nullptr;
+    G4int* fHitID = nullptr;
 };
 
 #endif

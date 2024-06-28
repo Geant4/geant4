@@ -27,33 +27,29 @@
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
-//fanoCavity
+// fanoCavity
 
 #include "ActionInitialization.hh"
+
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "TrackingAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization(DetectorConstruction* det)
-  : fDetector(det)
-{ 
-}
+ActionInitialization::ActionInitialization(DetectorConstruction* det) : fDetector(det) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{ }
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  RunAction* runAct = new RunAction(fDetector, 
-                                     new PrimaryGeneratorAction(fDetector)); 
+  RunAction* runAct = new RunAction(fDetector, new PrimaryGeneratorAction(fDetector));
   SetUserAction(runAct);
 }
 
@@ -67,12 +63,11 @@ void ActionInitialization::Build() const
   RunAction* runAct = new RunAction(fDetector, prim);
   SetUserAction(runAct);
 
-  TrackingAction *track = new TrackingAction();
+  TrackingAction* track = new TrackingAction();
   SetUserAction(track);
 
-  SteppingAction *step = new SteppingAction();
+  SteppingAction* step = new SteppingAction();
   SetUserAction(step);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

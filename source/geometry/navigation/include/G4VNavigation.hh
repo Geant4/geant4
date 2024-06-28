@@ -49,7 +49,7 @@ class G4VNavigation
 {
  public:
   /** Virtual Destructor. */
-  virtual ~G4VNavigation() {}
+  virtual ~G4VNavigation() = default;
 
   /**
    * Search positioned volumes in mother at current top level of @p history

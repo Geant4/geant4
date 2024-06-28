@@ -34,44 +34,40 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef WIN32
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
-#include "G4Types.hh"
-
-#include "ExUCNPhysicsList.hh"
-#include "ExUCNDetectorConstruction.hh"
 #include "ExUCNActionInitialization.hh"
+#include "ExUCNDetectorConstruction.hh"
+#include "ExUCNPhysicsList.hh"
 
 #include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
 #include "G4UIcommand.hh"
-
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 #include "Randomize.hh"
 
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace {
-  void PrintUsage() {
-    G4cerr << " Usage: " << G4endl;
-    G4cerr << " ExUCN [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
-           << G4endl;
-    G4cerr << "   note: -t option is available only for multi-threaded mode."
-           << G4endl;
-  }
+namespace
+{
+void PrintUsage()
+{
+  G4cerr << " Usage: " << G4endl;
+  G4cerr << " ExUCN [-m macro ] [-u UIsession] [-t nThreads] [-r seed] " << G4endl;
+  G4cerr << "   note: -t option is available only for multi-threaded mode." << G4endl;
 }
+}  // namespace
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Evaluate arguments
   //
-  if ( argc > 9 ) {
+  if (argc > 9) {
     PrintUsage();
     return 1;
   }
@@ -81,12 +77,15 @@ int main(int argc,char** argv)
   G4int nThreads = 0;
 
   G4long myseed = 1234;
-  for ( G4int i=1; i<argc; i=i+2 ) {
-     if      ( G4String(argv[i]) == "-m" ) macro   = argv[i+1];
-     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
-     else if ( G4String(argv[i]) == "-r" ) myseed  = atoi(argv[i+1]);
-     else if ( G4String(argv[i]) == "-t" ) {
-                    nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
+  for (G4int i = 1; i < argc; i = i + 2) {
+    if (G4String(argv[i]) == "-m")
+      macro = argv[i + 1];
+    else if (G4String(argv[i]) == "-u")
+      session = argv[i + 1];
+    else if (G4String(argv[i]) == "-r")
+      myseed = atoi(argv[i + 1]);
+    else if (G4String(argv[i]) == "-t") {
+      nThreads = G4UIcommand::ConvertToInt(argv[i + 1]);
     }
     else {
       PrintUsage();
@@ -96,7 +95,7 @@ int main(int argc,char** argv)
 
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -107,7 +106,7 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
   auto* runManager = G4RunManagerFactory::CreateRunManager();
-  if ( nThreads > 0 ) runManager->SetNumberOfThreads(nThreads);
+  if (nThreads > 0) runManager->SetNumberOfThreads(nThreads);
 
   // Seed the random number generator manually
   G4Random::setTheSeed(myseed);
@@ -136,18 +135,16 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( macro.size() ) {
-     // batch mode
-     G4String command = "/control/execute ";
-     UImanager->ApplyCommand(command+macro);
+  if (macro.size()) {
+    // batch mode
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command + macro);
   }
-  else
-  {  // interactive mode : define UI session
-     UImanager->ApplyCommand("/control/execute vis.mac");
-     if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");
-     ui->SessionStart();
-     delete ui;
+  else {  // interactive mode : define UI session
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
+    ui->SessionStart();
+    delete ui;
   }
 
   // Job termination

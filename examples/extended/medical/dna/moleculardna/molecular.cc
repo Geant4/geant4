@@ -27,35 +27,35 @@
 /// \file molecular.cc
 /// \brief Molecular level simulation of DNA
 
-#include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 
+#include "G4DNAChemistryManager.hh"
+#include "G4MoleculeGun.hh"
 #include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
 #include <ctime>
-#include "G4MoleculeGun.hh"
-#include "G4DNAChemistryManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace {
-    void PrintUsage() {
-      G4cout << " Usage: " << G4endl;
-      G4cout << " molecular [-m macro ] [-t nThreads] [-p PhysicsList]"
-             << G4endl;
-      G4cout << "   -p is the G4DNA Physics List option. Default (0) is"
-             << " G4EmDNAPhysics" << G4endl;
-      G4cout << "   note: -t option is available only for multi-threaded mode."
-             << G4endl;
-    }
+namespace
+{
+void PrintUsage()
+{
+  G4cout << " Usage: " << G4endl;
+  G4cout << " molecular [-m macro ] [-t nThreads] [-p PhysicsList]" << G4endl;
+  G4cout << "   -p is the G4DNA Physics List option. Default (0) is"
+         << " G4EmDNAPhysics" << G4endl;
+  G4cout << "   note: -t option is available only for multi-threaded mode." << G4endl;
 }
+}  // namespace
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv)
+{
   if (argc > 7) {
     PrintUsage();
     return 1;
@@ -68,17 +68,20 @@ int main(int argc, char **argv) {
   for (G4int ii = 1; ii < argc; ii = ii + 2) {
     if (G4String(argv[ii]) == "-m") {
       macro = argv[ii + 1];
-    } else if (G4String(argv[ii]) == "-p") {
+    }
+    else if (G4String(argv[ii]) == "-p") {
       phys_option = G4UIcommand::ConvertToInt(argv[ii + 1]);
-    } else if (G4String(argv[ii]) == "-t") {
+    }
+    else if (G4String(argv[ii]) == "-t") {
       nThreads = G4UIcommand::ConvertToInt(argv[ii + 1]);
-    } else {
+    }
+    else {
       PrintUsage();
       return 1;
     }
   }
 
-  G4UIExecutive *ui = nullptr;
+  G4UIExecutive* ui = nullptr;
   if (!macro.size()) {
     ui = new G4UIExecutive(argc, argv);
   }
@@ -96,7 +99,7 @@ int main(int argc, char **argv) {
   }
 
   runManager->SetUserInitialization(new DetectorConstruction());
-  G4VModularPhysicsList *physicsList = new PhysicsList(phys_option);
+  G4VModularPhysicsList* physicsList = new PhysicsList(phys_option);
   runManager->SetUserInitialization(physicsList);
   runManager->SetUserInitialization(new ActionInitialization());
   G4DNAChemistryManager::Instance()->Initialize();
@@ -104,12 +107,13 @@ int main(int argc, char **argv) {
   G4VisExecutive* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
-  G4UImanager *UImanager = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (!macro.empty()) {
     // batch mode
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command + macro);
-  } else {
+  }
+  else {
     visManager = new G4VisExecutive;
     visManager->Initialize();
     UImanager->ApplyCommand("/control/execute vis.mac");

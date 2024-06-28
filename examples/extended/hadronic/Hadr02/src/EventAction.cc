@@ -37,26 +37,23 @@
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #include "EventAction.hh"
-#include "G4Event.hh"
-#include "HistoManager.hh"
+
 #include "EventActionMessenger.hh"
+#include "HistoManager.hh"
+
+#include "G4Event.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction()
- : G4UserEventAction(),
-   fEventMessenger(0),
-   fSelectedEvents(),
-   fNSelected(0),
-   fDebugStarted(false)
+  : G4UserEventAction(), fEventMessenger(0), fSelectedEvents(), fNSelected(0), fDebugStarted(false)
 {
   fEventMessenger = new EventActionMessenger(this);
 }
@@ -75,8 +72,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   // New event
   G4int nEvt = evt->GetEventID();
 
-  if (fNSelected>0) {
-    for(G4int i=0; i<fNSelected; i++) {
+  if (fNSelected > 0) {
+    for (G4int i = 0; i < fNSelected; i++) {
       if (nEvt == fSelectedEvents[i]) {
         G4UImanager::GetUIpointer()->ApplyCommand("/random/saveThisEvent");
         G4UImanager::GetUIpointer()->ApplyCommand("/tracking/verbose  2");
@@ -88,10 +85,10 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
   // Initialize user actions
   HistoManager* man = HistoManager::GetPointer();
-  man->BeginOfEvent(); 
-  if ( man->GetVerbose() > 0 ) {
+  man->BeginOfEvent();
+  if (man->GetVerbose() > 0) {
     G4cout << "EventAction: Event # " << nEvt << " started" << G4endl;
-  }         
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -104,14 +101,13 @@ void EventAction::EndOfEventAction(const G4Event*)
   }
 
   HistoManager* man = HistoManager::GetPointer();
-  man->EndOfEvent(); 
-  if(man->GetVerbose() > 1) 
-    G4cout << "EventAction: Event ended" << G4endl;
+  man->EndOfEvent();
+  if (man->GetVerbose() > 1) G4cout << "EventAction: Event ended" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::AddEventToDebug(G4int val)  
+void EventAction::AddEventToDebug(G4int val)
 {
   fSelectedEvents.push_back(val);
   fNSelected++;

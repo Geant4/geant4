@@ -35,6 +35,7 @@
 
 #include "G4Run.hh"
 #include "globals.hh"
+
 #include <map>
 
 class DetectorConstruction;
@@ -46,29 +47,28 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction*);
-   ~Run() override = default;
+    ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void CountProcesses(G4String procName);
-    void SumTrack (G4double track); 
-    void SumeTransf (G4double energy);            
+    void SumTrack(G4double track);
+    void SumeTransf(G4double energy);
     void Merge(const G4Run*) override;
     void EndOfRun();
 
   private:
-    DetectorConstruction*  fDetector = nullptr;
-    G4ParticleDefinition*  fParticle = nullptr;
-    G4double  fEkin = 0.;
+    DetectorConstruction* fDetector = nullptr;
+    G4ParticleDefinition* fParticle = nullptr;
+    G4double fEkin = 0.;
 
-    std::map<G4String,G4int>    fProcCounter;
-    G4int    fTotalCount = 0;   //all processes counter
-    G4double fSumTrack = 0.;     //sum of trackLength
-    G4double fSumTrack2 = 0.;    //sum of trackLength*trackLength
-    G4double fEnTransfer = 0.;   //energy transfered to charged secondaries
+    std::map<G4String, G4int> fProcCounter;
+    G4int fTotalCount = 0;  // all processes counter
+    G4double fSumTrack = 0.;  // sum of trackLength
+    G4double fSumTrack2 = 0.;  // sum of trackLength*trackLength
+    G4double fEnTransfer = 0.;  // energy transfered to charged secondaries
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

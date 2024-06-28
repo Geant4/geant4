@@ -52,17 +52,16 @@ class G4Event;
 
 class DicomEventAction : public G4UserEventAction
 {
-public:
-  DicomEventAction();
-  ~DicomEventAction();
+  public:
+    DicomEventAction();
+    ~DicomEventAction();
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event* anEvent);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event* anEvent);
 
-  void SetDrawFlag (G4String val) { fDrawFlag = val; }
-    
-private:
-  G4String fDrawFlag;
+    void SetDrawFlag(G4String val) { fDrawFlag = val; }
+
+  private:
+    G4String fDrawFlag;
 };
 #endif
-

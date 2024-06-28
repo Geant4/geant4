@@ -27,9 +27,9 @@
 /// \brief Definition of the RunAction class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RunAction_h
 #define RunAction_h 1
@@ -46,16 +46,15 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction();
-   ~RunAction() override;
-   
+    ~RunAction() override;
+
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
-    
+    void EndOfRunAction(const G4Run*) override;
+
   private:
-    HistoManager*  fHistoManager = nullptr;    
+    HistoManager* fHistoManager = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

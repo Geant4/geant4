@@ -67,6 +67,8 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     G4UTet(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -118,6 +120,11 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 inline G4GeometryType G4UTet::GetEntityType() const
 {
   return "G4Tet";
+}
+
+inline G4bool G4UTet::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

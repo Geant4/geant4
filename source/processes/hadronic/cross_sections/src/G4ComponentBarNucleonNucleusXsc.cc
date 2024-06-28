@@ -38,42 +38,24 @@
 #include "G4Proton.hh"
 #include "G4Pow.hh"
 #include "G4BarashenkovData.hh"
-#include "G4NistManager.hh"
+#include "G4IsotopeList.hh"
+#include "G4HadronXSDataTable.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 
-G4double G4ComponentBarNucleonNucleusXsc::theA[93] = {0.0};
-G4double G4ComponentBarNucleonNucleusXsc::A75[93]  = {0.0};
+G4double G4ComponentBarNucleonNucleusXsc::A75[93] = {0.0};
 G4int G4ComponentBarNucleonNucleusXsc::theZ[] =
 {2,4,6,7,8,11,13,14,20,26,29,42,48,50,74,82,92};
 std::vector<G4PiData*>* G4ComponentBarNucleonNucleusXsc::thePData = nullptr;
 std::vector<G4PiData*>* G4ComponentBarNucleonNucleusXsc::theNData = nullptr;
 
-#ifdef G4MULTITHREADED
-G4Mutex G4ComponentBarNucleonNucleusXsc::barNNXSMutex = G4MUTEX_INITIALIZER;
-#endif
-
 G4ComponentBarNucleonNucleusXsc::G4ComponentBarNucleonNucleusXsc()
- : G4VComponentCrossSection("BarashenkovNucleonNucleusXsc"),
-   fTotalXsc(0.0), fInelasticXsc(0.0), fElasticXsc(0.0), isMaster(false)
+ : G4VComponentCrossSection("BarashenkovNucleonNucleusXsc")
 {
   theNeutron = G4Neutron::Neutron();
   theProton  = G4Proton::Proton();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-G4ComponentBarNucleonNucleusXsc::~G4ComponentBarNucleonNucleusXsc()
-{
-  if(isMaster && nullptr != thePData) {
-    for(G4int i=0; i<NZ; ++i) { 
-      delete (*thePData)[i];
-      delete (*theNData)[i];
-    }
-    delete thePData;
-    delete theNData;
-    thePData = nullptr;
-    theNData = nullptr;    
+  if (nullptr == thePData) {
+    LoadData();
   }
 }
 
@@ -176,8 +158,8 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2) const
   // for tabulated data, cross section scales with A^(2/3)
   G4double r1 = x1* A75[Z] / A75[Z1];
   G4double r2 = x2* A75[Z] / A75[Z2];
-  G4double alp1 = (theA[Z] - theA[Z1]);
-  G4double alp2 = (theA[Z2] - theA[Z]);
+  G4double alp1 = (aeff[Z] - aeff[Z1]);
+  G4double alp2 = (aeff[Z2] - aeff[Z]);
   G4double result = (r1*alp2 + r2*alp1)/(alp1 + alp2);
   //       G4cout << "x1/2, z1/2 z" <<x1<<" "<<x2<<" "<<Z1<<" "<<Z2<<" "<<Z<<G4endl;
   //       G4cout << "res1/2 " << r1 <<" " << r2 <<" " << result<< G4endl;
@@ -198,31 +180,15 @@ void G4ComponentBarNucleonNucleusXsc::Description(std::ostream& outFile) const
 
 /////////////////////////////////////////////////////////////////////////////
 
-void 
-G4ComponentBarNucleonNucleusXsc::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-  if(nullptr != theNData) { return; }
-
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&barNNXSMutex);
-  if(!theNData) { 
-#endif
-    isMaster = true;
-#ifdef G4MULTITHREADED
-  }
-  G4MUTEXUNLOCK(&barNNXSMutex);
-#endif
-  if(isMaster) { LoadData(); }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
 void G4ComponentBarNucleonNucleusXsc::LoadData()
 {
   theNData = new std::vector<G4PiData*>;
   thePData = new std::vector<G4PiData*>;
   theNData->resize(NZ, nullptr);
   thePData->resize(NZ, nullptr);
+  auto ptr = G4HadronXSDataTable::Instance();
+  ptr->AddPiData(theNData);
+  ptr->AddPiData(thePData);
 
   // He, Be, C
   (*theNData)[0] = new G4PiData(he_m_t, he_m_in, e1, 44);
@@ -281,12 +247,10 @@ void G4ComponentBarNucleonNucleusXsc::LoadData()
   (*theNData)[16] = new G4PiData(u_m_t,  u_m_in,  e6, 46);
   (*thePData)[16] = new G4PiData(u_m_t,  u_p_in,  e6, 46);
   
-  G4NistManager* nist = G4NistManager::Instance();
-  A75[0] = theA[0] = 1.0;
+  A75[0] = 1.0;
   G4Pow* g4pow = G4Pow::GetInstance();
   for(G4int i=1; i<93; ++i) {
-    theA[i] = nist->GetAtomicMassAmu(i);
-    A75[i] = g4pow->A23(theA[i]); // interpolate by square ~ A^(2/3)
+    A75[i] = g4pow->A23(aeff[i]); // interpolate by square ~ A^(2/3)
   }
 }
 

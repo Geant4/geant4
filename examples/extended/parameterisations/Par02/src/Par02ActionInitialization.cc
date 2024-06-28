@@ -28,28 +28,31 @@
 /// \brief Implementation of the Par02ActionInitialization class
 
 #include "Par02ActionInitialization.hh"
+
+#include "Par02EventAction.hh"
 #include "Par02PrimaryGeneratorAction.hh"
 #include "Par02RunAction.hh"
-#include "Par02EventAction.hh"
 #include "Par02TrackingAction.hh"
+
 #include "G4UIcommand.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02ActionInitialization::Par02ActionInitialization() : 
-  G4VUserActionInitialization(), fFileName( "DefaultOutput" ), fSmear( true ) {}
+Par02ActionInitialization::Par02ActionInitialization()
+  : G4VUserActionInitialization(), fFileName("DefaultOutput"), fSmear(true)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02ActionInitialization::Par02ActionInitialization( const G4String aOutName, 
-                                                      const G4String aSmear ) :
-  G4VUserActionInitialization(), fFileName( aOutName ), 
-  fSmear( G4UIcommand::ConvertToBool( aSmear ) ) {}
+Par02ActionInitialization::Par02ActionInitialization(const G4String aOutName, const G4String aSmear)
+  : G4VUserActionInitialization(), fFileName(aOutName), fSmear(G4UIcommand::ConvertToBool(aSmear))
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02ActionInitialization::Par02ActionInitialization( const G4String aOutName ) :
-  G4VUserActionInitialization(), fFileName( aOutName ), fSmear( true ) {}
+Par02ActionInitialization::Par02ActionInitialization(const G4String aOutName)
+  : G4VUserActionInitialization(), fFileName(aOutName), fSmear(true)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,18 +60,19 @@ Par02ActionInitialization::~Par02ActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02ActionInitialization::BuildForMaster() const {
-  SetUserAction( new Par02RunAction( fFileName ) );
+void Par02ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new Par02RunAction(fFileName));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02ActionInitialization::Build() const {
-  SetUserAction( new Par02PrimaryGeneratorAction );
-  SetUserAction( new Par02RunAction( fFileName ) );
-  SetUserAction( new Par02EventAction( fSmear ) );
-  SetUserAction( new Par02TrackingAction );
+void Par02ActionInitialization::Build() const
+{
+  SetUserAction(new Par02PrimaryGeneratorAction);
+  SetUserAction(new Par02RunAction(fFileName));
+  SetUserAction(new Par02EventAction(fSmear));
+  SetUserAction(new Par02TrackingAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

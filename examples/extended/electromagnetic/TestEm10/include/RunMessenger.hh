@@ -49,20 +49,19 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class RunMessenger: public G4UImessenger
+class RunMessenger : public G4UImessenger
 {
   public:
-   RunMessenger(RunAction* runAction);
-   ~RunMessenger();
+    RunMessenger(RunAction* runAction);
+    ~RunMessenger();
 
-   virtual void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
-   RunAction*             fRunAction;
-   G4UIdirectory*         fRndmDir;
-   G4UIcmdWithAnInteger*  fRndmSaveCmd;    
-   G4UIcmdWithAString*    fRndmReadCmd;    
+    RunAction* fRunAction;
+    G4UIdirectory* fRndmDir;
+    G4UIcmdWithAnInteger* fRndmSaveCmd;
+    G4UIcmdWithAString* fRndmReadCmd;
 };
 
 #endif
-

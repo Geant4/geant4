@@ -470,6 +470,15 @@ G4GeometryType G4Box::GetEntityType() const
 
 //////////////////////////////////////////////////////////////////////////
 //
+// IsFaceted
+
+G4bool G4Box::IsFaceted() const
+{
+  return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Stream object contents to an output stream
 
 std::ostream& G4Box::StreamInfo(std::ostream& os) const

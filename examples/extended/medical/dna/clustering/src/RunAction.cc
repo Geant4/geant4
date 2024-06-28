@@ -34,19 +34,19 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
-#include "RunInitObserver.hh"
-#include "RunActionMessenger.hh"
 
+#include "RunActionMessenger.hh"
+#include "RunInitObserver.hh"
+
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-: G4UserRunAction()
+RunAction::RunAction() : G4UserRunAction()
 {
-  fFileName="clusters_output";
+  fFileName = "clusters_output";
   fpRunMessenger = new RunActionMessenger(this);
   CreateHistogram();
 }
@@ -61,7 +61,7 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{ 
+{
   //
   RunInitManager::Instance()->Initialize();
 
@@ -71,8 +71,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   // Open an output file
   analysisManager->OpenFile(fFileName);
-  G4cout << "\n----> Histogram file is opened in " <<
-      fFileName << "." << analysisManager->GetFileType() << G4endl;
+  G4cout << "\n----> Histogram file is opened in " << fFileName << "."
+         << analysisManager->GetFileType() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,11 +90,11 @@ void RunAction::CreateHistogram()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetFirstHistoId(1);
-  analysisManager->CreateH1("1","simpleSSB",75,0.,75);
-  analysisManager->CreateH1("2","complexSSB",75,0.,75);
-  analysisManager->CreateH1("3","DSB",75,0.,75);
-  analysisManager->CreateH1("4","cluster size",20,1,20);
-  analysisManager->CreateH1("5","edep",1,0.,1E6);
+  analysisManager->CreateH1("1", "simpleSSB", 75, 0., 75);
+  analysisManager->CreateH1("2", "complexSSB", 75, 0., 75);
+  analysisManager->CreateH1("3", "DSB", 75, 0., 75);
+  analysisManager->CreateH1("4", "cluster size", 20, 1, 20);
+  analysisManager->CreateH1("5", "edep", 1, 0., 1E6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,4 +105,3 @@ void RunAction::WriteHistogram()
   analysisManager->Write();
   analysisManager->CloseFile();
 }
-

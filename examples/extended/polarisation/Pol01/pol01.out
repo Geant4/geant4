@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -214,26 +214,26 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.090000s Real=0.095028s Sys=0.000000s
+  User=0.070000s Real=0.077526s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-       Transportation=  31124                   msc=   1691           pol-annihil=     66
-            pol-compt=    280              pol-conv=    219             pol-eBrem=    325
-            pol-eIoni=    684              pol-phot=    176 
+       Transportation=  31112                   msc=   1694           pol-annihil=     58
+            pol-compt=    261              pol-conv=    225             pol-eBrem=    327
+            pol-eIoni=    673              pol-phot=    159 
  Gamma: 
-Mean Number per Event :1.0054
-Mean Energy :9.6029 MeV +- 1.8442 MeV
-Mean Polarization :-0.96717 +- 0.17639
+Mean Number per Event :1.0044
+Mean Energy :9.6075 MeV +- 1.8403 MeV
+Mean Polarization :-0.96646 +- 0.18855
  Electron: 
-Mean Number per Event :0.0352
-Mean Energy :5.2585 MeV +- 2.4996 MeV
-Mean Polarization :-0.73452 +- 0.28136
+Mean Number per Event :0.0342
+Mean Energy :5.2541 MeV +- 2.4634 MeV
+Mean Polarization :-0.73719 +- 0.2775
  Positron: 
-Mean Number per Event :0.0156
-Mean Energy :4.0642 MeV +- 1.9962 MeV
-Mean Polarization :-0.57169 +- 0.33581
+Mean Number per Event :0.017
+Mean Energy :4.1267 MeV +- 2.0764 MeV
+Mean Polarization :-0.57385 +- 0.33007
 
 ... write file : pol01.root - done
 ... close file : pol01.root - done
@@ -242,7 +242,7 @@ Mean Polarization :-0.57169 +- 0.33581
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={847175755666492636, 1425179808836154274, 1647568236133457718, 1084436876417971381, 166440695823598628, 1332950029560277730, 1392569583841259893, 1534215877070228699, 1030844911574454052, 17057310262608394, 1951505961711811416, 566340641376567458, 1168380125282625022, 345267671194425884, 25187549425416789, 310131633279191295, 1262900853831910112} counter= 11sumtot= 2273095466006287675
+N=17 V[N]={1717374177621652919, 2132159900284328841, 223701998748918168, 1978784610430274976, 923718687334451192, 1622689469762616116, 1313040377188205558, 2047290616958911276, 2015517591902663774, 988584145378492380, 1863220872396400112, 1292127148143504970, 1229922131050915299, 320333566335606112, 1807180599966017425, 930003090364290808, 2055020726244838393} counter= 8sumtot= 1402239617975148809
 ---------------------------------------
 #
 ================== Deleting memory pools ===================

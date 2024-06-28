@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -218,7 +218,7 @@ eBrem:  for e+  XStype:4  SubType=3
              PenBrem : Emin=    0 eV  Emax=    1 GeV
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             PenAnnih : Emin=    0 eV  Emax=    1 GeV
             eplus2gg : Emin=    1 GeV Emax=  100 TeV
@@ -556,14 +556,14 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=16.170000s Real=29.742671s Sys=0.050000s
+  User=15.040000s Real=21.615302s Sys=0.100000s
 
 --------------------End of Global Run-----------------------
  The run had 1000000 events... write file : output.root - done
 ... close file : output.root - done
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.028 MB
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.025 MB
 ============================================================
 Execution completed
-User=17.970000s Real=32.086496s Sys=0.090000s
+User=16.910000s Real=24.266991s Sys=0.140000s

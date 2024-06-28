@@ -34,34 +34,38 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "EventAction.hh"
-#include "G4RunManager.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::ActionInitialization(DetectorConstruction *detector)
-    : G4VUserActionInitialization(), fDetector(detector) {}
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const {
+ActionInitialization::ActionInitialization(DetectorConstruction* detector)
+  : G4VUserActionInitialization(), fDetector(detector)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
+{
   SetUserAction(new RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::Build() const {
+void ActionInitialization::Build() const
+{
   SetUserAction(new PrimaryGeneratorAction(fDetector));
   SetUserAction(new RunAction());
 
   auto ev_act = new EventAction();
   SetUserAction(ev_act);
 
-  SetUserAction(new SteppingAction(
-      ev_act)); // stepping action needs access to EventAction object
+  SetUserAction(new SteppingAction(ev_act));  // stepping action needs access to EventAction object
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

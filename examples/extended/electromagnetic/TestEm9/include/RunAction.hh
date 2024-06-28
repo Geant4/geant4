@@ -33,28 +33,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4UserRunAction.hh"
 #include "G4Run.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
+    RunAction();
+    ~RunAction() override = default;
 
-  RunAction();
-  ~RunAction() override = default;
+    void BeginOfRunAction(const G4Run*) override;
+    // In this method histogramms are booked
 
-  void BeginOfRunAction(const G4Run*) override;
-  // In this method histogramms are booked
+    void EndOfRunAction(const G4Run*) override;
+    // In this method histogramms are stored
 
-  void EndOfRunAction(const G4Run*) override;
-  // In this method histogramms are stored
-
-  RunAction & operator=(const RunAction &right) = delete;
-  RunAction(const RunAction&) = delete;
+    RunAction& operator=(const RunAction& right) = delete;
+    RunAction(const RunAction&) = delete;
 };
 
 #endif
-

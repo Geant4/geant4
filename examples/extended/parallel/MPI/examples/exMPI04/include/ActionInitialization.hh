@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// @file ActionInitialization.hh 
+/// @file ActionInitialization.hh
 /// @brief Define action initialization
 
 #ifndef ACTION_INITIALIZATION_H
@@ -33,16 +33,18 @@
 #include "G4VUserActionInitialization.hh"
 #include "globals.hh"
 
-class ActionInitialization : public G4VUserActionInitialization {
-public:
-  ActionInitialization(G4bool useNtuple, G4bool mergeNtuple);
-  ~ActionInitialization();
+class ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    ActionInitialization(G4bool useNtuple, G4bool mergeNtuple);
+    ~ActionInitialization();
 
-  virtual void BuildForMaster() const;
-  virtual void Build() const;
-private:
-  G4bool fUseNtuple;  
-  G4bool fMergeNtuple;  
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
+  private:
+    G4bool fUseNtuple;
+    G4bool fMergeNtuple;
 };
 
 #endif

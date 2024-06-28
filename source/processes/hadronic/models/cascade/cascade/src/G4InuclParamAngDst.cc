@@ -35,6 +35,8 @@
 #include "G4InuclParamAngDst.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4InuclParticleNames.hh"
+#include "Randomize.hh"
+
 using namespace G4InuclSpecialFunctions;
 using namespace G4InuclParticleNames;
 
@@ -67,7 +69,7 @@ G4double G4InuclParamAngDst::GetCosTheta(G4int ptype, G4double ekin) const {
 	     << G4endl;
     }
 
-    Spow = inuclRndm();
+    Spow = G4UniformRand();
   }
 
   return 2.0*Spow - 1.0;	// Convert generated [0..1] to [-1..1]

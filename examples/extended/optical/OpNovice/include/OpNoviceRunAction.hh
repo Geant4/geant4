@@ -34,8 +34,8 @@
 #ifndef OpNoviceRunAction_h
 #define OpNoviceRunAction_h 1
 
-#include "globals.hh"
 #include "G4UserRunAction.hh"
+#include "globals.hh"
 
 class OpNovicePrimaryGeneratorAction;
 class OpNoviceRun;
@@ -46,17 +46,17 @@ class G4Run;
 
 class OpNoviceRunAction : public G4UserRunAction
 {
- public:
-  OpNoviceRunAction(OpNovicePrimaryGeneratorAction* = nullptr);
-  ~OpNoviceRunAction() override = default;
+  public:
+    OpNoviceRunAction(OpNovicePrimaryGeneratorAction* = nullptr);
+    ~OpNoviceRunAction() override = default;
 
-  G4Run* GenerateRun() override;
-  void BeginOfRunAction(const G4Run*) override;
-  void EndOfRunAction(const G4Run*) override;
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
- private:
-  OpNoviceRun* fRun = nullptr;
-  OpNovicePrimaryGeneratorAction* fPrimary = nullptr;
+  private:
+    OpNoviceRun* fRun = nullptr;
+    OpNovicePrimaryGeneratorAction* fPrimary = nullptr;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

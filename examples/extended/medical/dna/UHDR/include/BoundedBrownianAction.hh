@@ -25,33 +25,37 @@
 //
 
 #ifndef BoundedBrownianAction_hh
-#define BoundedBrownianAction_hh
+#  define BoundedBrownianAction_hh 1
 
-#include "G4VUserBrownianAction.hh"
+#  include "G4VUserBrownianAction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4DNABoundingBox;
 
-class BoundedBrownianAction : public G4VUserBrownianAction {
-public:
-  BoundedBrownianAction();
+class BoundedBrownianAction : public G4VUserBrownianAction
+{
+  public:
+    BoundedBrownianAction();
 
-  ~BoundedBrownianAction() override = default;
+    ~BoundedBrownianAction() override = default;
 
-  G4double GetDistanceToBoundary(const G4Track &) override;
+    G4double GetDistanceToBoundary(const G4Track&) override;
 
-  void Transport(G4ThreeVector &, G4Track *) override;
+    void Transport(G4ThreeVector&, G4Track*) override;
 
-  void BouncingAction(G4ThreeVector &) const;
+    void BouncingAction(G4ThreeVector&) const;
 
-  inline void SetBoundary(const G4DNABoundingBox &);
+    inline void SetBoundary(const G4DNABoundingBox&);
 
-private:
-  const G4DNABoundingBox *fpBoundingBox = nullptr;
+  private:
+    const G4DNABoundingBox* fpBoundingBox = nullptr;
 };
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-inline void
-BoundedBrownianAction::SetBoundary(const G4DNABoundingBox &boudingBox) {
+inline void BoundedBrownianAction::SetBoundary(const G4DNABoundingBox& boudingBox)
+{
   fpBoundingBox = &boudingBox;
 }
 
-#endif // BoundedBrownianAction_hh
+#endif  // BoundedBrownianAction_hh
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

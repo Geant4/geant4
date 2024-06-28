@@ -6,21 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-05-02 Gabriele Cosmo (hadr-lend-V11-01-04)
+## 2024-05-02 Gabriele Cosmo (hadr-lend-V11-02-03)
 - Fixed compilation warnings for potentially initialised local variables in
   ptwXY_createFromFunctionZeroCrossing().
 
-## 2024-04-24 Pere Mato
+## 2024-04-24 Pere Mato (hadr-lend-V11-02-02)
 - Math macros such as M_PI are not standard. To define them the macro
   _USE_MATH_DEFINES needs to be defined before including <cmath>.
 - macro WIN32 is not standard, the correect macro is _WIN32.
 - <BaseTsd.h> should be <basetsd.h> for MinGW.
 
-## 2024-01-29 Vladimir Ivanchenko (hadr-lend-V11-01-03)
+## 2024-01-29 Vladimir Ivanchenko (hadr-lend-V11-02-01)
 - MCGIDI_product, MCGIDI_outputChannel, MCGIDI_distribution - fixed alma9-gcc131
-    compilation warnings seen in CMSSW
+  compilation warnings seen in CMSSW.
 
-## 2023-12-18 Gabriele Cosmo
+## 2023-12-18 Gabriele Cosmo (hadr-lend-V11-02-00)
 - Fixed compilation error on latest Windows VC++ compiler 17.8.3 for use of
   std::isfinite() in nf_specialFunctions_h and in nf_floatToShortestString().
   Addressing problem report #2582.

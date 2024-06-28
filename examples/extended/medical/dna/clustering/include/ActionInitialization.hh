@@ -40,13 +40,12 @@
 
 class ActionInitialization : public G4VUserActionInitialization
 {
-public:
-  ActionInitialization();
-  virtual ~ActionInitialization();
+  public:
+    ActionInitialization();
+    virtual ~ActionInitialization();
 
-  virtual void BuildForMaster() const;
-  virtual void Build() const;
-
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
 
 #endif

@@ -46,21 +46,20 @@ class G4UIcmdWithADouble;
 /// It implements commands:
 /// - /transform/setMethod method
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger() override;
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
 
     void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
   private:
-    DetectorConstruction*      fDetectorConstruction = nullptr;
-    G4UIdirectory*             fDirectory = nullptr;
-    G4UIcmdWithAString*        fSetMethodCmd = nullptr;
+    DetectorConstruction* fDetectorConstruction = nullptr;
+    G4UIdirectory* fDirectory = nullptr;
+    G4UIcmdWithAString* fSetMethodCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

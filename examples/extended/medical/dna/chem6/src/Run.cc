@@ -43,84 +43,72 @@
 /// \brief Implementation of the Run class
 
 #include "Run.hh"
-#include "RunAction.hh"
 
-#include "G4RunManager.hh"
+#include "RunAction.hh"
+#include "ScoreSpecies.hh"
+
 #include "G4Event.hh"
-#include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4THitsMap.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4THitsMap.hh"
 #include "G4VSensitiveDetector.hh"
 
 #include <map>
-
-#include "ScoreSpecies.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-Run::Run()
- : G4Run(),
-   fSumEne(0),
-   fScorerRun(0),
-   fLETScorerRun(0)
+Run::Run() : G4Run(), fSumEne(0), fScorerRun(0), fLETScorerRun(0)
 {
-  G4MultiFunctionalDetector* mfdet =  dynamic_cast<G4MultiFunctionalDetector*>
-    (G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
-  G4int CollectionIDspecies =
-    G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
-  G4int CollectionIDLET =
-    G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
+  G4MultiFunctionalDetector* mfdet = dynamic_cast<G4MultiFunctionalDetector*>(
+    G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
+  G4int CollectionIDspecies = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
+  G4int CollectionIDLET = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
 
-  fTotalLET = new G4THitsMap<G4double>("mfDetector","LET");
+  fTotalLET = new G4THitsMap<G4double>("mfDetector", "LET");
   fScorerRun = mfdet->GetPrimitive(CollectionIDspecies);
   fLETScorerRun = mfdet->GetPrimitive(CollectionIDLET);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-Run::~Run()
-{
-}
+Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void Run::RecordEvent(const G4Event* event)
 {
-  if(event->IsAborted()) return;
+  if (event->IsAborted()) return;
 
-  G4int CollectionID =
-    G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
+  G4int CollectionID = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
 
-  G4int CollectionIDLET =
-    G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
+  G4int CollectionIDLET = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
 
-  //Hits collections
+  // Hits collections
   //
   G4HCofThisEvent* HCE = event->GetHCofThisEvent();
-  if(!HCE) return;
+  if (!HCE) return;
 
-  G4THitsMap<G4double>* evtMap =
-  static_cast<G4THitsMap<G4double>*>(HCE->GetHC(CollectionID));
+  G4THitsMap<G4double>* evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(CollectionID));
 
-  G4THitsMap<G4double>* evtLET =
-  static_cast<G4THitsMap<G4double>*> (HCE->GetHC(CollectionIDLET));
+  G4THitsMap<G4double>* evtLET = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(CollectionIDLET));
 
   G4int nOfMap = evtLET->entries();
 
   G4int nOftotal = fTotalLET->entries();
 
-  for (G4int i=0; i<nOfMap; i++){
+  for (G4int i = 0; i < nOfMap; i++) {
     G4double* LET = (*evtLET)[i];
-    if(!LET) continue;
-    fTotalLET->add(nOftotal+i, *LET);
+    if (!LET) continue;
+    fTotalLET->add(nOftotal + i, *LET);
   }
 
-  std::map<G4int,G4double*>::iterator itr;
+  std::map<G4int, G4double*>::iterator itr;
 
-  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++){
+  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
     G4double edep = *(itr->second);
-    fSumEne+=edep;
-//    G4cout<<"Energy for this event: "<<edep/eV<<" eV"<<G4endl;
+    fSumEne += edep;
+    //    G4cout<<"Energy for this event: "<<edep/eV<<" eV"<<G4endl;
   }
 
   G4Run::RecordEvent(event);
@@ -130,7 +118,7 @@ void Run::RecordEvent(const G4Event* event)
 
 void Run::Merge(const G4Run* aRun)
 {
-  if(aRun == this){
+  if (aRun == this) {
     return;
   }
 
@@ -139,17 +127,15 @@ void Run::Merge(const G4Run* aRun)
 
   G4int nOfMaster = fTotalLET->entries();
   G4int nOfLocal = localRun->fTotalLET->entries();
-  for(G4int i=0;i<nOfLocal;i++){
+  for (G4int i = 0; i < nOfLocal; i++) {
     G4double* LET = (*localRun->fTotalLET)[i];
-    if(!LET) continue;
-    fTotalLET->add(nOfMaster+i,*LET);
+    if (!LET) continue;
+    fTotalLET->add(nOfMaster + i, *LET);
   }
 
-  ScoreSpecies* masterScorer =
-  dynamic_cast<ScoreSpecies*>(this->fScorerRun);
+  ScoreSpecies* masterScorer = dynamic_cast<ScoreSpecies*>(this->fScorerRun);
 
-  ScoreSpecies* localScorer =
-  dynamic_cast<ScoreSpecies*>(localRun->fScorerRun);
+  ScoreSpecies* localScorer = dynamic_cast<ScoreSpecies*>(localRun->fScorerRun);
 
   masterScorer->AbsorbResultsFromWorkerScorer(localScorer);
   G4Run::Merge(aRun);

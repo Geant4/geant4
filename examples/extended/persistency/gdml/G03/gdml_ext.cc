@@ -50,14 +50,13 @@
 #include "G03PrimaryGeneratorAction.hh"
 #include "G03RunAction.hh"
 
-#include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
 
 // --------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
-
   // Construct a serial run manager
   //
   auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
@@ -83,19 +82,19 @@ int main(int argc, char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( argc==1 )   // Define UI session for interactive mode.
+  if (argc == 1)  // Define UI session for interactive mode.
   {
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
   }
-  else             // Batch mode
+  else  // Batch mode
   {
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
     ui->SessionStart();
     delete ui;
   }

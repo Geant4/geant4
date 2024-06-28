@@ -31,54 +31,44 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
 
+#include "PhysicsListMessenger.hh"
+#include "StepMax.hh"
+
+#include "G4AnnihiToMuPair.hh"
+#include "G4DecayPhysics.hh"
+#include "G4Electron.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmStandardPhysicsGS.hh"
-#include "G4EmStandardPhysicsWVI.hh"
-#include "G4EmStandardPhysicsSS.hh"
-#include "G4EmLivermorePhysics.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLowEPPhysics.hh"
-
-#include "G4DecayPhysics.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessTable.hh"
-
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
 #include "G4GammaConversionToMuons.hh"
-
-#include "G4AnnihiToMuPair.hh"
-#include "G4eeToHadrons.hh"
-
+#include "G4LossTableManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4Positron.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4LossTableManager.hh"
-
-#include "StepMax.hh"
-
+#include "G4eeToHadrons.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
- fEmPhysicsList(0),
- fDecayPhysicsList(0),
- fStepMaxProcess(0),
- fMes(0)
+PhysicsList::PhysicsList()
+  : G4VModularPhysicsList(), fEmPhysicsList(0), fDecayPhysicsList(0), fStepMaxProcess(0), fMes(0)
 {
   G4LossTableManager::Instance()->SetVerbose(1);
 
-  defaultCutValue = 1.*km;
+  defaultCutValue = 1. * km;
   fMes = new PhysicsListMessenger(this);
 
   fStepMaxProcess = new StepMax();
@@ -111,7 +101,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
 
-  if(fEmPhysicsList) fEmPhysicsList->ConstructProcess();
+  if (fEmPhysicsList) fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
 
   AddStepMax();
@@ -140,12 +130,12 @@ void PhysicsList::ConstructHighEnergy()
 void PhysicsList::SetGammaToMuPairFac(G4double fac)
 {
   G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
-  G4GammaConversionToMuons* gammaToMuPairProcess = (G4GammaConversionToMuons*)
-                       theProcessTable->FindProcess("GammaToMuPair","gamma");
-  if(gammaToMuPairProcess) gammaToMuPairProcess->SetCrossSecFactor(fac);
-  else G4cout 
-   << "Warning. No process GammaToMuPair found, SetGammaToMuPairFac was ignored"
-   << G4endl;
+  G4GammaConversionToMuons* gammaToMuPairProcess =
+    (G4GammaConversionToMuons*)theProcessTable->FindProcess("GammaToMuPair", "gamma");
+  if (gammaToMuPairProcess)
+    gammaToMuPairProcess->SetCrossSecFactor(fac);
+  else
+    G4cout << "Warning. No process GammaToMuPair found, SetGammaToMuPairFac was ignored" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,12 +143,12 @@ void PhysicsList::SetGammaToMuPairFac(G4double fac)
 void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 {
   G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
-  G4AnnihiToMuPair* annihiToMuPairProcess = (G4AnnihiToMuPair*)
-                         theProcessTable->FindProcess("AnnihiToMuPair","e+");
-  if(annihiToMuPairProcess) annihiToMuPairProcess->SetCrossSecFactor(fac);
-  else G4cout 
-   << "Warning. No process AnnihiToMuPair found, SetAnnihiToMuPairFac ignored"
-   << G4endl;
+  G4AnnihiToMuPair* annihiToMuPairProcess =
+    (G4AnnihiToMuPair*)theProcessTable->FindProcess("AnnihiToMuPair", "e+");
+  if (annihiToMuPairProcess)
+    annihiToMuPairProcess->SetCrossSecFactor(fac);
+  else
+    G4cout << "Warning. No process AnnihiToMuPair found, SetAnnihiToMuPairFac ignored" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -166,96 +156,82 @@ void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 void PhysicsList::SetAnnihiToHadronFac(G4double fac)
 {
   G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
-  G4eeToHadrons* eehadProcess = (G4eeToHadrons*)
-                              theProcessTable->FindProcess("ee2hadr","e+");
-  if(eehadProcess) eehadProcess->SetCrossSecFactor(fac);
-  else G4cout
-    << "Warning. No process ee2hadr found, SetAnnihiToHadronFac was ignored"
-    << G4endl;
+  G4eeToHadrons* eehadProcess = (G4eeToHadrons*)theProcessTable->FindProcess("ee2hadr", "e+");
+  if (eehadProcess)
+    eehadProcess->SetCrossSecFactor(fac);
+  else
+    G4cout << "Warning. No process ee2hadr found, SetAnnihiToHadronFac was ignored" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel > 1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == fEmName) {
     return;
-
-  } else if (name == "emstandard_opt0") {
-
+  }
+  else if (name == "emstandard_opt0") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
-
-  } else if (name == "emstandard_opt1") {
-
+  }
+  else if (name == "emstandard_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1();
-
-  } else if (name == "emstandard_opt2") {
-
+  }
+  else if (name == "emstandard_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2();
-
-  } else if (name == "emstandard_opt3") {
-
+  }
+  else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
-
-  } else if (name == "emstandard_opt4") {
-
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-
-  } else if (name == "emlivermore") {
-
+  }
+  else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics();
-
-  } else if (name == "empenelope") {
-
+  }
+  else if (name == "empenelope") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
-
-  } else if (name == "emlowenergy") {
-
+  }
+  else if (name == "emlowenergy") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics();
-
-  } else if (name == "emstandardGS") {
-
+  }
+  else if (name == "emstandardGS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsGS();
-
-  } else if (name == "emstandardSS") {
-
+  }
+  else if (name == "emstandardSS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
-  
-  } else if (name == "emstandardWVI") {
-
+  }
+  else if (name == "emstandardWVI") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsWVI();
-  
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -263,21 +239,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::AddStepMax()
 {
-  //Step limitation seen as a process
+  // Step limitation seen as a process
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fStepMaxProcess->IsApplicable(*particle))
-    {
-      pmanager ->AddDiscreteProcess(fStepMaxProcess);
+    if (fStepMaxProcess->IsApplicable(*particle)) {
+      pmanager->AddDiscreteProcess(fStepMaxProcess);
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

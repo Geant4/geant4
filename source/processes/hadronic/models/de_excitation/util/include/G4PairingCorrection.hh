@@ -36,14 +36,12 @@
 
 #include "globals.hh"
 #include "G4CameronGilbertPairingCorrections.hh"
-#include "G4CameronGilbertShellCorrections.hh"
-#include "G4CameronShellPlusPairingCorrections.hh"
 
 class G4PairingCorrection
 {
 public:
 	
-  explicit G4PairingCorrection();
+  G4PairingCorrection();
   
   ~G4PairingCorrection() = default;
 
@@ -58,8 +56,6 @@ public:
 private:
 
   G4CameronGilbertPairingCorrections theCameronGilbertPairingCorrections;
-  G4CameronGilbertShellCorrections theCameronGilbertShellCorrections;
-  G4CameronShellPlusPairingCorrections theCorr;
 
 };
 #endif

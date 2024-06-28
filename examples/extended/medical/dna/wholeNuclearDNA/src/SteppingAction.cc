@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// and the DNA geometry given in the Geom_DNA example 
+// Any report or published results obtained using the Geant4-DNA software
+// and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
 // [1] NIM B 298 (2013) 47-54
 // [2] Med. Phys. 37 (2010) 4692-4708
@@ -38,27 +38,24 @@
 #include "SteppingAction.hh"
 
 // G4
-#include <globals.hh>
-#include <G4SystemOfUnits.hh>
-#include <G4VProcess.hh>
-#include <G4Track.hh>
+#include "CommandLineParser.hh"
 
 #include "G4AnalysisManager.hh"
-#include "CommandLineParser.hh"
+
+#include <G4SystemOfUnits.hh>
+#include <G4Track.hh>
+#include <G4VProcess.hh>
+#include <globals.hh>
 
 using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction() : G4UserSteppingAction()
-{
-}
+SteppingAction::SteppingAction() : G4UserSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{
-}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,63 +69,89 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   dE = step->GetTotalEnergyDeposit() / eV;
 
-  const G4String& particleName = step->GetTrack()->GetDynamicParticle()
-      ->GetDefinition()->GetParticleName();
+  const G4String& particleName =
+    step->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName();
 
-  const G4String& processName =
-      step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  const G4String& processName = step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
 
-  const G4String& volumeName =
-      step->GetPreStepPoint()->GetPhysicalVolume()->GetName();
+  const G4String& volumeName = step->GetPreStepPoint()->GetPhysicalVolume()->GetName();
 
-  if (particleName == "e-") flagParticle = 10;
-  else if (particleName == "proton") flagParticle = 20;
-  else if (particleName == "hydrogen") flagParticle = 30;
-  else if (particleName == "alpha") flagParticle = 40;
-  else if (particleName == "alpha+") flagParticle = 50;
-  else if (particleName == "helium") flagParticle = 60;
+  if (particleName == "e-")
+    flagParticle = 10;
+  else if (particleName == "proton")
+    flagParticle = 20;
+  else if (particleName == "hydrogen")
+    flagParticle = 30;
+  else if (particleName == "alpha")
+    flagParticle = 40;
+  else if (particleName == "alpha+")
+    flagParticle = 50;
+  else if (particleName == "helium")
+    flagParticle = 60;
 
-  if (processName == "e-_G4DNAElastic") flagProcess = 11;
-  else if (processName == "e-_G4DNAExcitation") flagProcess = 12;
-  else if (processName == "e-_G4DNAIonisation") flagProcess = 13;
-  else if (processName == "e-_G4DNAAttachment") flagProcess = 14;
-  else if (processName == "e-_G4DNAVibExcitation") flagProcess = 15;
-  else if (processName == "eCapture") flagProcess = 16;
-//  if (step->GetPostStepPoint()->GetProcessDefinedStep()
-// ->GetProcessName()=="msc")        flagProcess =17;
+  if (processName == "e-_G4DNAElastic")
+    flagProcess = 11;
+  else if (processName == "e-_G4DNAExcitation")
+    flagProcess = 12;
+  else if (processName == "e-_G4DNAIonisation")
+    flagProcess = 13;
+  else if (processName == "e-_G4DNAAttachment")
+    flagProcess = 14;
+  else if (processName == "e-_G4DNAVibExcitation")
+    flagProcess = 15;
+  else if (processName == "eCapture")
+    flagProcess = 16;
+  //  if (step->GetPostStepPoint()->GetProcessDefinedStep()
+  // ->GetProcessName()=="msc")        flagProcess =17;
 
-  else if (processName == "proton_G4DNAExcitation") flagProcess = 21;
-  else if (processName == "proton_G4DNAIonisation") flagProcess = 22;
-  else if (processName == "proton_G4DNAChargeDecrease") flagProcess = 23;
+  else if (processName == "proton_G4DNAExcitation")
+    flagProcess = 21;
+  else if (processName == "proton_G4DNAIonisation")
+    flagProcess = 22;
+  else if (processName == "proton_G4DNAChargeDecrease")
+    flagProcess = 23;
 
-  else if (processName == "hydrogen_G4DNAExcitation") flagProcess = 31;
-  else if (processName == "hydrogen_G4DNAIonisation") flagProcess = 32;
-  else if (processName == "hydrogen_G4DNAChargeIncrease") flagProcess = 33;
+  else if (processName == "hydrogen_G4DNAExcitation")
+    flagProcess = 31;
+  else if (processName == "hydrogen_G4DNAIonisation")
+    flagProcess = 32;
+  else if (processName == "hydrogen_G4DNAChargeIncrease")
+    flagProcess = 33;
 
-  else if (processName == "alpha_G4DNAExcitation") flagProcess = 41;
-  else if (processName == "alpha_G4DNAIonisation") flagProcess = 42;
-  else if (processName == "alpha_G4DNAChargeDecrease") flagProcess = 43;
+  else if (processName == "alpha_G4DNAExcitation")
+    flagProcess = 41;
+  else if (processName == "alpha_G4DNAIonisation")
+    flagProcess = 42;
+  else if (processName == "alpha_G4DNAChargeDecrease")
+    flagProcess = 43;
 
-  else if (processName == "alpha+_G4DNAExcitation") flagProcess = 51;
-  else if (processName == "alpha+_G4DNAIonisation") flagProcess = 52;
-  else if (processName == "alpha+_G4DNAChargeDecrease") flagProcess = 53;
-  else if (processName == "alpha+_G4DNAChargeIncrease") flagProcess = 54;
+  else if (processName == "alpha+_G4DNAExcitation")
+    flagProcess = 51;
+  else if (processName == "alpha+_G4DNAIonisation")
+    flagProcess = 52;
+  else if (processName == "alpha+_G4DNAChargeDecrease")
+    flagProcess = 53;
+  else if (processName == "alpha+_G4DNAChargeIncrease")
+    flagProcess = 54;
 
-  else if (processName == "helium_G4DNAExcitation") flagProcess = 61;
-  else if (processName == "helium_G4DNAIonisation") flagProcess = 62;
-  else if (processName == "helium_G4DNAChargeIncrease") flagProcess = 63;
+  else if (processName == "helium_G4DNAExcitation")
+    flagProcess = 61;
+  else if (processName == "helium_G4DNAIonisation")
+    flagProcess = 62;
+  else if (processName == "helium_G4DNAChargeIncrease")
+    flagProcess = 63;
 
-// if (step->GetPreStepPoint()->GetProcessDefinedStep()->
-//  GetProcessName()=="hIoni")        flagProcess =24;
-// if (step->GetPreStepPoint()->GetProcessDefinedStep()->
-//  GetProcessName()=="eIoni")        flagProcess =18;
+  // if (step->GetPreStepPoint()->GetProcessDefinedStep()->
+  //  GetProcessName()=="hIoni")        flagProcess =24;
+  // if (step->GetPreStepPoint()->GetProcessDefinedStep()->
+  //  GetProcessName()=="eIoni")        flagProcess =18;
 
-  if (volumeName == "physi sugar 2") flagVolume = 1;
-  else if (volumeName == "physi sugar 4") flagVolume = 2;
+  if (volumeName == "physi sugar 2")
+    flagVolume = 1;
+  else if (volumeName == "physi sugar 4")
+    flagVolume = 2;
 
-  if (flagVolume != 0 && dE != 0)
-  {
-
+  if (flagVolume != 0 && dE != 0) {
     x = step->GetPreStepPoint()->GetPosition().x() / nanometer;
     y = step->GetPreStepPoint()->GetPosition().y() / nanometer;
     z = step->GetPreStepPoint()->GetPosition().z() / nanometer;
@@ -137,11 +160,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     zp = step->GetPostStepPoint()->GetPosition().z() / nanometer;
 
     // The lines below could be put upper to gain time in the simulation
-    // Added here for testing that all the retrieve information are 
+    // Added here for testing that all the retrieve information are
     // correctly working
     CommandLineParser* parser = CommandLineParser::GetParser();
     Command* command(0);
-    if((command = parser->GetCommandIfActive("-out"))==0) return;
+    if ((command = parser->GetCommandIfActive("-out")) == 0) return;
 
     // get analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -153,12 +176,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     analysisManager->FillNtupleDColumn(4, yp);
     analysisManager->FillNtupleDColumn(5, zp);
     analysisManager->FillNtupleDColumn(6, dE);
-    analysisManager->FillNtupleDColumn(7,
-                                       std::sqrt((x - xp) * (x - xp)
-                                           + (y - yp) * (y - yp)
-                                           + (z - zp) * (z - zp)));
+    analysisManager->FillNtupleDColumn(
+      7, std::sqrt((x - xp) * (x - xp) + (y - yp) * (y - yp) + (z - zp) * (z - zp)));
 
     analysisManager->AddNtupleRow();
   }
-
 }

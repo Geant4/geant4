@@ -29,29 +29,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSPrimaryGeneratorAction.hh"
+
 #include "SAXSDetectorConstruction.hh"
 
-#include "G4RunManager.hh"
-#include "G4Event.hh"
 #include "G4AutoLock.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-
-#include "Randomize.hh"
-
+#include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
-
+#include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSPrimaryGeneratorAction::SAXSPrimaryGeneratorAction() :
-  G4VUserPrimaryGeneratorAction()
+SAXSPrimaryGeneratorAction::SAXSPrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
-  fParticleGPS = new G4GeneralParticleSource(); 
+  fParticleGPS = new G4GeneralParticleSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,4 +66,3 @@ void SAXSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

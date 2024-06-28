@@ -26,73 +26,75 @@
 // author: hoang tran
 
 #ifndef PULSE_PULSEACTION_HH
-#define PULSE_PULSEACTION_HH
+#define PULSE_PULSEACTION_HH 1
 
-#include "G4UserTrackingAction.hh"
-#include <map>
-#include "G4VUserTrackInformation.hh"
-#include "G4VUserPulseInfo.hh"
 #include "G4MoleculeCounter.hh"
-#include <vector>
+#include "G4UserTrackingAction.hh"
+#include "G4VUserPulseInfo.hh"
+#include "G4VUserTrackInformation.hh"
+
+#include <memory>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4ParticleDefinition;
 
 class PulseActionMessenger;
 
-class PulseInfo : public G4VUserPulseInfo {
-public:
-  explicit PulseInfo(G4double delayedTime);
+class PulseInfo : public G4VUserPulseInfo
+{
+  public:
+    explicit PulseInfo(G4double delayedTime);
 
-  ~PulseInfo() override;
+    ~PulseInfo() override;
 
-  G4double GetDelayedTime() const override;
+    G4double GetDelayedTime() const override;
 
-private:
-  G4double fDelayedTime = 0;
+  private:
+    G4double fDelayedTime = 0;
 };
 
-class PulseAction : public G4UserTrackingAction {
-public:
-  using PulseMap = std::map<G4double, G4double>;
+class PulseAction : public G4UserTrackingAction
+{
+  public:
+    using PulseMap = std::map<G4double, G4double>;
 
-  PulseAction();
+    PulseAction();
 
-  ~PulseAction() override;
+    ~PulseAction() override;
 
-  void Initialize();
+    void Initialize();
 
-  void PreUserTrackingAction(const G4Track *) override;
+    void PreUserTrackingAction(const G4Track*) override;
 
-  G4double RandomizeInPulse();
+    G4double RandomizeInPulse();
 
-  G4double PulseSpectrum(G4double);
+    G4double PulseSpectrum(G4double);
 
-  static G4double Interpolate(const std::array<G4double,5>& dat);
+    static G4double Interpolate(const std::array<G4double, 5>& dat);
 
-  G4double GetLonggestDelayedTime() const;
+    G4double GetLonggestDelayedTime() const;
 
-  inline void SetPulse(const G4bool& pulse)
-  {
-    fActivePulse = pulse;
-    if(fActivePulse){
-      G4MoleculeCounter::Instance()->Use(false);
+    inline void SetPulse(const G4bool& pulse)
+    {
+      fActivePulse = pulse;
+      if (fActivePulse) {
+        G4MoleculeCounter::Instance()->Use(false);
+      }
     }
-  }
 
-  inline G4bool IsActivedPulse() const
-  {
-    return fActivePulse;
-  }
+    inline G4bool IsActivedPulse() const { return fActivePulse; }
 
-private:
-  std::unique_ptr<PulseInfo> fpPulseInfo;
-  G4double fPulseLarger = 74.16666667;
-  G4double fDelayedTime = 0;
-  PulseMap fPulseData;
-  std::vector<G4double> fPulseVector;
-  G4double fLonggestDelayedTime = 0;
-  std::unique_ptr<PulseActionMessenger> fpMessenger;
-  G4bool fActivePulse = false;
+  private:
+    std::unique_ptr<PulseInfo> fpPulseInfo;
+    G4double fPulseLarger = 74.16666667;
+    G4double fDelayedTime = 0;
+    PulseMap fPulseData;
+    std::vector<G4double> fPulseVector;
+    G4double fLonggestDelayedTime = 0;
+    std::unique_ptr<PulseActionMessenger> fpMessenger;
+    G4bool fActivePulse = false;
 };
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif

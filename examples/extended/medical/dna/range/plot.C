@@ -1,13 +1,12 @@
 //
 // *********************************************************************
-// To execute this macro under ROOT after your simulation ended, 
+// To execute this macro under ROOT after your simulation ended,
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
 //   3 - OR directly type 'root plot.C'
 // *********************************************************************
 
 {
-
 gROOT->Reset();
 gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
@@ -15,6 +14,7 @@ gStyle->SetOptStat(00000);
 
 c1 = new TCanvas ("c1","Range",60,60,700,700);
 c1->Divide(1,1);
+
 c1->cd(1);
 gPad->SetLogx();
 gPad->SetLogy();
@@ -38,21 +38,23 @@ Int_t nlines = 0;
 
 TNtuple *ntuple = new TNtuple("ntuple","range","e:track:strack:proj:sproj:pene:spene");
 
-while (1) 
+while (1)
 {
-      ncols = fscanf(fp,"%f %f %f %f %f %f %f",&e,&track,&strack,&proj,&sproj,&pene,&spene);
-      if (ncols < 0) break;
-      ntuple->Fill(e,track,strack,proj,sproj,pene,spene);
-      nlines++;
+  ncols = fscanf(fp,"%f %f %f %f %f %f %f",&e,&track,&strack,&proj,&sproj,&pene,&spene);
+  if (ncols < 0) break;
+  ntuple->Fill(e,track,strack,proj,sproj,pene,spene);
+  nlines++;
 }
-   
 fclose(fp);
 
 ntuple->SetLineWidth(3);
+
 ntuple->SetLineColor(2);
 ntuple->Draw("track:e","","Lsame");
+
 ntuple->SetLineColor(3);
 ntuple->Draw("pene:e","","Lsame");
+
 ntuple->SetLineColor(4);
 ntuple->Draw("proj:e","","Lsame");
 }

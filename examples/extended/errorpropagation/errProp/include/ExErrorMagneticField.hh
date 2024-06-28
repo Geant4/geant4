@@ -41,24 +41,22 @@ class G4FieldManager;
 ///
 /// History:
 /// Created:   May 2007
-/// \author   P. Arce 
+/// \author   P. Arce
 //------------------------------------------------------------------------
 
-class ExErrorMagneticField: public G4UniformMagField
+class ExErrorMagneticField : public G4UniformMagField
 {
   public:
-  
-   ExErrorMagneticField(G4ThreeVector);  //  The value of the field
-   ExErrorMagneticField();               //  A zero field
-      
-   //Set the field (0,0,fieldValue)
-   void SetFieldValue(G4double fieldValue);
-   void SetFieldValue(G4ThreeVector fieldVector);
+    ExErrorMagneticField(G4ThreeVector);  //  The value of the field
+    ExErrorMagneticField();  //  A zero field
 
-protected:
+    // Set the field (0,0,fieldValue)
+    void SetFieldValue(G4double fieldValue);
+    void SetFieldValue(G4ThreeVector fieldVector);
 
-  // Find the global Field Manager
-  G4FieldManager* GetGlobalFieldManager();   // static 
+  protected:
+    // Find the global Field Manager
+    G4FieldManager* GetGlobalFieldManager();  // static
 };
 
 #endif

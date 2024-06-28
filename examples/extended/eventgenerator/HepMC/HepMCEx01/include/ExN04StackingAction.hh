@@ -31,46 +31,48 @@
 #ifndef ExN04StackingAction_H
 #define ExN04StackingAction_H 1
 
-#include "globals.hh"
+#include "ExN04MuonHit.hh"
+#include "ExN04TrackerHit.hh"
+
 #include "G4ThreeVector.hh"
 #include "G4UserStackingAction.hh"
-#include "ExN04TrackerHit.hh"
-#include "ExN04MuonHit.hh"
+#include "globals.hh"
 
 class G4Track;
 class ExN04StackingActionMessenger;
 
-class ExN04StackingAction : public G4UserStackingAction {
-public:
-  ExN04StackingAction();
-  virtual ~ExN04StackingAction();
+class ExN04StackingAction : public G4UserStackingAction
+{
+  public:
+    ExN04StackingAction();
+    virtual ~ExN04StackingAction();
 
-  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
-  virtual void NewStage();
-  virtual void PrepareNewEvent();
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+    virtual void NewStage();
+    virtual void PrepareNewEvent();
 
-  inline void SetNRequestMuon(G4int val) { fReqMuon = val; }
-  inline G4int GetNRequestMuon() const { return fReqMuon; }
-  inline void SetNRequestIsoMuon(G4int val) { fReqIsoMuon = val; }
-  inline G4int GetNRequestIsoMuon() const { return fReqIsoMuon; }
-  inline void SetNIsolation(G4int val) { fReqIso = val; }
-  inline G4int GetNIsolation() const { return fReqIso; }
-  inline void SetRoIAngle(G4double val) { fAngRoI = val; }
-  inline G4double GetRoIAngle() const { return fAngRoI; }
+    inline void SetNRequestMuon(G4int val) { fReqMuon = val; }
+    inline G4int GetNRequestMuon() const { return fReqMuon; }
+    inline void SetNRequestIsoMuon(G4int val) { fReqIsoMuon = val; }
+    inline G4int GetNRequestIsoMuon() const { return fReqIsoMuon; }
+    inline void SetNIsolation(G4int val) { fReqIso = val; }
+    inline G4int GetNIsolation() const { return fReqIso; }
+    inline void SetRoIAngle(G4double val) { fAngRoI = val; }
+    inline G4double GetRoIAngle() const { return fAngRoI; }
 
-private:
-  G4bool InsideRoI(const G4Track * aTrack,G4double ang);
-  G4VHitsCollection* GetCollection(G4String colName);
+  private:
+    G4bool InsideRoI(const G4Track* aTrack, G4double ang);
+    G4VHitsCollection* GetCollection(G4String colName);
 
-  ExN04TrackerHitsCollection* fTrkHits;
-  ExN04MuonHitsCollection* fMuonHits;
-  ExN04StackingActionMessenger* fMessenger;
+    ExN04TrackerHitsCollection* fTrkHits;
+    ExN04MuonHitsCollection* fMuonHits;
+    ExN04StackingActionMessenger* fMessenger;
 
-  G4int fStage;
-  G4int fReqMuon;
-  G4int fReqIsoMuon;
-  G4int fReqIso;
-  G4double fAngRoI;
+    G4int fStage;
+    G4int fReqMuon;
+    G4int fReqIsoMuon;
+    G4int fReqIso;
+    G4double fAngRoI;
 };
 
 #endif

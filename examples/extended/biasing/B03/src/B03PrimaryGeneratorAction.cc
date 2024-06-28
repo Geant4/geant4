@@ -29,26 +29,25 @@
 //
 //
 
-#include "globals.hh"
-
 #include "B03PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
-#include "G4ParticleGun.hh"
 #include "G4Neutron.hh"
-#include "G4ThreeVector.hh"
+#include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B03PrimaryGeneratorAction::B03PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
   fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
-  fParticleGun->SetParticleEnergy(10.0*MeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
+  fParticleGun->SetParticleEnergy(10.0 * MeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005 * cm));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
 }
 

@@ -123,7 +123,7 @@ class RBE : public VRadiobiologicalQuantity
 
     // Selected tables and associated values.
     // (changed when the cell line is set)
-    G4String fActiveCellLine ;
+    G4String fActiveCellLine;
     vector_type* fActiveTableEnergy = nullptr;
     vector_type* fActiveTableAlpha = nullptr;
     vector_type* fActiveTableBeta = nullptr;

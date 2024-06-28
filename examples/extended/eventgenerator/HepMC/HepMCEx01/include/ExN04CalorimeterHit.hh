@@ -39,47 +39,48 @@
 #include "G4Transform3D.hh"
 #include "G4VHit.hh"
 
-class ExN04CalorimeterHit : public G4VHit {
-public:
-  ExN04CalorimeterHit();
-  ExN04CalorimeterHit(G4LogicalVolume* logVol, G4int z, G4int phi);
-  ExN04CalorimeterHit(const ExN04CalorimeterHit& right);
+class ExN04CalorimeterHit : public G4VHit
+{
+  public:
+    ExN04CalorimeterHit();
+    ExN04CalorimeterHit(G4LogicalVolume* logVol, G4int z, G4int phi);
+    ExN04CalorimeterHit(const ExN04CalorimeterHit& right);
 
-  virtual ~ExN04CalorimeterHit();
+    virtual ~ExN04CalorimeterHit();
 
-  const ExN04CalorimeterHit& operator=(const ExN04CalorimeterHit& right);
-  G4bool operator==(const ExN04CalorimeterHit& right) const;
+    const ExN04CalorimeterHit& operator=(const ExN04CalorimeterHit& right);
+    G4bool operator==(const ExN04CalorimeterHit& right) const;
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
-  virtual void Draw();
-  virtual void Print();
+    virtual void Draw();
+    virtual void Print();
 
-  void SetCellID(G4int z,G4int phi);
-  G4int GetZ();
-  G4int GetPhi();
-  void SetEdep(G4double de);
-  void AddEdep(G4double de);
-  G4double GetEdep();
-  void SetPos(G4ThreeVector xyz);
-  G4ThreeVector GetPos();
-  void SetRot(G4RotationMatrix rmat);
-  G4RotationMatrix GetRot();
-  const G4LogicalVolume* GetLogV();
+    void SetCellID(G4int z, G4int phi);
+    G4int GetZ();
+    G4int GetPhi();
+    void SetEdep(G4double de);
+    void AddEdep(G4double de);
+    G4double GetEdep();
+    void SetPos(G4ThreeVector xyz);
+    G4ThreeVector GetPos();
+    void SetRot(G4RotationMatrix rmat);
+    G4RotationMatrix GetRot();
+    const G4LogicalVolume* GetLogV();
 
-private:
-  G4int fZCellID;
-  G4int fPhiCellID;
-  G4double fedep;
-  G4ThreeVector fpos;
-  G4RotationMatrix frot;
-  const G4LogicalVolume* fpLogV;
+  private:
+    G4int fZCellID;
+    G4int fPhiCellID;
+    G4double fedep;
+    G4ThreeVector fpos;
+    G4RotationMatrix frot;
+    const G4LogicalVolume* fpLogV;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline void ExN04CalorimeterHit::SetCellID(G4int z,G4int phi)
- {
+inline void ExN04CalorimeterHit::SetCellID(G4int z, G4int phi)
+{
   fZCellID = z;
   fPhiCellID = phi;
 }
@@ -129,7 +130,7 @@ inline G4RotationMatrix ExN04CalorimeterHit::GetRot()
   return frot;
 }
 
-inline const G4LogicalVolume * ExN04CalorimeterHit::GetLogV()
+inline const G4LogicalVolume* ExN04CalorimeterHit::GetLogV()
 {
   return fpLogV;
 }
@@ -142,13 +143,13 @@ extern G4Allocator<ExN04CalorimeterHit> ExN04CalorimeterHitAllocator;
 inline void* ExN04CalorimeterHit::operator new(size_t)
 {
   void* aHit;
-  aHit = (void*) ExN04CalorimeterHitAllocator.MallocSingle();
+  aHit = (void*)ExN04CalorimeterHitAllocator.MallocSingle();
   return aHit;
 }
 
 inline void ExN04CalorimeterHit::operator delete(void* aHit)
 {
-  ExN04CalorimeterHitAllocator.FreeSingle((ExN04CalorimeterHit*) aHit);
+  ExN04CalorimeterHitAllocator.FreeSingle((ExN04CalorimeterHit*)aHit);
 }
 
 #endif

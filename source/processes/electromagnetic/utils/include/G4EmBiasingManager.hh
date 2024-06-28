@@ -106,7 +106,7 @@ public:
 				 G4VEmModel* currentModel,
 				 G4ParticleChangeForLoss* pParticleChange,
 				 G4double& eloss, 
-   			 G4int coupleIdx,  
+   			         G4int coupleIdx,  
 				 G4double tcut, 
 				 G4double safety = 0.0);
 

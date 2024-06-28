@@ -23,23 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include <utility>
-
 #include "VirtualChromosome.hh"
+
+#include <utility>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-VirtualChromosome::VirtualChromosome(const G4String& name)
-  : fName(name)
-{}
+VirtualChromosome::VirtualChromosome(const G4String& name) : fName(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String VirtualChromosome::Plot()
 {
   G4String str = "";
-  for(int ii = 0; ii != 2000; ++ii)
-  {
+  for (int ii = 0; ii != 2000; ++ii) {
     G4ThreeVector point = RandomPointInChromosome();
     str += GetName();
     str += " ";

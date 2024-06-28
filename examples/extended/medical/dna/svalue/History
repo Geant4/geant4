@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-03-10 Sebastien Incerti (svalue-V11-02-00)
+- Cleaned example
+
 ## 2021-12-10 Ben Morgan (svalue-V11-00-00)
 - Change to new Markdown History format
 
@@ -22,10 +25,10 @@ be used as a substitute for writing good git commit messages!
   as this is now done by the Geant4 kernel.
 
 11-02-2021 - tag svalue-V10-07-00 - V. Ivanchenko
-- PhysicsList - remove unused header; radioactive decay is defined 
+- PhysicsList - remove unused header; radioactive decay is defined
   via standard radioactive physics builder; do not allow change
   of geometry between runs, only materials may be changed;
-  removed all warning in test run 
+  removed all warning in test run
 
 26-11-19 I. Hrivnacova (svalue-V10-05-01)
 - Fixed Doxygen warnings
@@ -96,7 +99,7 @@ be used as a substitute for writing good git commit messages!
 06-05-15 MK (svalue-V10-01-04)
 - make PrimaryGeneratorAction g4 state dependent in order to enable
 generic physics list (empty modular physics list)
-	 
+
 05-05-15 MK (svalue-V10-01-03)
 - update PhysicsList
 - code cleaning

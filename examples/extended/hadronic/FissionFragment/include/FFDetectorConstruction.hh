@@ -47,22 +47,20 @@
 #include "G4Material.hh"
 #include "G4VUserDetectorConstruction.hh"
 
-
-class FFDetectorConstruction
-:   public G4VUserDetectorConstruction
+class FFDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-// Constructor
+  public:
+    // Constructor
     FFDetectorConstruction();
-    
-// Functions
+
+    // Functions
     virtual G4VPhysicalVolume* Construct();
-    
-// Destructor
+
+    // Destructor
     virtual ~FFDetectorConstruction();
 
-private:
-// Fields
+  private:
+    // Fields
     G4Material* fAir;
     G4Material* fAluminum;
     G4Material* fBF3_96E;
@@ -73,14 +71,10 @@ private:
     G4Material* fWater;
     unsigned int fCopyNumber;
 
-// Functions
+    // Functions
     void DefineMaterials(void);
-    void PlaceFuelPlate(double x,
-                        double y,
-                        G4LogicalVolume* const myLogicalVolume,
+    void PlaceFuelPlate(double x, double y, G4LogicalVolume* const myLogicalVolume,
                         G4LogicalVolume* const parentLogicalVolume);
 };
 
-#endif //FFDETECTORCONSTRUCTION
-
-
+#endif  // FFDETECTORCONSTRUCTION

@@ -43,7 +43,10 @@ LXeRunAction::LXeRunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeRunAction::~LXeRunAction() { delete fHistoManager; }
+LXeRunAction::~LXeRunAction()
+{
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Run* LXeRunAction::GenerateRun()
@@ -57,8 +60,7 @@ G4Run* LXeRunAction::GenerateRun()
 void LXeRunAction::BeginOfRunAction(const G4Run*)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(analysisManager->IsActive())
-  {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
   }
 }
@@ -67,13 +69,11 @@ void LXeRunAction::BeginOfRunAction(const G4Run*)
 
 void LXeRunAction::EndOfRunAction(const G4Run*)
 {
-  if(isMaster)
-    fRun->EndOfRun();
+  if (isMaster) fRun->EndOfRun();
 
   // save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(analysisManager->IsActive())
-  {
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
   }

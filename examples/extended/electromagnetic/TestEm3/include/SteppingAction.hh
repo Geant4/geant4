@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,15 +45,15 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(DetectorConstruction*, EventAction*);
-   ~SteppingAction() override = default;
+    ~SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step*) override;
-    
+
     G4double BirksAttenuation(const G4Step*);
-    
+
   private:
     DetectorConstruction* fDetector = nullptr;
-    EventAction*          fEventAct = nullptr;
+    EventAction* fEventAct = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

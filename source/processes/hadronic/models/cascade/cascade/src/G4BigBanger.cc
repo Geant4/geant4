@@ -58,6 +58,7 @@
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4Pow.hh"
+#include "Randomize.hh"
 
 using namespace G4InuclSpecialFunctions;
 
@@ -327,12 +328,12 @@ G4double G4BigBanger::generateX(G4int a, G4double promax) const {
   G4int itry = 0;
   G4double x;
   
-  while(itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
+  while(itry < itry_max) {    /* Loop checking 08.06.2015 MHK */
     itry++;
-    x = inuclRndm();
+    x = G4UniformRand();
+    if(xProbability(x, a) >= promax*G4UniformRand() ) return x;
+  }
 
-    if(xProbability(x, a) >= promax * inuclRndm()) return x;
-  };
   if (verboseLevel > 2) {
     G4cout << " BigBanger -> can not generate x " << G4endl;
   }

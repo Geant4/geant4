@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/src/PhysicsListMessenger.cc
@@ -36,24 +39,22 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys),
- fPhysDir(0), fListCmd(0)
+  : G4UImessenger(), fPhysicsList(pPhys), fPhysDir(0), fListCmd(0)
 {
   fPhysDir = new G4UIdirectory("/svalue/phys/");
-  fPhysDir->SetGuidance("physics list commands");
-  
-  fListCmd = new G4UIcmdWithAString("/svalue/phys/addPhysics",this);  
-  fListCmd->SetGuidance("Add modula physics list.");
-  fListCmd->SetParameterName("PList",false);
+  fPhysDir->SetGuidance("Physics list commands");
+
+  fListCmd = new G4UIcmdWithAString("/svalue/phys/addPhysics", this);
+  fListCmd->SetGuidance("Add modular physics list");
+  fListCmd->SetParameterName("PList", false);
   fListCmd->AvailableForStates(G4State_PreInit);
-  fListCmd->SetToBeBroadcasted(false);        
+  fListCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,13 +62,14 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fListCmd;
-  delete fPhysDir;    
+  delete fPhysDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{       
-  if( command == fListCmd )
-   { fPhysicsList->AddPhysicsList(newValue);}
+{
+  if (command == fListCmd) {
+    fPhysicsList->AddPhysicsList(newValue);
+  }
 }

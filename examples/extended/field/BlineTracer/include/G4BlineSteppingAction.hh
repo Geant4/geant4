@@ -52,13 +52,11 @@ class G4BlineTracer;
 class G4BlineSteppingAction : public G4UserSteppingAction
 {
   public:  // with description
-
     G4BlineSteppingAction(G4BlineTracer* aBlineTool);
     ~G4BlineSteppingAction() override = default;
     void UserSteppingAction(const G4Step*) override;
 
   private:
-
     G4BlineTracer* fBlineTool = nullptr;
 };
 

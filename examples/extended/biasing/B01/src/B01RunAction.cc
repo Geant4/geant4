@@ -27,30 +27,31 @@
 /// \brief Implementation of the B01RunAction class
 //
 //
-// 
+//
 #include "B01RunAction.hh"
+
 #include "B01Run.hh"
 
 //-- In order to obtain detector information.
-#include "G4RunManager.hh"
 #include "B01DetectorConstruction.hh"
-#include "G4THitsMap.hh"
 
+#include "G4RunManager.hh"
+#include "G4THitsMap.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // B01RunAction
-//  
+//
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Constructor
-B01RunAction::B01RunAction(): 
-  G4UserRunAction(),
-  //  fFieldName(15),
-  fFieldValue(14)
+B01RunAction::B01RunAction()
+  : G4UserRunAction(),
+    //  fFieldName(15),
+    fFieldValue(14)
 {
   // - Prepare data member for B01Run.
   //   vector represents a list of MultiFunctionalDetector names.
@@ -86,7 +87,7 @@ void B01RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void B01RunAction::EndOfRunAction(const G4Run* aRun)
 {
-    G4cout << " ###### EndOfRunAction  " <<G4endl;
+  G4cout << " ###### EndOfRunAction  " << G4endl;
   //- B01Run object.
   B01Run* b01Run = (B01Run*)aRun;
   //--- Dump all socred quantities involved in B01Run.
@@ -94,13 +95,12 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
   //---
   G4RunManager* mgr = G4RunManager::GetRunManager();
   //
-  
-  for ( G4int i = 0; i < (G4int)fSDName.size(); i++ ){
-    const G4VUserDetectorConstruction* vdet = 
-                                       mgr->GetUserDetectorConstruction();
+
+  for (G4int i = 0; i < (G4int)fSDName.size(); i++) {
+    const G4VUserDetectorConstruction* vdet = mgr->GetUserDetectorConstruction();
     B01DetectorConstruction* bdet = (B01DetectorConstruction*)vdet;
     //
-    
+
     //---------------------------------------------
     // Dump accumulated quantities for this RUN.
     //  (Display only central region of x-y plane)
@@ -114,94 +114,73 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
     //      7       ConcreteSD/SLW_V
     //      8       ConcreteSD/SLWE_V
     //---------------------------------------------
-    G4THitsMap<G4double>* Collisions = 
-                          b01Run->GetHitsMap(fSDName[i]+"/Collisions");
-    G4THitsMap<G4double>* CollWeight = 
-                          b01Run->GetHitsMap(fSDName[i]+"/CollWeight");
-    G4THitsMap<G4double>* Population = 
-                          b01Run->GetHitsMap(fSDName[i]+"/Population");
-    G4THitsMap<G4double>* TrackEnter = 
-                          b01Run->GetHitsMap(fSDName[i]+"/TrackEnter");
-    G4THitsMap<G4double>* SL = b01Run->GetHitsMap(fSDName[i]+"/SL");
-    G4THitsMap<G4double>* SLW = b01Run->GetHitsMap(fSDName[i]+"/SLW");
-    G4THitsMap<G4double>* SLWE = b01Run->GetHitsMap(fSDName[i]+"/SLWE");
-    G4THitsMap<G4double>* SLW_V = b01Run->GetHitsMap(fSDName[i]+"/SLW_V");
-    G4THitsMap<G4double>* SLWE_V = b01Run->GetHitsMap(fSDName[i]+"/SLWE_V");
+    G4THitsMap<G4double>* Collisions = b01Run->GetHitsMap(fSDName[i] + "/Collisions");
+    G4THitsMap<G4double>* CollWeight = b01Run->GetHitsMap(fSDName[i] + "/CollWeight");
+    G4THitsMap<G4double>* Population = b01Run->GetHitsMap(fSDName[i] + "/Population");
+    G4THitsMap<G4double>* TrackEnter = b01Run->GetHitsMap(fSDName[i] + "/TrackEnter");
+    G4THitsMap<G4double>* SL = b01Run->GetHitsMap(fSDName[i] + "/SL");
+    G4THitsMap<G4double>* SLW = b01Run->GetHitsMap(fSDName[i] + "/SLW");
+    G4THitsMap<G4double>* SLWE = b01Run->GetHitsMap(fSDName[i] + "/SLWE");
+    G4THitsMap<G4double>* SLW_V = b01Run->GetHitsMap(fSDName[i] + "/SLW_V");
+    G4THitsMap<G4double>* SLWE_V = b01Run->GetHitsMap(fSDName[i] + "/SLWE_V");
 
-    if (IsMaster())
-      {
-        G4cout <<
-          "\n--------------------End of Global Run-----------------------" <<
-        G4endl;
-        G4cout << 
-          " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
-      }
-    else
-      {
-        G4cout <<
-          "\n--------------------End of Local Run------------------------" <<
-        G4endl;
-        G4cout << 
-          " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
-      }     
-    
-    G4cout << "=============================================================" 
-           <<G4endl;
-    G4cout << "=============================================================" 
-           <<G4endl;
+    if (IsMaster()) {
+      G4cout << "\n--------------------End of Global Run-----------------------" << G4endl;
+      G4cout << " Number of event processed : " << aRun->GetNumberOfEvent() << G4endl;
+    }
+    else {
+      G4cout << "\n--------------------End of Local Run------------------------" << G4endl;
+      G4cout << " Number of event processed : " << aRun->GetNumberOfEvent() << G4endl;
+    }
 
-    std::ostream *myout = &G4cout;
+    G4cout << "=============================================================" << G4endl;
+    G4cout << "=============================================================" << G4endl;
+
+    std::ostream* myout = &G4cout;
     PrintHeader(myout);
 
-    for ( G4int iz = 0; iz < 20; iz++){ 
+    for (G4int iz = 0; iz < 20; iz++) {
       G4double* SumCollisions = (*Collisions)[iz];
       G4double* SumCollWeight = (*CollWeight)[iz];
-      G4double* Populations   = (*Population)[iz];
-      G4double* TrackEnters   = (*TrackEnter)[iz];
-      G4double* SLs   = (*SL)[iz];
-      G4double* SLWs   = (*SLW)[iz];
-      G4double* SLWEs   = (*SLWE)[iz];
-      G4double* SLW_Vs   = (*SLW_V)[iz];
-      G4double* SLWE_Vs   = (*SLWE_V)[iz];
-      if ( !SumCollisions ) SumCollisions = new G4double(0.0);
-      if ( !SumCollWeight ) SumCollWeight = new G4double(0.0);
-      if ( !Populations   ) Populations   = new G4double(0.0);
-      if ( !TrackEnters   ) TrackEnters   = new G4double(0.0);
-      if ( !SLs   ) SLs   = new G4double(0.0);
-      if ( !SLWs   ) SLWs   = new G4double(0.0);
-      if ( !SLWEs   ) SLWEs   = new G4double(0.0);
-      if ( !SLW_Vs   ) SLW_Vs   = new G4double(0.0);
-      if ( !SLWE_Vs   ) SLWE_Vs   = new G4double(0.0);
-      G4double NumWeightedEnergy =0.0;
-      G4double FluxWeightedEnergy=0.0; 
-      G4double AverageTrackWeight=0.0;
-      if ( *SLW_Vs !=0. ) NumWeightedEnergy  = (*SLWE_Vs)/(*SLW_Vs);
-      if ( *SLWs   !=0. ) FluxWeightedEnergy  = (*SLWEs)/(*SLWs);
-      if ( *SLs    !=0. ) AverageTrackWeight  = (*SLWs)/(*SLs);
+      G4double* Populations = (*Population)[iz];
+      G4double* TrackEnters = (*TrackEnter)[iz];
+      G4double* SLs = (*SL)[iz];
+      G4double* SLWs = (*SLW)[iz];
+      G4double* SLWEs = (*SLWE)[iz];
+      G4double* SLW_Vs = (*SLW_V)[iz];
+      G4double* SLWE_Vs = (*SLWE_V)[iz];
+      if (!SumCollisions) SumCollisions = new G4double(0.0);
+      if (!SumCollWeight) SumCollWeight = new G4double(0.0);
+      if (!Populations) Populations = new G4double(0.0);
+      if (!TrackEnters) TrackEnters = new G4double(0.0);
+      if (!SLs) SLs = new G4double(0.0);
+      if (!SLWs) SLWs = new G4double(0.0);
+      if (!SLWEs) SLWEs = new G4double(0.0);
+      if (!SLW_Vs) SLW_Vs = new G4double(0.0);
+      if (!SLWE_Vs) SLWE_Vs = new G4double(0.0);
+      G4double NumWeightedEnergy = 0.0;
+      G4double FluxWeightedEnergy = 0.0;
+      G4double AverageTrackWeight = 0.0;
+      if (*SLW_Vs != 0.) NumWeightedEnergy = (*SLWE_Vs) / (*SLW_Vs);
+      if (*SLWs != 0.) FluxWeightedEnergy = (*SLWEs) / (*SLWs);
+      if (*SLs != 0.) AverageTrackWeight = (*SLWs) / (*SLs);
       G4String cname = bdet->GetCellName(iz);
-      G4cout 
-        << std::setw(fFieldValue) << cname << " |"
-        << std::setw(fFieldValue) << (*TrackEnters) << " |"
-        << std::setw(fFieldValue) << (*Populations) << " |"
-        << std::setw(fFieldValue) << (*SumCollisions) << " |"
-        << std::setw(fFieldValue) << (*SumCollWeight) << " |"
-        << std::setw(fFieldValue) << NumWeightedEnergy << " |"
-        << std::setw(fFieldValue) << FluxWeightedEnergy << " |"
-        << std::setw(fFieldValue) << AverageTrackWeight << " |"
-        << std::setw(fFieldValue) << (*SLs) << " |"
-        << std::setw(fFieldValue) << (*SLWs) << " |"
-        << std::setw(fFieldValue) << (*SLW_Vs) << " |"
-        << std::setw(fFieldValue) << (*SLWEs) << " |"
-        << std::setw(fFieldValue) << (*SLWE_Vs) << " |"
-        << G4endl;
+      G4cout << std::setw(fFieldValue) << cname << " |" << std::setw(fFieldValue) << (*TrackEnters)
+             << " |" << std::setw(fFieldValue) << (*Populations) << " |" << std::setw(fFieldValue)
+             << (*SumCollisions) << " |" << std::setw(fFieldValue) << (*SumCollWeight) << " |"
+             << std::setw(fFieldValue) << NumWeightedEnergy << " |" << std::setw(fFieldValue)
+             << FluxWeightedEnergy << " |" << std::setw(fFieldValue) << AverageTrackWeight << " |"
+             << std::setw(fFieldValue) << (*SLs) << " |" << std::setw(fFieldValue) << (*SLWs)
+             << " |" << std::setw(fFieldValue) << (*SLW_Vs) << " |" << std::setw(fFieldValue)
+             << (*SLWEs) << " |" << std::setw(fFieldValue) << (*SLWE_Vs) << " |" << G4endl;
     }
-    G4cout << "============================================="<<G4endl;
+    G4cout << "=============================================" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B01RunAction::PrintHeader(std::ostream *out)
+void B01RunAction::PrintHeader(std::ostream* out)
 {
   std::vector<G4String> vecScoreName;
   vecScoreName.push_back("Tr.Entering");
@@ -218,36 +197,35 @@ void B01RunAction::PrintHeader(std::ostream *out)
   vecScoreName.push_back("SLWE_v");
 
   // head line
-//   std::string vname;
-//   vname = FillString("Volume", ' ', fFieldName+1);
+  //   std::string vname;
+  //   vname = FillString("Volume", ' ', fFieldName+1);
   //*out << vname << '|';
-  *out << std::setw(fFieldValue) << "Volume" << " |";
-  for (std::vector<G4String>::iterator it = vecScoreName.begin();
-      it != vecScoreName.end(); it++) {
-//      vname = FillString((*it),
-//                         ' ', 
-//                         fFieldValue+1, 
-//                         false);
-//      *out << vname << '|';
-      *out << std::setw(fFieldValue) << (*it) << " |";
+  *out << std::setw(fFieldValue) << "Volume"
+       << " |";
+  for (std::vector<G4String>::iterator it = vecScoreName.begin(); it != vecScoreName.end(); it++) {
+    //      vname = FillString((*it),
+    //                         ' ',
+    //                         fFieldValue+1,
+    //                         false);
+    //      *out << vname << '|';
+    *out << std::setw(fFieldValue) << (*it) << " |";
   }
-  *out << G4endl;  
+  *out << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::string B01RunAction::FillString(const std::string &name, 
-                                       char c, G4int n, G4bool back)
+std::string B01RunAction::FillString(const std::string& name, char c, G4int n, G4bool back)
 {
   std::string fname("");
   G4int k = n - name.size();
   if (k > 0) {
     if (back) {
       fname = name;
-      fname += std::string(k,c);
+      fname += std::string(k, c);
     }
     else {
-      fname = std::string(k,c);
+      fname = std::string(k, c);
       fname += name;
     }
   }

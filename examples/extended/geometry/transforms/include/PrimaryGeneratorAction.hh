@@ -48,17 +48,15 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     PrimaryGeneratorAction();
-   ~PrimaryGeneratorAction() override;
+    ~PrimaryGeneratorAction() override;
 
   public:
     void GeneratePrimaries(G4Event*) override;
 
   private:
-    G4ParticleGun*  fParticleGun = nullptr;
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

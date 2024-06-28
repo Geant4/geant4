@@ -27,20 +27,19 @@
 /// file:
 /// brief:
 #include "EventAction.hh"
+
 #include "AnalysisManager.hh"
-#include "DetectorConstruction.hh"
-#include "DNAGeometry.hh"
-#include "ChromosomeMapper.hh"
 #include "ChromosomeHit.hh"
+#include "ChromosomeMapper.hh"
+#include "DNAGeometry.hh"
 #include "DNAHit.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(AnalysisManager* man)
-  : fAnalysisManager(man)
-{}
+EventAction::EventAction(AnalysisManager* man) : fAnalysisManager(man) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,10 +51,8 @@ void EventAction::Initialize()
   fDNAGeometry = det->GetDNAGeometry();
 
   // Prepare Chromo Hits Map
-  std::vector<G4String> keys =
-    fDNAGeometry->GetChromosomeMapper()->GetChromosomeKeys();
-  for(const auto& key : keys)
-  {
+  std::vector<G4String> keys = fDNAGeometry->GetChromosomeMapper()->GetChromosomeKeys();
+  for (const auto& key : keys) {
     uint32_t key_i = G4::hashing::crc32::Hash(key);
     fChromoHitMap[key_i] = nullptr;
   }
@@ -66,23 +63,20 @@ void EventAction::Initialize()
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
-  if(!fInitialized)
-  {
+  if (!fInitialized) {
     Initialize();
   }
 
-  fEdepCell   = 0;
+  fEdepCell = 0;
   fTraLenCell = 0;
   fTraLenChro = 0;
 
   // Prepare DNA Hits vector
   fDNAHits.reserve(10000);
 
-  std::vector<G4String> keys =
-      fDNAGeometry->GetChromosomeMapper()->GetChromosomeKeys();
-  //ChromosomeHit* theHit;
-  for(const auto& it : keys)
-  {
+  std::vector<G4String> keys = fDNAGeometry->GetChromosomeMapper()->GetChromosomeKeys();
+  // ChromosomeHit* theHit;
+  for (const auto& it : keys) {
     uint32_t key_i = G4::hashing::crc32::Hash(it);
     fChromoHitMap[key_i] = new ChromosomeHit(it);
   }
@@ -99,13 +93,11 @@ void EventAction::EndOfEventAction(const G4Event*)
   fAnalysisManager->ProcessCellEdep(fEdepCell);
 
   // destruction /////////////////////////////////////////////////////////////
-  for(auto& it : fChromoHitMap)
-  {
+  for (auto& it : fChromoHitMap) {
     delete it.second;
   }
 
-  for(auto& fDNAHit : fDNAHits)
-  {
+  for (auto& fDNAHit : fDNAHits) {
     delete fDNAHit;
   }
   fDNAHits.clear();
@@ -113,43 +105,44 @@ void EventAction::EndOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::AddChromosomeEdep(const G4String& key, const G4double& e,
-                                    const G4bool& isDNA)
+void EventAction::AddChromosomeEdep(const G4String& key, const G4double& e, const G4bool& isDNA)
 {
   uint32_t key_i = G4::hashing::crc32::Hash(key);
   auto it = fChromoHitMap.find(key_i);
-  if(it != fChromoHitMap.end())
-  {
-    if(isDNA)
-    {
+  if (it != fChromoHitMap.end()) {
+    if (isDNA) {
       it->second->AddDNAEdep(e);
     }
-    else
-    {
+    else {
       it->second->AddChromosomeEdep(e);
     }
   }
-  else
-  {
+  else {
     G4ExceptionDescription errmsg;
     errmsg << "Energy deposit in unknown chromosome: " << key << G4endl;
-    G4Exception("EventAction::AddChromosomeEdep", "ERR_UNKNOWN_CHROMOSOME",
-                FatalException, errmsg);
-
+    G4Exception("EventAction::AddChromosomeEdep", "ERR_UNKNOWN_CHROMOSOME", FatalException, errmsg);
   }
 }
-//2600754154
+// 2600754154
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::AddCellEdep(const G4double& edep) { fEdepCell += edep; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::AddTrackLengthCell(const G4double& tl) { fTraLenCell += tl; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::AddTrackLengthChro(const G4double& tl) { fTraLenChro += tl; }
+void EventAction::AddCellEdep(const G4double& edep)
+{
+  fEdepCell += edep;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void EventAction::AddTrackLengthCell(const G4double& tl)
+{
+  fTraLenCell += tl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::AddTrackLengthChro(const G4double& tl)
+{
+  fTraLenChro += tl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

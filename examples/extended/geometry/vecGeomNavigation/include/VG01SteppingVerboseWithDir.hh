@@ -33,7 +33,7 @@
 //
 // ********************************************************************
 // Code developed by:
-//    J. Apostolakis,   April 2021 
+//    J. Apostolakis,   April 2021
 // ********************************************************************
 
 #ifndef VG01SteppingVerboseWithDir_hh
@@ -41,19 +41,18 @@
 
 #include "G4SteppingVerbose.hh"
 
-class VG01SteppingVerboseWithDir : public G4SteppingVerbose {
+class VG01SteppingVerboseWithDir : public G4SteppingVerbose
+{
+  public:
+    // Constructor/Destructor
+    VG01SteppingVerboseWithDir();
+    ~VG01SteppingVerboseWithDir();
 
-public:   
-  
-  //Constructor/Destructor
-  VG01SteppingVerboseWithDir();
-  ~VG01SteppingVerboseWithDir();
-  
-  void StepInfo() override;
-  void TrackingStarted() override;
+    void StepInfo() override;
+    void TrackingStarted() override;
 
-  // implementation methods - simplify/reduce code
-  void Banner();
+    // implementation methods - simplify/reduce code
+    void Banner();
 };
 
 #endif

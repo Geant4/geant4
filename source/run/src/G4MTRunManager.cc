@@ -37,7 +37,6 @@
 #include "G4Run.hh"
 #include "G4ScoringManager.hh"
 #include "G4StateManager.hh"
-#include "G4TiMemory.hh"
 #include "G4Timer.hh"
 #include "G4TransportationManager.hh"
 #include "G4UImanager.hh"
@@ -625,8 +624,6 @@ void G4MTRunManager::TerminateWorkers()
   RequestWorkersProcessCommandsStack();
   // Ask workers to exit
   NewActionRequest(WorkerActionRequest::ENDWORKER);
-  // finalize profiler before shutting down the threads
-  G4Profiler::Finalize();
   // Now join threads.
 #ifdef G4MULTITHREADED  // protect here to prevent warning in compilation
   while (!threads.empty()) {

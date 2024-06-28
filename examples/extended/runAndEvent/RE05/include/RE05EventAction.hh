@@ -51,5 +51,3 @@ class RE05EventAction : public G4UserEventAction
 };
 
 #endif
-
-    

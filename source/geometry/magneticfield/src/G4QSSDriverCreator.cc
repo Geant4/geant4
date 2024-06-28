@@ -25,7 +25,7 @@
 //
 // G4QSSDriverCreator implementation
 //
-// Author: J.Apostolakis - October 2021 - February 2023 
+// Author: J.Apostolakis (CERN) - 2021-2023 
 // --------------------------------------------------------------------
 
 #include "G4QSSDriverCreator.hh"

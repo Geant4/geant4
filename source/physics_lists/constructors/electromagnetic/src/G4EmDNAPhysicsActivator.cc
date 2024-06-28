@@ -117,6 +117,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
 
   const G4double emaxDNA = 1.*CLHEP::MeV;
   const G4double emaxIonDNA = 300.*CLHEP::MeV;
+  const G4double emaxLightIonDNA = 400.*CLHEP::MeV;
   const G4double eminBorn = 500.*CLHEP::keV;
   const G4double emax = theParameters->MaxKinEnergy();
 
@@ -166,15 +167,15 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
     }
     DeactivateElectronProcesses(emaxDNA, emax, reg);
     G4EmDNABuilder::ConstructDNAElectronPhysics(emaxDNA, opt, fast, st, reg);
-    DeactivateHadronProcesses(prot, emaxDNA, emax, reg);
+    DeactivateHadronProcesses(prot, emaxIonDNA, emax, reg);
     G4EmDNABuilder::ConstructDNAProtonPhysics(eminBorn, emaxIonDNA, opt, fast, st, reg);
     DeactivateIonProcesses(gion, emaxIonDNA, emax, reg);
-    G4EmDNABuilder::ConstructDNAIonPhysics(emax, st, reg);
-    DeactivateIonProcesses(alpha2, emaxIonDNA, emax, reg);
-    G4EmDNABuilder::ConstructDNALightIonPhysics(alpha2, 2, opt, emaxIonDNA, fast, st, reg);
-    DeactivateHadronProcesses(alpha1, emaxIonDNA, emax, reg);
-    G4EmDNABuilder::ConstructDNALightIonPhysics(alpha1, 1, opt, emaxIonDNA, fast, st, reg);
-    G4EmDNABuilder::ConstructDNALightIonPhysics(alpha0, 0, opt, emaxIonDNA, fast, st, reg);
+    G4EmDNABuilder::ConstructDNAIonPhysics(emaxIonDNA, st, reg);
+    DeactivateIonProcesses(alpha2, emaxLightIonDNA, emax, reg);
+    G4EmDNABuilder::ConstructDNALightIonPhysics(alpha2, 2, opt, emaxLightIonDNA, fast, st, reg);
+    DeactivateHadronProcesses(alpha1, emaxLightIonDNA, emax, reg);
+    G4EmDNABuilder::ConstructDNALightIonPhysics(alpha1, 1, opt, emaxLightIonDNA, fast, st, reg);
+    G4EmDNABuilder::ConstructDNALightIonPhysics(alpha0, 0, opt, emaxLightIonDNA, fast, st, reg);
     G4EmDNABuilder::ConstructDNALightIonPhysics(h0, 0, opt, emaxIonDNA, fast, st, reg);
   }
 }

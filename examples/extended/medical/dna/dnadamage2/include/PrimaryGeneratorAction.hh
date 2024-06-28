@@ -39,43 +39,43 @@
 #ifndef DNADAMAGE2_PrimaryGeneratorAction_h
 #define DNADAMAGE2_PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
-#include <G4UImessenger.hh>
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+
+#include <G4UImessenger.hh>
 
 class G4ParticleGun;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction,
-                               public G4UImessenger
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4UImessenger
 {
-public:
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction() override;
-  void GeneratePrimaries(G4Event*) override;
-  const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
-  void SetNewValue(G4UIcommand * command, G4String newValue) override;
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
+    void GeneratePrimaries(G4Event*) override;
+    const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+    void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
-private:
-  void LoadSpectrum();
-  G4double SampleSpectrum();
-  G4double SampleProbability(G4double);
-  G4ThreeVector SamplePosition();
+  private:
+    void LoadSpectrum();
+    G4double SampleSpectrum();
+    G4double SampleProbability(G4double);
+    G4ThreeVector SamplePosition();
 
-private:
-  G4ParticleGun* fParticleGun = nullptr;
-  G4UIcmdWithAString* fpSourceFileUI = nullptr;
-  G4UIcmdWithAnInteger* fpVertexUI  = nullptr;
-  G4String fSourceFile = "";
-  G4int fVertex = 1;
-  std::vector<G4double> fEnergyWeights;
-  std::vector<G4double> fEnergies;
+  private:
+    G4ParticleGun* fParticleGun = nullptr;
+    G4UIcmdWithAString* fpSourceFileUI = nullptr;
+    G4UIcmdWithAnInteger* fpVertexUI = nullptr;
+    G4String fSourceFile = "";
+    G4int fVertex = 1;
+    std::vector<G4double> fEnergyWeights;
+    std::vector<G4double> fEnergies;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

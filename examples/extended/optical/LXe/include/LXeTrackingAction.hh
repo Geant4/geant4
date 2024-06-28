@@ -31,19 +31,19 @@
 #ifndef LXeTrackingAction_h
 #define LXeTrackingAction_h 1
 
-#include "globals.hh"
 #include "G4UserTrackingAction.hh"
+#include "globals.hh"
 
 class LXeTrackingAction : public G4UserTrackingAction
 {
- public:
-  LXeTrackingAction() = default;
-  ~LXeTrackingAction() = default;
+  public:
+    LXeTrackingAction() = default;
+    ~LXeTrackingAction() = default;
 
-  void PreUserTrackingAction(const G4Track*) override;
-  void PostUserTrackingAction(const G4Track*) override;
+    void PreUserTrackingAction(const G4Track*) override;
+    void PostUserTrackingAction(const G4Track*) override;
 
- private:
+  private:
 };
 
 #endif

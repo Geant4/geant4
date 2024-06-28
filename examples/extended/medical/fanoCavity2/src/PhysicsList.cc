@@ -31,26 +31,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
 
+#include "PhysListEmStandard_GS.hh"
+#include "PhysListEmStandard_SS.hh"
+#include "PhysListEmStandard_WVI.hh"
 #include "PhysListEmStandard_option0.hh"
 #include "PhysListEmStandard_option3.hh"
 #include "PhysListEmStandard_option4.hh"
-#include "PhysListEmStandard_GS.hh"
-#include "PhysListEmStandard_WVI.hh"
-#include "PhysListEmStandard_SS.hh"
-
+#include "PhysicsListMessenger.hh"
 #include "StepMax.hh"
 
-#include "G4ParticleDefinition.hh"
-
-#include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
 #include "G4Gamma.hh"
+#include "G4Geantino.hh"
 
 // leptons
 #include "G4Electron.hh"
@@ -58,7 +56,6 @@
 
 // Hadrons
 #include "G4Proton.hh"
-
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,15 +63,15 @@
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
-  fMessenger = new PhysicsListMessenger(this); 
-   
+  fMessenger = new PhysicsListMessenger(this);
+
   // EM physics
   fEmName = G4String("standard_opt3");
   fEmPhysicsList = new PhysListEmStandard_option3(fEmName);
-      
-  defaultCutValue = 10*km;
 
-  SetVerboseLevel(1);  
+  defaultCutValue = 10 * km;
+
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,27 +79,26 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete fEmPhysicsList;
-  delete fMessenger;  
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
-  
+
   // gamma
   G4Gamma::GammaDefinition();
-  
+
   // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
 
   // baryons
-  G4Proton::ProtonDefinition();  
+  G4Proton::ProtonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,16 +118,15 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   StepMax* stepMaxProcess = new StepMax();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)()){
-      G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+  while ((*particleIterator)()) {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
-        {
-          pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+    if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
+      pmanager->AddDiscreteProcess(stepMaxProcess);
+    }
   }
 }
 
@@ -139,53 +134,45 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>0) {
+  if (verboseLevel > 0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == fEmName) return;
 
   if (name == "standard_opt0") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_option0(name);
-    
-  } else if (name == "standard_opt3") {
-
+  }
+  else if (name == "standard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_option3(name);
-        
-  } else if (name == "standard_opt4") {
-
+  }
+  else if (name == "standard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_option4(name);
-        
-  } else if (name == "standard_GS") {
-
+  }
+  else if (name == "standard_GS") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard_GS(name);    
-        
-  } else if (name == "standard_WVI") {
-
+    fEmPhysicsList = new PhysListEmStandard_GS(name);
+  }
+  else if (name == "standard_WVI") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_WVI(name);
-            
-  } else if (name == "standard_SS") {
-
+  }
+  else if (name == "standard_SS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_SS(name);
-        
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 

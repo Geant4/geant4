@@ -25,18 +25,20 @@
 //
 
 #ifndef CHEMPUREWATERBUILDER_HH
-#define CHEMPUREWATERBUILDER_HH
+#  define CHEMPUREWATERBUILDER_HH 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4DNAMolecularReactionTable;
 
-class ChemPureWaterBuilder {
-public:
-  ChemPureWaterBuilder() = default;
+class ChemPureWaterBuilder
+{
+  public:
+    ChemPureWaterBuilder() = default;
 
-  ~ChemPureWaterBuilder() = default;
+    ~ChemPureWaterBuilder() = default;
 
-  static void
-  WaterScavengerReaction(G4DNAMolecularReactionTable *pReactionTable);
+    static void WaterScavengerReaction(G4DNAMolecularReactionTable* pReactionTable);
 };
 
 #endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

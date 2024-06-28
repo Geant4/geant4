@@ -146,7 +146,7 @@ class G4FissLib : public G4HadronicInteraction
     G4double* xSec;
     G4ParticleHPChannel* theFission;
     G4String dirName;
-    G4int numEle;
+    std::size_t numEle;
 };
 
 #endif

@@ -31,10 +31,10 @@
 #ifndef DicomRun_h
 #define DicomRun_h 1
 
-#include "G4Run.hh"
 #include "G4Event.hh"
-
+#include "G4Run.hh"
 #include "G4THitsMap.hh"
+
 #include <vector>
 
 //---------------------------------------------------------------------
@@ -48,9 +48,7 @@
 
 class DicomRun : public G4Run
 {
-
   public:
-
     // constructor and destructor.
     //  vector of multifunctionaldetector name has to given to constructor.
     DicomRun();
@@ -64,13 +62,12 @@ class DicomRun : public G4Run
     // Access methods for scoring information.
     // - Number of HitsMap for this RUN.
     //   This is equal to number of collections.
-    size_t GetNumberOfHitsMap() const {return fRunMap.size();}
+    size_t GetNumberOfHitsMap() const { return fRunMap.size(); }
     // - Get HitsMap of this RUN.
     //   by sequential number, by multifucntional name and collection name,
     //   and by collection name with full path.
-    G4THitsMap<G4double>* GetHitsMap(G4int i) const {return fRunMap[i];}
-    G4THitsMap<G4double>* GetHitsMap(const G4String& detName,
-                                    const G4String& colName) const;
+    G4THitsMap<G4double>* GetHitsMap(G4int i) const { return fRunMap[i]; }
+    G4THitsMap<G4double>* GetHitsMap(const G4String& detName, const G4String& colName) const;
     G4THitsMap<G4double>* GetHitsMap(const G4String& fullName) const;
 
     void ConstructMFD(const std::vector<G4String>&);
@@ -78,7 +75,6 @@ class DicomRun : public G4Run
     virtual void Merge(const G4Run*);
 
   private:
-
     std::vector<G4String> fCollName;
     std::vector<G4int> fCollID;
     std::vector<G4THitsMap<G4double>*> fRunMap;
@@ -87,32 +83,32 @@ class DicomRun : public G4Run
 //==========================================================================
 //          Generic Functions to help with merge
 //==========================================================================
-template <typename T>
+template<typename T>
 inline void Copy(std::vector<T>& main, const std::vector<T>& data)
 {
-    for(size_t i = main.size(); i < data.size(); ++i) {
-        main.push_back(data.at(i));
-    }
+  for (size_t i = main.size(); i < data.size(); ++i) {
+    main.push_back(data.at(i));
+  }
 }
 //==========================================================================
-template <typename T>
+template<typename T>
 inline size_t Copy(std::vector<T*>& main, const std::vector<T*>& data)
 {
-    size_t size_diff = data.size() - main.size();
-    for(size_t i = main.size(); i < data.size(); ++i) {
-        main.push_back(new T(*data.at(i)));
-    }
-    return size_diff;
+  size_t size_diff = data.size() - main.size();
+  for (size_t i = main.size(); i < data.size(); ++i) {
+    main.push_back(new T(*data.at(i)));
+  }
+  return size_diff;
 }
 //==========================================================================
-template <typename T>
+template<typename T>
 inline void Print(const std::vector<T>& data)
 {
-    G4cout << G4endl;
-    for(size_t i = 0; i < data.size(); ++i) {
-        G4cout << "\t\t" << i << " \t\t " << data.at(i) << G4endl;
-    }
-    G4cout << G4endl;
+  G4cout << G4endl;
+  for (size_t i = 0; i < data.size(); ++i) {
+    G4cout << "\t\t" << i << " \t\t " << data.at(i) << G4endl;
+  }
+  G4cout << G4endl;
 }
 //==========================================================================
 

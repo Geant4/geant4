@@ -1,25 +1,37 @@
-#
-/control/verbose 1
-/control/cout/ignoreThreadsExcept 0
+# MT mode
 /run/numberOfThreads 8
-/run/verbose 1
 #
+# Verbosity
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+# Set material
 /spower/det/setMat G4_WATER
+#
+# Set sphere radius
 /spower/det/setRadius 1 m
 #
-# Register physics constructor
+# Set physics constructor
 #/spower/phys/addPhysics  dna_stat
 /spower/phys/addPhysics  dna_stat_opt2
 #/spower/phys/addPhysics  dna_stat_opt4
 #/spower/phys/addPhysics  dna_stat_opt6
 #
+# Run initialization
 /run/initialize
 #
-/tracking/verbose 0
-#
+# Incident particle type
 /gun/particle e-
+#### Example of ion
+#/gun/particle ion
+#/gun/ion 3 7
 #
+# Incident particle energy
 /gun/energy 50 eV
+#
+# Beam on
 /run/beamOn 1000
 #
 /gun/energy 100 eV

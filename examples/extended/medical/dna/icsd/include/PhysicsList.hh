@@ -37,47 +37,40 @@
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-
-#include "G4DNAElastic.hh"
-#include "G4DNAChampionElasticModel.hh"
-#include "G4DNAScreenedRutherfordElasticModel.hh"
-#include "G4DNAPTBElasticModel.hh"
-
-#include "G4DNAExcitation.hh"
-#include "G4DNAMillerGreenExcitationModel.hh"
-#include "G4DNABornExcitationModel.hh"
-#include "G4DNAPTBExcitationModel.hh"
-
-#include "G4DNAIonisation.hh"
-#include "G4DNABornIonisationModel.hh"
-#include "G4DNARuddIonisationModel.hh"
-#include "G4DNAPTBIonisationModel.hh"
-
-#include "G4DNAChargeDecrease.hh"
-#include "G4DNADingfelderChargeDecreaseModel.hh"
-
-#include "G4DNAChargeIncrease.hh"
-#include "G4DNADingfelderChargeIncreaseModel.hh"
-
 #include "G4DNAAttachment.hh"
+#include "G4DNABornExcitationModel.hh"
+#include "G4DNABornIonisationModel.hh"
+#include "G4DNAChampionElasticModel.hh"
+#include "G4DNAChargeDecrease.hh"
+#include "G4DNAChargeIncrease.hh"
+#include "G4DNADingfelderChargeDecreaseModel.hh"
+#include "G4DNADingfelderChargeIncreaseModel.hh"
+#include "G4DNAElastic.hh"
+#include "G4DNAExcitation.hh"
+#include "G4DNAIonisation.hh"
 #include "G4DNAMeltonAttachmentModel.hh"
-
-#include "G4DNAVibExcitation.hh"
-#include "G4DNASancheExcitationModel.hh"
+#include "G4DNAMillerGreenExcitationModel.hh"
 #include "G4DNAModelInterface.hh"
+#include "G4DNAPTBElasticModel.hh"
+#include "G4DNAPTBExcitationModel.hh"
+#include "G4DNAPTBIonisationModel.hh"
+#include "G4DNARuddIonisationModel.hh"
+#include "G4DNASancheExcitationModel.hh"
+#include "G4DNAScreenedRutherfordElasticModel.hh"
+#include "G4DNAVibExcitation.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ProcessManager.hh"
+#include "G4VUserPhysicsList.hh"
 
 class PhysicsListMessenger;
 
-class PhysicsList: public G4VUserPhysicsList
+class PhysicsList : public G4VUserPhysicsList
 {
-public:
+  public:
     PhysicsList();
     virtual ~PhysicsList();
 
-protected:
+  protected:
     // these methods construct particles
     void ConstructBosons();
     void ConstructLeptons();
@@ -93,8 +86,8 @@ protected:
 
     // set cuts
     void SetCuts();
-private:
 
- };
+  private:
+};
 
 #endif

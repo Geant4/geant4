@@ -28,48 +28,36 @@
 
 #include "dcmtk/dcmdata/dcfilefo.h"
 
-#include <vector>
 #include <iostream>
+#include <vector>
 class DicomBeamDevice;
 class DicomBeamControlPoint;
 
-#include "dcmtk/dcmrt/seq/drtblds1.h" // for BeamLimitingDeviceSequenceInRTBeamsModule
 #include "dcmtk/dcmrt/seq/drtbldps.h"  // for BeamLimitingDevicePositionSequence
+#include "dcmtk/dcmrt/seq/drtblds1.h"  // for BeamLimitingDeviceSequenceInRTBeamsModule
 
-class DicomVBeamDevice 
-{ 
-protected:
-  DicomVBeamDevice();
-  ~DicomVBeamDevice(){};
+class DicomVBeamDevice
+{
+  protected:
+    DicomVBeamDevice();
+    ~DicomVBeamDevice() {};
 
-public:
-  void SetNumberOfLeafJawPairs(Sint32 dat){ 
-    theNumberOfLeafJawPairs= dat;
-  }
-  Sint32 GetNumberOfLeafJawPairs() const {
-    return theNumberOfLeafJawPairs;
-  }
-  void SetType(OFString dat){ 
-    theType = dat;
-  }
-  OFString GetType() const {
-    return theType;
-  }
-  void AddPositionBoundary( Float64 dat ){
-    thePositionBoundaries.push_back(dat);
-  }
-  Float64 GetPositionBoundary( size_t ii ) {
-    return thePositionBoundaries[ii];
-  }
+  public:
+    void SetNumberOfLeafJawPairs(Sint32 dat) { theNumberOfLeafJawPairs = dat; }
+    Sint32 GetNumberOfLeafJawPairs() const { return theNumberOfLeafJawPairs; }
+    void SetType(OFString dat) { theType = dat; }
+    OFString GetType() const { return theType; }
+    void AddPositionBoundary(Float64 dat) { thePositionBoundaries.push_back(dat); }
+    Float64 GetPositionBoundary(size_t ii) { return thePositionBoundaries[ii]; }
 
-  virtual void DumpToFile( std::ofstream& out ) = 0;
+    virtual void DumpToFile(std::ofstream& out) = 0;
 
-  virtual void Print( std::ostream& out ) = 0;
+    virtual void Print(std::ostream& out) = 0;
 
-protected:
-  OFString theType;
-  Sint32  theNumberOfLeafJawPairs;
-  std::vector<Float64> thePositionBoundaries;
+  protected:
+    OFString theType;
+    Sint32 theNumberOfLeafJawPairs;
+    std::vector<Float64> thePositionBoundaries;
 };
 
-#endif  
+#endif

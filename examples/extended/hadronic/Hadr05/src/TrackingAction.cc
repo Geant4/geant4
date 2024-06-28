@@ -33,8 +33,8 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "Run.hh"
 #include "EventAction.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
 #include "G4StepStatus.hh"
@@ -42,17 +42,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(DetectorConstruction* det, EventAction* evt)
-:fDetector(det),fEventAct(evt)
-{ }
- 
+  : fDetector(det), fEventAct(evt)
+{}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PreUserTrackingAction(const G4Track* track )
+void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
-  //get Run
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-             
+  // get Run
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   // Energy flow initialisation for primary particle
   //
   if (track->GetTrackID() == 1) {
@@ -62,32 +61,34 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track )
       const G4VTouchable* touchable = track->GetTouchable();
       G4int absorNum = touchable->GetCopyNumber();
       G4int layerNum = touchable->GetReplicaNumber(1);
-      Idnow = (fDetector->GetNbOfAbsor())*layerNum + absorNum;
+      Idnow = (fDetector->GetNbOfAbsor()) * layerNum + absorNum;
     }
-    
+
     G4double Eflow = track->GetKineticEnergy();
-    ///if (track->GetDefinition() == G4Positron::Positron()) {
-    ///  Eflow += 2*electron_mass_c2;
-    ///}
-         
-    //flux artefact, if primary vertex is inside the calorimeter   
-    for (G4int pl=1; pl<=Idnow; ++pl) {run->SumEnergyFlow(pl, Eflow);}
-  } 
+    /// if (track->GetDefinition() == G4Positron::Positron()) {
+    ///   Eflow += 2*electron_mass_c2;
+    /// }
+
+    // flux artefact, if primary vertex is inside the calorimeter
+    for (G4int pl = 1; pl <= Idnow; ++pl) {
+      run->SumEnergyFlow(pl, Eflow);
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{             
- // energy leakage
- G4StepStatus status = aTrack->GetStep()->GetPostStepPoint()->GetStepStatus();
- if (status == fWorldBoundary) { 
+{
+  // energy leakage
+  G4StepStatus status = aTrack->GetStep()->GetPostStepPoint()->GetStepStatus();
+  if (status == fWorldBoundary) {
     G4int parentID = aTrack->GetParentID();
-    G4int index = 0; if (parentID > 0) index = 1;    //primary=0, secondaries=1
+    G4int index = 0;
+    if (parentID > 0) index = 1;  // primary=0, secondaries=1
     G4double eleak = aTrack->GetKineticEnergy();
-    fEventAct->SumEnergyLeak(eleak,index); 
- }               
+    fEventAct->SumEnergyLeak(eleak, index);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

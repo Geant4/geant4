@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 #include "Par03ActionInitialisation.hh"
-#include "Par03PrimaryGeneratorAction.hh"
+
 #include "Par03EventAction.hh"
+#include "Par03PrimaryGeneratorAction.hh"
 #include "Par03RunAction.hh"
 
-Par03ActionInitialisation::Par03ActionInitialisation(
-  Par03DetectorConstruction* aDetector)
-  : G4VUserActionInitialization()
-  , fDetector(aDetector)
+Par03ActionInitialisation::Par03ActionInitialisation(Par03DetectorConstruction* aDetector)
+  : G4VUserActionInitialization(), fDetector(aDetector)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

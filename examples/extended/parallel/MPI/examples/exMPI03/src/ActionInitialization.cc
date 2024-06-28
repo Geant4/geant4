@@ -28,22 +28,19 @@
 /// @brief Define action initialization
 
 #include "ActionInitialization.hh"
+
 #include "EventAction.hh"
 #include "MedicalBeam.hh"
 #include "RunAction.hh"
 #include "RunActionMaster.hh"
+
 #include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ActionInitialization::ActionInitialization()
- : G4VUserActionInitialization()
-{
-}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ActionInitialization::~ActionInitialization()
-{
-}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ActionInitialization::BuildForMaster() const
@@ -56,8 +53,8 @@ void ActionInitialization::Build() const
 {
   SetUserAction(new MedicalBeam);
   SetUserAction(new EventAction);
-if ( G4Threading::IsMultithreadedApplication() )
-  SetUserAction(new RunAction);
-else
-  SetUserAction(new RunActionMaster);//Use master version for sequential
+  if (G4Threading::IsMultithreadedApplication())
+    SetUserAction(new RunAction);
+  else
+    SetUserAction(new RunActionMaster);  // Use master version for sequential
 }

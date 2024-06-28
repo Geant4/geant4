@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include <TQObject.h>
-#include <RQ_OBJECT.h>
 #include <TGFrame.h>
+#include <TQObject.h>
+
+#include <RQ_OBJECT.h>
 
 class TGWindow;
 class TGMainFrame;
@@ -35,23 +36,20 @@ class TCanvas;
 
 class CanvasInTab : public TGMainFrame
 {
-private:
-  TGTab* fpTab;
-  std::vector<TRootEmbeddedCanvas*> fEcanvas;
-  TGLayoutHints *fHintPlots;
-  
-public:
-  CanvasInTab(const TGWindow *p,UInt_t w,UInt_t h);
-  virtual ~CanvasInTab();
-  
-  size_t AddCanvas(const char* name = "New tab");
-  TCanvas* GetCanvas(int i);
-  size_t GetNCanvas() const
-  {
-    return fEcanvas.size();
-  }
-  
-  void SaveCanvas();
-  
-  ClassDef(CanvasInTab,0)
+  private:
+    TGTab* fpTab;
+    std::vector<TRootEmbeddedCanvas*> fEcanvas;
+    TGLayoutHints* fHintPlots;
+
+  public:
+    CanvasInTab(const TGWindow* p, UInt_t w, UInt_t h);
+    virtual ~CanvasInTab();
+
+    size_t AddCanvas(const char* name = "New tab");
+    TCanvas* GetCanvas(int i);
+    size_t GetNCanvas() const { return fEcanvas.size(); }
+
+    void SaveCanvas();
+
+    ClassDef(CanvasInTab, 0)
 };

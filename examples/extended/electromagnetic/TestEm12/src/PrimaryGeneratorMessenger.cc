@@ -33,21 +33,20 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithABool.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
-                                                   PrimaryGeneratorAction* Gun)
-:fAction(Gun)
-{ 
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun) : fAction(Gun)
+{
   fGunDir = new G4UIdirectory("/testem/gun/");
   fGunDir->SetGuidance("gun control");
 
-  fRndmCmd = new G4UIcmdWithABool("/testem/gun/rndm",this);
+  fRndmCmd = new G4UIcmdWithABool("/testem/gun/rndm", this);
   fRndmCmd->SetGuidance("random direction on the beam");
-  fRndmCmd->SetParameterName("rBeam",true);
+  fRndmCmd->SetParameterName("rBeam", true);
   fRndmCmd->SetDefaultValue(true);
 }
 
@@ -61,12 +60,11 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
-{ 
-  if (command == fRndmCmd)
-   {fAction->SetRndmBeam(fRndmCmd->GetNewBoolValue(newValue));}   
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fRndmCmd) {
+    fAction->SetRndmBeam(fRndmCmd->GetNewBoolValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -24,45 +24,36 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45, (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+// // The Geant4-DNA web site is available at http://geant4-dna.org
+//
 //
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
-#include "DetectorConstruction.hh"
-#include "TrackingAction.hh"
-#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-: G4VUserActionInitialization()
-{}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
- // In MT mode, to be clearer, the RunAction class for the master thread might
- // be different than the one used for the workers.
- // This RunAction will be called before and after starting the
- // workers.
- // For more details, please refer to :
- //https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
- //
-
   SetUserAction(new RunAction());
 }
 
@@ -70,18 +61,9 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  // G4cout << "Build for = "
-  // << G4RunManager::GetRunManager()->GetRunManagerType()
-  // << G4endl;
-
   SetUserAction(new PrimaryGeneratorAction);
 
-  TrackingAction* trackingAction = new TrackingAction();
-  SetUserAction(trackingAction);
-
-  RunAction* runAction= new RunAction();
+  RunAction* runAction = new RunAction();
   SetUserAction(runAction);
-
   SetUserAction(new SteppingAction());
-}  
-
+}

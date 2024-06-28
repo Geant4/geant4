@@ -25,14 +25,14 @@
 //
 /// \file SAXSPhysicsListMessenger.hh
 /// \brief Definition of the SAXSPhysicsListMessenger class
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSPhysicsListMessenger_h
 #define SAXSPhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class SAXSPhysicsList;
 
@@ -48,21 +48,20 @@ class G4UIcmdWithABool;
 
 class SAXSPhysicsListMessenger : public G4UImessenger
 {
-public:
-  SAXSPhysicsListMessenger(SAXSPhysicsList*);
-  virtual ~SAXSPhysicsListMessenger();
- 
-  virtual void SetNewValue(G4UIcommand*, G4String);
- 
-private:
-  SAXSPhysicsList* fPhysicsList; 
-  G4UIdirectory* fPhysDir;
-  G4UIcmdWithADoubleAndUnit* fCutsCmd;
-  G4UIcmdWithAString* fListCmd;
-  G4UIcmdWithABool* fUseMIFlagCmd;
+  public:
+    SAXSPhysicsListMessenger(SAXSPhysicsList*);
+    virtual ~SAXSPhysicsListMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    SAXSPhysicsList* fPhysicsList;
+    G4UIdirectory* fPhysDir;
+    G4UIcmdWithADoubleAndUnit* fCutsCmd;
+    G4UIcmdWithAString* fListCmd;
+    G4UIcmdWithABool* fUseMIFlagCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

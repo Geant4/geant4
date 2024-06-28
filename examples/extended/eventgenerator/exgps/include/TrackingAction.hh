@@ -42,14 +42,12 @@
 class TrackingAction : public G4UserTrackingAction
 {
   public:
-    TrackingAction() ;
-   ~TrackingAction() { };
-    
-    virtual void  PreUserTrackingAction(const G4Track*);
+    TrackingAction();
+    ~TrackingAction() {};
+
+    virtual void PreUserTrackingAction(const G4Track*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

@@ -27,35 +27,31 @@
 /// \brief Implementation of the RunAction class
 //
 // $Id: RunAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
-#include "HistoManager.hh"
 
-#include "G4RunManager.hh"
 #include "G4EmCalculator.hh"
-
+#include "G4RunManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-:G4UserRunAction(),
-fpDetector(0), fpRun(0),fpHistoManager(0)
+RunAction::RunAction() : G4UserRunAction(), fpDetector(0), fpRun(0), fpHistoManager(0)
 {
-
-  fpDetector =
-      dynamic_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()
-          ->GetUserDetectorConstruction());
+  fpDetector = dynamic_cast<const DetectorConstruction*>(
+    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
   fpHistoManager = new HistoManager();
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,7 +63,7 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
+{
   fpRun = new Run(fpDetector);
   return fpRun;
 }
@@ -75,34 +71,31 @@ G4Run* RunAction::GenerateRun()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{    
+{
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
   }
-  
-  const PrimaryGeneratorAction* primary =
-      dynamic_cast<const PrimaryGeneratorAction*>(G4RunManager::GetRunManager()
-          ->GetUserPrimaryGeneratorAction());
+
+  const PrimaryGeneratorAction* primary = dynamic_cast<const PrimaryGeneratorAction*>(
+    G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
 
   if (!primary) return;
-      
-  G4ParticleDefinition* particle 
-      = primary->GetParticleGun()->GetParticleDefinition();
+
+  G4ParticleDefinition* particle = primary->GetParticleGun()->GetParticleDefinition();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
   fpRun->SetPrimary(particle, energy);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-  if ( analysisManager->IsActive() ) {  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
-  }      
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

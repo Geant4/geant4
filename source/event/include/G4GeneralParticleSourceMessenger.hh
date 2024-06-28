@@ -190,6 +190,7 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
     G4UIcmdWithAString         *resethistCmd1;
 
     G4UIcmdWithAnInteger* verbosityCmd;
+    G4UIcmdWithABool*     volChkCmd;
 
     // Commands from G4ParticleGun
     //

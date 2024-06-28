@@ -46,20 +46,20 @@
 
 #ifndef RMC01PrimaryGeneratorAction_h
 #define RMC01PrimaryGeneratorAction_h 1
+#include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RMC01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    RMC01PrimaryGeneratorAction();    
+    RMC01PrimaryGeneratorAction();
     virtual ~RMC01PrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event*);
-  
+
   private:
     G4GeneralParticleSource* fParticleSource;
 };
@@ -67,4 +67,3 @@ class RMC01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -29,13 +29,13 @@
 #ifndef EmDNAChemistry_hh
 #define EmDNAChemistry_hh 1
 
+#include "ParserChemReaction.hh"
+
+#include "G4UIcmdWithAString.hh"
+#include "G4UImessenger.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4VUserChemistryList.hh"
 #include "globals.hh"
-
-#include "ParserChemReaction.hh"
-#include "G4UImessenger.hh"
-#include "G4UIcmdWithAString.hh"
 
 class G4DNAMolecularReactionTable;
 
@@ -50,36 +50,35 @@ namespace scavenger
 
 class EmDNAChemistry : public G4VUserChemistryList,
                        public G4VPhysicsConstructor,
-                       public G4UImessenger {
-public:
-  EmDNAChemistry();
+                       public G4UImessenger
+{
+  public:
+    EmDNAChemistry();
 
-  ~EmDNAChemistry() override = default;
+    ~EmDNAChemistry() override = default;
 
-  // Record name of the chemical reaction table to be used
-  void SetNewValue(G4UIcommand *, G4String) override;
+    // Record name of the chemical reaction table to be used
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  void ConstructParticle() override {
-    ConstructMolecule();
-  }
+    void ConstructParticle() override { ConstructMolecule(); }
 
-  void ConstructMolecule() override;
+    void ConstructMolecule() override;
 
-  void ConstructProcess() override;
+    void ConstructProcess() override;
 
-  void ConstructDissociationChannels() override;
+    void ConstructDissociationChannels() override;
 
-  void ConstructReactionTable(G4DNAMolecularReactionTable *) override;
+    void ConstructReactionTable(G4DNAMolecularReactionTable*) override;
 
-  void ConstructTimeStepModel(G4DNAMolecularReactionTable *) override;
+    void ConstructTimeStepModel(G4DNAMolecularReactionTable*) override;
 
-private:
-  std::unique_ptr<G4UIdirectory> fpParserDir;
-  std::unique_ptr<G4UIcmdWithAString> fpReactionTableNameCmd;
-  G4String fReactionTableName = "";
+  private:
+    std::unique_ptr<G4UIdirectory> fpParserDir;
+    std::unique_ptr<G4UIcmdWithAString> fpReactionTableNameCmd;
+    G4String fReactionTableName = "";
 };
 
-}
+}  // namespace scavenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

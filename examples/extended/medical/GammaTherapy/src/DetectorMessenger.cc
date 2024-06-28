@@ -42,104 +42,104 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
-  fDetector(h)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* h) : fDetector(h)
 {
   fDetDir = new G4UIdirectory("/testem/");
   fDetDir->SetGuidance("General  commands");
-  fDetDir1= new G4UIdirectory("/testem/physics/");
+  fDetDir1 = new G4UIdirectory("/testem/physics/");
   fDetDir1->SetGuidance(" commands to define physics");
-  fDetDir2= new G4UIdirectory("/testem/gun/");
+  fDetDir2 = new G4UIdirectory("/testem/gun/");
   fDetDir2->SetGuidance(" commands to define gun");
 
-  fAbsMaterCmd = new G4UIcmdWithAString("/testem/target1Material",this);
+  fAbsMaterCmd = new G4UIcmdWithAString("/testem/target1Material", this);
   fAbsMaterCmd->SetGuidance("Select Material of the target1.");
-  fAbsMaterCmd->SetParameterName("Material1",false);
-  fAbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsMaterCmd->SetParameterName("Material1", false);
+  fAbsMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fWorldMaterCmd = new G4UIcmdWithAString("/testem/target2Material",this);
+  fWorldMaterCmd = new G4UIcmdWithAString("/testem/target2Material", this);
   fWorldMaterCmd->SetGuidance("Select Material of the target2.");
-  fWorldMaterCmd->SetParameterName("Material2",false);
-  fWorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldMaterCmd->SetParameterName("Material2", false);
+  fWorldMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/mylarZ",this);
+  fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/mylarZ", this);
   fAbsThickCmd->SetGuidance("Set mylarZ");
-  fAbsThickCmd->SetParameterName("mylarZ",false);
+  fAbsThickCmd->SetParameterName("mylarZ", false);
   fAbsThickCmd->SetUnitCategory("Length");
   fAbsThickCmd->AvailableForStates(G4State_PreInit);
 
-  fAbsGapCmd = new G4UIcmdWithADoubleAndUnit("/testem/delta",this);
+  fAbsGapCmd = new G4UIcmdWithADoubleAndUnit("/testem/delta", this);
   fAbsGapCmd->SetGuidance("Set gap between absorbers");
-  fAbsGapCmd->SetParameterName("delta",false);
+  fAbsGapCmd->SetParameterName("delta", false);
   fAbsGapCmd->SetUnitCategory("Length");
   fAbsGapCmd->AvailableForStates(G4State_PreInit);
 
-  fAbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/target1Z",this);
+  fAbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/target1Z", this);
   fAbsSizYZCmd->SetGuidance("Set targeet1Z");
-  fAbsSizYZCmd->SetParameterName("target1Z",false);
+  fAbsSizYZCmd->SetParameterName("target1Z", false);
   fAbsSizYZCmd->SetUnitCategory("Length");
   fAbsSizYZCmd->AvailableForStates(G4State_PreInit);
 
-  fWorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/target2Z",this);
+  fWorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/target2Z", this);
   fWorldXCmd->SetGuidance("Set target2Z");
-  fWorldXCmd->SetParameterName("target2Z",false);
+  fWorldXCmd->SetParameterName("target2Z", false);
   fWorldXCmd->SetUnitCategory("Length");
   fWorldXCmd->AvailableForStates(G4State_PreInit);
 
-  fXMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/checkShiftZ",this);
+  fXMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/checkShiftZ", this);
   fXMagFieldCmd->SetGuidance("Define checkShftZ");
-  fXMagFieldCmd->SetParameterName("CheckSZ",false);
+  fXMagFieldCmd->SetParameterName("CheckSZ", false);
   fXMagFieldCmd->SetUnitCategory("Length");
   fXMagFieldCmd->AvailableForStates(G4State_PreInit);
 
-  fYMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdZ",this);
+  fYMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdZ", this);
   fYMagFieldCmd->SetGuidance("Define sensitive detector Z");
-  fYMagFieldCmd->SetParameterName("sdZ",false);
+  fYMagFieldCmd->SetParameterName("sdZ", false);
   fYMagFieldCmd->SetUnitCategory("Length");
   fYMagFieldCmd->AvailableForStates(G4State_PreInit);
 
-  fZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdShiftZ",this);
+  fZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdShiftZ", this);
   fZMagFieldCmd->SetGuidance("Define shift of sensitive detector");
-  fZMagFieldCmd->SetParameterName("sdShiftZ",false);
+  fZMagFieldCmd->SetParameterName("sdShiftZ", false);
   fZMagFieldCmd->SetUnitCategory("Length");
   fZMagFieldCmd->AvailableForStates(G4State_PreInit);
 
-  fNumOfAbsCmd = new G4UIcmdWithAnInteger("/testem/numberDivR",this);
+  fNumOfAbsCmd = new G4UIcmdWithAnInteger("/testem/numberDivR", this);
   fNumOfAbsCmd->SetGuidance("Set number divisions R");
-  fNumOfAbsCmd->SetParameterName("NR",false);
+  fNumOfAbsCmd->SetParameterName("NR", false);
   fNumOfAbsCmd->AvailableForStates(G4State_PreInit);
 
-  fNumOfEvt = new G4UIcmdWithAnInteger("/testem/numberDivZ",this);
+  fNumOfEvt = new G4UIcmdWithAnInteger("/testem/numberDivZ", this);
   fNumOfEvt->SetGuidance("Set number of divisions Z");
-  fNumOfEvt->SetParameterName("NZ",false);
+  fNumOfEvt->SetParameterName("NZ", false);
   fNumOfEvt->AvailableForStates(G4State_PreInit);
 
-  fVerbCmd = new G4UIcmdWithAnInteger("/testem/verbose",this);
+  fVerbCmd = new G4UIcmdWithAnInteger("/testem/verbose", this);
   fVerbCmd->SetGuidance("Set verbose for ");
-  fVerbCmd->SetParameterName("verb",false);
-  fVerbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fVerbCmd->SetParameterName("verb", false);
+  fVerbCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fIntCmd = new G4UIcmdWithAnInteger("/testem/numberDivE",this);
+  fIntCmd = new G4UIcmdWithAnInteger("/testem/numberDivE", this);
   fIntCmd->SetGuidance("Set number of divisions E");
-  fIntCmd->SetParameterName("NZ",false);
+  fIntCmd->SetParameterName("NZ", false);
   fIntCmd->AvailableForStates(G4State_PreInit);
 
-  fDeltaECmd = new G4UIcmdWithADoubleAndUnit("/testem/maxEnergy",this);
+  fDeltaECmd = new G4UIcmdWithADoubleAndUnit("/testem/maxEnergy", this);
   fDeltaECmd->SetGuidance("Define scale of secondary energy histogram");
-  fDeltaECmd->SetParameterName("DeltaE",false);
+  fDeltaECmd->SetParameterName("DeltaE", false);
   fDeltaECmd->SetUnitCategory("Energy");
-  fDeltaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  fDeltaECmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,61 +164,68 @@ DetectorMessenger::~DetectorMessenger()
   delete fVerbCmd;
   delete fIntCmd;
   delete fDeltaECmd;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
+  if (command == fAbsMaterCmd) {
+    fDetector->SetTarget1Material(newValue);
+  }
 
-  if( command == fAbsMaterCmd )
-   { fDetector->SetTarget1Material(newValue);}
+  if (command == fWorldMaterCmd) {
+    fDetector->SetTarget2Material(newValue);
+  }
 
-  if( command == fWorldMaterCmd )
-   { fDetector->SetTarget2Material(newValue);}
+  if (command == fAbsThickCmd) {
+    fDetector->SetMylarZ(fAbsThickCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fAbsThickCmd )
-   { fDetector->SetMylarZ(fAbsThickCmd->GetNewDoubleValue(newValue));}
+  if (command == fAbsGapCmd) {
+    fDetector->SetGap(fAbsGapCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fAbsGapCmd )
-   { fDetector->SetGap(fAbsGapCmd->GetNewDoubleValue(newValue));}
+  if (command == fAbsSizYZCmd) {
+    fDetector->SetTarget1Z(fAbsSizYZCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fAbsSizYZCmd )
-   { fDetector->SetTarget1Z(fAbsSizYZCmd->GetNewDoubleValue(newValue));}
+  if (command == fWorldXCmd) {
+    fDetector->SetTarget2Z(fWorldXCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fWorldXCmd )
-   { fDetector->SetTarget2Z(fWorldXCmd->GetNewDoubleValue(newValue));}
+  if (command == fXMagFieldCmd) {
+    fDetector->SetCheckShiftZ(fXMagFieldCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fXMagFieldCmd )
-   { fDetector->SetCheckShiftZ(fXMagFieldCmd->GetNewDoubleValue(newValue));}
+  if (command == fYMagFieldCmd) {
+    G4double x = fYMagFieldCmd->GetNewDoubleValue(newValue);
+    fDetector->SetAbsorberZ(x);
+  }
 
-  if( command == fYMagFieldCmd )
-   { G4double x = fYMagFieldCmd->GetNewDoubleValue(newValue);
-     fDetector->SetAbsorberZ(x);
-   }
+  if (command == fZMagFieldCmd) {
+    fDetector->SetAbsorberShiftZ(fZMagFieldCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fZMagFieldCmd )
-   { fDetector->SetAbsorberShiftZ(fZMagFieldCmd->GetNewDoubleValue(newValue));}
+  if (command == fNumOfAbsCmd) {
+    fDetector->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));
+  }
 
-  if( command == fNumOfAbsCmd )
-   {
-     fDetector->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));
-   }
+  if (command == fNumOfEvt) {
+    fDetector->SetNumberDivZ(fNumOfEvt->GetNewIntValue(newValue));
+  }
 
-  if( command == fNumOfEvt )
-   { fDetector->SetNumberDivZ(fNumOfEvt->GetNewIntValue(newValue));}
+  if (command == fIntCmd) {
+    fDetector->SetNumberDivE(fIntCmd->GetNewIntValue(newValue));
+  }
+  if (command == fDeltaECmd) {
+    fDetector->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fIntCmd )
-   { fDetector->SetNumberDivE(fIntCmd->GetNewIntValue(newValue));}
-  if( command == fDeltaECmd )
-   { fDetector->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));}
-
-  if( command == fVerbCmd ){
-     G4int ver = fVerbCmd->GetNewIntValue(newValue);
-     fDetector->SetVerbose(ver);
-   }
-
+  if (command == fVerbCmd) {
+    G4int ver = fVerbCmd->GetNewIntValue(newValue);
+    fDetector->SetVerbose(ver);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

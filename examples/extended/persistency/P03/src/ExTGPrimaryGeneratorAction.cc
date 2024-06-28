@@ -28,12 +28,13 @@
 /// \brief Implementation of the ExTGPrimaryGeneratorAction class
 
 #include "ExTGPrimaryGeneratorAction.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGPrimaryGeneratorAction::ExTGPrimaryGeneratorAction()
@@ -41,14 +42,14 @@ ExTGPrimaryGeneratorAction::ExTGPrimaryGeneratorAction()
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
 
-// default particle
+  // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
-  
+
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(10*MeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(10 * MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,9 +60,8 @@ ExTGPrimaryGeneratorAction::~ExTGPrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
-  
+{
+  fParticleGun->SetParticlePosition(G4ThreeVector(0. * cm, 0. * cm, 0. * cm));
+
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
-

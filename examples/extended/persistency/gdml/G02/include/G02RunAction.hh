@@ -37,10 +37,10 @@
 #ifndef G02RunAction_h
 #define G02RunAction_h 1
 
-#include <iostream>
-
-#include "globals.hh"
 #include "G4UserRunAction.hh"
+#include "globals.hh"
+
+#include <iostream>
 
 class G4Run;
 
@@ -51,13 +51,11 @@ class G4Run;
 class G02RunAction : public G4UserRunAction
 {
   public:
-
     G02RunAction();
-   ~G02RunAction();
+    ~G02RunAction();
 
     virtual void BeginOfRunAction(const G4Run*);
     virtual void EndOfRunAction(const G4Run*);
-      
 };
 
 // ----------------------------------------------------------------------------

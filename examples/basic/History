@@ -5,6 +5,18 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-06-10 I. Hrivnacova (exbasic-V11-02-01)
+- Fix includes, simplified local variables names:
+  - Applied suggestions of include-what-you-use tools,
+  - Adjustment for include "globals.hh":
+    alway prefer "globals.hh" in examples to explicit includes of containing definitions
+  - Simplified local variables names:
+    aStep, aTrack, anEvent, aRun -> step, track, event, run
+
+## 2024-06-01 Ben Morgan (exbasic-V11-02-00)
+- Apply clang-format to all basic examples
+- Address coding style warnings
+
 ## 2023-10-09 Ben Morgan (exbasic-V11-01-00)
 - Bump CMake range to 3.16...3.27 in line with main toolkit
 

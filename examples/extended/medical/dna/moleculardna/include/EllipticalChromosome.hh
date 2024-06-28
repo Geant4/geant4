@@ -32,62 +32,61 @@
 
 #include "VirtualChromosome.hh"
 
-#include "globals.hh"
-
-#include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EllipticalChromosome : public VirtualChromosome
 {
- public:
-  EllipticalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
-                       const G4double&, const G4double&);
+  public:
+    EllipticalChromosome(const G4String&, const G4ThreeVector&, const G4double&, const G4double&,
+                         const G4double&);
 
-  EllipticalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
-                       const G4double&, const G4double&, const G4RotationMatrix&);
+    EllipticalChromosome(const G4String&, const G4ThreeVector&, const G4double&, const G4double&,
+                         const G4double&, const G4RotationMatrix&);
 
-  ~EllipticalChromosome() override;
+    ~EllipticalChromosome() override;
 
-  G4bool PointInChromosome(G4ThreeVector const& position) override;
+    G4bool PointInChromosome(G4ThreeVector const& position) override;
 
-  G4ThreeVector RandomPointInChromosome() override;
+    G4ThreeVector RandomPointInChromosome() override;
 
-  G4String GetShape() override { return fShape; };
-  static const G4String fShape;
+    G4String GetShape() override { return fShape; };
+    static const G4String fShape;
 
-  void Print() override
-  {
-    G4cout << "type: " << fShape << G4endl;
-    G4cout << "semi-x: " << fSemiX << G4endl;
-    G4cout << "semi-y: " << fSemiY << G4endl;
-    G4cout << "semi-z: " << fSemiZ << G4endl;
-    G4cout << "center: " << fCenter << G4endl;
-    G4cout << "rotation: " << fRotation.getPhi() << " " << fRotation.getTheta()
-           << " " << fRotation.getPhi() << G4endl;
-  }
+    void Print() override
+    {
+      G4cout << "type: " << fShape << G4endl;
+      G4cout << "semi-x: " << fSemiX << G4endl;
+      G4cout << "semi-y: " << fSemiY << G4endl;
+      G4cout << "semi-z: " << fSemiZ << G4endl;
+      G4cout << "center: " << fCenter << G4endl;
+      G4cout << "rotation: " << fRotation.getPhi() << " " << fRotation.getTheta() << " "
+             << fRotation.getPhi() << G4endl;
+    }
 
-  void SetRotation(const G4RotationMatrix& rot)
-  {
-    fRotation        = rot;
-    fInverseRotation = fRotation.inverse();
-  };
+    void SetRotation(const G4RotationMatrix& rot)
+    {
+      fRotation = rot;
+      fInverseRotation = fRotation.inverse();
+    };
 
-  G4RotationMatrix GetRotation() const { return fRotation; };
+    G4RotationMatrix GetRotation() const { return fRotation; };
 
-  G4ThreeVector GetPosition() const { return fCenter; };
+    G4ThreeVector GetPosition() const { return fCenter; };
 
-  G4double GetSemiX() const { return fSemiX; };
+    G4double GetSemiX() const { return fSemiX; };
 
-  G4double GetSemiY() const { return fSemiY; };
+    G4double GetSemiY() const { return fSemiY; };
 
-  G4double GetSemiZ() const { return fSemiZ; };
+    G4double GetSemiZ() const { return fSemiZ; };
 
- private:
-  G4ThreeVector fCenter;
-  G4double fSemiX, fSemiY, fSemiZ;
-  G4RotationMatrix fRotation, fInverseRotation;
+  private:
+    G4ThreeVector fCenter;
+    G4double fSemiX, fSemiY, fSemiZ;
+    G4RotationMatrix fRotation, fInverseRotation;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

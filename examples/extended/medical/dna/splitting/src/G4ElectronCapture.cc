@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -43,22 +43,24 @@
 /// \brief Implementation of the G4ElectronCapture class
 
 #include "G4ElectronCapture.hh"
-#include "G4SystemOfUnits.hh"
+
+#include "G4Electron.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Step.hh"
-#include "G4Track.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
-#include "G4Electron.hh"
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ElectronCapture::G4ElectronCapture(const G4String& regName, G4double ekinlim)
-: G4VDiscreteProcess("eCapture", fElectromagnetic),
-  fKinEnergyThreshold(ekinlim),
-  fRegionName(regName), fpRegion(0)
+  : G4VDiscreteProcess("eCapture", fElectromagnetic),
+    fKinEnergyThreshold(ekinlim),
+    fRegionName(regName),
+    fpRegion(0)
 {
-  if(regName == "" || regName == "world") { 
+  if (regName == "" || regName == "world") {
     fRegionName = "DefaultRegionForTheWorld";
   }
   pParticleChange = &fParticleChange;
@@ -66,17 +68,16 @@ G4ElectronCapture::G4ElectronCapture(const G4String& regName, G4double ekinlim)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ElectronCapture::~G4ElectronCapture() 
-{}
+G4ElectronCapture::~G4ElectronCapture() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ElectronCapture::SetKinEnergyLimit(G4double val)
 {
   fKinEnergyThreshold = val;
-  if(verboseLevel > 0) {
-    G4cout << "### G4ElectronCapture: Tracking cut E(MeV) = " 
-        << fKinEnergyThreshold/MeV << G4endl;
+  if (verboseLevel > 0) {
+    G4cout << "### G4ElectronCapture: Tracking cut E(MeV) = " << fKinEnergyThreshold / MeV
+           << G4endl;
   }
 }
 
@@ -85,10 +86,9 @@ void G4ElectronCapture::SetKinEnergyLimit(G4double val)
 void G4ElectronCapture::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   fpRegion = (G4RegionStore::GetInstance())->GetRegion(fRegionName);
-  if(fpRegion && verboseLevel > 0) {
-    G4cout << "### G4ElectronCapture: Tracking cut E(MeV) = " 
-        << fKinEnergyThreshold/MeV << " is assigned to " << fRegionName
-        << G4endl;
+  if (fpRegion && verboseLevel > 0) {
+    G4cout << "### G4ElectronCapture: Tracking cut E(MeV) = " << fKinEnergyThreshold / MeV
+           << " is assigned to " << fRegionName << G4endl;
   }
 }
 
@@ -101,26 +101,26 @@ G4bool G4ElectronCapture::IsApplicable(const G4ParticleDefinition&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4ElectronCapture::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-    G4double,
-    G4ForceCondition* condition)
+G4double G4ElectronCapture::PostStepGetPhysicalInteractionLength(const G4Track& aTrack, G4double,
+                                                                 G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-  G4double limit = DBL_MAX; 
-  if(fpRegion) {
-    if(aTrack.GetVolume()->GetLogicalVolume()->GetRegion() == fpRegion && 
-        aTrack.GetKineticEnergy() < fKinEnergyThreshold) { limit = 0.0; }
+  G4double limit = DBL_MAX;
+  if (fpRegion) {
+    if (aTrack.GetVolume()->GetLogicalVolume()->GetRegion() == fpRegion
+        && aTrack.GetKineticEnergy() < fKinEnergyThreshold)
+    {
+      limit = 0.0;
+    }
   }
   return limit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* G4ElectronCapture::PostStepDoIt(const G4Track& aTrack, 
-    const G4Step&)
+G4VParticleChange* G4ElectronCapture::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   pParticleChange->Initialize(aTrack);
   pParticleChange->ProposeTrackStatus(fStopAndKill);
@@ -131,9 +131,7 @@ G4VParticleChange* G4ElectronCapture::PostStepDoIt(const G4Track& aTrack,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4ElectronCapture::GetMeanFreePath(const G4Track&,G4double,
-    G4ForceCondition*)
+G4double G4ElectronCapture::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
 {
   return DBL_MAX;
 }
-

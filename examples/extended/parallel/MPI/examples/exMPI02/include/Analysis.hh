@@ -39,32 +39,33 @@
 class TH1D;
 class TH2D;
 
-class Analysis {
-public:
-  ~Analysis();
+class Analysis
+{
+  public:
+    ~Analysis();
 
-  static Analysis* GetAnalysis();
+    static Analysis* GetAnalysis();
 
-  void Update();
-  void Clear();
-  void Save(const G4String& fname);
+    void Update();
+    void Clear();
+    void Save(const G4String& fname);
 
-  void FillIncident(const G4ThreeVector& p);
-  void FillDose(const G4ThreeVector& p, G4double dedx);
+    void FillIncident(const G4ThreeVector& p);
+    void FillDose(const G4ThreeVector& p, G4double dedx);
 
-  void ClearIncidentFlag();
+    void ClearIncidentFlag();
 
-private:
-  Analysis();
-  DISALLOW_COPY_AND_ASSIGN(Analysis);
+  private:
+    Analysis();
+    DISALLOW_COPY_AND_ASSIGN(Analysis);
 
-  TH2D* fincident_map;
-  TH1D* fincident_x_hist;
+    TH2D* fincident_map;
+    TH1D* fincident_x_hist;
 
-  TH2D* fdose_map;
-  TH1D* fdose_hist;
+    TH2D* fdose_map;
+    TH1D* fdose_hist;
 
-  static G4ThreadLocal G4int fincidentFlag;
+    static G4ThreadLocal G4int fincidentFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

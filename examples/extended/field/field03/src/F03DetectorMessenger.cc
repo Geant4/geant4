@@ -35,70 +35,87 @@
 #include "F03DetectorMessenger.hh"
 
 #include "F03DetectorConstruction.hh"
-#include "G4UIcmdWithAString.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
- : fDetector(det)
+F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det) : fDetector(det)
 {
   fDetDir = new G4UIdirectory("/calor/");
   fDetDir->SetGuidance("F03 detector control.");
 
-  fAbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
+  fAbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat", this);
   fAbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  fAbsMaterCmd->SetParameterName("choice",true);
+  fAbsMaterCmd->SetParameterName("choice", true);
   fAbsMaterCmd->SetDefaultValue("Lead");
   fAbsMaterCmd->AvailableForStates(G4State_Idle);
   fAbsMaterCmd->SetToBeBroadcasted(false);
 
-  fWorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
+  fWorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat", this);
   fWorldMaterCmd->SetGuidance("Select Material of the World.");
-  fWorldMaterCmd->SetParameterName("wchoice",true);
+  fWorldMaterCmd->SetParameterName("wchoice", true);
   fWorldMaterCmd->SetDefaultValue("Air");
   fWorldMaterCmd->AvailableForStates(G4State_Idle);
   fWorldMaterCmd->SetToBeBroadcasted(false);
 
-  fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
+  fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick", this);
   fAbsThickCmd->SetGuidance("Set Thickness of the Absorber");
-  fAbsThickCmd->SetParameterName("SizeZ",false,false);
+  fAbsThickCmd->SetParameterName("SizeZ", false, false);
   fAbsThickCmd->SetDefaultUnit("mm");
   fAbsThickCmd->SetRange("SizeZ>0.");
   fAbsThickCmd->AvailableForStates(G4State_Idle);
   fAbsThickCmd->SetToBeBroadcasted(false);
 
-  fAbsRadCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsRad",this);
+  fAbsRadCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsRad", this);
   fAbsRadCmd->SetGuidance("Set radius of the Absorber");
-  fAbsRadCmd->SetParameterName("SizeR",false,false);
+  fAbsRadCmd->SetParameterName("SizeR", false, false);
   fAbsRadCmd->SetDefaultUnit("mm");
   fAbsRadCmd->SetRange("SizeR>0.");
   fAbsRadCmd->AvailableForStates(G4State_Idle);
   fAbsRadCmd->SetToBeBroadcasted(false);
 
-  fAbsZposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsZpos",this);
+  fAbsZposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsZpos", this);
   fAbsZposCmd->SetGuidance("Set Z pos. of the Absorber");
-  fAbsZposCmd->SetParameterName("Zpos",false,false);
+  fAbsZposCmd->SetParameterName("Zpos", false, false);
   fAbsZposCmd->SetDefaultUnit("mm");
   fAbsZposCmd->AvailableForStates(G4State_Idle);
   fAbsZposCmd->SetToBeBroadcasted(false);
 
-  fWorldZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldZ",this);
+  fWorldZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldZ", this);
   fWorldZCmd->SetGuidance("Set Z size of the World");
-  fWorldZCmd->SetParameterName("WSizeZ",false,false);
+  fWorldZCmd->SetParameterName("WSizeZ", false, false);
   fWorldZCmd->SetDefaultUnit("mm");
   fWorldZCmd->SetRange("WSizeZ>0.");
   fWorldZCmd->AvailableForStates(G4State_Idle);
   fWorldZCmd->SetToBeBroadcasted(false);
 
-  fWorldRCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldR",this);
+  fWorldRCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldR", this);
   fWorldRCmd->SetGuidance("Set R size of the World");
-  fWorldRCmd->SetParameterName("WSizeR",false,false);
+  fWorldRCmd->SetParameterName("WSizeR", false, false);
   fWorldRCmd->SetDefaultUnit("mm");
   fWorldRCmd->SetRange("WSizeR>0.");
   fWorldRCmd->AvailableForStates(G4State_Idle);
   fWorldRCmd->SetToBeBroadcasted(false);
+
+  // moved from FieldSetup (depends on the user field)
+  fFieldDir = new G4UIdirectory("/field03/");
+  fFieldDir->SetGuidance("F03 field control.");
+
+  fMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field03/setField",this);
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetParameterName("Bx", "By", "Bz" ,false,false);
+  fMagFieldCmd->SetDefaultUnit("tesla");
+  fMagFieldCmd->AvailableForStates(G4State_Idle);
+
+  fLocalMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field03/setLocalField",this);
+  fLocalMagFieldCmd->SetGuidance("Define magnetic field.");
+  fLocalMagFieldCmd->SetParameterName("Bx", "By", "Bz" ,false,false);
+  fLocalMagFieldCmd->SetDefaultUnit("tesla");
+  fLocalMagFieldCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,32 +130,50 @@ F03DetectorMessenger::~F03DetectorMessenger()
   delete fWorldZCmd;
   delete fWorldRCmd;
   delete fDetDir;
+  delete fLocalMagFieldCmd;  
+  delete fMagFieldCmd;  
+  delete fFieldDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void F03DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == fAbsMaterCmd )
-   { fDetector->SetAbsorberMaterial(newValue);}
+  if (command == fAbsMaterCmd) {
+    fDetector->SetAbsorberMaterial(newValue);
+  }
 
-  if( command == fWorldMaterCmd )
-   { fDetector->SetWorldMaterial(newValue);}
+  if (command == fWorldMaterCmd) {
+    fDetector->SetWorldMaterial(newValue);
+  }
 
-  if( command == fAbsThickCmd )
-   {fDetector->SetAbsorberThickness(fAbsThickCmd->GetNewDoubleValue(newValue));}
+  if (command == fAbsThickCmd) {
+    fDetector->SetAbsorberThickness(fAbsThickCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fAbsRadCmd )
-   { fDetector->SetAbsorberRadius(fAbsRadCmd->GetNewDoubleValue(newValue));}
+  if (command == fAbsRadCmd) {
+    fDetector->SetAbsorberRadius(fAbsRadCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fAbsZposCmd )
-   { fDetector->SetAbsorberZpos(fAbsZposCmd->GetNewDoubleValue(newValue));}
+  if (command == fAbsZposCmd) {
+    fDetector->SetAbsorberZpos(fAbsZposCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fWorldZCmd )
-   { fDetector->SetWorldSizeZ(fWorldZCmd->GetNewDoubleValue(newValue));}
+  if (command == fWorldZCmd) {
+    fDetector->SetWorldSizeZ(fWorldZCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fWorldRCmd )
-   { fDetector->SetWorldSizeR(fWorldRCmd->GetNewDoubleValue(newValue));}
+  if (command == fWorldRCmd) {
+    fDetector->SetWorldSizeR(fWorldRCmd->GetNewDoubleValue(newValue));
+  }
+
+  if( command == fMagFieldCmd ) {
+    fDetector->SetFieldValue(fMagFieldCmd->GetNew3VectorValue(newValue));
+  }
+
+  if( command == fLocalMagFieldCmd ) {
+    fDetector->SetLocalFieldValue(fLocalMagFieldCmd->GetNew3VectorValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

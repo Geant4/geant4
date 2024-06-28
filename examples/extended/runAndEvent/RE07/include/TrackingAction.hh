@@ -42,10 +42,10 @@ class DetectorConstruction;
 
 class TrackingAction : public G4UserTrackingAction
 {
- public:
-  TrackingAction();
+  public:
+    TrackingAction();
 
-  void PreUserTrackingAction(const G4Track*) override;
+    void PreUserTrackingAction(const G4Track*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

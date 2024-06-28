@@ -138,6 +138,7 @@ Idle> exit
   - run03.mac: H2O; L = 9.97 radl; R = 0.665 radl; electron 1 GeV
        (Electron-induced cascade showers: J&H Crannel - Phys. Rev. 184-2 - August69)
   - test.mac: PbWO4; L = 20 radl; R = 5 radl; electron 5 GeV
+  - stepMax.mac: chargedgeantino in PbWO4; To illustrate step max mechanism;   
   - vis.mac: to activate visualization
 
 \section TestEm2_s7 HISTOGRAMS

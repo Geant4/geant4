@@ -28,16 +28,15 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization(DetectorConstruction* detector)
- : fDetector(detector)
-{}
+ActionInitialization::ActionInitialization(DetectorConstruction* detector) : fDetector(detector) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,10 +60,10 @@ void ActionInitialization::Build() const
 
   SetUserAction(new RunAction());
 
-  auto  eventAction = new EventAction();
+  auto eventAction = new EventAction();
   SetUserAction(eventAction);
 
-  auto  steppingAction = new SteppingAction(fDetector, eventAction);
+  auto steppingAction = new SteppingAction(fDetector, eventAction);
   SetUserAction(steppingAction);
 }
 

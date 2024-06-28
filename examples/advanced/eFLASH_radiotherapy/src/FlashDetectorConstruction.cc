@@ -55,7 +55,7 @@
 
 #include "G4SystemOfUnits.hh"
 
-#include "Applicator.hh"
+#include "FlashApplicator.hh"
 
 
 #include "G4MaterialPropertiesTable.hh"
@@ -221,7 +221,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   
 
-  Collimator = new Applicator(physicalTreatmentRoom);
+  Collimator = new FlashApplicator(physicalTreatmentRoom);
   
 
    

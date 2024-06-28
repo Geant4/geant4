@@ -29,15 +29,12 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "G4LogicalVolumeStore.hh"
-#include "G4LogicalVolume.hh"
 #include "G4Box.hh"
-#include "G4Event.hh"
+#include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
-#include "Randomize.hh"
 
 namespace B2
 {
@@ -51,12 +48,12 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   // default particle kinematic
 
-  G4ParticleDefinition* particleDefinition
-    = G4ParticleTable::GetParticleTable()->FindParticle("proton");
+  G4ParticleDefinition* particleDefinition =
+    G4ParticleTable::GetParticleTable()->FindParticle("proton");
 
   fParticleGun->SetParticleDefinition(particleDefinition);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(3.0*GeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(3.0 * GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +65,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   // This function is called at the begining of event
 
@@ -77,12 +74,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // from G4LogicalVolumeStore.
 
   G4double worldZHalfLength = 0;
-  G4LogicalVolume* worldLV
-    = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
+  G4LogicalVolume* worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
   G4Box* worldBox = nullptr;
-  if ( worldLV ) worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
-  if ( worldBox ) worldZHalfLength = worldBox->GetZHalfLength();
-  else  {
+  if (worldLV) worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
+  if (worldBox)
+    worldZHalfLength = worldBox->GetZHalfLength();
+  else {
     G4cerr << "World volume of box not found." << G4endl;
     G4cerr << "Perhaps you have changed geometry." << G4endl;
     G4cerr << "The gun will be place in the center." << G4endl;
@@ -90,12 +87,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Starting a primary particle close to the world boundary.
   //
-  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength+1*um));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength + 1 * um));
 
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(event);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
-
+}  // namespace B2

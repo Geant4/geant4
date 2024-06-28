@@ -41,23 +41,27 @@
 #include "G4ProcessManager.hh"
 #include "G4SystemOfUnits.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XPhysicsList::XPhysicsList(G4int verbose) : G4VUserPhysicsList() {
+XPhysicsList::XPhysicsList(G4int verbose) : G4VUserPhysicsList()
+{
   if (verbose) G4cout << "XPhysicsList::constructor" << G4endl;
 
   SetVerboseLevel(verbose);
-  SetDefaultCutValue(100*mm);
+  SetDefaultCutValue(100 * mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XPhysicsList::~XPhysicsList() {;}
+XPhysicsList::~XPhysicsList()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XPhysicsList::ConstructParticle() {
+void XPhysicsList::ConstructParticle()
+{
   G4PhononLong::PhononDefinition();
   G4PhononTransFast::PhononDefinition();
   G4PhononTransSlow::PhononDefinition();
@@ -65,7 +69,8 @@ void XPhysicsList::ConstructParticle() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XPhysicsList::ConstructProcess() {
+void XPhysicsList::ConstructProcess()
+{
   AddTransportation();
 
   // Only make processes once
@@ -78,9 +83,9 @@ void XPhysicsList::ConstructProcess() {
   phRefl->SetVerboseLevel(verboseLevel);
   phDown->SetVerboseLevel(verboseLevel);
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while( (*particleIterator)() ){
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
@@ -93,13 +98,11 @@ void XPhysicsList::ConstructProcess() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XPhysicsList::SetCuts() {
+void XPhysicsList::SetCuts()
+{
   // These values are used as the default production thresholds
   // for the world volume.
   SetCutsWithDefault();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-

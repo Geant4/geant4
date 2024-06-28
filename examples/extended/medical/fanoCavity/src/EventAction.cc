@@ -32,46 +32,36 @@
 
 #include "EventAction.hh"
 
-#include "RunAction.hh"
 #include "HistoManager.hh"
 #include "Run.hh"
-#include "G4RunManager.hh"
+#include "RunAction.hh"
 
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-{
-}
+EventAction::EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
-{
-}
+EventAction::~EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt )
+void EventAction::BeginOfEventAction(const G4Event* evt)
 {
-  
-  if ( ! G4Threading::IsMultithreadedApplication() ) {
- 
+  if (!G4Threading::IsMultithreadedApplication()) {
     G4int evtNb = evt->GetEventID();
     G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
-    //survey convergence
-    Run* run = static_cast<Run*>(
-               G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-    if (evtNb%printProgress == 0) run->SurveyConvergence(evtNb);
+    // survey convergence
+    Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    if (evtNb % printProgress == 0) run->SurveyConvergence(evtNb);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event*)
-{   
-}
+void EventAction::EndOfEventAction(const G4Event*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

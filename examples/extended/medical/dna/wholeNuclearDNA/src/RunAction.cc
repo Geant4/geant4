@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -33,11 +33,13 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+
+#include "CommandLineParser.hh"
+
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
-#include "CommandLineParser.hh"
 
 using namespace G4DNAPARSER;
 
@@ -45,14 +47,11 @@ void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction() : G4UserRunAction(),
-      fInitialized(0), fDebug(false)
-{}
+RunAction::RunAction() : G4UserRunAction(), fInitialized(0), fDebug(false) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,32 +65,29 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   // Please note, in the example provided with the Geant4 X beta version,
   // this RunAction class were not used by the master thread.
 
+  bool sequential =
+    (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM);
 
-  bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
-                     G4RunManager::sequentialRM);
-
-  if(isMaster && sequential == false )
+  if (isMaster && sequential == false)
   // WARNING : in sequential mode, isMaster == true
   {
     BeginMaster(run);
   }
-  else BeginWorker(run);
+  else
+    BeginWorker(run);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* run)
 {
+  bool sequential =
+    (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM);
 
-  bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
-                     G4RunManager::sequentialRM);
-
-  if(isMaster && sequential == false)
-  {
+  if (isMaster && sequential == false) {
     EndMaster(run);
   }
-  else
-  {
+  else {
     EndWorker(run);
   }
 }
@@ -100,13 +96,11 @@ void RunAction::EndOfRunAction(const G4Run* run)
 
 void RunAction::BeginMaster(const G4Run* run)
 {
-  if(fDebug)
-  {
-    bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
-                       G4RunManager::sequentialRM);
+  if (fDebug) {
+    bool sequential =
+      (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM);
     G4cout << "===================================" << G4endl;
-    if(!sequential)
-      G4cout << "================ RunAction::BeginMaster" << G4endl;
+    if (!sequential) G4cout << "================ RunAction::BeginMaster" << G4endl;
     PrintRunInfo(run);
     G4cout << "===================================" << G4endl;
   }
@@ -116,40 +110,33 @@ void RunAction::BeginMaster(const G4Run* run)
 
 void RunAction::BeginWorker(const G4Run* run)
 {
-  if (fDebug)
-  {
+  if (fDebug) {
     G4cout << "===================================" << G4endl;
     G4cout << "================ RunAction::BeginWorker" << G4endl;
     PrintRunInfo(run);
     G4cout << "===================================" << G4endl;
   }
-  if(fInitialized == false) InitializeWorker(run);
+  if (fInitialized == false) InitializeWorker(run);
 
   CreateNtuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndMaster(const G4Run*)
-{
-}
+void RunAction::EndMaster(const G4Run*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndWorker(const G4Run* run)
 {
-  if(fDebug)
-  {
+  if (fDebug) {
     PrintRunInfo(run);
   }
 
   G4int nofEvents = run->GetNumberOfEvent();
-  if ( nofEvents == 0 )
-  {
-    if(fDebug)
-    {
-      G4cout << "================ NO EVENTS TREATED IN THIS RUN ==> Exit"
-             << G4endl;
+  if (nofEvents == 0) {
+    if (fDebug) {
+      G4cout << "================ NO EVENTS TREATED IN THIS RUN ==> Exit" << G4endl;
     }
     return;
   }
@@ -179,32 +166,30 @@ void RunAction::CreateNtuple()
 
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* command(0);
-  if((command = parser->GetCommandIfActive("-out"))==0) return;
+  if ((command = parser->GetCommandIfActive("-out")) == 0) return;
 
-  G4cout << "##### Create analysis manager " << "  " << this << G4endl;
+  G4cout << "##### Create analysis manager "
+         << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetDefaultFileType("root");
-//  if(!analysisManager->IsActive()) {return; }
+  //  if(!analysisManager->IsActive()) {return; }
 
-  G4cout << "Using " << analysisManager->GetType() <<
-      " analysis manager" << G4endl;
+  G4cout << "Using " << analysisManager->GetType() << " analysis manager" << G4endl;
 
   // Create directories
 
-  //analysisManager->SetHistoDirectoryName("histograms");
-  //analysisManager->SetNtupleDirectoryName("ntuple");
+  // analysisManager->SetHistoDirectoryName("histograms");
+  // analysisManager->SetNtupleDirectoryName("ntuple");
   analysisManager->SetVerboseLevel(1);
 
   // Open an output file
   G4String fileName;
-  if(command->GetOption().empty() == false)
-  {
+  if (command->GetOption().empty() == false) {
     fileName = command->GetOption();
   }
-  else
-  {
-   fileName = "wholeNuclearDNA";
-//   fileName = command->GetDefaultOption(); // should work as well
+  else {
+    fileName = "wholeNuclearDNA";
+    //   fileName = command->GetDefaultOption(); // should work as well
   }
   analysisManager->OpenFile(fileName);
 
@@ -220,7 +205,6 @@ void RunAction::CreateNtuple()
   analysisManager->CreateNtupleDColumn("stepLength");
 
   analysisManager->FinishNtuple();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -229,12 +213,12 @@ void RunAction::WriteNtuple()
 {
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* commandLine(0);
-  if((commandLine = parser->GetCommandIfActive("-out"))==0) return;
+  if ((commandLine = parser->GetCommandIfActive("-out")) == 0) return;
 
   // print histogram statistics
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-//  if(!analysisManager->IsActive()) {return; }
+  //  if(!analysisManager->IsActive()) {return; }
 
   // save histograms
   //
@@ -247,13 +231,10 @@ void RunAction::WriteNtuple()
 
 void RunAction::PrintRunInfo(const G4Run* run)
 {
-  G4cout << "================ Run is = "
-         << run->GetRunID() << G4endl;
-  G4cout << "================ Run type is = "
-         << G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
-  G4cout << "================ Event processed = "
-         << run->GetNumberOfEventToBeProcessed() << G4endl;
-  G4cout << "================ Nevent = "
-         << run->GetNumberOfEvent() << G4endl;
+  G4cout << "================ Run is = " << run->GetRunID() << G4endl;
+  G4cout << "================ Run type is = " << G4RunManager::GetRunManager()->GetRunManagerType()
+         << G4endl;
+  G4cout << "================ Event processed = " << run->GetNumberOfEventToBeProcessed() << G4endl;
+  G4cout << "================ Nevent = " << run->GetNumberOfEvent() << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

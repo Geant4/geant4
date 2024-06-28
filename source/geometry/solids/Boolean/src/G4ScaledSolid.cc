@@ -120,7 +120,7 @@ G4VSolid* G4ScaledSolid::GetUnscaledSolid() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Get bounding box
-
+//
 void G4ScaledSolid::BoundingLimits(G4ThreeVector& pMin,
                                    G4ThreeVector& pMax) const
 {
@@ -314,6 +314,23 @@ G4ScaledSolid::ComputeDimensions( G4VPVParameterisation*,
 G4ThreeVector G4ScaledSolid::GetPointOnSurface() const
 {
   return fScale->InverseTransform(fPtrSolid->GetPointOnSurface());
+}
+//////////////////////////////////////////////////////////////////////////
+//
+// Return the number of constituents used for construction of the solid
+//
+G4int G4ScaledSolid::GetNumOfConstituents() const
+{
+  return fPtrSolid->GetNumOfConstituents();
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return true if the solid has only planar faces
+//
+G4bool G4ScaledSolid::IsFaceted() const
+{
+  return fPtrSolid->IsFaceted();  
 }
 
 //////////////////////////////////////////////////////////////////////////

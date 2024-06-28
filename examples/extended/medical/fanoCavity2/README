@@ -144,3 +144,8 @@
         Idle> type your commands
         ....
         Idle> exit
+
+   Alternative macro files:
+   basic.mac - disabled  multiple scattering and fluctuations of energy loss
+   essai.mac - run WVI EM physics configuration 
+   stepfunction.mac - the step function optimisation using histogram

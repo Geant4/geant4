@@ -52,24 +52,20 @@ class HistoManager;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction() override;
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event*) override;
+    void GeneratePrimaries(G4Event*) override;
 
-  PrimaryGeneratorAction & operator=
-  (const PrimaryGeneratorAction &right) = delete;
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
+    PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction& right) = delete;
+    PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
 
-private:
-
-  G4ParticleGun* fParticleGun;
-  HistoManager* fHisto; 
+  private:
+    G4ParticleGun* fParticleGun;
+    HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

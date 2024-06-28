@@ -24,32 +24,31 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 
 #include "EventAction.hh"
+
 #include "Run.hh"
 
 #include "G4RunManager.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:G4UserEventAction()
-{}
+EventAction::EventAction() : G4UserEventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
-{}
+EventAction::~EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,17 +61,10 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  //plot energy deposited per event
-  //
+  // Plot energy deposited per event
   if (fTotalEdep > 0.) {
-    
-    Run* run
-    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-    
+    Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
     run->AddEdep(fTotalEdep);
-    
-    //G4cout << "*** Edep cumulated (eV) = " << run->GetEdep()/eV << G4endl;
-  }  
+    // G4cout << "*** Edep cumulated (eV) = " << run->GetEdep()/eV << G4endl;
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,8 +32,9 @@
 #ifndef B01DetectorConstruction_hh
 #define B01DetectorConstruction_hh B01DetectorConstruction_hh
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
+
 #include <vector>
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -42,33 +43,32 @@ class G4VWeightWindowStore;
 
 class B01DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  B01DetectorConstruction();
-  ~B01DetectorConstruction();
-  
-  virtual G4VPhysicalVolume* Construct();
+  public:
+    B01DetectorConstruction();
+    ~B01DetectorConstruction();
 
-  G4VIStore* CreateImportanceStore();
+    virtual G4VPhysicalVolume* Construct();
+
+    G4VIStore* CreateImportanceStore();
     // create an importance store, caller is responsible for deleting it
 
-  G4VWeightWindowStore *CreateWeightWindowStore();
-    // create an weight window  store, caller is responsible for 
+    G4VWeightWindowStore* CreateWeightWindowStore();
+    // create an weight window  store, caller is responsible for
     // deleting it
 
-  G4String GetCellName(G4int i);
+    G4String GetCellName(G4int i);
 
-  G4VPhysicalVolume* GetWorldVolume();
+    G4VPhysicalVolume* GetWorldVolume();
 
-  void SetSensitive();
+    void SetSensitive();
 
-  virtual void ConstructSDandField();
+    virtual void ConstructSDandField();
 
-private:
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
-  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+  private:
+    std::vector<G4LogicalVolume*> fLogicalVolumeVector;
+    std::vector<G4VPhysicalVolume*> fPhysicalVolumeVector;
 
-  G4VPhysicalVolume* fWorldVolume;
-
+    G4VPhysicalVolume* fWorldVolume;
 };
 
 #endif

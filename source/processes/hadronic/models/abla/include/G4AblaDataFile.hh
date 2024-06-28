@@ -24,20 +24,17 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Jose Luis Rodriguez, UDC (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (initial translation of ablav3p)
 // Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
-#define ABLAXX_IN_GEANT4_MODE 1
 
-#include "globals.hh"
-
-#ifndef G4AblaDataFile_hh
-#define G4AblaDataFile_hh 1
+#pragma once
 
 #include "G4AblaVirtualData.hh"
+#include "globals.hh"
 
 /**
  * Read ABLA data from files.
@@ -45,23 +42,14 @@
 class G4AblaDataFile : public G4AblaVirtualData {
 
 public:
-#ifdef ABLAXX_IN_GEANT4_MODE
   G4AblaDataFile();
-#else
-  G4AblaDataFile(G4INCL::Config *);
-#endif
- ~G4AblaDataFile();
+  virtual ~G4AblaDataFile() = default;
 
   /**
    * Read all data from files.
    */
-  bool readData();
+  G4bool readData();
 
 private:
   G4int verboseLevel;
-#ifndef ABLAXX_IN_GEANT4_MODE
-  G4INCL::Config *theConfig;
-#endif
 };
-
-#endif

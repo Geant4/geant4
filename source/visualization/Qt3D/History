@@ -6,7 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-03-13 Gabriele Cosmo (visQt3D-V11-01-08)
+## 2024-05-23 Guy Barrand (visQt3D-V11-02-01)
+- G4Qt3DSceneHandler::EstablishG4Qt3DQEntities(): have a missing:
+   fpPhysicalVolumeObjects.clear();
+  It avoids a crash if doing multiple "/vis/open Qt3D".
+- G4Qt3DViewer destructor: do a setRootEntity(nullptr) to disconnect
+  the G4Qt3DSceneHandler::fpQt3DScene from a viewer.
+- G4Qt3DSceneHandler destructor: clear the fpQt3DScene scene tree.
+  A crash (seen on most platforms) is now avoided here because of the
+  disconnection of the fpQt3DScene in a viewer destructor.
+  (This "scene clearing" assumes that the deletion a G4Qt3DSceneHandler happens after
+  all related viewers are already deleted).
+
+## 2024-03-13 Gabriele Cosmo (visQt3D-V11-02-00)
 - Fixed compilation error on Windows for ambiguous string assignment in
   G4Qt3DSceneHandler::CreateNewNode().
 

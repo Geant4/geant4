@@ -53,7 +53,6 @@ class G4LocalThreadCoutMessenger;
 class G4UIaliasList;
 class G4MTcoutDestination;
 class G4UIbridge;
-class G4ProfilerMessenger;
 
 class G4UImanager : public G4VStateDependent
 {
@@ -266,7 +265,6 @@ class G4UImanager : public G4VStateDependent
     G4UIcontrolMessenger* UImessenger = nullptr;
     G4UnitsMessenger* UnitsMessenger = nullptr;
     G4LocalThreadCoutMessenger* CoutMessenger = nullptr;
-    G4ProfilerMessenger* ProfileMessenger = nullptr;
     G4String savedParameters;
     G4UIcommand* savedCommand = nullptr;
     G4int verboseLevel = 0;

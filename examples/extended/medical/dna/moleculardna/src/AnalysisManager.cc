@@ -28,11 +28,14 @@
 /// brief:
 
 #include "AnalysisManager.hh"
+
 #include "AnalysisMessenger.hh"
 #include "ChromosomeHit.hh"
 #include "DNAGeometry.hh"
 #include "DNAHit.hh"
 #include "DetectorConstruction.hh"
+#include "UtilityFunctions.hh"
+
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4MolecularConfiguration.hh"
@@ -40,7 +43,7 @@
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "UtilityFunctions.hh"
+
 #include <fstream>
 #include <utility>
 
@@ -48,23 +51,24 @@
 
 AnalysisManager::AnalysisManager()
 {
-  fAnalysisManager    = G4AnalysisManager::Instance();
+  fAnalysisManager = G4AnalysisManager::Instance();
   fpAnalysisMessenger = new AnalysisMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-AnalysisManager::~AnalysisManager() { delete fpAnalysisMessenger; }
+AnalysisManager::~AnalysisManager()
+{
+  delete fpAnalysisMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void AnalysisManager::Initialize()
 {
   const G4Run* run = G4RunManager::GetRunManager()->GetCurrentRun();
-  if(run->GetRunID() == 0)
-  {
-    G4cout << "AnalysisManager::Initialize() GetRunID : " << run->GetRunID()
-           << G4endl;
+  if (run->GetRunID() == 0) {
+    G4cout << "AnalysisManager::Initialize() GetRunID : " << run->GetRunID() << G4endl;
     fAnalysisManager->SetDefaultFileType("root");
     fAnalysisManager->SetVerboseLevel(1);
 
@@ -77,10 +81,10 @@ void AnalysisManager::Initialize()
     // 500);//ORG
     fAnalysisManager->CreateH1("fragments", "Fragment sizes", 10000, 0,
                                10000);  // dousatsu
-    fAnalysisManager->CreateH3("local_pos", "Strand Interaction Positions", 50,
-                               -25, 25, 50, -25, 25, 50, -25, 25);
-    fAnalysisManager->CreateH3("global_pos", "Strand Interaction Positions", 50,
-                               -100, 100, 50, -100, 100, 50, -100, 100);
+    fAnalysisManager->CreateH3("local_pos", "Strand Interaction Positions", 50, -25, 25, 50, -25,
+                               25, 50, -25, 25);
+    fAnalysisManager->CreateH3("global_pos", "Strand Interaction Positions", 50, -100, 100, 50,
+                               -100, 100, 50, -100, 100);
     fAnalysisManager->CreateH1("e_cell_kev", "Energy Deposits in Cell", 2500, 0,
                                2500);  // dousatsu
 
@@ -100,15 +104,13 @@ void AnalysisManager::Initialize()
     fAnalysisManager->CreateNtupleDColumn("TraLen_chro_um");
     fAnalysisManager->FinishNtuple();
 
-    fAnalysisManager->CreateNtuple("chromosome_hits",
-                                   "Energy Deposits in Chromosomes");
+    fAnalysisManager->CreateNtuple("chromosome_hits", "Energy Deposits in Chromosomes");
     fAnalysisManager->CreateNtupleSColumn("chromosome");
     fAnalysisManager->CreateNtupleDColumn("e_chromosome_kev");
     fAnalysisManager->CreateNtupleDColumn("e_dna_kev");
     fAnalysisManager->FinishNtuple();
 
-    fAnalysisManager->CreateNtuple("classification",
-                                   "Break Complexity Frequency");
+    fAnalysisManager->CreateNtuple("classification", "Break Complexity Frequency");
     fAnalysisManager->CreateNtupleSColumn("Primary");
     fAnalysisManager->CreateNtupleDColumn("Energy");
     fAnalysisManager->CreateNtupleIColumn("None");
@@ -157,14 +159,13 @@ void AnalysisManager::Initialize()
     fAnalysisManager->CreateNtupleDColumn("EnergyDeposited_eV");
     fAnalysisManager->CreateNtupleIColumn("InducedBreaks");
     fAnalysisManager->CreateNtupleIColumn("Chain");
-    fAnalysisManager->CreateNtupleIColumn("Strand");    // WG
+    fAnalysisManager->CreateNtupleIColumn("Strand");  // WG
     fAnalysisManager->CreateNtupleDColumn("BasePair");  // dousatsu
     fAnalysisManager->CreateNtupleSColumn("Name");
     fAnalysisManager->FinishNtuple();
   }
 
-  if(!fFileName)
-  {
+  if (!fFileName) {
     fFileName = "molecular-dna";
   }
   fAnalysisManager->OpenFile(fFileName);
@@ -180,55 +181,43 @@ void AnalysisManager::Close()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnalysisManager::ProcessDNAHitsVector(
-  const std::vector<const DNAHit*>& dnaHits)
+void AnalysisManager::ProcessDNAHitsVector(const std::vector<const DNAHit*>& dnaHits)
 {
   // Check we have DNA Geometry (runs once)
-  if(fpDNAGeometry == nullptr)
-  {
+  if (fpDNAGeometry == nullptr) {
     auto det = dynamic_cast<const DetectorConstruction*>(
       G4RunManager::GetRunManager()->GetUserDetectorConstruction());
     fpDNAGeometry = det->GetDNAGeometry();
   }
 
-  if(dnaHits.empty())
-  {
+  if (dnaHits.empty()) {
     return;
   }
-  const G4Event* event =
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  const G4Event* event = G4EventManager::GetEventManager()->GetConstCurrentEvent();
   // SSBs
-  for(auto dnaHit : dnaHits)
-  {
+  for (auto dnaHit : dnaHits) {
     fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("ssb_energies_ev"),
                              dnaHit->GetEnergy() / eV);
-    if(fChainToSave == -1)
-    {
+    if (fChainToSave == -1) {
       // save all chains
-      fAnalysisManager->FillH3(fAnalysisManager->GetH3Id("local_pos"),
-                               dnaHit->GetLocalPosition().getX() / nm,
-                               dnaHit->GetLocalPosition().getY() / nm,
-                               dnaHit->GetLocalPosition().getZ() / nm);
+      fAnalysisManager->FillH3(
+        fAnalysisManager->GetH3Id("local_pos"), dnaHit->GetLocalPosition().getX() / nm,
+        dnaHit->GetLocalPosition().getY() / nm, dnaHit->GetLocalPosition().getZ() / nm);
       fAnalysisManager->FillH3(fAnalysisManager->GetH3Id("global_pos"),
-                               dnaHit->GetPosition().getX() / nm,
-                               dnaHit->GetPosition().getY() / nm,
+                               dnaHit->GetPosition().getX() / nm, dnaHit->GetPosition().getY() / nm,
                                dnaHit->GetPosition().getZ() / nm);
     }
-    else if(fChainToSave == dnaHit->GetChainIdx())
-    {  // what is different ?
+    else if (fChainToSave == dnaHit->GetChainIdx()) {  // what is different ?
       // save only specified chain
-      fAnalysisManager->FillH3(fAnalysisManager->GetH3Id("local_pos"),
-                               dnaHit->GetLocalPosition().getX() / nm,
-                               dnaHit->GetLocalPosition().getY() / nm,
-                               dnaHit->GetLocalPosition().getZ() / nm);
+      fAnalysisManager->FillH3(
+        fAnalysisManager->GetH3Id("local_pos"), dnaHit->GetLocalPosition().getX() / nm,
+        dnaHit->GetLocalPosition().getY() / nm, dnaHit->GetLocalPosition().getZ() / nm);
       fAnalysisManager->FillH3(fAnalysisManager->GetH3Id("global_pos"),
-                               dnaHit->GetPosition().getX() / nm,
-                               dnaHit->GetPosition().getY() / nm,
+                               dnaHit->GetPosition().getX() / nm, dnaHit->GetPosition().getY() / nm,
                                dnaHit->GetPosition().getZ() / nm);
     }
   }
-  fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("ssb_counts"),
-                           dnaHits.size());
+  fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("ssb_counts"), dnaHits.size());
 
   // DSBs
   // Sorting
@@ -238,24 +227,19 @@ void AnalysisManager::ProcessDNAHitsVector(
   // Populate the binary tree
   // G4cout << "Building Binary Trees for " << dnaHits.size() << " Nodes" <<
   // G4endl;
-  for(auto it = dnaHits.begin(); it != dnaHits.end(); ++it)
-  {
-    std::pair<G4String, G4int> key =
-      std::make_pair((*it)->GetChromosome(), (*it)->GetChainIdx());
-    if(treemap.find(key) == treemap.end())
-    {
+  for (auto it = dnaHits.begin(); it != dnaHits.end(); ++it) {
+    std::pair<G4String, G4int> key = std::make_pair((*it)->GetChromosome(), (*it)->GetChainIdx());
+    if (treemap.find(key) == treemap.end()) {
       treemap[key] = new BinaryTree();
-      if(fAnalysisManager->GetVerboseLevel() >= 2)
-      {
-        G4cout << "Constructing binary tree. Chromosome: " << key.first
-               << " Chain: " << key.second << G4endl;
+      if (fAnalysisManager->GetVerboseLevel() >= 2) {
+        G4cout << "Constructing binary tree. Chromosome: " << key.first << " Chain: " << key.second
+               << G4endl;
       }
     }
     treemap.at(key)->Insert(*it);
-    if(fAnalysisManager->GetVerboseLevel() >= 2)
-    {
-      G4cout << "Adding hit to binary tree. Chromosome: " << key.first
-             << " Chain: " << key.second << G4endl;
+    if (fAnalysisManager->GetVerboseLevel() >= 2) {
+      G4cout << "Adding hit to binary tree. Chromosome: " << key.first << " Chain: " << key.second
+             << G4endl;
     }
   }
 
@@ -263,35 +247,31 @@ void AnalysisManager::ProcessDNAHitsVector(
   // Create a vector to stock damage records for the event
   // G4cout << "Building Damage Records" << G4endl;
   std::vector<DamageRecord*> damageRecords;
-  for(auto& it : treemap)
-  {
-    if(fAnalysisManager->GetVerboseLevel() >= 2)
-    {
-      G4cout << "Analysing hits for chromosome: " << it.first.first
-             << " Chain: " << it.first.second << G4endl;
+  for (auto& it : treemap) {
+    if (fAnalysisManager->GetVerboseLevel() >= 2) {
+      G4cout << "Analysing hits for chromosome: " << it.first.first << " Chain: " << it.first.second
+             << G4endl;
     }
     DNAHit* currentHit = it.second->First();
-    DNAHit* nextHit    = currentHit;
+    DNAHit* nextHit = currentHit;
 
     // Runs while their are still hits
-    while(nextHit)
-    {
+    while (nextHit) {
       // Create record for this fragment
-      if(currentHit->GetBasePairIdx() > 9223372036854775807)
-      {
+      if (currentHit->GetBasePairIdx() > 9223372036854775807) {
         G4cout << " SEE AnalysisManager !!!" << G4endl;
         abort();
       }  // dousatsu
       // if (currentHit->GetBasePairIdx()>2147483647){G4cout<<" SEE
       // AnalysisManager !!!"<<G4endl;abort();}//ORG
-      auto idx         = (int64_t) currentHit->GetBasePairIdx();  // dousatsu
-      int64_t startidx = (idx > 10) ? (idx - 10) : 0;             // dousatsu
+      auto idx = (int64_t)currentHit->GetBasePairIdx();  // dousatsu
+      int64_t startidx = (idx > 10) ? (idx - 10) : 0;  // dousatsu
       // G4int idx = currentHit->GetBasePairIdx();//ORG
       // G4int startidx = (idx > 10) ? (idx - 10) : 0;//ORG
-      G4String name = it.first.first + "_" + std::to_string(it.first.second) +
-                      "_" + std::to_string(startidx);  // check!!!!
-      auto* record = new DamageRecord(name, idx, currentHit->GetPlacementIdx(),
-                                      currentHit->GetChainIdx());
+      G4String name = it.first.first + "_" + std::to_string(it.first.second) + "_"
+                      + std::to_string(startidx);  // check!!!!
+      auto* record =
+        new DamageRecord(name, idx, currentHit->GetPlacementIdx(), currentHit->GetChainIdx());
       damageRecords.push_back(record);
       BasePairDamageRecord* bp;
       int64_t gap = 0;  // dousatsu
@@ -299,87 +279,68 @@ void AnalysisManager::ProcessDNAHitsVector(
       // bookend with 10 bps on either side of no damage
       record->AddEmptyBPDamage(idx - startidx);
       // continues until fragment ends
-      while(true)
-      {
-        bp                      = new BasePairDamageRecord;
-        bp->fStrand1Energy      = currentHit->GetStrand1Energy();
-        bp->fStrand2Energy      = currentHit->GetStrand2Energy();
-        bp->fBp1Energy          = currentHit->GetBP1Energy();
-        bp->fBp2Energy          = currentHit->GetBP2Energy();
-        bp->fBp1IndirectEvt     = (currentHit->GetBase1Rad() != nullptr);
-        bp->fBp2IndirectEvt     = (currentHit->GetBase2Rad() != nullptr);
+      while (true) {
+        bp = new BasePairDamageRecord;
+        bp->fStrand1Energy = currentHit->GetStrand1Energy();
+        bp->fStrand2Energy = currentHit->GetStrand2Energy();
+        bp->fBp1Energy = currentHit->GetBP1Energy();
+        bp->fBp2Energy = currentHit->GetBP2Energy();
+        bp->fBp1IndirectEvt = (currentHit->GetBase1Rad() != nullptr);
+        bp->fBp2IndirectEvt = (currentHit->GetBase2Rad() != nullptr);
         bp->fStrand1IndirectEvt = (currentHit->GetStrand1Rad() != nullptr);
         bp->fStrand2IndirectEvt = (currentHit->GetStrand2Rad() != nullptr);
-        bp->fbp1DirectDmg       = false;  // No physical damage on BPs
-        bp->fbp2DirectDmg       = false;  // No physical damage on BPs
+        bp->fbp1DirectDmg = false;  // No physical damage on BPs
+        bp->fbp2DirectDmg = false;  // No physical damage on BPs
 
         bp->fStrand1DirectDmg =
-          fpDNAGeometry->GetDamageModel()->IsDirectStrandBreak(
-            bp->fStrand1Energy);
+          fpDNAGeometry->GetDamageModel()->IsDirectStrandBreak(bp->fStrand1Energy);
         bp->fStrand2DirectDmg =
-          fpDNAGeometry->GetDamageModel()->IsDirectStrandBreak(
-            bp->fStrand2Energy);
+          fpDNAGeometry->GetDamageModel()->IsDirectStrandBreak(bp->fStrand2Energy);
 
         //        if(bp->fStrand1DirectDmg) bp->fStrandIdx = 1;
         //        else if(bp->fStrand2DirectDmg) strandID = 2;
 
-        if(bp->fBp1IndirectEvt)
-        {
+        if (bp->fBp1IndirectEvt) {
           bp->fBp1IndirectDmg =
-            fpDNAGeometry->GetDamageModel()->IsIndirectBaseDamage(
-              currentHit->GetBase1Rad());
-          if(bp->fBp1IndirectDmg)
-          {
+            fpDNAGeometry->GetDamageModel()->IsIndirectBaseDamage(currentHit->GetBase1Rad());
+          if (bp->fBp1IndirectDmg) {
             bp->fbp1InducedBreak =
-              fpDNAGeometry->GetDamageModel()->IsInducedStrandBreak(
-                currentHit->GetBase1Rad());
+              fpDNAGeometry->GetDamageModel()->IsInducedStrandBreak(currentHit->GetBase1Rad());
           }
         }
 
-        if(bp->fBp2IndirectEvt)
-        {
+        if (bp->fBp2IndirectEvt) {
           bp->fBp2IndirectDmg =
-            fpDNAGeometry->GetDamageModel()->IsIndirectBaseDamage(
-              currentHit->GetBase2Rad());
-          if(bp->fBp2IndirectDmg)
-          {
+            fpDNAGeometry->GetDamageModel()->IsIndirectBaseDamage(currentHit->GetBase2Rad());
+          if (bp->fBp2IndirectDmg) {
             bp->fbp2InducedBreak =
-              fpDNAGeometry->GetDamageModel()->IsInducedStrandBreak(
-                currentHit->GetBase2Rad());
+              fpDNAGeometry->GetDamageModel()->IsInducedStrandBreak(currentHit->GetBase2Rad());
           }
         }
 
-        if(bp->fStrand1IndirectEvt)
-        {
+        if (bp->fStrand1IndirectEvt) {
           bp->fStrand1IndirectDmg =
-            fpDNAGeometry->GetDamageModel()->IsIndirectStrandDamage(
-              currentHit->GetStrand1Rad());
+            fpDNAGeometry->GetDamageModel()->IsIndirectStrandDamage(currentHit->GetStrand1Rad());
         }
-        if(bp->fStrand2IndirectEvt)
-        {
+        if (bp->fStrand2IndirectEvt) {
           bp->fStrand2IndirectDmg =
-            fpDNAGeometry->GetDamageModel()->IsIndirectStrandDamage(
-              currentHit->GetStrand2Rad());
+            fpDNAGeometry->GetDamageModel()->IsIndirectStrandDamage(currentHit->GetStrand2Rad());
         }
         // Record radical-base/strand damage.
         // it is possible for base/strand damage to not correspond to
         // direct hits due to the damage induction probabilities.
         // This mainly affects strands.
-        if(bp->fBp1IndirectDmg)
-        {
+        if (bp->fBp1IndirectDmg) {
           record->AddBaseHit(currentHit->GetBase1Rad()->GetDefinition());
         }
-        if(bp->fBp2IndirectDmg)
-        {
+        if (bp->fBp2IndirectDmg) {
           record->AddBaseHit(currentHit->GetBase2Rad()->GetDefinition());
         }
-        if(bp->fStrand1IndirectDmg)
-        {
+        if (bp->fStrand1IndirectDmg) {
           record->AddStrandHit(currentHit->GetStrand1Rad()->GetDefinition());
           //         strandID = 1;
         }
-        if(bp->fStrand2IndirectDmg)
-        {
+        if (bp->fStrand2IndirectDmg) {
           record->AddStrandHit(currentHit->GetStrand2Rad()->GetDefinition());
           //          strandID = 2;
         }
@@ -387,47 +348,37 @@ void AnalysisManager::ProcessDNAHitsVector(
         record->AddBasePairDamage(bp, currentHit->GetPosition());
 
         nextHit = it.second->Next(currentHit);
-        if(nextHit == nullptr)
-        {
+        if (nextHit == nullptr) {
           break;
         }
 
         gap = nextHit->GetBasePairIdx() - currentHit->GetBasePairIdx();
-        if(fFragmentGap > 0)
-        {
+        if (fFragmentGap > 0) {
           // case 1: continuous strand
-          if(gap > fFragmentGap)
-          {
+          if (gap > fFragmentGap) {
             currentHit = nextHit;
             break;
           }
-          else
-          {
+          else {
             record->AddEmptyBPDamage(gap);
           }
         }
-        else if(fFragmentGap == 0)
-        {
+        else if (fFragmentGap == 0) {
           // case 2: individual placements, not joined
           // ie. plasmids etc. Each placement is a separate strand
-          if(currentHit->GetPlacementIdx() != nextHit->GetPlacementIdx())
-          {
-            if(fpDNAGeometry->GetVerbosity() > 1)
-            {
+          if (currentHit->GetPlacementIdx() != nextHit->GetPlacementIdx()) {
+            if (fpDNAGeometry->GetVerbosity() > 1) {
               G4cout << "Analysis passing to a new placement" << G4endl;
             }
             currentHit = nextHit;
             break;
           }
-          else
-          {
+          else {
             record->AddEmptyBPDamage(gap);
           }
         }
-        else
-        {
-          G4Exception("MolecularAnalaysisManager", "ERR_FRAGMENT_VALUE",
-                      FatalException,
+        else {
+          G4Exception("MolecularAnalaysisManager", "ERR_FRAGMENT_VALUE", FatalException,
                       "The value set in /analysisDNA/fragmentGap is bad");
         }
         currentHit = nextHit;
@@ -440,45 +391,38 @@ void AnalysisManager::ProcessDNAHitsVector(
   // std::map<G4String, G4int> breakmap;
   std::map<complexityEnum, G4int> breakmap;
 
-  breakmap[DSBplusplus]    = 0;
-  breakmap[DSBplus]        = 0;
-  breakmap[DSB]            = 0;
-  breakmap[twoSSB]         = 0;
-  breakmap[SSBplus]        = 0;
-  breakmap[SSB]            = 0;
+  breakmap[DSBplusplus] = 0;
+  breakmap[DSBplus] = 0;
+  breakmap[DSB] = 0;
+  breakmap[twoSSB] = 0;
+  breakmap[SSBplus] = 0;
+  breakmap[SSB] = 0;
   breakmap[NoneComplexity] = 0;
   std::map<sourceEnum, G4int> sourcemap;
-  sourcemap[SSBd]      = 0;
-  sourcemap[SSBi]      = 0;
-  sourcemap[SSBm]      = 0;
-  sourcemap[DSBh]      = 0;
-  sourcemap[DSBm]      = 0;
-  sourcemap[DSBd]      = 0;
-  sourcemap[DSBi]      = 0;
+  sourcemap[SSBd] = 0;
+  sourcemap[SSBi] = 0;
+  sourcemap[SSBm] = 0;
+  sourcemap[DSBh] = 0;
+  sourcemap[DSBm] = 0;
+  sourcemap[DSBd] = 0;
+  sourcemap[DSBi] = 0;
   sourcemap[undefined] = 0;
 
-  for(auto& damageRecord : damageRecords)
-  {
-    DamageClassification* classif =
-      damageRecord->GetClassification(fDSBDistance);
+  for (auto& damageRecord : damageRecords) {
+    DamageClassification* classif = damageRecord->GetClassification(fDSBDistance);
     breakmap[classif->fComplexity]++;
     sourcemap[classif->fSource]++;
-    fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("fragments"),
-                             damageRecord->GetSize());
+    fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("fragments"), damageRecord->GetSize());
 
     ///////////dousatsu--------------------------------------------
     fAnalysisManager->FillNtupleIColumn(4, 0, event->GetEventID());
-    fAnalysisManager->FillNtupleSColumn(4, 1,
-                                        event->GetPrimaryVertex()
-                                          ->GetPrimary()
-                                          ->GetParticleDefinition()
-                                          ->GetParticleName());
+    fAnalysisManager->FillNtupleSColumn(
+      4, 1, event->GetPrimaryVertex()->GetPrimary()->GetParticleDefinition()->GetParticleName());
     fAnalysisManager->FillNtupleDColumn(
       4, 2, event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
 
     G4String complexityString = "None";
-    switch(classif->fComplexity)
-    {
+    switch (classif->fComplexity) {
       case SSB:
         complexityString = "SSB";
         break;
@@ -504,8 +448,7 @@ void AnalysisManager::ProcessDNAHitsVector(
     fAnalysisManager->FillNtupleSColumn(4, 3, complexityString);
 
     G4String sourceString = "undefined";
-    switch(classif->fSource)
-    {
+    switch (classif->fSource) {
       case SSBd:
         sourceString = "SSBd";
         break;
@@ -533,22 +476,17 @@ void AnalysisManager::ProcessDNAHitsVector(
     }
 
     fAnalysisManager->FillNtupleSColumn(4, 4, sourceString);
-    fAnalysisManager->FillNtupleDColumn(
-      4, 5, damageRecord->GetMeanPosition().getX() / um);
-    fAnalysisManager->FillNtupleDColumn(
-      4, 6, damageRecord->GetMeanPosition().getY() / um);
-    fAnalysisManager->FillNtupleDColumn(
-      4, 7, damageRecord->GetMeanPosition().getZ() / um);
-    fAnalysisManager->FillNtupleDColumn(4, 8,
-                                        damageRecord->GetMeanDistance() / nm);
+    fAnalysisManager->FillNtupleDColumn(4, 5, damageRecord->GetMeanPosition().getX() / um);
+    fAnalysisManager->FillNtupleDColumn(4, 6, damageRecord->GetMeanPosition().getY() / um);
+    fAnalysisManager->FillNtupleDColumn(4, 7, damageRecord->GetMeanPosition().getZ() / um);
+    fAnalysisManager->FillNtupleDColumn(4, 8, damageRecord->GetMeanDistance() / nm);
     fAnalysisManager->FillNtupleIColumn(4, 9, damageRecord->GetSize());
     fAnalysisManager->FillNtupleIColumn(4, 10, classif->fbaseDmg);
     fAnalysisManager->FillNtupleIColumn(4, 11, classif->fStrandDmg);
     fAnalysisManager->FillNtupleIColumn(4, 12, classif->fDirectBreaks);
     fAnalysisManager->FillNtupleIColumn(4, 13, classif->fIndirectBreaks);
     fAnalysisManager->FillNtupleIColumn(4, 14, damageRecord->GetEaqBaseHits());
-    fAnalysisManager->FillNtupleIColumn(4, 15,
-                                        damageRecord->GetEaqStrandHits());
+    fAnalysisManager->FillNtupleIColumn(4, 15, damageRecord->GetEaqStrandHits());
     fAnalysisManager->FillNtupleIColumn(4, 16, damageRecord->GetOHBaseHits());
     fAnalysisManager->FillNtupleIColumn(4, 17, damageRecord->GetOHStrandHits());
     fAnalysisManager->FillNtupleIColumn(4, 18, damageRecord->GetHBaseHits());
@@ -557,8 +495,7 @@ void AnalysisManager::ProcessDNAHitsVector(
     fAnalysisManager->FillNtupleIColumn(4, 21, classif->fInducedBreaks);
     fAnalysisManager->FillNtupleIColumn(4, 22, damageRecord->GetChainIdx());
     fAnalysisManager->FillNtupleIColumn(4, 23, damageRecord->GetPlacementIdx());
-    fAnalysisManager->FillNtupleDColumn(
-      4, 24, (G4double) damageRecord->GetStartBPIdx());
+    fAnalysisManager->FillNtupleDColumn(4, 24, (G4double)damageRecord->GetStartBPIdx());
     // fAnalysisManager->FillNtupleIColumn(4, 23, (*it)->GetStartBPIdx());//ORG
     fAnalysisManager->FillNtupleSColumn(4, 25, damageRecord->GetName());
     fAnalysisManager->AddNtupleRow(4);
@@ -568,23 +505,17 @@ void AnalysisManager::ProcessDNAHitsVector(
     // is continuously joined to a past event or not.
     // If yes, save the fragment length.
     //
-    if(fSaveStrands)
-    {
-      damageRecord->PrintRecord(fStrandDirectory + "/" +
-                                std::to_string(event->GetEventID()) + "_" +
-                                damageRecord->GetName() + ".txt");
+    if (fSaveStrands) {
+      damageRecord->PrintRecord(fStrandDirectory + "/" + std::to_string(event->GetEventID()) + "_"
+                                + damageRecord->GetName() + ".txt");
     }
-    if(fAnalysisManager->GetVerboseLevel() >= 2)
-      damageRecord->PrintRecord("");
+    if (fAnalysisManager->GetVerboseLevel() >= 2) damageRecord->PrintRecord("");
   }
 
-  fAnalysisManager->FillNtupleSColumn(2, 0,
-                                      event->GetPrimaryVertex()
-                                        ->GetPrimary()
-                                        ->GetParticleDefinition()
-                                        ->GetParticleName());
-  fAnalysisManager->FillNtupleDColumn(
-    2, 1, event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
+  fAnalysisManager->FillNtupleSColumn(
+    2, 0, event->GetPrimaryVertex()->GetPrimary()->GetParticleDefinition()->GetParticleName());
+  fAnalysisManager->FillNtupleDColumn(2, 1,
+                                      event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
   fAnalysisManager->FillNtupleIColumn(2, 2, breakmap[NoneComplexity]);
   fAnalysisManager->FillNtupleIColumn(2, 3, breakmap[SSB]);
   fAnalysisManager->FillNtupleIColumn(2, 4, breakmap[SSBplus]);
@@ -594,13 +525,10 @@ void AnalysisManager::ProcessDNAHitsVector(
   fAnalysisManager->FillNtupleIColumn(2, 8, breakmap[DSBplusplus]);
   fAnalysisManager->AddNtupleRow(2);
 
-  fAnalysisManager->FillNtupleSColumn(3, 0,
-                                      event->GetPrimaryVertex()
-                                        ->GetPrimary()
-                                        ->GetParticleDefinition()
-                                        ->GetParticleName());
-  fAnalysisManager->FillNtupleDColumn(
-    3, 1, event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
+  fAnalysisManager->FillNtupleSColumn(
+    3, 0, event->GetPrimaryVertex()->GetPrimary()->GetParticleDefinition()->GetParticleName());
+  fAnalysisManager->FillNtupleDColumn(3, 1,
+                                      event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
   fAnalysisManager->FillNtupleIColumn(3, 2, sourcemap[undefined]);
   fAnalysisManager->FillNtupleIColumn(3, 3, sourcemap[SSBd]);
   fAnalysisManager->FillNtupleIColumn(3, 4, sourcemap[SSBi]);
@@ -611,58 +539,43 @@ void AnalysisManager::ProcessDNAHitsVector(
   fAnalysisManager->FillNtupleIColumn(3, 9, sourcemap[DSBh]);
   fAnalysisManager->AddNtupleRow(3);
 
-  for(auto it : damageRecords)
-  {
+  for (auto it : damageRecords) {
     delete it;
   }
 
   // Cleanup, delete binary trees
-  for(const auto& it : treemap)
-  {
+  for (const auto& it : treemap) {
     delete it.second;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnalysisManager::ProcessChromosomeHitMap(
-  const std::map<uint32_t, ChromosomeHit*>& chromosomes)
+void AnalysisManager::ProcessChromosomeHitMap(const std::map<uint32_t, ChromosomeHit*>& chromosomes)
 {
-  for(auto chromosome : chromosomes)
-  {
+  for (auto chromosome : chromosomes) {
     fAnalysisManager->FillNtupleSColumn(1, 0, chromosome.second->GetName());
-    fAnalysisManager->FillNtupleDColumn(
-      1, 1, chromosome.second->GetChromosomeEdep() / keV);
-    fAnalysisManager->FillNtupleDColumn(1, 2,
-                                        chromosome.second->GetDNAEdep() / keV);
+    fAnalysisManager->FillNtupleDColumn(1, 1, chromosome.second->GetChromosomeEdep() / keV);
+    fAnalysisManager->FillNtupleDColumn(1, 2, chromosome.second->GetDNAEdep() / keV);
     fAnalysisManager->AddNtupleRow(1);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnalysisManager::ProcessPrimary(const G4ThreeVector& primstoppos,
-                                     const G4double& tlcell,
+void AnalysisManager::ProcessPrimary(const G4ThreeVector& primstoppos, const G4double& tlcell,
                                      const G4double& tlchro)
 {
-  const G4Event* event =
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
-  fAnalysisManager->FillNtupleSColumn(0, 0,
-                                      event->GetPrimaryVertex()
-                                        ->GetPrimary()
-                                        ->GetParticleDefinition()
-                                        ->GetParticleName());
-  fAnalysisManager->FillNtupleDColumn(
-    0, 1, event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
-  fAnalysisManager->FillNtupleDColumn(0, 2,
-                                      event->GetPrimaryVertex()->GetX0() / um);
-  fAnalysisManager->FillNtupleDColumn(0, 3,
-                                      event->GetPrimaryVertex()->GetY0() / um);
-  fAnalysisManager->FillNtupleDColumn(0, 4,
-                                      event->GetPrimaryVertex()->GetZ0() / um);
+  const G4Event* event = G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  fAnalysisManager->FillNtupleSColumn(
+    0, 0, event->GetPrimaryVertex()->GetPrimary()->GetParticleDefinition()->GetParticleName());
+  fAnalysisManager->FillNtupleDColumn(0, 1,
+                                      event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy());
+  fAnalysisManager->FillNtupleDColumn(0, 2, event->GetPrimaryVertex()->GetX0() / um);
+  fAnalysisManager->FillNtupleDColumn(0, 3, event->GetPrimaryVertex()->GetY0() / um);
+  fAnalysisManager->FillNtupleDColumn(0, 4, event->GetPrimaryVertex()->GetZ0() / um);
 
-  G4ThreeVector mom =
-    event->GetPrimaryVertex()->GetPrimary()->GetMomentumDirection();
+  G4ThreeVector mom = event->GetPrimaryVertex()->GetPrimary()->GetMomentumDirection();
   fAnalysisManager->FillNtupleDColumn(0, 5, mom.x() / mom.mag());
   fAnalysisManager->FillNtupleDColumn(0, 6, mom.y() / mom.mag());
   fAnalysisManager->FillNtupleDColumn(0, 7, mom.z() / mom.mag());
@@ -685,11 +598,17 @@ void AnalysisManager::ProcessCellEdep(const G4double& edep)
 ////// Binary Tree Methods
 ////////////////////////////////////////////////////////////////////////////////
 
-BinaryTree::BinaryTree() { fRoot = nullptr; }
+BinaryTree::BinaryTree()
+{
+  fRoot = nullptr;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-BinaryTree::~BinaryTree() { Destroy_tree(); }
+BinaryTree::~BinaryTree()
+{
+  Destroy_tree();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -697,18 +616,16 @@ BinaryTree::~BinaryTree() { Destroy_tree(); }
 void BinaryTree::Insert(const DNAHit* hit)
 {
   auto newHit = new DNAHit(*hit);
-  if(fRoot == nullptr)
-  {
-    Node* node    = new Node;
-    node->fleft   = nullptr;
-    node->fright  = nullptr;
+  if (fRoot == nullptr) {
+    Node* node = new Node;
+    node->fleft = nullptr;
+    node->fright = nullptr;
     node->fparent = nullptr;
-    node->fdata   = newHit;
-    node->fkey    = newHit->GetBasePairIdx();
-    fRoot         = node;
+    node->fdata = newHit;
+    node->fkey = newHit->GetBasePairIdx();
+    fRoot = node;
   }
-  else
-  {
+  else {
     Insert_(newHit, fRoot);
   }
 }
@@ -722,14 +639,16 @@ DNAHit* BinaryTree::Search(int64_t index)  // dousatsu
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void BinaryTree::Destroy_tree() { Destroy_tree_(fRoot); }
+void BinaryTree::Destroy_tree()
+{
+  Destroy_tree_(fRoot);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void BinaryTree::Destroy_tree_(Node* node)
 {
-  if(node != nullptr)
-  {
+  if (node != nullptr) {
     Destroy_tree_(node->fleft);
     Destroy_tree_(node->fright);
     delete node->fdata;
@@ -741,56 +660,49 @@ void BinaryTree::Destroy_tree_(Node* node)
 
 void BinaryTree::Insert_(DNAHit* hit, Node* node)
 {
-  if(hit->GetBasePairIdx() > 9223372036854775807)
-  {
+  if (hit->GetBasePairIdx() > 9223372036854775807) {
     G4cout << " SEE AnalysisManager !!!" << G4endl;
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "!!!!!!!!!!!!!!!!!!!!" << G4endl;
     G4cout << "!!! aborting ... " << G4endl;
     G4cout << "This pair ID is so big " << hit->GetBasePairIdx() << G4endl;
     G4cout << "!!!!!!!!!!!!!!!!!!!!" << G4endl;
-    G4Exception("BinaryTree"
-                "::insert()",
-                "insert000", FatalException, exceptionDescription);
+    G4Exception(
+      "BinaryTree"
+      "::insert()",
+      "insert000", FatalException, exceptionDescription);
   }
   int64_t key = hit->GetBasePairIdx();  // dousatsu
   // G4int key = hit->GetBasePairIdx();//ORG
-  if(key < node->fkey)
-  {
-    if(node->fleft != nullptr)
-    {
+  if (key < node->fkey) {
+    if (node->fleft != nullptr) {
       Insert_(hit, node->fleft);
     }
-    else
-    {
-      Node* daughter    = new Node;
+    else {
+      Node* daughter = new Node;
       daughter->fparent = node;
-      daughter->fleft   = nullptr;
-      daughter->fright  = nullptr;
-      daughter->fdata   = hit;
-      daughter->fkey    = hit->GetBasePairIdx();
-      node->fleft       = daughter;
+      daughter->fleft = nullptr;
+      daughter->fright = nullptr;
+      daughter->fdata = hit;
+      daughter->fkey = hit->GetBasePairIdx();
+      node->fleft = daughter;
     }
   }
-  else if(key > node->fkey)
-  {
-    if(node->fright != nullptr)
-    {
+  else if (key > node->fkey) {
+    if (node->fright != nullptr) {
       Insert_(hit, node->fright);
     }
-    else
-    {
-      Node* daughter    = new Node;
+    else {
+      Node* daughter = new Node;
       daughter->fparent = node;
-      daughter->fleft   = nullptr;
-      daughter->fright  = nullptr;
-      daughter->fdata   = hit;
-      daughter->fkey    = hit->GetBasePairIdx();
-      node->fright      = daughter;
+      daughter->fleft = nullptr;
+      daughter->fright = nullptr;
+      daughter->fdata = hit;
+      daughter->fkey = hit->GetBasePairIdx();
+      node->fright = daughter;
     }
   }
-  else
-  {
+  else {
     node->fdata->AddHit(*hit);
   }
 }
@@ -799,23 +711,18 @@ void BinaryTree::Insert_(DNAHit* hit, Node* node)
 
 DNAHit* BinaryTree::Search_(int64_t key, Node* node)  // dousatsu check
 {
-  if(node != nullptr)
-  {
-    if(key < node->fkey)
-    {
+  if (node != nullptr) {
+    if (key < node->fkey) {
       return Search_(key, node->fleft);
     }
-    else if(key > node->fkey)
-    {
+    else if (key > node->fkey) {
       return Search_(key, node->fright);
     }
-    else
-    {
+    else {
       return node->fdata;
     }
   }
-  else
-  {
+  else {
     return nullptr;
   }
 }
@@ -824,12 +731,10 @@ DNAHit* BinaryTree::Search_(int64_t key, Node* node)  // dousatsu check
 
 DNAHit* BinaryTree::First() const
 {
-  if(fRoot == nullptr)
-  {
+  if (fRoot == nullptr) {
     return nullptr;
   }
-  else
-  {
+  else {
     return First_(fRoot);
   }
 }
@@ -838,12 +743,10 @@ DNAHit* BinaryTree::First() const
 
 DNAHit* BinaryTree::First_(Node* node) const
 {
-  if(node->fleft == nullptr)
-  {
+  if (node->fleft == nullptr) {
     return node->fdata;
   }
-  else
-  {
+  else {
     return First_(node->fleft);
   }
 }
@@ -852,25 +755,23 @@ DNAHit* BinaryTree::First_(Node* node) const
 
 DNAHit* BinaryTree::Next(const DNAHit* hit) const
 {
-  if(hit->GetBasePairIdx() > 9223372036854775807)
-  {
+  if (hit->GetBasePairIdx() > 9223372036854775807) {
     G4cout << " SEE AnalysisManager !!!" << G4endl;
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "!!!!!!!!!!!!!!!!!!!!" << G4endl;
     G4cout << "!!! aborting ... " << G4endl;
     G4cout << "This pair ID is so big " << hit->GetBasePairIdx() << G4endl;
     G4cout << "!!!!!!!!!!!!!!!!!!!!" << G4endl;
-    G4Exception("BinaryTree"
-                "::insert()",
-                "insert000", FatalException, exceptionDescription);
+    G4Exception(
+      "BinaryTree"
+      "::insert()",
+      "insert000", FatalException, exceptionDescription);
   }
   int64_t key = hit->GetBasePairIdx();  // dousatsu
-  if(fRoot == nullptr)
-  {
+  if (fRoot == nullptr) {
     return nullptr;
   }
-  else
-  {
+  else {
     return Next_(key, fRoot);
   }
 }
@@ -882,10 +783,8 @@ DNAHit* BinaryTree::Next(const DNAHit* hit) const
 // objects makes this look more complicated than standard algorithms
 DNAHit* BinaryTree::Next_(int64_t key, Node* node) const  // dousatsu
 {
-  if(key < node->fkey)
-  {
-    if(node->fleft != nullptr)
-    {
+  if (key < node->fkey) {
+    if (node->fleft != nullptr) {
       return Next_(key, node->fleft);
     }
     else  // left is NULL
@@ -895,21 +794,17 @@ DNAHit* BinaryTree::Next_(int64_t key, Node* node) const  // dousatsu
   }
   else  // (key >= node->key)
   {
-    if(node->fright != nullptr)
-    {
+    if (node->fright != nullptr) {
       return Next_(key, node->fright);
     }
     else  // right is NULL; solution is higher in tree
     {
-      while(true)
-      {
+      while (true) {
         node = node->fparent;
-        if(node == nullptr)
-        {
+        if (node == nullptr) {
           return nullptr;
         }
-        if(key < node->fkey)
-        {
+        if (key < node->fkey) {
           return node->fdata;
         }
       }
@@ -923,62 +818,52 @@ DNAHit* BinaryTree::Next_(int64_t key, Node* node) const  // dousatsu
 ////////// Damage Record
 ////////////////////////////////////////////////////////////////////////////////
 
-const char* DamageRecord::fDirectDamageChar   = "D";
+const char* DamageRecord::fDirectDamageChar = "D";
 const char* DamageRecord::fIndirectDamageChar = "I";
-const char* DamageRecord::fHitNoDamageChar    = "~";
-const char* DamageRecord::fNotHitChar         = "-";
-const char* DamageRecord::fBothDamageChar     = "X";
+const char* DamageRecord::fHitNoDamageChar = "~";
+const char* DamageRecord::fNotHitChar = "-";
+const char* DamageRecord::fBothDamageChar = "X";
 
-DamageRecord::DamageRecord(const G4String& name, int64_t startIndex,
-                           G4int place_idx, G4int chain_idx)
-  : fName(name)
-  , fStartIndex(startIndex)
-  , fStartPlacement(place_idx)
-  , fChainIdx(chain_idx)
+DamageRecord::DamageRecord(const G4String& name, int64_t startIndex, G4int place_idx,
+                           G4int chain_idx)
+  : fName(name), fStartIndex(startIndex), fStartPlacement(place_idx), fChainIdx(chain_idx)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DamageRecord::~DamageRecord()
 {
-  for(auto& fDamageRecord : fDamageRecords)
-  {
+  for (auto& fDamageRecord : fDamageRecords) {
     delete fDamageRecord;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DamageRecord::PrintRecord(const G4String& filename,
-                               const G4double& dsbDistance)
+void DamageRecord::PrintRecord(const G4String& filename, const G4double& dsbDistance)
 {
   std::stringstream strand1;
   std::stringstream bp1;
   std::stringstream bp2;
   std::stringstream strand2;
-  for(auto& fDamageRecord : fDamageRecords)
-  {
-    strand1 << GetChar(fDamageRecord->fStrand1DirectDmg,
-                       fDamageRecord->fStrand1IndirectDmg,
+  for (auto& fDamageRecord : fDamageRecords) {
+    strand1 << GetChar(fDamageRecord->fStrand1DirectDmg, fDamageRecord->fStrand1IndirectDmg,
                        fDamageRecord->fStrand1Energy);
     bp1 << GetChar(fDamageRecord->fbp1DirectDmg, fDamageRecord->fBp1IndirectDmg,
                    fDamageRecord->fBp1Energy);
     bp2 << GetChar(fDamageRecord->fbp2DirectDmg, fDamageRecord->fBp2IndirectDmg,
                    fDamageRecord->fBp2Energy);
-    strand2 << GetChar(fDamageRecord->fStrand2DirectDmg,
-                       fDamageRecord->fStrand2IndirectDmg,
+    strand2 << GetChar(fDamageRecord->fStrand2DirectDmg, fDamageRecord->fStrand2IndirectDmg,
                        fDamageRecord->fStrand2Energy);
   }
 
   // print to with no filename
-  if(filename.empty())
-  {
+  if (filename.empty()) {
     DamageClassification* classification = this->GetClassification(dsbDistance);
-    G4cout << "Sequences starts at base pair " << fStartIndex
-           << " in placement " << fStartPlacement << ", Chain " << fChainIdx
-           << ". Total length: " << fDamageRecords.size()
-           << ". Classification: " << classification->fComplexity << " "
-           << classification->fSource << G4endl;
+    G4cout << "Sequences starts at base pair " << fStartIndex << " in placement " << fStartPlacement
+           << ", Chain " << fChainIdx << ". Total length: " << fDamageRecords.size()
+           << ". Classification: " << classification->fComplexity << " " << classification->fSource
+           << G4endl;
     G4cout << strand1.str() << G4endl;
     G4cout << bp1.str() << G4endl;
     G4cout << bp2.str() << G4endl;
@@ -986,18 +871,15 @@ void DamageRecord::PrintRecord(const G4String& filename,
     return;
   }
   // To Text output
-  std::fstream fs(filename,
-                  std::fstream::in | std::fstream::out | std::fstream::trunc);
-  if(fs.fail())
-  {
+  std::fstream fs(filename, std::fstream::in | std::fstream::out | std::fstream::trunc);
+  if (fs.fail()) {
     G4cout << "Could not open filestream" << G4endl;
   }
   DamageClassification* classification = this->GetClassification(dsbDistance);
-  fs << "Sequences starts at base pair " << fStartIndex << " in placement "
-     << fStartPlacement << ", Chain " << fChainIdx
-     << ". Total length: " << fDamageRecords.size()
-     << ". Classification: " << classification->fComplexity << " "
-     << classification->fSource << std::endl;
+  fs << "Sequences starts at base pair " << fStartIndex << " in placement " << fStartPlacement
+     << ", Chain " << fChainIdx << ". Total length: " << fDamageRecords.size()
+     << ". Classification: " << classification->fComplexity << " " << classification->fSource
+     << std::endl;
   fs << strand1.str() << std::endl;
   fs << bp1.str() << std::endl;
   fs << bp2.str() << std::endl;
@@ -1006,35 +888,28 @@ void DamageRecord::PrintRecord(const G4String& filename,
   delete classification;
 }
 
-const char* DamageRecord::GetChar(const G4bool& direct, const G4bool& indirect,
-                                  const G4double& e)
+const char* DamageRecord::GetChar(const G4bool& direct, const G4bool& indirect, const G4double& e)
 {
-  if(direct && indirect)
-  {
+  if (direct && indirect) {
     return fBothDamageChar;
   }
-  else if(direct)
-  {
+  else if (direct) {
     return fDirectDamageChar;
   }
-  else if(indirect)
-  {
+  else if (indirect) {
     return fIndirectDamageChar;
   }
-  else if(e > 0)
-  {
+  else if (e > 0) {
     return fHitNoDamageChar;
   }
-  else
-  {
+  else {
     return fNotHitChar;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DamageClassification* DamageRecord::GetClassification(
-  const G4double& dsbDistance)
+DamageClassification* DamageRecord::GetClassification(const G4double& dsbDistance)
 {
   /* Explanation of class because we do some sneaky bit-level manipulation to
      track breaks along the strand.
@@ -1079,48 +954,47 @@ DamageClassification* DamageRecord::GetClassification(
   G4int nSSB = 0;
   // Source classification
   G4int oldnDSB = 0;
-  G4int nDSBm   = 0;
-  G4int nDSBi   = 0;
-  G4int nDSBd   = 0;
-  G4int nDSBh   = 0;
+  G4int nDSBm = 0;
+  G4int nDSBi = 0;
+  G4int nDSBd = 0;
+  G4int nDSBh = 0;
 
   // Complexity Classification
   G4int nDSBPlus = 0;
-  G4bool SSB1    = false;
-  G4bool SSB2    = false;
+  G4bool SSB1 = false;
+  G4bool SSB2 = false;
   // Counters for the last ten bp
-  uint32_t lastTenDirectStrand1   = 0;
-  uint32_t lastTenDirectStrand2   = 0;
+  uint32_t lastTenDirectStrand1 = 0;
+  uint32_t lastTenDirectStrand2 = 0;
   uint32_t lastTenIndirectStrand1 = 0;
   uint32_t lastTenIndirectStrand2 = 0;
-  uint32_t lastTenStrand1         = 0;
-  uint32_t lastTenStrand2         = 0;
+  uint32_t lastTenStrand1 = 0;
+  uint32_t lastTenStrand2 = 0;
   uint32_t lastTenTracked1 = 0;  // We remove entries from these if they have
   uint32_t lastTenTracked2 = 0;  // been counted in DSBs
-  uint32_t count1          = 0;
-  uint32_t count2          = 0;
-  G4bool strand1Indirect   = false;
-  G4bool strand1Direct     = false;
-  G4bool strand2Indirect   = false;
-  G4bool strand2Direct     = false;
-  G4int baseDamage         = 0;
-  G4int strandDamage       = 0;
-  uint32_t truncator       = std::pow(2, dsbDistance + 1) - 1;
-  for(G4int ii = 0; ii != (G4int) fDamageRecords.size(); ii++)
-  {
-    lastTenDirectStrand1   = (lastTenDirectStrand1 << 1) & truncator;
-    lastTenDirectStrand2   = (lastTenDirectStrand2 << 1) & truncator;
+  uint32_t count1 = 0;
+  uint32_t count2 = 0;
+  G4bool strand1Indirect = false;
+  G4bool strand1Direct = false;
+  G4bool strand2Indirect = false;
+  G4bool strand2Direct = false;
+  G4int baseDamage = 0;
+  G4int strandDamage = 0;
+  uint32_t truncator = std::pow(2, dsbDistance + 1) - 1;
+  for (G4int ii = 0; ii != (G4int)fDamageRecords.size(); ii++) {
+    lastTenDirectStrand1 = (lastTenDirectStrand1 << 1) & truncator;
+    lastTenDirectStrand2 = (lastTenDirectStrand2 << 1) & truncator;
     lastTenIndirectStrand1 = (lastTenIndirectStrand1 << 1) & truncator;
     lastTenIndirectStrand2 = (lastTenIndirectStrand2 << 1) & truncator;
 
-    lastTenStrand1  = lastTenStrand1 << 1;
-    lastTenStrand2  = lastTenStrand2 << 1;
+    lastTenStrand1 = lastTenStrand1 << 1;
+    lastTenStrand2 = lastTenStrand2 << 1;
     lastTenTracked1 = lastTenTracked1 << 1;
     lastTenTracked2 = lastTenTracked2 << 1;
     // DSB distance by default is 10
     // 2047 = 0b11111111111, ie. truncation to 11bp
-    lastTenStrand1  = lastTenStrand1 & truncator;
-    lastTenStrand2  = lastTenStrand2 & truncator;
+    lastTenStrand1 = lastTenStrand1 & truncator;
+    lastTenStrand2 = lastTenStrand2 & truncator;
     lastTenTracked1 = lastTenTracked1 & truncator;
     lastTenTracked2 = lastTenTracked2 & truncator;
     // keep counters to ten binary places
@@ -1128,48 +1002,38 @@ DamageClassification* DamageRecord::GetClassification(
     count2 = count_bytes(lastTenStrand2);
 
     // Nightmare of if statements
-    if(fDamageRecords.at(ii)->fStrand1DirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fStrand1DirectDmg) {
       strand1Direct = true;
       classification->fDirectBreaks++;
     }
-    if(fDamageRecords.at(ii)->fStrand1IndirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fStrand1IndirectDmg) {
       strand1Indirect = true;
       classification->fIndirectBreaks++;
     }
-    if(fDamageRecords.at(ii)->fStrand2DirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fStrand2DirectDmg) {
       strand2Direct = true;
       classification->fDirectBreaks++;
     }
-    if(fDamageRecords.at(ii)->fStrand2IndirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fStrand2IndirectDmg) {
       strand2Indirect = true;
       classification->fIndirectBreaks++;
     }
-    if(fDamageRecords.at(ii)->fbp1DirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fbp1DirectDmg) {
       // classification->fDirectBreaks++; //???
     }
-    if(fDamageRecords.at(ii)->fBp1IndirectDmg)
-    {
-      if(fDamageRecords.at(ii)->fbp1InducedBreak)
-      {
+    if (fDamageRecords.at(ii)->fBp1IndirectDmg) {
+      if (fDamageRecords.at(ii)->fbp1InducedBreak) {
         // Counts as a hit only if it breaks a strand
         classification->fIndirectBreaks++;
         strand1Indirect = true;
         classification->fInducedBreaks++;
       }
     }
-    if(fDamageRecords.at(ii)->fbp2DirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fbp2DirectDmg) {
       // classification->fDirectBreaks++; //???
     }
-    if(fDamageRecords.at(ii)->fBp2IndirectDmg)
-    {
-      if(fDamageRecords.at(ii)->fbp2InducedBreak)
-      {
+    if (fDamageRecords.at(ii)->fBp2IndirectDmg) {
+      if (fDamageRecords.at(ii)->fbp2InducedBreak) {
         // Counts as a hit only if it breaks a strand
         classification->fIndirectBreaks++;
         strand2Indirect = true;
@@ -1177,120 +1041,92 @@ DamageClassification* DamageRecord::GetClassification(
       }
     }
 
-    G4bool s1IndirectBreak = fDamageRecords.at(ii)->fStrand1IndirectDmg ||
-                             fDamageRecords.at(ii)->fbp1InducedBreak;
-    G4bool s2IndirectBreak = fDamageRecords.at(ii)->fStrand2IndirectDmg ||
-                             fDamageRecords.at(ii)->fbp2InducedBreak;
+    G4bool s1IndirectBreak =
+      fDamageRecords.at(ii)->fStrand1IndirectDmg || fDamageRecords.at(ii)->fbp1InducedBreak;
+    G4bool s2IndirectBreak =
+      fDamageRecords.at(ii)->fStrand2IndirectDmg || fDamageRecords.at(ii)->fbp2InducedBreak;
 
     // strand 1 hit
-    G4bool strand1hit =
-      fDamageRecords.at(ii)->fStrand1DirectDmg || s1IndirectBreak;
-    G4bool strand2hit =
-      fDamageRecords.at(ii)->fStrand2DirectDmg || s2IndirectBreak;
-    G4bool bp1hit = fDamageRecords.at(ii)->fbp1DirectDmg ||
-                    fDamageRecords.at(ii)->fBp1IndirectDmg;
-    G4bool bp2hit = fDamageRecords.at(ii)->fbp2DirectDmg ||
-                    fDamageRecords.at(ii)->fBp2IndirectDmg;
-    strandDamage += ((G4int) strand1hit + (G4int) strand2hit);
-    baseDamage += ((G4int) bp1hit + (G4int) bp2hit);
+    G4bool strand1hit = fDamageRecords.at(ii)->fStrand1DirectDmg || s1IndirectBreak;
+    G4bool strand2hit = fDamageRecords.at(ii)->fStrand2DirectDmg || s2IndirectBreak;
+    G4bool bp1hit = fDamageRecords.at(ii)->fbp1DirectDmg || fDamageRecords.at(ii)->fBp1IndirectDmg;
+    G4bool bp2hit = fDamageRecords.at(ii)->fbp2DirectDmg || fDamageRecords.at(ii)->fBp2IndirectDmg;
+    strandDamage += ((G4int)strand1hit + (G4int)strand2hit);
+    baseDamage += ((G4int)bp1hit + (G4int)bp2hit);
 
     // Update the damage type counters
     // strand 1
-    if(s1IndirectBreak)
-    {
+    if (s1IndirectBreak) {
       lastTenIndirectStrand1++;
     }
-    if(fDamageRecords.at(ii)->fStrand1DirectDmg)
-    {
+    if (fDamageRecords.at(ii)->fStrand1DirectDmg) {
       lastTenDirectStrand1++;
     }
     // strand 2
-    if(s2IndirectBreak)
-    {
+    if (s2IndirectBreak) {
       lastTenIndirectStrand2++;
     }
-    if(fDamageRecords.at(ii)->fStrand2DirectDmg)
-      lastTenDirectStrand2++;
+    if (fDamageRecords.at(ii)->fStrand2DirectDmg) lastTenDirectStrand2++;
 
     oldnDSB = nDSB + nDSBPlus;
-    if(strand1hit && strand2hit)
-    {
+    if (strand1hit && strand2hit) {
       nDSB++;
-      if(count1 || count2)
-      {
+      if (count1 || count2) {
         nDSBPlus++;
       }
       lastTenStrand1++;
       lastTenStrand2++;
     }
-    else if(strand1hit)
-    {
-      if(lastTenTracked2)
-      {
+    else if (strand1hit) {
+      if (lastTenTracked2) {
         nDSB++;
-        lastTenTracked2 =
-          (1 << (utility::Fls(lastTenTracked2) - 1)) ^ lastTenTracked2;
-        if((count2 > 1) || (count1))
-        {
+        lastTenTracked2 = (1 << (utility::Fls(lastTenTracked2) - 1)) ^ lastTenTracked2;
+        if ((count2 > 1) || (count1)) {
           nDSBPlus++;
         }
       }
-      else if(count1 && count2)
-      {
+      else if (count1 && count2) {
         nDSBPlus++;
       }
-      else
-      {
+      else {
         nSSB++;
       }
       SSB1 = true;
       lastTenTracked1++;
       lastTenStrand1++;
     }
-    else if(strand2hit)
-    {
-      if(lastTenTracked1)
-      {
+    else if (strand2hit) {
+      if (lastTenTracked1) {
         nDSB++;
-        lastTenTracked1 =
-          (1 << (utility::Fls(lastTenTracked1) - 1)) ^ lastTenTracked1;
-        if((count1 > 1) || (count2))
-        {
+        lastTenTracked1 = (1 << (utility::Fls(lastTenTracked1) - 1)) ^ lastTenTracked1;
+        if ((count1 > 1) || (count2)) {
           nDSBPlus++;
         }
       }
-      else if(count1 && count2)
-      {
+      else if (count1 && count2) {
         nDSBPlus++;
       }
-      else
-      {
+      else {
         nSSB++;
       }
       SSB2 = true;
       lastTenStrand2++;
       lastTenTracked2++;
     }
-    if(oldnDSB != (nDSB + nDSBPlus))
-    {
+    if (oldnDSB != (nDSB + nDSBPlus)) {
       // we have had a DSB, time to classify its source.
       // DSB
-      if(lastTenDirectStrand1 && lastTenDirectStrand2)
-      {
+      if (lastTenDirectStrand1 && lastTenDirectStrand2) {
         nDSBd = true;
-        if(lastTenIndirectStrand1 || lastTenIndirectStrand2)
-          nDSBm = true;
+        if (lastTenIndirectStrand1 || lastTenIndirectStrand2) nDSBm = true;
       }
-      if(lastTenIndirectStrand1 && lastTenIndirectStrand2)
-      {
+      if (lastTenIndirectStrand1 && lastTenIndirectStrand2) {
         nDSBi = true;
-        if(lastTenDirectStrand1 || lastTenDirectStrand2)
-          nDSBh = true;
-        if(lastTenDirectStrand1 && lastTenDirectStrand2)
-          nDSBm = true;
+        if (lastTenDirectStrand1 || lastTenDirectStrand2) nDSBh = true;
+        if (lastTenDirectStrand1 && lastTenDirectStrand2) nDSBm = true;
       }
-      if((lastTenDirectStrand1 && lastTenIndirectStrand2) ||
-         (lastTenIndirectStrand1 && lastTenDirectStrand2))
+      if ((lastTenDirectStrand1 && lastTenIndirectStrand2)
+          || (lastTenIndirectStrand1 && lastTenDirectStrand2))
       {
         nDSBh = true;
       }
@@ -1302,110 +1138,88 @@ DamageClassification* DamageRecord::GetClassification(
   // G4String complexity = "None";
 
   complexityEnum complexity = NoneComplexity;
-  if(nDSB > 1)
-  {
+  if (nDSB > 1) {
     complexity = DSBplusplus;
   }
-  else if(nDSBPlus != 0)
-  {
+  else if (nDSBPlus != 0) {
     complexity = DSBplus;
   }
-  else if(nDSB != 0)
-  {
+  else if (nDSB != 0) {
     complexity = DSB;
   }
-  else if((nSSB != 0) && SSB1 && SSB2)
-  {
+  else if ((nSSB != 0) && SSB1 && SSB2) {
     complexity = twoSSB;
   }
-  else if(nSSB > 1)
-  {
+  else if (nSSB > 1) {
     complexity = SSBplus;
   }
-  else if(nSSB != 0)
-  {
+  else if (nSSB != 0) {
     complexity = SSB;
   }
-  else
-  {
+  else {
     complexity = NoneComplexity;
   }
-  G4bool direct     = (strand1Direct || strand2Direct);
-  G4bool indirect   = (strand1Indirect || strand2Indirect);
+  G4bool direct = (strand1Direct || strand2Direct);
+  G4bool indirect = (strand1Indirect || strand2Indirect);
   sourceEnum source = undefined;
-  if(nDSB == 0)
-  {
-    if(direct && indirect)
-    {
+  if (nDSB == 0) {
+    if (direct && indirect) {
       source = SSBm;
     }
-    else if(direct)
-    {
+    else if (direct) {
       source = SSBd;
     }
-    else if(indirect)
-    {
+    else if (indirect) {
       source = SSBi;
     }
-    else
-    {
+    else {
       source = undefined;
     }
   }
-  else
-  {
-    if(nDSBm != 0)
-    {
+  else {
+    if (nDSBm != 0) {
       source = DSBm;
     }
-    else if((nDSBd != 0) && (nDSBi != 0))
-    {
+    else if ((nDSBd != 0) && (nDSBi != 0)) {
       source = DSBm;
     }
-    else if((nDSBd != 0) && (nDSBh != 0))
-    {
+    else if ((nDSBd != 0) && (nDSBh != 0)) {
       source = DSBm;
     }
-    else if(nDSBd != 0)
-    {
+    else if (nDSBd != 0) {
       source = DSBd;
     }
-    else if(nDSBh != 0)
-    {
+    else if (nDSBh != 0) {
       source = DSBh;  // Catches DSBi && DSBh
     }
-    else if(nDSBi != 0)
-    {
+    else if (nDSBi != 0) {
       source = DSBi;
     }
-    else
-    {
+    else {
       G4ExceptionDescription errmsg;
       this->PrintRecord("", dsbDistance);
       errmsg << "Error in source classification routine" << G4endl;
       errmsg << "I think this is " << complexity << "/"
              << "???" << G4endl;
-      G4Exception("DamageRecord::GetClassification", "ERR_BAD_CLASSIFICATION",
-                  JustWarning, errmsg);
+      G4Exception("DamageRecord::GetClassification", "ERR_BAD_CLASSIFICATION", JustWarning, errmsg);
       source = undefined;
     }
   }
 
-  if(((complexity == NoneComplexity) && (source != undefined)) ||
-     ((complexity != NoneComplexity) && (source == undefined)))
+  if (((complexity == NoneComplexity) && (source != undefined))
+      || ((complexity != NoneComplexity) && (source == undefined)))
   {
     G4ExceptionDescription errmsg;
     errmsg << "You can't have a complexity without a source etc." << G4endl;
     errmsg << "I think this is " << complexity << "/" << source << G4endl;
     this->PrintRecord("", dsbDistance);
-    G4Exception("DamageRecord::GetClassification", "ERR_BAD_CLASSIFICATION",
-                JustWarning, errmsg);
+    G4Exception("DamageRecord::GetClassification", "ERR_BAD_CLASSIFICATION", JustWarning, errmsg);
   }
 
   classification->fComplexity = complexity;
-  classification->fSource     = source;
-  classification->fbaseDmg    = baseDamage;
-  classification->fStrandDmg  = strandDamage;
+  classification->fSource = source;
+  classification->fbaseDmg = baseDamage;
+  classification->fStrandDmg = strandDamage;
 
   return classification;
 }
@@ -1423,55 +1237,43 @@ DamageClassification* DamageRecord::GetClassification(
 void DamageRecord::AddTestDamage(G4int s1, G4int b1, G4int b2, G4int s2)
 {
   auto* bp = new BasePairDamageRecord;
-  if(s1 == 0)
-  {
+  if (s1 == 0) {
     bp->fStrand1IndirectDmg = true;
   }
-  if(s1 > 0)
-  {
+  if (s1 > 0) {
     bp->fStrand1Energy = 10 * eV;
   }
-  if(s1 > 1)
-  {
+  if (s1 > 1) {
     bp->fStrand1DirectDmg = true;
   }
 
-  if(b1 == 0)
-  {
+  if (b1 == 0) {
     bp->fBp1IndirectDmg = true;
   }
-  if(b1 > 0)
-  {
+  if (b1 > 0) {
     bp->fBp1Energy = 10 * eV;
   }
-  if(b1 > 1)
-  {
+  if (b1 > 1) {
     bp->fbp1DirectDmg = true;
   }
 
-  if(s2 == 0)
-  {
+  if (s2 == 0) {
     bp->fStrand2IndirectDmg = true;
   }
-  if(s2 > 0)
-  {
+  if (s2 > 0) {
     bp->fStrand2Energy = 10 * eV;
   }
-  if(s2 > 1)
-  {
+  if (s2 > 1) {
     bp->fStrand2DirectDmg = true;
   }
 
-  if(b2 == 0)
-  {
+  if (b2 == 0) {
     bp->fBp2IndirectDmg = true;
   }
-  if(b2 > 0)
-  {
+  if (b2 > 0) {
     bp->fBp2Energy = 10 * eV;
   }
-  if(b2 > 1)
-  {
+  if (b2 > 1) {
     bp->fbp2DirectDmg = true;
   }
 
@@ -1497,8 +1299,8 @@ void AnalysisManager::TestClassification()
   DamageClassification* classification = theRecord->GetClassification();
   G4cout << "Test None" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == NoneComplexity);
   assert(classification->fSource == sourceEnum::undefined);
   delete classification;
@@ -1517,8 +1319,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test None" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   G4cout << "indirect Breaks = " << classification->fIndirectBreaks << G4endl;
   G4cout << "base Damage = " << classification->fbaseDmg << G4endl;
   assert(classification->fComplexity == NoneComplexity);
@@ -1539,8 +1341,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBd" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == SSB);
   assert(classification->fSource == SSBd);
   delete classification;
@@ -1555,8 +1357,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBi" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == SSB);
   assert(classification->fSource == SSBi);
   delete classification;
@@ -1573,8 +1375,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBm / SSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == SSBplus);
   assert(classification->fSource == SSBm);
   delete classification;
@@ -1591,8 +1393,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBd / 2SSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == twoSSB);
   assert(classification->fSource == SSBm);
   delete classification;
@@ -1611,8 +1413,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBi / 2SSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == twoSSB);
   assert(classification->fSource == SSBi);
   delete classification;
@@ -1629,8 +1431,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBd / SSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == SSBplus);
   assert(classification->fSource == SSBd);
   delete classification;
@@ -1647,8 +1449,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBm / 2SSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == twoSSB);
   assert(classification->fSource == SSBm);
   delete classification;
@@ -1665,8 +1467,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBd / 2SSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == twoSSB);
   assert(classification->fSource == SSBd);
   delete classification;
@@ -1683,8 +1485,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBd / 2SSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == twoSSB);
   assert(classification->fSource == SSBd);
   delete classification;
@@ -1701,8 +1503,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -1715,13 +1517,13 @@ void AnalysisManager::TestClassification()
   theRecord = new DamageRecord("Test", 0, 0, 0);
   theRecord->AddEmptyBPDamage(10);
 
-  auto* bp             = new BasePairDamageRecord();
-  bp->fBp1IndirectDmg  = true;
+  auto* bp = new BasePairDamageRecord();
+  bp->fBp1IndirectDmg = true;
   bp->fbp1InducedBreak = true;
   theRecord->AddBasePairDamage(bp, G4ThreeVector(0, 0, 0));
 
-  bp                   = new BasePairDamageRecord();
-  bp->fBp2IndirectDmg  = true;
+  bp = new BasePairDamageRecord();
+  bp->fBp2IndirectDmg = true;
   bp->fbp2InducedBreak = true;
   theRecord->AddBasePairDamage(bp, G4ThreeVector(0, 0, 0));
 
@@ -1729,8 +1531,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBi/DSB induced" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -1741,8 +1543,8 @@ void AnalysisManager::TestClassification()
   theRecord = new DamageRecord("Test", 0, 0, 0);
   theRecord->AddEmptyBPDamage(10);
 
-  bp                   = new BasePairDamageRecord();
-  bp->fBp2IndirectDmg  = true;
+  bp = new BasePairDamageRecord();
+  bp->fBp2IndirectDmg = true;
   bp->fbp2InducedBreak = true;
   theRecord->AddBasePairDamage(bp, G4ThreeVector(0, 0, 0));
 
@@ -1750,8 +1552,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test SSBi/SSB induced" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == SSB);
   assert(classification->fSource == SSBi);
   delete classification;
@@ -1768,8 +1570,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBi/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -1784,8 +1586,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -1800,8 +1602,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -1816,8 +1618,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBh);
   delete classification;
@@ -1833,8 +1635,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplus);
   assert(classification->fSource == DSBh);
   delete classification;
@@ -1850,8 +1652,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplus);
   assert(classification->fSource == DSBm);
   delete classification;
@@ -1869,8 +1671,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplus);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -1890,8 +1692,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplus);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -1911,8 +1713,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplus);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -1932,8 +1734,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBh);
   delete classification;
@@ -1952,8 +1754,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSB);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -1973,8 +1775,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -1994,8 +1796,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBh/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBh);
   delete classification;
@@ -2015,8 +1817,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBm/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBm);
   delete classification;
@@ -2036,8 +1838,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBi/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -2057,8 +1859,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBi/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -2079,8 +1881,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBd/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBd);
   delete classification;
@@ -2103,8 +1905,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBi/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -2129,8 +1931,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBh/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBh);
   delete classification;
@@ -2155,8 +1957,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBm/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplusplus);
   assert(classification->fSource == DSBm);
   delete classification;
@@ -2177,8 +1979,8 @@ void AnalysisManager::TestClassification()
   classification = theRecord->GetClassification();
   G4cout << "Test DSBi/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
-  G4cout << "Classification: " << classification->fSource << "/"
-         << classification->fComplexity << G4endl;
+  G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
+         << G4endl;
   assert(classification->fComplexity == DSBplus);
   assert(classification->fSource == DSBi);
   delete classification;
@@ -2196,8 +1998,7 @@ void AnalysisManager::TestClassification()
 void DamageRecord::AddEmptyBPDamage(int64_t ii)  // dousatsu
 {
   auto basePairNumber = ii;
-  while(basePairNumber > 0)
-  {
+  while (basePairNumber > 0) {
     fDamageRecords.push_back(new BasePairDamageRecord);
     basePairNumber--;
   }
@@ -2207,16 +2008,13 @@ void DamageRecord::AddEmptyBPDamage(int64_t ii)  // dousatsu
 
 void DamageRecord::AddStrandHit(const G4MoleculeDefinition* mol)
 {
-  if(mol == G4OH::Definition())
-  {
+  if (mol == G4OH::Definition()) {
     fOHStrand++;
   }
-  else if(mol == G4Electron_aq::Definition())
-  {
+  else if (mol == G4Electron_aq::Definition()) {
     fEaqStrand++;
   }
-  else if(mol == G4Hydrogen::Definition())
-  {
+  else if (mol == G4Hydrogen::Definition()) {
     fHStrand++;
   }
 }
@@ -2226,16 +2024,13 @@ void DamageRecord::AddStrandHit(const G4MoleculeDefinition* mol)
 void DamageRecord::AddBaseHit(const G4MoleculeDefinition* mol)
 {
   // G4cout << "Hit by " << mol->GetParticleName() << G4endl;
-  if(mol == fOH)
-  {
+  if (mol == fOH) {
     fOHBase++;
   }
-  else if(mol == fe_aq)
-  {
+  else if (mol == fe_aq) {
     fEaqBase++;
   }
-  else if(mol == fH)
-  {
+  else if (mol == fH) {
     fHBase++;
   }
 }
@@ -2247,22 +2042,19 @@ G4ThreeVector DamageRecord::GetMeanPosition() const
   G4double x(0.);
   G4double y(0.);
   G4double z(0.);
-  for(const auto& fPosition : fPositions)
-  {
+  for (const auto& fPosition : fPositions) {
     x += fPosition.getX();
     y += fPosition.getY();
     z += fPosition.getZ();
   }
 
-  if(fPositions.empty())
-  {
+  if (fPositions.empty()) {
     G4ExceptionDescription errmsg;
     errmsg << "fPositions is emply ";
     G4Exception("DamageRecord", "ERR_INVALID_PROB", FatalException, errmsg);
     return G4ThreeVector(0., 0., 0.);
   }
-  else
-  {
+  else {
     G4double factor = 1.0 / fPositions.size();
     return G4ThreeVector(x * factor, y * factor, z * factor);
   }
@@ -2273,10 +2065,8 @@ G4ThreeVector DamageRecord::GetMeanPosition() const
 G4double DamageRecord::GetMeanDistance() const
 {
   G4double d = 0.;
-  for(auto it = fPositions.begin(); it != fPositions.end(); ++it)
-  {
-    for(auto jt = it + 1; jt != fPositions.end(); ++jt)
-    {
+  for (auto it = fPositions.begin(); it != fPositions.end(); ++it) {
+    for (auto jt = it + 1; jt != fPositions.end(); ++jt) {
       d += ((*jt) - (*it)).mag();
     }
   }
@@ -2289,10 +2079,8 @@ G4double DamageRecord::GetMeanDistance() const
 G4double DamageRecord::GetEnergy() const
 {
   G4double en = 0;
-  for(auto bp : fDamageRecords)
-  {
-    en = en + bp->fBp1Energy + bp->fBp2Energy + bp->fStrand1Energy +
-         bp->fStrand2Energy;
+  for (auto bp : fDamageRecords) {
+    en = en + bp->fBp1Energy + bp->fBp2Energy + bp->fStrand1Energy + bp->fStrand2Energy;
   }
   return en;
 }

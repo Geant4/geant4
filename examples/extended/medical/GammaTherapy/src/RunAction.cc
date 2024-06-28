@@ -37,9 +37,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "RunAction.hh"
+
 #include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
 
 #include "Randomize.hh"
@@ -48,10 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::RunAction(DetectorConstruction* det)
-  : G4UserRunAction()
-  , fDetector(det)
-  , fRun(0)
-  , fHistoManager(0)
+  : G4UserRunAction(), fDetector(det), fRun(0), fHistoManager(0)
 {
   // Book predefined histograms
   fHistoManager = new HistoManager();
@@ -60,7 +58,10 @@ RunAction::RunAction(DetectorConstruction* det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::~RunAction() { delete fHistoManager; }
+RunAction::~RunAction()
+{
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -81,8 +82,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(analysisManager->IsActive())
-  {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
   }
 }
@@ -93,20 +93,17 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
   // print Run summary
   //
-  if(isMaster)
-    fRun->EndOfRun();
+  if (isMaster) fRun->EndOfRun();
 
   // save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(analysisManager->IsActive())
-  {
+  if (analysisManager->IsActive()) {
     analysisManager->Write();
     analysisManager->CloseFile();
   }
 
   // show Rndm status
-  if(isMaster)
-    G4Random::showEngineStatus();
+  if (isMaster) G4Random::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

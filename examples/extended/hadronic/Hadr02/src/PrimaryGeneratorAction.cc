@@ -41,20 +41,20 @@
 //
 
 #include "PrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
+
 #include "HistoManager.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0),
-   fHisto(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fHisto(0)
 {
-  fParticleGun  = new G4ParticleGun(1);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun = new G4ParticleGun(1);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
   fHisto = HistoManager::GetPointer();
 }
 
@@ -71,8 +71,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   if (event->GetEventID() == 0) {
     if (fHisto->DefaultBeamPosition()) {
-      G4double zVertex = -(5.0*mm + fHisto->Length());
-      fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+      G4double zVertex = -(5.0 * mm + fHisto->Length());
+      fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., zVertex));
     }
   }
   fParticleGun->GeneratePrimaryVertex(event);

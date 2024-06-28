@@ -27,82 +27,77 @@
 /// \brief Main program of the runAndEvent/RE04 example
 //
 //
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-#include "G4ScoringManager.hh"
-#include "G4UImanager.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
+#include "FTFP_BERT.hh"
 #include "RE04ActionInitialization.hh"
 #include "RE04DetectorConstruction.hh"
 #include "RE04ParallelWorldConstruction.hh"
 
-#include "FTFP_BERT.hh"
 #include "G4ParallelWorldPhysics.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4ScoringManager.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
- // Instantiate G4UIExecutive if there are no arguments (interactive mode)
- G4UIExecutive* ui = nullptr;
- if ( argc == 1 ) {
-   ui = new G4UIExecutive(argc, argv);
- }
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
-// Construct the run manager
- auto* runManager = G4RunManagerFactory::CreateRunManager();
- 
- G4ScoringManager::GetScoringManager();
+  // Construct the run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
- G4String paraWorldName = "ParallelWorld";
+  G4ScoringManager::GetScoringManager();
 
- // Set mandatory initialization classes
- //
- RE04DetectorConstruction* realWorld = new RE04DetectorConstruction;
- RE04ParallelWorldConstruction* parallelWorld
-   = new RE04ParallelWorldConstruction(paraWorldName);
- realWorld->RegisterParallelWorld(parallelWorld);
- runManager->SetUserInitialization(realWorld);
- //
- G4VModularPhysicsList* physicsList = new FTFP_BERT;
- physicsList->RegisterPhysics
-       (new G4ParallelWorldPhysics(paraWorldName,true));
- runManager->SetUserInitialization(physicsList);
+  G4String paraWorldName = "ParallelWorld";
 
- // Set user action classes
- //
- runManager->SetUserInitialization(new RE04ActionInitialization);
+  // Set mandatory initialization classes
+  //
+  RE04DetectorConstruction* realWorld = new RE04DetectorConstruction;
+  RE04ParallelWorldConstruction* parallelWorld = new RE04ParallelWorldConstruction(paraWorldName);
+  realWorld->RegisterParallelWorld(parallelWorld);
+  runManager->SetUserInitialization(realWorld);
+  //
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->RegisterPhysics(new G4ParallelWorldPhysics(paraWorldName, true));
+  runManager->SetUserInitialization(physicsList);
 
- // Visualization manager
- //
- G4VisManager* visManager = new G4VisExecutive;
- visManager->Initialize();
+  // Set user action classes
+  //
+  runManager->SetUserInitialization(new RE04ActionInitialization);
 
- // Initialize G4 kernel
- //
- runManager->Initialize();
+  // Visualization manager
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 
- // Get the pointer to the User Interface manager
- //
- G4UImanager* pUImanager = G4UImanager::GetUIpointer();
+  // Initialize G4 kernel
+  //
+  runManager->Initialize();
 
- if (ui)   // Define UI session for interactive mode
- {
-      pUImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
- }
- else           // Batch mode
- {
-   G4String command = "/control/execute ";
-   G4String fileName = argv[1];
-   pUImanager->ApplyCommand(command+fileName);
- }
+  // Get the pointer to the User Interface manager
+  //
+  G4UImanager* pUImanager = G4UImanager::GetUIpointer();
 
- delete visManager;
- delete runManager;
+  if (ui)  // Define UI session for interactive mode
+  {
+    pUImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
+  else  // Batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    pUImanager->ApplyCommand(command + fileName);
+  }
 
- return 0;
+  delete visManager;
+  delete runManager;
+
+  return 0;
 }

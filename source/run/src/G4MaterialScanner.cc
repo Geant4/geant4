@@ -166,7 +166,16 @@ void G4MaterialScanner::DoScan()
 
       G4cout << "        " << std::setw(11) << theta / deg << " " << std::setw(11) << phi / deg
              << " " << std::setw(11) << length / mm << " " << std::setw(11) << x0 << " "
-             << std::setw(11) << lambda << G4endl;
+             << std::setw(11) << lambda;
+      if(1 == verbosity)
+      {
+        theMatScannerSteppingAction->PrintIntegratedMaterialVerbose(G4cout);
+      }
+      else if(2 == verbosity)
+      {
+        theMatScannerSteppingAction->PrintEachMaterialVerbose(G4cout);
+      }
+      G4cout << G4endl;
       aveLength += length / mm;
       aveX0 += x0;
       aveLambda += lambda;

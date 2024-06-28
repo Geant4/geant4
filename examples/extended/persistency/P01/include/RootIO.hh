@@ -26,18 +26,17 @@
 /// \file persistency/P01/include/RootIO.hh
 /// \brief Definition of the RootIO class
 //
-#ifndef INCLUDE_ROOTIO_HH 
+#ifndef INCLUDE_ROOTIO_HH
 #define INCLUDE_ROOTIO_HH 1
 
 // Include files
-#include "TROOT.h"
+#include "ExP01TrackerHit.hh"
 #include "TFile.h"
+#include "TROOT.h"
 #include "TSystem.h"
 
-#include "ExP01TrackerHit.hh"
-
 /** @class RootIO
- *   
+ *
  *
  *  @author Witold POKORSKI
  *  @date   2005-10-27
@@ -45,22 +44,20 @@
 
 /// Root IO implementation for the persistency example
 
-class RootIO 
+class RootIO
 {
-public: 
-  virtual ~RootIO();
-  
-  static RootIO* GetInstance();
-  void Write(std::vector<ExP01TrackerHit*>*);
-  void Close();
+  public:
+    virtual ~RootIO();
 
-protected:
-  RootIO(); 
-  
-private:
+    static RootIO* GetInstance();
+    void Write(std::vector<ExP01TrackerHit*>*);
+    void Close();
 
-  TFile* fFile;
-  int fNevents;
-  
+  protected:
+    RootIO();
+
+  private:
+    TFile* fFile;
+    int fNevents;
 };
-#endif // INCLUDE_ROOTIO_HH
+#endif  // INCLUDE_ROOTIO_HH

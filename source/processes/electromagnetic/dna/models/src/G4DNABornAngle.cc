@@ -72,6 +72,7 @@ G4DNABornAngle::SampleDirectionForShell(const G4DynamicParticle* dp,
 {
   G4double k = dp->GetKineticEnergy();
   G4double cosTheta = 1.0;
+ 
   if (dp->GetDefinition() == fElectron)
     {
       if (secKinetic < 50.*eV) cosTheta = (2.*G4UniformRand())-1.;
@@ -89,14 +90,12 @@ G4DNABornAngle::SampleDirectionForShell(const G4DynamicParticle* dp,
     }
   else 
     {
-      G4double mass = dp->GetDefinition()->GetPDGMass();
-      G4double maxSecKinetic = 4.* (electron_mass_c2 / mass) * k;
-
-      // cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+      G4double tau = k/dp->GetDefinition()->GetPDGMass();
+      G4double maxSecKinetic = 2.* electron_mass_c2*tau*(tau + 2.0);
 
       // Restriction below 100 eV from Emfietzoglou (2000)
 
-      if (secKinetic>100*eV) cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+      if (secKinetic>100*eV) cosTheta = std::min(std::sqrt(secKinetic / maxSecKinetic), 1.0);
       else cosTheta = (2.*G4UniformRand())-1.;
     }
 

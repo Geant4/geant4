@@ -45,7 +45,7 @@
 // Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 #ifndef G4REDUCIBLEPOLYGON_HH
-#define G4REDUCIBLEPOLYGON_HH
+#define G4REDUCIBLEPOLYGON_HH 1
 
 #include "G4Types.hh"
 
@@ -123,7 +123,7 @@ class G4ReduciblePolygon
     friend struct ABVertex;       // protected nested structures
     struct ABVertex
     {
-      ABVertex()  {}
+      ABVertex()  = default;
       G4double a{0.}, b{0.};
       ABVertex *next{nullptr};
     };

@@ -83,6 +83,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 , fpClippingSolid    (0)
 , fClippingMode      (subtraction)
 , fNClippers         (0)
+, fTotalTouchables   (0)
 {
   fType = "G4PhysicalVolumeModel";
 
@@ -227,6 +228,11 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
      fRequestedDepth,
      startingTransformation,
      sceneHandler);
+
+  fTotalTouchables = 0;
+  for (const auto& entry : fNTouchables) {
+    fTotalTouchables += entry.second;
+  }
 
   // Reset or clear data...
   fCurrentDepth     = 0;

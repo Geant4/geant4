@@ -105,11 +105,13 @@ class G4VtkQtViewer : public QVTKOpenGLNativeWidget, public G4VtkViewer
 #ifdef G4MULTITHREADED
     QThread* fQGLContextVisSubThread;
     QThread* fQGLContextMainThread;
+    G4Mutex fmWaitForVisSubThreadQtOpenGLContextMoved;
+    G4Mutex fmWaitForVisSubThreadQtOpenGLContextInitialized;
+    G4Condition fc1_VisSubThreadQtOpenGLContextInitialized;
+    G4Condition fc2_VisSubThreadQtOpenGLContextMoved;
+    G4AutoLock* flWaitForVisSubThreadQtOpenGLContextInitialized;
+    G4AutoLock* flWaitForVisSubThreadQtOpenGLContextMoved;
 #endif
-
-    // safe to use in serial mode
-    G4AutoLock* lWaitForVisSubThreadQtOpenGLContextInitialized;
-    G4AutoLock* lWaitForVisSubThreadQtOpenGLContextMoved;
 };
 
 #endif

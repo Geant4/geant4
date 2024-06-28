@@ -39,21 +39,18 @@
 
 class EmAcceptance
 {
-public:
+  public:
+    EmAcceptance() = default;
+    ~EmAcceptance() = default;
 
-  EmAcceptance() = default;
- ~EmAcceptance() = default;
+    void BeginOfAcceptance(const G4String& title, G4int stat);
+    void EndOfAcceptance();
 
-  void BeginOfAcceptance(const G4String& title, G4int stat);
-  void EndOfAcceptance();
+    void EmAcceptanceGauss(const G4String& title, G4int stat, G4double avr, G4double avr0,
+                           G4double rms, G4double limit);
 
-  void EmAcceptanceGauss(const G4String& title, G4int stat, 
-                               G4double avr, G4double avr0, 
-                               G4double rms, G4double limit);
-
-private:
-
-  G4bool fIsAccepted = false;
+  private:
+    G4bool fIsAccepted = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

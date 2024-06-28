@@ -34,6 +34,8 @@
 
 #include "EmCalorimeterHit.hh"
 
+#include "globals.hh"
+
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
@@ -49,15 +51,15 @@ class EmCalorimeterSD : public G4VSensitiveDetector
     EmCalorimeterSD(G4String name);
     ~EmCalorimeterSD() override = default;
 
-    void Initialize(G4HCofThisEvent*HCE) override;
-    G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) override;
+    void Initialize(G4HCofThisEvent* HCE) override;
+    G4bool ProcessHits(G4Step* step, G4TouchableHistory* ROhist) override;
 
   private:
     EmCalorimeterHitsCollection* fHitsCollection = nullptr;
     G4int fHCID = -1;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

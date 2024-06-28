@@ -184,42 +184,6 @@ mark_as_advanced(GEANT4_USE_SMARTSTACK)
 geant4_add_feature(GEANT4_USE_SMARTSTACK "Use smart track stack")
 
 #-----------------------------------------------------------------------
-# Optional Support for TiMemory -- timing, memory, HW counters, roofline, gperftools, etc.
-# easily installed via:
-#   git clone https://github.com/NERSC/timemory.git timemory
-#   pip install -vvv ./timemory
-# and prepending CMAKE_PREFIX_PATH with `python -c "import sys; print(sys.prefix)"`
-#
-set(_default_use_timemory OFF)
-if(TiMemory_DIR)
-  set(_default_use_timemory ON)
-endif()
-
-option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support" ${_default_use_timemory})
-mark_as_advanced(GEANT4_USE_TIMEMORY)
-
-if(GEANT4_USE_TIMEMORY)
-  # by default just use the library which will import all the components that it
-  # was built with but once can add more
-  if(BUILD_SHARED_LIBS)
-    set(_G4timemory_DEFAULT_COMPONENTS cxx shared OPTIONAL_COMPONENTS)
-  else()
-    set(_G4timemory_DEFAULT_COMPONENTS cxx static OPTIONAL_COMPONENTS)
-  endif()
-  set(G4timemory_COMPONENTS "${_G4timemory_DEFAULT_COMPONENTS}" CACHE STRING
-      "timemory INTERFACE libraries that activate various capabilities in toolkit")
-  set(G4timemory_VERSION 3.2)
-  set(timemory_FIND_COMPONENTS_INTERFACE geant4-timemory)
-  add_library(geant4-timemory INTERFACE)
-  find_package(timemory ${G4timemory_VERSION} REQUIRED COMPONENTS ${G4timemory_COMPONENTS})
-  install(TARGETS geant4-timemory EXPORT Geant4LibraryDepends)
-  set(timemory_LIBRARIES geant4-timemory)
-  geant4_save_package_variables(timemory timemory_DIR)
-endif()
-
-geant4_add_feature(GEANT4_USE_TIMEMORY "Building Geant4 with TiMemory support")
-
-#-----------------------------------------------------------------------
 # Optional support for G3TOG4 convertion interface.
 # We do not build the rztog4 application.
 # -- OLDER NOTES --

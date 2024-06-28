@@ -24,16 +24,20 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
+
 #include "PhysicsListMessenger.hh"
 
 #include "G4EmDNAPhysics.hh"
@@ -47,61 +51,46 @@
 #include "G4EmDNAPhysics_option8.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"
-
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4UserSpecialCuts.hh"
 
-// particles
+// Particles
 
+#include "G4BaryonConstructor.hh"
 #include "G4BosonConstructor.hh"
+#include "G4DNAGenericIonsManager.hh"
+#include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-#include "G4DNAGenericIonsManager.hh"
 
-// decay
+// Decay
 
+#include "G4Electron.hh"
+#include "G4NuclideTable.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4NuclideTable.hh"
-#include "G4LossTableManager.hh"
-#include "G4UAtomicDeexcitation.hh"
-#include "G4NuclearLevelData.hh"
-#include "G4DeexPrecoParameters.hh"
-#include "G4NuclideTable.hh"
-#include "G4GenericIon.hh"
-#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0), fMessenger(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList(), fEmPhysicsList(0), fMessenger(0)
 {
   fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
-  // EM physics
+  // Physics
+
   fEmPhysicsList = new G4EmDNAPhysics();
   defaultCutValue = 1. * CLHEP::nm;
 
   G4double lowLimit = 10. * CLHEP::eV;
   G4double highLimit = 100. * CLHEP::GeV;
 
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit,
-                                                                  highLimit);
-
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit, highLimit);
   // Change time and other limits in G4NuclideTable
-  //
-  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
-  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
-  
+
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1 * picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0 * eV);
+
   fRadDecay = new G4RadioactiveDecayPhysics();
 }
 
@@ -118,7 +107,7 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  G4BosonConstructor  pBosonConstructor;
+  G4BosonConstructor pBosonConstructor;
   pBosonConstructor.ConstructParticle();
 
   G4LeptonConstructor pLeptonConstructor;
@@ -134,31 +123,31 @@ void PhysicsList::ConstructParticle()
   pIonConstructor.ConstructParticle();
 
   G4DNAGenericIonsManager* genericIonsManager;
-  genericIonsManager=G4DNAGenericIonsManager::Instance();
+  genericIonsManager = G4DNAGenericIonsManager::Instance();
   genericIonsManager->GetIon("alpha++");
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
-  genericIonsManager->GetIon("hydrogen");  
+  genericIonsManager->GetIon("hydrogen");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
-  // transportation
-  //
+  // Transportation
+
   AddTransportation();
-  
-  // electromagnetic physics list
-  //
+
+  // Electromagnetic physics list
+
   fEmPhysicsList->ConstructProcess();
-      
-  // tracking cut
-  //
+
+  // Tracking cut
+
   AddTrackingCut();
 
-  // raddecay
-  //
+  // Radioactive decay
+
   fRadDecay->ConstructProcess();
 }
 
@@ -166,7 +155,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>0) {
+  if (verboseLevel > 0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -176,8 +165,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics();
-    
-  } else if (name == "dna_opt1") {
+  }
+  else if (name == "dna_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option1();
@@ -217,20 +206,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option8();
   }
-  else if(name == "std_opt3") {
+  else if (name == "std_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
   }
-  else if(name == "std_opt4") {
+  else if (name == "std_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
   }
   else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -239,7 +227,5 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::AddTrackingCut()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-  ph->RegisterProcess(new G4UserSpecialCuts(), G4Electron::Electron()); 
+  ph->RegisterProcess(new G4UserSpecialCuts(), G4Electron::Electron());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

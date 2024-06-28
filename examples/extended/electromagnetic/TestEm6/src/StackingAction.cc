@@ -26,35 +26,32 @@
 /// \file electromagnetic/TestEm6/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StackingAction.hh"
+
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction()
- : G4UserStackingAction()
-{}
+StackingAction::StackingAction() : G4UserStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::~StackingAction()
-{}
+StackingAction::~StackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack 
-StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
-  G4ClassificationOfNewTrack     classification = fUrgent;
-  
+  G4ClassificationOfNewTrack classification = fUrgent;
+
   // kill all secondaries
-  if(aTrack->GetParentID() != 0) classification = fKill;
-  
+  if (aTrack->GetParentID() != 0) classification = fKill;
+
   return classification;
 }
 

@@ -33,6 +33,7 @@
 
 #include "SAXSSensitiveDetectorHit.hh"
 #include "SAXSSensitiveDetectorMessenger.hh"
+
 #include "G4VSensitiveDetector.hh"
 
 class G4Step;
@@ -46,26 +47,25 @@ class G4TouchableHistory;
 
 class SAXSSensitiveDetector : public G4VSensitiveDetector
 {
-public:
+  public:
     SAXSSensitiveDetector(G4String);
     virtual ~SAXSSensitiveDetector();
-    
+
     virtual void Initialize(G4HCofThisEvent*);
-    virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+    virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
     virtual void EndOfEvent(G4HCofThisEvent*);
-    
-    void SetVarStopAndKill(G4bool bVar) {fVarStopAndKill = bVar;}
-    
-private:
+
+    void SetVarStopAndKill(G4bool bVar) { fVarStopAndKill = bVar; }
+
+  private:
     SensitiveDetectorHitsCollection* fHitsCollection;
-    G4int fHCID;  
-    
+    G4int fHCID;
+
     SAXSSensitiveDetectorMessenger* fSDMessenger;
-    
-    G4bool fVarStopAndKill;    
+
+    G4bool fVarStopAndKill;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

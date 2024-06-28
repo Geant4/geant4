@@ -25,7 +25,7 @@
 //
 /// \file MoviesPrimaryGeneratorAction.hh
 /// \brief Definition of the MoviesPrimaryGeneratorAction class
-// 
+//
 
 #ifndef MoviesPrimaryGeneratorAction_h
 #define MoviesPrimaryGeneratorAction_h 1
@@ -38,14 +38,14 @@ class G4Event;
 
 class MoviesPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  MoviesPrimaryGeneratorAction();
-  virtual ~MoviesPrimaryGeneratorAction();
+  public:
+    MoviesPrimaryGeneratorAction();
+    virtual ~MoviesPrimaryGeneratorAction();
 
-  virtual void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
-private:
-  G4ParticleGun*  fParticleGun;
+  private:
+    G4ParticleGun* fParticleGun;
 };
 
 #endif

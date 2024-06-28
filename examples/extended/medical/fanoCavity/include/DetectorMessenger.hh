@@ -33,8 +33,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -44,24 +44,22 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger();
 
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-  
-    DetectorConstruction*      fDetector;
-    
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir;    
-    G4UIcmdWithAString*        fWallMater;
+    DetectorConstruction* fDetector;
+
+    G4UIdirectory* fTestemDir;
+    G4UIdirectory* fDetDir;
+    G4UIcmdWithAString* fWallMater;
     G4UIcmdWithADoubleAndUnit* fWallThick;
-    G4UIcmdWithAString*        fCavMater;
+    G4UIcmdWithAString* fCavMater;
     G4UIcmdWithADoubleAndUnit* fCavThick;
     G4UIcmdWithADoubleAndUnit* fCavRadius;
 };
@@ -69,4 +67,3 @@ class DetectorMessenger: public G4UImessenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

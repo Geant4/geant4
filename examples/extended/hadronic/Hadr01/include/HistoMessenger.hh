@@ -47,23 +47,20 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoMessenger: public G4UImessenger
+class HistoMessenger : public G4UImessenger
 {
-public:
+  public:
+    HistoMessenger(Histo*);
+    ~HistoMessenger() override;
 
-  HistoMessenger(Histo* );
-  ~HistoMessenger() override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  void SetNewValue(G4UIcommand* ,G4String ) override;
+  private:
+    Histo* fHisto;
 
-private:
-
-  Histo*                  fHisto;
-   
-  G4UIdirectory*          fHistoDir;   
-  G4UIcmdWithAString*     fFactoryCmd;
-  G4UIcommand*            fHistoCmd;
-
+    G4UIdirectory* fHistoDir;
+    G4UIcmdWithAString* fFactoryCmd;
+    G4UIcommand* fHistoCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

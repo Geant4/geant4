@@ -40,40 +40,34 @@
 
 #include "CheckVolumeSD.hh"
 
-#include "G4RunManager.hh"
 #include "Run.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Track.hh"
-#include "G4Positron.hh"
-#include "G4Gamma.hh"
-#include "G4SystemOfUnits.hh"
 
+#include "G4Gamma.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Positron.hh"
+#include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
+#include "G4VPhysicalVolume.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-CheckVolumeSD::CheckVolumeSD(const G4String& name)
- :G4VSensitiveDetector(name)
-{
-}
+CheckVolumeSD::CheckVolumeSD(const G4String& name) : G4VSensitiveDetector(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-CheckVolumeSD::~CheckVolumeSD()
-{}
+CheckVolumeSD::~CheckVolumeSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void CheckVolumeSD::Initialize(G4HCofThisEvent*)
-{}
+void CheckVolumeSD::Initialize(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   const G4Track* track = aStep->GetTrack();
   G4double e = track->GetKineticEnergy();
@@ -81,32 +75,25 @@ G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4ThreeVector p = track->GetPosition();
     G4double x = p.x();
     G4double y = p.y();
-    G4double r = std::sqrt(x*x + y*y);
-    run->AddPhantomGamma(e,r);
+    G4double r = std::sqrt(x * x + y * y);
+    run->AddPhantomGamma(e, r);
   }
-  if(run->GetVerbose()) {
-      G4cout << "CheckVolumeSD: energy = " << e/MeV
-             << G4endl;
+  if (run->GetVerbose()) {
+    G4cout << "CheckVolumeSD: energy = " << e / MeV << G4endl;
   }
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void CheckVolumeSD::EndOfEvent(G4HCofThisEvent*)
-{}
+void CheckVolumeSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void CheckVolumeSD::clear()
-{}
+void CheckVolumeSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-void CheckVolumeSD::PrintAll()
-{}
+void CheckVolumeSD::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-

@@ -33,9 +33,9 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
 
 class G4LogicalVolume;
 class G4Material;
@@ -48,63 +48,60 @@ const G4int kMaxTally = 20;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
 
-  void SetSizeX    (G4double);
-  void SetSizeYZ   (G4double);              
-  void SetMaterial (const G4String&);            
-  void SetWorldMaterial (const G4String&);            
-  void SetMagField (G4double);
-     
-  void SetTallyNumber   (G4int);     
-  void SetTallySize     (G4int, const G4ThreeVector&);
-  void SetTallyPosition (G4int, const G4ThreeVector&);
+    void SetSizeX(G4double);
+    void SetSizeYZ(G4double);
+    void SetMaterial(const G4String&);
+    void SetWorldMaterial(const G4String&);
+    void SetMagField(G4double);
 
-  virtual G4VPhysicalVolume* Construct();
-     
-  inline G4double GetWorldSizeX()  const {return fWorldSizeX;};
-  inline G4double GetWorldSizeYZ() const {return fWorldSizeYZ;};
-  inline G4double GetAbsorSizeX()  const {return fAbsorSizeX;};
-  inline G4double GetAbsorSizeYZ() const {return fAbsorSizeYZ;};           
-  inline G4int    GetTallyNumber() const {return fTallyNumber;};
+    void SetTallyNumber(G4int);
+    void SetTallySize(G4int, const G4ThreeVector&);
+    void SetTallyPosition(G4int, const G4ThreeVector&);
 
-  inline const G4Material* GetWorldMaterial() const {return fWorldMaterial;};
-  inline const G4Material* GetAbsorMaterial() const {return fAbsorMaterial;};
-     
-  G4double GetTallyMass(G4int n) const;
-  const G4LogicalVolume* GetLogicalTally(G4int n) const;
-     
-  void PrintParameters() const;
-  
-private:
+    virtual G4VPhysicalVolume* Construct();
 
-  void                DefineMaterials();
-  
-  G4double            fWorldSizeX;
-  G4double            fWorldSizeYZ;
-  G4double            fAbsorSizeX;
-  G4double            fAbsorSizeYZ;     
+    inline G4double GetWorldSizeX() const { return fWorldSizeX; };
+    inline G4double GetWorldSizeYZ() const { return fWorldSizeYZ; };
+    inline G4double GetAbsorSizeX() const { return fAbsorSizeX; };
+    inline G4double GetAbsorSizeYZ() const { return fAbsorSizeYZ; };
+    inline G4int GetTallyNumber() const { return fTallyNumber; };
 
-  G4Material*         fAbsorMaterial;
-  G4Material*         fWorldMaterial;           
+    inline const G4Material* GetWorldMaterial() const { return fWorldMaterial; };
+    inline const G4Material* GetAbsorMaterial() const { return fAbsorMaterial; };
 
-  G4UniformMagField*  fMagField;
-  G4LogicalVolume*    fLAbsor;
-  G4LogicalVolume*    fLWorld;
-     
-  G4int               fTallyNumber;                   
-  G4ThreeVector       fTallySize[kMaxTally];
-  G4double            fTallyMass[kMaxTally]; 
-  G4ThreeVector       fTallyPosition[kMaxTally];
-  G4LogicalVolume*    fLTally[kMaxTally];
-     
-  DetectorMessenger*  fDetectorMessenger;
+    G4double GetTallyMass(G4int n) const;
+    const G4LogicalVolume* GetLogicalTally(G4int n) const;
+
+    void PrintParameters() const;
+
+  private:
+    void DefineMaterials();
+
+    G4double fWorldSizeX;
+    G4double fWorldSizeYZ;
+    G4double fAbsorSizeX;
+    G4double fAbsorSizeYZ;
+
+    G4Material* fAbsorMaterial;
+    G4Material* fWorldMaterial;
+
+    G4UniformMagField* fMagField;
+    G4LogicalVolume* fLAbsor;
+    G4LogicalVolume* fLWorld;
+
+    G4int fTallyNumber;
+    G4ThreeVector fTallySize[kMaxTally];
+    G4double fTallyMass[kMaxTally];
+    G4ThreeVector fTallyPosition[kMaxTally];
+    G4LogicalVolume* fLTally[kMaxTally];
+
+    DetectorMessenger* fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

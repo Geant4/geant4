@@ -27,6 +27,7 @@
 #define PAR04PARALLELFASTWORLD_HH
 
 #include "Par04DetectorConstruction.hh"
+
 #include "G4VUserParallelWorld.hh"
 #include "globals.hh"
 
@@ -37,26 +38,25 @@ class G4VPhysicalVolume;
 
 class Par04ParallelFastWorld : public G4VUserParallelWorld
 {
-public:
-  Par04ParallelFastWorld(G4String aWorldName,
-                         const Par04DetectorConstruction* aMassDetector,
-                         const Par04ParallelFullWorld* aParallelFull);
-  ~Par04ParallelFastWorld();
-  
-  virtual void Construct() final;
-  virtual void ConstructSD() final;
-  
-  void Print();
+  public:
+    Par04ParallelFastWorld(G4String aWorldName, const Par04DetectorConstruction* aMassDetector,
+                           const Par04ParallelFullWorld* aParallelFull);
+    ~Par04ParallelFastWorld();
 
-private:
-  ///  Messenger that allows to modify geometry
-  const Par04DetectorConstruction* fMassDetector;
-  const Par04ParallelFullWorld* fParallelFull;
-  std::vector<G4LogicalVolume*> fLogicalCell;
-  G4int fNbOfLayers = 1;
-  G4int fNbOfSlices = 1;
-  G4int fNbOfRows = 1;
-  G4double fLayerThickness = 0;
+    virtual void Construct() final;
+    virtual void ConstructSD() final;
+
+    void Print();
+
+  private:
+    ///  Messenger that allows to modify geometry
+    const Par04DetectorConstruction* fMassDetector;
+    const Par04ParallelFullWorld* fParallelFull;
+    std::vector<G4LogicalVolume*> fLogicalCell;
+    G4int fNbOfLayers = 1;
+    G4int fNbOfSlices = 1;
+    G4int fNbOfRows = 1;
+    G4double fLayerThickness = 0;
 };
 
 #endif

@@ -39,20 +39,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RMC01RunAction.hh"
+
 #include "RMC01AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RMC01RunAction::RMC01RunAction() 
- : G4UserRunAction(),
-   fAnalysisManager(0)
-{ fAnalysisManager = RMC01AnalysisManager::GetInstance();  
+RMC01RunAction::RMC01RunAction() : G4UserRunAction(), fAnalysisManager(0)
+{
+  fAnalysisManager = RMC01AnalysisManager::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01RunAction::~RMC01RunAction()
-{ if (fAnalysisManager) delete fAnalysisManager;
+{
+  if (fAnalysisManager) delete fAnalysisManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +67,8 @@ void RMC01RunAction::BeginOfRunAction(const G4Run* aRun)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01RunAction::EndOfRunAction(const G4Run* aRun)
-{ fAnalysisManager->EndOfRun(aRun); 
+{
+  fAnalysisManager->EndOfRun(aRun);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

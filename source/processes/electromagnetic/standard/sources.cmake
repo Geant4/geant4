@@ -3,6 +3,7 @@
 geant4_add_module(G4emstandard
   PUBLIC_HEADERS
     G4ASTARStopping.hh
+    G4AllisonPositronAtRestModel.hh
     G4AtimaEnergyLossModel.hh
     G4AtimaFluctuations.hh
     G4BetheBlochIonGasModel.hh
@@ -55,6 +56,9 @@ geant4_add_module(G4emstandard
     G4SauterGavrilaAngularDistribution.hh
     G4ScreeningMottCrossSection.hh
     G4SeltzerBergerModel.hh
+    G4SimplePositronAtRestModel.hh
+    G4SimplePsAtRestModel.hh
+    G4OrePowellAtRestModel.hh
     G4UniversalFluctuation.hh
     G4UrbanFluctuation.hh
     G4UrbanMscModel.hh
@@ -83,6 +87,7 @@ geant4_add_module(G4emstandard
     G4ionIonisation.hh
   SOURCES
     G4ASTARStopping.cc
+    G4AllisonPositronAtRestModel.cc
     G4AtimaEnergyLossModel.cc
     G4AtimaFluctuations.cc
     G4BetheBlochIonGasModel.cc
@@ -133,6 +138,9 @@ geant4_add_module(G4emstandard
     G4SauterGavrilaAngularDistribution.cc
     G4ScreeningMottCrossSection.cc
     G4SeltzerBergerModel.cc
+    G4SimplePositronAtRestModel.cc
+    G4SimplePsAtRestModel.cc
+    G4OrePowellAtRestModel.cc
     G4UniversalFluctuation.cc
     G4UrbanFluctuation.cc
     G4UrbanMscModel.cc

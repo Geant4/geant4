@@ -60,7 +60,7 @@ class PhysicsList : public G4VModularPhysicsList
     G4double fCutForGamma = -1.;
     G4double fCutForElectron = -1.;
     G4double fCutForPositron = -1.;
-    G4String fEmName ;
+    G4String fEmName;
     G4VPhysicsConstructor* fEmPhysicsList = nullptr;
     G4VPhysicsConstructor* fDecayPhysicsList = nullptr;
 

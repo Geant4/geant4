@@ -26,39 +26,39 @@
 /// \file electromagnetic/TestEm17/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+
 #include "HistoManager.hh"
+#include "RunAction.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* Hist)
-  :G4UserSteppingAction(),fRunAction(RuAct), fHistoManager(Hist)
-{ }
+  : G4UserSteppingAction(), fRunAction(RuAct), fHistoManager(Hist)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{ }
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
-{  
+{
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
 
-  //count processes 
-  //    
+  // count processes
+  //
   fRunAction->CountProcesses(procName);
-  
-  //plot energy transfered
+
+  // plot energy transfered
   //
   G4StepPoint* startPoint = aStep->GetPreStepPoint();
   G4double E0 = startPoint->GetKineticEnergy();
@@ -67,21 +67,27 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double E2 = endPoint->GetKineticEnergy();
   G4double etrans = E1 - E2;
   G4double lgepsE = 0.;
-  if (etrans > 0.) lgepsE = std::log10(etrans/E1);
+  if (etrans > 0.) lgepsE = std::log10(etrans / E1);
 
   G4int id = 0;
-  if (procName == "muIoni")          id = 1; 
-  else if (procName == "muPairProd") id = 2;
-  else if (procName == "muBrems")    id = 3;
-  //  else if (procName == "muNucl")     id = 4;    
-  else if (procName == "muonNuclear")id = 4;    
-  else if (procName == "hIoni")      id = 5; 
-  else if (procName == "hPairProd")  id = 6;
-  else if (procName == "hBrems")     id = 7;
-  else if (procName == "muToMuonPairProd") id = 8;
-  fHistoManager->FillHisto(id,lgepsE);                       
+  if (procName == "muIoni")
+    id = 1;
+  else if (procName == "muPairProd")
+    id = 2;
+  else if (procName == "muBrems")
+    id = 3;
+  //  else if (procName == "muNucl")     id = 4;
+  else if (procName == "muonNuclear")
+    id = 4;
+  else if (procName == "hIoni")
+    id = 5;
+  else if (procName == "hPairProd")
+    id = 6;
+  else if (procName == "hBrems")
+    id = 7;
+  else if (procName == "muToMuonPairProd")
+    id = 8;
+  fHistoManager->FillHisto(id, lgepsE);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

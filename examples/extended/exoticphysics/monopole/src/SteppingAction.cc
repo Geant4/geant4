@@ -31,37 +31,36 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "G4Step.hh"
-#include "G4RunManager.hh"
+
 #include "Run.hh"
 
+#include "G4RunManager.hh"
+#include "G4Step.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()
- : G4UserSteppingAction()
-{}
+SteppingAction::SteppingAction() : G4UserSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if (edep <= 0.) { return; }
+  if (edep <= 0.) {
+    return;
+  }
 
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
- 
-  //Bragg curve
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  // Bragg curve
   G4double x = aStep->GetPreStepPoint()->GetPosition().x();
   G4double dx = aStep->GetPostStepPoint()->GetPosition().x() - x;
-  x += dx*G4UniformRand() - run->GetOffsetX();
+  x += dx * G4UniformRand() - run->GetOffsetX();
   run->FillHisto(1, x, edep);
 }
 

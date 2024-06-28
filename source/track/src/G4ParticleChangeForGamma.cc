@@ -41,6 +41,7 @@ G4ParticleChangeForGamma::G4ParticleChangeForGamma()
 {
   // Disable flag to avoid check of each secondary at each step
   debugFlag = false;
+  SetNumberOfSecondaries(2);
 }
 
 // --------------------------------------------------------------------

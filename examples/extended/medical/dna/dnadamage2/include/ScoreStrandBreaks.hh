@@ -42,71 +42,71 @@
 #ifndef DNADAMAGE2_ScoreSB_h
 #define DNADAMAGE2_ScoreSB_h 1
 
-#include "G4VPrimitiveScorer.hh"
-#include "G4THitsMap.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UImessenger.hh"
-#include "G4DNAIRT.hh"
 #include "DetectorConstruction.hh"
 #include "MoleculeInserter.hh"
+
+#include "G4DNAIRT.hh"
+#include "G4THitsMap.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UImessenger.hh"
+#include "G4VPrimitiveScorer.hh"
 
 class G4VAnalysisManager;
 class G4MolecularConfiguration;
 
-typedef std::map<G4int,std::map<G4int,std::map<G4int,
-                       std::map<G4int, G4double>>>> EnergyDepositMap;
-typedef std::map<G4int,std::vector<std::vector<G4int>>> DamageMap;
+typedef std::map<G4int, std::map<G4int, std::map<G4int, std::map<G4int, G4double>>>>
+  EnergyDepositMap;
+typedef std::map<G4int, std::vector<std::vector<G4int>>> DamageMap;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ScoreStrandBreaks : public G4VPrimitiveScorer,
-                          public G4UImessenger
+class ScoreStrandBreaks : public G4VPrimitiveScorer, public G4UImessenger
 {
-public:
-  ScoreStrandBreaks(G4String name,DetectorConstruction*,G4double*);
-  ~ScoreStrandBreaks() override;
+  public:
+    ScoreStrandBreaks(G4String name, DetectorConstruction*, G4double*);
+    ~ScoreStrandBreaks() override;
 
-  void WriteWithAnalysisManager(G4VAnalysisManager*);
-  DamageMap GetDamageMap() { return fDirectDamageMap; }
-  void ClearDamageMap() { fDirectDamageMap.clear(); }
+    void WriteWithAnalysisManager(G4VAnalysisManager*);
+    DamageMap GetDamageMap() { return fDirectDamageMap; }
+    void ClearDamageMap() { fDirectDamageMap.clear(); }
 
-  void Initialize(G4HCofThisEvent*) override;
-  void EndOfEvent(G4HCofThisEvent*) override;
-  void Clear();
-  void DrawAll() override;
-  void PrintAll() override;
-  void AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* );
-  void OutputAndClear(G4double, G4double);
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void Initialize(G4HCofThisEvent*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
+    void Clear();
+    void DrawAll() override;
+    void PrintAll() override;
+    void AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer*);
+    void OutputAndClear(G4double, G4double);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  void ASCII(G4double, G4double);
-  
-private:
-  G4int    fnbOfEvents = 0;
-  G4bool   fDNAInserted = false;
-  G4double fBreakEnergy = 17.5 * eV;
-  G4double fEnergyDeposit = 0;
-  G4double* fRadius = nullptr;
+    void ASCII(G4double, G4double);
 
-  G4String fOutputName = "DirectDamageInfo";
-  G4String fOutputType = "ascii";
-  DamageMap  fDirectDamageMap;
-  DamageMap  fIndirectDamageMap;
-  EnergyDepositMap fEnergyDepositMap;
+  private:
+    G4int fnbOfEvents = 0;
+    G4bool fDNAInserted = false;
+    G4double fBreakEnergy = 17.5 * eV;
+    G4double fEnergyDeposit = 0;
+    G4double* fRadius = nullptr;
 
-  G4UIcmdWithAString* fpOutputFileUI = nullptr;
-  G4UIcmdWithAString* fpOutputTypeUI = nullptr;
-  G4UIcmdWithADoubleAndUnit* fpBreakEnergyUI = nullptr;
+    G4String fOutputName = "DirectDamageInfo";
+    G4String fOutputType = "ascii";
+    DamageMap fDirectDamageMap;
+    DamageMap fIndirectDamageMap;
+    EnergyDepositMap fEnergyDepositMap;
 
-  DetectorConstruction* fpDetector = nullptr;
-  std::map<G4int,G4double> fDoseArray;
+    G4UIcmdWithAString* fpOutputFileUI = nullptr;
+    G4UIcmdWithAString* fpOutputTypeUI = nullptr;
+    G4UIcmdWithADoubleAndUnit* fpBreakEnergyUI = nullptr;
 
-  MoleculeInserter* fpGun = nullptr;
+    DetectorConstruction* fpDetector = nullptr;
+    std::map<G4int, G4double> fDoseArray;
 
-protected:
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
+    MoleculeInserter* fpGun = nullptr;
+
+  protected:
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,13 +30,13 @@
 
 #ifndef G4MVPIEXTRAWORKER_HH
 
-class G4VMPIextraWorker {
-public:
-  G4VMPIextraWorker() {}
-  virtual ~G4VMPIextraWorker() {}
+class G4VMPIextraWorker
+{
+  public:
+    G4VMPIextraWorker() {}
+    virtual ~G4VMPIextraWorker() {}
 
-  virtual void BeamOn() = 0;
+    virtual void BeamOn() = 0;
 };
 
-#endif //G4MPIVEXTRAWORKER_HH
-
+#endif  // G4MPIVEXTRAWORKER_HH

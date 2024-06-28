@@ -34,7 +34,7 @@
 
 #include "F02CalorHit.hh"
 
-G4ThreadLocal G4Allocator<F02CalorHit>* F02CalorHitAllocator=nullptr;
+G4ThreadLocal G4Allocator<F02CalorHit>* F02CalorHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,8 +50,10 @@ F02CalorHit::F02CalorHit(const F02CalorHit& right)
 
 const F02CalorHit& F02CalorHit::operator=(const F02CalorHit& right)
 {
-  fEdepAbs = right.fEdepAbs; fTrackLengthAbs = right.fTrackLengthAbs;
-  fEdepGap = right.fEdepGap; fTrackLengthGap = right.fTrackLengthGap;
+  fEdepAbs = right.fEdepAbs;
+  fTrackLengthAbs = right.fTrackLengthAbs;
+  fEdepGap = right.fEdepGap;
+  fTrackLengthGap = right.fTrackLengthGap;
   return *this;
 }
 
@@ -59,12 +61,11 @@ const F02CalorHit& F02CalorHit::operator=(const F02CalorHit& right)
 
 G4bool F02CalorHit::operator==(const F02CalorHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F02CalorHit::Print()
-{}
+void F02CalorHit::Print() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

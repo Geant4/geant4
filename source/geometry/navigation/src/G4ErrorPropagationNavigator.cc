@@ -38,19 +38,6 @@
 #include "G4ErrorPlaneSurfaceTarget.hh"
 #include "G4ErrorCylSurfaceTarget.hh"
 
-
-//-------------------------------------------------------------------
-
-G4ErrorPropagationNavigator::G4ErrorPropagationNavigator()
-{
-}
-
-//-------------------------------------------------------------------
-
-G4ErrorPropagationNavigator::~G4ErrorPropagationNavigator() = default;
-
-//-------------------------------------------------------------------
-
 G4double G4ErrorPropagationNavigator::
 ComputeStep ( const G4ThreeVector &pGlobalPoint,
               const G4ThreeVector &pDirection,

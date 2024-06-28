@@ -36,19 +36,19 @@
 #include "ExUCNDetectorConstruction.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExUCNPrimaryGeneratorAction::ExUCNPrimaryGeneratorAction(void)
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 
@@ -70,20 +70,20 @@ void ExUCNPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // This function is called at the begining of event
 
   fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, 0.0));
-  fParticleGun->SetParticlePolarization(G4ThreeVector(0,1,0));
+  fParticleGun->SetParticlePolarization(G4ThreeVector(0, 1, 0));
 
-  G4double particleEnergy = 1e-9*eV + G4UniformRand()*(1e-7*eV-1e-9*eV);
+  G4double particleEnergy = 1e-9 * eV + G4UniformRand() * (1e-7 * eV - 1e-9 * eV);
   fParticleGun->SetParticleEnergy(particleEnergy);
 
-  G4double theta = 2*pi*G4UniformRand();
-  G4double phi = std::acos(1-2*G4UniformRand());
-  if (phi > pi/2 && phi < pi) phi = pi-phi;
+  G4double theta = 2 * pi * G4UniformRand();
+  G4double phi = std::acos(1 - 2 * G4UniformRand());
+  if (phi > pi / 2 && phi < pi) phi = pi - phi;
 
-  G4double z = std::sin(phi)*std::cos(theta);
-  G4double x = std::sin(phi)*std::sin(theta);
+  G4double z = std::sin(phi) * std::cos(theta);
+  G4double x = std::sin(phi) * std::sin(theta);
   G4double y = std::cos(phi);
 
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(x,y,z));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(x, y, z));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

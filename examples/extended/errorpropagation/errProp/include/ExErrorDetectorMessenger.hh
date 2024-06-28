@@ -31,8 +31,8 @@
 #ifndef ExErrorDetectorMessenger_hh
 #define ExErrorDetectorMessenger_hh 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class ExErrorDetectorConstruction;
 class G4UIdirectory;
@@ -45,23 +45,22 @@ class G4UIcmdWithADoubleAndUnit;
 ///
 /// History:
 /// Created:  May 2007
-/// \author   P. Arce 
+/// \author   P. Arce
 //------------------------------------------------------------------------
 
-class ExErrorDetectorMessenger: public G4UImessenger
+class ExErrorDetectorMessenger : public G4UImessenger
 {
-public:
-  ExErrorDetectorMessenger(ExErrorDetectorConstruction*);
-  ~ExErrorDetectorMessenger();
-  
-  virtual void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  ExErrorDetectorConstruction* fMyDetector;
-  
-  G4UIdirectory*             fMydetDir;
-  G4UIcmdWithADoubleAndUnit* fFieldCmd;
+  public:
+    ExErrorDetectorMessenger(ExErrorDetectorConstruction*);
+    ~ExErrorDetectorMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    ExErrorDetectorConstruction* fMyDetector;
+
+    G4UIdirectory* fMydetDir;
+    G4UIcmdWithADoubleAndUnit* fFieldCmd;
 };
 
 #endif
-

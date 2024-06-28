@@ -48,23 +48,22 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction() override = default;
+    ~RunAction() override = default;
 
   public:
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
-    
+    void EndOfRunAction(const G4Run*) override;
+
     void GetCuts();
     void CriticalEnergy();
-                                    
+
   private:
-    DetectorConstruction*   fDetector = nullptr;
-    PrimaryGeneratorAction* fPrimary  = nullptr;
-    G4double  fRangeCut[3] = {0., 0., 0.};
+    DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary = nullptr;
+    G4double fRangeCut[3] = {0., 0., 0.};
     G4double fEnergyCut[3] = {0., 0., 0.};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

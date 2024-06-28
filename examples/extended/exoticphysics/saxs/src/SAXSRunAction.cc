@@ -28,38 +28,38 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "SAXSRunAction.hh"
+
+#include "SAXSDetectorConstruction.hh"
+#include "SAXSRunActionMessenger.hh"
+
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4AnalysisManager.hh"
-
-#include "SAXSRunAction.hh"
-#include "SAXSRunActionMessenger.hh"
-#include "SAXSDetectorConstruction.hh"
-
 #include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSRunAction::SAXSRunAction(): G4UserRunAction()
+SAXSRunAction::SAXSRunAction() : G4UserRunAction()
 {
-  //define the messenger  
+  // define the messenger
   fMessenger = new SAXSRunActionMessenger(this);
-  
-  //default output filename (can be set through macro)
+
+  // default output filename (can be set through macro)
   fFileName = "output";
-  
-  //Create the analysis manager  
+
+  // Create the analysis manager
   fAnalysisManager = G4AnalysisManager::Instance();
 
   fAnalysisManager->SetDefaultFileType("root");
   fAnalysisManager->SetFileName(fFileName);
-  fAnalysisManager->SetNtupleMerging(true); //only for root
+  fAnalysisManager->SetNtupleMerging(true);  // only for root
   fAnalysisManager->SetVerboseLevel(1);
-  
-  //Creating the SD scoring ntuple
-  fAnalysisManager->CreateNtuple("part","Particle");
+
+  // Creating the SD scoring ntuple
+  fAnalysisManager->CreateNtuple("part", "Particle");
   fAnalysisManager->CreateNtupleDColumn("e");
   fAnalysisManager->CreateNtupleDColumn("posx");
   fAnalysisManager->CreateNtupleDColumn("posy");
@@ -76,9 +76,9 @@ SAXSRunAction::SAXSRunAction(): G4UserRunAction()
   fAnalysisManager->CreateNtupleIColumn("eventID");
   fAnalysisManager->CreateNtupleDColumn("weight");
   fAnalysisManager->FinishNtuple();
-    
-  //Creating ntuple for scattering
-  fAnalysisManager->CreateNtuple("scatt","Scattering");
+
+  // Creating ntuple for scattering
+  fAnalysisManager->CreateNtuple("scatt", "Scattering");
   fAnalysisManager->CreateNtupleIColumn("processID");
   fAnalysisManager->CreateNtupleDColumn("e");
   fAnalysisManager->CreateNtupleDColumn("theta");
@@ -97,35 +97,29 @@ SAXSRunAction::~SAXSRunAction()
 
 void SAXSRunAction::BeginOfRunAction(const G4Run*)
 {
-  //open the output file         
-  if (!fIsFileOpened)
-    {
-      fAnalysisManager->OpenFile(fFileName);
-      fIsFileOpened = true;
-    }
+  // open the output file
+  if (!fIsFileOpened) {
+    fAnalysisManager->OpenFile(fFileName);
+    fIsFileOpened = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SAXSRunAction::EndOfRunAction(const G4Run* run)
-{               
+{
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
-      
-  //print
+
+  // print
   if (IsMaster()) {
-    G4cout
-         << G4endl
-         << "--------------------End of Global Run-----------------------"
-         << G4endl
-         << " The run had " << nofEvents << " events";
-   } else {
-     G4cout
-          << G4endl
-          << "--------------------End of Local Run------------------------"
-          << G4endl
-          << " The run had " << nofEvents << " events";
-  }      
+    G4cout << G4endl << "--------------------End of Global Run-----------------------" << G4endl
+           << " The run had " << nofEvents << " events";
+  }
+  else {
+    G4cout << G4endl << "--------------------End of Local Run------------------------" << G4endl
+           << " The run had " << nofEvents << " events";
+  }
   if (fIsFileOpened) {
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
@@ -136,9 +130,8 @@ void SAXSRunAction::EndOfRunAction(const G4Run* run)
 
 void SAXSRunAction::SetFileName(const G4String& filename)
 {
-  //method to set the output filename
+  // method to set the output filename
   if (filename != "") fFileName = filename;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

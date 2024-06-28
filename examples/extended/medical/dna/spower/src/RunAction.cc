@@ -23,39 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
-#include "Randomize.hh"
 
 #include "G4RunManager.hh"
-#include "G4EmCalculator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-:G4UserRunAction(),
-fpDetector(0), fpRun(0)
+RunAction::RunAction() : G4UserRunAction(), fpDetector(0), fpRun(0)
 {
-  fpDetector =
-      dynamic_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()
-          ->GetUserDetectorConstruction());
+  fpDetector = dynamic_cast<const DetectorConstruction*>(
+    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
+{
   fpRun = new Run(fpDetector);
   return fpRun;
 }
@@ -63,20 +67,16 @@ G4Run* RunAction::GenerateRun()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{    
+{
+  const PrimaryGeneratorAction* primary = dynamic_cast<const PrimaryGeneratorAction*>(
+    G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
 
-  const PrimaryGeneratorAction* primary =
-      dynamic_cast<const PrimaryGeneratorAction*>(G4RunManager::GetRunManager()
-          ->GetUserPrimaryGeneratorAction());
+  if (!primary) return;  //
 
-  if (!primary) return; //
-      
-  // keep run condition
-  G4ParticleDefinition* particle 
-      = primary->GetParticleGun()->GetParticleDefinition();
+  // Keep run condition
+  G4ParticleDefinition* particle = primary->GetParticleGun()->GetParticleDefinition();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
   fpRun->SetPrimary(particle, energy);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

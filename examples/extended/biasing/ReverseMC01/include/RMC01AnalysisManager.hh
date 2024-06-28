@@ -54,20 +54,25 @@
 #ifndef RMC01AnalysisManager_HH
 #define RMC01AnalysisManager_HH
 
-#include"G4ios.hh"
-#include <vector>
-#include"globals.hh"
+#include "G4AnalysisManager.hh"
+#include "G4Event.hh"
+#include "G4Run.hh"
+#include "G4ThreeVector.hh"
+#include "G4ios.hh"
+#include "g4hntools_defs.hh"
+#include "globals.hh"
+
 #include <fstream>
-#include"G4ThreeVector.hh"
-#include"G4Event.hh"
-#include"G4Run.hh"
-#include"G4AnalysisManager.hh"
-#include"g4hntools_defs.hh"
+#include <vector>
 
 class G4Timer;
 class RMC01AnalysisManagerMessenger;
 
-enum PRIM_SPECTRUM_TYPE{EXPO,POWER}; 
+enum PRIM_SPECTRUM_TYPE
+{
+  EXPO,
+  POWER
+};
 
 class G4Step;
 
@@ -75,113 +80,104 @@ class G4Step;
 
 class RMC01AnalysisManager
 {
-public:
-  
-  ~RMC01AnalysisManager();
-  static RMC01AnalysisManager* GetInstance();
-  
-   void BeginOfRun(const G4Run*); 
-   void EndOfRun(const G4Run*); 
-   void BeginOfEvent(const G4Event*); 
-   void EndOfEvent(const G4Event*); 
-   
-   void SetPrimaryExpSpectrumForAdjointSim(
-                                  const G4String& particle_name,
-                                  G4double fluence,
-                                  G4double E0, G4double Emin,G4double Emax);
-   void SetPrimaryPowerLawSpectrumForAdjointSim(
-                            const  G4String& particle_name,G4double fluence,
-                            G4double alpha, G4double Emin,G4double Emax);
-   //precision of the simulation results is given in % by the user
-   inline void SetPrecision(G4double precision){
-                                   fPrecision_to_reach =precision/100.;};
+  public:
+    ~RMC01AnalysisManager();
+    static RMC01AnalysisManager* GetInstance();
 
-   //Booking and saving of histograms
-   void Book();
-   void Save(G4double scaling_factor);
+    void BeginOfRun(const G4Run*);
+    void EndOfRun(const G4Run*);
+    void BeginOfEvent(const G4Event*);
+    void EndOfEvent(const G4Event*);
 
-private:
+    void SetPrimaryExpSpectrumForAdjointSim(const G4String& particle_name, G4double fluence,
+                                            G4double E0, G4double Emin, G4double Emax);
+    void SetPrimaryPowerLawSpectrumForAdjointSim(const G4String& particle_name, G4double fluence,
+                                                 G4double alpha, G4double Emin, G4double Emax);
+    // precision of the simulation results is given in % by the user
+    inline void SetPrecision(G4double precision) { fPrecision_to_reach = precision / 100.; };
 
-  static RMC01AnalysisManager* fInstance;
+    // Booking and saving of histograms
+    void Book();
+    void Save(G4double scaling_factor);
 
-  RMC01AnalysisManager(); 
-  
-  void EndOfEventForForwardSimulation(const G4Event* anEvent);
-  void EndOfEventForAdjointSimulation(const G4Event* anEvent);
-  G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
-  /*
-  void WriteHisto(G4H1* anHisto, G4double scaling_factor,
-                                G4String fileName, G4String header_lines);
-  void WriteHisto(G4H2* anHisto, G4double scaling_factor,
-                                G4String fileName, G4String header_lines);
-  */
-  void ComputeMeanEdepAndError(const G4Event* anEvent,
-                                G4double& mean,G4double& error);
-  
-  RMC01AnalysisManagerMessenger*  fMsg;
-  
-  //Histos for  fwd simulation
-  //--------------
-  G4H1* fEdep_vs_prim_ekin;
-  G4H1* fElectron_current;
-  G4H1* fProton_current;
-  G4H1* fGamma_current;
-  
-  //Fluence
-  //------------
-  //G4double fOmni_fluence_for_fwd_sim;
-  
-  //Variable to check the convergence of the energy deposited
-  //            for forward and adjoint simulations
-  //---------------------------------------------------------
-  G4double fAccumulated_edep;
-  G4double fAccumulated_edep2;
-  G4double fNentry;
-  G4double fMean_edep;
-  G4double fError_mean_edep;
-  G4double fRelative_error;
-  G4double fElapsed_time;
-  G4double fPrecision_to_reach;
-  G4bool fStop_run_if_precision_reached;
-  G4int fNb_evt_modulo_for_convergence_test;
-  
-  
-  //Histos for forward and adjoint simulation
-  //-----------------------------
-  G4H1* fEdep_rmatrix_vs_electron_prim_energy;
-  G4H2* fElectron_current_rmatrix_vs_electron_prim_energy;
-  G4H2* fGamma_current_rmatrix_vs_electron_prim_energy;
-  
-  G4H1* fEdep_rmatrix_vs_gamma_prim_energy;
-  G4H2* fElectron_current_rmatrix_vs_gamma_prim_energy;
-  G4H2* fGamma_current_rmatrix_vs_gamma_prim_energy;
-  
-  G4H1* fEdep_rmatrix_vs_proton_prim_energy;
-  G4H2* fElectron_current_rmatrix_vs_proton_prim_energy;
-  G4H2* fProton_current_rmatrix_vs_proton_prim_energy;
-  G4H2* fGamma_current_rmatrix_vs_proton_prim_energy;
-  
-  G4String      fFileName[2];
-  G4bool        fFactoryOn;
+  private:
+    static RMC01AnalysisManager* fInstance;
 
-  
-  //Prim spectrum to which the adjoint simulation will be normalised
-  //Answer matrices will be also registered for post processing
-  //normalisation
-  //--------------------------------------------------------
-  PRIM_SPECTRUM_TYPE fPrimSpectrumType;
-  G4int fPrimPDG_ID;
-  G4double fAlpha_or_E0;
-  G4double fAmplitude_prim_spectrum;
-  G4double fEmin_prim_spectrum;
-  G4double fEmax_prim_spectrum;
-  G4bool fAdjoint_sim_mode;
-  G4int fNb_evt_per_adj_evt;
+    RMC01AnalysisManager();
 
-  //Timer
-  //------
-  G4Timer* fTimer;
-  std::fstream fConvergenceFileOutput;
+    void EndOfEventForForwardSimulation(const G4Event* anEvent);
+    void EndOfEventForAdjointSimulation(const G4Event* anEvent);
+    G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
+    /*
+    void WriteHisto(G4H1* anHisto, G4double scaling_factor,
+                                  G4String fileName, G4String header_lines);
+    void WriteHisto(G4H2* anHisto, G4double scaling_factor,
+                                  G4String fileName, G4String header_lines);
+    */
+    void ComputeMeanEdepAndError(const G4Event* anEvent, G4double& mean, G4double& error);
+
+    RMC01AnalysisManagerMessenger* fMsg;
+
+    // Histos for  fwd simulation
+    //--------------
+    G4H1* fEdep_vs_prim_ekin;
+    G4H1* fElectron_current;
+    G4H1* fProton_current;
+    G4H1* fGamma_current;
+
+    // Fluence
+    //------------
+    // G4double fOmni_fluence_for_fwd_sim;
+
+    // Variable to check the convergence of the energy deposited
+    //             for forward and adjoint simulations
+    //---------------------------------------------------------
+    G4double fAccumulated_edep;
+    G4double fAccumulated_edep2;
+    G4double fNentry;
+    G4double fMean_edep;
+    G4double fError_mean_edep;
+    G4double fRelative_error;
+    G4double fElapsed_time;
+    G4double fPrecision_to_reach;
+    G4bool fStop_run_if_precision_reached;
+    G4int fNb_evt_modulo_for_convergence_test;
+
+    // Histos for forward and adjoint simulation
+    //-----------------------------
+    G4H1* fEdep_rmatrix_vs_electron_prim_energy;
+    G4H2* fElectron_current_rmatrix_vs_electron_prim_energy;
+    G4H2* fGamma_current_rmatrix_vs_electron_prim_energy;
+
+    G4H1* fEdep_rmatrix_vs_gamma_prim_energy;
+    G4H2* fElectron_current_rmatrix_vs_gamma_prim_energy;
+    G4H2* fGamma_current_rmatrix_vs_gamma_prim_energy;
+
+    G4H1* fEdep_rmatrix_vs_proton_prim_energy;
+    G4H2* fElectron_current_rmatrix_vs_proton_prim_energy;
+    G4H2* fProton_current_rmatrix_vs_proton_prim_energy;
+    G4H2* fGamma_current_rmatrix_vs_proton_prim_energy;
+
+    G4String fFileName[2];
+    G4bool fFactoryOn;
+
+    // Prim spectrum to which the adjoint simulation will be normalised
+    // Answer matrices will be also registered for post processing
+    // normalisation
+    //--------------------------------------------------------
+    PRIM_SPECTRUM_TYPE fPrimSpectrumType;
+    G4int fPrimPDG_ID;
+    G4double fAlpha_or_E0;
+    G4double fAmplitude_prim_spectrum;
+    G4double fEmin_prim_spectrum;
+    G4double fEmax_prim_spectrum;
+    G4bool fAdjoint_sim_mode;
+    G4int fNb_evt_per_adj_evt;
+
+    // Timer
+    //------
+    G4Timer* fTimer;
+    std::fstream fConvergenceFileOutput;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -39,36 +39,36 @@
 // -------------------------------------------------------------
 //
 //
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
+#include "CRMC_FTFP_BERT.hh"
 #include "DetectorConstruction.hh"
-#include "G4PhysListFactory.hh"
-#include "G4VModularPhysicsList.hh"
+#include "EventAction.hh"
+#include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "StackingAction.hh"
-#include "HistoManager.hh"
-#include "G4UIExecutive.hh"
-#include "G4VisExecutive.hh"
 #include "UrQMD.hh"
-#include "CRMC_FTFP_BERT.hh"
 
+#include "G4PhysListFactory.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VModularPhysicsList.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
-int main(int argc,char** argv) {
-
-  //detect interactive mode (if no arguments) and define UI session
+int main(int argc, char** argv)
+{
+  // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+  if (argc == 1) ui = new G4UIExecutive(argc, argv);
 
-  //choose the Random engine
+  // choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-  //Construct a serial run manager
+  // Construct a serial run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
-  //set mandatory initialization classes
+  // set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
 
   G4PhysListFactory factory;
@@ -78,23 +78,28 @@ int main(int argc,char** argv) {
   G4String physName = "QBBC";
 
   // Physics List name defined via 2nd argument
-  if (argc==3) { physName = argv[2]; }
+  if (argc == 3) {
+    physName = argv[2];
+  }
   else {
     char* path = std::getenv("PHYSLIST");
-    if (path) { physName = G4String(path); }
+    if (path) {
+      physName = G4String(path);
+    }
   }
-  if ( physName == "UrQMD" ) {
+  if (physName == "UrQMD") {
     phys = new UrQMD;
-  } else if ( physName == "CRMC_FTFP_BERT" ) {
+  }
+  else if (physName == "CRMC_FTFP_BERT") {
     phys = new CRMC_FTFP_BERT;
-  } else {
-    phys = factory.GetReferencePhysList( physName );
+  }
+  else {
+    phys = factory.GetReferencePhysList(physName);
   }
 
   // Physics List is defined via environment variable PHYSLIST
-  if(!phys) {
-    G4cout << "Hadr02 FATAL ERROR: Physics List is not defined"
-           << G4endl;
+  if (!phys) {
+    G4cout << "Hadr02 FATAL ERROR: Physics List is not defined" << G4endl;
     return 1;
   }
   runManager->SetUserInitialization(phys);
@@ -102,32 +107,31 @@ int main(int argc,char** argv) {
 
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
-  //set user action classes
+  // set user action classes
   runManager->SetUserAction(new RunAction());
   runManager->SetUserAction(new EventAction());
   runManager->SetUserAction(new StackingAction());
 
-  //initialize visualization
+  // initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
-  //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)  {
-   //interactive mode
-   ui->SessionStart();
-   delete ui;
+  if (ui) {
+    // interactive mode
+    ui->SessionStart();
+    delete ui;
   }
-  else  {
-   //batch mode
-   G4String command = "/control/execute ";
-   G4String fileName = argv[1];
-   UImanager->ApplyCommand(command+fileName);
+  else {
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
   }
 
-  //job termination
+  // job termination
   delete visManager;
   delete runManager;
 }
-

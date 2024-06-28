@@ -29,42 +29,43 @@
 
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
+
 #include "DetectorMessenger.hh"
 
+#include "G4Box.hh"
+#include "G4GeometryManager.hh"
+#include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-
-#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
 {
-  fBoxSize = 1*mm;
+  fBoxSize = 1 * mm;
   DefineMaterials();
-  SetMaterial("Germanium");  
+  SetMaterial("Germanium");
   fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete fDetectorMessenger;}
+{
+  delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,83 +74,95 @@ void DetectorConstruction::DefineMaterials()
   //
   // define Elements
   //
-  G4double z,a;
-  
-  G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
-  G4Element* C  = new G4Element("Carbon"   ,"C" , z= 6., a=  12.01*g/mole);  
-  G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
-  G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
-  G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=  72.59*g/mole);
-  G4Element* Pb = new G4Element("Lead"     ,"Pb", z=82., a= 207.19*g/mole);  
-  G4Element* Bi = new G4Element("Bismuth"  ,"Bi", z=83., a= 208.98*g/mole);
-  
+  G4double z, a;
+
+  G4Element* H = new G4Element("Hydrogen", "H", z = 1., a = 1.01 * g / mole);
+  G4Element* C = new G4Element("Carbon", "C", z = 6., a = 12.01 * g / mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z = 7., a = 14.01 * g / mole);
+  G4Element* O = new G4Element("Oxygen", "O", z = 8., a = 16.00 * g / mole);
+  G4Element* Ge = new G4Element("Germanium", "Ge", z = 32., a = 72.59 * g / mole);
+  G4Element* Pb = new G4Element("Lead", "Pb", z = 82., a = 207.19 * g / mole);
+  G4Element* Bi = new G4Element("Bismuth", "Bi", z = 83., a = 208.98 * g / mole);
+
   //
   // define materials
   //
   G4double density;
   G4int ncomponents, natoms;
-  G4double fractionmass;  
-  
-  G4Material* Air = 
-  new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
-  Air->AddElement(N, fractionmass=70.*perCent);
-  Air->AddElement(O, fractionmass=30.*perCent);
+  G4double fractionmass;
 
-  G4Material* H2l = 
-  new G4Material("H2liquid", density= 70.8*mg/cm3, ncomponents=1);
-  H2l->AddElement(H, fractionmass=1.);
-  
-  G4Material* H2O = 
-  new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
-  H2O->AddElement(H, natoms=2);
-  H2O->AddElement(O, natoms=1);
-  ///H2O->SetChemicalFormula("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
-        
-  G4Material* steam = 
-  new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);
-  steam->AddMaterial(H2O, fractionmass=1.);
-  steam->GetIonisation()->SetMeanExcitationEnergy(71.6*eV);  
-    
-  G4Material* BGO = 
-  new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
-  BGO->AddElement(O , natoms=12);
-  BGO->AddElement(Ge, natoms= 3);
-  BGO->AddElement(Bi, natoms= 4);  
-    
-  new G4Material("Aluminium"  , z=13., a= 26.98*g/mole, density= 2.700*g/cm3);
-  new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
-  new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);  
-  new G4Material("Iron"       , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
-  new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.960*g/cm3);
-  new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);  
-  new G4Material("Silver"     , z=47., a=107.87*g/mole, density= 10.50*g/cm3);
-  new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
-  new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
-  new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-    
-  G4Material* ams = 
-  new G4Material("ams", density= 7.409*g/cm3, ncomponents=3);
-  ams->AddElement(Pb, fractionmass = 94.81*perCent);
-  ams->AddElement(C , fractionmass =  4.79*perCent);
-  ams->AddElement(H , fractionmass =  0.40*perCent);
-  
-  G4Material* argonGas =   
-  new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
-                 kStateGas, 273.15*kelvin, 1*atmosphere);
+  G4Material* Air = new G4Material("Air", density = 1.290 * mg / cm3, ncomponents = 2);
+  Air->AddElement(N, fractionmass = 70. * perCent);
+  Air->AddElement(O, fractionmass = 30. * perCent);
 
-  G4Material* butane =
-  new G4Material("Isobutane",density= 2.42*mg/cm3, ncomponents=2,
-                 kStateGas,273.15*kelvin, 1*atmosphere);
-  butane->AddElement(C, natoms=4);
-  butane->AddElement(H, natoms=10);
- 
-  G4Material* ArButane =
-  new G4Material("ArgonButane", density= 1.835*mg/cm3, ncomponents=2,
-                 kStateGas,273.15*kelvin,1.*atmosphere);
-  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
-  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
-     
+  G4Material* H2l = new G4Material("H2liquid", density = 70.8 * mg / cm3, ncomponents = 1);
+  H2l->AddElement(H, fractionmass = 1.);
+
+  G4Material* H2O = new G4Material("Water", density = 1.000 * g / cm3, ncomponents = 2);
+  H2O->AddElement(H, natoms = 2);
+  H2O->AddElement(O, natoms = 1);
+  /// H2O->SetChemicalFormula("H_2O");
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0 * eV);
+
+  G4Material* steam = new G4Material("WaterSteam", density = 1.0 * mg / cm3, ncomponents = 1);
+  steam->AddMaterial(H2O, fractionmass = 1.);
+  steam->GetIonisation()->SetMeanExcitationEnergy(71.6 * eV);
+
+  G4Material* BGO = new G4Material("BGO", density = 7.10 * g / cm3, ncomponents = 3);
+  BGO->AddElement(O, natoms = 12);
+  BGO->AddElement(Ge, natoms = 3);
+  BGO->AddElement(Bi, natoms = 4);
+
+  new G4Material("Aluminium", z = 13., a = 26.98 * g / mole, density = 2.700 * g / cm3);
+  new G4Material("Silicon", z = 14., a = 28.09 * g / mole, density = 2.330 * g / cm3);
+  new G4Material("liquidArgon", z = 18., a = 39.95 * g / mole, density = 1.390 * g / cm3);
+  new G4Material("Iron", z = 26., a = 55.85 * g / mole, density = 7.870 * g / cm3);
+  new G4Material("Copper", z = 29., a = 63.55 * g / mole, density = 8.960 * g / cm3);
+  new G4Material("Germanium", z = 32., a = 72.61 * g / mole, density = 5.323 * g / cm3);
+  new G4Material("Silver", z = 47., a = 107.87 * g / mole, density = 10.50 * g / cm3);
+  new G4Material("Tungsten", z = 74., a = 183.85 * g / mole, density = 19.30 * g / cm3);
+  new G4Material("Lead", z = 82., a = 207.19 * g / mole, density = 11.35 * g / cm3);
+  new G4Material("Uranium", z = 92., a = 238.03 * g / mole, density = 18.95 * g / cm3);
+
+  G4Material* ams = new G4Material("ams", density = 7.409 * g / cm3, ncomponents = 3);
+  ams->AddElement(Pb, fractionmass = 94.81 * perCent);
+  ams->AddElement(C, fractionmass = 4.79 * perCent);
+  ams->AddElement(H, fractionmass = 0.40 * perCent);
+
+  G4Material* argonGas =
+    new G4Material("ArgonGas", z = 18, a = 39.948 * g / mole, density = 1.782 * mg / cm3, kStateGas,
+                   273.15 * kelvin, 1 * atmosphere);
+
+  G4Material* butane = new G4Material("Isobutane", density = 2.42 * mg / cm3, ncomponents = 2,
+                                      kStateGas, 273.15 * kelvin, 1 * atmosphere);
+  butane->AddElement(C, natoms = 4);
+  butane->AddElement(H, natoms = 10);
+
+  G4Material* ArButane = new G4Material("ArgonButane", density = 1.835 * mg / cm3, ncomponents = 2,
+                                        kStateGas, 273.15 * kelvin, 1. * atmosphere);
+  ArButane->AddMaterial(argonGas, fractionmass = 70 * perCent);
+  ArButane->AddMaterial(butane, fractionmass = 30 * perCent);
+
+  /// exercise: Xenon gas
+  //
+  G4Element* Xe = new G4Element("Xenon", "Xe", z = 54., a = 131.29 * g / mole);
+
+  // XenonGas0 (NTP)
+  G4double temperature0 = 293.15 * kelvin;
+  G4double pressure0 = 1 * atmosphere;
+  G4double density0 = 2.953 * mg / cm3;
+  G4Material* matXe0 =
+    new G4Material("XenonGas0", density0, ncomponents = 1, kStateGas, temperature0, pressure0);
+  matXe0->AddElement(Xe, natoms = 1);
+
+  // XenonGas1
+  G4double temperature1 = 293.15 * kelvin;
+  G4double pressure1 = 50 * atmosphere;
+  G4double density1 = density0 * (pressure1 / pressure0) * (temperature0 / temperature1);
+  G4Material* matXe1 =
+    new G4Material("XenonGas1", density1, ncomponents = 1, kStateGas, temperature1, pressure1);
+  matXe1->AddElement(Xe, natoms = 1);
+
   ////G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
@@ -158,26 +171,26 @@ void DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // the geometry is created once
-  if(fBox) { return fBox; }
+  if (fBox) {
+    return fBox;
+  }
 
-  G4Box* 
-    sBox = new G4Box("Container",                        //its name
-                     fBoxSize/2,fBoxSize/2,fBoxSize/2);  //its dimensions
-                   
-  G4LogicalVolume*
-    lBox = new G4LogicalVolume(sBox,                     //its shape
-                               fMaterial,                //its material
-                               fMaterial->GetName());    //its name
+  G4Box* sBox = new G4Box("Container",  // its name
+                          fBoxSize / 2, fBoxSize / 2, fBoxSize / 2);  // its dimensions
 
-  fBox = new G4PVPlacement(0,                            //no rotation
-                           G4ThreeVector(0.,0.,0.),      //at (0,0,0)
-                           lBox,                         //its logical volume
-                           fMaterial->GetName(),         //its name
-                           0,                            //its mother  volume
-                           false,                        //no boolean operation
-                           0);                           //copy number
-                             
-  //always return the root volume
+  G4LogicalVolume* lBox = new G4LogicalVolume(sBox,  // its shape
+                                              fMaterial,  // its material
+                                              fMaterial->GetName());  // its name
+
+  fBox = new G4PVPlacement(0,  // no rotation
+                           G4ThreeVector(0., 0., 0.),  // at (0,0,0)
+                           lBox,  // its logical volume
+                           fMaterial->GetName(),  // its name
+                           0,  // its mother  volume
+                           false,  // no boolean operation
+                           0);  // copy number
+
+  // always return the root volume
   //
   return fBox;
 }
@@ -186,8 +199,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::PrintParameters() const
 {
-  G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
-         << " of " << fMaterial->GetName() << G4endl;
+  G4cout << "\n The Box is " << G4BestUnit(fBoxSize, "Length") << " of " << fMaterial->GetName()
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -197,18 +210,20 @@ void DetectorConstruction::PrintParameters() const
 void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name, or build it from nist data base
-  G4Material* pttoMaterial = 
-     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
   if (pttoMaterial) {
     fMaterial = pttoMaterial;
-    if(fBox) { fBox->GetLogicalVolume()->SetMaterial(fMaterial); }
+    if (fBox) {
+      fBox->GetLogicalVolume()->SetMaterial(fMaterial);
+    }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "\n " << fMaterial << G4endl;
-  } else {
-    G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
-           << materialChoice << " not found" << G4endl;  
-  }  
+  }
+  else {
+    G4cout << "\n--> warning from DetectorConstruction::SetMaterial : " << materialChoice
+           << " not found" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

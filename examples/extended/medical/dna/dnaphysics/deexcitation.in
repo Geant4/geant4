@@ -1,0 +1,31 @@
+# Verbosity
+/tracking/verbose 0
+/run/verbose 2
+/control/verbose 2
+#
+# MT
+/run/numberOfThreads 10
+#
+# Material
+/dna/test/setMat G4_WATER
+#
+# Atomic deexcitation
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# Physics
+/dna/test/addPhysics DNA_Opt2
+#
+# Run initialization
+/run/initialize
+#
+# Incident particle type
+/gun/particle e-
+#
+# Incident particle energy
+/gun/energy 10 keV
+#
+# Beam on
+/run/beamOn 1000

@@ -47,7 +47,7 @@ class G4ErrorTarget
 {
   public:
 
-    G4ErrorTarget();
+    G4ErrorTarget() = default;
     virtual ~G4ErrorTarget() = default;
 
     virtual G4double GetDistanceFromPoint( const G4ThreeVector&,

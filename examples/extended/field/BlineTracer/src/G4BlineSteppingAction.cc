@@ -44,11 +44,9 @@
 
 G4BlineSteppingAction::G4BlineSteppingAction(G4BlineTracer* aBlineTool)
 {
-  fBlineTool=aBlineTool;
+  fBlineTool = aBlineTool;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BlineSteppingAction::UserSteppingAction(const G4Step*)
-{
-}
+void G4BlineSteppingAction::UserSteppingAction(const G4Step*) {}

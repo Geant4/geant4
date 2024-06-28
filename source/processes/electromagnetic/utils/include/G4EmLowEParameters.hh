@@ -51,6 +51,7 @@
 #include "globals.hh"
 #include "G4DNAModelSubType.hh"
 #include "G4EmFluoDirectory.hh"
+#include "G4ChemTimeStepModel.hh"
 #include <vector>
 
 class G4EmLowEParametersMessenger;
@@ -91,6 +92,9 @@ public:
 
   void SetDNAStationary(G4bool val);
   G4bool DNAStationary() const;
+
+  void SetChemTimeStepModel(G4ChemTimeStepModel val);
+  G4ChemTimeStepModel GetChemTimeStepModel() const;
 
   void SetDNAElectronMsc(G4bool val);
   G4bool DNAElectronMsc() const;
@@ -145,6 +149,7 @@ private:
   G4bool dnaMsc;
   
   G4DNAModelSubType dnaElectronSolvation;
+  G4ChemTimeStepModel fTimeStepModel;
 
   G4EmFluoDirectory fFluoDirectory;
 

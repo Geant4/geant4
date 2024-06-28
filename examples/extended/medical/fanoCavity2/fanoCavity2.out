@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -168,7 +168,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model for leptons and hadrons  Universal
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -180,12 +180,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for e+-           3
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -221,7 +221,7 @@ conv:  for gamma SubType=14 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -234,7 +234,7 @@ eIoni:  for e-  XStype:1  SubType=2
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -244,7 +244,7 @@ eIoni:  for e+  XStype:1  SubType=2
       myMollerBhabha : Emin=    0 eV  Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=   10 GeV
 
@@ -303,47 +303,47 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 10000 starts.
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52676 Ne-_cav= 2935 doseCavity/Ebeam= 1.38478  (100*(ratio-1) = 38.47829 %) 
+--->evntNb= 10000 Nwall= 9997 Ncav= 4 Ic/Iw= 2.10768 Ne-_cav= 2958 doseCavity/Ebeam= 1.18242  (100*(ratio-1) = 18.24224 %) 
 
 --> Event 20000 starts.
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79022 Ne-_cav= 5837 doseCavity/Ebeam= 1.30960  (100*(ratio-1) = 30.95961 %) 
+--->evntNb= 20000 Nwall= 19995 Ncav= 6 Ic/Iw= 1.58068 Ne-_cav= 5838 doseCavity/Ebeam= 1.15579  (100*(ratio-1) = 15.57930 %) 
 
 --> Event 30000 starts.
---->evntNb= 30000 Nwall= 29995 Ncav= 6 Ic/Iw= 1.05370 Ne-_cav= 8639 doseCavity/Ebeam= 1.31119  (100*(ratio-1) = 31.11949 %) 
+--->evntNb= 30000 Nwall= 29992 Ncav= 9 Ic/Iw= 1.58071 Ne-_cav= 8657 doseCavity/Ebeam= 1.07851  (100*(ratio-1) = 7.85147 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=1.290000s Real=1.339262s Sys=0.000000s
+  User=1.740000s Real=1.807404s Sys=0.000000s
 
- Process calls frequency --->  eIoni= 328414  msc= 138727  Transportation= 22903
+ Process calls frequency --->  eIoni= 315000  msc= 275995  Transportation= 22864
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11451	 Energy = 7.205 GeV
-      Exit  --> nbParticles = 11451	 Energy = 7.207 GeV
+      Enter --> nbParticles = 11430	 Energy = 7.218 GeV
+      Exit  --> nbParticles = 11434	 Energy = 7.223 GeV
 
- beamFluence in wall = 39988	 in cavity = 12	 Icav/Iwall = 1.58076	 energyFluence = 37.96066 MeV*cm2/mg
+ beamFluence in wall = 39987	 in cavity = 13	 Icav/Iwall = 1.71253	 energyFluence = 37.96066 MeV*cm2/mg
 
- Total edep in cavity = 10.22817 MeV +- 5.11570 %
- Total dose in cavity = 51.14086 MeV*cm2/mg +- 5.11570 %
+ Total edep in cavity = 8.08834 MeV +- 4.39251 %
+ Total dose in cavity = 40.44169 MeV*cm2/mg +- 4.39251 %
 
- DoseCavity/EnergyFluence = 1.34721 +- 0.06892
+ DoseCavity/EnergyFluence = 1.06536 +- 0.04680
 
- Total charged trackLength in cavity = 43.4676 m     (mean value = 3.7960 mm )
+ Total charged trackLength in cavity = 36.6239 m     (mean value = 3.2042 mm )
 
- StepSize of ch. tracks in wall   = 369.4681 um  +- 284.3692 um 	 (nbSteps/track = 11.9571)
- StepSize of ch. tracks in cavity = 3.6518 mm  +- 1.0372 cm 	 (nbSteps/track = 1.0395)
+ StepSize of ch. tracks in wall   = 299.9595 um  +- 255.1711 um 	 (nbSteps/track = 14.7233)
+ StepSize of ch. tracks in cavity = 1.4581 mm  +- 2.6789 mm 	 (nbSteps/track = 2.1976)
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1654413378427596061, 2083774194714727894, 435632633583180387, 1249217075862885945, 1841610948578514178, 2195212315604842651, 604850147562425736, 71370128272451398, 692251873205795303, 688961742426314054, 1568443410653060393, 934486371783296866, 250285745308568758, 981911920856436405, 1911439761393675093, 1678696166129964874, 1107850824324498422} counter= 3sumtot= 1503664564978682810
+N=17 V[N]={1122560079547894776, 489338179114589148, 962953981966901183, 1371396244330764127, 1216257719796551649, 871351706115100433, 1331924270603534972, 1161597106298325732, 1677528997079743374, 561171356176391074, 1761454154557839398, 593086082936043028, 652088176841567984, 1436493037053116940, 1396378354312194542, 1141314676005422410, 747120547568034109} counter= 17sumtot= 47270596594463271
 ---------------------------------------
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1654413378427596061, 2083774194714727894, 435632633583180387, 1249217075862885945, 1841610948578514178, 2195212315604842651, 604850147562425736, 71370128272451398, 692251873205795303, 688961742426314054, 1568443410653060393, 934486371783296866, 250285745308568758, 981911920856436405, 1911439761393675093, 1678696166129964874, 1107850824324498422} counter= 3sumtot= 1503664564978682810
+N=17 V[N]={1122560079547894776, 489338179114589148, 962953981966901183, 1371396244330764127, 1216257719796551649, 871351706115100433, 1331924270603534972, 1161597106298325732, 1677528997079743374, 561171356176391074, 1761454154557839398, 593086082936043028, 652088176841567984, 1436493037053116940, 1396378354312194542, 1141314676005422410, 747120547568034109} counter= 17sumtot= 47270596594463271
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

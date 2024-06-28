@@ -27,134 +27,113 @@
 /// \brief Implementation of the GB02BOptrMultiParticleForceCollision class
 //
 #include "GB02BOptrMultiParticleForceCollision.hh"
-#include "G4BiasingProcessInterface.hh"
 
 #include "G4BOptrForceCollision.hh"
+#include "G4BiasingProcessInterface.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB02BOptrMultiParticleForceCollision::GB02BOptrMultiParticleForceCollision()
-: G4VBiasingOperator("TestManyForceCollision")
-{
-}
+  : G4VBiasingOperator("TestManyForceCollision")
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
 {
   const G4ParticleDefinition* particle =
-    G4ParticleTable::GetParticleTable()->FindParticle( particleName );
+    G4ParticleTable::GetParticleTable()->FindParticle(particleName);
 
-  if ( particle == 0 )
-    {
-      G4ExceptionDescription ed;
-      ed << "Particle `" << particleName << "' not found !" << G4endl;
-      G4Exception("GB02BOptrMultiParticleForceCollision::AddParticle(...)",
-                  "exGB02.01",
-                  JustWarning,
-                  ed);
-      return;
-    }
-  
-  G4BOptrForceCollision* optr = new G4BOptrForceCollision(particleName,
-                                                          "ForceCollisionFor"+particleName);
-  fParticlesToBias.push_back( particle );
-  fBOptrForParticle[ particle ] = optr;
+  if (particle == 0) {
+    G4ExceptionDescription ed;
+    ed << "Particle `" << particleName << "' not found !" << G4endl;
+    G4Exception("GB02BOptrMultiParticleForceCollision::AddParticle(...)", "exGB02.01", JustWarning,
+                ed);
+    return;
+  }
 
+  G4BOptrForceCollision* optr =
+    new G4BOptrForceCollision(particleName, "ForceCollisionFor" + particleName);
+  fParticlesToBias.push_back(particle);
+  fBOptrForParticle[particle] = optr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VBiasingOperation* 
-GB02BOptrMultiParticleForceCollision::
-ProposeOccurenceBiasingOperation(const G4Track* track, 
-                                 const G4BiasingProcessInterface* callingProcess)
+G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeOccurenceBiasingOperation(
+  const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
-  if ( fCurrentOperator ) return fCurrentOperator->
-                            GetProposedOccurenceBiasingOperation(track, callingProcess);
-  else                    return 0;
+  if (fCurrentOperator)
+    return fCurrentOperator->GetProposedOccurenceBiasingOperation(track, callingProcess);
+  else
+    return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VBiasingOperation*
-GB02BOptrMultiParticleForceCollision::
-ProposeNonPhysicsBiasingOperation(const G4Track* track,
-                                  const G4BiasingProcessInterface* callingProcess)
+G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeNonPhysicsBiasingOperation(
+  const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
-  if ( fCurrentOperator ) return fCurrentOperator->
-                            GetProposedNonPhysicsBiasingOperation(track, callingProcess);
-  else                    return 0;
+  if (fCurrentOperator)
+    return fCurrentOperator->GetProposedNonPhysicsBiasingOperation(track, callingProcess);
+  else
+    return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VBiasingOperation*
-GB02BOptrMultiParticleForceCollision::
-ProposeFinalStateBiasingOperation(const G4Track* track,
-                                  const G4BiasingProcessInterface* callingProcess)
+G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeFinalStateBiasingOperation(
+  const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
-  if ( fCurrentOperator ) return fCurrentOperator->
-                            GetProposedFinalStateBiasingOperation(track, callingProcess);
-  else                    return 0;
+  if (fCurrentOperator)
+    return fCurrentOperator->GetProposedFinalStateBiasingOperation(track, callingProcess);
+  else
+    return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void GB02BOptrMultiParticleForceCollision::StartTracking( const G4Track* track )
+void GB02BOptrMultiParticleForceCollision::StartTracking(const G4Track* track)
 {
   const G4ParticleDefinition* definition = track->GetParticleDefinition();
-  std::map < const G4ParticleDefinition*, G4BOptrForceCollision* > :: iterator
-    it = fBOptrForParticle.find( definition );
+  std::map<const G4ParticleDefinition*, G4BOptrForceCollision*>::iterator it =
+    fBOptrForParticle.find(definition);
   fCurrentOperator = 0;
-  if ( it != fBOptrForParticle.end() ) fCurrentOperator = (*it).second;
+  if (it != fBOptrForParticle.end()) fCurrentOperator = (*it).second;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void 
-GB02BOptrMultiParticleForceCollision::
-OperationApplied( const G4BiasingProcessInterface*         callingProcess,
-                  G4BiasingAppliedCase                        biasingCase,
-                  G4VBiasingOperation*                   operationApplied,
-                  const G4VParticleChange*         particleChangeProduced )
+void GB02BOptrMultiParticleForceCollision::OperationApplied(
+  const G4BiasingProcessInterface* callingProcess, G4BiasingAppliedCase biasingCase,
+  G4VBiasingOperation* operationApplied, const G4VParticleChange* particleChangeProduced)
 {
-  if ( fCurrentOperator ) fCurrentOperator->ReportOperationApplied( callingProcess,
-                                                                    biasingCase,
-                                                                    operationApplied,
-                                                                    particleChangeProduced );
-  
+  if (fCurrentOperator)
+    fCurrentOperator->ReportOperationApplied(callingProcess, biasingCase, operationApplied,
+                                             particleChangeProduced);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-GB02BOptrMultiParticleForceCollision::
-OperationApplied( const G4BiasingProcessInterface*        callingProcess,
-                  G4BiasingAppliedCase                       biasingCase,
-                  G4VBiasingOperation*         occurenceOperationApplied,
-                  G4double                 weightForOccurenceInteraction,
-                  G4VBiasingOperation*        finalStateOperationApplied, 
-                  const G4VParticleChange*        particleChangeProduced )
+void GB02BOptrMultiParticleForceCollision::OperationApplied(
+  const G4BiasingProcessInterface* callingProcess, G4BiasingAppliedCase biasingCase,
+  G4VBiasingOperation* occurenceOperationApplied, G4double weightForOccurenceInteraction,
+  G4VBiasingOperation* finalStateOperationApplied, const G4VParticleChange* particleChangeProduced)
 {
-  if ( fCurrentOperator ) fCurrentOperator->ReportOperationApplied( callingProcess,
-                                                                    biasingCase,
-                                                                    occurenceOperationApplied,
-                                                                    weightForOccurenceInteraction,
-                                                                    finalStateOperationApplied, 
-                                                                    particleChangeProduced );
+  if (fCurrentOperator)
+    fCurrentOperator->ReportOperationApplied(callingProcess, biasingCase, occurenceOperationApplied,
+                                             weightForOccurenceInteraction,
+                                             finalStateOperationApplied, particleChangeProduced);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-GB02BOptrMultiParticleForceCollision::
-ExitBiasing( const G4Track*                           track,
-             const G4BiasingProcessInterface* callingProcess )
+void GB02BOptrMultiParticleForceCollision::ExitBiasing(
+  const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
-  if ( fCurrentOperator ) fCurrentOperator->ExitingBiasing( track, callingProcess );
+  if (fCurrentOperator) fCurrentOperator->ExitingBiasing(track, callingProcess);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -33,9 +33,9 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4Cache.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4Cache.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -43,7 +43,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class DetectorMessenger;
 
-const G4int kMaxAbsor = 10;                        // 0 + 9
+const G4int kMaxAbsor = 10;  // 0 + 9
 
 class G4GlobalMagFieldMessenger;
 
@@ -51,63 +51,57 @@ class G4GlobalMagFieldMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  
-  DetectorConstruction();
- ~DetectorConstruction() override;
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction() override;
 
-public:
-  
-  void SetNbOfAbsor     (G4int);      
-  void SetAbsorMaterial (G4int,const G4String&);     
-  void SetAbsorThickness(G4int,G4double);
-                
-  void SetAbsorSizeYZ   (G4double);          
-  void SetNbOfDivisions (G4int,G4int);
-     
-  G4VPhysicalVolume* Construct() override;
-  void ConstructSDandField() override;
-     
-public:
+  public:
+    void SetNbOfAbsor(G4int);
+    void SetAbsorMaterial(G4int, const G4String&);
+    void SetAbsorThickness(G4int, G4double);
 
-  G4int       GetNbOfAbsor()             {return fNbOfAbsor;}     
-  G4Material* GetAbsorMaterial (G4int i) {return fAbsorMaterial[i];};
-  G4double    GetAbsorThickness(G4int i) {return fAbsorThickness[i];};      
-  G4double    GetXfront        (G4int i) {return fXfront[i];};
-            
-  G4double GetAbsorSizeX()               {return fAbsorSizeX;}; 
-  G4double GetAbsorSizeYZ()              {return fAbsorSizeYZ;};
-  
-  G4int  GetNbOfDivisions(G4int i)       {return fNbOfDivisions[i];}; 
-  
-  void PrintParameters();
-   
-private:
+    void SetAbsorSizeYZ(G4double);
+    void SetNbOfDivisions(G4int, G4int);
 
-  G4int              fNbOfAbsor = 1;
-  G4Material*        fAbsorMaterial [kMaxAbsor];
-  G4double           fAbsorThickness[kMaxAbsor];
-  G4double           fXfront[kMaxAbsor];  
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
-  G4int              fNbOfDivisions[kMaxAbsor];
+  public:
+    G4int GetNbOfAbsor() { return fNbOfAbsor; }
+    G4Material* GetAbsorMaterial(G4int i) { return fAbsorMaterial[i]; };
+    G4double GetAbsorThickness(G4int i) { return fAbsorThickness[i]; };
+    G4double GetXfront(G4int i) { return fXfront[i]; };
 
-  G4double           fAbsorSizeX  = 0.;
-  G4double           fAbsorSizeYZ = 0.;
-  G4Material*        fDefaultMaterial = nullptr;
-  
-  G4VPhysicalVolume* fPhysiWorld = nullptr;
+    G4double GetAbsorSizeX() { return fAbsorSizeX; };
+    G4double GetAbsorSizeYZ() { return fAbsorSizeYZ; };
 
-  DetectorMessenger* fDetectorMessenger = nullptr;
-  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
+    G4int GetNbOfDivisions(G4int i) { return fNbOfDivisions[i]; };
 
-private:
+    void PrintParameters();
 
-  void DefineMaterials();
-  void ComputeParameters();
-  G4VPhysicalVolume* ConstructVolumes();
+  private:
+    G4int fNbOfAbsor = 1;
+    G4Material* fAbsorMaterial[kMaxAbsor];
+    G4double fAbsorThickness[kMaxAbsor];
+    G4double fXfront[kMaxAbsor];
+
+    G4int fNbOfDivisions[kMaxAbsor];
+
+    G4double fAbsorSizeX = 0.;
+    G4double fAbsorSizeYZ = 0.;
+    G4Material* fDefaultMaterial = nullptr;
+
+    G4VPhysicalVolume* fPhysiWorld = nullptr;
+
+    DetectorMessenger* fDetectorMessenger = nullptr;
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
+
+  private:
+    void DefineMaterials();
+    void ComputeParameters();
+    G4VPhysicalVolume* ConstructVolumes();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

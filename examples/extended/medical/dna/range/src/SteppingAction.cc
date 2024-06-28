@@ -23,36 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/range/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
-#include "Run.hh"
-#include "HistoManager.hh"
 
 #include "G4RunManager.hh"
-#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()
-:G4UserSteppingAction()
-{}
+SteppingAction::SteppingAction() : G4UserSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- //*** WARNING: this line will kill all secondary electrons ***
+  //*** WARNING: this will kill all secondary electrons ***
 
- if (    aStep->GetTrack()->GetDefinition()->GetPDGCharge() == -1
-      && aStep->GetTrack()->GetTrackID() != 1
-      ) 
+  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == -1
+      && aStep->GetTrack()->GetTrackID() != 1)
     aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 }
-

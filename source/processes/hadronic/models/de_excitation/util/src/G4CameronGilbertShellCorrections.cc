@@ -70,8 +70,8 @@ G4double G4CameronGilbertShellCorrections::ShellNTable[] =
 
 G4CameronGilbertShellCorrections::G4CameronGilbertShellCorrections()
 {
-  for(size_t i=0; i<ZTableSize; ++i) { ShellZTable[i] *= CLHEP::MeV; }
-  for(size_t i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
+  for (G4int i=0; i<ZTableSize; ++i) { ShellZTable[i] *= CLHEP::MeV; }
+  for (G4int i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
 }
 
 

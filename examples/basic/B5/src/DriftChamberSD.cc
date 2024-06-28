@@ -28,22 +28,20 @@
 /// \brief Implementation of the B5::DriftChamber class
 
 #include "DriftChamberSD.hh"
+
 #include "DriftChamberHit.hh"
 
 #include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
 #include "G4SDManager.hh"
-#include "G4ios.hh"
+#include "G4Step.hh"
+#include "G4Track.hh"
 
 namespace B5
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DriftChamberSD::DriftChamberSD(G4String name)
-: G4VSensitiveDetector(name)
+DriftChamberSD::DriftChamberSD(G4String name) : G4VSensitiveDetector(name)
 {
   collectionName.insert("driftChamberColl");
 }
@@ -52,13 +50,12 @@ DriftChamberSD::DriftChamberSD(G4String name)
 
 void DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 {
-  fHitsCollection
-    = new DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
+  fHitsCollection = new DriftChamberHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-  if (fHCID<0) {
-     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
+  if (fHCID < 0) {
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
   }
-  hce->AddHitsCollection(fHCID,fHitsCollection);
+  hce->AddHitsCollection(fHCID, fHitsCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,17 +63,16 @@ void DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 G4bool DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
   auto charge = step->GetTrack()->GetDefinition()->GetPDGCharge();
-  if (charge==0.) return true;
+  if (charge == 0.) return true;
 
   auto preStepPoint = step->GetPreStepPoint();
 
   auto touchable = step->GetPreStepPoint()->GetTouchable();
-  auto motherPhysical = touchable->GetVolume(1); // mother
+  auto motherPhysical = touchable->GetVolume(1);  // mother
   auto copyNo = motherPhysical->GetCopyNo();
 
   auto worldPos = preStepPoint->GetPosition();
-  auto localPos
-    = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
+  auto localPos = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
 
   auto hit = new DriftChamberHit(copyNo);
   hit->SetWorldPos(worldPos);
@@ -90,4 +86,4 @@ G4bool DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B5

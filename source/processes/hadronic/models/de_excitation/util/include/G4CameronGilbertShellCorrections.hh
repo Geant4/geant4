@@ -43,24 +43,28 @@ public:
 
   ~G4CameronGilbertShellCorrections() = default;
 
-  inline G4bool GetShellCorrection(G4int N, G4int Z, G4double& result) const
+  G4bool GetShellCorrection(G4int N, G4int Z, G4double& result) const
   {
     G4bool res = false;
-    if(Z >= ZTableMin && Z <= ZTableMax && N >= NTableMin && N <= NTableMax) { 
-      result = ShellZTable[Z-ZTableMin] + ShellNTable[N-NTableMin];
+    if (Z >= TableMin && Z <= ZTableMax && N >= TableMin && N <= NTableMax) { 
+      result = ShellZTable[Z - TableMin] + ShellNTable[N - TableMin];
       res = true; 
     }
     return res;
   }
-  
-  enum  { ZTableSize = 88, NTableSize = 140, ZTableMin = 11, ZTableMax = 98,
-	  NTableMin = 11, NTableMax = 150 };
 
   G4CameronGilbertShellCorrections(const G4CameronGilbertShellCorrections & right) = delete;
   const G4CameronGilbertShellCorrections & operator=
   (const G4CameronGilbertShellCorrections & right) = delete;
 
 private:
+
+  const G4int TableMin{11};
+  const G4int ZTableMax{98};
+  const G4int NTableMax{150};
+
+  static const G4int ZTableSize{88};
+  static const G4int NTableSize{140};
 
   static G4double ShellZTable[ZTableSize];  
   static G4double ShellNTable[NTableSize];

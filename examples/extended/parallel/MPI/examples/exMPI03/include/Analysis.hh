@@ -31,6 +31,7 @@
 #define ANALYSIS_MANAGER_H
 
 #include "G4ThreeVector.hh"
+
 #include <tools/histo/h1d>
 #include <tools/histo/h2d>
 
@@ -38,39 +39,40 @@
   TypeName(const TypeName&);               \
   void operator=(const TypeName&)
 
-class Analysis {
-public:
-  ~Analysis();
+class Analysis
+{
+  public:
+    ~Analysis();
 
-  static Analysis* GetAnalysis();
+    static Analysis* GetAnalysis();
 
-  void Book();
-  void EndOfRun();
+    void Book();
+    void EndOfRun();
 
-  void Update();
-  void Clear();
-  void Save(const G4String& fname);
-  void Close(G4bool reset = true);
+    void Update();
+    void Clear();
+    void Save(const G4String& fname);
+    void Close(G4bool reset = true);
 
-  void FillIncident(const G4ThreeVector& p);
-  void FillDose(const G4ThreeVector& p, G4double dedx);
+    void FillIncident(const G4ThreeVector& p);
+    void FillDose(const G4ThreeVector& p, G4double dedx);
 
-  void ClearIncidentFlag();
+    void ClearIncidentFlag();
 
-private:
-  Analysis();
-  DISALLOW_COPY_AND_ASSIGN(Analysis);
+  private:
+    Analysis();
+    DISALLOW_COPY_AND_ASSIGN(Analysis);
 
-  //Histograms handlers
-  G4int fincident_x_hist;
-  G4int fincident_map;
-  G4int fdose_hist;
-  G4int fdose_map;
-  G4int fdose_prof;
-  G4int fdose_map_prof;
-  G4int fdose_map3d;
+    // Histograms handlers
+    G4int fincident_x_hist;
+    G4int fincident_map;
+    G4int fdose_hist;
+    G4int fdose_map;
+    G4int fdose_prof;
+    G4int fdose_map_prof;
+    G4int fdose_map3d;
 
-  static G4ThreadLocal G4int fincidentFlag;
+    static G4ThreadLocal G4int fincidentFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

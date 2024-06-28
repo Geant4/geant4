@@ -31,7 +31,6 @@
 #define B2EventAction_h 1
 
 #include "G4UserEventAction.hh"
-
 #include "globals.hh"
 
 /// Event action class
@@ -42,8 +41,8 @@ class B2EventAction : public G4UserEventAction
     B2EventAction();
     virtual ~B2EventAction();
 
-    virtual void  BeginOfEventAction(const G4Event* );
-    virtual void    EndOfEventAction(const G4Event* );
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

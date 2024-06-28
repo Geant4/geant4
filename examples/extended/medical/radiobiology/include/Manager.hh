@@ -78,8 +78,6 @@ class Manager
     std::map<G4String, VRadiobiologicalQuantity*> fQuantities = {};
 
     inline static Manager* fInstance = nullptr;
-
-  
 };
 
 }  // namespace RadioBio

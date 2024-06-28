@@ -36,8 +36,12 @@
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
+
+#include <vector>
 
 class G4Region;
+
 
 class G4MSSteppingAction : public G4UserSteppingAction
 {
@@ -52,12 +56,84 @@ class G4MSSteppingAction : public G4UserSteppingAction
     inline G4double GetX0() const { return x0; }
     inline G4double GetLambda0() const { return lambda; }
 
+    /// Print material properties verbosely for each step of geantino
+    /// This function is useful for single shot scans.
+    void PrintEachMaterialVerbose(std::ostream & oss);
+
+    /// Print list of {material name, thickness, x0, lambda}, integrated by material name
+    /// This function is useful for global scans.
+    void PrintIntegratedMaterialVerbose(std::ostream & oss);
+
   private:
     G4bool regionSensitive = false;
     G4Region* theRegion = nullptr;
     G4double length = 0.0;
     G4double x0 = 0.0;
     G4double lambda = 0.0;
+    struct shape_mat_info_t
+    {
+      /// Calculated average atomic number
+      G4double aveZ               = 0.0;
+      /// Calculated average mass number
+      G4double aveA               = 0.0;
+      /// Density of material given by user
+      G4double density            = 0.0;
+      /// Material radiation length
+      G4double radiation_length   = 0.0;
+      /// Material interaction length
+      G4double interaction_length = 0.0;
+      /// Step of the geantino
+      G4double thickness          = 0.0;
+      /// Integrated path of the geantino
+      G4double integrated_thickness = 0.0;
+      /// Calculated x0 = thickness/radiation_length
+      G4double x0                 = 0.0;
+      /// Calculated lambda = thickness/interaction_length
+      G4double lambda             = 0.0;
+      /// Integrated x0
+      G4double integrated_x0       = 0.0;
+      /// Integrated lambda
+      G4double integrated_lambda   = 0.0;
+      /// Entry point of the geantino into the solid
+      G4ThreeVector entry_point   = { };
+      /// Exit point of the geantino out of the solid
+      G4ThreeVector exit_point    = { };
+      /// Material name. Composition is not checked.
+      /// That is, if there are two identical materials
+      /// except for the name, they are treated as different
+      G4String material_name      = { };
+      /// Getter that returns the full material name
+      G4String GetName(){return material_name;};
+      /// Getter that returns the material name, splitted in blocks of length 'column_width'
+      G4String GetName(G4int column_width)
+      {
+        G4int input_name_length = (G4int)material_name.length();
+        if( input_name_length < column_width) return material_name;
+
+        G4String formated_name;
+
+        for (size_t i = 0; i < material_name.length(); i += column_width)
+        {
+            // for each block of characters of length 'column_width', append '\n'
+            formated_name += material_name.substr(i, column_width);
+            if (i + column_width < material_name.length())
+            {
+                formated_name += '\n';
+            }
+            // append spaces for last block of characters so its length corresponds to column_width
+            else
+            {
+                formated_name+=G4String( column_width-(input_name_length%column_width),' ');
+            }
+        }
+
+        return formated_name;
+
+      };
+
+    };
+    std::vector<shape_mat_info_t> shape_mat_info_v;
+
 };
 
 #endif

@@ -31,27 +31,26 @@
 //
 
 #include "G01PrimaryGeneratorAction.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G01PrimaryGeneratorAction::G01PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  fParticleGun->SetParticleDefinition(
-               particleTable->FindParticle(particleName="geantino"));
-  fParticleGun->SetParticleEnergy(1.0*GeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(-2.0*m, 0.1, 0.1));
+  fParticleGun->SetParticleDefinition(particleTable->FindParticle(particleName = "geantino"));
+  fParticleGun->SetParticleEnergy(1.0 * GeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(-2.0 * m, 0.1, 0.1));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,9 +65,8 @@ G01PrimaryGeneratorAction::~G01PrimaryGeneratorAction()
 void G01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4int i = anEvent->GetEventID() % 3;
-  G4ThreeVector v(1.0,0.0,0.0);
-  switch(i)
-  {
+  G4ThreeVector v(1.0, 0.0, 0.0);
+  switch (i) {
     case 0:
       break;
     case 1:

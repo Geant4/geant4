@@ -41,8 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4UserRunAction.hh"
 #include "G4AnalysisManager.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,29 +53,25 @@ class Run;
 
 class RunAction : public G4UserRunAction
 {
-public: 
+  public:
+    RunAction();
+    virtual ~RunAction();
 
-  RunAction();
-  virtual ~RunAction();
+    virtual G4Run* GenerateRun();
 
-  virtual G4Run* GenerateRun(); 
+    virtual void BeginOfRunAction(const G4Run*);
+    // In this method histogramms are booked
 
-  virtual void BeginOfRunAction(const G4Run*);
-  // In this method histogramms are booked
+    virtual void EndOfRunAction(const G4Run*);
+    // In this method bookHisto method is called in which histogramms are filled
 
-  virtual void EndOfRunAction(const G4Run*);
-  // In this method bookHisto method is called in which histogramms are filled
+  private:
+    // Book predefined histogramms
+    void Book();
 
-private:
-
-  // Book predefined histogramms  
-  void Book();
-
-private:
-
-  G4AnalysisManager* fAnalysisManager;
-  Run*  fRun;
+  private:
+    G4AnalysisManager* fAnalysisManager;
+    Run* fRun;
 };
 
 #endif
-

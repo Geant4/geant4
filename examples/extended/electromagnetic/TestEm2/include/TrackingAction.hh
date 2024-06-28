@@ -37,13 +37,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
+    TrackingAction() = default;
+    ~TrackingAction() override = default;
 
-public:
-  TrackingAction() = default;
- ~TrackingAction() override = default;
-
-  void PostUserTrackingAction(const G4Track*) override;
+    void PostUserTrackingAction(const G4Track*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

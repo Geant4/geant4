@@ -40,7 +40,6 @@
 
 #include "XSHistoManager.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 XSHistoManagerMessenger::XSHistoManagerMessenger(XSHistoManager* const histoManager)
@@ -54,15 +53,15 @@ XSHistoManagerMessenger::XSHistoManagerMessenger(XSHistoManager* const histoMana
     fMaxKineticEnergyCmd(G4UIcmdWithADoubleAndUnit("/allXS/maxKineticEnergy", this))
 {
   fOutputFileNameCmd.SetGuidance("Set output file name (histograms).");
-  
+
   fParticleNameCmd.SetGuidance("Set particle name.");
   fParticleNameCmd.SetParameterName("particleName", false);
   fParticleNameCmd.AvailableForStates(G4State_PreInit, G4State_Idle);
- 
+
   fElementNameCmd.SetGuidance("Set target element name.");
   fElementNameCmd.SetParameterName("elementName", false);
   fElementNameCmd.AvailableForStates(G4State_PreInit, G4State_Idle);
-  
+
   fNonElementaryMaterialNameCmd.SetGuidance("Set target material name (in case not elementary).");
   fNonElementaryMaterialNameCmd.SetParameterName("nonElementaryMaterialName", false);
   fNonElementaryMaterialNameCmd.AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -70,7 +69,7 @@ XSHistoManagerMessenger::XSHistoManagerMessenger(XSHistoManager* const histoMana
   fNumBinsCmd.SetGuidance("Set number of bins in kinetic energy.");
   fNumBinsCmd.SetParameterName("numBins", false);
   fNumBinsCmd.AvailableForStates(G4State_PreInit, G4State_Idle);
-  
+
   fMinKineticEnergyCmd.SetGuidance("Set min kinetic energy");
   fMinKineticEnergyCmd.SetParameterName("MinKineticEnergy", false);
   fMinKineticEnergyCmd.SetUnitCategory("Energy");
@@ -84,8 +83,8 @@ XSHistoManagerMessenger::XSHistoManagerMessenger(XSHistoManager* const histoMana
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void XSHistoManagerMessenger::SetNewValue(G4UIcommand* command, G4String value) {
-
+void XSHistoManagerMessenger::SetNewValue(G4UIcommand* command, G4String value)
+{
   if (command == &fOutputFileNameCmd) {
     fHisto->SetOutputFileName(value);
   }
@@ -101,10 +100,10 @@ void XSHistoManagerMessenger::SetNewValue(G4UIcommand* command, G4String value) 
   else if (command == &fNumBinsCmd) {
     fHisto->SetNumberOfBins(fNumBinsCmd.GetNewIntValue(value));
   }
-  else if (command == &fMinKineticEnergyCmd) { 
+  else if (command == &fMinKineticEnergyCmd) {
     fHisto->SetMinKinEnergy(fMinKineticEnergyCmd.GetNewDoubleValue(value));
   }
-  else if (command == &fMaxKineticEnergyCmd) { 
+  else if (command == &fMaxKineticEnergyCmd) {
     fHisto->SetMaxKinEnergy(fMaxKineticEnergyCmd.GetNewDoubleValue(value));
   }
 }

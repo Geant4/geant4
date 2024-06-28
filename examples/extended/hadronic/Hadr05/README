@@ -122,7 +122,7 @@
  6- HOW TO START ?
  
   - Execute Hadr05 in 'batch' mode from macro files
-      % Hadr05   Cu-lAr.mac
+      % Hadr05  Cu-lAr.mac
  
   - Execute Hadr05 in 'interactive mode' with visualization
     % Hadr05
@@ -133,7 +133,9 @@
     Idle> exit
 
   Macros provided in this example:
+  - hadr05.in: macro used in Geant4 testing 
   - Fe-Sci.mac, Cu-lAr.mac, Pb-lAr.mac, W-lAr.mac : names are self explanatory
+  - Pb-lAr-em.mac : electromagnetic calorimeter
   - emtest.mac, emtutor.mac : to be run interactively
   - vis.mac: to activate visualization
 

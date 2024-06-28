@@ -24,26 +24,28 @@
 // ********************************************************************
 //
 #include "Par04PrimaryGeneratorAction.hh"
-#include <CLHEP/Units/SystemOfUnits.h>       // for GeV
-#include <G4String.hh>                       // for G4String
-#include <G4ThreeVector.hh>                  // for G4ThreeVector
-#include <G4Types.hh>                        // for G4int
+
+#include "Par04EventInformation.hh"  // for Par04EventInformation
+
+#include "G4Event.hh"  // for G4Event
+#include "G4ParticleGun.hh"  // for G4ParticleGun
+#include "G4ParticleTable.hh"  // for G4ParticleTable
+#include "G4SystemOfUnits.hh"  // for GeV
+
+#include <CLHEP/Units/SystemOfUnits.h>  // for GeV
+#include <G4String.hh>  // for G4String
+#include <G4ThreeVector.hh>  // for G4ThreeVector
+#include <G4Types.hh>  // for G4int
 #include <G4VUserPrimaryGeneratorAction.hh>  // for G4VUserPrimaryGeneratorA...
-#include <string>                            // for basic_string
-#include "G4Event.hh"                        // for G4Event
-#include "G4ParticleGun.hh"                  // for G4ParticleGun
-#include "G4ParticleTable.hh"                // for G4ParticleTable
-#include "G4SystemOfUnits.hh"                // for GeV
-#include "Par04EventInformation.hh"          // for Par04EventInformation
+#include <string>  // for basic_string
 class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04PrimaryGeneratorAction::Par04PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
+Par04PrimaryGeneratorAction::Par04PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  fParticleGun     = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
   // Default particle properties
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
@@ -56,7 +58,10 @@ Par04PrimaryGeneratorAction::Par04PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04PrimaryGeneratorAction::~Par04PrimaryGeneratorAction() { delete fParticleGun; }
+Par04PrimaryGeneratorAction::~Par04PrimaryGeneratorAction()
+{
+  delete fParticleGun;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -30,25 +30,25 @@
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
 
-#include "flabrt.h"
+#  include "flabrt.h"
 
-
-extern "C" {
-	// OWN HELPER FUNCTION
-	extern void flabrw_(const char* cOut, const int& lenOut, const char* cMes, const int& lenMes);
+extern "C"
+{
+  // OWN HELPER FUNCTION
+  extern void flabrw_(const char* cOut, const int& lenOut, const char* cMes, const int& lenMes);
 }
 
+namespace fluka_cpp_wrapper
+{
 
-namespace fluka_cpp_wrapper {
+void flabrt(const std::string& CHROUT, const std::string& CHMESS)
+{
+  const int lenOut = CHROUT.size();
+  const int lenMes = CHMESS.size();
 
-	void flabrt(const std::string& CHROUT, const std::string& CHMESS) {
-		const int lenOut = CHROUT.size();
-		const int lenMes = CHMESS.size();
-
-		flabrw_(CHROUT.c_str(), lenOut, CHMESS.c_str(), lenMes);
-	}
-
+  flabrw_(CHROUT.c_str(), lenOut, CHMESS.c_str(), lenMes);
 }
 
+}  // namespace fluka_cpp_wrapper
 
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

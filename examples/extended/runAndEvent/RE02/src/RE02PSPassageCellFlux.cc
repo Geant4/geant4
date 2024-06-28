@@ -47,24 +47,27 @@
 //   This is a primitive scorer class for scoring cell charge.
 //   The Cell Charge is defined by  a sum of charge inside the cell
 //  which calculates the deposited charge in the cell.
-//   
-//    
+//
+//
 //
 //
 //
 // Created: 2006-06-20  Tsukasa ASO, Akinori Kimura.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE02PSPassageCellFlux::RE02PSPassageCellFlux(G4String name,
-                                             G4int nx, G4int ny, G4int nz)
-  :G4PSPassageCellFlux(name),fNx(nx),fNy(ny),fNz(nz)
-{;}
+RE02PSPassageCellFlux::RE02PSPassageCellFlux(G4String name, G4int nx, G4int ny, G4int nz)
+  : G4PSPassageCellFlux(name), fNx(nx), fNy(ny), fNz(nz)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSPassageCellFlux::~RE02PSPassageCellFlux()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int RE02PSPassageCellFlux::GetIndex(G4Step* aStep)
@@ -73,8 +76,10 @@ G4int RE02PSPassageCellFlux::GetIndex(G4Step* aStep)
   G4int ix = touchable->GetReplicaNumber(1);
   G4int iy = touchable->GetReplicaNumber(2);
   G4int iz = touchable->GetReplicaNumber(0);
- 
+
   G4int tmp = fNy;
-  if (tmp) return iy*fNx*fNz+ix*fNz+iz;
-  else return iy*fNx*fNz+ix*fNz+iz; 
+  if (tmp)
+    return iy * fNx * fNz + ix * fNz + iz;
+  else
+    return iy * fNx * fNz + ix * fNz + iz;
 }

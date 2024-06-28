@@ -258,7 +258,6 @@
 /examples/extended/parallel/MPI/exMPI04/       @ihrivnac
 /examples/extended/parallel/TBB/               @jmadsen @ihrivnac
 /examples/extended/parallel/ThreadsafeScorers/ @jmadsen @ihrivnac
-/examples/extended/parallel/TopC/              @cooperma @ihrivnac
 
 /examples/extended/parameterisations/gflash/ @mverderi @ihrivnac
 /examples/extended/parameterisations/Par01/  @mverderi @ihrivnac

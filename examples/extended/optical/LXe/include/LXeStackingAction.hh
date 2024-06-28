@@ -37,14 +37,14 @@ class LXeEventAction;
 
 class LXeStackingAction : public G4UserStackingAction
 {
- public:
-  LXeStackingAction(LXeEventAction*);
-  ~LXeStackingAction() override = default;
+  public:
+    LXeStackingAction(LXeEventAction*);
+    ~LXeStackingAction() override = default;
 
-  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
 
- private:
-  LXeEventAction* fEventAction = nullptr;
+  private:
+    LXeEventAction* fEventAction = nullptr;
 };
 
 #endif

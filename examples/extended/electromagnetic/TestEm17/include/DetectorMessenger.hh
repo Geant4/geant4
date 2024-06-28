@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,27 +47,24 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-  
-    DetectorConstruction*      fDetector;
-    
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir;    
-    G4UIcmdWithAString*        fMaterCmd;
+    DetectorConstruction* fDetector;
+
+    G4UIdirectory* fTestemDir;
+    G4UIdirectory* fDetDir;
+    G4UIcmdWithAString* fMaterCmd;
     G4UIcmdWithADoubleAndUnit* fSizeCmd;
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIcmdWithoutParameter* fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

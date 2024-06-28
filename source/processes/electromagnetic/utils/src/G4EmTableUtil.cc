@@ -66,7 +66,6 @@ G4EmTableUtil::PrepareEmProcess(G4VEmProcess* proc,
     G4VEmModel* mod = modelManager->GetModel(i);
     if(nullptr == mod) { continue; }
     mod->SetPolarAngleLimit(plimit);
-    mod->SetMasterThread(master);
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
     }
@@ -248,7 +247,7 @@ void G4EmTableUtil::BuildLambdaTable(G4VEmProcess* proc,
         G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
       }
       // build high energy table
-      if(nullptr != theLambdaTablePrim) {
+      if(nullptr != theLambdaTablePrim && minKinEnergyPrim < maxKinEnergy) {
         delete (*theLambdaTablePrim)[i];
 
         // start not from zero and always use spline
@@ -352,7 +351,7 @@ G4EmTableUtil::CheckIon(G4VEnergyLossProcess* proc,
   if(part->GetParticleType() == "nucleus") {
     G4String pname = part->GetParticleName();
     if(pname != "deuteron" && pname != "triton" &&
-       pname != "alpha+"   && pname != "alpha") {
+       pname != "He3" && pname != "alpha+" && pname != "alpha") {
 
       const G4ParticleDefinition* theGIon = G4GenericIon::GenericIon();
       isIon = true; 
@@ -383,7 +382,7 @@ void G4EmTableUtil::UpdateModels(G4VEnergyLossProcess* proc,
                                  const G4int nModels,
                                  G4int& secID, G4int& biasID,
                                  G4int& mainSec, const G4bool baseMat,
-                                 const G4bool isMaster, const G4bool useAGen)
+                                 const G4bool, const G4bool useAGen)
 {
   // defined ID of secondary particles
   G4int stype = proc->GetProcessSubType();
@@ -398,7 +397,6 @@ void G4EmTableUtil::UpdateModels(G4VEnergyLossProcess* proc,
   // initialisation of models
   for(G4int i=0; i<nModels; ++i) {
     G4VEmModel* mod = modelManager->GetModel(i);
-    mod->SetMasterThread(isMaster);
     mod->SetAngularGeneratorFlag(useAGen);
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
@@ -546,7 +544,6 @@ void G4EmTableUtil::PrepareMscProcess(G4VMultipleScattering* proc,
   for(G4int i=0; i<numberOfModels; ++i) {
     G4VMscModel* msc = proc->GetModelByIndex(i);
     msc->SetIonisation(nullptr, &part);
-    msc->SetMasterThread(master);
     msc->SetPolarAngleLimit(param->MscThetaLimit());
     G4double emax = std::min(msc->HighEnergyLimit(),param->MaxKinEnergy());
     msc->SetHighEnergyLimit(emax);
@@ -566,15 +563,37 @@ void G4EmTableUtil::BuildMscProcess(G4VMultipleScattering* proc,
   auto param = G4EmParameters::Instance();
   G4int verb = param->Verbose(); 
 
-  if(!master && firstPart == &part) {
-    // initialisation of models
-    G4bool baseMat = masterProc->UseBaseMaterial();
-    for(G4int i=0; i<nModels; ++i) {
-      G4VMscModel* msc = proc->GetModelByIndex(i);
-      G4VMscModel* msc0 = masterProc->GetModelByIndex(i);
-      msc->SetUseBaseMaterials(baseMat);
-      msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
-      msc->InitialiseLocal(&part, msc0);
+  if (firstPart == &part) {
+    G4LossTableBuilder* bld = G4LossTableManager::Instance()->GetTableBuilder();
+    G4bool baseMat = bld->GetBaseMaterialFlag();
+    if (master) {
+      for (G4int i=0; i<nModels; ++i) {
+	G4VMscModel* msc = proc->GetModelByIndex(i);
+	msc->SetUseBaseMaterials(baseMat);
+	// table is always built for low mass particles 
+        if (part.GetParticleName() != "GenericIon" &&
+	    (part.GetPDGMass() < CLHEP::GeV || msc->ForceBuildTableFlag())) {
+	  G4double emin =
+	    std::max(msc->LowEnergyLimit(), msc->LowEnergyActivationLimit());
+	  G4double emax =
+	    std::min(msc->HighEnergyLimit(), msc->HighEnergyActivationLimit());
+	  emin = std::max(emin, param->MinKinEnergy());
+	  emax = std::min(emax, param->MaxKinEnergy());
+	  if (emin < emax) {
+	    auto table = bld->BuildTableForModel(msc->GetCrossSectionTable(),
+						 msc, &part, emin, emax, true);
+	    msc->SetCrossSectionTable(table, true);
+	  }
+	}
+      }
+    } else {
+      for (G4int i=0; i<nModels; ++i) {
+	G4VMscModel* msc = proc->GetModelByIndex(i);
+	G4VMscModel* msc0 = masterProc->GetModelByIndex(i);
+	msc->SetUseBaseMaterials(baseMat);
+	msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
+	msc->InitialiseLocal(&part, msc0);
+      }
     }
   }
   if(!param->IsPrintLocked()) {
@@ -671,7 +690,7 @@ G4bool G4EmTableUtil::RetrieveTable(G4VProcess* ptr,
 {
   G4bool res = true;
   if (nullptr == aTable) { return res; }
-  if (0 < verb) {
+  if (1 < verb) {
     G4cout << tname << " table for " << part->GetParticleName() 
            << " will be retrieved " << G4endl;
   }
@@ -685,7 +704,7 @@ G4bool G4EmTableUtil::RetrieveTable(G4VProcess* ptr,
     }
     if (0 < verb) {
       G4cout << tname << " table for " << part->GetParticleName() 
-	     << " is Retrieved from <" << name << ">"
+	     << " is retrieved from <" << name << ">"
 	     << G4endl;
     }
   } else {

@@ -41,7 +41,6 @@
 #  include "G4UIWin32.hh"
 #endif
 
-#include "G4TiMemory.hh"
 #include "G4UIcsh.hh"
 #include "G4UItcsh.hh"
 #include "G4UIterminal.hh"
@@ -164,8 +163,6 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     shell = new G4UIcsh;
     session = new G4UIterminal(shell);
   }
-
-  TIMEMORY_INIT(argc, argv);
 }
 
 // --------------------------------------------------------------------------

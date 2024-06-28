@@ -34,179 +34,168 @@
 //
 // --------------------------------------------------------------
 
-#include <vector>
-
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
-
-#include "G4LogicalVolumeStore.hh"
-#include "G4TransportationManager.hh"
-
-#include "G01PrimaryGeneratorAction.hh"
-#include "G01DetectorConstruction.hh"
-#include "G01ActionInitialization.hh"
-
 #include "FTFP_BERT.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
+#include "G01ActionInitialization.hh"
+#include "G01DetectorConstruction.hh"
+#include "G01PrimaryGeneratorAction.hh"
 
 #include "G4GDMLParser.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4TransportationManager.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
-void print_aux(const G4GDMLAuxListType* auxInfoList, G4String prepend="|")
+#include <vector>
+
+void print_aux(const G4GDMLAuxListType* auxInfoList, G4String prepend = "|")
 {
-  for(std::vector<G4GDMLAuxStructType>::const_iterator
-      iaux = auxInfoList->begin(); iaux != auxInfoList->end(); iaux++ )
-    {
-      G4String str=iaux->type;
-      G4String val=iaux->value;
-      G4String unit=iaux->unit;
+  for (std::vector<G4GDMLAuxStructType>::const_iterator iaux = auxInfoList->begin();
+       iaux != auxInfoList->end(); iaux++)
+  {
+    G4String str = iaux->type;
+    G4String val = iaux->value;
+    G4String unit = iaux->unit;
 
-      G4cout << prepend << str << " : " << val  << " " << unit << G4endl;
+    G4cout << prepend << str << " : " << val << " " << unit << G4endl;
 
-      if (iaux->auxList) print_aux(iaux->auxList, prepend + "|");
-    }
+    if (iaux->auxList) print_aux(iaux->auxList, prepend + "|");
+  }
   return;
 }
 
 // --------------------------------------------------------------
 
-int main(int argc,char **argv)
+int main(int argc, char** argv)
 {
-   G4cout << G4endl;
-   G4cout << "Usage: load_gdml <intput_gdml_file:mandatory>"
-          << " <output_gdml_file:optional>" << G4endl;
-   G4cout << G4endl;
+  G4cout << G4endl;
+  G4cout << "Usage: load_gdml <intput_gdml_file:mandatory>"
+         << " <output_gdml_file:optional>" << G4endl;
+  G4cout << G4endl;
 
-   if (argc<2)
-   {
-      G4cout << "Error! Mandatory input file is not specified!" << G4endl;
-      G4cout << G4endl;
-      return -1;
-   }
+  if (argc < 2) {
+    G4cout << "Error! Mandatory input file is not specified!" << G4endl;
+    G4cout << G4endl;
+    return -1;
+  }
 
-   G4GDMLParser parser;
+  G4GDMLParser parser;
 
-// Uncomment the following if wish to avoid names stripping
-// parser.SetStripFlag(false);
+  // Uncomment the following if wish to avoid names stripping
+  // parser.SetStripFlag(false);
 
-// Uncomment the following and set a string with proper absolute path and
-// schema filename if wishing to use alternative schema for parsing validation
-// parser.SetImportSchema("");
+  // Uncomment the following and set a string with proper absolute path and
+  // schema filename if wishing to use alternative schema for parsing validation
+  // parser.SetImportSchema("");
 
-   parser.SetOverlapCheck(true);
-   parser.Read(argv[1]);
+  parser.SetOverlapCheck(true);
+  parser.Read(argv[1]);
 
-   if (argc>4)
-   {
-      G4cout << "Error! Too many arguments!" << G4endl;
-      G4cout << G4endl;
-      return -1;
-   }
+  if (argc > 4) {
+    G4cout << "Error! Too many arguments!" << G4endl;
+    G4cout << G4endl;
+    return -1;
+  }
 
-   auto* runManager = G4RunManagerFactory::CreateRunManager();
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
-   runManager->SetUserInitialization(new G01DetectorConstruction(
-                                     parser.GetWorldVolume()));
-   runManager->SetUserInitialization(new FTFP_BERT);
-   runManager->SetUserInitialization(new G01ActionInitialization());
+  runManager->SetUserInitialization(new G01DetectorConstruction(parser.GetWorldVolume()));
+  runManager->SetUserInitialization(new FTFP_BERT);
+  runManager->SetUserInitialization(new G01ActionInitialization());
 
-   runManager->Initialize();
+  runManager->Initialize();
 
-   // Initialize visualization
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+  // Initialize visualization
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 
-   // Get the pointer to the User Interface manager
-   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-   ///////////////////////////////////////////////////////////////////////
-   //
-   // Example how to retrieve Auxiliary Information
-   //
+  ///////////////////////////////////////////////////////////////////////
+  //
+  // Example how to retrieve Auxiliary Information
+  //
 
-   G4cout << std::endl;
+  G4cout << std::endl;
 
-   const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
-   std::vector<G4LogicalVolume*>::const_iterator lvciter;
-   for( lvciter = lvs->begin(); lvciter != lvs->end(); lvciter++ )
-   {
-     G4GDMLAuxListType auxInfo = parser.GetVolumeAuxiliaryInformation(*lvciter);
+  const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
+  std::vector<G4LogicalVolume*>::const_iterator lvciter;
+  for (lvciter = lvs->begin(); lvciter != lvs->end(); lvciter++) {
+    G4GDMLAuxListType auxInfo = parser.GetVolumeAuxiliaryInformation(*lvciter);
 
-     if (auxInfo.size()>0)
-       G4cout << "Auxiliary Information is found for Logical Volume :  "
-              << (*lvciter)->GetName() << G4endl;
+    if (auxInfo.size() > 0)
+      G4cout << "Auxiliary Information is found for Logical Volume :  " << (*lvciter)->GetName()
+             << G4endl;
 
-     print_aux(&auxInfo);
-   }
+    print_aux(&auxInfo);
+  }
 
-   // now the 'global' auxiliary info
-   G4cout << std::endl;
-   G4cout << "Global auxiliary info:" << std::endl;
-   G4cout << std::endl;
+  // now the 'global' auxiliary info
+  G4cout << std::endl;
+  G4cout << "Global auxiliary info:" << std::endl;
+  G4cout << std::endl;
 
-   print_aux(parser.GetAuxList());
+  print_aux(parser.GetAuxList());
 
-   G4cout << std::endl;
+  G4cout << std::endl;
 
-   //
-   // End of Auxiliary Information block
-   //
-   ////////////////////////////////////////////////////////////////////////
+  //
+  // End of Auxiliary Information block
+  //
+  ////////////////////////////////////////////////////////////////////////
 
+  runManager->BeamOn(0);
 
-   runManager->BeamOn(0);
+  // example of writing out
 
-   // example of writing out
+  if (argc >= 3) {
+    /*
+         G4GDMLAuxStructType mysubaux = {"mysubtype", "mysubvalue", "mysubunit", 0};
+         G4GDMLAuxListType* myauxlist = new G4GDMLAuxListType();
+         myauxlist->push_back(mysubaux);
 
-   if (argc>=3)
-   {
-/*
-     G4GDMLAuxStructType mysubaux = {"mysubtype", "mysubvalue", "mysubunit", 0};
-     G4GDMLAuxListType* myauxlist = new G4GDMLAuxListType();
-     myauxlist->push_back(mysubaux);
-
-     G4GDMLAuxStructType myaux = {"mytype", "myvalue", "myunit", myauxlist};
-     parser.AddAuxiliary(myaux);
+         G4GDMLAuxStructType myaux = {"mytype", "myvalue", "myunit", myauxlist};
+         parser.AddAuxiliary(myaux);
 
 
-     // example of setting auxiliary info for world volume
-     // (can be set for any volume)
+         // example of setting auxiliary info for world volume
+         // (can be set for any volume)
 
-     G4GDMLAuxStructType mylocalaux = {"sometype", "somevalue", "someunit", 0};
+         G4GDMLAuxStructType mylocalaux = {"sometype", "somevalue", "someunit", 0};
 
-     parser.AddVolumeAuxiliary(mylocalaux,
-       G4TransportationManager::GetTransportationManager()
-       ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
-*/
+         parser.AddVolumeAuxiliary(mylocalaux,
+           G4TransportationManager::GetTransportationManager()
+           ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+    */
 
-     parser.SetRegionExport(true);
-     //     parser.SetEnergyCutsExport(true);
-     //     parser.SetOutputFileOverwrite(true);
-     parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
-   }
+    parser.SetRegionExport(true);
+    //     parser.SetEnergyCutsExport(true);
+    //     parser.SetOutputFileOverwrite(true);
+    parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
+                            ->GetNavigatorForTracking()
+                            ->GetWorldVolume()
+                            ->GetLogicalVolume());
+  }
 
+  if (argc == 4)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[3];
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else  // interactive mode
+  {
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
-   if (argc==4)   // batch mode
-   {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[3];
-     UImanager->ApplyCommand(command+fileName);
-   }
-   else           // interactive mode
-   {
-     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-     UImanager->ApplyCommand("/control/execute vis.mac");
-     ui->SessionStart();
-     delete ui;
-   }
+  delete visManager;
+  delete runManager;
 
-   delete visManager;
-   delete runManager;
-
-   return 0;
+  return 0;
 }

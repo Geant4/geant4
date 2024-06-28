@@ -51,13 +51,6 @@ class G4DNAMolecularReactionTable;
 class G4VITStepModel;
 class G4MoleculeDefinition;
 
-enum TimeStepModel
-{
-  fSBS,
-  fIRT,
-  fIRT_syn
-};
-
 class G4VUserChemistryList
 {
 public:

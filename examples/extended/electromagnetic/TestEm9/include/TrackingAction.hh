@@ -52,20 +52,17 @@ class HistoManager;
 
 class TrackingAction : public G4UserTrackingAction
 {
+  public:
+    TrackingAction();
+    ~TrackingAction() override = default;
 
-public:
-  TrackingAction();
-  ~TrackingAction() override = default;
+    void PreUserTrackingAction(const G4Track*) override;
 
-  void PreUserTrackingAction(const G4Track*) override;
+    TrackingAction& operator=(const TrackingAction& right) = delete;
+    TrackingAction(const TrackingAction&) = delete;
 
-  TrackingAction & operator=(const TrackingAction &right) = delete;
-  TrackingAction(const TrackingAction&) = delete;
-
-private:
-    
-  HistoManager* fHisto;
+  private:
+    HistoManager* fHisto;
 };
 
 #endif
-

@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,18 +53,18 @@ class RunAction : public G4UserRunAction
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int val) { fRndmFreq = val; }
-    G4int GetRndmFreq()          { return fRndmFreq; }    
+    void SetRndmFreq(G4int val) { fRndmFreq = val; }
+    G4int GetRndmFreq() { return fRndmFreq; }
+
   private:
     // methods
     void BookHisto();
 
     // data members
     RunMessenger* fRunMessenger;
-    G4int fRndmFreq;    
+    G4int fRndmFreq;
 };
 
 #endif
-

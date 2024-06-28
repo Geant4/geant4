@@ -44,8 +44,9 @@
 //
 // Class Description:
 //
-// Implementation of e+ annihilation into 2 gamma
-
+// Implementation of e+ annihilation into 2 gamma on fly
+// Annihilation at rest is sampled by G4VPositronAtRestModel
+//
 // -------------------------------------------------------------------
 //
 
@@ -53,6 +54,7 @@
 #define G4eeToTwoGammaModel_h 1
 
 #include "G4VEmModel.hh"
+#include <vector>
 
 class G4ParticleChangeForGamma;
 
@@ -99,8 +101,6 @@ private:
   G4double pi_rcl2;
   const G4ParticleDefinition* theGamma;
   G4ParticleChangeForGamma* fParticleChange;
-
-  static G4bool fSampleAtomicPDF;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

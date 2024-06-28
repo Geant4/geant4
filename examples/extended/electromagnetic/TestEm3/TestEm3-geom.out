@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -57,6 +57,15 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
  G4ChordFinder: stepperDriverId: 2
 #
 /testem/gun/setDefault
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Event0401
+      issued by : G4VPrimaryGenerator::SetParticlePosition
+Invalid vertex position ((-60,0,0)). Position MUST be located -inside- the world volume.
+Gun position has NOT been changed!
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 /testem/gun/rndm 0.1
 /gun/particle proton
 /gun/energy 300 MeV
@@ -237,9 +246,9 @@ ePairProd:  for e+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+        eplus2ggOKVI : Emin=    0 eV  Emax=  100 TeV
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
@@ -544,24 +553,24 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-     Aluminium: 85.764 MeV :  1.608 MeV     1.027 +- 0.3247 %      10.3 cm  +-  602 um 
+     Aluminium:      0 eV  :      0 eV          0 +-     0 %         0 fm  +-    0 fm 
 
- Total energy deposited = 85.76 MeV +- 1.608 MeV
- Energy leakage = 214.2 MeV +- 1.608 MeV
+ Total energy deposited = 0 eV  +- 0 eV 
+ Energy leakage = 300 MeV +- 0 eV 
  Total energy :  Edep + Eleak = 300 MeV +- 0 eV 
 ------------------------------------------------------------
  Beam particle proton  E = 300 MeV
  Mean number of gamma       0
  Mean number of e-          0
  Mean number of e+          0
- Mean number of charged steps  6.1
+ Mean number of charged steps  0
  Mean number of neutral steps  0
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
- Aluminium:	 85.7636 MeV
+ Aluminium:	 300 MeV
 
 ------------------------------------------------------------
 

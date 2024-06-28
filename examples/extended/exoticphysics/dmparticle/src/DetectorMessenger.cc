@@ -33,38 +33,38 @@
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
-  : G4UImessenger(), fDetector(det)
-{ 
+DetectorMessenger::DetectorMessenger(DetectorConstruction* det) : G4UImessenger(), fDetector(det)
+{
   fDetD = new G4UIdirectory("/testex/");
   fDetD->SetGuidance("dmparticle example commands");
 
   fDetDir = new G4UIdirectory("/testex/det/");
   fDetDir->SetGuidance("detector construction commands");
-      
-  fMaterCmd = new G4UIcmdWithAString("/testex/det/setMat",this);
+
+  fMaterCmd = new G4UIcmdWithAString("/testex/det/setMat", this);
   fMaterCmd->SetGuidance("Select material of the box.");
-  fMaterCmd->SetParameterName("choice",false);
-  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  fSizeZCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeZ",this);
+  fMaterCmd->SetParameterName("choice", false);
+  fMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fSizeZCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeZ", this);
   fSizeZCmd->SetGuidance("Set sizeX of the absorber");
-  fSizeZCmd->SetParameterName("SizeZ",false);
+  fSizeZCmd->SetParameterName("SizeZ", false);
   fSizeZCmd->SetRange("SizeZ>0.");
   fSizeZCmd->SetUnitCategory("Length");
   fSizeZCmd->AvailableForStates(G4State_PreInit);
-  
-  fSizeXYCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeXY",this);
+
+  fSizeXYCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setSizeXY", this);
   fSizeXYCmd->SetGuidance("Set sizeYZ of the absorber");
-  fSizeXYCmd->SetParameterName("SizeXY",false);
+  fSizeXYCmd->SetParameterName("SizeXY", false);
   fSizeXYCmd->SetRange("SizeXY>0.");
   fSizeXYCmd->SetUnitCategory("Length");
   fSizeXYCmd->AvailableForStates(G4State_PreInit);
@@ -77,22 +77,25 @@ DetectorMessenger::~DetectorMessenger()
   delete fMaterCmd;
   delete fSizeZCmd;
   delete fSizeXYCmd;
-  delete fDetDir;  
-  delete fDetD;  
+  delete fDetDir;
+  delete fDetD;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fMaterCmd )
-   { fDetector->SetMaterial(newValue);}
-   
-  if( command == fSizeZCmd )
-   { fDetector->SetSizeZ(fSizeZCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == fSizeXYCmd )
-   { fDetector->SetSizeXY(fSizeXYCmd->GetNewDoubleValue(newValue));}      
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fMaterCmd) {
+    fDetector->SetMaterial(newValue);
+  }
+
+  if (command == fSizeZCmd) {
+    fDetector->SetSizeZ(fSizeZCmd->GetNewDoubleValue(newValue));
+  }
+
+  if (command == fSizeXYCmd) {
+    fDetector->SetSizeXY(fSizeXYCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

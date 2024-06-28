@@ -33,36 +33,36 @@
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "RunAction.hh"
 
 #include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* event)
-:fDetector(det), fEventAction(event)
+  : fDetector(det), fEventAction(event)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
-    != fDetector->GetAbsorber()) return;
-    
-  fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
-   
+  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() != fDetector->GetAbsorber())
+    return;
+
+  fEventAction->AddEnergy(aStep->GetTotalEnergyDeposit());
+
   G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
-  if (charge != 0.) { 
+  if (charge != 0.) {
     fEventAction->AddTrakLenCharg(aStep->GetStepLength());
     fEventAction->CountStepsCharg();
-  } else {
+  }
+  else {
     fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
     fEventAction->CountStepsNeutr(aStep->GetPostStepPoint()->GetProcessDefinedStep());
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

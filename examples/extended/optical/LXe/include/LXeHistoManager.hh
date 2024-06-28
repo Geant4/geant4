@@ -34,20 +34,20 @@
 #ifndef LXeHistoManager_h
 #define LXeHistoManager_h 1
 
-#include "globals.hh"
 #include "G4AnalysisManager.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class LXeHistoManager
 {
- public:
-  LXeHistoManager();
-  ~LXeHistoManager() = default;
+  public:
+    LXeHistoManager();
+    ~LXeHistoManager() = default;
 
- private:
-  void Book();
-  G4String fFileName;
+  private:
+    void Book();
+    G4String fFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

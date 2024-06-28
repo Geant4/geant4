@@ -25,16 +25,17 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PulseAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithABool.hh"
 #include "PulseActionMessenger.hh"
 
+#include "PulseAction.hh"
+
+#include "G4UIcmdWithABool.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PulseActionMessenger::PulseActionMessenger(PulseAction *pPulse)
-    : G4UImessenger(), fpPulse(pPulse) {
+PulseActionMessenger::PulseActionMessenger(PulseAction* pPulse) : G4UImessenger(), fpPulse(pPulse)
+{
   fListCmd = std::make_unique<G4UIcmdWithABool>("/UHDR/pulse/activate", this);
   fListCmd->SetGuidance("Add time structure.");
   fListCmd->SetDefaultValue(false);
@@ -46,7 +47,8 @@ PulseActionMessenger::~PulseActionMessenger() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PulseActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue){
+void PulseActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   if (command == fListCmd.get()) {
     fpPulse->SetPulse(fListCmd->GetNewBoolValue(newValue));
   }

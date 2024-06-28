@@ -23,33 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
-#include "Randomize.hh"
+
 #include "DetectorConstruction.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4RandomDirection.hh"
 #include "G4RunManager.hh"
 #include "G4StateManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-:G4VUserPrimaryGeneratorAction(), G4VStateDependent(),
- fParticleGun(0),
- fDetector(0)
+  : G4VUserPrimaryGeneratorAction(), G4VStateDependent(), fParticleGun(0), fDetector(0)
 {
-  fDetector =
-      dynamic_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()
-          ->GetUserDetectorConstruction());
+  fDetector = dynamic_cast<const DetectorConstruction*>(
+    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,14 +59,14 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   G4StateManager::GetStateManager()->DeregisterDependent(this);
-  if(fParticleGun) delete fParticleGun;
+  if (fParticleGun) delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{    
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+{
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
   fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
@@ -73,19 +75,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 G4bool PrimaryGeneratorAction::Notify(G4ApplicationState requestedState)
 {
-  if(requestedState == G4State_Idle)
-  {
-    if(fParticleGun != 0) return true;
+  if (requestedState == G4State_Idle) {
+    if (fParticleGun != 0) return true;
 
-    fParticleGun  = new G4ParticleGun(1);
+    fParticleGun = new G4ParticleGun(1);
 
     // Define default primary
-    G4ParticleDefinition* particle
-             = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+    G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
     fParticleGun->SetParticleDefinition(particle);
-    fParticleGun->SetParticleEnergy(10*eV);
+    fParticleGun->SetParticleEnergy(10 * eV);
     fParticleGun->SetParticlePosition(G4ThreeVector());
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1,0,0));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1, 0, 0));
   }
 
   return true;

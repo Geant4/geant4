@@ -51,7 +51,6 @@
 
 #include "geomwdefs.hh"
 #include "G4Types.hh"
-#include "G4Allocator.hh"
 
 using G4SliceVector = std::vector<G4int>;
 
@@ -101,11 +100,6 @@ class G4SmartVoxelNode
 
     G4bool operator == (const G4SmartVoxelNode& v) const;
       // Equality operator.
-
-    inline void* operator new(std::size_t);
-      // Override "new" for "G4Allocator".
-    inline void operator delete(void* aNode);
-      // Override "delete" for "G4Allocator".
 
   private:
 

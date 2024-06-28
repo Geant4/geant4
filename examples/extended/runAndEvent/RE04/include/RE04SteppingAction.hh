@@ -48,4 +48,3 @@ class RE04SteppingAction : public G4UserSteppingAction
 };
 
 #endif
-

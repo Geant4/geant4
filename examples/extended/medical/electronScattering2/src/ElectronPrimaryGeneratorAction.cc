@@ -28,29 +28,30 @@
 /// \brief Implementation of the ElectronPrimaryGeneratorAction class
 
 #include "ElectronPrimaryGeneratorAction.hh"
+
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronPrimaryGeneratorAction::ElectronPrimaryGeneratorAction()
-: G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
-    fParticleGun  = new G4GeneralParticleSource();
+  fParticleGun = new G4GeneralParticleSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronPrimaryGeneratorAction::~ElectronPrimaryGeneratorAction()
 {
-    delete fParticleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ElectronPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -28,35 +28,33 @@
 
 #include "dcmtk/dcmrt/seq/drtbl2.h"
 
-#include <vector>
 #include <iostream>
+#include <vector>
 
-class DicomBeamBlock 
-{ 
-public:
-  DicomBeamBlock(DRTBlockSequenceInRTBeamsModule::Item bcompItem);
-  ~DicomBeamBlock(){};
+class DicomBeamBlock
+{
+  public:
+    DicomBeamBlock(DRTBlockSequenceInRTBeamsModule::Item bcompItem);
+    ~DicomBeamBlock() {};
 
-public:
+  public:
+    void Print(std::ostream& out);
 
-  void Print( std::ostream& out );
+    void DumpToFile(std::ofstream& out);
 
-  void DumpToFile( std::ofstream& out );
-
-private:
-  OFVector<Float64> theBlockData;
-  OFString theBlockDivergence;
-  OFString theBlockMountingPosition;
-  OFString theBlockName;
-  Sint32 theBlockNumber;
-  Sint32 theBlockNumberOfPoints;
-  Float64 theBlockThickness;
-  Float64 theBlockTransmission;
-  OFString theBlockTrayID;
-  OFString theBlockType;
-  OFString theMaterialID;
-  Float64 theSourceToBlockTrayDistance;
-
+  private:
+    OFVector<Float64> theBlockData;
+    OFString theBlockDivergence;
+    OFString theBlockMountingPosition;
+    OFString theBlockName;
+    Sint32 theBlockNumber;
+    Sint32 theBlockNumberOfPoints;
+    Float64 theBlockThickness;
+    Float64 theBlockTransmission;
+    OFString theBlockTrayID;
+    OFString theBlockType;
+    OFString theMaterialID;
+    Float64 theSourceToBlockTrayDistance;
 };
 
-#endif  
+#endif

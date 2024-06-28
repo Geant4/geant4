@@ -34,18 +34,6 @@
 
 //_____________________________________________________________________________
 
-G4PVDivisionFactory::G4PVDivisionFactory()   
-{
-  // Protected singleton constructor.
-  // ---
-}
-
-//_____________________________________________________________________________
-
-G4PVDivisionFactory::~G4PVDivisionFactory() = default;
-
-//_____________________________________________________________________________
-
 G4PVDivisionFactory* G4PVDivisionFactory::GetInstance()
 {
   if (fgInstance == nullptr)

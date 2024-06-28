@@ -26,7 +26,7 @@
 /// \file Run.hh
 /// \brief Definition of the Run class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,62 +34,72 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "G4Run.hh"
-#include "G4ThreeVector.hh"
 #include "SteppingAction.hh"
 #include "TrackingAction.hh"
+
+#include "G4Run.hh"
+#include "G4ThreeVector.hh"
+
 #include <array>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Run : public G4Run {
-  // This class accumulates relevant quantities related to particle fluence collected during
-  // the run.
-  // ( Note: these information are provided via calls of accessor methods of this Run class
-  //         made by SteppingAction::UserSteppingAction
-  //         and     TrackingAction::PreUserTrackingAction. )
-  // At the end of a run, the  PrintInfo  method is called by the run-action to print out
-  // some summary information about these quantities.
-  // In multithreaded (MT) mode, an object of this class is filled up for each working thread,
-  // and then merged (automatically by the Geant4 kernel) into another object (of this class)
-  // owned by the master class; the  PrintInfo  method is then called only for the latter run
-  // object.
-  // Note that, for simplicity and brevity, we avoid histograms and print-out instead some
-  // statistics (compute by ourself) at the end of the run.  
+class Run : public G4Run
+{
+    // This class accumulates relevant quantities related to particle fluence collected during
+    // the run.
+    // ( Note: these information are provided via calls of accessor methods of this Run class
+    //         made by SteppingAction::UserSteppingAction
+    //         and     TrackingAction::PreUserTrackingAction. )
+    // At the end of a run, the  PrintInfo  method is called by the run-action to print out
+    // some summary information about these quantities.
+    // In multithreaded (MT) mode, an object of this class is filled up for each working thread,
+    // and then merged (automatically by the Geant4 kernel) into another object (of this class)
+    // owned by the master class; the  PrintInfo  method is then called only for the latter run
+    // object.
+    // Note that, for simplicity and brevity, we avoid histograms and print-out instead some
+    // statistics (compute by ourself) at the end of the run.
   public:
     Run();
     ~Run() override = default;
-  
-    void RecordEvent( const G4Event* anEvent ) override;
+
+    void RecordEvent(const G4Event* anEvent) override;
     // This method is called automatically by the Geant4 kernel (not by the user!) at the end
     // of each event. In the case of multithreaded mode, it is called only for the working thread
     // that handled that event.
 
-    void Merge( const G4Run* aRun ) override;
+    void Merge(const G4Run* aRun) override;
     // This method is called automatically by the Geant4 kernel (not by the user!) only in the
     // case of multithreaded mode and only for working threads.
-  
+
     void PrintInfo() const;
     // This method is called by RunAction::EndOfRunAction : in the case of multithreaded mode,
     // only the master thread calls it.
 
-    void SetPrimaryParticleId( const G4int inputValue ) { fPrimaryParticleId = inputValue; }
-    void SetPrimaryParticleEnergy( const G4double inputValue )
-      { fPrimaryParticleEnergy = inputValue; }
-    void SetPrimaryParticleDirection( const G4ThreeVector &inputValue )
-      { fPrimaryParticleDirection = inputValue; }
-    void SetTrackerMaterialName( const G4String &inputValue )
-      { fTrackerMaterialName = inputValue; }
-    void SetEmCaloMaterialName( const G4String &inputValue )
-      { fEmCaloMaterialName = inputValue; }
-    void SetHadCaloMaterialName( const G4String &inputValue )
-      { fHadCaloMaterialName = inputValue; }
-    void SetCubicVolumeScoringTrackerShell( const G4double inputValue )
-      { fCubicVolumeScoringTrackerShell = inputValue; }
-    void SetCubicVolumeScoringEmCaloShell( const G4double inputValue )
-      { fCubicVolumeScoringEmCaloShell = inputValue; }
-    void SetCubicVolumeScoringHadCaloShell( const G4double inputValue )
-      { fCubicVolumeScoringHadCaloShell = inputValue; }
+    void SetPrimaryParticleId(const G4int inputValue) { fPrimaryParticleId = inputValue; }
+    void SetPrimaryParticleEnergy(const G4double inputValue)
+    {
+      fPrimaryParticleEnergy = inputValue;
+    }
+    void SetPrimaryParticleDirection(const G4ThreeVector& inputValue)
+    {
+      fPrimaryParticleDirection = inputValue;
+    }
+    void SetTrackerMaterialName(const G4String& inputValue) { fTrackerMaterialName = inputValue; }
+    void SetEmCaloMaterialName(const G4String& inputValue) { fEmCaloMaterialName = inputValue; }
+    void SetHadCaloMaterialName(const G4String& inputValue) { fHadCaloMaterialName = inputValue; }
+    void SetCubicVolumeScoringTrackerShell(const G4double inputValue)
+    {
+      fCubicVolumeScoringTrackerShell = inputValue;
+    }
+    void SetCubicVolumeScoringEmCaloShell(const G4double inputValue)
+    {
+      fCubicVolumeScoringEmCaloShell = inputValue;
+    }
+    void SetCubicVolumeScoringHadCaloShell(const G4double inputValue)
+    {
+      fCubicVolumeScoringHadCaloShell = inputValue;
+    }
     G4int GetPrimaryParticleId() const { return fPrimaryParticleId; }
     G4double GetPrimaryParticleEnergy() const { return fPrimaryParticleEnergy; }
     G4ThreeVector GetPrimaryParticleDirection() const { return fPrimaryParticleDirection; }
@@ -100,25 +110,31 @@ class Run : public G4Run {
     G4double GetCubicVolumeScoringEmCaloShell() const { return fCubicVolumeScoringEmCaloShell; }
     G4double GetCubicVolumeScoringHadCaloShell() const { return fCubicVolumeScoringHadCaloShell; }
 
-    void SetSteppingArray( const std::array< G4double,
-                           SteppingAction::fkNumberCombinations >& inputArray );
-    std::array< G4double, SteppingAction::fkNumberCombinations > GetSteppingArray() const
-    { return fSteppingArray; }
+    void
+    SetSteppingArray(const std::array<G4double, SteppingAction::fkNumberCombinations>& inputArray);
+    std::array<G4double, SteppingAction::fkNumberCombinations> GetSteppingArray() const
+    {
+      return fSteppingArray;
+    }
     // Accessor methods useful to transfer information collected by the stepping-action
     // into this Run class
 
-    void SetTrackingArray1( const std::array< G4long,
-                            TrackingAction::fkNumberCombinations >& inputArray );
-    std::array< G4long, TrackingAction::fkNumberCombinations > GetTrackingArray1() const
-    { return fTrackingArray1; }
-    void SetTrackingArray2( const std::array< G4double,
-                            TrackingAction::fkNumberCombinations >& inputArray );
-    std::array< G4double, TrackingAction::fkNumberCombinations > GetTrackingArray2() const
-    { return fTrackingArray2; }
+    void
+    SetTrackingArray1(const std::array<G4long, TrackingAction::fkNumberCombinations>& inputArray);
+    std::array<G4long, TrackingAction::fkNumberCombinations> GetTrackingArray1() const
+    {
+      return fTrackingArray1;
+    }
+    void
+    SetTrackingArray2(const std::array<G4double, TrackingAction::fkNumberCombinations>& inputArray);
+    std::array<G4double, TrackingAction::fkNumberCombinations> GetTrackingArray2() const
+    {
+      return fTrackingArray2;
+    }
     // Accessor methods useful to transfer information collected by the tracking-action
     // into this Run class
 
-  private:  
+  private:
     G4int fNumEvents;
     G4int fPrimaryParticleId;
     G4double fPrimaryParticleEnergy;
@@ -129,9 +145,9 @@ class Run : public G4Run {
     G4double fCubicVolumeScoringTrackerShell;
     G4double fCubicVolumeScoringEmCaloShell;
     G4double fCubicVolumeScoringHadCaloShell;
-    std::array< G4double, SteppingAction::fkNumberCombinations > fSteppingArray;
-    std::array< G4long,   TrackingAction::fkNumberCombinations > fTrackingArray1;
-    std::array< G4double, TrackingAction::fkNumberCombinations > fTrackingArray2;
+    std::array<G4double, SteppingAction::fkNumberCombinations> fSteppingArray;
+    std::array<G4long, TrackingAction::fkNumberCombinations> fTrackingArray1;
+    std::array<G4double, TrackingAction::fkNumberCombinations> fTrackingArray2;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

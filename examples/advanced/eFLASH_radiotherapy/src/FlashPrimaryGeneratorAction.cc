@@ -55,7 +55,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   particleGun->SetParticleDefinition(particle);
 
 
-  G4double defaultX0 = -100 * cm; //the beam propagates in the x direction from x=-100cm
+  G4double defaultX0 = -113 * cm; //the beam propagates in the x direction from x=-100cm
 
   X0 = defaultX0;
 
@@ -73,7 +73,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
 
   sigmaZ = defaultsigmaZ;
 
-  G4double defaultTheta = 1.5 * deg;
+  G4double defaultTheta = 2 * deg;
 
   Theta = defaultTheta;
 }

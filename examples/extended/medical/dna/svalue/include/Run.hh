@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/include/Run.hh
@@ -42,43 +45,38 @@
 
 class G4ParticleDefinition;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class Run : public G4Run
 {
   public:
     Run(const DetectorConstruction* detector);
-   ~Run();
+    ~Run();
 
-    void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-    void AddTrackLength (G4double t);
-    void AddProjRange   (G4double x);
-    void AddStepSize    (G4int nb, G4double st);
+    void AddTrackLength(G4double t);
+    void AddProjRange(G4double x);
+    void AddStepSize(G4int nb, G4double st);
 
-    void AddCytoEdep (G4double e);
-    G4double GetCytoEdep() const {return fCytoEdeposit;};
-        
-    void AddNuclEdep (G4double e);
-    G4double GetNuclEdep() const {return fNuclEdeposit;};
-        
+    void AddCytoEdep(G4double e);
+    G4double GetCytoEdep() const { return fCytoEdeposit; };
+
+    void AddNuclEdep(G4double e);
+    G4double GetNuclEdep() const { return fNuclEdeposit; };
+
     virtual void Merge(const G4Run*);
 
     void EndOfRun();
-    
-  private:
 
-    const DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin; 
-       
-    G4double   fCytoEdeposit,  fCytoEdeposit2;
-    G4double   fNuclEdeposit,  fNuclEdeposit2;
-    G4double   fTrackLen,  fTrackLen2;
-    G4double   fProjRange, fProjRange2;
-    G4int      fNbOfSteps, fNbOfSteps2;
-    G4double   fStepSize,  fStepSize2;
+  private:
+    const DetectorConstruction* fDetector;
+    G4ParticleDefinition* fParticle;
+    G4double fEkin;
+    G4double fCytoEdeposit, fCytoEdeposit2;
+    G4double fNuclEdeposit, fNuclEdeposit2;
+    G4double fTrackLen, fTrackLen2;
+    G4double fProjRange, fProjRange2;
+    G4int fNbOfSteps, fNbOfSteps2;
+    G4double fStepSize, fStepSize2;
 };
 
 #endif
-

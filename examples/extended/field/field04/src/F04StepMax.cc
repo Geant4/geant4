@@ -28,19 +28,18 @@
 /// \brief Implementation of the F04StepMax class
 //
 
+#include "F04StepMax.hh"
+
 #include "G4Track.hh"
 #include "G4VParticleChange.hh"
 
-#include "F04StepMax.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04StepMax::F04StepMax(const G4String& aName)
-  : G4VDiscreteProcess(aName)
+F04StepMax::F04StepMax(const G4String& aName) : G4VDiscreteProcess(aName)
 {
-   if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
-   }
+  if (verboseLevel > 0) {
+    G4cout << GetProcessName() << " is created " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,38 +51,38 @@ G4bool F04StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04StepMax::SetStepMax(G4double step) { fMaxChargedStep = step ; }
+void F04StepMax::SetStepMax(G4double step)
+{
+  fMaxChargedStep = step;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double F04StepMax::PostStepGetPhysicalInteractionLength(
-                                              const G4Track&,
-                                              G4double,
-                                              G4ForceCondition* condition)
+G4double F04StepMax::PostStepGetPhysicalInteractionLength(const G4Track&, G4double,
+                                                          G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
 
   G4double proposedStep = DBL_MAX;
 
-  if ( fMaxChargedStep > 0.) proposedStep = fMaxChargedStep ;
+  if (fMaxChargedStep > 0.) proposedStep = fMaxChargedStep;
 
-   return proposedStep;
+  return proposedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* F04StepMax::PostStepDoIt(const G4Track& aTrack,
-                                         const G4Step&         )
+G4VParticleChange* F04StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
-   // do nothing
-   aParticleChange.Initialize(aTrack);
-   return &aParticleChange;
+  // do nothing
+  aParticleChange.Initialize(aTrack);
+  return &aParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double F04StepMax::GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
+G4double F04StepMax::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
 {
   return 0.;
 }

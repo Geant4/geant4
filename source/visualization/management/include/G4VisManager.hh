@@ -338,6 +338,10 @@ public: // With description
   virtual void SetUpForAThread();
   // This method is invoked by G4WorkerRunManager
 
+  virtual void EventReadyForVis(const G4Event*);
+  // This is invoked by G4SubEvtRunManager.
+  // The event is passed to EndOfEventKernel.
+
   static G4ThreadFunReturnType G4VisSubThread(G4ThreadFunArgType);
   // Vis sub-thread function.
 
@@ -362,6 +366,11 @@ private:
   // This is called on change of state (G4ApplicationState).  It is
   // used to draw hits, digis and trajectories if included in the
   // current scene at the end of event, as required.
+  G4bool Relinquishable (G4int eventID, G4int nKeptEvents, G4int nRequests);
+  void EndOfEventKernel (const G4Event* event);
+  void EndOfEventCleanup
+  (const G4Event* currentEvent,
+   G4int eventID);  // See EndOfEventKernel: can be == -2?
 
   void EndOfRun ();
 
@@ -402,6 +411,8 @@ public: // With description
   G4bool                       GetTransientsDrawnThisEvent () const;
   G4bool                       GetDrawEventOnlyIfToBeKept  () const;
   const G4Event*               GetRequestedEvent           () const;
+  G4int                  GetNKeepForPostProcessingRequests () const;
+  G4int                        GetNKeepTheEventRequests    () const;
   G4int                        GetNKeepRequests            () const;
   G4bool                       GetReviewingKeptEvents      () const;
   G4bool                       GetAbortReviewKeptEvents    () const;
@@ -412,7 +423,10 @@ public: // With description
   G4int                        GetMaxEventQueueSize        () const;
   G4bool                       GetWaitOnEventQueueFull     () const;
 #endif
-  const G4String&              GetDefaultGraphicsSystemName() const;
+  virtual const G4String&      GetDefaultGraphicsSystemName();
+  // The above has to be virtual so that the derived class, G4VisExecutive,
+  // can override and non-const because on first pass it may/should
+  // determine these defaults.
   const G4String&              GetDefaultXGeometryString   () const;
   const G4String&              GetDefaultGraphicsSystemBasis() const;
   const G4String&              GetDefaultXGeometryStringBasis() const;
@@ -484,19 +498,18 @@ protected:
 
   void RegisterMessengers              ();   // Command messengers.
 
-  const G4int           fVerbose;
+  const G4int fVerbose;
   // No longer used. Use fVerbosity and access functions instead.
   // fVerbose is kept for backwards compatibility for some user
   // examples.  (It is used in the derived user vis managers to print
   // available graphics systems.)  It is initialised to 1 in the
   // constructor and cannot be changed.
+  static Verbosity fVerbosity;
 
-  static Verbosity      fVerbosity;
-
-  G4String              fDefaultGraphicsSystemName;
-  G4String              fDefaultXGeometryString;
-  G4String              fDefaultGraphicsSystemBasis;
-  G4String              fDefaultXGeometryStringBasis;
+  G4String fDefaultGraphicsSystemName;
+  G4String fDefaultXGeometryString;
+  G4String fDefaultGraphicsSystemBasis;
+  G4String fDefaultXGeometryStringBasis;
 
 private:
 
@@ -538,7 +551,8 @@ private:
   G4bool                fTransientsDrawnThisRun;
   G4bool                fTransientsDrawnThisEvent;
   G4int                 fNoOfEventsDrawnThisRun;
-  G4int                 fNKeepRequests;
+  G4int                 fNKeepForPostProcessingRequests;
+  G4int                 fNKeepTheEventRequests;
   G4bool                fEventKeepingSuspended;
   G4bool                fDrawEventOnlyIfToBeKept;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.

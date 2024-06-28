@@ -39,13 +39,13 @@ class G4Event;
 
 class ElectronPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
     ElectronPrimaryGeneratorAction();
     virtual ~ElectronPrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event*);
 
-private:
+  private:
     G4GeneralParticleSource* fParticleGun;
 };
 

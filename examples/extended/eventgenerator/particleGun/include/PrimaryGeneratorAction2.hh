@@ -27,7 +27,7 @@
 /// \brief Definition of the PrimaryGeneratorAction2 class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,6 +36,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 class G4ParticleGun;
@@ -46,28 +47,28 @@ class G4Event;
 class PrimaryGeneratorAction2
 {
   public:
-    PrimaryGeneratorAction2(G4ParticleGun*);    
-   ~PrimaryGeneratorAction2() = default;
+    PrimaryGeneratorAction2(G4ParticleGun*);
+    ~PrimaryGeneratorAction2() = default;
 
   public:
-   void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*);
 
-  public:        
+  public:
     G4double RejectAccept();
-    G4double InverseCumul();            
-    
-  private:    
-    G4ParticleGun*         fParticleGun = nullptr;
- 
-    G4int                  fNPoints = 0; //nb of points
-    std::vector<G4double>  fX;           //abscisses X
-    std::vector<G4double>  fY;           //values of Y(X)
-    std::vector<G4double>  fSlp;         //slopes
-    std::vector<G4double>  fYC;          //cumulative function of Y
-    G4double               fYmax = 0.;   //max(Y)
+    G4double InverseCumul();
 
   private:
-    void InitFunction();                        
+    G4ParticleGun* fParticleGun = nullptr;
+
+    G4int fNPoints = 0;  // nb of points
+    std::vector<G4double> fX;  // abscisses X
+    std::vector<G4double> fY;  // values of Y(X)
+    std::vector<G4double> fSlp;  // slopes
+    std::vector<G4double> fYC;  // cumulative function of Y
+    G4double fYmax = 0.;  // max(Y)
+
+  private:
+    void InitFunction();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

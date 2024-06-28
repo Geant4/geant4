@@ -30,10 +30,10 @@
 #ifndef ExTGRCDetectorBuilder_h
 #define ExTGRCDetectorBuilder_h
 
-#include "globals.hh"
 #include "G4tgbDetectorBuilder.hh"
+#include "globals.hh"
 
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 
 class ExTGRCLineProcessor;
 
@@ -43,16 +43,15 @@ class ExTGRCLineProcessor;
 /// \author:    P. Arce
 
 class ExTGRCDetectorBuilder : public G4tgbDetectorBuilder
-{ 
-  public:  
-
+{
+  public:
     ExTGRCDetectorBuilder();
-   ~ExTGRCDetectorBuilder();
+    ~ExTGRCDetectorBuilder();
 
     const G4tgrVolume* ReadDetector();
-    virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop);
-  private:
+    virtual G4VPhysicalVolume* ConstructDetector(const G4tgrVolume* tgrVoltop);
 
+  private:
     ExTGRCLineProcessor* fTlproc;
 };
 

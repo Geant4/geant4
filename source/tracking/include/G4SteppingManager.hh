@@ -73,9 +73,6 @@ class G4VSensitiveDetector;
 class G4SteppingManager
 {
  public:
-  using ProfilerConfig = G4Step::ProfilerConfig;
-
- public:
   // Constructor/Destructor
 
   // SteppingManger should be dynamically allocated, therefore

@@ -24,25 +24,30 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithABool.hh"
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIparameter.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* Det, PhysicsList* PL)
@@ -68,16 +73,16 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det, PhysicsList* PL)
   fpTrackingCutCmd->SetDefaultValue(false);
   fpTrackingCutCmd->AvailableForStates(G4State_PreInit);
   fpTrackingCutCmd->SetToBeBroadcasted(false);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
+  delete fpDetDir;
+
   delete fpMaterCmd;
   delete fpPhysCmd;
-  delete fpDetDir;
   delete fpTrackingCutCmd;
 }
 
@@ -86,9 +91,9 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fpMaterCmd) fpDetector->SetMaterial(newValue);
-  else if (command == fpPhysCmd) fpPhysList->AddPhysics(newValue);
-  if (command == fpTrackingCutCmd) fpPhysList->SetTrackingCut(
-      fpTrackingCutCmd->GetNewBoolValue(newValue));
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  if (command == fpPhysCmd) fpPhysList->AddPhysics(newValue);
+
+  if (command == fpTrackingCutCmd)
+    fpPhysList->SetTrackingCut(fpTrackingCutCmd->GetNewBoolValue(newValue));
+}

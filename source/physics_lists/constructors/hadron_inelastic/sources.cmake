@@ -63,6 +63,7 @@ geant4_module_link_libraries(G4phys_ctor_hinelastic
     G4hadronic_bert_cascade
     G4hadronic_binary
     G4hadronic_deex_photon_evaporation
+    G4hadronic_nudex
     G4hadronic_proc
     G4hadronic_util
     G4ions

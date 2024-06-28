@@ -42,20 +42,19 @@
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  DetectorConstruction();
-  ~DetectorConstruction();
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-public:
-  G4VPhysicalVolume* Construct();
+  public:
+    G4VPhysicalVolume* Construct();
 
-private:
-  void               DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
+  private:
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructVolumes();
 
-  G4Material*       fpDefaultMaterial;
-  G4Material*       fpWaterMaterial;
+    G4Material* fpDefaultMaterial;
+    G4Material* fpWaterMaterial;
 };
 
 #endif
-

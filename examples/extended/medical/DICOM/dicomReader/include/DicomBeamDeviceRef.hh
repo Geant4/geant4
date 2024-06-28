@@ -29,25 +29,27 @@
 #include "DicomVBeamDevice.hh"
 
 class DicomBeamDeviceRef : public DicomVBeamDevice
-{ 
-public:
-  DicomBeamDeviceRef(DRTBeamLimitingDeviceSequenceInRTBeamsModule::Item bldsItem);
-  ~DicomBeamDeviceRef(){};
+{
+  public:
+    DicomBeamDeviceRef(DRTBeamLimitingDeviceSequenceInRTBeamsModule::Item bldsItem);
+    ~DicomBeamDeviceRef() {};
 
-public:
-  void SetSourceToBeamLimitingDeviceDistance(Float64 dat){
-    theSourceToBeamLimitingDeviceDistance= dat;
-  }
-  Float64 GetSourceToBeamLimitingDeviceDistance() const {
-    return theSourceToBeamLimitingDeviceDistance;
-  }
+  public:
+    void SetSourceToBeamLimitingDeviceDistance(Float64 dat)
+    {
+      theSourceToBeamLimitingDeviceDistance = dat;
+    }
+    Float64 GetSourceToBeamLimitingDeviceDistance() const
+    {
+      return theSourceToBeamLimitingDeviceDistance;
+    }
 
-  void DumpToFile( std::ofstream& out );
+    void DumpToFile(std::ofstream& out);
 
-  void Print( std::ostream& out );
+    void Print(std::ostream& out);
 
-private:
-  Float64 theSourceToBeamLimitingDeviceDistance;
+  private:
+    Float64 theSourceToBeamLimitingDeviceDistance;
 };
 
-#endif  
+#endif

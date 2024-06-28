@@ -129,6 +129,16 @@ inline void G4Step::ResetNonIonizingEnergyDeposit()
   fNonIonizingEnergyDeposit = 0.;
 }
 
+inline G4double G4Step::GetDeltaEnergy() const
+{
+  return fpPostStepPoint->GetKineticEnergy() - fpPreStepPoint->GetKineticEnergy();
+}
+
+inline G4ThreeVector G4Step::GetDeltaMomentum() const
+{
+  return fpPostStepPoint->GetMomentum() - fpPreStepPoint->GetMomentum();
+}
+
 inline void G4Step::SetControlFlag(G4SteppingControl value)
 {
   fpSteppingControlFlag = value;

@@ -33,8 +33,8 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "G4Run.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Run.hh"
 
 class DetectorConstruction;
 class Run;
@@ -45,7 +45,7 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction*);
-   ~Run();
+    ~Run();
 
   public:
     void SetPrimary(G4ParticleDefinition* particle);
@@ -54,26 +54,22 @@ class Run : public G4Run
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     virtual void Merge(const G4Run*);
 
-
-
   private:
-    void InitFluence ();
+    void InitFluence();
     void ComputeFluenceError();
     void PrintFluence(G4int);
 
-   DetectorConstruction*  fDetector;
-   G4ParticleDefinition* fParticle;
-   G4double              fEnergy;
+    DetectorConstruction* fDetector;
+    G4ParticleDefinition* fParticle;
+    G4double fEnergy;
 
+    // for fluence computation
 
-    //for fluence computation
-
-   G4int                   fNbBins;
-   G4double                fDr;
-   std::vector<G4double>   fluence;
-   std::vector<G4double>   fluence1;        //normalized fluence    
-   std::vector<G4double>   fluence2;        //rms on norm. fl
-   std::vector<G4int>      fNbEntries;      //entries per bin       
-
+    G4int fNbBins;
+    G4double fDr;
+    std::vector<G4double> fluence;
+    std::vector<G4double> fluence1;  // normalized fluence
+    std::vector<G4double> fluence2;  // rms on norm. fl
+    std::vector<G4int> fNbEntries;  // entries per bin
 };
 #endif

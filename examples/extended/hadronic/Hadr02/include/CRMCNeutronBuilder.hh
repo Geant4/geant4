@@ -45,25 +45,25 @@
 #ifndef CRMCNeutronBuilder_h
 #define CRMCNeutronBuilder_h 1
 
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VNeutronBuilder.hh"
+#include "globals.hh"
 
 class HadronicInelasticModelCRMC;
 class G4NeutronRadCapture;
 class G4LFission;
 
-
-class CRMCNeutronBuilder : public G4VNeutronBuilder {
+class CRMCNeutronBuilder : public G4VNeutronBuilder
+{
   public:
-    CRMCNeutronBuilder( const G4int crmcModelId, const std::string & crmcModelName );
+    CRMCNeutronBuilder(const G4int crmcModelId, const std::string& crmcModelName);
     virtual ~CRMCNeutronBuilder();
-    virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4NeutronFissionProcess* aP ) final override;
-    virtual void Build( G4NeutronCaptureProcess* aP ) final override;
-    virtual void Build( G4HadronInelasticProcess* aP ) final override;
-    inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
-    inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
+    virtual void Build(G4HadronElasticProcess* aP) final override;
+    virtual void Build(G4NeutronFissionProcess* aP) final override;
+    virtual void Build(G4NeutronCaptureProcess* aP) final override;
+    virtual void Build(G4HadronInelasticProcess* aP) final override;
+    inline void SetMinEnergy(G4double aM) final override { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) final override { fMax = aM; }
     using G4VNeutronBuilder::Build;  // Prevent compiler warning
   private:
     G4double fMin;

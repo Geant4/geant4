@@ -6,21 +6,55 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-25 Pere Mato (global-V11-01-28)
-- Changed Windows.h to windows.h since for MinGW always seems to be lower case, not relevant for native builds.
-  _MSC_VER is only available for VC compiler, the os one is _WIN32.
+## 2024-06-28 Gabriele Cosmo (global-V11-02-13)
+- Updated tag IDs for geant4-11-02-ref-06.
 
-## 2024-04-20 Gabriele Cosmo
+## 2024-05-30 Gabriele Cosmo (global-V11-02-12)
+- Updated tag IDs for geant4-11-02-ref-05.
+
+## 2024-05-29 Alberto Ribon (global-V11-02-11)
+- G4PhysicsModelCatalog : added ID for the NuDEX nuclear de-excitation model;
+  removed unnecessary ID (24110) for internal conversion. 
+
+## 2024-05-03 Ben Morgan (global-V11-02-10)
+- Remove use of no longer supported TiMemory.
+
+## 2024-05-06 Vladimir Ivanchenko (global-V11-02-09)
+- G4PhysicsTable - avoid crash in printout for the case if a vector in the
+    table is not yet created. This is useful for debugging.
+
+## 2024-04-30 Gabriele Cosmo (global-V11-02-08)
+- Updated tag IDs for geant4-11-02-ref-04.
+
+## 2024-04-25 Pere Mato (global-V11-02-07)
+- Changed Windows.h to windows.h since for MinGW always seems to be lower case, not relevant for native builds.
+- _MSC_VER is only available for VC compiler, the os one is _WIN32 
+
+## 2024-04-20 Gabriele Cosmo (global-V11-02-06)
 - Fixed compilation error in G4PhysicsModelCatalog on Windows VC++ with
   C++20 Standard enabled.
   Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
 
-## 2024-04-04 Stephan Hageboeck
+## 2024-04-04 Stephan Hageboeck (global-V11-02-05)
 - Provide a helpful error message when GEANT4_DATA_DIR is set to an invalid
   location.
 
-## 2023-12-21 Yoshihide Sato (global-V11-01-27)
+## 2024-03-28 Gabriele Cosmo (global-V11-02-04)
+- Updated tag IDs for geant4-11-02-ref-03.
+
+## 2024-02-29 Gabriele Cosmo (global-V11-02-03)
+- Updated tag IDs for geant4-11-02-ref-02.
+
+## 2024-01-31 Gabriele Cosmo (global-V11-02-02)
+- Updated tag IDs for geant4-11-02-ref-01.
+
+## 2023-12-21 Yoshihide Sato (global-V11-02-01)
 - G4PhysicsModelCatalog.cc: added the ID for the Light-Ion QMD model.
+
+## 2023-12-18 Makoto Asai (global-V11-02-00)
+- G4StateManager, G4VStateDependent - added notifying methods when an event
+  or a run is deleted for the sake of avoiding a state-dependent class from
+  accessing to an obsolete event/run object.
 
 ## 2023-11-23 Gabriele Cosmo (global-V11-01-26)
 - Updated tag IDs for geant4-11-02-ref-00.

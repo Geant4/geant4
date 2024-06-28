@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,20 +39,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VUserPhysicsList
+class PhysicsList : public G4VUserPhysicsList
 {
   public:
     PhysicsList() = default;
-   ~PhysicsList() override = default;
+    ~PhysicsList() override = default;
 
   protected:
     // Construct particle and physics
     void ConstructParticle() override;
-    void ConstructProcess()  override; 
-    void SetCuts() override;   
+    void ConstructProcess() override;
+    void SetCuts() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

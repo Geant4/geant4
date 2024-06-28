@@ -34,28 +34,21 @@
 
 #include "ExUCNRunAction.hh"
 
-#include "G4Run.hh"
-
 #include "G4ProcessTable.hh"
+#include "G4Run.hh"
 #include "G4UCNBoundaryProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExUCNRunAction::ExUCNRunAction() : G4UserRunAction()
-{
-}
+ExUCNRunAction::ExUCNRunAction() : G4UserRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExUCNRunAction::~ExUCNRunAction()
-{
-}
+ExUCNRunAction::~ExUCNRunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExUCNRunAction::BeginOfRunAction(const G4Run*)
-{
-}
+void ExUCNRunAction::BeginOfRunAction(const G4Run*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,9 +56,8 @@ void ExUCNRunAction::EndOfRunAction(const G4Run*)
 {
   G4ProcessTable* processTable = G4ProcessTable::GetProcessTable();
 
-  G4UCNBoundaryProcess* ucnBoundaryProcess = 
-             (G4UCNBoundaryProcess*) processTable->
-             FindProcess("UCNBoundaryProcess",G4Neutron::NeutronDefinition());
+  G4UCNBoundaryProcess* ucnBoundaryProcess = (G4UCNBoundaryProcess*)processTable->FindProcess(
+    "UCNBoundaryProcess", G4Neutron::NeutronDefinition());
 
   ucnBoundaryProcess->BoundaryProcessSummary();
 }

@@ -33,28 +33,29 @@
 
 #include "VG01DetectorConstruction.hh"
 
-#include "globals.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4VisAttributes.hh"
-
-#include "G4UniformMagField.hh"
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4RunManager.hh"
-#include "VG01DetectorMessenger.hh"
-#include "G4RunManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4PropagatorInField.hh"
-
 #include "G4VecGeomConverter.h"
+#include "VG01DetectorMessenger.hh"
+
+#include "G4FieldManager.hh"
+#include "G4PropagatorInField.hh"
+#include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TransportationManager.hh"
+#include "G4UniformMagField.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
+#include "globals.hh"
+
 #include <VecGeom/management/GeoManager.h>
 
 G4double VG01DetectorConstruction::fglobFieldValue = 0.0;
 
 VG01DetectorConstruction::VG01DetectorConstruction()
-: G4VUserDetectorConstruction(), fWorld(nullptr), fFieldMgr(nullptr), 
-  fUniformMagField(nullptr), fDetectorMessenger(nullptr) 
+  : G4VUserDetectorConstruction(),
+    fWorld(nullptr),
+    fFieldMgr(nullptr),
+    fUniformMagField(nullptr),
+    fDetectorMessenger(nullptr)
 {
   fGDMLFileName = "TestNTST.gdml";
   fDetectorMessenger = new VG01DetectorMessenger(this);
@@ -62,7 +63,8 @@ VG01DetectorConstruction::VG01DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-VG01DetectorConstruction::~VG01DetectorConstruction() {
+VG01DetectorConstruction::~VG01DetectorConstruction()
+{
   delete fDetectorMessenger;
   if (fUniformMagField) {
     delete fUniformMagField;
@@ -71,17 +73,17 @@ VG01DetectorConstruction::~VG01DetectorConstruction() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* VG01DetectorConstruction::Construct() {
+G4VPhysicalVolume* VG01DetectorConstruction::Construct()
+{
   //  parser.SetOverlapCheck(true);
-  G4TransportationManager *trMgr = 
-     G4TransportationManager::GetTransportationManager();
+  G4TransportationManager* trMgr = G4TransportationManager::GetTransportationManager();
   assert(trMgr);
-  
+
   fParser.Read(fGDMLFileName, false);
-  fWorld = (G4VPhysicalVolume *)fParser.GetWorldVolume();
+  fWorld = (G4VPhysicalVolume*)fParser.GetWorldVolume();
 
   // enabling 'check' mode in G4 Navigator
-  G4Navigator *nav = trMgr->GetNavigatorForTracking();
+  G4Navigator* nav = trMgr->GetNavigatorForTracking();
   assert(nav);
   nav->CheckMode(true);
   // nav->SetVerboseLevel(1);
@@ -89,16 +91,15 @@ G4VPhysicalVolume* VG01DetectorConstruction::Construct() {
 
   // write back
   // fParser.Write("out.gdml", fWorld);
-  
+
   fFieldMgr = trMgr->GetFieldManager();
   fWorld->GetLogicalVolume()->SetVisAttributes(G4VisAttributes::GetInvisible());
-  if (fWorld==nullptr) {
+  if (fWorld == nullptr) {
     G4ExceptionDescription ed;
-    ed << "World volume not set properly check your setup selection criteria" 
+    ed << "World volume not set properly check your setup selection criteria"
        << "or GDML input!" << G4endl;
-    G4Exception( "VG01DetectorConstruction::Construct()", 
-                "G4VecGeomNavExtExample_0001", FatalException, ed );
-                
+    G4Exception("VG01DetectorConstruction::Construct()", "G4VecGeomNavExtExample_0001",
+                FatalException, ed);
   }
   CreateMagFieldAndIntegrator();
 
@@ -114,27 +115,22 @@ G4VPhysicalVolume* VG01DetectorConstruction::Construct() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void VG01DetectorConstruction::CreateMagFieldAndIntegrator() 
+void VG01DetectorConstruction::CreateMagFieldAndIntegrator()
 {
   delete fUniformMagField;
-  
-  if (std::abs(fglobFieldValue)>0.0) {
+
+  if (std::abs(fglobFieldValue) > 0.0) {
     // Apply a global uniform magnetic field along the Z axis.
-    // Note:  only when the magnetic field (pointer) is NOT zero, 
+    // Note:  only when the magnetic field (pointer) is NOT zero,
     //        does the Geant4 transportion in field get activated.
-    fUniformMagField = 
-        new G4UniformMagField(G4ThreeVector(0.0,0.0,fglobFieldValue));
+    fUniformMagField = new G4UniformMagField(G4ThreeVector(0.0, 0.0, fglobFieldValue));
     fFieldMgr->SetDetectorField(fUniformMagField);
     fFieldMgr->CreateChordFinder(fUniformMagField);
-    G4cout << G4endl
-           << " *** SETTING MAGNETIC FIELD in Z direction : fieldValue = " 
+    G4cout << G4endl << " *** SETTING MAGNETIC FIELD in Z direction : fieldValue = "
            << fglobFieldValue / tesla << " tesla *** " << G4endl << G4endl;
-  } 
-  else 
-  {
+  }
+  else {
     fFieldMgr->SetDetectorField(nullptr);
-    G4cout << G4endl
-           << " *** NO MAGNETIC FIELD SET  *** " << G4endl
-           << G4endl;
+    G4cout << G4endl << " *** NO MAGNETIC FIELD SET  *** " << G4endl << G4endl;
   }
 }

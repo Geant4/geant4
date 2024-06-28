@@ -24,17 +24,16 @@
 // ********************************************************************
 //
 #include "Par04EventInformation.hh"
+
 #include <CLHEP/Vector/ThreeVector.h>  // for operator<<
 #include <G4VUserEventInformation.hh>  // for G4VUserEventInformation
-#include <G4ios.hh>                    // for G4cout, G4endl
-#include <ostream>                     // for operator<<, basic_ostream, ost...
+#include <G4ios.hh>  // for G4cout, G4endl
+#include <ostream>  // for operator<<, basic_ostream, ost...
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04EventInformation::Par04EventInformation()
-  : G4VUserEventInformation()
-  , fDirection()
-  , fPosition()
+  : G4VUserEventInformation(), fDirection(), fPosition()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

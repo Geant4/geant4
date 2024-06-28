@@ -36,10 +36,10 @@
 
 #include "DetectorConstruction.hh"
 
-#include "G4Run.hh"
 #include "G4Event.hh"
-
+#include "G4Run.hh"
 #include "G4THitsMap.hh"
+
 #include <vector>
 
 class DetectorConstruction;
@@ -51,35 +51,33 @@ class Run : public G4Run
 {
   public:
     Run(const DetectorConstruction* /*detector*/);
-   ~Run();
+    ~Run();
 
   public:
-    void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-    G4double GetEdep()          const {return fEdeposit;};
+    G4double GetEdep() const { return fEdeposit; };
 
     virtual void RecordEvent(const G4Event*);
-    G4THitsMap<G4double>* GetHitsMap(){return fRunMap;}
-    G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
-                                     const G4String& colName);
+    G4THitsMap<G4double>* GetHitsMap() { return fRunMap; }
+    G4THitsMap<G4double>* GetHitsMap(const G4String& detName, const G4String& colName);
     G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
     void DumpAllScorer();
-        
+
     virtual void Merge(const G4Run*);
     void EndOfRun();
-    
+
   private:
-    //const DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin; 
-    G4double  fEdeposit; 
-       
+    // const DetectorConstruction*  fDetector;
+    G4ParticleDefinition* fParticle;
+    G4double fEkin;
+    G4double fEdeposit;
+
     G4String fCollName;
-    //G4int fCollID;
+    // G4int fCollID;
     G4THitsMap<G4double>* fRunMap;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

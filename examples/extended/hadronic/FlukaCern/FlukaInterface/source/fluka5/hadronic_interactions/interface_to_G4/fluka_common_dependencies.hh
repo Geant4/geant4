@@ -30,45 +30,43 @@
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef FLUKA_COMMON_DEPENDENCIES_HH
-#define FLUKA_COMMON_DEPENDENCIES_HH
+#  ifndef FLUKA_COMMON_DEPENDENCIES_HH
+#    define FLUKA_COMMON_DEPENDENCIES_HH
 
+#    include "beamcm.h"
+#    include "blnkcm.h"
+#    include "caslim.h"
+#    include "cmelds.h"
+#    include "cmphnu.h"
+#    include "ctitle.h"
+#    include "currpt.h"
+#    include "dblprc.h"
+#    include "dimpar.h"
+#    include "evaflg.h"
+#    include "evapix.h"
+#    include "fheavy.h"
+#    include "flkmat.h"
+#    include "genflg.h"
+#    include "genstk.h"
+#    include "genthr.h"
+#    include "iounit.h"
+#    include "isotop.h"
+#    include "ncsfta.h"
+#    include "ndnicm.h"
+#    include "nucdat.h"
+#    include "nucflg.h"
+#    include "nucgeo.h"
+#    include "nucpot.h"
+#    include "nuinfo.h"
+#    include "paprop.h"
+#    include "parevt.h"
+#    include "part2.h"
+#    include "phnccm.h"
+#    include "resnuc.h"
+#    include "sgtbcm.h"
+#    include "sumcou.h"
+#    include "thrscm.h"
+#    include "usryld.h"
 
-#include "dblprc.h"
-#include "dimpar.h"
-#include "iounit.h"
-#include "beamcm.h"
-#include "blnkcm.h"
-#include "caslim.h"
-#include "cmelds.h"
-#include "cmphnu.h"
-#include "ctitle.h"
-#include "currpt.h"
-#include "evaflg.h"
-#include "evapix.h"
-#include "fheavy.h"
-#include "flkmat.h"
-#include "genflg.h"
-#include "genstk.h"
-#include "genthr.h"
-#include "isotop.h"
-#include "ncsfta.h"
-#include "ndnicm.h"
-#include "nucdat.h"
-#include "nucflg.h"
-#include "nucgeo.h"
-#include "nucpot.h"
-#include "nuinfo.h"
-#include "paprop.h"
-#include "parevt.h"
-#include "part2.h"
-#include "phnccm.h"
-#include "resnuc.h"
-#include "sgtbcm.h"
-#include "sumcou.h"
-#include "thrscm.h"
-#include "usryld.h"
-
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

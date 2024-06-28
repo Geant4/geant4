@@ -32,8 +32,8 @@
 
 #include "EventAction.hh"
 
-#include "Run.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4Event.hh"
 #include "G4RunManager.hh"
@@ -44,7 +44,7 @@
 void EventAction::BeginOfEventAction(const G4Event*)
 {
   fTotalEnergyDeposit = 0.;
-  fTotalEnergyFlow = 0.; 
+  fTotalEnergyFlow = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,16 +65,13 @@ void EventAction::AddEflow(G4double Eflow)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-	     
-  G4double totalEnergy = fTotalEnergyDeposit + fTotalEnergyFlow;               
-  run->SumEnergies(fTotalEnergyDeposit,fTotalEnergyFlow, totalEnergy);                            
-  G4AnalysisManager::Instance()->FillH1(1,fTotalEnergyDeposit);
-  G4AnalysisManager::Instance()->FillH1(3,fTotalEnergyFlow);
-  G4AnalysisManager::Instance()->FillH1(24,totalEnergy);    
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  G4double totalEnergy = fTotalEnergyDeposit + fTotalEnergyFlow;
+  run->SumEnergies(fTotalEnergyDeposit, fTotalEnergyFlow, totalEnergy);
+  G4AnalysisManager::Instance()->FillH1(1, fTotalEnergyDeposit);
+  G4AnalysisManager::Instance()->FillH1(3, fTotalEnergyFlow);
+  G4AnalysisManager::Instance()->FillH1(24, totalEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

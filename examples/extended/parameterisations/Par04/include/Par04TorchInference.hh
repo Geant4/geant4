@@ -25,14 +25,15 @@
 //
 
 #ifdef USE_INFERENCE_TORCH
-#ifndef PAR04TORCHINFERENCE_HH
-#define PAR04TORCHINFERENCE_HH
-#include <G4String.hh>                         // for G4String
-#include <G4Types.hh>                          // for G4int, G4double
-#include <memory>                              // for unique_ptr
-#include <vector>                              // for vector
-#include "Par04InferenceInterface.hh"          // for Par04InferenceInterface
-#include <torch/script.h>
+#  ifndef PAR04TORCHINFERENCE_HH
+#    define PAR04TORCHINFERENCE_HH
+#    include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
+
+#    include <G4String.hh>  // for G4String
+#    include <G4Types.hh>  // for G4int, G4double
+#    include <memory>  // for unique_ptr
+#    include <torch/script.h>
+#    include <vector>  // for vector
 
 /**
  * @brief Inference using the TORCH.
@@ -43,20 +44,19 @@
 
 class Par04TorchInference : public Par04InferenceInterface
 {
-public:
-  Par04TorchInference(G4String);
-  Par04TorchInference();
+  public:
+    Par04TorchInference(G4String);
+    Par04TorchInference();
 
-  /// Run inference
-  /// @param[in] aGenVector Input latent space and conditions
-  /// @param[out] aEnergies Model output = generated shower energies
-  /// @param[in] aSize Size of the output
-  void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
+    /// Run inference
+    /// @param[in] aGenVector Input latent space and conditions
+    /// @param[out] aEnergies Model output = generated shower energies
+    /// @param[in] aSize Size of the output
+    void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
 
-private:
-  torch::jit::script::Module fModule;
-
+  private:
+    torch::jit::script::Module fModule;
 };
 
-#endif /* PAR04TORCHINFERENCE_HH */
+#  endif /* PAR04TORCHINFERENCE_HH */
 #endif

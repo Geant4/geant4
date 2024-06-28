@@ -36,15 +36,15 @@ class LXeDetectorConstruction;
 
 class LXeActionInitialization : public G4VUserActionInitialization
 {
- public:
-  LXeActionInitialization(const LXeDetectorConstruction* det);
-  ~LXeActionInitialization() override = default;
+  public:
+    LXeActionInitialization(const LXeDetectorConstruction* det);
+    ~LXeActionInitialization() override = default;
 
-  void BuildForMaster() const override;
-  void Build() const override;
+    void BuildForMaster() const override;
+    void Build() const override;
 
- private:
-  const LXeDetectorConstruction* fDetector = nullptr;
+  private:
+    const LXeDetectorConstruction* fDetector = nullptr;
 };
 
 #endif

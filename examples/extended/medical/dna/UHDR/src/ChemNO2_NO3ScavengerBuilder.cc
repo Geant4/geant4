@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 
-
 #include "ChemNO2_NO3ScavengerBuilder.hh"
+
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4MoleculeTable.hh"
 #include "G4SystemOfUnits.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChemNO2_NO3ScavengerBuilder
-::NO2_NO3ScavengerReaction(
-    G4DNAMolecularReactionTable *pReactionTable) {
+void ChemNO2_NO3ScavengerBuilder ::NO2_NO3ScavengerReaction(
+  G4DNAMolecularReactionTable* pReactionTable)
+{
   auto table = G4MoleculeTable::Instance();
   auto e_aq = table->GetConfiguration("e_aq");
   auto OH = table->GetConfiguration("OH");
@@ -43,25 +44,23 @@ void ChemNO2_NO3ScavengerBuilder
   auto NO3m = table->GetConfiguration("NO3m");
   auto NO3mm = table->GetConfiguration("NO3mm");
 
-  G4DNAMolecularReactionData *reactionData = nullptr;
+  G4DNAMolecularReactionData* reactionData = nullptr;
   //------------------------------------------------------------------
   // e_aq + NO2- -> NO2--
-  reactionData = new G4DNAMolecularReactionData(
-      3.5e9 * (1e-3 * m3 / (mole * s)), e_aq, NO2m);
+  reactionData = new G4DNAMolecularReactionData(3.5e9 * (1e-3 * m3 / (mole * s)), e_aq, NO2m);
   reactionData->AddProduct(NO2mm);
   pReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // OH + NO2- -> NO2 + OH-
-  reactionData =
-      new G4DNAMolecularReactionData(8e9 * (1e-3 * m3 / (mole * s)), OH, NO2m);
+  reactionData = new G4DNAMolecularReactionData(8e9 * (1e-3 * m3 / (mole * s)), OH, NO2m);
   reactionData->AddProduct(NO2);
   reactionData->AddProduct(OHm);
   pReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
   // e_aq + NO3- -> NO3--
-  reactionData = new G4DNAMolecularReactionData(
-      9.7e9 * (1e-3 * m3 / (mole * s)), e_aq, NO3m);
+  reactionData = new G4DNAMolecularReactionData(9.7e9 * (1e-3 * m3 / (mole * s)), e_aq, NO3m);
   reactionData->AddProduct(NO3mm);
   pReactionTable->SetReaction(reactionData);
   //------------------------------------------------------------------
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

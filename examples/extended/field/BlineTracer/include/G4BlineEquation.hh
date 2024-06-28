@@ -51,21 +51,17 @@
 class G4BlineEquation : public G4Mag_EqRhs
 {
   public:  // with description
-
-    G4BlineEquation( G4MagneticField* magField );
+    G4BlineEquation(G4MagneticField* magField);
     ~G4BlineEquation() override = default;
-      // Constructor and destructor.
+    // Constructor and destructor.
 
-    void EvaluateRhsGivenB( const G4double y[],
-                            const G4double B[3],
-                                  G4double dydx[] ) const override;
-      // Given the value of the magnetic field B, this function
-      // calculates the value of the derivative dydx.
+    void EvaluateRhsGivenB(const G4double y[], const G4double B[3], G4double dydx[]) const override;
+    // Given the value of the magnetic field B, this function
+    // calculates the value of the derivative dydx.
 
     void SetBackwardDirectionOfIntegration(G4bool abool);
 
   private:
-
     G4bool fBackward_direction = false;
     G4double fDirection = 1.;
 };

@@ -28,30 +28,29 @@
 /// \brief Implementation of the GB07ActionInitialization class
 
 #include "GB07ActionInitialization.hh"
+
 #include "GB07PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB07ActionInitialization::GB07ActionInitialization()
- : G4VUserActionInitialization()
-{}
+GB07ActionInitialization::GB07ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB07ActionInitialization::~GB07ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void GB07ActionInitialization::BuildForMaster() const
-{
-}
+void GB07ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB07ActionInitialization::Build() const
 {
   SetUserAction(new GB07PrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

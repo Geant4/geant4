@@ -125,7 +125,8 @@
  7- HOW TO START ?
  
    Execute NeutronSource in 'batch' mode from macro files :
- 	% NeutronSource   run1.mac
+ 	% NeutronSource  run1.mac
+	% NeutronSource  neutronSource.in > neutronSource.out
  		
    Execute NeutronSource in 'interactive mode' with visualization :
  	% NeutronSource

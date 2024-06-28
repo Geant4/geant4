@@ -37,15 +37,16 @@
 
 class G4Run;
 
-class RunAction : public G4UserRunAction {
-public:
-  RunAction() = default;
-  ~RunAction() override = default;
-  void BeginOfRunAction(const G4Run *) override;
-  void EndOfRunAction(const G4Run *) override;
+class RunAction : public G4UserRunAction
+{
+  public:
+    RunAction() = default;
+    ~RunAction() override = default;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-private:
-  G4Timer fTimer;
+  private:
+    G4Timer fTimer;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

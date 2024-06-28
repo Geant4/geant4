@@ -56,16 +56,14 @@ class RMC01AdjointEventActionMessenger;
 
 class RMC01AdjointEventAction : public G4UserEventAction
 {
- public:
-   RMC01AdjointEventAction();
-   virtual ~RMC01AdjointEventAction();
-  
-   virtual void  BeginOfEventAction(const G4Event*);
-   virtual void  EndOfEventAction(const G4Event*);
+  public:
+    RMC01AdjointEventAction();
+    virtual ~RMC01AdjointEventAction();
+
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

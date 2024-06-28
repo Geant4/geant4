@@ -48,7 +48,6 @@ class G4WorkerTaskRunManagerKernel;
 class G4WorkerTaskRunManager : public G4WorkerRunManager
 {
   public:
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
     using G4StrVector = std::vector<G4String>;
 
   public:
@@ -74,12 +73,11 @@ class G4WorkerTaskRunManager : public G4WorkerRunManager
   protected:
     void StoreRNGStatus(const G4String& filenamePrefix) override;
 
-  private:
-    void SetupDefaultRNGEngine();
+  protected:
+    void SetupDefaultRNGEngine() override;
 
-  private:
+  protected:
     G4StrVector processedCommandStack;
-    std::unique_ptr<ProfilerConfig> workerRunProfiler;
 };
 
 #endif  // G4WorkerTaskRunManager_h

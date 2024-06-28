@@ -32,17 +32,19 @@
 #include "GpsPrimaryGeneratorAction.hh"
 
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 
 using namespace Common;
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
@@ -59,11 +61,11 @@ int main(int argc,char** argv)
 
   // Process macro or start UI session
   //
-  if ( ! ui ) {
+  if (!ui) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
   else {
     // interactive mode

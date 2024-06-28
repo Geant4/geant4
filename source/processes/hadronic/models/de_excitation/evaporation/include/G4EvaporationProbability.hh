@@ -78,6 +78,8 @@ private:
   G4double muu;
   G4double freeU;
   G4double a0;
+  G4double a1;
+  G4double delta0;
   G4double delta1;
 
   // Gamma is A_f(2S_f+1) factor, where A_f is fragment atomic 

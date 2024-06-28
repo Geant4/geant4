@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// and the DNA geometry given in the Geom_DNA example 
+// Any report or published results obtained using the Geant4-DNA software
+// and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
 // [1] NIM B 298 (2013) 47-54
 // [2] Med. Phys. 37 (2010) 4692-4708
@@ -44,28 +44,24 @@
 #include <G4VPhysicalVolume.hh>
 
 using namespace std;
-using CLHEP::nanometer;
 using CLHEP::degree;
+using CLHEP::nanometer;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChromosomeParameterisation::ChromosomeParameterisation(const char* filename):
-    G4VPVParameterisation()
+ChromosomeParameterisation::ChromosomeParameterisation(const char* filename)
+  : G4VPVParameterisation()
 {
   ifstream f(filename, ios::in);
-  if (!f)
-    return;
+  if (!f) return;
 
   fPositions.reserve(100);
   fRotations.reserve(100);
 
-  while (!f.eof())
-  {
+  while (!f.eof()) {
     double x, y, z, rot;
     f >> x >> y >> z >> rot;
-    fPositions.push_back(new G4ThreeVector(x * nanometer,
-                                           y * nanometer,
-                                           z * nanometer));
+    fPositions.push_back(new G4ThreeVector(x * nanometer, y * nanometer, z * nanometer));
     fRotations.push_back(new G4RotationMatrix(0, 0, rot * degree));
   }
 }
@@ -83,18 +79,14 @@ ChromosomeParameterisation::~ChromosomeParameterisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChromosomeParameterisation::ComputeDimensions(
-    G4Tubs& /*rosette*/,
-    const G4int /*copyNo*/,
-    const G4VPhysicalVolume* /*physVol*/) const
-{
-
-}
+void ChromosomeParameterisation::ComputeDimensions(G4Tubs& /*rosette*/, const G4int /*copyNo*/,
+                                                   const G4VPhysicalVolume* /*physVol*/) const
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChromosomeParameterisation::ComputeTransformation(
-    const G4int copyNo, G4VPhysicalVolume* physVol) const
+void ChromosomeParameterisation::ComputeTransformation(const G4int copyNo,
+                                                       G4VPhysicalVolume* physVol) const
 {
   // see passive vs active method to specify
   // this transformation

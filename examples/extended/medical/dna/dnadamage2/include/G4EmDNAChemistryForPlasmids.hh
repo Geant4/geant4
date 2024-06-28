@@ -31,7 +31,7 @@
  *  Created on: Feb 10, 2021
  *      Author: J. Naoki D. Kondo
  *              W. G. Shin, J. Ramos-Mendez and B. Faddegon
-*/
+ */
 
 #ifndef DNADAMAGE2_ChemistryForPlasmids_hh
 #define DNADAMAGE2_ChemistryForPlasmids_hh 1
@@ -39,41 +39,38 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4VUserChemistryList.hh"
-#include <G4UImessenger.hh>
 #include "globals.hh"
+
+#include <G4UImessenger.hh>
 
 class G4DNAMolecularReactionTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmDNAChemistryForPlasmids:public G4VUserChemistryList,
-                                  public G4VPhysicsConstructor
+class G4EmDNAChemistryForPlasmids : public G4VUserChemistryList, public G4VPhysicsConstructor
 {
-public:
-  G4EmDNAChemistryForPlasmids();
-  G4EmDNAChemistryForPlasmids(G4double, G4double);
-  ~G4EmDNAChemistryForPlasmids() override = default;
+  public:
+    G4EmDNAChemistryForPlasmids();
+    G4EmDNAChemistryForPlasmids(G4double, G4double);
+    ~G4EmDNAChemistryForPlasmids() override = default;
 
-  void ConstructParticle() override
-  {
-    ConstructMolecule();
-  }
+    void ConstructParticle() override { ConstructMolecule(); }
 
-  void ConstructMolecule() override;
-  void ConstructProcess() override;
+    void ConstructMolecule() override;
+    void ConstructProcess() override;
 
-  void ConstructDissociationChannels() override;
-  void ConstructReactionTable(G4DNAMolecularReactionTable*) override;
-  void ConstructTimeStepModel(G4DNAMolecularReactionTable*) override;
+    void ConstructDissociationChannels() override;
+    void ConstructReactionTable(G4DNAMolecularReactionTable*) override;
+    void ConstructTimeStepModel(G4DNAMolecularReactionTable*) override;
 
-  void DeclareDMSOAndDNAReactions(G4DNAMolecularReactionTable*);
-  void DeclareOxygenReactions(G4DNAMolecularReactionTable*);
+    void DeclareDMSOAndDNAReactions(G4DNAMolecularReactionTable*);
+    void DeclareOxygenReactions(G4DNAMolecularReactionTable*);
 
-private:
-  G4double fDMSO   = 1E-4;
-  G4double fOxygen = 0.25E-3;
+  private:
+    G4double fDMSO = 1E-4;
+    G4double fOxygen = 0.25E-3;
 
-  //G4DNAMolecularReactionTable* fReactionTable = nullptr;
+    // G4DNAMolecularReactionTable* fReactionTable = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

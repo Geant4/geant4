@@ -27,13 +27,17 @@
 #define G4RadioactivationMessenger_h 1
 
 ////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  File:   G4RadioactivationMessenger.hh                                     //
-//  Author: D.H. Wright (SLAC)                                                //
-//  Date:   29 August 2017                                                    //
-//  Description: messenger class for biased version of G4RadioactiveDecay.    //
-//  Based on the code of F. Lei and P.R. Truscott.                            //
-//                                                                            //
+//
+//  GEANT4 Class header file
+//
+//  G4RadioactivationMessenger
+//
+//  Author: D.H. Wright (SLAC)
+//  Date:   29 August 2017
+//
+//  Description: messenger class for biased version of G4RadioactiveDecay.
+//               Based on the code of F. Lei and P.R. Truscott.
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4UImessenger.hh"
@@ -45,21 +49,20 @@
 #include "G4UIcmdWithAString.hh"
 #include "globals.hh"
 
-#include "G4Radioactivation.hh"
 #include "G4UIcmdWithNucleusLimits.hh"
 
-class G4Radioactivation;
+class G4RadioactiveDecay;
 
 class G4RadioactivationMessenger: public G4UImessenger
 {
   public:
-    G4RadioactivationMessenger(G4Radioactivation* theRadioactivationContainer);
-    ~G4RadioactivationMessenger();
+    G4RadioactivationMessenger(G4RadioactiveDecay*);
+    ~G4RadioactivationMessenger() override;
 
-    void SetNewValue(G4UIcommand* command, G4String newValues);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
   private:
-    G4Radioactivation* theRadioactivationContainer;
+    G4RadioactiveDecay* theRadDecay;
   
     G4UIdirectory* rdmDirectory;            
     G4UIcmdWithABool* analoguemcCmd;

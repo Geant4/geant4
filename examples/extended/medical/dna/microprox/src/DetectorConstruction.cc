@@ -24,60 +24,53 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 45  (2018) e722-e739
-// Phys. Med. 31  (2015) 861-874
-// Med. Phys. 37  (2010) 4692-4708
-// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157\u2013178
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
- 
+
 #include "DetectorConstruction.hh"
+
 #include "DetectorMessenger.hh"
 #include "TrackerSD.hh"
 
-#include "G4Material.hh"
-#include "G4NistManager.hh"
-
 #include "G4Box.hh"
-#include "G4PVPlacement.hh"
-
-#include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
-
-#include "G4SystemOfUnits.hh"
-#include "G4UserLimits.hh"
-#include "G4UnitsTable.hh"
-
+#include "G4GeometryTolerance.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
 #include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4UserLimits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
-fDetectorMessenger(0)
+
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction(), fDetectorMessenger(0)
 {
   // Default tracking cut
-  fTrackingCut = 9*eV; 
+  fTrackingCut = 9 * eV;
 
-  // Create commands for interactive definition of the detector  
+  // Create commands for interactive definition of the detector
   fDetectorMessenger = new DetectorMessenger(this);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 DetectorConstruction::~DetectorConstruction()
 {
   delete fDetectorMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Define materials
@@ -92,10 +85,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::DefineMaterials()
 {
   // Water is defined from NIST material database
-  G4NistManager * man = G4NistManager::Instance();
+  G4NistManager* man = G4NistManager::Instance();
 
-  G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
-  
+  G4Material* H2O = man->FindOrBuildMaterial("G4_WATER");
+
   fWaterMaterial = H2O;
 
   // Print materials
@@ -106,63 +99,52 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
-  G4double worldLength = 1*km;
+  G4double worldLength = 1 * km;
 
   // World
 
   G4GeometryManager::GetInstance()->SetWorldMaximumExtent(worldLength);
 
   G4cout << "Computed tolerance = "
-         << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/nm
-         << " nm" << G4endl;
+         << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() / nm << " nm" << G4endl;
 
-  G4Box* worldS
-    = new G4Box("world",                                    //its name
-                worldLength/2,worldLength/2,worldLength/2); //its size
-  
-  G4LogicalVolume* worldLV
-    = new G4LogicalVolume(
-                 worldS,   //its solid
-                 fWaterMaterial,      //its material
-                 "World_LV"); //its name
-  
-  G4VPhysicalVolume* worldPV
-    = new G4PVPlacement(
-                 0,               // no rotation
-                 G4ThreeVector(), // at (0,0,0)
-                 worldLV,         // its logical volume
-                 "World",         // its name
-                 0,               // its mother  volume
-                 false,           // no boolean operations
-                 0,               // copy number
-                 false); // checking overlaps 
-  
-  worldLV->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
-                             fTrackingCut));    
+  G4Box* worldS = new G4Box("world",  // its name
+                            worldLength / 2, worldLength / 2, worldLength / 2);  // its size
+
+  G4LogicalVolume* worldLV = new G4LogicalVolume(worldS,  // its solid
+                                                 fWaterMaterial,  // its material
+                                                 "World_LV");  // its name
+
+  G4VPhysicalVolume* worldPV = new G4PVPlacement(0,  // no rotation
+                                                 G4ThreeVector(),  // at (0,0,0)
+                                                 worldLV,  // its logical volume
+                                                 "World",  // its name
+                                                 0,  // its mother  volume
+                                                 false,  // no boolean operations
+                                                 0,  // copy number
+                                                 false);  // checking overlaps
+
+  worldLV->SetUserLimits(new G4UserLimits(DBL_MAX, DBL_MAX, DBL_MAX, fTrackingCut));
 
   PrintParameters();
-  
+
   return worldPV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 void DetectorConstruction::ConstructSDandField()
 {
   // Sensitive detectors
 
   G4String trackerChamberSDname = "TrackerChamberSD";
-  
-  TrackerSD* aTrackerSD = new TrackerSD(trackerChamberSDname,
-                                            "TrackerHitsCollection");
-  
+
+  TrackerSD* aTrackerSD = new TrackerSD(trackerChamberSDname, "TrackerHitsCollection");
+
   G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
 
-  // Setting aTrackerSD to all logical volumes with the same name 
-  // of "Chamber_LV".
   SetSensitiveDetector("World_LV", aTrackerSD, true);
-
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -176,10 +158,8 @@ void DetectorConstruction::SetTrackingCut(G4double value)
 void DetectorConstruction::PrintParameters() const
 {
   G4cout << "\n---------------------------------------------------------\n";
-  G4cout << "---> The tracking cut is set to " 
-         << G4BestUnit(fTrackingCut,"Energy") << G4endl;
+  G4cout << "---> The tracking cut is set to " << G4BestUnit(fTrackingCut, "Energy") << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

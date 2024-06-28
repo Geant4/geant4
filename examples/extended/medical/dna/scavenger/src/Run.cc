@@ -27,11 +27,13 @@
 /// \brief Implementation of the scavenger::Run class
 
 #include "Run.hh"
-#include "G4RunManager.hh"
-#include "G4Event.hh"
+
 #include "ScoreSpecies.hh"
-#include "G4SDManager.hh"
+
+#include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
 #include "G4THitsMap.hh"
 
 namespace scavenger
@@ -39,31 +41,30 @@ namespace scavenger
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-Run::Run()
-  : G4Run(){
-  G4MultiFunctionalDetector *mfdet = dynamic_cast<G4MultiFunctionalDetector *>
-  (G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
-  G4int CollectionIDspecies =
-    G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
+Run::Run() : G4Run()
+{
+  G4MultiFunctionalDetector* mfdet = dynamic_cast<G4MultiFunctionalDetector*>(
+    G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
+  G4int CollectionIDspecies = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
   fScorerRun = mfdet->GetPrimitive(CollectionIDspecies);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void Run::RecordEvent(const G4Event *event) {
+void Run::RecordEvent(const G4Event* event)
+{
   if (event->IsAborted()) {
     return;
   }
-  G4int CollectionID =
-    G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
-  //Hits collections
-  G4HCofThisEvent *pHCE = event->GetHCofThisEvent();
+  G4int CollectionID = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
+  // Hits collections
+  G4HCofThisEvent* pHCE = event->GetHCofThisEvent();
   if (!pHCE) {
     return;
   }
-  auto evtMap = dynamic_cast<G4THitsMap<G4double> *>(pHCE->GetHC(CollectionID));
+  auto evtMap = dynamic_cast<G4THitsMap<G4double>*>(pHCE->GetHC(CollectionID));
   auto map = evtMap->GetMap();
-  for (const auto &it : *map) {
+  for (const auto& it : *map) {
     G4double edep = *(it.second);
     fSumEne += edep;
   }
@@ -72,18 +73,19 @@ void Run::RecordEvent(const G4Event *event) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void Run::Merge(const G4Run *aRun) {
+void Run::Merge(const G4Run* aRun)
+{
   if (aRun == this) {
     return;
   }
-  const auto localRun = dynamic_cast<const Run *>(aRun);
+  const auto localRun = dynamic_cast<const Run*>(aRun);
   fSumEne += localRun->fSumEne;
-  auto masterScorer = dynamic_cast<ScoreSpecies *>(this->fScorerRun);
-  auto localScorer = dynamic_cast<ScoreSpecies *>(localRun->fScorerRun);
+  auto masterScorer = dynamic_cast<ScoreSpecies*>(this->fScorerRun);
+  auto localScorer = dynamic_cast<ScoreSpecies*>(localRun->fScorerRun);
   masterScorer->AbsorbResultsFromWorkerScorer(localScorer);
   G4Run::Merge(aRun);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-}
+}  // namespace scavenger

@@ -41,17 +41,17 @@ class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
     TrackingAction(DetectorConstruction*, EventAction*);
-   ~TrackingAction() = default;
-   
+    ~TrackingAction() = default;
+
     void PostUserTrackingAction(const G4Track*) override;
-    
+
   private:
     DetectorConstruction* fDetector = nullptr;
-    EventAction*          fEventAct = nullptr;
+    EventAction* fEventAct = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

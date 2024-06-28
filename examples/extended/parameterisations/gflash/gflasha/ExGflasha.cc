@@ -75,9 +75,10 @@ int main(int argc, char** argv)
   G4PhysListFactory listFactory;
   G4String name;
   auto list_name = std::getenv("PHYSLIST");
-  if (list_name == nullptr || std::strlen(list_name) == 0 ) {
+  if (list_name == nullptr || std::strlen(list_name) == 0) {
     name = "FTFP_BERT";
-  } else {
+  }
+  else {
     name = list_name;
   }
   G4VModularPhysicsList* physicsList = listFactory.GetReferencePhysList(name);

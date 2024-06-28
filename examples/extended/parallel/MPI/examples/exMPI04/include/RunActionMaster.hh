@@ -34,17 +34,18 @@
 
 class G4MPIntupleMerger;
 
-class RunActionMaster : public G4UserRunAction {
-public:
-  RunActionMaster(G4bool useNtuple, G4bool mergeNtuple);
-  ~RunActionMaster();
+class RunActionMaster : public G4UserRunAction
+{
+  public:
+    RunActionMaster(G4bool useNtuple, G4bool mergeNtuple);
+    ~RunActionMaster();
 
-  virtual G4Run* GenerateRun();
-  virtual void BeginOfRunAction(const G4Run* arun);
-  virtual void EndOfRunAction(const G4Run* arun);
+    virtual G4Run* GenerateRun();
+    virtual void BeginOfRunAction(const G4Run* arun);
+    virtual void EndOfRunAction(const G4Run* arun);
 
-private:
-  G4MPIntupleMerger* fMPIntupleMerger;
+  private:
+    G4MPIntupleMerger* fMPIntupleMerger;
 };
 
 #endif

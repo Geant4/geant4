@@ -27,9 +27,10 @@
 /// \brief Implementation of the scavenger::PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "G4GeneralParticleSource.hh"
-#include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 
 namespace scavenger
 {
@@ -37,8 +38,8 @@ namespace scavenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction(),
-    fpGeneralParticleSource(new G4GeneralParticleSource()) {
+  : G4VUserPrimaryGeneratorAction(), fpGeneralParticleSource(new G4GeneralParticleSource())
+{
   /**
    * default particle kinematic
    */
@@ -50,10 +51,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
   fpGeneralParticleSource->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-}
+}  // namespace scavenger

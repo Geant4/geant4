@@ -106,12 +106,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4double GetSizeY() const { return fBoxSizeY; }
     G4double GetSizeZ() const { return fBoxSizeZ; }
 
-
     /** @brief Returns a pointer to the world material */
-    G4Material* GetMaterial()
-    {
-      return fMaterial;
-    }
+    G4Material* GetMaterial() { return fMaterial; }
 
     /** @brief Prints on screen some parameters for this class */
     void PrintParameters();

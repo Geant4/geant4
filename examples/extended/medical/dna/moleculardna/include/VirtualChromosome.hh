@@ -27,34 +27,34 @@
 #ifndef MOLECULAR_CHROMOSOME_HH
 #define MOLECULAR_CHROMOSOME_HH
 
-#include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class VirtualChromosome
 {
- public:
-  explicit VirtualChromosome(const G4String&);
+  public:
+    explicit VirtualChromosome(const G4String&);
 
-  virtual ~VirtualChromosome() = default;
+    virtual ~VirtualChromosome() = default;
 
-  /// brief: Check point is in chromosome
-  virtual bool PointInChromosome(G4ThreeVector const& position) = 0;
+    /// brief: Check point is in chromosome
+    virtual bool PointInChromosome(G4ThreeVector const& position) = 0;
 
-  /// brief: return a random point in chromosome, not guaranteed uniform
-  virtual G4ThreeVector RandomPointInChromosome() = 0;
+    /// brief: return a random point in chromosome, not guaranteed uniform
+    virtual G4ThreeVector RandomPointInChromosome() = 0;
 
-  virtual G4String GetShape() = 0;
+    virtual G4String GetShape() = 0;
 
-  virtual void Print() = 0;
+    virtual void Print() = 0;
 
-  virtual G4String Plot();
+    virtual G4String Plot();
 
-  const G4String& GetName() { return fName; };
+    const G4String& GetName() { return fName; };
 
- private:
-  G4String fName;
+  private:
+    G4String fName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

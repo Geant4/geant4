@@ -33,45 +33,39 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
-
-#include "F01SteppingVerbose.hh"
-#include "G4RunManagerFactory.hh"
-
-#include "F01DetectorConstruction.hh"
 #include "F01ActionInitialization.hh"
-
+#include "F01DetectorConstruction.hh"
 #include "F01RunAction.hh"
+#include "F01SteppingVerbose.hh"
 
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UImanager.hh"
 
 // To control verbosity
+#include "FTFP_BERT.hh"
+
 #include "G4EmParameters.hh"
 #include "G4HadronicParameters.hh"
-
 #include "G4PhysicsListHelper.hh"
-
-#include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
+#include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
 #include "Randomize.hh"
 
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
 // For Printing statistic from Transporation process(es)
+#include "G4CoupledTransportation.hh"
 #include "G4Electron.hh"
 #include "G4Transportation.hh"
-#include "G4CoupledTransportation.hh"
-
 #include "G4TransportationParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -82,8 +76,7 @@ int main(int argc,char** argv)
   G4VSteppingVerbose::SetInstance(new F01SteppingVerbose);
 
   // Construct the sequential (or default) run manager
-  auto* runManager =
-     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
 
   // G4TransportationWithMscType: fDisabled, fEnabled, fMultipleSteps
   // G4EmParameters::Instance()->SetTransportationWithMsc(G4TransportationWithMscType::fEnabled);
@@ -91,7 +84,7 @@ int main(int argc,char** argv)
   // Set mandatory initialization classes
   //
   // Detector construction
-  auto  detector = new F01DetectorConstruction();
+  auto detector = new F01DetectorConstruction();
   // detector->SetUseFSALstepper();  // Uncomment to use FSAL steppers
 
   runManager->SetUserInitialization(detector);
@@ -125,34 +118,32 @@ int main(int argc,char** argv)
   // User action initialization
   runManager->SetUserInitialization(new F01ActionInitialization(detector));
 
-  G4double warningE   = 10.0 * CLHEP::keV;
-  G4double importantE =  0.1  * CLHEP::MeV;
-  G4int    numTrials  = 30;
+  G4double warningE = 10.0 * CLHEP::keV;
+  G4double importantE = 0.1 * CLHEP::MeV;
+  G4int numTrials = 30;
 
-  G4bool useTransportParams= true; // Use the new way - Nov 2022
+  G4bool useTransportParams = true;  // Use the new way - Nov 2022
 
-  if( useTransportParams )
-  {
-    auto transportParams= G4TransportationParameters::Instance();
-    transportParams->SetWarningEnergy(  warningE );
-    transportParams->SetImportantEnergy( importantE );
-    transportParams->SetNumberOfTrials( numTrials );
-    G4cout << "field01: Using G4TransportationParameters to set looper parameters."  << G4endl;
+  if (useTransportParams) {
+    auto transportParams = G4TransportationParameters::Instance();
+    transportParams->SetWarningEnergy(warningE);
+    transportParams->SetImportantEnergy(importantE);
+    transportParams->SetNumberOfTrials(numTrials);
+    G4cout << "field01: Using G4TransportationParameters to set looper parameters." << G4endl;
   }
-  else
-  {
+  else {
     // Fine grained control of thresholds for looping particles
-    auto runAction= new F01RunAction();
-    runAction->SetWarningEnergy( warningE );
+    auto runAction = new F01RunAction();
+    runAction->SetWarningEnergy(warningE);
     // Looping particles with E < 10 keV will be killed after 1 step
     //   with warning.
     // Looping particles with E > 10 keV will generate a warning.
-    runAction->SetImportantEnergy( importantE );
-    runAction->SetNumberOfTrials( numTrials );
+    runAction->SetImportantEnergy(importantE);
+    runAction->SetNumberOfTrials(numTrials);
     // Looping particles with E > 0.1 MeV will survive for up to
     //  30 'tracking' steps, and only be killed if they still loop.
 
-    G4cout << "field01: Using F01RunAction to set looper parameters."  << G4endl;
+    G4cout << "field01: Using F01RunAction to set looper parameters." << G4endl;
     runManager->SetUserAction(runAction);
   }
 
@@ -177,20 +168,18 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (!ui)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
-  else
-    {  // interactive mode : define UI session
-     UImanager->ApplyCommand("/control/execute init_vis.mac");
-     if (ui->IsGUI())
-       UImanager->ApplyCommand("/control/execute gui.mac");
-     ui->SessionStart();
-     delete ui;
-    }
+  if (!ui)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else {  // interactive mode : define UI session
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
   // Statistics of tracks killed by G4Transportation are currently
   //  printed in the RunAction's EndOfEvent action.

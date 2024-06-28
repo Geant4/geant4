@@ -41,36 +41,24 @@ class G4ParticleChangeForGamma;
 
 class MyKleinNishinaCompton : public G4KleinNishinaCompton
 {
+  public:
+    MyKleinNishinaCompton(DetectorConstruction*, const G4ParticleDefinition* p = 0,
+                          const G4String& nam = "myKlein-Nishina");
 
-public:
+    ~MyKleinNishinaCompton();
 
-  MyKleinNishinaCompton(DetectorConstruction*,
-                        const G4ParticleDefinition* p = 0, 
-                        const G4String& nam = "myKlein-Nishina");
+    virtual G4double CrossSectionPerVolume(const G4Material*, const G4ParticleDefinition*,
+                                           G4double kinEnergy, G4double cut, G4double emax);
 
- ~MyKleinNishinaCompton();
-                                      
-  virtual G4double CrossSectionPerVolume(
-                                const G4Material*,
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double cut,
-                                      G4double emax);
+    virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
+                                   const G4DynamicParticle*, G4double tmin, G4double maxEnergy);
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy);
-                                      
-  void SetCSFactor(G4double factor) {fCrossSectionFactor = factor;};
+    void SetCSFactor(G4double factor) { fCrossSectionFactor = factor; };
 
-protected:
-
-  DetectorConstruction*    fDetector;
-  MyKleinNishinaMessenger* fMessenger;
-  G4double                 fCrossSectionFactor;
-
+  protected:
+    DetectorConstruction* fDetector;
+    MyKleinNishinaMessenger* fMessenger;
+    G4double fCrossSectionFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

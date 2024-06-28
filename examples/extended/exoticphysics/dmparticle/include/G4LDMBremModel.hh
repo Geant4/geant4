@@ -46,55 +46,39 @@ class G4ParticleDefinition;
 
 class G4LDMBremModel : public G4MuBremsstrahlungModel
 {
+  public:
+    explicit G4LDMBremModel(const G4ParticleDefinition* p = nullptr,
+                            const G4String& nam = "ldmBrem");
 
-public:
+    virtual ~G4LDMBremModel();
 
-  explicit G4LDMBremModel(const G4ParticleDefinition* p = nullptr,
-                         const G4String& nam = "ldmBrem");
+    inline void SetEpsilon(G4double e) { fEpsilon = e; };
+    inline G4double GetEpsilon() { return fEpsilon; };
 
-  virtual ~G4LDMBremModel();
+  protected:
+    virtual G4double ComputeDEDXPerVolume(const G4Material*, const G4ParticleDefinition*,
+                                          G4double kineticEnergy, G4double cutEnergy) override;
 
-  inline void SetEpsilon(G4double e){fEpsilon=e;};
-  inline G4double GetEpsilon(){return fEpsilon;};
+    virtual G4double ComputeDMicroscopicCrossSection(G4double tkin, G4double Z,
+                                                     G4double gammaEnergy) override;
 
-protected:
+    virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*, G4double kineticEnergy,
+                                                G4double Z, G4double A, G4double cutEnergy,
+                                                G4double maxEnergy) override;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                                const G4ParticleDefinition*,
-                                G4double kineticEnergy,
-                                G4double cutEnergy) override;
+    virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
+                                   const G4DynamicParticle*, G4double tmin,
+                                   G4double maxEnergy) override;
 
-  virtual G4double ComputeDMicroscopicCrossSection( 
-                                 G4double tkin,
-                                 G4double Z,
-                                 G4double gammaEnergy ) override;
+  private:
+    // hide assignment operator
+    G4LDMBremModel& operator=(const G4LDMBremModel& right) = delete;
+    G4LDMBremModel(const G4LDMBremModel&) = delete;
 
+    const G4ParticleDefinition* theLDMPhoton;
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                 const G4ParticleDefinition*,
-                                 G4double kineticEnergy,
-                                 G4double Z, G4double A,
-                                 G4double cutEnergy,
-                                 G4double maxEnergy) override;
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy) override;
-
-private:
-
-  // hide assignment operator
-  G4LDMBremModel & 
-    operator=(const  G4LDMBremModel &right) = delete;
-  G4LDMBremModel(const  G4LDMBremModel&) = delete;
-
-  const G4ParticleDefinition* theLDMPhoton;
-
-  G4double fEpsilon; // correction for fine_structure_const
-  G4double fLDMPhotonMass; 
-
+    G4double fEpsilon;  // correction for fine_structure_const
+    G4double fLDMPhotonMass;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -37,14 +37,11 @@
 class RE03ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    RE03ActionInitialization();    
+    RE03ActionInitialization();
     virtual ~RE03ActionInitialization();
 
   public:
     virtual void Build() const;
- 
 };
 
 #endif
-
-

@@ -27,9 +27,9 @@
 /// \brief Definition of the HistoMessenger class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoMessenger_h
 #define HistoMessenger_h 1
@@ -47,27 +47,23 @@ class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoMessenger: public G4UImessenger
+class HistoMessenger : public G4UImessenger
 {
   public:
+    HistoMessenger(HistoManager*);
+    ~HistoMessenger();
 
-   HistoMessenger(HistoManager* );
-  ~HistoMessenger();
-
-   virtual void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
+    HistoManager* fHistoManager;
 
-   HistoManager*           fHistoManager;
-   
-   G4UIdirectory*          fHistoDir;   
-   G4UIcmdWithAString*     fFileNameCmd;
-   G4UIcommand*            fHistoCmd;
-   G4UIcmdWithAnInteger*   fPrtHistoCmd;   
-
+    G4UIdirectory* fHistoDir;
+    G4UIcmdWithAString* fFileNameCmd;
+    G4UIcommand* fHistoCmd;
+    G4UIcmdWithAnInteger* fPrtHistoCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

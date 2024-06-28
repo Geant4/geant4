@@ -27,80 +27,74 @@
 /// @file Analysis.cc
 /// @brief Define histograms
 
-#include "G4AutoDelete.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4AnalysisManager.hh"
 #include "Analysis.hh"
 
-//Select format of output here
+#include "G4AnalysisManager.hh"
+#include "G4AutoDelete.hh"
+#include "G4SystemOfUnits.hh"
+
+// Select format of output here
 G4ThreadLocal G4int Analysis::fincidentFlag = false;
 G4ThreadLocal Analysis* the_analysis = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Analysis*
-Analysis::GetAnalysis()
+Analysis* Analysis::GetAnalysis()
 {
-  if (!the_analysis)
-    {
-      the_analysis = new Analysis();
-      G4AutoDelete::Register(the_analysis);
-    }
+  if (!the_analysis) {
+    the_analysis = new Analysis();
+    G4AutoDelete::Register(the_analysis);
+  }
   return the_analysis;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Analysis::Analysis() :
-  fincident_x_hist(0), fincident_map(0), fdose_hist(0), fdose_map(0),
-      fdose_prof(0), fdose_map_prof(0), fdose_map3d(0)
-{
-}
+Analysis::Analysis()
+  : fincident_x_hist(0),
+    fincident_map(0),
+    fdose_hist(0),
+    fdose_map(0),
+    fdose_prof(0),
+    fdose_map_prof(0),
+    fdose_map3d(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::Book()
+void Analysis::Book()
 {
   G4AnalysisManager* mgr = G4AnalysisManager::Instance();
   mgr->SetDefaultFileType("root");
   mgr->SetVerboseLevel(1);
-  fincident_x_hist = mgr->CreateH1("incident_x", "Incident X", 100, -5 * cm,
-      5 * cm, "cm");
-  fincident_map = mgr->CreateH2("incident_map", "Incident Map", 50, -5 * cm,
-      5 * cm, 50, -5 * cm, 5 * cm, "cm", "cm");
-  fdose_hist
-      = mgr->CreateH1("dose", "Dose distribution", 500, 0, 50 * cm, "cm");
-  fdose_map = mgr->CreateH2("dose_map", "Dose distribution", 500, 0, 50 * cm,
-      200, -10 * cm, 10 * cm, "cm", "cm");
-  fdose_map3d = mgr->CreateH3("dose_map_3d", "Dose distribution", 30, 0,
-      50 * cm, 20, -10 * cm, 10 * cm, 20, -10 * cm, 10 * cm, "cm", "cm", "cm");
-  fdose_prof = mgr->CreateP1("dose_prof", "Dose distribution", 300, 0, 30 * cm,
-      0, 100 * MeV, "cm", "MeV");
-  fdose_map_prof = mgr->CreateP2("dose_map_prof", "Dose distribution", 300, 0,
-      30 * cm, 80, -4 * cm, 4 * cm, 0, 100 * MeV, "cm", "cm", "MeV");
-
+  fincident_x_hist = mgr->CreateH1("incident_x", "Incident X", 100, -5 * cm, 5 * cm, "cm");
+  fincident_map = mgr->CreateH2("incident_map", "Incident Map", 50, -5 * cm, 5 * cm, 50, -5 * cm,
+                                5 * cm, "cm", "cm");
+  fdose_hist = mgr->CreateH1("dose", "Dose distribution", 500, 0, 50 * cm, "cm");
+  fdose_map = mgr->CreateH2("dose_map", "Dose distribution", 500, 0, 50 * cm, 200, -10 * cm,
+                            10 * cm, "cm", "cm");
+  fdose_map3d = mgr->CreateH3("dose_map_3d", "Dose distribution", 30, 0, 50 * cm, 20, -10 * cm,
+                              10 * cm, 20, -10 * cm, 10 * cm, "cm", "cm", "cm");
+  fdose_prof =
+    mgr->CreateP1("dose_prof", "Dose distribution", 300, 0, 30 * cm, 0, 100 * MeV, "cm", "MeV");
+  fdose_map_prof = mgr->CreateP2("dose_map_prof", "Dose distribution", 300, 0, 30 * cm, 80, -4 * cm,
+                                 4 * cm, 0, 100 * MeV, "cm", "cm", "MeV");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Analysis::~Analysis()
-{
-}
+Analysis::~Analysis() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::Update()
+void Analysis::Update()
 {
   return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::Clear()
+void Analysis::Clear()
 {
   return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::Save(const G4String& fname)
+void Analysis::Save(const G4String& fname)
 {
   G4AnalysisManager* mgr = G4AnalysisManager::Instance();
   mgr->OpenFile(fname.c_str());
@@ -109,8 +103,7 @@ Analysis::Save(const G4String& fname)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::Close(G4bool reset)
+void Analysis::Close(G4bool reset)
 {
   G4AnalysisManager* mgr = G4AnalysisManager::Instance();
   mgr->CloseFile(reset);
@@ -118,36 +111,30 @@ Analysis::Close(G4bool reset)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::FillIncident(const G4ThreeVector& p)
+void Analysis::FillIncident(const G4ThreeVector& p)
 {
-  if (!fincidentFlag)
-    {
-      G4AnalysisManager* mgr = G4AnalysisManager::Instance();
-      mgr->FillH2(fincident_map, p.x(), p.y());
-      mgr->FillH1(fincident_x_hist, p.x());
-      fincidentFlag = true;
-    }
+  if (!fincidentFlag) {
+    G4AnalysisManager* mgr = G4AnalysisManager::Instance();
+    mgr->FillH2(fincident_map, p.x(), p.y());
+    mgr->FillH1(fincident_x_hist, p.x());
+    fincidentFlag = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void
-Analysis::FillDose(const G4ThreeVector& p, G4double dedx)
+void Analysis::FillDose(const G4ThreeVector& p, G4double dedx)
 {
   const G4double dxy = 10. * mm;
-  if (std::abs(p.y()) < dxy)
-    {
-      G4AnalysisManager* mgr = G4AnalysisManager::Instance();
-      const G4double Z0 = 25. * cm;
+  if (std::abs(p.y()) < dxy) {
+    G4AnalysisManager* mgr = G4AnalysisManager::Instance();
+    const G4double Z0 = 25. * cm;
 
-      mgr->FillH2(fdose_map, p.z() + Z0, p.x(), dedx / GeV);
-      mgr->FillP2(fdose_map_prof, p.z() + Z0, p.x(), dedx);
-      mgr->FillH3(fdose_map3d, p.z() + Z0, p.x(), p.y(), dedx / GeV);
-      if (std::abs(p.x()) < dxy)
-        {
-          mgr->FillH1(fdose_hist, p.z() + Z0, dedx / GeV);
-          mgr->FillP1(fdose_prof, p.z() + Z0, dedx);
-        }
+    mgr->FillH2(fdose_map, p.z() + Z0, p.x(), dedx / GeV);
+    mgr->FillP2(fdose_map_prof, p.z() + Z0, p.x(), dedx);
+    mgr->FillH3(fdose_map3d, p.z() + Z0, p.x(), p.y(), dedx / GeV);
+    if (std::abs(p.x()) < dxy) {
+      mgr->FillH1(fdose_hist, p.z() + Z0, dedx / GeV);
+      mgr->FillP1(fdose_prof, p.z() + Z0, dedx);
     }
-
+  }
 }

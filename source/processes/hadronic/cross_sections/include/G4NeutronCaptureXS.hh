@@ -124,7 +124,6 @@ private:
 
   G4bool isInitializer{false};
 
-  static const G4int MAXZCAPTURE = 93;
   static G4ElementData* data;
   static G4String gDataDirectory;
 };

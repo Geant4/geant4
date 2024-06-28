@@ -26,7 +26,7 @@
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,17 +42,18 @@ class TrackingAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction: public G4UserRunAction {
+class RunAction : public G4UserRunAction
+{
   public:
-    RunAction( SteppingAction* steppingAction = nullptr,
-               TrackingAction* trackingAction = nullptr );
+    RunAction(SteppingAction* steppingAction = nullptr, TrackingAction* trackingAction = nullptr);
     ~RunAction() override = default;
-    void BeginOfRunAction( const G4Run* aRun ) override;
-    void   EndOfRunAction( const G4Run* aRun ) override;
+    void BeginOfRunAction(const G4Run* aRun) override;
+    void EndOfRunAction(const G4Run* aRun) override;
     G4Run* GenerateRun() override;
+
   private:
     SteppingAction* fSteppingAction;
-    TrackingAction* fTrackingAction;  
+    TrackingAction* fTrackingAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -41,8 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
-  : G4UImessenger(), fDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fDetector(Det)
 {
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");

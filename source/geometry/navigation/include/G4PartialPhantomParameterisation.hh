@@ -30,11 +30,10 @@
 // Describes partial regular parameterisations, i.e. the voxels do not 
 // completely fill the container in the three dimensions
 
-// History:
 // - Created: P.Arce, September 2010
 // --------------------------------------------------------------------
-#ifndef G4PartialPhantomParameterisation_HH
-#define G4PartialPhantomParameterisation_HH
+#ifndef G4PartialPhantomParameterisation_hh
+#define G4PartialPhantomParameterisation_hh 1
 
 #include <map>
 #include <set>
@@ -52,10 +51,10 @@ class G4Material;
 
 class G4PartialPhantomParameterisation : public G4PhantomParameterisation
 {
-  public:  // with description
+  public:
 
-    G4PartialPhantomParameterisation();
-   ~G4PartialPhantomParameterisation() override;
+    G4PartialPhantomParameterisation() = default;
+   ~G4PartialPhantomParameterisation() override = default;
 
     void ComputeTransformation(const G4int, G4VPhysicalVolume *) const override;
   

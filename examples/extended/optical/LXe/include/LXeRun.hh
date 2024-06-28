@@ -33,73 +33,73 @@
 #ifndef LXeRun_h
 #define LXeRun_h 1
 
-#include "globals.hh"
 #include "G4Run.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class LXeRun : public G4Run
 {
- public:
-  LXeRun() = default;
-  ~LXeRun() override = default;
+  public:
+    LXeRun() = default;
+    ~LXeRun() override = default;
 
-  void IncPhotonCount_Scint(G4int count)
-  {
-    fPhotonCount_Scint += count;
-    fPhotonCount_Scint2 += count * count;
-  }
-  void IncPhotonCount_Ceren(G4int count)
-  {
-    fPhotonCount_Ceren += count;
-    fPhotonCount_Ceren2 += count * count;
-  }
-  void IncEDep(G4double dep)
-  {
-    fTotE += dep;
-    fTotE2 += dep * dep;
-  }
-  void IncAbsorption(G4int count)
-  {
-    fAbsorptionCount += count;
-    fAbsorptionCount2 += count * count;
-  }
-  void IncBoundaryAbsorption(G4int count)
-  {
-    fBoundaryAbsorptionCount += count;
-    fBoundaryAbsorptionCount2 += count * count;
-  }
-  void IncHitCount(G4int count)
-  {
-    fHitCount += count;
-    fHitCount2 += count * count;
-  }
-  void IncHitsAboveThreshold(G4int count)
-  {
-    fPMTsAboveThreshold += count;
-    fPMTsAboveThreshold2 += count * count;
-  }
+    void IncPhotonCount_Scint(G4int count)
+    {
+      fPhotonCount_Scint += count;
+      fPhotonCount_Scint2 += count * count;
+    }
+    void IncPhotonCount_Ceren(G4int count)
+    {
+      fPhotonCount_Ceren += count;
+      fPhotonCount_Ceren2 += count * count;
+    }
+    void IncEDep(G4double dep)
+    {
+      fTotE += dep;
+      fTotE2 += dep * dep;
+    }
+    void IncAbsorption(G4int count)
+    {
+      fAbsorptionCount += count;
+      fAbsorptionCount2 += count * count;
+    }
+    void IncBoundaryAbsorption(G4int count)
+    {
+      fBoundaryAbsorptionCount += count;
+      fBoundaryAbsorptionCount2 += count * count;
+    }
+    void IncHitCount(G4int count)
+    {
+      fHitCount += count;
+      fHitCount2 += count * count;
+    }
+    void IncHitsAboveThreshold(G4int count)
+    {
+      fPMTsAboveThreshold += count;
+      fPMTsAboveThreshold2 += count * count;
+    }
 
-  void Merge(const G4Run* run) override;
+    void Merge(const G4Run* run) override;
 
-  void EndOfRun();
+    void EndOfRun();
 
- private:
-  G4int fHitCount = 0;
-  G4int fHitCount2 = 0;
-  G4int fPhotonCount_Scint = 0;
-  G4int fPhotonCount_Scint2 = 0;
-  G4int fPhotonCount_Ceren = 0;
-  G4int fPhotonCount_Ceren2 = 0;
-  G4int fAbsorptionCount = 0;
-  G4int fAbsorptionCount2 = 0;
-  G4int fBoundaryAbsorptionCount = 0;
-  G4int fBoundaryAbsorptionCount2 = 0;
-  G4int fPMTsAboveThreshold = 0;
-  G4int fPMTsAboveThreshold2 = 0;
+  private:
+    G4int fHitCount = 0;
+    G4int fHitCount2 = 0;
+    G4int fPhotonCount_Scint = 0;
+    G4int fPhotonCount_Scint2 = 0;
+    G4int fPhotonCount_Ceren = 0;
+    G4int fPhotonCount_Ceren2 = 0;
+    G4int fAbsorptionCount = 0;
+    G4int fAbsorptionCount2 = 0;
+    G4int fBoundaryAbsorptionCount = 0;
+    G4int fBoundaryAbsorptionCount2 = 0;
+    G4int fPMTsAboveThreshold = 0;
+    G4int fPMTsAboveThreshold2 = 0;
 
-  G4double fTotE = 0.;
-  G4double fTotE2 = 0.;
+    G4double fTotE = 0.;
+    G4double fTotE2 = 0.;
 };
 
 #endif  // LXeRun_h

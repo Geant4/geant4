@@ -26,17 +26,18 @@
 //
 /// \file G04DetectorConstruction.cc
 /// \brief Implementation of the G04DetectorConstruction class
- 
+
 #include "G04DetectorConstruction.hh"
+
 #include "G04SensitiveDetector.hh"
-#include "G4SDManager.hh"
+
 #include "G4GDMLParser.hh"
- 
+#include "G4SDManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G04DetectorConstruction::G04DetectorConstruction(const G4GDMLParser& parser)
- : G4VUserDetectorConstruction(),
-   fParser(parser)
+  : G4VUserDetectorConstruction(), fParser(parser)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,36 +51,30 @@ G4VPhysicalVolume* G04DetectorConstruction::Construct()
 
 void G04DetectorConstruction::ConstructSDandField()
 {
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Sensitive detectors
-  //------------------------------------------------ 
+  //------------------------------------------------
 
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  
+
   G4String trackerChamberSDname = "Tracker";
-  G04SensitiveDetector* aTrackerSD = 
-    new G04SensitiveDetector(trackerChamberSDname);
-  SDman->AddNewDetector( aTrackerSD );
-   
+  G04SensitiveDetector* aTrackerSD = new G04SensitiveDetector(trackerChamberSDname);
+  SDman->AddNewDetector(aTrackerSD);
+
   ///////////////////////////////////////////////////////////////////////
   //
   // Example how to retrieve Auxiliary Information for sensitive detector
   //
   const G4GDMLAuxMapType* auxmap = fParser.GetAuxMap();
-  G4cout << "Found " << auxmap->size()
-            << " volume(s) with auxiliary information."
-            << G4endl << G4endl;
-  for(G4GDMLAuxMapType::const_iterator iter=auxmap->begin();
-      iter!=auxmap->end(); iter++) 
-  {
+  G4cout << "Found " << auxmap->size() << " volume(s) with auxiliary information." << G4endl
+         << G4endl;
+  for (G4GDMLAuxMapType::const_iterator iter = auxmap->begin(); iter != auxmap->end(); iter++) {
     G4cout << "Volume " << ((*iter).first)->GetName()
-           << " has the following list of auxiliary information: "
-           << G4endl << G4endl;
-    for (G4GDMLAuxListType::const_iterator vit=(*iter).second.begin();
-         vit!=(*iter).second.end(); vit++)
+           << " has the following list of auxiliary information: " << G4endl << G4endl;
+    for (G4GDMLAuxListType::const_iterator vit = (*iter).second.begin();
+         vit != (*iter).second.end(); vit++)
     {
-      G4cout << "--> Type: " << (*vit).type
-                << " Value: " << (*vit).value << G4endl;
+      G4cout << "--> Type: " << (*vit).type << " Value: " << (*vit).value << G4endl;
     }
   }
   G4cout << G4endl;
@@ -87,34 +82,25 @@ void G04DetectorConstruction::ConstructSDandField()
   // The same as above, but now we are looking for
   // sensitive detectors setting them for the volumes
 
-  for(G4GDMLAuxMapType::const_iterator iter=auxmap->begin();
-      iter!=auxmap->end(); iter++) 
-  {
+  for (G4GDMLAuxMapType::const_iterator iter = auxmap->begin(); iter != auxmap->end(); iter++) {
     G4cout << "Volume " << ((*iter).first)->GetName()
-           << " has the following list of auxiliary information: "
-           << G4endl << G4endl;
-    for (G4GDMLAuxListType::const_iterator vit=(*iter).second.begin();
-         vit!=(*iter).second.end();vit++)
+           << " has the following list of auxiliary information: " << G4endl << G4endl;
+    for (G4GDMLAuxListType::const_iterator vit = (*iter).second.begin();
+         vit != (*iter).second.end(); vit++)
     {
-      if ((*vit).type=="SensDet")
-      {
-        G4cout << "Attaching sensitive detector " << (*vit).value
-               << " to volume " << ((*iter).first)->GetName()
-               <<  G4endl << G4endl;
+      if ((*vit).type == "SensDet") {
+        G4cout << "Attaching sensitive detector " << (*vit).value << " to volume "
+               << ((*iter).first)->GetName() << G4endl << G4endl;
 
-        G4VSensitiveDetector* mydet = 
-          SDman->FindSensitiveDetector((*vit).value);
-        if(mydet) 
-        {
+        G4VSensitiveDetector* mydet = SDman->FindSensitiveDetector((*vit).value);
+        if (mydet) {
           G4LogicalVolume* myvol = (*iter).first;
           myvol->SetSensitiveDetector(mydet);
         }
-        else
-        {
+        else {
           G4cout << (*vit).value << " detector not found" << G4endl;
         }
       }
     }
   }
 }
-

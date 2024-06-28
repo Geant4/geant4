@@ -31,14 +31,14 @@
 #ifndef RE05StackingAction_H
 #define RE05StackingAction_H 1
 
-#include "globals.hh"
-#include "G4UserStackingAction.hh"
 #include "G4ThreeVector.hh"
+#include "G4UserStackingAction.hh"
+#include "globals.hh"
 
 class G4Track;
 
-#include "RE05TrackerHit.hh"
 #include "RE05MuonHit.hh"
+#include "RE05TrackerHit.hh"
 class RE05StackingActionMessenger;
 
 class RE05StackingAction : public G4UserStackingAction
@@ -53,9 +53,9 @@ class RE05StackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
 
   private:
-    G4bool InsideRoI(const G4Track * aTrack,G4double ang);
+    G4bool InsideRoI(const G4Track* aTrack, G4double ang);
     G4VHitsCollection* GetCollection(G4String colName);
-    
+
     RE05TrackerHitsCollection* fTrkHits;
     RE05MuonHitsCollection* fMuonHits;
     RE05StackingActionMessenger* fMessenger;
@@ -65,7 +65,7 @@ class RE05StackingAction : public G4UserStackingAction
     G4int fReqIsoMuon;
     G4int fReqIso;
     G4double fAngRoI;
-  
+
   public:
     inline void SetNRequestMuon(G4int val) { fReqMuon = val; }
     inline G4int GetNRequestMuon() const { return fReqMuon; }

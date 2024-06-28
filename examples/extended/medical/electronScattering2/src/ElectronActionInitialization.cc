@@ -27,33 +27,30 @@
 /// \file ElectronActionInitialization.cc
 /// \brief Implementation of the ElectronActionInitialization class
 
-#include "globals.hh"
 #include "ElectronActionInitialization.hh"
-#include "ElectronRunAction.hh"
+
 #include "ElectronPrimaryGeneratorAction.hh"
+#include "ElectronRunAction.hh"
+
 #include "G4GeneralParticleSource.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectronActionInitialization::ElectronActionInitialization(const G4String& 
-                                                           outputFile)
- : G4VUserActionInitialization(), fOutputFileSpec(outputFile)
-{
-}
+ElectronActionInitialization::ElectronActionInitialization(const G4String& outputFile)
+  : G4VUserActionInitialization(), fOutputFileSpec(outputFile)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectronActionInitialization::~ElectronActionInitialization()
-{
-}
+ElectronActionInitialization::~ElectronActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ElectronActionInitialization::BuildForMaster() const
 {
- SetUserAction(new ElectronRunAction(fOutputFileSpec));
+  SetUserAction(new ElectronRunAction(fOutputFileSpec));
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,6 +58,6 @@ void ElectronActionInitialization::Build() const
 {
   SetUserAction(new ElectronRunAction(fOutputFileSpec));
   SetUserAction(new ElectronPrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

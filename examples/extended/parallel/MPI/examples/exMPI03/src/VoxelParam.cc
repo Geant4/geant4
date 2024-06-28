@@ -27,45 +27,40 @@
 /// @file VoxelParam.cc
 /// @brief Define voxel parameterization
 
+#include "VoxelParam.hh"
+
 #include "G4Box.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
-#include "VoxelParam.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-VoxelParam::VoxelParam()
-{
-}
+VoxelParam::VoxelParam() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-VoxelParam::~VoxelParam()
-{
-}
+VoxelParam::~VoxelParam() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void VoxelParam::ComputeTransformation(const G4int id,
-                                       G4VPhysicalVolume* vol) const
+void VoxelParam::ComputeTransformation(const G4int id, G4VPhysicalVolume* vol) const
 {
   const G4int NX = 100;
 
   G4int iy = id / NX;
   G4int ix = id % NX;
 
-  const G4double dxyz = 1.*mm;
-  const G4double DXY = 10.*cm;
+  const G4double dxyz = 1. * mm;
+  const G4double DXY = 10. * cm;
 
-  G4double x0 = -DXY/2. + ix*dxyz;
-  G4double y0 = -DXY/2. + iy*dxyz;
+  G4double x0 = -DXY / 2. + ix * dxyz;
+  G4double y0 = -DXY / 2. + iy * dxyz;
 
-  vol-> SetTranslation(G4ThreeVector(x0,y0,0.));
-  vol-> SetRotation(0);
+  vol->SetTranslation(G4ThreeVector(x0, y0, 0.));
+  vol->SetRotation(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void VoxelParam::ComputeDimensions(G4Box& box, const G4int,
-                                   const G4VPhysicalVolume*) const
+void VoxelParam::ComputeDimensions(G4Box& box, const G4int, const G4VPhysicalVolume*) const
 {
-  const G4double dxyz = 0.5*mm;
+  const G4double dxyz = 0.5 * mm;
 
   box.SetXHalfLength(dxyz);
   box.SetYHalfLength(dxyz);

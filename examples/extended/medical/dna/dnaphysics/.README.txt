@@ -13,7 +13,7 @@ b. G4AI Ltd., UK
 \section dnaphysics_s1 INTRODUCTION.
 
 The dnaphysics example shows how to simulate track structures in liquid water
-using the Geant4-DNA physics models and processes.
+using the Geant4-DNA physics processes and models.
 
 The Geant4-DNA processes and models are further described at:
 http://geant4-dna.org
@@ -31,7 +31,7 @@ The geometry is a 100-micron side cube (World) made of liquid water (G4_WATER
 material). Particles are shot from the center of the volume.
 
 The variable density feature of materials is illustrated in DetectorConstruction.
-The material can be changed directly in dnaphysics.in macro file.
+The material can be changed directly in the dnaphysics.in macro file.
 
 \section dnaphysics_s3 SET-UP
 
@@ -46,14 +46,16 @@ In interactive mode, run:
 \endverbatim
 
 In batch, the macro dnaphysics.in can be used. It shows how to shoot different
-particle types.
+particle types and how to use Geant4-DNA Physics constructors.
+
+The deexcitation.in macro can also be used to simulate the energy spectrum of deexcitation products.
 
 \section dnaphysics_s5 PHYSICS
 
-The PhysicsList uses Geant4-DNA Physics constructors or activator.
-Activator can be used to apply Geant4-DNA to a specific Region only.
+The PhysicsList uses Geant4-DNA Physics constructors and other
+electromagnetic physics constructors.
 
-1) Geant4-DNA Physics constructors can be selected using the command:
+Geant4-DNA Physics constructors can be selected using the command:
 
 \verbatim
 /dna/test/addPhysics DNA_OptX
@@ -61,24 +63,17 @@ Activator can be used to apply Geant4-DNA to a specific Region only.
 
 where X is 0 to 8 (2, 4 or 6 are recommended).
 
-2) Alternatively, Geant4-DNA activator for World Region can be selected using the command:
-
-\verbatim
-/process/em/AddDNARegion World DNA_OptX
-\endverbatim
-
-where X = 0, 2, 4, or 6.
-
-3) In addition to 1) or 2), to enable radioactive decay, one can use:
+In addition, to also enable radioactive decay, one can use:
 
 \verbatim
 /dna/test/addPhysics raddecay
 \endverbatim
 
-4) Warning regarding ions: when the incident particle type is ion
+Warning regarding ions: when the incident particle type is ion
 (/gun/particle ion), specified with Z and A numbers (/gun/ion A Z),
 the Rudd ionisation extended model is used. The particles are tracked
-by default down to 0.5 MeV/u. This tracking cut can be bypassed using :
+by default down to 0.5 MeV/u and undergo below a capture process.
+This tracking cut can be bypassed using:
 
 \verbatim
 /dna/test/addIonsTrackingCut false
@@ -86,7 +81,10 @@ by default down to 0.5 MeV/u. This tracking cut can be bypassed using :
 
 \section dnaphysics_s6 SIMULATION OUTPUT AND RESULT ANALYSIS
 
-The output results consists in a dna.root file, containing for each simulation step:
+The output results consists in a dna.root file, containing two ntuples, named
+"step" and "track", respectively:
+
+1) for each simulation step:
 - the type of particle for the current step
 - the type of process for the current step
 - the step PostStepPoint coordinates (in nm)
@@ -111,6 +109,8 @@ file plot.C; to do so :
 * under your ROOT session, type in : .X plot.C to execute the macro file
 * alternatively you can type directly under your session : root plot.C
 
+Also, the plotDeexcitation.C ROOT macro file can be used to plot results of deexcitation.in.
+
 The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
 
 - particles: \n
@@ -124,8 +124,7 @@ helium: 6 \n
 \n
 - processes: \n
 
-Capture: 1 \n
-(only if one uses G4EmDNAPhysicsActivator in PhysicsList)
+Capture: 1
 
 e-_G4DNAElectronSolvation: 10 \n
 e-_G4DNAElastic: 11 \n
@@ -185,6 +184,15 @@ phot: 81 \n
 compt: 82 \n
 conv: 83 \n
 Rayl: 84 \n
+
+2) for each simulation track:
+
+- the type of particle for the current track (see 1))
+- the track position (in nm)
+- the track momentum direction
+- the track kinetic energy (in eV)
+- the track ID
+- the parent track ID
 
 ---------------------------------------------------------------------------
 

@@ -34,105 +34,100 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "Run.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
-#include "G4Track.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* DET)
-:fDetector(DET)
+TrackingAction::TrackingAction(DetectorConstruction* DET) : fDetector(DET)
 {
- fZend = 0.5*(fDetector->GetThicknessWorld()); 
+  fZend = 0.5 * (fDetector->GetThicknessWorld());
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PreUserTrackingAction(const G4Track*)
-{ }
+void TrackingAction::PreUserTrackingAction(const G4Track*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
+
   G4double charge = track->GetDefinition()->GetPDGCharge();
   G4ThreeVector position = track->GetPosition();
-  G4ThreeVector direction = track->GetMomentumDirection();    
+  G4ThreeVector direction = track->GetMomentumDirection();
 
-  if (charge == 0.0)       return;
+  if (charge == 0.0) return;
   if (position.z() < fZend) return;
   if (direction.z() <= 0.) return;
-    
+
   G4double rmin, dr, ds;
   G4int ih = 1;
-    
-  //projected angle at exit
-  
+
+  // projected angle at exit
+
   G4double ux = direction.x(), uy = direction.y(), uz = direction.z();
-  G4double thetax = std::atan(ux/uz);
-  G4double thetay = std::atan(uy/uz);
+  G4double thetax = std::atan(ux / uz);
+  G4double thetay = std::atan(uy / uz);
   analysisManager->FillH1(ih, thetax);
   analysisManager->FillH1(ih, thetay);
-      
-  //dN/dS at exit
-  
+
+  // dN/dS at exit
+
   G4double x = position.x(), y = position.y();
-  G4double r = std::sqrt(x*x + y*y);
+  G4double r = std::sqrt(x * x + y * y);
   ih = 2;
   dr = analysisManager->GetH1Width(ih);
-  rmin = ((int)(r/dr))*dr;
-  ds = twopi*(rmin + 0.5*dr)*dr;        
-  analysisManager->FillH1(ih, r, 1/ds);  
-      
-  //d(N/cost)/dS at exit
-  
+  rmin = ((int)(r / dr)) * dr;
+  ds = twopi * (rmin + 0.5 * dr) * dr;
+  analysisManager->FillH1(ih, r, 1 / ds);
+
+  // d(N/cost)/dS at exit
+
   ih = 3;
   dr = analysisManager->GetH1Width(ih);
-  rmin = ((int)(r/dr))*dr;
-  ds = twopi*(rmin + 0.5*dr)*dr;        
-  analysisManager->FillH1(ih, r, 1/(uz*ds));
-  
-  //vector of d(N/cost)/dS at exit
-  
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  rmin = ((int)(r / dr)) * dr;
+  ds = twopi * (rmin + 0.5 * dr) * dr;
+  analysisManager->FillH1(ih, r, 1 / (uz * ds));
 
-  run->SumFluence(r, 1/uz);
-  
-  //space angle at exit : dN/dOmega
-  
+  // vector of d(N/cost)/dS at exit
+
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  run->SumFluence(r, 1 / uz);
+
+  // space angle at exit : dN/dOmega
+
   ih = 5;
   G4double theta = std::acos(uz);
   if (theta > 0.) {
-     G4double dtheta = analysisManager->GetH1Width(ih);
-     G4double unit   = analysisManager->GetH1Unit(ih);
-     if (dtheta > 0.) {
-        G4double weight = unit*unit/(twopi*std::sin(theta)*dtheta);
-        analysisManager->FillH1(ih, theta, weight);
-     }
-  }
-  
-  //measured space angle at exit : dN/dOmega_meas
-  //
-  ih = 6;  
-  const G4double dist = fDetector->GetZdist_foil_detector();
-  G4double thetam = std::atan(r/dist);
-  if (thetam > 0.) {
-     G4double dtheta = analysisManager->GetH1Width(ih);
-     G4double unit   = analysisManager->GetH1Unit(ih);
-     if (dtheta > 0.) {
-        G4double weight = unit*unit/(twopi*std::sin(thetam)*dtheta);
-        analysisManager->FillH1(ih, thetam, weight);
-     }
+    G4double dtheta = analysisManager->GetH1Width(ih);
+    G4double unit = analysisManager->GetH1Unit(ih);
+    if (dtheta > 0.) {
+      G4double weight = unit * unit / (twopi * std::sin(theta) * dtheta);
+      analysisManager->FillH1(ih, theta, weight);
+    }
   }
 
+  // measured space angle at exit : dN/dOmega_meas
+  //
+  ih = 6;
+  const G4double dist = fDetector->GetZdist_foil_detector();
+  G4double thetam = std::atan(r / dist);
+  if (thetam > 0.) {
+    G4double dtheta = analysisManager->GetH1Width(ih);
+    G4double unit = analysisManager->GetH1Unit(ih);
+    if (dtheta > 0.) {
+      G4double weight = unit * unit / (twopi * std::sin(thetam) * dtheta);
+      analysisManager->FillH1(ih, thetam, weight);
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

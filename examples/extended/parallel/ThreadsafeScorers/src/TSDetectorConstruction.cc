@@ -53,22 +53,21 @@
 
 #include "TSDetectorConstruction.hh"
 
-#include "G4RunManager.hh"
 #include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4Material.hh"
-#include "G4NistManager.hh"
-#include "G4PVPlacement.hh"
-#include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "G4UnitsTable.hh"
-#include "G4UserLimits.hh"
-
-#include "G4SDManager.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4MultiFunctionalDetector.hh"
+#include "G4NistManager.hh"
 #include "G4PSEnergyDeposit.hh"
 #include "G4PSNofStep.hh"
+#include "G4PVPlacement.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4UnitsTable.hh"
+#include "G4UserLimits.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
 
 using namespace CLHEP;
 
@@ -86,21 +85,24 @@ TSDetectorConstruction* TSDetectorConstruction::Instance()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TSDetectorConstruction::TSDetectorConstruction()
-  : fWorldPhys(0)
-  , fWorldMaterialName("G4_Galactic")
-  , fTargetMaterialName("G4_B")
-  , fCasingMaterialName("G4_WATER")
-  , fWorldDim(G4ThreeVector(0.5 * m, 0.5 * m, 0.5 * m))
-  , fTargetDim(G4ThreeVector(0.5 * m, 0.5 * m, 0.5 * m))
-  , fTargetSections(G4ThreeVector(5, 5, 5))
-  , fMfdName("Target_MFD")
+  : fWorldPhys(0),
+    fWorldMaterialName("G4_Galactic"),
+    fTargetMaterialName("G4_B"),
+    fCasingMaterialName("G4_WATER"),
+    fWorldDim(G4ThreeVector(0.5 * m, 0.5 * m, 0.5 * m)),
+    fTargetDim(G4ThreeVector(0.5 * m, 0.5 * m, 0.5 * m)),
+    fTargetSections(G4ThreeVector(5, 5, 5)),
+    fMfdName("Target_MFD")
 {
   fgInstance = this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSDetectorConstruction::~TSDetectorConstruction() { fgInstance = 0; }
+TSDetectorConstruction::~TSDetectorConstruction()
+{
+  fgInstance = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,13 +113,12 @@ G4VPhysicalVolume* TSDetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSDetectorConstruction::MaterialCollection_t
-TSDetectorConstruction::ConstructMaterials()
+TSDetectorConstruction::MaterialCollection_t TSDetectorConstruction::ConstructMaterials()
 {
   MaterialCollection_t materials;
   G4NistManager* nist = G4NistManager::Instance();
 
-  materials["World"]  = nist->FindOrBuildMaterial(fWorldMaterialName);
+  materials["World"] = nist->FindOrBuildMaterial(fWorldMaterialName);
   materials["Target"] = nist->FindOrBuildMaterial(fTargetMaterialName);
   materials["Casing"] = nist->FindOrBuildMaterial(fCasingMaterialName);
 
@@ -126,19 +127,17 @@ TSDetectorConstruction::ConstructMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* TSDetectorConstruction::ConstructWorld(
-  const MaterialCollection_t& materials)
+G4VPhysicalVolume* TSDetectorConstruction::ConstructWorld(const MaterialCollection_t& materials)
 {
-  G4UserLimits* steplimit =
-    new G4UserLimits(0.1 * (fTargetDim.z() / fTargetSections.z()));
+  G4UserLimits* steplimit = new G4UserLimits(0.1 * (fTargetDim.z() / fTargetSections.z()));
   G4bool check_overlap = false;
 
-  G4Box* world_solid = new G4Box("World", 0.5 * fWorldDim.x(),
-                                 0.5 * fWorldDim.y(), 0.5 * fWorldDim.z());
+  G4Box* world_solid =
+    new G4Box("World", 0.5 * fWorldDim.x(), 0.5 * fWorldDim.y(), 0.5 * fWorldDim.z());
   G4LogicalVolume* world_log =
     new G4LogicalVolume(world_solid, materials.find("World")->second, "World");
-  fWorldPhys = new G4PVPlacement(0, G4ThreeVector(0.), "World", world_log, 0,
-                                 false, 0, check_overlap);
+  fWorldPhys =
+    new G4PVPlacement(0, G4ThreeVector(0.), "World", world_log, 0, false, 0, check_overlap);
 
   G4int nz = fTargetSections.z();
   G4int ny = fTargetSections.y();
@@ -155,9 +154,9 @@ G4VPhysicalVolume* TSDetectorConstruction::ConstructWorld(
   //------------------------------------------------------------------------//
   // Set Visual Attributes
   //------------------------------------------------------------------------//
-  G4VisAttributes* red   = new G4VisAttributes(G4Color(1., 0., 0., 1.0));
+  G4VisAttributes* red = new G4VisAttributes(G4Color(1., 0., 0., 1.0));
   G4VisAttributes* green = new G4VisAttributes(G4Color(0., 1., 0., 0.25));
-  G4VisAttributes* blue  = new G4VisAttributes(G4Color(0., 0., 1., 0.1));
+  G4VisAttributes* blue = new G4VisAttributes(G4Color(0., 0., 1., 0.1));
   G4VisAttributes* white = new G4VisAttributes(G4Color(1., 1., 1., 1.));
 
   white->SetVisibility(true);
@@ -172,35 +171,28 @@ G4VPhysicalVolume* TSDetectorConstruction::ConstructWorld(
 
   world_log->SetVisAttributes(white);
 
-  for(G4int k = 0; k < nz; ++k)
-    for(G4int j = 0; j < ny; ++j)
-      for(G4int i = 0; i < nx; ++i)
-      {
+  for (G4int k = 0; k < nz; ++k)
+    for (G4int j = 0; j < ny; ++j)
+      for (G4int i = 0; i < nx; ++i) {
         // displacement of section
-        G4double dx =
-          0.5 * sx + static_cast<G4double>(i) * sx - 0.5 * fWorldDim.x();
-        G4double dy =
-          0.5 * sy + static_cast<G4double>(j) * sy - 0.5 * fWorldDim.y();
-        G4double dz =
-          0.5 * sz + static_cast<G4double>(k) * sz - 0.5 * fWorldDim.z();
+        G4double dx = 0.5 * sx + static_cast<G4double>(i) * sx - 0.5 * fWorldDim.x();
+        G4double dy = 0.5 * sy + static_cast<G4double>(j) * sy - 0.5 * fWorldDim.y();
+        G4double dz = 0.5 * sz + static_cast<G4double>(k) * sz - 0.5 * fWorldDim.z();
         G4ThreeVector td = G4ThreeVector(dx, dy, -dz);
         // make unique name
         std::stringstream ss_name;
         ss_name << "Target_" << i << "_" << j << "_" << k;
 
-        G4Box* target_solid =
-          new G4Box(ss_name.str(), 0.5 * sx, 0.5 * sy, 0.5 * sz);
+        G4Box* target_solid = new G4Box(ss_name.str(), 0.5 * sx, 0.5 * sy, 0.5 * sz);
 
         G4Material* target_material = 0;
-        G4bool is_casing            = true;
+        G4bool is_casing = true;
 
-        if(j == 0 || j + 1 == ny || i == 0 || i + 1 == nx ||
-           (nz > 1 && (k == 0 || k + 1 == nz)))
+        if (j == 0 || j + 1 == ny || i == 0 || i + 1 == nx || (nz > 1 && (k == 0 || k + 1 == nz)))
           target_material = materials.find("Casing")->second;
-        else
-        {
+        else {
           target_material = materials.find("Target")->second;
-          is_casing       = false;
+          is_casing = false;
         }
 
         G4LogicalVolume* target_log =
@@ -213,10 +205,9 @@ G4VPhysicalVolume* TSDetectorConstruction::ConstructWorld(
 
         fScoringVolumes.insert(target_log);
 
-        if(is_casing)
+        if (is_casing)
           target_log->SetVisAttributes(blue);
-        else
-        {
+        else {
           // making a checkerboard for kicks...
           G4bool even_z = (k % 2 == 0) ? true : false;
           G4bool even_y = (j % 2 == 0) ? true : false;
@@ -224,16 +215,15 @@ G4VPhysicalVolume* TSDetectorConstruction::ConstructWorld(
 
           G4VisAttributes* theColor = nullptr;
 
-          if((even_z))
-          {
-            if((even_y && even_x) || (!even_y && !even_x))
+          if ((even_z)) {
+            if ((even_y && even_x) || (!even_y && !even_x))
               theColor = red;
             else
               theColor = green;
           }
           else  // ! even_z
           {
-            if((!even_y && even_x) || (even_y && !even_x))
+            if ((!even_y && even_x) || (even_y && !even_x))
               theColor = red;
             else
               theColor = green;
@@ -262,8 +252,7 @@ void TSDetectorConstruction::ConstructSDandField()
   MFDet->RegisterPrimitive(nstep);
 
   // add scoring volumes
-  for(auto ite : fScoringVolumes)
-  {
+  for (auto ite : fScoringVolumes) {
     SetSensitiveDetector(ite, MFDet);
   }
 }

@@ -39,19 +39,18 @@
 #include "G4Cerenkov.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4Scintillation.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4ProcessManager.hh"
+#include "G4RunManager.hh"
+#include "G4Scintillation.hh"
 #include "G4Step.hh"
 #include "G4SteppingManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
-#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingAction::SteppingAction()
-  : G4UserSteppingAction()
+SteppingAction::SteppingAction() : G4UserSteppingAction()
 {
   fSteppingMessenger = new SteppingMessenger(this);
 }
@@ -65,41 +64,33 @@ SteppingAction::~SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  static G4ParticleDefinition* opticalphoton =
-    G4OpticalPhoton::OpticalPhotonDefinition();
+  static G4ParticleDefinition* opticalphoton = G4OpticalPhoton::OpticalPhotonDefinition();
 
   G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
-  Run* run =
-    static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
-  G4Track* track          = step->GetTrack();
-  G4StepPoint* endPoint   = step->GetPostStepPoint();
+  G4Track* track = step->GetTrack();
+  G4StepPoint* endPoint = step->GetPostStepPoint();
   G4StepPoint* startPoint = step->GetPreStepPoint();
 
   const G4DynamicParticle* theParticle = track->GetDynamicParticle();
-  const G4ParticleDefinition* particleDef =
-    theParticle->GetParticleDefinition();
+  const G4ParticleDefinition* particleDef = theParticle->GetParticleDefinition();
 
-  auto trackInfo = (TrackInformation*) (track->GetUserInformation());
+  auto trackInfo = (TrackInformation*)(track->GetUserInformation());
 
-  if(particleDef == opticalphoton)
-  {
+  if (particleDef == opticalphoton) {
     const G4VProcess* pds = endPoint->GetProcessDefinedStep();
-    G4String procname     = pds->GetProcessName();
-    if(procname == "OpAbsorption")
-    {
+    G4String procname = pds->GetProcessName();
+    if (procname == "OpAbsorption") {
       run->AddOpAbsorption();
-      if(trackInfo->GetIsFirstTankX())
-      {
+      if (trackInfo->GetIsFirstTankX()) {
         run->AddOpAbsorptionPrior();
       }
     }
-    else if(procname == "OpRayleigh")
-    {
+    else if (procname == "OpRayleigh") {
       run->AddRayleigh();
     }
-    else if(procname == "OpWLS")
-    {
+    else if (procname == "OpWLS") {
       G4double en = track->GetKineticEnergy();
       run->AddWLSAbsorption();
       run->AddWLSAbsorptionEnergy(en);
@@ -107,8 +98,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       // loop over secondaries, create statistics
       // const std::vector<const G4Track*>* secondaries =
       auto secondaries = step->GetSecondaryInCurrentStep();
-      for(auto sec : *secondaries)
-      {
+      for (auto sec : *secondaries) {
         en = sec->GetKineticEnergy();
         run->AddWLSEmission();
         run->AddWLSEmissionEnergy(en);
@@ -117,8 +107,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         analysisMan->FillH1(6, time / ns);
       }
     }
-    else if(procname == "OpWLS2")
-    {
+    else if (procname == "OpWLS2") {
       G4double en = track->GetKineticEnergy();
       run->AddWLS2Absorption();
       run->AddWLS2AbsorptionEnergy(en);
@@ -126,8 +115,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       // loop over secondaries, create statistics
       // const std::vector<const G4Track*>* secondaries =
       auto secondaries = step->GetSecondaryInCurrentStep();
-      for(auto sec : *secondaries)
-      {
+      for (auto sec : *secondaries) {
         en = sec->GetKineticEnergy();
         run->AddWLS2Emission();
         run->AddWLS2EmissionEnergy(en);
@@ -138,34 +126,28 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     }
 
     // optical process has endpt on bdry,
-    if(endPoint->GetStepStatus() == fGeomBoundary)
-    {
+    if (endPoint->GetStepStatus() == fGeomBoundary) {
       G4ThreeVector p0 = startPoint->GetMomentumDirection();
       G4ThreeVector p1 = endPoint->GetMomentumDirection();
 
       G4OpBoundaryProcessStatus theStatus = Undefined;
 
       G4ProcessManager* OpManager = opticalphoton->GetProcessManager();
-      G4ProcessVector* postStepDoItVector =
-        OpManager->GetPostStepProcessVector(typeDoIt);
+      G4ProcessVector* postStepDoItVector = OpManager->GetPostStepProcessVector(typeDoIt);
       G4int n_proc = postStepDoItVector->entries();
 
-      if(trackInfo->GetIsFirstTankX())
-      {
-        G4double px1         = p1.x();
-        G4double py1         = p1.y();
-        G4double pz1         = p1.z();
+      if (trackInfo->GetIsFirstTankX()) {
+        G4double px1 = p1.x();
+        G4double py1 = p1.y();
+        G4double pz1 = p1.z();
         // do not count Absorbed or Detected photons here
-        if(track->GetTrackStatus() != fStopAndKill)
-        {
-          if(px1 < 0.)
-          {
+        if (track->GetTrackStatus() != fStopAndKill) {
+          if (px1 < 0.) {
             analysisMan->FillH1(11, px1);
             analysisMan->FillH1(12, py1);
             analysisMan->FillH1(13, pz1);
           }
-          else
-          {
+          else {
             analysisMan->FillH1(14, px1);
             analysisMan->FillH1(15, py1);
             analysisMan->FillH1(16, pz1);
@@ -175,18 +157,15 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         trackInfo->SetIsFirstTankX(false);
         run->AddTotalSurface();
 
-        for(G4int i = 0; i < n_proc; ++i)
-        {
+        for (G4int i = 0; i < n_proc; ++i) {
           G4VProcess* currentProcess = (*postStepDoItVector)[i];
 
           auto opProc = dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
-          if(opProc)
-          {
+          if (opProc) {
             G4double angle = std::acos(p0.x());
-            theStatus      = opProc->GetStatus();
+            theStatus = opProc->GetStatus();
             analysisMan->FillH1(10, theStatus);
-            switch(theStatus)
-            {
+            switch (theStatus) {
               case Transmission:
                 run->AddTransmission();
                 analysisMan->FillH1(25, angle / deg);
@@ -325,8 +304,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
                 run->AddCoatedDielectricFrustratedTransmission();
                 break;
               default:
-                G4cout << "theStatus: " << theStatus
-                       << " was none of the above." << G4endl;
+                G4cout << "theStatus: " << theStatus << " was none of the above." << G4endl;
                 break;
             }
           }
@@ -350,84 +328,66 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     // Only steps where pre- and post- are the same material, to avoid
     // incorrect checks (so, in practice, set e.g. OpRayleigh low enough
     // for particles to step in the interior of each volume.
-    if (endPoint->GetMaterial() == startPoint->GetMaterial())
-    {
+    if (endPoint->GetMaterial() == startPoint->GetMaterial()) {
       G4double trackVelocity = track->GetVelocity();
       G4double materialVelocity = CLHEP::c_light;
-      G4MaterialPropertyVector* velVector = endPoint->GetMaterial()
-        ->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
-      if(velVector)
-      {
-        materialVelocity =
-          velVector->Value(theParticle->GetTotalMomentum(), fIdxVelocity);
+      G4MaterialPropertyVector* velVector =
+        endPoint->GetMaterial()->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
+      if (velVector) {
+        materialVelocity = velVector->Value(theParticle->GetTotalMomentum(), fIdxVelocity);
       }
 
-      if (std::abs(trackVelocity - materialVelocity) > 1e-9 * CLHEP::c_light)
-      {
+      if (std::abs(trackVelocity - materialVelocity) > 1e-9 * CLHEP::c_light) {
         G4ExceptionDescription ed;
-        ed << "Optical photon group velocity: " << trackVelocity/(cm/ns)
-           << " cm/ns is not what is expected from " << G4endl
-           << "the material properties, "
-           << materialVelocity/(cm/ns) << " cm/ns";
-        G4Exception("OpNovice2 SteppingAction", "OpNovice2_1",
-                    FatalException, ed);
+        ed << "Optical photon group velocity: " << trackVelocity / (cm / ns)
+           << " cm/ns is not what is expected from " << G4endl << "the material properties, "
+           << materialVelocity / (cm / ns) << " cm/ns";
+        G4Exception("OpNovice2 SteppingAction", "OpNovice2_1", FatalException, ed);
       }
     }
     // end of group velocity test
   }
 
-  else
-  {  // particle != opticalphoton
+  else {  // particle != opticalphoton
     // print how many Cerenkov and scint photons produced this step
     // this demonstrates use of GetNumPhotons()
-    auto proc_man =
-      track->GetDynamicParticle()->GetParticleDefinition()->GetProcessManager();
+    auto proc_man = track->GetDynamicParticle()->GetParticleDefinition()->GetProcessManager();
     G4ProcessVector* proc_vec = proc_man->GetPostStepProcessVector(typeDoIt);
-    G4int n_proc              = proc_vec->entries();
+    G4int n_proc = proc_vec->entries();
 
     G4int n_scint = 0;
-    G4int n_cer   = 0;
-    for(G4int i = 0; i < n_proc; ++i)
-    {
+    G4int n_cer = 0;
+    for (G4int i = 0; i < n_proc; ++i) {
       G4String proc_name = (*proc_vec)[i]->GetProcessName();
-      if(proc_name == "Cerenkov")
-      {
-        auto cer = (G4Cerenkov*) (*proc_vec)[i];
-        n_cer    = cer->GetNumPhotons();
+      if (proc_name == "Cerenkov") {
+        auto cer = (G4Cerenkov*)(*proc_vec)[i];
+        n_cer = cer->GetNumPhotons();
       }
-      else if(proc_name == "Scintillation")
-      {
-        auto scint = (G4Scintillation*) (*proc_vec)[i];
-        n_scint    = scint->GetNumPhotons();
+      else if (proc_name == "Scintillation") {
+        auto scint = (G4Scintillation*)(*proc_vec)[i];
+        n_scint = scint->GetNumPhotons();
       }
     }
-    if(fVerbose > 0)
-    {
-      if(n_cer > 0 || n_scint > 0)
-      {
+    if (fVerbose > 0) {
+      if (n_cer > 0 || n_scint > 0) {
         G4cout << "In this step, " << n_cer << " Cerenkov and " << n_scint
                << " scintillation photons were produced." << G4endl;
       }
     }
 
     // loop over secondaries, create statistics
-    const std::vector<const G4Track*>* secondaries =
-      step->GetSecondaryInCurrentStep();
+    const std::vector<const G4Track*>* secondaries = step->GetSecondaryInCurrentStep();
 
-    for(auto sec : *secondaries)
-    {
-      if(sec->GetDynamicParticle()->GetParticleDefinition() == opticalphoton)
-      {
+    for (auto sec : *secondaries) {
+      if (sec->GetDynamicParticle()->GetParticleDefinition() == opticalphoton) {
         G4String creator_process = sec->GetCreatorProcess()->GetProcessName();
-        if(creator_process == "Cerenkov")
-        {
+        if (creator_process == "Cerenkov") {
           G4double en = sec->GetKineticEnergy();
           run->AddCerenkovEnergy(en);
           run->AddCerenkov();
           analysisMan->FillH1(1, en / eV);
         }
-        else if(creator_process == "Scintillation")
-        {
+        else if (creator_process == "Scintillation") {
           G4double en = sec->GetKineticEnergy();
           run->AddScintillationEnergy(en);
           run->AddScintillation();

@@ -45,16 +45,16 @@ class G4UIcmdWithAString;
 
 class PhysicsListMessenger : public G4UImessenger
 {
- public:
-  PhysicsListMessenger(PhysicsList*);
-  ~PhysicsListMessenger();
+  public:
+    PhysicsListMessenger(PhysicsList*);
+    ~PhysicsListMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  PhysicsList* fPhysicsList;
+  private:
+    PhysicsList* fPhysicsList;
 
-  std::unique_ptr<G4UIcmdWithAString> fModeCmd;
+    std::unique_ptr<G4UIcmdWithAString> fModeCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

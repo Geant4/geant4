@@ -56,42 +56,40 @@ class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
+  public:
+    PhysicsList();
+    virtual ~PhysicsList();
 
-  virtual void ConstructParticle();
+    virtual void ConstructParticle();
 
-  virtual void ConstructProcess();
+    virtual void ConstructProcess();
 
-  void AddPhysicsList(const G4String& name);
-  void AddStepMax();
+    void AddPhysicsList(const G4String& name);
+    void AddStepMax();
 
-private:
+  private:
+    // hide assignment operator
+    PhysicsList& operator=(const PhysicsList& right);
+    PhysicsList(const PhysicsList&);
 
-  // hide assignment operator
-  PhysicsList & operator=(const PhysicsList &right);
-  PhysicsList(const PhysicsList&);
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fDecayPhysicsList;
 
-  G4VPhysicsConstructor*  fEmPhysicsList;
-  G4VPhysicsConstructor*  fDecayPhysicsList;
+    std::vector<G4VPhysicsConstructor*> fHadronPhys;
+    G4String fEmName;
 
-  std::vector<G4VPhysicsConstructor*> fHadronPhys;
-  G4String fEmName;
+    StepMax* fStepMaxProcess;
 
-  StepMax* fStepMaxProcess;
+    PhysicsListMessenger* fMessenger;
 
-  PhysicsListMessenger* fMessenger;
-
-  G4bool fHelIsRegisted;
-  G4bool fBicIsRegisted;
-  G4bool fGnucIsRegisted;
-  G4bool fStopIsRegisted;
+    G4bool fHelIsRegisted;
+    G4bool fBicIsRegisted;
+    G4bool fGnucIsRegisted;
+    G4bool fStopIsRegisted;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

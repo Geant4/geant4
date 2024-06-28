@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
@@ -40,27 +43,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(): G4UserRunAction()
+RunAction::RunAction() : G4UserRunAction()
 {
-  // Book histograms, ntuple
-  
   // Create analysis manager
-  
-  G4cout << "##### Create analysis manager " << "  " << this << G4endl;
+  G4cout << "##### Create analysis manager "
+         << "  " << this << G4endl;
   auto analysisManager = G4AnalysisManager::Instance();
 
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetNtupleMerging(true);
-    
-  G4cout << "Using " << analysisManager->GetType()
-      << " analysis manager"
-      << G4endl;
+
+  G4cout << "Using " << analysisManager->GetType() << " analysis manager" << G4endl;
 
   analysisManager->SetVerboseLevel(1);
-  
+
   // Creating ntuple
-  
-  analysisManager->CreateNtuple("dna", "dnaphysics");
+
+  // Step information ntuple
+  analysisManager->CreateNtuple("step", "dnaphysics");
   analysisManager->CreateNtupleDColumn("flagParticle");
   analysisManager->CreateNtupleDColumn("flagProcess");
   analysisManager->CreateNtupleDColumn("x");
@@ -77,39 +77,47 @@ RunAction::RunAction(): G4UserRunAction()
   analysisManager->CreateNtupleIColumn("stepID");
   analysisManager->FinishNtuple();
 
+  // Track information ntuple
+  analysisManager->CreateNtuple("track", "dnaphysics");
+  analysisManager->CreateNtupleDColumn("flagParticle");
+  analysisManager->CreateNtupleDColumn("x");
+  analysisManager->CreateNtupleDColumn("y");
+  analysisManager->CreateNtupleDColumn("z");
+  analysisManager->CreateNtupleDColumn("dirx");
+  analysisManager->CreateNtupleDColumn("diry");
+  analysisManager->CreateNtupleDColumn("dirz");
+  analysisManager->CreateNtupleDColumn("kineticEnergy");
+  analysisManager->CreateNtupleIColumn("trackID");
+  analysisManager->CreateNtupleIColumn("parentID");
+  analysisManager->FinishNtuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{
-}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{  
+{
   auto analysisManager = G4AnalysisManager::Instance();
 
   // Open an output file
-  
   G4String fileName = "dna";
   analysisManager->OpenFile(fileName);
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int nofEvents = aRun->GetNumberOfEvent();
-  if ( nofEvents == 0 ) return;
-  
-  // print histogram statistics
-  
+  if (nofEvents == 0) return;
+
+  // Print histogram statistics
   auto analysisManager = G4AnalysisManager::Instance();
-  
-  // save histograms 
-  
+
+  // Save histograms
   analysisManager->Write();
   analysisManager->CloseFile();
 }

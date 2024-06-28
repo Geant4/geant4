@@ -29,9 +29,11 @@
 
 #include "MoviesPrimaryGeneratorAction.hh"
 
-#include "G4ParticleGun.hh"
 #include "G4Gamma.hh"
+#include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MoviesPrimaryGeneratorAction::MoviesPrimaryGeneratorAction()
 {
@@ -39,15 +41,19 @@ MoviesPrimaryGeneratorAction::MoviesPrimaryGeneratorAction()
 
   // Default - a 10 GeV gamma
   fParticleGun->SetParticleDefinition(G4Gamma::GammaDefinition());
-  fParticleGun->SetParticleEnergy(10.*GeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-20.*cm));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(10. * GeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -20. * cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MoviesPrimaryGeneratorAction::~MoviesPrimaryGeneratorAction()
 {
   delete fParticleGun;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MoviesPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {

@@ -30,18 +30,23 @@
 //
 
 #include "B01ActionInitialization.hh"
+
 #include "B01PrimaryGeneratorAction.hh"
 #include "B01RunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B01ActionInitialization::B01ActionInitialization()
-{;} 
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B01ActionInitialization::~B01ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,11 +59,8 @@ void B01ActionInitialization::BuildForMaster() const
 
 void B01ActionInitialization::Build() const
 {
-
   SetUserAction(new B01PrimaryGeneratorAction);
   SetUserAction(new B01RunAction);
-
 }
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

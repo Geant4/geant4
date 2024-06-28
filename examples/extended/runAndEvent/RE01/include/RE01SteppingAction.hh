@@ -31,17 +31,16 @@
 #ifndef RE01SteppingAction_H
 #define RE01SteppingAction_H 1
 
-#include "globals.hh"
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 class RE01SteppingAction : public G4UserSteppingAction
 {
-public:
-  RE01SteppingAction();
-  virtual ~RE01SteppingAction();
-  
-  virtual void UserSteppingAction(const G4Step*);
+  public:
+    RE01SteppingAction();
+    virtual ~RE01SteppingAction();
+
+    virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif
-

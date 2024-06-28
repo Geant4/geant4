@@ -32,6 +32,9 @@
 
 #include "Run.hh"
 
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
@@ -40,9 +43,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
-
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
 
 #include <iomanip>
 
@@ -94,11 +94,17 @@ void Run::FillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddChargedStep() { fChargedStep += 1.0; }
+void Run::AddChargedStep()
+{
+  fChargedStep += 1.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddNeutralStep() { fNeutralStep += 1.0; }
+void Run::AddNeutralStep()
+{
+  fNeutralStep += 1.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

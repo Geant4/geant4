@@ -86,6 +86,8 @@ public:
 
   inline G4double GetMinExcitation() const;
 
+  inline G4double GetNuclearLevelWidth() const;
+
   inline G4double GetMaxLifeTime() const;
 
   inline G4double GetMinExPerNucleounForMF() const;
@@ -149,6 +151,8 @@ public:
   void SetPhenoFactor(G4double);
 
   void SetMinExcitation(G4double);
+
+  void SetNuclearLevelWidth(G4double);
 
   void SetMaxLifeTime(G4double);
 
@@ -234,47 +238,48 @@ private:
   G4double fPrecoHighEnergy;
 
   // Preco phenomenological factor
-  G4double fPhenoFactor = 1.0;
+  G4double fPhenoFactor;
 
   // Excitation handler
   G4double fMinExcitation;
+  G4double fNuclearLevelWidth;
   G4double fMaxLifeTime;
 
   // Multi-fragmentation model
   G4double fMinExPerNucleounForMF;
 
   // Cross section type
-  G4int fPrecoType = 3;
-  G4int fDeexType = 3;
+  G4int fPrecoType;
+  G4int fDeexType;
 
-  G4int fTwoJMAX = 10;
+  G4int fTwoJMAX;
 
   // Preco model
-  G4int fMinZForPreco = 3;
-  G4int fMinAForPreco = 5;
+  G4int fMinZForPreco;
+  G4int fMinAForPreco;
 
-  G4int fVerbose = 1;
+  G4int fVerbose;
 
   // Preco flags
-  G4bool fNeverGoBack = false;
-  G4bool fUseSoftCutoff = false;
-  G4bool fUseCEM = true;
-  G4bool fUseGNASH = false;
-  G4bool fUseHETC = false;
-  G4bool fUseAngularGen = true;
-  G4bool fPrecoDummy = false;
+  G4bool fNeverGoBack;
+  G4bool fUseSoftCutoff;
+  G4bool fUseCEM;
+  G4bool fUseGNASH;
+  G4bool fUseHETC;
+  G4bool fUseAngularGen;
+  G4bool fPrecoDummy;
 
   // Deex flags
-  G4bool fCorrelatedGamma = false;
-  G4bool fStoreAllLevels = false;
-  G4bool fInternalConversion = true;
-  G4bool fLD = true;  // use simple level density model 
-  G4bool fFD = true;  // use transition to discrete level 
-  G4bool fIsomerFlag = true;  // enable isomere production
-  G4bool fIsPrinted = false;
+  G4bool fCorrelatedGamma;
+  G4bool fStoreAllLevels;
+  G4bool fInternalConversion;
+  G4bool fLD; 
+  G4bool fFD; 
+  G4bool fIsomerFlag;
+  G4bool fIsPrinted{false};
 
-  // type of a set of e-exitation channels
-  G4DeexChannelType fDeexChannelType = fCombined;
+  // type of a set of de-exitation channels
+  G4DeexChannelType fDeexChannelType;
 };
 
 inline G4double G4DeexPrecoParameters::GetLevelDensity() const
@@ -320,6 +325,11 @@ inline G4double G4DeexPrecoParameters::GetPhenoFactor() const
 inline G4double G4DeexPrecoParameters::GetMinExcitation() const
 {
   return fMinExcitation;
+}
+
+inline G4double G4DeexPrecoParameters::GetNuclearLevelWidth() const
+{
+  return fNuclearLevelWidth;
 }
 
 inline G4double G4DeexPrecoParameters::GetMaxLifeTime() const

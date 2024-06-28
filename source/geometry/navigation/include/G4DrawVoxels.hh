@@ -54,7 +54,7 @@ class G4DrawVoxels
       // Copy constructor and assignment operator not supported (array
       // fvoxelcolours ...).
 
-    ~G4DrawVoxels();
+    ~G4DrawVoxels() = default;
       // Destructor NOT virtual. Not a base class.
     
     void DrawVoxels(const G4LogicalVolume* lv) const;

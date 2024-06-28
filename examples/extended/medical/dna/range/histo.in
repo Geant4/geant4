@@ -1,24 +1,37 @@
-#
+# MT mode
 /run/numberOfThreads 2
 #
+# Set sphere material
 /range/det/setMat G4_WATER
+#
+# Set sphere radius
 /range/det/setRadius 1 m
 #
+# Set tracking cut
 /range/det/setTrackingCut 10 eV
 #
-/range/phys/addPhysics  dna	        
+# Set Geant4-DNA physics constructor
+/range/phys/addPhysics  dna_opt2
 #
+# Run initialization
 /run/initialize
 #
+# Set incident particle type
 /gun/particle e-
 #
+# Set incident particle energy
 /gun/energy 1 keV
 #
+# Set histogram file name
 /analysis/setFileName range
+#
+# Define histograms
 /analysis/h1/set 1 100  0.    200. nm	#track length
 /analysis/h1/set 2 100  0.    200. nm	#projected range
 /analysis/h1/set 3 100  0.    200. nm	#penetration
 #
+# Run progress display
 /run/printProgress 100
 #
+# Beam on
 /run/beamOn 1000

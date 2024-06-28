@@ -48,9 +48,12 @@
 //
 // Class Description:
 //
-// This class manages the process of e+ annihilation into 2 gammas
+// This class manages the process of e+ annihilation at rest and on fly
+// It is possible to enable ApplyCuts and Entanglement options via
+// G4EmParameters class using UI commands or C++ interface.
+// EM splitting or Russian roulette are allowed is corresponding options
+// are enabled.
 //
-
 // -------------------------------------------------------------------
 //
 
@@ -60,6 +63,7 @@
 #include "G4VEmProcess.hh"
 
 class G4ParticleDefinition;
+class G4VPositronAtRestModel;
 
 class G4eplusAnnihilation : public G4VEmProcess
 {
@@ -95,11 +99,12 @@ protected:
   void StreamProcessInfo(std::ostream& outFile) const override;
 
 private:
-  
-  G4bool isInitialised = false;
-  const G4ParticleDefinition* theGamma;
-  const G4ParticleDefinition* theElectron;
+
+  G4VPositronAtRestModel* fAtRestModel{nullptr};
   G4int fEntanglementModelID;
+  G4bool isInitialised{false};
+  G4bool fEntangled{false};
+  G4bool fApplyCuts{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

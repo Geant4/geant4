@@ -41,15 +41,14 @@
 /// \file dnadamage2.cc
 /// \brief DnaDamage2 example
 
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
-
-#include "G4RunManagerFactory.hh"
 
 #include "G4DNAChemistryManager.hh"
-#include "G4UImanager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 
 /*
@@ -70,24 +69,24 @@ G4int fSeed = 1234;
 int main(int argc, char** argv)
 {
   G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  auto* runManager= G4RunManagerFactory::CreateRunManager();
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // Set mandatory initialization classes
-  DetectorConstruction* fpDetector  = new DetectorConstruction();
+  DetectorConstruction* fpDetector = new DetectorConstruction();
   ActionInitialization* fpActionIni = new ActionInitialization();
 
   runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(fpDetector);
   runManager->SetUserInitialization(fpActionIni);
 
-  //get the pointer to the User Interface manager
-  G4UImanager* UI  = G4UImanager::GetUIpointer();
+  // get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
   G4VisManager* vM = new G4VisExecutive;
 
   G4String fileName = "";
@@ -101,20 +100,19 @@ int main(int argc, char** argv)
     delete ui;
   }
 
-  else if (argc == 2) // batch mode
+  else if (argc == 2)  // batch mode
   {
     fileName = argv[1];
   }
 
-  else if (argc > 2) 
-  {
+  else if (argc > 2) {
     fileName = argv[1];
     fSeed = atoi(argv[2]);
   }
 
   if (argc > 1) {
     G4Random::setTheSeed(fSeed);
-    UI->ApplyCommand(command+fileName);
+    UI->ApplyCommand(command + fileName);
   }
 
   // Job termination

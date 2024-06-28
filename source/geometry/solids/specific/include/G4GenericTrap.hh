@@ -54,6 +54,8 @@
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
 //   Adapted from Root Arb8 implementation, author Andrei Gheata, CERN
+//
+//   27.05.2024 - Evgueni Tcherniaev, complete revision, speed up
 // -------------------------------------------------------------------
 #ifndef G4GENERICTRAP_HH
 #define G4GENERICTRAP_HH
@@ -74,21 +76,28 @@
 #include "globals.hh"
 #include "G4TwoVector.hh"
 #include "G4VSolid.hh"
-#include "G4TessellatedSolid.hh"
 
 class G4GenericTrap : public G4VSolid
 {
   public:
 
-    G4GenericTrap( const G4String& name, G4double halfZ,
-                   const std::vector<G4TwoVector>& vertices );
-      // Constructor
+    // Constructor
+    G4GenericTrap(const G4String& name, G4double halfZ,
+                  const std::vector<G4TwoVector>& vertices);
 
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
+    G4GenericTrap(__void__&);
+
+    // Copy constructor and assignment operator
+    G4GenericTrap(const G4GenericTrap& rhs);
+    G4GenericTrap& operator=(const G4GenericTrap& rhs);
+
+    // Destructor
     ~G4GenericTrap() override;
-      // Destructor
 
     // Accessors
-
     inline G4double    GetZHalfLength() const;
     inline G4int       GetNofVertices() const;
     inline G4TwoVector GetVertex(G4int index) const;
@@ -99,7 +108,6 @@ class G4GenericTrap : public G4VSolid
     inline void        SetVisSubdivisions(G4int subdiv);
 
     // Solid methods
-
     EInside Inside(const G4ThreeVector& p) const override;
     G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
     G4double DistanceToIn(const G4ThreeVector& p,
@@ -119,6 +127,8 @@ class G4GenericTrap : public G4VSolid
 
     G4GeometryType GetEntityType() const override;
 
+    G4bool IsFaceted () const override;
+
     G4VSolid* Clone() const override;
 
     std::ostream& StreamInfo(std::ostream& os) const override;
@@ -129,93 +139,76 @@ class G4GenericTrap : public G4VSolid
     G4double GetSurfaceArea() override;
 
     // Visualisation functions
-
-    G4Polyhedron* GetPolyhedron () const override;
     void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
-    G4VisExtent   GetExtent() const override;
+    G4VisExtent GetExtent() const override;
     G4Polyhedron* CreatePolyhedron() const override;
-
-    G4GenericTrap(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
-    G4GenericTrap(const G4GenericTrap& rhs);
-    G4GenericTrap& operator=(const G4GenericTrap& rhs);
-      // Copy constructor and assignment operator.
+    G4Polyhedron* GetPolyhedron () const override;
 
   private:
 
     // Internal methods
-
-    inline void SetTwistAngle(G4int index, G4double twist);
-    G4bool  ComputeIsTwisted() ;
-    G4bool  CheckOrder(const std::vector<G4TwoVector>& vertices) const;
-    G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b,
-                          const G4TwoVector& c, const G4TwoVector& d) const;
-    G4bool  IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b,
-                           const G4TwoVector& c, const G4TwoVector& d) const;
-    void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
-    void ComputeBBox();
-    inline G4ThreeVector GetMinimumBBox() const;
-    inline G4ThreeVector GetMaximumBBox() const;
-
-    G4VFacet* MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices,
-                            G4int ind1, G4int ind2, G4int ind3) const;
-    G4VFacet* MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices,
-                            G4int ind1, G4int ind2, G4int ind3) const;
-    G4VFacet* MakeSideFacet(const G4ThreeVector& downVertex0,
-                            const G4ThreeVector& downVertex1,
-                            const G4ThreeVector& upVertex1,
-                            const G4ThreeVector& upVertex0) const;
-    G4TessellatedSolid* CreateTessellatedSolid() const;
-
-    EInside InsidePolygone(const G4ThreeVector& p,
-                           const std::vector<G4TwoVector>& poly) const;
-    G4double DistToPlane(const G4ThreeVector& p,
-                         const G4ThreeVector& v, const G4int ipl) const ;
-    G4double DistToTriangle(const G4ThreeVector& p,
-                            const G4ThreeVector& v, const G4int ipl) const;
-    G4ThreeVector NormalToPlane(const G4ThreeVector& p,
-                                const G4int ipl) const;
-    G4double SafetyToFace(const G4ThreeVector& p, const G4int iseg) const;
+    void CheckParameters(G4double halfZ, const std::vector<G4TwoVector>& vertices);
+    void ComputeLateralSurfaces();
+    void ComputeBoundingBox();
+    void ComputeScratchLength();
     G4double GetLateralFaceArea(G4int iface) const;
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
 
-  protected:
-
-     mutable G4bool fRebuildPolyhedron = false;
-     mutable G4Polyhedron* fpPolyhedron = nullptr;
+    void WarningSignA(const G4String& method, const G4String& icase, G4double A,
+                      const G4ThreeVector& p, const G4ThreeVector& v) const;
+    void WarningSignB(const G4String& method, const G4String& icase, G4double f, G4double B,
+                      const G4ThreeVector& p, const G4ThreeVector& v) const;
+    void WarningDistanceToIn(G4int k, const G4ThreeVector& p, const G4ThreeVector& v,
+                             G4double tmin, G4double tmax,
+                             const G4double ttin[2], const G4double ttout[2]) const;
+    void WarningDistanceToOut(const G4ThreeVector& p,
+                              const G4ThreeVector& v,
+                              G4double tout) const;
 
   private:
 
-    // static data members
+  struct G4GenericTrapPlane // Ax + By + Cz + D = 0
+    {
+      G4double A = 0.;
+      G4double B = 0.;
+      G4double C = 0.;
+      G4double D = 0.;
+    };
+    struct G4GenericTrapSurface // Axz + Byz + Czz + Dx + Ey + Fz + G = 0
+    {
+      G4double A = 0.;
+      G4double B = 0.;
+      G4double C = 0.;
+      G4double D = 0.;
+      G4double E = 0.;
+      G4double F = 0.;
+      G4double G = 0.;
+    };
 
-    static const G4int       fgkNofVertices;
-    static const G4double    fgkTolerance;
-
-    G4double halfCarTolerance;
-
-    // data members
-
-    G4double                 fDz;
-    std::vector<G4TwoVector> fVertices;
+    // Data members
+    G4double                 halfTolerance = 0.;
+    G4double                 fScratch = 0.;
+    G4double                 fDz = 0.;
+    std::vector<G4TwoVector> fVertices = {0.,0.,0.,0.,0.,0.,0.,0.};
+    G4TwoVector              fDelta[4];
     G4bool                   fIsTwisted = false;
-    G4double                 fTwist[4];
-    G4TessellatedSolid*      fTessellatedSolid = nullptr;
-    G4ThreeVector            fMinBBoxVector;
-    G4ThreeVector            fMaxBBoxVector;
+    G4double                 fTwist[5] = {0.};
+    G4ThreeVector            fMinBBox{0.};
+    G4ThreeVector            fMaxBBox{0.};
     G4int                    fVisSubdivisions = 0;
+    G4GenericTrapPlane       fPlane[8];
+    G4GenericTrapSurface     fSurf[4];
+    mutable G4double         fArea[4] = {0.};
+    mutable G4bool           fRebuildPolyhedron = false;
+    mutable G4Polyhedron*    fpPolyhedron = nullptr;
 
-    enum ESide {kUndef,kXY0,kXY1,kXY2,kXY3,kMZ,kPZ};
-      // Codes for faces (kXY[num]=num of lateral face,kMZ= minus z face etc)
-
-    G4double                 fSurfaceArea = 0.0;
-    G4double                 fCubicVolume = 0.0;
-      // Surface and Volume
+    // Surface and Volume
+    G4double                 fSurfaceArea = 0.;
+    G4double                 fCubicVolume = 0.;
 };
 
 #include "G4GenericTrap.icc"
 
-#endif
+#endif // defined(G4GEOM_USE_UGENERICTRAP)
 
-#endif
+#endif // G4GENERICTRAP_HH

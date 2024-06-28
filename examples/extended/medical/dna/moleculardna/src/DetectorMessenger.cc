@@ -28,18 +28,18 @@
 
 #include "DetectorConstruction.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* detConstruction)
-  : fpDetectorConstruction(detConstruction)
-  , fpWorldGeometryDirectory(nullptr)
-  , fpWorldSideLength(nullptr)
-  , fpCellGeometryDirectory(nullptr)
-  , fpCellRadius(nullptr)
+  : fpDetectorConstruction(detConstruction),
+    fpWorldGeometryDirectory(nullptr),
+    fpWorldSideLength(nullptr),
+    fpCellGeometryDirectory(nullptr),
+    fpCellRadius(nullptr)
 {
   // World geometry
   fpWorldGeometryDirectory = new G4UIdirectory("/world/");
@@ -53,8 +53,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* detConstruction)
   fpCellGeometryDirectory = new G4UIdirectory("/cell/");
   fpCellGeometryDirectory->SetGuidance("Commands for world geometry params");
   fpCellRadius = new G4UIcmdWith3VectorAndUnit("/cell/radiusSize", this);
-  fpCellRadius->SetGuidance(
-    "Set Semi-Major axes for cell (x, y, z) - unset, whole world is water");
+  fpCellRadius->SetGuidance("Set Semi-Major axes for cell (x, y, z) - unset, whole world is water");
   fpCellRadius->SetParameterName("xradius", "yradius", "zradius", false);
 }
 
@@ -74,15 +73,13 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   // Geometry
-  if(command == fpWorldSideLength)
-  {
+  if (command == fpWorldSideLength) {
     fpDetectorConstruction->SetWorldSideLength(
-      ((G4UIcmdWithADoubleAndUnit*) command)->GetNewDoubleValue(newValue));
+      ((G4UIcmdWithADoubleAndUnit*)command)->GetNewDoubleValue(newValue));
   }
-  else if(command == fpCellRadius)
-  {
+  else if (command == fpCellRadius) {
     fpDetectorConstruction->SetCellRadius(
-      ((G4UIcmdWith3VectorAndUnit*) command)->GetNew3VectorValue(newValue));
+      ((G4UIcmdWith3VectorAndUnit*)command)->GetNew3VectorValue(newValue));
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

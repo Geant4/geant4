@@ -124,12 +124,6 @@ G4FieldTrack& G4FieldTrack::operator=(G4FieldTrack&& from) noexcept
   return *this;
 }
 
-inline
-G4FieldTrack::~G4FieldTrack()
-{
-  // delete fpChargeState; 
-}
-
 inline G4FieldTrack& 
 G4FieldTrack::SetCurvePnt(const G4ThreeVector& pPosition, 
                           const G4ThreeVector& pMomentum,  

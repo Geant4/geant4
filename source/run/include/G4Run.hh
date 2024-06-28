@@ -36,7 +36,6 @@
 #ifndef G4Run_hh
 #define G4Run_hh 1
 
-#include "G4Profiler.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -47,9 +46,6 @@ class G4DCtable;
 
 class G4Run
 {
-  public:
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
-
   public:
     G4Run();
     virtual ~G4Run();
@@ -102,6 +98,8 @@ class G4Run
 
     // Returns the event vector.
     inline std::vector<const G4Event*>* GetEventVector() const { return eventVector; }
+    inline G4int GetEventVectorSize() const 
+    { return (eventVector!=nullptr) ? (G4int)(eventVector->size()) : 0; }
 
     inline void SetRunID(G4int id) { runID = id; }
     inline void SetNumberOfEventToBeProcessed(G4int n_ev) { numberOfEventToBeProcessed = n_ev; }

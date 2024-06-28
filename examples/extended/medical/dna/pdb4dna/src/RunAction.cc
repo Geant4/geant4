@@ -37,6 +37,7 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+
 #include "RunInitObserver.hh"
 
 #include "G4AnalysisManager.hh"
@@ -53,15 +54,9 @@ RunAction::RunAction() : G4UserRunAction()
 
   // Creating histograms
   //
-  analysisManager->CreateH1("1",
-                            "Energy deposit in the target (eV)",
-                            1000,0.,1000.);
-  analysisManager->CreateH1("2",
-                            "Number of SSB",
-                            10,0.,10.);
-  analysisManager->CreateH1("3",
-                            "Number of DSB",
-                            10,0.,10.);
+  analysisManager->CreateH1("1", "Energy deposit in the target (eV)", 1000, 0., 1000.);
+  analysisManager->CreateH1("2", "Number of SSB", 10, 0., 10.);
+  analysisManager->CreateH1("3", "Number of DSB", 10, 0., 10.);
 
   // Open an output file
   //
@@ -93,8 +88,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  // save histograms 
+  // save histograms
   //
   analysisManager->Write();
 }
-

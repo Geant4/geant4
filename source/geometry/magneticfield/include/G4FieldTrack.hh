@@ -72,7 +72,7 @@ class G4FieldTrack
         // Older constructor
         // ---> Misses charge !!!
 
-     ~G4FieldTrack();
+     ~G4FieldTrack() = default;
        // Destructor 
 
      inline G4FieldTrack( const G4FieldTrack& pFieldTrack ); 

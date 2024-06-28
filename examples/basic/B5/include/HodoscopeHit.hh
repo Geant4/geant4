@@ -31,15 +31,20 @@
 #define B5HodoscopeHit_h 1
 
 #include "G4VHit.hh"
-#include "G4THitsCollection.hh"
+
 #include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
+#include "G4THitsCollection.hh"
+#include "G4Threading.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
+
+#include <map>
+#include <vector>
 
 class G4AttDef;
 class G4AttValue;
+class G4LogicalVolume;
 
 namespace B5
 {
@@ -54,18 +59,18 @@ namespace B5
 class HodoscopeHit : public G4VHit
 {
   public:
-    HodoscopeHit(G4int i,G4double t);
-    HodoscopeHit(const HodoscopeHit &right) = default;
+    HodoscopeHit(G4int i, G4double t);
+    HodoscopeHit(const HodoscopeHit& right) = default;
     ~HodoscopeHit() override = default;
 
-    HodoscopeHit& operator=(const HodoscopeHit &right) = default;
-    G4bool operator==(const HodoscopeHit &right) const;
+    HodoscopeHit& operator=(const HodoscopeHit& right) = default;
+    G4bool operator==(const HodoscopeHit& right) const;
 
-    inline void *operator new(size_t);
-    inline void operator delete(void*aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
     void Draw() override;
-    const std::map<G4String,G4AttDef>* GetAttDefs() const override;
+    const std::map<G4String, G4AttDef>* GetAttDefs() const override;
     std::vector<G4AttValue>* CreateAttValues() const override;
     void Print() override;
 
@@ -98,17 +103,17 @@ extern G4ThreadLocal G4Allocator<HodoscopeHit>* HodoscopeHitAllocator;
 inline void* HodoscopeHit::operator new(size_t)
 {
   if (!HodoscopeHitAllocator) {
-       HodoscopeHitAllocator = new G4Allocator<HodoscopeHit>;
+    HodoscopeHitAllocator = new G4Allocator<HodoscopeHit>;
   }
   return (void*)HodoscopeHitAllocator->MallocSingle();
 }
 
-inline void HodoscopeHit::operator delete(void*aHit)
+inline void HodoscopeHit::operator delete(void* aHit)
 {
-  HodoscopeHitAllocator->FreeSingle((HodoscopeHit*) aHit);
+  HodoscopeHitAllocator->FreeSingle((HodoscopeHit*)aHit);
 }
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

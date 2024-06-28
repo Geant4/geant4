@@ -51,7 +51,7 @@ class HistoManager
 {
   public:
     HistoManager() = default;
-   ~HistoManager();
+    ~HistoManager();
 
     void Book();
     void Save();
@@ -59,8 +59,7 @@ class HistoManager
     void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
     void Normalize(G4int id, G4double fac);
 
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
+    void FillNtuple(G4double energyAbs, G4double energyGap, G4double trackLAbs, G4double trackLGap);
 
     void PrintStatistic();
 
@@ -79,4 +78,3 @@ class HistoManager
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

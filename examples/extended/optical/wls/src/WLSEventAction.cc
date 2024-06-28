@@ -57,23 +57,26 @@ WLSEventAction::WLSEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSEventAction::~WLSEventAction() { delete fEventMessenger; }
+WLSEventAction::~WLSEventAction()
+{
+  delete fEventMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSEventAction::BeginOfEventAction(const G4Event*)
 {
-  fNTIR        = 0;
-  fNExiting    = 0;
-  fEscapedEnd  = 0;
-  fEscapedMid  = 0;
-  fBounce      = 0;
-  fWLSBounce   = 0;
+  fNTIR = 0;
+  fNExiting = 0;
+  fEscapedEnd = 0;
+  fEscapedMid = 0;
+  fBounce = 0;
+  fWLSBounce = 0;
   fClad1Bounce = 0;
   fClad2Bounce = 0;
-  fReflected   = 0;
-  fEscaped     = 0;
-  fMirror      = 0;
+  fReflected = 0;
+  fEscaped = 0;
+  fMirror = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,25 +85,22 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
 {
   // Get Hits from the detector if any
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  G4String colName   = "PhotonDetHitCollection";
-  fMPPCCollID        = SDman->GetCollectionID(colName);
+  G4String colName = "PhotonDetHitCollection";
+  fMPPCCollID = SDman->GetCollectionID(colName);
 
-  G4HCofThisEvent* HCE               = evt->GetHCofThisEvent();
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   WLSPhotonDetHitsCollection* mppcHC = nullptr;
 
   // Get the hit collections
-  if(HCE)
-  {
-    if(fMPPCCollID >= 0)
-    {
-      mppcHC = (WLSPhotonDetHitsCollection*) (HCE->GetHC(fMPPCCollID));
+  if (HCE) {
+    if (fMPPCCollID >= 0) {
+      mppcHC = (WLSPhotonDetHitsCollection*)(HCE->GetHC(fMPPCCollID));
     }
   }
 
   // Get hit information about photons that reached the detector in this event
   G4int n_hit = 0;
-  if(mppcHC)
-  {
+  if (mppcHC) {
     n_hit = mppcHC->entries();
   }
 
@@ -112,26 +112,19 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
     analysisManager->FillH1(1, pdHit->GetArrivalTime());
   }
 
-  if(fVerboseLevel > 1)
-  {
+  if (fVerboseLevel > 1) {
     G4cout << "-------------------------------------" << G4endl
-           << " In this event, number of:" << G4endl
-           << "  TIR:           " << fNTIR << G4endl
-           << "  Exiting:       " << fNExiting << G4endl
-           << "  Escaped Mid:   " << fEscapedMid << G4endl
-           << "  Escaped End:   " << fEscapedEnd << G4endl
-           << "  Bounced:       " << fBounce << G4endl
-           << "  WLS Bounce:    " << fWLSBounce << G4endl
-           << "  Clad1 Bounce:  " << fClad1Bounce << G4endl
-           << "  Clad2 Bounce:  " << fClad2Bounce << G4endl
-           << "  Reflected:     " << fReflected << G4endl
-           << "  Escaped:       " << fEscaped << G4endl
-           << "  Mirror:        " << fMirror << G4endl
-           << "  Detector hit:  " << n_hit << G4endl;
+           << " In this event, number of:" << G4endl << "  TIR:           " << fNTIR << G4endl
+           << "  Exiting:       " << fNExiting << G4endl << "  Escaped Mid:   " << fEscapedMid
+           << G4endl << "  Escaped End:   " << fEscapedEnd << G4endl
+           << "  Bounced:       " << fBounce << G4endl << "  WLS Bounce:    " << fWLSBounce
+           << G4endl << "  Clad1 Bounce:  " << fClad1Bounce << G4endl
+           << "  Clad2 Bounce:  " << fClad2Bounce << G4endl << "  Reflected:     " << fReflected
+           << G4endl << "  Escaped:       " << fEscaped << G4endl << "  Mirror:        " << fMirror
+           << G4endl << "  Detector hit:  " << n_hit << G4endl;
   }
 
-  auto run = static_cast<WLSRun*>(
-    G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  auto run = static_cast<WLSRun*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   run->AddTIR(fNTIR);
   run->AddExiting(fNExiting);
@@ -155,4 +148,7 @@ G4int WLSEventAction::GetEventNo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSEventAction::SetEventVerbose(G4int level) { fVerboseLevel = level; }
+void WLSEventAction::SetEventVerbose(G4int level)
+{
+  fVerboseLevel = level;
+}

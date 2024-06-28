@@ -31,7 +31,7 @@
 //
 // ClassName:   PhysicsList
 //
-// Authors:  01.06.17 V.Ivanchenko 
+// Authors:  01.06.17 V.Ivanchenko
 //
 //
 ///////////////////////////////////////////
@@ -50,43 +50,40 @@ class G4VPhysicsConstructor;
 class PhysicsListMessenger;
 class StepMax;
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
+  public:
+    PhysicsList();
+    virtual ~PhysicsList();
 
-  PhysicsList();
-  virtual ~PhysicsList();
+    virtual void ConstructParticle();
 
-  virtual void ConstructParticle();
-    
-  virtual void SetCuts();
-        
-  virtual void ConstructProcess();
+    virtual void SetCuts();
 
-  void AddPhysicsList(const G4String& name);
+    virtual void ConstructProcess();
 
-  void SetLDMPhotonMass(G4double val);
+    void AddPhysicsList(const G4String& name);
 
-  void SetLDMHiMass(G4double val);
+    void SetLDMPhotonMass(G4double val);
 
-private:
+    void SetLDMHiMass(G4double val);
 
-  void AddDarkMatter(); 
+  private:
+    void AddDarkMatter();
 
-  G4VPhysicsConstructor*  fEmPhysicsList;
-  G4VPhysicsConstructor*  fDecayPhysicsList;
-  G4String                fEmName;
-    
-  PhysicsListMessenger* fMessenger;
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fDecayPhysicsList;
+    G4String fEmName;
 
-  G4double fLDMPhotonMass; 
-  G4double fLDMHiMass;
+    PhysicsListMessenger* fMessenger;
 
-  G4bool fLDMPhoton;
-  G4bool fLDMHi;
+    G4double fLDMPhotonMass;
+    G4double fLDMHiMass;
+
+    G4bool fLDMPhoton;
+    G4bool fLDMHi;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

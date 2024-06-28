@@ -33,6 +33,7 @@
 #include "EventAction.hh"
 
 #include "Run.hh"
+
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
@@ -41,20 +42,17 @@
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- //additional initializations 
- Run* run 
-   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
- run->InitializePerEvent();
+  // additional initializations
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->InitializePerEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
-{  
- Run* run 
-   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
- run->FillPerEvent();  
+{
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->FillPerEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

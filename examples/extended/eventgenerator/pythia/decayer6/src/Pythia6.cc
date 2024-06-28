@@ -30,7 +30,7 @@
 // ----------------------------------------------------------------------------
 // According to TPythia6 class from Root:
 // (The TPythia6 class is an interface class to F77 routines in Pythia6                //
-// CERNLIB event generators, written by T.Sjostrand.)                         
+// CERNLIB event generators, written by T.Sjostrand.)
 // http://root.cern.ch/
 // see http://root.cern.ch/root/License.html
 //
@@ -89,25 +89,26 @@
 
 #include "Pythia6.hh"
 
-#include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 
 #ifndef WIN32
-# define pycomp pycomp_
-# define py1ent py1ent_
-# define type_of_call
+#  define pycomp pycomp_
+#  define py1ent py1ent_
+#  define type_of_call
 #else
-# define pycomp PYCOMP
-# define py1ent PY1ENT
-# define type_of_call _stdcall
+#  define pycomp PYCOMP
+#  define py1ent PY1ENT
+#  define type_of_call _stdcall
 #endif
 
 // pythia6 functions
-extern "C" {
-  int  type_of_call pycomp(int *kf);
+extern "C"
+{
+  int type_of_call pycomp(int* kf);
   void type_of_call py1ent(int&, int&, double&, double&, double&);
-  void*  pythia6_common_address(const char*);
+  void* pythia6_common_address(const char*);
 }
 
 // Direct declaration of pythia6 common blocks
@@ -117,178 +118,148 @@ extern "C" {
 //   extern Pydat3_t pydat3_;
 // }
 
-Pythia6*  Pythia6::fgInstance = 0;
+Pythia6* Pythia6::fgInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Pythia6* Pythia6::Instance() 
+Pythia6* Pythia6::Instance()
 {
-/// Static access method
+  /// Static access method
 
-   if ( ! fgInstance ) fgInstance = new Pythia6();
+  if (!fgInstance) fgInstance = new Pythia6();
 
-   return fgInstance;
+  return fgInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Pythia6::Pythia6()  
-  : fParticles(0),
-    fPyjets(0),
-    fPydat1(0),
-    fPydat3(0)
+Pythia6::Pythia6() : fParticles(0), fPyjets(0), fPydat1(0), fPydat3(0)
 {
-/// Pythia6 constructor: creates a vector of Pythia6Particle in which it will 
-/// store all particles. Note that there may be only one functional Pythia6 
-/// object at a time, so it's not use to create more than one instance of it.
-  
-   // Protect against multiple objects.   All access should be via the
-   // Instance member function. 
-   if ( fgInstance ) {
-      std::cerr << "There's already an instance of Pythia6" << std::endl;
-      exit (1);
-   }   
-  
-   fParticles = new ParticleVector();
+  /// Pythia6 constructor: creates a vector of Pythia6Particle in which it will
+  /// store all particles. Note that there may be only one functional Pythia6
+  /// object at a time, so it's not use to create more than one instance of it.
 
-   // Initialize common-blocks 
-   fPyjets = (Pyjets_t*) pythia6_common_address("PYJETS");
-   fPydat1 = (Pydat1_t*) pythia6_common_address("PYDAT1");
-   fPydat3 = (Pydat3_t*) pythia6_common_address("PYDAT3");
+  // Protect against multiple objects.   All access should be via the
+  // Instance member function.
+  if (fgInstance) {
+    std::cerr << "There's already an instance of Pythia6" << std::endl;
+    exit(1);
+  }
 
-   // Alternative way to initialize common-blocks
-   // usind direct declaration of pythia6 common blocks
-   // fPyjets = &pyjets_;
-   // fPydat1 = &pydat1_;
-   // fPydat3 = &pydat3_;
+  fParticles = new ParticleVector();
+
+  // Initialize common-blocks
+  fPyjets = (Pyjets_t*)pythia6_common_address("PYJETS");
+  fPydat1 = (Pydat1_t*)pythia6_common_address("PYDAT1");
+  fPydat3 = (Pydat3_t*)pythia6_common_address("PYDAT3");
+
+  // Alternative way to initialize common-blocks
+  // usind direct declaration of pythia6 common blocks
+  // fPyjets = &pyjets_;
+  // fPydat1 = &pydat1_;
+  // fPydat3 = &pydat3_;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Pythia6::~Pythia6()
 {
-/// Destroy the object, delete and dispose all Pythia6Particles currently on 
-/// list.
+  /// Destroy the object, delete and dispose all Pythia6Particles currently on
+  /// list.
 
-   if ( fParticles ) {
-      ParticleVector::const_iterator it;
-      for ( it = fParticles->begin(); it != fParticles->end(); it++ )
-        delete  *it;
-      delete fParticles;
-   }
+  if (fParticles) {
+    ParticleVector::const_iterator it;
+    for (it = fParticles->begin(); it != fParticles->end(); it++)
+      delete *it;
+    delete fParticles;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int Pythia6::Pycomp(int kf) 
+int Pythia6::Pycomp(int kf)
 {
-/// Interface with fortran routine pycomp
+  /// Interface with fortran routine pycomp
 
-   return pycomp(&kf);
+  return pycomp(&kf);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Pythia6::Py1ent(int ip, int kf, double pe, double theta, double phi)
 {
-/// Add one entry to the event record, i.e. either a parton or a
-/// particle. 
-///
-///  IP:   normally line number for the parton/particle. There are two
-///        exceptions:
-/// 
-///        If IP = 0: line number 1 is used and PYEXEC is called. 
-///        If IP < 0: line -IP is used, with status code K(-IP,2)=2
-///                   rather than 1; thus a parton system may be built
-///                   up by filling all but the last parton of the
-///                   system with IP < 0.   
-///  KF:   parton/particle flavour code (PDG code)
-///  PE:   parton/particle energy. If PE is smaller than the mass,
-///        the parton/particle is taken to be at rest.  
-///  THETA:
-///  PHI:  polar and azimuthal angle for the momentum vector of the
-///        parton/particle. 
+  /// Add one entry to the event record, i.e. either a parton or a
+  /// particle.
+  ///
+  ///  IP:   normally line number for the parton/particle. There are two
+  ///        exceptions:
+  ///
+  ///        If IP = 0: line number 1 is used and PYEXEC is called.
+  ///        If IP < 0: line -IP is used, with status code K(-IP,2)=2
+  ///                   rather than 1; thus a parton system may be built
+  ///                   up by filling all but the last parton of the
+  ///                   system with IP < 0.
+  ///  KF:   parton/particle flavour code (PDG code)
+  ///  PE:   parton/particle energy. If PE is smaller than the mass,
+  ///        the parton/particle is taken to be at rest.
+  ///  THETA:
+  ///  PHI:  polar and azimuthal angle for the momentum vector of the
+  ///        parton/particle.
 
-   py1ent(ip, kf, pe, theta, phi);
+  py1ent(ip, kf, pe, theta, phi);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int Pythia6::ImportParticles(ParticleVector* particles, const char* option)
 {
-///  Default primary creation method. It reads the /HEPEVT/ common block which
-///  has been filled by the GenerateEvent method. If the event generator does
-///  not use the HEPEVT common block, This routine has to be overloaded by
-///  the subclasses.
-///  The function loops on the generated particles and store them in
-///  the TClonesArray pointed by the argument particles.
-///  The default action is to store only the stable particles (ISTHEP = 1)
-///  This can be demanded explicitly by setting the option = "Final"
-///  If the option = "All", all the particles are stored.
+  ///  Default primary creation method. It reads the /HEPEVT/ common block which
+  ///  has been filled by the GenerateEvent method. If the event generator does
+  ///  not use the HEPEVT common block, This routine has to be overloaded by
+  ///  the subclasses.
+  ///  The function loops on the generated particles and store them in
+  ///  the TClonesArray pointed by the argument particles.
+  ///  The default action is to store only the stable particles (ISTHEP = 1)
+  ///  This can be demanded explicitly by setting the option = "Final"
+  ///  If the option = "All", all the particles are stored.
 
-   if ( particles == 0 ) return 0;
-   
-   ParticleVector::const_iterator it;
-   for ( it = particles->begin(); it != particles->end(); it++ )
-     delete  *it;
-   particles->clear();
-   
-   int numpart = fPyjets->N;
-   int nparts=0;
-   if (!strcmp(option,"") || !strcmp(option,"Final")) {
-      for (int i = 0; i<numpart; i++) {
+  if (particles == 0) return 0;
 
-        if (fPyjets->K[0][i] == 1) {
-          //
-          //  Use the common block values for the TParticle constructor
-          //
-          particles->push_back(
-            new Pythia6Particle(
-                            fPyjets->K[0][i] ,
-                            fPyjets->K[1][i] ,
-                            fPyjets->K[2][i] ,
-                            fPyjets->K[3][i] ,
-                            fPyjets->K[4][i] ,
-                            fPyjets->P[0][i] ,
-                            fPyjets->P[1][i] ,
-                            fPyjets->P[2][i] ,
-                            fPyjets->P[3][i] ,
-                            fPyjets->P[4][i] ,
-                            fPyjets->V[0][i] ,
-                            fPyjets->V[1][i] ,
-                            fPyjets->V[2][i] ,
-                            fPyjets->V[3][i] ,
-                            fPyjets->V[4][i]));
+  ParticleVector::const_iterator it;
+  for (it = particles->begin(); it != particles->end(); it++)
+    delete *it;
+  particles->clear();
 
-          //     if(gDebug) printf("%d %d %d! ",i,fPyjets->K[1][i],numpart);
-          nparts++;
-       }
-     }
-   } 
-   else if (!strcmp(option,"All")) {
-      for (int i = 0; i<numpart; i++) {
-          particles->push_back(
-            new Pythia6Particle(
-                            fPyjets->K[0][i] ,
-                            fPyjets->K[1][i] ,
-                            fPyjets->K[2][i] ,
-                            fPyjets->K[3][i] ,
-                            fPyjets->K[4][i] ,
-                            fPyjets->P[0][i] ,
-                            fPyjets->P[1][i] ,
-                            fPyjets->P[2][i] ,
-                            fPyjets->P[3][i] ,
-                            fPyjets->P[4][i] ,
-                            fPyjets->V[0][i] ,
-                            fPyjets->V[1][i] ,
-                            fPyjets->V[2][i] ,
-                            fPyjets->V[3][i] ,
-                            fPyjets->V[4][i]));
+  int numpart = fPyjets->N;
+  int nparts = 0;
+  if (!strcmp(option, "") || !strcmp(option, "Final")) {
+    for (int i = 0; i < numpart; i++) {
+      if (fPyjets->K[0][i] == 1) {
+        //
+        //  Use the common block values for the TParticle constructor
+        //
+        particles->push_back(new Pythia6Particle(
+          fPyjets->K[0][i], fPyjets->K[1][i], fPyjets->K[2][i], fPyjets->K[3][i], fPyjets->K[4][i],
+          fPyjets->P[0][i], fPyjets->P[1][i], fPyjets->P[2][i], fPyjets->P[3][i], fPyjets->P[4][i],
+          fPyjets->V[0][i], fPyjets->V[1][i], fPyjets->V[2][i], fPyjets->V[3][i],
+          fPyjets->V[4][i]));
+
+        //     if(gDebug) printf("%d %d %d! ",i,fPyjets->K[1][i],numpart);
+        nparts++;
       }
-      nparts=numpart;
-   }
+    }
+  }
+  else if (!strcmp(option, "All")) {
+    for (int i = 0; i < numpart; i++) {
+      particles->push_back(new Pythia6Particle(
+        fPyjets->K[0][i], fPyjets->K[1][i], fPyjets->K[2][i], fPyjets->K[3][i], fPyjets->K[4][i],
+        fPyjets->P[0][i], fPyjets->P[1][i], fPyjets->P[2][i], fPyjets->P[3][i], fPyjets->P[4][i],
+        fPyjets->V[0][i], fPyjets->V[1][i], fPyjets->V[2][i], fPyjets->V[3][i], fPyjets->V[4][i]));
+    }
+    nparts = numpart;
+  }
 
-   return nparts;
+  return nparts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

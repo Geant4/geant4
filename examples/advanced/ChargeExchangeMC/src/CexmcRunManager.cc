@@ -107,7 +107,7 @@ CexmcRunManager::CexmcRunManager( const G4String &  projectId_,
                                   G4bool  overrideExistingProject ) :
     basePhysicsUsed( CexmcPMFactoryInstance::GetBasePhysics() ),
     productionModelType( CexmcUnknownProductionModel ),
-    gdmlFileName( "default.gdml" ), shouldGdmlFileBeValidated( true ),
+    gdmlFileName( "default.gdml" ), shouldGdmlFileBeValidated( false ),
     zipGdmlFile( false ), projectsDir( "." ), projectId( projectId_ ),
     rProject( rProject_ ), guiMacroName( "" ), cfFileName( "" ),
     eventCountPolicy( CexmcCountAllEvents ),

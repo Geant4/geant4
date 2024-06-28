@@ -64,6 +64,7 @@ G4VViewer::G4VViewer(G4VSceneHandler& sceneHandler, G4int id, const G4String& na
   fDefaultVP = fVP;
 
   fSceneTree.SetType(G4SceneTreeItem::root);
+  fSceneTree.SetDescription(fName);
 }
 
 G4VViewer::~G4VViewer()
@@ -231,73 +232,129 @@ void G4VViewer::UpdateGUISceneTree()
   if (uiWindow) uiWindow->UpdateSceneTree(fSceneTree);
 }
 
-void G4VViewer::SceneTreeScene::SetModel(G4VModel* pModel)
+void G4VViewer::InsertModelInSceneTree(G4VModel* model)
 {
-  fpModel = pModel;
+  auto modelType = model->GetType();
+  auto modelDescription = model->GetGlobalDescription();
 
-  // Insert in tree (if not already inserted)
-  auto& modelType = fpModel->GetType();
-  auto& modelID = fpModel->GetGlobalDescription();
-  FindOrInsertModel(modelType, modelID);
+  auto type = G4SceneTreeItem::model;
+  auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(model);
+  if (pvModel) type = G4SceneTreeItem::pvmodel;
 
-  auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  fCurtailDescent = false;  // This is used later in SceneTreeScene::ProcessVolume
+  G4String furtherInfo;
   if (pvModel) {
-    // Limit the expanded depth to limit the number expanded so as not to swamp the GUI
-    G4int expanded = 0;
-    for (const auto& dn : pvModel->GetNumberOfTouchables()) {
-      expanded += dn.second;
-      if (fMaximumExpandedDepth < dn.first) fMaximumExpandedDepth = dn.first;
-      if (expanded > fMaximumExpanded) break;
+    struct : public G4PseudoScene {
+      void ProcessVolume(const G4VSolid&) {++fNTotalTouchables;}
+      G4int fNTotalTouchables = 0;
+    } counter;
+    pvModel->DescribeYourselfTo(counter);  // Calls ProcessVolume for every touchable
+    if (counter.fNTotalTouchables > fMaxNTouchables) {
+      std::ostringstream oss;
+      oss << counter.fNTotalTouchables << " touchables - too many for scene tree";
+      furtherInfo = oss.str();
+      if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings) {
+        G4ExceptionDescription ed;
+        ed << pvModel->GetGlobalDescription() <<
+        ":\n  Too many touchables (" << counter.fNTotalTouchables
+        << ") for scene tree. Scene tree for this model will be empty.";
+        G4Exception("G4VViewer::InsertModelInSceneTree", "visman0404", JustWarning, ed);
+      }
+      fCurtailDescent = true;  // This is used later in SceneTreeScene::ProcessVolume
     }
   }
-}
-
-std::list<G4SceneTreeItem>::iterator
-G4VViewer::SceneTreeScene::FindOrInsertModel(const G4String& modelType, const G4String& modelID)
-{
-  G4SceneTreeItem::Type type = G4SceneTreeItem::unidentified;
-  if (dynamic_cast<G4PhysicalVolumeModel*>(fpModel)) {
-    type = G4SceneTreeItem::pvmodel;
-  }
-  else {
-    type = G4SceneTreeItem::model;
-  }
-
-  auto& rootItem = fpViewer->fSceneTree;
-  rootItem.SetDescription(fpViewer->GetName());
 
   // Find appropriate model
-  auto& modelItems = rootItem.AccessChildren();
+  auto& modelItems = fSceneTree.AccessChildren();
   auto modelIter = modelItems.begin();
   auto pvModelIter = modelItems.end();
   for (; modelIter != modelItems.end(); ++modelIter) {
     if (modelIter->GetType() == G4SceneTreeItem::pvmodel) {
-      pvModelIter = modelIter;  // Last PV model
+      pvModelIter = modelIter;  // Last pre-existing PV model (if any)
     }
-    if (modelIter->GetModelDescription() == modelID) break;
+    if (modelIter->GetModelDescription() == modelDescription) break;
   }
 
-  if (modelIter == modelItems.end()) {
-    // Model not seen before
+  if (modelIter == modelItems.end()) {  // Model not seen before
     G4SceneTreeItem modelItem(type);
     modelItem.SetDescription("model");
     modelItem.SetModelType(modelType);
-    modelItem.SetModelDescription(modelID);
+    modelItem.SetModelDescription(modelDescription);
+    modelItem.SetFurtherInfo(furtherInfo);
     if (pvModelIter != modelItems.end() &&  // There was pre-existing PV Model...
-        type == G4SceneTreeItem::pvmodel)
-    {  // ...and the new model is also PV...
-      modelIter = rootItem.InsertChild(++pvModelIter, modelItem);  // ...insert after, else...
+        type == G4SceneTreeItem::pvmodel) {   // ...and the new model is also PV...
+      fSceneTree.InsertChild(++pvModelIter, modelItem);  // ...insert after, else...
+    } else {
+      fSceneTree.InsertChild(modelIter, modelItem);  // ...insert at end
     }
-    else {
-      modelIter = rootItem.InsertChild(modelIter, modelItem);  // ...insert at end
-    }
-  }
-  else {
-    // Existing model - mark visible == active
+  } else {  // Existing model - mark visible == active
     modelIter->AccessVisAttributes().SetVisibility(true);
   }
+}
 
-  return modelIter;
+G4VViewer::SceneTreeScene::SceneTreeScene(G4VViewer* pViewer, G4PhysicalVolumeModel* pPVModel)
+: fpViewer (pViewer)
+, fpPVModel(pPVModel)
+{
+  if (fpPVModel == nullptr) {
+    G4Exception("G4VViewer::SceneTreeScene::SceneTreeScene", "visman0405", FatalException,
+                "G4PhysicalVolumeModel pointer is null");
+    return;  // To keep Coverity happy
+  }
+  
+  // Describe the model to an empty scene simply to get the numbers of touchables
+  struct : public G4PseudoScene {
+    void ProcessVolume(const G4VSolid&) {}
+  } counter;
+  fpPVModel->DescribeYourselfTo(counter);  // Calls ProcessVolume for every touchable
+
+  // Limit the expanded depth to limit the number expanded so as not to swamp the GUI
+  G4int expanded = 0;
+  for (const auto& dn : fpPVModel->GetNumberOfTouchables()) {
+    expanded += dn.second;
+    if (fMaximumExpandedDepth < dn.first) fMaximumExpandedDepth = dn.first;
+    if (expanded > fMaximumExpanded) break;
+  }
+
+  // Find appropriate model and its iterator
+  const auto& modelID = fpPVModel->GetGlobalDescription();
+  auto& modelItems = fpViewer->fSceneTree.AccessChildren();
+  fModelIter = modelItems.begin();
+  for (; fModelIter != modelItems.end(); ++fModelIter) {
+    if (fModelIter->GetModelDescription() == modelID) break;
+  }
+  if (fModelIter == modelItems.end()) {
+    G4Exception("G4VViewer::SceneTreeScene::SceneTreeScene", "visman0406", JustWarning,
+                "Model not found");
+  }
+}
+
+void G4VViewer::SceneTreeScene::ProcessVolume(const G4VSolid&)
+{
+  if (fpViewer->fCurtailDescent) {
+    fpPVModel->CurtailDescent();
+    return;
+  }
+
+  const auto& modelID = fpPVModel->GetGlobalDescription();
+
+  std::ostringstream oss;
+  oss << fpPVModel->GetFullPVPath();  // of this volume
+  G4String fullPathString(oss.str());  // Has a leading space
+
+  // Navigate scene tree and find or insert touchables one by one
+  // Work down the path - "name id", then "name id name id", etc.
+  const auto& nodeIDs = fpPVModel->GetFullPVPath();
+  G4String partialPathString;
+  auto currentIter = fModelIter;
+  G4int depth = 0;
+  for (const auto& nodeID : nodeIDs) {
+    std::ostringstream oss1;
+    oss1 << nodeID;
+    partialPathString += ' ' + oss1.str();
+    currentIter =
+    FindOrInsertTouchable(modelID, *currentIter, ++depth, partialPathString, fullPathString);
+  }
 }
 
 // clang-format off
@@ -305,12 +362,6 @@ std::list<G4SceneTreeItem>::iterator G4VViewer::SceneTreeScene::FindOrInsertTouc
  (const G4String& modelID, G4SceneTreeItem& mother,
   G4int depth, const G4String& partialPathString, const G4String& fullPathString)
 {
-  auto pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  if (pPVModel == nullptr) {
-    G4ExceptionDescription ed;
-    ed << fpModel->GetType() << ": not a Physical VolumeModel";
-    G4Exception("G4VViewer::SceneTreeScene::FindOrInsertTouchable", "visman0404", FatalException, ed);
-  }
   auto& children = mother.AccessChildren();
   auto childIter = children.begin();
   for (; childIter != children.end(); ++childIter) {
@@ -328,13 +379,13 @@ std::list<G4SceneTreeItem>::iterator G4VViewer::SceneTreeScene::FindOrInsertTouc
         // Partial path string refers to the actual volume so it's a touchable
         childIter->SetType(G4SceneTreeItem::touchable);
         // Populate with information
-        childIter->SetDescription(fpModel->GetCurrentTag());
-        childIter->SetModelType(fpModel->GetType());
+        childIter->SetDescription(fpPVModel->GetCurrentTag());
+        childIter->SetModelType(fpPVModel->GetType());
         childIter->SetModelDescription(modelID);
         childIter->SetPVPath(partialPathString);
         if (fpVisAttributes) childIter->SetVisAttributes(*fpVisAttributes);
-        if (pPVModel) childIter->SetAttDefs(pPVModel->GetAttDefs());
-        if (pPVModel) childIter->SetAttValues(pPVModel->CreateCurrentAttValues());
+        childIter->SetAttDefs(fpPVModel->GetAttDefs());
+        childIter->SetAttValues(fpPVModel->CreateCurrentAttValues());
       }  // Partial path string refers to an ancester - do nothing
 
     } else {
@@ -359,13 +410,13 @@ std::list<G4SceneTreeItem>::iterator G4VViewer::SceneTreeScene::FindOrInsertTouc
       // Insert new touchable item
       G4SceneTreeItem touchable(G4SceneTreeItem::touchable);
       touchable.SetExpanded(depth > fMaximumExpandedDepth? false: true);
-      touchable.SetDescription(fpModel->GetCurrentTag());
-      touchable.SetModelType(fpModel->GetType());
+      touchable.SetDescription(fpPVModel->GetCurrentTag());
+      touchable.SetModelType(fpPVModel->GetType());
       touchable.SetModelDescription(modelID);
       touchable.SetPVPath(partialPathString);
       if (fpVisAttributes) touchable.SetVisAttributes(*fpVisAttributes);
-      if (pPVModel) touchable.SetAttDefs(pPVModel->GetAttDefs());
-      if (pPVModel) touchable.SetAttValues(pPVModel->CreateCurrentAttValues());
+      touchable.SetAttDefs(fpPVModel->GetAttDefs());
+      touchable.SetAttValues(fpPVModel->CreateCurrentAttValues());
       childIter = mother.InsertChild(childIter,touchable);
 
     } else {
@@ -380,7 +431,7 @@ std::list<G4SceneTreeItem>::iterator G4VViewer::SceneTreeScene::FindOrInsertTouc
       std::ostringstream oss;
       oss << name << ':' << copyNo;
       ghost.SetDescription(oss.str());
-      ghost.SetModelType(fpModel->GetType());
+      ghost.SetModelType(fpPVModel->GetType());
       ghost.SetModelDescription(modelID);
       ghost.SetPVPath(partialPathString);
       ghost.AccessVisAttributes().SetVisibility(false);
@@ -391,39 +442,6 @@ std::list<G4SceneTreeItem>::iterator G4VViewer::SceneTreeScene::FindOrInsertTouc
   return childIter;
 }
 // clang-format on
-
-void G4VViewer::SceneTreeScene::ProcessVolume(const G4VSolid&)
-{
-  auto& modelType = fpModel->GetType();
-  auto& modelID = fpModel->GetGlobalDescription();
-  auto modelIter = FindOrInsertModel(modelType, modelID);
-
-  auto pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  if (pPVModel) {  // G4PhysicalVolumeModel
-
-    std::ostringstream oss;
-    oss << pPVModel->GetFullPVPath();
-    G4String fullPathString(oss.str());  // Has a leading space - OK
-
-    // Navigate scene tree and find or insert touchables one by one
-    const auto& nodeIDs = pPVModel->GetFullPVPath();  // std::vector<G4PhysicalVolumeNodeID>
-
-    // Work down the path - "name id", then "name id name id", etc.
-    G4String partialPathString;
-    auto currentIter = modelIter;
-    G4int depth = 0;
-    for (const auto& nodeID : nodeIDs) {
-      std::ostringstream oss1;
-      oss1 << nodeID;
-      partialPathString += ' ' + oss1.str();  // Has a leading space - OK
-      currentIter =
-        FindOrInsertTouchable(modelID, *currentIter, ++depth, partialPathString, fullPathString);
-    }
-  }
-  else {
-    // Orphan solid - what to do? Push an empty scene tree item????????????????????????
-  }
-}
 
 #ifdef G4MULTITHREADED
 

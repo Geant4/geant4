@@ -23,47 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Helper: 
+// Helper:
 // Construct a G4HadronInelasticProcess (could be templated on process class),
-// assign XS and model to the process, 
+// assign XS and model to the process,
 // and register the process to the process manager.
 //
 // Author: G.Hugo, 01 August 2022
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef BUILD_G4_PROCESS_HELPERS_HH
-#define BUILD_G4_PROCESS_HELPERS_HH
+#  ifndef BUILD_G4_PROCESS_HELPERS_HH
+#    define BUILD_G4_PROCESS_HELPERS_HH
 
-
-#include <vector>
+#    include <vector>
 
 // G4
-#include "globals.hh"
-
+#    include "globals.hh"
 
 class G4ParticleDefinition;
 class G4PhysicsListHelper;
 class G4VCrossSectionDataSet;
 class G4HadronicInteraction;
 
+namespace build_G4_process_helpers
+{
 
-namespace build_G4_process_helpers {
+void buildInelasticProcessForEachParticle(const std::vector<G4int>& partList,
+                                          G4PhysicsListHelper* ph, G4VCrossSectionDataSet* xs,
+                                          // const G4double xsFactor,
+                                          G4HadronicInteraction* hadronicModel);
 
-  void buildInelasticProcessForEachParticle(const std::vector<G4int>& partList,
-                                            G4PhysicsListHelper* ph,
-                                            G4VCrossSectionDataSet* xs,
-                                            //const G4double xsFactor,
-                                            G4HadronicInteraction* hadronicModel);
+void buildInelasticProcess(G4ParticleDefinition* particle, G4PhysicsListHelper* ph,
+                           G4VCrossSectionDataSet* xs,
+                           // const G4double xsFactor,
+                           G4HadronicInteraction* hadronicModel);
+}  // namespace build_G4_process_helpers
 
-
-  void buildInelasticProcess(G4ParticleDefinition* particle,
-                             G4PhysicsListHelper* ph,
-                             G4VCrossSectionDataSet* xs,
-                             //const G4double xsFactor,
-                             G4HadronicInteraction* hadronicModel);
-}
-
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

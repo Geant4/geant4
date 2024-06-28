@@ -37,22 +37,22 @@
 #ifndef ActionInitialization_h
 #define ActionInitialization_h 1
 
-#include "G4VUserActionInitialization.hh"
-
 #include "DetectorConstruction.hh"
+
+#include "G4VUserActionInitialization.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    explicit ActionInitialization(DetectorConstruction*);
+    ~ActionInitialization() override = default;
 
-class ActionInitialization : public G4VUserActionInitialization {
-public:
-  explicit ActionInitialization(DetectorConstruction *);
-  ~ActionInitialization() override = default;
+    void BuildForMaster() const override;
+    void Build() const override;
 
-  void BuildForMaster() const override;
-  void Build() const override;
-
-private:
-  DetectorConstruction *fDetector = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

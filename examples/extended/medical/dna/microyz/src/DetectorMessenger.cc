@@ -24,59 +24,58 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id$
 //
 /// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
-G4UImessenger(), fpDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fpDetector(Det)
 {
   fpTestDir = std::make_unique<G4UIdirectory>("/microyz/");
   fpTestDir->SetGuidance(" detector control.");
-  
+
   fpDetDir = std::make_unique<G4UIdirectory>("/microyz/det/");
   fpDetDir->SetGuidance("detector construction commands");
-      
-  fpTrackingCutCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/setTrackingCut",this);
+
+  fpTrackingCutCmd =
+    std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/setTrackingCut", this);
   fpTrackingCutCmd->SetGuidance("Set tracking cut");
-  fpTrackingCutCmd->SetParameterName("Cut",false);
+  fpTrackingCutCmd->SetParameterName("Cut", false);
   fpTrackingCutCmd->SetRange("Cut>0.");
   fpTrackingCutCmd->SetUnitCategory("Energy");
-  fpTrackingCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fpTrackingCutCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fpTrackingCutCmd->SetToBeBroadcasted(false);
 
-  fpMaxStepSizeCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/setMaxStepSize",this);
+  fpMaxStepSizeCmd =
+    std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/setMaxStepSize", this);
   fpMaxStepSizeCmd->SetGuidance("Set maximum step size");
-  fpMaxStepSizeCmd->SetParameterName("Size",false);
+  fpMaxStepSizeCmd->SetParameterName("Size", false);
   fpMaxStepSizeCmd->SetRange("Size>0.");
   fpMaxStepSizeCmd->SetUnitCategory("Length");
-  fpMaxStepSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fpMaxStepSizeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fpMaxStepSizeCmd->SetToBeBroadcasted(false);
 
-  fAddRadius = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/Radius",this);
+  fAddRadius = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/Radius", this);
   fpMaxStepSizeCmd->SetGuidance("Set TrackSD radius");
   fAddRadius->SetToBeBroadcasted(false);
-  fAddRadius->SetParameterName("Radius",false);
+  fAddRadius->SetParameterName("Radius", false);
   fAddRadius->SetRange("Radius>0.");
   fAddRadius->SetUnitCategory("Length");
-  fAddRadius->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAddRadius->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,14 +86,17 @@ DetectorMessenger::~DetectorMessenger() = default;
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == fpTrackingCutCmd.get() )
-   { fpDetector->SetTrackingCut(fpTrackingCutCmd->GetNewDoubleValue(newValue));}
+  if (command == fpTrackingCutCmd.get()) {
+    fpDetector->SetTrackingCut(fpTrackingCutCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fpMaxStepSizeCmd.get() )
-   { fpDetector->SetMaxStepSize(fpMaxStepSizeCmd->GetNewDoubleValue(newValue));}
+  if (command == fpMaxStepSizeCmd.get()) {
+    fpDetector->SetMaxStepSize(fpMaxStepSizeCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fAddRadius.get() )
-  { fpDetector->SetTrackerSDRadius(fAddRadius->GetNewDoubleValue(newValue));}
+  if (command == fAddRadius.get()) {
+    fpDetector->SetTrackerSDRadius(fAddRadius->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

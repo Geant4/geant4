@@ -27,25 +27,6 @@
 //
 // --------------------------------------------------------------------
 
-extern G4GEOM_DLL G4Allocator<G4SmartVoxelNode>*& aNodeAllocator();
-
-// --------------------------------------------------------------------
-inline
-void* G4SmartVoxelNode::operator new(std::size_t)
-{
-  if(aNodeAllocator() == nullptr)
-  {
-    aNodeAllocator() = new G4Allocator<G4SmartVoxelNode>;
-  }
-  return (void*) aNodeAllocator()->MallocSingle();
-}
-
-// --------------------------------------------------------------------
-inline
-void G4SmartVoxelNode::operator delete(void* aNode)
-{
-  aNodeAllocator()->FreeSingle((G4SmartVoxelNode*) aNode);
-}
 
 // --------------------------------------------------------------------
 inline

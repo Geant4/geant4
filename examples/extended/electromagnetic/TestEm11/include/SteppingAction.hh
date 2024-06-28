@@ -44,14 +44,14 @@ class EventAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,EventAction*);
-   ~SteppingAction() = default;
+    SteppingAction(DetectorConstruction*, EventAction*);
+    ~SteppingAction() = default;
 
     void UserSteppingAction(const G4Step*) override;
-    
+
   private:
     DetectorConstruction* fDetector = nullptr;
-    EventAction*          fEventAction = nullptr;
+    EventAction* fEventAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

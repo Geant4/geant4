@@ -36,10 +36,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Run.hh"
-#include "G4DataVector.hh"
-#include "G4StatDouble.hh"
 #include "G4AnalysisManager.hh"
+#include "G4DataVector.hh"
+#include "G4Run.hh"
+#include "G4StatDouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,44 +49,42 @@ class TestParameters;
 
 class Run : public G4Run
 {
-public:
+  public:
+    Run();
+    virtual ~Run();
 
-  Run();
-  virtual ~Run();
+    virtual void Merge(const G4Run*);
 
-  virtual void Merge(const G4Run*);
+    void BeginOfRun();
+    void EndOfRun();
 
-  void BeginOfRun();
-  void EndOfRun();
+    void BeginOfEvent();
+    void EndOfEvent();
 
-  void BeginOfEvent();
-  void EndOfEvent();
+    void AddEnergy(G4double edep, const G4Step*);
 
-  void AddEnergy(G4double edep, const G4Step*);
+    inline void SetVerbose(G4int value);
 
-  inline void SetVerbose(G4int value);
+    inline G4int GetVerbose() const;
 
-  inline G4int GetVerbose() const;
+    inline G4double GetTotStepGas() const;
 
-  inline G4double GetTotStepGas() const;
+    inline const G4StatDouble* GetStat() const;
 
-  inline const G4StatDouble* GetStat() const;
+  private:
+    G4int fVerbose;
+    G4int fNbins;
+    G4double fStepGas;
+    G4double fMaxEnergy;
+    G4double fTotStepGas;
+    G4double fEvt;
 
-private:
+    G4double fTotEdep;
+    G4StatDouble fEdep;
+    G4double fOverflow;
+    G4DataVector fEgas;
 
-  G4int    fVerbose;
-  G4int    fNbins;
-  G4double fStepGas;
-  G4double fMaxEnergy;
-  G4double fTotStepGas;
-  G4double fEvt;
-
-  G4double fTotEdep;
-  G4StatDouble fEdep;
-  G4double fOverflow;
-  G4DataVector fEgas;
-
-  TestParameters* fParam;
+    TestParameters* fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,5 +118,3 @@ inline const G4StatDouble* Run::GetStat() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

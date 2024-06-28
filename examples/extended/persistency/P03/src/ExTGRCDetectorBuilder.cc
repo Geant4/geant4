@@ -28,6 +28,7 @@
 /// \brief Implementation of the ExTGRCDetectorBuilder class
 
 #include "ExTGRCDetectorBuilder.hh"
+
 #include "ExTGRCLineProcessor.hh"
 #include "ExTGRCRegionCutsMgr.hh"
 
@@ -35,15 +36,14 @@
 #include "G4tgrVolumeMgr.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExTGRCDetectorBuilder::ExTGRCDetectorBuilder()
-  : G4tgbDetectorBuilder(), fTlproc(0)
-{
-}
+ExTGRCDetectorBuilder::ExTGRCDetectorBuilder() : G4tgbDetectorBuilder(), fTlproc(0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCDetectorBuilder::~ExTGRCDetectorBuilder()
 {
-  if (fTlproc)  { delete fTlproc; }
+  if (fTlproc) {
+    delete fTlproc;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,10 +52,10 @@ const G4tgrVolume* ExTGRCDetectorBuilder::ReadDetector()
   //------------------- construct geometry
   fTlproc = new ExTGRCLineProcessor;
   G4tgrFileReader* tfr = G4tgrFileReader::GetInstance();
-  tfr->SetLineProcessor( fTlproc );
+  tfr->SetLineProcessor(fTlproc);
   tfr->ReadFiles();
 
-  //---------- find top G4tgrVolume 
+  //---------- find top G4tgrVolume
   G4tgrVolumeMgr* tgrVolmgr = G4tgrVolumeMgr::GetInstance();
   const G4tgrVolume* tgrVoltop = tgrVolmgr->GetTopVolume();
 
@@ -63,17 +63,15 @@ const G4tgrVolume* ExTGRCDetectorBuilder::ReadDetector()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4VPhysicalVolume* ExTGRCDetectorBuilder::
-ConstructDetector( const G4tgrVolume* tgrVoltop)
+G4VPhysicalVolume* ExTGRCDetectorBuilder::ConstructDetector(const G4tgrVolume* tgrVoltop)
 {
-  G4VPhysicalVolume* topPV =
-    G4tgbDetectorBuilder::ConstructDetector( tgrVoltop );
+  G4VPhysicalVolume* topPV = G4tgbDetectorBuilder::ConstructDetector(tgrVoltop);
 
   //--- Create regions
   ExTGRCRegionCutsMgr::GetInstance()->BuildRegions();
-  
+
   //--- Set cuts to regions
-    ExTGRCRegionCutsMgr::GetInstance()->BuildProductionCuts();
+  ExTGRCRegionCutsMgr::GetInstance()->BuildProductionCuts();
 
   return topPV;
 }

@@ -46,19 +46,19 @@ class G4Run;
 
 class RunAction : public G4UserRunAction
 {
-public:
-  RunAction();
-  ~RunAction() override;
+  public:
+    RunAction();
+    ~RunAction() override;
 
-  void BeginOfRunAction(const G4Run*) override;
-  void   EndOfRunAction(const G4Run*) override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-  void PrintStatistic();
+    void PrintStatistic();
 
-private:
-  void DefineCommands();
+  private:
+    void DefineCommands();
 
-  G4GenericMessenger* fMessenger = nullptr;
+    G4GenericMessenger* fMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

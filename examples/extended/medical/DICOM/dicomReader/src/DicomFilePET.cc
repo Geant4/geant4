@@ -24,79 +24,72 @@
 // ********************************************************************
 //
 #include "DicomFilePET.hh"
+
 #include "DicomFileStructure.hh"
 #include "DicomROI.hh"
+#include "dcmtk/dcmdata/dcdeftag.h"
+#include "dcmtk/dcmdata/dcfilefo.h"
+#include "dcmtk/dcmdata/dcpixel.h"
+#include "dcmtk/dcmdata/dcpixseq.h"
+#include "dcmtk/dcmdata/dcpxitem.h"
+#include "dcmtk/dcmrt/drtimage.h"
 
 #include "G4GeometryTolerance.hh"
-
-#include "dcmtk/dcmdata/dcfilefo.h"
-#include "dcmtk/dcmdata/dcdeftag.h"
-#include "dcmtk/dcmdata/dcpixel.h"
-#include "dcmtk/dcmdata/dcpxitem.h"
-#include "dcmtk/dcmdata/dcpixseq.h"
-#include "dcmtk/dcmrt/drtimage.h"
 
 #include <set>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomFilePET::DicomFilePET()
-{
-}
+DicomFilePET::DicomFilePET() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomFilePET::DicomFilePET(DcmDataset* dset) : DicomVFileImage(dset)
-{
-}
+DicomFilePET::DicomFilePET(DcmDataset* dset) : DicomVFileImage(dset) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomFilePET::BuildActivities()
 {
   G4int fCompress = theFileMgr->GetCompression();
-  if( fNoVoxelsX%fCompress != 0 || fNoVoxelsY%fCompress != 0 ) {
-    G4Exception("DicompFileMgr.:BuildMaterials",
-                "DFC004",
-                FatalException,
-                ("Compression factor = " + std::to_string(fCompress) 
-                 + " has to be a divisor of Number of voxels X = " + std::to_string(fNoVoxelsX) 
-                 + " and Y " + std::to_string(fNoVoxelsY)).c_str());
+  if (fNoVoxelsX % fCompress != 0 || fNoVoxelsY % fCompress != 0) {
+    G4Exception("DicompFileMgr.:BuildMaterials", "DFC004", FatalException,
+                ("Compression factor = " + std::to_string(fCompress)
+                 + " has to be a divisor of Number of voxels X = " + std::to_string(fNoVoxelsX)
+                 + " and Y " + std::to_string(fNoVoxelsY))
+                  .c_str());
   }
 
   //  if( DicomVerb(debugVerb) ) G4cout << " BuildMaterials " << fFileName << G4endl;
   double meanHV = 0.;
-  for( int ir = 0; ir < fNoVoxelsY; ir += fCompress ) {
-    for( int ic = 0; ic < fNoVoxelsX; ic += fCompress ) {
+  for (int ir = 0; ir < fNoVoxelsY; ir += fCompress) {
+    for (int ic = 0; ic < fNoVoxelsX; ic += fCompress) {
       meanHV = 0.;
-      int isumrMax = std::min(ir+fCompress,fNoVoxelsY);
-      int isumcMax = std::min(ic+fCompress,fNoVoxelsX);
-      for( int isumr = ir; isumr < isumrMax; isumr ++ ) {
-        for( int isumc = ic; isumc < isumcMax; isumc ++ ) {
-          meanHV += fHounsfieldV[isumc+isumr*fNoVoxelsX];
+      int isumrMax = std::min(ir + fCompress, fNoVoxelsY);
+      int isumcMax = std::min(ic + fCompress, fNoVoxelsX);
+      for (int isumr = ir; isumr < isumrMax; isumr++) {
+        for (int isumc = ic; isumc < isumcMax; isumc++) {
+          meanHV += fHounsfieldV[isumc + isumr * fNoVoxelsX];
         }
       }
-      meanHV /= (isumrMax-ir)*(isumcMax-ic);
+      meanHV /= (isumrMax - ir) * (isumcMax - ic);
       fActivities.push_back(meanHV);
     }
   }
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomFilePET::DumpActivitiesToTextFile(std::ofstream& fout)
 {
   G4int fCompress = theFileMgr->GetCompression();
-  if( DicomFileMgr::verbose >= warningVerb ) G4cout << fLocation << " DumpDensitiesToTextFile " 
-          << fFileName << " " << fActivities.size() << G4endl;
-  
+  if (DicomFileMgr::verbose >= warningVerb)
+    G4cout << fLocation << " DumpDensitiesToTextFile " << fFileName << " " << fActivities.size()
+           << G4endl;
+
   G4int copyNo = 0;
-  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
-      fout << fActivities[ic+ir*fNoVoxelsX/fCompress];
-      if( ic != fNoVoxelsX/fCompress-1) fout << " ";
-      if( copyNo%8 == 7 ) fout << G4endl;
+  for (int ir = 0; ir < fNoVoxelsY / fCompress; ir++) {
+    for (int ic = 0; ic < fNoVoxelsX / fCompress; ic++) {
+      fout << fActivities[ic + ir * fNoVoxelsX / fCompress];
+      if (ic != fNoVoxelsX / fCompress - 1) fout << " ";
+      if (copyNo % 8 == 7) fout << G4endl;
       copyNo++;
     }
-    if( copyNo%8 != 0 ) fout << G4endl;
+    if (copyNo % 8 != 0) fout << G4endl;
   }
-
 }
-

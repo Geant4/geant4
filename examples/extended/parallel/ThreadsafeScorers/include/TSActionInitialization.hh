@@ -40,28 +40,27 @@
 #ifndef tsactioninitialization_hh_
 #define tsactioninitialization_hh_
 
-#include "globals.hh"
-#include "G4VUserActionInitialization.hh"
-
 #include "G4AutoLock.hh"
 #include "G4Threading.hh"
+#include "G4VUserActionInitialization.hh"
+#include "globals.hh"
 
 class TSActionInitialization : public G4VUserActionInitialization
 {
- public:
-  // Constructor and Destructors
-  TSActionInitialization();
-  virtual ~TSActionInitialization();
+  public:
+    // Constructor and Destructors
+    TSActionInitialization();
+    virtual ~TSActionInitialization();
 
-  static TSActionInitialization* Instance();
+    static TSActionInitialization* Instance();
 
- public:
-  virtual void BuildForMaster() const;
-  virtual void Build() const;
+  public:
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
- private:
-  // Private functions
-  static TSActionInitialization* fgInstance;
+  private:
+    // Private functions
+    static TSActionInitialization* fgInstance;
 };
 
 #endif

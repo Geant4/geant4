@@ -43,30 +43,27 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger() override;
-    
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
+
     void SetNewValue(G4UIcommand*, G4String) override;
-    
+
   private:
-  
-    DetectorConstruction*      fDetector = nullptr;
-    
-    G4UIdirectory*             fRdecayDir          = nullptr;
-    G4UIdirectory*             fDetDir             = nullptr;
-    G4UIcmdWithAString*        fTargMatCmd         = nullptr;
-    G4UIcmdWithAString*        fDetectMatCmd       = nullptr;
-    G4UIcmdWithADoubleAndUnit* fTargRadiusCmd      = nullptr;
+    DetectorConstruction* fDetector = nullptr;
+
+    G4UIdirectory* fRdecayDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fTargMatCmd = nullptr;
+    G4UIcmdWithAString* fDetectMatCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTargRadiusCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fDetectThicknessCmd = nullptr;
-    G4UIcmdWithADoubleAndUnit* fTargLengthCmd      = nullptr;
-    G4UIcmdWithADoubleAndUnit* fDetectLengthCmd    = nullptr;    
+    G4UIcmdWithADoubleAndUnit* fTargLengthCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDetectLengthCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

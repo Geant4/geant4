@@ -25,18 +25,20 @@
 //
 //
 #include "ChromosomeMessenger.hh"
+
 #include "ChromosomeMapper.hh"
 #include "UtilityFunctions.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ChromosomeMessenger::ChromosomeMessenger(ChromosomeMapper* mapper)
-  : fpChromosomeMapper(mapper)
-  , fpChromosomeDirectory(new G4UIdirectory("/chromosome/"))
-  , fpAddChromosome(new G4UIcmdWithAString("/chromosome/add", this))
-  , fpSavePlotData(new G4UIcmdWithAString("/chromosome/plotData", this))
+  : fpChromosomeMapper(mapper),
+    fpChromosomeDirectory(new G4UIdirectory("/chromosome/")),
+    fpAddChromosome(new G4UIcmdWithAString("/chromosome/add", this)),
+    fpSavePlotData(new G4UIcmdWithAString("/chromosome/plotData", this))
 {
   // Chromosomes
   fpChromosomeDirectory->SetGuidance("Commands for chromosome geometry.");
@@ -54,19 +56,16 @@ ChromosomeMessenger::ChromosomeMessenger(ChromosomeMapper* mapper)
 
 void ChromosomeMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fpAddChromosome.get())
-  {
+  if (command == fpAddChromosome.get()) {
     std::vector<G4String> values = utility::Split(newValue, ' ');
-    G4String key                 = values[0];
+    G4String key = values[0];
     std::vector<G4String> commands;
-    for(auto it = (values.begin() + 1); it != values.end(); it++)
-    {
+    for (auto it = (values.begin() + 1); it != values.end(); it++) {
       commands.emplace_back(*it);
     }
     fpChromosomeMapper->AddChromosome(key, commands);
   }
-  else if(command == fpSavePlotData.get())
-  {
+  else if (command == fpSavePlotData.get()) {
     fpChromosomeMapper->SavePlotData(newValue);
   }
 }

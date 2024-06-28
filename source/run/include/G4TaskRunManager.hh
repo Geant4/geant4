@@ -38,7 +38,6 @@
 #include "G4EnvironmentUtils.hh"
 #include "G4MTBarrier.hh"
 #include "G4MTRunManager.hh"
-#include "G4Profiler.hh"
 #include "G4RNGHelper.hh"
 #include "G4RunManager.hh"
 #include "G4TBBTaskGroup.hh"
@@ -68,8 +67,6 @@ class G4TaskRunManager : public G4MTRunManager, public PTL::TaskRunManager
     friend class G4RunManagerFactory;
 
   public:
-    // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
     using InitializeSeedsCallback = std::function<G4bool(G4int, G4int&, G4int&)>;
     using RunTaskGroup = G4TaskGroup<void>;
 
@@ -141,8 +138,8 @@ class G4TaskRunManager : public G4MTRunManager, public PTL::TaskRunManager
     G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue, G4bool reseedRequired = true) override;
 
     // To be invoked solely from G4WorkerTaskRunManager to merge the results
-    void MergeScores(const G4ScoringManager* localScoringManager);
-    void MergeRun(const G4Run* localRun);
+    void MergeScores(const G4ScoringManager* localScoringManager) override;
+    void MergeRun(const G4Run* localRun) override;
 
     // Called to force workers to request and process the UI commands stack
     // This will block untill all workers have processed UI commands
@@ -206,7 +203,7 @@ class G4TaskRunManager : public G4MTRunManager, public PTL::TaskRunManager
       return false;
     };
 
-  private:
+  protected:
     // grainsize
     G4bool workersStarted = false;
     G4int eventGrainsize = 0;

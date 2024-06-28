@@ -25,22 +25,21 @@
 //
 //
 #include "AnalysisMessenger.hh"
+
 #include "AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 AnalysisMessenger::AnalysisMessenger(AnalysisManager* analysisManager)
-  : fpAnalysisManager(analysisManager)
-  , fpAnalysisDirectory(new G4UIdirectory("/analysisDNA/"))
-  , fpSaveStrands(new G4UIcmdWithABool("/analysisDNA/saveStrands", this))
-  , fpStrandDirectory(new G4UIcmdWithAString("/analysisDNA/strandDir", this))
-  , fpFragmentLength(new G4UIcmdWithAnInteger("/analysisDNA/fragmentGap", this))
-  , fpSaveSingleChain(
-      new G4UIcmdWithAnInteger("/analysisDNA/diagnosticChain", this))
-  , fpDSBDistance(new G4UIcmdWithAnInteger("/analysisDNA/dsbDistance", this))
-  , fpTestClassifier(
-      new G4UIcmdWithoutParameter("/analysisDNA/testClassifier", this))
-  , fpFileName(new G4UIcmdWithAString("/analysisDNA/fileName", this))
+  : fpAnalysisManager(analysisManager),
+    fpAnalysisDirectory(new G4UIdirectory("/analysisDNA/")),
+    fpSaveStrands(new G4UIcmdWithABool("/analysisDNA/saveStrands", this)),
+    fpStrandDirectory(new G4UIcmdWithAString("/analysisDNA/strandDir", this)),
+    fpFragmentLength(new G4UIcmdWithAnInteger("/analysisDNA/fragmentGap", this)),
+    fpSaveSingleChain(new G4UIcmdWithAnInteger("/analysisDNA/diagnosticChain", this)),
+    fpDSBDistance(new G4UIcmdWithAnInteger("/analysisDNA/dsbDistance", this)),
+    fpTestClassifier(new G4UIcmdWithoutParameter("/analysisDNA/testClassifier", this)),
+    fpFileName(new G4UIcmdWithAString("/analysisDNA/fileName", this))
 {
   // world geometry
   fpAnalysisDirectory->SetGuidance("App local commands for analysis");
@@ -52,12 +51,10 @@ AnalysisMessenger::AnalysisMessenger(AnalysisManager* analysisManager)
   fpStrandDirectory->SetParameterName("DNA framgents", false);
 
   fpFragmentLength->SetGuidance("Gap between DNA fragments in base pairs.");
-  fpFragmentLength->SetGuidance(
-    "Set to zero to score placement volumes independently");
+  fpFragmentLength->SetGuidance("Set to zero to score placement volumes independently");
   fpFragmentLength->SetParameterName("Base Pair gap", false);
 
-  fpSaveSingleChain->SetGuidance(
-    "Save the position of hits histos only on one chain");
+  fpSaveSingleChain->SetGuidance("Save the position of hits histos only on one chain");
   fpSaveSingleChain->SetParameterName("Chain Index", false);
 
   fpDSBDistance->SetGuidance("Max separation of DSBs. Must be less than 31.");
@@ -73,36 +70,25 @@ AnalysisMessenger::AnalysisMessenger(AnalysisManager* analysisManager)
 
 void AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fpStrandDirectory.get())
-  {
+  if (command == fpStrandDirectory.get()) {
     fpAnalysisManager->SetStrandDirectory(newValue);
   }
-  else if(command == fpSaveStrands.get())
-  {
-    fpAnalysisManager->SetSaveStrands(
-      G4UIcmdWithABool::GetNewBoolValue(newValue));
+  else if (command == fpSaveStrands.get()) {
+    fpAnalysisManager->SetSaveStrands(G4UIcmdWithABool::GetNewBoolValue(newValue));
   }
-  else if(command == fpFragmentLength.get())
-  {
-    fpAnalysisManager->SetFragmentGap(
-      G4UIcmdWithAnInteger::GetNewIntValue(newValue));
+  else if (command == fpFragmentLength.get()) {
+    fpAnalysisManager->SetFragmentGap(G4UIcmdWithAnInteger::GetNewIntValue(newValue));
   }
-  else if(command == fpSaveSingleChain.get())
-  {
-    fpAnalysisManager->SetChainToSave(
-      G4UIcmdWithAnInteger::GetNewIntValue(newValue));
+  else if (command == fpSaveSingleChain.get()) {
+    fpAnalysisManager->SetChainToSave(G4UIcmdWithAnInteger::GetNewIntValue(newValue));
   }
-  else if(command == fpDSBDistance.get())
-  {
-    fpAnalysisManager->SetDSBDistance(
-      G4UIcmdWithAnInteger::GetNewIntValue(newValue));
+  else if (command == fpDSBDistance.get()) {
+    fpAnalysisManager->SetDSBDistance(G4UIcmdWithAnInteger::GetNewIntValue(newValue));
   }
-  else if(command == fpTestClassifier.get())
-  {
+  else if (command == fpTestClassifier.get()) {
     fpAnalysisManager->TestClassification();
   }
-  else if(command == fpFileName.get())
-  {
+  else if (command == fpFileName.get()) {
     fpAnalysisManager->SetFileName(newValue);
   }
 }

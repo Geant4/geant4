@@ -32,35 +32,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
+
+#include "MuNuclearBuilder.hh"
+#include "PhysListEmStandard.hh"
 #include "PhysicsListMessenger.hh"
 
+#include "G4BaryonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4Electron.hh"
+#include "G4EmParameters.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "PhysListEmStandard.hh"
-#include "MuNuclearBuilder.hh"
-
-#include "G4EmParameters.hh"
-
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-#include "G4BosonConstructor.hh"
+#include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
+#include "G4Positron.hh"
 #include "G4ShortLivedConstructor.hh"
-
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0),
-  fMuNuclPhysicsList(0),
-  fMessenger(0)
+PhysicsList::PhysicsList()
+  : G4VModularPhysicsList(), fEmPhysicsList(0), fMuNuclPhysicsList(0), fMessenger(0)
 {
   SetVerboseLevel(1);
   fMessenger = new PhysicsListMessenger(this);
@@ -69,11 +63,11 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   fEmName = G4String("emstandard_opt0");
   fEmPhysicsList = new G4EmStandardPhysics();
 
-  //extend energy range of PhysicsTables
+  // extend energy range of PhysicsTables
   //
   G4EmParameters* param = G4EmParameters::Instance();
-  param->SetMinEnergy(100*eV);  
-  param->SetMaxEnergy(1000*PeV);
+  param->SetMinEnergy(100 * eV);
+  param->SetMaxEnergy(1000 * PeV);
 
   fMuNuclPhysicsList = 0;
 }
@@ -89,7 +83,7 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  G4BosonConstructor  pBosonConstructor;
+  G4BosonConstructor pBosonConstructor;
   pBosonConstructor.ConstructParticle();
 
   G4LeptonConstructor pLeptonConstructor;
@@ -115,52 +109,45 @@ void PhysicsList::ConstructProcess()
   // transportation
   //
   AddTransportation();
-  
+
   // electromagnetic Physics List
   //
   fEmPhysicsList->ConstructProcess();
-  if(fMuNuclPhysicsList) fMuNuclPhysicsList->ConstructProcess();
+  if (fMuNuclPhysicsList) fMuNuclPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == fEmName) return;
 
   if (name == "emstandard_opt0") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
-
-  } else if (name == "emstandard_opt4") {
-
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-
-  } else if (name == "local") {
-
+  }
+  else if (name == "local") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(name);
-
-  } else if (name == "muNucl") {
+  }
+  else if (name == "muNucl") {
     fMuNuclPhysicsList = new MuNuclearBuilder(name);
-
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -95,6 +95,7 @@ NeutronHP: /Elastic file for Z = 18, A = 38 is not found and NeutronHP will use 
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
+ Use probability tables from     njoy
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -112,7 +113,7 @@ NeutronHP: /Capture file for Z = 18, A = 38 is not found and NeutronHP will use 
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-  Process: Radioactivation
+  Process: RadioactiveDecay
 -----------------------------------------------------------------------
                            Hadronic Processes for He3
   Process: hadElastic
@@ -336,7 +337,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -382,7 +383,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.950000s Real=7.477565s Sys=0.000000s
+  User=5.080000s Real=6.321701s Sys=0.020000s
 
  ======================== run summary =====================
 
@@ -390,42 +391,47 @@ Run Summary
     1        30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-            NoProcess=  99446       Radioactivation=    174                  Rayl=   1657
-       Transportation=  58618               annihil=    131                 compt=  54990
-                 conv=    131                 eBrem=    646                 eIoni= 110763
-                hIoni=    174            hadElastic=  86001               ionIoni= 171990
-                  msc=     65      neutronInelastic=  14288                  phot=    738
+                Decay=      1             NoProcess=  99680      RadioactiveDecay=    141
+                 Rayl=   1505        Transportation=  58680               annihil=    133
+                compt=  52181                  conv=    136                 eBrem=    728
+                eIoni= 107254                 hIoni=    141            hadElastic=  86258
+              ionIoni= 171952                   msc=     58              nCapture=      1
+     neutronInelastic=  14259                  phot=    807         photonNuclear=      1
 
 
- Edep in absorber 1 = 6.94 MeV	(51.4 keV-->14.1 MeV)
- Energy leakage     = 4.66 MeV	(260 eV -->14.1 MeV)
- Energy total       = 11.6 MeV	(496 keV-->14.3 MeV)
+ Edep in absorber 1 = 6.9 MeV	(2.36 keV-->17.8 MeV)
+ Energy leakage     = 4.69 MeV	(367 eV -->14.1 MeV)
+ Energy total       = 11.6 MeV	(793 keV-->30.1 MeV)
 
  List of created particles in absorber 1:
-            He6:     174  Emean =     1.3 MeV	( 1.02 MeV --> 1.34 MeV)	mean life = 1.16 s  
-            Li6:     174  Emean =     772 eV 	( 38.7 eV  --> 1.4 keV)	stable
-            Li7:   99272  Emean =     563 keV	( 28.2 meV --> 6.2 MeV)	stable
-          alpha:     276  Emean =    1.27 MeV	( 35.4 keV --> 4.06 MeV)	stable
-      anti_nu_e:     174  Emean =     1.9 MeV	( 310 keV --> 3.36 MeV)	stable
-       deuteron:     174  Emean =     434 keV	( 341 keV --> 447 keV)	stable
-             e+:     131  Emean =    1.81 MeV	( 190 keV --> 3.55 MeV)	stable
-             e-:   55558  Emean =     239 keV	( 100 eV  --> 4.39 MeV)	stable
-          gamma:   14155  Emean =    2.51 MeV	( 1.52 keV --> 4.63 MeV)	stable
-        neutron:   14958  Emean =    3.66 MeV	( 12.5 keV --> 13.6 MeV)	mean life = 14.7 min
+  Be8[3030.000]:       1  Emean =    5.83 keV	( 5.83 keV --> 5.83 keV)	mean life = 0 ps 
+            He6:     139  Emean =    1.28 MeV	( 939 keV --> 1.34 MeV)	mean life = 1.16 s  
+            Li6:     139  Emean =     830 eV 	( 13 eV  --> 1.4 keV)	stable
+            Li7:   99541  Emean =     560 keV	( 294 meV --> 6.21 MeV)	stable
+            Li8:       1  Emean =    8.27 keV	( 8.27 keV --> 8.27 keV)	mean life = 1.21 s  
+          alpha:     264  Emean =    1.27 MeV	( 40.6 keV --> 4.21 MeV)	stable
+      anti_nu_e:     140  Emean =    1.97 MeV	( 400 keV --> 5.88 MeV)	stable
+       deuteron:     139  Emean =     427 keV	( 314 keV --> 447 keV)	stable
+             e+:     136  Emean =    1.86 MeV	( 60 keV --> 3.54 MeV)	stable
+             e-:   52889  Emean =     248 keV	( 100 eV  --> 7.09 MeV)	stable
+          gamma:   14254  Emean =    2.52 MeV	( 1.52 keV --> 4.63 MeV)	stable
+        neutron:   14957  Emean =    3.69 MeV	( 3.26 keV --> 13.6 MeV)	mean life = 14.7 min
+         triton:       1  Emean =    1.23 MeV	( 1.23 MeV --> 1.23 MeV)	mean life = 17.8 y  
 
  List of particles emerging from absorbers :
-      anti_nu_e:     174  Emean =     1.9 MeV	( 310 keV --> 3.36 MeV)
-             e-:     174  Emean =    1.88 MeV	( 16 keV --> 4.21 MeV)
-          gamma:   13286  Emean =    1.69 MeV	( 5.86 keV --> 4.63 MeV)
-        neutron:   10670  Emean =     2.2 MeV	( 6.75 eV  --> 14.1 MeV)
+      anti_nu_e:     140  Emean =    1.97 MeV	( 400 keV --> 5.88 MeV)
+             e+:       3  Emean =    2.03 MeV	( 881 keV --> 2.85 MeV)
+             e-:     187  Emean =    1.71 MeV	( 49.9 keV --> 4.24 MeV)
+          gamma:   13310  Emean =    1.72 MeV	( 4.43 keV --> 4.63 MeV)
+        neutron:   10697  Emean =    2.19 MeV	( 2.87 eV  --> 14.1 MeV)
 
- Nb of events with primary absorbed = 87 %,   transmit = 6.7 %,   reflected = 5.9 %
+ Nb of events with primary absorbed = 87 %,   transmit = 6.3 %,   reflected = 6.3 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 180201676, 665043448
+ Current couple of seeds = 1470623734, 1549385205
 ----------------------------------------
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.04 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.043 MB
 ============================================================

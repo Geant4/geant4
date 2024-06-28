@@ -51,47 +51,47 @@ class G4RayleighScattering;
 
 class EmStandardPhysicsTrackingManager : public G4VTrackingManager
 {
- public:
-  EmStandardPhysicsTrackingManager();
-  ~EmStandardPhysicsTrackingManager();
+  public:
+    EmStandardPhysicsTrackingManager();
+    ~EmStandardPhysicsTrackingManager();
 
-  void BuildPhysicsTable(const G4ParticleDefinition&) override;
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  void PreparePhysicsTable(const G4ParticleDefinition&) override;
+    void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
-  void HandOverOneTrack(G4Track* aTrack) override;
+    void HandOverOneTrack(G4Track* aTrack) override;
 
- private:
-  void TrackElectron(G4Track* aTrack);
-  void TrackPositron(G4Track* aTrack);
-  void TrackGamma(G4Track* aTrack);
+  private:
+    void TrackElectron(G4Track* aTrack);
+    void TrackPositron(G4Track* aTrack);
+    void TrackGamma(G4Track* aTrack);
 
-  struct
-  {
-    G4eMultipleScattering* msc;
-    G4eIonisation* ioni;
-    G4eBremsstrahlung* brems;
-    G4CoulombScattering* ss;
-  } fElectronProcs;
+    struct
+    {
+        G4eMultipleScattering* msc;
+        G4eIonisation* ioni;
+        G4eBremsstrahlung* brems;
+        G4CoulombScattering* ss;
+    } fElectronProcs;
 
-  struct
-  {
-    G4eMultipleScattering* msc;
-    G4eIonisation* ioni;
-    G4eBremsstrahlung* brems;
-    G4eplusAnnihilation* annihilation;
-    G4CoulombScattering* ss;
-  } fPositronProcs;
+    struct
+    {
+        G4eMultipleScattering* msc;
+        G4eIonisation* ioni;
+        G4eBremsstrahlung* brems;
+        G4eplusAnnihilation* annihilation;
+        G4CoulombScattering* ss;
+    } fPositronProcs;
 
-  struct
-  {
-    G4PhotoElectricEffect* pe;
-    G4ComptonScattering* compton;
-    G4GammaConversion* conversion;
-    G4RayleighScattering* rayleigh;
-  } fGammaProcs;
+    struct
+    {
+        G4PhotoElectricEffect* pe;
+        G4ComptonScattering* compton;
+        G4GammaConversion* conversion;
+        G4RayleighScattering* rayleigh;
+    } fGammaProcs;
 
-  static EmStandardPhysicsTrackingManager* fMasterTrackingManager;
+    static EmStandardPhysicsTrackingManager* fMasterTrackingManager;
 };
 
 #endif

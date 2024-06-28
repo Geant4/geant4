@@ -37,10 +37,9 @@
 #ifndef G02PrimaryGeneratorAction_h
 #define G02PrimaryGeneratorAction_h 1
 
-#include "G4ParticleTable.hh"
-#include "G4ParticleGun.hh"
 #include "G4Event.hh"
-
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 // ----------------------------------------------------------------------------
@@ -50,20 +49,18 @@
 class G02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-
     // Constructor and destructor
     //
     G02PrimaryGeneratorAction();
-   ~G02PrimaryGeneratorAction();
+    ~G02PrimaryGeneratorAction();
 
     // Used by Geant4 to generate the primary particles of the event
     //
     virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-
     G4ParticleGun* fParticleGun;
-    G4ParticleTable * fParticleTable;
+    G4ParticleTable* fParticleTable;
 };
 
 // ----------------------------------------------------------------------------

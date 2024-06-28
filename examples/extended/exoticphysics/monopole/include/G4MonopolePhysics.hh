@@ -43,40 +43,36 @@ class G4Monopole;
 
 class G4MonopolePhysics : public G4VPhysicsConstructor
 {
-public:
+  public:
+    G4MonopolePhysics(const G4String& nam = "Monopole Physics");
 
-  G4MonopolePhysics(const G4String& nam = "Monopole Physics");
+    ~G4MonopolePhysics();
 
-  ~G4MonopolePhysics();
+    // This method is dummy for physics
+    virtual void ConstructParticle();
 
-  // This method is dummy for physics
-  virtual void ConstructParticle();
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type
+    virtual void ConstructProcess();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+    void SetMagneticCharge(G4double);
+    void SetElectricCharge(G4double);
+    void SetMonopoleMass(G4double);
 
-  void SetMagneticCharge(G4double);
-  void SetElectricCharge(G4double);
-  void SetMonopoleMass(G4double);
+  private:
+    // hide assignment operator
+    G4MonopolePhysics& operator=(const G4MonopolePhysics& right);
+    G4MonopolePhysics(const G4MonopolePhysics&);
 
-private:
+    G4double fMagCharge;
+    G4double fElCharge;
+    G4double fMonopoleMass;
 
-  // hide assignment operator
-  G4MonopolePhysics & operator=(const G4MonopolePhysics &right);
-  G4MonopolePhysics(const G4MonopolePhysics&);
-
-  G4double    fMagCharge;
-  G4double    fElCharge;
-  G4double    fMonopoleMass;
-
-  G4MonopolePhysicsMessenger*  fMessenger;
-  G4Monopole* fMpl;
-
+    G4MonopolePhysicsMessenger* fMessenger;
+    G4Monopole* fMpl;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

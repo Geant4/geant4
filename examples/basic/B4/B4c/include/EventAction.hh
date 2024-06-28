@@ -36,6 +36,8 @@
 
 #include "globals.hh"
 
+class G4Event;
+
 namespace B4c
 {
 
@@ -47,29 +49,26 @@ namespace B4c
 
 class EventAction : public G4UserEventAction
 {
-public:
-  EventAction() = default;
-  ~EventAction() override = default;
+  public:
+    EventAction() = default;
+    ~EventAction() override = default;
 
-  void  BeginOfEventAction(const G4Event* event) override;
-  void    EndOfEventAction(const G4Event* event) override;
+    void BeginOfEventAction(const G4Event* event) override;
+    void EndOfEventAction(const G4Event* event) override;
 
-private:
-  // methods
-  CalorHitsCollection* GetHitsCollection(G4int hcID,
-                                            const G4Event* event) const;
-  void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
-                            G4double gapEdep, G4double gapTrackLength) const;
+  private:
+    // methods
+    CalorHitsCollection* GetHitsCollection(G4int hcID, const G4Event* event) const;
+    void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength, G4double gapEdep,
+                              G4double gapTrackLength) const;
 
-  // data members
-  G4int fAbsHCID = -1;
-  G4int fGapHCID = -1;
+    // data members
+    G4int fAbsHCID = -1;
+    G4int fGapHCID = -1;
 };
 
-}
+}  // namespace B4c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

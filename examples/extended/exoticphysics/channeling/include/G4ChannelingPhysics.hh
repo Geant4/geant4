@@ -37,11 +37,11 @@
 
 class G4ChannelingPhysics : public G4VPhysicsConstructor
 {
-public:
+  public:
     G4ChannelingPhysics(const G4String& name = "crystal");
     ~G4ChannelingPhysics();
-    
-public:
+
+  public:
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 };

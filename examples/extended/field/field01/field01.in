@@ -5,16 +5,20 @@
 #
 /tracking/verbose 1
 /run/verbose 1
+/control/verbose 2
+#/control/cout/ignoreThreadsExcept 0
 #
 # ******  Start of initialisation of classes for field propagation 
 # Change the type of stepper used to integrate the ODE of motion
 #
 # Recommended and default since Geant4 10.4 (Dec 2017) - Dormand Prince (7) 4/5
-/field/setStepperType 745
+/field/stepperType DormandPrince745 
+
 # High efficiency 5th order embedded stepper - Tsitouras 
-# /field/setStepperType 145
+# /field/stepperType TsitourasRK45
+
 # Higher order Dormand Prince stepper - 6th order (for smoothest fields & long steps)
-# /field/setStepperType 56
+# /field/stepperType DormandPrinceRK56
 #
 #
 # Different types of steppers can be chosen for integration in B-field:
@@ -42,7 +46,7 @@
 # Control the mininum step size for integration in field
 #     with a value of 10 um ==> accept any amount of integration error in smaller steps!
 #
-/field/setMinStep 0.01 mm  
+/field/setMinimumStep 0.01 mm
 #
 # Control the (relative) accuracy of the integration.
 # ---------------------------------------------------
@@ -50,14 +54,14 @@
 ## Errors of this size in an integration sub-step are acceptable except when 
 #   it is limited by the relative integration error limits (epsilon_min/max)
 #
-/field/setDeltaOneStep  2.0e-05 mm
+/field/setDeltaOneStep  2.0e-05 mm 
 #
 #    DeltaOneStep is used to obtain a relative accuracy for the step:
 #       relative_eps = DeltaOneStep / step-length
 #  To ensure robustness the value of this is kept within the following limits: 
 # 2. Epsilon Min:  the minimum value of the relative integration error (EpsilonMin) -
 #
-/field/setEpsilonMin    5.0e-06
+/field/setMinimumEpsilonStep    5.0e-06
 # 
 #  This Limit to ensure that large steps do NOT result in a very low value of relative_eps 
 #   (ie very high accuracy) that would result in integration requiring many steps and CPU cycles.
@@ -65,20 +69,18 @@
 #
 # 3. Epsilon Max:
 #
-/field/setEpsilonMax    5.0e-04
+/field/setMaximumEpsilonStep    5.0e-04
 # 
 # A minimum value of the relative integration error (EpsilonMax). Also a dimensionless number");
 #  This Limit serves to ensure that a very small step does NOT result in a large relative error 
 #  (ie low accuracy) and unreliable results."); 
 #
 
-# Initialise the field classes - parameters, stepper, ...
-#
-/field/update
 #
 # ******  Initialisation of classes for field propagation is done
 #
 /run/initialize
+/field/printParameters
 #
 # /run/particle/dumpCutValues
 #
@@ -104,8 +106,7 @@
 #
 # Change the value of the B-field
 #
-/field/update
-/field/setField 0.1 0 0 tesla
+/field01/setField 0.1 0 0 tesla
 /run/beamOn 1
 #
 /gun/energy 500.0 MeV
@@ -123,7 +124,7 @@
 /calor/setAbsZpos  20990 mm   # default 21990.0*mm
 /calor/setWorldZ  45000 mm    # default 44000.*mm
 /calor/setWorldR  23000 mm    # default 22000.*mm
-/field/setFieldZ 1.0 kG       # default field 3*tesla in X-direction 
+/field01/setField 0 0 1.0 kG       # default field 3*tesla in Z-direction
 #
 /gun/random   on       # default "off"
 /gun/xvertex  100 mm   # default 0

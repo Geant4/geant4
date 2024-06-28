@@ -34,18 +34,16 @@
 
 #include "G03PrimaryGeneratorAction.hh"
 
-#include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G03PrimaryGeneratorAction::G03PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(), 
-   fParticleGun(0), 
-   fParticleTable(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fParticleTable(0)
 {
-  // Particle gun and particle table 
+  // Particle gun and particle table
   //
   fParticleGun = new G4ParticleGun();
   fParticleTable = G4ParticleTable::GetParticleTable();
@@ -53,15 +51,14 @@ G03PrimaryGeneratorAction::G03PrimaryGeneratorAction()
   // Default particle
   //
   fParticleGun->SetParticleDefinition(fParticleTable->FindParticle("geantino"));
-  fParticleGun->SetParticleEnergy( 1.0*MeV );
+  fParticleGun->SetParticleEnergy(1.0 * MeV);
 
-  G4ThreeVector err1=G4ThreeVector(-1260,-560,40); // outside
-  G4ThreeVector err2=G4ThreeVector(100,-240,120);  // inside
-  G4ThreeVector err2v=(err2-err1).unit();
-  
+  G4ThreeVector err1 = G4ThreeVector(-1260, -560, 40);  // outside
+  G4ThreeVector err2 = G4ThreeVector(100, -240, 120);  // inside
+  G4ThreeVector err2v = (err2 - err1).unit();
+
   fParticleGun->SetParticleMomentumDirection(err2v);
   fParticleGun->SetParticlePosition(err1);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

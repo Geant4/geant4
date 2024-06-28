@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,7 +31,6 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
          --->  Isotope:   F19   Z =  9   N =  19   A =  19.00 g/mole   abundance: 100.000 %
           ElmMassFraction:  61.26 %  ElmAbundance  50.00 % 
 
-PhysicsList::SetCuts:CutLength : 1 (mm)
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
@@ -175,7 +174,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : FluorCarbonate
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.64815 keV    e-  431.054 keV    e+  417.356 keV proton -1 MeV
+ Energy thresholds :  gamma  3.64815 keV    e-  431.054 keV    e+  417.356 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -209,25 +208,26 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.710000s Real=0.755292s Sys=0.000000s
+  User=0.770000s Real=0.822511s Sys=0.000000s
 
 --------------------End of Global Run------------------------
  The run consists of 100000 gamma of 9 MeV in a volume of C6F6 
- Energy deposit per event:  mean = 928.584 keV    rms = 2.34926 MeV
+ Energy deposit per event:  mean = 921.134 keV    rms = 2.34106 MeV
 ------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2851671, 824097029
+ Current couple of seeds = 417036897, 829731305
 ----------------------------------------
 ... write file : testem4.root - done
 ... close file : testem4.root - done
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
+Deleting G4Run (id:0) 
+UserDetectorConstruction deleted 0x1c43400
+UserPhysicsList deleted 0x1c427a0
+UserActionInitialization deleted 0x1ca8050
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
@@ -243,12 +243,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00385 MB
-Pool ID '7G4Track', size : 0.00673 MB
+Pool ID '17G4DynamicParticle', size : 0.00288 MB
+Pool ID '7G4Track', size : 0.00577 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.023 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.021 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

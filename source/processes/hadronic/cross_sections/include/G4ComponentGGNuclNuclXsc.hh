@@ -53,8 +53,8 @@ class G4ComponentGGNuclNuclXsc : public G4VComponentCrossSection
 {
 public:
 
-  G4ComponentGGNuclNuclXsc ();
-  virtual ~G4ComponentGGNuclNuclXsc ();
+  G4ComponentGGNuclNuclXsc();
+  ~G4ComponentGGNuclNuclXsc() override;
 
   // virtual interface methods
   G4double GetTotalElementCrossSection(const G4ParticleDefinition* aParticle,
@@ -91,10 +91,6 @@ public:
 
   void Description(std::ostream&) const final;
    
-  // Extra methods
-  //  inline G4double GetElementCrossSection(const G4DynamicParticle*, 
-  //				         G4int Z, const G4Material*);
-
   inline G4double GetZandACrossSection(const G4DynamicParticle*, 
 				       G4int Z, G4int A);
 
@@ -109,6 +105,7 @@ public:
   G4double GetRatioSD(const G4DynamicParticle*, G4double At, G4double Zt);
   G4double GetRatioQE(const G4DynamicParticle*, G4double At, G4double Zt);
 
+  // main access methods
   inline G4double GetElasticGlauberGribov(const G4DynamicParticle*,G4int Z, G4int A);
   inline G4double GetInelasticGlauberGribov(const G4DynamicParticle*,G4int Z, G4int A);
 
@@ -118,16 +115,23 @@ public:
   inline G4double GetProductionGlauberGribovXsc() const  { return fProductionXsc; }; 
   inline G4double GetDiffractionGlauberGribovXsc() const { return fDiffractionXsc; }; 
 
+  G4ComponentGGNuclNuclXsc& operator=
+  (const G4ComponentGGNuclNuclXsc &right) = delete;
+  G4ComponentGGNuclNuclXsc(const G4ComponentGGNuclNuclXsc&) = delete;
+
 private:
 
   // Glauber-Gribov cross section
   void ComputeCrossSections(const G4ParticleDefinition* aParticle,
 			    G4double kinEnergy, G4int Z, G4int A);
 
-  G4double fTotalXsc, fElasticXsc, fInelasticXsc;
-  G4double fProductionXsc, fDiffractionXsc;
+  G4double fTotalXsc{0.0};
+  G4double fElasticXsc{0.0};
+  G4double fInelasticXsc{0.0};
+  G4double fProductionXsc{0.0};
+  G4double fDiffractionXsc{0.0};
   // Cache
-  G4double fEnergy;
+  G4double fEnergy{0.0};
  
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
@@ -137,8 +141,9 @@ private:
   G4HadronNucleonXsc* fHNXsc;
 
   // Cache
-  const G4ParticleDefinition* fParticle;
-  G4int fZ, fA;    
+  const G4ParticleDefinition* fParticle{nullptr};
+  G4int fZ{0};
+  G4int fA{0};
 };
 
 inline G4double
@@ -157,16 +162,6 @@ G4ComponentGGNuclNuclXsc::GetInelasticGlauberGribov(const G4DynamicParticle* dp,
   return fInelasticXsc;
 }
 
-/*
-inline G4double
-G4ComponentGGNuclNuclXsc::GetElementCrossSection(const G4DynamicParticle* dp,
-						 G4int Z, const G4Material*)
-{
-  G4int A = G4lrint(fNist->GetAtomicMassAmu(Z));
-  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(), Z, A);
-  return fInelasticXsc;
-}
-*/
 inline G4double
 G4ComponentGGNuclNuclXsc::GetZandACrossSection(const G4DynamicParticle* dp,
 					       G4int Z, G4int A)

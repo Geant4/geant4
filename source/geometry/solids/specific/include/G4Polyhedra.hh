@@ -111,6 +111,8 @@ class G4Polyhedra : public G4VCSGfaceted
 
     G4GeometryType  GetEntityType() const override;
 
+    G4bool IsFaceted () const override;
+
     G4VSolid* Clone() const override;
 
     G4double GetCubicVolume() override;

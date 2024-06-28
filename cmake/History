@@ -6,43 +6,81 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-06-07 Ben Morgan (cmake-V11-01-33)
+## 2024-06-07 Ben Morgan (cmake-V11-02-18)
+- Add optional install of new URRPT data model
+  - Fixes Issue #217
+
+## 2024-06-04 Ben Morgan (cmake-V11-02-17)
 - Do not export HDF5 version to Geant4Config
   - Fixes Issue #214
 
-## 2024-05-17 Gunter Folger
+## 2024-05-17 Gunter Folger (cmake-V11-02-16)
 - Use patched G4NDL 4.7.1 dataset.
 
-## 2024-03-26  Ben Morgan
+## 2024-05-17 Ben Morgan (cmake-V11-02-15)
+- Add optional install of new NuDEXLib data model
+
+## 2024-05-09 Ben Morgan (cmake-V11-02-14)
+- Provide CMake function to assist in linking unit tests to final libraries
+  given required source code modules.
+
+## 2024-05-08 Ben Morgan (cmake-V11-02-13)
+- Remove configuration/setup of TiMemory in Geant4.
+
+## 2024-05-03 Ben Morgan (cmake-V11-02-12)
+- Introduce new `FullRelWithDebInfo` build mode.
+  - Essentially `-O3 -g`, so maximum optimization with debugging symbols
+  - Intended to help diagnose FPE exceptions on Alma9/gcc13/c++20 and future
+    proof against similar
+- Remove obsolete `Maintainer` build mode that is nothing more than `Debug` 
+
+## 2024-04-30 Ben Morgan (cmake-V11-02-11)
+- Simplifications to Geant4Config.cmake
+  - Remove obsolete and never run "whole archive" linking of G4physics_lists
+  - Replace TOOLSSG vis driver variables that are just synonyms for more
+    fundamental config options (e.g. GEANT4_USE_QT) with the underlying
+    variable.
+
+## 2024-03-26 Ben Morgan (cmake-V11-02-10)
 - Disable use of FindPythia6 outside of internal Geant4 examples.
 
-## 2024-04-17 Stephan Hageboeck
+## 2024-04-17 Stephan Hageboeck (cmake-V11-02-09)
 - Mention the possibility of using cvmfs datasets in the cmake configure warning
 
-## 2024-04-08 Guilherme Amadio
+## 2024-04-17 Ben Morgan (cmake-V11-02-08)
+- Bump G4EMLOW dataset to v8.6
+
+## 2024-04-08 Guilherme Amadio (cmake-V11-02-07)
 - Fix also find_package(SoXt) and find_package(SoWin)
 
-## 2024-04-20 Ben Morgan
+## 2024-04-20 Ben Morgan (cmake-V11-02-06)
 - Update FindPythia8 module to:
   - Apply [GitHub PR 68](https://github.com/Geant4/geant4/pull/68)
   - Reduce capability to only that required by py8decayer example
   - Emit error if used in project outside Geant4 or py8decayer
 
-## 2024-03-12 Ben Morgan
+## 2024-03-12 Ben Morgan (cmake-V11-02-05)
 - Update FindPythia6 module to account for lib64
   - Applies [GitHub PR 63](https://github.com/Geant4/geant4/pull/63)
 
-## 2024-03-11 Ben Morgan
+## 2024-03-11 Ben Morgan (cmake-V11-02-04)
 - Fix escaping of regex in geant4_module_check to satisfy latest Python3. 
 
-## 2024-01-29 Ben Morgan (cmake-V11-01-32)
+## 2024-03-06 Ben Morgan (cmake-V11-02-03)
+- Bump G4PARTICLEXS dataset to v4.1
+
+## 2024-01-29 Ben Morgan (cmake-V11-02-02)
 - Manually check versions of found SoXX packages to workaround their use of
   the `ExactVersionOnly` version checking strategy in find_package. Geant4
   only requires a minimum version. 
 
-## 2024-01-26 Ben Morgan (cmake-V11-01-31)
+## 2024-01-26 Ben Morgan (cmake-V11-02-01)
 - Add -F flag for Qt when on macOS and with a framework build of Qt
   - Addresses [Bugzilla 2589](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2589)
+
+## 2024-01-19 Ben Morgan (cmake-V11-02-00)
+- Add compiler flags for GCC only to help detect/debug LTO-related problems when
+  building with CMAKE_INTERPROCEDURAL_OPTIMIZATION. 
 
 ## 2023-11-28 Ben Morgan (cmake-V11-01-30)
 - Bump minimum VecGeom version to 1.2.6

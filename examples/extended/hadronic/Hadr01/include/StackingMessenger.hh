@@ -52,21 +52,19 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingMessenger: public G4UImessenger
+class StackingMessenger : public G4UImessenger
 {
-public:
+  public:
+    explicit StackingMessenger(StackingAction*);
+    ~StackingMessenger() override;
 
-  explicit StackingMessenger(StackingAction*);
-  ~StackingMessenger() override;
-    
-  void SetNewValue(G4UIcommand*, G4String) override;
-  
-private:
-    
-  StackingAction*     fStackAction;
-    
-  G4UIcmdWithABool*   fKillCmd;
-  G4UIcmdWithAString* fKCmd;
+    void SetNewValue(G4UIcommand*, G4String) override;
+
+  private:
+    StackingAction* fStackAction;
+
+    G4UIcmdWithABool* fKillCmd;
+    G4UIcmdWithAString* fKCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

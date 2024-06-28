@@ -488,6 +488,8 @@ private:
   G4int secID = _DeltaElectron;
   G4int tripletID = _TripletElectron;
   G4int biasID = _DeltaEBelowCut;
+  G4int epixeID = _ePIXE;
+  G4int gpixeID = _GammaPIXE;
   G4int mainSecondaries = 1;
 
   std::size_t basedCoupleIndex = 0;
@@ -509,11 +511,11 @@ private:
   G4bool tablesAreBuilt = false;
   G4bool spline = true;
   G4bool isIon = false;
-  G4bool isIonisation = true;
+  G4bool isIonisation = false;
   G4bool useDeexcitation = false;
   G4bool biasFlag = false;
   G4bool weightFlag = false;
-  G4bool isMaster = true;
+  G4bool isMaster = false;
   G4bool baseMat = false;
   G4bool actLinLossLimit = false;
   G4bool actLossFluc = false;

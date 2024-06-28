@@ -31,31 +31,30 @@
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4PVPlacement.hh"
-#include "G4LogicalVolume.hh"
 #include "G3G4Interface.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-/// Detector construction class. 
+/// Detector construction class.
 ///
-/// Most the work is done in G4BuildGeom(), which returns a pointer to 
-/// the top-level logical volume in the detector defined by 
+/// Most the work is done in G4BuildGeom(), which returns a pointer to
+/// the top-level logical volume in the detector defined by
 /// the call list file inFile.
 
 class G3toG4DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  G3toG4DetectorConstruction(G4String inFile="svt.dat");
-  virtual ~G3toG4DetectorConstruction();
+  public:
+    G3toG4DetectorConstruction(G4String inFile = "svt.dat");
+    virtual ~G3toG4DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct();
- 
-private:
-  G4LogicalVolume* SimpleConstruct();
-  G4String fInFile;
+    virtual G4VPhysicalVolume* Construct();
+
+  private:
+    G4LogicalVolume* SimpleConstruct();
+    G4String fInFile;
 };
 
 #endif
-
-

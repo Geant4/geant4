@@ -55,7 +55,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fScoringVolume = nullptr;
 };
 
-}
+}  // namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

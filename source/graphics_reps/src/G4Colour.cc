@@ -118,6 +118,9 @@ void G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
     return;
   }
 
+  // Add standard colours to map
+  InitialiseColourMap();  // Initialises if not already initialised
+
   // Convert to lower case since colour map is case insensitive
   G4String myKey = G4StrUtil::to_lower_copy(key);
   
@@ -152,7 +155,11 @@ void G4Colour::InitialiseColourMap()
   AddToMap("yellow",  G4Colour::Yellow());
 }
 
-G4bool G4Colour::GetColour(const G4String& key, G4Colour& result) 
+G4bool G4Colour::GetColour(const G4String& key, G4Colour& result)
+// Get colour for given key, placing it in result.
+// The key is usually the name of the colour.
+// The key is case insensitive.
+// Returns false if key doesn't exist, leaving result unchanged.
 {
   // Add standard colours to map
   InitialiseColourMap();  // Initialises if not already initialised
@@ -163,8 +170,13 @@ G4bool G4Colour::GetColour(const G4String& key, G4Colour& result)
   std::map<G4String, G4Colour>::const_iterator iter = fColourMap.find(myKey); 
 
   // Don't modify "result" if colour was not found in map
-  if (iter == fColourMap.cend()) return false;
-  
+  if (iter == fColourMap.cend()) {
+    G4ExceptionDescription ed;
+    ed << "Colour \"" << key << "\" not found. No action taken.";
+    G4Exception("G4Colour::GetColour", "greps0003", JustWarning, ed);
+    return false;
+  }
+
   result = iter->second;
 
   return true;

@@ -38,25 +38,25 @@
 class G4RootMpiNtupleManager;
 class G4RootMpiPNtupleManager;
 
-namespace tools {
-class impi;  
-}  
+namespace tools
+{
+class impi;
+}
 
-class G4RootMpiNtupleFileManager : public  G4RootNtupleFileManager
+class G4RootMpiNtupleFileManager : public G4RootNtupleFileManager
 {
   public:
     explicit G4RootMpiNtupleFileManager(const G4AnalysisManagerState& state);
     virtual ~G4RootMpiNtupleFileManager();
-    
+
     // MPI
-    void SetMpiNtupleMerging(tools::impi* impi, 
-                             G4int mpiRank, G4int mpiSize,
+    void SetMpiNtupleMerging(tools::impi* impi, G4int mpiRank, G4int mpiSize,
                              G4int nofReducedNtupleFiles = 0);
 
     // virtual methods from base class
     virtual G4bool ActionAtOpenFile(const G4String& fileName) final;
     virtual G4bool ActionAtWrite() final;
-    virtual G4bool ActionAtCloseFile() final; 
+    virtual G4bool ActionAtCloseFile() final;
     virtual G4bool Reset() final;
 
     virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
@@ -68,12 +68,12 @@ class G4RootMpiNtupleFileManager : public  G4RootNtupleFileManager
     void SetMpiNtupleMergingMode(G4int nofNtupleFiles);
     void CreateMpiNtupleManagers(tools::impi* impi, G4int mpiRank, G4int mpiSize);
 
-    // data members 
+    // data members
     tools::impi* fImpi;
     G4int fMpiRank;
     G4int fMpiSize;
-    // std::shared_ptr<G4RootMpiNtupleManager>  fMpiNtupleManager; 
-    std::shared_ptr<G4RootMpiPNtupleManager>  fMpiSlaveNtupleManager;
+    // std::shared_ptr<G4RootMpiNtupleManager>  fMpiNtupleManager;
+    std::shared_ptr<G4RootMpiPNtupleManager> fMpiSlaveNtupleManager;
     G4bool fNtupleBooked;
 };
 

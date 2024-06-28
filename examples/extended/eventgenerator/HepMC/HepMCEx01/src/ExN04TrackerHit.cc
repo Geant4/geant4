@@ -29,35 +29,30 @@
 //
 
 #include "ExN04TrackerHit.hh"
-#include "G4VVisManager.hh"
+
 #include "G4Circle.hh"
 #include "G4Colour.hh"
+#include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Allocator<ExN04TrackerHit> ExN04TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerHit::ExN04TrackerHit()
- : G4VHit(), fEdep(0.), fPos()
-{
-}
+ExN04TrackerHit::ExN04TrackerHit() : G4VHit(), fEdep(0.), fPos() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerHit::~ExN04TrackerHit()
-{
-}
+ExN04TrackerHit::~ExN04TrackerHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04TrackerHit::ExN04TrackerHit(const ExN04TrackerHit &right)
-  : G4VHit()
+ExN04TrackerHit::ExN04TrackerHit(const ExN04TrackerHit& right) : G4VHit()
 {
   fEdep = right.fEdep;
   fPos = right.fPos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
+const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit& right)
 {
   fEdep = right.fEdep;
   fPos = right.fPos;
@@ -65,21 +60,20 @@ const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
+G4bool ExN04TrackerHit::operator==(const ExN04TrackerHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if (pVVisManager) {
     G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -87,6 +81,4 @@ void ExN04TrackerHit::Draw()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04TrackerHit::Print()
-{
-}
+void ExN04TrackerHit::Print() {}

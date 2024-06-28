@@ -27,34 +27,33 @@
 /// @file RunAction.cc
 /// @brief Describe run actions
 
-#include <G4VUserMPIrunMerger.hh>
-#include "G4MPImanager.hh"
-#include <stdio.h>
-#include "G4Threading.hh"
-#include "Analysis.hh"
 #include "RunAction.hh"
-#include "Run.hh"
 
-#include "G4MPIscorerMerger.hh"
+#include "Analysis.hh"
+#include "Run.hh"
 #include "toolx/mpi/wrmpi"
 
+#include "G4MPImanager.hh"
+#include "G4MPIscorerMerger.hh"
+#include "G4Threading.hh"
+
+#include <G4VUserMPIrunMerger.hh>
+#include <stdio.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RunAction::RunAction(G4bool useNtuple, G4bool mergeNtuple)
- : G4UserRunAction()
+RunAction::RunAction(G4bool useNtuple, G4bool mergeNtuple) : G4UserRunAction()
 {
   // Book analysis in ctor
   Analysis* myana = Analysis::GetAnalysis();
   myana->SetUseNtuple(useNtuple);
   myana->SetMergeNtuple(mergeNtuple);
-  G4cout<<"Book analysis on rank: " << G4MPImanager::GetManager()-> GetRank() << G4endl;;
+  G4cout << "Book analysis on rank: " << G4MPImanager::GetManager()->GetRank() << G4endl;
+  ;
   myana->Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RunAction::~RunAction()
-{
-}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Run* RunAction::GenerateRun()
@@ -71,10 +70,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // ntuples will be written on each rank
   G4int rank = G4MPImanager::GetManager()->GetRank();
   std::ostringstream fname;
-  fname<<"dose-rank"<<rank;
+  fname << "dose-rank" << rank;
   myana->OpenFile(fname.str());
-     // OpenFile triggeres creating collecting/sending ntuples objects;
-     // must be called at BeginOfRunAction
+  // OpenFile triggeres creating collecting/sending ntuples objects;
+  // must be called at BeginOfRunAction
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,5 +82,5 @@ void RunAction::EndOfRunAction(const G4Run*)
   G4cout << "RunAction::EndOfRunAction" << G4endl;
 
   Analysis* myana = Analysis::GetAnalysis();
-  myana-> Save();
+  myana->Save();
 }

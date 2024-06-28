@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 #include "DicomBeamDevicePos.hh"
-#include "dcmtk/dcmrt/seq/drtrbs8.h" // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
+#include "dcmtk/dcmrt/seq/drtrbs8.h"  // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,36 +34,33 @@ DicomBeamDevicePos::DicomBeamDevicePos(DRTBeamLimitingDevicePositionSequence::It
 {
   OFString fstr;
   Float64 ffloat;
-  
+
   bldpsItem.getRTBeamLimitingDeviceType(fstr);
-  G4cout << "    " << " BeamLimitingDeviceType " << fstr << G4endl;
+  G4cout << "    "
+         << " BeamLimitingDeviceType " << fstr << G4endl;
   SetType(fstr);
   size_t ii = 0;
-  for(;; ii++ ){
-    if( bldpsItem.getLeafJawPositions(ffloat,ii) == EC_Normal ){
+  for (;; ii++) {
+    if (bldpsItem.getLeafJawPositions(ffloat, ii) == EC_Normal) {
       G4cout << "    " << ii << " LeafPositionBoundaries " << ffloat << G4endl;
       AddPositionBoundary(ffloat);
-    } else {
+    }
+    else {
       break;
     }
   }
   SetNumberOfLeafJawPairs(ii);
-
-}
-
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamDevicePos::DumpToFile( std::ofstream& fout )
-{
-  G4int nLeafs = theNumberOfLeafJawPairs;
-  for( G4int jj = 0; jj < nLeafs; jj++ ){
-    fout << ":P " << theType << "_" + std::to_string(jj+1) + "_POS " << thePositionBoundaries[jj] 
-         << G4endl;
-  }
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamDevicePos::Print( std::ostream&  )
+void DicomBeamDevicePos::DumpToFile(std::ofstream& fout)
 {
-
+  G4int nLeafs = theNumberOfLeafJawPairs;
+  for (G4int jj = 0; jj < nLeafs; jj++) {
+    fout << ":P " << theType << "_" + std::to_string(jj + 1) + "_POS " << thePositionBoundaries[jj]
+         << G4endl;
+  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomBeamDevicePos::Print(std::ostream&) {}

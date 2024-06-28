@@ -36,26 +36,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingAction_h
-#define SteppingAction_h 1
+#  define SteppingAction_h 1
 
-#include "G4UserSteppingAction.hh"
-#include "RunInitObserver.hh"
-#include "globals.hh"
+#  include "RunInitObserver.hh"
+
+#  include "G4UserSteppingAction.hh"
+#  include "globals.hh"
 
 class EventAction;
 
 class SteppingAction : public G4UserSteppingAction, public RunInitObserver
 {
-public:
-  SteppingAction();
-  ~SteppingAction();
+  public:
+    SteppingAction();
+    ~SteppingAction();
 
-  virtual void UserSteppingAction(const G4Step*);
-  virtual void Initialize();
+    virtual void UserSteppingAction(const G4Step*);
+    virtual void Initialize();
 
-private:
-  EventAction* fpEventAction;
-
+  private:
+    EventAction* fpEventAction;
 };
 
 #endif

@@ -31,8 +31,8 @@
 // We would be very happy hearing from you, send us your feedback! :)
 //
 // In order for Geant4-DNA to be maintained and still open-source,
-// article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// article citations are crucial.
+// If you use Geant4-DNA chemistry and you publish papers about your software,
 // in addition to the general paper on Geant4-DNA:
 //
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
@@ -41,7 +41,7 @@
 // reference papers on chemistry:
 //
 // J. Comput. Phys. 274 (2014) 841-882
-// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 
 
 #ifndef G4DNAWaterDissociationDisplacer_h
@@ -59,26 +59,31 @@ class G4DNAWaterDissociationDisplacer: public G4VMolecularDissociationDisplacer
 public:
   G4DNAWaterDissociationDisplacer();
   ~G4DNAWaterDissociationDisplacer() override;
-  
+
   std::vector<G4ThreeVector>
   GetProductsDisplacement(const G4MolecularDissociationChannel*) const
   override;
-  
+
   G4ThreeVector
   GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const
   override;
-  
+
   G4ThreeVector radialDistributionOfElectron() const;
   G4ThreeVector radialDistributionOfProducts(G4double r_rms) const;
   static G4double ElectronProbaDistribution(G4double r);
-  
+
   G4CT_COUNT_DEF(Ionisation_DissociationDecay)
   G4CT_COUNT_DEF(A1B1_DissociationDecay)
   G4CT_COUNT_DEF(B1A1_DissociationDecay)
   G4CT_COUNT_DEF(B1A1_DissociationDecay2)
   G4CT_COUNT_DEF(AutoIonisation)
   G4CT_COUNT_DEF(DissociativeAttachment)
-  
+  G4CT_COUNT_DEF(DoubleIonisation_DissociationDecay1)
+  G4CT_COUNT_DEF(DoubleIonisation_DissociationDecay2)
+  G4CT_COUNT_DEF(DoubleIonisation_DissociationDecay3)
+  G4CT_COUNT_DEF(TripleIonisation_DissociationDecay)
+  G4CT_COUNT_DEF(QuadrupleIonisation_DissociationDecay)
+
 private:
   G4double ke;
   G4DNAModelSubType dnaSubType;

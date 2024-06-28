@@ -27,41 +27,45 @@
 /// \file Par02RunAction.cc
 /// \brief Implementation of the Par02RunAction class
 
-#include "Par02Output.hh"
 #include "Par02RunAction.hh"
+
+#include "Par02Output.hh"
+
 #include "G4Run.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02RunAction::Par02RunAction( const G4String aOutName ) : 
-  G4UserRunAction() {
-  Par02Output::Instance()->SetFileName( aOutName );
+Par02RunAction::Par02RunAction(const G4String aOutName) : G4UserRunAction()
+{
+  Par02Output::Instance()->SetFileName(aOutName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02RunAction::~Par02RunAction() {
-  #ifdef G4MULTITHREADED
-  if ( isMaster ) delete Par02Output::Instance();
-  #else
+Par02RunAction::~Par02RunAction()
+{
+#ifdef G4MULTITHREADED
+  if (isMaster) delete Par02Output::Instance();
+#else
   delete Par02Output::Instance();
-  #endif
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02RunAction::BeginOfRunAction( const G4Run* aRun ) {
-  Par02Output::Instance()->StartAnalysis( aRun->GetRunID() );
+void Par02RunAction::BeginOfRunAction(const G4Run* aRun)
+{
+  Par02Output::Instance()->StartAnalysis(aRun->GetRunID());
   Par02Output::Instance()->CreateHistograms();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02RunAction::EndOfRunAction( const G4Run* /*aRun*/ ) {
+void Par02RunAction::EndOfRunAction(const G4Run* /*aRun*/)
+{
   Par02Output::Instance()->EndAnalysis();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

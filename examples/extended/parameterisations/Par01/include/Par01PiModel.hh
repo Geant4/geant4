@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 //----------------------------------------
 // Simple example of a "parameterisation".
 //----------------------------------------
@@ -39,24 +39,23 @@
 
 class Par01PiModel : public G4VFastSimulationModel
 {
-public:
-  //-------------------------
-  // Constructor, destructor
-  //-------------------------
-  Par01PiModel (G4Region *anEnvelope);
-  ~Par01PiModel();
+  public:
+    //-------------------------
+    // Constructor, destructor
+    //-------------------------
+    Par01PiModel(G4Region* anEnvelope);
+    ~Par01PiModel();
 
-  //------------------------------
-  // Virtual methods of the base
-  // class to be coded by the user
-  //------------------------------
+    //------------------------------
+    // Virtual methods of the base
+    // class to be coded by the user
+    //------------------------------
 
-  // -- IsApplicable
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
-  // -- ModelTrigger
-  virtual G4bool ModelTrigger(const G4FastTrack &);
-  // -- User method DoIt
-  virtual void DoIt(const G4FastTrack&, G4FastStep&);
-
+    // -- IsApplicable
+    virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    // -- ModelTrigger
+    virtual G4bool ModelTrigger(const G4FastTrack&);
+    // -- User method DoIt
+    virtual void DoIt(const G4FastTrack&, G4FastStep&);
 };
 #endif

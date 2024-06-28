@@ -31,48 +31,49 @@
 #define MOLECULAR_SPHERICAL_CHROMOSOME_HH
 
 #include "VirtualChromosome.hh"
-#include "globals.hh"
-#include "G4ThreeVector.hh"
+
 #include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SphericalChromosome : public VirtualChromosome
 {
- public:
-  SphericalChromosome(const G4String&, const G4ThreeVector&, const G4double&);
+  public:
+    SphericalChromosome(const G4String&, const G4ThreeVector&, const G4double&);
 
-  SphericalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
-                      const G4RotationMatrix&);
+    SphericalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
+                        const G4RotationMatrix&);
 
-  ~SphericalChromosome() override;
+    ~SphericalChromosome() override;
 
-  G4bool PointInChromosome(G4ThreeVector const& position) override;
+    G4bool PointInChromosome(G4ThreeVector const& position) override;
 
-  G4ThreeVector RandomPointInChromosome() override;
+    G4ThreeVector RandomPointInChromosome() override;
 
-  G4String GetShape() override { return fShape; };
+    G4String GetShape() override { return fShape; };
 
-  static const G4String fShape;
+    static const G4String fShape;
 
-  void Print() override;
+    void Print() override;
 
-  inline void SetRotation(const G4RotationMatrix& rot)
-  {
-    fRotation = rot;
-    fInverseRotation = fRotation.inverse();
-  };
+    inline void SetRotation(const G4RotationMatrix& rot)
+    {
+      fRotation = rot;
+      fInverseRotation = fRotation.inverse();
+    };
 
-  inline G4RotationMatrix GetRotation() const { return fRotation; };
+    inline G4RotationMatrix GetRotation() const { return fRotation; };
 
-  inline G4ThreeVector GetPosition() const { return fCenter; };
+    inline G4ThreeVector GetPosition() const { return fCenter; };
 
-  inline G4double GetRadius() const { return fRadius; };
+    inline G4double GetRadius() const { return fRadius; };
 
- private:
-  G4ThreeVector fCenter;
-  G4double fRadius;
-  G4RotationMatrix fRotation, fInverseRotation;
+  private:
+    G4ThreeVector fCenter;
+    G4double fRadius;
+    G4RotationMatrix fRotation, fInverseRotation;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -28,11 +28,11 @@
 /// \brief Definition of the LXeSteppingAction class
 //
 #ifndef LXeSteppingAction_h
-#define LXeSteppingACtion_h 1
+#  define LXeSteppingACtion_h 1
 
-#include "globals.hh"
-#include "G4OpBoundaryProcess.hh"
-#include "G4UserSteppingAction.hh"
+#  include "G4OpBoundaryProcess.hh"
+#  include "G4UserSteppingAction.hh"
+#  include "globals.hh"
 
 class LXeEventAction;
 class LXeTrackingAction;
@@ -40,22 +40,22 @@ class LXeSteppingMessenger;
 
 class LXeSteppingAction : public G4UserSteppingAction
 {
- public:
-  LXeSteppingAction(LXeEventAction*);
-  ~LXeSteppingAction() override;
+  public:
+    LXeSteppingAction(LXeEventAction*);
+    ~LXeSteppingAction() override;
 
-  void UserSteppingAction(const G4Step*) override;
+    void UserSteppingAction(const G4Step*) override;
 
-  void SetOneStepPrimaries(G4bool b) { fOneStepPrimaries = b; }
-  G4bool GetOneStepPrimaries() { return fOneStepPrimaries; }
+    void SetOneStepPrimaries(G4bool b) { fOneStepPrimaries = b; }
+    G4bool GetOneStepPrimaries() { return fOneStepPrimaries; }
 
- private:
-  G4bool fOneStepPrimaries = false;
-  LXeSteppingMessenger* fSteppingMessenger = nullptr;
-  LXeEventAction* fEventAction = nullptr;
-  G4OpBoundaryProcess* fBoundary = nullptr;
+  private:
+    G4bool fOneStepPrimaries = false;
+    LXeSteppingMessenger* fSteppingMessenger = nullptr;
+    LXeEventAction* fEventAction = nullptr;
+    G4OpBoundaryProcess* fBoundary = nullptr;
 
-  G4OpBoundaryProcessStatus fExpectedNextStatus = Undefined;
+    G4OpBoundaryProcessStatus fExpectedNextStatus = Undefined;
 };
 
 #endif

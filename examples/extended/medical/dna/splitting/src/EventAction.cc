@@ -27,81 +27,77 @@
 /// \brief Implementation of the EventAction class
 
 #include "EventAction.hh"
+
 #include "PhysicsList.hh"
 
 #include "G4AnalysisManager.hh"
 #include "G4Event.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(PhysicsList* physicsList)
-:G4UserEventAction(), fPhysicsList(physicsList)
+EventAction::EventAction(PhysicsList* physicsList) : G4UserEventAction(), fPhysicsList(physicsList)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EventAction::~EventAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::BeginOfEventAction(const G4Event*)
 {
+  // Initialization of parameters
+  //
+  fNumberOfSplit = fPhysicsList->GetNumberOfSplit();
+  fTotalEnergyDeposit = 0.;
+
+  for (int i = 0; i < fNumberOfSplit; i++)
+    fNumberOfIonizations.push_back(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
+void EventAction::EndOfEventAction(const G4Event*)
 {
-}
+  if (fTotalEnergyDeposit > 0) {
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    analysisManager->FillH1(1, fTotalEnergyDeposit);
 
-void EventAction::BeginOfEventAction( const G4Event*)
-{
-    // Initialization of parameters
-    //
-    fNumberOfSplit = fPhysicsList->GetNumberOfSplit();
-    fTotalEnergyDeposit=0.;
-
-    for ( int i = 0; i < fNumberOfSplit; i++ ) 
-        fNumberOfIonizations.push_back(0);
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction( const G4Event*)
-{
-    if ( fTotalEnergyDeposit > 0 ) {
-        G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-
-        analysisManager->FillH1(1,fTotalEnergyDeposit);
-          
-        for ( int i = 0; i < fNumberOfSplit; i++ ) {
-            G4int nIonizations = fNumberOfIonizations[i];
-            analysisManager->FillH1(2, nIonizations);
-        }
+    for (int i = 0; i < fNumberOfSplit; i++) {
+      G4int nIonizations = fNumberOfIonizations[i];
+      analysisManager->FillH1(2, nIonizations);
     }
-    fNumberOfIonizations.clear(); 
-    fTotalEnergyDeposit = 0.0;
+  }
+  fNumberOfIonizations.clear();
+  fTotalEnergyDeposit = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::AddEdepEvent(G4double edep)
 {
-    fTotalEnergyDeposit += edep;
+  fTotalEnergyDeposit += edep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::AddIonizationEvent(G4int idx, G4int n)
 {
-    // if idx > 2, then the particle is a split particle 
-    // it goes to the corresponding index in the array 
-    if ( 2 < idx ) { 
-        fNumberOfIonizations[idx-3] += n;
-    } else {
-    // if idx == 2 or 1, the particle is the original history. 
-    // This information must to be added to the entire array of ionizations 
-        for ( int i = 0; i < fNumberOfSplit; i++ ) {
-            fNumberOfIonizations[i] += n;
-        }
+  // if idx > 2, then the particle is a split particle
+  // it goes to the corresponding index in the array
+  if (2 < idx) {
+    fNumberOfIonizations[idx - 3] += n;
+  }
+  else {
+    // if idx == 2 or 1, the particle is the original history.
+    // This information must to be added to the entire array of ionizations
+    for (int i = 0; i < fNumberOfSplit; i++) {
+      fNumberOfIonizations[i] += n;
     }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

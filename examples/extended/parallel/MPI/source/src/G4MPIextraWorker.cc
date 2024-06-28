@@ -32,8 +32,9 @@
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)
 
 #include "G4MPIextraWorker.hh"
-#include "G4UserRunAction.hh"
+
 #include "G4Run.hh"
+#include "G4UserRunAction.hh"
 #include "G4ios.hh"
 
 void G4MPIextraWorker::BeamOn()

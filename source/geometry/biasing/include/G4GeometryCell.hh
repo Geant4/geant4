@@ -43,16 +43,16 @@ class G4VPhysicalVolume;
 
 class G4GeometryCell
 {
-  public:  // with description
+  public:
 
     G4GeometryCell(const G4VPhysicalVolume& aVolume, G4int RepNum);
       // initialise volume and replica number
 
-    G4GeometryCell(const G4GeometryCell& rhs);
+    G4GeometryCell(const G4GeometryCell& rhs) = default;
     G4GeometryCell& operator=(const G4GeometryCell& rhs);
       // copy constructor and assignment operator
 
-    ~G4GeometryCell();
+    ~G4GeometryCell() = default;
       // simple destruction
   
     const G4VPhysicalVolume& GetPhysicalVolume() const;

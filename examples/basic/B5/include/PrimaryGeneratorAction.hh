@@ -51,7 +51,6 @@ namespace B5
 /// - the momentum and angle spreads
 /// - random selection of a particle type from proton, kaon+, pi+, muon+, e+
 
-
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
@@ -88,7 +87,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4bool fRandomizePrimary = true;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

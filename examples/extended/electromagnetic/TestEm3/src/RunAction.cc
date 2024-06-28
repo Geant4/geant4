@@ -33,18 +33,19 @@
 #include "RunAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunActionMessenger.hh"
 #include "HistoManager.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
-#include "G4Timer.hh"
+#include "RunActionMessenger.hh"
+
 #include "G4RunManager.hh"
+#include "G4Timer.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
- : fDetector(det), fPrimary(prim)
+  : fDetector(det), fPrimary(prim)
 {
   fRunMessenger = new RunActionMessenger(this);
   fHistoManager = new HistoManager();
@@ -60,8 +61,8 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
-  fRun = new Run(fDetector); 
+{
+  fRun = new Run(fDetector);
   return fRun;
 }
 
@@ -70,14 +71,13 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   // keep run condition
-  if ( fPrimary ) { 
-    G4ParticleDefinition* particle 
-      = fPrimary->GetParticleGun()->GetParticleDefinition();
+  if (fPrimary) {
+    G4ParticleDefinition* particle = fPrimary->GetParticleGun()->GetParticleDefinition();
     G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
     fRun->SetPrimary(particle, energy);
   }
-        
-  //histograms
+
+  // histograms
   //
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   if (analysis->IsActive()) analysis->OpenFile();
@@ -95,39 +95,38 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  // compute and print statistic 
+  // compute and print statistic
   if (isMaster) {
     fTimer->Stop();
-    if(!((G4RunManager::GetRunManager()->GetRunManagerType() ==
-          G4RunManager::sequentialRM))) {
-      G4cout << "\n" << "Total number of events:  "  
-             << fRun->GetNumberOfEvent() << G4endl;
-      G4cout << "Master thread time:  "  << *fTimer << G4endl;
+    if (!((G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM))) {
+      G4cout << "\n"
+             << "Total number of events:  " << fRun->GetNumberOfEvent() << G4endl;
+      G4cout << "Master thread time:  " << *fTimer << G4endl;
     }
     delete fTimer;
     fRun->EndOfRun();
   }
-  //save histograms
-  G4AnalysisManager* analysis = G4AnalysisManager::Instance();   
-  if (analysis->IsActive()) {   
+  // save histograms
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  if (analysis->IsActive()) {
     analysis->Write();
     analysis->CloseFile();
-  }    
+  }
 
   // show Rndm status
-  //  if (isMaster)  G4Random::showEngineStatus();   
+  //  if (isMaster)  G4Random::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::SetEdepAndRMS(G4int i,G4double edep,G4double rms,G4double lim)
+void RunAction::SetEdepAndRMS(G4int i, G4double edep, G4double rms, G4double lim)
 {
   if (fRun) fRun->SetEdepAndRMS(i, edep, rms, lim);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::SetApplyLimit(G4bool val)        
+void RunAction::SetApplyLimit(G4bool val)
 {
   if (fRun) fRun->SetApplyLimit(val);
 }

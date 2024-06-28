@@ -29,16 +29,16 @@
 #ifndef MOLECULAR_DNA_MESSENGER_HH
 #define MOLECULAR_DNA_MESSENGER_HH
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
-#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 #include <memory>
 
@@ -48,49 +48,47 @@ class DNAGeometry;
 
 class DNAGeometryMessenger : public G4UImessenger
 {
- public:
-  explicit DNAGeometryMessenger(DNAGeometry*);
+  public:
+    explicit DNAGeometryMessenger(DNAGeometry*);
 
-  ~DNAGeometryMessenger() override = default;
+    ~DNAGeometryMessenger() override = default;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- protected:
- private:
-  DNAGeometry* fpDNAGeometry;
+  protected:
+  private:
+    DNAGeometry* fpDNAGeometry;
 
-  // Related to "voxel" placements
-  std::unique_ptr<G4UIdirectory> fpDNADirectory;
-  std::unique_ptr<G4UIcmdWithAString>
-    fpNewPlacementVolumeFile;  // specifies molecule locations
-  std::unique_ptr<G4UIcmdWithAString>
-    fpVoxelPlacementsFile;  // specifies voxel locations
-  std::unique_ptr<G4UIcmdWith3VectorAndUnit> fpVoxelSideLength;  // voxel size
-  std::unique_ptr<G4UIcmdWith3VectorAndUnit>
-    fpFractalScaling;  // multiplier for de-dimensionalised voxel locations
-  std::unique_ptr<G4UIcmdWithABool>
-    fpAnglesAsPi;  // take voxel placement angles as multiples of pi
-  std::unique_ptr<G4UIcmdWithABool>
-    fpCustomMoleculeSizes;  // turn off default molecule sizes and use custom
-  std::unique_ptr<G4UIcmdWithAString> fpAddMoleculeSize;  // set a molecule size
+    // Related to "voxel" placements
+    std::unique_ptr<G4UIdirectory> fpDNADirectory;
+    std::unique_ptr<G4UIcmdWithAString> fpNewPlacementVolumeFile;  // specifies molecule locations
+    std::unique_ptr<G4UIcmdWithAString> fpVoxelPlacementsFile;  // specifies voxel locations
+    std::unique_ptr<G4UIcmdWith3VectorAndUnit> fpVoxelSideLength;  // voxel size
+    std::unique_ptr<G4UIcmdWith3VectorAndUnit>
+      fpFractalScaling;  // multiplier for de-dimensionalised voxel locations
+    std::unique_ptr<G4UIcmdWithABool>
+      fpAnglesAsPi;  // take voxel placement angles as multiples of pi
+    std::unique_ptr<G4UIcmdWithABool>
+      fpCustomMoleculeSizes;  // turn off default molecule sizes and use custom
+    std::unique_ptr<G4UIcmdWithAString> fpAddMoleculeSize;  // set a molecule size
 
-  // Related to processing
-  std::unique_ptr<G4UIcmdWithABool> fpCheckDNAOverlaps;
-  std::unique_ptr<G4UIcmdWithAnInteger> fpVerbosity;
-  std::unique_ptr<G4UIcmdWithAnInteger> fpSmartless;
+    // Related to processing
+    std::unique_ptr<G4UIcmdWithABool> fpCheckDNAOverlaps;
+    std::unique_ptr<G4UIcmdWithAnInteger> fpVerbosity;
+    std::unique_ptr<G4UIcmdWithAnInteger> fpSmartless;
 
-  // damage-like
-  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpIntRangeDirect;
-  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpRadicalKillDistance;
-  std::unique_ptr<G4UIcmdWithABool> fpUseHistoneScav;
+    // damage-like
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpIntRangeDirect;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpRadicalKillDistance;
+    std::unique_ptr<G4UIcmdWithABool> fpUseHistoneScav;
 
-  // vis
-  std::unique_ptr<G4UIcmdWithABool> fpDrawCellVolumes;
-  // testing
-  std::unique_ptr<G4UIdirectory> fpTestDirectory;
-  std::unique_ptr<G4UIcmdWithoutParameter> fpChromosomeTest;
-  std::unique_ptr<G4UIcmdWithoutParameter> fpBasePairTest;
-  std::unique_ptr<G4UIcmdWithoutParameter> fpUniqueIDTest;
+    // vis
+    std::unique_ptr<G4UIcmdWithABool> fpDrawCellVolumes;
+    // testing
+    std::unique_ptr<G4UIdirectory> fpTestDirectory;
+    std::unique_ptr<G4UIcmdWithoutParameter> fpChromosomeTest;
+    std::unique_ptr<G4UIcmdWithoutParameter> fpBasePairTest;
+    std::unique_ptr<G4UIcmdWithoutParameter> fpUniqueIDTest;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

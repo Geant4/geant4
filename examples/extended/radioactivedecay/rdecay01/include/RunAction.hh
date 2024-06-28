@@ -26,7 +26,7 @@
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,19 +46,18 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(PrimaryGeneratorAction*);
-   ~RunAction() override;
+    ~RunAction() override;
 
-    G4Run* GenerateRun() override;   
+    G4Run* GenerateRun() override;
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
-    
+    void EndOfRunAction(const G4Run*) override;
+
   private:
     PrimaryGeneratorAction* fPrimary = nullptr;
-    Run*                    fRun = nullptr;
-    HistoManager*           fHistoManager = nullptr;    
+    Run* fRun = nullptr;
+    HistoManager* fHistoManager = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

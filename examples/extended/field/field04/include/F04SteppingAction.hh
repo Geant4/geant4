@@ -40,14 +40,12 @@ class G4LogicalVolume;
 class F04SteppingAction : public G4UserSteppingAction
 {
   public:
-
     F04SteppingAction() = default;
     ~F04SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step*) override;
 
   private:
-
     G4LogicalVolume* fTargetVolume = nullptr;
     G4LogicalVolume* fTestPlaneVolume = nullptr;
 };

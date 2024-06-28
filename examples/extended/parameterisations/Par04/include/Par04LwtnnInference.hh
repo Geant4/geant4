@@ -25,17 +25,18 @@
 //
 
 #ifdef USE_INFERENCE_LWTNN
-#ifndef PAR04LWTNNINFERENCE_HH
-#define PAR04LWTNNINFERENCE_HH
+#  ifndef PAR04LWTNNINFERENCE_HH
+#    define PAR04LWTNNINFERENCE_HH
 
-#include <G4String.hh>                 // for G4String
-#include <G4Types.hh>                  // for G4double
-#include <map>                         // for map, map<>::value_compare
-#include <memory>                      // for unique_ptr
-#include <string>                      // for string, basic_string, operator<
-#include <vector>                      // for vector
-#include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
-#include "lwtnn/LightweightGraph.hh"   // for LightweightGraph
+#    include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
+#    include "lwtnn/LightweightGraph.hh"  // for LightweightGraph
+
+#    include <G4String.hh>  // for G4String
+#    include <G4Types.hh>  // for G4double
+#    include <map>  // for map, map<>::value_compare
+#    include <memory>  // for unique_ptr
+#    include <string>  // for string, basic_string, operator<
+#    include <vector>  // for vector
 
 /**
  * @brief Inference using the LWTNN library.
@@ -48,22 +49,22 @@
 
 class Par04LwtnnInference : public Par04InferenceInterface
 {
- public:
-  Par04LwtnnInference(G4String);
-  Par04LwtnnInference();
+  public:
+    Par04LwtnnInference(G4String);
+    Par04LwtnnInference();
 
-  /// Run inference
-  /// @param[in] aGenVector Input latent space and conditions
-  /// @param[out] aEnergies Model output = generated shower energies
-  /// @param[in] aSize Size of the output
-  void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
+    /// Run inference
+    /// @param[in] aGenVector Input latent space and conditions
+    /// @param[out] aEnergies Model output = generated shower energies
+    /// @param[in] aSize Size of the output
+    void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
 
- private:
-  /// LWTNN graph , Network input and output vectors
-  std::unique_ptr<lwt::LightweightGraph> fGraph;
-  typedef std::map<std::string, std::map<std::string, double>> fNetworkInputs;
-  typedef std::map<std::string, double> fNetworkOutputs;
+  private:
+    /// LWTNN graph , Network input and output vectors
+    std::unique_ptr<lwt::LightweightGraph> fGraph;
+    typedef std::map<std::string, std::map<std::string, double>> fNetworkInputs;
+    typedef std::map<std::string, double> fNetworkOutputs;
 };
 
-#endif /* PAR04LWTNNINFERENCE_HH */
+#  endif /* PAR04LWTNNINFERENCE_HH */
 #endif

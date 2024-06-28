@@ -38,17 +38,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+class TrackingAction : public G4UserTrackingAction
+{
+  public:
+    TrackingAction();
+    ~TrackingAction();
 
-public:  
+    virtual void PostUserTrackingAction(const G4Track*);
 
-  TrackingAction();
-  ~TrackingAction();
-   
-  virtual void PostUserTrackingAction(const G4Track*);
-    
-private:
-
+  private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

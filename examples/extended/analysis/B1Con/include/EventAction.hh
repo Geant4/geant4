@@ -56,13 +56,11 @@ class EventAction : public G4UserEventAction
 
   private:
     B1Con::RunAction* fRunAction = nullptr;
-    G4double   fEdep = 0.;
+    G4double fEdep = 0.;
 };
 
-}
+}  // namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

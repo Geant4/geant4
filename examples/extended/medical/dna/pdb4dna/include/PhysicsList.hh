@@ -39,21 +39,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsList_h
-#define PhysicsList_h 1
+#  define PhysicsList_h 1
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+#  include "G4VModularPhysicsList.hh"
+#  include "globals.hh"
 
 class G4VPhysicsConstructor;
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
+  public:
+    PhysicsList();
+    virtual ~PhysicsList();
 };
 
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

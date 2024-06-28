@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gdml_simple_extension xmlns:gdml_simple_extension="http://www.example.org"
-		       xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"          
+<gdml_simple_extension xmlns:gdml_simple_extension="https://www.example.org"
+		       xmlns:xs="https://www.w3.org/2001/XMLSchema-instance"          
 		       xs:noNamespaceSchemaLocation="./SimpleExtensionSchema/SimpleExtension.xsd"> 
 
     <extension>

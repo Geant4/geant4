@@ -29,7 +29,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:
 //
 // Author: 2012 Andrea Dotti
 //   created from HadronPhysicsFTFP_BERT
@@ -40,59 +40,51 @@
 #ifndef HadronPhysicsHIJING_h
 #define HadronPhysicsHIJING_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
-#include "G4VPhysicsConstructor.hh"
-
-#include "G4PiKBuilder.hh"
+#include "HIJINGAntiBarionBuilder.hh"
+#include "HIJINGNeutronBuilder.hh"
 #include "HIJINGPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
 #include "HIJINGProtonBuilder.hh"
 
-#include "G4NeutronBuilder.hh"
-#include "HIJINGNeutronBuilder.hh"
-
+#include "G4AntiBarionBuilder.hh"
 #include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
-
-#include "G4AntiBarionBuilder.hh"
-#include "HIJINGAntiBarionBuilder.hh"
+#include "G4NeutronBuilder.hh"
+#include "G4PiKBuilder.hh"
+#include "G4ProtonBuilder.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 class HadronPhysicsHIJING : public G4VPhysicsConstructor
 {
-  public: 
-
-    HadronPhysicsHIJING(G4int verbose =1);
+  public:
+    HadronPhysicsHIJING(G4int verbose = 1);
     virtual ~HadronPhysicsHIJING();
 
-  public: 
+  public:
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
   private:
-
     void CreateModels();
     G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
-    
-    G4NeutronBuilder * fNeutrons;
-    HIJINGNeutronBuilder * fHIJINGNeutron;
- 
-    G4PiKBuilder * fPiK;
-    HIJINGPiKBuilder * fHIJINGPiK;
-    
-    G4ProtonBuilder * fPro;
-    HIJINGProtonBuilder * fHIJINGPro;    
-    
-    G4HyperonBuilder * fHyperon;
-    G4HyperonFTFPBuilder * fFTFPHyperon;
-    
-    G4AntiBarionBuilder * fAntiBaryon;
-    HIJINGAntiBarionBuilder * fHIJINGAntiBaryon;
 
-    G4VCrossSectionDataSet * fCHIPSInelastic;
+    G4NeutronBuilder* fNeutrons;
+    HIJINGNeutronBuilder* fHIJINGNeutron;
+
+    G4PiKBuilder* fPiK;
+    HIJINGPiKBuilder* fHIJINGPiK;
+
+    G4ProtonBuilder* fPro;
+    HIJINGProtonBuilder* fHIJINGPro;
+
+    G4HyperonBuilder* fHyperon;
+    G4HyperonFTFPBuilder* fFTFPHyperon;
+
+    G4AntiBarionBuilder* fAntiBaryon;
+    HIJINGAntiBarionBuilder* fHIJINGAntiBaryon;
+
+    G4VCrossSectionDataSet* fCHIPSInelastic;
 };
 
 #endif
-

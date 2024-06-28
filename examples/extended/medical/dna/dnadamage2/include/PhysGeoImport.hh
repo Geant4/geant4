@@ -33,24 +33,24 @@
 #ifndef DNADAMAGE2_GeoImport_h
 #define DNADAMAGE2_GeoImport_h 1
 
-#include <map>
-#include <fstream>
-#include <algorithm>
-
-#include "G4String.hh"
-#include "G4ThreeVector.hh"
-#include "G4Orb.hh"
-#include "G4VSolid.hh"
 #include "G4Box.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4SubtractionSolid.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4NistManager.hh"
-#include "G4VisAttributes.hh"
-#include <memory>
-#include "G4H2O.hh"
 #include "G4Electron_aq.hh"
+#include "G4H2O.hh"
+#include "G4LogicalVolume.hh"
+#include "G4NistManager.hh"
+#include "G4Orb.hh"
+#include "G4PVPlacement.hh"
+#include "G4String.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4VSolid.hh"
+#include "G4VisAttributes.hh"
+
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <memory>
 
 class G4VPhysicalVolume;
 
@@ -58,23 +58,23 @@ class G4VPhysicalVolume;
 
 struct Molecule
 {
-    Molecule(G4String name, G4int copyNumber, G4ThreeVector position, 
-        G4double radius, G4double waterRadius, std::string material, G4int strand)
+    Molecule(G4String name, G4int copyNumber, G4ThreeVector position, G4double radius,
+             G4double waterRadius, std::string material, G4int strand)
     {
-        fName = name;
-        fMaterial = material;
-        fCopyNumber = copyNumber;
-        fPosition = position;
-        fRadius = radius;
-        fRadiusWater = waterRadius;
-        fStrand = strand;
+      fName = name;
+      fMaterial = material;
+      fCopyNumber = copyNumber;
+      fPosition = position;
+      fRadius = radius;
+      fRadiusWater = waterRadius;
+      fStrand = strand;
     }
 
-    G4String fName     = "none";
+    G4String fName = "none";
     G4String fMaterial = "none";
 
     G4int fCopyNumber = -1;
-    G4int fStrand     = -1;
+    G4int fStrand = -1;
 
     G4ThreeVector fPosition = G4ThreeVector();
 
@@ -86,17 +86,17 @@ struct Molecule
 
 class PhysGeoImport
 {
-public:
+  public:
     PhysGeoImport();
     ~PhysGeoImport() = default;
 
     G4LogicalVolume* CreateLogicVolumeXYZ(G4String fileName);
 
-    std::vector<G4String> GetMoleculesNames() {return fSampleDNANames;}
-    std::vector<G4ThreeVector> GetMoleculesPositions() {return fSampleDNAPositions;}
-    std::vector<std::vector<G4int>> GetMoleculesDetails() {return fSampleDNADetails;}
+    std::vector<G4String> GetMoleculesNames() { return fSampleDNANames; }
+    std::vector<G4ThreeVector> GetMoleculesPositions() { return fSampleDNAPositions; }
+    std::vector<std::vector<G4int>> GetMoleculesDetails() { return fSampleDNADetails; }
 
-private:
+  private:
     std::string fGeoName = "VoxelStraight";
 
     std::map<G4String, G4double> fRadiusMap;
@@ -113,11 +113,11 @@ private:
     G4double fOffsetX = 0;
     G4double fOffsetY = 0;
     G4double fOffsetZ = 0;
-    G4double fXMin =  1000;
+    G4double fXMin = 1000;
     G4double fXMax = -1000;
-    G4double fYMin =  1000;
+    G4double fYMin = 1000;
     G4double fYMax = -1000;
-    G4double fZMin =  1000;
+    G4double fZMin = 1000;
     G4double fZMax = -1000;
     std::ofstream fOutDNA;
 

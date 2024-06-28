@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 //----------------------------------------------
 // Parameterisation of e+/e-/gamma producing hits
 // The hits are the same as defined in the detailed
@@ -39,52 +39,48 @@
 
 #include "Par01EnergySpot.hh"
 
-#include "G4VFastSimulationModel.hh"
 #include "G4Step.hh"
 #include "G4TouchableHandle.hh"
+#include "G4VFastSimulationModel.hh"
+
 #include <vector>
 
 class Par01EMShowerModel : public G4VFastSimulationModel
 {
-public:
-  //-------------------------
-  // Constructor, destructor
-  //-------------------------
-  Par01EMShowerModel (G4String, G4Region*);
-  Par01EMShowerModel (G4String);
-  ~Par01EMShowerModel ();
+  public:
+    //-------------------------
+    // Constructor, destructor
+    //-------------------------
+    Par01EMShowerModel(G4String, G4Region*);
+    Par01EMShowerModel(G4String);
+    ~Par01EMShowerModel();
 
-  //------------------------------
-  // Virtual methods of the base
-  // class to be coded by the user
-  //------------------------------
+    //------------------------------
+    // Virtual methods of the base
+    // class to be coded by the user
+    //------------------------------
 
-  // -- IsApplicable
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
-  // -- ModelTrigger
-  virtual G4bool ModelTrigger(const G4FastTrack &);
-  // -- User method DoIt
-  virtual void DoIt(const G4FastTrack&, G4FastStep&);
+    // -- IsApplicable
+    virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    // -- ModelTrigger
+    virtual G4bool ModelTrigger(const G4FastTrack&);
+    // -- User method DoIt
+    virtual void DoIt(const G4FastTrack&, G4FastStep&);
 
-private:
-  void AssignSpotAndCallHit(const Par01EnergySpot &eSpot);
-  void FillFakeStep(const Par01EnergySpot &eSpot);
-  void Explode(const G4FastTrack&);
-  void BuildDetectorResponse();
-  
-private:  
-  G4Step                         *fFakeStep;
-  G4StepPoint                    *fFakePreStepPoint, *fFakePostStepPoint;
-  G4TouchableHandle              fTouchableHandle;
-  G4Navigator                    *fpNavigator;
-  G4bool                         fNaviSetup;
-  G4Material*                    fCsI;
+  private:
+    void AssignSpotAndCallHit(const Par01EnergySpot& eSpot);
+    void FillFakeStep(const Par01EnergySpot& eSpot);
+    void Explode(const G4FastTrack&);
+    void BuildDetectorResponse();
 
-  std::vector<Par01EnergySpot> feSpotList;
+  private:
+    G4Step* fFakeStep;
+    G4StepPoint *fFakePreStepPoint, *fFakePostStepPoint;
+    G4TouchableHandle fTouchableHandle;
+    G4Navigator* fpNavigator;
+    G4bool fNaviSetup;
+    G4Material* fCsI;
 
+    std::vector<Par01EnergySpot> feSpotList;
 };
 #endif
-
-
-
-

@@ -54,6 +54,7 @@
 #include "G4EmParameters.hh"
 #include "G4ChemicalMoleculeFinder.hh"
 #include "G4Filesystem.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -209,7 +210,7 @@ void ChemPhysicsList::RegisterChemListConstructor(const G4String& name)
         if ( fChemistryList_option2 != nullptr) return;
         fChemistryList_option2.reset(new G4EmDNAChemistry_option2());
         fChemistryList_option2->SetVerboseLevel(verboseLevel);
-        fTimeStepModel = fSBS;
+        fTimeStepModel = G4ChemTimeStepModel::SBS;
         fChemListName = name;
     }
     else if(name == "G4EmDNAChemistry_option3") 
@@ -217,8 +218,9 @@ void ChemPhysicsList::RegisterChemListConstructor(const G4String& name)
         if ( fChemistryList_option3_mod != nullptr) return;
         fChemistryList_option3_mod.reset(new G4EmDNAChemistry_option3_Extended());
         fChemistryList_option3_mod->SetVerboseLevel(verboseLevel);
-        fTimeStepModel = fIRT_syn;
-        fChemistryList_option3_mod->SetTimeStepModel(fTimeStepModel);
+        fTimeStepModel = G4ChemTimeStepModel::IRT_syn;
+        G4EmParameters::Instance()->SetTimeStepModel(fTimeStepModel);
+        std::cout<<"G4EmParameters::Instance()->SetTimeStepModel(fTimeStepModel);"<<G4endl;
         fChemListName = name;
     }
     else 

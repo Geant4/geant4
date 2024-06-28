@@ -28,7 +28,7 @@
 //
 //
 //
- 
+
 #ifndef RE02EventAction_h
 #define RE02EventAction_h 1
 
@@ -47,17 +47,15 @@ class G4Event;
 //
 class RE02EventAction : public G4UserEventAction
 {
-public:
-  RE02EventAction();
-  ~RE02EventAction();
+  public:
+    RE02EventAction();
+    ~RE02EventAction();
 
-public:
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+  public:
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 //
 
 #endif
-
-    

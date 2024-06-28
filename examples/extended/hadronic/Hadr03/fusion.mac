@@ -12,7 +12,7 @@
 /process/inactivate hadElastic
 #
 /gun/particle deuteron
-/gun/energy 400 keV
+/gun/energy 110 keV
 #
 /run/printProgress 10000
 /run/beamOn 100000

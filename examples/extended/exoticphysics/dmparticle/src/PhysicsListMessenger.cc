@@ -36,7 +36,7 @@
 // Author:      V.Ivanchenko 01.09.2010
 //
 //----------------------------------------------------------------------------
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,49 +44,50 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "TestParameters.hh"
+
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "TestParameters.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys)
-{   
+  : G4UImessenger(), fPhysicsList(pPhys)
+{
   fPhysDir = new G4UIdirectory("/testex/phys/");
   fPhysDir->SetGuidance("physics list commands");
 
-  fECmd = new G4UIcmdWithADoubleAndUnit("/testex/phys/setMaxE",this);  
+  fECmd = new G4UIcmdWithADoubleAndUnit("/testex/phys/setMaxE", this);
   fECmd->SetGuidance("Set max energy deposit");
-  fECmd->SetParameterName("Emax",false);
+  fECmd->SetParameterName("Emax", false);
   fECmd->SetUnitCategory("Energy");
   fECmd->SetRange("Emax>0.0");
-  fECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fECmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fEBCmd = new G4UIcmdWithAnInteger("/testex/phys/setNbinsE",this);  
+  fEBCmd = new G4UIcmdWithAnInteger("/testex/phys/setNbinsE", this);
   fEBCmd->SetGuidance("Set number of bins in energy.");
-  fEBCmd->SetParameterName("Ebins",false);
+  fEBCmd->SetParameterName("Ebins", false);
   fEBCmd->SetRange("Ebins>0");
-  fEBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  fListCmd = new G4UIcmdWithAString("/testex/phys/addPhysics",this);  
+  fEBCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fListCmd = new G4UIcmdWithAString("/testex/phys/addPhysics", this);
   fListCmd->SetGuidance("Add modula physics list.");
-  fListCmd->SetParameterName("PList",false);
+  fListCmd->SetParameterName("PList", false);
   fListCmd->AvailableForStates(G4State_PreInit);
 
-  fPHCmd = new G4UIcmdWithADoubleAndUnit("/testex/phys/setLDMPhotonMass",this);
+  fPHCmd = new G4UIcmdWithADoubleAndUnit("/testex/phys/setLDMPhotonMass", this);
   fPHCmd->SetGuidance("Set LDMPhotonMass");
-  fPHCmd->SetParameterName("LDMPmass",false);
+  fPHCmd->SetParameterName("LDMPmass", false);
   fPHCmd->SetUnitCategory("Energy");
   fPHCmd->SetRange("LDMPmass>0.0");
   fPHCmd->AvailableForStates(G4State_PreInit);
 
-  fHCmd = new G4UIcmdWithADoubleAndUnit("/testex/phys/setLDMHiMass",this);
+  fHCmd = new G4UIcmdWithADoubleAndUnit("/testex/phys/setLDMHiMass", this);
   fHCmd->SetGuidance("Set LDMHiMass");
-  fHCmd->SetParameterName("LDMHmass",false);
+  fHCmd->SetParameterName("LDMHmass", false);
   fHCmd->SetUnitCategory("Energy");
   fHCmd->SetRange("LDMHmass>0.0");
   fHCmd->AvailableForStates(G4State_PreInit);
@@ -106,32 +107,25 @@ PhysicsListMessenger::~PhysicsListMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                       G4String newValue)
-{       
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   TestParameters* man = TestParameters::GetPointer();
 
-  if( command == fECmd )
-  { 
-    man->SetMaxEnergy(fECmd->GetNewDoubleValue(newValue)); 
+  if (command == fECmd) {
+    man->SetMaxEnergy(fECmd->GetNewDoubleValue(newValue));
   }
-  if( command == fEBCmd )
-  { 
-    man->SetNumberBins(fEBCmd->GetNewIntValue(newValue)); 
+  if (command == fEBCmd) {
+    man->SetNumberBins(fEBCmd->GetNewIntValue(newValue));
   }
-  if( command == fListCmd )
-  { 
-    fPhysicsList->AddPhysicsList(newValue); 
+  if (command == fListCmd) {
+    fPhysicsList->AddPhysicsList(newValue);
   }
-  if( command == fPHCmd )
-  { 
-    fPhysicsList->SetLDMPhotonMass(fPHCmd->GetNewDoubleValue(newValue)); 
+  if (command == fPHCmd) {
+    fPhysicsList->SetLDMPhotonMass(fPHCmd->GetNewDoubleValue(newValue));
   }
-  if( command == fHCmd )
-  { 
-    fPhysicsList->SetLDMHiMass(fHCmd->GetNewDoubleValue(newValue)); 
+  if (command == fHCmd) {
+    fPhysicsList->SetLDMHiMass(fHCmd->GetNewDoubleValue(newValue));
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

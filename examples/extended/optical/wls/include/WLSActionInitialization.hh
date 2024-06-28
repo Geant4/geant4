@@ -36,15 +36,15 @@ class WLSDetectorConstruction;
 
 class WLSActionInitialization : public G4VUserActionInitialization
 {
- public:
-  WLSActionInitialization(WLSDetectorConstruction*);
-  ~WLSActionInitialization() override = default;
+  public:
+    WLSActionInitialization(WLSDetectorConstruction*);
+    ~WLSActionInitialization() override = default;
 
-  void BuildForMaster() const override;
-  void Build() const override;
+    void BuildForMaster() const override;
+    void Build() const override;
 
- private:
-  WLSDetectorConstruction* fDetector = nullptr;
+  private:
+    WLSDetectorConstruction* fDetector = nullptr;
 };
 
 #endif

@@ -30,8 +30,8 @@
 #ifndef B5MagneticField_H
 #define B5MagneticField_H 1
 
-#include "globals.hh"
 #include "G4MagneticField.hh"
+#include "globals.hh"
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
@@ -48,7 +48,7 @@ class MagneticField : public G4MagneticField
     MagneticField();
     ~MagneticField() override;
 
-    void GetFieldValue(const G4double point[4],double* bField ) const override;
+    void GetFieldValue(const G4double point[4], double* bField) const override;
 
     void SetField(G4double val) { fBy = val; }
     G4double GetField() const { return fBy; }
@@ -57,10 +57,10 @@ class MagneticField : public G4MagneticField
     void DefineCommands();
 
     G4GenericMessenger* fMessenger = nullptr;
-    G4double fBy = 1.0*CLHEP::tesla;
+    G4double fBy = 1.0 * CLHEP::tesla;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

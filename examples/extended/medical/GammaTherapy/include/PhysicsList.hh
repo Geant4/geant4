@@ -40,31 +40,30 @@ class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
+  public:
+    PhysicsList();
+    virtual ~PhysicsList();
 
-  void ConstructParticle();
-  void ConstructProcess();
+    void ConstructParticle();
+    void ConstructProcess();
 
-  void AddPhysicsList(const G4String&);
-  inline void SetVerbose(G4int val);
+    void AddPhysicsList(const G4String&);
+    inline void SetVerbose(G4int val);
 
-private:
+  private:
+    PhysicsList& operator=(const PhysicsList& right);
+    PhysicsList(const PhysicsList&);
 
-  PhysicsList & operator=(const PhysicsList &right);
-  PhysicsList(const PhysicsList&);
+    G4int fVerbose;
+    G4bool fHelIsRegisted;
+    G4bool fBicIsRegisted;
+    G4bool fIonIsRegisted;
+    G4bool fGnucIsRegisted;
+    G4bool fStopIsRegisted;
 
-  G4int    fVerbose;
-  G4bool   fHelIsRegisted;
-  G4bool   fBicIsRegisted;
-  G4bool   fIonIsRegisted;
-  G4bool   fGnucIsRegisted;
-  G4bool   fStopIsRegisted;
-
-  PhysicsListMessenger* fMessenger;
+    PhysicsListMessenger* fMessenger;
 };
 
 inline void PhysicsList::SetVerbose(G4int value)
@@ -75,4 +74,3 @@ inline void PhysicsList::SetVerbose(G4int value)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

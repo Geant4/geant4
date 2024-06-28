@@ -30,41 +30,33 @@
 //
 
 #include "G04SensitiveDetector.hh"
+
 #include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
-#include "G4SDManager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G04SensitiveDetector::G04SensitiveDetector(const G4String& name)
-  : G4VSensitiveDetector(name)
-{
-}
+G04SensitiveDetector::G04SensitiveDetector(const G4String& name) : G4VSensitiveDetector(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G04SensitiveDetector::~G04SensitiveDetector()
-{
-}
+G04SensitiveDetector::~G04SensitiveDetector() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G04SensitiveDetector::Initialize(G4HCofThisEvent*)
-{
-}
+void G04SensitiveDetector::Initialize(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G04SensitiveDetector::ProcessHits(G4Step*, G4TouchableHistory*)
 {
-  G4cout << "Processing hits ...." << G4endl; 
+  G4cout << "Processing hits ...." << G4endl;
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G04SensitiveDetector::EndOfEvent(G4HCofThisEvent*)
-{
-}
+void G04SensitiveDetector::EndOfEvent(G4HCofThisEvent*) {}

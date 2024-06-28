@@ -162,7 +162,9 @@
 \endverbatim
 	
  Macros provided in this example:
-  - neutron.mac: neutron (14.1 MeV) in 30 cm of Li7 
+  - hadr07.in: macro used in Geant4 testing to produce hadr07.out 
+  - neutron.mac: neutron (14.1 MeV) in 30 cm of Li7
+  - multiLayers.mac : example of multilayers : Air, Water, G4Bone   
   - Na22.mac: multilayers. Radioactive source
   - alpha.mac: alpha (400 MeV). Limit the step size from histo 10
   - ionC12.mac: C12 (2.4 GeV). Limit the step size from histo 10

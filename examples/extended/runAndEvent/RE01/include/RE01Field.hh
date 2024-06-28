@@ -31,23 +31,21 @@
 #ifndef RE01Field_H
 #define RE01Field_H 1
 
-#include "globals.hh"
 #include "G4MagneticField.hh"
+#include "globals.hh"
 
 class RE01Field : public G4MagneticField
 {
-public:
-  RE01Field();
-  virtual ~RE01Field();
-  
-  virtual void GetFieldValue( const  double point[3],
-                              double *bfield ) const;
-  
-private:
-  G4double fBz;
-  G4double fRmax_sq;
-  G4double fZmax;
+  public:
+    RE01Field();
+    virtual ~RE01Field();
+
+    virtual void GetFieldValue(const double point[3], double* bfield) const;
+
+  private:
+    G4double fBz;
+    G4double fRmax_sq;
+    G4double fZmax;
 };
 
 #endif
-

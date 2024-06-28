@@ -31,30 +31,26 @@
 
 #include "TrackInformation.hh"
 
-#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
+#include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<TrackInformation>* aTrackInformationAllocator =
-  nullptr;
+G4ThreadLocal G4Allocator<TrackInformation>* aTrackInformationAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TrackInformation::TrackInformation()
-  : G4VUserTrackInformation()
+TrackInformation::TrackInformation() : G4VUserTrackInformation()
 {
   fFirstTankX = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TrackInformation::TrackInformation(const G4Track*)
-  : G4VUserTrackInformation()
+TrackInformation::TrackInformation(const G4Track*) : G4VUserTrackInformation()
 {
   fFirstTankX = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TrackInformation::TrackInformation(const TrackInformation* aTrackInfo)
-  : G4VUserTrackInformation()
+TrackInformation::TrackInformation(const TrackInformation* aTrackInfo) : G4VUserTrackInformation()
 {
   fFirstTankX = aTrackInfo->fFirstTankX;
 }
@@ -63,8 +59,7 @@ TrackInformation::TrackInformation(const TrackInformation* aTrackInfo)
 TrackInformation::~TrackInformation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TrackInformation& TrackInformation::operator=(
-  const TrackInformation& aTrackInfo)
+TrackInformation& TrackInformation::operator=(const TrackInformation& aTrackInfo)
 {
   fFirstTankX = aTrackInfo.fFirstTankX;
 

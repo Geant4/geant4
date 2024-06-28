@@ -74,7 +74,7 @@ void G4FieldManagerStore::Clean()
 
   for(const auto & pos : *store)
   {
-    if (pos != nullptr) { delete pos; }
+    delete pos; 
   }
 
   locked = false;

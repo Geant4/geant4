@@ -28,31 +28,31 @@
 
 #include "ScoreSpecies.hh"
 
+#include "G4AnalysisManager.hh"
+#include "G4Event.hh"
+#include "G4Scheduler.hh"
+#include "G4UImessenger.hh"
+#include "G4UnitsTable.hh"
+
+#include <G4EventManager.hh>
 #include <G4MolecularConfiguration.hh>
 #include <G4MoleculeCounter.hh>
 #include <G4SystemOfUnits.hh>
-#include <G4EventManager.hh>
 #include <globals.hh>
-#include "G4UnitsTable.hh"
-#include "G4Scheduler.hh"
-#include "G4AnalysisManager.hh"
-#include "G4Event.hh"
-#include "G4UImessenger.hh"
 
 namespace scavenger
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ScoreSpecies::ScoreSpecies(const G4String &name, const G4int &depth)
+ScoreSpecies::ScoreSpecies(const G4String& name, const G4int& depth)
   : G4VPrimitiveScorer(name, depth),
     G4UImessenger(),
     fpSpeciesdir(new G4UIdirectory("/scorer/species/")),
     fpTimeBincmd(new G4UIcmdWithAnInteger("/scorer/species/nOfTimeBins", this)),
-    fpAddTimeToRecordcmd(
-      new G4UIcmdWithADoubleAndUnit("/scorer/species/addTimeToRecord", this)),
-    fpSetResultsFileNameCmd(
-      new G4UIcmdWithAString("/scorer/species/setRootFileName", this)) {
+    fpAddTimeToRecordcmd(new G4UIcmdWithADoubleAndUnit("/scorer/species/addTimeToRecord", this)),
+    fpSetResultsFileNameCmd(new G4UIcmdWithAString("/scorer/species/setRootFileName", this))
+{
   fpSpeciesdir->SetGuidance("ScoreSpecies commands");
   fpSetResultsFileNameCmd->SetGuidance("Set the root file name");
   G4MoleculeCounter::Instance()->ResetCounter();
@@ -60,7 +60,8 @@ ScoreSpecies::ScoreSpecies(const G4String &name, const G4int &depth)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreSpecies::SetNewValue(G4UIcommand *command, G4String newValue) {
+void ScoreSpecies::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   if (command == fpAddTimeToRecordcmd.get()) {
     G4double cmdTime = fpAddTimeToRecordcmd->GetNewDoubleValue(newValue);
     AddTimeToRecord(cmdTime);
@@ -73,8 +74,7 @@ void ScoreSpecies::SetNewValue(G4UIcommand *command, G4String newValue) {
     G4double timeLogMin = std::log10(timeMin);
     G4double timeLogMax = std::log10(timeMax);
     for (G4int i = 0; i < cmdBins; i++) {
-      AddTimeToRecord(std::pow(10, timeLogMin +
-                                   i * (timeLogMax - timeLogMin) / (cmdBins - 1)));
+      AddTimeToRecord(std::pow(10, timeLogMin + i * (timeLogMax - timeLogMin) / (cmdBins - 1)));
     }
   }
   if (command == fpSetResultsFileNameCmd.get()) {
@@ -84,12 +84,13 @@ void ScoreSpecies::SetNewValue(G4UIcommand *command, G4String newValue) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool ScoreSpecies::ProcessHits(G4Step *aStep, G4TouchableHistory *) {
+G4bool ScoreSpecies::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+{
   G4double edep = aStep->GetTotalEnergyDeposit();
   if (edep == 0.) {
     return FALSE;
   }
-  edep *= aStep->GetPreStepPoint()->GetWeight(); // (Particle Weight)
+  edep *= aStep->GetPreStepPoint()->GetWeight();  // (Particle Weight)
   auto index = GetIndex(aStep);
   fEvtMap->add(index, edep);
   fEdep += edep;
@@ -98,19 +99,20 @@ G4bool ScoreSpecies::ProcessHits(G4Step *aStep, G4TouchableHistory *) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreSpecies::Initialize(G4HCofThisEvent *HCE) {
-  fEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(),
-                                     GetName());
+void ScoreSpecies::Initialize(G4HCofThisEvent* HCE)
+{
+  fEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(), GetName());
   if (fHCID < 0) {
     fHCID = GetCollectionID(0);
   }
-  HCE->AddHitsCollection(fHCID, (G4VHitsCollection *) fEvtMap);
+  HCE->AddHitsCollection(fHCID, (G4VHitsCollection*)fEvtMap);
   G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreSpecies::EndOfEvent(G4HCofThisEvent *) {
+void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
+{
   if (G4EventManager::GetEventManager()->GetConstCurrentEvent()->IsAborted()) {
     fEdep = 0.;
     G4MoleculeCounter::Instance()->ResetCounter();
@@ -120,23 +122,20 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent *) {
   auto species = G4MoleculeCounter::Instance()->GetRecordedMolecules();
 
   if (species == nullptr || species->empty()) {
-    G4cout << "No molecule recorded, energy deposited= "
-           << G4BestUnit(fEdep, "Energy") << G4endl;
+    G4cout << "No molecule recorded, energy deposited= " << G4BestUnit(fEdep, "Energy") << G4endl;
     ++fNEvent;
     fEdep = 0.;
     G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
-  for (auto molecule: *species) {
-    for (auto time_mol: fTimeToRecord) {
-      G4double n_mol =
-        G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule,
-                                                           time_mol);
+  for (auto molecule : *species) {
+    for (auto time_mol : fTimeToRecord) {
+      G4double n_mol = G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule, time_mol);
       if (n_mol < 0) {
         G4cerr << "N molecules not valid < 0 " << G4endl;
         G4Exception("", "N<0", FatalException, "");
       }
-      SpeciesInfo &molInfo = fSpeciesInfoPerTime[time_mol][molecule];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][molecule];
       molInfo.fNumber += n_mol;
       G4double gValue = (n_mol / (fEdep / eV)) * 100.;
       molInfo.fG += gValue;
@@ -150,9 +149,9 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent *) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void
-ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer *workerScorer) {
-  auto right = dynamic_cast<ScoreSpecies *>(dynamic_cast<G4VPrimitiveScorer *>(workerScorer));
+void ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerScorer)
+{
+  auto right = dynamic_cast<ScoreSpecies*>(dynamic_cast<G4VPrimitiveScorer*>(workerScorer));
 
   if (right == nullptr) {
     return;
@@ -165,13 +164,12 @@ ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer *workerScorer) {
   auto end_map1 = right->fSpeciesInfoPerTime.end();
 
   for (; it_map1 != end_map1; ++it_map1) {
-    InnerSpeciesMap &map2 = it_map1->second;
+    InnerSpeciesMap& map2 = it_map1->second;
     auto it_map2 = map2.begin();
     auto end_map2 = map2.end();
 
     for (; it_map2 != end_map2; ++it_map2) {
-      SpeciesInfo &molInfo =
-        fSpeciesInfoPerTime[it_map1->first][it_map2->first];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[it_map1->first][it_map2->first];
       molInfo.fNumber += it_map2->second.fNumber;
       molInfo.fG += it_map2->second.fG;
       molInfo.fG2 += it_map2->second.fG2;
@@ -185,25 +183,23 @@ ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer *workerScorer) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreSpecies::PrintAll() {
+void ScoreSpecies::PrintAll()
+{
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of events " << fNEvent << G4endl;
-  G4cout << " Number of energy deposition recorded "
-         << fEvtMap->entries() << G4endl;
+  G4cout << " Number of energy deposition recorded " << fEvtMap->entries() << G4endl;
 
   for (auto itr : *fEvtMap->GetMap()) {
-    G4cout << "  copy no.: " << itr.first
-           << "  energy deposit: "
-           << *(itr.second) / GetUnitValue()
-           << " [" << GetUnit() << "]"
-           << G4endl;
+    G4cout << "  copy no.: " << itr.first << "  energy deposit: " << *(itr.second) / GetUnitValue()
+           << " [" << GetUnit() << "]" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreSpecies::OutputAndClear() {
+void ScoreSpecies::OutputAndClear()
+{
   if (G4Threading::IsWorkerThread()) {
     return;
   }
@@ -217,8 +213,8 @@ void ScoreSpecies::OutputAndClear() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void
-ScoreSpecies::WriteWithAnalysisManager(G4VAnalysisManager *analysisManager) {
+void ScoreSpecies::WriteWithAnalysisManager(G4VAnalysisManager* analysisManager)
+{
   analysisManager->OpenFile(fRootFileName);
   G4int fNtupleID = analysisManager->CreateNtuple("species", "species");
   analysisManager->CreateNtupleIColumn(fNtupleID, "speciesID");
@@ -230,24 +226,24 @@ ScoreSpecies::WriteWithAnalysisManager(G4VAnalysisManager *analysisManager) {
   analysisManager->CreateNtupleDColumn(fNtupleID, "sumG2");
   analysisManager->FinishNtuple(fNtupleID);
 
-  for (const auto &it_map1: fSpeciesInfoPerTime) {
-    const InnerSpeciesMap &map2 = it_map1.second;
+  for (const auto& it_map1 : fSpeciesInfoPerTime) {
+    const InnerSpeciesMap& map2 = it_map1.second;
 
-    for (const auto &it_map2 : map2) {
+    for (const auto& it_map2 : map2) {
       G4double time = it_map1.first;
       auto species = it_map2.first;
-      const G4String &name = species->GetName();
+      const G4String& name = species->GetName();
       auto molID = it_map2.first->GetMoleculeID();
       auto number = it_map2.second.fNumber;
       auto G = it_map2.second.fG;
       auto G2 = it_map2.second.fG2;
-      analysisManager->FillNtupleIColumn(fNtupleID, 0, molID);   // MolID
+      analysisManager->FillNtupleIColumn(fNtupleID, 0, molID);  // MolID
       analysisManager->FillNtupleIColumn(fNtupleID, 1, number);  // Number
-      analysisManager->FillNtupleIColumn(fNtupleID, 2, fNEvent); // Total nb events
-      analysisManager->FillNtupleSColumn(fNtupleID, 3, name);    // molName
-      analysisManager->FillNtupleDColumn(fNtupleID, 4, time);    // time
-      analysisManager->FillNtupleDColumn(fNtupleID, 5, G);       // G
-      analysisManager->FillNtupleDColumn(fNtupleID, 6, G2);      // G2
+      analysisManager->FillNtupleIColumn(fNtupleID, 2, fNEvent);  // Total nb events
+      analysisManager->FillNtupleSColumn(fNtupleID, 3, name);  // molName
+      analysisManager->FillNtupleDColumn(fNtupleID, 4, time);  // time
+      analysisManager->FillNtupleDColumn(fNtupleID, 5, G);  // G
+      analysisManager->FillNtupleDColumn(fNtupleID, 6, G2);  // G2
       analysisManager->AddNtupleRow(fNtupleID);
     }
   }
@@ -258,4 +254,4 @@ ScoreSpecies::WriteWithAnalysisManager(G4VAnalysisManager *analysisManager) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace scavenger

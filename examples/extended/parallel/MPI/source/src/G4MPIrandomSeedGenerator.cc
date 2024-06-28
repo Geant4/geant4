@@ -25,35 +25,34 @@
 /// @file G4MPIrandomSeedGenerator.cc
 /// @brief An implementation of random number seed distribution
 
-#include "mpi.h"
-#include "Randomize.hh"
-#include "G4MPImanager.hh"
 #include "G4MPIrandomSeedGenerator.hh"
 
+#include "mpi.h"
+
+#include "G4MPImanager.hh"
+#include "Randomize.hh"
+
 // --------------------------------------------------------------------------
-G4MPIrandomSeedGenerator::G4MPIrandomSeedGenerator()
-  : G4VMPIseedGenerator()
+G4MPIrandomSeedGenerator::G4MPIrandomSeedGenerator() : G4VMPIseedGenerator()
 {
   GenerateSeeds();
 }
 
 // --------------------------------------------------------------------------
-G4MPIrandomSeedGenerator::~G4MPIrandomSeedGenerator()
-{
-}
+G4MPIrandomSeedGenerator::~G4MPIrandomSeedGenerator() {}
 
 // --------------------------------------------------------------------------
 G4bool G4MPIrandomSeedGenerator::CheckDoubleCount()
 {
   G4MPImanager* g4mpi = G4MPImanager::GetManager();
 
-  G4int nsize = g4mpi-> GetActiveSize();
+  G4int nsize = g4mpi->GetActiveSize();
 
-  for ( G4int i = 0; i < nsize; i++ ) {
-    for ( G4int j = 0; j < nsize; j++ ) {
-      if( (i != j) && (seed_list_[i] == seed_list_[j]) ) {
+  for (G4int i = 0; i < nsize; i++) {
+    for (G4int j = 0; j < nsize; j++) {
+      if ((i != j) && (seed_list_[i] == seed_list_[j])) {
         G4double x = G4UniformRand();
-        seed_list_[j] = G4long(x*LONG_MAX);
+        seed_list_[j] = G4long(x * LONG_MAX);
         return false;
       }
     }
@@ -67,17 +66,17 @@ void G4MPIrandomSeedGenerator::GenerateSeeds()
 {
   G4MPImanager* g4mpi = G4MPImanager::GetManager();
 
-  G4int nsize = g4mpi-> GetActiveSize();
+  G4int nsize = g4mpi->GetActiveSize();
 
   seed_list_.clear();
 
-  for ( G4int i = 0; i < nsize; i++ ) {
+  for (G4int i = 0; i < nsize; i++) {
     G4double x = G4UniformRand();
-    G4int seed = G4long(x*LONG_MAX);
+    G4int seed = G4long(x * LONG_MAX);
     seed_list_.push_back(seed);
   }
 
-  while(! CheckDoubleCount()) {
+  while (!CheckDoubleCount()) {
     continue;
   }
 }

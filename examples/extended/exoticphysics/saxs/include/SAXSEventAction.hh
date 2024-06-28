@@ -33,8 +33,9 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include <iostream>
+
 #include <fstream>
+#include <iostream>
 #include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,33 +44,32 @@
 
 class SAXSEventAction : public G4UserEventAction
 {
-public:
-        SAXSEventAction();
-        virtual ~SAXSEventAction();
+  public:
+    SAXSEventAction();
+    virtual ~SAXSEventAction();
 
-        virtual void BeginOfEventAction(const G4Event*);
-        virtual void EndOfEventAction(const G4Event*);
-    
-private:
-        G4int fSensitiveDetector_ID;
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
+
+  private:
+    G4int fSensitiveDetector_ID;
     G4int fVerboseLevel;
-        
-    G4int fNRi; 
-    G4int fNCi;
-        G4int fNDi;
-        G4double fEventWeight;
 
-public:
-        inline void SetVerbose(G4int val) {fVerboseLevel = val;}
-        inline G4int GetVerbose() const {return fVerboseLevel;}
-        
-        void AddNRi() {fNRi++;}
-        void AddNCi() {fNCi++;}
-        void AddNDi() {fNDi++;}        
-        void UpdateEventWeight(G4double ew) {fEventWeight = ew;}
+    G4int fNRi;
+    G4int fNCi;
+    G4int fNDi;
+    G4double fEventWeight;
+
+  public:
+    inline void SetVerbose(G4int val) { fVerboseLevel = val; }
+    inline G4int GetVerbose() const { return fVerboseLevel; }
+
+    void AddNRi() { fNRi++; }
+    void AddNCi() { fNCi++; }
+    void AddNDi() { fNDi++; }
+    void UpdateEventWeight(G4double ew) { fEventWeight = ew; }
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

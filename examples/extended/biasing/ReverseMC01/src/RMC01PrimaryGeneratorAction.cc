@@ -43,21 +43,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01PrimaryGeneratorAction::RMC01PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleSource(0)
-{fParticleSource = new G4GeneralParticleSource();
+  : G4VUserPrimaryGeneratorAction(), fParticleSource(0)
+{
+  fParticleSource = new G4GeneralParticleSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01PrimaryGeneratorAction::~RMC01PrimaryGeneratorAction()
-{delete fParticleSource;
+{
+  delete fParticleSource;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{fParticleSource->GeneratePrimaryVertex(anEvent);
+{
+  fParticleSource->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,24 +38,24 @@ class G4UIcmdWithADoubleAndUnit;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class RE05StackingActionMessenger: public G4UImessenger
+class RE05StackingActionMessenger : public G4UImessenger
 {
   public:
     RE05StackingActionMessenger(RE05StackingAction* msa);
     virtual ~RE05StackingActionMessenger();
-    
+
   public:
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
   private:
-    RE05StackingAction * fMyAction;
-    
-    //commands
+    RE05StackingAction* fMyAction;
+
+    // commands
     G4UIcmdWithAnInteger* fMuonCmd;
     G4UIcmdWithAnInteger* fIsoMuonCmd;
     G4UIcmdWithAnInteger* fIsoCmd;
-    G4UIcmdWithADoubleAndUnit* fRoiCmd;  
+    G4UIcmdWithADoubleAndUnit* fRoiCmd;
 };
 
 #endif

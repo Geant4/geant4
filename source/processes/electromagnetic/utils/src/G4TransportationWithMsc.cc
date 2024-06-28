@@ -159,7 +159,6 @@ void G4TransportationWithMsc::PreparePhysicsTable(const G4ParticleDefinition& pa
     if (fType == ScatteringType::MultipleScattering) {
       for (G4int i = 0; i < numberOfModels; ++i) {
         auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
-        msc->SetMasterThread(master);
         msc->SetPolarAngleLimit(theParameters->MscThetaLimit());
         G4double emax = std::min(msc->HighEnergyLimit(), theParameters->MaxKinEnergy());
         msc->SetHighEnergyLimit(emax);

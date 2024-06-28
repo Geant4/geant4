@@ -42,46 +42,46 @@
 #include "EventActionMessenger.hh"
 
 #include "EventAction.hh"
+
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* evAct)
-  : G4UImessenger(), fEventAction(evAct),
-    fPrintCmd(0), fCmd(0)
-{   
-  fPrintCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
+  : G4UImessenger(), fEventAction(evAct), fPrintCmd(0), fCmd(0)
+{
+  fPrintCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo", this);
   fPrintCmd->SetGuidance("Print events modulo n");
-  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetParameterName("EventNb", false);
   fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
+  fPrintCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent",this);
+  fCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent", this);
   fCmd->SetGuidance("D event to debug");
-  fCmd->SetParameterName("fNb",false);
+  fCmd->SetParameterName("fNb", false);
   fCmd->SetRange("fNb>0");
-  fCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
-
+  fCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete fPrintCmd;   
+  delete fPrintCmd;
   delete fCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                       G4String newValue)
-{ 
-  if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
-  if(command == fCmd)
-    {fEventAction->AddEventToDebug(fCmd->GetNewIntValue(newValue));}
+void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fPrintCmd) {
+    fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));
+  }
+  if (command == fCmd) {
+    fEventAction->AddEventToDebug(fCmd->GetNewIntValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

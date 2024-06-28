@@ -84,6 +84,8 @@ G4TransportationManager::G4TransportationManager()
   fFieldManager     = new G4FieldManager(); // deleted by G4FieldManagerStore
   fPropagatorInField= new G4PropagatorInField(trackingNavigator,fFieldManager);
   fSafetyHelper     = new G4SafetyHelper();
+
+  G4FieldManager::SetGlobalFieldManager(fFieldManager);
 } 
 
 // ----------------------------------------------------------------------------
@@ -130,6 +132,7 @@ G4TransportationManager* G4TransportationManager::GetInstanceIfExist()
 void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
 {
    fFieldManager = newFieldManager; 
+   G4FieldManager::SetGlobalFieldManager(fFieldManager);
 
    // Message the PropagatorInField, 
    // which also maintains this information (to be reviewed)

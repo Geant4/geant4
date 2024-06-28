@@ -53,58 +53,56 @@ class G4VProcess;
 class GB05BOptnSplitAndKillByCrossSection;
 #include <map>
 
+class GB05BOptrSplitAndKillByCrossSection : public G4VBiasingOperator
+{
+  public:
+    // ------------------------------------------------------------
+    // -- Constructor: takes the name of the particle type to bias:
+    // ------------------------------------------------------------
+    GB05BOptrSplitAndKillByCrossSection(G4String particleToBias,
+                                        G4String name = "SplitAndKillByXS");
+    virtual ~GB05BOptrSplitAndKillByCrossSection();
 
-class GB05BOptrSplitAndKillByCrossSection : public G4VBiasingOperator {
-public:
-  // ------------------------------------------------------------
-  // -- Constructor: takes the name of the particle type to bias:
-  // ------------------------------------------------------------
-  GB05BOptrSplitAndKillByCrossSection(G4String particleToBias,
-                                      G4String name = "SplitAndKillByXS");
-  virtual ~GB05BOptrSplitAndKillByCrossSection();
-  
-  // -- method called at beginning of run:
-  virtual void StartRun();
-  
-private:
-  // -----------------------------
-  // -- Mandatory from base class:
-  // -----------------------------
-  // -- Not used:
-  virtual G4VBiasingOperation*
-  ProposeOccurenceBiasingOperation(const G4Track*,
-                                   const G4BiasingProcessInterface*) final
-  { return 0; }
-  
-  // -- Not used:
-  virtual G4VBiasingOperation*
-  ProposeFinalStateBiasingOperation(const G4Track*,
-                                    const G4BiasingProcessInterface*) final
-  { return 0; }
+    // -- method called at beginning of run:
+    virtual void StartRun();
 
-  // -- Used method : it will return the biasing operation that will split particles
-  // -- with a probabilty depending on the total absorption cross-section.
-  virtual G4VBiasingOperation*
-  ProposeNonPhysicsBiasingOperation(const G4Track*,
-                                    const G4BiasingProcessInterface*) final;
+  private:
+    // -----------------------------
+    // -- Mandatory from base class:
+    // -----------------------------
+    // -- Not used:
+    virtual G4VBiasingOperation*
+    ProposeOccurenceBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    {
+      return 0;
+    }
 
+    // -- Not used:
+    virtual G4VBiasingOperation*
+    ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    {
+      return 0;
+    }
 
-  // ---------------------------------------
-  // -- Method specific to this application:
-  // ---------------------------------------
-  // -- Each "absorbing" process that the biasing has to counterbalance
-  // -- its action for has to be passed to the biasing operator
-public:
-  void AddProcessToEquipoise(G4String processName);
+    // -- Used method : it will return the biasing operation that will split particles
+    // -- with a probabilty depending on the total absorption cross-section.
+    virtual G4VBiasingOperation*
+    ProposeNonPhysicsBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final;
 
-  
-private:
-  GB05BOptnSplitAndKillByCrossSection* fSplitAndKillByCrossSection;
-  const G4ParticleDefinition*                      fParticleToBias;
-  std::vector< G4String >                    fProcessesToEquipoise;
-  G4bool                                                    fSetup;
-  std::vector< const G4VProcess* >                      fProcesses;
+    // ---------------------------------------
+    // -- Method specific to this application:
+    // ---------------------------------------
+    // -- Each "absorbing" process that the biasing has to counterbalance
+    // -- its action for has to be passed to the biasing operator
+  public:
+    void AddProcessToEquipoise(G4String processName);
 
+  private:
+    GB05BOptnSplitAndKillByCrossSection* fSplitAndKillByCrossSection;
+    const G4ParticleDefinition* fParticleToBias;
+    std::vector<G4String> fProcessesToEquipoise;
+    G4bool fSetup;
+    std::vector<const G4VProcess*> fProcesses;
 };
 
 #endif

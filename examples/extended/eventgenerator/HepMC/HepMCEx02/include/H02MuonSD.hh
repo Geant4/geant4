@@ -30,28 +30,29 @@
 #ifndef H02_MUON_SD_H
 #define H02_MUON_SD_H
 
-#include "G4VSensitiveDetector.hh"
 #include "H02MuonHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-class H02MuonSD : public G4VSensitiveDetector {
-public:
-  H02MuonSD(G4String name);
-  ~H02MuonSD();
+class H02MuonSD : public G4VSensitiveDetector
+{
+  public:
+    H02MuonSD(G4String name);
+    ~H02MuonSD();
 
-  virtual void Initialize(G4HCofThisEvent* HCE);
-  virtual G4bool ProcessHits(G4Step* astep, G4TouchableHistory* ROhist);
-  virtual void EndOfEvent(G4HCofThisEvent* HCE);
-  virtual void clear();
-  virtual void DrawAll();
-  virtual void PrintAll();
+    virtual void Initialize(G4HCofThisEvent* HCE);
+    virtual G4bool ProcessHits(G4Step* astep, G4TouchableHistory* ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent* HCE);
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
 
-private:
-  H02MuonHitsCollection* fHitCollection;
-
+  private:
+    H02MuonHitsCollection* fHitCollection;
 };
 
 #endif

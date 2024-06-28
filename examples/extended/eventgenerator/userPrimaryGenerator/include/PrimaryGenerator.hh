@@ -26,7 +26,7 @@
 /// \file PrimaryGenerator.hh
 /// \brief Definition of the PrimaryGenerator class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,8 +42,8 @@ class G4Event;
 class PrimaryGenerator : public G4VPrimaryGenerator
 {
   public:
-    PrimaryGenerator() = default;    
-   ~PrimaryGenerator() override = default;
+    PrimaryGenerator() = default;
+    ~PrimaryGenerator() override = default;
 
   public:
     void GeneratePrimaryVertex(G4Event*) override;

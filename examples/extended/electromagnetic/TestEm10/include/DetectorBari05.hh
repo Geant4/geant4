@@ -35,13 +35,13 @@
 #ifndef DetectorBari05_h
 #define DetectorBari05_h 1
 
-#include "globals.hh"
-
 #include "RadiatorDescription.hh"
+
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 
-class DetectorBari05 
+class DetectorBari05
 {
   public:
     DetectorBari05();
@@ -55,7 +55,7 @@ class DetectorBari05
 
   private:
     // data members
-    RadiatorDescription* fRadiatorDescription; 
+    RadiatorDescription* fRadiatorDescription;
 };
 
 #endif

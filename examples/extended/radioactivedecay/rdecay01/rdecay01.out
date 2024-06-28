@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -35,12 +35,12 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 /rdecay01/fullChain false
 #
 /tracking/verbose 2
-/run/beamOn 1
+/run/beamOn
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-min MeanLife (from G4NuclideTable)                1 ps 
-Max life time (from G4DeexPrecoParameters)        1 ps 
+min MeanLife (from G4NuclideTable)                1 ns 
+Max life time (from G4DeexPrecoParameters)        1 ns 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
 Enabled atomic relaxation mode                    0
@@ -58,7 +58,7 @@ Threshold for very long decay time at rest        1e+60 y
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 -------------------------------------------------------------------------
                            Hadronic Processes for GenericIon
-  Process: Radioactivation
+  Process: RadioactiveDecay
 
 ========= Table of registered couples ============================
 
@@ -80,7 +80,7 @@ Index : 0     used in the geometry : Yes
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
     0       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   initStep
-    1       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   Radioactivation
+    1       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   RadioactiveDecay
 
     :----- List of secondaries ----------------
    Ni60[2505.753]:  energy = 3.228 eV   time = 1.348 y  
@@ -116,7 +116,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.004897s Sys=0.000000s
+  User=0.000000s Real=0.001674s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -125,7 +125,7 @@ Run Summary
  Nb of generated particles: 
 
              Co60:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[2505.753]:       1  Emean =  3.228 eV 	( 3.228 eV  --> 3.228 eV )	mean life = 4.761 ps 
+   Ni60[2505.753]:       1  Emean =  3.228 eV 	( 3.228 eV  --> 3.228 eV )
         anti_nu_e:       1  Emean =  36.42 keV	( 36.42 keV --> 36.42 keV)	stable
                e-:       1  Emean =  277.2 keV	( 277.2 keV --> 277.2 keV)	stable
 
@@ -140,10 +140,9 @@ Run Summary
    Activity of Co60 = 2.36e+14 Bq/g   (6379 Ci/g) 
 
 
-#
 /tracking/verbose 0
-/run/printProgress 10000
 #
+/run/printProgress 10000
 /run/beamOn 100000
 
 ========= Table of registered couples ============================
@@ -191,7 +190,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.140000s Real=1.295824s Sys=0.000000s
+  User=1.020000s Real=1.044943s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -200,8 +199,8 @@ Run Summary
  Nb of generated particles: 
 
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[1332.514]:     118  Emean =  18.86 eV 	( 604.8 meV --> 32.92 eV )	mean life = 1.06 ps 
-   Ni60[2505.753]:   99882  Emean =  1.467 eV 	( 0 eV  --> 3.748 eV )	mean life = 4.761 ps 
+   Ni60[1332.514]:     118  Emean =  18.86 eV 	( 604.8 meV --> 32.92 eV )
+   Ni60[2505.753]:   99882  Emean =  1.467 eV 	( 0 eV  --> 3.748 eV )
         anti_nu_e:  100000  Emean =  218.2 keV	( 1 eV  --> 1.461 MeV)	stable
                e-:  100000  Emean =  96.82 keV	( 7.341 eV  --> 1.413 MeV)	stable
 
@@ -218,7 +217,6 @@ Run Summary
 
 #
 /rdecay01/fullChain true
-#
 /run/beamOn 100000
 
 ========= Table of registered couples ============================
@@ -266,7 +264,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.740000s Real=3.138787s Sys=0.000000s
+  User=2.440000s Real=2.532862s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -276,9 +274,9 @@ Run Summary
 
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
              Ni60:  100000  Emean =  15.91 eV 	( 15.91 eV  --> 41.74 eV )	stable
-   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 1.227 eV  --> 30.74 eV )	mean life = 1.06 ps 
+   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 1.227 eV  --> 30.74 eV )
    Ni60[2158.632]:      16  Emean =   1.27 eV 	( 1.079 eV  --> 4.13 eV )
-   Ni60[2505.753]:   99884  Emean =   1.47 eV 	( 2.394 meV --> 3.687 eV )	mean life = 4.761 ps 
+   Ni60[2505.753]:   99884  Emean =   1.47 eV 	( 2.394 meV --> 3.687 eV )
         anti_nu_e:  100000  Emean =  217.8 keV	( 3.329 keV --> 1.483 MeV)	stable
                e-:  100030  Emean =  97.45 keV	( 524.8 meV --> 1.36 MeV)	stable
             gamma:  199869  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
@@ -294,7 +292,86 @@ Run Summary
    Activity of Co60 = 4.179e+13 Bq/g   (1130 Ci/g) 
 
 
+#
+# test biasing:
+/gun/particle ion
+/gun/ion 20 47
+#
+/process/had/rdm/decayBiasProfile timeWindowBiased.data
+#
+/run/beamOn 100000
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 3 starts.
+--> Event 0 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 10000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 20000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 30000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 40000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 50000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 60000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 70000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 80000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+--> Event 90000 starts.
+    End of event. Decay chain: Ca47 ---> Ti47
+
+ Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=1.990000s Real=2.070968s Sys=0.040000s
+
+ ======================== run summary ======================
+ The run was 100000 Ca47 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+             Ca47:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 6.544 d  
+             Ti47:  100000  Emean =  2.663 eV 	( 6.665 meV --> 10.97 eV )	stable
+        anti_nu_e:  200000  Emean =  486.6 keV	( 1 eV  --> 1.99 MeV)	stable
+               e-:  200246  Emean =  291.6 keV	( 2.486 eV  --> 1.976 MeV)	stable
+            gamma:  137682  Emean =    749 keV	( 41.06 keV --> 1.878 MeV)	stable
+
+   Ekin Total (Q single decay): mean =  2.588 MeV	( 2.583 MeV --> 2.589 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean =  1.057 MeV	( 10.87 keV --> 3.224 MeV)
+
+   Total time of life (full chain): mean =     10 d    half-life =  6.934 d     ( 13.28 s   --> 20 d  )
+
+   Total visible energy (full chain) : mean =  1.615 MeV   ( 8.56 keV --> 2.537 MeV)
+
+   Activity of Ca47 =      0 Bq/g   (0 Ci/g) 
+
+
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.017 MB
+Dynamic pools deleted: 10 / Total memory freed: 38 MB
 ============================================================

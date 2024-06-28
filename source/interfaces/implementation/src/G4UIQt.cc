@@ -1539,7 +1539,11 @@ void G4UIQt::UpdateSceneTree(const G4SceneTreeItem& root)
     item->setData(0, Qt::UserRole, data);
 
     // Load a tooltip
-    item->setToolTip(0, model.GetModelDescription().c_str());
+    G4String toolTipMessage = model.GetModelDescription();
+    if (!model.GetFurtherInfo().empty()) {
+      toolTipMessage += "\n  " + model.GetFurtherInfo();
+    }
+    item->setToolTip(0, toolTipMessage.c_str());
 
     // Set the check state
     item->setCheckState
@@ -1629,28 +1633,13 @@ void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
     case G4SceneTreeItem::root:
       break;  // Do nothing
     case G4SceneTreeItem::model:
-      // Clicked - but has checkbox actually been clicked?
-      if (newCheckState != oldCheckState) {
-        if (newCheckState == Qt::Checked) argument = "true";
-        G4String modelName, text;
-        std::istringstream iss(sceneTreeItem->GetModelDescription());
-        iss >> modelName >> text;
-        if (modelName.find("Text") != std::string::npos) {
-          // Text model: special case, use text to identify
-          uiMan->ApplyCommand("/vis/scene/activateModel " + text + ' ' + argument);
-        } else {
-          uiMan->ApplyCommand("/vis/scene/activateModel " + modelName + ' ' + argument);
-        }
-      }
-      break;
+      [[fallthrough]];
     case G4SceneTreeItem::pvmodel:
       // Clicked - but has checkbox actually been clicked?
       if (newCheckState != oldCheckState) {
         if (newCheckState == Qt::Checked) argument = "true";
-        G4String modelName, pvName;
-        std::istringstream iss(sceneTreeItem->GetModelDescription());
-        iss >> modelName >> pvName;
-        uiMan->ApplyCommand("/vis/scene/activateModel " + pvName + ' ' + argument);
+        uiMan->ApplyCommand
+        ("/vis/scene/activateModel \"" + sceneTreeItem->GetModelDescription() + "\" " + argument);
       }
       break;
     case G4SceneTreeItem::ghost:
@@ -2196,14 +2185,22 @@ void G4UIQt::CreateViewerWidget()
 
   // fill right splitter
   if (fViewerTabWidget == nullptr) {
+#if QT_VERSION < 0x060000
     fViewerTabWidget = new G4QTabWidget();
+#else
+    fViewerTabWidget = new QTabWidget();
+#endif
     fMainWindow->setCentralWidget(fViewerTabWidget);
     fViewerTabWidget->setTabsClosable(true);
 
     fViewerTabWidget->setUsesScrollButtons(true);
 
     connect(fViewerTabWidget, SIGNAL(tabCloseRequested(int)),this, SLOT(TabCloseCallback(int)));
+#if QT_VERSION < 0x060000
     connect(fViewerTabWidget, SIGNAL(currentChanged(int)), SLOT(UpdateTabWidget(int)));
+#else
+    connect(fViewerTabWidget, SIGNAL(currentChanged(int)), this, SLOT(UpdateTabWidget(int)));
+#endif
   }
 
   // set the QGLWidget size policy
@@ -2282,13 +2279,16 @@ G4bool G4UIQt::AddViewerTabFromFile(std::string fileName, std::string title)
 */
 G4bool G4UIQt::AddTabWidget(QWidget* aWidget, QString name)
 {
+#if QT_VERSION < 0x060000
   if (fViewerTabWidget == nullptr) {
     CreateViewerWidget();
   }
+#endif
 
   if (aWidget == nullptr) {
     return false;
   }
+#if QT_VERSION < 0x060000
   // Has to be added before we put it into the fViewerTabWidget widget
   aWidget->setParent(fViewerTabWidget);  // Will create in some cases widget outside
   // of UI for a really short moment
@@ -2299,6 +2299,16 @@ G4bool G4UIQt::AddTabWidget(QWidget* aWidget, QString name)
 
   // Set visible
   fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
+#else
+  //G.Barrand: disconnect temporarily the signal/slot on UpdateTabWidget(), else
+  //           if adding a viewer, the UpdateTabWidget/Apply("vis/viewer/select") will
+  //           issue an ERROR message since the viewer is not yet declared to the G4VisManager
+  //           at this moment (see the logic in G4VisManager::CreateViewer()).
+  QObject::disconnect(fViewerTabWidget, SIGNAL(currentChanged(int)), this, SLOT(UpdateTabWidget(int)));
+  fViewerTabWidget->addTab(aWidget, name);
+  fViewerTabWidget->setCurrentIndex(fViewerTabWidget->count() - 1);
+  QObject::connect(fViewerTabWidget, SIGNAL(currentChanged(int)), this, SLOT(UpdateTabWidget(int)));
+#endif
 
   // Not the good solution, but ensure that the help tree is correctly build when launching a viewer
   // It should be done by a notification when adding a command, but that's nit done yet
@@ -2322,6 +2332,7 @@ void G4UIQt::SetStartPage(const std::string& text)
   fStartPage->setHtml(fDefaultViewerFirstPageHTMLText.c_str());
 }
 
+#if QT_VERSION < 0x060000
 void G4UIQt::UpdateTabWidget(int tabNumber)
 {
   if (fViewerTabWidget == nullptr) {
@@ -2338,6 +2349,22 @@ void G4UIQt::UpdateTabWidget(int tabNumber)
   // This will send a paintEvent to OGL Viewers
   fViewerTabWidget->setTabSelected(true);
 }
+#else
+void G4UIQt::UpdateTabWidget(int)
+{
+  //G.Barrand: have the Apply("vis/viewer/select") done here instead of
+  //           in a G4QTabWidget::paintEvent(). A signal/slot looks a more
+  //           adequate Qt mechanism to do that.
+  if (fViewerTabWidget->currentWidget() != nullptr) {
+    auto edit = dynamic_cast<QTextEdit*>(fViewerTabWidget->currentWidget());
+    if (edit == nullptr) {
+      QString text = fViewerTabWidget->tabText(fViewerTabWidget->currentIndex());
+      QString paramSelect = QString("/vis/viewer/select ") + text;
+      G4UImanager::GetUIpointer()->ApplyCommand(paramSelect.toStdString().c_str());
+    }
+  }
+}
+#endif
 
 /** Send resize event to all tabs
  */
@@ -5403,6 +5430,7 @@ void G4UIQt::SetIconOrthoSelected()
   }
 }
 
+#if QT_VERSION < 0x060000
 G4QTabWidget::G4QTabWidget(QWidget* aParent, G4int sizeX, G4int sizeY)
   : QTabWidget(aParent),
     fTabSelected(false),
@@ -5419,6 +5447,7 @@ G4QTabWidget::G4QTabWidget(QWidget* aParent, G4int sizeX, G4int sizeY)
 G4QTabWidget::G4QTabWidget()
   : QTabWidget(), fTabSelected(false), fLastCreated(-1), fPreferedSizeX(0), fPreferedSizeY(0)
 {}
+#endif
 
 G4UIOutputString::G4UIOutputString(QString text, G4String origine, G4String outputStream)
   : fText(text), fThread(origine)
@@ -5438,6 +5467,8 @@ void G4UIQt::TabCloseCallback(int a)
 
   // get the address of the widget
   QWidget* temp = fViewerTabWidget->widget(a);
+
+#if QT_VERSION < 0x060000
   // remove the tab
   fViewerTabWidget->removeTab(a);
 
@@ -5454,6 +5485,29 @@ void G4UIQt::TabCloseCallback(int a)
   }
   // delete the widget
   delete temp;
+#else
+  // remove the tab
+  QObject::disconnect(fViewerTabWidget, SIGNAL(currentChanged(int)), this, SLOT(UpdateTabWidget(int)));
+  fViewerTabWidget->removeTab(a);
+  QObject::connect(fViewerTabWidget, SIGNAL(currentChanged(int)), this, SLOT(UpdateTabWidget(int)));
+
+  G4int lastViewerTabIndex = -1;
+  for (G4int c = 0; c < fViewerTabWidget->count(); ++c) {
+    if (fViewerTabWidget->tabText(c).contains("viewer")) {
+      lastViewerTabIndex = c;
+    }
+  }
+
+  // delete the widget
+  delete temp;
+
+  // if last QWidget : Add empty string
+  if (lastViewerTabIndex==(-1)) {
+    CreateEmptyViewerPropertiesWidget();
+  } else {
+    UpdateTabWidget(lastViewerTabIndex); //have to do this after the widget deletion.
+  }
+#endif
 }
 
 void G4UIQt::ToolBoxActivated(int a)
@@ -5467,6 +5521,7 @@ void G4UIQt::ToolBoxActivated(int a)
   }
 }
 
+#if QT_VERSION < 0x060000
 void G4QTabWidget::paintEvent(QPaintEvent*)
 {
   if (currentWidget() != nullptr) {
@@ -5492,6 +5547,7 @@ void G4QTabWidget::paintEvent(QPaintEvent*)
     }
   }
 }
+#endif
 
 G4UIDockWidget::G4UIDockWidget(QString txt) : QDockWidget(txt) {}
 

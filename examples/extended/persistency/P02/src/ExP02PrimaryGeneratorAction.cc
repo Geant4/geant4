@@ -30,18 +30,17 @@
 #include "ExP02PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02PrimaryGeneratorAction::ExP02PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0)
-   
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
@@ -49,8 +48,8 @@ ExP02PrimaryGeneratorAction::ExP02PrimaryGeneratorAction()
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   //    particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="pi+"));
-  fParticleGun->SetParticleDefinition(particleTable->FindParticle(particleName="geantino"));
-  fParticleGun->SetParticleEnergy(1.0*GeV);
+  fParticleGun->SetParticleDefinition(particleTable->FindParticle(particleName = "geantino"));
+  fParticleGun->SetParticleEnergy(1.0 * GeV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, 0.0));
 }
 
@@ -65,12 +64,10 @@ ExP02PrimaryGeneratorAction::~ExP02PrimaryGeneratorAction()
 
 void ExP02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4ThreeVector v(1.0,0.1,0.1);
+  G4ThreeVector v(1.0, 0.1, 0.1);
 
   fParticleGun->SetParticleMomentumDirection(v);
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

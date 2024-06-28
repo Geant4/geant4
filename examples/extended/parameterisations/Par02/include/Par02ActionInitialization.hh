@@ -36,36 +36,36 @@
 /// Actions initialization.
 ///
 /// Initialization of all user defined actions as well as mandatory
-/// particle generator. 
+/// particle generator.
 /// Based on G4 examples/extended/parametrisations/Par01/include/
 ///                Par01ActionInitialization.hh .
 /// @author Anna Zaborowska
 
-class Par02ActionInitialization : public G4VUserActionInitialization {
+class Par02ActionInitialization : public G4VUserActionInitialization
+{
   public:
-    
-    /// A default constructor: sets the output file name fFileName 
+    /// A default constructor: sets the output file name fFileName
     /// (passed to Par02RunAction) to DefaultOutput.root as well as
     /// flag fSmear (passed to Par02EventAction) to true indicating
     /// that smearing will be performed.
     Par02ActionInitialization();
-    
+
     /// A constructor: sets the flag fSmear (passed to Par02EventAction)
     ///                to true indicating that smearing will be performed.
     /// @param aOutName The output file name passed to Par02RunAction.
-    Par02ActionInitialization( const G4String aOutName );
-    
+    Par02ActionInitialization(const G4String aOutName);
+
     /// A constructor.
     /// @param aOutName The output file name passed to Par02RunAction.
     /// @param aSmear The flag indicating if smearing should be done,
     ///               passed to Par02EventAction.
-    Par02ActionInitialization( const G4String aOutName, const G4String aSmear );
+    Par02ActionInitialization(const G4String aOutName, const G4String aSmear);
 
     virtual ~Par02ActionInitialization();
 
     virtual void BuildForMaster() const;
-    
-    /// A method where all the user actions are created. 
+
+    /// A method where all the user actions are created.
     /// One of them, Par02PrimaryGeneratorAction is a mandatory class.
     virtual void Build() const;
 
@@ -73,10 +73,9 @@ class Par02ActionInitialization : public G4VUserActionInitialization {
     /// An output file name. Passed in Build() to the Par02RunAction.
     G4String fFileName;
 
-    /// A flag indicating if smearing should be performed. 
-    /// Passed in Build() to the Par02EventAction.    
+    /// A flag indicating if smearing should be performed.
+    /// Passed in Build() to the Par02EventAction.
     G4bool fSmear;
 };
 
 #endif
-

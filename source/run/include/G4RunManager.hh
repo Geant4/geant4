@@ -103,7 +103,6 @@
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4Profiler.hh"
 #include "G4RunManagerKernel.hh"
 #include "globals.hh"
 
@@ -138,11 +137,6 @@ class G4RunManagerFactory;
 class G4RunManager
 {
     friend class G4RunManagerFactory;
-
-  public:
-    // the profiler aliases are only used when compiled with the
-    // GEANT4_USE_TIMEMORY flag enabled.
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
 
   public:
     // Static method which returns the singleton pointer of G4RunManager
@@ -252,12 +246,6 @@ class G4RunManager
     // G4VPersistentManager class is defined.
     virtual G4Event* GenerateEvent(G4int i_event);
     virtual void AnalyzeEvent(G4Event* anEvent);
-
-    // This method configures the global fallback query and label generators.
-    virtual void ConfigureProfilers(const std::vector<std::string>& args = {});
-
-    // Calls the above virtual method.
-    void ConfigureProfilers(G4int argc, char** argv);
 
     // Dummy methods to dispatch generic inheritance calls from G4RunManager
     // base class.
@@ -404,6 +392,20 @@ class G4RunManager
       eventManager->GetStackManager()->SetNumberOfAdditionalWaitingStacks(iAdd);
     }
 
+    // Define the default classification for a newly arriving track.
+    // Default can be alternated by the UserStackingAction.
+    // G4ExceptionSeverity can be set to warn the user if the classification is changed 
+    // by the UserStackingAction.
+    inline void SetDefaultClassification(G4TrackStatus ts,
+                                         G4ClassificationOfNewTrack val,
+            G4ExceptionSeverity es = G4ExceptionSeverity::IgnoreTheIssue)
+    { eventManager->GetStackManager()->SetDefaultClassification(ts,val,es); }
+    inline void SetDefaultClassification(const G4ParticleDefinition* pd,
+                                         G4ClassificationOfNewTrack val,
+            G4ExceptionSeverity es = G4ExceptionSeverity::IgnoreTheIssue)
+    { eventManager->GetStackManager()->SetDefaultClassification(pd,val,es); }
+
+    
     inline const G4String& GetVersionString() const { return kernel->GetVersionString(); }
 
     inline void SetPrimaryTransformer(G4PrimaryTransformer* pt)
@@ -519,22 +521,66 @@ class G4RunManager
     {
       sequentialRM,
       masterRM,
-      workerRM
+      workerRM,
+      subEventMasterRM,
+      subEventWorkerRM
     };
 
     inline RMType GetRunManagerType() const { return runManagerType; }
+
+    // Following methods are used only for sub-event parallel mode.
+    // Actual explanations of these methods are found in G4SubEvtRunManager class
+    virtual void RegisterSubEventType(G4int, G4int)
+    {
+      G4Exception("G4RunManager::RegisterSubEventType","RunSE1000",FatalException,
+        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+    }
+    virtual void UpdateScoringForSubEvent(const G4SubEvent*,const G4Event*)
+    {
+      G4Exception("G4RunManager::UpdateScoringForSubEvent","RunSE1001",FatalException,
+        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+    }
+    virtual const G4SubEvent* GetSubEvent(G4int, G4bool&, 
+              G4long&, G4long&, G4long&, G4bool)
+    {
+      G4Exception("G4RunManager::GetSubEvent","RunSE1002",FatalException,
+        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+      return nullptr;
+    }
+    virtual void SubEventFinished(const G4SubEvent*,const G4Event*)
+    {
+      G4Exception("G4RunManager::SubEventFinished","RunSE1003",FatalException,
+        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+    }
+    virtual G4int GetSubEventType() const
+    {
+      G4Exception("G4RunManager::GetSubEventType","RunSE1010",FatalException,
+        "Base class method is invoked for RunManager that is not a worker in sub-event paralle mode");
+      return -1; 
+    }
+    virtual std::size_t GetMaxNTrack() const
+    { return 0; }
+
+    virtual void ReportEventDeletion(const G4Event* evt);
 
   protected:
     // This constructor is called in case of multi-threaded build.
     G4RunManager(RMType rmType);
 
-    void CleanUpPreviousEvents();
-    void CleanUpUnnecessaryEvents(G4int keepNEvents);
-    void StackPreviousEvent(G4Event* anEvent);
+    // This method is invoked at the end of processing each event
+    virtual void StackPreviousEvent(G4Event* anEvent);
+
+    // This method is invoked at the beginning of next run or when the
+    // program is quiting. So, we delete all the kept G4Event objects.
+    virtual void CleanUpPreviousEvents();
+
+    // This method is invoked at the end of processing each event 
+    // to delete any G4Event objects that are no longer needed.
+    virtual void CleanUpUnnecessaryEvents(G4int keepNEvents);
 
     virtual void StoreRNGStatus(const G4String& filenamePrefix);
 
-    void UpdateScoring();
+    void UpdateScoring(const G4Event* evt = nullptr);
 
     // Called by destructor to delete user detector. Note: the user detector
     // is shared among threads, thus this should be re-implemented in derived
@@ -605,8 +651,6 @@ class G4RunManager
     static G4ThreadLocal G4RunManager* fRunManager;
 
     G4RunMessenger* runMessenger = nullptr;
-
-    std::unique_ptr<ProfilerConfig> masterRunProfiler;
 };
 
 #endif

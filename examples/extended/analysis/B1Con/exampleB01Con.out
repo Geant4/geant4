@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -43,14 +43,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -233,7 +240,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -794,7 +801,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -806,24 +813,24 @@ G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =          0.17
-             MEAN =   4.24413e-14
-              VAR =   1.51296e-26
-               SD =   1.23003e-13
-                R =     0.0916485
-            SHIFT =     1.833e-13
-              VOV =    0.00965561
-              FOM =       3968.52
-THE LARGEST SCORE =   5.55155e-13 and it happened at 893th event
-    Affected Mean =   4.29535e-14 and its ratio to original is 1.01207
-     Affected VAR =   1.53771e-26 and its ratio to original is 1.01636
-       Affected R =     0.0912476 and its ratio to original is 0.995626
-   Affected SHIFT =   1.83781e-13 and its ratio to original is 1.00262
-     Affected FOM =       3968.52 and its ratio to original is 1
+       EFFICIENCY =         0.198
+             MEAN =   4.55475e-14
+              VAR =   1.54263e-26
+               SD =   1.24203e-13
+                R =     0.0862315
+            SHIFT =   1.72861e-13
+              VOV =    0.00854466
+              FOM =       4482.77
+THE LARGEST SCORE =   5.54337e-13 and it happened at 366th event
+    Affected Mean =   4.60558e-14 and its ratio to original is 1.01116
+     Affected VAR =   1.56695e-26 and its ratio to original is 1.01576
+       Affected R =     0.0859065 and its ratio to original is 0.99623
+   Affected SHIFT =   1.73445e-13 and its ratio to original is 1.00338
+     Affected FOM =       4482.77 and its ratio to original is 1
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0916485
+r is less than 0.1. r = 0.0862315
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -833,48 +840,48 @@ This result passes 5 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  4.15089e-14  1.47669e-26  1.21519e-13     0.368836     0.150664      245.026  1.75351e-13     0.174603    0.0750361    0.0588445
-   2   124  3.93009e-14   1.4082e-26  1.18668e-13     0.270069     0.082913      457.014  1.81552e-13        0.176    0.0374545    0.0348991
-   3   187  3.87499e-14  1.31699e-26   1.1476e-13     0.215994    0.0578571      714.488  1.78683e-13      0.18617    0.0232523     0.023153
-   4   249  4.09837e-14  1.41212e-26  1.18833e-13     0.183381     0.041065      991.219  1.80656e-13        0.188    0.0172766    0.0162175
-   5   312  4.32645e-14  1.52396e-26  1.23449e-13     0.161281    0.0306769      1281.48  1.82098e-13     0.188498    0.0137543    0.0121741
-   6   374  4.11182e-14  1.42378e-26  1.19322e-13     0.149855    0.0274276      1484.35  1.81735e-13     0.186667     0.011619    0.0107776
-   7   437  4.21075e-14  1.46511e-26  1.21042e-13     0.137353    0.0225127      1766.86  1.80916e-13     0.182648    0.0102169   0.00860589
-   8   499  4.12978e-14   1.4143e-26  1.18924e-13     0.128783    0.0199466      2009.83  1.78628e-13        0.186   0.00875269   0.00779928
-   9   562  4.00473e-14  1.37636e-26  1.17319e-13     0.123464    0.0179062      2186.76  1.77608e-13     0.174067   0.00842788   0.00678832
-  10   624  3.94354e-14  1.35768e-26  1.16519e-13     0.118188    0.0164103      2386.35  1.78155e-13       0.1696   0.00783396   0.00611202
-  11   687  4.14442e-14  1.41886e-26  1.19116e-13     0.109575     0.014024      2776.22  1.76413e-13     0.174419   0.00687984   0.00510943
-  12   749  4.06709e-14  1.39931e-26  1.18292e-13     0.106204    0.0132954      2955.25  1.78255e-13     0.170667   0.00647917   0.00478516
-  13   812  4.08157e-14  1.40276e-26  1.18438e-13      0.10177    0.0121591       3218.4  1.77843e-13     0.169742   0.00601636   0.00432802
-  14   874  4.12957e-14     1.44e-26      1.2e-13    0.0982365    0.0112995      3454.09  1.80358e-13     0.170286   0.00556855   0.00407083
-  15   937  4.37242e-14  1.55491e-26  1.24696e-13    0.0931171   0.00983397      3844.32  1.81499e-13     0.173774   0.00506887   0.00359268
-  16   999  4.24413e-14  1.51296e-26  1.23003e-13    0.0916485   0.00965561      3968.52    1.833e-13         0.17   0.00488235   0.00350869
+   1    62  3.17379e-14  1.29473e-26  1.13786e-13     0.451691     0.226367      163.379   2.0412e-13     0.142857    0.0952381     0.105548
+   2   124  3.30804e-14  1.06384e-26  1.03143e-13     0.278877     0.105732      428.601  1.73258e-13        0.168     0.039619    0.0375311
+   3   187  3.94836e-14  1.26526e-26  1.12484e-13     0.207776    0.0559014      772.128  1.69917e-13     0.191489    0.0224586    0.0204825
+   4   249  3.97276e-14  1.30204e-26  1.14107e-13     0.181656    0.0405982      1010.14  1.71002e-13        0.184    0.0177391    0.0151277
+   5   312  3.82407e-14  1.22829e-26  1.10828e-13     0.163814    0.0339478      1242.15  1.69776e-13     0.185304    0.0140465    0.0127029
+   6   374  3.89136e-14   1.2719e-26  1.12778e-13     0.149661    0.0287795       1488.2    1.742e-13        0.184    0.0118261    0.0105126
+   7   437  3.80559e-14  1.25301e-26  1.11938e-13     0.140546    0.0252541       1687.5  1.75552e-13     0.191781   0.00962166    0.0100864
+   8   499  4.16767e-14  1.38768e-26    1.178e-13     0.126406     0.019678      2086.14  1.74791e-13        0.202   0.00790099   0.00804549
+   9   562  4.17944e-14   1.4095e-26  1.18722e-13     0.119718    0.0172617      2325.73  1.75728e-13     0.198934   0.00715237   0.00715461
+  10   624  4.33469e-14  1.47176e-26  1.21316e-13     0.111949    0.0146904      2659.74  1.74757e-13       0.1968   0.00653008   0.00598243
+  11   687  4.40834e-14  1.50155e-26  1.22538e-13     0.105974    0.0130273       2968.1  1.74616e-13     0.196221   0.00595392   0.00526027
+  12   749  4.57566e-14  1.56694e-26  1.25178e-13    0.0998947    0.0112546      3340.36  1.73389e-13     0.198667   0.00537808   0.00458757
+  13   812  4.50245e-14  1.54897e-26  1.24458e-13    0.0969456    0.0105987      3546.68  1.74374e-13     0.195572    0.0050593    0.0043276
+  14   874  4.57357e-14  1.56286e-26  1.25015e-13    0.0924063   0.00966482      3903.69   1.7349e-13          0.2   0.00457143   0.00395773
+  15   937  4.56765e-14  1.55286e-26  1.24614e-13    0.0890783    0.0090895      4200.83  1.73294e-13     0.198294   0.00431025   0.00361624
+  16   999  4.55475e-14  1.54263e-26  1.24203e-13    0.0862315   0.00854466      4482.77  1.72861e-13        0.198   0.00405051   0.00337794
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Cumulated dose per run, in scoring volume : 42.4413 picoGy  rms = 3.88774 picoGy 
+ Cumulated dose per run, in scoring volume : 45.5475 picoGy  rms = 3.92567 picoGy 
 ------------------------------------------------------------
 
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.638
-             MEAN =   5.05669e-12
-              VAR =   2.16333e-23
-               SD =   4.65116e-12
-                R =     0.0290868
-            SHIFT =    2.0878e-15
-              VOV =   0.000156804
-              FOM =       4727.91
-THE LARGEST SCORE =    1.0851e-11 and it happened at 802th event
-    Affected Mean =   5.06247e-12 and its ratio to original is 1.00114
-     Affected VAR =   2.16452e-23 and its ratio to original is 1.00055
-       Affected R =      0.029047 and its ratio to original is 0.998632
-   Affected SHIFT =  -2.10021e-15 and its ratio to original is -1.00595
-     Affected FOM =       4727.91 and its ratio to original is 1
+       EFFICIENCY =         0.612
+             MEAN =   4.70767e-12
+              VAR =   2.09414e-23
+               SD =   4.57618e-12
+                R =     0.0307395
+            SHIFT =   3.36726e-13
+              VOV =   0.000199175
+              FOM =       4601.27
+THE LARGEST SCORE =   1.07575e-11 and it happened at 607th event
+    Affected Mean =   4.71372e-12 and its ratio to original is 1.00128
+     Affected VAR =   2.09571e-23 and its ratio to original is 1.00075
+       Affected R =     0.0306962 and its ratio to original is 0.998591
+   Affected SHIFT =    3.3236e-13 and its ratio to original is 0.987033
+     Affected FOM =       4601.27 and its ratio to original is 1
 MEAN distribution is  RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0290868
+r is less than 0.1. r = 0.0307395
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -884,26 +891,26 @@ This result passes 6 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  5.51905e-12  2.10641e-23  4.58956e-12      0.10477   0.00349254      379.591 -6.31268e-13     0.619048   0.00976801   0.00103449
-   2   124  5.24443e-12  2.19131e-23  4.68114e-12     0.079836   0.00119948      627.571 -2.32561e-13        0.632   0.00465823   0.00166456
-   3   187  5.19533e-12  2.17828e-23   4.6672e-12    0.0655187  0.000810324      931.816 -1.46253e-13     0.638298   0.00301418   0.00125568
-   4   249  5.24762e-12  2.17577e-23  4.66451e-12    0.0562178  0.000628242      1265.64 -1.88828e-13         0.64      0.00225  0.000897804
-   5   312  5.05818e-12  2.13264e-23  4.61805e-12    0.0516051  0.000543135      1502.01 -1.61673e-14     0.632588   0.00185562  0.000798965
-   6   374  4.94544e-12  2.13069e-23  4.61595e-12    0.0481992  0.000456237      1721.79   8.7396e-14     0.626667   0.00158865  0.000728316
-   7   437  5.00127e-12    2.121e-23  4.60543e-12        0.044  0.000391269      2066.11  4.18245e-14     0.636986   0.00130112  0.000630458
-   8   499  5.08953e-12  2.13598e-23  4.62167e-12    0.0406103  0.000326214      2425.43 -4.35334e-14        0.646   0.00109598  0.000549919
-   9   562  5.16829e-12  2.14152e-23  4.62765e-12    0.0377363  0.000291332      2808.93  -1.0866e-13     0.653641  0.000941192  0.000480309
-  10   624  5.18124e-12  2.14591e-23  4.63239e-12    0.0357628  0.000258743       3127.5 -1.18512e-13       0.6544  0.000844988  0.000431944
-  11   687  5.17908e-12  2.13659e-23  4.62233e-12    0.0340262  0.000239275      3454.87 -1.19679e-13     0.655523  0.000763807  0.000392296
-  12   749  5.17742e-12  2.13375e-23  4.61926e-12    0.0325783   0.00022047       3768.8 -1.13831e-13     0.658667  0.000690958  0.000368972
-  13   812  5.18358e-12  2.12092e-23  4.60534e-12    0.0311592  0.000212735      4119.89 -1.23029e-13     0.661747  0.000628724  0.000340981
-  14   874  5.13529e-12  2.13621e-23  4.62192e-12    0.0304266  0.000190414      4320.69 -7.65616e-14     0.651429  0.000611529   0.00031319
-  15   937  5.10108e-12  2.15153e-23  4.63846e-12      0.02969  0.000170897      4537.73 -4.15281e-14     0.646055  0.000584067  0.000296492
-  16   999  5.05669e-12  2.16333e-23  4.65116e-12    0.0290868  0.000156804      4727.91   2.0878e-15        0.638  0.000567398  0.000277796
+   1    62  5.19299e-12   2.1284e-23  4.61346e-12     0.111928   0.00320878      347.051  -2.2379e-14     0.666667   0.00793651   0.00439255
+   2   124  5.36134e-12  2.12529e-23  4.61009e-12    0.0769096     0.001509      735.041  -2.4295e-13        0.656   0.00419512   0.00167264
+   3   187   5.1933e-12  2.16596e-23  4.65399e-12    0.0653586  0.000877776      1017.81 -8.33545e-14     0.632979   0.00308421   0.00116482
+   4   249  4.95489e-12  2.15601e-23  4.64329e-12    0.0592682  0.000688672      1237.74   1.1844e-13        0.612   0.00253595  0.000962715
+   5   312  4.91856e-12  2.14292e-23  4.62917e-12    0.0531977  0.000567319      1536.34   1.6347e-13     0.616613   0.00198646  0.000834496
+   6   374  4.90622e-12   2.0871e-23  4.56847e-12    0.0480849  0.000528341      1880.42  1.48974e-13        0.624   0.00160684  0.000699154
+   7   437  4.77642e-12  2.08916e-23  4.57073e-12    0.0457243  0.000449474      2079.59  2.55796e-13     0.609589   0.00146221  0.000623722
+   8   499  4.77164e-12  2.09932e-23  4.58183e-12    0.0429424  0.000382828      2357.76  2.67344e-13        0.612   0.00126797   0.00057239
+   9   562  4.71852e-12  2.09737e-23   4.5797e-12    0.0409051  0.000346315      2598.47  3.11738e-13     0.605684   0.00115635    0.0005139
+  10   624  4.70478e-12  2.10471e-23  4.58771e-12    0.0390047   0.00030795      2857.84  3.22915e-13       0.6016   0.00105957   0.00045936
+  11   687  4.72405e-12  2.09644e-23   4.5787e-12    0.0369516  0.000283309      3184.24  3.08893e-13     0.607558  0.000938856  0.000424579
+  12   749  4.72705e-12  2.11366e-23  4.59746e-12    0.0355138  0.000252487      3447.29  3.11107e-13     0.602667  0.000879056  0.000380491
+  13   812  4.76222e-12  2.10716e-23  4.59039e-12    0.0338061  0.000231611      3804.37  2.76281e-13     0.608856   0.00079019  0.000351255
+  14   874  4.76977e-12  2.10183e-23  4.58457e-12    0.0324935  0.000216617      4117.92  2.72184e-13     0.612571  0.000722814  0.000331808
+  15   937  4.70589e-12  2.09145e-23  4.57323e-12    0.0317308  0.000213362      4318.29  3.35765e-13     0.610874  0.000679103  0.000326665
+  16   999  4.70767e-12  2.09414e-23  4.57618e-12    0.0307395  0.000199175      4601.27  3.36726e-13        0.612  0.000633987  0.000309986
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Cumulated dose per run, in scoring volume : 5.05669 nanoGy  rms = 147.009 picoGy 
+ Cumulated dose per run, in scoring volume : 4.70767 nanoGy  rms = 144.639 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

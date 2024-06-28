@@ -36,14 +36,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
- ~PhysicsList() override = default;
+  public:
+    PhysicsList();
+    ~PhysicsList() override = default;
 
-public:
-  void SetCuts() override;
+  public:
+    void SetCuts() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

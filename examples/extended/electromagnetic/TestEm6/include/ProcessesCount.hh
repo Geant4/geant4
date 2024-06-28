@@ -34,24 +34,29 @@
 #define ProcessesCount_HH
 
 #include "globals.hh"
+
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class OneProcessCount
 {
-public:
-    OneProcessCount(G4String name) {fName=name; fCounter=0;};
-   ~OneProcessCount() {};
-   
-public:
-    G4String  GetName()       {return fName;};
-    G4int     GetCounter()    {return fCounter;};        
-    void      Count()         {fCounter++;};
-    
-private:
-    G4String fName;            // process name
-    G4int    fCounter;         // process counter
+  public:
+    OneProcessCount(G4String name)
+    {
+      fName = name;
+      fCounter = 0;
+    };
+    ~OneProcessCount() {};
+
+  public:
+    G4String GetName() { return fName; };
+    G4int GetCounter() { return fCounter; };
+    void Count() { fCounter++; };
+
+  private:
+    G4String fName;  // process name
+    G4int fCounter;  // process counter
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

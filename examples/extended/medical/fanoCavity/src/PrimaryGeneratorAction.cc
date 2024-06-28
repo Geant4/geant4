@@ -36,9 +36,9 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -46,19 +46,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fParticleGun(0), fDetector(det), fGunMessenger(0)                                              
+  : fParticleGun(0), fDetector(det), fGunMessenger(0)
 {
-  fParticleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+  fParticleGun = new G4ParticleGun(1);
+  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(1.25*MeV);  
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-    
-  fRBeam   = 1.;
-    
-  //create a messenger for this class
-  fGunMessenger = new PrimaryGeneratorMessenger(this);  
+  fParticleGun->SetParticleEnergy(1.25 * MeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+
+  fRBeam = 1.;
+
+  // create a messenger for this class
+  fGunMessenger = new PrimaryGeneratorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,31 +65,29 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete fParticleGun;
-  delete fGunMessenger;  
+  delete fGunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  // this function is called at the begining of event
   //
-  G4double z0 = -0.5*(fDetector->GetTotalThickness());
-  G4double x0 = 0.*cm, y0 = 0.*cm;
-    
-  //beam width
+  G4double z0 = -0.5 * (fDetector->GetTotalThickness());
+  G4double x0 = 0. * cm, y0 = 0. * cm;
+
+  // beam width
   //
-  if (fRBeam > 0.) 
-    {
-      G4double beam  = fRBeam*(fDetector->GetWallRadius());
-      G4double r     = beam*std::sqrt(G4UniformRand());
-      G4double theta = twopi*G4UniformRand();
-        x0 = r*std::cos(theta);
-        y0 = r*std::sin(theta);
-    }
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
+  if (fRBeam > 0.) {
+    G4double beam = fRBeam * (fDetector->GetWallRadius());
+    G4double r = beam * std::sqrt(G4UniformRand());
+    G4double theta = twopi * G4UniformRand();
+    x0 = r * std::cos(theta);
+    y0 = r * std::sin(theta);
+  }
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

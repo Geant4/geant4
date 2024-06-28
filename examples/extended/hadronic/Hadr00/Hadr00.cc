@@ -43,38 +43,39 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-
-#include "DetectorConstruction.hh"
-#include "G4PhysListFactory.hh"
-#include "G4VModularPhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
 
+#include "G4PhysListFactory.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VModularPhysicsList.hh"
 #include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
-
-  //detect interactive mode (if no arguments) and define UI session
+int main(int argc, char** argv)
+{
+  // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // Number of threads can be defined via 3rd argument
-  if (argc==4) {
+  if (argc == 4) {
     G4int nThreads = G4UIcommand::ConvertToInt(argv[3]);
     runManager->SetNumberOfThreads(nThreads);
   }
-  G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads()
-         << " threads" << " #####" << G4endl;
+  G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads() << " threads"
+         << " #####" << G4endl;
 
-  //set mandatory initialization classes
+  // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
 
@@ -82,49 +83,54 @@ int main(int argc,char** argv) {
   G4VModularPhysicsList* phys = nullptr;
   G4String physName = "";
 
-  //Physics List name defined via 3nd argument
-  if (argc>=3) { physName = argv[2]; }
-
-  //Physics List is defined via environment variable PHYSLIST
-  if ("" == physName) {
-    char* path = std::getenv("PHYSLIST");
-    if (path) { physName = G4String(path); }
+  // Physics List name defined via 3nd argument
+  if (argc >= 3) {
+    physName = argv[2];
   }
 
-  //if name is not known to the factory use FTFP_BERT
-  if("" == physName || !factory.IsReferencePhysList(physName)) {
+  // Physics List is defined via environment variable PHYSLIST
+  if ("" == physName) {
+    char* path = std::getenv("PHYSLIST");
+    if (path) {
+      physName = G4String(path);
+    }
+  }
+
+  // if name is not known to the factory use FTFP_BERT
+  if ("" == physName || !factory.IsReferencePhysList(physName)) {
     physName = "FTFP_BERT";
   }
 
-  //reference PhysicsList via its name
+  // reference PhysicsList via its name
   phys = factory.GetReferencePhysList(physName);
 
   runManager->SetUserInitialization(phys);
   det->SetPhysicsList(phys);
 
-  //set user action classes
+  // set user action classes
   runManager->SetUserInitialization(new ActionInitialization(det));
 
-  //initialize visualization
+  // initialize visualization
   G4VisManager* visManager = nullptr;
 
-  //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)  {
-    //interactive mode
+  if (ui) {
+    // interactive mode
     visManager = new G4VisExecutive;
     visManager->Initialize();
     ui->SessionStart();
     delete ui;
-  } else  {
-    //batch mode
+  }
+  else {
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
 
-  //job termination
+  // job termination
   delete visManager;
   delete runManager;
 }

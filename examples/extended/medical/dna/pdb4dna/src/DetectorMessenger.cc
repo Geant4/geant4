@@ -32,78 +32,68 @@
 //                  simulations (submitted to Comput. Phys. Commun.)
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// 
+//
 /// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
 
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
-: G4UImessenger(),
-  fpDetectorConstruction(Det)
-{ 
+  : G4UImessenger(), fpDetectorConstruction(Det)
+{
   fpDirectory = new G4UIdirectory("/PDB4DNA/");
   fpDirectory->SetGuidance("UI commands of this example");
 
   fpDetDirectory = new G4UIdirectory("/PDB4DNA/det/");
   fpDetDirectory->SetGuidance("Detector construction control");
 
-  fpLoadPdbCmd = new G4UIcmdWithAString("/PDB4DNA/det/loadPDB",this);
+  fpLoadPdbCmd = new G4UIcmdWithAString("/PDB4DNA/det/loadPDB", this);
   fpLoadPdbCmd->SetGuidance("Load PDB file");
-  fpLoadPdbCmd->SetParameterName("filename",false);
+  fpLoadPdbCmd->SetParameterName("filename", false);
   fpLoadPdbCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpDrawAtoms = new G4UIcmdWithoutParameter("/PDB4DNA/det/drawAtoms",this);
+  fpDrawAtoms = new G4UIcmdWithoutParameter("/PDB4DNA/det/drawAtoms", this);
   fpDrawAtoms->SetGuidance("Draw atoms");
   fpDrawAtoms->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpDrawNucleotides = new G4UIcmdWithoutParameter(
-      "/PDB4DNA/det/drawNucleotides",
-      this);
+  fpDrawNucleotides = new G4UIcmdWithoutParameter("/PDB4DNA/det/drawNucleotides", this);
   fpDrawNucleotides->SetGuidance("Draw nucleotides with bounding sphere");
   fpDrawNucleotides->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpDrawResidues = new G4UIcmdWithoutParameter(
-      "/PDB4DNA/det/drawResidues",
-      this);
-  fpDrawResidues->SetGuidance("Draw residues inside nucleotides with sphere "
-      "linked by cylinders");
+  fpDrawResidues = new G4UIcmdWithoutParameter("/PDB4DNA/det/drawResidues", this);
+  fpDrawResidues->SetGuidance(
+    "Draw residues inside nucleotides with sphere "
+    "linked by cylinders");
   fpDrawResidues->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpBuildBoundingV = new G4UIcmdWithoutParameter(
-      "/PDB4DNA/det/buildBoundingV",
-      this);
+  fpBuildBoundingV = new G4UIcmdWithoutParameter("/PDB4DNA/det/buildBoundingV", this);
   fpBuildBoundingV->SetGuidance("Build molecule bounding volume");
   fpBuildBoundingV->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpDrawAtomsWithBounding = new G4UIcmdWithoutParameter(
-      "/PDB4DNA/det/drawAtomsWithBounding",
-      this);
+  fpDrawAtomsWithBounding = new G4UIcmdWithoutParameter("/PDB4DNA/det/drawAtomsWithBounding", this);
   fpDrawAtomsWithBounding->SetGuidance("Draw atoms with bounding volume");
   fpDrawAtomsWithBounding->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpDrawNucleotidesWithBounding = new G4UIcmdWithoutParameter(
-      "/PDB4DNA/det/drawNucleotidesWithBounding",
-      this);
+  fpDrawNucleotidesWithBounding =
+    new G4UIcmdWithoutParameter("/PDB4DNA/det/drawNucleotidesWithBounding", this);
   fpDrawNucleotidesWithBounding->SetGuidance(
-      "Draw nucleotides with bounding sphere and bounding volume");
-  fpDrawNucleotidesWithBounding->AvailableForStates(G4State_PreInit,
-                                                    G4State_Idle);
+    "Draw nucleotides with bounding sphere and bounding volume");
+  fpDrawNucleotidesWithBounding->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpDrawResiduesWithBounding = new G4UIcmdWithoutParameter(
-      "/PDB4DNA/det/drawResiduesWithBounding",
-      this);
-  fpDrawResiduesWithBounding->SetGuidance("Draw residues inside nucleotides"
-      " with sphere linked by cylinders and with bounding volume");
-  fpDrawResiduesWithBounding->AvailableForStates(
-      G4State_PreInit, G4State_Idle);
+  fpDrawResiduesWithBounding =
+    new G4UIcmdWithoutParameter("/PDB4DNA/det/drawResiduesWithBounding", this);
+  fpDrawResiduesWithBounding->SetGuidance(
+    "Draw residues inside nucleotides"
+    " with sphere linked by cylinders and with bounding volume");
+  fpDrawResiduesWithBounding->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,38 +115,30 @@ DetectorMessenger::~DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fpLoadPdbCmd )
-  {
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fpLoadPdbCmd) {
     fpDetectorConstruction->LoadPDBfile(newValue);
   }
-  if( command == fpDrawAtoms )
-  {
+  if (command == fpDrawAtoms) {
     fpDetectorConstruction->DrawAtoms_();
   }
-  if( command == fpDrawNucleotides )
-  {
+  if (command == fpDrawNucleotides) {
     fpDetectorConstruction->DrawNucleotides_();
   }
-  if( command == fpDrawResidues )
-  {
+  if (command == fpDrawResidues) {
     fpDetectorConstruction->DrawResidues_();
   }
-  if( command == fpBuildBoundingV )
-  {
+  if (command == fpBuildBoundingV) {
     fpDetectorConstruction->BuildBoundingVolume();
   }
-  if( command == fpDrawAtomsWithBounding )
-  {
+  if (command == fpDrawAtomsWithBounding) {
     fpDetectorConstruction->DrawAtomsWithBounding_();
   }
-  if( command == fpDrawNucleotidesWithBounding )
-  {
+  if (command == fpDrawNucleotidesWithBounding) {
     fpDetectorConstruction->DrawNucleotidesWithBounding_();
   }
-  if( command == fpDrawResiduesWithBounding )
-  {
+  if (command == fpDrawResiduesWithBounding) {
     fpDetectorConstruction->DrawResiduesWithBounding_();
   }
 }

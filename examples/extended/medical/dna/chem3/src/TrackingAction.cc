@@ -35,31 +35,27 @@
 /// \brief Implementation of the TrackingAction class
 
 #include "TrackingAction.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
 
-TrackingAction::TrackingAction(): G4UserTrackingAction()
-{}
+TrackingAction::TrackingAction() : G4UserTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::~TrackingAction()
-{}
+TrackingAction::~TrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-TrackingAction::PreUserTrackingAction(const G4Track* /*track*/)
-{}
+void TrackingAction::PreUserTrackingAction(const G4Track* /*track*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
-    if(track->GetTrackID() == 1)
-    {
-        G4cout<<"End of tracking primary particle, its final energy is :"
-            << G4BestUnit(track->GetKineticEnergy(), "Energy")<< G4endl;
-    }
+  if (track->GetTrackID() == 1) {
+    G4cout << "End of tracking primary particle, its final energy is :"
+           << G4BestUnit(track->GetKineticEnergy(), "Energy") << G4endl;
+  }
 }

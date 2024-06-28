@@ -24,87 +24,77 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
+
 #include "EventAction.hh"
 
 #include "G4AnalysisManager.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4EventManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(EventAction* event): G4UserSteppingAction()
-,fEventAction(event)
-{}
+SteppingAction::SteppingAction(EventAction* event) : G4UserSteppingAction(), fEventAction(event) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
-{ 
+{
+  G4double edep = step->GetTotalEnergyDeposit();
 
- G4double edep = step->GetTotalEnergyDeposit();
- 
- //total energy deposit 
- fEventAction->AddEdep(edep);      
- 
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition()
-     == G4Electron::ElectronDefinition())
- {
-   const G4String& processName = step->GetPostStepPoint()->
-      GetProcessDefinedStep()->GetProcessName();
-   
-   if (processName!="Transportation")
-   {
-      // get analysis manager
+  // Total energy deposit
+  fEventAction->AddEdep(edep);
+
+  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Electron::ElectronDefinition()) {
+    const G4String& processName =
+      step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+
+    if (processName != "Transportation") {
+      // Get analysis manager
       G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-      // fill histo
-    
+      // Fill histograms
+
       // 1) ALL e-
+      //
       // analysisManager
-      // ->FillH1(1, 
+      // ->FillH1(1,
       // step->GetTrack()->GetKineticEnergy()/eV,step->GetStepLength()/nm);
-      analysisManager->FillH1(1,
-       step->GetPreStepPoint()->GetKineticEnergy()/eV,
-       step->GetStepLength()/nm);
+      analysisManager->FillH1(1, step->GetPreStepPoint()->GetKineticEnergy() / eV,
+                              step->GetStepLength() / nm);
 
       // 2) PARENT e-
-      if (step->GetTrack()->GetParentID()==0 
-          && step->GetTrack()->GetTrackID()==1) 
-      // analysisManager->FillH1(2, step->GetTrack()->GetKineticEnergy()/eV,
-      // step->GetStepLength()/nm);
-      analysisManager->FillH1(2, 
-       step->GetPreStepPoint()->GetKineticEnergy()/eV,
-       step->GetStepLength()/nm);
-    
-      // 3) SECONDARY e-
-      if (   !(step->GetTrack()->GetParentID()==0) 
-          || !(step->GetTrack()->GetTrackID()==1) ) 
-      // analysisManager->FillH1(3, step->GetTrack()->GetKineticEnergy()/eV,
-      // step->GetStepLength()/nm);
-       analysisManager->FillH1(3, 
-        step->GetPreStepPoint()->GetKineticEnergy()/eV,
-        step->GetStepLength()/nm);
-    
-   }
-    
- }
-}  
+      //
+      if (step->GetTrack()->GetParentID() == 0 && step->GetTrack()->GetTrackID() == 1)
+        // analysisManager->FillH1(2, step->GetTrack()->GetKineticEnergy()/eV,
+        // step->GetStepLength()/nm);
+        analysisManager->FillH1(2, step->GetPreStepPoint()->GetKineticEnergy() / eV,
+                                step->GetStepLength() / nm);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......  
+      // 3) SECONDARY e-
+      //
+      if (!(step->GetTrack()->GetParentID() == 0) || !(step->GetTrack()->GetTrackID() == 1))
+        // analysisManager->FillH1(3, step->GetTrack()->GetKineticEnergy()/eV,
+        // step->GetStepLength()/nm);
+        analysisManager->FillH1(3, step->GetPreStepPoint()->GetKineticEnergy() / eV,
+                                step->GetStepLength() / nm);
+    }
+  }
+}

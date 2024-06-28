@@ -58,13 +58,11 @@
 class F02SteppingVerbose : public G4SteppingVerbose
 {
   public:
-
     F02SteppingVerbose() = default;
     ~F02SteppingVerbose() override = default;
 
     void StepInfo() override;
     void TrackingStarted() override;
-
 };
 
 #endif

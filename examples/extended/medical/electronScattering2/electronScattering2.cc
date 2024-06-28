@@ -26,86 +26,82 @@
 //
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-
-#include "G4UIExecutive.hh"
-#include "G4VisExecutive.hh"
-
+#include "ElectronActionInitialization.hh"
 #include "ElectronBenchmarkDetector.hh"
 #include "PhysicsList.hh"
-#include "ElectronActionInitialization.hh"
+
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
+int main(int argc, char** argv)
+{
+  // detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc, argv);
 
-    //detect interactive mode (if no arguments) and define UI session
-    G4UIExecutive* ui = nullptr;
-    if (argc == 1) ui = new G4UIExecutive(argc,argv);
+  // Parse the arguments
+  G4String outputFile = "output.csv";
+  G4String startingSeed = "1";
+  G4String macroFile = "None";
+  if (argc > 1) macroFile = argv[1];
+  if (argc > 2) startingSeed = argv[2];
+  if (argc > 3) outputFile = argv[3];
+  G4cout << "Starting run with" << G4endl;
+  G4cout << "Macro File    : " << macroFile << G4endl;
+  G4cout << "Starting Seed : " << startingSeed << G4endl;
+  G4cout << "Output File   : " << outputFile << G4endl;
 
-    // Parse the arguments
-    G4String outputFile = "output.csv";
-    G4String startingSeed = "1";
-    G4String macroFile = "None";
-    if (argc > 1) macroFile = argv[1];
-    if (argc > 2) startingSeed = argv[2];
-    if (argc > 3) outputFile = argv[3];
-    G4cout << "Starting run with" << G4endl;
-    G4cout << "Macro File    : " << macroFile << G4endl;
-    G4cout << "Starting Seed : " << startingSeed << G4endl;
-    G4cout << "Output File   : " << outputFile << G4endl;
+  // Instantiate the run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
-    // Instantiate the run manager
-    auto* runManager = G4RunManagerFactory::CreateRunManager();
+  // Instantiate the random engine
+  G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
-    // Instantiate the random engine
-    G4Random::setTheEngine(new CLHEP::MTwistEngine);
+  // Convert the starting seed to integer and feed it to the random engine
+  unsigned startingSeedInt;
+  std::istringstream is(startingSeed);
+  is >> startingSeedInt;
+  G4Random::setTheSeed(startingSeedInt);
 
-    // Convert the starting seed to integer and feed it to the random engine
-    unsigned startingSeedInt;
-    std::istringstream is(startingSeed);
-    is >> startingSeedInt;
-    G4Random::setTheSeed(startingSeedInt);
+  // Instantiate the geometry
+  runManager->SetUserInitialization(new ElectronBenchmarkDetector);
 
-    // Instantiate the geometry
-    runManager->SetUserInitialization(new ElectronBenchmarkDetector);
+  // Instantiate the physics list (in turn calls one of the choices of
+  // physics list)
+  runManager->SetUserInitialization(new PhysicsList);
 
-    // Instantiate the physics list (in turn calls one of the choices of
-    // physics list)
-    runManager->SetUserInitialization(new PhysicsList);
+  // set user action classes
+  runManager->SetUserInitialization(new ElectronActionInitialization(outputFile));
 
-    // set user action classes
-    runManager->SetUserInitialization(
-        new ElectronActionInitialization(outputFile));
+  // initialize visualization
+  G4VisManager* visManager = nullptr;
 
-    //initialize visualization
-    G4VisManager* visManager = nullptr;
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-    //get the pointer to the User Interface manager
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  if (ui) {
+    // interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    ui->SessionStart();
+    delete ui;
+  }
+  else {
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
 
-    if (ui)  {
-     //interactive mode
-     visManager = new G4VisExecutive;
-     visManager->Initialize();
-     ui->SessionStart();
-     delete ui;
-    }
-    else  {
-    //batch mode
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
-    }
-
-    //job termination
-    delete visManager;
-    delete runManager;
+  // job termination
+  delete visManager;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

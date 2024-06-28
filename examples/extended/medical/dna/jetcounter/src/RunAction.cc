@@ -29,21 +29,23 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+
 #include "G4Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run *run) {
+void RunAction::BeginOfRunAction(const G4Run* run)
+{
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
   fTimer.Start();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run *run) {
+void RunAction::EndOfRunAction(const G4Run* run)
+{
   fTimer.Stop();
-  G4cout << "number of event = " << run->GetNumberOfEvent() << " " << fTimer
-         << G4endl;
+  G4cout << "number of event = " << run->GetNumberOfEvent() << " " << fTimer << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

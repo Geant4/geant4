@@ -31,11 +31,10 @@
 #ifndef F04PrimaryGeneratorAction_h
 #define F04PrimaryGeneratorAction_h 1
 
-#include "globals.hh"
-#include "G4VUserPrimaryGeneratorAction.hh"
-
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -46,29 +45,26 @@ class F04PrimaryGeneratorMessenger;
 class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-
     F04PrimaryGeneratorAction(F04DetectorConstruction*);
     ~F04PrimaryGeneratorAction() override;
 
   public:
-
     void GeneratePrimaries(G4Event*) override;
 
-    void SetRndmFlag(G4String val) { fRndmFlag = val;}
+    void SetRndmFlag(G4String val) { fRndmFlag = val; }
 
     void SetXvertex(G4double x);
     void SetYvertex(G4double y);
     void SetZvertex(G4double z);
 
   private:
+    F04DetectorConstruction* fDetector = nullptr;  // pointer to the geometry
 
-    F04DetectorConstruction*   fDetector = nullptr;    // pointer to the geometry
+    G4ParticleGun* fParticleGun = nullptr;  // pointer a to G4 service class
 
-    G4ParticleGun*             fParticleGun = nullptr; // pointer a to G4 service class
+    F04PrimaryGeneratorMessenger* fGunMessenger = nullptr;  // messenger of this class
 
-    F04PrimaryGeneratorMessenger* fGunMessenger = nullptr; // messenger of this class
-
-    G4String fRndmFlag ="off";   // flag for random impact point
+    G4String fRndmFlag = "off";  // flag for random impact point
 
     G4bool fFirst = false;
 
@@ -78,7 +74,6 @@ class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double fYvertex = 0.;
     G4double fZvertex = 0.;
     G4bool fVertexDefined = false;
-
 };
 
 #endif

@@ -33,26 +33,25 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01DetectorConstruction.hh"
-#include "F01DetectorMessenger.hh"
 
 #include "F01CalorimeterSD.hh"
-#include "F01FieldSetup.hh"
+#include "F01DetectorMessenger.hh"
 
-#include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-#include "G4SDManager.hh"
-
-#include "G4Material.hh"
-#include "G4Tubs.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
-
+#include "G4GeometryManager.hh"
+#include "G4FieldBuilder.hh"
+#include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4Material.hh"
+#include "G4PVPlacement.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4SolidStore.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
+#include "G4UniformMagField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,19 +59,25 @@ F01DetectorConstruction::F01DetectorConstruction()
 {
   // create commands for interactive definition of the calorimeter
 
+  G4cout << "F01DetectorConstruction::F01DetectorConstruction()" << G4endl;
+
   fDetectorMessenger = new F01DetectorMessenger(this);
+
+  // create field builder
+  // this will create commands for field configuration
+  G4FieldBuilder::Instance();
+  // G4FieldBuilder::Instance()->SetVerboseLevel(2);
 
   // create materials
 
   DefineMaterials();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01DetectorConstruction::~F01DetectorConstruction()
 {
-  delete fDetectorMessenger;
+  // delete fDetectorMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,10 +91,10 @@ G4VPhysicalVolume* F01DetectorConstruction::Construct()
 
 void F01DetectorConstruction::DefineMaterials()
 {
-  //This function illustrates the possible ways to define materials
+  // This function illustrates the possible ways to define materials
 
-  G4String name, symbol;             // a=mass of a mole;
-  G4double a, z, density;            // z=mean number of protons;
+  G4String name, symbol;  // a=mass of a mole;
+  G4double a, z, density;  // z=mean number of protons;
   G4int nel;
   G4int ncomponents;
   G4double fractionmass, pressure, temperature;
@@ -98,20 +103,20 @@ void F01DetectorConstruction::DefineMaterials()
   // define Elements
   //
 
-  a = 1.01*g/mole;
-  auto  elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
+  a = 1.01 * g / mole;
+  auto elH = new G4Element(name = "Hydrogen", symbol = "H", z = 1., a);
 
-  a = 12.01*g/mole;
-  auto  elC = new G4Element(name="Carbon", symbol="C", z=6., a);
+  a = 12.01 * g / mole;
+  auto elC = new G4Element(name = "Carbon", symbol = "C", z = 6., a);
 
-  a = 14.01*g/mole;
-  auto  elN  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
+  a = 14.01 * g / mole;
+  auto elN = new G4Element(name = "Nitrogen", symbol = "N", z = 7., a);
 
-  a = 16.00*g/mole;
-  auto  elO  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
+  a = 16.00 * g / mole;
+  auto elO = new G4Element(name = "Oxygen", symbol = "O", z = 8., a);
 
-  a = 39.948*g/mole;
-  auto  elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
+  a = 39.948 * g / mole;
+  auto elAr = new G4Element(name = "Argon", symbol = "Ar", z = 18., a);
 
   //
   // define simple materials
@@ -119,77 +124,77 @@ void F01DetectorConstruction::DefineMaterials()
 
   // Mylar
 
-  density = 1.39*g/cm3;
-  auto  mylar = new G4Material(name="Mylar", density, nel=3);
-  mylar->AddElement(elO,2);
-  mylar->AddElement(elC,5);
-  mylar->AddElement(elH,4);
+  density = 1.39 * g / cm3;
+  auto mylar = new G4Material(name = "Mylar", density, nel = 3);
+  mylar->AddElement(elO, 2);
+  mylar->AddElement(elC, 5);
+  mylar->AddElement(elH, 4);
 
   // Polypropelene
 
-  auto  CH2 = new G4Material ("Polypropelene" , 0.91*g/cm3, 2);
-  CH2->AddElement(elH,2);
-  CH2->AddElement(elC,1);
+  auto CH2 = new G4Material("Polypropelene", 0.91 * g / cm3, 2);
+  CH2->AddElement(elH, 2);
+  CH2->AddElement(elC, 1);
 
   // Krypton as detector gas, STP
 
-  density = 3.700*mg/cm3;
-  a = 83.80*g/mole;
-  auto  Kr  = new G4Material(name="Kr",z=36., a, density );
+  density = 3.700 * mg / cm3;
+  a = 83.80 * g / mole;
+  auto Kr = new G4Material(name = "Kr", z = 36., a, density);
 
   // Dry air (average composition)
 
-  density = 1.7836*mg/cm3;        // STP
-  auto  argon = new G4Material(name="Argon"  , density, ncomponents=1);
+  density = 1.7836 * mg / cm3;  // STP
+  auto argon = new G4Material(name = "Argon", density, ncomponents = 1);
   argon->AddElement(elAr, 1);
 
-  density = 1.25053*mg/cm3;       // STP
-  auto  nitrogen = new G4Material(name="N2"  , density, ncomponents=1);
+  density = 1.25053 * mg / cm3;  // STP
+  auto nitrogen = new G4Material(name = "N2", density, ncomponents = 1);
   nitrogen->AddElement(elN, 2);
 
-  density = 1.4289*mg/cm3;        // STP
-  auto  oxygen = new G4Material(name="O2"  , density, ncomponents=1);
+  density = 1.4289 * mg / cm3;  // STP
+  auto oxygen = new G4Material(name = "O2", density, ncomponents = 1);
   oxygen->AddElement(elO, 2);
 
-  density  = 1.2928*mg/cm3;       // STP
-  density *= 1.0e-8;              // pumped vacuum
+  density = 1.2928 * mg / cm3;  // STP
+  density *= 1.0e-8;  // pumped vacuum
 
   temperature = STP_Temperature;
-  pressure = 1.0e-8*STP_Pressure;
+  pressure = 1.0e-8 * STP_Pressure;
 
-  auto  air = new G4Material(name="Air"  , density, ncomponents=3,
-                                   kStateGas,temperature,pressure);
-  air->AddMaterial( nitrogen, fractionmass = 0.7557 );
-  air->AddMaterial( oxygen,   fractionmass = 0.2315 );
+  auto air =
+    new G4Material(name = "Air", density, ncomponents = 3, kStateGas, temperature, pressure);
+  air->AddMaterial(nitrogen, fractionmass = 0.7557);
+  air->AddMaterial(oxygen, fractionmass = 0.2315);
 
-  air->AddMaterial( argon,    fractionmass = 0.0128 );
+  air->AddMaterial(argon, fractionmass = 0.0128);
 
   // Xenon as detector gas, STP
 
-  density = 5.858*mg/cm3;
-  a = 131.29*g/mole;
-  auto  Xe  = new G4Material(name="Xenon",z=54., a, density );
+  density = 5.858 * mg / cm3;
+  a = 131.29 * g / mole;
+  auto Xe = new G4Material(name = "Xenon", z = 54., a, density);
 
   // Carbon dioxide, STP
 
-  density = 1.842*mg/cm3;
-  auto  CarbonDioxide = new G4Material(name="CO2", density, nel=2);
-  CarbonDioxide->AddElement(elC,1);
-  CarbonDioxide->AddElement(elO,2);
+  density = 1.842 * mg / cm3;
+  auto CarbonDioxide = new G4Material(name = "CO2", density, nel = 2);
+  CarbonDioxide->AddElement(elC, 1);
+  CarbonDioxide->AddElement(elO, 2);
 
   // 80% Xe + 20% CO2, STP
 
-  density = 5.0818*mg/cm3;
-  auto  Xe20CO2 = new G4Material(name="Xe20CO2", density, ncomponents=2);
-  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 );
-  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 );
+  density = 5.0818 * mg / cm3;
+  auto Xe20CO2 = new G4Material(name = "Xe20CO2", density, ncomponents = 2);
+  Xe20CO2->AddMaterial(Xe, fractionmass = 0.922);
+  Xe20CO2->AddMaterial(CarbonDioxide, fractionmass = 0.078);
 
   // 80% Kr + 20% CO2, STP
 
-  density = 3.601*mg/cm3;
-  auto  Kr20CO2 = new G4Material(name="Kr20CO2", density, ncomponents=2);
-  Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 );
-  Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 );
+  density = 3.601 * mg / cm3;
+  auto Kr20CO2 = new G4Material(name = "Kr20CO2", density, ncomponents = 2);
+  Kr20CO2->AddMaterial(Kr, fractionmass = 0.89);
+  Kr20CO2->AddMaterial(CarbonDioxide, fractionmass = 0.11);
 
   // Print material table -- silence it for now
   // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -198,9 +203,9 @@ void F01DetectorConstruction::DefineMaterials()
 
   // default materials of the calorimeter
 
-  fAbsorberMaterial = air; //  Kr20CO2;   // XeCO2CF4;
+  fAbsorberMaterial = air;  //  Kr20CO2;   // XeCO2CF4;
 
-  fWorldMaterial    = air;
+  fWorldMaterial = air;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -209,8 +214,7 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
 {
   // Cleanup old geometry
 
-  if (fPhysiWorld)
-  {
+  if (fPhysiWorld) {
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
@@ -224,38 +228,29 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
 
   // World
 
-  fSolidWorld = new G4Tubs("World",                        // its name
-                   0.,fWorldSizeR,fWorldSizeZ/2.,0.,twopi);// its size
+  fSolidWorld = new G4Tubs("World",  // its name
+                           0., fWorldSizeR, fWorldSizeZ / 2., 0., twopi);  // its size
 
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,           // its solid
-                                   fWorldMaterial,         // its material
-                                   "World");               // its name
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,  // its solid
+                                    fWorldMaterial,  // its material
+                                    "World");  // its name
 
-  fPhysiWorld = new G4PVPlacement(nullptr,                       // no rotation
-                                  G4ThreeVector(),         // at (0,0,0)
-                                  "World",                 // its name
-                                  fLogicWorld,             // its logical volume
-                                  nullptr,                       // its mother  volume
-                                  false,                   // no boolean op.
-                                  0);                      // copy number
+  fPhysiWorld = new G4PVPlacement(nullptr,  // no rotation
+                                  G4ThreeVector(),  // at (0,0,0)
+                                  "World",  // its name
+                                  fLogicWorld,  // its logical volume
+                                  nullptr,  // its mother  volume
+                                  false,  // no boolean op.
+                                  0);  // copy number
   // Absorber
 
-  fSolidAbsorber = new G4Tubs("Absorber", 1.0*mm,
-                              fAbsorberRadius,
-                              fAbsorberThickness/2.,
-                              0.0,twopi);
+  fSolidAbsorber =
+    new G4Tubs("Absorber", 1.0 * mm, fAbsorberRadius, fAbsorberThickness / 2., 0.0, twopi);
 
-  fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,
-                                       fAbsorberMaterial,
-                                       "Absorber");
+  fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber, fAbsorberMaterial, "Absorber");
 
-  fPhysiAbsorber = new G4PVPlacement(nullptr,
-                                     G4ThreeVector(0.,0.,fZAbsorber),
-                                     "Absorber",
-                                     fLogicAbsorber,
-                                     fPhysiWorld,
-                                     false,
-                                         0);
+  fPhysiAbsorber = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fZAbsorber), "Absorber",
+                                     fLogicAbsorber, fPhysiWorld, false, 0);
 
   return fPhysiWorld;
 }
@@ -264,16 +259,13 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
 
 void F01DetectorConstruction::PrintCalorParameters()
 {
-  G4cout << "\n The  WORLD   is made of "
-         << fWorldSizeZ/mm << "mm of " << fWorldMaterial->GetName();
-  G4cout << ", the transverse size (R) of the world is "
-         << fWorldSizeR/mm << " mm. " << G4endl;
-  G4cout << " The ABSORBER is made of "
-         << fAbsorberThickness/mm << "mm of " << fAbsorberMaterial->GetName();
-  G4cout << ", the transverse size (R) is " << fAbsorberRadius/mm
-         << " mm. " << G4endl;
-  G4cout << " Z position of the (middle of the) absorber "
-         << fZAbsorber/mm << "  mm." << G4endl;
+  G4cout << "\n The  WORLD   is made of " << fWorldSizeZ / mm << "mm of "
+         << fWorldMaterial->GetName();
+  G4cout << ", the transverse size (R) of the world is " << fWorldSizeR / mm << " mm. " << G4endl;
+  G4cout << " The ABSORBER is made of " << fAbsorberThickness / mm << "mm of "
+         << fAbsorberMaterial->GetName();
+  G4cout << ", the transverse size (R) is " << fAbsorberRadius / mm << " mm. " << G4endl;
+  G4cout << " Z position of the (middle of the) absorber " << fZAbsorber / mm << "  mm." << G4endl;
   G4cout << G4endl;
 }
 
@@ -286,15 +278,14 @@ void F01DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   // search the material by its name
   G4Material* material;
-  for (size_t j=0 ; j<theMaterialTable->size() ; j++)
-   { material = (*theMaterialTable)[j];
-     if (material->GetName() == materialChoice)
-        {
-          fAbsorberMaterial = material;
-          fLogicAbsorber->SetMaterial(material);
-          G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-        }
-   }
+  for (size_t j = 0; j < theMaterialTable->size(); j++) {
+    material = (*theMaterialTable)[j];
+    if (material->GetName() == materialChoice) {
+      fAbsorberMaterial = material;
+      fLogicAbsorber->SetMaterial(material);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -306,15 +297,14 @@ void F01DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
   // search the material by its name
   G4Material* material;
-  for (size_t j=0 ; j<theMaterialTable->size() ; j++)
-   { material = (*theMaterialTable)[j];
-     if(material->GetName() == materialChoice)
-        {
-          fWorldMaterial = material;
-          fLogicWorld->SetMaterial(material);
-          G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-        }
-   }
+  for (size_t j = 0; j < theMaterialTable->size(); j++) {
+    material = (*theMaterialTable)[j];
+    if (material->GetName() == materialChoice) {
+      fWorldMaterial = material;
+      fLogicWorld->SetMaterial(material);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -365,6 +355,22 @@ void F01DetectorConstruction::SetAbsorberZpos(G4double val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F01DetectorConstruction::SetFieldValue(G4ThreeVector value)
+{
+  fFieldVector = value;
+
+  G4UniformMagField* magField = nullptr;
+  if (fFieldVector != G4ThreeVector(0.,0.,0.)) {
+    magField = new G4UniformMagField(fFieldVector);
+  }
+
+  // Set field to the field builder
+  auto fieldBuilder = G4FieldBuilder::Instance();
+  fieldBuilder->SetGlobalField(magField);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4FieldManager.hh"
 
 void F01DetectorConstruction::ConstructSDandField()
@@ -372,20 +378,18 @@ void F01DetectorConstruction::ConstructSDandField()
   // Sensitive Detectors: Absorber
 
   if (!fCalorimeterSD.Get()) {
-    auto  calorimeterSD = new F01CalorimeterSD("CalorSD",this);
+    auto calorimeterSD = new F01CalorimeterSD("CalorSD", this);
     fCalorimeterSD.Put(calorimeterSD);
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(fCalorimeterSD.Get());
   SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD.Get());
 
-  // Construct the field creator - this will register the field it creates
-  if (!fEmFieldSetup.Get()) {
-    auto  fieldSetup
-       = new F01FieldSetup(G4ThreeVector( 0.0, 0.0, 3.3*tesla ),
-                           fUseFSALstepper );
-    G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
-    fEmFieldSetup.Put(fieldSetup);
-  }
+  // Create detector field
+  SetFieldValue(fFieldVector);
+
+  // Construct all Geant4 field objects
+  auto fieldBuilder = G4FieldBuilder::Instance();
+  fieldBuilder->ConstructFieldSetup();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

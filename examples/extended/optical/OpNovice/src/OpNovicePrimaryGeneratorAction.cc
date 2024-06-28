@@ -32,7 +32,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNovicePrimaryGeneratorAction.hh"
+
 #include "OpNovicePrimaryGeneratorMessenger.hh"
+
 #include "G4Event.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
@@ -42,11 +44,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 OpNovicePrimaryGeneratorAction::OpNovicePrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
-  , fParticleGun(nullptr)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(nullptr)
 {
   G4int n_particle = 1;
-  fParticleGun     = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
   // create a messenger for this class
   fGunMessenger = new OpNovicePrimaryGeneratorMessenger(this);
   // default kinematic
@@ -84,28 +85,24 @@ void OpNovicePrimaryGeneratorAction::SetOptPhotonPolar()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void OpNovicePrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
 {
-  if(fParticleGun->GetParticleDefinition()->GetParticleName() !=
-     "opticalphoton")
-  {
+  if (fParticleGun->GetParticleDefinition()->GetParticleName() != "opticalphoton") {
     G4ExceptionDescription ed;
     ed << "Warning: the particleGun is not an opticalphoton";
-    G4Exception("OpNovicePrimaryGeneratorAction::SetOptPhotonPolar()",
-                "OpNovice_010", JustWarning, ed);
+    G4Exception("OpNovicePrimaryGeneratorAction::SetOptPhotonPolar()", "OpNovice_010", JustWarning,
+                ed);
     return;
   }
 
   G4ThreeVector normal(1., 0., 0.);
   G4ThreeVector kphoton = fParticleGun->GetParticleMomentumDirection();
   G4ThreeVector product = normal.cross(kphoton);
-  G4double modul2       = product * product;
+  G4double modul2 = product * product;
 
   G4ThreeVector e_perpend(0., 0., 1.);
-  if(modul2 > 0.)
-    e_perpend = (1. / std::sqrt(modul2)) * product;
+  if (modul2 > 0.) e_perpend = (1. / std::sqrt(modul2)) * product;
   G4ThreeVector e_paralle = e_perpend.cross(kphoton);
 
-  G4ThreeVector polar =
-    std::cos(angle) * e_paralle + std::sin(angle) * e_perpend;
+  G4ThreeVector polar = std::cos(angle) * e_paralle + std::sin(angle) * e_perpend;
   fParticleGun->SetParticlePolarization(polar);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

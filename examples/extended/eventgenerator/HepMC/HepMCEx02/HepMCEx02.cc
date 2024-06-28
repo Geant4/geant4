@@ -33,65 +33,64 @@
 //      GEANT 4 - example of HepMC-interface
 // --------------------------------------------------------------
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
-#include "H02DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
-#include "H02PrimaryGeneratorAction.hh"
+#include "H02DetectorConstruction.hh"
 #include "H02EventAction.hh"
+#include "H02PrimaryGeneratorAction.hh"
 #include "H02SteppingAction.hh"
 
-#include "G4VisExecutive.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  auto* runManager= G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // User Initialization classes (mandatory)
   //
   G4VUserDetectorConstruction* detector = new H02DetectorConstruction;
-  runManager-> SetUserInitialization(detector);
+  runManager->SetUserInitialization(detector);
   //
   G4VUserPhysicsList* physics = new FTFP_BERT;
-  runManager-> SetUserInitialization(physics);
+  runManager->SetUserInitialization(physics);
 
-  runManager-> Initialize();
+  runManager->Initialize();
 
   // User Action classes
   //
   G4VUserPrimaryGeneratorAction* gen_action = new H02PrimaryGeneratorAction;
-  runManager-> SetUserAction(gen_action);
+  runManager->SetUserAction(gen_action);
   //
   G4UserEventAction* event_action = new H02EventAction;
-  runManager-> SetUserAction(event_action);
+  runManager->SetUserAction(event_action);
   //
   G4UserSteppingAction* stepping_action = new H02SteppingAction;
-  runManager-> SetUserAction(stepping_action);
+  runManager->SetUserAction(stepping_action);
 
-  G4VisManager* visManager= new G4VisExecutive;
-  visManager-> Initialize();
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
   G4cout << G4endl;
 
- //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (!ui) { // batch mode
-    visManager-> SetVerboseLevel("quiet");
+  if (!ui) {  // batch mode
+    visManager->SetVerboseLevel("quiet");
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager-> ApplyCommand(command+fileName);
-  } else {  // interactive mode : define UI session
-    ui-> SessionStart();
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else {  // interactive mode : define UI session
+    ui->SessionStart();
     delete ui;
   }
 
@@ -102,4 +101,3 @@ int main(int argc, char** argv)
   delete visManager;
   delete runManager;
 }
-

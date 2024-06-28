@@ -27,28 +27,24 @@
 /// @file EventAction.cc
 /// @brief Describe event actions
 
-#include "G4Event.hh"
-#include "Analysis.hh"
 #include "EventAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-EventAction::EventAction()
-{
-}
+#include "Analysis.hh"
+
+#include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-EventAction::~EventAction()
-{
-}
+EventAction::EventAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+EventAction::~EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void EventAction::BeginOfEventAction(const G4Event*)
 {
   Analysis* myana = Analysis::GetAnalysis();
-  myana-> ClearIncidentFlag();
+  myana->ClearIncidentFlag();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void EventAction::EndOfEventAction(const G4Event*)
-{
-}
+void EventAction::EndOfEventAction(const G4Event*) {}

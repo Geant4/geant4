@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,15 +41,15 @@ class RunAction;
 
 class EventAction : public G4UserEventAction
 {
-public:
-  EventAction(RunAction *);
-  virtual ~EventAction();
+  public:
+    EventAction(RunAction*);
+    virtual ~EventAction();
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
-    
-private:
-  RunAction*            fRunAction;
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
+
+  private:
+    RunAction* fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

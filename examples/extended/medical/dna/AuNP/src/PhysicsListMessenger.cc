@@ -34,24 +34,24 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys),
- fPhysDir(0), fListCmd(0)
+  : G4UImessenger(), fPhysicsList(pPhys), fPhysDir(0), fListCmd(0)
 {
   fPhysDir = new G4UIdirectory("/AuNP/phys/");
   fPhysDir->SetGuidance("physics list commands");
-  
-  fListCmd = new G4UIcmdWithAString("/AuNP/phys/Physics4NP",this);  
+
+  fListCmd = new G4UIcmdWithAString("/AuNP/phys/Physics4NP", this);
   fListCmd->SetGuidance("Add physics list. for Nanoparticle");
-  fListCmd->SetParameterName("choice",false);
+  fListCmd->SetParameterName("choice", false);
   fListCmd->AvailableForStates(G4State_PreInit);
-  fListCmd->SetToBeBroadcasted(false);        
+  fListCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,14 +59,16 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fListCmd;
-  delete fPhysDir;    
+  delete fPhysDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{       
-  if( command == fListCmd ) { fPhysicsList->SetPhysics4NP(newValue);}
+{
+  if (command == fListCmd) {
+    fPhysicsList->SetPhysics4NP(newValue);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

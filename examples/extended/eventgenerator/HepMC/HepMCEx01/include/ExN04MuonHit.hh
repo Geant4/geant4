@@ -31,34 +31,35 @@
 #ifndef ExN04MuonHit_h
 #define ExN04MuonHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 
-class ExN04MuonHit : public G4VHit {
-public:
-  ExN04MuonHit();
-  ~ExN04MuonHit();
-  ExN04MuonHit(const ExN04MuonHit& right);
-  const ExN04MuonHit& operator=(const ExN04MuonHit &right);
-  G4bool operator==(const ExN04MuonHit &right) const;
+class ExN04MuonHit : public G4VHit
+{
+  public:
+    ExN04MuonHit();
+    ~ExN04MuonHit();
+    ExN04MuonHit(const ExN04MuonHit& right);
+    const ExN04MuonHit& operator=(const ExN04MuonHit& right);
+    G4bool operator==(const ExN04MuonHit& right) const;
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
-  virtual void Draw();
-  virtual void Print();
+    virtual void Draw();
+    virtual void Print();
 
-  inline void SetEdep(G4double de) { fedep = de; }
-  inline void AddEdep(G4double de) { fedep += de; }
-  inline G4double GetEdep() { return fedep; }
-  inline void SetPos(G4ThreeVector xyz) { fpos = xyz; }
-  inline G4ThreeVector GetPos() { return fpos; }
+    inline void SetEdep(G4double de) { fedep = de; }
+    inline void AddEdep(G4double de) { fedep += de; }
+    inline G4double GetEdep() { return fedep; }
+    inline void SetPos(G4ThreeVector xyz) { fpos = xyz; }
+    inline G4ThreeVector GetPos() { return fpos; }
 
-private:
-  G4double fedep;
-  G4ThreeVector fpos;
+  private:
+    G4double fedep;
+    G4ThreeVector fpos;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,13 +70,13 @@ extern G4Allocator<ExN04MuonHit> ExN04MuonHitAllocator;
 inline void* ExN04MuonHit::operator new(size_t)
 {
   void* aHit;
-  aHit = (void *) ExN04MuonHitAllocator.MallocSingle();
+  aHit = (void*)ExN04MuonHitAllocator.MallocSingle();
   return aHit;
 }
 
-inline void ExN04MuonHit::operator delete(void *aHit)
+inline void ExN04MuonHit::operator delete(void* aHit)
 {
-  ExN04MuonHitAllocator.FreeSingle((ExN04MuonHit*) aHit);
+  ExN04MuonHitAllocator.FreeSingle((ExN04MuonHit*)aHit);
 }
 
 #endif

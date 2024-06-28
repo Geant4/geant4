@@ -48,7 +48,6 @@ geant4_add_module(G4hadronic_xsect
     G4HadronNucleonXsc.hh
     G4HadronXSDataTable.hh
     G4IonsShenCrossSection.hh
-    G4IsotopeList.hh
     G4KokoulinMuonNuclearXS.hh
     G4MuNeutrinoNucleusTotXsc.hh
     G4NeutrinoElectronCcXsc.hh

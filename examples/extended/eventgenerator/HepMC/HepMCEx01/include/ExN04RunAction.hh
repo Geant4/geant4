@@ -38,12 +38,13 @@
 
 class G4Run;
 
-class ExN04RunAction : public G4UserRunAction {
-public:
-  ExN04RunAction();
-  ~ExN04RunAction();
+class ExN04RunAction : public G4UserRunAction
+{
+  public:
+    ExN04RunAction();
+    ~ExN04RunAction();
 
-  virtual void BeginOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
 };
 
 #endif

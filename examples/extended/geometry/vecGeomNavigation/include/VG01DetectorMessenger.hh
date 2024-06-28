@@ -30,29 +30,27 @@
 #ifndef VG01DetectorMessenger_hh
 #define VG01DetectorMessenger_hh 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class VG01DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 
-class VG01DetectorMessenger: public G4UImessenger {
+class VG01DetectorMessenger : public G4UImessenger
+{
+  public:
+    VG01DetectorMessenger(VG01DetectorConstruction*);
+    ~VG01DetectorMessenger();
 
-public:
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  VG01DetectorMessenger( VG01DetectorConstruction* );
-  ~VG01DetectorMessenger();
-
-  void SetNewValue( G4UIcommand*, G4String ) override;
-
-private:
-  VG01DetectorConstruction*    fDetector;
-  G4UIdirectory*             fDetectorDir;
-  G4UIcmdWithADoubleAndUnit* fFieldCommand;
-  G4UIcmdWithAString*        fGDMLCommand;
-
+  private:
+    VG01DetectorConstruction* fDetector;
+    G4UIdirectory* fDetectorDir;
+    G4UIcmdWithADoubleAndUnit* fFieldCommand;
+    G4UIcmdWithAString* fGDMLCommand;
 };
 
 #endif

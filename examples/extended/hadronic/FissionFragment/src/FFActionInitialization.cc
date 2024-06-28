@@ -34,60 +34,53 @@
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
 //
 // -------------------------------------------------------------
 
-#include "globals.hh"
-
 #include "FFActionInitialization.hh"
+
 #include "FFPrimaryGeneratorAction.hh"
 #include "FFRunAction.hh"
-//#include "FFEventAction.hh"
-//#include "FFSteppingAction.hh"
 
+#include "globals.hh"
+// #include "FFEventAction.hh"
+// #include "FFSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-FFActionInitialization::
-FFActionInitialization()
-:   G4VUserActionInitialization(),
-    fMasterRunAction(new FFRunAction())
+FFActionInitialization::FFActionInitialization()
+  : G4VUserActionInitialization(), fMasterRunAction(new FFRunAction())
 {
-    // Nothing here
+  // Nothing here
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void FFActionInitialization::
-Build(void) const
+void FFActionInitialization::Build(void) const
 {
-    FFRunAction* runAction;
+  FFRunAction* runAction;
 #ifdef G4MULTITHREADED
-    runAction = new FFRunAction();
+  runAction = new FFRunAction();
 #else
-    runAction = fMasterRunAction;
-#endif // G4MULTITHREADED
+  runAction = fMasterRunAction;
+#endif  // G4MULTITHREADED
 
-    SetUserAction(runAction);
-    SetUserAction(new FFPrimaryGeneratorAction());
-  
-    //FFEventAction* eventAction = new FFEventAction();
-    //SetUserAction(eventAction);
-  
-    //SetUserAction(new FFSteppingAction(eventAction));
+  SetUserAction(runAction);
+  SetUserAction(new FFPrimaryGeneratorAction());
+
+  // FFEventAction* eventAction = new FFEventAction();
+  // SetUserAction(eventAction);
+
+  // SetUserAction(new FFSteppingAction(eventAction));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void FFActionInitialization::
-BuildForMaster(void) const
+void FFActionInitialization::BuildForMaster(void) const
 {
-    SetUserAction(fMasterRunAction);
+  SetUserAction(fMasterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-FFActionInitialization::
-~FFActionInitialization()
+FFActionInitialization::~FFActionInitialization()
 {
-    // Nothing here
+  // Nothing here
 }
-
-

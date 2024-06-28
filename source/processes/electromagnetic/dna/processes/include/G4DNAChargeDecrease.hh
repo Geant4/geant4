@@ -31,27 +31,20 @@
 
 #include "G4VEmProcess.hh"
 
-#include "G4DNAGenericIonsManager.hh"
-#include "G4Proton.hh"
-
-// Available models
-#include "G4DNADingfelderChargeDecreaseModel.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4DNAChargeDecrease : public G4VEmProcess
-
 {
 public: 
 
   G4DNAChargeDecrease(const G4String& processName ="DNAChargeDecrease",
-		     G4ProcessType type = fElectromagnetic);
+		      G4ProcessType type = fElectromagnetic);
 
-  ~G4DNAChargeDecrease() override;
+  ~G4DNAChargeDecrease() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition&) override;
   
-  virtual void PrintInfo();
+  void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
 
@@ -59,7 +52,7 @@ protected:
 
 private:
      
-  G4bool       isInitialised{false};
+  G4bool isInitialised{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

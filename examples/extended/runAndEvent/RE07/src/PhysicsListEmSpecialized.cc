@@ -29,12 +29,12 @@
 
 #include "PhysicsListEmSpecialized.hh"
 
+#include "SpecializedTrackingManager.hh"
+
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Positron.hh"
-
-#include "SpecializedTrackingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

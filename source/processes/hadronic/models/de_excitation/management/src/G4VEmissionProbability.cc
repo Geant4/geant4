@@ -53,6 +53,7 @@ void G4VEmissionProbability::Initialise()
   pVerbose = param->GetVerbose();
   fFD = param->GetDiscreteExcitationFlag();
   pTolerance = param->GetMinExcitation();
+  pWidth = param->GetNuclearLevelWidth();
 }
 
 void G4VEmissionProbability::ResetIntegrator(size_t, G4double de, G4double eps)
@@ -185,7 +186,7 @@ G4double G4VEmissionProbability::SampleEnergy()
 
   CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
   const G4int nmax = 1000;
-  G4double ekin, g, gmax;
+  G4double ekin, gg, gmax;
   G4int n = 0;
   do {
     ++n;
@@ -201,22 +202,22 @@ G4double G4VEmissionProbability::SampleEnergy()
 	gmax = probmax*((x > alim) ? G4Exp(-x) : 1.0 - x*(1.0 - 0.5*x));
       }
     }
-    g = ComputeProbability(ekin, eCoulomb);
+    gg = ComputeProbability(ekin, eCoulomb);
     if(pVerbose > 2) {
       G4cout << "    " << n
-	     << ". prob= " << g << " probmax= " << probmax
+	     << ". prob= " << gg << " probmax= " << probmax
 	     << " Ekin= " << ekin << G4endl;
     }
-    if((g > gmax || n > nmax) && pVerbose > 1) {
+    if((gg > gmax || n > nmax) && pVerbose > 1) {
       G4cout << "### G4VEmissionProbability::SampleEnergy for Z= " << theZ 
              << " A= " << theA << " Eex(MeV)=" << fExc << " p1=" << p1
              << "\n    Warning n= " << n
-	     << " prob/gmax=" << g/gmax 
-	     << " prob=" << g << " gmax=" << gmax << " probmax=" << probmax 
+	     << " prob/gmax=" << gg/gmax 
+	     << " prob=" << gg << " gmax=" << gmax << " probmax=" << probmax 
 	     << "\n    Ekin= " << ekin << " Emin= " << emin
 	     << " Emax= " << emax << G4endl;
     }
-  } while(gmax*rndm->flat() > g && n < nmax);
+  } while(gmax*rndm->flat() > gg && n < nmax);
   G4double enew = FindRecoilExcitation(ekin);
   if(pVerbose > 1) {
     G4cout << "### SampleEnergy: Efinal= " 
@@ -258,15 +259,21 @@ G4double G4VEmissionProbability::FindRecoilExcitation(const G4double e)
   if(fExcRes > lManager->MaxLevelEnergy() + pTolerance) { return e; }
 
   // find level
-  G4double elevel = lManager->NearestLevelEnergy(fExcRes);
+  std::size_t idx = lManager->NearestLevelIndex(fExcRes);
+  auto level = lManager->GetLevel(idx); 
 
-  // excited level
-  if(pMass > mass + pResMass + elevel && 
-     std::abs(elevel - fExcRes) <= pTolerance) {
-    G4double massR = pResMass + elevel;
-    G4double mr2 = massR*massR;
-    fExcRes = elevel;
-    return std::max(0.5*(m02 + m12 - mr2)/pMass - mass, 0.0);
+  // unstable level
+  if (level->GetTimeGamma() == 0.0) { return e; }
+
+  // is possible to use level energy?
+  G4double elevel = lManager->LevelEnergy(idx);
+  if (std::abs(elevel - fExcRes) > pWidth || pMass < mass + pResMass + elevel) { 
+    return e;
   }
-  return e;
+
+  // long-lived level
+  G4double massR = pResMass + elevel;
+  G4double mr2 = massR*massR;
+  fExcRes = elevel;
+  return std::max(0.5*(m02 + m12 - mr2)/pMass - mass, 0.0);
 }

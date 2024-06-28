@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,52 +44,46 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  
-  DetectorConstruction();
-  ~DetectorConstruction();
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-public:
-  
-  G4VPhysicalVolume* Construct()  override;
-  void ConstructSDandField() override;
-     
-  void SetSizeXY   (G4double);
-  void SetSizeZ    (G4double);              
-  void SetTargetMaterial (G4String);            
-  void SetWorldMaterial (G4String);            
+  public:
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
-  void UpdateGeometry();
-     
-public:
-  
-  const G4VPhysicalVolume* GetWorld()      {return fWorld;};
-  const G4VPhysicalVolume* GetBox()        {return fBox;};
-                     
-  G4double           GetWorldSize()  {return fWorldSize;};                          
-  G4double           GetBoxSizeXY()  {return fBoxSizeXY;};
-  G4double           GetBoxSizeZ()   {return fBoxSizeZ;};
-  G4Material*        GetMaterial()   {return fTargetMaterial;};
-     
-private:
+    void SetSizeXY(G4double);
+    void SetSizeZ(G4double);
+    void SetTargetMaterial(G4String);
+    void SetWorldMaterial(G4String);
 
-  void ConstructMaterials();
+    void UpdateGeometry();
 
-  void               PrintParameters();
-                       
-private:
-  
-  G4VPhysicalVolume*    fWorld;  
-  G4VPhysicalVolume*    fBox;
-     
-  G4double              fBoxSizeXY;
-  G4double              fBoxSizeZ;
-  G4double              fWorldSize;
-  G4Material*           fTargetMaterial;
-  G4Material*           fWorldMaterial;     
-     
-  DetectorMessenger* fMessenger;
+  public:
+    const G4VPhysicalVolume* GetWorld() { return fWorld; };
+    const G4VPhysicalVolume* GetBox() { return fBox; };
 
+    G4double GetWorldSize() { return fWorldSize; };
+    G4double GetBoxSizeXY() { return fBoxSizeXY; };
+    G4double GetBoxSizeZ() { return fBoxSizeZ; };
+    G4Material* GetMaterial() { return fTargetMaterial; };
+
+  private:
+    void ConstructMaterials();
+
+    void PrintParameters();
+
+  private:
+    G4VPhysicalVolume* fWorld;
+    G4VPhysicalVolume* fBox;
+
+    G4double fBoxSizeXY;
+    G4double fBoxSizeZ;
+    G4double fWorldSize;
+    G4Material* fTargetMaterial;
+    G4Material* fWorldMaterial;
+
+    DetectorMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

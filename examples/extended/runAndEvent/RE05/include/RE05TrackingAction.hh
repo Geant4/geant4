@@ -33,12 +33,12 @@
 
 #include "G4UserTrackingAction.hh"
 
-class RE05TrackingAction : public G4UserTrackingAction {
-
+class RE05TrackingAction : public G4UserTrackingAction
+{
   public:
     RE05TrackingAction() : G4UserTrackingAction() {}
     virtual ~RE05TrackingAction() {}
-   
+
     virtual void PreUserTrackingAction(const G4Track*);
 };
 

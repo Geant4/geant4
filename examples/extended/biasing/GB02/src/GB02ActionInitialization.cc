@@ -28,30 +28,29 @@
 /// \brief Implementation of the GB02ActionInitialization class
 
 #include "GB02ActionInitialization.hh"
+
 #include "GB02PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB02ActionInitialization::GB02ActionInitialization()
- : G4VUserActionInitialization()
-{}
+GB02ActionInitialization::GB02ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB02ActionInitialization::~GB02ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void GB02ActionInitialization::BuildForMaster() const
-{
-}
+void GB02ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB02ActionInitialization::Build() const
 {
   SetUserAction(new GB02PrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,37 +30,38 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
+#include "DetectorConstruction.hh"
+
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-#include "DetectorConstruction.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-public:
-  explicit PrimaryGeneratorAction(DetectorConstruction *);
-  ~PrimaryGeneratorAction() override = default;
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    explicit PrimaryGeneratorAction(DetectorConstruction*);
+    ~PrimaryGeneratorAction() override = default;
 
-  // public:
-  void GeneratePrimaries(G4Event *) override;
+    // public:
+    void GeneratePrimaries(G4Event*) override;
 
-private:
-  std::unique_ptr<G4ParticleGun> fpParticleGun;
-  DetectorConstruction *fDetector = nullptr;
+  private:
+    std::unique_ptr<G4ParticleGun> fpParticleGun;
+    DetectorConstruction* fDetector = nullptr;
 
-  G4double GenerateParticleEnergy();
-  G4String fEnergySpectrumFilename = "energy.spectrum"; // default filename
+    G4double GenerateParticleEnergy();
+    G4String fEnergySpectrumFilename = "energy.spectrum";  // default filename
 
-  std::vector<G4int> fEnergySpectrum_counts;
-  G4double fEnergySpectrum_gain = 0.;
-  G4double fEnergySpectrum_offset = 0.;
-  G4int fEnergySpectrum_length = 0;
+    std::vector<G4int> fEnergySpectrum_counts;
+    G4double fEnergySpectrum_gain = 0.;
+    G4double fEnergySpectrum_offset = 0.;
+    G4int fEnergySpectrum_length = 0;
 
-  G4bool fMonoEnergetic = true;
+    G4bool fMonoEnergetic = true;
 
-  G4ThreeVector GenerateParticlePosition();
-  G4ThreeVector GenerateParticleDirection();
+    G4ThreeVector GenerateParticlePosition();
+    G4ThreeVector GenerateParticleDirection();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -41,6 +41,9 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 
+G4double G4PrimaryTransformer::kETolerance = 1.0 * CLHEP::MeV;
+G4ExceptionSeverity G4PrimaryTransformer::kETSeverity = JustWarning;
+
 G4PrimaryTransformer::G4PrimaryTransformer()
 {
   particleTable = G4ParticleTable::GetParticleTable();
@@ -114,7 +117,7 @@ GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
   if(!IsGoodForTrack(partDef))
   {  // The particle cannot be converted to G4Track, check daughters
 #ifdef G4VERBOSE
-    if(verboseLevel>2)
+    if(verboseLevel>1)
     {
       G4cout << "Primary particle (PDGcode " << primaryParticle->GetPDGcode()
              << ") --- Ignored" << G4endl;
@@ -139,6 +142,23 @@ GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
              << G4endl;
     }
 #endif
+    // Check the mass of the "real" particle
+    // N.B. PDG code 0 is used for artificial particle such as geantino
+    if(primaryParticle->GetPDGcode() != 0 && kETSeverity != IgnoreTheIssue)
+    { 
+      G4double pmas = partDef->GetPDGMass();
+      if(std::abs(pmas - primaryParticle->GetMass()) > kETolerance) {
+        G4ExceptionDescription ed;
+        ed << "Primary particle PDG=" << primaryParticle->GetPDGcode()
+           << " deltaMass(MeV)=" << (std::abs(pmas - primaryParticle->GetMass()))/CLHEP::MeV
+           << " is larger than the tolerance(MeV)=" << kETolerance/CLHEP::MeV
+           << "\n Specified mass(MeV)=" << (primaryParticle->GetMass())/CLHEP::MeV
+           << " while PDG mass(MEV)=" << pmas/CLHEP::MeV
+           << "\n To change the tolerance or the exception severity,"
+           << " use G4PrimaryTransformer::SetKETolerance() method."; 
+        G4Exception("G4PrimaryParticle::Set4Momentum", "part0005", kETSeverity, ed);
+      }
+    }
     auto* DP = 
       new G4DynamicParticle(partDef,
                             primaryParticle->GetMomentumDirection(),

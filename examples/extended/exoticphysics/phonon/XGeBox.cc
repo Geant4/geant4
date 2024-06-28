@@ -28,78 +28,72 @@
 //
 //
 
-#include "G4Types.hh"
-
-#include "G4UImanager.hh"
-#include "G4UserSteppingAction.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
 #include "XActionInitialization.hh"
 #include "XDetectorConstruction.hh"
 #include "XPhysicsList.hh"
 
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4UserSteppingAction.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int main(int argc,char** argv) {
+int main(int argc, char** argv)
+{
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
- // Instantiate G4UIExecutive if interactive mode
- G4UIExecutive* ui = nullptr;
- if ( argc == 1 ) {
-   ui = new G4UIExecutive(argc, argv);
- }
+  // Construct the run manager
+  //
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
- // Construct the run manager
- //
- auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+  // Set mandatory initialization classes
+  //
+  XDetectorConstruction* detector = new XDetectorConstruction();
+  runManager->SetUserInitialization(detector);
+  //
+  G4VUserPhysicsList* physics = new XPhysicsList();
+  physics->SetCuts();
+  runManager->SetUserInitialization(physics);
 
- // Set mandatory initialization classes
- //
- XDetectorConstruction* detector = new XDetectorConstruction();
- runManager->SetUserInitialization(detector);
- //
- G4VUserPhysicsList* physics = new XPhysicsList();
- physics->SetCuts();
- runManager->SetUserInitialization(physics);
+  // Set user action classes
+  //
+  runManager->SetUserInitialization(new XActionInitialization);
 
- // Set user action classes
- //
- runManager->SetUserInitialization(new XActionInitialization);
+  // Visualization manager
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 
- // Visualization manager
- //
- G4VisManager* visManager = new G4VisExecutive;
- visManager->Initialize();
+  // Initialize G4 kernel (replaces /run/initialize macro command)
+  //
+  runManager->Initialize();
 
- // Initialize G4 kernel (replaces /run/initialize macro command)
- //
- runManager->Initialize();
+  // Get the pointer to the User Interface manager
+  //
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
- // Get the pointer to the User Interface manager
- //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  if (ui)  // Define UI session for interactive mode
+  {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
+  else  // Batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
 
- if (ui)   // Define UI session for interactive mode
- {
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
- }
- else           // Batch mode
- {
-   G4String command = "/control/execute ";
-   G4String fileName = argv[1];
-   UImanager->ApplyCommand(command+fileName);
- }
+  delete visManager;
+  delete runManager;
 
- delete visManager;
- delete runManager;
-
- return 0;
+  return 0;
 }
-
-

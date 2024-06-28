@@ -32,9 +32,9 @@
 #ifndef RE02DetectorConstruction_h
 #define RE02DetectorConstruction_h 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "G4MultiFunctionalDetector.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -47,34 +47,34 @@ class G4Material;
 /// (Description)
 ///
 ///    Detector construction for example RE02.
-///   
-///  [Geometry] 
+///
+///  [Geometry]
 ///    The world volume is defined as 200 cm x 200 cm x 200 cm box with Air.
 ///  Water phantom is defined as  200 mm x 200 mm x 400 mm box with Water.
 ///  The water phantom is divided into 100 segments in x,y plane using
 ///  replication,
-///  and then divided into 200 segments perpendicular to z axis using nested 
-///  parameterised volume.  
+///  and then divided into 200 segments perpendicular to z axis using nested
+///  parameterised volume.
 ///   These values are defined at constructor,
 ///   e.g. the size of water phantom (fPhantomSize), and number of segmentation
 ///  of water phantom (fNx, fNy, fNz).
 ///
-///  By default, lead plates are inserted into the position of even order 
+///  By default, lead plates are inserted into the position of even order
 ///  segments.
 ///  NIST database is used for materials.
 ///
 ///
 ///  [Scorer]
-///   Assignment of G4MultiFunctionalDetector and G4PrimitiveScorer 
+///   Assignment of G4MultiFunctionalDetector and G4PrimitiveScorer
 ///  is demonstrated in this example.
 ///      -------------------------------------------------
 ///      The collection names of defined Primitives are
-///       0       PhantomSD/totalEDep 
+///       0       PhantomSD/totalEDep
 ///       1       PhantomSD/protonEDep
 ///       2       PhantomSD/protonNStep
 ///       3       PhantomSD/chargedPassCellFlux
-///       4       PhantomSD/chargedCellFlux 
-///       5       PhantomSD/chargedSurfFlux 
+///       4       PhantomSD/chargedCellFlux
+///       5       PhantomSD/chargedSurfFlux
 ///       6       PhantomSD/gammaSurfCurr000
 ///       7       PhantomSD/gammaSurfCurr001
 ///       9       PhantomSD/gammaSurdCurr002
@@ -94,10 +94,10 @@ class G4Material;
 /// - const G4ThreeVector& GetPhantomSize() const
 ///     gets the water phantom size
 ///
-/// - void SetNumberOfSegmentsInPhantom(G4int nx, G4int ny, G4int nz) 
+/// - void SetNumberOfSegmentsInPhantom(G4int nx, G4int ny, G4int nz)
 ///     sets the number of segments of the water phantom
 ///
-/// - void GetNumberOfSegmentsInPhantom(G4int& nx, G4int& ny, G4int& nz) 
+/// - void GetNumberOfSegmentsInPhantom(G4int& nx, G4int& ny, G4int& nz)
 ///     gets the number of segments of the water phantom
 ///
 /// - void SetLeadSegment(G4bool flag=TRUE)
@@ -109,36 +109,43 @@ class G4Material;
 //
 class RE02DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  // constructor and destructor.
-  RE02DetectorConstruction();
-  virtual ~RE02DetectorConstruction();
+  public:
+    // constructor and destructor.
+    RE02DetectorConstruction();
+    virtual ~RE02DetectorConstruction();
 
-public:
-  // virtual method from G4VUserDetectorConstruction.
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  public:
+    // virtual method from G4VUserDetectorConstruction.
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
-public:
-  // Get/Set Access methods for data members
-  // Size of Whater Phantom
-  void SetPhantomSize(G4ThreeVector size) { fPhantomSize=size; }
-  const G4ThreeVector& GetPhantomSize() const { return fPhantomSize; }
-  // Number of segments of water phantom
-  void SetNumberOfSegmentsInPhantom(G4int nx, G4int ny, G4int nz) 
-      { fNx=nx; fNy=ny; fNz=nz; }
-  void GetNumberOfSegmentsInPhantom(G4int& nx, G4int& ny, G4int& nz) 
-     const{ nx=fNx; ny = fNy; nz = fNz; }
-  // Insert Lead plate in water or simple homogeneous water phantom
-  void SetLeadSegment(G4bool flag=TRUE){ fInsertLead = flag; }
-  G4bool IsLeadSegment(){ return fInsertLead; }
+  public:
+    // Get/Set Access methods for data members
+    // Size of Whater Phantom
+    void SetPhantomSize(G4ThreeVector size) { fPhantomSize = size; }
+    const G4ThreeVector& GetPhantomSize() const { return fPhantomSize; }
+    // Number of segments of water phantom
+    void SetNumberOfSegmentsInPhantom(G4int nx, G4int ny, G4int nz)
+    {
+      fNx = nx;
+      fNy = ny;
+      fNz = nz;
+    }
+    void GetNumberOfSegmentsInPhantom(G4int& nx, G4int& ny, G4int& nz) const
+    {
+      nx = fNx;
+      ny = fNy;
+      nz = fNz;
+    }
+    // Insert Lead plate in water or simple homogeneous water phantom
+    void SetLeadSegment(G4bool flag = TRUE) { fInsertLead = flag; }
+    G4bool IsLeadSegment() { return fInsertLead; }
 
-private:
-  // Data members
-  G4ThreeVector fPhantomSize;   // Size of Water Phantom
-  G4int         fNx,fNy,fNz;    // Number of segmentation of water phantom.
-  G4bool        fInsertLead;    // Flag for inserting lead plate in water phantom
-  G4LogicalVolume* fLVPhantomSens;
-
+  private:
+    // Data members
+    G4ThreeVector fPhantomSize;  // Size of Water Phantom
+    G4int fNx, fNy, fNz;  // Number of segmentation of water phantom.
+    G4bool fInsertLead;  // Flag for inserting lead plate in water phantom
+    G4LogicalVolume* fLVPhantomSens;
 };
 #endif

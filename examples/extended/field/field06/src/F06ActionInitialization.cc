@@ -28,13 +28,12 @@
 /// \brief Implementation of the F04ActionInitialization class
 
 #include "F06ActionInitialization.hh"
+
 #include "F06PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F06ActionInitialization::BuildForMaster() const
-{
-}
+void F06ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

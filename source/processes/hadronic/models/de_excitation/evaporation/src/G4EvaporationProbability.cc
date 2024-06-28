@@ -52,13 +52,16 @@
 #include "G4Log.hh"
 #include "G4Pow.hh"
 
-static const G4double explim = 160.;
+namespace
+{
+  const G4double explim = 160.;
+}
 
 G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ, 
 						   G4double aGamma) 
   : G4VEmissionProbability(aZ, anA), fGamma(aGamma)
 {
-  resA13 = lastA = muu = freeU = a0 = delta1 = 0.0;
+  resA13 = lastA = muu = freeU = a0 = a1 = delta0 = delta1 = 0.0;
   pcoeff = fGamma*pEvapMass*CLHEP::millibarn
     /((CLHEP::pi*CLHEP::hbarc)*(CLHEP::pi*CLHEP::hbarc)); 
 
@@ -87,11 +90,11 @@ G4double G4EvaporationProbability::TotalProbability(
   G4double CB, G4double exEnergy)
 {
   G4int fragA = fragment.GetA_asInt();
-  G4int fragZ = fragment.GetZ_asInt();
-  G4double U = fragment.GetExcitationEnergy(); 
-  a0 = pNuclearLevelData->GetLevelDensity(fragZ,fragA,U);
+  G4int fragZ = fragment.GetZ_asInt(); 
   freeU = exEnergy;
-  delta1 = pNuclearLevelData->GetPairingCorrection(resZ,resA);
+  a0 = pNuclearLevelData->GetLevelDensity(fragZ, fragA, freeU);
+  delta0 = pNuclearLevelData->GetPairingCorrection(fragZ, fragA);
+  delta1 = pNuclearLevelData->GetPairingCorrection(resZ, resA);
   resA13 = pG4pow->Z13(resA);
   /*      
   G4cout << "G4EvaporationProbability: Z= " << theZ << " A= " << theA 
@@ -112,7 +115,7 @@ G4double G4EvaporationProbability::TotalProbability(
     G4double Beta = CalcBetaParam(fragment);
 
     // to be checked where to use a0, where - a1	
-    G4double a1 = pNuclearLevelData->GetLevelDensity(resZ,resA,freeU);
+    a1 = pNuclearLevelData->GetLevelDensity(resZ,resA,freeU);
     G4double GlobalFactor = fGamma*Alpha*pEvapMass*RN2*resA13*resA13/(a1*a1);
     
     G4double maxea = maxEnergy*a1;
@@ -140,20 +143,22 @@ G4double G4EvaporationProbability::TotalProbability(
 }
 
 G4double G4EvaporationProbability::ComputeProbability(G4double K, G4double CB)
-{ 
-  G4double E0 = freeU;
+{
   // abnormal case - should never happens
   if(pMass < pEvapMass + pResMass) { return 0.0; }
     
-  G4double m02 = pMass*pMass;
-  G4double m12 = pEvapMass*pEvapMass;
-  G4double mres = std::sqrt(m02 + m12 - 2.*pMass*(pEvapMass + K));
+  G4double pEvapM2 = pEvapMass*pEvapMass;
+  G4double mres = std::sqrt(pMass*pMass + pEvapM2 - 2.*pMass*(pEvapMass + K));
 
   G4double excRes = mres - pResMass;
-  G4double E1 = excRes - delta1;
-  if(E1 <= 0.0) { return 0.0; }
-  G4double a1 = pNuclearLevelData->GetLevelDensity(resZ,resA,excRes);
-  G4double xs = CrossSection(K, CB); 
+  if (excRes < 0.0) { return 0.0; }
+  a1 = pNuclearLevelData->GetLevelDensity(resZ, resA, excRes);
+
+  G4double E0 = std::max(freeU - delta0, 0.0);
+  G4double E1 = std::max(excRes - delta1, 0.0);
+  G4double erec = (pMass*(K + pEvapMass) - pEvapM2)/mres - pEvapMass;
+  erec = std::max(erec, 0.0); 
+  G4double xs = CrossSection(erec, CB); 
   G4double prob = pcoeff*G4Exp(2.0*(std::sqrt(a1*E1) - std::sqrt(a0*E0)))*K*xs;
   return prob;
 }
@@ -173,7 +178,7 @@ G4EvaporationProbability::CrossSection(G4double K, G4double CB)
 							index, theZ, resA); 
   } else {
     // added barrier penetration factor
-    G4double elim = 0.6*CB;
+    G4double elim = 0.5*CB;
     if (K > elim) {
       res = G4KalbachCrossSection::ComputeCrossSection(K, CB, resA13, muu,
     						       index, theZ, theA, resA);

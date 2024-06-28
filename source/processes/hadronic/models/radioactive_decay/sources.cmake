@@ -28,6 +28,7 @@ geant4_add_module(G4hadronic_radioactivedecay
     G4TritonDecay.hh
     G4UIcmdWithNucleusLimits.hh
     G4UserLimitsForRD.hh
+    G4VRadioactiveDecay.hh
   SOURCES
     G4AlphaDecay.cc
     G4BatemanParameters.cc
@@ -45,14 +46,14 @@ geant4_add_module(G4hadronic_radioactivedecay
     G4ProtonDecay.cc
     G4RadioactiveDecay.cc
     G4RadioactiveDecayMessenger.cc
-    G4Radioactivation.cc
     G4RadioactivationMessenger.cc
     G4RadioactiveDecayMode.cc
     G4RadioactiveDecayRatesToDaughter.cc
     G4RadioactiveDecayChainsFromParent.cc
     G4RadioactivityTable.cc
     G4TritonDecay.cc
-    G4UIcmdWithNucleusLimits.cc)
+    G4UIcmdWithNucleusLimits.cc
+    G4VRadioactiveDecay.cc)
 
 geant4_module_link_libraries(G4hadronic_radioactivedecay
   PUBLIC

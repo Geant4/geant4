@@ -48,9 +48,9 @@
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
-#include "globals.hh"
-#include "G4Material.hh"
 #include "G4AnalysisManager.hh"
+#include "G4Material.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,54 +60,52 @@ class HistoManagerMessenger;
 
 class HistoManager
 {
-public:
+  public:
+    HistoManager();
 
-  HistoManager();
+    ~HistoManager();
 
-  ~HistoManager();
+    void BeginOfRun();
+    void EndOfRun();
 
-  void BeginOfRun();
-  void EndOfRun();
+    void SetVerbose(G4int val);
 
-  void SetVerbose(G4int val);        
+    inline void SetParticleName(const G4String&);
+    inline void SetElementName(const G4String&);
 
-  inline void SetParticleName(const G4String&);
-  inline void SetElementName(const G4String&);
+    inline void SetNumberOfBinsE(G4int val);
+    inline void SetNumberOfBinsP(G4int val);
 
-  inline void SetNumberOfBinsE(G4int val);
-  inline void SetNumberOfBinsP(G4int val);
+    inline void SetMinKinEnergy(G4double val);
+    inline void SetMaxKinEnergy(G4double val);
 
-  inline void SetMinKinEnergy(G4double val);
-  inline void SetMaxKinEnergy(G4double val);
+    inline void SetMinMomentum(G4double val);
+    inline void SetMaxMomentum(G4double val);
 
-  inline void SetMinMomentum(G4double val);
-  inline void SetMaxMomentum(G4double val);
+    inline void SetHistoName(G4String& val);
 
-  inline void SetHistoName(G4String& val);
+    inline void SetTargetMaterial(const G4Material* p);
 
-  inline void SetTargetMaterial(const G4Material* p);
+  private:
+    HistoManagerMessenger* fMessenger;
+    G4AnalysisManager* fAnalysisManager;
 
-private:
+    const G4ParticleDefinition* fNeutron;
+    const G4Material* fTargetMaterial;
 
-  HistoManagerMessenger* fMessenger;
-  G4AnalysisManager*     fAnalysisManager;
+    G4String fParticleName;
+    G4String fElementName;
 
-  const G4ParticleDefinition* fNeutron;
-  const G4Material* fTargetMaterial;
+    G4double fMinKinEnergy;
+    G4double fMaxKinEnergy;
+    G4double fMinMomentum;
+    G4double fMaxMomentum;
 
-  G4String fParticleName;
-  G4String fElementName;
+    G4int fVerbose;
+    G4int fBinsE;
+    G4int fBinsP;
 
-  G4double fMinKinEnergy;
-  G4double fMaxKinEnergy;
-  G4double fMinMomentum;
-  G4double fMaxMomentum;
- 
-  G4int fVerbose;
-  G4int fBinsE;
-  G4int fBinsP;
-
-  G4String fHistoName;
+    G4String fHistoName;
 };
 
 inline void HistoManager::SetParticleName(const G4String& name)
@@ -122,35 +120,47 @@ inline void HistoManager::SetElementName(const G4String& name)
 
 inline void HistoManager::SetNumberOfBinsE(G4int val)
 {
-  if(val>0) { fBinsE = val; } 
+  if (val > 0) {
+    fBinsE = val;
+  }
 }
 
 inline void HistoManager::SetNumberOfBinsP(G4int val)
 {
-  if(val>0) { fBinsP = val; } 
+  if (val > 0) {
+    fBinsP = val;
+  }
 }
 
 inline void HistoManager::SetMinKinEnergy(G4double val)
 {
-  if(val>0 && val<fMaxKinEnergy) { fMinKinEnergy = val; }
+  if (val > 0 && val < fMaxKinEnergy) {
+    fMinKinEnergy = val;
+  }
 }
- 
+
 inline void HistoManager::SetMaxKinEnergy(G4double val)
 {
-  if(val>fMinKinEnergy) { fMaxKinEnergy = val; }
+  if (val > fMinKinEnergy) {
+    fMaxKinEnergy = val;
+  }
 }
 
 inline void HistoManager::SetMinMomentum(G4double val)
 {
-  if(val>0 && val<fMaxMomentum) { fMinMomentum = val; }
+  if (val > 0 && val < fMaxMomentum) {
+    fMinMomentum = val;
+  }
 }
-  
+
 inline void HistoManager::SetMaxMomentum(G4double val)
 {
-  if(val>fMinMomentum) { fMaxMomentum = val; }
+  if (val > fMinMomentum) {
+    fMaxMomentum = val;
+  }
 }
- 
-inline void HistoManager::SetHistoName(G4String& val) 
+
+inline void HistoManager::SetHistoName(G4String& val)
 {
   fHistoName = val;
 }

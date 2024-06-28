@@ -31,9 +31,10 @@
 #ifndef SAXSPhysicsList_h
 #define SAXSPhysicsList_h 1
 
-#include "globals.hh"
-#include "G4VUserPhysicsList.hh"
 #include "G4VModularPhysicsList.hh"
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
+
 #include <vector>
 
 class G4VPhysicsConstructor;
@@ -43,39 +44,37 @@ class SAXSPhysicsListMessenger;
 
 /// Physics list.
 /// It includes various EM constructors, which can be selected through macro.
-/// By defualt "standard" Penelope physics is used. In order to activate 
-/// Molecular interference (MI) effects in Rayleigh scattering, choose 
+/// By defualt "standard" Penelope physics is used. In order to activate
+/// Molecular interference (MI) effects in Rayleigh scattering, choose
 /// G4EmPenelopeMI PhysicsList with fUseMIFlag variable set as true (default).
 
 class SAXSPhysicsList : public G4VUserPhysicsList
 {
-public:
-  SAXSPhysicsList();
-  virtual ~SAXSPhysicsList();
+  public:
+    SAXSPhysicsList();
+    virtual ~SAXSPhysicsList();
 
-  void ConstructParticle() override;
-  void ConstructProcess() override;
-   
-  //for the Messenger 
-  void SetDefaultCutsValue(G4double);
-  void SelectPhysicsList(const G4String& name);
-  void SetUseMIFlag(G4bool val){fUseMIFlag = val;};
-  G4bool GetUseMIFlag(){return fUseMIFlag;};
- 
-  SAXSPhysicsList & operator = (const SAXSPhysicsList &right) = delete;
-  SAXSPhysicsList(const SAXSPhysicsList&) = delete;
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
-private:
-  
-  G4VPhysicsConstructor* fParticleList; 
-  G4VPhysicsConstructor* fEmPhysicsList;    
-  
-  G4bool fUseMIFlag; 
-      
-  SAXSPhysicsListMessenger* fPMessenger;
+    // for the Messenger
+    void SetDefaultCutsValue(G4double);
+    void SelectPhysicsList(const G4String& name);
+    void SetUseMIFlag(G4bool val) { fUseMIFlag = val; };
+    G4bool GetUseMIFlag() { return fUseMIFlag; };
+
+    SAXSPhysicsList& operator=(const SAXSPhysicsList& right) = delete;
+    SAXSPhysicsList(const SAXSPhysicsList&) = delete;
+
+  private:
+    G4VPhysicsConstructor* fParticleList;
+    G4VPhysicsConstructor* fEmPhysicsList;
+
+    G4bool fUseMIFlag;
+
+    SAXSPhysicsListMessenger* fPMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif 
-
+#endif

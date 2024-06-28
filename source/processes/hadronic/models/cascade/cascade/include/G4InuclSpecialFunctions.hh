@@ -66,8 +66,6 @@ namespace G4InuclSpecialFunctions {
   G4double G4cbrt(G4double x);	// Can't use "cbrt" name, clashes with <math.h>
   G4double G4cbrt(G4int n);	// Use G4Pow::powN() here for speedup
 
-  G4double inuclRndm();				// Wrapper for G4UniformRand()
-
   G4double randomInuclPowers(G4double ekin, 	// Power series in Ekin, S
 			     const G4double (&coeff)[4][4]);
 

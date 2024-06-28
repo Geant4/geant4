@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-02-13 Sebastien Incerti (microdosimetry-V11-02-01)
+- simplification of example to demonstrate the usage of G4DNAPhysicsActivator
+
+## 2024-02-03 Sebastien Incerti (microdosimetry-V11-02-00)
+- original content of example removed
+- replaced by dnaphysics example, version dnaphysics-V11-01-03
 
 ## 2021-12-10 Ben Morgan (microdosimetry-V11-00-00)
 - Change to new Markdown History format

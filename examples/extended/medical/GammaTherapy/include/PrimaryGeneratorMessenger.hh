@@ -33,7 +33,7 @@
 //---------------------------------------------------------------------------
 //
 // ClassName:   PrimaryGeneratorAction
-//  
+//
 // Description: Definition of physics list parameters via UI interface
 //
 // Author:      V.Ivanchenko 26/09/00
@@ -44,47 +44,44 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class PrimaryGeneratorAction;
 
-class PrimaryGeneratorMessenger: public G4UImessenger
+class PrimaryGeneratorMessenger : public G4UImessenger
 {
-public:
-  
-  PrimaryGeneratorMessenger(PrimaryGeneratorAction* gen);
-  virtual ~PrimaryGeneratorMessenger();
-    
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  public:
+    PrimaryGeneratorMessenger(PrimaryGeneratorAction* gen);
+    virtual ~PrimaryGeneratorMessenger();
 
-private:
-  
-  PrimaryGeneratorMessenger & operator=(const PrimaryGeneratorMessenger &right);
-  PrimaryGeneratorMessenger(const PrimaryGeneratorMessenger&);
+    void SetNewValue(G4UIcommand* command, G4String newValue);
 
-  PrimaryGeneratorAction*  fGen;
-  G4bool fVerbose;
+  private:
+    PrimaryGeneratorMessenger& operator=(const PrimaryGeneratorMessenger& right);
+    PrimaryGeneratorMessenger(const PrimaryGeneratorMessenger&);
 
-  G4UIcmdWithADoubleAndUnit* fBeamXCmd;
-  G4UIcmdWithADoubleAndUnit* fBeamYCmd;
-  G4UIcmdWithADoubleAndUnit* fBeamZCmd;
-  G4UIcmdWithADoubleAndUnit* fBeamECmd;
-  G4UIcmdWithADoubleAndUnit* fSigmaXCmd;
-  G4UIcmdWithADoubleAndUnit* fSigmaYCmd;
-  G4UIcmdWithADoubleAndUnit* fSigmaZCmd;
-  G4UIcmdWithADoubleAndUnit* fSigmaECmd;
+    PrimaryGeneratorAction* fGen;
+    G4bool fVerbose;
 
-  G4UIcmdWithAString* fRandCmd;
-  G4UIcmdWithADoubleAndUnit* fMaxThetaCmd;
-  G4UIcmdWithADoubleAndUnit* fThetaCmd;
+    G4UIcmdWithADoubleAndUnit* fBeamXCmd;
+    G4UIcmdWithADoubleAndUnit* fBeamYCmd;
+    G4UIcmdWithADoubleAndUnit* fBeamZCmd;
+    G4UIcmdWithADoubleAndUnit* fBeamECmd;
+    G4UIcmdWithADoubleAndUnit* fSigmaXCmd;
+    G4UIcmdWithADoubleAndUnit* fSigmaYCmd;
+    G4UIcmdWithADoubleAndUnit* fSigmaZCmd;
+    G4UIcmdWithADoubleAndUnit* fSigmaECmd;
+
+    G4UIcmdWithAString* fRandCmd;
+    G4UIcmdWithADoubleAndUnit* fMaxThetaCmd;
+    G4UIcmdWithADoubleAndUnit* fThetaCmd;
 };
 
 #endif
-

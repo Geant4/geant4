@@ -33,8 +33,8 @@
 #ifndef RunActionMessenger_h
 #define RunActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class RunAction;
 class G4UIdirectory;
@@ -43,20 +43,20 @@ class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunActionMessenger: public G4UImessenger
+class RunActionMessenger : public G4UImessenger
 {
-public:
-  RunActionMessenger(RunAction*);
- ~RunActionMessenger() override;
-    
-  void SetNewValue(G4UIcommand*, G4String) override;
-    
-private:
-  RunAction*          fRunAction = nullptr;
-    
-  G4UIdirectory*      fRunDir = nullptr;
-  G4UIcommand*        fAccCmd = nullptr;
-  G4UIcmdWithABool*   fLimCmd = nullptr;
+  public:
+    RunActionMessenger(RunAction*);
+    ~RunActionMessenger() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
+
+  private:
+    RunAction* fRunAction = nullptr;
+
+    G4UIdirectory* fRunDir = nullptr;
+    G4UIcommand* fAccCmd = nullptr;
+    G4UIcmdWithABool* fLimCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

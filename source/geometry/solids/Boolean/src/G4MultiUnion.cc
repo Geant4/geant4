@@ -824,6 +824,21 @@ G4double G4MultiUnion::GetSurfaceArea()
 }
 
 //______________________________________________________________________________
+G4int G4MultiUnion::GetNumOfConstituents() const
+{
+  G4int num = 0;
+  for (const auto solid : fSolids) { num += solid->GetNumOfConstituents(); }
+  return num;
+}
+
+//______________________________________________________________________________
+G4bool G4MultiUnion::IsFaceted() const
+{
+  for (const auto solid : fSolids) { if (!solid->IsFaceted()) return false; }
+  return true;
+}
+
+//______________________________________________________________________________
 void G4MultiUnion::Voxelize()
 {
   fVoxels.Voxelize(fSolids, fTransformObjs);
@@ -1004,23 +1019,7 @@ G4Polyhedron* G4MultiUnion::CreatePolyhedron() const
   }
   else
   {
-    G4VSolid* solidA = GetSolid(0);
-    auto solidAPolyhedron =solidA->GetPolyhedron();
-
-    const G4Transform3D transform0 = GetTransformation(0);
-    G4DisplacedSolid dispSolidA("placedA", solidA, transform0);
-
-    // dispSolidA.GetPolyhedron()
-    for (G4int i = 1; i < GetNumberOfSolids(); ++i)
-    {
-      G4VSolid* solidB = GetSolid(i);
-      const G4Transform3D transform = GetTransformation(i);
-      G4DisplacedSolid dispSolidB("placedB", solidB, transform);
-      solidAPolyhedron = G4BooleanSolid::GetExternalBooleanProcessor()
-                       ->Union(solidAPolyhedron, dispSolidB.GetPolyhedron());
-    }
-
-    return solidAPolyhedron;
+    return G4BooleanSolid::GetExternalBooleanProcessor()->Process(this);
   }
 }
 

@@ -37,49 +37,52 @@
 
 #include "ClusteringAlgo.hh"
 
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ClusteringAlgoMessenger::ClusteringAlgoMessenger(ClusteringAlgo* pClustAlgo)
-:G4UImessenger(),fpClusteringAlgo(pClustAlgo)
+  : G4UImessenger(), fpClusteringAlgo(pClustAlgo)
 {
   fpAppliDir = new G4UIdirectory("/clustering/");
   fpAppliDir->SetGuidance("commands specific to this example");
 
-  fpMinPtsCmd = new G4UIcmdWithAnInteger("/clustering/algo/setMinPts",this);
+  fpMinPtsCmd = new G4UIcmdWithAnInteger("/clustering/algo/setMinPts", this);
   fpMinPtsCmd->SetGuidance("Minimal number of points to create a cluster");
-  fpMinPtsCmd->SetParameterName("MinPts",false);
+  fpMinPtsCmd->SetParameterName("MinPts", false);
   fpMinPtsCmd->SetRange("MinPts>0");
   fpMinPtsCmd->AvailableForStates(G4State_Idle);
 
-  fpProbCmd = new G4UIcmdWithADouble("/clustering/algo/setSelectionProb",this);
-  fpProbCmd->SetGuidance("Probability to select potential "
-      "damage according to the geometry");
-  fpProbCmd->SetParameterName("Prob",false);
+  fpProbCmd = new G4UIcmdWithADouble("/clustering/algo/setSelectionProb", this);
+  fpProbCmd->SetGuidance(
+    "Probability to select potential "
+    "damage according to the geometry");
+  fpProbCmd->SetParameterName("Prob", false);
   fpProbCmd->SetRange("Prob>0");
   fpProbCmd->AvailableForStates(G4State_Idle);
 
-  fpEpsCmd = new G4UIcmdWithADoubleAndUnit("/clustering/algo/setEps",this);
+  fpEpsCmd = new G4UIcmdWithADoubleAndUnit("/clustering/algo/setEps", this);
   fpEpsCmd->SetGuidance("Maximal distance between points to create a cluster");
-  fpEpsCmd->SetParameterName("Eps",false);
+  fpEpsCmd->SetParameterName("Eps", false);
   fpEpsCmd->SetRange("Eps>0");
   fpEpsCmd->AvailableForStates(G4State_Idle);
 
-  fpEminCmd = new G4UIcmdWithADoubleAndUnit("/clustering/algo/setEmin",this);
-  fpEminCmd->SetGuidance("Energy to have a probability "
-      "to create a strand break = 0");
-  fpEminCmd->SetParameterName("Emin",false);
+  fpEminCmd = new G4UIcmdWithADoubleAndUnit("/clustering/algo/setEmin", this);
+  fpEminCmd->SetGuidance(
+    "Energy to have a probability "
+    "to create a strand break = 0");
+  fpEminCmd->SetParameterName("Emin", false);
   fpEminCmd->SetRange("Emin>=0");
   fpEminCmd->AvailableForStates(G4State_Idle);
 
-  fpEmaxCmd = new G4UIcmdWithADoubleAndUnit("/clustering/algo/setEmax",this);
-  fpEmaxCmd->SetGuidance("Energy to have a probability "
-      "to create a strand break = 1");
-  fpEmaxCmd->SetParameterName("Emax",false);
+  fpEmaxCmd = new G4UIcmdWithADoubleAndUnit("/clustering/algo/setEmax", this);
+  fpEmaxCmd->SetGuidance(
+    "Energy to have a probability "
+    "to create a strand break = 1");
+  fpEmaxCmd->SetParameterName("Emax", false);
   fpEmaxCmd->SetRange("Emax>=0");
   fpEmaxCmd->AvailableForStates(G4State_Idle);
 }
@@ -98,27 +101,21 @@ ClusteringAlgoMessenger::~ClusteringAlgoMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ClusteringAlgoMessenger::SetNewValue(G4UIcommand* pCommand,
-    G4String pNewValue)
-{ 
-  if(pCommand == fpMinPtsCmd)
-  {
+void ClusteringAlgoMessenger::SetNewValue(G4UIcommand* pCommand, G4String pNewValue)
+{
+  if (pCommand == fpMinPtsCmd) {
     fpClusteringAlgo->SetMinPts(fpMinPtsCmd->GetNewIntValue(pNewValue));
   }
-  if(pCommand == fpProbCmd)
-  {
+  if (pCommand == fpProbCmd) {
     fpClusteringAlgo->SetSPointsProb(fpProbCmd->GetNewDoubleValue(pNewValue));
   }
-  if(pCommand == fpEpsCmd)
-  {
+  if (pCommand == fpEpsCmd) {
     fpClusteringAlgo->SetEps(fpEpsCmd->GetNewDoubleValue(pNewValue));
   }
-  if(pCommand == fpEminCmd)
-  {
+  if (pCommand == fpEminCmd) {
     fpClusteringAlgo->SetEMinDamage(fpEminCmd->GetNewDoubleValue(pNewValue));
   }
-  if(pCommand == fpEmaxCmd)
-  {
+  if (pCommand == fpEmaxCmd) {
     fpClusteringAlgo->SetEMaxDamage(fpEmaxCmd->GetNewDoubleValue(pNewValue));
   }
 }

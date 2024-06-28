@@ -29,6 +29,7 @@
 //
 
 #include "F04Materials.hh"
+
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,10 +47,10 @@ F04Materials::F04Materials()
 
 F04Materials::~F04Materials()
 {
-  delete    fVacuum;
-  delete    fAir;
-  delete    fSci;
-  delete    fBeO;
+  delete fVacuum;
+  delete fAir;
+  delete fSci;
+  delete fBeO;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,10 +59,9 @@ F04Materials* F04Materials::fInstance = nullptr;
 
 F04Materials* F04Materials::GetInstance()
 {
-  if (fInstance == nullptr)
-    {
-      fInstance = new F04Materials();
-    }
+  if (fInstance == nullptr) {
+    fInstance = new F04Materials();
+  }
   return fInstance;
 }
 
@@ -69,10 +69,12 @@ F04Materials* F04Materials::GetInstance()
 
 G4Material* F04Materials::GetMaterial(const G4String material)
 {
-  G4Material* mat =  fNistMan->FindOrBuildMaterial(material);
+  G4Material* mat = fNistMan->FindOrBuildMaterial(material);
 
   if (!mat) mat = G4Material::GetMaterial(material);
-  if (!mat) {G4cout << material << "Not Found, Please Retry"<< G4endl;}
+  if (!mat) {
+    G4cout << material << "Not Found, Please Retry" << G4endl;
+  }
 
   return mat;
 }
@@ -82,7 +84,7 @@ G4Material* F04Materials::GetMaterial(const G4String material)
 void F04Materials::CreateMaterials()
 {
   G4double density;
-  std::vector<G4int>  natoms;
+  std::vector<G4int> natoms;
   std::vector<G4double> fractionMass;
   std::vector<G4String> elements;
 
@@ -103,13 +105,15 @@ void F04Materials::CreateMaterials()
 
   // Define Scintillator
 
-  elements.push_back("C");     natoms.push_back(9);
-  elements.push_back("H");     natoms.push_back(10);
+  elements.push_back("C");
+  natoms.push_back(9);
+  elements.push_back("H");
+  natoms.push_back(10);
 
-  density = 1.032*g/cm3;;
+  density = 1.032 * g / cm3;
+  ;
 
-  fSci = fNistMan->
-          ConstructNewMaterial("Scintillator", elements, natoms, density);
+  fSci = fNistMan->ConstructNewMaterial("Scintillator", elements, natoms, density);
 
   elements.clear();
   natoms.clear();

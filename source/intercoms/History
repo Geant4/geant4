@@ -6,10 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-05-18 Makoto Asai (intercoms-V11-01-09)
+## 2024-05-18 Makoto Asai (intercoms-V11-02-04)
 - G4GenericMessenger.cc : Further addressing to Bug Report #2606
 
-## 2024-04-24 Makoto Asai
+## 2024-05-17 Ben Morgan (intercoms-V11-02-03)
+- Unify range checking implementation in G4UIparameter/command.
+  - Pure refactor to remove code duplication and complexity
+    of user-facing classes.
+
+## 2024-05-09 Ben Morgan (intercoms-V11-02-02)
+- Move tests to tests/ctests_source
+
+## 2024-05-03 Ben Morgan (intercoms-V11-02-01)
+- Remove use of no longer supported TiMemory.
+
+## 2024-04-24 Makoto Asai (intercoms-V11-02-00)
 - G4UIparsing.hh : checking int or long int parameter value is withing the 
   range of G4int or G4long
 - G4GenericMessenger.cc : Addressing to Bug Report #2606

@@ -26,54 +26,51 @@
 //
 
 #ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#  define DetectorConstruction_h 1
 #endif
 
-#include "G4VUserDetectorConstruction.hh"
-
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4RunManager.hh"
 #include "DetectorConstructionMessenger.hh"
 
+#include "G4LogicalVolume.hh"
+#include "G4RunManager.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-    
+  public:
     DetectorConstruction();
     ~DetectorConstruction();
-    
+
     void DefineMaterials();
     G4VPhysicalVolume* Construct();
 
-private:
+  private:
     void ConstructSDandField();
 
-private:
+  private:
     DetectorConstructionMessenger* fMessenger;
 
-public:
-    G4String GetEC() {return fECfileName;}
-    void SetEC(G4String aString) {fECfileName = aString;}
+  public:
+    G4String GetEC() { return fECfileName; }
+    void SetEC(G4String aString) { fECfileName = aString; }
 
-    G4String GetMaterial() {return fMaterialName;}
-    void SetMaterial(G4String aString) {fMaterialName = aString;}
-    
-    G4ThreeVector GetSizes() {return fSizes;}
-    void SetSizes(G4ThreeVector a3vec) {fSizes = a3vec;}
-    
-    G4ThreeVector GetBR() {return fBR;}
-    void SetBR(G4ThreeVector a3vec) {fBR = a3vec;}
+    G4String GetMaterial() { return fMaterialName; }
+    void SetMaterial(G4String aString) { fMaterialName = aString; }
 
-    G4ThreeVector GetAngles() {return fAngles;}
-    void SetAngles(G4ThreeVector a3vec) {fAngles = a3vec;}
+    G4ThreeVector GetSizes() { return fSizes; }
+    void SetSizes(G4ThreeVector a3vec) { fSizes = a3vec; }
 
-private:
+    G4ThreeVector GetBR() { return fBR; }
+    void SetBR(G4ThreeVector a3vec) { fBR = a3vec; }
+
+    G4ThreeVector GetAngles() { return fAngles; }
+    void SetAngles(G4ThreeVector a3vec) { fAngles = a3vec; }
+
+  private:
     G4String fECfileName;
     G4String fECOfileName;
     G4String fMaterialName;

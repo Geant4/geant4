@@ -33,10 +33,8 @@
 
 #include "G4TrackingManager.hh"
 
-#include "G4Profiler.hh"
 #include "G4RichTrajectory.hh"
 #include "G4SmoothTrajectory.hh"
-#include "G4TiMemory.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
 
@@ -90,10 +88,6 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   // we need this to scope the G4Track::ProfilerConfig b/t
   // the PreUserTrackingAction and PostUserTrackingAction
   {
-#if defined(GEANT4_USE_TIMEMORY)
-    ProfilerConfig profiler{fpTrack};
-#endif
-
 #ifdef G4_STORE_TRAJECTORY
     // Construct a trajectory if it is requested
     //

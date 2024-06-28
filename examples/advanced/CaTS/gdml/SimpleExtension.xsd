@@ -4,10 +4,9 @@
 	   elementFormDefault="unqualified"
 	   version="1.0"
 	   xmlns:gdml_simple_extension="http://www.example.org/"
-	   xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
 	   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:redefine schemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+  <xs:redefine schemaLocation="http://cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
     <xs:annotation>
       <xs:documentation>

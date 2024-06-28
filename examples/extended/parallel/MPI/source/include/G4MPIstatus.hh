@@ -28,51 +28,54 @@
 #ifndef G4MPI_STATUS_H
 #define G4MPI_STATUS_H
 
-#include "globals.hh"
 #include "G4ApplicationState.hh"
 #include "G4Timer.hh"
+#include "globals.hh"
 
 class G4Timer;
 
-class G4MPIstatus {
-public:
-  G4MPIstatus();
-  ~G4MPIstatus();
+class G4MPIstatus
+{
+  public:
+    G4MPIstatus();
+    ~G4MPIstatus();
 
-  // set/get functions
-  void SetStatus(G4int arank, G4int runid, G4int noe, G4int evtid,
-                 G4ApplicationState state);
+    // set/get functions
+    void SetStatus(G4int arank, G4int runid, G4int noe, G4int evtid, G4ApplicationState state);
 
-  G4int GetRank() const;
-  G4int GetRunID() const;
-  G4int GetNEventToBeProcessed() const;
-  G4int GetEventID() const;
-  G4double GetCPUTime() const;
-  G4ApplicationState GetG4State() const;
+    G4int GetRank() const;
+    G4int GetRunID() const;
+    G4int GetNEventToBeProcessed() const;
+    G4int GetEventID() const;
+    G4double GetCPUTime() const;
+    G4ApplicationState GetG4State() const;
 
-  // for pickling
-  G4int SizeOf() const;
-  void Pack(G4int* data) const;
-  void UnPack(G4int* data);
+    // for pickling
+    G4int SizeOf() const;
+    void Pack(G4int* data) const;
+    void UnPack(G4int* data);
 
-  // for timer
-  void StartTimer();
-  void StopTimer();
+    // for timer
+    void StartTimer();
+    void StopTimer();
 
-  void Print() const;
+    void Print() const;
 
-  enum { kNSIZE = 10 };
+    enum
+    {
+      kNSIZE = 10
+    };
 
-private:
-  G4int rank_;
-  G4int run_id_;
-  G4int nevent_to_be_processed_;
-  G4int event_id_;
-  G4double cputime_;
-  G4ApplicationState g4state_;
-  G4Timer* timer_;
+  private:
+    G4int rank_;
+    G4int run_id_;
+    G4int nevent_to_be_processed_;
+    G4int event_id_;
+    G4double cputime_;
+    G4ApplicationState g4state_;
+    G4Timer* timer_;
 
-  G4String GetStateString(G4ApplicationState astate) const;
+    G4String GetStateString(G4ApplicationState astate) const;
 };
 
 // ====================================================================

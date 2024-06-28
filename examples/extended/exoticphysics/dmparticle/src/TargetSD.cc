@@ -31,7 +31,7 @@
 //
 // ClassName:  TargetSD
 //
-// Authors:  01.06.17 V.Ivanchenko 
+// Authors:  01.06.17 V.Ivanchenko
 //
 //
 ///////////////////////////////////////////
@@ -39,35 +39,34 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TargetSD.hh"
+
 #include "Run.hh"
-#include "globals.hh"
+
 #include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
+#include "G4RunManager.hh"
 #include "G4Step.hh"
 #include "G4String.hh"
-#include "G4RunManager.hh"
+#include "G4TouchableHistory.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TargetSD::TargetSD(const G4String& name)
-  : G4VSensitiveDetector(name), fRun(nullptr)
-{}
+TargetSD::TargetSD(const G4String& name) : G4VSensitiveDetector(name), fRun(nullptr) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TargetSD::~TargetSD()
-{}
+TargetSD::~TargetSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TargetSD::Initialize(G4HCofThisEvent*)
 {
-  fRun = (Run*)G4RunManager::GetRunManager()->GetNonConstCurrentRun();  
+  fRun = (Run*)G4RunManager::GetRunManager()->GetNonConstCurrentRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool TargetSD::ProcessHits( G4Step* aStep, G4TouchableHistory* )
+G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   /*
@@ -75,29 +74,24 @@ G4bool TargetSD::ProcessHits( G4Step* aStep, G4TouchableHistory* )
 
   if(name == "ldmhi" || name == "ldmhibar" || name == "ldmphoton")
   {
-  G4cout << name << " Edep(MeV)= " << edep/MeV << G4endl; 
+  G4cout << name << " Edep(MeV)= " << edep/MeV << G4endl;
   }
   */
-  fRun->AddEnergy(edep, aStep); 
+  fRun->AddEnergy(edep, aStep);
 
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TargetSD::EndOfEvent(G4HCofThisEvent*)
-{}
+void TargetSD::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TargetSD::clear()
-{}
+void TargetSD::clear() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TargetSD::PrintAll()
-{}
+void TargetSD::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

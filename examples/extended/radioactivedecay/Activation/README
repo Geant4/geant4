@@ -144,11 +144,12 @@
  7- HOW TO START ?
  
    Execute Activation in 'batch' mode from macro files :
- 	% ./Activation   run.mac
- 		
+ 	% ./Activation  run.mac
+ 	% ./Activation  Activation.in > Activation.out
+		
    Execute Activation in 'interactive mode' with visualization :
  	% ./Activation
-  Idle> control/execute debug.mac
+        Idle> control/execute debug.mac
  	....
  	Idle> type your commands
  	....

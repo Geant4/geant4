@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -40,67 +40,67 @@
 /// \file EventAction.cc
 /// \brief Implementation of the EventAction class
 
-#include "G4Event.hh"
-#include "Randomize.hh"
 #include "EventAction.hh"
+
+#include "Run.hh"
 #include "RunAction.hh"
+
+#include "G4AnalysisManager.hh"
+#include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
-#include "G4AnalysisManager.hh"
-#include "Run.hh"
-#include "G4RunManager.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-EventAction::EventAction(RunAction* run)
-:fRunAction(run)
+EventAction::EventAction(RunAction* run) : fRunAction(run)
 {
-  remove ("OutputPerEvent.out");
+  remove("OutputPerEvent.out");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
-{  
+{
   G4int evtNb = evt->GetEventID();
   fRunAction->SetNumEvent(evtNb);
-  // 
+  //
   fRunAction->SetEdepALL(0);
   fRunAction->SetEdepMedium(0);
   fRunAction->SetEdepSlice(0);
   fRunAction->SetEdepNeuron(0);
   fRunAction->SetEdepSoma(0);
   fRunAction->SetEdepDend(0);
-  fRunAction->SetEdepAxon(0);  
+  fRunAction->SetEdepAxon(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::EndOfEventAction(const G4Event* evt)
-{  
-  //Get Postion and Momentum of primary
-  // beam index of per track
+{
+  // Get Postion and Momentum of primary
+  //  beam index of per track
   G4int evtNb = evt->GetEventID();
 
   Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-  run->AddEdepALL(fRunAction->GetEdepALL()); 
-  run->AddEdepMedium(fRunAction->GetEdepMedium()); 
-  run->AddEdepSlice(fRunAction->GetEdepSlice()); 
-  run->AddEdepNeuron(fRunAction->GetEdepNeuron()); 
-  run->AddEdepSoma(fRunAction->GetEdepSoma()); 
-  run->AddEdepDend(fRunAction->GetEdepDend()); 
-  run->AddEdepAxon(fRunAction->GetEdepAxon()); 
+  run->AddEdepALL(fRunAction->GetEdepALL());
+  run->AddEdepMedium(fRunAction->GetEdepMedium());
+  run->AddEdepSlice(fRunAction->GetEdepSlice());
+  run->AddEdepNeuron(fRunAction->GetEdepNeuron());
+  run->AddEdepSoma(fRunAction->GetEdepSoma());
+  run->AddEdepDend(fRunAction->GetEdepDend());
+  run->AddEdepAxon(fRunAction->GetEdepAxon());
   std::ofstream OutputEdep("OutputPerEvent.out", std::ios::app);
-  OutputEdep<<   evtNb+1          << '\t' << "   "  // event number
-        // edep in all volume
-   <<   fRunAction->GetEdepALL()/keV         << '\t' << "   " 
-        // outside bounding box 
-   <<   fRunAction->GetEdepMedium()/keV         << '\t' << "   " 
-   <<   (fRunAction->GetEdepSlice()+fRunAction->GetEdepNeuron())/keV 
-   << '\t' << "   "//  inside Bounding Slice
-   <<   fRunAction->GetEdepNeuron()/keV         << '\t' << "   " 
-   <<   fRunAction->GetEdepSoma()/keV         << '\t' << "   " 
-   <<   fRunAction->GetEdepDend()/keV         << '\t' << "   " 
-   <<   fRunAction->GetEdepAxon()/keV         << '\t' << "   " 
-   << G4endl; 
+  OutputEdep << evtNb + 1 << '\t' << "   "  // event number
+                                            // edep in all volume
+             << fRunAction->GetEdepALL() / keV << '\t'
+             << "   "
+             // outside bounding box
+             << fRunAction->GetEdepMedium() / keV << '\t' << "   "
+             << (fRunAction->GetEdepSlice() + fRunAction->GetEdepNeuron()) / keV << '\t'
+             << "   "  //  inside Bounding Slice
+             << fRunAction->GetEdepNeuron() / keV << '\t' << "   "
+             << fRunAction->GetEdepSoma() / keV << '\t' << "   " << fRunAction->GetEdepDend() / keV
+             << '\t' << "   " << fRunAction->GetEdepAxon() / keV << '\t' << "   " << G4endl;
 }

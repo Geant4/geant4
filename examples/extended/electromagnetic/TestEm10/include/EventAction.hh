@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -50,15 +50,13 @@ class EventAction : public G4UserEventAction
     ~EventAction();
 
     virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-    void  SetVerboseLevel(G4int level) { fVerboseLevel = level; }
-        
+    void SetVerboseLevel(G4int level) { fVerboseLevel = level; }
+
   private:
     RunAction* fRunAction;
-    G4int      fVerboseLevel;
+    G4int fVerboseLevel;
 };
 
 #endif
-
-    

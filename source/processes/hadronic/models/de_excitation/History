@@ -6,16 +6,47 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-01-29 Vladimir Ivanchenko (hadr-deex-V11-01-12)
+## 2024-05-30 Vladimir Ivanchenko (hadr-deex-V11-02-05)
+- G4ExcitationHandle, G4NeutronRadCapture - correct model ID for IC electrons
+- G4VCoulombBarrier, G4CoulombBarrier, G4GEMCoulombBarrier,
+  G4FermiBreakUpUtil - clean-up Coulomb barrier classes, removed unused 
+    headers and variables
+- G4GEMChannelVI, G4GEMProbabilityVI - updated interfaces and simplified
+    algorithm of computation of probability
+
+## 2024-05-16 Vladimir Ivanchenko (hadr-deex-V11-02-04)
+- G4NuclearLevelData, G4PairingCorrection, G4CameronGilbertPairingCorrections,
+  G4CameronGilbertShellCorrections - simplified computation of corrections,
+    computations are done in one place only, not spreaded between classes.
+- G4EvaporationChannel, G4EvaporationProbability - fixed usage of pairing
+    corrections, agreement with test data is improved.
+
+## 2024-05-09 Vladimir Ivanchenko (hadr-deex-V11-02-03)
+- G4DeexPrecoParameters - moved definition of int and bool parameters to
+    source, improve comments, added default width of nuclear level needed
+    for selection of final excitation in a decay of an excited state
+- G4VEmissionProbability - use the new width parameter
+- G4EvaporationChannel - fixed computation of minimal kinetic energy of a
+    fragment for odd-even residual nucleaus 
+
+## 2024-01-29 Vladimir Ivanchenko (hadr-deex-V11-02-02)
 - G4StatMFChannel - fixed compilation warnings at alma9-gcc131 seen in CMSSW 
     by substitution of C-arrays by std::vector 
 
-## 2024-01-25 Vladimir Ivanchenko
+## 2024-01-25 Vladimir Ivanchenko (hadr-deex-V11-02-01)
 - G4FermiBreakUpVI, G4FermiFragmentsPoolVI - fixed problem 2584 (production
     of fake excited isomeres) by moving the check on lifetime limit from the
     pull (initialized once as a static object) to the Initialise() method of 
     the model allowing to change this limit in an application, do not consider
     decay chains with no final state.
+- G4VEmissionProbability - substitute local variable "g" by "gg" to avoid
+    possible shadowing
+- G4ExcitationHandler - improved debug printout
+
+## 2024-01-23 Vladimir Ivanchenko (hadr-deex-V11-02-00)
+- G4PhotonEvaporation - use in all computations abs(JP) instead of JP,
+    because since 11.2 JP may be negative due to parity. This address
+    problem report 2587.
 
 ## 2023-11-15 Vladimir Ivanchenko (hadr-deex-V11-01-11)
 - G4FermiChannels - fixed memory leak at exit

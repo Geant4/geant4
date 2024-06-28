@@ -30,7 +30,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #ifndef ExP01PrimaryGeneratorAction_h
 #define ExP01PrimaryGeneratorAction_h 1
 
@@ -43,12 +43,12 @@ class G4Event;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 /// Primary generator action for the persistency example
- 
+
 class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    ExP01PrimaryGeneratorAction(ExP01DetectorConstruction*);    
-   ~ExP01PrimaryGeneratorAction();
+    ExP01PrimaryGeneratorAction(ExP01DetectorConstruction*);
+    ~ExP01PrimaryGeneratorAction();
 
   public:
     virtual void GeneratePrimaries(G4Event*);
@@ -61,4 +61,3 @@ class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

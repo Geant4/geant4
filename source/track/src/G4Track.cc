@@ -65,10 +65,12 @@ G4Track::G4Track()
 {}
 
 // --------------------------------------------------------------------
-G4Track::G4Track(const G4Track& right)
+G4Track::G4Track(const G4Track& right,G4bool copyTouchables)
   : fVelocity(c_light)
 {
+  fCopyTouchables = copyTouchables;
   *this = right;
+  fCopyTouchables = true;
 }
 
 // --------------------------------------------------------------------
@@ -92,9 +94,11 @@ G4Track& G4Track::operator=(const G4Track& right)
     fStepLength  = right.fStepLength;
 
     // additional fields required for geometrical splitting
-    fpTouchable = right.fpTouchable;
-    fpNextTouchable = right.fpNextTouchable;
-    fpOriginTouchable = right.fpOriginTouchable;
+    if(fCopyTouchables) {
+      fpTouchable = right.fpTouchable;
+      fpNextTouchable = right.fpNextTouchable;
+      fpOriginTouchable = right.fpOriginTouchable;
+    }
 
     // Track ID (and Parent ID) is not copied and set to zero for new track
     fTrackID  = 0;
@@ -151,9 +155,11 @@ G4Track& G4Track::operator=(const G4Track& right)
 }
 
 // --------------------------------------------------------------------
-void G4Track::CopyTrackInfo(const G4Track& right)
+void G4Track::CopyTrackInfo(const G4Track& right, G4bool copyTouchables)
 {
+  fCopyTouchables = copyTouchables;
   *this = right;
+  fCopyTouchables = true;
 }
 
 // --------------------------------------------------------------------

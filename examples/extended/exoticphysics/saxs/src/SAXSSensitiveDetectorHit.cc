@@ -30,31 +30,30 @@
 
 #include "SAXSSensitiveDetectorHit.hh"
 
-#include "G4ios.hh"
-#include "G4VVisManager.hh"
+#include "G4AttDef.hh"
+#include "G4AttDefStore.hh"
+#include "G4AttValue.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
-#include "G4AttDefStore.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
-#include "G4UIcommand.hh"
-#include "G4UnitsTable.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UIcommand.hh"
+#include "G4UnitsTable.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreadLocal G4Allocator<SAXSSensitiveDetectorHit>* hitAllocator = nullptr; 
+G4ThreadLocal G4Allocator<SAXSSensitiveDetectorHit>* hitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SAXSSensitiveDetectorHit::SAXSSensitiveDetectorHit() :
-  G4VHit()
+SAXSSensitiveDetectorHit::SAXSSensitiveDetectorHit() : G4VHit()
 {
   fTime = 0.;
-  fPos = G4ThreeVector(0.,0.,0.);
-  fMom = G4ThreeVector(0.,0.,0.);
+  fPos = G4ThreeVector(0., 0., 0.);
+  fMom = G4ThreeVector(0., 0., 0.);
   fEnergy = 0.;
   fType = -1;
   fTrackID = -1;
@@ -63,8 +62,7 @@ SAXSSensitiveDetectorHit::SAXSSensitiveDetectorHit() :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SAXSSensitiveDetectorHit::SAXSSensitiveDetectorHit(const SAXSSensitiveDetectorHit &right):
-  G4VHit()
+SAXSSensitiveDetectorHit::SAXSSensitiveDetectorHit(const SAXSSensitiveDetectorHit& right) : G4VHit()
 {
   fTrackID = right.fTrackID;
   fTrackIDP = right.fTrackIDP;
@@ -78,8 +76,8 @@ SAXSSensitiveDetectorHit::SAXSSensitiveDetectorHit(const SAXSSensitiveDetectorHi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const SAXSSensitiveDetectorHit& SAXSSensitiveDetectorHit::operator=
-                                       (const SAXSSensitiveDetectorHit &right)
+const SAXSSensitiveDetectorHit&
+SAXSSensitiveDetectorHit::operator=(const SAXSSensitiveDetectorHit& right)
 {
   fTrackID = right.fTrackID;
   fTrackIDP = right.fTrackIDP;
@@ -89,13 +87,13 @@ const SAXSSensitiveDetectorHit& SAXSSensitiveDetectorHit::operator=
   fEnergy = right.fEnergy;
   fType = right.fType;
   fWeight = right.fWeight;
-        
+
   return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int SAXSSensitiveDetectorHit::operator==(const SAXSSensitiveDetectorHit &) const
+int SAXSSensitiveDetectorHit::operator==(const SAXSSensitiveDetectorHit&) const
 {
   return 0;
 }
@@ -105,26 +103,23 @@ int SAXSSensitiveDetectorHit::operator==(const SAXSSensitiveDetectorHit &) const
 void SAXSSensitiveDetectorHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (pVVisManager)
-    {
-      G4Circle circle(fPos);
-      circle.SetScreenSize(2);
-      circle.SetFillStyle(G4Circle::filled);
-      G4Colour colour(1.,1.,0.);
-      G4VisAttributes attribs(colour);
-      circle.SetVisAttributes(attribs);
-      pVVisManager->Draw(circle);
-    }
+  if (pVVisManager) {
+    G4Circle circle(fPos);
+    circle.SetScreenSize(2);
+    circle.SetFillStyle(G4Circle::filled);
+    G4Colour colour(1., 1., 0.);
+    G4VisAttributes attribs(colour);
+    circle.SetVisAttributes(attribs);
+    pVVisManager->Draw(circle);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void SAXSSensitiveDetectorHit::Print()
 {
-  G4cout << " Hit at time " << fTime/ns
-    << " (nsec) - pos(x,y,z) " << fPos/mm
-    << " (mm) - mom(x,y,z) " << fMom/eV << " eV" << G4endl;
+  G4cout << " Hit at time " << fTime / ns << " (nsec) - pos(x,y,z) " << fPos / mm
+         << " (mm) - mom(x,y,z) " << fMom / eV << " eV" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

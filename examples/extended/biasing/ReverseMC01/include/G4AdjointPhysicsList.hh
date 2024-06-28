@@ -47,71 +47,68 @@
 #ifndef G4AdjointPhysicsList_h
 #define G4AdjointPhysicsList_h 1
 #include "G4VUserPhysicsList.hh"
-#include "globals.hh"
 #include "G4eIonisation.hh"
 #include "G4hIonisation.hh"
+#include "globals.hh"
 class G4AdjointPhysicsMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4AdjointPhysicsList: public G4VUserPhysicsList
+class G4AdjointPhysicsList : public G4VUserPhysicsList
 {
   public:
-   G4AdjointPhysicsList();
-   virtual ~G4AdjointPhysicsList();
-   void SetLossFluctuationFlag(bool aBool);
-   inline void SetUseIonisation(bool aBool){fUse_eionisation = aBool;}
-   inline void SetUseProtonIonisation(bool aBool){fUse_pionisation = aBool;}
-   inline void SetUseBrem(bool aBool){fUse_brem = aBool;}
-   inline void SetUseCompton(bool aBool){fUse_compton = aBool;}
-   inline void SetUseMS(bool aBool){fUse_ms = aBool;}
-   inline void SetUsePEEffect(bool aBool){fUse_peeffect = aBool;}
-   inline void SetUseGammaConversion(bool aBool){ fUse_gamma_conversion
-                       = aBool;}
-   inline void SetUseEgainFluctuation(bool aBool){ fUse_egain_fluctuation
-                        = aBool;}
-   inline void SetEminAdjModels(G4double aVal){ fEmin_adj_models = aVal;}
-   inline void SetEmaxAdjModels(G4double aVal){ fEmax_adj_models = aVal;}
-  
+    G4AdjointPhysicsList();
+    virtual ~G4AdjointPhysicsList();
+    void SetLossFluctuationFlag(bool aBool);
+    inline void SetUseIonisation(bool aBool) { fUse_eionisation = aBool; }
+    inline void SetUseProtonIonisation(bool aBool) { fUse_pionisation = aBool; }
+    inline void SetUseBrem(bool aBool) { fUse_brem = aBool; }
+    inline void SetUseCompton(bool aBool) { fUse_compton = aBool; }
+    inline void SetUseMS(bool aBool) { fUse_ms = aBool; }
+    inline void SetUsePEEffect(bool aBool) { fUse_peeffect = aBool; }
+    inline void SetUseGammaConversion(bool aBool) { fUse_gamma_conversion = aBool; }
+    inline void SetUseEgainFluctuation(bool aBool) { fUse_egain_fluctuation = aBool; }
+    inline void SetEminAdjModels(G4double aVal) { fEmin_adj_models = aVal; }
+    inline void SetEmaxAdjModels(G4double aVal) { fEmax_adj_models = aVal; }
+
   protected:
     // Construct particle and physics
-   virtual void ConstructParticle();
-   virtual void ConstructProcess();
-   virtual void SetCuts();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+    virtual void SetCuts();
 
-    // these methods Construct particles 
-   void ConstructBosons();
-   void ConstructLeptons();
-   void ConstructMesons();
-   void ConstructBaryons();
-   void ConstructAdjointParticles();
+    // these methods Construct particles
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
+    void ConstructAdjointParticles();
 
     // these methods Construct physics processes and register them
-   void ConstructGeneral();
-   void ConstructEM();
-   G4eIonisation* fEminusIonisation;
-   G4hIonisation* fPIonisation;
+    void ConstructGeneral();
+    void ConstructEM();
+    G4eIonisation* fEminusIonisation;
+    G4hIonisation* fPIonisation;
 
   private:
-   G4AdjointPhysicsMessenger* fPhysicsMessenger;
-   G4bool fUse_forced_interaction;
-   G4bool fUse_eionisation;
-   G4bool fUse_pionisation;
-   G4bool fUse_brem;
-   G4bool fUse_compton;
-   G4bool fUse_ms;
-   G4bool fUse_egain_fluctuation;
-   G4bool fUse_peeffect;
-   G4bool fUse_gamma_conversion;
-   G4double fEmin_adj_models;
-   G4double fEmax_adj_models;
-   G4double fCS_biasing_factor_compton;
-   G4double fCS_biasing_factor_brem;
-   G4double fCS_biasing_factor_ionisation;
-   G4double fCS_biasing_factor_PEeffect;
+    G4AdjointPhysicsMessenger* fPhysicsMessenger;
+    G4bool fUse_forced_interaction;
+    G4bool fUse_eionisation;
+    G4bool fUse_pionisation;
+    G4bool fUse_brem;
+    G4bool fUse_compton;
+    G4bool fUse_ms;
+    G4bool fUse_egain_fluctuation;
+    G4bool fUse_peeffect;
+    G4bool fUse_gamma_conversion;
+    G4double fEmin_adj_models;
+    G4double fEmax_adj_models;
+    G4double fCS_biasing_factor_compton;
+    G4double fCS_biasing_factor_brem;
+    G4double fCS_biasing_factor_ionisation;
+    G4double fCS_biasing_factor_PEeffect;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

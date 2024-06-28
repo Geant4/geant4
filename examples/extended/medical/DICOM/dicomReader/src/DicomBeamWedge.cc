@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 #include "DicomBeamWedge.hh"
-#include "dcmtk/dcmrt/seq/drtws.h"   
+
+#include "dcmtk/dcmrt/seq/drtws.h"
+
 #include "G4UIcommand.hh"
 
 // DOC at https://www.dabsoft.ch/dicom/3/C.8.8.14/
@@ -35,7 +37,7 @@ DicomBeamWedge::DicomBeamWedge(DRTWedgeSequence::Item bwItem)
   Sint32 fint;
   Float64 ffloat;
   OFVector<Float64> fvfloat;
-  OFCondition cond; 
+  OFCondition cond;
   G4cout << " DicomBeamWedge::DicomBeamWedge " << G4endl;
 
   bwItem.getWedgeID(fstr);
@@ -49,22 +51,17 @@ DicomBeamWedge::DicomBeamWedge(DRTWedgeSequence::Item bwItem)
   theWedgeAngle = fint;
   bwItem.getWedgeFactor(ffloat);
   bwItem.getWedgeOrientation(ffloat);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamWedge::Print( std::ostream&  )
-{
-
-}
+void DicomBeamWedge::Print(std::ostream&) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamWedge::DumpToFile( std::ofstream& fout )
+void DicomBeamWedge::DumpToFile(std::ofstream& fout)
 {
-  std::string name  = ":P WEDGE_" + G4UIcommand::ConvertToString(theWedgeNumber) + "_";
+  std::string name = ":P WEDGE_" + G4UIcommand::ConvertToString(theWedgeNumber) + "_";
 
   fout << name << "SourceToWedgeTrayDistance " << theSourceToWedgeTrayDistance << G4endl;
 
   fout << name << "WedgeAngle " << theWedgeAngle << G4endl;
-  
 }

@@ -46,5 +46,3 @@ class GB01ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-
-    

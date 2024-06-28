@@ -75,8 +75,6 @@ geant4_add_module(G4globman
     G4PhysicsVector.icc
     G4PhysicsVectorType.hh
     G4Pow.hh
-    G4Profiler.hh
-    G4Profiler.icc
     G4ReferenceCountedHandle.hh
     G4RotationMatrix.hh
     G4SliceTimer.hh
@@ -96,7 +94,6 @@ geant4_add_module(G4globman
     G4ThreadLocalSingleton.hh
     G4ThreadPool.hh
     G4ThreeVector.hh
-    G4TiMemory.hh
     G4Timer.hh
     G4Timer.icc
     G4Tokenizer.hh
@@ -146,7 +143,6 @@ geant4_add_module(G4globman
     G4PhysicsVector.cc
     G4Physics2DVector.cc
     G4Pow.cc
-    G4Profiler.cc
     G4ReferenceCountedHandle.cc
     G4SliceTimer.cc
     G4StateManager.cc
@@ -164,7 +160,6 @@ geant4_module_include_directories(G4globman
 geant4_module_link_libraries(G4globman
   PUBLIC
     ${CLHEP_LIBRARIES}
-    ${timemory_LIBRARIES}
     ${PTL_LIBRARIES}
     ${GEANT4_CXX_FILESYSTEM_LIBRARY} # to temporarily support libstdc++fs, libc++fs
     )

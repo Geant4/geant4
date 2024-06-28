@@ -28,35 +28,27 @@
 /// \brief Implementation of the GB05SD class
 
 #include "GB05SD.hh"
-#include "G4Track.hh"
+
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB05SD::GB05SD(G4String name)
-: G4VSensitiveDetector(name)
-{}
+GB05SD::GB05SD(G4String name) : G4VSensitiveDetector(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool GB05SD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-  auto track        = step->GetTrack();
+  auto track = step->GetTrack();
   auto preStepPoint = step->GetPreStepPoint();
 
   // -- simply prints few particle characteristics:
-  G4cout << std::setw(14)
-         << track->GetParticleDefinition()->GetParticleName()
-         << ", kinetic energy (MeV) = "
-         << std::setw(12)
-         << preStepPoint->GetKineticEnergy()/MeV
-         << ", position (cm) = "
-         << preStepPoint->GetPosition()/cm
-         << ",\t weight = "
-         << preStepPoint->GetWeight()
-         << G4endl;
-  
+  G4cout << std::setw(14) << track->GetParticleDefinition()->GetParticleName()
+         << ", kinetic energy (MeV) = " << std::setw(12) << preStepPoint->GetKineticEnergy() / MeV
+         << ", position (cm) = " << preStepPoint->GetPosition() / cm
+         << ",\t weight = " << preStepPoint->GetWeight() << G4endl;
+
   return true;
 }

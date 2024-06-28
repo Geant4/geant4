@@ -26,9 +26,9 @@
 #ifndef F01RunAction_h
 #define F01RunAction_h
 
-#include "G4UserRunAction.hh"
-
 #include "CLHEP/Units/SystemOfUnits.h"
+
+#include "G4UserRunAction.hh"
 
 class G4ParticleDefinition;
 class G4Transportation;
@@ -36,43 +36,43 @@ class G4CoupledTransportation;
 
 class G4Run;
 
-class F01RunAction: public G4UserRunAction {
+class F01RunAction : public G4UserRunAction
+{
+  public:
+    F01RunAction() = default;
+    ~F01RunAction() override = default;
 
-public:
+    void BeginOfRunAction(const G4Run* aRun) override;
+    void EndOfRunAction(const G4Run* aRun) override;
 
-  F01RunAction()  = default;
-  ~F01RunAction() override = default;
+    // Helper method to change the Transportation's 'looper' parameters
+    void ChangeLooperParameters(const G4ParticleDefinition* particleDef);
 
-  void BeginOfRunAction( const G4Run* aRun ) override;
-  void EndOfRunAction( const G4Run* aRun ) override;
+    // Helper method to find the Transportation process for a particle type
+    G4Transportation* FindTransportation(const G4ParticleDefinition* particleDef,
+                                         bool reportError = true);
 
-  // Helper method to change the Transportation's 'looper' parameters
-  void ChangeLooperParameters(const G4ParticleDefinition* particleDef );
+  public:
+    void SetNumberOfTrials(G4int val) { fNumberOfTrials = val; }
+    void SetWarningEnergy(G4double val) { fWarningEnergy = val; }
+    void SetImportantEnergy(G4double val) { fImportantEnergy = val; }
+    G4int GetNumberOfTrials() { return fNumberOfTrials; }
+    G4double GetWarningEnergy() { return fWarningEnergy; }
+    G4double GetImportantEnergy() { return fImportantEnergy; }
 
-  // Helper method to find the Transportation process for a particle type
-  G4Transportation*
-     FindTransportation( const G4ParticleDefinition * particleDef,
-                         bool reportError= true );
+  private:
+    // Values for initialising 'loopers' parameters of Transport process
+    G4int fNumberOfTrials = 15;  // Arbitrary
+    G4double fWarningEnergy = 1.0 * CLHEP::kiloelectronvolt;  // Arbitrary
+    G4double fImportantEnergy =
+      10.0
+      * CLHEP::kiloelectronvolt;  // Arbitrary
+                                  // Applications should determine these thresholds according to
+                                  //  - physics requirements, and
+                                  //  - the computing cost of continuing integration for looping
+                                  //  tracks
 
-public:
-  void     SetNumberOfTrials( G4int val )   { fNumberOfTrials  =  val; }
-  void     SetWarningEnergy( G4double val )   { fWarningEnergy = val; }
-  void     SetImportantEnergy( G4double val ) { fImportantEnergy = val; }
-  G4int    GetNumberOfTrials() { return fNumberOfTrials; }
-  G4double GetWarningEnergy()  { return fWarningEnergy; }
-  G4double GetImportantEnergy() { return fImportantEnergy; }
-
-private:
-
-  // Values for initialising 'loopers' parameters of Transport process
-  G4int    fNumberOfTrials  =  15;  // Arbitrary
-  G4double fWarningEnergy   =  1.0 * CLHEP::kiloelectronvolt;  // Arbitrary
-  G4double fImportantEnergy = 10.0 * CLHEP::kiloelectronvolt;  // Arbitrary
-    // Applications should determine these thresholds according to
-    //  - physics requirements, and
-    //  - the computing cost of continuing integration for looping tracks
-
-  G4int    fVerboseLevel = 0;
+    G4int fVerboseLevel = 0;
 };
 
 #endif

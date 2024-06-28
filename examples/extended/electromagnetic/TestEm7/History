@@ -1,14 +1,23 @@
 # Example TestEm7 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
 
-## 2023-04-17 V. Ivanchenko (testem7-V11-01-00)
+## 2024-04-06 Vladimir Ivanchenko (testem7-V11-02-01)
+- RunAction - added protection to histogram binning for very low step limit
+
+## 2023-12-18 Gabriele Cosmo (testem7-V11-02-00)
+- Fixed compilation error on latest Windows VC++ compiler 17.8.3 for use of
+  std::isfinite() and std::isnan() in c2_function.hh.
+  Addressing problem report #2582.
+
+## 2023-04-17 Vladimir Ivanchenko (testem7-V11-01-00)
 - added extra macro for test muon dEdx and Range
 
-## 2022-10-18 V. Ivanchenko (testem7-V11-00-01)
+## 2022-10-18 Vladimir Ivanchenko (testem7-V11-00-01)
 - Make local EM physics the same as EM physics option3
   with G4IonParameterizedModel
 

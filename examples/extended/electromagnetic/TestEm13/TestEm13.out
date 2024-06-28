@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -183,7 +183,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.450000s Real=2.456338s Sys=0.000000s
+  User=2.320000s Real=2.350237s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -250,7 +250,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.910000s Real=3.010912s Sys=0.000000s
+  User=2.750000s Real=2.941842s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -270,11 +270,12 @@ Run Summary
  Current couple of seeds = 1537749914, 1160203484
 ----------------------------------------
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
+Deleting G4Run (id:1) 
+UserDetectorConstruction deleted 0xfd6d30
+UserPhysicsList deleted 0x1278f00
+UserActionInitialization deleted 0x13f9e60
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.

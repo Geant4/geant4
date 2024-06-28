@@ -65,10 +65,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   private:
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
+    static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

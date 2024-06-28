@@ -37,11 +37,9 @@
 #include "G4GPILSelection.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4ParticleTable.hh"
-#include "G4Profiler.hh"
 #include "G4SteppingControl.hh"
 #include "G4SteppingVerbose.hh"
 #include "G4SteppingVerboseWithUnits.hh"
-#include "G4TiMemory.hh"
 #include "G4TransportationManager.hh"
 #include "G4UImanager.hh"
 #include "G4UserLimits.hh"
@@ -122,10 +120,6 @@ G4SteppingManager::~G4SteppingManager()
 G4StepStatus G4SteppingManager::Stepping()
 //////////////////////////////////////////
 {
-#ifdef GEANT4_USE_TIMEMORY
-  ProfilerConfig profiler{fStep};
-#endif
-
 //--------
 // Prelude
 //--------

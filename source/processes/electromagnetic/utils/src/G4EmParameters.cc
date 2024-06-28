@@ -160,6 +160,7 @@ void G4EmParameters::Initialise()
   safetyFactor = 0.6;
   lambdaLimit  = 1.0*CLHEP::mm;
   factorScreen = 1.0;
+  fOrtoPsFraction = 0.0375; // 0.75 * 0.05
 
   nbinsPerDecade = 7;
   verbose = 1;
@@ -174,7 +175,14 @@ void G4EmParameters::Initialise()
   fSStype = fWVI;
   fFluct = fUniversalFluctuation;
 
-  fDirLEDATA = G4String(G4FindDataDir("G4LEDATA"));
+  const char* data_dir = G4FindDataDir("G4LEDATA");
+  if (nullptr != data_dir) {
+    fDirLEDATA = G4String(data_dir);
+  }
+  else {
+    G4Exception("G4EmParameters::Initialise()", "em0003", JustWarning,
+                "G4LEDATA data directory was not found.");
+  }
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
@@ -582,13 +590,13 @@ G4double G4EmParameters::MinKinEnergy() const
 void G4EmParameters::SetMaxEnergy(G4double val)
 {
   if(IsLocked()) { return; }
-  if(val > std::max(minKinEnergy,9.99*CLHEP::MeV) && val < 1.e+7*CLHEP::TeV) {
+  if(val > std::max(minKinEnergy,599.9*CLHEP::MeV) && val < 1.e+7*CLHEP::TeV) {
     maxKinEnergy = val;
   } else {
     G4ExceptionDescription ed;
     ed << "Value of MaxKinEnergy is out of range: " 
        << val/CLHEP::GeV 
-       << " GeV is ignored; allowed range 10 MeV - 1.e+7 TeV"; 
+       << " GeV is ignored; allowed range 600 MeV - 1.e+7 TeV"; 
     PrintWarning(ed);
   }
 }
@@ -1032,6 +1040,29 @@ G4EmFluctuationType G4EmParameters::FluctuationType() const
   return fFluct;
 }
 
+void G4EmParameters::SetPositronAtRestModelType(G4PositronAtRestModelType val)
+{
+  if(IsLocked()) { return; }
+  fPositronium = val;
+}
+
+G4PositronAtRestModelType G4EmParameters::PositronAtRestModelType() const
+{
+  return fPositronium;
+}
+
+void G4EmParameters::SetOrtoPsFraction(G4double val)
+{
+  if(IsLocked()) { return; }
+  fOrtoPsFraction = val;
+}
+
+G4double  G4EmParameters::OrtoPsFraction() const
+{
+  return fOrtoPsFraction;
+}
+
+
 void G4EmParameters::SetMscStepLimitType(G4MscStepLimitType val)
 {
   if(IsLocked()) { return; }
@@ -1453,6 +1484,13 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      << fCParameters->DNAElectronMsc() << "\n";
   os << "Use DNA e- solvation model type                    " 
      << fCParameters->DNAeSolvationSubType() << "\n";
+  auto chemModel = fCParameters->GetChemTimeStepModel();
+  if(fCParameters->GetChemTimeStepModel() != G4ChemTimeStepModel::Unknown)
+  {
+    std::vector<G4String> ChemModel{"Unknown","SBS","IRT","IRT_syn"};
+    os << "Use DNA Chemistry model                            "
+       << ChemModel.at((std::size_t)chemModel) << "\n";
+  }
   os << "=======================================================================" << G4endl;
   }
   os.precision(prec);
@@ -1485,4 +1523,14 @@ G4bool G4EmParameters::IsLocked() const
 	   fStateManager->GetCurrentState() != G4State_Idle));
 }
 
+
+void G4EmParameters::SetTimeStepModel(const G4ChemTimeStepModel& model)
+{
+  fCParameters-> SetChemTimeStepModel(model);
+}
+
+G4ChemTimeStepModel G4EmParameters::GetTimeStepModel() const
+{
+  return fCParameters->GetChemTimeStepModel();
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

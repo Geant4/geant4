@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -110,6 +110,7 @@ Element TS_C_of_Graphite,  internal thermal scattering id 2
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
+ Use probability tables from     njoy
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -162,36 +163,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.540000s Real=10.525301s Sys=0.000000s
+  User=9.750000s Real=11.340655s Sys=0.000000s
 
  The run is 1000 neutron of 2 MeV through 50 cm  of Water_ts (density: 1 g/cm3 )
 
  Process calls frequency :
-	hadElastic= 224412	nCapture= 1000
+	hadElastic= 221622	nCapture= 1000
 
  Parcours of incident neutron:
-   nb of collisions    E>1*eV= 16.673      E<1*eV= 208.74       total= 225.41
-   track length        E>1*eV= 20.254 cm   E<1*eV= 76.435 cm    total= 96.688 cm 
-   time of flight      E>1*eV= 796.3 ns   E<1*eV= 211.84 us    total= 212.64 us 
+   nb of collisions    E>1*eV= 16.889      E<1*eV= 205.73       total= 222.62
+   track length        E>1*eV= 20.436 cm   E<1*eV= 75.118 cm    total= 95.554 cm 
+   time of flight      E>1*eV= 757.13 ns   E<1*eV= 208.58 us    total= 209.34 us 
 
  List of generated particles:
-            O16:   12233  Emean =  9.3327 keV	( 0.058598 meV --> 444.96 keV)
-            O17:      17  Emean =   3.831 keV	( 2.9119 meV --> 64.585 keV)
-            O18:      35  Emean =  10.242 keV	( 11.177 meV --> 199.22 keV)
-       deuteron:     999  Emean =  1.3176 keV	( 1.2609 keV --> 1.4405 keV)
-          gamma:    1000  Emean =   2.225 MeV	( 2.2229 MeV --> 4.1426 MeV)
-         proton:   13906  Emean =  135.66 keV	( 9.7889 meV --> 1.9995 MeV)
+            O16:   12405  Emean =  10.326 keV	( 0.036563 meV --> 446.87 keV)
+            O17:      17  Emean =  43.186 keV	( 13.109 meV --> 391.78 keV)
+            O18:      38  Emean =  4.8667 keV	( 9.4368 meV --> 113.5 keV)
+       deuteron:    1003  Emean =  1.5629 keV	( 1.1977 keV --> 155.08 keV)
+          gamma:    1000  Emean =  2.2231 MeV	( 2.223 MeV --> 2.2232 MeV)
+         proton:   13910  Emean =  134.56 keV	( 16.773 meV --> 1.9964 MeV)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1274956609, 42059612
+ Current couple of seeds = 1799570820, 454728659
 ----------------------------------------
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
+Deleting G4Run (id:0) 
+UserDetectorConstruction deleted 0xcebd30
+UserPhysicsList deleted 0xf81280
+UserActionInitialization deleted 0x10f0700
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
@@ -207,14 +209,14 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0154 MB
-Pool ID '7G4Track', size : 0.0298 MB
+Pool ID '17G4DynamicParticle', size : 0.0144 MB
+Pool ID '7G4Track', size : 0.0288 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.057 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.055 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

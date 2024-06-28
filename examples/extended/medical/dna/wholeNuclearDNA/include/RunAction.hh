@@ -45,45 +45,42 @@ class G4Run;
 
 class RunAction : public G4UserRunAction
 {
-public:
-  
-  RunAction();
-  virtual ~RunAction();
+  public:
+    RunAction();
+    virtual ~RunAction();
 
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-private:
+  private:
+    /////////////////
+    // Ntuple & Histogramming
+    //
+    void CreateNtuple();
+    void WriteNtuple();
 
-  /////////////////
-  // Ntuple & Histogramming
-  //
-  void CreateNtuple();
-  void WriteNtuple();
+    /////////////////
+    // Worker
+    //
+    void BeginMaster(const G4Run*);
+    void EndMaster(const G4Run*);
 
-  /////////////////
-  // Worker
-  //
-  void BeginMaster(const G4Run*);
-  void EndMaster(const G4Run*);
+    /////////////////
+    // Worker
+    //
+    void InitializeWorker(const G4Run*);
+    void BeginWorker(const G4Run*);
+    void EndWorker(const G4Run*);
 
-  /////////////////
-  // Worker
-  //
-  void InitializeWorker(const G4Run*);
-  void BeginWorker(const G4Run*);
-  void EndWorker(const G4Run*);
+    /////////////////
+    // Print Info
+    //
+    void PrintRunInfo(const G4Run* run);
 
-  /////////////////
-  // Print Info
-  //
-  void PrintRunInfo(const G4Run* run);
-
-  /////////////////
-  // Attributes
-  //
-  bool fInitialized;
-  bool fDebug;
-
+    /////////////////
+    // Attributes
+    //
+    bool fInitialized;
+    bool fDebug;
 };
 #endif

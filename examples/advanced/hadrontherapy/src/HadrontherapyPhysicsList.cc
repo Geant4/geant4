@@ -30,9 +30,11 @@
 //    ******      SUGGESTED PHYSICS FOR ACCURATE SIMULATIONS    *********
 //    ******            IN MEDICAL PHYSICS APPLICATIONS         *********
 //
-// 'HADRONTHERAPY_1' and 'HADRONTHERAPY_2' are both suggested;
+// 'HADRONTHERAPY_1' is more suited for protons only
+// 'HADRONTHERAPY_2' is suggested for better precision with ions
+// 'HADRONTHERAPY_3' test that uses Bertini cascade
 // It can be activated inside any macro file using the command:
-// /Physics/addPhysics HADRONTHERAPY_1 (HADRONTHERAPY_2)
+// /Physics/addPhysics HADRONTHERAPY_1 (HADRONTHERAPY_2) (HADRONTHERAPY_3)
 
 #include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
@@ -61,10 +63,14 @@
 #include "G4ProcessManager.hh"
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
+#include "G4EmParameters.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4AutoDelete.hh"
 #include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
+#include "QGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT_HP.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
@@ -176,7 +182,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     }
     
     else if (name == "HADRONTHERAPY_2") {
-        // HP models are switched off
+        
         AddPhysicsList("standard_opt4");
         hadronPhys.push_back( new G4DecayPhysics());
         hadronPhys.push_back( new G4RadioactiveDecayPhysics());
@@ -184,10 +190,26 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
         hadronPhys.push_back( new G4EmExtraPhysics());
         hadronPhys.push_back( new G4HadronElasticPhysics());
         hadronPhys.push_back( new G4StoppingPhysics());
-        hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
+        hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC_AllHP());
         hadronPhys.push_back( new G4NeutronTrackingCut());
         
-        G4cout << "HADRONTHERAPY_2 PHYSICS LIST has been activated" << G4endl;    }
+        G4cout << "HADRONTHERAPY_2 PHYSICS LIST has been activated" << G4endl;   
+    }
+
+    else if (name == "HADRONTHERAPY_3"){
+        AddPhysicsList("standard_opt4");
+        hadronPhys.push_back( new G4DecayPhysics());
+        hadronPhys.push_back( new G4RadioactiveDecayPhysics());
+        hadronPhys.push_back( new G4IonBinaryCascadePhysics());
+        hadronPhys.push_back( new G4EmExtraPhysics());
+        hadronPhys.push_back( new G4HadronElasticPhysics());
+        hadronPhys.push_back( new G4StoppingPhysics());
+        hadronPhys.push_back( new G4HadronPhysicsQGSP_BERT_HP());
+        hadronPhys.push_back( new G4NeutronTrackingCut());
+        
+        G4cout << "HADRONTHERAPY_3 PHYSICS LIST has been activated" << G4endl;
+    }
+
     else {
         G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
         << " is not defined"
@@ -203,6 +225,7 @@ void HadrontherapyPhysicsList::AddStepMax()
     // This process must exist in all threads.
     //
     HadrontherapyStepMax* stepMaxProcess  = new HadrontherapyStepMax();
+    
     
     auto particleIterator = GetParticleIterator();
     particleIterator->reset();

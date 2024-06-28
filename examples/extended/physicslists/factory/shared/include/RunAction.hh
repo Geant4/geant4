@@ -59,7 +59,7 @@ class RunAction : public G4UserRunAction
     ~RunAction() override = default;
 
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
   private:
     G4String fFileName;
@@ -68,4 +68,3 @@ class RunAction : public G4UserRunAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

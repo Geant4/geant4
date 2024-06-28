@@ -37,21 +37,19 @@
 #include "G4OpticalSurface.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIparameter.hh"
 
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
-  : G4UImessenger()
-  , fDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fDetector(Det)
 {
   fOpticalDir = new G4UIdirectory("/opnovice2/");
   fOpticalDir->SetGuidance("Parameters for optical simulation.");
@@ -71,8 +69,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
   fSurfaceModelCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceModelCmd->SetToBeBroadcasted(false);
 
-  fSurfaceSigmaAlphaCmd =
-    new G4UIcmdWithADouble("/opnovice2/surfaceSigmaAlpha", this);
+  fSurfaceSigmaAlphaCmd = new G4UIcmdWithADouble("/opnovice2/surfaceSigmaAlpha", this);
   fSurfaceSigmaAlphaCmd->SetGuidance("surface sigma alpha");
   fSurfaceSigmaAlphaCmd->SetGuidance(" parameter.");
   fSurfaceSigmaAlphaCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -84,29 +81,25 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
   fSurfacePolishCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfacePolishCmd->SetToBeBroadcasted(false);
 
-  fSurfaceMatPropVectorCmd =
-    new G4UIcmdWithAString("/opnovice2/surfaceProperty", this);
+  fSurfaceMatPropVectorCmd = new G4UIcmdWithAString("/opnovice2/surfaceProperty", this);
   fSurfaceMatPropVectorCmd->SetGuidance("Set material property vector");
   fSurfaceMatPropVectorCmd->SetGuidance(" for the surface.");
   fSurfaceMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fSurfaceMatPropConstCmd =
-    new G4UIcmdWithAString("/opnovice2/surfaceConstProperty", this);
+  fSurfaceMatPropConstCmd = new G4UIcmdWithAString("/opnovice2/surfaceConstProperty", this);
   fSurfaceMatPropConstCmd->SetGuidance("Set material constant property");
   fSurfaceMatPropConstCmd->SetGuidance(" for the surface.");
   fSurfaceMatPropConstCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceMatPropConstCmd->SetToBeBroadcasted(false);
 
-  fTankMatPropVectorCmd =
-    new G4UIcmdWithAString("/opnovice2/boxProperty", this);
+  fTankMatPropVectorCmd = new G4UIcmdWithAString("/opnovice2/boxProperty", this);
   fTankMatPropVectorCmd->SetGuidance("Set material property vector for ");
   fTankMatPropVectorCmd->SetGuidance("the box.");
   fTankMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fTankMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fTankMatPropConstCmd =
-    new G4UIcmdWithAString("/opnovice2/boxConstProperty", this);
+  fTankMatPropConstCmd = new G4UIcmdWithAString("/opnovice2/boxConstProperty", this);
   fTankMatPropConstCmd->SetGuidance("Set material constant property ");
   fTankMatPropConstCmd->SetGuidance("for the box.");
   fTankMatPropConstCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -117,15 +110,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
   fTankMaterialCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fTankMaterialCmd->SetToBeBroadcasted(false);
 
-  fWorldMatPropVectorCmd =
-    new G4UIcmdWithAString("/opnovice2/worldProperty", this);
+  fWorldMatPropVectorCmd = new G4UIcmdWithAString("/opnovice2/worldProperty", this);
   fWorldMatPropVectorCmd->SetGuidance("Set material property vector ");
   fWorldMatPropVectorCmd->SetGuidance("for the world.");
   fWorldMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fWorldMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fWorldMatPropConstCmd =
-    new G4UIcmdWithAString("/opnovice2/worldConstProperty", this);
+  fWorldMatPropConstCmd = new G4UIcmdWithAString("/opnovice2/worldConstProperty", this);
   fWorldMatPropConstCmd->SetGuidance("Set material constant property");
   fWorldMatPropConstCmd->SetGuidance(" for the world.");
   fWorldMatPropConstCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -162,167 +153,126 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   //    FINISH
-  if(command == fSurfaceFinishCmd)
-  {
-    if(newValue == "polished")
-    {
+  if (command == fSurfaceFinishCmd) {
+    if (newValue == "polished") {
       fDetector->SetSurfaceFinish(polished);
     }
-    else if(newValue == "polishedfrontpainted")
-    {
+    else if (newValue == "polishedfrontpainted") {
       fDetector->SetSurfaceFinish(polishedfrontpainted);
     }
-    else if(newValue == "polishedbackpainted")
-    {
+    else if (newValue == "polishedbackpainted") {
       fDetector->SetSurfaceFinish(polishedbackpainted);
     }
-    else if(newValue == "ground")
-    {
+    else if (newValue == "ground") {
       fDetector->SetSurfaceFinish(ground);
     }
-    else if(newValue == "groundfrontpainted")
-    {
+    else if (newValue == "groundfrontpainted") {
       fDetector->SetSurfaceFinish(groundfrontpainted);
     }
-    else if(newValue == "groundbackpainted")
-    {
+    else if (newValue == "groundbackpainted") {
       fDetector->SetSurfaceFinish(groundbackpainted);
     }
-    else if(newValue == "polishedlumirrorair")
-    {
+    else if (newValue == "polishedlumirrorair") {
       fDetector->SetSurfaceFinish(polishedlumirrorair);
     }
-    else if(newValue == "polishedlumirrorglue")
-    {
+    else if (newValue == "polishedlumirrorglue") {
       fDetector->SetSurfaceFinish(polishedlumirrorglue);
     }
-    else if(newValue == "polishedair")
-    {
+    else if (newValue == "polishedair") {
       fDetector->SetSurfaceFinish(polishedair);
     }
-    else if(newValue == "polishedteflonair")
-    {
+    else if (newValue == "polishedteflonair") {
       fDetector->SetSurfaceFinish(polishedteflonair);
     }
-    else if(newValue == "polishedtioair")
-    {
+    else if (newValue == "polishedtioair") {
       fDetector->SetSurfaceFinish(polishedtioair);
     }
-    else if(newValue == "polishedtyvekair")
-    {
+    else if (newValue == "polishedtyvekair") {
       fDetector->SetSurfaceFinish(polishedtyvekair);
     }
-    else if(newValue == "polishedvm2000air")
-    {
+    else if (newValue == "polishedvm2000air") {
       fDetector->SetSurfaceFinish(polishedvm2000air);
     }
-    else if(newValue == "polishedvm2000glue")
-    {
+    else if (newValue == "polishedvm2000glue") {
       fDetector->SetSurfaceFinish(polishedvm2000glue);
     }
-    else if(newValue == "etchedlumirrorair")
-    {
+    else if (newValue == "etchedlumirrorair") {
       fDetector->SetSurfaceFinish(etchedlumirrorair);
     }
-    else if(newValue == "etchedlumirrorglue")
-    {
+    else if (newValue == "etchedlumirrorglue") {
       fDetector->SetSurfaceFinish(etchedlumirrorglue);
     }
-    else if(newValue == "etchedair")
-    {
+    else if (newValue == "etchedair") {
       fDetector->SetSurfaceFinish(etchedair);
     }
-    else if(newValue == "etchedteflonair")
-    {
+    else if (newValue == "etchedteflonair") {
       fDetector->SetSurfaceFinish(etchedteflonair);
     }
-    else if(newValue == "etchedtioair")
-    {
+    else if (newValue == "etchedtioair") {
       fDetector->SetSurfaceFinish(etchedtioair);
     }
-    else if(newValue == "etchedtyvekair")
-    {
+    else if (newValue == "etchedtyvekair") {
       fDetector->SetSurfaceFinish(etchedtyvekair);
     }
-    else if(newValue == "etchedvm2000air")
-    {
+    else if (newValue == "etchedvm2000air") {
       fDetector->SetSurfaceFinish(etchedvm2000air);
     }
-    else if(newValue == "etchedvm2000glue")
-    {
+    else if (newValue == "etchedvm2000glue") {
       fDetector->SetSurfaceFinish(etchedvm2000glue);
     }
-    else if(newValue == "groundlumirrorair")
-    {
+    else if (newValue == "groundlumirrorair") {
       fDetector->SetSurfaceFinish(groundlumirrorair);
     }
-    else if(newValue == "groundlumirrorglue")
-    {
+    else if (newValue == "groundlumirrorglue") {
       fDetector->SetSurfaceFinish(groundlumirrorglue);
     }
-    else if(newValue == "groundair")
-    {
+    else if (newValue == "groundair") {
       fDetector->SetSurfaceFinish(groundair);
     }
-    else if(newValue == "groundteflonair")
-    {
+    else if (newValue == "groundteflonair") {
       fDetector->SetSurfaceFinish(groundteflonair);
     }
-    else if(newValue == "groundtioair")
-    {
+    else if (newValue == "groundtioair") {
       fDetector->SetSurfaceFinish(groundtioair);
     }
-    else if(newValue == "groundtyvekair")
-    {
+    else if (newValue == "groundtyvekair") {
       fDetector->SetSurfaceFinish(groundtyvekair);
     }
-    else if(newValue == "groundvm2000air")
-    {
+    else if (newValue == "groundvm2000air") {
       fDetector->SetSurfaceFinish(groundvm2000air);
     }
-    else if(newValue == "groundvm2000glue")
-    {
+    else if (newValue == "groundvm2000glue") {
       fDetector->SetSurfaceFinish(groundvm2000glue);
     }
     //         for Davis model
-    else if(newValue == "Rough_LUT")
-    {
+    else if (newValue == "Rough_LUT") {
       fDetector->SetSurfaceFinish(Rough_LUT);
     }
-    else if(newValue == "RoughTeflon_LUT")
-    {
+    else if (newValue == "RoughTeflon_LUT") {
       fDetector->SetSurfaceFinish(RoughTeflon_LUT);
     }
-    else if(newValue == "RoughESR_LUT")
-    {
+    else if (newValue == "RoughESR_LUT") {
       fDetector->SetSurfaceFinish(RoughESR_LUT);
     }
-    else if(newValue == "RoughESRGrease_LUT")
-    {
+    else if (newValue == "RoughESRGrease_LUT") {
       fDetector->SetSurfaceFinish(RoughESRGrease_LUT);
     }
-    else if(newValue == "Polished_LUT")
-    {
+    else if (newValue == "Polished_LUT") {
       fDetector->SetSurfaceFinish(Polished_LUT);
     }
-    else if(newValue == "PolishedTeflon_LUT")
-    {
+    else if (newValue == "PolishedTeflon_LUT") {
       fDetector->SetSurfaceFinish(PolishedTeflon_LUT);
     }
-    else if(newValue == "PolishedESR_LUT")
-    {
+    else if (newValue == "PolishedESR_LUT") {
       fDetector->SetSurfaceFinish(PolishedESR_LUT);
     }
-    else if(newValue == "PolishedESRGrease_LUT")
-    {
+    else if (newValue == "PolishedESRGrease_LUT") {
       fDetector->SetSurfaceFinish(PolishedESRGrease_LUT);
     }
-    else if(newValue == "Detector_LUT")
-    {
+    else if (newValue == "Detector_LUT") {
       fDetector->SetSurfaceFinish(Detector_LUT);
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
       ed << "Invalid surface finish: " << newValue;
       G4Exception("DetectorMessenger", "OpNovice2_003", FatalException, ed);
@@ -330,30 +280,23 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
 
   //  MODEL
-  else if(command == fSurfaceModelCmd)
-  {
-    if(newValue == "glisur")
-    {
+  else if (command == fSurfaceModelCmd) {
+    if (newValue == "glisur") {
       fDetector->SetSurfaceModel(glisur);
     }
-    else if(newValue == "unified")
-    {
+    else if (newValue == "unified") {
       fDetector->SetSurfaceModel(unified);
     }
-    else if(newValue == "LUT")
-    {
+    else if (newValue == "LUT") {
       fDetector->SetSurfaceModel(LUT);
     }
-    else if(newValue == "DAVIS")
-    {
+    else if (newValue == "DAVIS") {
       fDetector->SetSurfaceModel(DAVIS);
     }
-    else if(newValue == "dichroic")
-    {
+    else if (newValue == "dichroic") {
       fDetector->SetSurfaceModel(dichroic);
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
       ed << "Invalid surface model: " << newValue;
       G4Exception("DetectorMessenger", "ONovice2_001", FatalException, ed);
@@ -361,47 +304,35 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
 
   // TYPE
-  else if(command == fSurfaceTypeCmd)
-  {
-    if(newValue == "dielectric_metal")
-    {
+  else if (command == fSurfaceTypeCmd) {
+    if (newValue == "dielectric_metal") {
       fDetector->SetSurfaceType(dielectric_metal);
     }
-    else if(newValue == "dielectric_dielectric")
-    {
+    else if (newValue == "dielectric_dielectric") {
       fDetector->SetSurfaceType(dielectric_dielectric);
     }
-    else if(newValue == "dielectric_LUT")
-    {
+    else if (newValue == "dielectric_LUT") {
       fDetector->SetSurfaceType(dielectric_LUT);
     }
-    else if(newValue == "dielectric_LUTDAVIS")
-    {
+    else if (newValue == "dielectric_LUTDAVIS") {
       fDetector->SetSurfaceType(dielectric_LUTDAVIS);
     }
-    else if(newValue == "coated")
-    {
+    else if (newValue == "coated") {
       fDetector->SetSurfaceType(coated);
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
       ed << "Invalid surface type: " << newValue;
       G4Exception("DetectorMessenger", "OpNovice2_002", FatalException, ed);
     }
   }
-  else if(command == fSurfaceSigmaAlphaCmd)
-  {
-    fDetector->SetSurfaceSigmaAlpha(
-      G4UIcmdWithADouble::GetNewDoubleValue(newValue));
+  else if (command == fSurfaceSigmaAlphaCmd) {
+    fDetector->SetSurfaceSigmaAlpha(G4UIcmdWithADouble::GetNewDoubleValue(newValue));
   }
-  else if(command == fSurfacePolishCmd)
-  {
-    fDetector->SetSurfacePolish(
-      G4UIcmdWithADouble::GetNewDoubleValue(newValue));
+  else if (command == fSurfacePolishCmd) {
+    fDetector->SetSurfacePolish(G4UIcmdWithADouble::GetNewDoubleValue(newValue));
   }
-  else if(command == fTankMatPropVectorCmd)
-  {
+  else if (command == fTankMatPropVectorCmd) {
     // got a string. need to convert it to physics vector.
     // string format is property name, then pairs of energy, value
     // specify units for each value, eg 3.0*eV
@@ -410,12 +341,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     std::istringstream instring(newValue);
     G4String prop;
     instring >> prop;
-    while(instring)
-    {
+    while (instring) {
       G4String tmp;
       instring >> tmp;
-      if(tmp == "")
-      {
+      if (tmp == "") {
         break;
       }
       G4double en = G4UIcommand::ConvertToDouble(tmp);
@@ -426,20 +355,17 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
     fDetector->AddTankMPV(prop, mpv);
   }
-  else if(command == fWorldMatPropVectorCmd)
-  {
+  else if (command == fWorldMatPropVectorCmd) {
     // Convert string to physics vector
     // string format is property name, then pairs of energy, value
     auto mpv = new G4MaterialPropertyVector();
     std::istringstream instring(newValue);
     G4String prop;
     instring >> prop;
-    while(instring)
-    {
+    while (instring) {
       G4String tmp;
       instring >> tmp;
-      if(tmp == "")
-      {
+      if (tmp == "") {
         break;
       }
       G4double en = G4UIcommand::ConvertToDouble(tmp);
@@ -449,8 +375,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     }
     fDetector->AddWorldMPV(prop, mpv);
   }
-  else if(command == fSurfaceMatPropVectorCmd)
-  {
+  else if (command == fSurfaceMatPropVectorCmd) {
     // Convert string to physics vector
     // string format is property name, then pairs of energy, value
     // space delimited
@@ -459,12 +384,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     std::istringstream instring(newValue);
     G4String prop;
     instring >> prop;
-    while(instring)
-    {
+    while (instring) {
       G4String tmp;
       instring >> tmp;
-      if(tmp == "")
-      {
+      if (tmp == "") {
         break;
       }
       G4double en = G4UIcommand::ConvertToDouble(tmp);
@@ -475,8 +398,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fDetector->AddSurfaceMPV(prop, mpv);
   }
 
-  else if(command == fTankMatPropConstCmd)
-  {
+  else if (command == fTankMatPropConstCmd) {
     // Convert string to physics vector
     // string format is property name, then value
     // space delimited
@@ -488,8 +410,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     fDetector->AddTankMPC(prop, val);
   }
-  else if(command == fWorldMatPropConstCmd)
-  {
+  else if (command == fWorldMatPropConstCmd) {
     // Convert string to physics vector
     // string format is property name, then value
     // space delimited
@@ -501,8 +422,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     fDetector->AddWorldMPC(prop, val);
   }
-  else if(command == fSurfaceMatPropConstCmd)
-  {
+  else if (command == fSurfaceMatPropConstCmd) {
     // Convert string to physics vector
     // string format is property name, then value
     // space delimited
@@ -514,12 +434,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     fDetector->AddSurfaceMPC(prop, val);
   }
-  else if(command == fWorldMaterialCmd)
-  {
+  else if (command == fWorldMaterialCmd) {
     fDetector->SetWorldMaterial(newValue);
   }
-  else if(command == fTankMaterialCmd)
-  {
+  else if (command == fTankMaterialCmd) {
     fDetector->SetTankMaterial(newValue);
   }
 }

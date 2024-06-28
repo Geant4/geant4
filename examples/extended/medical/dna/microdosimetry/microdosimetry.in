@@ -1,8 +1,58 @@
+# Verbosity
 /tracking/verbose 0
 /run/verbose 2
-/process/eLoss/verbose 1
-/gun/particle proton
-/gun/energy 5 MeV
+/control/verbose 2
+#
+# MT
+/run/numberOfThreads 2
+#
+# Material
+#/dna/test/setMat G4_WATER_MODIFIED
+/dna/test/setMat G4_WATER
+#
+#
+# Physics
+#
+# Atomic deexcitation
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# -> 1) EM Physics in the World region
+/dna/test/addPhysics emstandard_opt4
+#
+# -> 2) Geant4-DNA Physics in the target regionTarget
+# use /process/em/AddDNARegion regionTarget X
+# where X is DNA_Opt0 or DNA_Opt2 or DNA_Opt4 or DNA_Opt6
+/process/em/AddDNARegion regionTarget DNA_Opt4
+#
+# -> 3) If needed, to add radioactive radioactive decay
+#/dna/test/addPhysics raddecay
+#
+# -> 4) If needed, heavy ions tracking cut
+#/dna/test/addIonsTrackingCut false
+#
+# Run initialization
 /run/initialize
+#
+# Visualization
+#/control/execute vis.mac
+#
+# Incident particle
+#
+/gun/position -4 0 0 micrometer
+#
+#/gun/particle e-
+/gun/particle proton
+#/gun/particle hydrogen
+#/gun/particle alpha
+#/gun/particle alpha+
+#/gun/particle helium
+#/gun/particle ion
+#/gun/ion 6 12
+#
+/gun/energy 1 MeV
+#
+# Beam on
 /run/beamOn 2
-

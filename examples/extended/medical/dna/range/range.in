@@ -1,18 +1,28 @@
-#
+# MT mode
 /run/numberOfThreads 2
 #
+# Set sphere material
 /range/det/setMat G4_WATER
+#
+# Set sphere radius
 /range/det/setRadius 1 m
 #
+# Set tracking cut
 /range/det/setTrackingCut 10 eV
 #
-/range/phys/addPhysics  dna	        
+# Set Geant4-DNA physics constructor
+/range/phys/addPhysics  dna_opt2
 #
+# Run initialization
 /run/initialize
 #
+# Set incident particle type
 /gun/particle e-
 #
+# Set incident particle energy
 /gun/energy 12 eV
+#
+# Beam on
 /run/beamOn 1000
 #
 /gun/energy 14 eV

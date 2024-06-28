@@ -36,29 +36,24 @@
 #include "SteppingAction.hh"
 
 #include "ClusteringAlgo.hh"
-#include "G4EventManager.hh"
 #include "EventAction.hh"
+
+#include "G4EventManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()
-:G4UserSteppingAction(),RunInitObserver(),fpEventAction(0)
-{
-}
+SteppingAction::SteppingAction() : G4UserSteppingAction(), RunInitObserver(), fpEventAction(0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{
-}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::Initialize()
 {
-  fpEventAction = (EventAction*) G4EventManager::GetEventManager()->
-      GetUserEventAction();
+  fpEventAction = (EventAction*)G4EventManager::GetEventManager()->GetUserEventAction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,10 +61,8 @@ void SteppingAction::Initialize()
 void SteppingAction::UserSteppingAction(const G4Step* pStep)
 {
   G4double edepStep = pStep->GetTotalEnergyDeposit();
-  if(edepStep>0)
-  {
+  if (edepStep > 0) {
     fpEventAction->AddEdep(edepStep);
-    fpEventAction->fpClustering->RegisterDamage(
-        pStep->GetPreStepPoint()->GetPosition(),edepStep);
+    fpEventAction->fpClustering->RegisterDamage(pStep->GetPreStepPoint()->GetPosition(), edepStep);
   }
 }

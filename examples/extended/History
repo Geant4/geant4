@@ -1,0 +1,17 @@
+# Example extended History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2024-06-10 Gabriele Cosmo (exextended-V11-02-01)
+- Updated GDML files to use short URL for schema validation.
+
+## 2024-06-04 Ben Morgan (exextended-V11-02-00)
+- Initial overall History file for extended examples.
+  Used for global changes affecting all examples under here.
+- Apply clang-format to all extended examples.
+- Address coding style warnings.
+

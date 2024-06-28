@@ -32,25 +32,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 
+#include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-int main(int argc,char** argv) {
-
-  //detect interactive mode (if no arguments) and define UI session
+int main(int argc, char** argv)
+{
+  // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = 0;
-  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+  if (argc == 1) ui = new G4UIExecutive(argc, argv);
 
-  //Construct a serial run manager
+  // Construct a serial run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // set mandatory initialization classes
@@ -59,25 +58,26 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
-      
-  // set user action classes
-  runManager->SetUserAction(new RunAction(det,prim));
 
-  //get the pointer to the User Interface manager 
+  // set user action classes
+  runManager->SetUserAction(new RunAction(det, prim));
+
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)  {
-    //interactive mode
+  if (ui) {
+    // interactive mode
     ui->SessionStart();
     delete ui;
-  } else {
-    //batch mode  
+  }
+  else {
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
 
-  //job termination 
+  // job termination
   //
   delete runManager;
 }

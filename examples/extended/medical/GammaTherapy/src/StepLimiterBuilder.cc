@@ -43,25 +43,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepLimiterBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+
 #include "StepLimiter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StepLimiterBuilder::StepLimiterBuilder(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{}
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepLimiterBuilder::~StepLimiterBuilder()
-{}
+StepLimiterBuilder::StepLimiterBuilder(const G4String& name) : G4VPhysicsConstructor(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepLimiterBuilder::ConstructParticle()
-{}
+StepLimiterBuilder::~StepLimiterBuilder() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StepLimiterBuilder::ConstructParticle() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,9 +67,9 @@ void StepLimiterBuilder::ConstructProcess()
 {
   StepLimiter* stepMax = new StepLimiter();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while( (*particleIterator)() ){
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
@@ -82,4 +80,3 @@ void StepLimiterBuilder::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

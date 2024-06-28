@@ -56,7 +56,6 @@
 #include "G4VUserTrackInformation.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4Material.hh"
-#include "G4Profiler.hh"
 
 class G4Step;  // Forward declaration
 class G4MaterialCutsCouple;
@@ -66,9 +65,6 @@ class G4VProcess;
 class G4Track
 {
   public:
-  // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
-  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Track>;
-
     G4Track();
       // Default constructor
     G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -76,7 +72,7 @@ class G4Track
             const G4ThreeVector& aValuePosition);
       // Constructor - aValueTime is a global time
 
-    G4Track(const G4Track&);
+    G4Track(const G4Track&,G4bool copyTouchables = true);
       // Copy Constructor - copies members other than tracking information
 
     ~G4Track();
@@ -94,137 +90,135 @@ class G4Track
     inline G4bool operator!=(const G4Track&);
       // Equality operators
 
-    void CopyTrackInfo(const G4Track&);
+    void CopyTrackInfo(const G4Track&, G4bool copyTouchables = true);
       // Copy information of the track (w/o tracking information)
 
-    G4int GetTrackID() const;
-    void SetTrackID(const G4int aValue);
+    inline G4int GetTrackID() const;
+    inline void SetTrackID(const G4int aValue);
       // Get/Set functions track ID
 
-    G4int GetParentID() const;
-    void SetParentID(const G4int aValue);
+    inline G4int GetParentID() const;
+    inline void SetParentID(const G4int aValue);
 
-    const G4DynamicParticle* GetDynamicParticle() const;
+    inline const G4DynamicParticle* GetDynamicParticle() const;
       // Dynamic particle
 
-    const G4ParticleDefinition* GetParticleDefinition() const;
+    inline const G4ParticleDefinition* GetParticleDefinition() const;
       // Particle definition
-    G4ParticleDefinition* GetDefinition() const;
+    inline G4ParticleDefinition* GetDefinition() const;
       // Obsolete, for backwards compatibility...
 
-    const G4ThreeVector& GetPosition() const;
-    void SetPosition(const G4ThreeVector& aValue);
+    inline const G4ThreeVector& GetPosition() const;
+    inline void SetPosition(const G4ThreeVector& aValue);
       // Position, time
 
-    G4double GetGlobalTime() const;
-    void SetGlobalTime(const G4double aValue);
+    inline G4double GetGlobalTime() const;
+    inline void SetGlobalTime(const G4double aValue);
       // Time since the event in which the track belongs is created
 
-    G4double GetLocalTime() const;
-    void SetLocalTime(const G4double aValue);
+    inline G4double GetLocalTime() const;
+    inline void SetLocalTime(const G4double aValue);
       // Time since the current track is created
 
-    G4double GetProperTime() const;
-    void SetProperTime(const G4double aValue);
+    inline G4double GetProperTime() const;
+    inline void SetProperTime(const G4double aValue);
       // Proper time of the current track
 
-    G4VPhysicalVolume* GetVolume() const;
-    G4VPhysicalVolume* GetNextVolume() const;
+    inline G4VPhysicalVolume* GetVolume() const;
+    inline G4VPhysicalVolume* GetNextVolume() const;
       // Volume, material, touchable
 
-    G4Material* GetMaterial() const;
-    G4Material* GetNextMaterial() const;
+    inline G4Material* GetMaterial() const;
+    inline G4Material* GetNextMaterial() const;
 
-    const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
-    const G4MaterialCutsCouple* GetNextMaterialCutsCouple() const;
+    inline const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
+    inline const G4MaterialCutsCouple* GetNextMaterialCutsCouple() const;
 
-    const G4VTouchable* GetTouchable() const;
-    const G4TouchableHandle& GetTouchableHandle() const;
-    void SetTouchableHandle(const G4TouchableHandle& apValue);
+    inline const G4VTouchable* GetTouchable() const;
+    inline const G4TouchableHandle& GetTouchableHandle() const;
+    inline void SetTouchableHandle(const G4TouchableHandle& apValue);
 
-    const G4VTouchable* GetNextTouchable() const;
-    const G4TouchableHandle& GetNextTouchableHandle() const;
-    void SetNextTouchableHandle(const G4TouchableHandle& apValue);
+    inline const G4VTouchable* GetNextTouchable() const;
+    inline const G4TouchableHandle& GetNextTouchableHandle() const;
+    inline void SetNextTouchableHandle(const G4TouchableHandle& apValue);
 
-    const G4VTouchable* GetOriginTouchable() const;
-    const G4TouchableHandle& GetOriginTouchableHandle() const;
-    void SetOriginTouchableHandle(const G4TouchableHandle& apValue);
+    inline const G4VTouchable* GetOriginTouchable() const;
+    inline const G4TouchableHandle& GetOriginTouchableHandle() const;
+    inline void SetOriginTouchableHandle(const G4TouchableHandle& apValue);
 
-    G4double GetKineticEnergy() const;
-    void SetKineticEnergy(const G4double aValue);
+    inline G4double GetKineticEnergy() const;
+    inline G4double GetTotalEnergy() const;
+    inline void SetKineticEnergy(const G4double aValue);
       // Energy
 
-    G4double GetTotalEnergy() const;
-
-    const G4ThreeVector& GetMomentumDirection() const;
-    void SetMomentumDirection(const G4ThreeVector& aValue);
+    inline G4ThreeVector GetMomentum() const;
+    inline const G4ThreeVector& GetMomentumDirection() const;
+    inline void SetMomentumDirection(const G4ThreeVector& aValue);
       // Momentum
 
-    G4ThreeVector GetMomentum() const;
-
-    G4double GetVelocity() const;
-    void SetVelocity(G4double val);
+    inline G4double GetVelocity() const;
+    inline void SetVelocity(G4double val);
       // Velocity
 
-    G4double CalculateVelocity() const;
+    inline G4double CalculateVelocity() const;
     G4double CalculateVelocityForOpticalPhoton() const;
 
-    G4bool UseGivenVelocity() const;
-    void UseGivenVelocity(G4bool val);
+    inline G4bool UseGivenVelocity() const;
+    inline void UseGivenVelocity(G4bool val);
 
-    const G4ThreeVector& GetPolarization() const;
-    void SetPolarization(const G4ThreeVector& aValue);
+    inline const G4ThreeVector& GetPolarization() const;
+    inline void SetPolarization(const G4ThreeVector& aValue);
       // Polarization
 
-    G4TrackStatus GetTrackStatus() const;
-    void SetTrackStatus(const G4TrackStatus aTrackStatus);
+    inline G4TrackStatus GetTrackStatus() const;
+    inline void SetTrackStatus(const G4TrackStatus aTrackStatus);
       // Track status, flags for tracking
 
-    G4bool IsBelowThreshold() const;
-    void SetBelowThresholdFlag(G4bool value = true);
+    inline G4bool IsBelowThreshold() const;
+    inline void SetBelowThresholdFlag(G4bool value = true);
       // The flag of "BelowThreshold" is set to true
       // If this track energy is below threshold energy
       // in this material is determined by the range cut value
 
-    G4bool IsGoodForTracking() const;
-    void SetGoodForTrackingFlag(G4bool value = true);
+    inline G4bool IsGoodForTracking() const;
+    inline void SetGoodForTrackingFlag(G4bool value = true);
       // The flag of "GoodForTracking" is set by processes
       // if this track should be tracked
       // even if the energy is below threshold
 
-    G4double GetTrackLength() const;
-    void AddTrackLength(const G4double aValue);
+    inline G4double GetTrackLength() const;
+    inline void AddTrackLength(const G4double aValue);
       // Accumulated track length
 
-    const G4Step* GetStep() const;
-    void SetStep(const G4Step* aValue);
+    inline const G4Step* GetStep() const;
+    inline void SetStep(const G4Step* aValue);
       // Step information
 
-    G4int GetCurrentStepNumber() const;
-    void IncrementCurrentStepNumber();
+    inline G4int GetCurrentStepNumber() const;
+    inline void IncrementCurrentStepNumber();
 
-    G4double GetStepLength() const;
-    void SetStepLength(G4double value);
+    inline G4double GetStepLength() const;
+    inline void SetStepLength(G4double value);
       // Before the end of the AlongStepDoIt() loop, StepLength keeps
       // the initial value which is determined by the shortest geometrical Step
       // proposed by a physics process. After finishing the AlongStepDoIt(),
       // it will be set equal to 'StepLength' in G4Step
 
-    const G4ThreeVector& GetVertexPosition() const;
-    void SetVertexPosition(const G4ThreeVector& aValue);
+    inline const G4ThreeVector& GetVertexPosition() const;
+    inline void SetVertexPosition(const G4ThreeVector& aValue);
       // Vertex (where this track was created) information
 
-    const G4ThreeVector& GetVertexMomentumDirection() const;
-    void SetVertexMomentumDirection(const G4ThreeVector& aValue);
+    inline const G4ThreeVector& GetVertexMomentumDirection() const;
+    inline void SetVertexMomentumDirection(const G4ThreeVector& aValue);
 
-    G4double GetVertexKineticEnergy() const;
-    void SetVertexKineticEnergy(const G4double aValue);
+    inline G4double GetVertexKineticEnergy() const;
+    inline void SetVertexKineticEnergy(const G4double aValue);
 
-    const G4LogicalVolume* GetLogicalVolumeAtVertex() const;
-    void SetLogicalVolumeAtVertex(const G4LogicalVolume*);
+    inline const G4LogicalVolume* GetLogicalVolumeAtVertex() const;
+    inline void SetLogicalVolumeAtVertex(const G4LogicalVolume*);
 
-    const G4VProcess* GetCreatorProcess() const;
-    void SetCreatorProcess(const G4VProcess* aValue);
+    inline const G4VProcess* GetCreatorProcess() const;
+    inline void SetCreatorProcess(const G4VProcess* aValue);
 
     inline void SetCreatorModelID(const G4int id);
     inline G4int GetCreatorModelID() const;  
@@ -258,12 +252,12 @@ class G4Track
       // the above "Get" methods return, respectively: nullptr, 0, false,
       // 0, "", 0.
   
-    G4double GetWeight() const;
-    void SetWeight(G4double aValue);
+    inline G4double GetWeight() const;
+    inline void SetWeight(G4double aValue);
       // Track weight; methods for manipulating a weight for this track
 
-    G4VUserTrackInformation* GetUserInformation() const;
-    void SetUserInformation(G4VUserTrackInformation* aValue) const;
+    inline G4VUserTrackInformation* GetUserInformation() const;
+    inline void SetUserInformation(G4VUserTrackInformation* aValue) const;
       // User information
 
     void SetAuxiliaryTrackInformation(G4int id,
@@ -363,6 +357,8 @@ class G4Track
     G4bool useGivenVelocity = false;
       // do not calculate velocity and just use current fVelocity
       // if this flag is set
+
+    G4bool fCopyTouchables = true;
 };
 
 #include "G4Track.icc"

@@ -6,9 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-24 Gabriele Cosmo (hadrontherapy-V11-01-02)
+## 2024-04-24 Gabriele Cosmo (hadrontherapy-V11-02-01)
 - Fixed compilation error on Windows VC++ with C++20 Standard enabled.
   Make proper use of G4String in HadrontherapyInteractionParameters.
+
+## 2024-03-27 A. Sciuto (hadrontherapy-V11-02-00)
+- Update of the laser beamline macro and physics list 
 
 ## 2023-11-15 I. Hrivnacova (hadrontherapy-V11-01-01)
 - Updated macros using /vis/open:

@@ -31,9 +31,9 @@
 #ifndef F04FocusSolenoid_h
 #define F04FocusSolenoid_h 1
 
-#include "G4LogicalVolume.hh"
-
 #include "F04SimpleSolenoid.hh"
+
+#include "G4LogicalVolume.hh"
 
 //  F04FocusSolenoid implements a solenoid magnet with an increased
 //  cylindrical magnetic field in +/- z-direction (or half focusing)
@@ -41,10 +41,8 @@
 class F04FocusSolenoid : public F04SimpleSolenoid
 {
   public:
-
     ///  Default constructor.
-    F04FocusSolenoid(G4double, G4double, G4double,
-                            G4LogicalVolume*, G4ThreeVector);
+    F04FocusSolenoid(G4double, G4double, G4double, G4LogicalVolume*, G4ThreeVector);
 
     ///  Destructor.
     ~F04FocusSolenoid() override = default;
@@ -57,12 +55,10 @@ class F04FocusSolenoid : public F04SimpleSolenoid
     void AddFieldValue(const G4double point[4], G4double field[6]) const override;
 
   private:
-
     G4bool fHalf = false;
 
     G4double fB1 = 0.;
     G4double fB2 = 0.;
-
 };
 
 #endif

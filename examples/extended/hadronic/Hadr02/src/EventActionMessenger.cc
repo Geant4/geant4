@@ -40,34 +40,31 @@
 //
 
 #include "EventActionMessenger.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "EventAction.hh"
+#include "HistoManager.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
- : G4UImessenger(),
-   fEventAction(EvAct),
-   fIonCmd(0),
-   fDebugCmd(0)
-{ 
+  : G4UImessenger(), fEventAction(EvAct), fIonCmd(0), fDebugCmd(0)
+{
   fIonCmd = new G4UIcmdWithAString("/testhadr/ionPhysics", this);
   fIonCmd->SetGuidance("Added ion physics");
   fIonCmd->SetGuidance("  Choice : FTF DPMJET");
-  fIonCmd->SetParameterName("ion",true);
-  fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fIonCmd->SetParameterName("ion", true);
+  fIonCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fDebugCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent",this);
+  fDebugCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent", this);
   fDebugCmd->SetGuidance("D event to debug");
-  fDebugCmd->SetParameterName("fNb",false);
+  fDebugCmd->SetParameterName("fNb", false);
   fDebugCmd->SetRange("fNb>0");
-  fDebugCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
-
+  fDebugCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,15 +77,15 @@ EventActionMessenger::~EventActionMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == fIonCmd)
-    {HistoManager::GetPointer()->SetIonPhysics(newValue);}
+void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fIonCmd) {
+    HistoManager::GetPointer()->SetIonPhysics(newValue);
+  }
 
-  if(command == fDebugCmd)
-    {fEventAction->AddEventToDebug(fDebugCmd->GetNewIntValue(newValue));}           
-   
+  if (command == fDebugCmd) {
+    fEventAction->AddEventToDebug(fDebugCmd->GetNewIntValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

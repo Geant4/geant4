@@ -39,7 +39,6 @@
 #define G4MTRunManager_hh 1
 
 #include "G4MTBarrier.hh"
-#include "G4Profiler.hh"
 #include "G4RNGHelper.hh"
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
@@ -60,10 +59,6 @@ class G4MTRunManager : public G4RunManager
     friend class G4RunManagerFactory;
 
   public:
-    // The profiler aliases are only used when compiled with
-    // GEANT4_USE_TIMEMORY.
-    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
-
     // Map of defined worlds.
     using masterWorlds_t = std::map<G4int, G4VPhysicalVolume*>;
 
@@ -157,8 +152,8 @@ class G4MTRunManager : public G4RunManager
     void SetUserAction(G4UserSteppingAction* userAction) override;
 
     // To be invoked solely from G4WorkerRunManager to merge the results
-    void MergeScores(const G4ScoringManager* localScoringManager);
-    void MergeRun(const G4Run* localRun);
+    virtual void MergeScores(const G4ScoringManager* localScoringManager);
+    virtual void MergeRun(const G4Run* localRun);
 
     // Handling of more than one run per thread
     enum class WorkerActionRequest
@@ -274,7 +269,7 @@ class G4MTRunManager : public G4RunManager
     G4MTBarrier nextActionRequestBarrier;
     G4MTBarrier processUIBarrier;
 
-  private:
+  protected:
     // List of workers (i.e. thread)
     using G4ThreadsList = std::list<G4Thread*>;
 

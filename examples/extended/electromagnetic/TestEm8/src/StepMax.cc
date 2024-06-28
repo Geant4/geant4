@@ -28,32 +28,38 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMax.hh"
+
 #include "DetectorConstruction.hh"
-#include "G4VPhysicalVolume.hh"
+
 #include "G4TransportationProcessType.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::StepMax(DetectorConstruction *ptr, const G4String &processName)
-  : G4VEmProcess(processName, fGeneral), fDetector(ptr) {
+StepMax::StepMax(DetectorConstruction* ptr, const G4String& processName)
+  : G4VEmProcess(processName, fGeneral), fDetector(ptr)
+{
   SetProcessSubType(static_cast<G4int>(STEP_LIMITER));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool StepMax::IsApplicable(const G4ParticleDefinition &part) {
+G4bool StepMax::IsApplicable(const G4ParticleDefinition& part)
+{
   return (part.GetPDGCharge() != 0. && !part.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::PreparePhysicsTable(const G4ParticleDefinition &) {
+void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
+{
   fIsInitialised = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::BuildPhysicsTable(const G4ParticleDefinition &) {
+void StepMax::BuildPhysicsTable(const G4ParticleDefinition&)
+{
   if (!fIsInitialised) {
     fMaxChargedStep = fDetector->GetMaxChargedStep();
     fWorld = fDetector->GetWorldPhysVol();
@@ -67,13 +73,13 @@ void StepMax::BuildPhysicsTable(const G4ParticleDefinition &) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::InitialiseProcess(const G4ParticleDefinition *) {}
+void StepMax::InitialiseProcess(const G4ParticleDefinition*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double
-StepMax::PostStepGetPhysicalInteractionLength(const G4Track &aTrack, G4double,
-                                              G4ForceCondition *condition) {
+G4double StepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack, G4double,
+                                                       G4ForceCondition* condition)
+{
   // condition is set to "Not Forced"
   *condition = NotForced;
   return (aTrack.GetVolume() != fWorld) ? fMaxChargedStep : DBL_MAX;
@@ -81,8 +87,8 @@ StepMax::PostStepGetPhysicalInteractionLength(const G4Track &aTrack, G4double,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange *StepMax::PostStepDoIt(const G4Track &aTrack,
-                                         const G4Step &) {
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
   // do nothing
   aParticleChange.Initialize(aTrack);
   return &aParticleChange;

@@ -35,31 +35,31 @@
 // for fast simulation in calorimeters.
 //
 //-------------------------------------------------------------------
-#include "FTFP_BERT.hh"                  // for FTFP_BERT
+#include "FTFP_BERT.hh"  // for FTFP_BERT
 #include "Par04ActionInitialisation.hh"  // for Par04ActionInitialisation
 #include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
 #include "Par04ParallelFastWorld.hh"
 #include "Par04ParallelFullWorld.hh"
 
-#include "G4EmParameters.hh"             // for G4EmParameters
-#include "G4FastSimulationPhysics.hh"    // for G4FastSimulationPhysics
-#include "G4HadronicProcessStore.hh"     // for G4HadronicProcessStore
+#include "G4EmParameters.hh"  // for G4EmParameters
+#include "G4Exception.hh"  // for G4Exception
+#include "G4ExceptionSeverity.hh"  // for FatalErrorInArgument
+#include "G4FastSimulationPhysics.hh"  // for G4FastSimulationPhysics
+#include "G4HadronicProcessStore.hh"  // for G4HadronicProcessStore
 #include "G4ParallelWorldPhysics.hh"
-#include "G4RunManagerFactory.hh"        // for G4RunManagerFactory, G4RunMa...
-#include "G4Types.hh"                    // for G4bool, G4int
-#include "G4UIExecutive.hh"              // for G4UIExecutive
-#include "G4UImanager.hh"                // for G4UImanager
-#include "G4VisExecutive.hh"             // for G4VisExecutive
+#include "G4RunManager.hh"  // for G4RunManager
+#include "G4RunManagerFactory.hh"  // for G4RunManagerFactory, G4RunMa...
+#include "G4String.hh"  // for G4String
+#include "G4Types.hh"  // for G4bool, G4int
+#include "G4UIExecutive.hh"  // for G4UIExecutive
+#include "G4UImanager.hh"  // for G4UImanager
+#include "G4VisExecutive.hh"  // for G4VisExecutive
+#include "G4VisManager.hh"  // for G4VisManager
+#include "G4ios.hh"  // for G4cout, G4endl
 
-#include "G4Exception.hh"                // for G4Exception
-#include "G4ExceptionSeverity.hh"        // for FatalErrorInArgument
-#include "G4RunManager.hh"               // for G4RunManager
-#include "G4String.hh"                   // for G4String
-#include "G4VisManager.hh"               // for G4VisManager
-#include "G4ios.hh"                      // for G4cout, G4endl
-#include <ctime>                        // for time
-#include <sstream>                       // for char_traits, operator<<, bas...
-#include <string>                        // for allocator, operator+, operat...
+#include <ctime>  // for time
+#include <sstream>  // for char_traits, operator<<, bas...
+#include <string>  // for allocator, operator+, operat...
 
 int main(int argc, char** argv)
 {
@@ -77,90 +77,79 @@ int main(int argc, char** argv)
     "\n\t-r\t\trun manager type (0=serial,1=MT,2=tasking)"
     "\n\t-t\t\tnumber of threads for MT mode (no change for other modes)."
     );
-  if(argc < 2 ) {
+  if (argc < 2) {
     G4Exception("main", "No arguments", FatalErrorInArgument,
-                ("No arguments passed to " + G4String(argv[0]) + "\n" + helpMsg)
-                .c_str());
+                ("No arguments passed to " + G4String(argv[0]) + "\n" + helpMsg).c_str());
   }
-  for(G4int i = 1; i < argc; ++i)
-  {
+  for (G4int i = 1; i < argc; ++i) {
     G4String argument(argv[i]);
-    if(argument == "-h" || argument == "--help")
-    {
+    if (argument == "-h" || argument == "--help") {
       G4cout << helpMsg << G4endl;
       return 0;
     }
-    else if(argument == "-m")
-    {
-      batchMacroName     = G4String(argv[i + 1]);
+    else if (argument == "-m") {
+      batchMacroName = G4String(argv[i + 1]);
       ++i;
     }
-    else if(argument == "-i")
-    {
+    else if (argument == "-i") {
       useInteractiveMode = true;
     }
-    else if(argument == "-r")
-    {
+    else if (argument == "-r") {
       G4int tmp = atoi(argv[i + 1]);
       ++i;
       switch (tmp) {
-      case 0:
-        runManagerTypeInt = tmp;
-        runManagerType = G4RunManagerType::Serial;
-        break;
-      case 1:
-        runManagerTypeInt = tmp;
-        runManagerType = G4RunManagerType::MTOnly;
-        break;
-      case 2:
-        runManagerTypeInt = tmp;
-        runManagerType = G4RunManagerType::Tasking;
-        break;
-      default:
-        G4Exception("main", "Wrong Run Manager type", FatalErrorInArgument,
-                "Choose 0 (serial, default), 1 (MT), 2 (tasking)");
-        break;
+        case 0:
+          runManagerTypeInt = tmp;
+          runManagerType = G4RunManagerType::Serial;
+          break;
+        case 1:
+          runManagerTypeInt = tmp;
+          runManagerType = G4RunManagerType::MTOnly;
+          break;
+        case 2:
+          runManagerTypeInt = tmp;
+          runManagerType = G4RunManagerType::Tasking;
+          break;
+        default:
+          G4Exception("main", "Wrong Run Manager type", FatalErrorInArgument,
+                      "Choose 0 (serial, default), 1 (MT), 2 (tasking)");
+          break;
       }
     }
-    else if(argument == "-t")
-    {
+    else if (argument == "-t") {
       numOfThreadsOrTasks = atoi(argv[i + 1]);
       ++i;
     }
-    else
-    {
-      G4Exception("main", "Unknown argument", FatalErrorInArgument,
-                  ("Unknown argument passed to " + G4String(argv[0]) + " : " +
-                   argument + "\n" + helpMsg)
-                    .c_str());
+    else {
+      G4Exception(
+        "main", "Unknown argument", FatalErrorInArgument,
+        ("Unknown argument passed to " + G4String(argv[0]) + " : " + argument + "\n" + helpMsg)
+          .c_str());
     }
   }
 
-  //choose the Random engine
+  // choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
-  //set random seed with system time
+  // set random seed with system time
   G4long seed = time(NULL);
   CLHEP::HepRandom::setTheSeed(seed);
 
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  
-  if(useInteractiveMode)
-  {
+
+  if (useInteractiveMode) {
     ui = new G4UIExecutive(argc, argv);
     runManagerType = G4RunManagerType::Serial;
   }
 
   // Initialization of default Run manager
-  auto* runManager =
-    G4RunManagerFactory::CreateRunManager(runManagerType);
-  if(runManagerTypeInt == 1)
-    runManager->SetNumberOfThreads(numOfThreadsOrTasks);
+  auto* runManager = G4RunManagerFactory::CreateRunManager(runManagerType);
+  if (runManagerTypeInt == 1) runManager->SetNumberOfThreads(numOfThreadsOrTasks);
   // Detector geometry:
   auto detector = new Par04DetectorConstruction();
   auto parallelWorldFull = new Par04ParallelFullWorld("parallelWorldFullSim", detector);
-  auto parallelWorldFast = new Par04ParallelFastWorld("parallelWorldFastSim", detector,
-                                                      parallelWorldFull);
+  auto parallelWorldFast =
+    new Par04ParallelFastWorld("parallelWorldFastSim", detector, parallelWorldFull);
   detector->RegisterParallelWorld(parallelWorldFull);
   detector->RegisterParallelWorld(parallelWorldFast);
   runManager->SetUserInitialization(detector);
@@ -175,8 +164,8 @@ int main(int argc, char** argv)
   fastSimulationPhysics->ActivateFastSimulation("gamma");
   physicsList->RegisterPhysics(fastSimulationPhysics);
   // Add parallel world for readout
-  physicsList->RegisterPhysics( new G4ParallelWorldPhysics("parallelWorldFullSim") );
-  physicsList->RegisterPhysics( new G4ParallelWorldPhysics("parallelWorldFastSim") );
+  physicsList->RegisterPhysics(new G4ParallelWorldPhysics("parallelWorldFullSim"));
+  physicsList->RegisterPhysics(new G4ParallelWorldPhysics("parallelWorldFastSim"));
   // reduce verbosity of physics lists
   G4EmParameters::Instance()->SetVerbose(0);
   runManager->SetUserInitialization(physicsList);
@@ -193,21 +182,17 @@ int main(int argc, char** argv)
   visManager->Initialize();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(useInteractiveMode)
-  {
-    if(batchMacroName.empty())
-    {
+  if (useInteractiveMode) {
+    if (batchMacroName.empty()) {
       G4Exception("main", "Unknown macro name", FatalErrorInArgument,
-                  ("No macro name passed to " + G4String(argv[0]))
-                    .c_str());
+                  ("No macro name passed to " + G4String(argv[0])).c_str());
     }
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command + batchMacroName);
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
+  else {
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command + batchMacroName);
   }

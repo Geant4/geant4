@@ -31,11 +31,11 @@
 #ifndef G4_PYTHIA6_DECAYER_H
 #define G4_PYTHIA6_DECAYER_H
 
-#include "G4VExtDecayer.hh"
-#include "G4Pythia6DecayerMessenger.hh"
-#include "Pythia6.hh"
 #include "EDecayType.hh"
+#include "Pythia6.hh"
 
+#include "G4Pythia6DecayerMessenger.hh"
+#include "G4VExtDecayer.hh"
 #include "globals.hh"
 
 struct Pythia6Particle;
@@ -52,46 +52,41 @@ class G4DecayProducts;
 class G4Pythia6Decayer : public G4VExtDecayer
 {
   public:
-
     G4Pythia6Decayer();
     virtual ~G4Pythia6Decayer();
 
     virtual G4DecayProducts* ImportDecayProducts(const G4Track& track);
-    
-    void ForceDecayType(EDecayType decayType);
-    void SetVerboseLevel(G4int verboseLevel) { fVerboseLevel =  verboseLevel; }
-    
-  private:
 
+    void ForceDecayType(EDecayType decayType);
+    void SetVerboseLevel(G4int verboseLevel) { fVerboseLevel = verboseLevel; }
+
+  private:
     /// Not implemented
     G4Pythia6Decayer(const G4Pythia6Decayer& right);
     /// Not implemented
     G4Pythia6Decayer& operator=(const G4Pythia6Decayer& right);
-    
-    G4ParticleDefinition*
-    GetParticleDefinition(const Pythia6Particle* p,G4bool warn = true) const;
+
+    G4ParticleDefinition* GetParticleDefinition(const Pythia6Particle* p, G4bool warn = true) const;
     G4DynamicParticle* CreateDynamicParticle(const Pythia6Particle* p) const;
     G4ThreeVector GetParticlePosition(const Pythia6Particle* particle) const;
-    G4ThreeVector GetParticleMomentum(const Pythia6Particle* particle) const; 
-                           
-    G4int CountProducts(G4int channel, G4int particle);
-    void  ForceParticleDecay(G4int particle, G4int product, G4int mult);
-    void  ForceParticleDecay(G4int particle, 
-                             G4int* products, G4int* mult, G4int npart);
-    void  ForceHadronicD();
-    void  ForceOmega();
-    void  ForceDecay(EDecayType decayType);
-    
-    
-    void  Decay(G4int pdg, const CLHEP::HepLorentzVector& p);
-    G4int ImportParticles(ParticleVector* particles);
-    
-    static const EDecayType fgkDefaultDecayType; ///< default decay type
+    G4ThreeVector GetParticleMomentum(const Pythia6Particle* particle) const;
 
-    G4Pythia6DecayerMessenger fMessenger;  ///< command messenger 
-    G4int            fVerboseLevel;        ///< verbose level
-    EDecayType       fDecayType;           ///< selected decay type
-    ParticleVector*  fDecayProductsArray ; ///< array of decay products
+    G4int CountProducts(G4int channel, G4int particle);
+    void ForceParticleDecay(G4int particle, G4int product, G4int mult);
+    void ForceParticleDecay(G4int particle, G4int* products, G4int* mult, G4int npart);
+    void ForceHadronicD();
+    void ForceOmega();
+    void ForceDecay(EDecayType decayType);
+
+    void Decay(G4int pdg, const CLHEP::HepLorentzVector& p);
+    G4int ImportParticles(ParticleVector* particles);
+
+    static const EDecayType fgkDefaultDecayType;  ///< default decay type
+
+    G4Pythia6DecayerMessenger fMessenger;  ///< command messenger
+    G4int fVerboseLevel;  ///< verbose level
+    EDecayType fDecayType;  ///< selected decay type
+    ParticleVector* fDecayProductsArray;  ///< array of decay products
 };
 
 // ----------------------------------------------------------------------------

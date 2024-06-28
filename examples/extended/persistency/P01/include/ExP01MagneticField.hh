@@ -31,7 +31,7 @@
 //
 //    A class for control of the Magnetic Field of the detector.
 //  The field is assumed to be uniform.
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,24 +46,22 @@ class G4FieldManager;
 
 /// Magnetic field for the persistency example
 
-class ExP01MagneticField: public G4UniformMagField
+class ExP01MagneticField : public G4UniformMagField
 {
   public:
-  
-   ExP01MagneticField(G4ThreeVector);  //  The value of the field
-   ExP01MagneticField();               //  A zero field
-  ~ExP01MagneticField();  
-      
-   //Set the field (fieldValue,0,0)
-   void SetFieldValue(G4double fieldValue);
-   void SetFieldValue(G4ThreeVector fieldVector);
-      
-   G4ThreeVector GetConstantFieldValue();
+    ExP01MagneticField(G4ThreeVector);  //  The value of the field
+    ExP01MagneticField();  //  A zero field
+    ~ExP01MagneticField();
+
+    // Set the field (fieldValue,0,0)
+    void SetFieldValue(G4double fieldValue);
+    void SetFieldValue(G4ThreeVector fieldVector);
+
+    G4ThreeVector GetConstantFieldValue();
 
   protected:
-
-      // Find the global Field Manager
-      G4FieldManager* GetGlobalFieldManager();   // static 
+    // Find the global Field Manager
+    G4FieldManager* GetGlobalFieldManager();  // static
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

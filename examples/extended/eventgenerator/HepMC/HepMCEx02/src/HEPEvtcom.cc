@@ -72,14 +72,21 @@
 
 #include <ctype.h>
 
-enum {HEPEVT_EntriesAllocation=4000};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const unsigned int hepevt_bytes_allocation =
-sizeof(long int) * ( 2 + 4 * HEPEVT_EntriesAllocation )
-  + sizeof(double) * ( 9 * HEPEVT_EntriesAllocation );
+enum
+{
+  HEPEVT_EntriesAllocation = 4000
+};
 
-extern "C" struct hepevt{
-  char data[hepevt_bytes_allocation];
+const unsigned int hepevt_bytes_allocation = sizeof(long int) * (2 + 4 * HEPEVT_EntriesAllocation)
+                                             + sizeof(double) * (9 * HEPEVT_EntriesAllocation);
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+extern "C" struct hepevt
+{
+    char data[hepevt_bytes_allocation];
 };
 
 hepevt hepevt_;

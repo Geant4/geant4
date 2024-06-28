@@ -26,64 +26,63 @@
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-                           
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* event)
-: fDetector(det), fEventAction(event)
-{ }
+  : fDetector(det), fEventAction(event)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());    
-  
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  //which volume ?
+  // which volume ?
   //
-  G4LogicalVolume* lVolume = aStep->GetPreStepPoint()->GetTouchableHandle()
-                             ->GetVolume()->GetLogicalVolume();
+  G4LogicalVolume* lVolume =
+    aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
   G4int iVol = 0;
-  if (lVolume == fDetector->GetLogicTarget())   iVol = 1;
+  if (lVolume == fDetector->GetLogicTarget()) iVol = 1;
   if (lVolume == fDetector->GetLogicDetector()) iVol = 2;
 
   // count processes
-  // 
+  //
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4VProcess* process   = endPoint->GetProcessDefinedStep();
+  const G4VProcess* process = endPoint->GetProcessDefinedStep();
   run->CountProcesses(process, iVol);
-  
+
   // energy deposit
   //
   G4double edepStep = aStep->GetTotalEnergyDeposit();
   if (edepStep <= 0.) return;
-  G4double time   = aStep->GetPreStepPoint()->GetGlobalTime();
-  G4double weight = aStep->GetPreStepPoint()->GetWeight();   
+  G4double time = aStep->GetPreStepPoint()->GetGlobalTime();
+  G4double weight = aStep->GetPreStepPoint()->GetWeight();
   fEventAction->AddEdep(iVol, edepStep, time, weight);
-  
-  //fill ntuple id = 2
-  G4int id = 2;   
-  analysisManager->FillNtupleDColumn(id,0, edepStep);
-  analysisManager->FillNtupleDColumn(id,1, time/s);
-  analysisManager->FillNtupleDColumn(id,2, weight);
-  analysisManager->AddNtupleRow(id);      
+
+  // fill ntuple id = 2
+  G4int id = 2;
+  analysisManager->FillNtupleDColumn(id, 0, edepStep);
+  analysisManager->FillNtupleDColumn(id, 1, time / s);
+  analysisManager->FillNtupleDColumn(id, 2, weight);
+  analysisManager->AddNtupleRow(id);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

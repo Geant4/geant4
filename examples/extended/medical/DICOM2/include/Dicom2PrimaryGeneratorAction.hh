@@ -30,8 +30,8 @@
 #ifndef Dicom2PrimaryGeneratorAction_h
 #define Dicom2PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
 class G4ParticleGun;
@@ -41,28 +41,28 @@ class G4VPhysicalVolume;
 
 /// The primary generator action class with particle gun.
 ///
-/// The default kinematic is a 6 MeV gamma, randomly distribued 
+/// The default kinematic is a 6 MeV gamma, randomly distribued
 /// in front of the phantom across 80% of the (X,Y) phantom size.
 
 class Dicom2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
     Dicom2PrimaryGeneratorAction();
     virtual ~Dicom2PrimaryGeneratorAction();
 
     // method from the base class
-    virtual void GeneratePrimaries(G4Event*);         
-  
+    virtual void GeneratePrimaries(G4Event*);
+
     // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
-  
-private:
-    G4ParticleGun*      fParticleGun; // pointer a to G4 gun class
-    G4Box*              fEnvelopeBox;
-    G4VPhysicalVolume*  fEnvelopeVol;
-    G4ThreeVector       fPosCenter;
-    G4ThreeVector       fPosDelta;
-    G4double            fGeomFactor;
+
+  private:
+    G4ParticleGun* fParticleGun;  // pointer a to G4 gun class
+    G4Box* fEnvelopeBox;
+    G4VPhysicalVolume* fEnvelopeVol;
+    G4ThreeVector fPosCenter;
+    G4ThreeVector fPosDelta;
+    G4double fGeomFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

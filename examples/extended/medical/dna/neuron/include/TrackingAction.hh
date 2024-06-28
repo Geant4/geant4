@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -42,8 +42,10 @@
 #ifndef TrackingAction_h
 #define TrackingAction_h
 
-#include "G4UserTrackingAction.hh"
 #include "RunInitObserver.hh"
+
+#include "G4UserTrackingAction.hh"
+
 #include <map>
 
 class G4Region;
@@ -51,7 +53,7 @@ class G4ParticleDefinition;
 
 class TrackingAction : public G4UserTrackingAction, public RunInitObserver
 {
-public:
+  public:
     TrackingAction();
     ~TrackingAction();
 
@@ -62,15 +64,15 @@ public:
 
     std::map<const G4ParticleDefinition*, int>& GetNParticlesCreatedInTarget()
     {
-        return fNParticleInTarget;
+      return fNParticleInTarget;
     }
 
     std::map<const G4ParticleDefinition*, int>& GetNParticlesCreatedInWorld()
     {
-        return fNParticleInWorld;
+      return fNParticleInWorld;
     }
 
-private:
+  private:
     G4Region* fpTargetRegion;
     std::map<const G4ParticleDefinition*, int> fNParticleInTarget;
     std::map<const G4ParticleDefinition*, int> fNParticleInWorld;

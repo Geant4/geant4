@@ -33,9 +33,11 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "ProcessesCount.hh"
+
+#include "G4UserRunAction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,27 +56,26 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-   ~RunAction();
+    ~RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
     void CountProcesses(const G4String&);
-    
-  private:    
-    G4double ComputeTheory (const G4String&, G4int); 
-    G4double GetEnergyCut  (const G4Material*, G4int);
-    void FillCrossSectionHisto (const G4String&, G4int);
-                        
-    DetectorConstruction*   fDetector;
+
+  private:
+    G4double ComputeTheory(const G4String&, G4int);
+    G4double GetEnergyCut(const G4Material*, G4int);
+    void FillCrossSectionHisto(const G4String&, G4int);
+
+    DetectorConstruction* fDetector;
     PrimaryGeneratorAction* fPrimary;
-    ProcessesCount*         fProcCounter;
-    HistoManager*           fHistoManager;
-    MuCrossSections*        fMucs;
+    ProcessesCount* fProcCounter;
+    HistoManager* fHistoManager;
+    MuCrossSections* fMucs;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

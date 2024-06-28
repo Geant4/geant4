@@ -24,26 +24,28 @@
 // ********************************************************************
 //
 #include "Par04ParallelMessenger.hh"
-#include <CLHEP/Units/SystemOfUnits.h>   // for pi
-#include <G4ApplicationState.hh>         // for G4State_PreInit, G4State_Idle
-#include <G4ThreeVector.hh>              // for G4ThreeVector
-#include <G4Types.hh>                    // for G4bool, G4double, G4int
-#include <G4UIcommand.hh>                // for G4UIcommand
-#include <G4UImessenger.hh>              // for G4UImessenger
-#include <G4UIparameter.hh>              // for G4UIparameter
-#include <istream>                       // for basic_istream, basic_istream...
-#include <string>                        // for operator>>
-#include "G4UIcmdWithAnInteger.hh"       // for G4UIcmdWithAnInteger
-#include "G4UIcmdWithoutParameter.hh"    // for G4UIcmdWithoutParameter
-#include "G4UIcmdWithABool.hh"           // for G4UIcmdWithABool
-#include "G4UIdirectory.hh"              // for G4UIdirectory
-#include "Par04ParallelFullWorld.hh"         // for Par04ParallelFullWorld
+
+#include "Par04ParallelFullWorld.hh"  // for Par04ParallelFullWorld
+
+#include "G4UIcmdWithABool.hh"  // for G4UIcmdWithABool
+#include "G4UIcmdWithAnInteger.hh"  // for G4UIcmdWithAnInteger
+#include "G4UIcmdWithoutParameter.hh"  // for G4UIcmdWithoutParameter
+#include "G4UIdirectory.hh"  // for G4UIdirectory
+
+#include <CLHEP/Units/SystemOfUnits.h>  // for pi
+#include <G4ApplicationState.hh>  // for G4State_PreInit, G4State_Idle
+#include <G4ThreeVector.hh>  // for G4ThreeVector
+#include <G4Types.hh>  // for G4bool, G4double, G4int
+#include <G4UIcommand.hh>  // for G4UIcommand
+#include <G4UImessenger.hh>  // for G4UImessenger
+#include <G4UIparameter.hh>  // for G4UIparameter
+#include <istream>  // for basic_istream, basic_istream...
+#include <string>  // for operator>>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04ParallelMessenger::Par04ParallelMessenger(Par04ParallelFullWorld* aParallel)
-  : G4UImessenger()
-  , fParallel(aParallel)
+  : G4UImessenger(), fParallel(aParallel)
 {
   fExampleDir = new G4UIdirectory("/Par04/");
   fExampleDir->SetGuidance("UI commands specific to this example");
@@ -84,16 +86,13 @@ Par04ParallelMessenger::~Par04ParallelMessenger()
 
 void Par04ParallelMessenger::SetNewValue(G4UIcommand* aCommand, G4String aNewValue)
 {
-  if(aCommand == fPrintCmd)
-  {
+  if (aCommand == fPrintCmd) {
     fParallel->Print();
   }
-  else if(aCommand == fNbSlicesCmd)
-  {
+  else if (aCommand == fNbSlicesCmd) {
     fParallel->SetNbOfSlices(fNbSlicesCmd->GetNewIntValue(aNewValue));
   }
-  else if(aCommand == fNbRowsCmd)
-  {
+  else if (aCommand == fNbRowsCmd) {
     fParallel->SetNbOfRows(fNbRowsCmd->GetNewIntValue(aNewValue));
   }
 }
@@ -104,12 +103,10 @@ G4String Par04ParallelMessenger::GetCurrentValue(G4UIcommand* aCommand)
 {
   G4String cv;
 
-  if(aCommand == fNbSlicesCmd)
-  {
+  if (aCommand == fNbSlicesCmd) {
     cv = fNbSlicesCmd->ConvertToString(fParallel->GetNbOfSlices());
   }
-  else if(aCommand == fNbRowsCmd)
-  {
+  else if (aCommand == fNbRowsCmd) {
     cv = fNbRowsCmd->ConvertToString(fParallel->GetNbOfRows());
   }
   return cv;

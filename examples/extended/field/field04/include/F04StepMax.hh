@@ -31,16 +31,14 @@
 #ifndef F04StepMax_h
 #define F04StepMax_h 1
 
-#include "globals.hh"
-
+#include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
 class F04StepMax : public G4VDiscreteProcess
 {
   public:
-
     F04StepMax(const G4String& processName = "UserStepMax");
 
     ~F04StepMax() override = default;
@@ -48,28 +46,22 @@ class F04StepMax : public G4VDiscreteProcess
     F04StepMax(const F04StepMax&) = delete;
     F04StepMax& operator=(const F04StepMax&) = delete;
 
-
     G4bool IsApplicable(const G4ParticleDefinition&) override;
 
     void SetStepMax(G4double);
 
-    G4double GetStepMax() {return fMaxChargedStep;};
+    G4double GetStepMax() { return fMaxChargedStep; };
 
-    G4double PostStepGetPhysicalInteractionLength(const G4Track&,
-                                                          G4double,
-                                                          G4ForceCondition*) override;
+    G4double PostStepGetPhysicalInteractionLength(const G4Track&, G4double,
+                                                  G4ForceCondition*) override;
 
     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
   protected:
+    G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*) override;
 
-    G4double GetMeanFreePath(const G4Track&,
-                                     G4double,
-                                     G4ForceCondition*) override;
   private:
-
     G4double fMaxChargedStep = DBL_MAX;
-
 };
 
 #endif

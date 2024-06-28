@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-02-01 Vladimir Ivanchenko (hadr-lepnuc-V11-02-00)
+- Fixed Coverity warning on unused variable in neutrino models
+
 ## 2023-09-04 Vladimir Ivanchenko (hadr-lepnuc-V11-01-00)
 - G4ElectroVDNuclearModel : updated initialisation of data tables
 

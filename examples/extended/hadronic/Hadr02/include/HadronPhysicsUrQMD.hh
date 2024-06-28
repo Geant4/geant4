@@ -29,7 +29,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:
 //
 // Author: 2012 Andrea Dotti
 //   created from HadronPhysicsFTFP_BERT
@@ -40,55 +40,47 @@
 #ifndef HadronPhysicsUrQMD_h
 #define HadronPhysicsUrQMD_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
-#include "G4PiKBuilder.hh"
+#include "UrQMDAntiBarionBuilder.hh"
+#include "UrQMDNeutronBuilder.hh"
 #include "UrQMDPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
 #include "UrQMDProtonBuilder.hh"
 
-#include "G4NeutronBuilder.hh"
-#include "UrQMDNeutronBuilder.hh"
-
+#include "G4AntiBarionBuilder.hh"
 #include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
-
-#include "G4AntiBarionBuilder.hh"
-#include "UrQMDAntiBarionBuilder.hh"
+#include "G4NeutronBuilder.hh"
+#include "G4PiKBuilder.hh"
+#include "G4ProtonBuilder.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 class HadronPhysicsUrQMD : public G4VPhysicsConstructor
 {
-public: 
+  public:
+    HadronPhysicsUrQMD(G4int verbose = 1);
+    virtual ~HadronPhysicsUrQMD();
 
-  HadronPhysicsUrQMD(G4int verbose =1);
-  virtual ~HadronPhysicsUrQMD();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  private:
+    void CreateModels();
+    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
 
-private:
+    G4NeutronBuilder* fNeutrons;
+    UrQMDNeutronBuilder* fUrQMDNeutron;
 
-  void CreateModels();
-  G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
-    
-  G4NeutronBuilder * fNeutrons;
-  UrQMDNeutronBuilder * fUrQMDNeutron;
- 
-  G4PiKBuilder * fPiK;
-  UrQMDPiKBuilder * fUrQMDPiK;
-    
-  G4ProtonBuilder * fPro;
-  UrQMDProtonBuilder * fUrQMDPro;    
-    
-  G4HyperonBuilder * fHyperon;
-  G4HyperonFTFPBuilder * fFTFPHyperon;
-    
-  G4AntiBarionBuilder * fAntiBaryon;
-  UrQMDAntiBarionBuilder * fUrQMDAntiBaryon;
+    G4PiKBuilder* fPiK;
+    UrQMDPiKBuilder* fUrQMDPiK;
 
+    G4ProtonBuilder* fPro;
+    UrQMDProtonBuilder* fUrQMDPro;
+
+    G4HyperonBuilder* fHyperon;
+    G4HyperonFTFPBuilder* fFTFPHyperon;
+
+    G4AntiBarionBuilder* fAntiBaryon;
+    UrQMDAntiBarionBuilder* fUrQMDAntiBaryon;
 };
 
 #endif
-

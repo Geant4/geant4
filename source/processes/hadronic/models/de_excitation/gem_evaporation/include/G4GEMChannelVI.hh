@@ -37,43 +37,60 @@ class G4VCoulombBarrier;
 class G4LevelManager;
 class G4GEMProbabilityVI;
 
-class G4GEMChannelVI final: public G4VEvaporationChannel
+class G4GEMChannelVI : public G4VEvaporationChannel
 {
 public:
 
   explicit G4GEMChannelVI(G4int theA, G4int theZ);
 
-  ~G4GEMChannelVI() final;
-    
-  G4double GetEmissionProbability(G4Fragment* theNucleus) final;
+  ~G4GEMChannelVI() override;
 
-  G4Fragment* EmittedFragment(G4Fragment* theNucleus) final;
+  void Initialise() override;
 
-  void Dump() const final;
+  G4double GetEmissionProbability(G4Fragment* theNucleus) override;
+
+  G4Fragment* EmittedFragment(G4Fragment* theNucleus) override;
+
+  void Dump() const override;
+
+  G4GEMChannelVI(const G4GEMChannelVI & right) = delete;
+  const G4GEMChannelVI & operator=(const G4GEMChannelVI & right) = delete;
+  G4bool operator==(const G4GEMChannelVI & right) const = delete;
+  G4bool operator!=(const G4GEMChannelVI & right) const = delete;
 
 private: 
-
-  G4GEMChannelVI(const G4GEMChannelVI & right);  
-  const G4GEMChannelVI & operator=(const G4GEMChannelVI & right);
-  G4bool operator==(const G4GEMChannelVI & right) const;
-  G4bool operator!=(const G4GEMChannelVI & right) const;
 
   const G4VCoulombBarrier* cBarrier;
   const G4PairingCorrection* pairingCorrection;
   G4GEMProbabilityVI* fProbability;
   
+  G4double fEvapMass;
+  G4double fEvapMass2;
+  G4double fMass{0.0};
+  G4double fResMass{0.0};
+  G4double fExc{0.0};
+  G4double bCoulomb{0.0};
+  G4double fCoeff;
+
   G4int A;
   G4int Z;
-  G4int resA;
-  G4int resZ;
-  G4int fragA;
-  G4int fragZ;
-  G4int secID;  // Creator model ID for the secondaries created by this model
+  G4int resA{0};
+  G4int resZ{0};
+  G4int fragA{0};
+  G4int fragZ{0};
+  G4int fVerbose{1};
+  G4int nProb{1};
+  G4int secID;
+  G4int indexC;
   
-  G4double mass;
-  G4double resMass;
-  G4double evapMass;
-  G4double evapMass2;
+  // evaporation fragment data
+  struct evapData {
+    G4double exc{0.0};   // excitation
+    G4double ekin1{0.0}; // min kinetic energy
+    G4double ekin2{0.0}; // max kinetic energy
+    G4double prob{0.0};  // probability
+  };
+  evapData fEData[10]; 
 };
 
 #endif

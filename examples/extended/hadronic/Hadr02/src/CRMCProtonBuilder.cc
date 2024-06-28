@@ -40,34 +40,42 @@
 //
 #ifdef G4_USE_CRMC
 
-#include "CRMCProtonBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4HadronInelasticProcess.hh"
-#include "HadronicInelasticModelCRMC.hh"
-#include "G4HadronicParameters.hh"
-#include "G4SystemOfUnits.hh"
+#  include "CRMCProtonBuilder.hh"
 
+#  include "HadronicInelasticModelCRMC.hh"
 
-CRMCProtonBuilder::CRMCProtonBuilder( const G4int crmcModelId, const std::string & crmcModelName ) {
-  fMin = 0.0*MeV;  // This value does not matter in practice because we are going
-                   // to use this model only at high energies.
+#  include "G4HadronInelasticProcess.hh"
+#  include "G4HadronicParameters.hh"
+#  include "G4ParticleDefinition.hh"
+#  include "G4ParticleTable.hh"
+#  include "G4ProcessManager.hh"
+#  include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+CRMCProtonBuilder::CRMCProtonBuilder(const G4int crmcModelId, const std::string& crmcModelName)
+{
+  fMin = 0.0 * MeV;  // This value does not matter in practice because we are going
+                     // to use this model only at high energies.
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
-  fModel = new HadronicInelasticModelCRMC( crmcModelId, crmcModelName );
+  fModel = new HadronicInelasticModelCRMC(crmcModelId, crmcModelName);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 CRMCProtonBuilder::~CRMCProtonBuilder() {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void CRMCProtonBuilder::Build( G4HadronElasticProcess* ) {}
+void CRMCProtonBuilder::Build(G4HadronElasticProcess*) {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void CRMCProtonBuilder::Build( G4HadronInelasticProcess* aP ) {
-  fModel->SetMinEnergy( fMin );
-  fModel->SetMaxEnergy( fMax );
-  aP->RegisterMe( fModel );
+void CRMCProtonBuilder::Build(G4HadronInelasticProcess* aP)
+{
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
 }
 
-#endif //G4_USE_CRMC
+#endif  // G4_USE_CRMC

@@ -6,6 +6,60 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-28 Gabriele Cosmo (examples-V11-02-06)
+- Updated reference outputs according to reference tag geant4-11-02-ref-06.
+- Included tags: doxygen-V11-02-00, exadvanced-V11-02-00, dsbandrepair-V11-02-00,
+                 ChargeExchangeMC-V11-02-01, xraysiliconporeoptics-V11-02-00,
+                 exbasic-V11-02-01, exextended-V11-02-01,fieldex01-V11-02-00,
+                 fieldex02-V11-02-00, fieldex03-V11-02-00, exhadr01-V11-02-00,
+                 DICOM-V11-02-00, chem6-V11-02-00, exparallel-V11-02-00,
+                 expar04-V11-02-02, G01-V11-02-00, G02-V11-02-00, G03-V11-02-00,
+                 G04-V11-02-00, rdecay02-V11-02-00.
+
+## 2024-05-31 Gabriele Cosmo (examples-V11-02-05)
+- Updated reference outputs according to reference tag geant4-11-02-ref-05.
+- Included tags: exampleB3-V11-02-00, dnadamage1-V11-02-00, UHDR-V11-02-02,
+                 dnaphysics-V11-02-02, ThreadsafeScorers-V11-02-00,
+                 rdecay01-V11-02-02, exampleRE07-V11-02-00.
+
+## 2024-04-30 Gabriele Cosmo (examples-V11-02-04)
+- Updated reference outputs according to reference tag geant4-11-02-ref-04.
+- Included tags: hadrontherapy-V11-02-01, medical_linac-V11-02-00,
+                 testem0-V11-02-00, testem2-V11-02-00, testem3-V11-02-00,
+                 testem4-V11-02-01, testem5-V11-02-00, testem7-V11-02-01,
+                 testem13-V11-02-00, testem14-V11-02-00, testem15-V11-02-00,
+                 exEventGenerator-V11-02-01, HepMCEx01-V11-02-00,
+                 HepMCEx02-V11-02-00, p6decayer-V11-02-00, exhadr09-V11-02-00,
+                 exHadNucIneEvents-V11-02-00, exdna-V11-02-00, mfp-V11-02-01,
+                 molecularDNA-V11-02-00, range-V11-02-00, slowing-V11-02-00,
+                 spower-V11-02-01, UHDR-V11-02-00, fano-V11-02-01.
+
+## 2024-03-28 Gabriele Cosmo (examples-V11-02-03)
+- Updated reference outputs according to reference tag geant4-11-02-ref-03.
+- Included tags: exbiasing-V11-02-00, exEventGenerator-V11-02-00,
+                 exgps-V11-02-00, particleGunExample-V11-02-00,
+                 p8decayer-V11-02-01, phononExample-V11-02-00,
+                 exhadr03-V11-02-01, exhadr04-V11-02-00, exhadr05-V11-02-00,
+                 exhadr06-V11-02-00, exhadr07-V11-02-00, dnaphysics-V11-02-01,
+                 microprox-V11-02-00, svalue-V11-02-00, wvalue-V11-02-00,
+                 fano-V11-02-00, fano2-V11-02-00, MPI-V11-02-00,
+                 expar04-V11-02-00.
+
+## 2024-02-29 Gabriele Cosmo (examples-V11-02-02)
+- Updated reference outputs according to reference tag geant4-11-02-ref-02.
+- Included tags: testem5-V11-02-01, testem12-V11-02-00, exhadr03-V11-02-00,
+                 NeutronSource-V11-02-00, microdosimetry-V11-02-01,
+                 dnaphysics-V11-02-00, microyz-V11-02-00, spower-V11-02-00,
+                 activation-V11-02-00, rdecay01-V11-02-01.
+
+## 2024-01-31 Gabriele Cosmo (examples-V11-02-01)
+- Updated reference outputs according to reference tag geant4-11-02-ref-01.
+- Included tags: eFLASH_radiotherapy-V11-02-00, exampleB2-V11-02-00,
+                 testem1-V11-02-00, testem5-V11-02-00, testem7-V11-02-00,
+                 testem11-V11-02-00, testem16-V12-00-00, p8decayer-V11-02-00,
+                 neuron-V11-02-00, rdecay01-V11-02-00,
+                 exam-ext-vis-standalone-V11-02-00.
+
 ## 2023-11-30 Gabriele Cosmo (examples-V11-02-00)
 - Updated reference outputs according to reference tag geant4-11-02-ref-00.
 - Removed obsolete references to GNUmakefile and hbook from extended examples

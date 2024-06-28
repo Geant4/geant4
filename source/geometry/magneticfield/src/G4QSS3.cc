@@ -25,7 +25,7 @@
 //
 // QSS3 implementation
 //
-// Author: Lucio Santi - 2020-2021.
+// Author: Lucio Santi (Univ. Buenos Aires) - 2020-2021
 // --------------------------------------------------------------------
 
 #include "G4QSS3.hh"
@@ -35,7 +35,7 @@ G4QSS3::G4QSS3(QSS_simulator sim)
 {
 }
 
-void G4QSS3::recompute_next_times(G4int *inf, G4double t)
+void G4QSS3::recompute_next_times(G4int* inf, G4double t)
 {
   G4int i;
   G4double *x = simulator->x;
@@ -44,7 +44,7 @@ void G4QSS3::recompute_next_times(G4int *inf, G4double t)
   G4double *time = simulator->nextStateTime;
   G4double coeff[4];
 
-  for(i = 0; i < 3; i++)
+  for(i = 0; i < 3; ++i)
   {
     const G4int var = inf[i],
                 cf0 = 4*var,

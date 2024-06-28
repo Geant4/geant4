@@ -33,22 +33,20 @@
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 
-#include "G4VUserDetectorConstruction.hh"
 #include "G4Element.hh"
+#include "G4VUserDetectorConstruction.hh"
 
 /// Detector construction
 
 class ExP02DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-
     ExP02DetectorConstruction();
     ~ExP02DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
 
   private:
-    
     // Logical volumes
     //
     G4LogicalVolume* fExperimentalHall_log;
@@ -65,4 +63,3 @@ class ExP02DetectorConstruction : public G4VUserDetectorConstruction
 };
 
 #endif
-

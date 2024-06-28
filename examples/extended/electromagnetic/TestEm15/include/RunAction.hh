@@ -33,8 +33,9 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "ProcessesCount.hh"
+
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,49 +51,63 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction();
+    ~RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
     void CountProcesses(G4String);
-    void SumPathLength (G4double truepl, G4double geompl) 
-         {fTotalCount++; 
-          fTruePL += truepl; fTruePL2 += truepl*truepl;
-          fGeomPL += geompl; fGeomPL2 += geompl*geompl;
-         };
-         
-    void SumLateralDisplacement (G4double displa)  
-         {fLDispl += displa; fLDispl2 += displa*displa;}
-         
-    void SumPsi (G4double psi)  
-         {fPsiSpa += psi; fPsiSpa2 += psi*psi;}
-         
-    void SumTetaPlane (G4double teta)  
-         {fTetPrj += teta; fTetPrj2 += teta*teta;}
-                  
-    void SumPhiCorrel (G4double correl)  
-         {fPhiCor += correl; fPhiCor2 += correl*correl;}
-                  
-   G4double ComputeMscHighland(G4double pathLength);
-                                     
+    void SumPathLength(G4double truepl, G4double geompl)
+    {
+      fTotalCount++;
+      fTruePL += truepl;
+      fTruePL2 += truepl * truepl;
+      fGeomPL += geompl;
+      fGeomPL2 += geompl * geompl;
+    };
+
+    void SumLateralDisplacement(G4double displa)
+    {
+      fLDispl += displa;
+      fLDispl2 += displa * displa;
+    }
+
+    void SumPsi(G4double psi)
+    {
+      fPsiSpa += psi;
+      fPsiSpa2 += psi * psi;
+    }
+
+    void SumTetaPlane(G4double teta)
+    {
+      fTetPrj += teta;
+      fTetPrj2 += teta * teta;
+    }
+
+    void SumPhiCorrel(G4double correl)
+    {
+      fPhiCor += correl;
+      fPhiCor2 += correl * correl;
+    }
+
+    G4double ComputeMscHighland(G4double pathLength);
+
   private:
-    DetectorConstruction*   fDetector;
+    DetectorConstruction* fDetector;
     PrimaryGeneratorAction* fPrimary;
-    ProcessesCount*         fProcCounter;
-    HistoManager*           fHistoManager;
-        
-    G4int    fTotalCount;
+    ProcessesCount* fProcCounter;
+    HistoManager* fHistoManager;
+
+    G4int fTotalCount;
     G4double fTruePL, fTruePL2;
     G4double fGeomPL, fGeomPL2;
     G4double fLDispl, fLDispl2;
     G4double fPsiSpa, fPsiSpa2;
     G4double fTetPrj, fTetPrj2;
-    G4double fPhiCor, fPhiCor2;     
+    G4double fPhiCor, fPhiCor2;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

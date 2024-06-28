@@ -24,10 +24,14 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45, (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 // The Geant4-DNA web site is available at http://geant4-dna.org
+//
 //
 /// \file SteppingAction.hh
 /// \brief Definition of the SteppingAction class
@@ -37,20 +41,12 @@
 
 #include "G4UserSteppingAction.hh"
 
-class RunAction;
-class DetectorConstruction;
-class PrimaryGeneratorAction;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class SteppingAction : public G4UserSteppingAction
 {
-public:
+  public:
+    SteppingAction();
+    virtual ~SteppingAction();
 
-  SteppingAction();
-  ~SteppingAction();
-  
-  void UserSteppingAction(const G4Step*);
-  
+    virtual void UserSteppingAction(const G4Step*);
 };
 #endif

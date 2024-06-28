@@ -39,13 +39,13 @@
 
 #include "G4UserTrackingAction.hh"
 
-class ITTrackingAction: public G4UserTrackingAction
+class ITTrackingAction : public G4UserTrackingAction
 {
-public:
+  public:
     ITTrackingAction();
     virtual ~ITTrackingAction();
     virtual void PreUserTrackingAction(const G4Track*);
     virtual void PostUserTrackingAction(const G4Track*);
 };
 
-#endif // ITTRACKINGACTION_HH
+#endif  // ITTRACKINGACTION_HH

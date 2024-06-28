@@ -29,26 +29,28 @@
 //
 #include "RE04SteppingAction.hh"
 
-#include "G4Step.hh"
-#include "G4Track.hh"
 #include "G4Material.hh"
+#include "G4Step.hh"
 #include "G4StepPoint.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE04SteppingAction::RE04SteppingAction()
- : G4UserSteppingAction()
-{;}
+RE04SteppingAction::RE04SteppingAction() : G4UserSteppingAction()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04SteppingAction::~RE04SteppingAction()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4Track* trk = aStep->GetTrack();
-  G4cout << "PreStep " << aStep->GetPreStepPoint()->GetPosition()
-         << " -- PostStep " << aStep->GetPostStepPoint()->GetPosition()
-         << " >>> Material " << trk->GetMaterial()->GetName() << G4endl;
+  G4cout << "PreStep " << aStep->GetPreStepPoint()->GetPosition() << " -- PostStep "
+         << aStep->GetPostStepPoint()->GetPosition() << " >>> Material "
+         << trk->GetMaterial()->GetName() << G4endl;
 }
-

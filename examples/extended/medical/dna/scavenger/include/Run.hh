@@ -39,26 +39,27 @@ namespace scavenger
 
 /// Collects information event per event from the hits collections
 
-class Run : public G4Run {
-public:
-  Run();
+class Run : public G4Run
+{
+  public:
+    Run();
 
-  ~Run() override = default;
+    ~Run() override = default;
 
-  void RecordEvent(const G4Event *) override;
+    void RecordEvent(const G4Event*) override;
 
-  void Merge(const G4Run *) override;
+    void Merge(const G4Run*) override;
 
-  [[nodiscard]] inline auto GetSumDose() const { return fSumEne; }
+    [[nodiscard]] inline auto GetSumDose() const { return fSumEne; }
 
-  [[nodiscard]] inline auto GetPrimitiveScorer() const { return fScorerRun; }
+    [[nodiscard]] inline auto GetPrimitiveScorer() const { return fScorerRun; }
 
-private:
-  G4double fSumEne = 0;
-  G4VPrimitiveScorer *fScorerRun = nullptr;
+  private:
+    G4double fSumEne = 0;
+    G4VPrimitiveScorer* fScorerRun = nullptr;
 };
 
-}
+}  // namespace scavenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

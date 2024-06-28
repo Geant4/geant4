@@ -32,8 +32,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -43,10 +43,10 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-    DetectorMessenger(DetectorConstruction* );
+    DetectorMessenger(DetectorConstruction*);
     ~DetectorMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
@@ -54,13 +54,13 @@ class DetectorMessenger: public G4UImessenger
   private:
     DetectorConstruction* fDetector = nullptr;
 
-    G4UIdirectory*             fDetDir = nullptr;
-    G4UIcmdWithAString*        fAbsMaterCmd = nullptr;
-    G4UIcmdWithAString*        fGapMaterCmd = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fAbsMaterCmd = nullptr;
+    G4UIcmdWithAString* fGapMaterCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fAbsThickCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fGapThickCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSizeYZCmd = nullptr;
-    G4UIcmdWithAnInteger*      fNbLayersCmd = nullptr;
+    G4UIcmdWithAnInteger* fNbLayersCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

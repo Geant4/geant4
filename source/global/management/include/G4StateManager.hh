@@ -46,6 +46,9 @@
 #include "G4VStateDependent.hh"
 #include <vector>
 
+class G4Run;
+class G4Event;
+
 class G4StateManager
 {
  public:
@@ -88,6 +91,11 @@ class G4StateManager
   // Removed pointer is returned
   G4String GetStateString(const G4ApplicationState& aState) const;
   // Utility method which returns a string of the state name
+
+  void NotifyDeletion(const G4Event*);
+  void NotifyDeletion(const G4Run*);
+  // Notifying when an event or a run is deleted for the sake of avoiding
+  // a state-dependent class from accessing to an obsolete event/run object.
 
   inline void SetSuppressAbortion(G4int i);
   inline G4int GetSuppressAbortion() const;

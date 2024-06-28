@@ -41,15 +41,13 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization(DetectorConstruction* detector);
-   ~ActionInitialization() override = default;
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
-   
+
   private:
     DetectorConstruction* fDetector = nullptr;
 };
 
 #endif
-
-    

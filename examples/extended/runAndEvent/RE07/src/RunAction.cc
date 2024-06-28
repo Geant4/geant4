@@ -32,13 +32,13 @@
 
 #include "RunAction.hh"
 
-#include "G4RunManager.hh"
-#include "G4Timer.hh"
-#include "Randomize.hh"
-
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
+
+#include "G4RunManager.hh"
+#include "G4Timer.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -77,7 +77,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   // compute and print statistic
   if (isMaster) {
     fTimer.Stop();
-    if (! ((G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM))) {
+    if (!((G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM))) {
       G4cout << "\n"
              << "Total number of events:  " << fRun->GetNumberOfEvent() << G4endl;
       G4cout << "Master thread time:  " << fTimer << G4endl;

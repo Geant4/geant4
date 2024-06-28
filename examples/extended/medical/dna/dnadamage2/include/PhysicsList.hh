@@ -44,45 +44,45 @@
 #ifndef DNADAMAGE2_PhysicsList_h
 #define DNADAMAGE2_PhysicsList_h 1
 
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+
 #include <G4UImessenger.hh>
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADouble.hh"
 
 class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList,
-                   public G4UImessenger
+class PhysicsList : public G4VModularPhysicsList, public G4UImessenger
 {
-public:
-  explicit PhysicsList();
-  ~PhysicsList() override = default;
+  public:
+    explicit PhysicsList();
+    ~PhysicsList() override = default;
 
-  void ConstructParticle() override;
-  void ConstructProcess() override;
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
-  void SetNewValue(G4UIcommand * command, G4String newValue) override;
+    void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
-  void RegisterPhysicsConstructor(const G4String& name);
-  void RegisterChemistryConstructor(const G4String& name);
+    void RegisterPhysicsConstructor(const G4String& name);
+    void RegisterChemistryConstructor(const G4String& name);
 
-private:
-  G4VPhysicsConstructor* fEmDNAPhysicsList = nullptr;
-  G4VPhysicsConstructor* fEmDNAChemistryList = nullptr;
-  G4String fPhysDNAName = "";
-  G4String fChemDNAName = "";
+  private:
+    G4VPhysicsConstructor* fEmDNAPhysicsList = nullptr;
+    G4VPhysicsConstructor* fEmDNAChemistryList = nullptr;
+    G4String fPhysDNAName = "";
+    G4String fChemDNAName = "";
 
-  G4UIcmdWithAString* fpPhysicsUI   = nullptr;
-  G4UIcmdWithAString* fpChemistryUI = nullptr;
+    G4UIcmdWithAString* fpPhysicsUI = nullptr;
+    G4UIcmdWithAString* fpChemistryUI = nullptr;
 
-  G4UIcmdWithADouble* fpDMSOUI   = nullptr;
-  G4UIcmdWithADouble* fpOxygenUI = nullptr;
+    G4UIcmdWithADouble* fpDMSOUI = nullptr;
+    G4UIcmdWithADouble* fpOxygenUI = nullptr;
 
-  G4double fDMSO = 1E-2;
-  G4double fOxygen = 0.27E-3;
+    G4double fDMSO = 1E-2;
+    G4double fOxygen = 0.27E-3;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

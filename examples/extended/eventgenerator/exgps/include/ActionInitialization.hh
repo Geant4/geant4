@@ -37,11 +37,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class  ActionInitialization : public G4VUserActionInitialization
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization();
-   ~ActionInitialization();
+    ~ActionInitialization();
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
@@ -50,5 +50,3 @@ class  ActionInitialization : public G4VUserActionInitialization
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

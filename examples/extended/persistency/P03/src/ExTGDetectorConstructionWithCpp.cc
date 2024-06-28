@@ -27,13 +27,14 @@
 /// \file persistency/P03/src/ExTGDetectorConstructionWithCpp.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithCpp class
 
-#include "G4tgbVolumeMgr.hh"
 #include "ExTGDetectorConstructionWithCpp.hh"
-#include "G4tgrMessenger.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4tgbVolumeMgr.hh"
+#include "G4tgrMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGDetectorConstructionWithCpp::ExTGDetectorConstructionWithCpp()
@@ -50,26 +51,26 @@ ExTGDetectorConstructionWithCpp::~ExTGDetectorConstructionWithCpp()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* ExTGDetectorConstructionWithCpp::Construct()
 {
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Define one or several text files containing the geometry description
-  //------------------------------------------------ 
+  //------------------------------------------------
   G4String filename = "g4geom_simple.txt";
   G4tgbVolumeMgr* volmgr = G4tgbVolumeMgr::GetInstance();
   volmgr->AddTextFile(filename);
 
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Read the text files and construct the GEANT4 geometry
-  //------------------------------------------------ 
+  //------------------------------------------------
   G4VPhysicalVolume* physiWorld = volmgr->ReadAndConstructDetector();
 
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Build another volume and place it in the text geometry
-  //------------------------------------------------ 
-  G4Box* solid = new G4Box("mybox",2.,2.,3.);
-  
+  //------------------------------------------------
+  G4Box* solid = new G4Box("mybox", 2., 2., 3.);
+
   G4Material* water = G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe");
 
-  G4LogicalVolume* logicVol = new G4LogicalVolume(solid,water,"mybox",0,0,0);
+  G4LogicalVolume* logicVol = new G4LogicalVolume(solid, water, "mybox", 0, 0, 0);
 
   //----- Place the volume in the world of the text geometry
   G4LogicalVolume* textWorldVol = physiWorld->GetLogicalVolume();
@@ -77,24 +78,23 @@ G4VPhysicalVolume* ExTGDetectorConstructionWithCpp::Construct()
   // NOTE: if you want to place your full text geometry in the C++ geometry,
   //       you should use this G4LogicalVolume and place it in a C++ logical
   //       volume
-  new G4PVPlacement(0,               // no rotation
-                    G4ThreeVector(0.,-20.,0),  // at (x,y,z)
-                    logicVol,        // its logical volume    
-                    "myBox1",        // its name
-                    textWorldVol,    // its mother  volume
-                    false,           // no boolean operations
-                    0);              // copy number 
-  
+  new G4PVPlacement(0,  // no rotation
+                    G4ThreeVector(0., -20., 0),  // at (x,y,z)
+                    logicVol,  // its logical volume
+                    "myBox1",  // its name
+                    textWorldVol,  // its mother  volume
+                    false,  // no boolean operations
+                    0);  // copy number
+
   //----- Place the volume inside a volume of the text geometry
-  G4LogicalVolume* textSphereVol =
-    G4tgbVolumeMgr::GetInstance()->FindG4LogVol("sphere",1);
-    new G4PVPlacement(0,             // no rotation
-                    G4ThreeVector(0.,0.,0),  // at (x,y,z)
-                    logicVol,        // its logical volume    
-                    "myBox2",        // its name
-                    textSphereVol,   // its mother  volume
-                    false,           // no boolean operations
-                    1);              // copy number 
-  
+  G4LogicalVolume* textSphereVol = G4tgbVolumeMgr::GetInstance()->FindG4LogVol("sphere", 1);
+  new G4PVPlacement(0,  // no rotation
+                    G4ThreeVector(0., 0., 0),  // at (x,y,z)
+                    logicVol,  // its logical volume
+                    "myBox2",  // its name
+                    textSphereVol,  // its mother  volume
+                    false,  // no boolean operations
+                    1);  // copy number
+
   return physiWorld;
 }

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -215,10 +215,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.154
 9.283e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.43 s
+total time for build X-ray TR energy loss tables = 0.37 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 1.43 s
+total time for build X-ray TR angle for energy loss tables = 1.5 s
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -242,7 +242,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -308,7 +308,7 @@ Lorentz Factor	XTR photon number
 total time for build X-ray TR energy loss tables = 0.38 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 1.47 s
+total time for build X-ray TR angle for energy loss tables = 1.46 s
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -632,7 +632,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.250000s Real=0.304928s Sys=0.000000s
+  User=0.260000s Real=0.308644s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
  Mean energy deposit in absorber = 0.0479535 +-0.0189569  MeV 
@@ -646,6 +646,6 @@ Run Summary
 ... write file : testem10.root - done
 ... close file : testem10.root - done
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.045 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.043 MB
 ============================================================

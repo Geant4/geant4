@@ -138,6 +138,23 @@ time (ns). Please correct the dose in the
 TTree *tree = (TTree *) dir->Get("0.010000");
 \endverbatim
 
+\section UHDR_s11 - Periodic Boundary Condition (PBC)
+
+The Periodic Boundary Condition is implemented based on https://github.com/amentumspace/g4pbc
+to calculate microdosimetry.
+This requires a maximum dose (xxx) to abort the event. This to avoid the high energy of
+secondary electrons deposit a large energy inside the micro volume.
+
+\verbatim
+/scorer/Dose/abortedDose xxx Gy
+\endverbatim
+
+Use the following command to activate or deactivate PBC.
+
+\verbatim
+/UHDR/Detector/PBC true
+\endverbatim
+
 Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
 Contact: H. Tran (tran@cenbg.in2p3.fr)
 CNRS, lp2i, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France

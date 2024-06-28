@@ -93,7 +93,34 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
 
   G4String searchString, activateString;
   std::istringstream is (newValue);
-  is >> searchString >> activateString;
+  // Need to handle the possibility that the search string
+  // contains embedded blanks within quotation marks.
+  // (This arises if the search string is automatically generated from the
+  // global description, as in G4UIQt, clicking on check box.)
+  auto lastQuotationMark = newValue.find_last_of('"');
+  if (lastQuotationMark != std::string::npos) {  // We have at least one quotation mark
+    auto firstQuotationMark = newValue.find_first_of('"');
+    if (lastQuotationMark != firstQuotationMark) {  // We have at least two quotations marks
+      // Note: there must not be more quotation marks - it upsets the command system.
+      searchString = newValue.substr
+      (firstQuotationMark + 1, lastQuotationMark - firstQuotationMark - 1);
+      activateString = newValue.substr(lastQuotationMark + 2);
+      // Perhaps we ought to check number of quotation marks
+      G4int nQuotes = 0;
+      for (auto c : newValue) {
+        if (c == '"') nQuotes++;
+      }
+      if (nQuotes > 2) {
+        G4ExceptionDescription ed;
+        ed << "More than 2 quotation marks in search string: " << searchString;
+        G4Exception("G4VisCommandSceneActivateModel::SetNewValue", "visman0301", JustWarning, ed);
+      }
+    }
+  }
+  else {
+    // None or one quotation marks - just input two strings
+    is >> searchString >> activateString;
+  }
   G4bool activate = G4UIcommand::ConvertToBool(activateString);
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
@@ -127,10 +154,8 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   std::vector<G4Scene::Model>& runDurationModelList =
     pScene->SetRunDurationModelList();
   for (size_t i = 0; i < runDurationModelList.size(); i++) {
-    const G4String& modelName =
-      runDurationModelList[i].fpModel->GetGlobalDescription();
-    if (searchString == "all" || modelName.find(searchString)
-	!= std::string::npos) {
+    const G4String& modelName = runDurationModelList[i].fpModel->GetGlobalDescription();
+    if (searchString == "all" || modelName.find(searchString) != std::string::npos) {
       any = true;
       runDurationModelList[i].fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
@@ -145,10 +170,8 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   std::vector<G4Scene::Model>& endOfEventModelList =
     pScene->SetEndOfEventModelList();
   for (size_t i = 0; i < endOfEventModelList.size(); i++) {
-    const G4String& modelName =
-      endOfEventModelList[i].fpModel->GetGlobalDescription();
-    if (searchString == "all" || modelName.find(searchString)
-	!= std::string::npos) {
+    const G4String& modelName = endOfEventModelList[i].fpModel->GetGlobalDescription();
+    if (searchString == "all" || modelName.find(searchString) != std::string::npos) {
       any = true;
       endOfEventModelList[i].fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
@@ -163,10 +186,8 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   std::vector<G4Scene::Model>& endOfRunModelList =
     pScene->SetEndOfRunModelList();
   for (size_t i = 0; i < endOfRunModelList.size(); i++) {
-    const G4String& modelName =
-      endOfRunModelList[i].fpModel->GetGlobalDescription();
-    if (searchString == "all" || modelName.find(searchString)
-	!= std::string::npos) {
+    const G4String& modelName = endOfRunModelList[i].fpModel->GetGlobalDescription();
+    if (searchString == "all" || modelName.find(searchString) != std::string::npos) {
       any = true;
       endOfRunModelList[i].fActive = activate;
       if (verbosity >= G4VisManager::warnings) {

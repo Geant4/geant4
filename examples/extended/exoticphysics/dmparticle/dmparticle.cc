@@ -30,76 +30,74 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-#include "G4UIcommand.hh"
-#include "Randomize.hh"
-
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
 
-#include "G4VisExecutive.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UIcommand.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  //choose the Random engine
+  // choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::Ranlux64Engine);
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   PhysicsList* phys = new PhysicsList();
 
   // defined mass of LDM particles
-  if(argc > 2) {
+  if (argc > 2) {
     G4String s = argv[2];
     UI->ApplyCommand("/control/verbose 1");
     UI->ApplyCommand("/testex/phys/setLDMPhotonMass " + s + " GeV");
   }
-  if(argc > 3) {
+  if (argc > 3) {
     G4String s = argv[3];
     UI->ApplyCommand("/testex/phys/setLDMHiMass " + s + " GeV");
   }
 
   // Construct the default run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager();
-  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(), 2);
   runManager->SetNumberOfThreads(nThreads);
-  G4cout << "===== dmparticle is started with "
-         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
+  G4cout << "===== dmparticle is started with " << runManager->GetNumberOfThreads()
+         << " threads =====" << G4endl;
 
   // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
-  runManager->SetUserInitialization( phys );
-  runManager->SetUserInitialization( det);
+  runManager->SetUserInitialization(phys);
+  runManager->SetUserInitialization(det);
 
   // set user action classes
-  runManager->SetUserInitialization( new ActionInitialization(det));
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
-  if (!ui)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }
-  else           //define visualization and UI terminal for interactive mode
-    {
-      ui->SessionStart();
-      delete ui;
-    }
+  if (!ui)  // batch mode
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command + fileName);
+  }
+  else  // define visualization and UI terminal for interactive mode
+  {
+    ui->SessionStart();
+    delete ui;
+  }
   // job termination
   delete visManager;
   delete runManager;
@@ -107,5 +105,3 @@ int main(int argc,char** argv)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

@@ -34,17 +34,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ActionInitialization : public G4VUserActionInitialization {
-public:
-  ActionInitialization();
-  ~ActionInitialization() override = default;
+class ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    ActionInitialization();
+    ~ActionInitialization() override = default;
 
-  void Build() const override;
+    void Build() const override;
 
-  void BuildForMaster() const override;
+    void BuildForMaster() const override;
 
-  ActionInitialization &operator = (const ActionInitialization &right) = delete;
-  ActionInitialization(const ActionInitialization &) = delete;
+    ActionInitialization& operator=(const ActionInitialization& right) = delete;
+    ActionInitialization(const ActionInitialization&) = delete;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,13 +27,14 @@
 /// \file persistency/P03/src/ExTGDetectorConstruction.cc
 /// \brief Implementation of the ExTGDetectorConstruction class
 
-#include "G4tgbVolumeMgr.hh"
 #include "ExTGDetectorConstruction.hh"
+
+#include "G4tgbVolumeMgr.hh"
 #include "G4tgrMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGDetectorConstruction::ExTGDetectorConstruction()
-{ 
+{
   fMessenger = new G4tgrMessenger;
 }
 
@@ -46,16 +47,16 @@ ExTGDetectorConstruction::~ExTGDetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* ExTGDetectorConstruction::Construct()
 {
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Define one or several text files containing the geometry description
-  //------------------------------------------------ 
+  //------------------------------------------------
   G4String filename = "g4geom.txt";
   G4tgbVolumeMgr* volmgr = G4tgbVolumeMgr::GetInstance();
   volmgr->AddTextFile(filename);
 
-  //------------------------------------------------ 
+  //------------------------------------------------
   // Read the text files and construct the GEANT4 geometry
-  //------------------------------------------------ 
+  //------------------------------------------------
   G4VPhysicalVolume* physiWorld = volmgr->ReadAndConstructDetector();
 
   return physiWorld;

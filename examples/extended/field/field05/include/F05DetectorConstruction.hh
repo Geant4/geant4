@@ -50,24 +50,20 @@ class F05Field;
 class F05DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-
     F05DetectorConstruction();
     ~F05DetectorConstruction() override;
 
   public:
-
     G4VPhysicalVolume* Construct() override;
     void ConstructSDandField() override;
 
   private:
+    G4Material* fVacuum = nullptr;
 
-     G4Material*        fVacuum = nullptr;
-
-     static G4ThreadLocal F05Field* fField;
+    static G4ThreadLocal F05Field* fField;
 
   private:
-
-     void DefineMaterials();
+    void DefineMaterials();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

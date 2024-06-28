@@ -29,21 +29,25 @@
 //
 
 #include "RE01ActionInitialization.hh"
+
+#include "RE01EventAction.hh"
 #include "RE01PrimaryGeneratorAction.hh"
 #include "RE01RunAction.hh"
-#include "RE01EventAction.hh"
-
 #include "RE01StackingAction.hh"
-#include "RE01TrackingAction.hh"
 #include "RE01SteppingAction.hh"
+#include "RE01TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01ActionInitialization::RE01ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01ActionInitialization::~RE01ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01ActionInitialization::Build() const
@@ -70,4 +74,3 @@ void RE01ActionInitialization::BuildForMaster() const
   G4UserRunAction* run_action = new RE01RunAction;
   SetUserAction(run_action);
 }
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file eventgenerator/pythia/decayer6/include/P6DExtDecayerPhysics.hh
 /// \brief Definition of the P6DExtDecayerPhysics class
 ///
@@ -44,7 +44,7 @@ class G4Decay;
 ///
 /// \author I. Hrivnacova; IPN Orsay
 
-class P6DExtDecayerPhysics: public G4VPhysicsConstructor
+class P6DExtDecayerPhysics : public G4VPhysicsConstructor
 {
   public:
     P6DExtDecayerPhysics(const G4String& name = "ExtDecayer");
@@ -52,7 +52,7 @@ class P6DExtDecayerPhysics: public G4VPhysicsConstructor
 
   protected:
     // methods
-          // construct particle and physics
+    // construct particle and physics
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
@@ -63,5 +63,4 @@ class P6DExtDecayerPhysics: public G4VPhysicsConstructor
     P6DExtDecayerPhysics& operator=(const P6DExtDecayerPhysics& right);
 };
 
-#endif //P6D_EXT_DECAYER_PHYSICS_H
-
+#endif  // P6D_EXT_DECAYER_PHYSICS_H

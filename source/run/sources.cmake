@@ -20,9 +20,11 @@ geant4_add_module(G4run
     G4RunManagerFactory.hh
     G4RunManager.hh
     G4RunManagerKernel.hh
+    G4SubEvtRunManager.hh
     G4TaskRunManager.hh
     G4TaskRunManagerKernel.hh
     G4UserRunAction.hh
+    G4UserSubEvtThreadInitialization.hh
     G4UserTaskInitialization.hh
     G4UserTaskThreadInitialization.hh
     G4UserWorkerInitialization.hh
@@ -38,6 +40,7 @@ geant4_add_module(G4run
     G4VUserPrimaryGeneratorAction.hh
     G4WorkerRunManager.hh
     G4WorkerRunManagerKernel.hh
+    G4WorkerSubEvtRunManager.hh
     G4WorkerTaskRunManager.hh
     G4WorkerTaskRunManagerKernel.hh
     G4WorkerThread.hh
@@ -67,10 +70,12 @@ geant4_add_module(G4run
     G4RunManagerFactory.cc
     G4RunManagerKernel.cc
     G4RunMessenger.cc
+    G4SubEvtRunManager.cc
     G4TaskRunManager.cc
     G4TaskRunManagerKernel.cc
     G4UserPhysicsListMessenger.cc
     G4UserRunAction.cc
+    G4UserSubEvtThreadInitialization.cc
     G4UserTaskThreadInitialization.cc
     G4UserWorkerThreadInitialization.cc
     G4VModularPhysicsList.cc
@@ -83,6 +88,7 @@ geant4_add_module(G4run
     G4VUserPrimaryGeneratorAction.cc
     G4WorkerRunManager.cc
     G4WorkerRunManagerKernel.cc
+    G4WorkerSubEvtRunManager.cc
     G4WorkerTaskRunManager.cc
     G4WorkerTaskRunManagerKernel.cc
     G4WorkerThread.cc)

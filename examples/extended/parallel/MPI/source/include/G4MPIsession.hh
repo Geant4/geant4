@@ -30,23 +30,24 @@
 
 #include "G4VMPIsession.hh"
 
-class G4MPIsession : public G4VMPIsession {
-public:
-  G4MPIsession(G4VUIshell* ashell = 0);
-  ~G4MPIsession();
+class G4MPIsession : public G4VMPIsession
+{
+  public:
+    G4MPIsession(G4VUIshell* ashell = 0);
+    ~G4MPIsession();
 
-  void SetPrompt(const G4String& prompt);
-  void SetShell(G4VUIshell* ashell);
+    void SetPrompt(const G4String& prompt);
+    void SetShell(G4VUIshell* ashell);
 
-  virtual G4UIsession* SessionStart();
+    virtual G4UIsession* SessionStart();
 
-private:
-  G4VUIshell* shell_;
+  private:
+    G4VUIshell* shell_;
 
-  // get command from user prompt of the master node
-  G4String GetCommand(const char* msg = 0);
+    // get command from user prompt of the master node
+    G4String GetCommand(const char* msg = 0);
 
-  G4bool TryForcedTerminate();
+    G4bool TryForcedTerminate();
 };
 
 #endif

@@ -24,36 +24,37 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+
 #include "DetectorMessenger.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4UserLimits.hh"
 #include "G4NistManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4LogicalVolumeStore.hh"
 #include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4UserLimits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-DetectorConstruction::DetectorConstruction() :
-    G4VUserDetectorConstruction(), fWaterMaterial(0)
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction(), fWaterMaterial(0)
 {
-  // create commands for interactive definition of the detector  
+  // Create commands for interactive definition of the detector
   fDetectorMessenger = new DetectorMessenger(this);
 
-  //default tracking cut  
-  fTrackingCut = 7.4*eV;
+  // Default tracking cut
+  fTrackingCut = 7.4 * eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,7 +67,6 @@ DetectorConstruction::~DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
-
 {
   DefineMaterials();
   return ConstructDetector();
@@ -76,11 +76,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 {
-
   // Water is defined from NIST material database
-  G4NistManager * man = G4NistManager::Instance();
+  G4NistManager* man = G4NistManager::Instance();
 
-  G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
+  G4Material* H2O = man->FindOrBuildMaterial("G4_WATER");
 
   fWaterMaterial = H2O;
 
@@ -91,28 +90,26 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
-
   // WORLD VOLUME
 
   G4double worldSizeX = 1 * m;
   G4double worldSizeY = worldSizeX;
   G4double worldSizeZ = worldSizeX;
 
-  G4Box* solidWorld = new G4Box("World",               //its name
-      worldSizeX / 2, worldSizeY / 2, worldSizeZ / 2); //its size
+  G4Box* solidWorld = new G4Box("World",  // its name
+                                worldSizeX / 2, worldSizeY / 2, worldSizeZ / 2);  // its size
 
-  fLogicWorld = new G4LogicalVolume(solidWorld, //its solid
-      fWaterMaterial, //its material
-      "World"); //its name
+  fLogicWorld = new G4LogicalVolume(solidWorld,  // its solid
+                                    fWaterMaterial,  // its material
+                                    "World");  // its name
 
-  G4PVPlacement* physiWorld = new G4PVPlacement(
-      0, //no rotation
-      G4ThreeVector(), //at (0,0,0)
-      fLogicWorld,
-      "World", //its name
-      0, //its mother  volume
-      false, //no boolean operation
-      0); //copy number
+  G4PVPlacement* physiWorld = new G4PVPlacement(0,  // no rotation
+                                                G4ThreeVector(),  // at (0,0,0)
+                                                fLogicWorld,
+                                                "World",  // its name
+                                                0,  // its mother  volume
+                                                false,  // no boolean operation
+                                                0);  // copy number
 
   // Visualization attributes
   G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
@@ -123,8 +120,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   worldVisAtt1->SetVisibility(true);
 
   // Tracking cut
-  fLogicWorld->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
-    fTrackingCut));    
+  fLogicWorld->SetUserLimits(new G4UserLimits(DBL_MAX, DBL_MAX, DBL_MAX, fTrackingCut));
 
   PrintParameters();
 
@@ -135,10 +131,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  // Search the material by its name
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) fWaterMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,7 +142,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetTrackingCut(G4double value)
 {
   fTrackingCut = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();  
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,9 +150,6 @@ void DetectorConstruction::SetTrackingCut(G4double value)
 void DetectorConstruction::PrintParameters() const
 {
   G4cout << "\n---------------------------------------------------------\n";
-  G4cout << "---> The tracking cut is set to " 
-         << G4BestUnit(fTrackingCut,"Energy") << G4endl;
+  G4cout << "---> The tracking cut is set to " << G4BestUnit(fTrackingCut, "Energy") << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

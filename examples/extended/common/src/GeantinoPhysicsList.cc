@@ -28,8 +28,9 @@
 /// \brief Implementation of the Common::GeantinoPhysicsList class
 
 #include "GeantinoPhysicsList.hh"
-#include "G4Geantino.hh"
+
 #include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
 
 namespace Common
 {
@@ -66,4 +67,4 @@ void GeantinoPhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace Common

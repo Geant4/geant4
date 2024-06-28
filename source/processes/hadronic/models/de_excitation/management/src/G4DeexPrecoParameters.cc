@@ -58,16 +58,47 @@ void G4DeexPrecoParameters::SetDefaults()
 
 void G4DeexPrecoParameters::Initialise()
 {
+  // common parameters
+  fVerbose = 1;
   fLevelDensity = 0.075/CLHEP::MeV;
   fR0 = 1.5*CLHEP::fermi;
   fTransitionsR0 = 0.6*CLHEP::fermi;
-  fFBUEnergyLimit = 20.0*CLHEP::MeV; 
-  fFermiEnergy = 35.0*CLHEP::MeV; 
+
+  // preco parameters
   fPrecoLowEnergy = 0.1*CLHEP::MeV;
   fPrecoHighEnergy = 30*CLHEP::MeV;
+  fPhenoFactor = 1.0;
+
+  fPrecoType = 3;
+  fMinZForPreco = 3;
+  fMinAForPreco = 5;
+
+  fNeverGoBack = false;
+  fUseSoftCutoff = false;
+  fUseCEM = true;
+  fUseGNASH = false;
+  fUseHETC = false;
+  fUseAngularGen = true;
+  fPrecoDummy = false;
+
+  // de-exitation parameters 
   fMinExcitation = 10*CLHEP::eV;
+  fNuclearLevelWidth = 0.2*CLHEP::MeV;
+  fFBUEnergyLimit = 20.0*CLHEP::MeV; 
+  fFermiEnergy = 35.0*CLHEP::MeV; 
   fMaxLifeTime = 1*CLHEP::nanosecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
+
+  fDeexChannelType = fCombined;
+  fDeexType = 3;
+  fTwoJMAX = 10;
+
+  fCorrelatedGamma = false;
+  fStoreAllLevels = false;
+  fInternalConversion = true;
+  fLD = true;  // use simple level density model 
+  fFD = false; // use transition to discrete level 
+  fIsomerFlag = true; // enable isomere production
 }
 
 void G4DeexPrecoParameters::SetLevelDensity(G4double val)
@@ -122,6 +153,12 @@ void G4DeexPrecoParameters::SetMinExcitation(G4double val)
 {
   if(IsLocked() || val < 0.0) { return; }
   fMinExcitation = val;
+}
+
+void G4DeexPrecoParameters::SetNuclearLevelWidth(G4double val)
+{
+  if(IsLocked() || val < 0.0) { return; }
+  fNuclearLevelWidth = val;
 }
 
 void G4DeexPrecoParameters::SetMaxLifeTime(G4double val)

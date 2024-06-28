@@ -30,8 +30,8 @@
 #ifndef H02_PRIMARY_GENERATOR_MESSENGER_H
 #define H02_PRIMARY_GENERATOR_MESSENGER_H
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class H02PrimaryGeneratorAction;
 class G4UIdirectory;
@@ -41,20 +41,20 @@ class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 
-class H02PrimaryGeneratorMessenger : public G4UImessenger {
-public:
-  H02PrimaryGeneratorMessenger(H02PrimaryGeneratorAction* genaction);
-  ~H02PrimaryGeneratorMessenger();
+class H02PrimaryGeneratorMessenger : public G4UImessenger
+{
+  public:
+    H02PrimaryGeneratorMessenger(H02PrimaryGeneratorAction* genaction);
+    ~H02PrimaryGeneratorMessenger();
 
-  virtual void SetNewValue(G4UIcommand* command, G4String newValues);
-  virtual G4String GetCurrentValue(G4UIcommand* command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
-private:
-  H02PrimaryGeneratorAction* fPrimaryAction;
+  private:
+    H02PrimaryGeneratorAction* fPrimaryAction;
 
-  G4UIdirectory* fDir;
-  G4UIcmdWithAString* fSelect;
-
+    G4UIdirectory* fDir;
+    G4UIcmdWithAString* fSelect;
 };
 
 #endif

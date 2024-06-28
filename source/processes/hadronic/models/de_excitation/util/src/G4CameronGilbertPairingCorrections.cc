@@ -70,8 +70,8 @@ G4double G4CameronGilbertPairingCorrections::PairingNTable[] =
 
 G4CameronGilbertPairingCorrections::G4CameronGilbertPairingCorrections()
 {
-  for(size_t i=0; i<ZTableSize; ++i) { PairingZTable[i] *= CLHEP::MeV; }
-  for(size_t i=0; i<NTableSize; ++i) { PairingNTable[i] *= CLHEP::MeV; }
+  for (G4int i=0; i<ZTableSize; ++i) { PairingZTable[i] *= CLHEP::MeV; }
+  for (G4int i=0; i<NTableSize; ++i) { PairingNTable[i] *= CLHEP::MeV; }
 }
 
 

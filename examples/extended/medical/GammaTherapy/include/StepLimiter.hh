@@ -33,11 +33,11 @@
 #ifndef StepLimiter_h
 #define StepLimiter_h 1
 
-#include "globals.hh"
-#include "G4VDiscreteProcess.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
+#include "G4VDiscreteProcess.hh"
+#include "globals.hh"
 
 class StepLimiterMessenger;
 
@@ -45,36 +45,33 @@ class StepLimiterMessenger;
 
 class StepLimiter : public G4VDiscreteProcess
 {
-public:
+  public:
+    StepLimiter(const G4String& processName = "UserMaxStep");
+    virtual ~StepLimiter();
 
-  StepLimiter(const G4String& processName = "UserMaxStep");
-  virtual ~StepLimiter();
+    G4bool IsApplicable(const G4ParticleDefinition&);
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+    // G4double GetMaxStep() {return MaxChargedStep;};
 
-  //G4double GetMaxStep() {return MaxChargedStep;};
+    G4double PostStepGetPhysicalInteractionLength(const G4Track& track, G4double previousStepSize,
+                                                  G4ForceCondition* condition);
 
-  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                                G4double previousStepSize,
-                                                G4ForceCondition* condition);
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+    G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
 
-  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
+    inline void SetMaxStep(G4double);
 
-  inline void SetMaxStep(G4double);
+  private:
+    StepLimiter& operator=(const StepLimiter& right);
+    StepLimiter(const StepLimiter&);
 
-private:
+    G4double fMaxChargedStep;
 
-  StepLimiter & operator=(const StepLimiter &right);
-  StepLimiter(const StepLimiter&);
-
-  G4double fMaxChargedStep;
-
-  StepLimiterMessenger* fMessenger;
+    StepLimiterMessenger* fMessenger;
 };
 
-inline void StepLimiter::SetMaxStep(G4double value) 
+inline void StepLimiter::SetMaxStep(G4double value)
 {
   fMaxChargedStep = value;
 }
@@ -82,4 +79,3 @@ inline void StepLimiter::SetMaxStep(G4double value)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

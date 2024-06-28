@@ -54,16 +54,14 @@
 
 class RE02PSFlatSurfaceCurrent : public G4PSFlatSurfaceCurrent
 {
-   public: // with description
-      RE02PSFlatSurfaceCurrent(G4String name, G4int direction,
-                               G4int nx,G4int ny, G4int nz);
-      virtual ~RE02PSFlatSurfaceCurrent();
+  public:  // with description
+    RE02PSFlatSurfaceCurrent(G4String name, G4int direction, G4int nx, G4int ny, G4int nz);
+    virtual ~RE02PSFlatSurfaceCurrent();
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+  protected:  // with description
+    virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNx, fNy, fNz;
+    G4int fNx, fNy, fNz;
 };
 #endif
-

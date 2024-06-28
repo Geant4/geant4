@@ -37,33 +37,33 @@
 
 class G4RootMpiNtupleFileManager;
 
-namespace tools {
-class impi;  
-}  
+namespace tools
+{
+class impi;
+}
 
-class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
+class G4RootMpiAnalysisManager : public G4RootAnalysisManager
 {
   public:
     explicit G4RootMpiAnalysisManager(G4bool isMaster = true);
     virtual ~G4RootMpiAnalysisManager();
-    
+
     // Static methods
     static G4RootMpiAnalysisManager* Instance();
 
     // MPI
-    void SetMpiNtupleMerging(tools::impi* impi, 
-                             G4int mpiRank, G4int mpiSize,
+    void SetMpiNtupleMerging(tools::impi* impi, G4int mpiRank, G4int mpiSize,
                              G4int nofReducedNtupleFiles = 0);
 
   protected:
     // virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteImpl() final; 
-    virtual G4bool CloseFileImpl(G4bool reset) final; 
+    virtual G4bool WriteImpl() final;
+    virtual G4bool CloseFileImpl(G4bool reset) final;
 
   private:
     // Static data members
-    inline static G4RootMpiAnalysisManager* fgInstance { nullptr };
+    inline static G4RootMpiAnalysisManager* fgInstance{nullptr};
 };
 
 #endif

@@ -39,7 +39,7 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorMessenger: public G4UImessenger
+class PrimaryGeneratorMessenger : public G4UImessenger
 {
   public:
     PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
@@ -57,4 +57,3 @@ class PrimaryGeneratorMessenger: public G4UImessenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

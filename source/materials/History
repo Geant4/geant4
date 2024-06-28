@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-04 Vladimir Ivanchenko (materials-V11-01-15)
+## 2024-04-04 Vladimir Ivanchenko (materials-V11-02-00)
 - G4NistMaterialBuilder in the method HepAndNuclearMaterials()
     G4_BRASS, G4_BRONZE, and G4_STAILESS_STEEL are defined using
     mass fractions of components instead of number of atoms

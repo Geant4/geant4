@@ -48,5 +48,3 @@ class B2ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-
-    

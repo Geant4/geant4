@@ -33,8 +33,8 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
 class G4Event;
@@ -45,23 +45,21 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();    
-   ~PrimaryGeneratorAction() override;
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
-  public:  
-    void SetRndmBeam(G4bool val)  {fRndmBeam = val;}   
+  public:
+    void SetRndmBeam(G4bool val) { fRndmBeam = val; }
     void GeneratePrimaries(G4Event*) override;
-         
-    G4ParticleGun* GetParticleGun() {return fParticleGun;}
-    
+
+    G4ParticleGun* GetParticleGun() { return fParticleGun; }
+
   private:
-    G4ParticleGun*             fParticleGun  = nullptr;
-    G4bool                     fRndmBeam     = true;
-    PrimaryGeneratorMessenger* fGunMessenger = nullptr;     
+    G4ParticleGun* fParticleGun = nullptr;
+    G4bool fRndmBeam = true;
+    PrimaryGeneratorMessenger* fGunMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

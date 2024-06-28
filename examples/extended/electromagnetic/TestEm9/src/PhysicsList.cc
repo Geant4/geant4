@@ -44,52 +44,51 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
+#include "PhysicsListMessenger.hh"
+#include "StepMax.hh"
+
+#include "G4DecayPhysics.hh"
+#include "G4Electron.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmLivermorePhysics.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLowEPPhysics.hh"
-#include "G4EmStandardPhysicsGS.hh"
-#include "G4EmStandardPhysicsSS.hh"
-#include "G4EmStandardPhysicsWVI.hh"
-#include "G4DecayPhysics.hh"
+#include "G4Gamma.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonPhysics.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4StoppingPhysics.hh"
-
-#include "G4RegionStore.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Proton.hh"
-
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
-#include "StepMax.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleTypes.hh"
+#include "G4Positron.hh"
+#include "G4ProcessManager.hh"
+#include "G4Proton.hh"
+#include "G4RegionStore.hh"
+#include "G4StoppingPhysics.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(nullptr),
-  fDecayPhysicsList(nullptr),
-  fStepMaxProcess(nullptr),
-  fMessenger(nullptr)
+PhysicsList::PhysicsList()
+  : G4VModularPhysicsList(),
+    fEmPhysicsList(nullptr),
+    fDecayPhysicsList(nullptr),
+    fStepMaxProcess(nullptr),
+    fMessenger(nullptr)
 {
   G4LossTableManager::Instance();
-  SetDefaultCutValue(1*mm);
+  SetDefaultCutValue(1 * mm);
 
   fMessenger = new PhysicsListMessenger(this);
   fStepMaxProcess = new StepMax();
@@ -98,8 +97,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
 
   SetVerboseLevel(1);
 
-  fHelIsRegisted  = false;
-  fBicIsRegisted  = false;
+  fHelIsRegisted = false;
+  fBicIsRegisted = false;
   fGnucIsRegisted = false;
   fStopIsRegisted = false;
 
@@ -119,7 +118,7 @@ PhysicsList::~PhysicsList()
   delete fDecayPhysicsList;
   delete fEmPhysicsList;
   delete fStepMaxProcess;
-  for(size_t i=0; i<fHadronPhys.size(); i++) {
+  for (size_t i = 0; i < fHadronPhys.size(); i++) {
     delete fHadronPhys[i];
   }
 }
@@ -138,7 +137,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
-  for(size_t i=0; i<fHadronPhys.size(); ++i) {
+  for (size_t i = 0; i < fHadronPhys.size(); ++i) {
     fHadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
@@ -148,8 +147,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel > 1) 
-    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  if (verboseLevel > 1) G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
 
   if (name == fEmName) return;
 
@@ -157,105 +155,93 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics(verboseLevel);
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "emstandard_opt1") {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+  }
+  else if (name == "emstandard_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1(verboseLevel);
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "emstandard_opt2") {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+  }
+  else if (name == "emstandard_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2(verboseLevel);
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "emstandard_opt3") {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+  }
+  else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3(verboseLevel);
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "emstandard_opt4") {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4(verboseLevel);
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "local") {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+  }
+  else if (name == "local") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(verboseLevel);
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
-
-  } else if (name == "emlivermore") {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+  }
+  else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics(verboseLevel);
-
-  } else if (name == "empenelope") {
+  }
+  else if (name == "empenelope") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics(verboseLevel);
-
-  } else if (name == "emlowenergy") {
+  }
+  else if (name == "emlowenergy") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics(verboseLevel);
-
-  } else if (name == "emstandardGS") {
+  }
+  else if (name == "emstandardGS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsGS(verboseLevel);
-
-  } else if (name == "emstandardSS") {
+  }
+  else if (name == "emstandardSS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS(verboseLevel);
-
-  } else if (name == "emstandardWVI") {
+  }
+  else if (name == "emstandardWVI") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsWVI();
-
-  } else if (name == "elastic" && !fHelIsRegisted) {
-    fHadronPhys.push_back( new G4HadronElasticPhysics());
+  }
+  else if (name == "elastic" && !fHelIsRegisted) {
+    fHadronPhys.push_back(new G4HadronElasticPhysics());
     fHelIsRegisted = true;
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Add hadron elastic physics" << G4endl;
-
-  } else if (name == "binary" && !fBicIsRegisted) {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Add hadron elastic physics" << G4endl;
+  }
+  else if (name == "binary" && !fBicIsRegisted) {
     fHadronPhys.push_back(new G4HadronInelasticQBBC());
     fHadronPhys.push_back(new G4IonPhysics());
     fBicIsRegisted = true;
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Add hadron inelastic physics from <QBBC>" 
-             << G4endl;
-
-  } else if (name == "gamma_nuc" && !fGnucIsRegisted) {
+    if (verboseLevel > 0)
+      G4cout << "PhysicsList::Add hadron inelastic physics from <QBBC>" << G4endl;
+  }
+  else if (name == "gamma_nuc" && !fGnucIsRegisted) {
     fHadronPhys.push_back(new G4EmExtraPhysics());
     fGnucIsRegisted = true;
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Add gamma- and electro-nuclear physics" 
-             << G4endl;
-
-  } else if (name == "stopping" && !fStopIsRegisted) {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Add gamma- and electro-nuclear physics" << G4endl;
+  }
+  else if (name == "stopping" && !fStopIsRegisted) {
     fHadronPhys.push_back(new G4StoppingPhysics());
     fStopIsRegisted = true;
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Add stopping physics" << G4endl;
-
-  } else {
+    if (verboseLevel > 0) G4cout << "PhysicsList::Add stopping physics" << G4endl;
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -265,18 +251,16 @@ void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)()){
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
-      {
-        pmanager ->AddDiscreteProcess(fStepMaxProcess);
-      }
+    if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
+      pmanager->AddDiscreteProcess(fStepMaxProcess);
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

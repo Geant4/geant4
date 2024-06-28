@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-02 Michel Maire (rdecay01-V11-02-02)
+- timeWindowBiased.mac, rdecay01.in: remove /process/had/rdm/BRbias
+
+## 2024-02-11 Michel Maire (rdecay01-V11-02-01)
+- PhysicsList.cc: MeanLifeThreshold = 1 nanosecond
+- cosmetic in rdecay01.in
+
+## 2024-01-02 Alexander Howard (rdecay01-V11-02-00)
+- Added time windowed biasing to rdecay01.in for system testing. With release
+  v11.2 this will cause a crash due to non-existent daughter levels.
+  Commit ba7345 from July 2023 causes the crash.
+
 ## 2023-11-10 Alberto Ribon (rdecay01-V11-01-01)
 - In all macro files, introduced the UI command
   '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'

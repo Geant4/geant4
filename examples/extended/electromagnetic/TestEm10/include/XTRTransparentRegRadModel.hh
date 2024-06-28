@@ -27,22 +27,21 @@
 /// \file electromagnetic/TestEm10/include/XTRTransparentRegRadModel.hh
 /// \brief Definition of the XTRTransparentRegRadModel class
 //
-// 
+//
 ///////////////////////////////////////////////////////////////////////////
-// 
-// Process describing a radiator of X-ray transition radiation.  
+//
+// Process describing a radiator of X-ray transition radiation.
 // Thicknesses of plates and gas gaps are fixed.
 // We suppose that:
 // formation zone ~ mean thickness << absorption length
 // for each material and in the range 1-100 keV. This allows us to simplify
 // interference effects in radiator stack (GetStackFactor method).
-// 
-// 
+//
+//
 // History:
 //
-// 05.04.05 V. Grichine, first version 
+// 05.04.05 V. Grichine, first version
 //
-
 
 #ifndef XTRTransparentRegRadModel_h
 #define XTRTransparentRegRadModel_h 1
@@ -51,20 +50,19 @@
 
 class XTRTransparentRegRadModel : public G4VXTRenergyLoss
 {
-public:
+  public:
+    XTRTransparentRegRadModel(G4LogicalVolume* anEnvelope, G4Material*, G4Material*, G4double,
+                              G4double, G4int,
+                              const G4String& processName = "XTRTransparentRegRadModel");
+    ~XTRTransparentRegRadModel();
 
-  XTRTransparentRegRadModel (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
-                        G4double,G4double,G4int,
-                        const G4String & processName = "XTRTransparentRegRadModel");
-  ~XTRTransparentRegRadModel ();
+    // reimplementation of base class function in analytical way
 
-  // reimplementation of base class function in analytical way
+    G4double SpectralXTRdEdx(G4double energy);
 
-  G4double SpectralXTRdEdx(G4double energy);
+    // Pure virtual function from base class
 
-  // Pure virtual function from base class
-
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
+    G4double GetStackFactor(G4double energy, G4double gamma, G4double varAngle);
 };
 
 #endif

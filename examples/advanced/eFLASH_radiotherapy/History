@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-01-10 G. Milluzzo (eFLASH_radiotherapy-V11-02-00)
+- Added the FlashPhysicsListMessenger class to change the physics lists by macro commands (opt3,opt4,penelope and livermore)
+
 ## 2023-11-15 I. Hrivnacova (eFLASH_radiotherapy-V11-01-02)
 - Updated vis.mac:
   - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices

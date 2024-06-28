@@ -46,17 +46,15 @@ class G4PrimaryParticle;
 //
 class RE04EventAction : public G4UserEventAction
 {
-public:
-  RE04EventAction();
-  ~RE04EventAction();
+  public:
+    RE04EventAction();
+    ~RE04EventAction();
 
-public:
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+  public:
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-//  private:
+    //  private:
 };
 
 #endif
-
-    

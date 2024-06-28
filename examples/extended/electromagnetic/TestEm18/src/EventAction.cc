@@ -32,47 +32,47 @@
 
 #include "EventAction.hh"
 
-#include "RunAction.hh"
 #include "HistoManager.hh"
+#include "RunAction.hh"
 
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* RA)
-:fRunAction(RA)
-{}
+EventAction::EventAction(RunAction* RA) : fRunAction(RA) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- // initialisation per event
- fEdepPrimary = fEdepSecondary = 0.;
+  // initialisation per event
+  fEdepPrimary = fEdepSecondary = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::SumEnergyDeposited(G4int trackID, G4double edep)
 {
-  if (trackID == 1) fEdepPrimary  += edep;
-  else fEdepSecondary += edep;
+  if (trackID == 1)
+    fEdepPrimary += edep;
+  else
+    fEdepSecondary += edep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::SumEnergyTransfered(const G4VProcess* process,G4double energy)
+void EventAction::SumEnergyTransfered(const G4VProcess* process, G4double energy)
 {
   G4String procName = process->GetProcessName();
-  std::map<G4String,G4double>::iterator it = fEnergyTransfered.find(procName);
-  if ( it == fEnergyTransfered.end()) {
+  std::map<G4String, G4double>::iterator it = fEnergyTransfered.find(procName);
+  if (it == fEnergyTransfered.end()) {
     fEnergyTransfered[procName] = energy;
   }
   else {
     fEnergyTransfered[procName] += energy;
   }
-  
-  G4int subtype = process-> GetProcessSubType();
+
+  G4int subtype = process->GetProcessSubType();
   fProcessSubType[procName] = subtype;
 }
 
@@ -80,40 +80,41 @@ void EventAction::SumEnergyTransfered(const G4VProcess* process,G4double energy)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
- 
- G4double EtransferedTotal = 0.;
- std::map<G4String,G4double>::iterator it;    
- for (it = fEnergyTransfered.begin(); it != fEnergyTransfered.end(); it++) {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  G4double EtransferedTotal = 0.;
+  std::map<G4String, G4double>::iterator it;
+  for (it = fEnergyTransfered.begin(); it != fEnergyTransfered.end(); it++) {
     G4String procName = it->first;
-    G4double energy   = it->second;
+    G4double energy = it->second;
     fRunAction->EnergyTransferedByProcess(procName, energy);
     EtransferedTotal += energy;
     //
     G4int ih = 0;
-    if(fProcessSubType[procName] == 2) ih = 3;
-    else if(fProcessSubType[procName] == 3) ih = 4;
-    else if(fProcessSubType[procName] == 4) ih = 5;
+    if (fProcessSubType[procName] == 2)
+      ih = 3;
+    else if (fProcessSubType[procName] == 3)
+      ih = 4;
+    else if (fProcessSubType[procName] == 4)
+      ih = 5;
     if (ih > 0) analysisManager->FillH1(ih, energy);
- }
+  }
 
- fRunAction->EnergyDeposited(fEdepPrimary, fEdepSecondary);
- if (EtransferedTotal > 0.) fRunAction->EnergyTransfered(EtransferedTotal);
- G4double energyLostTotal = fEdepPrimary + EtransferedTotal;
- fRunAction->TotalEnergyLost(energyLostTotal);
- G4double energyDepositTotal = fEdepPrimary + fEdepSecondary;
- fRunAction->TotalEnergyDeposit(energyDepositTotal);
- 
+  fRunAction->EnergyDeposited(fEdepPrimary, fEdepSecondary);
+  if (EtransferedTotal > 0.) fRunAction->EnergyTransfered(EtransferedTotal);
+  G4double energyLostTotal = fEdepPrimary + EtransferedTotal;
+  fRunAction->TotalEnergyLost(energyLostTotal);
+  G4double energyDepositTotal = fEdepPrimary + fEdepSecondary;
+  fRunAction->TotalEnergyDeposit(energyDepositTotal);
 
- analysisManager->FillH1( 2, fEdepPrimary);
- analysisManager->FillH1( 6, EtransferedTotal);
- analysisManager->FillH1( 7, energyLostTotal);
- analysisManager->FillH1( 9, fEdepSecondary);
- analysisManager->FillH1(10, energyDepositTotal);
- 
- fEnergyTransfered.clear();
- fProcessSubType.clear();
+  analysisManager->FillH1(2, fEdepPrimary);
+  analysisManager->FillH1(6, EtransferedTotal);
+  analysisManager->FillH1(7, energyLostTotal);
+  analysisManager->FillH1(9, fEdepSecondary);
+  analysisManager->FillH1(10, energyDepositTotal);
+
+  fEnergyTransfered.clear();
+  fProcessSubType.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -36,58 +36,48 @@
 
 #include "ActionInitialization.hh"
 
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
-#include "TrackingAction.hh"
-#include "G4RunManager.hh"
-
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 #include "G4DNAChemistryManager.hh"
-
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 #include "G4UnitsTable.hh"
 
-#include "G4Threading.hh"
-
-#include "TrackingAction.hh"
-
 // chemistry
-#include "G4Scheduler.hh"
-#include "StackingAction.hh"
-#include "TimeStepAction.hh"
-#include "ITTrackingInteractivity.hh"
 #include "ITSteppingAction.hh"
 #include "ITTrackingAction.hh"
+#include "ITTrackingInteractivity.hh"
+#include "StackingAction.hh"
+#include "TimeStepAction.hh"
+
+#include "G4Scheduler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization() : G4VUserActionInitialization()
-{
-}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
- // In MT mode, to be clearer, the RunAction class for the master thread might
- // be different than the one used for the workers.
- // This RunAction will be called before and after starting the
- // workers.
- // For more details, please refer to :
- // https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
- //
- // RunAction* runAction= new RunAction();
- // SetUserAction(runAction);
+  // In MT mode, to be clearer, the RunAction class for the master thread might
+  // be different than the one used for the workers.
+  // This RunAction will be called before and after starting the
+  // workers.
+  // For more details, please refer to :
+  // https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
+  //
+  // RunAction* runAction= new RunAction();
+  // SetUserAction(runAction);
 }
 
 void ActionInitialization::Build() const
@@ -102,15 +92,15 @@ void ActionInitialization::Build() const
   SetUserAction(new StackingAction());
 
   // chemistry part
-  if(G4DNAChemistryManager::IsActivated()){
+  if (G4DNAChemistryManager::IsActivated()) {
     G4Scheduler::Instance()->SetUserAction(new TimeStepAction());
 
     // Uncomment and set to stop chemistry stage after:
     // ...given number of time steps
-    //G4Scheduler::Instance()->SetMaxNbSteps(1000);
+    // G4Scheduler::Instance()->SetMaxNbSteps(1000);
 
     // ...OR reaching this time
-    G4Scheduler::Instance()->SetEndTime(100*nanosecond);
+    G4Scheduler::Instance()->SetEndTime(100 * nanosecond);
 
     G4Scheduler::Instance()->SetVerbose(1);
 
@@ -119,28 +109,28 @@ void ActionInitialization::Build() const
     itInteractivity->SetUserAction(new ITTrackingAction);
     G4Scheduler::Instance()->SetInteractivity(itInteractivity);
   }
-/*
-  // To output the pre-chemical stage
-  //
-  G4String fileName ("output");
+  /*
+    // To output the pre-chemical stage
+    //
+    G4String fileName ("output");
 
-  if(G4RunManager::GetRunManager()->GetRunManagerType() ==
-      G4RunManager::sequentialRM)
-  {
-    // write initial situation at 1 picosecond
-    G4DNAChemistryManager::Instance()->WriteInto(fileName + ".txt");
-  }
-  else
-  {
-    G4int id = G4Threading::G4GetThreadId();
+    if(G4RunManager::GetRunManager()->GetRunManagerType() ==
+        G4RunManager::sequentialRM)
+    {
+      // write initial situation at 1 picosecond
+      G4DNAChemistryManager::Instance()->WriteInto(fileName + ".txt");
+    }
+    else
+    {
+      G4int id = G4Threading::G4GetThreadId();
 
-    G4String fileName_mt = fileName;
-    fileName_mt += G4UIcommand::ConvertToString(id);
-    fileName_mt += ".txt";
+      G4String fileName_mt = fileName;
+      fileName_mt += G4UIcommand::ConvertToString(id);
+      fileName_mt += ".txt";
 
-    G4cout << "chosen file name : " << fileName_mt << G4endl;
+      G4cout << "chosen file name : " << fileName_mt << G4endl;
 
-    G4DNAChemistryManager::Instance()->WriteInto(fileName_mt);
-  }
-*/
-}  
+      G4DNAChemistryManager::Instance()->WriteInto(fileName_mt);
+    }
+  */
+}

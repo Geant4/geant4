@@ -28,70 +28,65 @@
 //
 //
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
+#include "FTFP_BERT.hh"
 #include "GB06ActionInitialization.hh"
-
-#include "G4UImanager.hh"
-
 #include "GB06DetectorConstruction.hh"
 #include "GB06ParallelWorldForSlices.hh"
 #include "GB06PrimaryGeneratorAction.hh"
 
-#include "FTFP_BERT.hh"
 #include "G4GenericBiasingPhysics.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
-
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace {
-  void PrintUsage() {
-    G4cerr << " Usage: " << G4endl;
-    G4cerr << " ./exampleGB06 [-m macro ] "
-           << " [-b biasing {'on','off'}]"
-           << "\n or\n ./exampleGB06 [macro.mac]"
-           << G4endl;
-  }
+namespace
+{
+void PrintUsage()
+{
+  G4cerr << " Usage: " << G4endl;
+  G4cerr << " ./exampleGB06 [-m macro ] "
+         << " [-b biasing {'on','off'}]"
+         << "\n or\n ./exampleGB06 [macro.mac]" << G4endl;
 }
+}  // namespace
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Evaluate arguments
   //
-  if ( argc > 5 ) {
+  if (argc > 5) {
     PrintUsage();
     return 1;
   }
 
   G4String macro("");
   G4String onOffBiasing("");
-  if ( argc == 2 ) macro = argv[1];
-  else
-    {
-      for ( G4int i=1; i<argc; i=i+2 )
-        {
-          if      ( G4String(argv[i]) == "-m" ) macro        = argv[i+1];
-          else if ( G4String(argv[i]) == "-b" ) onOffBiasing = argv[i+1];
-          else
-            {
-              PrintUsage();
-              return 1;
-            }
-        }
+  if (argc == 2)
+    macro = argv[1];
+  else {
+    for (G4int i = 1; i < argc; i = i + 2) {
+      if (G4String(argv[i]) == "-m")
+        macro = argv[i + 1];
+      else if (G4String(argv[i]) == "-b")
+        onOffBiasing = argv[i + 1];
+      else {
+        PrintUsage();
+        return 1;
+      }
     }
+  }
 
-  if ( onOffBiasing == "" ) onOffBiasing = "on";
+  if (onOffBiasing == "") onOffBiasing = "on";
 
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( macro == "" ) {
+  if (macro == "") {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -99,16 +94,15 @@ int main(int argc,char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
-
   // -- Set mandatory initialization classes
 
   // -- Create geometry:
-  GB06DetectorConstruction*        detector = new GB06DetectorConstruction();
+  GB06DetectorConstruction* detector = new GB06DetectorConstruction();
   // -- Create parallel world:
   GB06ParallelWorldForSlices* parallelWorld =
     new GB06ParallelWorldForSlices("parallelWorldForSlices");
   // -- and "augment" detector geometry with the parallelWorld one:
-  detector->RegisterParallelWorld( parallelWorld );
+  detector->RegisterParallelWorld(parallelWorld);
   runManager->SetUserInitialization(detector);
 
   // -- Select a physics list:
@@ -116,28 +110,23 @@ int main(int argc,char** argv)
   // -- and augment it with biasing facilities:
   G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
   biasingPhysics->BeVerbose();
-  if ( onOffBiasing == "on" )
-    {
-      // -- We use only the "non physics biasing" functionnality (ie, the ones which don't
-      // -- alter physics processes behavior), and hence we equipe the physics list
-      // -- accordingly:
-      biasingPhysics->NonPhysicsBias("neutron");
-      // -- we activate and configure the parallel geometry facility:
-      biasingPhysics->AddParallelGeometry("neutron","parallelWorldForSlices");
-      physicsList->RegisterPhysics(biasingPhysics);
-      G4cout << "      ********************************************************* "
-             << G4endl;
-      G4cout << "      ********** processes are wrapped for biasing ************ "
-             << G4endl;
-      G4cout << "      ********************************************************* "
-             << G4endl;
-    }
-  else
-    {
-      G4cout << "      ************************************************* " << G4endl;
-      G4cout << "      ********** processes are not wrapped ************ " << G4endl;
-      G4cout << "      ************************************************* " << G4endl;
-    }
+  if (onOffBiasing == "on") {
+    // -- We use only the "non physics biasing" functionnality (ie, the ones which don't
+    // -- alter physics processes behavior), and hence we equipe the physics list
+    // -- accordingly:
+    biasingPhysics->NonPhysicsBias("neutron");
+    // -- we activate and configure the parallel geometry facility:
+    biasingPhysics->AddParallelGeometry("neutron", "parallelWorldForSlices");
+    physicsList->RegisterPhysics(biasingPhysics);
+    G4cout << "      ********************************************************* " << G4endl;
+    G4cout << "      ********** processes are wrapped for biasing ************ " << G4endl;
+    G4cout << "      ********************************************************* " << G4endl;
+  }
+  else {
+    G4cout << "      ************************************************* " << G4endl;
+    G4cout << "      ********** processes are not wrapped ************ " << G4endl;
+    G4cout << "      ************************************************* " << G4endl;
+  }
   runManager->SetUserInitialization(physicsList);
 
   // -- Action initialization:
@@ -154,19 +143,18 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( macro != "" )   // batch mode
-    {
-      G4String command = "/control/execute ";
-      UImanager->ApplyCommand(command+macro);
-    }
-  else
-    {  // interactive mode : define UI session
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      //      if (ui->IsGUI())
-      //              UImanager->ApplyCommand("/control/execute gui.mac");
-      ui->SessionStart();
-      delete ui;
-    }
+  if (macro != "")  // batch mode
+  {
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command + macro);
+  }
+  else {  // interactive mode : define UI session
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    //      if (ui->IsGUI())
+    //              UImanager->ApplyCommand("/control/execute gui.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
   delete visManager;
   delete runManager;

@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 45  (2018) e722-e739
-// Phys. Med. 31  (2015) 861-874
-// Med. Phys. 37  (2010) 4692-4708
-// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157\u2013178
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
@@ -39,35 +39,22 @@
 #ifndef TrackerSD_h
 #define TrackerSD_h 1
 
-#include "G4VSensitiveDetector.hh"
-
 #include "TrackerHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-/// Tracker sensitive detector class
-///
-/// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero 
-/// energy deposit.
+#include "G4VSensitiveDetector.hh"
 
 class TrackerSD : public G4VSensitiveDetector
 {
   public:
-    TrackerSD(const G4String& name, 
-                const G4String& hitsCollectionName);
+    TrackerSD(const G4String& name, const G4String& hitsCollectionName);
     virtual ~TrackerSD();
-  
-    // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
+
+    virtual void Initialize(G4HCofThisEvent* hitCollection);
     virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
+    virtual void EndOfEvent(G4HCofThisEvent* hitCollection);
 
   private:
     TrackerHitsCollection* fHitsCollection;
-    
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

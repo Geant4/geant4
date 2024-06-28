@@ -27,10 +27,10 @@
 #ifndef MOLECULAR_CHROMOSOME_MAPPER_HH
 #define MOLECULAR_CHROMOSOME_MAPPER_HH
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-
 #include "ChromosomeFactory.hh"
+
+#include "G4ThreeVector.hh"
+#include "globals.hh"
 
 #include <map>
 #include <vector>
@@ -43,37 +43,31 @@ class ChromosomeMessenger;
 
 class ChromosomeMapper
 {
- public:
-  ChromosomeMapper();
+  public:
+    ChromosomeMapper();
 
-  virtual ~ChromosomeMapper();
+    virtual ~ChromosomeMapper();
 
-  [[maybe_unused]] VirtualChromosome* GetChromosome(
-    const G4String&) const;
+    [[maybe_unused]] VirtualChromosome* GetChromosome(const G4String&) const;
 
-  [[maybe_unused]] VirtualChromosome* GetChromosome(
-    const G4ThreeVector& p) const;
+    [[maybe_unused]] VirtualChromosome* GetChromosome(const G4ThreeVector& p) const;
 
-  [[maybe_unused]] G4String GetCurrentChromosomeKey(
-    const G4ThreeVector&) const;
+    [[maybe_unused]] G4String GetCurrentChromosomeKey(const G4ThreeVector&) const;
 
-  [[maybe_unused]] std::vector<G4String> GetChromosomeKeys() const;
+    [[maybe_unused]] std::vector<G4String> GetChromosomeKeys() const;
 
-  inline G4int GetNumberOfChromosomes()
-  {
-    return (G4int) fChromosomes.size();
-  };
+    inline G4int GetNumberOfChromosomes() { return (G4int)fChromosomes.size(); };
 
-  void AddChromosome(const G4String&, const std::vector<G4String>&);
+    void AddChromosome(const G4String&, const std::vector<G4String>&);
 
-  void Test();
+    void Test();
 
-  void SavePlotData(const G4String& filename);
+    void SavePlotData(const G4String& filename);
 
- private:
-  std::map<uint32_t, VirtualChromosome*> fChromosomes;
-  ChromosomeMessenger* fpChromosomeMessenger;
-  ChromosomeFactory* fpChromosomeFactory;
+  private:
+    std::map<uint32_t, VirtualChromosome*> fChromosomes;
+    ChromosomeMessenger* fpChromosomeMessenger;
+    ChromosomeFactory* fpChromosomeFactory;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

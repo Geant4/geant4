@@ -33,9 +33,10 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "G4Run.hh"
-#include "G4AnalysisManager.hh"
 #include "DetectorConstruction.hh"
+
+#include "G4AnalysisManager.hh"
+#include "G4Run.hh"
 
 #include <vector>
 typedef std::vector<G4double> MyVector;
@@ -49,85 +50,88 @@ class PrimaryGeneratorAction;
 
 class Run : public G4Run
 {
-public:
+  public:
+    Run(DetectorConstruction*, PrimaryGeneratorAction*);
+    ~Run() override = default;
 
-  Run(DetectorConstruction*, PrimaryGeneratorAction*);
- ~Run() override = default;
+    void Merge(const G4Run*) override;
 
-  void Merge(const G4Run*) override;
+    void InitializePerEvent();
+    void FillPerEvent();
 
-  void InitializePerEvent();
-  void FillPerEvent();
+    inline void FillPerTrack(G4double, G4double);
+    inline void FillPerStep(G4double, G4int, G4int);
 
-  inline void FillPerTrack(G4double,G4double);
-  inline void FillPerStep (G4double,G4int,G4int);
+    inline void AddStep(G4double q);
 
-  inline void AddStep(G4double q);
+    void EndOfRun(G4double edep, G4double rms, G4double& limit);
 
-  void EndOfRun(G4double edep, G4double rms, G4double& limit); 
+    inline void SetVerbose(G4int val) { fVerbose = val; };
 
-  inline void SetVerbose(G4int val)  {fVerbose = val;};
-     
-private:
-  void Reset();
+  private:
+    void Reset();
 
-  DetectorConstruction*   fDet = nullptr;
-  PrimaryGeneratorAction* fKin = nullptr;
-    
-  G4int f_nLbin = kMaxBin;
-  MyVector f_dEdL;
-  MyVector fSumELongit;
-  MyVector fSumE2Longit;
-  MyVector fSumELongitCumul;
-  MyVector fSumE2LongitCumul;
+    DetectorConstruction* fDet = nullptr;
+    PrimaryGeneratorAction* fKin = nullptr;
 
-  G4int f_nRbin = kMaxBin;
-  MyVector f_dEdR;
-  MyVector fSumERadial;
-  MyVector fSumE2Radial;
-  MyVector fSumERadialCumul;
-  MyVector fSumE2RadialCumul;
+    G4int f_nLbin = kMaxBin;
+    MyVector f_dEdL;
+    MyVector fSumELongit;
+    MyVector fSumE2Longit;
+    MyVector fSumELongitCumul;
+    MyVector fSumE2LongitCumul;
 
-  G4double fChargTrLength = 0.;
-  G4double fSumChargTrLength = 0.;
-  G4double fSum2ChargTrLength = 0.;
+    G4int f_nRbin = kMaxBin;
+    MyVector f_dEdR;
+    MyVector fSumERadial;
+    MyVector fSumE2Radial;
+    MyVector fSumERadialCumul;
+    MyVector fSumE2RadialCumul;
 
-  G4double fNeutrTrLength = 0.;
-  G4double fSumNeutrTrLength = 0.;
-  G4double fSum2NeutrTrLength = 0.;
+    G4double fChargTrLength = 0.;
+    G4double fSumChargTrLength = 0.;
+    G4double fSum2ChargTrLength = 0.;
 
-  G4double fChargedStep = 0.;
-  G4double fNeutralStep = 0.;
+    G4double fNeutrTrLength = 0.;
+    G4double fSumNeutrTrLength = 0.;
+    G4double fSum2NeutrTrLength = 0.;
 
-  G4int    fVerbose = 0;
+    G4double fChargedStep = 0.;
+    G4double fNeutralStep = 0.;
+
+    G4int fVerbose = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-void Run::FillPerTrack(G4double charge, G4double trkLength)
+inline void Run::FillPerTrack(G4double charge, G4double trkLength)
 {
-  if (charge != 0.) fChargTrLength += trkLength;
-  else              fNeutrTrLength += trkLength;   
+  if (charge != 0.)
+    fChargTrLength += trkLength;
+  else
+    fNeutrTrLength += trkLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-void Run::FillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
+inline void Run::FillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
-  f_dEdL[Lbin] += dEstep; f_dEdR[Rbin] += dEstep;
+  f_dEdL[Lbin] += dEstep;
+  f_dEdR[Rbin] += dEstep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void Run::AddStep(G4double q)
 {
-  if (q == 0.0) { fNeutralStep += 1.0; }
-  else          { fChargedStep += 1.0; }  
+  if (q == 0.0) {
+    fNeutralStep += 1.0;
+  }
+  else {
+    fChargedStep += 1.0;
+  }
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

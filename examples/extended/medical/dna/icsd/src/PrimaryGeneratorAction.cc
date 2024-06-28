@@ -35,42 +35,41 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
+
+#include "G4LogicalVolumeStore.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
-#include "G4LogicalVolumeStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
-: G4VUserPrimaryGeneratorAction()
+PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
-    G4int n_particle = 1;
-    fpParticleGun  = new G4ParticleGun(n_particle);
+  G4int n_particle = 1;
+  fpParticleGun = new G4ParticleGun(n_particle);
 
-    // default gun parameters
-    fpParticleGun->SetParticleEnergy(500.*eV);
-    fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-    fpParticleGun->SetParticlePosition(G4ThreeVector(-1.15*nanometer,0.,0));
+  // default gun parameters
+  fpParticleGun->SetParticleEnergy(500. * eV);
+  fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
+  fpParticleGun->SetParticlePosition(G4ThreeVector(-1.15 * nanometer, 0., 0));
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-    delete fpParticleGun;
+  delete fpParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    G4Tubs* targetSolid = dynamic_cast< G4Tubs*>(
-        G4LogicalVolumeStore::GetInstance()->GetVolume("Target")->GetSolid());
+  G4Tubs* targetSolid =
+    dynamic_cast<G4Tubs*>(G4LogicalVolumeStore::GetInstance()->GetVolume("Target")->GetSolid());
 
-    if(targetSolid != nullptr)
-    {
-        G4double radius = targetSolid->GetOuterRadius();
-        fpParticleGun->SetParticlePosition(G4ThreeVector(-radius,0.,0));
-    }
-    
-    fpParticleGun->GeneratePrimaryVertex(anEvent);
+  if (targetSolid != nullptr) {
+    G4double radius = targetSolid->GetOuterRadius();
+    fpParticleGun->SetParticlePosition(G4ThreeVector(-radius, 0., 0));
+  }
+
+  fpParticleGun->GeneratePrimaryVertex(anEvent);
 }

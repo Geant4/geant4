@@ -35,10 +35,9 @@
 #include "WLSMaterials.hh"
 #include "WLSPhotonDetSD.hh"
 
-#include "globals.hh"
 #include "G4Box.hh"
+#include "G4Colour.hh"
 #include "G4EllipticalTube.hh"
-#include "G4ios.hh"
 #include "G4GeometryManager.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
@@ -47,29 +46,28 @@
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4OpticalSurface.hh"
+#include "G4PVPlacement.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4PVPlacement.hh"
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
 #include "G4SolidStore.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4UserLimits.hh"
-
 #include "G4VisAttributes.hh"
-#include "G4Colour.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSDetectorConstruction::WLSDetectorConstruction()
-  : fVisAttributes()
+WLSDetectorConstruction::WLSDetectorConstruction() : fVisAttributes()
 {
   fDetectorMessenger = new WLSDetectorMessenger(this);
 
   fMPPCHalfL = fWLSfiberRY;
   fClrfiberZ = fMPPCZ + 10. * nm;
-  fHoleLength       = fBarLength;
+  fHoleLength = fBarLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,8 +76,7 @@ WLSDetectorConstruction::~WLSDetectorConstruction()
 {
   delete fDetectorMessenger;
   delete fMaterials;
-  for (auto visAttributes: fVisAttributes)
-  {
+  for (auto visAttributes : fVisAttributes) {
     delete visAttributes;
   }
 }
@@ -88,8 +85,7 @@ WLSDetectorConstruction::~WLSDetectorConstruction()
 
 G4VPhysicalVolume* WLSDetectorConstruction::Construct()
 {
-  if(fPhysiWorld)
-  {
+  if (fPhysiWorld) {
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
@@ -108,24 +104,20 @@ G4VPhysicalVolume* WLSDetectorConstruction::Construct()
 
 G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
 {
-
   auto air = FindMaterial("G4_AIR");
-  //G4cout << "\nMaterial Properties Table for G4_AIR:" << G4endl;
-  //air->GetMaterialPropertiesTable()->DumpTable();
+  // G4cout << "\nMaterial Properties Table for G4_AIR:" << G4endl;
+  // air->GetMaterialPropertiesTable()->DumpTable();
 
   //--------------------------------------------------
   // World
   //--------------------------------------------------
 
-  G4VSolid* solidWorld =
-    new G4Box("World", fWorldSizeX, fWorldSizeY, fWorldSizeZ);
+  G4VSolid* solidWorld = new G4Box("World", fWorldSizeX, fWorldSizeY, fWorldSizeZ);
 
-  fLogicWorld =
-    new G4LogicalVolume(solidWorld, air, "World");
+  fLogicWorld = new G4LogicalVolume(solidWorld, air, "World");
 
   fPhysiWorld =
-    new G4PVPlacement(nullptr, G4ThreeVector(), fLogicWorld, "World", nullptr,
-                      false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), fLogicWorld, "World", nullptr, false, 0);
 
   //--------------------------------------------------
   // Extrusion
@@ -133,30 +125,27 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
 
   auto coating = FindMaterial("Coating");
 
-  G4VSolid* solidExtrusion = new G4Box("Extrusion", GetBarBase() / 2.,
-                                       GetBarBase() / 2., GetBarLength() / 2.);
+  G4VSolid* solidExtrusion =
+    new G4Box("Extrusion", GetBarBase() / 2., GetBarBase() / 2., GetBarLength() / 2.);
 
-  auto logicExtrusion =
-    new G4LogicalVolume(solidExtrusion, coating, "Extrusion");
+  auto logicExtrusion = new G4LogicalVolume(solidExtrusion, coating, "Extrusion");
 
-  auto TiO2Surface = new G4OpticalSurface(
-    "TiO2Surface", glisur, ground, dielectric_metal, fExtrusionPolish);
+  auto TiO2Surface =
+    new G4OpticalSurface("TiO2Surface", glisur, ground, dielectric_metal, fExtrusionPolish);
 
   auto TiO2SurfaceProperty = new G4MaterialPropertiesTable();
 
-  std::vector<G4double> p_TiO2 = { 2.00 * eV, 3.47 * eV };
+  std::vector<G4double> p_TiO2 = {2.00 * eV, 3.47 * eV};
 
-  std::vector<G4double> refl_TiO2 = { fExtrusionReflectivity,
-                                      fExtrusionReflectivity };
-  std::vector<G4double> effi_TiO2 = { 0., 0. };
+  std::vector<G4double> refl_TiO2 = {fExtrusionReflectivity, fExtrusionReflectivity};
+  std::vector<G4double> effi_TiO2 = {0., 0.};
 
   TiO2SurfaceProperty->AddProperty("REFLECTIVITY", p_TiO2, refl_TiO2);
   TiO2SurfaceProperty->AddProperty("EFFICIENCY", p_TiO2, effi_TiO2);
 
   TiO2Surface->SetMaterialPropertiesTable(TiO2SurfaceProperty);
 
-  new G4PVPlacement(nullptr, G4ThreeVector(), logicExtrusion, "Extrusion",
-                    fLogicWorld, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(), logicExtrusion, "Extrusion", fLogicWorld, false, 0);
 
   new G4LogicalSkinSurface("TiO2Surface", logicExtrusion, TiO2Surface);
 
@@ -165,103 +154,92 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   //--------------------------------------------------
 
   auto polystyrene = FindMaterial("Polystyrene");
-  //G4cout << "\nMaterial Properties Table for Polystyrene:" << G4endl;
-  //polystyrene->GetMaterialPropertiesTable()->DumpTable();
+  // G4cout << "\nMaterial Properties Table for Polystyrene:" << G4endl;
+  // polystyrene->GetMaterialPropertiesTable()->DumpTable();
 
   G4VSolid* solidScintillator =
-    new G4Box("Scintillator",
-              GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius(),
-              GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius(),
-              GetBarLength() / 2.);
+    new G4Box("Scintillator", GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius(),
+              GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius(), GetBarLength() / 2.);
 
-  auto logicScintillator = new G4LogicalVolume(
-    solidScintillator, polystyrene, "Scintillator");
+  auto logicScintillator = new G4LogicalVolume(solidScintillator, polystyrene, "Scintillator");
 
-  new G4PVPlacement(nullptr, G4ThreeVector(), logicScintillator, "Scintillator",
-                    logicExtrusion, false, 0);
-  
+  new G4PVPlacement(nullptr, G4ThreeVector(), logicScintillator, "Scintillator", logicExtrusion,
+                    false, 0);
+
   G4LogicalVolume* logicScintSide = nullptr;
   G4LogicalVolume* logicScintCrnr = nullptr;
-  if(GetCoatingRadius() > 0.)
-  {
+  if (GetCoatingRadius() > 0.) {
     G4VSolid* solidScintside =
-      new G4Box("SideOfBar",
-                GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius(),
+      new G4Box("SideOfBar", GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius(),
                 GetCoatingRadius() / 2., GetBarLength() / 2.);
 
-    G4VSolid* solidScintcrnr =
-      new G4Tubs("CrnrOfBar", 0.0 * cm, GetCoatingRadius(), GetBarLength() / 2.,
-                 0. * deg, 90. * deg);
+    G4VSolid* solidScintcrnr = new G4Tubs("CrnrOfBar", 0.0 * cm, GetCoatingRadius(),
+                                          GetBarLength() / 2., 0. * deg, 90. * deg);
 
-    logicScintSide = new G4LogicalVolume(
-      solidScintside, polystyrene, "SideOfBar");
+    logicScintSide = new G4LogicalVolume(solidScintside, polystyrene, "SideOfBar");
 
-    logicScintCrnr = new G4LogicalVolume(
-      solidScintcrnr, polystyrene, "CrnrOfBar");
+    logicScintCrnr = new G4LogicalVolume(solidScintcrnr, polystyrene, "CrnrOfBar");
 
-    G4double pos =
-      GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius() / 2.;
+    G4double pos = GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius() / 2.;
 
-    new G4PVPlacement(nullptr, G4ThreeVector(0., -pos, 0.), logicScintSide,
-                      "SideOfBar", logicExtrusion, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(0., -pos, 0.), logicScintSide, "SideOfBar",
+                      logicExtrusion, false, 0);
 
-    new G4PVPlacement(nullptr, G4ThreeVector(0., pos, 0.), logicScintSide,
-                      "SideOfBar", logicExtrusion, false, 1);
+    new G4PVPlacement(nullptr, G4ThreeVector(0., pos, 0.), logicScintSide, "SideOfBar",
+                      logicExtrusion, false, 1);
 
     auto rot1 = new G4RotationMatrix();
-    rot1->rotateZ(-90.*deg);
+    rot1->rotateZ(-90. * deg);
 
-    new G4PVPlacement(rot1, G4ThreeVector(pos, 0., 0.), logicScintSide,
-                      "SideOfBar", logicExtrusion, false, 2);
+    new G4PVPlacement(rot1, G4ThreeVector(pos, 0., 0.), logicScintSide, "SideOfBar", logicExtrusion,
+                      false, 2);
 
-    new G4PVPlacement(rot1, G4ThreeVector(-pos, 0., 0.), logicScintSide,
-                      "SideOfBar", logicExtrusion, false, 3);
+    new G4PVPlacement(rot1, G4ThreeVector(-pos, 0., 0.), logicScintSide, "SideOfBar",
+                      logicExtrusion, false, 3);
 
     pos = GetBarBase() / 2. - GetCoatingThickness() - GetCoatingRadius();
 
-    new G4PVPlacement(nullptr, G4ThreeVector(pos, pos, 0.), logicScintCrnr,
-                      "CrnrOfBar", logicExtrusion, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(pos, pos, 0.), logicScintCrnr, "CrnrOfBar",
+                      logicExtrusion, false, 0);
 
-    new G4PVPlacement(rot1, G4ThreeVector(-pos, pos, 0.), logicScintCrnr,
-                      "CrnrOfBar", logicExtrusion, false, 1);
+    new G4PVPlacement(rot1, G4ThreeVector(-pos, pos, 0.), logicScintCrnr, "CrnrOfBar",
+                      logicExtrusion, false, 1);
 
     auto rot2 = new G4RotationMatrix();
-    rot2->rotateZ(-180.*deg);
+    rot2->rotateZ(-180. * deg);
 
-    new G4PVPlacement(rot2, G4ThreeVector(-pos, -pos, 0.), logicScintCrnr,
-                      "CrnrOfBar", logicExtrusion, false, 2);
+    new G4PVPlacement(rot2, G4ThreeVector(-pos, -pos, 0.), logicScintCrnr, "CrnrOfBar",
+                      logicExtrusion, false, 2);
 
     auto rot3 = new G4RotationMatrix();
-    rot3->rotateZ(-270.*deg);
+    rot3->rotateZ(-270. * deg);
 
-    new G4PVPlacement(rot3, G4ThreeVector(pos, -pos, 0.), logicScintCrnr,
-                      "CrnrOfBar", logicExtrusion, false, 3);
+    new G4PVPlacement(rot3, G4ThreeVector(pos, -pos, 0.), logicScintCrnr, "CrnrOfBar",
+                      logicExtrusion, false, 3);
   }
 
-  if(GetFiberRadius() < GetHoleRadius())
-  {
-    G4VSolid* solidHole = new G4Tubs(
-      "Hole", 0., GetHoleRadius(), GetHoleLength() / 2., 0. * deg, 360. * deg);
+  if (GetFiberRadius() < GetHoleRadius()) {
+    G4VSolid* solidHole =
+      new G4Tubs("Hole", 0., GetHoleRadius(), GetHoleLength() / 2., 0. * deg, 360. * deg);
 
     fLogicHole = new G4LogicalVolume(solidHole, air, "Hole");
 
-    fPhysiHole = new G4PVPlacement(nullptr, G4ThreeVector(), fLogicHole, "Hole",
-                                   logicScintillator, false, 0);
+    fPhysiHole =
+      new G4PVPlacement(nullptr, G4ThreeVector(), fLogicHole, "Hole", logicScintillator, false, 0);
   }
 
   //--------------------------------------------------
   // Fiber
   //--------------------------------------------------
 
-  if(!(fLogicHole) || !(fPhysiHole))
-  {
+  if (!(fLogicHole) || !(fPhysiHole)) {
     G4ExceptionDescription ed;
     ed << "The Fiber Hole has not been constructed";
     G4Exception("WLSDetectorConstruction", "wls001", FatalException, ed);
   }
 
   // Pointers to the most recently constructed volume
-  G4LogicalVolume* logicPlacement   = fLogicHole;
+  G4LogicalVolume* logicPlacement = fLogicHole;
   G4VPhysicalVolume* physiPlacement = fPhysiHole;
 
   //--------------------------------------------------
@@ -271,53 +249,47 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   // Boundary Surface Properties
   G4OpticalSurface* opSurface = nullptr;
 
-  if(fSurfaceRoughness < 1.)
-    opSurface = new G4OpticalSurface("RoughSurface", glisur, ground,
-                                     dielectric_dielectric, fSurfaceRoughness);
-  
+  if (fSurfaceRoughness < 1.)
+    opSurface = new G4OpticalSurface("RoughSurface", glisur, ground, dielectric_dielectric,
+                                     fSurfaceRoughness);
+
   G4LogicalVolume* logicWLSfiber = nullptr;
-  G4LogicalVolume* logicClad1    = nullptr;
-  G4LogicalVolume* logicClad2    = nullptr;
-  G4VPhysicalVolume* physiClad1  = nullptr;
-  G4VPhysicalVolume* physiClad2  = nullptr;
+  G4LogicalVolume* logicClad1 = nullptr;
+  G4LogicalVolume* logicClad2 = nullptr;
+  G4VPhysicalVolume* physiClad1 = nullptr;
+  G4VPhysicalVolume* physiClad2 = nullptr;
 
   auto fpethylene = FindMaterial("FPethylene");
   auto pethylene = FindMaterial("Pethylene");
   auto pmma = FindMaterial("PMMA");
 
   // Determine the number of cladding layers to be built
-  switch(fNumOfCladLayers)
-  {
+  switch (fNumOfCladLayers) {
     case 2:
 
       //--------------------------------------------------
       // Cladding 2
       //--------------------------------------------------
 
-      //G4cout << "\nMaterial Properties Table for fPethylene:" << G4endl;
-      //fpethylene->GetMaterialPropertiesTable()->DumpTable();
+      // G4cout << "\nMaterial Properties Table for fPethylene:" << G4endl;
+      // fpethylene->GetMaterialPropertiesTable()->DumpTable();
 
       G4VSolid* solidClad2;
 
-      if(fXYRatio == 1.)
+      if (fXYRatio == 1.)
         solidClad2 = new G4Tubs("Clad2", 0., fClad2RX, fClad2Z, 0., twopi);
       else
         solidClad2 = new G4EllipticalTube("Clad2", fClad2RX, fClad2RY, fClad2Z);
 
-      logicClad2 =
-        new G4LogicalVolume(solidClad2, fpethylene, "Clad2");
+      logicClad2 = new G4LogicalVolume(solidClad2, fpethylene, "Clad2");
 
-      physiClad2 =
-        new G4PVPlacement(nullptr, G4ThreeVector(0.0, 0.0, fWLSfiberOrigin),
-                          logicClad2, "Clad2", logicPlacement, false, 0);
+      physiClad2 = new G4PVPlacement(nullptr, G4ThreeVector(0.0, 0.0, fWLSfiberOrigin), logicClad2,
+                                     "Clad2", logicPlacement, false, 0);
 
       // Place the rough surface only if needed
-      if(opSurface)
-      {
-        new G4LogicalBorderSurface("surfaceClad2Out", physiClad2,
-                                   physiPlacement, opSurface);
-        new G4LogicalBorderSurface("surfaceClad2In", physiPlacement, physiClad2,
-                                   opSurface);
+      if (opSurface) {
+        new G4LogicalBorderSurface("surfaceClad2Out", physiClad2, physiPlacement, opSurface);
+        new G4LogicalBorderSurface("surfaceClad2In", physiPlacement, physiClad2, opSurface);
       }
 
       logicPlacement = logicClad2;
@@ -330,31 +302,26 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
       // Cladding 1
       //--------------------------------------------------
 
-      //G4cout << "\nMaterial Properties Table for Pethylene:" << G4endl;
-      //pethylene->GetMaterialPropertiesTable()->DumpTable();
+      // G4cout << "\nMaterial Properties Table for Pethylene:" << G4endl;
+      // pethylene->GetMaterialPropertiesTable()->DumpTable();
 
       G4VSolid* solidClad1;
 
-      if(fXYRatio == 1.)
+      if (fXYRatio == 1.)
         solidClad1 = new G4Tubs("Clad1", 0., fClad1RX, fClad1Z, 0., twopi);
       else
         solidClad1 = new G4EllipticalTube("Clad1", fClad1RX, fClad1RY, fClad1Z);
 
-      logicClad1 =
-        new G4LogicalVolume(solidClad1, pethylene, "Clad1");
+      logicClad1 = new G4LogicalVolume(solidClad1, pethylene, "Clad1");
 
-      physiClad1 =
-        new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fWLSfiberOrigin),
-                          logicClad1, "Clad1", logicPlacement, false, 0);
+      physiClad1 = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fWLSfiberOrigin), logicClad1,
+                                     "Clad1", logicPlacement, false, 0);
 
       // Place the rough surface only if needed
-      if(opSurface)
-      {
-        new G4LogicalBorderSurface("surfaceClad1Out", physiClad1,
-                                   physiPlacement, opSurface);
+      if (opSurface) {
+        new G4LogicalBorderSurface("surfaceClad1Out", physiClad1, physiPlacement, opSurface);
 
-        new G4LogicalBorderSurface("surfaceClad1In", physiPlacement, physiClad1,
-                                   opSurface);
+        new G4LogicalBorderSurface("surfaceClad1In", physiPlacement, physiClad1, opSurface);
       }
 
       logicPlacement = logicClad1;
@@ -367,40 +334,31 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
       // WLS Fiber
       //--------------------------------------------------
 
-      //G4cout << "\nMaterial Properties Table for PMMA:" << G4endl;
-      //pmma->GetMaterialPropertiesTable()->DumpTable();
+      // G4cout << "\nMaterial Properties Table for PMMA:" << G4endl;
+      // pmma->GetMaterialPropertiesTable()->DumpTable();
 
       G4VSolid* solidWLSfiber;
 
-      if(fXYRatio == 1.)
-      {
-        solidWLSfiber =
-          new G4Tubs("WLSFiber", 0., fWLSfiberRX, fWLSfiberZ, 0., twopi);
+      if (fXYRatio == 1.) {
+        solidWLSfiber = new G4Tubs("WLSFiber", 0., fWLSfiberRX, fWLSfiberZ, 0., twopi);
       }
-      else
-      {
-        solidWLSfiber = new G4EllipticalTube("WLSFiber", fWLSfiberRX,
-                                             fWLSfiberRY, fWLSfiberZ);
+      else {
+        solidWLSfiber = new G4EllipticalTube("WLSFiber", fWLSfiberRX, fWLSfiberRY, fWLSfiberZ);
       }
 
-      logicWLSfiber =
-        new G4LogicalVolume(solidWLSfiber, pmma, "WLSFiber");
+      logicWLSfiber = new G4LogicalVolume(solidWLSfiber, pmma, "WLSFiber");
 
-      logicWLSfiber->SetUserLimits(
-        new G4UserLimits(DBL_MAX, DBL_MAX, 10. * ms));
+      logicWLSfiber->SetUserLimits(new G4UserLimits(DBL_MAX, DBL_MAX, 10. * ms));
 
       G4VPhysicalVolume* physiWLSfiber =
-        new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fWLSfiberOrigin),
-                          logicWLSfiber, "WLSFiber", logicPlacement, false, 0);
+        new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fWLSfiberOrigin), logicWLSfiber,
+                          "WLSFiber", logicPlacement, false, 0);
 
       // Place the rough surface only if needed
-      if(opSurface)
-      {
-        new G4LogicalBorderSurface("surfaceWLSOut", physiWLSfiber,
-                                   physiPlacement, opSurface);
+      if (opSurface) {
+        new G4LogicalBorderSurface("surfaceWLSOut", physiWLSfiber, physiPlacement, opSurface);
 
-        new G4LogicalBorderSurface("surfaceWLSIn", physiPlacement,
-                                   physiWLSfiber, opSurface);
+        new G4LogicalBorderSurface("surfaceWLSIn", physiPlacement, physiWLSfiber, opSurface);
       }
   }
 
@@ -413,31 +371,27 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
 
   auto aluminum = FindMaterial("G4_Al");
 
-  if(fMirrorToggle)
-  {
-    G4VSolid* solidMirror =
-      new G4Box("Mirror", fMirrorRmax, fMirrorRmax, fMirrorZ);
+  if (fMirrorToggle) {
+    G4VSolid* solidMirror = new G4Box("Mirror", fMirrorRmax, fMirrorRmax, fMirrorZ);
 
-    logicMirror =
-      new G4LogicalVolume(solidMirror, aluminum, "Mirror");
+    logicMirror = new G4LogicalVolume(solidMirror, aluminum, "Mirror");
 
-    auto mirrorSurface = new G4OpticalSurface(
-      "MirrorSurface", glisur, ground, dielectric_metal, fMirrorPolish);
+    auto mirrorSurface =
+      new G4OpticalSurface("MirrorSurface", glisur, ground, dielectric_metal, fMirrorPolish);
 
     auto mirrorSurfaceProperty = new G4MaterialPropertiesTable();
 
-    std::vector<G4double> p_mirror    = { 2.00 * eV, 3.47 * eV };
-    std::vector<G4double> refl_mirror = { fMirrorReflectivity,
-                                          fMirrorReflectivity };
-    std::vector<G4double> effi_mirror = { 0., 0. };
+    std::vector<G4double> p_mirror = {2.00 * eV, 3.47 * eV};
+    std::vector<G4double> refl_mirror = {fMirrorReflectivity, fMirrorReflectivity};
+    std::vector<G4double> effi_mirror = {0., 0.};
 
     mirrorSurfaceProperty->AddProperty("REFLECTIVITY", p_mirror, refl_mirror);
     mirrorSurfaceProperty->AddProperty("EFFICIENCY", p_mirror, effi_mirror);
 
     mirrorSurface->SetMaterialPropertiesTable(mirrorSurfaceProperty);
 
-    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fMirrorOrigin),
-                      logicMirror, "Mirror", fLogicWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fMirrorOrigin), logicMirror, "Mirror",
+                      fLogicWorld, false, 0);
 
     new G4LogicalSkinSurface("MirrorSurface", logicMirror, mirrorSurface);
   }
@@ -451,8 +405,8 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
 
   auto logicCouple = new G4LogicalVolume(solidCouple, air, "Couple");
 
-  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fCoupleOrigin), logicCouple,
-                    "Couple", fLogicWorld, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fCoupleOrigin), logicCouple, "Couple",
+                    fLogicWorld, false, 0);
 
   //--------------------------------------------------
   // A logical layer in front of PhotonDet
@@ -461,9 +415,8 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   // Purpose: Preventing direct dielectric to metal contact
 
   // Check for valid placement of PhotonDet
-  if(fMPPCTheta > std::atan(fMPPCDist / fMPPCHalfL))
-  {
-    fMPPCTheta   = 0.;
+  if (fMPPCTheta > std::atan(fMPPCDist / fMPPCHalfL)) {
+    fMPPCTheta = 0.;
     fMPPCOriginX = std::sin(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
     fMPPCOriginZ = -fCoupleZ + std::cos(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
     G4ExceptionDescription ed;
@@ -474,22 +427,18 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   // Clear Fiber (Coupling Layer)
   G4VSolid* solidClrfiber;
 
-  if(fMPPCShape == "Square")
-  {
-    solidClrfiber =
-      new G4Box("ClearFiber", fClrfiberHalfL, fClrfiberHalfL, fClrfiberZ);
+  if (fMPPCShape == "Square") {
+    solidClrfiber = new G4Box("ClearFiber", fClrfiberHalfL, fClrfiberHalfL, fClrfiberZ);
   }
-  else
-  {
-    solidClrfiber =
-      new G4Tubs("ClearFiber", 0., fClrfiberHalfL, fClrfiberZ, 0., twopi);
+  else {
+    solidClrfiber = new G4Tubs("ClearFiber", 0., fClrfiberHalfL, fClrfiberZ, 0., twopi);
   }
 
   auto logicClrfiber = new G4LogicalVolume(solidClrfiber, air, "ClearFiber");
 
   new G4PVPlacement(new G4RotationMatrix(CLHEP::HepRotationY(-fMPPCTheta)),
-                    G4ThreeVector(fMPPCOriginX, 0.0, fMPPCOriginZ),
-                    logicClrfiber, "ClearFiber", logicCouple, false, 0);
+                    G4ThreeVector(fMPPCOriginX, 0.0, fMPPCOriginZ), logicClrfiber, "ClearFiber",
+                    logicCouple, false, 0);
 
   //--------------------------------------------------
   // PhotonDet (Sensitive Detector)
@@ -498,107 +447,102 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   // Physical Construction
   G4VSolid* solidPhotonDet = nullptr;
 
-  if(fMPPCShape == "Square")
+  if (fMPPCShape == "Square")
     solidPhotonDet = new G4Box("PhotonDet", fMPPCHalfL, fMPPCHalfL, fMPPCZ);
   else
     solidPhotonDet = new G4Tubs("PhotonDet", 0., fMPPCHalfL, fMPPCZ, 0., twopi);
 
-  auto logicPhotonDet =
-    new G4LogicalVolume(solidPhotonDet, aluminum, "PhotonDet_LV");
+  auto logicPhotonDet = new G4LogicalVolume(solidPhotonDet, aluminum, "PhotonDet_LV");
 
-  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), logicPhotonDet,
-                    "PhotonDet", logicClrfiber, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), logicPhotonDet, "PhotonDet", logicClrfiber,
+                    false, 0);
 
   // PhotonDet Surface Properties
-  auto photonDetSurface = new G4OpticalSurface(
-    "PhotonDetSurface", glisur, ground, dielectric_metal, fMPPCPolish);
+  auto photonDetSurface =
+    new G4OpticalSurface("PhotonDetSurface", glisur, ground, dielectric_metal, fMPPCPolish);
 
   auto photonDetSurfaceProperty = new G4MaterialPropertiesTable();
 
-  std::vector<G4double> p_mppc    = { 2.00 * eV, 3.47 * eV };
-  std::vector<G4double> refl_mppc = { fMPPCReflectivity, fMPPCReflectivity };
-  std::vector<G4double> effi_mppc = { 1., 1. };
+  std::vector<G4double> p_mppc = {2.00 * eV, 3.47 * eV};
+  std::vector<G4double> refl_mppc = {fMPPCReflectivity, fMPPCReflectivity};
+  std::vector<G4double> effi_mppc = {1., 1.};
 
   photonDetSurfaceProperty->AddProperty("REFLECTIVITY", p_mppc, refl_mppc);
   photonDetSurfaceProperty->AddProperty("EFFICIENCY", p_mppc, effi_mppc);
 
   photonDetSurface->SetMaterialPropertiesTable(photonDetSurfaceProperty);
 
-  new G4LogicalSkinSurface("PhotonDetSurface", logicPhotonDet,
-                           photonDetSurface);
+  new G4LogicalSkinSurface("PhotonDetSurface", logicPhotonDet, photonDetSurface);
 
   // visualization attributes -------------------------------------------------
 
-  auto visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto visAttributes = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   visAttributes->SetVisibility(false);
   fLogicWorld->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.2,0.2,0.2,0.5));
+  visAttributes = new G4VisAttributes(G4Colour(0.2, 0.2, 0.2, 0.5));
   visAttributes->SetVisibility(true);
   logicExtrusion->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.0,0.0,1.0,0.9));
+  visAttributes = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0, 0.9));
   visAttributes->SetVisibility(true);
   logicScintillator->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.0,0.8,0.2,0.2));
+  visAttributes = new G4VisAttributes(G4Colour(0.0, 0.8, 0.2, 0.2));
   visAttributes->SetVisibility(true);
   logicScintSide->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.0,0.8,0.2,0.2));
+  visAttributes = new G4VisAttributes(G4Colour(0.0, 0.8, 0.2, 0.2));
   visAttributes->SetVisibility(true);
   logicScintCrnr->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.4,0.0,0.0,0.5));
+  visAttributes = new G4VisAttributes(G4Colour(0.4, 0.0, 0.0, 0.5));
   visAttributes->SetVisibility(true);
   fLogicHole->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  if(logicClad1 != nullptr)
-  {
-    visAttributes = new G4VisAttributes(G4Colour(0.0,0.8,0.5,0.5));
+  if (logicClad1 != nullptr) {
+    visAttributes = new G4VisAttributes(G4Colour(0.0, 0.8, 0.5, 0.5));
     visAttributes->SetVisibility(true);
     logicClad1->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
   }
 
-  if(logicClad2 != nullptr)
-  {
-    visAttributes = new G4VisAttributes(G4Colour(0.0,0.5,0.8,0.5));
+  if (logicClad2 != nullptr) {
+    visAttributes = new G4VisAttributes(G4Colour(0.0, 0.5, 0.8, 0.5));
     visAttributes->SetVisibility(true);
     logicClad2->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
   }
 
-  visAttributes = new G4VisAttributes(G4Colour(0.8,0.8,1.0));
+  visAttributes = new G4VisAttributes(G4Colour(0.8, 0.8, 1.0));
   visAttributes->SetVisibility(true);
   logicWLSfiber->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  if(fMirrorToggle == true)
-  {
-    visAttributes = new G4VisAttributes(G4Colour(0.3,0.3,1.0,0.3));
+  if (fMirrorToggle == true) {
+    visAttributes = new G4VisAttributes(G4Colour(0.3, 0.3, 1.0, 0.3));
     visAttributes->SetVisibility(true);
     logicMirror->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
   }
 
-  visAttributes = new G4VisAttributes(G4Colour(0.0,0.0,0.5,0.5));
+  visAttributes = new G4VisAttributes(G4Colour(0.0, 0.0, 0.5, 0.5));
   visAttributes->SetVisibility(true);
   logicCouple->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.3,0.3,0.3,0.5));
+  visAttributes = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3, 0.5));
   visAttributes->SetVisibility(true);
   logicClrfiber->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
 
-  visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0,0.8));
+  visAttributes = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0, 0.8));
   visAttributes->SetVisibility(true);
   logicPhotonDet->SetVisAttributes(visAttributes);
   fVisAttributes.push_back(visAttributes);
@@ -606,15 +550,12 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   return fPhysiWorld;
 }
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSDetectorConstruction::ConstructSDandField()
 {
-  if(!fmppcSD.Get())
-  {
-    G4String mppcSDName    = "WLS/PhotonDet";
+  if (!fmppcSD.Get()) {
+    G4String mppcSDName = "WLS/PhotonDet";
     auto mppcSD = new WLSPhotonDetSD(mppcSDName);
     G4SDManager::GetSDMpointer()->AddNewDetector(mppcSD);
     fmppcSD.Put(mppcSD);
@@ -630,11 +571,11 @@ void WLSDetectorConstruction::UpdateGeometryParameters()
 
   fClad1RX = fWLSfiberRX + 0.03 * fWLSfiberRX;
   fClad1RY = fWLSfiberRY + 0.03 * fWLSfiberRY;
-  fClad1Z  = fWLSfiberZ;
+  fClad1Z = fWLSfiberZ;
 
   fClad2RX = fClad1RX + 0.03 * fWLSfiberRX;
   fClad2RY = fClad1RY + 0.03 * fWLSfiberRY;
-  fClad2Z  = fWLSfiberZ;
+  fClad2Z = fWLSfiberZ;
 
   fWorldSizeX = fClad2RX + fMPPCDist + fMPPCHalfL + 1. * cm;
   fWorldSizeY = fClad2RY + fMPPCDist + fMPPCHalfL + 1. * cm;
@@ -642,7 +583,7 @@ void WLSDetectorConstruction::UpdateGeometryParameters()
 
   fCoupleRX = fWorldSizeX;
   fCoupleRY = fWorldSizeY;
-  fCoupleZ  = (fWorldSizeZ - fWLSfiberZ) / 2.;
+  fCoupleZ = (fWorldSizeZ - fWLSfiberZ) / 2.;
 
   fClrfiberHalfL = fMPPCHalfL;
 
@@ -650,8 +591,8 @@ void WLSDetectorConstruction::UpdateGeometryParameters()
 
   fCoupleOrigin = fWLSfiberOrigin + fWLSfiberZ + fCoupleZ;
   fMirrorOrigin = fWLSfiberOrigin - fWLSfiberZ - fMirrorZ;
-  fMPPCOriginX  = std::sin(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
-  fMPPCOriginZ  = -fCoupleZ + std::cos(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
+  fMPPCOriginX = std::sin(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
+  fMPPCOriginZ = -fCoupleZ + std::cos(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -660,8 +601,7 @@ void WLSDetectorConstruction::SetPhotonDetGeometry(G4String shape)
 // Set the Geometry of the PhotonDet detector
 // Pre:  shape must be either "Circle" and "Square"
 {
-  if(shape == "Circle" || shape == "Square")
-    fMPPCShape = shape;
+  if (shape == "Circle" || shape == "Square") fMPPCShape = shape;
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
@@ -859,27 +799,45 @@ void WLSDetectorConstruction::SetCoatingRadius(G4double radius)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetWLSFiberLength() { return fWLSfiberZ; }
+G4double WLSDetectorConstruction::GetWLSFiberLength()
+{
+  return fWLSfiberZ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetBarLength() { return fBarLength; }
+G4double WLSDetectorConstruction::GetBarLength()
+{
+  return fBarLength;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetBarBase() { return fBarBase; }
+G4double WLSDetectorConstruction::GetBarBase()
+{
+  return fBarBase;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetHoleRadius() { return fHoleRadius; }
+G4double WLSDetectorConstruction::GetHoleRadius()
+{
+  return fHoleRadius;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetHoleLength() { return fHoleLength; }
+G4double WLSDetectorConstruction::GetHoleLength()
+{
+  return fHoleLength;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetFiberRadius() { return GetWLSFiberRMax(); }
+G4double WLSDetectorConstruction::GetFiberRadius()
+{
+  return GetWLSFiberRMax();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -890,7 +848,10 @@ G4double WLSDetectorConstruction::GetCoatingThickness()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double WLSDetectorConstruction::GetCoatingRadius() { return fCoatingRadius; }
+G4double WLSDetectorConstruction::GetCoatingRadius()
+{
+  return fCoatingRadius;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -903,10 +864,8 @@ G4double WLSDetectorConstruction::GetWLSFiberEnd()
 
 G4double WLSDetectorConstruction::GetWLSFiberRMax()
 {
-  if(fNumOfCladLayers == 2)
-    return fClad2RY;
-  if(fNumOfCladLayers == 1)
-    return fClad1RY;
+  if (fNumOfCladLayers == 2) return fClad2RY;
+  if (fNumOfCladLayers == 1) return fClad1RY;
   return fWLSfiberRY;
 }
 
@@ -922,8 +881,8 @@ G4double WLSDetectorConstruction::GetSurfaceRoughness()
 // Return True if the fiber construction is ideal
 G4bool WLSDetectorConstruction::IsPerfectFiber()
 {
-  return fSurfaceRoughness == 1. && fXYRatio == 1. &&
-         (!fMirrorToggle || (fMirrorPolish == 1. && fMirrorReflectivity == 1.));
+  return fSurfaceRoughness == 1. && fXYRatio == 1.
+         && (!fMirrorToggle || (fMirrorPolish == 1. && fMirrorReflectivity == 1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

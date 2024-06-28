@@ -47,105 +47,71 @@ class ClusteringAlgoMessenger;
 
 class ClusteringAlgo
 {
-public:
+  public:
+    ClusteringAlgo(G4double pEps, G4int pMinPts, G4double pSPointsProb, G4double pEMinDamage,
+                   G4double pEMaxDamage);
+    ~ClusteringAlgo();
 
-  ClusteringAlgo(G4double pEps, G4int pMinPts, G4double pSPointsProb,
-      G4double pEMinDamage, G4double pEMaxDamage);
-  ~ClusteringAlgo();
+    // Get Set methods
+    G4double GetEps() { return fEps; };
+    void SetEps(G4double val) { fEps = val; };
+    G4int GetMinPts() { return fMinPts; };
+    void SetMinPts(G4int val) { fMinPts = val; };
+    G4double GetSPointsProb() { return fSPointsProb; };
+    void SetSPointsProb(G4double val) { fSPointsProb = val; };
+    G4double GetEMinDamage() { return fEMinDamage; };
+    void SetEMinDamage(G4double val) { fEMinDamage = val; };
+    G4double GetEMaxDamage() { return fEMaxDamage; };
+    void SetEMaxDamage(G4double val) { fEMaxDamage = val; };
 
-  // Get Set methods
-  G4double GetEps()
-  {
-    return fEps;
-  };
-  void SetEps(G4double val)
-  {
-    fEps=val;
-  };
-  G4int GetMinPts()
-  {
-    return fMinPts;
-  };
-  void SetMinPts(G4int val)
-  {
-    fMinPts=val;
-  };
-  G4double GetSPointsProb()
-  {
-    return fSPointsProb;
-  };
-  void SetSPointsProb(G4double val)
-  {
-    fSPointsProb=val;
-  };
-  G4double GetEMinDamage()
-  {
-    return fEMinDamage;
-  };
-  void SetEMinDamage(G4double val)
-  {
-    fEMinDamage=val;
-  };
-  G4double GetEMaxDamage()
-  {
-    return fEMaxDamage;
-  };
-  void SetEMaxDamage(G4double val)
-  {
-    fEMaxDamage=val;
-  };
+    // Register a damage (position, edep)
+    void RegisterDamage(G4ThreeVector, G4double);
 
-  // Register a damage (position, edep)
-  void RegisterDamage(G4ThreeVector, G4double);
+    // Clustering Algorithm
+    std::map<G4int, G4int> RunClustering();
 
-  // Clustering Algorithm
-  std::map<G4int,G4int> RunClustering();
+    // Clean all data structures
+    void Purge();
 
-  // Clean all data structures
-  void  Purge();
+    // Return the number of simple break
+    G4int GetSSB() const;
+    // Return the number of complex simple break
+    G4int GetComplexSSB() const;
+    // Return the number of double strand break
+    G4int GetDSB() const;
+    // Return a map representing cluster size distribution
+    // first G4int : cluster size (1 = SSB)
+    // second G4int : counts
+    std::map<G4int, G4int> GetClusterSizeDistribution();
 
-  // Return the number of simple break
-  G4int GetSSB() const;
-  // Return the number of complex simple break
-  G4int GetComplexSSB() const;
-  // Return the number of double strand break
-  G4int GetDSB() const;
-  // Return a map representing cluster size distribution
-  // first G4int : cluster size (1 = SSB)
-  // second G4int : counts
-  std::map<G4int,G4int> GetClusterSizeDistribution();
+  private:
+    // Functions to check if SB candidate
+    G4bool IsInSensitiveArea();
+    G4bool IsEdepSufficient(G4double);
+    // Check if a SB point can be merged to a cluster, and do it
+    bool FindCluster(SBPoint* pPt);
+    // Check if two points can be merged
+    bool AreOnTheSameCluster(G4ThreeVector, G4ThreeVector, G4double);
+    // Merge clusters
+    void MergeClusters();
+    // Add SSB to clusters
+    void IncludeUnassociatedPoints();
 
-private:
+    // Parameters to run clustering algorithm
+    G4double fEps;  // distance to merge SBPoints
+    G4int fMinPts;  // number of SBPoints to create a cluster
+    G4double fSPointsProb;  // probability for a point to be in the sensitive area
+    G4double fEMinDamage;  // min energy to create a damage
+    G4double fEMaxDamage;  // energy to have a probability to create a damage = 1
 
-  // Functions to check if SB candidate
-  G4bool IsInSensitiveArea();
-  G4bool IsEdepSufficient(G4double);
-  // Check if a SB point can be merged to a cluster, and do it
-  bool FindCluster(SBPoint* pPt);
-  // Check if two points can be merged
-  bool AreOnTheSameCluster(G4ThreeVector, G4ThreeVector,G4double);
-  // Merge clusters
-  void MergeClusters();
-  // Add SSB to clusters
-  void IncludeUnassociatedPoints();
+    // Data structure containing all SB points
+    std::vector<SBPoint*> fpSetOfPoints;
+    // Datya structure containing all clusters
+    std::vector<ClusterSBPoints*> fpClusters;
+    // ID of the next SB point
+    unsigned int fNextSBPointID;
 
-  // Parameters to run clustering algorithm
-  G4double fEps;         // distance to merge SBPoints
-  G4int fMinPts;         // number of SBPoints to create a cluster
-  G4double fSPointsProb; // probability for a point to be in the sensitive area
-  G4double fEMinDamage;  // min energy to create a damage
-  G4double fEMaxDamage;  // energy to have a probability to create a damage = 1
-
-  // Data structure containing all SB points
-  std::vector<SBPoint*> fpSetOfPoints;
-  // Datya structure containing all clusters
-  std::vector<ClusterSBPoints*> fpClusters;
-  // ID of the next SB point
-  unsigned int fNextSBPointID;
-
-  ClusteringAlgoMessenger* fpClustAlgoMessenger;
-
+    ClusteringAlgoMessenger* fpClustAlgoMessenger;
 };
 
 #endif
-

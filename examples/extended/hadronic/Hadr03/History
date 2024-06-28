@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-03-08 Michel Maire (exhadr03-V11-02-01)
+- PrimaryGeneratorAction - added tiny shift of position of the
+    particle gun from the world volume boundary. This fix removes
+    a warning due to the new protection in G4ParticleGun
+- update Readme
+
+## 2024-02-08 Michel Maire (exhadr03-V11-02-00)
+- PhysicsList: remove G4RadioactiveDecayPhysics
+- update fusion.mac
+
 ## 2023-04-22 Michel Maire (exhadr03-V11-01-01)
 - continue revision of all header files
 - add a comment in nFission.mac

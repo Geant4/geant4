@@ -31,8 +31,8 @@
 #ifndef SAXSRunActionMessenger_h
 #define SAXSRunActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4UIcmdWithAString;
 class SAXSRunAction;
@@ -41,20 +41,19 @@ class SAXSRunAction;
 
 /// RunAction messenger.
 
-class SAXSRunActionMessenger: public G4UImessenger
+class SAXSRunActionMessenger : public G4UImessenger
 {
-public: 
-  SAXSRunActionMessenger(SAXSRunAction*);
-  virtual ~SAXSRunActionMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*,G4String);
-    
-private: 
-  SAXSRunAction* fRunAction;
-  G4UIcmdWithAString* fSetFileNameCmd;   
+  public:
+    SAXSRunActionMessenger(SAXSRunAction*);
+    virtual ~SAXSRunActionMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    SAXSRunAction* fRunAction;
+    G4UIcmdWithAString* fSetFileNameCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -27,25 +27,26 @@
 /// \brief Implementation of the scavenger::StackingAction class
 
 #include "StackingAction.hh"
-#include "G4StackManager.hh"
+
 #include "G4DNAChemistryManager.hh"
+#include "G4StackManager.hh"
 
 namespace scavenger
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-StackingAction::StackingAction()
-  : G4UserStackingAction() {}
+StackingAction::StackingAction() : G4UserStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void StackingAction::NewStage() {
+void StackingAction::NewStage()
+{
   if (stackManager->GetNTotalTrack() == 0) {
-    G4DNAChemistryManager::Instance()->Run(); // starts chemistry
+    G4DNAChemistryManager::Instance()->Run();  // starts chemistry
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-}
+}  // namespace scavenger

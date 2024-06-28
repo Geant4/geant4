@@ -38,7 +38,7 @@ class B1EventAction;
 class G4LogicalVolume;
 
 /// Stepping action class
-/// 
+///
 
 class B1SteppingAction : public G4UserSteppingAction
 {
@@ -50,7 +50,7 @@ class B1SteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
-    B1EventAction*  fEventAction;
+    B1EventAction* fEventAction;
     G4LogicalVolume* fScoringVolume;
 };
 

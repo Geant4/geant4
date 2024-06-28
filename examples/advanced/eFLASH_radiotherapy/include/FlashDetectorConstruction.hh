@@ -39,7 +39,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class Applicator;
+class FlashApplicator;
 class G4VSensitiveDetector;
 class G4NistManager;
 class G4Tubs;
@@ -87,7 +87,7 @@ private:
   
   G4Material *airNist;
   G4Material *fPhantomMaterial;
-  Applicator *Collimator;
+  FlashApplicator *Collimator;
 
   G4double fAirGap;
   G4double fPhantomSizeX, fPhantomSizeY, fPhantomSizeZ, fPhantom_coordinateX,fPosition_coefficient;

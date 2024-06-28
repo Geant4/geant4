@@ -36,26 +36,26 @@
 ///  In practice, the interactions studied here are hadron nuclear inelastic interactions
 ///  (though the code is fully generic).
 ///
-///  Energy spectra are plotted for all encountered secondaries 
+///  Energy spectra are plotted for all encountered secondaries
 ///  (one histo per secondary).
 ///  In addition, the residual nuclei Z and A distributions are plotted.
 ///
-///  All histograms are G4H1. 
+///  All histograms are G4H1.
 ///  They are created and filled via the G4VAnalysisManager.
 ///
-///  The histograms can be dumped to all usual formats, including ROOT 
+///  The histograms can be dumped to all usual formats, including ROOT
 ///  (via G4VAnalysisManager).
-///  An interesting added feature here, is that the plots, while being allocated 
-///  and filled via G4VAnalysisManager, are also dumped 
+///  An interesting added feature here, is that the plots, while being allocated
+///  and filled via G4VAnalysisManager, are also dumped
 ///  in a Flair-compatible format (via tools::histo::flair).
 ///
 ///  NB 1: Note that instead of a hardcoded number associated to a hardcoded set of particles,
-///  particle PDG IDs are used to index the histos. 
+///  particle PDG IDs are used to index the histos.
 ///  This allows a dynamic storage of all particles encountered in the final states.
 ///
-///  NB 2: tools::histo::flair code, which allows the dump of any G4H1 
-///  into Flair-compatible format, is fully application-agnostic, 
-///  and is placed in FlukaCern/utils. 
+///  NB 2: tools::histo::flair code, which allows the dump of any G4H1
+///  into Flair-compatible format, is fully application-agnostic,
+///  and is placed in FlukaCern/utils.
 ///  It could also be added as an extension of core G4 Analysis Manager.
 //
 // ***************************************************************************
@@ -63,67 +63,61 @@
 #ifndef FINAL_STATE_HISTO_MANAGER_HH
 #define FINAL_STATE_HISTO_MANAGER_HH
 
+#include "G4H1Wrapper.hh"
+#include "G4SystemOfUnits.hh"
+#include "globals.hh"
+
 #include <memory>
 #include <unordered_map>
 #include <vector>
 
-#include "globals.hh"
-
-#include "G4SystemOfUnits.hh"
-
-#include "G4H1Wrapper.hh"
-
-
 class G4DynamicParticle;
 class G4VAnalysisManager;
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class FinalStateHistoManager {
+class FinalStateHistoManager
+{
+  public:
+    FinalStateHistoManager();
 
-public:
-  FinalStateHistoManager();
+    void Book();
+    void BeginOfEvent();
+    void ScoreSecondary(const G4DynamicParticle* const secondary);
+    void EndOfEvent();
+    void EndOfRun() const;
 
-  void Book();
-  void BeginOfEvent();
-  void ScoreSecondary(const G4DynamicParticle* const secondary);
-  void EndOfEvent();
-  void EndOfRun() const;
+  private:
+    void DumpAllG4H1IntoRootFile() const;
+    void
+    DumpAllG4H1IntoFlairFile(const std::map<G4String, const G4H1Wrapper*>& particlesHistos) const;
 
+    G4String fOutputFileName = "all_secondaries";
+    G4String fRootOutputFileName = fOutputFileName + ".root";
+    G4String fFlairOutputFileName = fOutputFileName + ".hist";
 
-private:
-  void DumpAllG4H1IntoRootFile() const;
-  void DumpAllG4H1IntoFlairFile(const std::map<G4String, 
-                                const G4H1Wrapper*>& particlesHistos) const;
-  
-  G4String fOutputFileName = "all_secondaries";
-  G4String fRootOutputFileName = fOutputFileName + ".root";
-  G4String fFlairOutputFileName = fOutputFileName + ".hist";
+    G4int fNumBins = 90;
+    G4double fMinKineticEnergy = 10. * keV;
+    G4double fMaxKineticEnergy = 10. * TeV;
+    G4String fFunctionName = "none";
+    G4String fBinSchemeName = "log";
+    G4String fRootEnergyUnit = "MeV";
 
-  G4int fNumBins = 90;
-  G4double fMinKineticEnergy = 10. * keV;
-  G4double fMaxKineticEnergy = 10. * TeV;
-  G4String fFunctionName = "none";
-  G4String fBinSchemeName = "log";
-  G4String fRootEnergyUnit = "MeV";
+    G4int fNucleiZMax = 25;
+    G4int fNucleiAMax = 50;
 
-  G4int fNucleiZMax = 25;
-  G4int fNucleiAMax = 50;
+    G4int fNumEvents = 0;
 
-  G4int fNumEvents = 0;
+    G4VAnalysisManager* fAnalysisManager = nullptr;
 
-  G4VAnalysisManager* fAnalysisManager = nullptr;
-
-  // key is particle PDG ID:
-  std::unordered_map<G4int, std::unique_ptr<G4H1Wrapper>> fParticleData;
-  // key is nuclei Z or A score index:
-  std::unordered_map<G4int, std::unique_ptr<G4H1Wrapper>> fNucleiData;
-  G4int fNucleiZScoreIndex = 0;
-  G4int fNucleiAScoreIndex = 1;
+    // key is particle PDG ID:
+    std::unordered_map<G4int, std::unique_ptr<G4H1Wrapper>> fParticleData;
+    // key is nuclei Z or A score index:
+    std::unordered_map<G4int, std::unique_ptr<G4H1Wrapper>> fNucleiData;
+    G4int fNucleiZScoreIndex = 0;
+    G4int fNucleiAScoreIndex = 1;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 
 #endif

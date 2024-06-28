@@ -30,14 +30,12 @@
 
 #include "F04StackingAction.hh"
 
-#include "G4RunManager.hh"
-
-#include "G4Track.hh"
-#include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4RunManager.hh"
+#include "G4Track.hh"
 
-G4ClassificationOfNewTrack
-      F04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
+G4ClassificationOfNewTrack F04StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4ParticleDefinition* particleType = aTrack->GetDefinition();
   const G4String name = particleType->GetParticleName();
@@ -45,16 +43,16 @@ G4ClassificationOfNewTrack
   // keep primary particle
   if (aTrack->GetParentID() == 0) return fUrgent;
 
-  if (particleType != G4Proton::ProtonDefinition()     &&
-      particleType != G4Neutron::NeutronDefinition()   &&
-      particleType != G4KaonPlus::KaonPlusDefinition() &&
-      particleType != G4PionPlus::PionPlusDefinition() &&
-      particleType != G4MuonPlus::MuonPlusDefinition() &&
-      particleType != G4Positron::PositronDefinition()) return fKill;
+  if (particleType != G4Proton::ProtonDefinition() && particleType != G4Neutron::NeutronDefinition()
+      && particleType != G4KaonPlus::KaonPlusDefinition()
+      && particleType != G4PionPlus::PionPlusDefinition()
+      && particleType != G4MuonPlus::MuonPlusDefinition()
+      && particleType != G4Positron::PositronDefinition())
+    return fKill;
 
   if (name != "pi+" && name != "mu+") return fKill;
 
-//  if (name == "mu+") G4RunManager::GetRunManager()->rndmSaveThisEvent();
+  //  if (name == "mu+") G4RunManager::GetRunManager()->rndmSaveThisEvent();
 
   return fUrgent;
 }

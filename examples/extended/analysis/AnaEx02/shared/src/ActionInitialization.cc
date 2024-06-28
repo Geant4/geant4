@@ -28,17 +28,16 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
+#include "EventAction.hh"
 #include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization(DetectorConstruction* detector)
- : fDetector(detector)
-{}
+ActionInitialization::ActionInitialization(DetectorConstruction* detector) : fDetector(detector) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,7 +48,7 @@ ActionInitialization::~ActionInitialization() = default;
 void ActionInitialization::BuildForMaster() const
 {
   // Histo manager
-  auto   histo = new HistoManager();
+  auto histo = new HistoManager();
 
   // Actions
   SetUserAction(new RunAction(histo));
@@ -60,19 +59,19 @@ void ActionInitialization::BuildForMaster() const
 void ActionInitialization::Build() const
 {
   // Histo manager
-  auto   histo = new HistoManager();
+  auto histo = new HistoManager();
 
   // Actions
   //
   SetUserAction(new PrimaryGeneratorAction(fDetector));
 
-  auto  runAction = new RunAction(histo);
+  auto runAction = new RunAction(histo);
   SetUserAction(runAction);
 
-  auto  eventAction = new EventAction(runAction, histo);
+  auto eventAction = new EventAction(runAction, histo);
   SetUserAction(eventAction);
 
-  auto  steppingAction = new SteppingAction(fDetector, eventAction);
+  auto steppingAction = new SteppingAction(fDetector, eventAction);
   SetUserAction(steppingAction);
 }
 

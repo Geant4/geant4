@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-05-09 Sebastien Incerti (dnaphysics-V11-02-02)
+- Added plotDeexcitation.C and deexcitation.in
+
+## 2024-03-13 Sebastien Incerti (dnaphysics-V11-02-01)
+- Updated headers
+
+## 2024-02-05 Sebastien Incerti (dnaphysics-V11-02-00)
+- PhysicsList: switched to DNA physics constructors i/o model activator
+- Added new ntuple to collect track information
+
 ## 2023-11-14 Vladimir Ivanchenko (dnaphysics-V11-01-03)
 - PhysicsList - more clear implementation of two cases: usage of a DNA
     physics constructor or standard physics constructor + DNA model activator

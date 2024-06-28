@@ -36,13 +36,14 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #include "EventAction.hh"
-#include "G4Event.hh"
+
 #include "EventActionMessenger.hh"
 #include "HistoManager.hh"
 
+#include "G4Event.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
@@ -69,7 +70,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   G4int nEvt = evt->GetEventID();
 
   if (!fSelectedEvents.empty()) {
-    for (auto const & n : fSelectedEvents) {
+    for (auto const& n : fSelectedEvents) {
       if (nEvt == n) {
         fUI->ApplyCommand("/random/saveThisEvent");
         fUI->ApplyCommand("/tracking/verbose 2");
@@ -80,11 +81,10 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   }
 
   // Initialize user actions
-  if (G4int(nEvt/fPrintModulo)*fPrintModulo == nEvt) {
-    G4cout << "EventAction: Event #"
-           << nEvt << " started" << G4endl;
+  if (G4int(nEvt / fPrintModulo) * fPrintModulo == nEvt) {
+    G4cout << "EventAction: Event #" << nEvt << " started" << G4endl;
   }
-  HistoManager::GetPointer()->BeginOfEvent(); 
+  HistoManager::GetPointer()->BeginOfEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,14 +94,12 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   if (fDebugStarted) {
     fUI->ApplyCommand("/tracking/verbose 0");
     fDebugStarted = false;
-    G4cout << "EventAction: Event #" << evt->GetEventID()
-           << " ended" << G4endl;
+    G4cout << "EventAction: Event #" << evt->GetEventID() << " ended" << G4endl;
   }
   HistoManager* man = HistoManager::GetPointer();
-  man->EndOfEvent(); 
+  man->EndOfEvent();
   if (man->GetVerbose() > 1) {
-    G4cout << "EventAction: Event #" << evt->GetEventID()
-           << " ended" << G4endl;
+    G4cout << "EventAction: Event #" << evt->GetEventID() << " ended" << G4endl;
   }
 }
 

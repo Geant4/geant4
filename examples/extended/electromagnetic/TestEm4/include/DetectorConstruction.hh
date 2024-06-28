@@ -25,7 +25,7 @@
 //
 /// \file electromagnetic/TestEm4/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,14 +41,12 @@
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
     DetectorConstruction() = default;
-   ~DetectorConstruction() override = default;
-     
+    ~DetectorConstruction() override = default;
+
     G4VPhysicalVolume* Construct() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

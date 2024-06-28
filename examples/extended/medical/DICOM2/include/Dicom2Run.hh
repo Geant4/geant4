@@ -31,13 +31,13 @@
 #ifndef Dicom2Run_h
 #define Dicom2Run_h 1
 
-#include "G4Run.hh"
-#include "G4Event.hh"
 #include "DicomRun.hh"
 
+#include "G4Event.hh"
+#include "G4Run.hh"
+#include "G4StatAnalysis.hh"
 #include "G4THitsMap.hh"
 #include "G4THitsVector.hh"
-#include "G4StatAnalysis.hh"
 
 #include <vector>
 
@@ -52,7 +52,6 @@
 class Dicom2Run : public DicomRun
 {
   public:
-
     typedef G4VTHitsVector<G4StatAnalysis, std::vector<G4StatAnalysis>> Dicom2RunVector;
 
     // constructor and destructor.
@@ -72,9 +71,8 @@ class Dicom2Run : public DicomRun
     // - Get HitsMap of this RUN.
     //   by sequential number, by multifucntional name and collection name,
     //   and by collection name with full path.
-    Dicom2RunVector* GetHitsVector(G4int i) const {return fRunMap[i];}
-    Dicom2RunVector* GetHitsVector(const G4String& detName,
-                                   const G4String& colName) const;
+    Dicom2RunVector* GetHitsVector(G4int i) const { return fRunMap[i]; }
+    Dicom2RunVector* GetHitsVector(const G4String& detName, const G4String& colName) const;
     Dicom2RunVector* GetHitsVector(const G4String& fullName) const;
 
     void ConstructMFD(const std::vector<G4String>&);
@@ -82,7 +80,6 @@ class Dicom2Run : public DicomRun
     virtual void Merge(const G4Run*);
 
   private:
-
     std::vector<G4String> fCollName;
     std::vector<G4int> fCollID;
     std::vector<Dicom2RunVector*> fRunMap;

@@ -30,8 +30,9 @@
 #ifndef ExTGRCRegionCutsMgr_h
 #define ExTGRCRegionCutsMgr_h
 
-#include <vector>
 #include "globals.hh"
+
+#include <vector>
 
 class ExTGRCRegionData;
 
@@ -40,30 +41,27 @@ class ExTGRCRegionData;
 /// Changes:     creation   May 2007
 /// \author      P. Arce
 
-class ExTGRCRegionCutsMgr 
-{ 
+class ExTGRCRegionCutsMgr
+{
   public:
-
-   ~ExTGRCRegionCutsMgr();
+    ~ExTGRCRegionCutsMgr();
 
     static ExTGRCRegionCutsMgr* GetInstance();
-      // Get the only instance 
+    // Get the only instance
 
-    void AddRegionData( const std::vector<G4String>& rd );
+    void AddRegionData(const std::vector<G4String>& rd);
 
-    void AddRegionCuts( const std::vector<G4String>& rc );
-  
-    std::vector<ExTGRCRegionData*> FindRegionData( const G4String& name);
+    void AddRegionCuts(const std::vector<G4String>& rc);
+
+    std::vector<ExTGRCRegionData*> FindRegionData(const G4String& name);
 
     void BuildRegions();
     void BuildProductionCuts();
 
   private:
-
     ExTGRCRegionCutsMgr();
 
   private:
-
     static ExTGRCRegionCutsMgr* fInstance;
     std::vector<ExTGRCRegionData*> fRegionDatae;
 };

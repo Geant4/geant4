@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE03/include/RE03DetectorConstruction.hh
 /// \brief Definition of the RE03DetectorConstruction class
 //
-// 
+//
 
 #ifndef RE03DetectorConstruction_h
 #define RE03DetectorConstruction_h 1
@@ -46,7 +46,7 @@ class RE03DetectorConstruction : public G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-     
+
   private:
     void DefineMaterials();
     void SetupGeometry();
@@ -60,4 +60,3 @@ class RE03DetectorConstruction : public G4VUserDetectorConstruction
 };
 
 #endif
-

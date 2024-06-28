@@ -33,23 +33,25 @@
 #include "G4MPImanager.hh"
 #include "G4VMPIextraWorker.hh"
 
-namespace toolx {
-namespace mpi {
-class wrmpi;    
+namespace toolx
+{
+namespace mpi
+{
+class wrmpi;
 }
-}
+}  // namespace toolx
 
 class G4RootMpiAnalysisManager;
 
 class G4MPIntupleMerger
 {
-public:
-  G4MPIntupleMerger(G4int nofReducedNtupleFiles = 0,
-                    G4bool rowWise = false, G4bool rowMode = true);
-  ~G4MPIntupleMerger();
+  public:
+    G4MPIntupleMerger(G4int nofReducedNtupleFiles = 0, G4bool rowWise = false,
+                      G4bool rowMode = true);
+    ~G4MPIntupleMerger();
 
-private:
-  toolx::mpi::wrmpi* fWrmpi;
+  private:
+    toolx::mpi::wrmpi* fWrmpi;
 };
 
-#endif //G4MPINTUPLEMERGER_HH
+#endif  // G4MPINTUPLEMERGER_HH

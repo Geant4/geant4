@@ -32,18 +32,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExP01TrackerHit.hh"
-#include "G4UnitsTable.hh"
-#include "G4VVisManager.hh"
+
 #include "G4Circle.hh"
 #include "G4Colour.hh"
+#include "G4UnitsTable.hh"
+#include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 
 G4ThreadLocal G4Allocator<ExP01TrackerHit>* ExP01TrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01TrackerHit::ExP01TrackerHit()
-: G4VHit(), fTrackID(0), fChamberNb(0), fEdep(0), fPos(0,0,0) {}
+ExP01TrackerHit::ExP01TrackerHit() : G4VHit(), fTrackID(0), fChamberNb(0), fEdep(0), fPos(0, 0, 0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,23 +52,22 @@ ExP01TrackerHit::~ExP01TrackerHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01TrackerHit::ExP01TrackerHit(const ExP01TrackerHit& right)
-  : G4VHit()
+ExP01TrackerHit::ExP01TrackerHit(const ExP01TrackerHit& right) : G4VHit()
 {
-  fTrackID   = right.fTrackID;
+  fTrackID = right.fTrackID;
   fChamberNb = right.fChamberNb;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const ExP01TrackerHit& ExP01TrackerHit::operator=(const ExP01TrackerHit& right)
 {
-  fTrackID   = right.fTrackID;
+  fTrackID = right.fTrackID;
   fChamberNb = right.fChamberNb;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   return *this;
 }
 
@@ -75,7 +75,7 @@ const ExP01TrackerHit& ExP01TrackerHit::operator=(const ExP01TrackerHit& right)
 
 G4bool ExP01TrackerHit::operator==(const ExP01TrackerHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,12 +83,11 @@ G4bool ExP01TrackerHit::operator==(const ExP01TrackerHit& right) const
 void ExP01TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if (pVVisManager) {
     G4Circle circle(fPos);
     circle.SetScreenSize(2.);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -100,9 +99,7 @@ void ExP01TrackerHit::Draw()
 void ExP01TrackerHit::Print()
 {
   G4cout << "  trackID: " << fTrackID << "  chamberNb: " << fChamberNb
-         << "  energy deposit[MeV]: " << fEdep
-         << "  position[mm]: " << fPos << G4endl;
+         << "  energy deposit[MeV]: " << fEdep << "  position[mm]: " << fPos << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

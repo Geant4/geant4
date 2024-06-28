@@ -31,8 +31,8 @@
 #ifndef RE05Field_H
 #define RE05Field_H 1
 
-#include "globals.hh"
 #include "G4MagneticField.hh"
+#include "globals.hh"
 
 class RE05Field : public G4MagneticField
 {
@@ -40,8 +40,7 @@ class RE05Field : public G4MagneticField
     RE05Field();
     virtual ~RE05Field();
 
-    virtual void GetFieldValue(const double Point[3],
-                               double *Bfield ) const;
+    virtual void GetFieldValue(const double Point[3], double* Bfield) const;
 
   private:
     G4double fBz;
@@ -50,4 +49,3 @@ class RE05Field : public G4MagneticField
 };
 
 #endif
-

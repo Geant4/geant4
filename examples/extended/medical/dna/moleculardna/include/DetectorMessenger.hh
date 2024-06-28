@@ -28,8 +28,8 @@
 #ifndef MOLECULAR_DETECTOR_MESSENGER_HH
 #define MOLECULAR_DETECTOR_MESSENGER_HH
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 
@@ -44,22 +44,22 @@ class G4UIcommand;
 
 class DetectorMessenger : public G4UImessenger
 {
- public:
-  explicit DetectorMessenger(DetectorConstruction*);
+  public:
+    explicit DetectorMessenger(DetectorConstruction*);
 
-  ~DetectorMessenger() override;
+    ~DetectorMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  DetectorConstruction* fpDetectorConstruction;
+  private:
+    DetectorConstruction* fpDetectorConstruction;
 
-  // Related to geometry
-  G4UIdirectory* fpWorldGeometryDirectory;
-  G4UIcmdWithADoubleAndUnit* fpWorldSideLength;
+    // Related to geometry
+    G4UIdirectory* fpWorldGeometryDirectory;
+    G4UIcmdWithADoubleAndUnit* fpWorldSideLength;
 
-  G4UIdirectory* fpCellGeometryDirectory;
-  G4UIcmdWith3VectorAndUnit* fpCellRadius;
+    G4UIdirectory* fpCellGeometryDirectory;
+    G4UIcmdWith3VectorAndUnit* fpCellRadius;
 };
 
 #endif  // MOLECULAR_DETECTOR_MESSENGER_HH

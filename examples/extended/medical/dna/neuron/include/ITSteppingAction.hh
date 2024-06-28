@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -47,10 +47,10 @@
 
 class ITSteppingAction : public G4UserSteppingAction
 {
-public:
+  public:
     ITSteppingAction();
     virtual ~ITSteppingAction();
     virtual void UserSteppingAction(const G4Step*);
 };
 
-#endif // ITSTEPPINGACTION_HH
+#endif  // ITSTEPPINGACTION_HH

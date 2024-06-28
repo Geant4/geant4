@@ -27,33 +27,34 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
+
 #include "HistoMessenger.hh"
-#include "G4UnitsTable.hh"
+
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager()
- : fHistoMessenger(0)
+HistoManager::HistoManager() : fHistoMessenger(0)
 {
-  fileName[0]  = "testem17";
+  fileName[0] = "testem17";
   factoryOn = false;
-  fNbHist   = 0;
+  fNbHist = 0;
 
   // histograms
-  for (G4int k=0; k<kMaxHisto; k++) {
+  for (G4int k = 0; k < kMaxHisto; k++) {
     fHistId[k] = 0;
-    fHistPt[k] = 0;    
+    fHistPt[k] = 0;
     fExist[k] = false;
-    fUnit[k]  = 1.0;
+    fUnit[k] = 1.0;
     fWidth[k] = 1.0;
-    fAscii[k] = false;    
+    fAscii[k] = false;
   }
 
   fHistoMessenger = new HistoMessenger(this);
@@ -72,7 +73,7 @@ void HistoManager::Book()
 {
   // if no histos, do nothing
   if (fNbHist == 0) return;
-  
+
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
@@ -81,31 +82,28 @@ void HistoManager::Book()
   analysisManager->SetVerboseLevel(0);
   G4String extension = analysisManager->GetFileType();
   fileName[1] = fileName[0] + "." + extension;
-  
+
   // Open an output file
   //
   G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
   if (!fileOpen) {
-    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
-           << G4endl;
+    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] << G4endl;
     return;
-  }  
+  }
 
   // create selected histograms
   //
   analysisManager->SetFirstHistoId(1);
-    
-  for (G4int k=0; k<kMaxHisto; k++) {
+
+  for (G4int k = 0; k < kMaxHisto; k++) {
     if (fExist[k]) {
-      fHistId[k] = analysisManager->CreateH1( fLabel[k], fTitle[k],
-                                              fNbins[k], fVmin[k], fVmax[k]);
+      fHistId[k] = analysisManager->CreateH1(fLabel[k], fTitle[k], fNbins[k], fVmin[k], fVmax[k]);
       fHistPt[k] = analysisManager->GetH1(fHistId[k]);
       factoryOn = true;
     }
   }
 
-  if (factoryOn)  
-    G4cout << "\n----> Histogram file is opened in " << fileName[1] << G4endl;
+  if (factoryOn) G4cout << "\n----> Histogram file is opened in " << fileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,15 +112,15 @@ void HistoManager::Save()
 {
   if (factoryOn) {
     G4cout << "\n----> HistoManager::save " << G4endl;
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->Write();
     analysisManager->CloseFile();
-    SaveAscii();                    // Write fAscii file, if any
+    SaveAscii();  // Write fAscii file, if any
     G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
-      
+
     analysisManager->Clear();
     factoryOn = false;
-  }         
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,54 +133,55 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
     return;
   }
 
-  if (fHistPt[ih]) fHistPt[ih]->fill(e/fUnit[ih], weight);
+  if (fHistPt[ih]) fHistPt[ih]->fill(e / fUnit[ih], weight);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::SetHisto(G4int ih,
-               G4int nbins, G4double vmin, G4double vmax, const G4String& unit)
+void HistoManager::SetHisto(G4int ih, G4int nbins, G4double vmin, G4double vmax,
+                            const G4String& unit)
 {
   if (ih > kMaxHisto) {
-    G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
-           << "does not fExist" << G4endl;
+    G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih << "does not fExist"
+           << G4endl;
     return;
   }
-  
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                 "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-                 "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"};
-  const G4String title[] = { "dummy", // 0
-                  "log10(Eloss/Emu) muIonization",              //1
-                  "log10(Eloss/Emu) muPair",                    //2
-                  "log10(Eloss/Emu) muBrems",                   //3
-                  "log10(Eloss/Emu) muNuclear",                 //4
-                  "log10(Eloss/Emu) hIonization",               //5
-                  "log10(Eloss/Emu) hPair",                     //6
-                  "log10(Eloss/Emu) hBrems",                    //7
-                  "log10(Eloss/Emu) muToMuonPair",              //8
-                  "dummy",                                      //9
-                  "dummy",                                      //10
-                  "log10(Eloss/Emu) muIonization",              //11
-                  "log10(Eloss/Emu) muPair",                    //12
-                  "log10(Eloss/Emu) muBrems",                   //13
-                  "log10(Eloss/Emu) muNuclear",                 //14
-                  "dummy",                                      //15
-                  "dummy",                                      //16
-                  "dummy",                                      //17
-                  "log10(Eloss/Emu) muToMuonPair",              //18
-                  "dummy",                                      //19
-                  "dummy",                                      //20
-                  "CS(1/mm) vs ekin muIonisation",              //21
-                  "CS(1/mm) vs ekin muPair",                    //22
-                  "CS(1/mm) vs ekin muBrems",                   //23
-                  "CS(1/mm) vs ekin muNuclear",                 //24
-                  "dummy",                                      //25
-                  "dummy",                                      //26
-                  "dummy",                                      //27
-                  "CS(1/mm) vs ekin muToMuonPair",              //28
-                  "dummy"                                       //29 
-                 };
+
+  const G4String id[] = {"0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9",
+                         "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+                         "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"};
+  const G4String title[] = {
+    "dummy",  // 0
+    "log10(Eloss/Emu) muIonization",  // 1
+    "log10(Eloss/Emu) muPair",  // 2
+    "log10(Eloss/Emu) muBrems",  // 3
+    "log10(Eloss/Emu) muNuclear",  // 4
+    "log10(Eloss/Emu) hIonization",  // 5
+    "log10(Eloss/Emu) hPair",  // 6
+    "log10(Eloss/Emu) hBrems",  // 7
+    "log10(Eloss/Emu) muToMuonPair",  // 8
+    "dummy",  // 9
+    "dummy",  // 10
+    "log10(Eloss/Emu) muIonization",  // 11
+    "log10(Eloss/Emu) muPair",  // 12
+    "log10(Eloss/Emu) muBrems",  // 13
+    "log10(Eloss/Emu) muNuclear",  // 14
+    "dummy",  // 15
+    "dummy",  // 16
+    "dummy",  // 17
+    "log10(Eloss/Emu) muToMuonPair",  // 18
+    "dummy",  // 19
+    "dummy",  // 20
+    "CS(1/mm) vs ekin muIonisation",  // 21
+    "CS(1/mm) vs ekin muPair",  // 22
+    "CS(1/mm) vs ekin muBrems",  // 23
+    "CS(1/mm) vs ekin muNuclear",  // 24
+    "dummy",  // 25
+    "dummy",  // 26
+    "dummy",  // 27
+    "CS(1/mm) vs ekin muToMuonPair",  // 28
+    "dummy"  // 29
+  };
 
   G4String titl = title[ih];
   fUnit[ih] = 1.;
@@ -193,19 +192,17 @@ void HistoManager::SetHisto(G4int ih,
   }
 
   fExist[ih] = true;
-  fLabel[ih] = "h"+id[ih];
+  fLabel[ih] = "h" + id[ih];
   fTitle[ih] = titl;
   fNbins[ih] = nbins;
-  fVmin[ih]  = vmin;
-  fVmax[ih]  = vmax;
-  fWidth[ih] = fUnit[ih]*(vmax-vmin)/nbins;
-  
+  fVmin[ih] = vmin;
+  fVmax[ih] = vmax;
+  fWidth[ih] = fUnit[ih] * (vmax - vmin) / nbins;
+
   fNbHist++;
 
-  G4cout << "----> SetHisto " << ih << ": " << titl << ";  "
-         << nbins << " bins from "
-         << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
-
+  G4cout << "----> SetHisto " << ih << ": " << titl << ";  " << nbins << " bins from " << vmin
+         << " " << unit << " to " << vmax << " " << unit << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,8 +210,8 @@ void HistoManager::SetHisto(G4int ih,
 void HistoManager::Normalize(G4int ih, G4double fac)
 {
   if (ih >= kMaxHisto) {
-    G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
-           << "  fac= " << fac << G4endl;
+    G4cout << "---> warning from HistoManager::Normalize() : histo " << ih << "  fac= " << fac
+           << G4endl;
     return;
   }
 
@@ -225,10 +222,13 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < kMaxHisto) { fAscii[ih] = true; fAscii[0] = true; }
- else
-    G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
-           << "does not exist" << G4endl;
+  if (ih < kMaxHisto) {
+    fAscii[ih] = true;
+    fAscii[0] = true;
+  }
+  else
+    G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih << "does not exist"
+           << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -237,34 +237,29 @@ void HistoManager::PrintHisto(G4int ih)
 
 void HistoManager::SaveAscii()
 {
- if (!fAscii[0]) return;
- 
- G4String name = fileName[0] + ".ascii";
- std::ofstream File(name, std::ios::out);
- if (!File) {
-   G4cout 
-       << "\n---> HistoManager::saveAscii(): cannot open " << name << G4endl;
-    return;
-  }  
+  if (!fAscii[0]) return;
 
- File.setf( std::ios::scientific, std::ios::floatfield );
-  
- //write selected histograms
- for (G4int ih=0; ih<kMaxHisto; ih++) {
+  G4String name = fileName[0] + ".ascii";
+  std::ofstream File(name, std::ios::out);
+  if (!File) {
+    G4cout << "\n---> HistoManager::saveAscii(): cannot open " << name << G4endl;
+    return;
+  }
+
+  File.setf(std::ios::scientific, std::ios::floatfield);
+
+  // write selected histograms
+  for (G4int ih = 0; ih < kMaxHisto; ih++) {
     if (fHistPt[ih] && fAscii[ih]) {
-          
-      File << "\n  1D histogram " << ih << ": " << fTitle[ih] 
-           << "\n \n \t     X \t\t     Y" << G4endl;
-     
-      for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
-         File << "  " << iBin << "\t" 
-              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-              << fHistPt[ih]->bin_height(iBin) 
-              << G4endl;
-      } 
+      File << "\n  1D histogram " << ih << ": " << fTitle[ih] << "\n \n \t     X \t\t     Y"
+           << G4endl;
+
+      for (G4int iBin = 0; iBin < fNbins[ih]; iBin++) {
+        File << "  " << iBin << "\t" << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+             << fHistPt[ih]->bin_height(iBin) << G4endl;
+      }
     }
- } 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

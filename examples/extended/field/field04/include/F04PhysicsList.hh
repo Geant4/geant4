@@ -31,41 +31,38 @@
 #ifndef F04PhysicsList_h
 #define F04PhysicsList_h 1
 
-#include "globals.hh"
 #include "G4VModularPhysicsList.hh"
+#include "globals.hh"
 
 class G4VPhysicsConstructor;
 class F04PhysicsListMessenger;
 
 class F04StepMax;
 
-class F04PhysicsList: public G4VModularPhysicsList
+class F04PhysicsList : public G4VModularPhysicsList
 {
-public:
-
+  public:
     F04PhysicsList(G4String);
     ~F04PhysicsList() override;
 
     void SetStepMax(G4double);
     F04StepMax* GetStepMaxProcess();
     void AddStepMax();
-/*
-    /// Remove specific physics from physics list.
-    void RemoveFromPhysicsList(const G4String&);
+    /*
+        /// Remove specific physics from physics list.
+        void RemoveFromPhysicsList(const G4String&);
 
-    /// Make sure that the physics list is empty.
-    void ClearPhysics();
-*/
+        /// Make sure that the physics list is empty.
+        void ClearPhysics();
+    */
     void ConstructParticle() override;
     void ConstructProcess() override;
 
-private:
-
+  private:
     G4double fMaxChargedStep = DBL_MAX;
     static G4ThreadLocal F04StepMax* fStepMaxProcess;
 
     F04PhysicsListMessenger* fMessenger = nullptr;
-
 };
 
 #endif

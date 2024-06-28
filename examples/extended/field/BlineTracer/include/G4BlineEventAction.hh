@@ -48,9 +48,9 @@
 #ifndef G4BlineEventAction_h
 #define G4BlineEventAction_h 1
 
+#include "G4Colour.hh"
 #include "G4UserEventAction.hh"
 #include "G4VisAttributes.hh"
-#include "G4Colour.hh"
 
 class G4Event;
 class G4Polyline;
@@ -60,7 +60,6 @@ class G4BlineTracer;
 class G4BlineEventAction : public G4UserEventAction
 {
   public:  // with description
-
     G4BlineEventAction(G4BlineTracer* aBlineTool);
     ~G4BlineEventAction() override;
 
@@ -71,31 +70,27 @@ class G4BlineEventAction : public G4UserEventAction
     void ResetVectorObjectToBeDrawn();
 
   public:  // with description
-
     inline void SetDrawColour(G4Colour aColour) { fDrawColour = aColour; }
-    inline void SetDrawBline(G4bool aBool) { fDrawBline=aBool; }
-    inline void SetDrawPoints(G4bool aBool) { fDrawPoints=aBool; }
-    inline void SetPointSize(G4double aVal) { fPointSize=aVal; }
+    inline void SetDrawBline(G4bool aBool) { fDrawBline = aBool; }
+    inline void SetDrawPoints(G4bool aBool) { fDrawPoints = aBool; }
+    inline void SetPointSize(G4double aVal) { fPointSize = aVal; }
     inline G4bool GetDrawBline() { return fDrawBline; }
 
   public:  // without description
-
-    // inline void SetDrawLineWidth(G4double aVal)
-    //   { fTrajectoryVisAttributes.SetLineWidth(aVal); }
-    // inline void SetDrawLineStyle(G4VisAttributes::LineStyle aStyle)
-    //   { fTrajectoryVisAttributes.SetLineStyle(aStyle); }
-      // Future implementation...
-
+           // inline void SetDrawLineWidth(G4double aVal)
+           //   { fTrajectoryVisAttributes.SetLineWidth(aVal); }
+           // inline void SetDrawLineStyle(G4VisAttributes::LineStyle aStyle)
+           //   { fTrajectoryVisAttributes.SetLineStyle(aStyle); }
+           // Future implementation...
   private:
-
-   G4BlineTracer* fBlineTool = nullptr;
-   G4Colour fDrawColour;
-   G4bool fDrawBline = false;
-   G4bool fDrawPoints = false;
-   G4double fPointSize = 1;
-   std::vector<G4VisAttributes*> fTrajectoryVisAttributes;
-   std::vector<G4Polyline> fTrajectoryPolyline;
-   std::vector<G4Polymarker> fTrajectoryPoints;
+    G4BlineTracer* fBlineTool = nullptr;
+    G4Colour fDrawColour;
+    G4bool fDrawBline = false;
+    G4bool fDrawPoints = false;
+    G4double fPointSize = 1;
+    std::vector<G4VisAttributes*> fTrajectoryVisAttributes;
+    std::vector<G4Polyline> fTrajectoryPolyline;
+    std::vector<G4Polymarker> fTrajectoryPoints;
 };
 
 #endif

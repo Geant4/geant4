@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-03-11 Ben Morgan (MPI-V11-02-00)
+- Move CTests definitions to tests/ctests_examples
+
 ## 2023-11-09 I. Hrivnacova (MPI-V11-01-03)
 - Coding guidelines - document examples macros in README files
 - Renamed v.mac in vis.mac

@@ -42,6 +42,7 @@
 #include "G4PionPlus.hh"
 #include "G4PhysicsTable.hh"
 #include "G4NistManager.hh"
+#include "G4HadronXSDataTable.hh"
 
 G4int G4UPiNuclearCrossSection::theZ[NZ] = 
 {2,4,6,7,8,11,13,20,26,29,42,48,50,74,82,92};
@@ -54,47 +55,14 @@ G4PhysicsTable* G4UPiNuclearCrossSection::piPlusInelastic = nullptr;
 G4PhysicsTable* G4UPiNuclearCrossSection::piMinusElastic = nullptr;
 G4PhysicsTable* G4UPiNuclearCrossSection::piMinusInelastic = nullptr;
 
-#ifdef G4MULTITHREADED
-G4Mutex G4UPiNuclearCrossSection::pionUXSMutex = G4MUTEX_INITIALIZER;
-#endif
-
 G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
  : G4VCrossSectionDataSet("G4UPiNuclearCrossSection")
 {
-  isMaster = false;
-  spline   = false;
-
-  piPlus  = G4PionPlus::PionPlus();
+  piPlus = G4PionPlus::PionPlus();
   piMinus = G4PionMinus::PionMinus();
+  elow = 20.0*CLHEP::MeV;
 
-  aPower  = 0.75;
-  elow    = 20.0*CLHEP::MeV;
-}
-
-G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
-{
-  if(isMaster) {
-    if(piPlusElastic) {
-      piPlusElastic->clearAndDestroy();
-      delete piPlusElastic;
-      piPlusElastic = nullptr;
-    }
-    if(piPlusInelastic) {
-      piPlusInelastic->clearAndDestroy();
-      delete piPlusInelastic;
-      piPlusInelastic = nullptr;
-    }
-    if(piMinusElastic) {
-      piMinusElastic->clearAndDestroy();
-      delete piMinusElastic;
-      piMinusElastic = nullptr;
-    }
-    if(piMinusInelastic) {
-      piMinusInelastic->clearAndDestroy();
-      delete piMinusInelastic;
-      piMinusInelastic = nullptr;
-    }
-  }
+  if (idxZ[0] == 0) { LoadData(); }
 }
 
 G4bool 
@@ -111,7 +79,7 @@ G4double G4UPiNuclearCrossSection::Interpolate(
   G4double ekin = std::max(e, elow);
   G4int iz  = std::min(Z, 92);
   G4int idx = idxZ[iz];
-  size_t jdx = (size_t)(std::max(ekin - elow, 0.0)*0.06);
+  std::size_t jdx = (std::size_t)(std::max(ekin - elow, 0.0)*0.06);
   //G4cout << "Interpolate: Z= " << iz << " A= " << A << " idx= " << idx 
   // << " jdx= " << jdx << " Ekin= " << ekin << G4endl;
   if(idx < 0 || 2 == iz) {
@@ -138,15 +106,15 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
 {
   G4PhysicsFreeVector* pvin = new G4PhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV,spline);
   G4PhysicsFreeVector* pvel = new G4PhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV,spline);
-  for(G4int i=0; i<n; ++i) { 
-    pvin->PutValues(i,e[i]*GeV,in[i]*millibarn); 
-    pvel->PutValues(i,e[i]*GeV,std::max(0.0,(tot[i]-in[i])*millibarn)); 
+  for (G4int i=0; i<n; ++i) { 
+    pvin->PutValues(i, e[i]*CLHEP::GeV, in[i]*CLHEP::millibarn); 
+    pvel->PutValues(i, e[i]*CLHEP::GeV, std::max(0.0,(tot[i]-in[i])*CLHEP::millibarn)); 
   }
-  if(spline) {
+  if (spline) {
     pvin->FillSecondDerivatives();
     pvel->FillSecondDerivatives();
   }
-  if(p == "pi+") {
+  if (p == "pi+") {
     piPlusInelastic->push_back(pvin);
     piPlusElastic->push_back(pvel);
   } else {
@@ -172,39 +140,26 @@ void G4UPiNuclearCrossSection::DumpPhysicsTable(const G4ParticleDefinition& p)
 
 void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  //G4cout << "G4UPiNuclearCrossSection::BuildPhysicsTable for " 
-  //	 << p.GetParticleName() << "  " << piPlusElastic << G4endl; 
-  if(piPlusElastic) { return; }
-
   if(&p != piPlus && &p != piMinus) { 
     G4ExceptionDescription ed;
     ed << "This cross section is applicable only to pions and not to " 
        << p.GetParticleName() << G4endl; 
     G4Exception("G4UPiNuclearCrossSection::BuildPhysicsTable", "had001", 
 		FatalException, ed);
-    return;
   }
+}
 
-  if(!piPlusElastic) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&pionUXSMutex);
-    if(!piPlusElastic) { 
-#endif
-      isMaster = true;
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&pionUXSMutex);
-#endif
-  }
-  if(!isMaster) { return; }
-  
+void G4UPiNuclearCrossSection::LoadData()
+{
+  idxZ[0] = 1;
+  idxZ[1] = idxZ[2] = 0; 
   G4NistManager* nist = G4NistManager::Instance();
   G4Pow* g4pow = G4Pow::GetInstance();
   for(G4int i=0; i<NZ; ++i) {
     theA[i] = nist->GetAtomicMassAmu(theZ[i]);
   }
   for(G4int i=1; i<93; ++i) {
-    APower[i] = g4pow->powA(nist->GetAtomicMassAmu(i),aPower);
+    APower[i] = g4pow->powA(nist->GetAtomicMassAmu(i), aPower);
   }
   G4int idx = 1;
   for(G4int i=3; i<93; ++i) {
@@ -220,13 +175,12 @@ void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
   piPlusInelastic  = new G4PhysicsTable();
   piMinusElastic   = new G4PhysicsTable();
   piMinusInelastic = new G4PhysicsTable();
+  auto ptr = G4HadronXSDataTable::Instance();
+  ptr->AddTable(piPlusElastic);
+  ptr->AddTable(piPlusInelastic);
+  ptr->AddTable(piMinusElastic);
+  ptr->AddTable(piMinusInelastic);
 
-  LoadData();
-  //G4cout << "### Initialisation done " << G4endl;
-}
-
-void G4UPiNuclearCrossSection::LoadData()
-{
   static const G4double e1[38] = {
     0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.13, 0.14, 0.15, 0.16, 
     0.17, 0.18, 0.19, 0.2,  0.22,0.24, 0.26, 0.28, 0.3,  0.35, 

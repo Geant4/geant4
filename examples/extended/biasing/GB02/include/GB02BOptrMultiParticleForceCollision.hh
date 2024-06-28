@@ -35,57 +35,57 @@ class G4ParticleDefinition;
 
 #include <map>
 
-class GB02BOptrMultiParticleForceCollision : public G4VBiasingOperator {
-public:
-  GB02BOptrMultiParticleForceCollision();
-  virtual ~GB02BOptrMultiParticleForceCollision() {}
+class GB02BOptrMultiParticleForceCollision : public G4VBiasingOperator
+{
+  public:
+    GB02BOptrMultiParticleForceCollision();
+    virtual ~GB02BOptrMultiParticleForceCollision() {}
 
-  // --------------------------
-  // -- Specific to this class:
-  // --------------------------
-  // -- Declare particles to be biased:
-  void AddParticle( G4String particleName );
-  
-private:
-  // -----------------------------
-  // -- Mandatory from base class:
-  // -----------------------------
-  virtual G4VBiasingOperation*
-  ProposeNonPhysicsBiasingOperation(const G4Track* track,
-                                    const G4BiasingProcessInterface* callingProcess) final;
-  virtual G4VBiasingOperation* 
-  ProposeOccurenceBiasingOperation (const G4Track* track,
-                                    const G4BiasingProcessInterface* callingProcess) final;
-  virtual G4VBiasingOperation*
-  ProposeFinalStateBiasingOperation(const G4Track* track,
-                                    const G4BiasingProcessInterface* callingProcess) final;
-  
-private:
-  // -------------------------------
-  // -- Optionnal, from base class :
-  // -------------------------------
-  // -- Here, these are needed implementions to forward calls to the underneath
-  // -- G4BOptrForceCollision biasing operator
-  void OperationApplied( const G4BiasingProcessInterface*         callingProcess,
-                         G4BiasingAppliedCase                        biasingCase,
-                         G4VBiasingOperation*                   operationApplied,
-                         const G4VParticleChange*         particleChangeProduced ) final;
-  void OperationApplied( const G4BiasingProcessInterface*         callingProcess,
-                         G4BiasingAppliedCase                        biasingCase,
-                         G4VBiasingOperation*          occurenceOperationApplied,
-                         G4double                  weightForOccurenceInteraction,
-                         G4VBiasingOperation*         finalStateOperationApplied, 
-                         const G4VParticleChange*         particleChangeProduced ) final;
-  
-  void ExitBiasing( const G4Track*, const G4BiasingProcessInterface* ) final;
-  
-public:
-  virtual void StartTracking( const G4Track* track ) final;
-  
-private:
-  std::map < const G4ParticleDefinition*, G4BOptrForceCollision* > fBOptrForParticle;
-  std::vector < const G4ParticleDefinition* > fParticlesToBias;
-  G4BOptrForceCollision* fCurrentOperator;
+    // --------------------------
+    // -- Specific to this class:
+    // --------------------------
+    // -- Declare particles to be biased:
+    void AddParticle(G4String particleName);
+
+  private:
+    // -----------------------------
+    // -- Mandatory from base class:
+    // -----------------------------
+    virtual G4VBiasingOperation*
+    ProposeNonPhysicsBiasingOperation(const G4Track* track,
+                                      const G4BiasingProcessInterface* callingProcess) final;
+    virtual G4VBiasingOperation*
+    ProposeOccurenceBiasingOperation(const G4Track* track,
+                                     const G4BiasingProcessInterface* callingProcess) final;
+    virtual G4VBiasingOperation*
+    ProposeFinalStateBiasingOperation(const G4Track* track,
+                                      const G4BiasingProcessInterface* callingProcess) final;
+
+  private:
+    // -------------------------------
+    // -- Optionnal, from base class :
+    // -------------------------------
+    // -- Here, these are needed implementions to forward calls to the underneath
+    // -- G4BOptrForceCollision biasing operator
+    void OperationApplied(const G4BiasingProcessInterface* callingProcess,
+                          G4BiasingAppliedCase biasingCase, G4VBiasingOperation* operationApplied,
+                          const G4VParticleChange* particleChangeProduced) final;
+    void OperationApplied(const G4BiasingProcessInterface* callingProcess,
+                          G4BiasingAppliedCase biasingCase,
+                          G4VBiasingOperation* occurenceOperationApplied,
+                          G4double weightForOccurenceInteraction,
+                          G4VBiasingOperation* finalStateOperationApplied,
+                          const G4VParticleChange* particleChangeProduced) final;
+
+    void ExitBiasing(const G4Track*, const G4BiasingProcessInterface*) final;
+
+  public:
+    virtual void StartTracking(const G4Track* track) final;
+
+  private:
+    std::map<const G4ParticleDefinition*, G4BOptrForceCollision*> fBOptrForParticle;
+    std::vector<const G4ParticleDefinition*> fParticlesToBias;
+    G4BOptrForceCollision* fCurrentOperator;
 };
 
 #endif

@@ -33,25 +33,27 @@
 
 #include "G4VUserVisAction.hh"
 
-namespace B1 {  // Taken from example/basic/B1
-  class DetectorConstruction;
+namespace B1
+{  // Taken from example/basic/B1
+class DetectorConstruction;
 }
 class G4VPhysicalVolume;
 #include "G4Transform3D.hh"
 #include "G4VisExtent.hh"
 
-class DrawGeometryVisAction: public G4VUserVisAction {
-public:
-  DrawGeometryVisAction();
-  ~DrawGeometryVisAction();
-  void Draw() override;
-  const G4VisExtent& GetVisxtent() const {return fExtent;}
-private:
-  B1::DetectorConstruction* fDetectorConstruction;
-  G4VPhysicalVolume* fPhysicalVolume;
-  G4Transform3D fTransform;
-  G4VisExtent fExtent;
+class DrawGeometryVisAction : public G4VUserVisAction
+{
+  public:
+    DrawGeometryVisAction();
+    ~DrawGeometryVisAction();
+    void Draw() override;
+    const G4VisExtent& GetVisxtent() const { return fExtent; }
+
+  private:
+    B1::DetectorConstruction* fDetectorConstruction;
+    G4VPhysicalVolume* fPhysicalVolume;
+    G4Transform3D fTransform;
+    G4VisExtent fExtent;
 };
 
 #endif
-

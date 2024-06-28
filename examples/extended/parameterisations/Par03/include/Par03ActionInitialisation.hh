@@ -40,18 +40,18 @@ class Par03DetectorConstruction;
 
 class Par03ActionInitialisation : public G4VUserActionInitialization
 {
- public:
-  Par03ActionInitialisation(Par03DetectorConstruction* aDetector);
-  ~Par03ActionInitialisation();
-  /// Create all user actions.
-  virtual void Build() const final;
-  /// Create run action in the master thread to allow analysis merging.
-  virtual void BuildForMaster() const final;
+  public:
+    Par03ActionInitialisation(Par03DetectorConstruction* aDetector);
+    ~Par03ActionInitialisation();
+    /// Create all user actions.
+    virtual void Build() const final;
+    /// Create run action in the master thread to allow analysis merging.
+    virtual void BuildForMaster() const final;
 
- private:
-  /// Pointer to detector to be passed to event and run actions in order to
-  /// retrieve detector dimensions
-  Par03DetectorConstruction* fDetector;
+  private:
+    /// Pointer to detector to be passed to event and run actions in order to
+    /// retrieve detector dimensions
+    Par03DetectorConstruction* fDetector;
 };
 
 #endif /* PAR03ACTIONINITIALISATION_HH */

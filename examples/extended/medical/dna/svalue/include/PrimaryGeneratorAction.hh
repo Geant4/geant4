@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/include/PrimaryGeneratorAction.hh
@@ -36,36 +39,27 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
-#include "globals.hh"
 #include "G4VStateDependent.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
-class G4Event;
 class DetectorConstruction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction,
-                              public G4VStateDependent
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction, public G4VStateDependent
 {
-public:
-  PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+  public:
+    PrimaryGeneratorAction();
+    virtual ~PrimaryGeneratorAction();
 
-  virtual G4bool Notify(G4ApplicationState requestedState);
+    virtual G4bool Notify(G4ApplicationState requestedState);
 
-  virtual void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
-  G4ParticleGun* GetParticleGun() const
-  {
-    return fParticleGun;
-  }
+    G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
-private:
-  G4ParticleGun* fParticleGun;
-  const DetectorConstruction* fDetector;
+  private:
+    G4ParticleGun* fParticleGun;
+    const DetectorConstruction* fDetector;
 };
 
 #endif
-

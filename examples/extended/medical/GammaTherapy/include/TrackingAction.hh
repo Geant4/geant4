@@ -33,12 +33,12 @@
 //---------------------------------------------------------------------------
 //
 // ClassName:   TrackingAction
-//  
-// Description: Implementation file for control on MC truth 
+//
+// Description: Implementation file for control on MC truth
 //
 // Author:      V.Ivanchenko 13/03/01
 //
-// Modified: 
+// Modified:
 //
 //----------------------------------------------------------------------------
 //
@@ -52,20 +52,16 @@
 
 class TrackingAction : public G4UserTrackingAction
 {
+  public:
+    TrackingAction();
+    virtual ~TrackingAction();
 
-public:
-  TrackingAction();
-  virtual ~TrackingAction();
+    void PreUserTrackingAction(const G4Track*);
+    void PostUserTrackingAction(const G4Track*);
 
-  void PreUserTrackingAction(const G4Track*);
-  void PostUserTrackingAction(const G4Track*);
-
-private:
-
-  TrackingAction(const TrackingAction & right);
-  const TrackingAction & operator = (const TrackingAction & right);
-
+  private:
+    TrackingAction(const TrackingAction& right);
+    const TrackingAction& operator=(const TrackingAction& right);
 };
 
 #endif
-

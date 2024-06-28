@@ -144,6 +144,13 @@
 \verbatim
 % fanoCavity2   run01.mac
 \endverbatim
+
+ - Alternative macro files:
+\verbatim
+   basic.mac - disabled  multiple scattering and fluctuations of energy loss
+   essai.mac - run WVI EM physics configuration 
+   stepfunction.mac - the step function optimisation using histogram
+\endverbatim
  
  - Execute fanoCavity2 in 'interactive mode' with visualization
 \verbatim

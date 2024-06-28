@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-06-07 Vladimir Ivanchenko (rdecay02-V11-02-00)
+- BiasedRDPhysics - removed unnecessary lines and forward declarations
+
 ## 2023-11-10 Alberto Ribon (rdecay02-V11-01-02)
 - In all macro files, introduced the UI command
   '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'

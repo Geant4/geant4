@@ -48,79 +48,79 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class TestParameters {
+class TestParameters
+{
+  public:
+    // With description
 
-public:
-  // With description
+    static TestParameters* GetPointer();
 
-  static TestParameters *GetPointer();
+  private:
+    TestParameters();
 
-private:
-  TestParameters();
+  public:  // Without description
+    ~TestParameters() = default;
 
-public: // Without description
-  ~TestParameters() = default;
+    void SetMaxEnergy(G4double value);
 
-  void SetMaxEnergy(G4double value);
+    G4double GetMaxEnergy() const;
 
-  G4double GetMaxEnergy() const;
+    void SetNumberBins(G4int value);
 
-  void SetNumberBins(G4int value);
+    G4int GetNumberBins() const;
 
-  G4int GetNumberBins() const;
+    void SetNumberBinsCluster(G4int value);
 
-  void SetNumberBinsCluster(G4int value);
+    G4int GetNumberBinsCluster() const;
 
-  G4int GetNumberBinsCluster() const;
+    void SetMaxCluster(G4int value);
 
-  void SetMaxCluster(G4int value);
+    G4int GetMaxCluster() const;
 
-  G4int GetMaxCluster() const;
+    void SetEnergyPerChannel(G4double value);
 
-  void SetEnergyPerChannel(G4double value);
+    G4double GetFactorALICE() const;
 
-  G4double GetFactorALICE() const;
+    void SetNormFactor(G4double value);
 
-  void SetNormFactor(G4double value);
+    G4double GetNormFactor() const;
 
-  G4double GetNormFactor() const;
+    void SetEnergySmear(G4double value);
 
-  void SetEnergySmear(G4double value);
+    G4double GetEnergySmear() const;
 
-  G4double GetEnergySmear() const;
+    void SetPositionZ(G4double val);
 
-  void SetPositionZ(G4double val);
+    G4double GetPositionZ() const;
 
-  G4double GetPositionZ() const;
+    void SetBeamEnergy(G4double val);
 
-  void SetBeamEnergy(G4double val);
+    G4double GetBeamEnergy() const;
 
-  G4double GetBeamEnergy() const;
+    void SetBeamParticle(const G4ParticleDefinition*);
 
-  void SetBeamParticle(const G4ParticleDefinition *);
+    const G4ParticleDefinition* GetBeamParticle() const;
 
-  const G4ParticleDefinition *GetBeamParticle() const;
+  private:
+    static TestParameters* fManager;
 
-private:
-  static TestParameters *fManager;
+    G4double fMaxEnergy;
+    G4double fFactorALICE = 325;
+    G4double fNormFactor = 1.0;
+    G4double fEnergySmear = 0.0;
+    G4double fPositionZ = 0.0;
+    G4double fBeamEnergy = 0.0;
 
-  G4double fMaxEnergy;
-  G4double fFactorALICE = 325;
-  G4double fNormFactor = 1.0;
-  G4double fEnergySmear = 0.0;
-  G4double fPositionZ = 0.0;
-  G4double fBeamEnergy = 0.0;
+    G4int fBinsE = 100;
+    G4int fBinsCluster = 1;
+    G4int fMaxCluster = 1500;
 
-  G4int fBinsE = 100;
-  G4int fBinsCluster = 1;
-  G4int fMaxCluster = 1500;
-
-  const G4ParticleDefinition *fParticle = nullptr;
+    const G4ParticleDefinition* fParticle = nullptr;
 };
 
 #endif

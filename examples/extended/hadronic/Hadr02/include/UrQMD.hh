@@ -29,7 +29,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:
 //
 // Author: 2012  Andrea Dotti
 //   created from FTFP_BERT
@@ -45,14 +45,14 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-
-class UrQMD : public G4VModularPhysicsList {
+class UrQMD : public G4VModularPhysicsList
+{
   public:
-    UrQMD( G4int ver = 1 );
+    UrQMD(G4int ver = 1);
     virtual ~UrQMD() = default;
 
-    UrQMD( const UrQMD & ) = delete;
-    UrQMD & operator=( const UrQMD & ) = delete;  
+    UrQMD(const UrQMD&) = delete;
+    UrQMD& operator=(const UrQMD&) = delete;
 };
 
 #endif

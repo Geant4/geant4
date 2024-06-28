@@ -25,24 +25,27 @@
 //
 
 #include "BoundedBrownianAction.hh"
+
 #include "G4DNABoundingBox.hh"
 #include "G4Molecule.hh"
 #include "G4Track.hh"
 
-BoundedBrownianAction::BoundedBrownianAction()
-    : G4VUserBrownianAction() {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double BoundedBrownianAction::GetDistanceToBoundary(const G4Track &track) {
+BoundedBrownianAction::BoundedBrownianAction() : G4VUserBrownianAction() {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double BoundedBrownianAction::GetDistanceToBoundary(const G4Track& track)
+{
   if (!fpBoundingBox->contains(track.GetPosition())) {
     G4ExceptionDescription errMsg;
     errMsg << "Point is out of box : " << *fpBoundingBox
-           << " of particle : " << GetIT(track)->GetName() << "("
-           << track.GetTrackID() << ") : " << track.GetPosition();
-    G4Exception("BoundedBrownianAction::GetDistanceToBoundary"
-                "BoundedBrownianAction",
-                "BoundedBrownianAction", FatalErrorInArgument,
-                errMsg);
+           << " of particle : " << GetIT(track)->GetName() << "(" << track.GetTrackID()
+           << ") : " << track.GetPosition();
+    G4Exception(
+      "BoundedBrownianAction::GetDistanceToBoundary"
+      "BoundedBrownianAction",
+      "BoundedBrownianAction", FatalErrorInArgument, errMsg);
   }
 
   auto dx = std::min(track.GetPosition().getX() - fpBoundingBox->Getxlo(),
@@ -56,31 +59,37 @@ G4double BoundedBrownianAction::GetDistanceToBoundary(const G4Track &track) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void BoundedBrownianAction::Transport(G4ThreeVector &nextposition, G4Track *) {
+void BoundedBrownianAction::Transport(G4ThreeVector& nextposition, G4Track*)
+{
   BouncingAction(nextposition);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void BoundedBrownianAction::BouncingAction(G4ThreeVector &nextposition) const {
-  if (nextposition.getX() <= fpBoundingBox->Getxlo()) {
-    nextposition.setX(2 * fpBoundingBox->Getxlo() - nextposition.getX());
-  }
-  if (nextposition.getX() >= fpBoundingBox->Getxhi()) {
-    nextposition.setX(2 * fpBoundingBox->Getxhi() - nextposition.getX());
-  }
-  if (nextposition.getY() <= fpBoundingBox->Getylo()) {
-    nextposition.setY(2 * fpBoundingBox->Getylo() - nextposition.getY());
-  }
-  if (nextposition.getY() >= fpBoundingBox->Getyhi()) {
-    nextposition.setY(2 * fpBoundingBox->Getyhi() - nextposition.getY());
-  }
-  if (nextposition.getZ() <= fpBoundingBox->Getzlo()) {
-    nextposition.setZ(2 * fpBoundingBox->Getzlo() - nextposition.getZ());
-  }
-  if (nextposition.getZ() >= fpBoundingBox->Getzhi()) {
-    nextposition.setZ(2 * fpBoundingBox->Getzhi() - nextposition.getZ());
-  }
+void BoundedBrownianAction::BouncingAction(G4ThreeVector& nextposition) const
+{
+  // This algorithm is implemented based on Karamitros, Mathieu et al.2020,arXiv:2006.14225 (2020)
+  //  https://doi.org/10.48550/arXiv.2006.14225
+  G4double RxM = fpBoundingBox->Getxhi();
+  G4double RyM = fpBoundingBox->Getyhi();
+  G4double RzM = fpBoundingBox->Getzhi();
+
+  G4double Rxm = fpBoundingBox->Getxlo();
+  G4double Rym = fpBoundingBox->Getylo();
+  G4double Rzm = fpBoundingBox->Getzlo();
+  G4double Lx = RxM - Rxm;
+  G4double Ly = RyM - Rym;
+  G4double Lz = RzM - Rzm;
+  G4double trunx = trunc(std::abs(nextposition.getX() - Rxm) / Lx);
+  G4double truny = trunc(std::abs(nextposition.getY() - Rym) / Ly);
+  G4double trunz = trunc(std::abs(nextposition.getZ() - Rzm) / Lz);
+  G4double hx = std::fmod(trunx, 2);
+  G4double hy = std::fmod(truny, 2);
+  G4double hz = std::fmod(trunz, 2);
+  G4double x = Rxm + hx * Lx + (1 - 2 * hx) * std::abs(std::fmod(nextposition.getX() - Rxm, Lx));
+  G4double y = Rym + hy * Ly + (1 - 2 * hy) * std::abs(std::fmod(nextposition.getY() - Rym, Ly));
+  G4double z = Rzm + hz * Lz + (1 - 2 * hz) * std::abs(std::fmod(nextposition.getZ() - Rzm, Lz));
+  nextposition.set(x, y, z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

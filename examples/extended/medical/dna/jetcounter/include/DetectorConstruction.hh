@@ -35,20 +35,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
-public:
-  DetectorConstruction() = default;
-  ~DetectorConstruction() override = default;
-  G4VPhysicalVolume *Construct() override;
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    DetectorConstruction() = default;
+    ~DetectorConstruction() override = default;
+    G4VPhysicalVolume* Construct() override;
 
-  inline auto GetCollDiameter() const { return fCollDiameter; };
-  inline auto GetCollLength() const { return fCollLength; };
-  inline auto GetCollExitPosistion() const { return fCollExitPosition; };
+    inline auto GetCollDiameter() const { return fCollDiameter; };
+    inline auto GetCollLength() const { return fCollLength; };
+    inline auto GetCollExitPosistion() const { return fCollExitPosition; };
 
-private:
-  G4double fCollDiameter = 0.;
-  G4double fCollLength = 0.;
-  G4double fCollExitPosition = 0.;
+  private:
+    G4double fCollDiameter = 0.;
+    G4double fCollLength = 0.;
+    G4double fCollExitPosition = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

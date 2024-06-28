@@ -86,6 +86,8 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     G4UExtrudedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -111,6 +113,11 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 inline G4GeometryType G4UExtrudedSolid::GetEntityType() const
 {
   return "G4ExtrudedSolid";
+}
+
+inline G4bool G4UExtrudedSolid::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

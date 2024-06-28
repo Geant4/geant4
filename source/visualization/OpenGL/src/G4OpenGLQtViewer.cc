@@ -100,17 +100,6 @@
 #include "moc_G4OpenGLQtViewer.cpp"
 #endif
 
-namespace
-{
-  G4Mutex mWaitForVisSubThreadQtOpenGLContextMoved = G4MUTEX_INITIALIZER;
-  G4Mutex mWaitForVisSubThreadQtOpenGLContextInitialized = G4MUTEX_INITIALIZER;
-  // avoid unused variable warning
-#ifdef G4MULTITHREADED
-  G4Condition c1_VisSubThreadQtOpenGLContextInitialized = G4CONDITION_INITIALIZER;
-  G4Condition c2_VisSubThreadQtOpenGLContextMoved = G4CONDITION_INITIALIZER;
-#endif
-}
-
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
  G4QGLWidgetType* glWidget
@@ -127,7 +116,11 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
   G4Qt* interactorManager = G4Qt::getInstance ();
 
+#if QT_VERSION < 0x060000
   ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+#else
+  ResizeWindow(glWidget->devicePixelRatio()*fVP.GetWindowSizeHintX(),glWidget->devicePixelRatio()*fVP.GetWindowSizeHintY());
+#endif
 
   // FIXME L.Garnier 9/11/09 Has to be check !!!
   // Qt UI with Qt Vis
@@ -162,6 +155,10 @@ void G4OpenGLQtViewer::CreateMainWindow (
                          this,
                          SLOT(currentTabActivated(int)));
 
+#if QT_VERSION < 0x060000
+#else
+        createViewerPropertiesWidget();
+#endif
 
       }
       createSceneTreeWidget();
@@ -275,12 +272,14 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fLastHighlightName(0)
   ,fIsDeleting(false)
 {
-    lWaitForVisSubThreadQtOpenGLContextInitialized
-            = new G4AutoLock(mWaitForVisSubThreadQtOpenGLContextInitialized,
+#ifdef G4MULTITHREADED
+    flWaitForVisSubThreadQtOpenGLContextInitialized
+            = new G4AutoLock(fmWaitForVisSubThreadQtOpenGLContextInitialized,
                              std::defer_lock);
-    lWaitForVisSubThreadQtOpenGLContextMoved
-            = new G4AutoLock(mWaitForVisSubThreadQtOpenGLContextMoved,
+    flWaitForVisSubThreadQtOpenGLContextMoved
+            = new G4AutoLock(fmWaitForVisSubThreadQtOpenGLContextMoved,
                              std::defer_lock);
+#endif
 
   // launch Qt if not
   if (QCoreApplication::instance () == NULL) {
@@ -522,11 +521,14 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
   delete fTreeIconOpen;
   delete fTreeIconClosed;
 
-  G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
+#if QT_VERSION < 0x060000
+  G4cout <<removeTempFolder().toStdString().c_str() <<G4endl; //G.Barrand: with Qt6, it crashes at exit if the viewer is in a detached dialog window.
+#endif
 
-  delete lWaitForVisSubThreadQtOpenGLContextInitialized;
-  delete lWaitForVisSubThreadQtOpenGLContextMoved;
-
+#ifdef G4MULTITHREADED
+  delete flWaitForVisSubThreadQtOpenGLContextInitialized;
+  delete flWaitForVisSubThreadQtOpenGLContextMoved;
+#endif
 }
 
 
@@ -1266,6 +1268,12 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
  */
 void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
 {
+#if QT_VERSION < 0x060000
+#else
+ {auto* qGLW = dynamic_cast<G4QGLWidgetType*> (fGLWidget) ;
+  if (qGLW) qGLW->makeCurrent();}
+  ResizeGLView();
+#endif
   GLint viewport[4];
   glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -2707,6 +2715,91 @@ void G4OpenGLQtViewer::setCheckComponent(QTreeWidgetItem* item,bool check)
   }
 }
 
+#if QT_VERSION < 0x060000
+#else
+//G.Barrand : from stackoverflow "How to render text with QOpenGLWidget":
+static void transform_point(GLdouble out[4], const GLdouble m[16], const GLdouble in[4])
+{
+#define M(row,col)  m[col*4+row]
+    out[0] =
+        M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
+    out[1] =
+        M(1, 0) * in[0] + M(1, 1) * in[1] + M(1, 2) * in[2] + M(1, 3) * in[3];
+    out[2] =
+        M(2, 0) * in[0] + M(2, 1) * in[1] + M(2, 2) * in[2] + M(2, 3) * in[3];
+    out[3] =
+        M(3, 0) * in[0] + M(3, 1) * in[1] + M(3, 2) * in[2] + M(3, 3) * in[3];
+#undef M
+}
+inline GLint project_point(GLdouble objx, GLdouble objy, GLdouble objz,
+    const GLdouble model[16], const GLdouble proj[16],
+    const GLint viewport[4],
+    GLdouble * winx, GLdouble * winy, GLdouble * winz)
+{
+    GLdouble in[4], out[4];
+
+    in[0] = objx;
+    in[1] = objy;
+    in[2] = objz;
+    in[3] = 1.0;
+    transform_point(out, model, in);
+    transform_point(in, proj, out);
+
+    if (in[3] == 0.0)
+        return GL_FALSE;
+
+    in[0] /= in[3];
+    in[1] /= in[3];
+    in[2] /= in[3];
+
+    *winx = viewport[0] + (1 + in[0]) * viewport[2] / 2;
+    *winy = viewport[1] + (1 + in[1]) * viewport[3] / 2;
+
+    *winz = (1 + in[2]) / 2;
+    return GL_TRUE;
+}
+static void render_text(QOpenGLWidget& widget,
+                 double world_x, double world_y, double world_z,
+                 double offset_x, double offset_y,
+                 const QFont& font,
+                 const QColor& color,
+                 const char* text)
+{
+    GLdouble model[4][4];
+    glGetDoublev(GL_MODELVIEW_MATRIX, &model[0][0]);
+    GLdouble proj[4][4];
+    glGetDoublev(GL_PROJECTION_MATRIX, &proj[0][0]);
+    GLint view[4];
+    glGetIntegerv(GL_VIEWPORT, &view[0]);
+
+    GLdouble textPosX = 0, textPosY = 0, textPosZ = 0;
+    project_point(world_x, world_y, world_z,
+                  &model[0][0], &proj[0][0], &view[0],
+                  &textPosX, &textPosY, &textPosZ);
+
+    textPosX /= GLdouble(widget.devicePixelRatio());
+    textPosY /= GLdouble(widget.devicePixelRatio());
+
+    textPosY = GLdouble(widget.height()) - textPosY; // y is inverted
+
+    textPosX += offset_x;
+    textPosY += offset_y;
+
+    GLboolean GL_BLEND_enabled = glIsEnabled(GL_BLEND);
+
+    QPainter painter(&widget);
+    painter.setPen(color);
+    painter.setFont(font);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    painter.drawText(textPosX, textPosY, text);
+    painter.end();
+
+    if(GL_BLEND_enabled==GL_TRUE) {
+      ::glEnable(GL_BLEND);
+      ::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+}
+#endif
 
 void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
 {
@@ -2733,22 +2826,18 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     font.setPointSizeF(size);
 
     const G4Colour& c = fSceneHandler.GetTextColour(g4text);
-    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
 
     G4Point3D position = g4text.GetPosition();
 
     const G4String& textString = g4text.GetText();
     const char* textCString = textString.c_str();
 
-    glRasterPos3d(position.x(),position.y(),position.z());
-
     // Calculate move for centre and right adjustment
     QFontMetrics* f = new QFontMetrics (font);
     G4double span = f->boundingRect(textCString).width();
-    // Marked as such due to current un-use when building with Qt6
-    // See use of renderText at end of function.
-    [[maybe_unused]] G4double xmove = 0.;
-    [[maybe_unused]] G4double ymove = 0.;
+
+    G4double xmove = 0.;
+    G4double ymove = 0.;
 
     switch (g4text.GetLayout()) {
     case G4Text::left: break;
@@ -2760,6 +2849,9 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     xmove += g4text.GetXOffset();
     ymove += g4text.GetYOffset();
 
+#if QT_VERSION < 0x060000
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+    glRasterPos3d(position.x(),position.y(),position.z());
     // xmove, ymove in pixels - or are they?
 #ifdef __APPLE__
     const G4double fudgeFactor = 2.;
@@ -2768,8 +2860,6 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
 #endif
     xmove *= fudgeFactor;
     ymove *= fudgeFactor;
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     qGLW->renderText
       ((position.x()+(2*xmove)/getWinWidth()),
        (position.y()+(2*ymove)/getWinHeight()),
@@ -2777,7 +2867,14 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
        textCString,
        font);
 #else
-    // Not yet obvious how to do this in Qt6....
+    QColor color((int)(c.GetRed()*255),
+                 (int)(c.GetGreen()*255),
+                 (int)(c.GetBlue()*255),
+                 (int)(c.GetAlpha()*255));
+    render_text(*qGLW,
+                position.x(),position.y(),position.z(),
+                xmove,ymove,
+                font,color,textCString);
 #endif
   }
 }
@@ -4450,6 +4547,12 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
     createPickInfosWidget();
   }
 
+#if QT_VERSION < 0x060000
+#else
+ {auto* qGLW = dynamic_cast<G4QGLWidgetType*> (fGLWidget) ;
+  if (qGLW) qGLW->makeCurrent();}
+  ResizeGLView();
+#endif
   const std::vector < G4OpenGLViewerPickMap* > & pickMapVector = GetPickDetails(aX,aY);
 
   // remove all previous widgets
@@ -4699,9 +4802,9 @@ void G4OpenGLQtViewer::DoneWithMasterThread()
   // Called by Main Thread !
 
   // Useful to avoid two vis thread at the same time
-  //G4MUTEXLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
-  if(!lWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
-      lWaitForVisSubThreadQtOpenGLContextInitialized->lock();
+  //G4MUTEXLOCK(&fmWaitForVisSubThreadQtOpenGLContextInitialized);
+  if(!flWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
+      flWaitForVisSubThreadQtOpenGLContextInitialized->lock();
 }
 
 void G4OpenGLQtViewer::SwitchToVisSubThread()
@@ -4717,15 +4820,15 @@ void G4OpenGLQtViewer::SwitchToVisSubThread()
   SetQGLContextVisSubThread(QThread::currentThread());
 
   // - Wait for the vis thread to set its QThread
-  G4CONDITIONBROADCAST(&c1_VisSubThreadQtOpenGLContextInitialized);
+  G4CONDITIONBROADCAST(&fc1_VisSubThreadQtOpenGLContextInitialized);
   // a condition without a locked mutex is an undefined behavior.
   // we check if the mutex owns the lock, and if not, we lock it
-  if(!lWaitForVisSubThreadQtOpenGLContextMoved->owns_lock())
-      lWaitForVisSubThreadQtOpenGLContextMoved->lock();
+  if(!flWaitForVisSubThreadQtOpenGLContextMoved->owns_lock())
+      flWaitForVisSubThreadQtOpenGLContextMoved->lock();
 
   // Unlock the vis thread if it is Qt Viewer
-  G4CONDITIONWAIT(&c2_VisSubThreadQtOpenGLContextMoved,
-                  lWaitForVisSubThreadQtOpenGLContextMoved);
+  G4CONDITIONWAIT(&fc2_VisSubThreadQtOpenGLContextMoved,
+                  flWaitForVisSubThreadQtOpenGLContextMoved);
 
   // make context current
   qGLW->makeCurrent();
@@ -4756,9 +4859,9 @@ void G4OpenGLQtViewer::SwitchToMasterThread()
   }
 
   // Useful to avoid two vis thread at the same time
-  //G4MUTEXUNLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
-  if(lWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
-      lWaitForVisSubThreadQtOpenGLContextInitialized->unlock();
+  //G4MUTEXUNLOCK(&fmWaitForVisSubThreadQtOpenGLContextInitialized);
+  if(flWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
+      flWaitForVisSubThreadQtOpenGLContextInitialized->unlock();
 
   qGLW->makeCurrent();
 }
@@ -4774,12 +4877,12 @@ void G4OpenGLQtViewer::MovingToVisSubThread(){
 
   // a condition without a locked mutex is an undefined behavior.
   // we check if the mutex owns the lock, and if not, we lock it
-  if(!lWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
-      lWaitForVisSubThreadQtOpenGLContextInitialized->lock();
+  if(!flWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
+      flWaitForVisSubThreadQtOpenGLContextInitialized->lock();
 
   // - Wait for the vis sub thread to set its QThread
-  G4CONDITIONWAIT(&c1_VisSubThreadQtOpenGLContextInitialized,
-                  lWaitForVisSubThreadQtOpenGLContextInitialized);
+  G4CONDITIONWAIT(&fc1_VisSubThreadQtOpenGLContextInitialized,
+                  flWaitForVisSubThreadQtOpenGLContextInitialized);
 
   // Set current QThread for the way back
   SetQGLContextMainThread(QThread::currentThread());
@@ -4788,7 +4891,7 @@ void G4OpenGLQtViewer::MovingToVisSubThread(){
   qGLW->doneCurrent();
   qGLW->context()->moveToThread(fQGLContextVisSubThread);
 
-  G4CONDITIONBROADCAST(&c2_VisSubThreadQtOpenGLContextMoved);
+  G4CONDITIONBROADCAST(&fc2_VisSubThreadQtOpenGLContextMoved);
 }
 
 #endif

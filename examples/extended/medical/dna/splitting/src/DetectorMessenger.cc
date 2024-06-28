@@ -29,46 +29,44 @@
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIparameter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
-    G4UImessenger(), fpDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fpDetector(Det)
 {
-    fpDiameterCmd = new G4UIcmdWithADoubleAndUnit("/detector/diameter", this);
-    fpDiameterCmd->SetGuidance("Set the diameter of the target.");
-    fpDiameterCmd->SetParameterName("choice", false);
-    fpDiameterCmd->AvailableForStates(G4State_PreInit);
+  fpDiameterCmd = new G4UIcmdWithADoubleAndUnit("/detector/diameter", this);
+  fpDiameterCmd->SetGuidance("Set the diameter of the target.");
+  fpDiameterCmd->SetParameterName("choice", false);
+  fpDiameterCmd->AvailableForStates(G4State_PreInit);
 
-    fpLengthCmd = new G4UIcmdWithADoubleAndUnit("/detector/length", this);
-    fpLengthCmd->SetGuidance("Set the length of the target.");
-    fpLengthCmd->SetParameterName("choice", false);
-    fpLengthCmd->AvailableForStates(G4State_PreInit);
-
+  fpLengthCmd = new G4UIcmdWithADoubleAndUnit("/detector/length", this);
+  fpLengthCmd->SetGuidance("Set the length of the target.");
+  fpLengthCmd->SetParameterName("choice", false);
+  fpLengthCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-    delete fpDiameterCmd;
-    delete fpLengthCmd;
+  delete fpDiameterCmd;
+  delete fpLengthCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-    if (command == fpDiameterCmd) 
-        fpDetector->SetDiameter(fpDiameterCmd->GetNewDoubleValue(newValue));
-    else if (command == fpLengthCmd) 
-        fpDetector->SetLength(fpLengthCmd->GetNewDoubleValue(newValue));
+  if (command == fpDiameterCmd)
+    fpDetector->SetDiameter(fpDiameterCmd->GetNewDoubleValue(newValue));
+  else if (command == fpLengthCmd)
+    fpDetector->SetLength(fpLengthCmd->GetNewDoubleValue(newValue));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

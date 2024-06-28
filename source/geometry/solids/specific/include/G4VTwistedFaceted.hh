@@ -30,10 +30,10 @@
 //  G4VTwistedFaceted is an abstract base class for twisted boxoids:
 //  G4TwistedTrd, G4TwistedTrap and G4TwistedBox
 
-// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
+// Author: 27-Oct-2004 - O.Link (CERN)
 // --------------------------------------------------------------------
 #ifndef G4VTWISTEDFACETED_HH
-#define G4VTWISTEDFACETED_HH
+#define G4VTWISTEDFACETED_HH 1
 
 #include "G4VSolid.hh"
 #include "G4TwoVector.hh"
@@ -63,7 +63,7 @@ class G4VTwistedFaceted: public G4VSolid
                             G4double pAlph    // tilt angle at +pDz
                      );
 
-    virtual ~G4VTwistedFaceted();
+    ~G4VTwistedFaceted() override;
 
     void ComputeDimensions(      G4VPVParameterisation*,
                            const G4int,

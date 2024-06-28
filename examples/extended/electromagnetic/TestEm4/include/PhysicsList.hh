@@ -25,7 +25,7 @@
 //
 /// \file electromagnetic/TestEm4/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,32 +38,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VUserPhysicsList
+class PhysicsList : public G4VUserPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList() override = default;
+    ~PhysicsList() override = default;
 
-  protected:
     // Construct particle and physics
     void ConstructParticle() override;
     void ConstructProcess() override;
- 
-    void SetCuts() override;
-    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
-    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -46,8 +46,8 @@
 #ifndef DNADAMAGE2_RunAction_h
 #define DNADAMAGE2_RunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "G4THitsMap.hh"
+#include "G4UserRunAction.hh"
 
 class G4Run;
 class DetectorConstruction;
@@ -56,16 +56,16 @@ class DetectorConstruction;
 
 class RunAction : public G4UserRunAction
 {
-public:
-  RunAction();
-  // TIPs: please avoid constructors with arguments
-  // all data can be retrieved from G4RunManager
-  // or others: G4SDManager::FindSensitiveDetector
-  ~RunAction() override = default;
+  public:
+    RunAction();
+    // TIPs: please avoid constructors with arguments
+    // all data can be retrieved from G4RunManager
+    // or others: G4SDManager::FindSensitiveDetector
+    ~RunAction() override = default;
 
-  G4Run* GenerateRun() override;
-  void BeginOfRunAction(const G4Run*) override;
-  void   EndOfRunAction(const G4Run*) override;
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

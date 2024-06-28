@@ -47,19 +47,19 @@ class PrimaryGeneratorAction;
 
 class RunAction : public G4UserRunAction
 {
- public:
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim = 0);
+  public:
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim = 0);
 
-  G4Run* GenerateRun() override;
-  void BeginOfRunAction(const G4Run*) override;
-  void EndOfRunAction(const G4Run*) override;
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
- private:
-  G4Timer fTimer;
+  private:
+    G4Timer fTimer;
 
-  DetectorConstruction* fDetector;
-  PrimaryGeneratorAction* fPrimary;
-  Run* fRun;
+    DetectorConstruction* fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    Run* fRun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

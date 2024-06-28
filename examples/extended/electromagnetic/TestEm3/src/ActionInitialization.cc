@@ -28,43 +28,41 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "DetectorConstruction.hh"
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization(DetectorConstruction* det)
- :fDetector(det)
-{ }
+ActionInitialization::ActionInitialization(DetectorConstruction* det) : fDetector(det) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
- SetUserAction(new RunAction(fDetector));
+  SetUserAction(new RunAction(fDetector));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
 {
-  
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
   SetUserAction(prim);
 
-  RunAction* run = new RunAction(fDetector,prim);
-  SetUserAction(run); 
-  
+  RunAction* run = new RunAction(fDetector, prim);
+  SetUserAction(run);
+
   EventAction* event = new EventAction(fDetector);
   SetUserAction(event);
 
-  SetUserAction(new TrackingAction(fDetector,event));
+  SetUserAction(new TrackingAction(fDetector, event));
 
-  SetUserAction(new SteppingAction(fDetector,event));
-}  
+  SetUserAction(new SteppingAction(fDetector, event));
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

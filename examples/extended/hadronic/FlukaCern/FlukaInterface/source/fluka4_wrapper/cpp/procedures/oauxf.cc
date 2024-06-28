@@ -30,26 +30,26 @@
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
 
-#include "oauxf.h"
+#  include "oauxf.h"
 
-
-extern "C" {
-	// OWN HELPER FUNCTION
-	extern void oauxfw_(const char* cFile, const int& lenFil, const int& IONUMB, const char* cForm, const int& lenFor, int& IERR);
+extern "C"
+{
+  // OWN HELPER FUNCTION
+  extern void oauxfw_(const char* cFile, const int& lenFil, const int& IONUMB, const char* cForm,
+                      const int& lenFor, int& IERR);
 }
 
+namespace fluka_cpp_wrapper
+{
 
-namespace fluka_cpp_wrapper {
+void oauxf(const std::string& FILE, const int& IONUMB, const std::string& CHSTTS, int& IERR)
+{
+  const int lenFil = FILE.size();
+  const int lenFor = CHSTTS.size();
 
-	void oauxf(const std::string& FILE, const int& IONUMB, 
-		   const std::string& CHSTTS, int& IERR) {
-		const int lenFil = FILE.size();
-		const int lenFor = CHSTTS.size();
-
-		oauxfw_( FILE.c_str(), lenFil, IONUMB, CHSTTS.c_str(), lenFor, IERR);
-	}
-
+  oauxfw_(FILE.c_str(), lenFil, IONUMB, CHSTTS.c_str(), lenFor, IERR);
 }
 
+}  // namespace fluka_cpp_wrapper
 
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

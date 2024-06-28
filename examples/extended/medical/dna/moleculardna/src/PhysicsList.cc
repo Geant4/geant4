@@ -28,18 +28,18 @@
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
-#include "G4SystemOfUnits.hh"
+
+#include "ChemistryList.hh"
 #include "ParallelWorldPhysics.hh"
+
+#include "G4DecayPhysics.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option2.hh"
 #include "G4EmDNAPhysics_option4.hh"
 #include "G4EmDNAPhysics_option6.hh"
-
-#include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"
-
-#include "ChemistryList.hh"
 #include "G4EmParameters.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,24 +50,19 @@ PhysicsList::PhysicsList(G4int phylist)
 
   UseCoupledTransportation();
 
-  if(phylist == 0)
-  {
+  if (phylist == 0) {
     RegisterPhysics(new G4EmDNAPhysics());
   }
-  else if(phylist == 2)
-  {
+  else if (phylist == 2) {
     RegisterPhysics(new G4EmDNAPhysics_option2());
   }
-  else if(phylist == 4)
-  {
+  else if (phylist == 4) {
     RegisterPhysics(new G4EmDNAPhysics_option4());
   }
-  else if(phylist == 6)
-  {
+  else if (phylist == 6) {
     RegisterPhysics(new G4EmDNAPhysics_option6());
   }
-  else
-  {
+  else {
     G4ExceptionDescription errmsg;
     errmsg << "Recommend to option 2, 4, 6 or default" << G4endl;
     G4Exception("PhysicsList::PhysicsList", "", FatalException, errmsg);
@@ -82,8 +77,7 @@ PhysicsList::PhysicsList(G4int phylist)
 
   RegisterPhysics(new ChemistryList());
 
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV,
-                                                                  1 * GeV);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV, 1 * GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

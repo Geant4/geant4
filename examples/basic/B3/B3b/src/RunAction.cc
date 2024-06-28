@@ -28,13 +28,15 @@
 /// \brief Implementation of the B3b::RunAction class
 
 #include "RunAction.hh"
-#include "Run.hh"
-#include "PrimaryGeneratorAction.hh"
 
+#include "PrimaryGeneratorAction.hh"
+#include "Run.hh"
+
+#include "G4ParticleGun.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 using namespace B3;
 
@@ -45,23 +47,25 @@ namespace B3b
 
 RunAction::RunAction()
 {
-  //add new units for dose
+  // add new units for dose
   //
-  const G4double milligray = 1.e-3*gray;
-  const G4double microgray = 1.e-6*gray;
-  const G4double nanogray  = 1.e-9*gray;
-  const G4double picogray  = 1.e-12*gray;
+  const G4double milligray = 1.e-3 * gray;
+  const G4double microgray = 1.e-6 * gray;
+  const G4double nanogray = 1.e-9 * gray;
+  const G4double picogray = 1.e-12 * gray;
 
-  new G4UnitDefinition("milligray", "milliGy" , "Dose", milligray);
-  new G4UnitDefinition("microgray", "microGy" , "Dose", microgray);
-  new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
-  new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
+  new G4UnitDefinition("milligray", "milliGy", "Dose", milligray);
+  new G4UnitDefinition("microgray", "microGy", "Dose", microgray);
+  new G4UnitDefinition("nanogray", "nanoGy", "Dose", nanogray);
+  new G4UnitDefinition("picogray", "picoGy", "Dose", picogray);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ return new Run; }
+{
+  return new Run;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,7 +73,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 {
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
-  //inform the runManager to save random number seed
+  // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
 
@@ -86,48 +90,35 @@ void RunAction::EndOfRunAction(const G4Run* run)
   const auto generatorAction = static_cast<const PrimaryGeneratorAction*>(
     G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4String partName;
-  if (generatorAction)
-  {
-    G4ParticleDefinition* particle
-      = generatorAction->GetParticleGun()->GetParticleDefinition();
+  if (generatorAction) {
+    G4ParticleDefinition* particle = generatorAction->GetParticleGun()->GetParticleDefinition();
     partName = particle->GetParticleName();
   }
 
-  //results
+  // results
   //
   const Run* b3Run = static_cast<const Run*>(run);
   G4int nbGoodEvents = b3Run->GetNbGoodEvents();
-  G4double sumDose   = b3Run->GetSumDose();
+  G4double sumDose = b3Run->GetSumDose();
   G4StatAnalysis statDose = b3Run->GetStatDose();
 
-  //print
+  // print
   //
-  if (IsMaster())
-  {
-    G4cout
-     << G4endl
-     << "--------------------End of Global Run-----------------------"
-     << G4endl
-     << "  The run was " << nofEvents << " events ";
+  if (IsMaster()) {
+    G4cout << G4endl << "--------------------End of Global Run-----------------------" << G4endl
+           << "  The run was " << nofEvents << " events ";
   }
-  else
-  {
-    G4cout
-     << G4endl
-     << "--------------------End of Local Run------------------------"
-     << G4endl
-     << "  The run was " << nofEvents << " "<< partName;
+  else {
+    G4cout << G4endl << "--------------------End of Local Run------------------------" << G4endl
+           << "  The run was " << nofEvents << " " << partName;
   }
   statDose /= gray;
-  G4cout
-     << "; Nb of 'good' e+ annihilations: " << nbGoodEvents  << G4endl
-     << " Total dose in patient : " << G4BestUnit(sumDose, "Dose") << G4endl
-     << " Total dose in patient : " << statDose << " Gy" << G4endl
-     << "------------------------------------------------------------" << G4endl
-     << G4endl;
+  G4cout << "; Nb of 'good' e+ annihilations: " << nbGoodEvents << G4endl
+         << " Total dose in patient : " << G4BestUnit(sumDose, "Dose") << G4endl
+         << " Total dose in patient : " << statDose << " Gy" << G4endl
+         << "------------------------------------------------------------" << G4endl << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
-
+}  // namespace B3b

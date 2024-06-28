@@ -36,37 +36,35 @@
 
 #include "G4RootNtupleManager.hh"
 
-namespace tools {
-class impi;    
+namespace tools
+{
+class impi;
 }
 
 class G4RootMpiNtupleManager : public G4RootNtupleManager
 {
   public:
     G4RootMpiNtupleManager(const G4AnalysisManagerState& state,
-                std::shared_ptr<G4NtupleBookingManager> bookingManger,
-                G4bool rowWise, G4bool rowMode,
-                tools::impi* impi, G4int mpiSize);
+                           std::shared_ptr<G4NtupleBookingManager> bookingManger, G4bool rowWise,
+                           G4bool rowMode, tools::impi* impi, G4int mpiSize);
     virtual ~G4RootMpiNtupleManager();
 
-    virtual void CreateNtuplesFromBooking(
-                   const std::vector<G4NtupleBooking*>& ntupleBookings) final;
+    virtual void
+    CreateNtuplesFromBooking(const std::vector<G4NtupleBooking*>& ntupleBookings) final;
 
     // Methods from the templated base class
     virtual G4bool Merge() final;
 
-   private:
+  private:
     // MPI
-    G4RootFile*  GetNtupleFile(G4int id);
+    G4RootFile* GetNtupleFile(G4int id);
     G4bool Send(G4int id, RootNtupleDescription* ntupleDescription);
     G4bool InitializeRanks();
     G4bool WaitBuffer();
 
-    tools::impi*  fImpi;
-    std::vector<G4int>  fSlaveRanks;
+    tools::impi* fImpi;
+    std::vector<G4int> fSlaveRanks;
     G4int fMainRank;
-};    
+};
 
 #endif
-
-

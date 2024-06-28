@@ -27,13 +27,13 @@
 /// file: CylindricalChromosome.cc
 /// brief: Implementation of virt chromosome class for cylindrical chromosomes
 
-#include <utility>
-
 #include "CylindricalChromosome.hh"
 
-#include "Randomize.hh"
-#include "G4RandomDirection.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4RandomDirection.hh"
+#include "Randomize.hh"
+
+#include <utility>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,31 +41,23 @@ const G4String CylindricalChromosome::fShape = "cyl";
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-CylindricalChromosome::CylindricalChromosome(const G4String& name,
-                                             const G4ThreeVector& pos,
-                                             const G4double& radius,
-                                             const G4double& height)
-  : VirtualChromosome(name)
-  , fCenter(pos)
-  , fRadius(radius)
-  , fHeight(height)
-  , fRotation(G4RotationMatrix())
+CylindricalChromosome::CylindricalChromosome(const G4String& name, const G4ThreeVector& pos,
+                                             const G4double& radius, const G4double& height)
+  : VirtualChromosome(name),
+    fCenter(pos),
+    fRadius(radius),
+    fHeight(height),
+    fRotation(G4RotationMatrix())
 {
   fInverseRotation = fRotation.inverse();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-CylindricalChromosome::CylindricalChromosome(const G4String& name,
-                                             const G4ThreeVector& pos,
-                                             const G4double& radius,
-                                             const G4double& height,
+CylindricalChromosome::CylindricalChromosome(const G4String& name, const G4ThreeVector& pos,
+                                             const G4double& radius, const G4double& height,
                                              const G4RotationMatrix& rot)
-  : VirtualChromosome(name)
-  , fCenter(pos)
-  , fRadius(radius)
-  , fHeight(height)
-  , fRotation(rot)
+  : VirtualChromosome(name), fCenter(pos), fRadius(radius), fHeight(height), fRotation(rot)
 {
   fInverseRotation = fRotation.inverse();
 }
@@ -75,7 +67,7 @@ CylindricalChromosome::CylindricalChromosome(const G4String& name,
 bool CylindricalChromosome::PointInChromosome(G4ThreeVector const& pos)
 {
   G4ThreeVector rpos = pos - fCenter;
-  rpos               = fInverseRotation(rpos);
+  rpos = fInverseRotation(rpos);
 
   G4bool height_ok;
   G4bool radius_ok;
@@ -83,7 +75,7 @@ bool CylindricalChromosome::PointInChromosome(G4ThreeVector const& pos)
   G4double rad2;
 
   height = std::abs(rpos.getZ());
-  rad2   = rpos.getX() * rpos.getX() + rpos.getY() * rpos.getY();
+  rad2 = rpos.getX() * rpos.getX() + rpos.getY() * rpos.getY();
 
   height_ok = (height < fHeight);
   radius_ok = (rad2 < (fRadius * fRadius));
@@ -95,13 +87,13 @@ bool CylindricalChromosome::PointInChromosome(G4ThreeVector const& pos)
 G4ThreeVector CylindricalChromosome::RandomPointInChromosome()
 {
   G4ThreeVector point;
-  G4double z     = 2 * (G4UniformRand() - 0.5) * fHeight;
+  G4double z = 2 * (G4UniformRand() - 0.5) * fHeight;
   G4double theta = twopi * G4UniformRand();
-  G4double r     = fRadius * std::pow(G4UniformRand(), 0.5);
-  G4double x     = r * std::cos(theta);
-  G4double y     = r * std::sin(theta);
-  point          = G4ThreeVector(x, y, z);
-  point          = fRotation(point) + fCenter;
+  G4double r = fRadius * std::pow(G4UniformRand(), 0.5);
+  G4double x = r * std::cos(theta);
+  G4double y = r * std::sin(theta);
+  point = G4ThreeVector(x, y, z);
+  point = fRotation(point) + fCenter;
 
   return point;
 }

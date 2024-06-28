@@ -28,18 +28,18 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization(DetectorConstruction* detector, 
-                                           PhysicsList* physics)
- : fDetector(detector), fPhysics(physics)
-{ }
+ActionInitialization::ActionInitialization(DetectorConstruction* detector, PhysicsList* physics)
+  : fDetector(detector), fPhysics(physics)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,15 +55,15 @@ void ActionInitialization::Build() const
 {
   PrimaryGeneratorAction* kinematics = new PrimaryGeneratorAction(fDetector);
   SetUserAction(kinematics);
-  
+
   SetUserAction(new RunAction(fDetector, fPhysics, kinematics));
-  
+
   EventAction* eventAction = new EventAction(fDetector);
   SetUserAction(eventAction);
-  
+
   SetUserAction(new TrackingAction(fDetector, eventAction));
-  
+
   SetUserAction(new SteppingAction(fDetector, eventAction));
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

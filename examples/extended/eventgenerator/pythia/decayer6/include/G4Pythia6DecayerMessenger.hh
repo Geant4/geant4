@@ -29,7 +29,7 @@
 /// \brief Definition of the G4Pythia6DecayerMessenger class
 
 #ifndef G4_PYTHIA6_DECAYER_MESSENGER_H
-#define G4_PYTHIA6_DECAYER_MESSENGER_H 
+#define G4_PYTHIA6_DECAYER_MESSENGER_H
 
 #include <G4UImessenger.hh>
 #include <globals.hh>
@@ -49,14 +49,12 @@ class G4UIcmdWithABool;
 class G4Pythia6DecayerMessenger : public G4UImessenger
 {
   public:
-
     G4Pythia6DecayerMessenger(G4Pythia6Decayer* pythia6Decayer);
     virtual ~G4Pythia6DecayerMessenger();
-   
-    virtual void SetNewValue(G4UIcommand* command, G4String string);
-    
-  private:
 
+    virtual void SetNewValue(G4UIcommand* command, G4String string);
+
+  private:
     /// Not implemented
     G4Pythia6DecayerMessenger();
     /// Not implemented
@@ -65,11 +63,10 @@ class G4Pythia6DecayerMessenger : public G4UImessenger
     G4Pythia6DecayerMessenger& operator=(const G4Pythia6DecayerMessenger& r);
 
   private:
-
-    G4Pythia6Decayer*      fPythia6Decayer;    ///< associated class 
-    G4UIdirectory*         fDirectory;         ///< command directory
-    G4UIcmdWithAnInteger*  fVerboseCmd;        ///< command: verbose
-    G4UIcmdWithAnInteger*  fDecayTypeCmd;      ///< command: forceDEcayeType
+    G4Pythia6Decayer* fPythia6Decayer;  ///< associated class
+    G4UIdirectory* fDirectory;  ///< command directory
+    G4UIcmdWithAnInteger* fVerboseCmd;  ///< command: verbose
+    G4UIcmdWithAnInteger* fDecayTypeCmd;  ///< command: forceDEcayeType
 };
 
 // ----------------------------------------------------------------------------

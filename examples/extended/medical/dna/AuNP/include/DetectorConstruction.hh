@@ -34,9 +34,9 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4LogicalVolume.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4LogicalVolume.hh"
 
 class G4VPhysicalVolume;
 class G4Material;
@@ -45,80 +45,55 @@ class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction: public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  DetectorConstruction();
-  ~DetectorConstruction();
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-public:
-  void SetNReplicaR(G4int);
-  void SetNReplicaAzm(G4int);
-  void SetAbsRadius(G4double);
-  void SetAbsMaterial(G4String);
-  void SetNPRadius(G4double);
-  void SetNPMaterial(G4String);
-  void SetTrackingCut(G4double);
-  virtual G4VPhysicalVolume* Construct();
+  public:
+    void SetNReplicaR(G4int);
+    void SetNReplicaAzm(G4int);
+    void SetAbsRadius(G4double);
+    void SetAbsMaterial(G4String);
+    void SetNPRadius(G4double);
+    void SetNPMaterial(G4String);
+    void SetTrackingCut(G4double);
+    virtual G4VPhysicalVolume* Construct();
 
-  inline G4double GetNReplicaR() const
-  {
-    return fNreplicaR;
-  }
-  inline G4double GetNReplicaAzm() const
-  {
-    return fNreplicaAzm;
-  }
-  inline G4double GetAbsRadius() const
-  {
-    return fAbsRadius;
-  }
-  inline G4double GetNPRadius() const
-  {
-    return fNPRadius;
-  }
-  inline G4Material* GetNPMaterial() const
-  {
-    return fNPMaterial;
-  }
-  inline G4double GetTrackingCut() const 
-  {
-  return fTrackingCut;
-  }
-  inline G4double GetNPMass() const
-  {
-    return fLogicalNP->GetMass();
-  }
+    inline G4double GetNReplicaR() const { return fNreplicaR; }
+    inline G4double GetNReplicaAzm() const { return fNreplicaAzm; }
+    inline G4double GetAbsRadius() const { return fAbsRadius; }
+    inline G4double GetNPRadius() const { return fNPRadius; }
+    inline G4Material* GetNPMaterial() const { return fNPMaterial; }
+    inline G4double GetTrackingCut() const { return fTrackingCut; }
+    inline G4double GetNPMass() const { return fLogicalNP->GetMass(); }
 
-  inline G4MultiFunctionalDetector* GetMFDetector() const
-  {
-    return fMFD;
-  }
-  void PrintParameters() const;
-  G4Region *GetTargetRegion(){return fRegion;}
+    inline G4MultiFunctionalDetector* GetMFDetector() const { return fMFD; }
+    void PrintParameters() const;
+    G4Region* GetTargetRegion() { return fRegion; }
 
-private:
-  void DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
+  private:
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructVolumes();
 
-  G4int fNreplicaR;
-  G4int fNreplicaAzm;
-  G4double fTrackingCut;
-  G4double fNPRadius;
-  G4double fAbsRadius;
-  G4Material* fNPMaterial;
-  G4Material* fAbsMaterial;
-  G4VPhysicalVolume* pWorld;
-  G4VPhysicalVolume* fNP;
-  G4VPhysicalVolume* fAbs;
-  G4LogicalVolume* fLogicalNP;
-  G4LogicalVolume* fLogicalAbs;
-  DetectorMessenger* fDetectorMessenger;
-  G4MultiFunctionalDetector* fMFD;
-  G4Region   *fRegion;
+    G4int fNreplicaR;
+    G4int fNreplicaAzm;
+    G4double fTrackingCut;
+    G4double fNPRadius;
+    G4double fAbsRadius;
+    G4Material* fNPMaterial;
+    G4Material* fAbsMaterial;
+    G4VPhysicalVolume* pWorld;
+    G4VPhysicalVolume* fNP;
+    G4VPhysicalVolume* fAbs;
+    G4LogicalVolume* fLogicalNP;
+    G4LogicalVolume* fLogicalAbs;
+    DetectorMessenger* fDetectorMessenger;
+    G4MultiFunctionalDetector* fMFD;
+    G4Region* fRegion;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

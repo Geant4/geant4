@@ -48,38 +48,35 @@ class G4TouchableHistory;
  *
  */
 
-class Par03SensitiveDetector
-  : public G4VSensitiveDetector
-  , public G4VFastSimSensitiveDetector
+class Par03SensitiveDetector : public G4VSensitiveDetector, public G4VFastSimSensitiveDetector
 {
- public:
-  Par03SensitiveDetector(G4String aName);
-  Par03SensitiveDetector(G4String aName, G4int aNumLayers, G4int aNumPhi,
-                         G4int aNumRho);
-  virtual ~Par03SensitiveDetector();
-  /// Create hit collection
-  virtual void Initialize(G4HCofThisEvent* HCE) final;
-  /// Process energy deposit from the full simulation.
-  virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* aROhist) final;
-  /// Process energy deposit from the fast simulation.
-  virtual G4bool ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
-                             G4TouchableHistory* aROhist) final;
-  /// Process energy deposit - common part for full and fast simulation
-  /// It is invoked from ProcessHits() methods, and sets basic hit properties
-  /// (position, etc.), common for hit from fast and full simulation.
-  Par03Hit* RetrieveAndSetupHit(G4TouchableHistory* aTouchable);
+  public:
+    Par03SensitiveDetector(G4String aName);
+    Par03SensitiveDetector(G4String aName, G4int aNumLayers, G4int aNumPhi, G4int aNumRho);
+    virtual ~Par03SensitiveDetector();
+    /// Create hit collection
+    virtual void Initialize(G4HCofThisEvent* HCE) final;
+    /// Process energy deposit from the full simulation.
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* aROhist) final;
+    /// Process energy deposit from the fast simulation.
+    virtual G4bool ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
+                               G4TouchableHistory* aROhist) final;
+    /// Process energy deposit - common part for full and fast simulation
+    /// It is invoked from ProcessHits() methods, and sets basic hit properties
+    /// (position, etc.), common for hit from fast and full simulation.
+    Par03Hit* RetrieveAndSetupHit(G4TouchableHistory* aTouchable);
 
- private:
-  /// Collection of hits
-  Par03HitsCollection* fHitsCollection = nullptr;
-  /// ID of collection of hits
-  G4int fHitCollectionID = -1;
-  /// Number of readout cells along z axis
-  G4int fCellNoZ = 10;
-  /// Number of readout cells along radius of cylinder
-  G4int fCellNoRho = 10;
-  /// Number of readout cells along azimuthal angle
-  G4int fCellNoPhi = 10;
+  private:
+    /// Collection of hits
+    Par03HitsCollection* fHitsCollection = nullptr;
+    /// ID of collection of hits
+    G4int fHitCollectionID = -1;
+    /// Number of readout cells along z axis
+    G4int fCellNoZ = 10;
+    /// Number of readout cells along radius of cylinder
+    G4int fCellNoRho = 10;
+    /// Number of readout cells along azimuthal angle
+    G4int fCellNoPhi = 10;
 };
 
 #endif /* PAR03SENSITIVEDETECTOR_HH */

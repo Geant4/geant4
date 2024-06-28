@@ -41,51 +41,46 @@
 //
 // + Université Laval, Québec (QC) Canada
 // *******************************************************
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "globals.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-
-#include "G4GenericPhysicsList.hh"
-
-#include "DicomRegularDetectorConstruction.hh"
+#include "DicomActionInitialization.hh"
 #include "DicomNestedParamDetectorConstruction.hh"
 #include "DicomPartialDetectorConstruction.hh"
+#include "DicomRegularDetectorConstruction.hh"
 
-#include "DicomActionInitialization.hh"
+#include "G4GenericPhysicsList.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
+#include "G4UImanager.hh"
+#include "Randomize.hh"
+#include "globals.hh"
 
 #ifdef G4_DCMTK
-#   include "DicomFileMgr.hh"
+#  include "DicomFileMgr.hh"
 #else
-#   include "DicomHandler.hh"
+#  include "DicomHandler.hh"
 #endif
 
 #include "DicomIntersectVolume.hh"
 #include "QGSP_BIC.hh"
-#include "G4tgrMessenger.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-
 #include "Shielding.hh"
+
+#include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
+#include "G4tgrMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   new G4tgrMessenger;
-  char* part = std::getenv( "DICOM_PARTIAL_PARAM" );
+  char* part = std::getenv("DICOM_PARTIAL_PARAM");
   G4bool bPartial = FALSE;
-  if( part && G4String(part) == "1" ) {
+  if (part && G4String(part) == "1") {
     bPartial = TRUE;
   }
 
@@ -102,8 +97,12 @@ int main(int argc,char** argv)
   unsigned nthreads = 4;
   unsigned env_threads = 0;
 
-  if(nthread_c) {env_threads=unsigned(G4UIcommand::ConvertToDouble(nthread_c));}
-  if(env_threads > 0) {nthreads=env_threads;}
+  if (nthread_c) {
+    env_threads = unsigned(G4UIcommand::ConvertToDouble(nthread_c));
+  }
+  if (env_threads > 0) {
+    nthreads = env_threads;
+  }
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(nthreads);
@@ -116,7 +115,7 @@ int main(int argc,char** argv)
   DicomHandler* dcmHandler = 0;
 #endif
 
-  if( !bPartial ){
+  if (!bPartial) {
 #ifdef G4_DCMTK
 
     theFileMgr = DicomFileMgr::GetInstance();
@@ -129,13 +128,15 @@ int main(int argc,char** argv)
 #endif
 
     // Initialisation of physics, geometry, primary particles ...
-    char* nest = std::getenv( "DICOM_NESTED_PARAM" );
-    if( nest && G4String(nest) == "1" ) {
+    char* nest = std::getenv("DICOM_NESTED_PARAM");
+    if (nest && G4String(nest) == "1") {
       theGeometry = new DicomNestedParamDetectorConstruction();
-    } else {
+    }
+    else {
       theGeometry = new DicomRegularDetectorConstruction();
     }
-  } else {
+  }
+  else {
     theGeometry = new DicomPartialDetectorConstruction();
   }
   runManager->SetUserInitialization(theGeometry);
@@ -159,23 +160,21 @@ int main(int argc,char** argv)
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)
-    {
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
-    }
-  else
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+  if (ui) {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
+  else {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  }
 
   delete visManager;
   delete runManager;
 
-  if( !bPartial ) {
+  if (!bPartial) {
 #ifdef G4_DCMTK
     delete theFileMgr;
 #endif
@@ -183,4 +182,3 @@ int main(int argc,char** argv)
 
   return 0;
 }
-

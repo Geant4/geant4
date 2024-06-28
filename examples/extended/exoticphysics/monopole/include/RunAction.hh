@@ -33,8 +33,8 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "G4Run.hh"
+#include "G4UserRunAction.hh"
 
 class Run;
 class DetectorConstruction;
@@ -45,31 +45,28 @@ class RunActionMessenger;
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    virtual ~RunAction();
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-  virtual ~RunAction();
+    virtual G4Run* GenerateRun();
 
-  virtual G4Run* GenerateRun();    
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
+    void SetBinSize(G4double size);
 
-  void SetBinSize(G4double size);
+  private:
+    void Book();
 
-private:  
+    DetectorConstruction* fDetector;
+    PrimaryGeneratorAction* fKinematic;
+    Run* fRun;
+    RunActionMessenger* fMessenger;
 
-  void Book();
-
-  DetectorConstruction*   fDetector;
-  PrimaryGeneratorAction* fKinematic;
-  Run*                    fRun;        
-  RunActionMessenger*     fMessenger;
-
-  G4double                fBinLength;
+    G4double fBinLength;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

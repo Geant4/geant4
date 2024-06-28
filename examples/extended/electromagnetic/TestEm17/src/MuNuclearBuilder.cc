@@ -29,36 +29,32 @@
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "MuNuclearBuilder.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
-
+#include "G4MuonPlus.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-//#include "G4MuNuclearInteraction.hh"
-//#include "G4PreCompoundModel.hh"
+// #include "G4MuNuclearInteraction.hh"
+// #include "G4PreCompoundModel.hh"
 #include "G4MuonNuclearProcess.hh"
 #include "G4MuonVDNuclearModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-MuNuclearBuilder::MuNuclearBuilder(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{}
+MuNuclearBuilder::MuNuclearBuilder(const G4String& name) : G4VPhysicsConstructor(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-MuNuclearBuilder::~MuNuclearBuilder()
-{}
+MuNuclearBuilder::~MuNuclearBuilder() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MuNuclearBuilder::ConstructProcess()
 {
-  G4ProcessManager * pManager = 0;
+  G4ProcessManager* pManager = 0;
 
   G4MuonNuclearProcess* muNucProcess = new G4MuonNuclearProcess();
   G4MuonVDNuclearModel* muNucModel = new G4MuonVDNuclearModel();
@@ -72,15 +68,14 @@ void MuNuclearBuilder::ConstructProcess()
   /*
   // Add standard EM Processes for Muon
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
-  G4ProcessManager* pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4MuNuclearInteraction("muNucl"),-1,-1,4);       
+  G4ProcessManager* pmanager = particle->GetProcessManager();
+  pmanager->AddProcess(new G4MuNuclearInteraction("muNucl"),-1,-1,4);
 
   particle = G4MuonMinus::MuonMinus();
-  pmanager = particle->GetProcessManager();    
+  pmanager = particle->GetProcessManager();
 
   pmanager->AddProcess(new G4MuNuclearInteraction("muNucl"),-1,-1,4);
   */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

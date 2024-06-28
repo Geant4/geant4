@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-07 I. Hrivnacova (exampleB3-V11-02-00)
+- Looping over G4THitsMap via range for loop instead of iterators.
+
 ## 2023-11-15 I. Hrivnacova (exampleB3-V11-01-01)
 - Updated vis.mac macros:
   Changed "/vis/open OGL [600x600-0+0]" to "/vis/open" to allow run-time choices

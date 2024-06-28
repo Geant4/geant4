@@ -31,8 +31,9 @@
 #define B3bRun_h 1
 
 #include "G4Run.hh"
-#include "globals.hh"
+
 #include "G4StatAnalysis.hh"
+#include "globals.hh"
 
 namespace B3b
 {
@@ -53,7 +54,7 @@ class Run : public G4Run
 
   public:
     G4int GetNbGoodEvents() const { return fGoodEvents; }
-    G4double GetSumDose()   const { return fSumDose; }
+    G4double GetSumDose() const { return fSumDose; }
     G4StatAnalysis GetStatDose() const { return fStatDose; }
 
   private:
@@ -65,10 +66,8 @@ class Run : public G4Run
     G4StatAnalysis fStatDose;
 };
 
-}
+}  // namespace B3b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

@@ -118,8 +118,7 @@ G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysicsWVI::~G4EmStandardPhysicsWVI()
-{}
+G4EmStandardPhysicsWVI::~G4EmStandardPhysicsWVI() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -226,9 +225,9 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
-  auto fluc = new G4IonFluctuations();
+  auto fluc = new G4AtimaFluctuations();
   ionIoni->SetFluctModel(fluc);
-  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
+  ionIoni->SetEmModel(new G4AtimaEnergyLossModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
   if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }

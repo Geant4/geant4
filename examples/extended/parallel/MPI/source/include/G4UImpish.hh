@@ -30,12 +30,13 @@
 
 #include "G4VUIshell.hh"
 
-class G4UImpish : public G4VUIshell {
-public:
-  G4UImpish();
-  ~G4UImpish();
+class G4UImpish : public G4VUIshell
+{
+  public:
+    G4UImpish();
+    ~G4UImpish();
 
-  virtual G4String GetCommandLineString(const char* msg = 0);
+    virtual G4String GetCommandLineString(const char* msg = 0);
 };
 
 #endif

@@ -40,16 +40,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "Run.hh"
 #include "TestParameters.hh"
+
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-  : G4UserRunAction(), fAnalysisManager(nullptr), fRun(nullptr)
+RunAction::RunAction() : G4UserRunAction(), fAnalysisManager(nullptr), fRun(nullptr)
 {
   TestParameters::GetPointer();
   fAnalysisManager = G4AnalysisManager::Instance();
@@ -60,8 +61,7 @@ RunAction::RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,17 +73,17 @@ void RunAction::Book()
   G4double maxEnergy = param->GetMaxEnergy();
 
   // Creating an 1-dimensional histograms in the root directory of the tree
-  fAnalysisManager->SetFirstHistoId(1);   
-  fAnalysisManager->CreateH1("h1","Energy deposition in detector (GeV)",
-                             nBinsE,0.0,maxEnergy/GeV);
-  fAnalysisManager->OpenFile(); 
+  fAnalysisManager->SetFirstHistoId(1);
+  fAnalysisManager->CreateH1("h1", "Energy deposition in detector (GeV)", nBinsE, 0.0,
+                             maxEnergy / GeV);
+  fAnalysisManager->OpenFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
-  fRun = new Run(); 
+{
+  fRun = new Run();
   return fRun;
 }
 
@@ -92,12 +92,11 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
-  G4cout << "### Run " << id << " start analysis activation: " 
-         << G4endl;
+  G4cout << "### Run " << id << " start analysis activation: " << G4endl;
 
   fRun->BeginOfRun();
 
-  //histograms
+  // histograms
   Book();
 }
 
@@ -106,14 +105,14 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   // print Run summary
-  G4cout << "RunAction: End of run actions are started " << isMaster 
-         << "  Nevt=  " << fRun->GetNumberOfEvent() 
-         << "  Edep= " << fRun->GetStat()->mean() << G4endl;
+  G4cout << "RunAction: End of run actions are started " << isMaster
+         << "  Nevt=  " << fRun->GetNumberOfEvent() << "  Edep= " << fRun->GetStat()->mean()
+         << G4endl;
   if (isMaster) {
-    fRun->EndOfRun(); 
+    fRun->EndOfRun();
   }
   // save histos and close analysis
-  if (fAnalysisManager->IsActive()) { 
+  if (fAnalysisManager->IsActive()) {
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
     fAnalysisManager->Clear();

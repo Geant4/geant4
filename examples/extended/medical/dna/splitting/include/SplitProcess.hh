@@ -33,19 +33,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class SplitProcess : public G4WrapperProcess {
+class SplitProcess : public G4WrapperProcess
+{
+  public:
+    SplitProcess(G4String regName, G4int split);
 
-public:
-        SplitProcess(G4String regName, G4int split);
-    
-        virtual ~SplitProcess();
+    virtual ~SplitProcess();
 
-        G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
+    G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
 
-private:
-        G4Region* fRegion;
-        G4String fRegionName;
-        G4int fNSplit;
+  private:
+    G4Region* fRegion;
+    G4String fRegionName;
+    G4int fNSplit;
 };
 
 #endif

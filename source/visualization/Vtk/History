@@ -6,14 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-03-25 Gabriele Cosmo (visVtk-V11-01-16)
+## 2024-05-27 Guy Barrand (visVtk-V11-02-03)
+- G4VtxQtViewer: MT: have the variables mWaitForVisSubThreadQtOpenGLContextMoved,
+  mWaitForVisSubThreadQtOpenGLContextInitialized,
+  c1_VisSubThreadQtOpenGLContextInitialized, c2_VisSubThreadQtOpenGLContextMoved local
+  to the G4VtkQtViewer class. It avoids dead-locks in case of multiple Vtk viewers
+  if doing a "/run/beamOn" in each of them. (Same problem and fix as seen with
+  OGLI/OGLS. See also opengl-V11-02-01).
+
+## 2024-03-25 Gabriele Cosmo (visVtk-V11-02-02)
 - Use angle brackets <> for external Vtk package headers inclusion in
   G4VVtkPipeline.hh.
 
-## 2024-03-20 Stewart Boogert
+## 2024-03-20 Stewart Boogert (visVtk-V11-02-01)
 - Fixed Ubuntu 22 & VTK 9.1 compilation error
 
-## 2024-03-18 Gabriele Cosmo
+## 2024-03-18 Gabriele Cosmo (visVtk-V11-02-00)
 - Porting code to compile on Windows Visual-Studio:
   - Protected use of GNU pragmas in code.
   - Removed explicit symbol export for G4VtkInteractorStyle and

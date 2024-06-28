@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,14 +78,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -277,7 +284,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -832,7 +839,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -853,10 +860,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 86.7754 MeV rms = 6.06128 MeV
-EGap: mean = 6.22737 MeV rms = 4.05788 MeV
-LAbs: mean = 6.36212 cm  rms = 5.45277 mm 
-LGap: mean = 3.22513 cm  rms = 2.15538 cm 
+EAbs: mean = 92.3063 MeV rms = 4.14219 MeV
+EGap: mean = 4.85878 MeV rms = 2.0183 MeV
+LAbs: mean = 6.63777 cm  rms = 2.92186 mm 
+LGap: mean = 2.3872 cm  rms = 9.61394 mm 
 ### Run 1 start.
 
 ---> Begin of event: 0
@@ -868,8 +875,8 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 182.084 MeV rms = 6.77419 MeV
-LAbs: mean = 13.0969 cm  rms = 5.39518 mm 
+EAbs: mean = 181.847 MeV rms = 4.68046 MeV
+LAbs: mean = 13.1175 cm  rms = 4.04973 mm 
 ### Run 2 start.
 
 ---> Begin of event: 0
@@ -881,10 +888,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 271.702 MeV rms = 14.4701 MeV
-EGap2: mean = 13.0056 MeV rms = 4.70044 MeV
-LAbs: mean = 19.609 cm  rms = 1.07761 cm 
-LGap2: mean = 6.42871 cm  rms = 2.46679 cm 
+EAbs: mean = 274.942 MeV rms = 8.96651 MeV
+EGap2: mean = 13.9939 MeV rms = 6.14487 MeV
+LAbs: mean = 19.7961 cm  rms = 7.49951 mm 
+LGap2: mean = 6.91332 cm  rms = 3.1357 cm 
 ... close file : e-.root - done
 ... create file : proton.root - done
 ... open analysis file : proton.root - done
@@ -900,10 +907,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 197.13 MeV rms = 59.1173 MeV
-EGap2: mean = 20.0031 MeV rms = 11.0171 MeV
-LAbs: mean = 8.42208 cm  rms = 2.68317 cm 
-LGap2: mean = 4.32901 cm  rms = 1.4735 cm 
+EAbs: mean = 220.52 MeV rms = 42.6585 MeV
+EGap2: mean = 21.0932 MeV rms = 14.424 MeV
+LAbs: mean = 8.44493 cm  rms = 2.11558 cm 
+LGap2: mean = 4.29837 cm  rms = 1.2912 cm 
 ### Run 4 start.
 
 ---> Begin of event: 0
@@ -915,10 +922,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 201.326 MeV rms = 52.7717 MeV
-EGap2: mean = 19.8641 MeV rms = 13.0272 MeV
-LAbs: mean = 9.43807 cm  rms = 2.2901 cm 
-LGap2: mean = 4.98845 cm  rms = 1.36532 cm 
+EAbs: mean = 183.744 MeV rms = 43.5113 MeV
+EGap2: mean = 15.4705 MeV rms = 6.10516 MeV
+LAbs: mean = 9.21143 cm  rms = 2.16642 cm 
+LGap2: mean = 4.86717 cm  rms = 1.60599 cm 
 ... close file : proton.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

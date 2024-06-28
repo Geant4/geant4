@@ -25,40 +25,40 @@
 //
 //
 /// \file PrimaryGeneratorSourceGRASCSV.hh
-/// \brief Header file for Primary Generator source class implementation for GRAS CSV phase space for Molecular DNA simulation
+/// \brief Header file for Primary Generator source class implementation for GRAS CSV phase space
+/// for Molecular DNA simulation
 
 #ifndef MOLECULAR_PRIMARY_GENERATORSOURCEGRASCSV_HH
 #define MOLECULAR_PRIMARY_GENERATORSOURCEGRASCSV_HH
 
-#include <list>
-#include <fstream>
+#include "PrimaryGeneratorSource.hh"
 
-#include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "PrimaryGeneratorSource.hh"
+#include "G4ThreeVector.hh"
+
+#include <fstream>
+#include <list>
 
 class PrimaryGeneratorSourceGRASCSV : public PrimaryGeneratorSource
 {
-    public:
+  public:
+    PrimaryGeneratorSourceGRASCSV(const G4String& filename);
+    ~PrimaryGeneratorSourceGRASCSV();
 
-        PrimaryGeneratorSourceGRASCSV(const G4String& filename);
-        ~PrimaryGeneratorSourceGRASCSV();
+    // Define Primary class within PrimaryGeneratorSourceGRASCSV
+    Primary* GetPrimary();
 
-        // Define Primary class within PrimaryGeneratorSourceGRASCSV
-        Primary* GetPrimary();
+    void SetBufferSize(G4int bufferSize) { fBufferSize = bufferSize; }
+    void SetnParticles(G4int nParticles) { fnParticles = nParticles; }
+    G4double RecomputeNParticles();
 
-        void SetBufferSize(G4int bufferSize){ fBufferSize = bufferSize; }
-        void SetnParticles(G4int nParticles){ fnParticles = nParticles; }
-        G4double RecomputeNParticles();
-
-    private:
-        std::ifstream       fInputFile;
-        std::list<Primary*> fPrimaryList;
-        G4int               fBufferSize = 100;
-        G4int               fnParticles = 2;  // number of particles to be generated
-        G4bool              fEndOfFile;
-
+  private:
+    std::ifstream fInputFile;
+    std::list<Primary*> fPrimaryList;
+    G4int fBufferSize = 100;
+    G4int fnParticles = 2;  // number of particles to be generated
+    G4bool fEndOfFile;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

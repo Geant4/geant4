@@ -32,7 +32,6 @@
 
 #include "LXeScintHit.hh"
 
-#include "G4ios.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SDManager.hh"
@@ -42,11 +41,11 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeScintSD::LXeScintSD(G4String name)
-  : G4VSensitiveDetector(name)
+LXeScintSD::LXeScintSD(G4String name) : G4VSensitiveDetector(name)
 {
   collectionName.insert("scintCollection");
 }
@@ -55,11 +54,9 @@ LXeScintSD::LXeScintSD(G4String name)
 
 void LXeScintSD::Initialize(G4HCofThisEvent* hitsCE)
 {
-  fScintCollection =
-    new LXeScintHitsCollection(SensitiveDetectorName, collectionName[0]);
+  fScintCollection = new LXeScintHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-  if(fHitsCID < 0)
-  {
+  if (fHitsCID < 0) {
     fHitsCID = G4SDManager::GetSDMpointer()->GetCollectionID(fScintCollection);
   }
   hitsCE->AddHitsCollection(fHitsCID, fScintCollection);
@@ -70,12 +67,10 @@ void LXeScintSD::Initialize(G4HCofThisEvent* hitsCE)
 G4bool LXeScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep == 0.)
-    return false;  // No edep so don't count as hit
+  if (edep == 0.) return false;  // No edep so don't count as hit
 
   G4StepPoint* thePrePoint = aStep->GetPreStepPoint();
-  auto theTouchable =
-    (G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable());
+  auto theTouchable = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
   G4VPhysicalVolume* thePrePV = theTouchable->GetVolume();
 
   G4StepPoint* thePostPoint = aStep->GetPostStepPoint();

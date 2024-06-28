@@ -39,20 +39,19 @@ class G4LogicalVolume;
 
 class RE01DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  RE01DetectorConstruction();
-  virtual ~RE01DetectorConstruction();
-  
-public:
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
-  
-private:
+  public:
+    RE01DetectorConstruction();
+    virtual ~RE01DetectorConstruction();
+
+  public:
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
+
+  private:
 #include "RE01DetectorParameterDef.hh"
 
-  G4LogicalVolume * fTrackerLayer_log;
-  G4LogicalVolume * fCalorimeter_log;
+    G4LogicalVolume* fTrackerLayer_log;
+    G4LogicalVolume* fCalorimeter_log;
 };
 
 #endif
-

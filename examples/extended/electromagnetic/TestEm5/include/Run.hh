@@ -33,12 +33,10 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "G4Run.hh"
-
-#include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4Gamma.hh"
 #include "G4Positron.hh"
-
+#include "G4Run.hh"
 #include "globals.hh"
 
 class DetectorConstruction;
@@ -48,79 +46,121 @@ class G4ParticleDefinition;
 
 class Run : public G4Run
 {
-public:
-  Run(DetectorConstruction*);
- ~Run() override = default;
+  public:
+    Run(DetectorConstruction*);
+    ~Run() override = default;
 
-  void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-  void AddEnergy (G4double edep)
-  {fEnergyDeposit += edep; fEnergyDeposit2 += edep*edep;};
+    void AddEnergy(G4double edep)
+    {
+      fEnergyDeposit += edep;
+      fEnergyDeposit2 += edep * edep;
+    };
 
-  void AddTrakLenCharg (G4double length)
-  {fTrakLenCharged += length; fTrakLenCharged2 += length*length;};
+    void AddTrakLenCharg(G4double length)
+    {
+      fTrakLenCharged += length;
+      fTrakLenCharged2 += length * length;
+    };
 
-  void AddTrakLenNeutr (G4double length)
-  {fTrakLenNeutral += length; fTrakLenNeutral2 += length*length;};
+    void AddTrakLenNeutr(G4double length)
+    {
+      fTrakLenNeutral += length;
+      fTrakLenNeutral2 += length * length;
+    };
 
-  void AddMscProjTheta (G4double theta)
-  { if (std::abs(theta) <= fMscThetaCentral) { fMscEntryCentral++;
-      fMscProjecTheta += theta;  fMscProjecTheta2 += theta*theta;}
-  };
+    void AddMscProjTheta(G4double theta)
+    {
+      if (std::abs(theta) <= fMscThetaCentral) {
+        fMscEntryCentral++;
+        fMscProjecTheta += theta;
+        fMscProjecTheta2 += theta * theta;
+      }
+    };
 
-  void CountStepsCharg (G4int nSteps)
-  {fNbStepsCharged += nSteps; fNbStepsCharged2 += nSteps*nSteps;};
+    void CountStepsCharg(G4int nSteps)
+    {
+      fNbStepsCharged += nSteps;
+      fNbStepsCharged2 += nSteps * nSteps;
+    };
 
-  void CountStepsNeutr (G4int nSteps)
-  {fNbStepsNeutral += nSteps; fNbStepsNeutral2 += nSteps*nSteps;};
+    void CountStepsNeutr(G4int nSteps)
+    {
+      fNbStepsNeutral += nSteps;
+      fNbStepsNeutral2 += nSteps * nSteps;
+    };
 
-  void CountParticles (G4ParticleDefinition* part)
-  { if (part == G4Gamma::Gamma()) ++fNbGamma;
-    else if (part == G4Electron::Electron()) ++fNbElect;
-    else if (part == G4Positron::Positron()) ++fNbPosit; };
+    void CountParticles(G4ParticleDefinition* part)
+    {
+      if (part == G4Gamma::Gamma())
+        ++fNbGamma;
+      else if (part == G4Electron::Electron())
+        ++fNbElect;
+      else if (part == G4Positron::Positron())
+        ++fNbPosit;
+    };
 
-  void CountTransmit (G4int flag)
-  { if (flag == 1) ++fTransmit[0];
-    else if (flag == 2) { ++fTransmit[0]; ++fTransmit[1]; }};
+    void CountTransmit(G4int flag)
+    {
+      if (flag == 1)
+        ++fTransmit[0];
+      else if (flag == 2) {
+        ++fTransmit[0];
+        ++fTransmit[1];
+      }
+    };
 
-  void CountReflect (G4int flag)
-  { if (flag == 1) ++fReflect[0];
-    else if (flag == 2) { ++fReflect[0]; ++fReflect[1]; }};
-    
-  void AddEnergyLeak (G4double eleak, G4int index)
-  {fEnergyLeak[index] += eleak; fEnergyLeak2[index] += eleak*eleak;};
-            
-  G4double ComputeMscHighland();
+    void CountReflect(G4int flag)
+    {
+      if (flag == 1)
+        ++fReflect[0];
+      else if (flag == 2) {
+        ++fReflect[0];
+        ++fReflect[1];
+      }
+    };
 
-  void CountGammaProcesses(G4int* type)
-  { for(G4int i=0; i<4; ++i) { fTypes[i] += type[i]; }} 
-               
-  void Merge(const G4Run*) override;
-   
-  void EndOfRun();
+    void AddEnergyLeak(G4double eleak, G4int index)
+    {
+      fEnergyLeak[index] += eleak;
+      fEnergyLeak2[index] += eleak * eleak;
+    };
 
-private:
-  DetectorConstruction*  fDetector = nullptr;
-  G4ParticleDefinition*  fParticle = nullptr;
-  G4double fEkin = 0.;
-                           
-  G4double fEnergyDeposit  = 0.,  fEnergyDeposit2 = 0.;
-  G4double fTrakLenCharged = 0., fTrakLenCharged2 = 0.;
-  G4double fTrakLenNeutral = 0., fTrakLenNeutral2 = 0.;
-  G4double fNbStepsCharged = 0., fNbStepsCharged2 = 0.;
-  G4double fNbStepsNeutral = 0., fNbStepsNeutral2 = 0.;
-  G4double fMscProjecTheta = 0., fMscProjecTheta2 = 0.;
-  G4double fMscThetaCentral = 0.;
-    
-  G4int fNbGamma = 0, fNbElect = 0, fNbPosit = 0;
-  G4int fTransmit[2] = {0,0}, fReflect[2] = {0,0};
-  G4int fMscEntryCentral = 0;
-  G4int fTypes[4] = {0,0,0,0};
-      
-  G4double fEnergyLeak[2] = {0,0},  fEnergyLeak2[2] = {0,0};
+    G4double ComputeMscHighland();
+
+    void CountGammaProcesses(G4int* type)
+    {
+      for (G4int i = 0; i < 4; ++i) {
+        fTypes[i] += type[i];
+      }
+    }
+
+    void Merge(const G4Run*) override;
+
+    void EndOfRun();
+
+  private:
+    DetectorConstruction* fDetector = nullptr;
+    G4ParticleDefinition* fParticle = nullptr;
+    G4double fEkin = 0.;
+
+    G4double fEnergyDeposit = 0., fEnergyDeposit2 = 0.;
+    G4double fTrakLenCharged = 0., fTrakLenCharged2 = 0.;
+    G4double fTrakLenNeutral = 0., fTrakLenNeutral2 = 0.;
+    G4double fNbStepsCharged = 0., fNbStepsCharged2 = 0.;
+    G4double fNbStepsNeutral = 0., fNbStepsNeutral2 = 0.;
+    G4double fMscProjecTheta = 0., fMscProjecTheta2 = 0.;
+    G4double fMscThetaCentral = 0.;
+
+    G4int fNbGamma = 0, fNbElect = 0, fNbPosit = 0;
+    G4int fTransmit[2] = {0, 0}, fReflect[2] = {0, 0};
+    G4int fMscEntryCentral = 0;
+    G4int fTypes[4] = {0, 0, 0, 0};
+
+    G4double fEnergyLeak[2] = {0, 0}, fEnergyLeak2[2] = {0, 0};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

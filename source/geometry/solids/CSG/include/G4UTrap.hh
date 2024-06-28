@@ -132,6 +132,8 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
@@ -174,6 +176,11 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
 inline G4GeometryType G4UTrap::GetEntityType() const
 {
   return "G4Trap";
+}
+
+inline G4bool G4UTrap::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

@@ -30,28 +30,25 @@
 //
 #include "LXeScintHit.hh"
 
-#include "G4ios.hh"
 #include "G4Colour.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4ios.hh"
 
 G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeScintHit::LXeScintHit(G4VPhysicalVolume* pVol)
-  : fPhysVol(pVol)
-{}
+LXeScintHit::LXeScintHit(G4VPhysicalVolume* pVol) : fPhysVol(pVol) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeScintHit::LXeScintHit(const LXeScintHit& right)
-  : G4VHit()
+LXeScintHit::LXeScintHit(const LXeScintHit& right) : G4VHit()
 {
-  fEdep    = right.fEdep;
-  fPos     = right.fPos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   fPhysVol = right.fPhysVol;
 }
 
@@ -59,8 +56,8 @@ LXeScintHit::LXeScintHit(const LXeScintHit& right)
 
 const LXeScintHit& LXeScintHit::operator=(const LXeScintHit& right)
 {
-  fEdep    = right.fEdep;
-  fPos     = right.fPos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   fPhysVol = right.fPhysVol;
   return *this;
 }

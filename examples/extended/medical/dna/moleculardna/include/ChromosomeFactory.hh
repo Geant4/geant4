@@ -34,17 +34,16 @@ class VirtualChromosome;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 class ChromosomeFactory
 {
- public:
-  ChromosomeFactory() = default;
+  public:
+    ChromosomeFactory() = default;
 
-  ~ChromosomeFactory() = default;
+    ~ChromosomeFactory() = default;
 
-  static VirtualChromosome* MakeChromosome(const G4String&,
-                                           const std::vector<G4String>&);
+    static VirtualChromosome* MakeChromosome(const G4String&, const std::vector<G4String>&);
 
-  static void InvalidReading(const G4String& chromosome_type);
+    static void InvalidReading(const G4String& chromosome_type);
 
-  void Test();
+    void Test();
 };
 
 #endif  // MOLECULAR_CHROMOSOME_FACTORY_HH

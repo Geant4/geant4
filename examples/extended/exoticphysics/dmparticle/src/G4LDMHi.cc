@@ -30,8 +30,8 @@
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4LDMHi
-//  
-// Description: 
+//
+// Description:
 //
 // 15.03.17  V. Grichine based on G4Monopole
 //
@@ -40,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4LDMHi.hh"
+
 #include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -50,51 +51,37 @@ G4LDMHi* G4LDMHi::theLDMHi = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LDMHi::G4LDMHi(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable)
- : G4ParticleDefinition( aName, mass, width, charge, iSpin, iParity,
-           iConjugation, iIsospin, iIsospin3, gParity, pType,
-           lepton, baryon, encoding, stable, lifetime, decaytable )
+G4LDMHi::G4LDMHi(const G4String& aName, G4double mass, G4double width, G4double charge, G4int iSpin,
+                 G4int iParity, G4int iConjugation, G4int iIsospin, G4int iIsospin3, G4int gParity,
+                 const G4String& pType, G4int lepton, G4int baryon, G4int encoding, G4bool stable,
+                 G4double lifetime, G4DecayTable* decaytable)
+  : G4ParticleDefinition(aName, mass, width, charge, iSpin, iParity, iConjugation, iIsospin,
+                         iIsospin3, gParity, pType, lepton, baryon, encoding, stable, lifetime,
+                         decaytable)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LDMHi::~G4LDMHi()
-{}
+G4LDMHi::~G4LDMHi() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//     
+//
 //    Arguments for constructor are as follows
 //               name             mass          width         charge
 //             2*spin           parity  C-conjugation
 //          2*Isospin       2*Isospin3       G-parity
 //               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+//             stable         lifetime    decay table
 //
 //
 
 G4LDMHi* G4LDMHi::LDMHiDefinition(G4double mass)
-{    
-  if(!theLDMHi) 
-  {
-    theLDMHi = new G4LDMHi(
-       "ldmhi",         mass,       0.0*MeV,       0, 
-                0,               -1,             -1,          
-                0,               0,             0,             
-          "boson",               0,             0,           51,
-             true,            -1.0,             0);
-    
-    
-    G4cout << "LDMHi is created: m(GeV)= " << theLDMHi->GetPDGMass()/GeV 
-           << G4endl;
+{
+  if (!theLDMHi) {
+    theLDMHi = new G4LDMHi("ldmhi", mass, 0.0 * MeV, 0, 0, -1, -1, 0, 0, 0, "boson", 0, 0, 51, true,
+                           -1.0, 0);
+
+    G4cout << "LDMHi is created: m(GeV)= " << theLDMHi->GetPDGMass() / GeV << G4endl;
   }
   return theLDMHi;
 }
@@ -102,10 +89,8 @@ G4LDMHi* G4LDMHi::LDMHiDefinition(G4double mass)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4LDMHi* G4LDMHi::LDMHi()
-{    
+{
   return theLDMHi;
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

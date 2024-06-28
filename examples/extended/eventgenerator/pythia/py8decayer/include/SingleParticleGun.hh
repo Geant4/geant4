@@ -43,21 +43,18 @@ class G4Event;
 
 class SingleParticleGun : public G4VUserPrimaryGeneratorAction
 {
+  public:
+    // ctor & dtor
+    SingleParticleGun(const G4String&, const double);
+    ~SingleParticleGun();
 
-   public:
+    // methods/functions
+    virtual void GeneratePrimaries(G4Event*);
 
-      //ctor & dtor
-      SingleParticleGun( const G4String&, const double );
-      ~SingleParticleGun();
-
-      // methods/functions
-      virtual void GeneratePrimaries( G4Event* );
-
-   private:
-
-      // data members
-      G4ParticleGun* fGun;
-      double         fMomentum;
+  private:
+    // data members
+    G4ParticleGun* fGun;
+    double fMomentum;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

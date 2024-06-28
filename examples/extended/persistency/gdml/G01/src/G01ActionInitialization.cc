@@ -28,30 +28,26 @@
 /// \brief Implementation of the G01ActionInitialization class
 
 #include "G01ActionInitialization.hh"
+
 #include "G01PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G01ActionInitialization::G01ActionInitialization()
- : G4VUserActionInitialization()
-{}
+G01ActionInitialization::G01ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G01ActionInitialization::~G01ActionInitialization()
-{}
+G01ActionInitialization::~G01ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G01ActionInitialization::BuildForMaster() const
-{
-}
+void G01ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G01ActionInitialization::Build() const
 {
   SetUserAction(new G01PrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

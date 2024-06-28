@@ -35,28 +35,26 @@
 /// \brief Implementation of the ITTrackingAction class
 
 #include "ITTrackingAction.hh"
+
 #include "G4SystemOfUnits.hh"
 
 /*
-#include "G4Track.hh"
 #include "G4Molecule.hh"
+#include "G4Track.hh"
 #include "G4UnitsTable.hh"
  */
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ITTrackingAction::ITTrackingAction(): G4UserTrackingAction()
-{}
+ITTrackingAction::ITTrackingAction() : G4UserTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ITTrackingAction::~ITTrackingAction()
-{}
+ITTrackingAction::~ITTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-ITTrackingAction::PreUserTrackingAction(const G4Track* /*track*/)
+void ITTrackingAction::PreUserTrackingAction(const G4Track* /*track*/)
 {
   //    G4cout << "Track ID : " << track->GetTrackID()
   //           << "\t"
@@ -68,7 +66,4 @@ ITTrackingAction::PreUserTrackingAction(const G4Track* /*track*/)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-ITTrackingAction::PostUserTrackingAction(const G4Track* /*track*/)
-{}
-
+void ITTrackingAction::PostUserTrackingAction(const G4Track* /*track*/) {}

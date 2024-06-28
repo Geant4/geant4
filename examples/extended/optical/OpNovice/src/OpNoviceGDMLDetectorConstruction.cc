@@ -25,22 +25,22 @@
 //
 
 #include "OpNoviceGDMLDetectorConstruction.hh"
+
 #include "OpNoviceDetectorMessenger.hh"
 
-#include "globals.hh"
 #include "G4GDMLParser.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4NistManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4RunManager.hh"
 #include "G4VisAttributes.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceGDMLDetectorConstruction::OpNoviceGDMLDetectorConstruction(
-  G4String fname)
+OpNoviceGDMLDetectorConstruction::OpNoviceGDMLDetectorConstruction(G4String fname)
   : G4VUserDetectorConstruction()
 {
-  fGdmlFile         = fname;
+  fGdmlFile = fname;
   // create a messenger for this class
   fDetectorMessenger = new OpNoviceDetectorMessenger(this);
 
@@ -59,8 +59,7 @@ G4VPhysicalVolume* OpNoviceGDMLDetectorConstruction::Construct()
 {
   ReadGDML();
   G4VPhysicalVolume* worldPhysVol = fParser->GetWorldVolume();
-  if(fDumpGdml)
-    fParser->Write(fDumpGdmlFileName, worldPhysVol);
+  if (fDumpGdml) fParser->Write(fDumpGdmlFileName, worldPhysVol);
   return worldPhysVol;
 }
 
@@ -77,22 +76,17 @@ void OpNoviceGDMLDetectorConstruction::ReadGDML()
   G4LogicalVolume* pworldLogical = world->GetLogicalVolume();
   pworldLogical->SetVisAttributes(nullptr);
   G4cout << world->GetTranslation() << G4endl << G4endl;
-  if(fVerbose)
-  {
+  if (fVerbose) {
     G4cout << "Found world:  " << world->GetName() << G4endl;
     G4cout << "world LV:  " << world->GetLogicalVolume()->GetName() << G4endl;
   }
   G4LogicalVolumeStore* pLVStore = G4LogicalVolumeStore::GetInstance();
-  if(fVerbose)
-  {
-    G4cout << "Found " << pLVStore->size() << " logical volumes." << G4endl
-           << G4endl;
+  if (fVerbose) {
+    G4cout << "Found " << pLVStore->size() << " logical volumes." << G4endl << G4endl;
   }
   G4PhysicalVolumeStore* pPVStore = G4PhysicalVolumeStore::GetInstance();
-  if(fVerbose)
-  {
-    G4cout << "Found " << pPVStore->size() << " physical volumes." << G4endl
-           << G4endl;
+  if (fVerbose) {
+    G4cout << "Found " << pPVStore->size() << " physical volumes." << G4endl << G4endl;
   }
 }
 
@@ -121,7 +115,10 @@ void OpNoviceGDMLDetectorConstruction::SetVerbose(G4bool val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool OpNoviceGDMLDetectorConstruction::IsVerbose() const { return fVerbose; }
+G4bool OpNoviceGDMLDetectorConstruction::IsVerbose() const
+{
+  return fVerbose;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void OpNoviceGDMLDetectorConstruction::SetDumpGdmlFile(G4String val)

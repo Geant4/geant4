@@ -24,8 +24,15 @@
 // ********************************************************************
 
 #include "ActionInitialization.hh"
+
 #include "ChemistryWorld.hh"
 #include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "PulseAction.hh"
+#include "RunAction.hh"
+#include "StackingAction.hh"
+#include "TimeStepAction.hh"
+
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAEventScheduler.hh"
 #include "G4DNAScavengerMaterial.hh"
@@ -34,26 +41,24 @@
 #include "G4MoleculeCounter.hh"
 #include "G4MoleculeGun.hh"
 #include "G4Scheduler.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "StackingAction.hh"
-#include "TimeStepAction.hh"
-#include "PulseAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ActionInitialization::ActionInitialization(DetectorConstruction *pDetector)
-    : G4VUserActionInitialization(), fpDetector(pDetector) {}
+ActionInitialization::ActionInitialization(DetectorConstruction* pDetector)
+  : G4VUserActionInitialization(), fpDetector(pDetector)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ActionInitialization::BuildForMaster() const {
+void ActionInitialization::BuildForMaster() const
+{
   SetUserAction(new RunAction());
   G4DNAChemistryManager::Instance()->ResetCounterWhenRunEnds(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ActionInitialization::Build() const {
+void ActionInitialization::Build() const
+{
   G4MoleculeCounter::Instance()->Use(true);
   G4MoleculeCounter::Instance()->DontRegister(G4H2O::Definition());
   G4MoleculeCounter::Instance()->SetVerbose(0);
@@ -65,11 +70,9 @@ void ActionInitialization::Build() const {
   SetUserAction(pRunAction);
   SetUserAction(new StackingAction());
   auto pChemWorld = fpDetector->GetChemistryWorld();
-  auto pScavenger =
-      std::make_unique<G4DNAScavengerMaterial>(pChemWorld);
+  auto pScavenger = std::make_unique<G4DNAScavengerMaterial>(pChemWorld);
   // To counter Scavenger
-  dynamic_cast<G4DNAScavengerMaterial *>(pScavenger.get())
-      ->SetCounterAgainstTime();
+  dynamic_cast<G4DNAScavengerMaterial*>(pScavenger.get())->SetCounterAgainstTime();
   G4Scheduler::Instance()->SetScavengerMaterial(std::move(pScavenger));
   auto timeStepAction = new TimeStepAction(pChemWorld, pPulseAction);
   auto eventScheduler = timeStepAction->GetEventScheduler();

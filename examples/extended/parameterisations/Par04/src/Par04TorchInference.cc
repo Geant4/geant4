@@ -25,43 +25,43 @@
 //
 
 #ifdef USE_INFERENCE_TORCH
-#include "Par04TorchInference.hh"
-#include <algorithm>                           // for copy, max
-#include <cassert>                             // for assert
-#include <cstddef>                             // for size_t
-#include <cstdint>                             // for int64_t
-#include <utility>                             // for move
-#include "Par04InferenceInterface.hh"          // for Par04InferenceInterface
-#include <torch/torch.h>
+#  include "Par04TorchInference.hh"
+
+#  include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
+
+#  include <algorithm>  // for copy, max
+#  include <cassert>  // for assert
+#  include <cstddef>  // for size_t
+#  include <cstdint>  // for int64_t
+#  include <torch/torch.h>
+#  include <utility>  // for move
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04TorchInference::Par04TorchInference(G4String modelPath)
-  : Par04InferenceInterface()
+Par04TorchInference::Par04TorchInference(G4String modelPath) : Par04InferenceInterface()
 {
-  fModule = torch::jit::load( modelPath );
+  fModule = torch::jit::load(modelPath);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par04TorchInference::RunInference(std::vector<float> aGenVector,
-                                       std::vector<G4double>& aEnergies,
-                                       int aSize)
+                                       std::vector<G4double>& aEnergies, int aSize)
 {
   // latentSize : size of the latent space
   // 4 is the size of the condition vector
   int latentSize = aGenVector.size() - 4;
   // split into latent and condition vectors
   std::vector<float> latent;
-  for ( int i=0;i<latentSize;i++) {
+  for (int i = 0; i < latentSize; i++) {
     latent.push_back(aGenVector[i]);
   }
   std::vector<float> energy;
-  energy.push_back(aGenVector[latentSize+1]);
+  energy.push_back(aGenVector[latentSize + 1]);
   std::vector<float> angle;
-  energy.push_back(aGenVector[latentSize+2]);
+  energy.push_back(aGenVector[latentSize + 2]);
   std::vector<float> geo;
-  for ( int i=latentSize+2;i<latentSize+4;i++) {
+  for (int i = latentSize + 2; i < latentSize + 4; i++) {
     geo.push_back(aGenVector[i]);
   }
 
@@ -73,18 +73,18 @@ void Par04TorchInference::RunInference(std::vector<float> aGenVector,
 
   std::vector<torch::jit::IValue> genInput;
 
-  genInput.push_back( latentVector );
-  genInput.push_back( eTensor );
-  genInput.push_back( angleTensor );
-  genInput.push_back( geoTensor );
+  genInput.push_back(latentVector);
+  genInput.push_back(eTensor);
+  genInput.push_back(angleTensor);
+  genInput.push_back(geoTensor);
 
-  at::Tensor  outTensor = fModule.forward( genInput).toTensor().contiguous();
+  at::Tensor outTensor = fModule.forward(genInput).toTensor().contiguous();
 
-  std::vector<G4double> output( outTensor.data_ptr<float>(),
-                                outTensor.data_ptr<float>() + outTensor.numel() );
+  std::vector<G4double> output(outTensor.data_ptr<float>(),
+                               outTensor.data_ptr<float>() + outTensor.numel());
 
   aEnergies.assign(aSize, 0);
-  for(int i = 0; i < aSize; i++) {
+  for (int i = 0; i < aSize; i++) {
     aEnergies[i] = output[i];
   }
 }

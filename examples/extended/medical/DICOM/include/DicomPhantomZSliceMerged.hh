@@ -34,49 +34,45 @@
 //
 //*******************************************************
 
-
 #ifndef dicomphantomzslicemerged_hh_
 #define dicomphantomzslicemerged_hh_
 
-#include <map>
+#include "DicomPhantomZSliceHeader.hh"
+
 #include "globals.hh"
 
-#include "DicomPhantomZSliceHeader.hh"
+#include <map>
 
 class DicomPhantomZSliceMerged
 {
-public:
+  public:
     // Constructor and Destructors
     DicomPhantomZSliceMerged();
     ~DicomPhantomZSliceMerged();
 
-public:
+  public:
     // Public functions
-    void AddZSlice(DicomPhantomZSliceHeader* val) {
-        fSlices[val->GetSliceLocation()] = val;
-    }
+    void AddZSlice(DicomPhantomZSliceHeader* val) { fSlices[val->GetSliceLocation()] = val; }
 
     void CheckSlices();
 
     inline void DumpExcessMemory();
 
-private:
+  private:
     // Private functions
 
-private:
+  private:
     // Private variables
-    std::map<G4double,DicomPhantomZSliceHeader*> fSlices;
-
-
+    std::map<G4double, DicomPhantomZSliceHeader*> fSlices;
 };
 
 inline void DicomPhantomZSliceMerged::DumpExcessMemory()
 {
-    for(std::map<G4double,DicomPhantomZSliceHeader*>::iterator ite = fSlices.begin();
-        ite != fSlices.end(); ++ite) {
-        ite->second->DumpExcessMemory();
-    }
+  for (std::map<G4double, DicomPhantomZSliceHeader*>::iterator ite = fSlices.begin();
+       ite != fSlices.end(); ++ite)
+  {
+    ite->second->DumpExcessMemory();
+  }
 }
-
 
 #endif

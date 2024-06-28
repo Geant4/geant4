@@ -31,8 +31,8 @@
 #ifndef LXeDetectorMessenger_h
 #define LXeDetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class LXeDetectorConstruction;
 
@@ -46,31 +46,31 @@ class G4UIdirectory;
 
 class LXeDetectorMessenger : public G4UImessenger
 {
- public:
-  LXeDetectorMessenger(LXeDetectorConstruction*);
-  ~LXeDetectorMessenger() override;
+  public:
+    LXeDetectorMessenger(LXeDetectorConstruction*);
+    ~LXeDetectorMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  LXeDetectorConstruction* fLXeDetector = nullptr;
-  G4UIdirectory* fDetectorDir = nullptr;
-  G4UIdirectory* fVolumesDir = nullptr;
-  G4UIcmdWith3VectorAndUnit* fDimensionsCmd = nullptr;
-  G4UIcmdWithADoubleAndUnit* fHousingThicknessCmd = nullptr;
-  G4UIcmdWithADoubleAndUnit* fPmtRadiusCmd = nullptr;
-  G4UIcmdWithAnInteger* fNxCmd = nullptr;
-  G4UIcmdWithAnInteger* fNyCmd = nullptr;
-  G4UIcmdWithAnInteger* fNzCmd = nullptr;
-  G4UIcmdWithABool* fSphereCmd = nullptr;
-  G4UIcmdWithADouble* fReflectivityCmd = nullptr;
-  G4UIcmdWithABool* fWlsCmd = nullptr;
-  G4UIcmdWithABool* fLxeCmd = nullptr;
-  G4UIcmdWithAnInteger* fNFibersCmd = nullptr;
-  G4UIcommand* fDefaultsCmd = nullptr;
-  G4UIcmdWithADouble* fMainScintYield = nullptr;
-  G4UIcmdWithADouble* fWLSScintYield = nullptr;
-  G4UIcmdWithAnInteger* fSaveThresholdCmd = nullptr;
+  private:
+    LXeDetectorConstruction* fLXeDetector = nullptr;
+    G4UIdirectory* fDetectorDir = nullptr;
+    G4UIdirectory* fVolumesDir = nullptr;
+    G4UIcmdWith3VectorAndUnit* fDimensionsCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fHousingThicknessCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fPmtRadiusCmd = nullptr;
+    G4UIcmdWithAnInteger* fNxCmd = nullptr;
+    G4UIcmdWithAnInteger* fNyCmd = nullptr;
+    G4UIcmdWithAnInteger* fNzCmd = nullptr;
+    G4UIcmdWithABool* fSphereCmd = nullptr;
+    G4UIcmdWithADouble* fReflectivityCmd = nullptr;
+    G4UIcmdWithABool* fWlsCmd = nullptr;
+    G4UIcmdWithABool* fLxeCmd = nullptr;
+    G4UIcmdWithAnInteger* fNFibersCmd = nullptr;
+    G4UIcommand* fDefaultsCmd = nullptr;
+    G4UIcmdWithADouble* fMainScintYield = nullptr;
+    G4UIcmdWithADouble* fWLSScintYield = nullptr;
+    G4UIcmdWithAnInteger* fSaveThresholdCmd = nullptr;
 };
 
 #endif

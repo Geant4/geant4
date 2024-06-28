@@ -38,15 +38,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ITSteppingAction::ITSteppingAction() : G4UserSteppingAction()
-{}
+ITSteppingAction::ITSteppingAction() : G4UserSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ITSteppingAction::~ITSteppingAction()
-{}
+ITSteppingAction::~ITSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ITSteppingAction::UserSteppingAction(const G4Step* )
-{}
+void ITSteppingAction::UserSteppingAction(const G4Step*) {}

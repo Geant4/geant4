@@ -33,28 +33,28 @@
 #include "G4Event.hh"
 #include "G4Run.hh"
 #include "G4THitsMap.hh"
+
 #include <map>
 
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ElectronRun : public G4Run {
-    
-public:
+class ElectronRun : public G4Run
+{
+  public:
     ElectronRun();
     virtual ~ElectronRun();
-    
+
     virtual void RecordEvent(const G4Event*);
     virtual void Merge(const G4Run*);
     void DumpData(G4String&) const;
 
-private:
+  private:
     void Print(const std::vector<G4String>& title,
-               const std::map< G4int, std::vector<G4double> >&out,
-               G4String&) const;
-    
-    std::map<G4int, G4THitsMap<G4double>* > fMap;
+               const std::map<G4int, std::vector<G4double>>& out, G4String&) const;
+
+    std::map<G4int, G4THitsMap<G4double>*> fMap;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

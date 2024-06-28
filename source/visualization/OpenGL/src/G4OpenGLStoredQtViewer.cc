@@ -71,6 +71,7 @@ G4OpenGLStoredQtViewer::~G4OpenGLStoredQtViewer() {
 }
 
 void G4OpenGLStoredQtViewer::Initialise() {
+#if QT_VERSION < 0x060000
   makeCurrent();
 
   fQGLWidgetInitialiseCompleted = false;
@@ -87,6 +88,15 @@ void G4OpenGLStoredQtViewer::Initialise() {
   }
   
   fQGLWidgetInitialiseCompleted = true;
+#else
+  fQGLWidgetInitialiseCompleted = false;
+  CreateMainWindow (this,QString(GetName()));
+  if(G4QGLWidgetType::isValid()) { //G.Barrand: macOS: isValid() needed at startup.
+    makeCurrent();
+    glDrawBuffer (GL_BACK);
+  }
+  fQGLWidgetInitialiseCompleted = true;
+#endif
 }
 
 void G4OpenGLStoredQtViewer::initializeGL () {
@@ -208,7 +218,22 @@ G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
 }
 
 void G4OpenGLStoredQtViewer::DrawView () {
+#if QT_VERSION < 0x060000
+#else
+  if(IsGettingPickInfos()) {
+    paintGL();
+    return;
+  }
+#endif
+#if (QT_VERSION < 0x060000) || !defined(G4MULTITHREADED)
   updateQWidget();
+#else
+  if (G4Threading::G4GetThreadId() == G4Threading::MASTER_ID) {
+    updateQWidget();
+  } else {
+    update(); //G.Barrand: updateQWidget() induces a crash on run beamOn.
+  }
+#endif
 }
 
 void G4OpenGLStoredQtViewer::ComputeView () {
@@ -284,7 +309,11 @@ void G4OpenGLStoredQtViewer::resizeGL(
 {  
   // Set new size, it will be update when next Repaint()->SetView() called
   if ((aWidth > 0) && (aHeight > 0)) {
+#if QT_VERSION < 0x060000
     ResizeWindow(aWidth,aHeight);
+#else
+    ResizeWindow(devicePixelRatio()*aWidth,devicePixelRatio()*aHeight);
+#endif
     fHasToRepaint = sizeHasChanged();
   }
 }
@@ -297,7 +326,11 @@ void G4OpenGLStoredQtViewer::resizeGL(
  
 void G4OpenGLStoredQtViewer::paintGL()
 {
+#if QT_VERSION < 0x060000
   updateToolbarAndMouseContextMenu();
+#else
+  //G.Barrand: don't do any change in the GUI here, just "paint" this widget!
+#endif
 
   if (fPaintEventLock) {
 //    return ;
@@ -311,6 +344,8 @@ void G4OpenGLStoredQtViewer::paintGL()
     fPaintEventLock = false;
     return;
   }
+
+#if QT_VERSION < 0x060000
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE :
   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
   //    EXECEPT WHEN MOUSE MOVE EVENT
@@ -330,6 +365,13 @@ void G4OpenGLStoredQtViewer::paintGL()
       return;
     }
   }
+#endif
+
+#if QT_VERSION < 0x060000
+#else
+  InitializeGLView ();
+#endif
+
   // Ensure that we really draw the BACK buffer
   glDrawBuffer (GL_BACK);
 
@@ -343,6 +385,7 @@ void G4OpenGLStoredQtViewer::paintGL()
   fPaintEventLock = false;
 }
 
+#if QT_VERSION < 0x060000
 void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
   if (! fQGLWidgetInitialiseCompleted) {
     return;
@@ -362,6 +405,7 @@ void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
 #endif
   }
 }
+#endif
 
 void G4OpenGLStoredQtViewer::mousePressEvent(QMouseEvent *event)
 {
@@ -430,10 +474,15 @@ void G4OpenGLStoredQtViewer::updateQWidget() {
   // The widget's rendering context will become the current context and initializeGL()
   // will be called if it hasn't already been called.
   // Copies the back buffer of a double-buffered context to the front buffer.
+#if QT_VERSION < 0x060000
   repaint(); // will read scene tree state
   // updateGL() // From J.Allison picking branch
   updateViewerPropertiesTableWidget();
   updateSceneTreeWidget();
+#else
+  //G.Barrand: don't do any change in the GUI here, just ask to "paint" this widget!
+  update();
+#endif
   fUpdateGLLock = false;
 }
 

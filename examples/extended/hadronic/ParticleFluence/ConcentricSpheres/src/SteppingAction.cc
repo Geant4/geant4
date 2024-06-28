@@ -32,48 +32,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4IonTable.hh"
-#include "G4StepPoint.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
-#include "G4VSolid.hh"
-#include "G4LossTableManager.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "Run.hh"
 
-const std::array< G4String, SteppingAction::fkNumberScoringShells >
-  SteppingAction::fkArrayScoringShellNames = { "tracker", "emCalo", "hadCalo" };
+#include "G4IonTable.hh"
+#include "G4LossTableManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Track.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VSolid.hh"
+#include "G4VTouchable.hh"
 
-const std::array< G4String, SteppingAction::fkNumberKinematicRegions >
-  SteppingAction::fkArrayKinematicRegionNames = { "", "below 20 MeV", "above 20 MeV" };
+const std::array<G4String, SteppingAction::fkNumberScoringShells>
+  SteppingAction::fkArrayScoringShellNames = {"tracker", "emCalo", "hadCalo"};
 
-const std::array< G4String, SteppingAction::fkNumberScoringPositions >
-  SteppingAction::fkArrayScoringPositionNames = { "forward", "backward" };
+const std::array<G4String, SteppingAction::fkNumberKinematicRegions>
+  SteppingAction::fkArrayKinematicRegionNames = {"", "below 20 MeV", "above 20 MeV"};
 
-const std::array< G4String, SteppingAction::fkNumberParticleTypes >
-SteppingAction::fkArrayParticleTypeNames = { "all", "electron", "gamma", "muon", "neutrino",
-                                             "pion", "neutron", "proton", "ion", "otherMeson",
-                                             "otherBaryon" };
+const std::array<G4String, SteppingAction::fkNumberScoringPositions>
+  SteppingAction::fkArrayScoringPositionNames = {"forward", "backward"};
+
+const std::array<G4String, SteppingAction::fkNumberParticleTypes>
+  SteppingAction::fkArrayParticleTypeNames = {"all",      "electron",   "gamma",      "muon",
+                                              "neutrino", "pion",       "neutron",    "proton",
+                                              "ion",      "otherMeson", "otherBaryon"};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int SteppingAction::GetIndex( const G4int iScoringShell, const G4int iKinematicRegion,
-                                const G4int iScoringPosition, const G4int iParticleType ) {
+G4int SteppingAction::GetIndex(const G4int iScoringShell, const G4int iKinematicRegion,
+                               const G4int iScoringPosition, const G4int iParticleType)
+{
   G4int index = -1;
-  if ( iScoringShell >= 0     &&  iScoringShell < fkNumberScoringShells        &&
-       iKinematicRegion >= 0  &&  iKinematicRegion < fkNumberKinematicRegions  &&
-       iScoringPosition >= 0  &&  iScoringPosition < fkNumberScoringPositions  &&
-       iParticleType >= 0     &&  iParticleType < fkNumberParticleTypes           ) {
-    index = iScoringShell * fkNumberKinematicRegions * fkNumberScoringPositions *
-      fkNumberParticleTypes + iKinematicRegion * fkNumberScoringPositions * fkNumberParticleTypes
+  if (iScoringShell >= 0 && iScoringShell < fkNumberScoringShells && iKinematicRegion >= 0
+      && iKinematicRegion < fkNumberKinematicRegions && iScoringPosition >= 0
+      && iScoringPosition < fkNumberScoringPositions && iParticleType >= 0
+      && iParticleType < fkNumberParticleTypes)
+  {
+    index =
+      iScoringShell * fkNumberKinematicRegions * fkNumberScoringPositions * fkNumberParticleTypes
+      + iKinematicRegion * fkNumberScoringPositions * fkNumberParticleTypes
       + iScoringPosition * fkNumberParticleTypes + iParticleType;
   }
-  if ( index < 0 || index >= fkNumberCombinations ) {
+  if (index < 0 || index >= fkNumberCombinations) {
     G4cerr << "SteppingAction::GetIndex : WRONG index=" << index << "  set it to 0 !" << G4endl;
     index = 0;
   }
@@ -82,25 +87,27 @@ G4int SteppingAction::GetIndex( const G4int iScoringShell, const G4int iKinemati
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction() :G4UserSteppingAction() {
+SteppingAction::SteppingAction() : G4UserSteppingAction()
+{
   Initialize();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::Initialize() {
+void SteppingAction::Initialize()
+{
   // Initialization needed at the beginning of each Run
   fPrimaryParticleId = 0;
   fPrimaryParticleEnergy = 0.0;
-  fPrimaryParticleDirection = G4ThreeVector( 0.0, 0.0, 1.0 );
+  fPrimaryParticleDirection = G4ThreeVector(0.0, 0.0, 1.0);
   fTrackerMaterialName = fEmCaloMaterialName = fHadCaloMaterialName = "";
   fIsFirstStepOfTheEvent = true;
   fIsFirstStepInTracker = fIsFirstStepInEmCalo = fIsFirstStepInHadCalo = true;
   fIsFirstStepInScoringTrackerShell = fIsFirstStepInScoringEmCaloShell =
-    fIsFirstStepInScoringHadCaloShell = true;  
+    fIsFirstStepInScoringHadCaloShell = true;
   fCubicVolumeScoringTrackerShell = fCubicVolumeScoringEmCaloShell =
     fCubicVolumeScoringHadCaloShell = 1.0;
-  for ( G4int i = 0; i < fkNumberCombinations; ++i ) {
+  for (G4int i = 0; i < fkNumberCombinations; ++i) {
     fArraySumStepLengths[i] = 0.0;
   }
   /*
@@ -128,74 +135,80 @@ void SteppingAction::Initialize() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
+void SteppingAction::UserSteppingAction(const G4Step* theStep)
+{
   // Get information on the primary particle
-  if ( fIsFirstStepOfTheEvent ) {
-    if ( theStep->GetTrack()->GetParentID() == 0 ) {
+  if (fIsFirstStepOfTheEvent) {
+    if (theStep->GetTrack()->GetParentID() == 0) {
       fPrimaryParticleId = theStep->GetTrack()->GetDefinition()->GetPDGEncoding();
       fPrimaryParticleEnergy = theStep->GetPreStepPoint()->GetKineticEnergy();
       fPrimaryParticleDirection = theStep->GetPreStepPoint()->GetMomentumDirection();
-      if ( fRunPtr ) {
-        fRunPtr->SetPrimaryParticleId( fPrimaryParticleId );
-        fRunPtr->SetPrimaryParticleEnergy( fPrimaryParticleEnergy );
-        fRunPtr->SetPrimaryParticleDirection( fPrimaryParticleDirection );
+      if (fRunPtr) {
+        fRunPtr->SetPrimaryParticleId(fPrimaryParticleId);
+        fRunPtr->SetPrimaryParticleEnergy(fPrimaryParticleEnergy);
+        fRunPtr->SetPrimaryParticleDirection(fPrimaryParticleDirection);
       }
       fIsFirstStepOfTheEvent = false;
     }
   }
   // Get information on the materials
-  if ( fIsFirstStepInTracker  &&
-       theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiTrackerShell" ) {
+  if (fIsFirstStepInTracker
+      && theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiTrackerShell")
+  {
     fTrackerMaterialName = theStep->GetPreStepPoint()->GetMaterial()->GetName();
-    if ( fRunPtr ) fRunPtr->SetTrackerMaterialName( fTrackerMaterialName );
+    if (fRunPtr) fRunPtr->SetTrackerMaterialName(fTrackerMaterialName);
     fIsFirstStepInTracker = false;
   }
-  if ( fIsFirstStepInEmCalo  &&
-       theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiEmCaloShell" ) {
+  if (fIsFirstStepInEmCalo
+      && theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiEmCaloShell")
+  {
     fEmCaloMaterialName = theStep->GetPreStepPoint()->GetMaterial()->GetName();
-    if ( fRunPtr ) fRunPtr->SetEmCaloMaterialName( fEmCaloMaterialName );
+    if (fRunPtr) fRunPtr->SetEmCaloMaterialName(fEmCaloMaterialName);
     fIsFirstStepInEmCalo = false;
   }
-  if ( fIsFirstStepInHadCalo  &&
-       theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiHadCaloShell" ) {
+  if (fIsFirstStepInHadCalo
+      && theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiHadCaloShell")
+  {
     fHadCaloMaterialName = theStep->GetPreStepPoint()->GetMaterial()->GetName();
-    if ( fRunPtr ) fRunPtr->SetHadCaloMaterialName( fHadCaloMaterialName );
+    if (fRunPtr) fRunPtr->SetHadCaloMaterialName(fHadCaloMaterialName);
     fIsFirstStepInHadCalo = false;
   }
   // Get information on step lengths in the scoring shells
   G4int iScoringShell = -1;
-  if ( theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() ==
-       "physiScoringTrackerShell" ) {   
+  if (theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiScoringTrackerShell") {
     iScoringShell = 0;
-    if (  fIsFirstStepInScoringTrackerShell ) {
+    if (fIsFirstStepInScoringTrackerShell) {
       fCubicVolumeScoringTrackerShell =
         theStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-      if ( fRunPtr ) fRunPtr->SetCubicVolumeScoringTrackerShell( fCubicVolumeScoringTrackerShell );
+      if (fRunPtr) fRunPtr->SetCubicVolumeScoringTrackerShell(fCubicVolumeScoringTrackerShell);
       fIsFirstStepInScoringTrackerShell = false;
     }
-  } else if ( theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() ==
-              "physiScoringEmCaloShell" ) {
+  }
+  else if (theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiScoringEmCaloShell")
+  {
     iScoringShell = 1;
-    if (  fIsFirstStepInScoringEmCaloShell ) {
+    if (fIsFirstStepInScoringEmCaloShell) {
       fCubicVolumeScoringEmCaloShell =
         theStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-      if ( fRunPtr ) fRunPtr->SetCubicVolumeScoringEmCaloShell( fCubicVolumeScoringEmCaloShell );
+      if (fRunPtr) fRunPtr->SetCubicVolumeScoringEmCaloShell(fCubicVolumeScoringEmCaloShell);
       fIsFirstStepInScoringEmCaloShell = false;
     }
-  } else if ( theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() ==
-              "physiScoringHadCaloShell" ) {
+  }
+  else if (theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiScoringHadCaloShell")
+  {
     iScoringShell = 2;
-    if (  fIsFirstStepInScoringHadCaloShell ) {
+    if (fIsFirstStepInScoringHadCaloShell) {
       fCubicVolumeScoringHadCaloShell =
         theStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-      if ( fRunPtr ) fRunPtr->SetCubicVolumeScoringHadCaloShell( fCubicVolumeScoringHadCaloShell );
+      if (fRunPtr) fRunPtr->SetCubicVolumeScoringHadCaloShell(fCubicVolumeScoringHadCaloShell);
       fIsFirstStepInScoringHadCaloShell = false;
     }
   }
-  if ( iScoringShell >= 0 ) {
+  if (iScoringShell >= 0) {
     G4double stepLength = theStep->GetTrack()->GetStepLength() * theStep->GetTrack()->GetWeight();
-    G4int absPdg = theStep->GetTrack()->GetDefinition() == nullptr ? 0 :
-      std::abs( theStep->GetTrack()->GetDefinition()->GetPDGEncoding() );
+    G4int absPdg = theStep->GetTrack()->GetDefinition() == nullptr
+                     ? 0
+                     : std::abs(theStep->GetTrack()->GetDefinition()->GetPDGEncoding());
     /*
     G4cout << theStep->GetTrack()->GetDefinition()->GetParticleName() << "  absPdg=" << absPdg
            << "  Ekin[MeV]=" << theStep->GetPreStepPoint()->GetKineticEnergy()
@@ -203,7 +216,7 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
            << "  z[mm]=" << theStep->GetTrack()->GetPosition().z()
            << "  " << theStep->GetTrack()->GetVolume()->GetName()
            << "  " << theStep->GetTrack()->GetMaterial()->GetName()
-           << "  L[mm]=" << stepLength << "  " 
+           << "  L[mm]=" << stepLength << "  "
            << ( fPrimaryParticleDirection.dot( theStep->GetTrack()->GetPosition().unit() ) > 0.0
                 ? "forward" : "backward" ) << G4endl;
     */
@@ -212,39 +225,49 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
     // Two scoring positions:  [0] : forward hemisphere ;  [1] : backward hemisphere
     // (with respect to the primary particle initial direction)
     G4int iScoringPosition =
-      fPrimaryParticleDirection.dot( theStep->GetTrack()->GetPosition().unit() ) > 0.0 ? 0 : 1;
+      fPrimaryParticleDirection.dot(theStep->GetTrack()->GetPosition().unit()) > 0.0 ? 0 : 1;
     G4int iParticleType = -1;
-    if      ( absPdg == 11 ) iParticleType = 1;  // electron (and positron)
-    else if ( absPdg == 22 ) iParticleType = 2;  // gamma
-    else if ( absPdg == 13 ) iParticleType = 3;  // muons (mu- and mu+)
-    else if ( absPdg == 12 || absPdg == 14 || absPdg == 16 ) iParticleType = 4;  // neutrinos
-                                                           // (and anti-neutrinos), all flavors
-    else if ( absPdg == 111 || absPdg == 211 ) iParticleType = 5;  // (charged) pions
-    else if ( absPdg == 2112 ) iParticleType = 6;  // neutron (and anti-neutron)
-    else if ( absPdg == 2212 ) iParticleType = 7;  // proton  (and anti-proton)
-    else if ( G4IonTable::IsIon( theStep->GetTrack()->GetDefinition() ) || // ions (and anti-ions)
-              G4IonTable::IsAntiIon( theStep->GetTrack()->GetDefinition() ) ) iParticleType = 8;
-    else if ( absPdg < 1000 ) iParticleType = 9;   // other mesons (e.g. kaons) (Note: this works
-                                                   // in most cases, but not always!)
-    else if ( absPdg > 1000 ) iParticleType = 10;  // other baryons (e.g. hyperons, anti-hyperons,
-                                                   // etc.)
+    if (absPdg == 11)
+      iParticleType = 1;  // electron (and positron)
+    else if (absPdg == 22)
+      iParticleType = 2;  // gamma
+    else if (absPdg == 13)
+      iParticleType = 3;  // muons (mu- and mu+)
+    else if (absPdg == 12 || absPdg == 14 || absPdg == 16)
+      iParticleType = 4;  // neutrinos
+    // (and anti-neutrinos), all flavors
+    else if (absPdg == 111 || absPdg == 211)
+      iParticleType = 5;  // (charged) pions
+    else if (absPdg == 2112)
+      iParticleType = 6;  // neutron (and anti-neutron)
+    else if (absPdg == 2212)
+      iParticleType = 7;  // proton  (and anti-proton)
+    else if (G4IonTable::IsIon(theStep->GetTrack()->GetDefinition()) ||  // ions (and anti-ions)
+             G4IonTable::IsAntiIon(theStep->GetTrack()->GetDefinition()))
+      iParticleType = 8;
+    else if (absPdg < 1000)
+      iParticleType = 9;  // other mesons (e.g. kaons) (Note: this works
+                          // in most cases, but not always!)
+    else if (absPdg > 1000)
+      iParticleType = 10;  // other baryons (e.g. hyperons, anti-hyperons,
+                           // etc.)
     // Consider the specific case : scoring shell, kinematic region, scoring position, and
     // particle type
-    G4int index = GetIndex( iScoringShell, iKinematicRegion, iScoringPosition, iParticleType );
+    G4int index = GetIndex(iScoringShell, iKinematicRegion, iScoringPosition, iParticleType);
     fArraySumStepLengths[index] += stepLength;
     // Consider the "all" particle case, with the same scoring shell, kinematic region and
     // scoring position
-    index = GetIndex( iScoringShell, iKinematicRegion, iScoringPosition, 0 );
+    index = GetIndex(iScoringShell, iKinematicRegion, iScoringPosition, 0);
     fArraySumStepLengths[index] += stepLength;
     // Consider the "any" kinematic region case, with the same scoring shell, scoring position
-    // and particle type    
-    index = GetIndex( iScoringShell, 0, iScoringPosition, iParticleType );
+    // and particle type
+    index = GetIndex(iScoringShell, 0, iScoringPosition, iParticleType);
     fArraySumStepLengths[index] += stepLength;
     // Consider the "any" kinematic region and "all" particle, with the same scoring shell and
-    // scoring position    
-    index = GetIndex( iScoringShell, 0, iScoringPosition, 0 );
+    // scoring position
+    index = GetIndex(iScoringShell, 0, iScoringPosition, 0);
     fArraySumStepLengths[index] += stepLength;
-    if ( fRunPtr ) fRunPtr->SetSteppingArray( fArraySumStepLengths );
+    if (fRunPtr) fRunPtr->SetSteppingArray(fArraySumStepLengths);
   }
 }
 

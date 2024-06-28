@@ -51,7 +51,6 @@ class G4FieldManager;
 class F06DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-
     F06DetectorConstruction();
     ~F06DetectorConstruction() override;
 
@@ -59,12 +58,11 @@ class F06DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructSDandField() override;
 
   private:
-     void DefineMaterials();
+    void DefineMaterials();
 
-     G4Material* fVacuum = nullptr;
+    G4Material* fVacuum = nullptr;
 
-     static G4ThreadLocal G4UniformGravityField* fField;
-
+    static G4ThreadLocal G4UniformGravityField* fField;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

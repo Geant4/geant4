@@ -30,19 +30,23 @@
 //
 
 #include "RE03ActionInitialization.hh"
+
 #include "RE03PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03ActionInitialization::RE03ActionInitialization()
-{;} 
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03ActionInitialization::~RE03ActionInitialization()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03ActionInitialization::Build() const
 {
   SetUserAction(new RE03PrimaryGeneratorAction);
 }
- 

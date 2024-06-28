@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-02 Gabriele Cosmo (geombias-V11-02-00)
+- Applied trivial clang-tidy fixes to G4GeometryCell, i.e. use of default
+  constructor/destructor.
+
 ## 2023-06-12 Gabriele Cosmo (geombias-V11-01-01)
 - Use G4AutoLock in G4IStore and G4ImportanceAlgorithm instead of static
   mutex data member.

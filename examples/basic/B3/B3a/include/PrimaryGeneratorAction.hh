@@ -31,7 +31,6 @@
 #define B3PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
 #include "globals.hh"
 
 class G4ParticleGun;
@@ -60,7 +59,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* fParticleGun = nullptr;
 };
 
-}
+}  // namespace B3
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

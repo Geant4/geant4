@@ -33,8 +33,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -49,34 +49,34 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger : public G4UImessenger
 {
- public:
-  DetectorMessenger(DetectorConstruction*);
-  ~DetectorMessenger() override;
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  DetectorConstruction* fDetector = nullptr;
-  G4UIdirectory* fOpticalDir = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
+    G4UIdirectory* fOpticalDir = nullptr;
 
-  // the surface
-  G4UIcmdWithAString* fSurfaceTypeCmd = nullptr;
-  G4UIcmdWithAString* fSurfaceFinishCmd = nullptr;
-  G4UIcmdWithAString* fSurfaceModelCmd = nullptr;
-  G4UIcmdWithADouble* fSurfaceSigmaAlphaCmd = nullptr;
-  G4UIcmdWithADouble* fSurfacePolishCmd = nullptr;
-  G4UIcmdWithAString* fSurfaceMatPropVectorCmd = nullptr;
-  G4UIcmdWithAString* fSurfaceMatPropConstCmd = nullptr;
+    // the surface
+    G4UIcmdWithAString* fSurfaceTypeCmd = nullptr;
+    G4UIcmdWithAString* fSurfaceFinishCmd = nullptr;
+    G4UIcmdWithAString* fSurfaceModelCmd = nullptr;
+    G4UIcmdWithADouble* fSurfaceSigmaAlphaCmd = nullptr;
+    G4UIcmdWithADouble* fSurfacePolishCmd = nullptr;
+    G4UIcmdWithAString* fSurfaceMatPropVectorCmd = nullptr;
+    G4UIcmdWithAString* fSurfaceMatPropConstCmd = nullptr;
 
-  // the box
-  G4UIcmdWithAString* fTankMatPropVectorCmd = nullptr;
-  G4UIcmdWithAString* fTankMatPropConstCmd = nullptr;
-  G4UIcmdWithAString* fTankMaterialCmd = nullptr;
+    // the box
+    G4UIcmdWithAString* fTankMatPropVectorCmd = nullptr;
+    G4UIcmdWithAString* fTankMatPropConstCmd = nullptr;
+    G4UIcmdWithAString* fTankMaterialCmd = nullptr;
 
-  // the world
-  G4UIcmdWithAString* fWorldMatPropVectorCmd = nullptr;
-  G4UIcmdWithAString* fWorldMatPropConstCmd = nullptr;
-  G4UIcmdWithAString* fWorldMaterialCmd = nullptr;
+    // the world
+    G4UIcmdWithAString* fWorldMatPropVectorCmd = nullptr;
+    G4UIcmdWithAString* fWorldMatPropConstCmd = nullptr;
+    G4UIcmdWithAString* fWorldMaterialCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

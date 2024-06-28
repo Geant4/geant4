@@ -41,7 +41,7 @@
 #define DetectorConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"       
+#include "globals.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -49,19 +49,17 @@ class G4Material;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-  DetectorConstruction();
-  ~DetectorConstruction();
-  
-  virtual G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
-private:
-
-  void PrintParameters();
+  private:
+    void PrintParameters();
     // Print the name of absorber and active materials.
 
-  G4Material* fAbsorberMaterial;
+    G4Material* fAbsorberMaterial;
 };
 
 #endif

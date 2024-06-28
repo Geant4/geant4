@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -41,113 +41,12 @@ Command is ignored.
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 @@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1
-=======================================================================
-======                 Electromagnetic Physics Parameters      ========
-=======================================================================
-LPM effect enabled                                 1
-Enable creation and use of sampling tables         0
-Apply cuts on all EM processes                     0
-Use combined TransportationWithMsc                 Disabled
-Use general process                                0
-Enable linear polarisation for gamma               0
-Enable photoeffect sampling below K-shell          1
-Enable sampling of quantum entanglement            0
-X-section factor for integral approach             0.8
-Min kinetic energy for tables                      100 eV 
-Max kinetic energy for tables                      100 TeV
-Number of bins per decade of a table               7
-Verbose level                                      1
-Verbose level for worker thread                    0
-Bremsstrahlung energy threshold above which 
-  primary e+- is added to the list of secondary    100 TeV
-Bremsstrahlung energy threshold above which primary
-  muon/hadron is added to the list of secondary    100 TeV
-Lowest triplet kinetic energy                      1 MeV
-Enable sampling of gamma linear polarisation       0
-5D gamma conversion model type                     0
-5D gamma conversion model on isolated ion          0
-Livermore data directory                           epics_2017
-=======================================================================
-======                 Ionisation Parameters                   ========
-=======================================================================
-Step function for e+-                              (0.2, 1 mm)
-Step function for muons/hadrons                    (0.2, 0.1 mm)
-Step function for light ions                       (0.2, 0.1 mm)
-Step function for general ions                     (0.2, 0.1 mm)
-Lowest e+e- kinetic energy                         1 keV
-Lowest muon/hadron kinetic energy                  1 keV
-Use ICRU90 data                                    0
-Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model for leptons and hadrons  Universal
-Use built-in Birks satuaration                     0
-Build CSDA range enabled                           0
-Use cut as a final range enabled                   0
-Enable angular generator interface                 0
-Max kinetic energy for CSDA tables                 1 GeV
-Max kinetic energy for NIEL computation            0 eV 
-Linear loss limit                                  0.01
-Read data from file for e+e- pair production by mu 0
-=======================================================================
-======                 Multiple Scattering Parameters          ========
-=======================================================================
-Type of msc step limit algorithm for e+-           1
-Type of msc step limit algorithm for muons/hadrons 0
-Msc lateral displacement for e+- enabled           1
-Msc lateral displacement for muons and hadrons     0
-Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
-Range factor for msc step limit for muons/hadrons  0.2
-Geometry factor for msc step limitation of e+-     2.5
-Safety factor for msc step limit for e+-           0.6
-Skin parameter for msc step limitation of e+-      1
-Lambda limit for msc step limit for e+-            1 mm
-Use Mott correction for e- scattering              0
-Factor used for dynamic computation of angular 
-  limit between single and multiple scattering     1
-Fixed angular limit between single 
-  and multiple scattering                          3.1416 rad
-Upper energy limit for e+- multiple scattering     100 MeV
-Type of electron single scattering model           0
-Type of nuclear form-factor                        1
-Screening factor                                   1
-=======================================================================
-======                 Atomic Deexcitation Parameters          ========
-=======================================================================
-Fluorescence enabled                               1
-Directory in G4LEDATA for fluorescence data files  fluor
-Auger electron cascade enabled                     1
-PIXE atomic de-excitation enabled                  0
-De-excitation module ignores cuts                  1
-Type of PIXE cross section for hadrons             Empirical
-Type of PIXE cross section for e+-                 Livermore
-=======================================================================
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-### ===  Auger flag: 1
-### ===  Ignore cuts flag:   1
 #
 /gun/particle proton
 /gun/energy 10 MeV
 #
 /run/printProgress 1000
 /run/beamOn 10000
-======================================================================
-======          Radioactive Decay Physics Parameters           =======
-======================================================================
-min MeanLife (from G4NuclideTable)                1 ps 
-Max life time (from G4DeexPrecoParameters)        1 ps 
-Internal e- conversion flag                       1
-Stored internal conversion coefficients           1
-Enabled atomic relaxation mode                    1
-Enable correlated gamma emission                  0
-Max 2J for sampling of angular correlations       10
-Atomic de-excitation enabled                      1
-Auger electron emission enabled                   1
-Check EM cuts disabled for atomic de-excitation   1
-Use Bearden atomic level energies                 0
-Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        1 y  
-======================================================================
 
 =======================================================
 ======       ParticleHP Physics Parameters     ========
@@ -164,6 +63,7 @@ Threshold for very long decay time at rest        1 y
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
+ Use probability tables from     njoy
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -179,7 +79,6 @@ Threshold for very long decay time at rest        1 y
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-  Process: Radioactivation
 -----------------------------------------------------------------------
                            Hadronic Processes for He3
   Process: hadElastic
@@ -377,7 +276,6 @@ Threshold for very long decay time at rest        1 y
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
-  Process: Radioactivation
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
@@ -402,11 +300,11 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
-Time limit for long lived isomeres                  1 ps 
+Use discrete excitation energy of the residual      0
+Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   1
+Store e- internal conversion data                   0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
@@ -442,17 +340,17 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.138480s Sys=0.000000s
+  User=0.150000s Real=0.167064s Sys=0.000000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 8080	protonInelastic= 1920
+	hadElastic= 8103	protonInelastic= 1897
 
 
- MeanFreePath:	4.9881 cm  +- 5.0145 cm 	massic: 51.278 g/cm2 
- CrossSection:	0.20048 cm^-1 		massic: 1.9502 mm2/g 
- crossSection per atom:	3.1705 barn  
+ MeanFreePath:	5.0235 cm  +- 5.045 cm 	massic: 51.642 g/cm2 
+ CrossSection:	0.19906 cm^-1 		massic: 1.9364 mm2/g 
+ crossSection per atom:	3.1482 barn  
 
  Verification: crossSections from G4HadronicProcessStore
 
@@ -462,55 +360,52 @@ Run Summary
 
  List of nuclear reactions: 
 
+                        proton + Mo98 --> N gamma or e- + Tc99:       1   Q =  6.4945 MeV
                proton + Mo98 --> N gamma or e- + Tc99[142.683]:       1   Q =  6.3518 MeV
-               proton + Mo98 --> N gamma or e- + Tc99[761.950]:       1   Q =  5.7325 MeV
-              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1667   Q = -2.4774 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.550]:      28   Q = -2.6141 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[152.090]:      17   Q = -2.6246 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[190.210]:      24   Q = -2.6636 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[203.670]:      25   Q = -2.6778 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[21.800]:      51   Q = -2.4947 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[65.430]:      71   Q = -2.5385 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[81.680]:      15   Q = -2.5542 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:       7   Q = -0.0035425 meV
-     proton + Mo98 --> N gamma or e- + proton + Mo98[1432.206]:       2   Q = -1.4322 MeV
-     proton + Mo98 --> N gamma or e- + proton + Mo98[1510.039]:       1   Q =   -1.51 MeV
-     proton + Mo98 --> N gamma or e- + proton + Mo98[1758.480]:       2   Q = -1.7585 MeV
-      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       4   Q = -734.75 keV
-      proton + Mo98 --> N gamma or e- + proton + Mo98[787.384]:       4   Q = -787.38 keV
-                               proton + Mo98 --> proton + Mo98:    8080   Q = -0.005701 meV
+                proton + Mo98 --> N gamma or e- + alpha + Nb95:       1   Q =  3.5405 MeV
+       proton + Mo98 --> N gamma or e- + alpha + Nb95[235.690]:       2   Q =  3.3048 MeV
+              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1647   Q = -2.4725 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.550]:      26   Q =  -2.611 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[152.090]:      16   Q = -2.6246 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[190.210]:      27   Q = -2.6627 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[203.670]:      27   Q = -2.6762 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[21.800]:      53   Q = -2.4943 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[65.430]:      65   Q = -2.5379 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[81.680]:      10   Q = -2.5542 MeV
+               proton + Mo98 --> N gamma or e- + proton + Mo98:      16   Q = -0.010617 meV
+      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       5   Q = -734.75 keV
+                               proton + Mo98 --> proton + Mo98:    8103   Q = -0.0057073 meV
 
                           number of gamma or e- (ic): N = 1 --> 10
 
  List of generated particles:
-           Mo98:    8087  Emean =  31.146 keV	( 1.3422 eV  --> 403.57 keV)
-  Mo98[1432.206]:       2  Emean =  18.042 keV	( 9.3003 keV --> 26.784 keV)
-  Mo98[1510.039]:       1  Emean =  235.98 keV	( 235.98 keV --> 235.98 keV)
-  Mo98[1758.480]:       2  Emean =  70.246 keV	( 44.512 keV --> 95.981 keV)
-  Mo98[734.750]:       4  Emean =  190.73 keV	( 11.252 keV --> 337.03 keV)
-  Mo98[787.384]:       4  Emean =  185.86 keV	( 89.749 keV --> 243.34 keV)
-           Tc98:    1667  Emean =  116.07 keV	( 14.987 keV --> 294.74 keV)
-  Tc98[138.550]:      28  Emean =  135.91 keV	( 39.412 keV --> 263.76 keV)
-  Tc98[152.090]:      17  Emean =  104.71 keV	( 18.676 keV --> 195.09 keV)
-  Tc98[190.210]:      24  Emean =  116.61 keV	( 34.738 keV --> 244.87 keV)
-  Tc98[203.670]:      25  Emean =  121.33 keV	( 15.323 keV --> 295.65 keV)
-   Tc98[21.800]:      51  Emean =  121.47 keV	( 14.302 keV --> 242.83 keV)
-   Tc98[65.430]:      71  Emean =   121.7 keV	( 8.8893 keV --> 266.16 keV)
-   Tc98[81.680]:      15  Emean =  143.55 keV	( 43.013 keV --> 222.58 keV)
+           Mo98:    8119  Emean =  31.942 keV	( 1.3422 eV  --> 403.57 keV)
+  Mo98[734.750]:       5  Emean =  178.18 keV	( 44.551 keV --> 336.75 keV)
+           Nb95:       1  Emean =  695.25 keV	( 695.25 keV --> 695.25 keV)
+  Nb95[235.690]:       2  Emean =  569.65 keV	( 441.58 keV --> 697.73 keV)
+           Tc98:    1647  Emean =  116.12 keV	( 14.993 keV --> 294.6 keV)
+  Tc98[138.550]:      26  Emean =  130.33 keV	( 39.422 keV --> 263.66 keV)
+  Tc98[152.090]:      16  Emean =  103.58 keV	( 18.676 keV --> 195.05 keV)
+  Tc98[190.210]:      27  Emean =  121.73 keV	( 34.747 keV --> 244.87 keV)
+  Tc98[203.670]:      27  Emean =  131.14 keV	( 15.331 keV --> 295.51 keV)
+   Tc98[21.800]:      53  Emean =  120.43 keV	( 14.302 keV --> 242.76 keV)
+   Tc98[65.430]:      65  Emean =  123.06 keV	( 8.8893 keV --> 266.06 keV)
+   Tc98[81.680]:      10  Emean =  135.89 keV	( 43.026 keV --> 194.43 keV)
+           Tc99:       1  Emean =  119.33 keV	( 119.33 keV --> 119.33 keV)
   Tc99[142.683]:       1  Emean =  98.365 keV	( 98.365 keV --> 98.365 keV)
-  Tc99[761.950]:       1  Emean =  119.31 keV	( 119.31 keV --> 119.31 keV)
-             e-:     458  Emean =  121.17 keV	( 51.673 keV --> 972.75 keV)
-          gamma:   11163  Emean =  971.18 keV	( 7.8469 keV --> 12.219 MeV)
-        neutron:    1898  Emean =  1.6918 MeV	( 104.08 keV --> 6.9129 MeV)
-         proton:      20  Emean =  7.0424 MeV	( 4.3018 MeV --> 9.4983 MeV)
+          alpha:       3  Emean =  9.9208 MeV	( 9.6654 MeV --> 10.242 MeV)
+             e-:     462  Emean =  141.23 keV	( 72.706 keV --> 993.75 keV)
+          gamma:   11091  Emean =  965.72 keV	( 7.8469 keV --> 12.219 MeV)
+        neutron:    1871  Emean =  1.6922 MeV	( 104.04 keV --> 6.9129 MeV)
+         proton:      21  Emean =  6.8567 MeV	( 4.2018 MeV --> 9.4924 MeV)
 
-   Momentum balance: Pmean =  34.717 eV 	( 0.0015801 meV --> 2.3823 keV) 
+   Momentum balance: Pmean =  36.189 eV 	( 0.00071906 meV --> 2.4398 keV) 
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={679430062265746045, 844762968342894762, 1492256616040714884, 243662184377446662, 580592281013604042, 1255009003807460760, 428539554732951737, 1317178919202591865, 37751163068258779, 262001865548913553, 2089727373674120, 896390294140543952, 2260289831170756919, 542376720398316918, 979350352163703868, 2161452924317969780, 397928349046895587} counter= 5sumtot= 546004761730280527
+N=17 V[N]={215777633650529703, 1434163777672415998, 972678355049174479, 353189911098519134, 1327239674961381633, 1583735542945193405, 882212591285906120, 2296967497179244957, 605720837195306643, 677880508452805353, 221190765530727373, 1773389971985750954, 1462597689217449695, 390063013494275709, 971757184890504590, 1757644652783323372, 1209290032755218863} counter= 14sumtot= 1994598575651870324
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

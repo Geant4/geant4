@@ -40,6 +40,7 @@
 
 #include "G4THitsMap.hh"
 #include "G4UserRunAction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 
@@ -47,22 +48,23 @@ class DetectorConstruction;
 
 class G4DNAEventScheduler;
 
-class RunAction : public G4UserRunAction {
-public:
-  RunAction();
+class RunAction : public G4UserRunAction
+{
+  public:
+    RunAction();
 
-  ~RunAction() override = default;
+    ~RunAction() override = default;
 
-  G4Run *GenerateRun() final;
+    G4Run* GenerateRun() final;
 
-  void BeginOfRunAction(const G4Run *) final;
+    void BeginOfRunAction(const G4Run*) final;
 
-  void EndOfRunAction(const G4Run *) final;
+    void EndOfRunAction(const G4Run*) final;
 
-  void SetEventScheduler(G4DNAEventScheduler *pEventScheduler);
+    void SetEventScheduler(G4DNAEventScheduler* pEventScheduler);
 
-private:
-  G4DNAEventScheduler *fpEventScheduler = nullptr;
+  private:
+    G4DNAEventScheduler* fpEventScheduler = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

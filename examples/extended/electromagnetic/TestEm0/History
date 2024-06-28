@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-09 Michel Maire (testem0-V11-02-00)
+- DetectorConstruction: introduce Xenon gas
+- new macro xenonGas.mac
+
 ## 2023-03-11 Michel Maire (testem0-V11-01-00)
 - revision of all headers
 - RunAction: restore output format

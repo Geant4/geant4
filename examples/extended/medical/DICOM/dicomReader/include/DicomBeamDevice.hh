@@ -28,53 +28,43 @@
 
 #include "dcmtk/dcmdata/dcfilefo.h"
 
-#include <vector>
 #include <iostream>
+#include <vector>
 class DicomBeamDeviceDevice;
 class DicomBeamDeviceControlPoint;
 
-#include "dcmtk/dcmrt/seq/drtblds1.h" // for BeamLimitingDeviceSequenceInRTBeamsModule
 #include "dcmtk/dcmrt/seq/drtbldps.h"  // for BeamLimitingDevicePositionSequence
+#include "dcmtk/dcmrt/seq/drtblds1.h"  // for BeamLimitingDeviceSequenceInRTBeamsModule
 
-class DicomBeamDevice 
-{ 
-public:
-  DicomBeamDevice(DRTBeamLimitingDeviceSequenceInRTBeamsModule::Item bldsItem);
-  DicomBeamDevice(DRTBeamLimitingDevicePositionSequence::Item bldpsItem);
-  ~DicomBeamDevice(){};
+class DicomBeamDevice
+{
+  public:
+    DicomBeamDevice(DRTBeamLimitingDeviceSequenceInRTBeamsModule::Item bldsItem);
+    DicomBeamDevice(DRTBeamLimitingDevicePositionSequence::Item bldpsItem);
+    ~DicomBeamDevice() {};
 
-public:
-  void SetSourceToBeamLimitingDeviceDistance(Float64 dat){
-    theSourceToBeamLimitingDeviceDistance= dat;
-  }
-  Float64 GetSourceToBeamLimitingDeviceDistance() const {
-    return theSourceToBeamLimitingDeviceDistance;
-  }
-  void SetNumberOfLeafJawPairs(Sint32 dat){ 
-    theNumberOfLeafJawPairs= dat;
-  }
-  Sint32 GetNumberOfLeafJawPairs() const {
-    return theNumberOfLeafJawPairs;
-  }
-  void SetType(OFString dat){ 
-    theType = dat;
-  }
-  OFString GetType() const {
-    return theType;
-  }
-  void AddPositionBoundary( Float64 dat ){
-    thePositionBoundaries.push_back(dat);
-  }
-  Float64 GetPositionBoundary( size_t ii ) {
-    return thePositionBoundaries[ii];
-  }
-  void Print( std::ostream& out );
+  public:
+    void SetSourceToBeamLimitingDeviceDistance(Float64 dat)
+    {
+      theSourceToBeamLimitingDeviceDistance = dat;
+    }
+    Float64 GetSourceToBeamLimitingDeviceDistance() const
+    {
+      return theSourceToBeamLimitingDeviceDistance;
+    }
+    void SetNumberOfLeafJawPairs(Sint32 dat) { theNumberOfLeafJawPairs = dat; }
+    Sint32 GetNumberOfLeafJawPairs() const { return theNumberOfLeafJawPairs; }
+    void SetType(OFString dat) { theType = dat; }
+    OFString GetType() const { return theType; }
+    void AddPositionBoundary(Float64 dat) { thePositionBoundaries.push_back(dat); }
+    Float64 GetPositionBoundary(size_t ii) { return thePositionBoundaries[ii]; }
+    void Print(std::ostream& out);
 
-private:
-  OFString theType;
-  Float64 theSourceToBeamLimitingDeviceDistance;
-  Sint32  theNumberOfLeafJawPairs;
-  std::vector<Float64> thePositionBoundaries;
+  private:
+    OFString theType;
+    Float64 theSourceToBeamLimitingDeviceDistance;
+    Sint32 theNumberOfLeafJawPairs;
+    std::vector<Float64> thePositionBoundaries;
 };
 
 #endif

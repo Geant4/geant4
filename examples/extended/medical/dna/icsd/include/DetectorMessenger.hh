@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -36,30 +36,25 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIcommand;
 class G4UIcmdWithAString;
 
-
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-  
     DetectorMessenger(DetectorConstruction*);
     ~DetectorMessenger() override = default;
-    
-    virtual void SetNewValue(G4UIcommand*, G4String) override;
-    
-  private:
-  
-    DetectorConstruction*      fDetector = nullptr;
-    
-    G4UIcmdWithAString*        fGeomCmd = nullptr;
 
+    virtual void SetNewValue(G4UIcommand*, G4String) override;
+
+  private:
+    DetectorConstruction* fDetector = nullptr;
+
+    G4UIcmdWithAString* fGeomCmd = nullptr;
 };
 
 #endif
-

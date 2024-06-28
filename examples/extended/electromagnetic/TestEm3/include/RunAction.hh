@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Run; 
+class Run;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
 class RunActionMessenger;
@@ -49,30 +49,27 @@ class G4Timer;
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim = 0);
+    ~RunAction() override;
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim=0);
- ~RunAction() override;
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-  G4Run* GenerateRun() override;
-  void BeginOfRunAction(const G4Run*) override;
-  void   EndOfRunAction(const G4Run*) override;
-   
-  // Acceptance parameters
-  void SetEdepAndRMS(G4int, G4double, G4double, G4double);
-  void SetApplyLimit(G4bool val);
+    // Acceptance parameters
+    void SetEdepAndRMS(G4int, G4double, G4double, G4double);
+    void SetApplyLimit(G4bool val);
 
-private:
-  
-  DetectorConstruction*   fDetector = nullptr;
-  PrimaryGeneratorAction* fPrimary = nullptr;
-  Run*                    fRun = nullptr;
-  RunActionMessenger*     fRunMessenger = nullptr;
-  HistoManager*           fHistoManager = nullptr;
-  G4Timer*                fTimer = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary = nullptr;
+    Run* fRun = nullptr;
+    RunActionMessenger* fRunMessenger = nullptr;
+    HistoManager* fHistoManager = nullptr;
+    G4Timer* fTimer = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -28,7 +28,7 @@
 //
 //
 //
- 
+
 #ifndef RE02PrimaryGeneratorAction_h
 #define RE02PrimaryGeneratorAction_h 1
 
@@ -43,26 +43,24 @@ class G4Event;
 /// User primary particle generator class
 ///
 /// - void GeneratePrimaries(G4Event*)
-///     an incident particle is proton with 150 MeV energy at the position 
+///     an incident particle is proton with 150 MeV energy at the position
 ///     (x,y,-100 cm) toward the (0,0,1) direction. The x and y positions are
 ///     uniformly varied from -5 mm to 5 mm, respectively.
 //
 class RE02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    RE02PrimaryGeneratorAction();    
-   ~RE02PrimaryGeneratorAction();
+    RE02PrimaryGeneratorAction();
+    ~RE02PrimaryGeneratorAction();
 
   public:
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4double fSigmaPosition; // Initial beam spot size in x-y plane.
+    G4double fSigmaPosition;  // Initial beam spot size in x-y plane.
     G4ParticleGun* fParticleGun;
 };
 
 //
 
 #endif
-
-

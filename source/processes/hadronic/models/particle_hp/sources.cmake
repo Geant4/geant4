@@ -59,6 +59,7 @@ geant4_add_module(G4had_par_hp
     G4NeutronRadCaptureHP.hh
     G4ParticleHPList.hh
     G4ParticleHPIsoData.hh
+    G4ParticleHPIsoProbabilityTable.hh
     G4ParticleHP2AInelasticFS.hh
     G4ParticleHPNames.hh
     G4ParticleHP2N2AInelasticFS.hh
@@ -82,7 +83,9 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPArbitaryTab.hh
     G4ParticleHPCapture.hh
     G4ParticleHPCaptureData.hh
+    G4ParticleHPCaptureDataPT.hh
     G4ParticleHPCaptureFS.hh
+    G4ParticleHPCaptureURR.hh
     G4ParticleHPChannel.hh
     G4ParticleHPChannelList.hh
     G4ParticleHPContAngularPar.hh
@@ -97,7 +100,9 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPDiscreteTwoBody.hh
     G4ParticleHPElastic.hh
     G4ParticleHPElasticData.hh
+    G4ParticleHPElasticDataPT.hh
     G4ParticleHPElasticFS.hh
+    G4ParticleHPElasticURR.hh
     G4ParticleHPElementData.hh
     G4ParticleHPEnAngCorrelation.hh
     G4ParticleHPEnergyDistribution.hh
@@ -112,17 +117,23 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPFission.hh
     G4ParticleHPFissionBaseFS.hh
     G4ParticleHPFissionData.hh
+    G4ParticleHPFissionDataPT.hh
     G4ParticleHPFissionERelease.hh
     G4ParticleHPFissionFS.hh
     G4ParticleHPFissionSpectrum.hh
+    G4ParticleHPFissionURR.hh
     G4ParticleHPHash.hh
     G4ParticleHPHe3InelasticFS.hh
     G4ParticleHPInelastic.hh
     G4ParticleHPInelasticBaseFS.hh
     G4ParticleHPInelasticCompFS.hh
     G4ParticleHPInelasticData.hh
+    G4ParticleHPInelasticDataPT.hh
+    G4ParticleHPInelasticURR.hh
     G4ParticleHPInelasticXS.hh
     G4ParticleHPInterpolator.hh
+    G4ParticleHPIsoProbabilityTable_CALENDF.hh
+    G4ParticleHPIsoProbabilityTable_NJOY.hh
     G4ParticleHPIsotropic.hh
     G4ParticleHPJENDLHEData.hh
     G4ParticleHPJENDLHEElasticData.hh
@@ -155,6 +166,7 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPPTInelasticFS.hh
     G4ParticleHPPhotonDist.hh
     G4ParticleHPPolynomExpansion.hh
+    G4ParticleHPProbabilityTablesStore.hh
     G4ParticleHPSCFissionFS.hh
     G4ParticleHPSimpleEvapSpectrum.hh
     G4ParticleHPT2AInelasticFS.hh
@@ -200,6 +212,7 @@ geant4_add_module(G4had_par_hp
     G4NeutronHPInelasticXS.cc
     G4NeutronRadCaptureHP.cc
     G4ParticleHPIsoData.cc
+    G4ParticleHPIsoProbabilityTable.cc
     G4ParticleHP2AInelasticFS.cc
     G4ParticleHPList.cc
     G4ParticleHP2N2AInelasticFS.cc
@@ -220,6 +233,8 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPAInelasticFS.cc
     G4ParticleHPAngular.cc
     G4ParticleHPArbitaryTab.cc
+    G4ParticleHPCaptureDataPT.cc
+    G4ParticleHPCaptureURR.cc
     G4ParticleHPChannel.cc
     G4ParticleHPChannelList.cc
     G4ParticleHPContAngularPar.cc
@@ -232,7 +247,9 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPDiscreteTwoBody.cc
     G4ParticleHPElastic.cc
     G4ParticleHPElasticData.cc
+    G4ParticleHPElasticDataPT.cc
     G4ParticleHPElasticFS.cc
+    G4ParticleHPElasticURR.cc
     G4ParticleHPElementData.cc
     G4ParticleHPEnAngCorrelation.cc
     G4ParticleHPFCFissionFS.cc
@@ -252,14 +269,20 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPFission.cc
     G4ParticleHPFissionBaseFS.cc
     G4ParticleHPFissionData.cc
+    G4ParticleHPFissionDataPT.cc
     G4ParticleHPFissionFS.cc
+    G4ParticleHPFissionURR.cc
     G4ParticleHPHe3InelasticFS.cc
     G4ParticleHPInelastic.cc
     G4ParticleHPInelasticBaseFS.cc
     G4ParticleHPInelasticCompFS.cc
     G4ParticleHPInelasticData.cc
+    G4ParticleHPInelasticDataPT.cc
+    G4ParticleHPInelasticURR.cc
     G4ParticleHPInelasticXS.cc
     G4ParticleHPInterpolator.cc
+    G4ParticleHPIsoProbabilityTable_CALENDF.cc
+    G4ParticleHPIsoProbabilityTable_NJOY.cc
     G4ParticleHPIsotropic.cc
     G4ParticleHPJENDLHEData.cc
     G4ParticleHPJENDLHEElasticData.cc
@@ -289,6 +312,7 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPPInelasticFS.cc
     G4ParticleHPPTInelasticFS.cc
     G4ParticleHPPhotonDist.cc
+    G4ParticleHPProbabilityTablesStore.cc
     G4ParticleHPSCFissionFS.cc
     G4ParticleHPT2AInelasticFS.cc
     G4ParticleHPTCFissionFS.cc

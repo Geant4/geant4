@@ -25,36 +25,42 @@
 //
 
 #include "StackingAction.hh"
+
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(){
-    fKillSecondary  = true;
+StackingAction::StackingAction()
+{
+  fKillSecondary = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::~StackingAction(){;}
+StackingAction::~StackingAction()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* aTrack){
-    G4ClassificationOfNewTrack status = fUrgent;
-    
-    if(fKillSecondary){
-        if(aTrack->GetTrackID()>1){
-            status = fKill;
-        }
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+{
+  G4ClassificationOfNewTrack status = fUrgent;
+
+  if (fKillSecondary) {
+    if (aTrack->GetTrackID() > 1) {
+      status = fKill;
     }
-    return status;
+  }
+  return status;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StackingAction::SetKillStatus(G4bool value){
-    fKillSecondary = value;
+void StackingAction::SetKillStatus(G4bool value)
+{
+  fKillSecondary = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

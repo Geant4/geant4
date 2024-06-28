@@ -1,0 +1,21 @@
+# Category hadr-nudex History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2024-06-23 vladimir Ivantchenko (hadr-nudex-V11-02-03)
+- G4NuDEXNeutronCaptureModel : fixed access to the data
+
+## 2024-06-07 Emilio Mendoza (hadr-nudex-V11-02-02)
+- G4NuDEXNeutronCaptureModel : few corrections.
+
+## 2024-06-04 Gabriele Cosmo (hadr-nudex-V11-02-01)
+- Fixed compilation warnings on macOS/XCode for implicit type conversion.
+- Attempt fix for compilation warning on G4NuDEXStatisticalNucleus source
+  on alma9 with LTO settings.
+
+## 2024-05-29 Emilio Mendoza (hadr-nudex-V11-02-00)
+- First version of NuDEX in Geant4.

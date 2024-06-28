@@ -30,18 +30,40 @@
 
 #include "G4VPrimaryGenerator.hh"
 #include "G4TransportationManager.hh"
+#include "G4StateManager.hh"
 #include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VSolid.hh"
 
 G4bool G4VPrimaryGenerator::CheckVertexInsideWorld(const G4ThreeVector& pos)
 {
+  // Check can only happen if run has been initialised
+  //
+  if (G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle)
+  {
+    return true;
+  }
+
   G4Navigator* navigator= G4TransportationManager::GetTransportationManager()
                                                  -> GetNavigatorForTracking();
-  
   G4VPhysicalVolume* world= navigator-> GetWorldVolume();
   G4VSolid* solid = world-> GetLogicalVolume()-> GetSolid();
   EInside qinside = solid-> Inside(pos);
   
   return qinside == kInside;
+}
+
+void G4VPrimaryGenerator::SetParticlePosition(G4ThreeVector aPosition)
+{
+  if (ifCheckInside && !CheckVertexInsideWorld(aPosition))
+  {
+    G4ExceptionDescription ed;
+    ed << "Invalid vertex position (" << aPosition << "). "
+       << "Position MUST be located -inside- the world volume." << G4endl
+       << "Gun position has NOT been changed!";
+    G4Exception("G4VPrimaryGenerator::SetParticlePosition",
+                "Event0401", JustWarning, ed);
+    return;
+  }
+  particle_position = aPosition;
 }

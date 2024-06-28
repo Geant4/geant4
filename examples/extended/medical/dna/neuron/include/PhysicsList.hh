@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -53,25 +53,24 @@ class G4EmDNAChemistry_option1;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  explicit PhysicsList();
-  ~PhysicsList() override;
+  public:
+    explicit PhysicsList();
+    ~PhysicsList() override;
 
-  void ConstructParticle() override;
-  void ConstructProcess() override;
- 
-  void RegisterConstructor(const G4String& name);
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
-private:
+    void RegisterConstructor(const G4String& name);
 
-  G4VPhysicsConstructor*    fEmPhysicsList;
-  G4EmDNAPhysicsActivator*  fDNAActivator;
-  G4EmDNAChemistry*         fEmDNAChemistryList;
-  G4EmDNAChemistry_option1* fEmDNAChemistryList1;
-  G4String                  fEmName;
-  G4bool                    fHadronic;
+  private:
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4EmDNAPhysicsActivator* fDNAActivator;
+    G4EmDNAChemistry* fEmDNAChemistryList;
+    G4EmDNAChemistry_option1* fEmDNAChemistryList1;
+    G4String fEmName;
+    G4bool fHadronic;
 };
 
 #endif

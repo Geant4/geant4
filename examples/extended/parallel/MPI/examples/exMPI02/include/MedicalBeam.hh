@@ -30,58 +30,62 @@
 #ifndef MEDICAL_BEAM_H
 #define MEDICAL_BEAM_H
 
-#include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4ParticleDefinition;
 
-class MedicalBeam : public G4VUserPrimaryGeneratorAction {
-public:
-  enum FieldShape{ kSQUARE=0, kCIRCLE };
+class MedicalBeam : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    enum FieldShape
+    {
+      kSQUARE = 0,
+      kCIRCLE
+    };
 
-  MedicalBeam();
-  ~MedicalBeam();
+    MedicalBeam();
+    ~MedicalBeam();
 
-  // set/get functions...
-  void SetParticleDefinition(G4ParticleDefinition* pd);
-  const G4ParticleDefinition* GetParticleDefinition() const;
+    // set/get functions...
+    void SetParticleDefinition(G4ParticleDefinition* pd);
+    const G4ParticleDefinition* GetParticleDefinition() const;
 
-  void SetKineticE(G4double e);
-  G4double GetKineticE() const;
+    void SetKineticE(G4double e);
+    G4double GetKineticE() const;
 
-  void SetSourcePosition(const G4ThreeVector& pos);
-  G4ThreeVector GetSourcePosition() const;
+    void SetSourcePosition(const G4ThreeVector& pos);
+    G4ThreeVector GetSourcePosition() const;
 
-  void SetFieldShape(FieldShape shape);
-  FieldShape GetFieldShape() const;
+    void SetFieldShape(FieldShape shape);
+    FieldShape GetFieldShape() const;
 
-  void SetSSD(G4double ssd);
-  G4double GetSSD() const;
+    void SetSSD(G4double ssd);
+    G4double GetSSD() const;
 
-  void SetFieldXY(G4double fx, G4double fy);
-  G4double GetFieldX() const;
-  G4double GetFieldY() const;
+    void SetFieldXY(G4double fx, G4double fy);
+    G4double GetFieldX() const;
+    G4double GetFieldY() const;
 
-  void SetFieldR(G4double r);
-  G4double GetFieldR() const;
+    void SetFieldR(G4double r);
+    G4double GetFieldR() const;
 
-  // methods...
-  virtual void GeneratePrimaries(G4Event* anEvent);
+    // methods...
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
-private:
-  // local methods...
-  G4ThreeVector GenerateBeamDirection() const;
+  private:
+    // local methods...
+    G4ThreeVector GenerateBeamDirection() const;
 
-  G4ParticleDefinition* fparticle;
-  G4double fkineticE;
-  G4ThreeVector fsourcePosition;
+    G4ParticleDefinition* fparticle;
+    G4double fkineticE;
+    G4ThreeVector fsourcePosition;
 
-  G4double fSSD; // (SSD= Source Skin Depth)
-  FieldShape ffieldShape;
-  G4double ffieldXY[2];
-  G4double ffieldR;
-
+    G4double fSSD;  // (SSD= Source Skin Depth)
+    FieldShape ffieldShape;
+    G4double ffieldXY[2];
+    G4double ffieldR;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,7 +116,7 @@ inline void MedicalBeam::SetSourcePosition(const G4ThreeVector& pos)
 
 inline G4ThreeVector MedicalBeam::GetSourcePosition() const
 {
- return fsourcePosition;
+  return fsourcePosition;
 }
 
 inline void MedicalBeam::SetFieldShape(MedicalBeam::FieldShape shape)
@@ -122,7 +126,7 @@ inline void MedicalBeam::SetFieldShape(MedicalBeam::FieldShape shape)
 
 inline MedicalBeam::FieldShape MedicalBeam::GetFieldShape() const
 {
- return ffieldShape;
+  return ffieldShape;
 }
 
 inline void MedicalBeam::SetSSD(G4double ssd)

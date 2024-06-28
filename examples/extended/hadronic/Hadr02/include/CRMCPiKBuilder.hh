@@ -33,7 +33,7 @@
 //
 // Author:    2018 Alberto Ribon
 //
-// Physics builder to treat the final state of inelastic pion- and kaon- 
+// Physics builder to treat the final state of inelastic pion- and kaon-
 // nuclear interactions with the wrapper hadronic model around CRMC.
 //
 // Modified:
@@ -44,21 +44,21 @@
 #ifndef CRMCPiKBuilder_h
 #define CRMCPiKBuilder_h 1
 
-#include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VPiKBuilder.hh"
+#include "globals.hh"
 
 class HadronicInelasticModelCRMC;
 
-
-class CRMCPiKBuilder : public G4VPiKBuilder {
+class CRMCPiKBuilder : public G4VPiKBuilder
+{
   public:
-    CRMCPiKBuilder( const G4int crmcModelId, const std::string & crmcModelName );
+    CRMCPiKBuilder(const G4int crmcModelId, const std::string& crmcModelName);
     virtual ~CRMCPiKBuilder();
-    virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4HadronInelasticProcess* aP ) final override;
-    inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
-    inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
+    virtual void Build(G4HadronElasticProcess* aP) final override;
+    virtual void Build(G4HadronInelasticProcess* aP) final override;
+    inline void SetMinEnergy(G4double aM) final override { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) final override { fMax = aM; }
     using G4VPiKBuilder::Build;  // Prevent compiler warning
   private:
     HadronicInelasticModelCRMC* fModel;

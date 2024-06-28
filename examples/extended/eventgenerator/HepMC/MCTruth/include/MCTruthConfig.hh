@@ -37,42 +37,36 @@
 // Date  : 2006-03-06
 //
 // --------------------------------------------------------------
-#ifndef INCLUDE_MCTRUTHCONFIG_H 
+#ifndef INCLUDE_MCTRUTHCONFIG_H
 #define INCLUDE_MCTRUTHCONFIG_H 1
-
-#include<vector>
-#include<iostream>
 
 #include "globals.hh"
 
-class MCTruthConfig 
+#include <iostream>
+#include <vector>
+
+class MCTruthConfig
 {
-public: 
+  public:
+    MCTruthConfig();
 
-  MCTruthConfig(); 
+    virtual ~MCTruthConfig();
 
-  virtual ~MCTruthConfig();
+    void SetMinE(double e) { fMinE = e; }
+    G4double GetMinE() const { return fMinE; }
 
-  void SetMinE(double e) {fMinE = e;}
-  G4double GetMinE() const {return fMinE;}
+    void SetParticleTypes(std::vector<G4int>& types) { fParticleTypes = types; }
+    void AddParticleType(G4int type) { fParticleTypes.push_back(type); }
+    std::vector<G4int>& GetParticleTypes() { return fParticleTypes; }
 
-  void SetParticleTypes(std::vector<G4int>& types) {fParticleTypes = types;}
-  void AddParticleType(G4int type) {fParticleTypes.push_back(type);}
-  std::vector<G4int>& GetParticleTypes() {return fParticleTypes;}
+    void SetCreatorProcesses(std::vector<G4String>& processes) { fCreatorProcesses = processes; }
+    void AddCreatorProcess(G4String& process) { fCreatorProcesses.push_back(process); }
+    std::vector<G4String>& GetCreatorProcesses() { return fCreatorProcesses; }
 
-  void SetCreatorProcesses(std::vector<G4String>& processes)
-       {fCreatorProcesses = processes;}
-  void AddCreatorProcess(G4String& process)
-       {fCreatorProcesses.push_back(process);}
-  std::vector<G4String>& GetCreatorProcesses()
-       {return fCreatorProcesses;}
-
-private:
-
-  G4double fMinE;
-  std::vector<G4int> fParticleTypes;
-  std::vector<G4String> fCreatorProcesses;
-
+  private:
+    G4double fMinE;
+    std::vector<G4int> fParticleTypes;
+    std::vector<G4String> fCreatorProcesses;
 };
 
-#endif // INCLUDE_MCTRUTHCONFIG_H
+#endif  // INCLUDE_MCTRUTHCONFIG_H

@@ -52,10 +52,6 @@ G4DrawVoxels::G4DrawVoxels()
   fBoundingBoxVisAttributes.SetColour(G4Colour(.3,0.,.2));
 }
 
-// Destructor
-//
-G4DrawVoxels::~G4DrawVoxels() = default;
-
 // Methods that allow changing colors of the drawing
 //
 void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,

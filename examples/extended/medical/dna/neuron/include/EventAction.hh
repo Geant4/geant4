@@ -31,12 +31,12 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
-// 
-// 
+//
+//
 /// \file EventAction.hh
 /// \brief Implementation of the EventAction class
 #ifndef EventAction_h
@@ -51,19 +51,15 @@ class RunAction;
 
 class EventAction : public G4UserEventAction
 {
-public:
-  
-  EventAction(RunAction*);
-  ~EventAction() override = default;
+  public:
+    EventAction(RunAction*);
+    ~EventAction() override = default;
 
-  void BeginOfEventAction(const G4Event*) override;
-  void EndOfEventAction(const G4Event*) override;
-    
-private:
-  
-  RunAction* fRunAction;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
+
+  private:
+    RunAction* fRunAction;
 };
 
 #endif
-
-    

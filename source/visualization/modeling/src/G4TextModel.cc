@@ -44,8 +44,8 @@ G4TextModel::G4TextModel (const G4Text& g4Text, const G4Transform3D& transform)
 {
   fType = "G4TextModel";
   std::ostringstream oss;
-  oss << "G4TextModel: \"" << fG4Text.GetText()
-      << "\" at " << G4BestUnit(g4Text.GetPosition(),"Length")
+  oss << "G4TextModel: '" << fG4Text.GetText()
+      << "' at " << G4BestUnit(g4Text.GetPosition(),"Length")
       << "with size " << g4Text.GetScreenSize()
       << " with offsets " << g4Text.GetXOffset() << ',' << g4Text.GetYOffset();
   fGlobalTag = oss.str();

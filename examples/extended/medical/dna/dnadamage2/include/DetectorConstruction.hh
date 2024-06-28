@@ -45,67 +45,67 @@
 #ifndef DNADAMAGE2_DetectorConstruction_h
 #define DNADAMAGE2_DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4UImessenger.hh"
-#include "G4Orb.hh"
-#include "G4MoleculeGun.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithABool.hh"
 #include "PhysGeoImport.hh"
 #include "StackingAction.hh"
+
+#include "G4MoleculeGun.hh"
+#include "G4Orb.hh"
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UImessenger.hh"
+#include "G4VUserDetectorConstruction.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction,
-                             public G4UImessenger
+class DetectorConstruction : public G4VUserDetectorConstruction, public G4UImessenger
 {
-public:
-  DetectorConstruction();
-  ~DetectorConstruction() override;
-  void SetNewValue(G4UIcommand*,G4String) override;
-  void SetSize(G4double);
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction() override;
+    void SetNewValue(G4UIcommand*, G4String) override;
+    void SetSize(G4double);
 
-  G4VPhysicalVolume* Construct() override;
-  void ConstructSDandField() override;
-  void ReadOffsetFile(G4String);
-  void AddDNAInformation(G4int, G4ThreeVector);
-  void SetStacking(StackingAction* stack) {fpStacking = stack;}
-  StackingAction* GetStacking() {return fpStacking;}
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
+    void ReadOffsetFile(G4String);
+    void AddDNAInformation(G4int, G4ThreeVector);
+    void SetStacking(StackingAction* stack) { fpStacking = stack; }
+    StackingAction* GetStacking() { return fpStacking; }
 
-  std::vector<G4String> GetDNANames() {return fDNANames;}
-  std::vector<G4ThreeVector> GetDNAPositions() {return fDNAPositions;}
-  std::vector<std::vector<G4int>> GetDNADetails() {return fDNADetails;}
+    std::vector<G4String> GetDNANames() { return fDNANames; }
+    std::vector<G4ThreeVector> GetDNAPositions() { return fDNAPositions; }
+    std::vector<std::vector<G4int>> GetDNADetails() { return fDNADetails; }
 
-private:
-  G4UIdirectory* fDetDir = nullptr;
-  G4UIcmdWithAString* fpOffSetFileUI = nullptr;
-  G4UIcmdWithAString* fpPlasmidFile  = nullptr;
-  G4UIcmdWithAnInteger* fpPlasmidNbUI = nullptr;
-  G4UIcmdWithADoubleAndUnit* fSizeCmd = nullptr;
-  G4UIcmdWithABool* fpUseDNA = nullptr;
+  private:
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fpOffSetFileUI = nullptr;
+    G4UIcmdWithAString* fpPlasmidFile = nullptr;
+    G4UIcmdWithAnInteger* fpPlasmidNbUI = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd = nullptr;
+    G4UIcmdWithABool* fpUseDNA = nullptr;
 
-  G4Orb* fPlasmidEnvelope = nullptr;
-  G4double fWorldSize = 1 * um;
+    G4Orb* fPlasmidEnvelope = nullptr;
+    G4double fWorldSize = 1 * um;
 
-  G4int fNbOfPlasmids = 0;
-  G4String fPlasmidFile = "VoxelStraight.fab2g4dna";
-  G4bool fUseDNAVolumes = false;
-  std::vector<G4ThreeVector> fVOffset;
+    G4int fNbOfPlasmids = 0;
+    G4String fPlasmidFile = "VoxelStraight.fab2g4dna";
+    G4bool fUseDNAVolumes = false;
+    std::vector<G4ThreeVector> fVOffset;
 
-  std::vector<G4String> fDNANames;
-  std::vector<G4ThreeVector> fDNAPositions;
-  std::vector<std::vector<G4int>> fDNADetails;
+    std::vector<G4String> fDNANames;
+    std::vector<G4ThreeVector> fDNAPositions;
+    std::vector<std::vector<G4int>> fDNADetails;
 
-  std::vector<G4String> fSampleDNANames;
-  std::vector<G4ThreeVector> fSampleDNAPositions;
-  std::vector<std::vector<G4int>> fSampleDNADetails;
+    std::vector<G4String> fSampleDNANames;
+    std::vector<G4ThreeVector> fSampleDNAPositions;
+    std::vector<std::vector<G4int>> fSampleDNADetails;
 
-  StackingAction* fpStacking = nullptr;
+    StackingAction* fpStacking = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

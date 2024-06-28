@@ -31,7 +31,6 @@
 #define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
-
 #include "globals.hh"
 
 class DetectorMessenger;
@@ -59,7 +58,8 @@ class G4VPhysicalVolume;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    enum EMethod {
+    enum EMethod
+    {
       kWithDirectMatrix,
       kWithInverseMatrix,
       kWithAxialRotations,
@@ -69,7 +69,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     DetectorConstruction();
-   ~DetectorConstruction() override;
+    ~DetectorConstruction() override;
 
   public:
     // methods from base class
@@ -88,13 +88,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     // data members
     DetectorMessenger* fMessenger = nullptr;
-    EMethod  fMethod = kWithDirectMatrix;
+    EMethod fMethod = kWithDirectMatrix;
     G4LogicalVolume* fWorldVolume = nullptr;
     G4LogicalVolume* fTrdVolume = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #endif
-

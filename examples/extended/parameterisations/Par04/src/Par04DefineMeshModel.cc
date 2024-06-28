@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 #include "Par04DefineMeshModel.hh"
-#include <G4FastTrack.hh>              // for G4FastTrack
-#include <G4Track.hh>                  // for G4Track
-#include <G4VFastSimulationModel.hh>   // for G4VFastSimulationModel
+
+#include "Par04EventInformation.hh"  // for Par04EventInformation
+
+#include "G4Event.hh"  // for G4Event
+#include "G4EventManager.hh"  // for G4EventManager
+
+#include <G4FastTrack.hh>  // for G4FastTrack
+#include <G4Track.hh>  // for G4Track
+#include <G4VFastSimulationModel.hh>  // for G4VFastSimulationModel
 #include <G4VUserEventInformation.hh>  // for G4VUserEventInformation
-#include "G4Event.hh"                  // for G4Event
-#include "G4EventManager.hh"           // for G4EventManager
-#include "Par04EventInformation.hh"    // for Par04EventInformation
 class G4FastStep;
 class G4ParticleDefinition;
 class G4Region;
@@ -43,8 +46,7 @@ Par04DefineMeshModel::Par04DefineMeshModel(G4String aModelName, G4Region* aEnvel
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04DefineMeshModel::Par04DefineMeshModel(G4String aModelName)
-  : G4VFastSimulationModel(aModelName)
+Par04DefineMeshModel::Par04DefineMeshModel(G4String aModelName) : G4VFastSimulationModel(aModelName)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,10 +64,10 @@ G4bool Par04DefineMeshModel::IsApplicable(const G4ParticleDefinition&)
 
 G4bool Par04DefineMeshModel::ModelTrigger(const G4FastTrack&)
 {
-  auto  info = dynamic_cast<Par04EventInformation*>(
+  auto info = dynamic_cast<Par04EventInformation*>(
     G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetUserInformation());
   // check if particle direction and position were already set for this event
-  if(info != nullptr)
+  if (info != nullptr)
     return !info->GetFlag();
   else
     return true;
@@ -75,10 +77,9 @@ G4bool Par04DefineMeshModel::ModelTrigger(const G4FastTrack&)
 
 void Par04DefineMeshModel::DoIt(const G4FastTrack& aFastTrack, G4FastStep&)
 {
-  auto  info = dynamic_cast<Par04EventInformation*>(
+  auto info = dynamic_cast<Par04EventInformation*>(
     G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetUserInformation());
-  if(info == nullptr)
-  {
+  if (info == nullptr) {
     info = new Par04EventInformation();
     G4EventManager::GetEventManager()->GetNonconstCurrentEvent()->SetUserInformation(info);
   }

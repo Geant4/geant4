@@ -31,7 +31,6 @@
 #define B5RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "globals.hh"
 
 class G4Run;
 
@@ -49,13 +48,13 @@ class RunAction : public G4UserRunAction
     ~RunAction() override = default;
 
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
   private:
     EventAction* fEventAction = nullptr;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

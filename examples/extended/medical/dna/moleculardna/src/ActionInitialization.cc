@@ -28,20 +28,22 @@
 /// \brief Molecular DNA Action Initialization
 
 #include "ActionInitialization.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
-#include "PrimaryGeneratorAction.hh"
+
 #include "AnalysisManager.hh"
-#include "G4Scheduler.hh"
+#include "EventAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
 #include "StackingAction.hh"
+#include "SteppingAction.hh"
 #include "TimeStepAction.hh"
+
+#include "G4Scheduler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  auto man       = new AnalysisManager();
+  auto man = new AnalysisManager();
   auto runAction = new RunAction(man);
   SetUserAction(runAction);
 }
@@ -50,7 +52,7 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  auto man       = new AnalysisManager();
+  auto man = new AnalysisManager();
   auto runAction = new RunAction(man);
   SetUserAction(runAction);
 

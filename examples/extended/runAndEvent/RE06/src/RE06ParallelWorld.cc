@@ -26,41 +26,39 @@
 /// \file RE06/src/RE06ParallelWorld.cc
 /// \brief Implementation of the RE06ParallelWorld class
 //
-// 
+//
 
 #include "RE06ParallelWorld.hh"
 
-#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4PSEnergyDeposit.hh"
+#include "G4PSMinKinEAtGeneration.hh"
+#include "G4PSNofSecondary.hh"
+#include "G4PSNofStep.hh"
+#include "G4PSTrackLength.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-
 #include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSNofSecondary.hh"
-#include "G4PSTrackLength.hh"
-#include "G4PSNofStep.hh"
-#include "G4PSMinKinEAtGeneration.hh"
-#include "G4VSDFilter.hh"
 #include "G4SDParticleFilter.hh"
-#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4VSDFilter.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal G4bool RE06ParallelWorld::fSDConstructed = false;
 
 RE06ParallelWorld::RE06ParallelWorld(G4String worldName)
-:G4VUserParallelWorld(worldName),
- fConstructed(false),
- fSerial(false),
- fTotalThickness(2.0*m),
- fNumberOfLayers(20)
+  : G4VUserParallelWorld(worldName),
+    fConstructed(false),
+    fSerial(false),
+    fTotalThickness(2.0 * m),
+    fNumberOfLayers(20)
 {
-  for(size_t i=0;i<3;i++)
-  {
+  for (size_t i = 0; i < 3; i++) {
     fCalorLogical[i] = 0;
     fLayerLogical[i] = 0;
     fCalorPhysical[i] = 0;
@@ -74,14 +72,15 @@ RE06ParallelWorld::RE06ParallelWorld(G4String worldName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE06ParallelWorld::~RE06ParallelWorld()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE06ParallelWorld::Construct()
 {
-  if(!fConstructed)
-  { 
+  if (!fConstructed) {
     fConstructed = true;
     SetupGeometry();
   }
@@ -91,8 +90,7 @@ void RE06ParallelWorld::Construct()
 
 void RE06ParallelWorld::ConstructSD()
 {
-  if(!fSDConstructed)
-  {
+  if (!fSDConstructed) {
     fSDConstructed = true;
     SetupDetectors();
   }
@@ -101,49 +99,39 @@ void RE06ParallelWorld::ConstructSD()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE06ParallelWorld::SetupGeometry()
 {
-  //     
+  //
   // World
   //
   G4VPhysicalVolume* ghostWorld = GetWorld();
   G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
-  
-  //                               
+
+  //
   // Calorimeter
-  //  
-  G4VSolid* calorSolid 
-    = new G4Tubs("Calor",0.0,0.5*m,fTotalThickness/2.,0.0,360.*deg);
+  //
+  G4VSolid* calorSolid = new G4Tubs("Calor", 0.0, 0.5 * m, fTotalThickness / 2., 0.0, 360. * deg);
   G4int i;
-  for(i=0;i<3;i++)
-  {
-    fCalorLogical[i] = new G4LogicalVolume(calorSolid,0,fCalName[i]);
-    if(fSerial)
-    {
-      fCalorPhysical[i] = new G4PVPlacement(0,
-                 G4ThreeVector(0.,0.,G4double(i-1)*fTotalThickness),
-                 fCalorLogical[i],fCalName[i],worldLogical,false,i);
+  for (i = 0; i < 3; i++) {
+    fCalorLogical[i] = new G4LogicalVolume(calorSolid, 0, fCalName[i]);
+    if (fSerial) {
+      fCalorPhysical[i] =
+        new G4PVPlacement(0, G4ThreeVector(0., 0., G4double(i - 1) * fTotalThickness),
+                          fCalorLogical[i], fCalName[i], worldLogical, false, i);
     }
-    else
-    {
-      fCalorPhysical[i] = new G4PVPlacement(0,
-                 G4ThreeVector(0.,G4double(i-1)*m,0.),
-                 fCalorLogical[i],fCalName[i],worldLogical,false,i);
+    else {
+      fCalorPhysical[i] = new G4PVPlacement(0, G4ThreeVector(0., G4double(i - 1) * m, 0.),
+                                            fCalorLogical[i], fCalName[i], worldLogical, false, i);
     }
   }
- 
-  //                                 
+
+  //
   // Layers --- as absorbers
   //
-  G4VSolid* layerSolid 
-    = new G4Tubs("Layer",0.0,0.5*m,fTotalThickness/2.,0.0,360.*deg);
-  for(i=0;i<3;i++)
-  {
-    fLayerLogical[i] 
-      = new G4LogicalVolume(layerSolid,0,fCalName[i]+"_LayerLog");
-    fLayerPhysical[i] 
-      = new G4PVReplica(fCalName[i]+"_Layer",fLayerLogical[i],fCalorLogical[i],
-                        kRho,fNumberOfLayers,0.5*m/fNumberOfLayers);
+  G4VSolid* layerSolid = new G4Tubs("Layer", 0.0, 0.5 * m, fTotalThickness / 2., 0.0, 360. * deg);
+  for (i = 0; i < 3; i++) {
+    fLayerLogical[i] = new G4LogicalVolume(layerSolid, 0, fCalName[i] + "_LayerLog");
+    fLayerPhysical[i] = new G4PVReplica(fCalName[i] + "_Layer", fLayerLogical[i], fCalorLogical[i],
+                                        kRho, fNumberOfLayers, 0.5 * m / fNumberOfLayers);
   }
-   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,20 +141,18 @@ void RE06ParallelWorld::SetupDetectors()
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
   G4String filterName, particleName;
 
-  G4SDParticleFilter* gammaFilter 
-    = new G4SDParticleFilter(filterName="gammaFilter",particleName="gamma");
-  G4SDParticleFilter* electronFilter 
-    = new G4SDParticleFilter(filterName="electronFilter",particleName="e-");
-  G4SDParticleFilter* positronFilter 
-    = new G4SDParticleFilter(filterName="positronFilter",particleName="e+");
-  G4SDParticleFilter* epFilter 
-    = new G4SDParticleFilter(filterName="epFilter");
-  epFilter->add(particleName="e-");
-  epFilter->add(particleName="e+");
+  G4SDParticleFilter* gammaFilter =
+    new G4SDParticleFilter(filterName = "gammaFilter", particleName = "gamma");
+  G4SDParticleFilter* electronFilter =
+    new G4SDParticleFilter(filterName = "electronFilter", particleName = "e-");
+  G4SDParticleFilter* positronFilter =
+    new G4SDParticleFilter(filterName = "positronFilter", particleName = "e+");
+  G4SDParticleFilter* epFilter = new G4SDParticleFilter(filterName = "epFilter");
+  epFilter->add(particleName = "e-");
+  epFilter->add(particleName = "e+");
 
-  for(G4int i=0;i<3;i++)
-  {
-    G4String detName = fCalName[i]+"_para";
+  for (G4int i = 0; i < 3; i++) {
+    G4String detName = fCalName[i] + "_para";
     G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
 
     G4VPrimitiveScorer* primitive;
@@ -192,27 +178,21 @@ void RE06ParallelWorld::SetupDetectors()
     SetSensitiveDetector(fLayerLogical[i], det);
   }
   G4SDManager::GetSDMpointer()->SetVerboseLevel(0);
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE06ParallelWorld::SetSerialGeometry(G4bool serial)
 {
-  if(fSerial==serial) return;
-  fSerial=serial;
-  if(!fConstructed) return;
-  for(G4int i=0;i<3;i++)
-  {
-    if(fSerial)
-    { 
-      fCalorPhysical[i]
-        ->SetTranslation(G4ThreeVector(0.,0.,G4double(i-1)*2.*m)); 
+  if (fSerial == serial) return;
+  fSerial = serial;
+  if (!fConstructed) return;
+  for (G4int i = 0; i < 3; i++) {
+    if (fSerial) {
+      fCalorPhysical[i]->SetTranslation(G4ThreeVector(0., 0., G4double(i - 1) * 2. * m));
     }
-    else
-    { 
-      fCalorPhysical[i]
-        ->SetTranslation(G4ThreeVector(0.,G4double(i-1)*m,0.)); 
+    else {
+      fCalorPhysical[i]->SetTranslation(G4ThreeVector(0., G4double(i - 1) * m, 0.));
     }
   }
 }

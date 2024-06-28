@@ -79,6 +79,14 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
- 
+  
+  Macros provided in this example:
+  - anni.mac:      e+ (10 MeV) on  5 cm Aluminium
+  - compton.mac:   gamma (300 keV) on 1 cm Aluminium
+  - conv.mac:      gamma (20 MeV) on 5 mm Lead  
+  - electron.mac:  e- (100 MeV) on 1 cm Aluminium
+  - gamma.mac:     gamma (100 keV) on 1 cm Water
+  - photoelec.mac: gamma (100 keV) on 1 cm Iron
+  - proton.mac:    proton (1 GeV) on 1 cm Water
   
 */

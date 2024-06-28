@@ -1,11 +1,16 @@
 # Example RE07 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
 
-## 2023-11-09 I. Hrivnacova (exampleRE07-V11-01-00)
+## 2024-05-02 Gabriele Cosmo (exampleRE07-V11-02-00)
+- Fixed compilation warnings for potentially initialised local variable
+  in EmStandardPhysicsTrackingManager::PostStepDoIt().
+
+## 2023-11-09 Ivana Hrivnacova (exampleRE07-V11-01-00)
 - Coding guidelines - document macros in README files
 - Added separators in EmStandardPhysicsTrackingManager.cc
 

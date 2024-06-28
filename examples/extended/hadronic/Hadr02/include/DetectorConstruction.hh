@@ -37,15 +37,15 @@
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
 #include "G4Material.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class CheckVolumeSD;
 class TargetSD;
@@ -56,38 +56,34 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
 
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
+    virtual G4VPhysicalVolume* Construct();
 
-  virtual G4VPhysicalVolume* Construct();
+    void SetWorldMaterial(const G4String&);
+    void SetTargetMaterial(const G4String&);
 
-  void SetWorldMaterial(const G4String&);
-  void SetTargetMaterial(const G4String&);
+    void SetTargetRadius(G4double val);
 
-  void SetTargetRadius(G4double val);
+  private:
+    DetectorConstruction& operator=(const DetectorConstruction& right);
+    DetectorConstruction(const DetectorConstruction&);
 
-private:
+    G4double fRadius;
 
-  DetectorConstruction & operator=(const DetectorConstruction &right);
-  DetectorConstruction(const DetectorConstruction&);
+    G4Material* fTargetMaterial;
+    G4Material* fWorldMaterial;
 
-  G4double fRadius;
+    TargetSD* fTargetSD;
 
-  G4Material*  fTargetMaterial;
-  G4Material*  fWorldMaterial;
+    G4LogicalVolume* fLogicTarget;
+    G4LogicalVolume* fLogicWorld;
 
-  TargetSD*        fTargetSD;
-
-  G4LogicalVolume* fLogicTarget;
-  G4LogicalVolume* fLogicWorld;
-
-  DetectorMessenger* fDetectorMessenger;
-
+    DetectorMessenger* fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif
-

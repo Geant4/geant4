@@ -25,124 +25,116 @@
 //
 #include "UtilityFunctions.hh"
 
-#include <memory>
 #include <cstdio>
+#include <memory>
 
 #ifdef WIN32
-#include <direct.h>
+#  include <direct.h>
 #else
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace utility
 {
-  std::vector<G4String>& Split(const G4String& str, char delim,
-                               std::vector<G4String>& elems)
-  {
-    std::stringstream ss(str);
-    std::string item;
-    while(std::getline(ss, item, delim))
-    {
-      if(!item.empty())
-        elems.push_back((G4String) item);
+std::vector<G4String>& Split(const G4String& str, char delim, std::vector<G4String>& elems)
+{
+  std::stringstream ss(str);
+  std::string item;
+  while (std::getline(ss, item, delim)) {
+    if (!item.empty()) elems.push_back((G4String)item);
+  }
+  return elems;
+}
+
+std::vector<G4String> Split(const G4String& str, char delim)
+{
+  std::vector<G4String> elems;
+  Split(str, delim, elems);
+  return elems;
+}
+
+// return element ii
+G4String Get_seperated_element(const G4String& str, char delim, G4int ii)
+{
+  G4int delims = 0;
+  G4String ss;
+  for (char c : str) {
+    if (delims > ii) {
+      return ss;
     }
-    return elems;
-  }
-
-  std::vector<G4String> Split(const G4String& str, char delim)
-  {
-    std::vector<G4String> elems;
-    Split(str, delim, elems);
-    return elems;
-  }
-
-  // return element ii
-  G4String Get_seperated_element(const G4String& str, char delim, G4int ii)
-  {
-    G4int delims = 0;
-    G4String ss;
-    for(char c : str)
-    {
-      if(delims > ii) {
-        return ss;}
-      if(c == delim) {
-        delims++;
-      } else if(delims == ii) {
-        ss += c;}
+    if (c == delim) {
+      delims++;
     }
-    return ss;
-  }
-
-  // return first four strings
-  std::array<G4String, 4> Get_four_elements(const G4String& str, char delim)
-  {
-    G4int delims = 0;
-    std::array<G4String, 4> arr;
-    for(char c : str)
-    {
-      if(delims >= 4)
-        return arr;
-      if(c == delim)
-        delims++;
-      else
-        arr.at(delims) += c;
+    else if (delims == ii) {
+      ss += c;
     }
-    return arr;
   }
+  return ss;
+}
 
-  G4bool Path_exists(const G4String& fname)
-  {
-    G4bool bool_val = false;
-    if(FILE* file = std::fopen(fname, "r"))
-    {
-      fclose(file);
-      bool_val = true;
-    }
-    return bool_val;
+// return first four strings
+std::array<G4String, 4> Get_four_elements(const G4String& str, char delim)
+{
+  G4int delims = 0;
+  std::array<G4String, 4> arr;
+  for (char c : str) {
+    if (delims >= 4) return arr;
+    if (c == delim)
+      delims++;
+    else
+      arr.at(delims) += c;
   }
+  return arr;
+}
 
-  // Memory safe multi-platform getcwd
-  // http://stackoverflow.com/questions/2869594/
-  G4String Getcwd()
-  {
-    const size_t chunkSize = 255;
-    const int maxChunks    = 10240;  // 2550 KiBs of current path is plenty
+G4bool Path_exists(const G4String& fname)
+{
+  G4bool bool_val = false;
+  if (FILE* file = std::fopen(fname, "r")) {
+    fclose(file);
+    bool_val = true;
+  }
+  return bool_val;
+}
 
-    char stackBuffer[chunkSize];  // Stack buffer for the "normal" case
-    if(::getcwd(stackBuffer, sizeof(stackBuffer)) != nullptr)
-      return stackBuffer;
-    if(errno != ERANGE)
-    {
+// Memory safe multi-platform getcwd
+// http://stackoverflow.com/questions/2869594/
+G4String Getcwd()
+{
+  const size_t chunkSize = 255;
+  const int maxChunks = 10240;  // 2550 KiBs of current path is plenty
+
+  char stackBuffer[chunkSize];  // Stack buffer for the "normal" case
+  if (::getcwd(stackBuffer, sizeof(stackBuffer)) != nullptr) return stackBuffer;
+  if (errno != ERANGE) {
+    // It's not ERANGE, so we don't know how to handle it
+    throw std::runtime_error("Cannot determine the current path.");
+    // Of course you may choose a different error reporting method
+  }
+  // Ok, the stack buffer isn't long enough; fallback to heap allocation
+  for (int chunks = 2; chunks < maxChunks; chunks++) {
+    // With boost use scoped_ptr; in C++0x, use unique_ptr
+    // If you want to be less C++ but more efficient
+    // you may want to use realloc
+    std::unique_ptr<char[]> cwd(new char[chunkSize * chunks]);
+    if (::getcwd(cwd.get(), chunkSize * chunks) != nullptr) return cwd.get();
+    if (errno != ERANGE) {
       // It's not ERANGE, so we don't know how to handle it
       throw std::runtime_error("Cannot determine the current path.");
       // Of course you may choose a different error reporting method
     }
-    // Ok, the stack buffer isn't long enough; fallback to heap allocation
-    for(int chunks = 2; chunks < maxChunks; chunks++)
-    {
-      // With boost use scoped_ptr; in C++0x, use unique_ptr
-      // If you want to be less C++ but more efficient
-      // you may want to use realloc
-      std::unique_ptr<char[]> cwd(new char[chunkSize * chunks]);
-      if(::getcwd(cwd.get(), chunkSize * chunks) != nullptr)
-        return cwd.get();
-      if(errno != ERANGE)
-      {
-        // It's not ERANGE, so we don't know how to handle it
-        throw std::runtime_error("Cannot determine the current path.");
-        // Of course you may choose a different error reporting method
-      }
-    }
-    throw std::runtime_error("Cannot determine the current path; the path is "
-                             "apparently unreasonably long");
   }
+  throw std::runtime_error(
+    "Cannot determine the current path; the path is "
+    "apparently unreasonably long");
+}
 
-  G4double Min(const G4ThreeVector& v)
-  {
-    return std::min(std::min(v.x(), v.y()), v.z());
-  }
+G4double Min(const G4ThreeVector& v)
+{
+  return std::min(std::min(v.x(), v.y()), v.z());
+}
 }  // namespace utility
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

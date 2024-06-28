@@ -24,24 +24,24 @@
 // ********************************************************************
 //
 //
-// 
+//
 /// \file common/testCommon.cc
 /// \brief Test program for the common classes
 
 #include "DetectorConstruction.hh"
 #include "DetectorConstruction0.hh"
+#include "FTFP_BERT.hh"
 #include "GeantinoPhysicsList.hh"
 #include "GpsPrimaryGeneratorAction.hh"
 #include "GunPrimaryGeneratorAction.hh"
 
 #include "G4RunManager.hh"
-#include "FTFP_BERT.hh"
 
 using namespace Common;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Test program which only instantiates classes defined in 
+// Test program which only instantiates classes defined in
 // examples/common
 
 int main()
@@ -58,7 +58,7 @@ int main()
 
   // Instantiate all physics list classes
   auto geantinoPhysicsList = new GeantinoPhysicsList();
-  
+
   // Instantiate all primary generator actions classes
   auto gpsPrimaryGeneratorAction = new GpsPrimaryGeneratorAction();
   auto gunPrimaryGeneratorAction = new GunPrimaryGeneratorAction();

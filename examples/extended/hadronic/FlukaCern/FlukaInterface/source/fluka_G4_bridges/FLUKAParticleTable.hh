@@ -25,10 +25,10 @@
 //
 // Convert particles FLUKA <-> G4 worlds.
 //
-// NB 1: Conversion tables are created at initialization time, 
+// NB 1: Conversion tables are created at initialization time,
 // and only accessed at run time.
 //
-// NB 2: At run time, if ever a particle returned from the FLUKA interface 
+// NB 2: At run time, if ever a particle returned from the FLUKA interface
 // is not found in the G4 particle table, an exception is thrown.
 //
 // NB 3: There are FLUKA particles categories,
@@ -39,37 +39,34 @@
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef FLUKA_PARTICLE_TABLE_HH
-#define FLUKA_PARTICLE_TABLE_HH
+#  ifndef FLUKA_PARTICLE_TABLE_HH
+#    define FLUKA_PARTICLE_TABLE_HH
 
-
-#include <map>
-#include <unordered_map>
+#    include <map>
+#    include <unordered_map>
 
 // G4
-#include "globals.hh"
-
+#    include "globals.hh"
 
 class G4ParticleDefinition;
 
+namespace fluka_particle_table
+{
 
-namespace fluka_particle_table {
+void initialize();
 
-  void initialize();
+// FLUKA
+const G4String& fluka2name(const G4int id);
 
-  // FLUKA
-  const G4String& fluka2name(const G4int id);
+// FLUKA -> G4
+const G4ParticleDefinition* fluka2geant(const G4int ij);
+const G4String& fluka2geantName(const G4String& name);
+const G4ParticleDefinition* fluka2geant(const G4String& name);
 
-  // FLUKA -> G4
-  const G4ParticleDefinition* fluka2geant(const G4int ij);
-  const G4String& fluka2geantName(const G4String& name);
-  const G4ParticleDefinition* fluka2geant(const G4String& name);
+// G4 -> FLUKA
+G4int geant2fluka(const G4ParticleDefinition* def);
+const G4String& geant2flukaName(const G4ParticleDefinition* def);
+}  // namespace fluka_particle_table
 
-  // G4 -> FLUKA
-  G4int geant2fluka(const G4ParticleDefinition* def);
-  const G4String& geant2flukaName(const G4ParticleDefinition* def);
-}
-
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

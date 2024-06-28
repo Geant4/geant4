@@ -37,17 +37,19 @@
 // 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #include "TargetSD.hh"
+
 #include "HistoManager.hh"
-#include "G4TouchableHistory.hh"
+
 #include "G4Step.hh"
+#include "G4TouchableHistory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TargetSD::TargetSD(const G4String& name)
- :G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
+  : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,4 +61,3 @@ G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

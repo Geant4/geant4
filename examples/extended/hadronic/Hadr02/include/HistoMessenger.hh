@@ -46,24 +46,21 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoMessenger: public G4UImessenger
+class HistoMessenger : public G4UImessenger
 {
-public:
+  public:
+    HistoMessenger(Histo*);
+    virtual ~HistoMessenger();
 
-  HistoMessenger(Histo* );
-  virtual ~HistoMessenger();
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-  virtual void SetNewValue(G4UIcommand* ,G4String );
+  private:
+    Histo* fHisto;
 
-private:
-
-  Histo*                  fHisto;
-   
-  G4UIdirectory*          fHistoDir;   
-  G4UIcmdWithAString*     fFactoryCmd;
-  G4UIcmdWithAString*     fFileCmd;
-  G4UIcommand*            fHistoCmd;
-
+    G4UIdirectory* fHistoDir;
+    G4UIcmdWithAString* fFactoryCmd;
+    G4UIcmdWithAString* fFileCmd;
+    G4UIcommand* fHistoCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

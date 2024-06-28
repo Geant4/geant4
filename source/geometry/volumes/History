@@ -6,10 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-03-28 Gabriele Cosmo (geomvol-V11-01-03)
+## 2024-04-02 Gabriele Cosmo (geomvol-V11-02-02)
+- Applied trivial clang-tidy fixes to G4AssemblyStore, i.e. removed
+  unnecessary 'if' check for null pointer in Clean() method.
+
+## 2024-03-28 Gabriele Cosmo (geomvol-V11-02-01)
 - Use 'const auto &' for iterator in G4LogicalSkinSurface::CleanSurfaceTable().
 
-## 2024-03-08 Gabriele Cosmo
+## 2024-03-08 Gabriele Cosmo (geomvol-V11-02-00)
 - Use std::map instead of std::vector to define G4LogicalSkinSurfaceTable,
   to speedup search of skin surfaces in large tables, as already done
   previously for G4LogicalBorderSurface. Addressing problem report #2598.

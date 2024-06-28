@@ -49,8 +49,8 @@
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,67 +60,59 @@ class DetectorConstruction;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
+    // The constructor defines a ParticleGun object, which allows
+    // shooting a beam of particles through the experimental set-up.
+    PrimaryGeneratorAction(DetectorConstruction* pDet);
 
-  // The constructor defines a ParticleGun object, which allows
-  // shooting a beam of particles through the experimental set-up.
-  PrimaryGeneratorAction(DetectorConstruction* pDet);
+    // The destructor. It deletes the ParticleGun.
+    virtual ~PrimaryGeneratorAction();
 
-  //The destructor. It deletes the ParticleGun.
-  virtual ~PrimaryGeneratorAction();
+    // It reads the parameters of the primary particles.
+    // Generates the primary event via the ParticleGun method.
+    void GeneratePrimaries(G4Event* anEvent);
 
-  //It reads the parameters of the primary particles.
-  //Generates the primary event via the ParticleGun method.
-  void GeneratePrimaries(G4Event* anEvent);
+    // Get/Set methods
+    void SetBeamEnergy(G4double val);
 
-  //Get/Set methods
-  void SetBeamEnergy(G4double val);
+    inline void SetBeamSigmaE(G4double val) { fSigmaE = val; };
+    inline void SetBeamX(G4double val) { fX0 = val; };
+    inline void SetBeamY(G4double val) { fY0 = val; };
+    inline void SetBeamZ(G4double val) { fZ0 = val; };
+    inline void SetBeamSigmaX(G4double val) { fSigmaX = val; };
+    inline void SetBeamSigmaY(G4double val) { fSigmaY = val; };
+    inline void SetBeamSigmaZ(G4double val) { fSigmaY = val; };
+    inline void SetBeamMinCosTheta(G4double val) { fMinCosTheta = val; };
+    inline void SetSigmaTheta(G4double val) { fSigmaTheta = val; };
+    inline void SetVerbose(G4int val) { fVerbose = val; };
+    inline void SetRandom(const G4String& type) { fGauss = type; };
 
-  inline void SetBeamSigmaE(G4double val) { fSigmaE = val; };
-  inline void SetBeamX(G4double val) { fX0 = val;};
-  inline void SetBeamY(G4double val) { fY0 = val;};
-  inline void SetBeamZ(G4double val) { fZ0 = val;};
-  inline void SetBeamSigmaX(G4double val) { fSigmaX = val;};
-  inline void SetBeamSigmaY(G4double val) { fSigmaY = val;};
-  inline void SetBeamSigmaZ(G4double val) { fSigmaY = val;};
-  inline void SetBeamMinCosTheta(G4double val) { fMinCosTheta = val;};
-  inline void SetSigmaTheta(G4double val) { fSigmaTheta = val;};
-  inline void SetVerbose(G4int val) { fVerbose = val;};
-  inline void SetRandom(const G4String& type) { fGauss = type;};
+    G4bool GetVerbose() const { return fVerbose; }
 
-  G4bool GetVerbose() const { return fVerbose; }
+  private:
+    void InitializeMe();
 
-private:
+    PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction& right);
+    PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  void InitializeMe();
+    G4int fVerbose;
+    PrimaryGeneratorMessenger* fMessenger;
+    G4ParticleGun* fParticleGun;
+    DetectorConstruction* fDetector;
 
-  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
-
-  G4int fVerbose;
-  PrimaryGeneratorMessenger* fMessenger;
-  G4ParticleGun* fParticleGun;
-  DetectorConstruction* fDetector;
-
-  G4int fCounter;
-  G4double fX0, fY0, fZ0;
-  G4double fSigmaX, fSigmaY, fSigmaZ;
-  G4double fRMax2;
-  G4double fSigmaE;
-  G4double fSigmaTheta;
-  G4double fEnergy;
-  G4double fMinCosTheta;
-  G4ThreeVector fPosition;
-  G4ThreeVector fDirection;
-  G4String fGauss;
+    G4int fCounter;
+    G4double fX0, fY0, fZ0;
+    G4double fSigmaX, fSigmaY, fSigmaZ;
+    G4double fRMax2;
+    G4double fSigmaE;
+    G4double fSigmaTheta;
+    G4double fEnergy;
+    G4double fMinCosTheta;
+    G4ThreeVector fPosition;
+    G4ThreeVector fDirection;
+    G4String fGauss;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-
-
-
-
-

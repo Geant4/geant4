@@ -45,35 +45,35 @@
 #ifndef DNADAMAGE2_Run_h
 #define DNADAMAGE2_Run_h 1
 
-#include "G4Run.hh"
-#include "G4THitsMap.hh"
-
 #include "ScoreSpecies.hh"
 #include "ScoreStrandBreaks.hh"
+
+#include "G4Run.hh"
+#include "G4THitsMap.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4VPrimitiveScorer;
 class Run : public G4Run
 {
-public:
-  Run();
-  ~Run() override = default;
-  
-  void RecordEvent(const G4Event*) override;
-  void Merge(const G4Run*) override;
-  
-  G4double GetSumDose() const { return fSumEne; }
-  G4VPrimitiveScorer* GetPrimitiveScorer() const { return fScorerRun;}
-  G4VPrimitiveScorer* GetSBScorer() const {return fStrandBreakRun;}
-  G4THitsMap<G4double>* GetLET() {return fTotalLET;}
-  
-private:
-  G4double fSumEne = 0;
-  G4VPrimitiveScorer* fScorerRun = nullptr;
-  G4VPrimitiveScorer* fLETScorerRun = nullptr;
-  G4VPrimitiveScorer* fStrandBreakRun = nullptr;
-  G4THitsMap<G4double>* fTotalLET = nullptr;
+  public:
+    Run();
+    ~Run() override = default;
+
+    void RecordEvent(const G4Event*) override;
+    void Merge(const G4Run*) override;
+
+    G4double GetSumDose() const { return fSumEne; }
+    G4VPrimitiveScorer* GetPrimitiveScorer() const { return fScorerRun; }
+    G4VPrimitiveScorer* GetSBScorer() const { return fStrandBreakRun; }
+    G4THitsMap<G4double>* GetLET() { return fTotalLET; }
+
+  private:
+    G4double fSumEne = 0;
+    G4VPrimitiveScorer* fScorerRun = nullptr;
+    G4VPrimitiveScorer* fLETScorerRun = nullptr;
+    G4VPrimitiveScorer* fStrandBreakRun = nullptr;
+    G4THitsMap<G4double>* fTotalLET = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

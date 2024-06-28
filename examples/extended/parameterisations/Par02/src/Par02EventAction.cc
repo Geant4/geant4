@@ -28,23 +28,25 @@
 /// \brief Implementation of the Par02EventAction class
 
 #include "Par02EventAction.hh"
+
 #include "Par02EventInformation.hh"
-#include "Par02RunAction.hh"
 #include "Par02Output.hh"
-#include "G4RunManager.hh"
+#include "Par02RunAction.hh"
+
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
+
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02EventAction::Par02EventAction() : G4UserEventAction(), fSmear( 1 ) {}
+Par02EventAction::Par02EventAction() : G4UserEventAction(), fSmear(1) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02EventAction::Par02EventAction( G4bool aSmear ) : 
-  G4UserEventAction(), fSmear( aSmear ) {}
+Par02EventAction::Par02EventAction(G4bool aSmear) : G4UserEventAction(), fSmear(aSmear) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,15 +54,14 @@ Par02EventAction::~Par02EventAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02EventAction::BeginOfEventAction( const G4Event* /*aEvent*/ ) {
-  G4EventManager::GetEventManager()->SetUserInformation( 
-                                              new Par02EventInformation( fSmear ) );
+void Par02EventAction::BeginOfEventAction(const G4Event* /*aEvent*/)
+{
+  G4EventManager::GetEventManager()->SetUserInformation(new Par02EventInformation(fSmear));
   Par02Output::Instance()->CreateNtuples();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par02EventAction::EndOfEventAction( const G4Event* /*aEvent*/ ) {}
+void Par02EventAction::EndOfEventAction(const G4Event* /*aEvent*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

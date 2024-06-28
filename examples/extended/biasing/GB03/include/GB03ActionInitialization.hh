@@ -30,8 +30,8 @@
 #ifndef GB03ActionInitialization_H
 #define GB03ActionInitialization_H 1
 
-#include "globals.hh"
 #include "G4VUserActionInitialization.hh"
+#include "globals.hh"
 
 class GB03ActionInitialization : public G4VUserActionInitialization
 {
@@ -41,8 +41,6 @@ class GB03ActionInitialization : public G4VUserActionInitialization
 
     virtual void Build() const;
     virtual void BuildForMaster() const;
-
 };
 
 #endif
-

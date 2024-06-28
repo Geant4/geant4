@@ -28,112 +28,104 @@
 /// \brief Implementation of the F04PhysicsListMessenger class
 //
 
-#include "globals.hh"
-
 #include "F04PhysicsListMessenger.hh"
+
 #include "F04PhysicsList.hh"
 
-#include <G4UIdirectory.hh>
-#include <G4UIcmdWithAString.hh>
-#include <G4UIcmdWithoutParameter.hh>
-#include <G4UIcmdWithADoubleAndUnit.hh>
-
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-
 #include "G4DecayTable.hh"
-#include "G4VDecayChannel.hh"
-
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4PionRadiativeDecayChannel.hh"
+#include "G4VDecayChannel.hh"
+#include "globals.hh"
+
+#include <G4UIcmdWithADoubleAndUnit.hh>
+#include <G4UIcmdWithAString.hh>
+#include <G4UIcmdWithoutParameter.hh>
+#include <G4UIdirectory.hh>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04PhysicsListMessenger::F04PhysicsListMessenger(F04PhysicsList* pPhys)
-    : fPhysicsList(pPhys)
+F04PhysicsListMessenger::F04PhysicsListMessenger(F04PhysicsList* pPhys) : fPhysicsList(pPhys)
 {
-    fDirectory = new G4UIdirectory("/exp/phys/");
-    fDirectory->SetGuidance("Control the physics lists");
+  fDirectory = new G4UIdirectory("/exp/phys/");
+  fDirectory->SetGuidance("Control the physics lists");
 
-    fStepMaxCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/stepMax",this);
-    fStepMaxCMD->SetGuidance("Set max. step length in the detector");
-    fStepMaxCMD->SetParameterName("mxStep",false);
-    fStepMaxCMD->SetUnitCategory("Length");
-    fStepMaxCMD->SetRange("mxStep>0.0");
-    fStepMaxCMD->SetDefaultUnit("mm");
-    fStepMaxCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-/*
-    fClearPhysicsCMD = new G4UIcmdWithoutParameter("/exp/phys/clearPhysics",
-                                                                        this);
-    fClearPhysicsCMD->SetGuidance("Clear the physics list");
-    fClearPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fStepMaxCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/stepMax", this);
+  fStepMaxCMD->SetGuidance("Set max. step length in the detector");
+  fStepMaxCMD->SetParameterName("mxStep", false);
+  fStepMaxCMD->SetUnitCategory("Length");
+  fStepMaxCMD->SetRange("mxStep>0.0");
+  fStepMaxCMD->SetDefaultUnit("mm");
+  fStepMaxCMD->AvailableForStates(G4State_PreInit, G4State_Idle);
+  /*
+      fClearPhysicsCMD = new G4UIcmdWithoutParameter("/exp/phys/clearPhysics",
+                                                                          this);
+      fClearPhysicsCMD->SetGuidance("Clear the physics list");
+      fClearPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fRemovePhysicsCMD = new G4UIcmdWithAString("/exp/phys/removePhysics",this);
-    fRemovePhysicsCMD->
-                     SetGuidance("Remove a physics process from Physics List");
-    fRemovePhysicsCMD->SetParameterName("PList",false);
-    fRemovePhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-*/
-    fDecayDirectory = new G4UIdirectory("/decay/");
-    fDecayDirectory->SetGuidance("Decay chain control commands.");
+      fRemovePhysicsCMD = new G4UIcmdWithAString("/exp/phys/removePhysics",this);
+      fRemovePhysicsCMD->
+                       SetGuidance("Remove a physics process from Physics List");
+      fRemovePhysicsCMD->SetParameterName("PList",false);
+      fRemovePhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
+  */
+  fDecayDirectory = new G4UIdirectory("/decay/");
+  fDecayDirectory->SetGuidance("Decay chain control commands.");
 
-    fPienuCMD = new G4UIcmdWithoutParameter("/decay/pienu", this);
-    fPienuCMD->SetGuidance("Sets the pi+ to decay into e+, nu");
+  fPienuCMD = new G4UIcmdWithoutParameter("/decay/pienu", this);
+  fPienuCMD->SetGuidance("Sets the pi+ to decay into e+, nu");
 
-    fPimunuCMD = new G4UIcmdWithoutParameter("/decay/pimunu", this);
-    fPimunuCMD->SetGuidance("Sets the pi+ to decay into mu+, nu");
-
+  fPimunuCMD = new G4UIcmdWithoutParameter("/decay/pimunu", this);
+  fPimunuCMD->SetGuidance("Sets the pi+ to decay into mu+, nu");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04PhysicsListMessenger::~F04PhysicsListMessenger()
 {
-/*
-    delete fClearPhysicsCMD;
-    delete fRemovePhysicsCMD;
-*/
-    delete fPienuCMD;
-    delete fPimunuCMD;
+  /*
+      delete fClearPhysicsCMD;
+      delete fRemovePhysicsCMD;
+  */
+  delete fPienuCMD;
+  delete fPimunuCMD;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
+void F04PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-    G4ParticleTable* fParticleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleTable* fParticleTable = G4ParticleTable::GetParticleTable();
 
-    if (command == fPienuCMD) {
-       G4ParticleDefinition* fParticleDef = fParticleTable->FindParticle("pi+");
-       G4VDecayChannel* fMode =
-                     new G4PhaseSpaceDecayChannel("pi+",0.999983,2,"e+","nu_e");
-       auto  fTable = new G4DecayTable();
-       fTable->Insert(fMode);
-       fMode = new G4PionRadiativeDecayChannel("pi+",0.000017);
-       fTable->Insert(fMode);
-       fParticleDef->SetDecayTable(fTable);
-    }
+  if (command == fPienuCMD) {
+    G4ParticleDefinition* fParticleDef = fParticleTable->FindParticle("pi+");
+    G4VDecayChannel* fMode = new G4PhaseSpaceDecayChannel("pi+", 0.999983, 2, "e+", "nu_e");
+    auto fTable = new G4DecayTable();
+    fTable->Insert(fMode);
+    fMode = new G4PionRadiativeDecayChannel("pi+", 0.000017);
+    fTable->Insert(fMode);
+    fParticleDef->SetDecayTable(fTable);
+  }
 
-    if (command == fPimunuCMD) {
-       G4ParticleDefinition* fParticleDef = fParticleTable->FindParticle("pi+");
-       G4VDecayChannel* fMode =
-                     new G4PhaseSpaceDecayChannel("pi+",1.000,2,"mu+","nu_mu");
-       auto  fTable = new G4DecayTable();
-       fTable->Insert(fMode);
-       fParticleDef->SetDecayTable(fTable);
-    }
+  if (command == fPimunuCMD) {
+    G4ParticleDefinition* fParticleDef = fParticleTable->FindParticle("pi+");
+    G4VDecayChannel* fMode = new G4PhaseSpaceDecayChannel("pi+", 1.000, 2, "mu+", "nu_mu");
+    auto fTable = new G4DecayTable();
+    fTable->Insert(fMode);
+    fParticleDef->SetDecayTable(fTable);
+  }
 
-    else if (command == fStepMaxCMD) {
-        fPhysicsList->SetStepMax(fStepMaxCMD
-                                     ->GetNewDoubleValue(newValue));
-    }
-/*  else if (command == fClearPhysicsCMD) {
-        fPhysicsList->ClearPhysics();
-    }
-    else if (command == fRemovePhysicsCMD) {
-        G4String name = newValue;
-        fPhysicsList->RemoveFromPhysicsList(name);
-    }
-*/
+  else if (command == fStepMaxCMD) {
+    fPhysicsList->SetStepMax(fStepMaxCMD->GetNewDoubleValue(newValue));
+  }
+  /*  else if (command == fClearPhysicsCMD) {
+          fPhysicsList->ClearPhysics();
+      }
+      else if (command == fRemovePhysicsCMD) {
+          G4String name = newValue;
+          fPhysicsList->RemoveFromPhysicsList(name);
+      }
+  */
 }

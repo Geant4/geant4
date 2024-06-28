@@ -45,33 +45,31 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
-  DetectorMessenger(DetectorConstruction*);
- ~DetectorMessenger() override;
-    
-  void SetNewValue(G4UIcommand*, G4String) override;
-    
-private:
-  DetectorConstruction*      fDetector      = nullptr;
-    
-  G4UIdirectory*             fTestemDir     = nullptr;
-  G4UIdirectory*             fDetDir        = nullptr;
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
 
-  G4UIcmdWithAString*        fAbsMaterCmd   = nullptr;
-  G4UIcmdWithADoubleAndUnit* fAbsThickCmd   = nullptr;
-  G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd   = nullptr;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  G4UIcmdWithADoubleAndUnit* fAbsXposCmd    = nullptr;
+  private:
+    DetectorConstruction* fDetector = nullptr;
 
-  G4UIcmdWithAString*        fWorldMaterCmd = nullptr;
-  G4UIcmdWithADoubleAndUnit* fWorldXCmd     = nullptr;
-  G4UIcmdWithADoubleAndUnit* fWorldYZCmd    = nullptr;
+    G4UIdirectory* fTestemDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
 
+    G4UIcmdWithAString* fAbsMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd = nullptr;
+
+    G4UIcmdWithADoubleAndUnit* fAbsXposCmd = nullptr;
+
+    G4UIcmdWithAString* fWorldMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fWorldXCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fWorldYZCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

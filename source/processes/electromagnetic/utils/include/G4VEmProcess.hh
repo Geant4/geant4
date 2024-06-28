@@ -85,8 +85,6 @@ public:
   // Virtual methods to be implemented in concrete processes
   //------------------------------------------------------------------------
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
-
   void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
@@ -197,15 +195,15 @@ protected:
   //------------------------------------------------------------------------
   // Specific methods to set, access, modify models and basic parameters
   //------------------------------------------------------------------------
-
+  
   // Select model in run time
-  inline G4VEmModel* SelectModel(G4double kinEnergy, size_t);
+  inline G4VEmModel* SelectModel(G4double kinEnergy, std::size_t);
 
 public:
 
   // Select model by energy and couple index
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
-                                            size_t idxCouple) const;
+                                            std::size_t idxCouple) const;
    
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
@@ -218,7 +216,7 @@ public:
   inline G4int NumberOfModels() const;
       
   // return a model from the local list
-  inline G4VEmModel* EmModel(size_t index = 0) const;
+  inline G4VEmModel* EmModel(std::size_t index = 0) const;
 
   // Access to active model
   inline const G4VEmModel* GetCurrentModel() const;
@@ -287,7 +285,7 @@ protected:
   
   inline void SetSecondaryParticle(const G4ParticleDefinition* p);
 
-  inline size_t CurrentMaterialCutsCoupleIndex() const;
+  inline std::size_t CurrentMaterialCutsCoupleIndex() const;
 
   inline const G4MaterialCutsCouple* MaterialCutsCouple() const;
 
@@ -369,7 +367,7 @@ protected:
 private:
 
   const std::vector<G4double>* theDensityFactor = nullptr;
-  const std::vector<G4int>*    theDensityIdx = nullptr;
+  const std::vector<G4int>* theDensityIdx = nullptr;
 
   // ======== parameters =========
   G4double minKinEnergy;
@@ -404,12 +402,12 @@ protected:
   G4int augerID = _AugerElectron;
   G4int biasID = _EM;
   G4int tripletID = _TripletElectron;
-  size_t currentCoupleIndex = 0;
-  size_t basedCoupleIndex = 0;
-  size_t coupleIdxLambda = 0;
-  size_t idxLambda = 0;
+  std::size_t currentCoupleIndex = 0;
+  std::size_t basedCoupleIndex = 0;
+  std::size_t coupleIdxLambda = 0;
+  std::size_t idxLambda = 0;
 
-  G4bool isTheMaster = true;
+  G4bool isTheMaster = false;
   G4bool baseMat = false;
 
 private:
@@ -442,7 +440,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
+inline std::size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentCoupleIndex;
 }
@@ -472,15 +470,15 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 
 inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
-  if(couple != currentCouple) {
+  if (couple != currentCouple) {
     currentCouple = couple;
     baseMaterial = currentMaterial = couple->GetMaterial();
     basedCoupleIndex = currentCoupleIndex = couple->GetIndex();
     fFactor = biasFactor;
     mfpKinEnergy = DBL_MAX;
-    if(baseMat) {
+    if (baseMat) {
       basedCoupleIndex = (*theDensityIdx)[currentCoupleIndex];
-      if(nullptr != currentMaterial->GetBaseMaterial())
+      if (nullptr != currentMaterial->GetBaseMaterial())
         baseMaterial = currentMaterial->GetBaseMaterial();
       fFactor *= (*theDensityFactor)[currentCoupleIndex];
     }
@@ -490,7 +488,7 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4VEmModel* G4VEmProcess::SelectModel(G4double kinEnergy, size_t)
+G4VEmModel* G4VEmProcess::SelectModel(G4double kinEnergy, std::size_t)
 {
   if(1 < numberOfModels) {
     currentModel = modelManager->SelectModel(kinEnergy, currentCoupleIndex);
@@ -503,7 +501,7 @@ G4VEmModel* G4VEmProcess::SelectModel(G4double kinEnergy, size_t)
 
 inline 
 G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy, 
-                                                 size_t idxCouple) const
+                                                 std::size_t idxCouple) const
 {
   return modelManager->SelectModel(kinEnergy, idxCouple);
 }
@@ -803,7 +801,7 @@ inline G4int G4VEmProcess::NumberOfModels() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEmProcess::EmModel(size_t index) const
+inline G4VEmModel* G4VEmProcess::EmModel(std::size_t index) const
 {
   return (index < emModels.size()) ? emModels[index] : nullptr;
 }

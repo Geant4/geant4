@@ -76,7 +76,7 @@ template<typename Position>
     G4KDNode_Base* aParent = nullptr;
     G4KDNode_Base* next = this;
     G4int split = -1;
-    while(next)
+    while(next  != nullptr && next->IsValid())
     {
       split = (G4int)next->fAxis;
       aParent = next;

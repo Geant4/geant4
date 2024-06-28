@@ -134,3 +134,15 @@ void G4FieldManager::ProposeDetectorField(G4Field* detectorField)
   fDetectorField = detectorField;
   InitialiseFieldChangesEnergy();
 }
+
+inline
+void G4FieldManager::SetGlobalFieldManager(G4FieldManager* fieldManager)
+{
+   fGlobalFieldManager = fieldManager;
+}
+
+inline
+G4FieldManager* G4FieldManager::GetGlobalFieldManager()
+{
+   return fGlobalFieldManager;
+}

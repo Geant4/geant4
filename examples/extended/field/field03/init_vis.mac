@@ -8,9 +8,9 @@
 #
 #
 #
-/field/setStepperType 4
-/field/setMinStep 10 mm
-#/field/setFieldZ 1.0 kG
+/field/stepperType ClassicalRK4
+/field/setMinimumStep 10 mm
+#/field/setField 0. 0. 1. kG
 #
 /field/update
 #

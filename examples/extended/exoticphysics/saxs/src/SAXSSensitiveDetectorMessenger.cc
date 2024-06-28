@@ -29,21 +29,22 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSSensitiveDetectorMessenger.hh"
+
 #include "SAXSSensitiveDetector.hh"
 
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSSensitiveDetectorMessenger::SAXSSensitiveDetectorMessenger(SAXSSensitiveDetector* SD):
-  G4UImessenger(), fSenDet(SD)
+SAXSSensitiveDetectorMessenger::SAXSSensitiveDetectorMessenger(SAXSSensitiveDetector* SD)
+  : G4UImessenger(), fSenDet(SD)
 {
   fSenDetDir = new G4UIdirectory("/sd/");
   fSenDetDir->SetGuidance("Sensitive Detector control.");
-    
+
   fUserStopAndKillCmd = new G4UIcmdWithABool("/sd/setSK", this);
-  fUserStopAndKillCmd->SetGuidance("bStopAndKill: (1) true, (0) false.");          
+  fUserStopAndKillCmd->SetGuidance("bStopAndKill: (1) true, (0) false.");
   fUserStopAndKillCmd->SetParameterName("bStopAndKill", true);
   fUserStopAndKillCmd->SetDefaultValue(false);
 }
@@ -58,11 +59,10 @@ SAXSSensitiveDetectorMessenger::~SAXSSensitiveDetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SAXSSensitiveDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{     
-  if (command == fUserStopAndKillCmd) 
+void SAXSSensitiveDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fUserStopAndKillCmd)
     fSenDet->SetVarStopAndKill(fUserStopAndKillCmd->GetNewBoolValue(newValue));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

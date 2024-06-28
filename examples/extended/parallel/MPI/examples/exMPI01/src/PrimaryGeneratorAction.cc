@@ -27,11 +27,12 @@
 /// @file PrimaryGeneratorAction.cc
 /// @brief Define primary generator action
 
+#include "PrimaryGeneratorAction.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 PrimaryGeneratorAction::PrimaryGeneratorAction()
@@ -39,12 +40,12 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fparticleGun = new G4ParticleGun;
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable-> FindParticle("e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
-  fparticleGun-> SetParticleDefinition(particle);
-  fparticleGun-> SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fparticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-14.9*cm));
-  fparticleGun-> SetParticleEnergy(200.*MeV);
+  fparticleGun->SetParticleDefinition(particle);
+  fparticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fparticleGun->SetParticlePosition(G4ThreeVector(0., 0., -14.9 * cm));
+  fparticleGun->SetParticleEnergy(200. * MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,5 +57,5 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  fparticleGun-> GeneratePrimaryVertex(anEvent);
+  fparticleGun->GeneratePrimaryVertex(anEvent);
 }

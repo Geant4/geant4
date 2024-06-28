@@ -41,7 +41,7 @@ target_link_libraries(TestEm16 ${Geant4_LIBRARIES} )
 #
 set(TestEm16_SCRIPTS
     run01.mac run01_prot.mac run02.mac TestEm16.in TestEm16.out gui.mac vis.mac
-    TestReflection.mac vis_TestReflection.mac Box_1m_Cu.gdml
+    TestReflection.mac Box_1m_Cu.gdml
     )
 
 foreach(_script ${TestEm16_SCRIPTS})

@@ -24,20 +24,24 @@
 // ********************************************************************
 //
 #include "Run.hh"
+
 #include <atomic>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-namespace {
-  std::atomic_int g_ctr(0);
+namespace
+{
+std::atomic_int g_ctr(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Run::Run() {
+Run::Run()
+{
   fDummyCounter = g_ctr++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void Run::Merge(const G4Run* other ) {
+void Run::Merge(const G4Run* other)
+{
   G4Run::Merge(other);
   fDummyCounter += static_cast<const Run*>(other)->fDummyCounter;
 }

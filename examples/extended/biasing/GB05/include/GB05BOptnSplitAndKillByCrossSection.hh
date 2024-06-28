@@ -31,62 +31,56 @@
 #ifndef GB05BOptnSplitAndKillByCrossSection_hh
 #define GB05BOptnSplitAndKillByCrossSection_hh 1
 
-#include "G4VBiasingOperation.hh"
 #include "G4ParticleChange.hh"
+#include "G4VBiasingOperation.hh"
 
+class GB05BOptnSplitAndKillByCrossSection : public G4VBiasingOperation
+{
+  public:
+    // -- Constructor :
+    GB05BOptnSplitAndKillByCrossSection(G4String name);
+    // -- destructor:
+    virtual ~GB05BOptnSplitAndKillByCrossSection();
 
-class GB05BOptnSplitAndKillByCrossSection : public G4VBiasingOperation {
-public:
-  // -- Constructor :
-  GB05BOptnSplitAndKillByCrossSection(G4String name);
-  // -- destructor:
-  virtual ~GB05BOptnSplitAndKillByCrossSection();
+  public:
+    // ----------------------------------------------
+    // -- Methods from G4VBiasingOperation interface:
+    // ----------------------------------------------
+    // -- Unused:
+    virtual const G4VBiasingInteractionLaw*
+    ProvideOccurenceBiasingInteractionLaw(const G4BiasingProcessInterface*, G4ForceCondition&) final
+    {
+      return 0;
+    }
+    virtual G4VParticleChange* ApplyFinalStateBiasing(const G4BiasingProcessInterface*,
+                                                      const G4Track*, const G4Step*, G4bool&) final
+    {
+      return 0;
+    }
 
-public:
-  // ----------------------------------------------
-  // -- Methods from G4VBiasingOperation interface:
-  // ----------------------------------------------
-  // -- Unused:
-  virtual const G4VBiasingInteractionLaw*
-  ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*,
-                                         G4ForceCondition&                 ) final
-  {return 0;}
-  virtual G4VParticleChange*                            
-  ApplyFinalStateBiasing               ( const G4BiasingProcessInterface*,
-                                         const G4Track*,
-                                         const G4Step*,
-                                         G4bool&                           ) final
-  {return 0;}
+    // -- Used methods ("non-physics biasing methods"):
+    // ------------------------------------------------
+    // -- Method to return the distance or the condition under which
+    // -- requesting the biasing.
+    // -- Here this distance will be sampled according the exponential
+    // -- interaction law, using the interaction length passed to the
+    // -- method SetInteractionLength(G4double)  below.
+    virtual G4double DistanceToApplyOperation(const G4Track*, G4double,
+                                              G4ForceCondition* condition) final;
+    // -- Method the generate the final state, which is made of the primary
+    // -- with half of its original weight, and a clone of it.
+    virtual G4VParticleChange* GenerateBiasingFinalState(const G4Track*, const G4Step*) final;
 
-  // -- Used methods ("non-physics biasing methods"):
-  // ------------------------------------------------
-  // -- Method to return the distance or the condition under which
-  // -- requesting the biasing.
-  // -- Here this distance will be sampled according the exponential
-  // -- interaction law, using the interaction length passed to the
-  // -- method SetInteractionLength(G4double)  below.
-  virtual G4double
-  DistanceToApplyOperation              ( const G4Track*,
-                                          G4double,
-                                          G4ForceCondition* condition      ) final;
-  // -- Method the generate the final state, which is made of the primary
-  // -- with half of its original weight, and a clone of it.
-  virtual G4VParticleChange* 
-  GenerateBiasingFinalState             ( const G4Track*,
-                                          const G4Step*                    ) final;
+    // -- Specific to this example:
+    // ----------------------------
+    void SetInteractionLength(G4double interactionLength)
+    {
+      fInteractionLength = interactionLength;
+    }
 
-  // -- Specific to this example:
-  // ----------------------------
-  void SetInteractionLength(G4double interactionLength )
-  {
-    fInteractionLength = interactionLength;
-  }
-
-  
-private:
-  G4ParticleChange    fParticleChange;
-  G4double         fInteractionLength;
-
+  private:
+    G4ParticleChange fParticleChange;
+    G4double fInteractionLength;
 };
 
 #endif

@@ -27,37 +27,34 @@
 //
 // NB 1: Neutron HP treatment is the one from G4.
 //
-// NB 2: Neutron capture and fission processes are also defined here in this constructor 
+// NB 2: Neutron capture and fission processes are also defined here in this constructor
 // (as is done in the G4 physics lists), and are from G4.
 //
 // Author: G.Hugo, 01 August 2022
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef FLUKA_HADRON_INELASTIC_PHYSICS_CONSTRUCTOR_HH
-#define FLUKA_HADRON_INELASTIC_PHYSICS_CONSTRUCTOR_HH
-
+#  ifndef FLUKA_HADRON_INELASTIC_PHYSICS_CONSTRUCTOR_HH
+#    define FLUKA_HADRON_INELASTIC_PHYSICS_CONSTRUCTOR_HH
 
 // G4
-#include "CLHEP/Units/SystemOfUnits.h"
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#    include "CLHEP/Units/SystemOfUnits.h"
 
+#    include "G4VPhysicsConstructor.hh"
+#    include "globals.hh"
 
-class FLUKAHadronInelasticPhysicsConstructor final : public G4VPhysicsConstructor {
+class FLUKAHadronInelasticPhysicsConstructor final : public G4VPhysicsConstructor
+{
+  public:
+    FLUKAHadronInelasticPhysicsConstructor(G4int verbose = 1);
 
-public:
-  FLUKAHadronInelasticPhysicsConstructor(G4int verbose = 1);
+    virtual void ConstructParticle() override;
+    virtual void ConstructProcess() override;
 
-  virtual void ConstructParticle() override;
-  virtual void ConstructProcess() override;
-
-
-private:
-  G4double fNeutronHPMaxE = 20*CLHEP::MeV;
-  G4double fNeutronFLUKAMinE = 20*CLHEP::MeV;
+  private:
+    G4double fNeutronHPMaxE = 20 * CLHEP::MeV;
+    G4double fNeutronFLUKAMinE = 20 * CLHEP::MeV;
 };
 
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

@@ -26,25 +26,25 @@
 //
 /// @brief A MPI example code
 
+#include "G4MPIextraWorker.hh"
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
-#include "G4MPIextraWorker.hh"
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#  include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+#  include "G4RunManager.hh"
 #endif
-
-#include "G4UImanager.hh"
-#include "G4UserRunAction.hh"
-#include "G4VisExecutive.hh"
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
-#include "RunActionMaster.hh"
 #include "FTFP_BERT.hh"
+#include "RunActionMaster.hh"
+
 #include "G4ScoringManager.hh"
+#include "G4UImanager.hh"
+#include "G4UserRunAction.hh"
+#include "G4VisExecutive.hh"
 #include "globals.hh"
 
 int main(int argc, char** argv)
@@ -61,50 +61,48 @@ int main(int argc, char** argv)
   // At first, G4MPImanager/G4MPIsession should be created.
   G4int nofExtraWorkers = 0;
 #ifndef G4MULTITHREADED
-  if ( mergeNtuple ) nofExtraWorkers = 1;
+  if (mergeNtuple) nofExtraWorkers = 1;
 #endif
   G4MPImanager* g4MPI = new G4MPImanager(argc, argv, nofExtraWorkers);
   g4MPI->SetVerbose(1);
-  
+
   // MPI session (G4MPIsession) instead of G4UIterminal
   // Terminal availability depends on your MPI implementation.
-  G4MPIsession* session = g4MPI-> GetMPIsession();
+  G4MPIsession* session = g4MPI->GetMPIsession();
 
   // LAM/MPI users can use G4tcsh.
   G4String prompt = "[40;01;33m";
   prompt += "G4MPI";
   prompt += "[40;31m(%s)[40;36m[%/][00;30m:";
-  session-> SetPrompt(prompt);
+  session->SetPrompt(prompt);
 
   // --------------------------------------------------------------------
   // user application setting
   // --------------------------------------------------------------------
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager();
-  runManager-> SetNumberOfThreads(4);
+  runManager->SetNumberOfThreads(4);
 #else
   G4RunManager* runManager = new G4RunManager();
 #endif
-G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
- scManager->SetVerboseLevel(1);
+  G4ScoringManager* scManager = G4ScoringManager::GetScoringManager();
+  scManager->SetVerboseLevel(1);
   // setup your application
-  runManager-> SetUserInitialization(new DetectorConstruction);
-  runManager-> SetUserInitialization(new FTFP_BERT);
-  runManager-> SetUserInitialization(
-                 new ActionInitialization(useNtuple, mergeNtuple));
+  runManager->SetUserInitialization(new DetectorConstruction);
+  runManager->SetUserInitialization(new FTFP_BERT);
+  runManager->SetUserInitialization(new ActionInitialization(useNtuple, mergeNtuple));
 
-  runManager-> Initialize();
+  runManager->Initialize();
 
   // extra worker (for collecting ntuple data)
-  if ( g4MPI->IsExtraWorker() ) {
+  if (g4MPI->IsExtraWorker()) {
     G4cout << "Set extra worker" << G4endl;
-    G4UserRunAction* runAction 
-      = const_cast<G4UserRunAction*>(runManager->GetUserRunAction());
+    G4UserRunAction* runAction = const_cast<G4UserRunAction*>(runManager->GetUserRunAction());
     g4MPI->SetExtraWorker(new G4MPIextraWorker(runAction));
   }
 
   G4VisExecutive* visManager = new G4VisExecutive;
-  visManager-> Initialize();
+  visManager->Initialize();
   G4cout << G4endl;
 
   // --------------------------------------------------------------------
@@ -112,7 +110,7 @@ G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
   // MPIsession treats both interactive and batch modes.
   // Just start your session as below.
   // --------------------------------------------------------------------
-  session-> SessionStart();
+  session->SessionStart();
 
   // --------------------------------------------------------------------
   // termination

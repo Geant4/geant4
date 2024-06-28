@@ -31,6 +31,8 @@
 #define B4cDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+
+#include "G4Threading.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -73,16 +75,15 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
-                                      // magnetic field messenger
+    static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
+    // magnetic field messenger
 
-    G4bool fCheckOverlaps = true; // option to activate checking of volumes overlaps
-    G4int  fNofLayers = -1;     // number of layers
+    G4bool fCheckOverlaps = true;  // option to activate checking of volumes overlaps
+    G4int fNofLayers = -1;  // number of layers
 };
 
-}
+}  // namespace B4c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

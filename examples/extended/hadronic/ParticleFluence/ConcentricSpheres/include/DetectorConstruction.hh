@@ -26,7 +26,7 @@
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,7 @@
 #define DetectorConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"       
+#include "globals.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -44,36 +44,37 @@ class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
   public:
     DetectorConstruction();
     ~DetectorConstruction();
 
     G4VPhysicalVolume* Construct();
 
-    void SetMaterialTracker( const G4String name );
+    void SetMaterialTracker(const G4String name);
     inline G4Material* GetMaterialTracker() const;
-    void SetMaterialEmCalo( const G4String name );
+    void SetMaterialEmCalo(const G4String name);
     inline G4Material* GetMaterialEmCalo() const;
-    void SetMaterialHadCalo( const G4String name );
+    void SetMaterialHadCalo(const G4String name);
     inline G4Material* GetMaterialHadCalo() const;
-  
-    inline void SetInnerRadiusTracker( const G4double value );
+
+    inline void SetInnerRadiusTracker(const G4double value);
     inline G4double GetInnerRadiusTracker() const;
-    inline void SetOuterRadiusTracker( const G4double value );
+    inline void SetOuterRadiusTracker(const G4double value);
     inline G4double GetOuterRadiusTracker() const;
-    inline void SetInnerRadiusEmCalo( const G4double value );
+    inline void SetInnerRadiusEmCalo(const G4double value);
     inline G4double GetInnerRadiusEmCalo() const;
-    inline void SetOuterRadiusEmCalo( const G4double value );
+    inline void SetOuterRadiusEmCalo(const G4double value);
     inline G4double GetOuterRadiusEmCalo() const;
-    inline void SetInnerRadiusHadCalo( const G4double value );
+    inline void SetInnerRadiusHadCalo(const G4double value);
     inline G4double GetInnerRadiusHadCalo() const;
-    inline void SetOuterRadiusHadCalo( const G4double value );
+    inline void SetOuterRadiusHadCalo(const G4double value);
     inline G4double GetOuterRadiusHadCalo() const;
     inline G4double GetScoringThickness() const;
-  
+
     void UpdateGeometry();
-  
+
   private:
     G4VPhysicalVolume* ConstructDetector();  // To be invoked each time the geometry needs
                                              // to be updated.
@@ -81,21 +82,21 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     G4Material* fMaterialTracker;
     G4Material* fMaterialEmCalo;
     G4Material* fMaterialHadCalo;
-    G4LogicalVolume*   fExperimentalHall_log;
+    G4LogicalVolume* fExperimentalHall_log;
     G4VPhysicalVolume* fExperimentalHall_phys;
-    G4LogicalVolume*   fLogicTrackerShell;
+    G4LogicalVolume* fLogicTrackerShell;
     G4VPhysicalVolume* fPhysiTrackerShell;
-    G4LogicalVolume*   fLogicEmCaloShell;
+    G4LogicalVolume* fLogicEmCaloShell;
     G4VPhysicalVolume* fPhysiEmCaloShell;
-    G4LogicalVolume*   fLogicHadCaloShell;
+    G4LogicalVolume* fLogicHadCaloShell;
     G4VPhysicalVolume* fPhysiHadCaloShell;
-    G4LogicalVolume*   fLogicScoringTrackerShell;
+    G4LogicalVolume* fLogicScoringTrackerShell;
     G4VPhysicalVolume* fPhysiScoringTrackerShell;
-    G4LogicalVolume*   fLogicScoringEmCaloShell;
+    G4LogicalVolume* fLogicScoringEmCaloShell;
     G4VPhysicalVolume* fPhysiScoringEmCaloShell;
-    G4LogicalVolume*   fLogicScoringHadCaloShell;
+    G4LogicalVolume* fLogicScoringHadCaloShell;
     G4VPhysicalVolume* fPhysiScoringHadCaloShell;
-    DetectorMessenger* fDetectorMessenger;  
+    DetectorMessenger* fDetectorMessenger;
     G4double fInnerRadiusTracker;
     G4double fOuterRadiusTracker;
     G4double fInnerRadiusEmCalo;
@@ -105,67 +106,83 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     const G4double fScoringThickness = 10.0;  //***LOOKHERE*** thickness of the scoring shell
 };
 
-inline G4Material* DetectorConstruction::GetMaterialTracker() const {
+inline G4Material* DetectorConstruction::GetMaterialTracker() const
+{
   return fMaterialTracker;
 }
 
-inline G4Material* DetectorConstruction::GetMaterialEmCalo() const {
+inline G4Material* DetectorConstruction::GetMaterialEmCalo() const
+{
   return fMaterialEmCalo;
 }
 
-inline G4Material* DetectorConstruction::GetMaterialHadCalo() const {
+inline G4Material* DetectorConstruction::GetMaterialHadCalo() const
+{
   return fMaterialHadCalo;
 }
 
-inline G4double DetectorConstruction::GetInnerRadiusTracker() const {
+inline G4double DetectorConstruction::GetInnerRadiusTracker() const
+{
   return fInnerRadiusTracker;
 }
 
-inline void DetectorConstruction::SetInnerRadiusTracker( const G4double value ) {
+inline void DetectorConstruction::SetInnerRadiusTracker(const G4double value)
+{
   fInnerRadiusTracker = value;
 }
 
-inline G4double DetectorConstruction::GetOuterRadiusTracker() const {
+inline G4double DetectorConstruction::GetOuterRadiusTracker() const
+{
   return fOuterRadiusTracker;
 }
 
-inline void DetectorConstruction::SetOuterRadiusTracker( const G4double value ) {
+inline void DetectorConstruction::SetOuterRadiusTracker(const G4double value)
+{
   fOuterRadiusTracker = value;
 }
 
-inline G4double DetectorConstruction::GetInnerRadiusEmCalo() const {
+inline G4double DetectorConstruction::GetInnerRadiusEmCalo() const
+{
   return fInnerRadiusEmCalo;
 }
 
-inline void DetectorConstruction::SetInnerRadiusEmCalo( const G4double value ) {
+inline void DetectorConstruction::SetInnerRadiusEmCalo(const G4double value)
+{
   fInnerRadiusEmCalo = value;
 }
 
-inline G4double DetectorConstruction::GetOuterRadiusEmCalo() const {
+inline G4double DetectorConstruction::GetOuterRadiusEmCalo() const
+{
   return fOuterRadiusEmCalo;
 }
 
-inline void DetectorConstruction::SetOuterRadiusEmCalo( const G4double value ) {
+inline void DetectorConstruction::SetOuterRadiusEmCalo(const G4double value)
+{
   fOuterRadiusEmCalo = value;
 }
 
-inline G4double DetectorConstruction::GetInnerRadiusHadCalo() const {
+inline G4double DetectorConstruction::GetInnerRadiusHadCalo() const
+{
   return fInnerRadiusHadCalo;
 }
 
-inline void DetectorConstruction::SetInnerRadiusHadCalo( const G4double value ) {
+inline void DetectorConstruction::SetInnerRadiusHadCalo(const G4double value)
+{
   fInnerRadiusHadCalo = value;
 }
 
-inline G4double DetectorConstruction::GetOuterRadiusHadCalo() const {
+inline G4double DetectorConstruction::GetOuterRadiusHadCalo() const
+{
   return fOuterRadiusHadCalo;
 }
 
-inline void DetectorConstruction::SetOuterRadiusHadCalo( const G4double value ) {
+inline void DetectorConstruction::SetOuterRadiusHadCalo(const G4double value)
+{
   fOuterRadiusHadCalo = value;
 }
 
-inline G4double DetectorConstruction::GetScoringThickness() const {
+inline G4double DetectorConstruction::GetScoringThickness() const
+{
   return fScoringThickness;
 }
 

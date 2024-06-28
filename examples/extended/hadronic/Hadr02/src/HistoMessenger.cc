@@ -32,62 +32,56 @@
 
 #include "HistoMessenger.hh"
 
-#include <sstream>
-
 #include "Histo.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
-#include "G4UIcmdWithAString.hh"
+
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIparameter.hh"
 
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(Histo* hist)
-  : G4UImessenger(),
-    fHisto(hist),
-    fHistoDir(0),   
-    fFactoryCmd(0),
-    fFileCmd(0),
-    fHistoCmd(0)
+  : G4UImessenger(), fHisto(hist), fHistoDir(0), fFactoryCmd(0), fFileCmd(0), fHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/testhadr/histo/");
   fHistoDir->SetGuidance("histograms control");
 
-  fFactoryCmd = new G4UIcmdWithAString("/testhadr/histo/fileName",this);
+  fFactoryCmd = new G4UIcmdWithAString("/testhadr/histo/fileName", this);
   fFactoryCmd->SetGuidance("set name for the histograms file");
 
-  fFileCmd = new G4UIcmdWithAString("/testhadr/histo/fileType",this);
+  fFileCmd = new G4UIcmdWithAString("/testhadr/histo/fileType", this);
   fFileCmd->SetGuidance("set type (root, XML) for the histograms file");
 
-  fHistoCmd = new G4UIcommand("/testhadr/histo/setHisto",this);
+  fHistoCmd = new G4UIcommand("/testhadr/histo/setHisto", this);
   fHistoCmd->SetGuidance("Set bining of the histo number ih :");
   fHistoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
-  G4UIparameter* ih = new G4UIparameter("ih",'i',false);
+  G4UIparameter* ih = new G4UIparameter("ih", 'i', false);
   ih->SetGuidance("histo number : from 0 to MaxHisto-1");
   fHistoCmd->SetParameter(ih);
   //
-  G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
+  G4UIparameter* nbBins = new G4UIparameter("nbBins", 'i', false);
   nbBins->SetGuidance("number of bins");
   nbBins->SetParameterRange("nbBins>0");
   fHistoCmd->SetParameter(nbBins);
   //
-  G4UIparameter* valMin = new G4UIparameter("valMin",'d',false);
+  G4UIparameter* valMin = new G4UIparameter("valMin", 'd', false);
   valMin->SetGuidance("valMin, expressed in unit");
   fHistoCmd->SetParameter(valMin);
   //
-  G4UIparameter* valMax = new G4UIparameter("valMax",'d',false);
+  G4UIparameter* valMax = new G4UIparameter("valMax", 'd', false);
   valMax->SetGuidance("valMax, expressed in unit");
   fHistoCmd->SetParameter(valMax);
   //
-  G4UIparameter* unit = new G4UIparameter("unit",'s',true);
+  G4UIparameter* unit = new G4UIparameter("unit", 's', true);
   unit->SetGuidance("if omitted, vmin and vmax are assumed dimensionless");
   unit->SetDefaultValue("none");
   fHistoCmd->SetParameter(unit);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,21 +98,29 @@ HistoMessenger::~HistoMessenger()
 
 void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if (command == fFactoryCmd) { fHisto->SetFileName(newValues); }
+  if (command == fFactoryCmd) {
+    fHisto->SetFileName(newValues);
+  }
 
-  if (command == fFileCmd)    { fHisto->SetFileType(newValues); }
-    
+  if (command == fFileCmd) {
+    fHisto->SetFileType(newValues);
+  }
+
   if (command == fHistoCmd) {
-    G4int ih,nbBins; 
-    G4double vmin,vmax;
+    G4int ih, nbBins;
+    G4double vmin, vmax;
     std::istringstream is(newValues);
     G4String unts;
     is >> ih >> nbBins >> vmin >> vmax >> unts;
     G4String unit = unts;
-    G4double vUnit = 1. ;
-    if(unit != "none") { vUnit = G4UIcommand::ValueOf(unit); }
-    if(vUnit <= 0.0)   { vUnit = 1.; }
-    fHisto->SetHisto1D(ih,nbBins,vmin,vmax,vUnit);
+    G4double vUnit = 1.;
+    if (unit != "none") {
+      vUnit = G4UIcommand::ValueOf(unit);
+    }
+    if (vUnit <= 0.0) {
+      vUnit = 1.;
+    }
+    fHisto->SetHisto1D(ih, nbBins, vmin, vmax, vUnit);
   }
 }
 

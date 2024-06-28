@@ -45,9 +45,5 @@
 //! \brief Defined if Geant4 built with TBB support
 #cmakedefine GEANT4_USE_TBB
 
-//! \def GEANT4_USE_TIMEMORY
-//! \brief Defined if Geant4 built with TiMemory support
-#cmakedefine GEANT4_USE_TIMEMORY
-
 #endif // G4GLOBALCONFIG_HH
 

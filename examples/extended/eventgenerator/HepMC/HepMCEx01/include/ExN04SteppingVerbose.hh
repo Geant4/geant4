@@ -38,15 +38,14 @@
 
 class ExN04SteppingVerbose;
 
+class ExN04SteppingVerbose : public G4SteppingVerbose
+{
+  public:
+    ExN04SteppingVerbose();
+    ~ExN04SteppingVerbose();
 
-class ExN04SteppingVerbose : public G4SteppingVerbose {
-public:
-  ExN04SteppingVerbose();
-  ~ExN04SteppingVerbose();
-
-  void StepInfo();
-  void TrackingStarted();
-
+    void StepInfo();
+    void TrackingStarted();
 };
 
 #endif

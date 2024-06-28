@@ -30,30 +30,26 @@
 
 #include "RE05TrackerParametrisation.hh"
 
-#include "G4VPhysicalVolume.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05TrackerParametrisation::RE05TrackerParametrisation()
-: G4VPVParameterisation()
+RE05TrackerParametrisation::RE05TrackerParametrisation() : G4VPVParameterisation()
 {
-
 #include "RE05DetectorParameterDef.icc"
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05TrackerParametrisation::~RE05TrackerParametrisation()
-{}
+RE05TrackerParametrisation::~RE05TrackerParametrisation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerParametrisation::ComputeTransformation
-(const G4int, G4VPhysicalVolume* physVol) const
+void RE05TrackerParametrisation::ComputeTransformation(const G4int,
+                                                       G4VPhysicalVolume* physVol) const
 {
   G4ThreeVector origin;
   physVol->SetTranslation(origin);
@@ -61,13 +57,13 @@ void RE05TrackerParametrisation::ComputeTransformation
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerParametrisation::ComputeDimensions
-(G4Tubs& trackerLayer, const G4int copyNo, const G4VPhysicalVolume*) const
+void RE05TrackerParametrisation::ComputeDimensions(G4Tubs& trackerLayer, const G4int copyNo,
+                                                   const G4VPhysicalVolume*) const
 {
   trackerLayer.SetInnerRadius(fTracker_radius[copyNo]);
-  trackerLayer.SetOuterRadius(fTracker_radius[copyNo]+fTracker_thick);
+  trackerLayer.SetOuterRadius(fTracker_radius[copyNo] + fTracker_thick);
   trackerLayer.SetZHalfLength(fTracker_length[copyNo]);
-  trackerLayer.SetStartPhiAngle(fTrkTubs_sphi,false);
+  trackerLayer.SetStartPhiAngle(fTrkTubs_sphi, false);
   trackerLayer.SetDeltaPhiAngle(fTrkTubs_dphi);
 }
 

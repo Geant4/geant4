@@ -70,11 +70,11 @@
 
 #include "TSRun.hh"
 
-#include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4TiMemory.hh"
 #include "TSDetectorConstruction.hh"
+
+#include "G4MultiFunctionalDetector.hh"
+#include "G4SDManager.hh"
+#include "G4VPrimitiveScorer.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,8 +86,7 @@ std::vector<G4StatContainer<G4ConvergenceTester>*> TSRun::fConvMaps;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSRun::TSRun(const G4String& mfd_name)
-  : G4Run()
+TSRun::TSRun(const G4String& mfd_name) : G4Run()
 {
   ConstructMFD(mfd_name);
 }
@@ -97,15 +96,14 @@ TSRun::TSRun(const G4String& mfd_name)
 TSRun::~TSRun()
 {
   //--- Clear HitsMap for RUN
-  for(unsigned i = 0; i < fRunMaps.size(); ++i)
+  for (unsigned i = 0; i < fRunMaps.size(); ++i)
     delete fRunMaps[i];
 
-  if(!G4Threading::IsWorkerThread())
-  {
-    for(unsigned i = 0; i < fAtomicRunMaps.size(); ++i)
+  if (!G4Threading::IsWorkerThread()) {
+    for (unsigned i = 0; i < fAtomicRunMaps.size(); ++i)
       delete fAtomicRunMaps[i];
 
-    for(auto& itr : fConvMaps)
+    for (auto& itr : fConvMaps)
       delete itr;
 
     fAtomicRunMaps.clear();
@@ -125,13 +123,11 @@ void TSRun::ConstructMFD(const G4String& mfdName)
   //  Get CollectionIDs for HitCollections.
   //=================================================
   G4MultiFunctionalDetector* mfd =
-    (G4MultiFunctionalDetector*) (SDman->FindSensitiveDetector(mfdName));
+    (G4MultiFunctionalDetector*)(SDman->FindSensitiveDetector(mfdName));
   //
-  if(mfd)
-  {
+  if (mfd) {
     //--- Loop over the registered primitive scorers.
-    for(G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++)
-    {
+    for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++) {
       // Get Primitive Scorer object.
       G4VPrimitiveScorer* scorer = mfd->GetPrimitive(icol);
       // collection name and collectionID for HitsCollection,
@@ -139,36 +135,28 @@ void TSRun::ConstructMFD(const G4String& mfdName)
       // of primitive scorer.
       // The collection name is given by <MFD name>/<Primitive
       // Scorer name>.
-      G4String collectionName     = scorer->GetName();
+      G4String collectionName = scorer->GetName();
       G4String fullCollectionName = mfdName + "/" + collectionName;
-      G4int collectionID          = SDman->GetCollectionID(fullCollectionName);
+      G4int collectionID = SDman->GetCollectionID(fullCollectionName);
       //
-      if(collectionID >= 0)
-      {
-        G4cout << "++ " << fullCollectionName << " id " << collectionID
-               << G4endl;
+      if (collectionID >= 0) {
+        G4cout << "++ " << fullCollectionName << " id " << collectionID << G4endl;
         // Store obtained HitsCollection information into data members.
         // And, creates new G4THitsMap for accumulating quantities during RUN.
         fCollNames.push_back(fullCollectionName);
         fCollIDs.push_back(collectionID);
         fRunMaps.push_back(new G4THitsMap<G4double>(mfdName, collectionName));
         fStatMaps.push_back(new G4StatContainer<G4StatAnalysis>(
-          mfdName, collectionName,
-          TSDetectorConstruction::Instance()->GetTotalTargets()));
-        if(!G4Threading::IsWorkerThread())
-        {
-          fAtomicRunMaps.push_back(
-            new G4TAtomicHitsMap<G4double>(mfdName, collectionName));
+          mfdName, collectionName, TSDetectorConstruction::Instance()->GetTotalTargets()));
+        if (!G4Threading::IsWorkerThread()) {
+          fAtomicRunMaps.push_back(new G4TAtomicHitsMap<G4double>(mfdName, collectionName));
           fMutexRunMaps[fCollNames[collectionID]].clear();
           fConvMaps.push_back(new G4StatContainer<G4ConvergenceTester>(
-            mfdName, collectionName,
-            TSDetectorConstruction::Instance()->GetTotalTargets()));
+            mfdName, collectionName, TSDetectorConstruction::Instance()->GetTotalTargets()));
         }
       }
-      else
-      {
-        G4cout << "** collection " << fullCollectionName << " not found. "
-               << G4endl;
+      else {
+        G4cout << "** collection " << fullCollectionName << " not found. " << G4endl;
       }
     }
   }
@@ -187,52 +175,43 @@ void TSRun::RecordEvent(const G4Event* aEvent)
   // HitsCollection of This Event
   //============================
   G4HCofThisEvent* HCE = aEvent->GetHCofThisEvent();
-  if(!HCE)
-    return;
+  if (!HCE) return;
 
-  for(unsigned i = 0; i < fCollIDs.size(); ++i)
-  {
+  for (unsigned i = 0; i < fCollIDs.size(); ++i) {
     G4int fCollID = fCollIDs.at(i);
     //=======================================================
     // Sum up HitsMap of this Event into HitsMap of this RUN
     //=======================================================
     G4THitsMap<G4double>* EvtMap = 0;
-    if(fCollID >= 0)  // Collection is attached to HCE
+    if (fCollID >= 0)  // Collection is attached to HCE
       EvtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
     else
       G4cout << " Error EvtMap Not Found " << G4endl;
 
-    G4USER_SCOPED_PROFILE(fCollNames.at(i));
-    if(EvtMap)
-    {
+    if (EvtMap) {
       //=== Sum up HitsMap of this event to HitsMap of RUN.===
       {
-        G4USER_SCOPED_PROFILE("ThreadLocal");
         *fRunMaps[fCollID] += *EvtMap;
       }
       //=== Sum up HitsMap of this event to StatMap of RUN.===
       {
-        G4USER_SCOPED_PROFILE("ThreadLocal/G4StatAnalysis");
         // G4StatAnalysis map
         *fStatMaps[fCollID] += *EvtMap;
       }
       //=== Sum up HitsMap of this event to atomic HitsMap of RUN.===
       {
-        G4USER_SCOPED_PROFILE("Global/Atomic");
         *fAtomicRunMaps[fCollID] += *EvtMap;
       }
       //=== Sum up HitsMap of this event to MutexMap of RUN.===
       {
-        G4USER_SCOPED_PROFILE("Global/Mutex");
         // mutex run map
         static G4Mutex mtx = G4MUTEX_INITIALIZER;
         G4AutoLock lock(&mtx);
-        for(const auto& itr : *EvtMap)
+        for (const auto& itr : *EvtMap)
           fMutexRunMaps[fCollNames[fCollID]][itr.first] += *itr.second;
       }
       //=== Sum up HitsMap of this event to MutexMap of RUN.===
       {
-        G4USER_SCOPED_PROFILE("Global/Mutex/G4ConvergenceTester");
         // G4ConvergenceTester run map
         static G4Mutex mtx = G4MUTEX_INITIALIZER;
         G4AutoLock lock(&mtx);
@@ -249,8 +228,7 @@ void TSRun::Merge(const G4Run* aTSRun)
 {
   const TSRun* localTSRun = static_cast<const TSRun*>(aTSRun);
 
-  for(unsigned i = 0; i < fRunMaps.size(); ++i)
-  {
+  for (unsigned i = 0; i < fRunMaps.size(); ++i) {
     *fRunMaps[i] += *localTSRun->fRunMaps[i];
     *fStatMaps[i] += *localTSRun->fStatMaps[i];
   }
@@ -265,10 +243,8 @@ void TSRun::Merge(const G4Run* aTSRun)
 // <MultiFunctional Detector Name>/<Primitive Scorer Name>
 G4THitsMap<G4double>* TSRun::GetHitsMap(const G4String& collName) const
 {
-  for(unsigned i = 0; i < fCollNames.size(); ++i)
-  {
-    if(collName == fCollNames[i])
-      return fRunMaps[i];
+  for (unsigned i = 0; i < fCollNames.size(); ++i) {
+    if (collName == fCollNames[i]) return fRunMaps[i];
   }
 
   G4Exception("TSRun", collName.c_str(), JustWarning,
@@ -281,13 +257,10 @@ G4THitsMap<G4double>* TSRun::GetHitsMap(const G4String& collName) const
 // Access AtomicsHitsMap.
 // by full description of collection name, that is
 // <MultiFunctional Detector Name>/<Primitive Scorer Name>
-G4TAtomicHitsMap<G4double>* TSRun::GetAtomicHitsMap(
-  const G4String& collName) const
+G4TAtomicHitsMap<G4double>* TSRun::GetAtomicHitsMap(const G4String& collName) const
 {
-  for(unsigned i = 0; i < fCollNames.size(); ++i)
-  {
-    if(collName == fCollNames[i])
-      return fAtomicRunMaps[i];
+  for (unsigned i = 0; i < fCollNames.size(); ++i) {
+    if (collName == fCollNames[i]) return fAtomicRunMaps[i];
   }
 
   G4Exception("TSRun", collName.c_str(), JustWarning,
@@ -302,8 +275,7 @@ G4TAtomicHitsMap<G4double>* TSRun::GetAtomicHitsMap(
 // <MultiFunctional Detector Name>/<Primitive Scorer Name>
 TSRun::MutexHitsMap_t* TSRun::GetMutexHitsMap(const G4String& collName) const
 {
-  if(fMutexRunMaps.find(collName) != fMutexRunMaps.end())
-    return &fMutexRunMaps[collName];
+  if (fMutexRunMaps.find(collName) != fMutexRunMaps.end()) return &fMutexRunMaps[collName];
 
   G4Exception("TSRun", collName.c_str(), JustWarning,
               "GetHitsMap failed to locate the requested MutexHitsMap");
@@ -315,13 +287,10 @@ TSRun::MutexHitsMap_t* TSRun::GetMutexHitsMap(const G4String& collName) const
 // Access StatMap.
 // by full description of collection name, that is
 // <MultiFunctional Detector Name>/<Primitive Scorer Name>
-G4StatContainer<G4StatAnalysis>* TSRun::GetStatMap(
-  const G4String& collName) const
+G4StatContainer<G4StatAnalysis>* TSRun::GetStatMap(const G4String& collName) const
 {
-  for(unsigned i = 0; i < fCollNames.size(); ++i)
-  {
-    if(collName == fCollNames[i])
-      return fStatMaps[i];
+  for (unsigned i = 0; i < fCollNames.size(); ++i) {
+    if (collName == fCollNames[i]) return fStatMaps[i];
   }
 
   G4Exception("TSRun", collName.c_str(), JustWarning,
@@ -331,13 +300,10 @@ G4StatContainer<G4StatAnalysis>* TSRun::GetStatMap(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StatContainer<G4ConvergenceTester>* TSRun::GetConvMap(
-  const G4String& collName) const
+G4StatContainer<G4ConvergenceTester>* TSRun::GetConvMap(const G4String& collName) const
 {
-  for(unsigned i = 0; i < fCollNames.size(); ++i)
-  {
-    if(collName == fCollNames[i])
-      return fConvMaps[i];
+  for (unsigned i = 0; i < fCollNames.size(); ++i) {
+    if (collName == fCollNames[i]) return fConvMaps[i];
   }
 
   G4Exception("TSRun", collName.c_str(), JustWarning,

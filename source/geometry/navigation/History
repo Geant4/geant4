@@ -6,10 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-21 Gabriele Cosmo (geomnav-V11-01-09)
+## 2024-05-15 Ivana Hrivnacova (geomnav-V11-02-02)
+- Let G4TransportationManager notify G4FieldManager about the global
+  field via newly added G4FieldManager::SetGlobalFieldManager().
+  This allows to acces the global field manager direcly via G4FieldManager
+  without dependency on G4navigation.
+
+## 2024-04-21 Gabriele Cosmo (geomnav-V11-02-01)
 - Fixed compilation error in G4Navigator on Windows VC++ with
   C++20 Standard enabled.
   Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+## 2024-04-02 Gabriele Cosmo (geomnav-V11-02-00)
+- Applied trivial clang-tidy fixes to classes, i.e. use of 'override' and
+  removal of 'virtual' keywords; use of default constructor/destructor.
 
 ## 2023-11-17 Gabriele Cosmo (geomnav-V11-01-08)
 - Fixed "/geometry/test/check_parallel" UI command in G4GeometryMessenger.

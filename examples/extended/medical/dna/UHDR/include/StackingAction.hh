@@ -27,15 +27,17 @@
 #define StackingAction_h 1
 
 #include "G4UserStackingAction.hh"
+
 #include <memory>
 
-class StackingAction : public G4UserStackingAction {
-public:
-  StackingAction();
+class StackingAction : public G4UserStackingAction
+{
+  public:
+    StackingAction();
 
-  ~StackingAction() override = default;
+    ~StackingAction() override = default;
 
-  void NewStage() override;
+    void NewStage() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

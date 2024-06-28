@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
@@ -37,20 +37,20 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  PrimaryGeneratorAction();    
-  ~PrimaryGeneratorAction();
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction();
 
-  virtual void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
-private:
-  G4ParticleGun* fpParticleGun;
+  private:
+    G4ParticleGun* fpParticleGun;
 };
 #endif

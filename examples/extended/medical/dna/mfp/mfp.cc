@@ -23,41 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file mfp.cc
 /// \brief Main program of the medical/dna/mfp example
-#include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
-#include "G4VisExecutive.hh"
+#ifdef G4MULTITHREADED
+#  include "G4MTRunManager.hh"
+#else
+#  include "G4RunManager.hh"
+#endif
+
 #include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
+int main(int argc, char** argv)
+{
+  // Delete output file
+  remove("mfp.txt");
 
-  // delete output file
-  remove ("mfp.txt");
-
-  // detect interactive mode (if no arguments) and define UI session
+  // Detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // construct the default run manager
+  // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 #else
@@ -65,7 +71,7 @@ int main(int argc,char** argv) {
   G4RunManager* runManager = new G4RunManager;
 #endif
 
-  // set mandatory initialization classes
+  // Set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction;
   runManager->SetUserInitialization(det);
 
@@ -74,29 +80,29 @@ int main(int argc,char** argv) {
 
   runManager->SetUserInitialization(new ActionInitialization());
 
-  // initialize visualization
+  // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
-  // get the pointer to the User Interface manager
+  // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  // process macro or start UI session
-  if ( ! ui ) {
+  // Process macro or start UI session
+  if (!ui) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
   else {
-    // interactive mode
+    // Interactive mode
     ui->SessionStart();
     delete ui;
   }
 
-  // job termination
+  // Job termination
   delete runManager;
 
   return 0;

@@ -29,15 +29,18 @@
 
 #include "PrimaryGeneratorAction.hh"
 
+#include "PrimaryGeneratorMessenger.hh"
+#include "PrimaryGeneratorSourceGRASCSV.hh"
+
 #include "G4GeneralParticleSource.hh"
 #include "G4ParticleGun.hh"
 
-#include "PrimaryGeneratorSourceGRASCSV.hh"
-#include "PrimaryGeneratorMessenger.hh"
-
 // define a Mutex to avoid concurrent reading in multi-thread
 #include "G4AutoLock.hh"
-namespace { G4Mutex PrimaryGeneratorMutex = G4MUTEX_INITIALIZER; }
+namespace
+{
+G4Mutex PrimaryGeneratorMutex = G4MUTEX_INITIALIZER;
+}
 
 // instance of PrimaryGeneratorSource
 PrimaryGeneratorSourceGRASCSV* PrimaryGeneratorAction::fPrimarySource = nullptr;
@@ -59,8 +62,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   G4AutoLock lock(&PrimaryGeneratorMutex);
   delete fParticleGun;
-  if(fPrimarySource != nullptr)
-  {
+  if (fPrimarySource != nullptr) {
     delete fPrimarySource;
     fPrimarySource = nullptr;
   }
@@ -71,53 +73,50 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(fMyInputFileName != "")
-  {
+  if (fMyInputFileName != "") {
     G4AutoLock lock(&PrimaryGeneratorMutex);
     // Read primaries from file
     // Before first event, instantiate file reader if fInputFileName is not empty
-    if(fFirstEvent)
-    {
+    if (fFirstEvent) {
       fPrimarySource = new PrimaryGeneratorSourceGRASCSV(fMyInputFileName);
       fFirstEvent = false;
     }
 
-    auto *fpParticleGun = new G4ParticleGun();
+    auto* fpParticleGun = new G4ParticleGun();
 
     // Get a new primary particle.
     Primary* primary = fPrimarySource->GetPrimary();
-    if(primary != nullptr)
-    {
+    if (primary != nullptr) {
       G4String particleName = primary->GetName();
       G4ThreeVector pos = primary->GetPosition();
       G4ThreeVector momdir = primary->GetMomentumDirection();
       G4double energy = primary->GetEnergy();
       G4ParticleDefinition* particle = primary->GetParticleDefinition();
-      //primary->Print();  // print of the data of the primary particle
+      // primary->Print();  // print of the data of the primary particle
 
-      fpParticleGun->SetParticleDefinition( particle );
-      fpParticleGun->SetParticlePosition( pos );
-      fpParticleGun->SetParticleEnergy( energy*CLHEP::MeV );
-      fpParticleGun->SetParticleMomentumDirection( momdir );
-      fpParticleGun->GeneratePrimaryVertex( anEvent );
+      fpParticleGun->SetParticleDefinition(particle);
+      fpParticleGun->SetParticlePosition(pos);
+      fpParticleGun->SetParticleEnergy(energy * CLHEP::MeV);
+      fpParticleGun->SetParticleMomentumDirection(momdir);
+      fpParticleGun->GeneratePrimaryVertex(anEvent);
     }
-    else
-    {
+    else {
       // If primary is NULL, the end of file has been reached or the file format is not consistent
       // A Geantino placed at kInfinity will be fired in this case
-      G4cout << "WARNING: The phase space source is ended. Maybe you reach the end of file, or your file is broken. A Geantino will be generated." << G4endl;
+      G4cout << "WARNING: The phase space source is ended. Maybe you reach the end of file, or "
+                "your file is broken. A Geantino will be generated."
+             << G4endl;
       G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-      G4ParticleDefinition* particle = pTable->FindParticle( "geantino" );
-      fpParticleGun->SetParticleDefinition( particle );
-      G4ThreeVector pos = G4ThreeVector(kInfinity,kInfinity,kInfinity);
-      fpParticleGun->SetParticlePosition( pos );
-      fpParticleGun->SetParticleEnergy( 0 );
-      fpParticleGun->SetParticleMomentumDirection( pos );
-      fpParticleGun->GeneratePrimaryVertex( anEvent );
+      G4ParticleDefinition* particle = pTable->FindParticle("geantino");
+      fpParticleGun->SetParticleDefinition(particle);
+      G4ThreeVector pos = G4ThreeVector(kInfinity, kInfinity, kInfinity);
+      fpParticleGun->SetParticlePosition(pos);
+      fpParticleGun->SetParticleEnergy(0);
+      fpParticleGun->SetParticleMomentumDirection(pos);
+      fpParticleGun->GeneratePrimaryVertex(anEvent);
     }
   }
-  else
-  {
+  else {
     fParticleGun->GeneratePrimaryVertex(anEvent);
   }
 }

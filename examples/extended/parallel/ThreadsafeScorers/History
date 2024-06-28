@@ -4,6 +4,8 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-05-03 Ben Morgan (ThreadsafeScorers-V11-02-00)
+- Remove use of no longer supported TiMemory
 
 ## 2022-11-09 I. Hrivnacova (ThreadsafeScorers-V11-00-01)
 - Fixed Doxygen documentation

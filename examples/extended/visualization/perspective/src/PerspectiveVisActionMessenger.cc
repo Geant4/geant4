@@ -32,45 +32,37 @@
 
 #include "PerspectiveVisAction.hh"
 
-#include "G4UImanager.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
-(PerspectiveVisAction* PVA):
-  G4UImessenger(),
-  fPVA(PVA),
-  fpDirectory(0),
-  fpCommandOS(0),
-  fpCommandScene(0)
+PerspectiveVisActionMessenger::PerspectiveVisActionMessenger(PerspectiveVisAction* PVA)
+  : G4UImessenger(), fPVA(PVA), fpDirectory(0), fpCommandOS(0), fpCommandScene(0)
 {
   G4bool omitable;
 
-  fpDirectory = new G4UIdirectory ("/perspectiveDemo/");
-  fpDirectory -> SetGuidance ("Perspective demonstration commands.");
+  fpDirectory = new G4UIdirectory("/perspectiveDemo/");
+  fpDirectory->SetGuidance("Perspective demonstration commands.");
 
-  fpCommandOS = new G4UIcmdWithAString ("/perspectiveDemo/optionString", this);
-  fpCommandOS -> SetGuidance
-    ("Option string - any combination of \"x\", \"y\", \"z\", \"a[ll]\".");
-  fpCommandOS -> SetGuidance
-    ("Controls direction of perspective lines.");
-  fpCommandOS -> SetParameterName ("option-string", omitable = true);
-  fpCommandOS -> SetDefaultValue("all");
+  fpCommandOS = new G4UIcmdWithAString("/perspectiveDemo/optionString", this);
+  fpCommandOS->SetGuidance("Option string - any combination of \"x\", \"y\", \"z\", \"a[ll]\".");
+  fpCommandOS->SetGuidance("Controls direction of perspective lines.");
+  fpCommandOS->SetParameterName("option-string", omitable = true);
+  fpCommandOS->SetDefaultValue("all");
 
-  fpCommandScene = new G4UIcmdWithAString ("/perspectiveDemo/scene", this);
-  fpCommandScene -> SetGuidance
-    ("Scene name.");
-  fpCommandScene -> SetParameterName ("scene-name", omitable = true);
-  fpCommandScene -> SetDefaultValue("room-and-chair");
-  fpCommandScene -> SetCandidates("room-and-chair");
+  fpCommandScene = new G4UIcmdWithAString("/perspectiveDemo/scene", this);
+  fpCommandScene->SetGuidance("Scene name.");
+  fpCommandScene->SetParameterName("scene-name", omitable = true);
+  fpCommandScene->SetDefaultValue("room-and-chair");
+  fpCommandScene->SetCandidates("room-and-chair");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PerspectiveVisActionMessenger::~PerspectiveVisActionMessenger ()
+PerspectiveVisActionMessenger::~PerspectiveVisActionMessenger()
 {
   delete fpCommandScene;
   delete fpCommandOS;
@@ -79,21 +71,17 @@ PerspectiveVisActionMessenger::~PerspectiveVisActionMessenger ()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PerspectiveVisActionMessenger::SetNewValue
-(G4UIcommand* command, G4String newValue)
+void PerspectiveVisActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fpCommandOS)
-    {
-      fPVA->SetOptionString(newValue);
-    }
+  if (command == fpCommandOS) {
+    fPVA->SetOptionString(newValue);
+  }
 
-  else if (command == fpCommandScene)
-    {
-      fPVA->SetScene(newValue);
-    }
+  else if (command == fpCommandScene) {
+    fPVA->SetScene(newValue);
+  }
 
   G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

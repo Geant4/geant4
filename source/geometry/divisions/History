@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-02 Gabriele Cosmo (geomdiv-V11-02-00)
+- Applied trivial clang-tidy fixes to G4PVDivisionFactory, i.e. use of default
+  constructor/destructor.
+
 ## 2023-05-09 Gabriele Cosmo (geomdiv-V11-01-00)
 - Applied clang-tidy fixes (readability, modernization, performance, ...).
 

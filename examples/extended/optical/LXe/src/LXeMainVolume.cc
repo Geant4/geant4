@@ -30,11 +30,10 @@
 //
 #include "LXeMainVolume.hh"
 
-#include "globals.hh"
 #include "G4Box.hh"
 #include "G4Colour.hh"
-#include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4MaterialPropertiesTable.hh"
@@ -43,19 +42,20 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4VisAttributes.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeMainVolume::LXeMainVolume(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
-                             G4LogicalVolume* pMotherLogical, G4bool pMany,
-                             G4int pCopyNo, LXeDetectorConstruction* c)
+                             G4LogicalVolume* pMotherLogical, G4bool pMany, G4int pCopyNo,
+                             LXeDetectorConstruction* c)
   // Pass info to the G4PVPlacement constructor
-  : G4PVPlacement(pRot, tlate,
-                  // Temp logical volume must be created here
-                  new G4LogicalVolume(new G4Box("temp", 1, 1, 1),
-                                    G4Material::GetMaterial("Vacuum"), "temp"),
-                  "housing", pMotherLogical, pMany, pCopyNo)
-  , fConstructor(c)
+  : G4PVPlacement(
+      pRot, tlate,
+      // Temp logical volume must be created here
+      new G4LogicalVolume(new G4Box("temp", 1, 1, 1), G4Material::GetMaterial("Vacuum"), "temp"),
+      "housing", pMotherLogical, pMany, pCopyNo),
+    fConstructor(c)
 {
   CopyValues();
 
@@ -64,50 +64,41 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
   G4double housing_z = fScint_z + 2. * fD_mtl;
 
   //*************************** housing and scintillator
-  fScint_box =
-    new G4Box("scint_box", fScint_x / 2., fScint_y / 2., fScint_z / 2.);
-  fHousing_box =
-    new G4Box("housing_box", housing_x / 2., housing_y / 2., housing_z / 2.);
+  fScint_box = new G4Box("scint_box", fScint_x / 2., fScint_y / 2., fScint_z / 2.);
+  fHousing_box = new G4Box("housing_box", housing_x / 2., housing_y / 2., housing_z / 2.);
 
-  fScint_log   = new G4LogicalVolume(fScint_box, G4Material::GetMaterial("LXe"),
-                                   "scint_log");
-  fHousing_log = new G4LogicalVolume(
-    fHousing_box, G4Material::GetMaterial("Al"), "housing_log");
+  fScint_log = new G4LogicalVolume(fScint_box, G4Material::GetMaterial("LXe"), "scint_log");
+  fHousing_log = new G4LogicalVolume(fHousing_box, G4Material::GetMaterial("Al"), "housing_log");
 
-  new G4PVPlacement(nullptr, G4ThreeVector(), fScint_log, "scintillator",
-                    fHousing_log, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(), fScint_log, "scintillator", fHousing_log, false, 0);
 
   //*************** Miscellaneous sphere to demonstrate skin surfaces
-  fSphere = new G4Sphere("sphere", 0., 2. * cm, 0. * deg, 360. * deg, 0. * deg,
-                         360. * deg);
-  fSphere_log =
-    new G4LogicalVolume(fSphere, G4Material::GetMaterial("Al"), "sphere_log");
-  if(fSphereOn)
-    new G4PVPlacement(nullptr, G4ThreeVector(5. * cm, 5. * cm, 5. * cm),
-                      fSphere_log, "sphere", fScint_log, false, 0);
+  fSphere = new G4Sphere("sphere", 0., 2. * cm, 0. * deg, 360. * deg, 0. * deg, 360. * deg);
+  fSphere_log = new G4LogicalVolume(fSphere, G4Material::GetMaterial("Al"), "sphere_log");
+  if (fSphereOn)
+    new G4PVPlacement(nullptr, G4ThreeVector(5. * cm, 5. * cm, 5. * cm), fSphere_log, "sphere",
+                      fScint_log, false, 0);
 
   //****************** Build PMTs
-  G4double innerRadius_pmt   = 0.;
-  G4double height_pmt        = fD_mtl / 2.;
-  G4double startAngle_pmt    = 0.;
+  G4double innerRadius_pmt = 0.;
+  G4double height_pmt = fD_mtl / 2.;
+  G4double startAngle_pmt = 0.;
   G4double spanningAngle_pmt = 360. * deg;
 
-  fPmt = new G4Tubs("pmt_tube", innerRadius_pmt, fOuterRadius_pmt, height_pmt,
-                    startAngle_pmt, spanningAngle_pmt);
+  fPmt = new G4Tubs("pmt_tube", innerRadius_pmt, fOuterRadius_pmt, height_pmt, startAngle_pmt,
+                    spanningAngle_pmt);
 
   // the "photocathode" is a metal slab at the back of the glass that
   // is only a very rough approximation of the real thing since it only
   // absorbs or detects the photons based on the efficiency set below
-  fPhotocath = new G4Tubs("photocath_tube", innerRadius_pmt, fOuterRadius_pmt,
-                          height_pmt / 2., startAngle_pmt, spanningAngle_pmt);
+  fPhotocath = new G4Tubs("photocath_tube", innerRadius_pmt, fOuterRadius_pmt, height_pmt / 2.,
+                          startAngle_pmt, spanningAngle_pmt);
 
-  fPmt_log =
-    new G4LogicalVolume(fPmt, G4Material::GetMaterial("Glass"), "pmt_log");
-  fPhotocath_log = new G4LogicalVolume(
-    fPhotocath, G4Material::GetMaterial("Al"), "photocath_log");
+  fPmt_log = new G4LogicalVolume(fPmt, G4Material::GetMaterial("Glass"), "pmt_log");
+  fPhotocath_log = new G4LogicalVolume(fPhotocath, G4Material::GetMaterial("Al"), "photocath_log");
 
-  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., -height_pmt / 2.),
-                    fPhotocath_log, "photocath", fPmt_log, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., -height_pmt / 2.), fPhotocath_log, "photocath",
+                    fPmt_log, false, 0);
 
   //***********Arrange pmts around the outside of housing**********
 
@@ -119,7 +110,7 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
   G4double xmin = -fScint_x / 2. - dx / 2.;
   G4double ymin = -fScint_y / 2. - dy / 2.;
   G4double zmin = -fScint_z / 2. - dz / 2.;
-  G4int k       = 0;
+  G4int k = 0;
 
   z = -fScint_z / 2. - height_pmt;  // front
   PlacePMTs(fPmt_log, nullptr, x, y, dx, dy, xmin, ymin, fNx, fNy, x, y, z, k);
@@ -159,25 +150,23 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
 
 void LXeMainVolume::CopyValues()
 {
-  fScint_x         = fConstructor->GetScintX();
-  fScint_y         = fConstructor->GetScintY();
-  fScint_z         = fConstructor->GetScintZ();
-  fD_mtl           = fConstructor->GetHousingThickness();
-  fNx              = fConstructor->GetNX();
-  fNy              = fConstructor->GetNY();
-  fNz              = fConstructor->GetNZ();
+  fScint_x = fConstructor->GetScintX();
+  fScint_y = fConstructor->GetScintY();
+  fScint_z = fConstructor->GetScintZ();
+  fD_mtl = fConstructor->GetHousingThickness();
+  fNx = fConstructor->GetNX();
+  fNy = fConstructor->GetNY();
+  fNz = fConstructor->GetNZ();
   fOuterRadius_pmt = fConstructor->GetPMTRadius();
-  fSphereOn        = fConstructor->GetSphereOn();
-  fRefl            = fConstructor->GetHousingReflectivity();
+  fSphereOn = fConstructor->GetSphereOn();
+  fRefl = fConstructor->GetHousingReflectivity();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeMainVolume::PlacePMTs(G4LogicalVolume* pmt_log, G4RotationMatrix* rot,
-                              G4double& a, G4double& b, G4double da,
-                              G4double db, G4double amin, G4double bmin,
-                              G4int na, G4int nb, G4double& x, G4double& y,
-                              G4double& z, G4int& k)
+void LXeMainVolume::PlacePMTs(G4LogicalVolume* pmt_log, G4RotationMatrix* rot, G4double& a,
+                              G4double& b, G4double da, G4double db, G4double amin, G4double bmin,
+                              G4int na, G4int nb, G4double& x, G4double& y, G4double& z, G4int& k)
 {
   /*  PlacePMTs : a different way to parameterize placement that does not depend
    * on calculating the position from the copy number
@@ -193,15 +182,12 @@ void LXeMainVolume::PlacePMTs(G4LogicalVolume* pmt_log, G4RotationMatrix* rot,
    *  sd = sensitive detector for pmts
    */
   a = amin;
-  for(G4int j = 1; j <= na; ++j)
-  {
+  for (G4int j = 1; j <= na; ++j) {
     a += da;
     b = bmin;
-    for(G4int i = 1; i <= nb; ++i)
-    {
+    for (G4int i = 1; i <= nb; ++i) {
       b += db;
-      new G4PVPlacement(rot, G4ThreeVector(x, y, z), pmt_log, "pmt",
-                        fHousing_log, false, k);
+      new G4PVPlacement(rot, G4ThreeVector(x, y, z), pmt_log, "pmt", fHousing_log, false, k);
       fPmtPositions.push_back(G4ThreeVector(x, y, z));
       ++k;
     }
@@ -224,11 +210,11 @@ void LXeMainVolume::VisAttributes()
 
 void LXeMainVolume::SurfaceProperties()
 {
-  std::vector<G4double> ephoton = { 7.0 * eV, 7.14 * eV };
+  std::vector<G4double> ephoton = {7.0 * eV, 7.14 * eV};
 
   //**Scintillator housing properties
-  std::vector<G4double> reflectivity     = { fRefl, fRefl };
-  std::vector<G4double> efficiency       = { 0.0, 0.0 };
+  std::vector<G4double> reflectivity = {fRefl, fRefl};
+  std::vector<G4double> efficiency = {0.0, 0.0};
   auto scintHsngPT = new G4MaterialPropertiesTable();
   scintHsngPT->AddProperty("REFLECTIVITY", ephoton, reflectivity);
   scintHsngPT->AddProperty("EFFICIENCY", ephoton, efficiency);
@@ -237,30 +223,28 @@ void LXeMainVolume::SurfaceProperties()
   OpScintHousingSurface->SetMaterialPropertiesTable(scintHsngPT);
 
   //**Sphere surface properties
-  std::vector<G4double> sphereReflectivity = { 1.0, 1.0 };
-  std::vector<G4double> sphereEfficiency   = { 0.0, 0.0 };
+  std::vector<G4double> sphereReflectivity = {1.0, 1.0};
+  std::vector<G4double> sphereEfficiency = {0.0, 0.0};
   auto spherePT = new G4MaterialPropertiesTable();
   spherePT->AddProperty("REFLECTIVITY", ephoton, sphereReflectivity);
   spherePT->AddProperty("EFFICIENCY", ephoton, sphereEfficiency);
-  auto OpSphereSurface =
-    new G4OpticalSurface("SphereSurface", unified, polished, dielectric_metal);
+  auto OpSphereSurface = new G4OpticalSurface("SphereSurface", unified, polished, dielectric_metal);
   OpSphereSurface->SetMaterialPropertiesTable(spherePT);
 
   //**Photocathode surface properties
-  std::vector<G4double> photocath_EFF     = { 1., 1. };
-  std::vector<G4double> photocath_ReR     = { 1.92, 1.92 };
-  std::vector<G4double> photocath_ImR     = { 1.69, 1.69 };
+  std::vector<G4double> photocath_EFF = {1., 1.};
+  std::vector<G4double> photocath_ReR = {1.92, 1.92};
+  std::vector<G4double> photocath_ImR = {1.69, 1.69};
   auto photocath_mt = new G4MaterialPropertiesTable();
   photocath_mt->AddProperty("EFFICIENCY", ephoton, photocath_EFF);
   photocath_mt->AddProperty("REALRINDEX", ephoton, photocath_ReR);
   photocath_mt->AddProperty("IMAGINARYRINDEX", ephoton, photocath_ImR);
-  auto photocath_opsurf = new G4OpticalSurface(
-    "photocath_opsurf", glisur, polished, dielectric_metal);
+  auto photocath_opsurf =
+    new G4OpticalSurface("photocath_opsurf", glisur, polished, dielectric_metal);
   photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
 
   //**Create logical skin surfaces
-  new G4LogicalSkinSurface("photocath_surf", fHousing_log,
-                           OpScintHousingSurface);
+  new G4LogicalSkinSurface("photocath_surf", fHousing_log, OpScintHousingSurface);
   new G4LogicalSkinSurface("sphere_surface", fSphere_log, OpSphereSurface);
   new G4LogicalSkinSurface("photocath_surf", fPhotocath_log, photocath_opsurf);
 }

@@ -36,7 +36,6 @@
 #define ExUCNRunAction_h 1
 
 #include "G4Run.hh"
-
 #include "G4UserRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,10 +48,9 @@ class ExUCNRunAction : public G4UserRunAction
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
   private:
-
 };
 
 #endif

@@ -25,69 +25,93 @@
 //
 //
 #include "TimeStepAction.hh"
+
+#include "PulseAction.hh"
+
 #include "G4DNAEventScheduler.hh"
 #include "G4DNAGillespieDirectMethod.hh"
 #include "G4DNAMolecularReactionTable.hh"
+#include "G4EventManager.hh"
 #include "G4ITLeadingTracks.hh"
-#include "G4ITTransportationManager.hh"
+#include "G4MoleculeCounter.hh"
+#include "G4Scheduler.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4Scheduler.hh"
-#include "PulseAction.hh"
-#include "G4MoleculeCounter.hh"
+#include "G4UnitsTable.hh"
 #include "G4VChemistryWorld.hh"
+#include "G4VPrimitiveScorer.hh"
 
-TimeStepAction::TimeStepAction(const G4VChemistryWorld *pChemWorld, PulseAction *pPulse)
-    : G4UserTimeStepAction(), fpPulse(pPulse), fpChemWorld(pChemWorld) {
+TimeStepAction::TimeStepAction(const G4VChemistryWorld* pChemWorld, PulseAction* pPulse)
+  : G4UserTimeStepAction(), fpPulse(pPulse), fpChemWorld(pChemWorld)
+{
   fpEventScheduler = std::make_unique<G4DNAEventScheduler>();
+  fScheduler = G4Scheduler::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void TimeStepAction::UserPreTimeStepAction() {}
 
-void TimeStepAction::UserPostTimeStepAction() {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TimeStepAction::UserPostTimeStepAction()
+{
   G4double T1 = 5 * CLHEP::ns;
   if (fpPulse != nullptr && fpPulse->IsActivedPulse()) {
     G4MoleculeCounter::Instance()->Use(false);
-    //we don't count molecules during the pulse
+    // we don't count molecules during the pulse
     T1 = fpPulse->GetLonggestDelayedTime() + 5 * CLHEP::ns;
   }
   // T1: time to start mesoscopic model
-  if (G4Scheduler::Instance()->GetGlobalTime() >= T1) {
+  if (fScheduler->GetGlobalTime() >= T1) {
     CompartmentBased();
   }
 }
 
-void TimeStepAction::UserReactionAction(
-    const G4Track & /*a*/, const G4Track & /*b*/,
-    const std::vector<G4Track *> * /*products*/) {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TimeStepAction::UserReactionAction(const G4Track& /*a*/, const G4Track& /*b*/,
+                                        const std::vector<G4Track*>* /*products*/)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TimeStepAction::EndProcessing() {}
 
-void TimeStepAction::CompartmentBased() {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TimeStepAction::CompartmentBased()
+{
   SetInitialPixel();
-  fpEventScheduler->SetVerbose(G4Scheduler::Instance()->GetVerbose());
-  fpEventScheduler->SetStartTime(G4Scheduler::Instance()->GetGlobalTime()); // continue from globalTime
-  fpEventScheduler->SetEndTime(G4Scheduler::Instance()->GetEndTime() - 1 * ps);
+  fpEventScheduler->SetVerbose(fScheduler->GetVerbose());
+  fpEventScheduler->SetStartTime(fScheduler->GetGlobalTime());  // continue from globalTime
+  fpEventScheduler->SetEndTime(fScheduler->GetEndTime() - 1 * ps);
   fpEventScheduler->SetChangeMesh(true);
   fpEventScheduler->Initialize(*fpChemWorld->GetChemistryBoundary(), fPixel);
   fpEventScheduler->Run();
-  G4Scheduler::Instance()->Stop();
+  fScheduler->Stop();
 }
 
-G4DNAEventScheduler *TimeStepAction::GetEventScheduler() const {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4DNAEventScheduler* TimeStepAction::GetEventScheduler() const
+{
   return fpEventScheduler.get();
 }
 
-void TimeStepAction::SetInitialPixel() {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TimeStepAction::SetInitialPixel()
+{
   auto pBoundingBox = fpChemWorld->GetChemistryBoundary();
   G4double Box = pBoundingBox->halfSideLengthInX();
   if (Box == 1.6 * um) {
-    fPixel = 512;// for CONV
-  } else if (Box == 0.8 * um) {
-    fPixel = 256;// for FLASH
-  } else {
+    fPixel = 512;  // for CONV
+  }
+  else if (Box == 0.8 * um) {
+    fPixel = 256;  // for FLASH
+  }
+  else {
     G4cout << "Box  : " << *pBoundingBox << "  Pixel : " << fPixel << G4endl;
     G4Exception("This chem volume is not optimized and the result may be incorrect.",
                 "TimeStepAction::TimeStepAction", FatalException, "");
@@ -95,3 +119,16 @@ void TimeStepAction::SetInitialPixel() {
   // 512 : for conventional dose rate
   // 256 : for higher dose rate
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TimeStepAction::StartProcessing()
+{
+  auto currentEvent = G4EventManager::GetEventManager();
+  if (currentEvent->GetConstCurrentEvent()->IsAborted()) {
+    G4cout << "This event is fully aborted" << G4endl;
+    fScheduler->Stop();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

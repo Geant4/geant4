@@ -33,6 +33,7 @@
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
+
 #include <map>
 
 class SAXSEventAction;
@@ -42,28 +43,27 @@ class G4LogicalVolume;
 
 /// Stepping Action.
 /// It is used to retrive information about every interaction of the photons
-/// occuring iside the phantom, and in particular, scattering events. 
-/// The total number of scattering events (subdivided by tyoe) is passed to 
+/// occuring iside the phantom, and in particular, scattering events.
+/// The total number of scattering events (subdivided by tyoe) is passed to
 /// the EventAction class and stored at the end of the event.
 
 class SAXSSteppingAction : public G4UserSteppingAction
 {
-public:
+  public:
     SAXSSteppingAction(SAXSEventAction*);
     virtual ~SAXSSteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
 
-private:
-    SAXSEventAction* fEventAction;   
+  private:
+    SAXSEventAction* fEventAction;
 
-        G4LogicalVolume* fPhantom;
-    
+    G4LogicalVolume* fPhantom;
+
     G4int fEventNumber;
-    G4int fNSe;   
+    G4int fNSe;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

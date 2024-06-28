@@ -26,7 +26,7 @@
 /// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,8 +34,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -45,17 +45,19 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger {
+class DetectorMessenger : public G4UImessenger
+{
   public:
-    DetectorMessenger( DetectorConstruction* );
+    DetectorMessenger(DetectorConstruction*);
     ~DetectorMessenger();
-    void SetNewValue( G4UIcommand*, G4String ) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
-    DetectorConstruction*      fDetector;
-    G4UIdirectory*             fDetectorDir;
-    G4UIcmdWithAString*        fMaterial;
+    DetectorConstruction* fDetector;
+    G4UIdirectory* fDetectorDir;
+    G4UIcmdWithAString* fMaterial;
     G4UIcmdWithADoubleAndUnit* fRadius;
-    G4UIcmdWithoutParameter*   fUpdateCommand;
+    G4UIcmdWithoutParameter* fUpdateCommand;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

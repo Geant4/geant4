@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE
-#ifndef PAR04INFERENCEINTERFACE_HH
-#define PAR04INFERENCEINTERFACE_HH
+#  ifndef PAR04INFERENCEINTERFACE_HH
+#    define PAR04INFERENCEINTERFACE_HH
 
-#include "globals.hh"
-#include <vector>
+#    include "globals.hh"
+
+#    include <vector>
 
 /**
  * @brief Inference interface
@@ -39,16 +40,16 @@
 
 class Par04InferenceInterface
 {
- public:
-  virtual ~Par04InferenceInterface(){};
+  public:
+    virtual ~Par04InferenceInterface() {};
 
-  /// Run inference
-  /// @param[in] aGenVector Input latent space and conditions
-  /// @param[out] aEnergies Model output = generated shower energies
-  /// @param[in] aSize Size of the output
-  virtual void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
-                            int aSize) = 0;
+    /// Run inference
+    /// @param[in] aGenVector Input latent space and conditions
+    /// @param[out] aEnergies Model output = generated shower energies
+    /// @param[in] aSize Size of the output
+    virtual void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
+                              int aSize) = 0;
 };
 
-#endif /* PAR04INFERENCEINTERFACE_HH */
+#  endif /* PAR04INFERENCEINTERFACE_HH */
 #endif

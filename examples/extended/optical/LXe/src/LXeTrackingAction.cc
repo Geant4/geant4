@@ -56,38 +56,31 @@ void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
 void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
-  auto trajectory = (LXeTrajectory*) fpTrackingManager->GimmeTrajectory();
-  auto trackInformation =
-    (LXeUserTrackInformation*) aTrack->GetUserInformation();
+  auto trajectory = (LXeTrajectory*)fpTrackingManager->GimmeTrajectory();
+  auto trackInformation = (LXeUserTrackInformation*)aTrack->GetUserInformation();
 
   // Let's choose to draw only the photons that hit the sphere and a pmt
-  if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  {
+  if (aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
     const G4VProcess* creator = aTrack->GetCreatorProcess();
-    if(creator && creator->GetProcessName() == "OpWLS")
-    {
+    if (creator && creator->GetProcessName() == "OpWLS") {
       trajectory->WLS();
       trajectory->SetDrawTrajectory(true);
     }
 
-    if(LXeDetectorConstruction::GetSphereOn())
-    {
-      if((trackInformation->GetTrackStatus() & hitPMT) &&
-         (trackInformation->GetTrackStatus() & hitSphere))
+    if (LXeDetectorConstruction::GetSphereOn()) {
+      if ((trackInformation->GetTrackStatus() & hitPMT)
+          && (trackInformation->GetTrackStatus() & hitSphere))
       {
         trajectory->SetDrawTrajectory(true);
       }
     }
-    else
-    {
-      if(trackInformation->GetTrackStatus() & hitPMT)
-        trajectory->SetDrawTrajectory(true);
+    else {
+      if (trackInformation->GetTrackStatus() & hitPMT) trajectory->SetDrawTrajectory(true);
     }
   }
   // draw all other (not optical photon) trajectories
   else
     trajectory->SetDrawTrajectory(true);
 
-  if(trackInformation->GetForceDrawTrajectory())
-    trajectory->SetDrawTrajectory(true);
+  if (trackInformation->GetForceDrawTrajectory()) trajectory->SetDrawTrajectory(true);
 }

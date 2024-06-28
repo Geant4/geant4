@@ -40,12 +40,12 @@
 
 class PhysicsListEmSpecialized : public G4EmStandardPhysics
 {
- public:
-  PhysicsListEmSpecialized(G4int ver = 1, const G4String& name = "");
-  ~PhysicsListEmSpecialized();
+  public:
+    PhysicsListEmSpecialized(G4int ver = 1, const G4String& name = "");
+    ~PhysicsListEmSpecialized();
 
- public:
-  void ConstructProcess() override;
+  public:
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

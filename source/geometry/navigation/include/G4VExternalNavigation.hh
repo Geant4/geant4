@@ -49,7 +49,7 @@ class G4VExternalNavigation : public G4VNavigation
     G4VExternalNavigation();
       // Constructor
    
-    virtual ~G4VExternalNavigation();
+    ~G4VExternalNavigation() override;
       // Destructor
 
     virtual G4VExternalNavigation* Clone() = 0;
@@ -62,8 +62,8 @@ class G4VExternalNavigation : public G4VNavigation
      // Special 'Inside' call that includes direction of next motion
      //   provided for potential optimisations.
 
-    virtual void RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
-                                       const G4ThreeVector& localPoint );
+    void RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
+                               const G4ThreeVector& localPoint ) override;
      //   Update any relevant internal state to take account that
      //      - the location has been moved to 'localPoint'
      //      - it remains in the current (mother) physical volume 'motherPhysical'

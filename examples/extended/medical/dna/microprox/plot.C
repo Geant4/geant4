@@ -1,5 +1,5 @@
 // *********************************************************************
-// To execute this macro under ROOT after your simulation ended, 
+// To execute this macro under ROOT after your simulation ended,
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
 //
@@ -24,16 +24,15 @@ Int_t nbRadius = 101;
 TCanvas *c1 = new TCanvas ("c1","",60,60,800,800);
 Int_t mycolor;
 
-TFile f("t.root"); 
+TFile f("t.root");
 mycolor=4;
 
 TNtuple* ntuple;
-ntuple = (TNtuple*)f.Get("t"); 
+ntuple = (TNtuple*)f.Get("t");
 
 bool rowWise = true;
 TBranch* eventBranch = ntuple->FindBranch("row_wise_branch");
 if ( ! eventBranch ) rowWise = false;
-// std::cout <<  "rowWise: " << rowWise << std::endl
 
 Double_t radius1,nofHits,nbEdep,edep,radius2,Einc;
 Int_t noRadius;
@@ -54,7 +53,7 @@ else {
   SetLeafAddress(ntuple, "nbScoredHits",&nbEdep);
   SetLeafAddress(ntuple, "edep",&edep);
   SetLeafAddress(ntuple, "radius2",&radius2);
-  SetLeafAddress(ntuple, "Einc",&Einc);        
+  SetLeafAddress(ntuple, "Einc",&Einc);
 }
 
 Int_t nentries = (Int_t)ntuple->GetEntries();
@@ -63,32 +62,32 @@ Int_t nentries = (Int_t)ntuple->GetEntries();
 
 Double_t t[1000]; // 1000 is the max number of radius values
 Double_t population[1000];
-Double_t myRad[1000]; 
+Double_t myRad[1000];
 
-for (Int_t i=0; i<1000; i++) 
+for (Int_t i=0; i<1000; i++)
 {
- t[i]=0; 
+ t[i]=0;
  population[i]=0;
- myRad[i]=0; 
+ myRad[i]=0;
 }
 
 Int_t event = 0;
 
-for (Int_t i=0; i<nentries; i++) 
+for (Int_t i=0; i<nentries; i++)
 {
   ntuple->GetEntry(i);
   t[noRadius] = t[noRadius] + edep;
   population[noRadius]=population[noRadius]+1;
-  myRad[noRadius] = radius1;  
+  myRad[noRadius] = radius1;
 }
 
 // Mean
 
-for (Int_t j=1; j<nbRadius; j++) 
+for (Int_t j=1; j<nbRadius; j++)
 {
   t[j] = t[j]/population[j];
   t[j] = t[j]/(myRad[j+1]-myRad[j]);
-  //cout << j << " " << myRad[j] << " " << myRad[j+1] 
+  //cout << j << " " << myRad[j] << " " << myRad[j+1]
   // << " " << t[j] << " " << population[j] << endl;
 }
 
@@ -125,4 +124,3 @@ void SetLeafAddress(TNtuple* ntuple, const char* name, void* address) {
   }
   leaf->SetAddress(address);
 }
-

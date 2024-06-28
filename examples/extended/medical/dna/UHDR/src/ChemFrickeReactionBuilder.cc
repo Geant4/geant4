@@ -24,62 +24,53 @@
 // ********************************************************************
 //
 
-
 #include "ChemFrickeReactionBuilder.hh"
+
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4MoleculeTable.hh"
 #include "G4SystemOfUnits.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChemFrickeReactionBuilder::FrickeDosimeterReaction(G4DNAMolecularReactionTable *pReactionTable) {
+void ChemFrickeReactionBuilder::FrickeDosimeterReaction(G4DNAMolecularReactionTable* pReactionTable)
+{
   auto OH = G4MoleculeTable::Instance()->GetConfiguration("OH");
   auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm");
 
-  G4MolecularConfiguration *H2O2 =
-      G4MoleculeTable::Instance()->GetConfiguration("H2O2");
-  G4MolecularConfiguration *HO2 =
-      G4MoleculeTable::Instance()->GetConfiguration("HO2");
-  G4MolecularConfiguration *HO2m =
-      G4MoleculeTable::Instance()->GetConfiguration("HO2m");
-  G4MolecularConfiguration *Fepp =
-      G4MoleculeTable::Instance()->GetConfiguration("Fepp");
-  G4MolecularConfiguration *Feppp =
-      G4MoleculeTable::Instance()->GetConfiguration("Feppp");
+  G4MolecularConfiguration* H2O2 = G4MoleculeTable::Instance()->GetConfiguration("H2O2");
+  G4MolecularConfiguration* HO2 = G4MoleculeTable::Instance()->GetConfiguration("HO2");
+  G4MolecularConfiguration* HO2m = G4MoleculeTable::Instance()->GetConfiguration("HO2m");
+  G4MolecularConfiguration* Fepp = G4MoleculeTable::Instance()->GetConfiguration("Fepp");
+  G4MolecularConfiguration* Feppp = G4MoleculeTable::Instance()->GetConfiguration("Feppp");
 
-  G4MolecularConfiguration *HSO4m =
-      G4MoleculeTable::Instance()->GetConfiguration("HSO4m");
-  G4MolecularConfiguration *SO4m =
-      G4MoleculeTable::Instance()->GetConfiguration("SO4m");
+  G4MolecularConfiguration* HSO4m = G4MoleculeTable::Instance()->GetConfiguration("HSO4m");
+  G4MolecularConfiguration* SO4m = G4MoleculeTable::Instance()->GetConfiguration("SO4m");
 
-  G4DNAMolecularReactionData *reactionData = nullptr;
+  G4DNAMolecularReactionData* reactionData = nullptr;
 
-//------------------------------------------------------------------
-//Fepp(B) + OH -> Feppp + OHm
-  reactionData = new G4DNAMolecularReactionData(
-      3.4e8 * (1e-3 * m3 / (mole * s)), Fepp, OH);
+  //------------------------------------------------------------------
+  // Fepp(B) + OH -> Feppp + OHm
+  reactionData = new G4DNAMolecularReactionData(3.4e8 * (1e-3 * m3 / (mole * s)), Fepp, OH);
   reactionData->AddProduct(Feppp);
   reactionData->AddProduct(OHm);
   pReactionTable->SetReaction(reactionData);
-//------------------------------------------------------------------
-//Fepp(B) + HO2 -> Feppp + HO2m
-  reactionData = new G4DNAMolecularReactionData(
-      7.9e5 * (1e-3 * m3 / (mole * s)), Fepp, HO2);
+  //------------------------------------------------------------------
+  // Fepp(B) + HO2 -> Feppp + HO2m
+  reactionData = new G4DNAMolecularReactionData(7.9e5 * (1e-3 * m3 / (mole * s)), Fepp, HO2);
   reactionData->AddProduct(Feppp);
   reactionData->AddProduct(HO2m);
   pReactionTable->SetReaction(reactionData);
-//------------------------------------------------------------------
-//Fepp(B) + H2O2 -> Feppp + OH + OHm
-  reactionData = new G4DNAMolecularReactionData(
-      52 * (1e-3 * m3 / (mole * s)), Fepp, H2O2);
+  //------------------------------------------------------------------
+  // Fepp(B) + H2O2 -> Feppp + OH + OHm
+  reactionData = new G4DNAMolecularReactionData(52 * (1e-3 * m3 / (mole * s)), Fepp, H2O2);
   reactionData->AddProduct(Feppp);
   reactionData->AddProduct(OH);
   reactionData->AddProduct(OHm);
   pReactionTable->SetReaction(reactionData);
-//------------------------------------------------------------------
+  //------------------------------------------------------------------
 
-//HSO4m(B) + OH -> SO4- + H2O
-  reactionData = new G4DNAMolecularReactionData(
-      1.5e5 * (1e-3 * m3 / (mole * s)), HSO4m, OH);
+  // HSO4m(B) + OH -> SO4- + H2O
+  reactionData = new G4DNAMolecularReactionData(1.5e5 * (1e-3 * m3 / (mole * s)), HSO4m, OH);
   reactionData->AddProduct(SO4m);
   pReactionTable->SetReaction(reactionData);
-
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

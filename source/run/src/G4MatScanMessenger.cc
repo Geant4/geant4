@@ -39,6 +39,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIparameter.hh"
@@ -137,6 +138,14 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   regionCmd->SetGuidance("set to TRUE with this command.");
   regionCmd->SetParameterName("region", true);
   regionCmd->SetDefaultValue("DefaultRegionForTheWorld");
+  
+  verboseCmd = new G4UIcmdWithAnInteger("/control/matScan/verbose", this);
+  verboseCmd->SetGuidance("Set verbose level of material scan");
+  verboseCmd->SetGuidance("0: default, properties integrated over the scan");
+  verboseCmd->SetGuidance("1: integrated properties per material");
+  verboseCmd->SetGuidance("2: detailed properties per material crossed");
+  verboseCmd->SetParameterName("verbose_level", false);
+  verboseCmd->SetDefaultValue(0);
 }
 
 // --------------------------------------------------------------------
@@ -221,6 +230,10 @@ void G4MatScanMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if (command == regionCmd) {
     if (theScanner->SetRegionName(newValue)) theScanner->SetRegionSensitive(true);
+  }
+  else if(command == verboseCmd)
+  {
+    theScanner->SetVerbosity(StoI(newValue));
   }
   else if (command == singleCmd || command == single2Cmd) {
     G4int ntheta = theScanner->GetNTheta();

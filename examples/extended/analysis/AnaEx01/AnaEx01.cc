@@ -32,25 +32,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
+#include "DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
 
-#include "G4VisExecutive.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -62,7 +60,7 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  auto  detector = new DetectorConstruction;
+  auto detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new FTFP_BERT);
   runManager->SetUserInitialization(new ActionInitialization(detector));
@@ -76,13 +74,13 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( ui == nullptr ) {
+  if (ui == nullptr) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand("/control/alias defaultFileType root");
-      // define the default value for alias used in AnaEx01.in
-    UImanager->ApplyCommand(command+fileName);
+    // define the default value for alias used in AnaEx01.in
+    UImanager->ApplyCommand(command + fileName);
   }
   else {
     // interactive mode

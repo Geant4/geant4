@@ -154,8 +154,8 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
         ( CexmcMessenger::geometryDirName + "validateGdmlFile" ).c_str(),
         this );
     validateGdmlFile->SetGuidance( "If GDML file will be validated or not" );
-    validateGdmlFile->SetParameterName( "ValidateGdmlFile", true );
-    validateGdmlFile->SetDefaultValue( true );
+    validateGdmlFile->SetParameterName( "ValidateGdmlFile", false );
+    validateGdmlFile->SetDefaultValue( false );
     validateGdmlFile->AvailableForStates( G4State_PreInit );
 }
 

@@ -38,35 +38,44 @@
 /// (dependent on the detector, parametrisation type and particle momentum).
 /// @author Anna Zaborowska
 
-class Par02DetectorParametrisation {
+class Par02DetectorParametrisation
+{
   public:
-    
     /// A default constructor.
     Par02DetectorParametrisation();
 
     ~Par02DetectorParametrisation();
-    
+
     /// A parametrisation type (CMS, ATLAS, ALEPH).
-    enum Parametrisation { eCMS, eATLAS, eALEPH };
-    
+    enum Parametrisation
+    {
+      eCMS,
+      eATLAS,
+      eALEPH
+    };
+
     /// A detector type (tracking detector, electromagnetic calorimeter,
     ///                  hadronic calorimeter).
-    enum Detector { eTRACKER, eEMCAL, eHCAL };
-    
+    enum Detector
+    {
+      eTRACKER,
+      eEMCAL,
+      eHCAL
+    };
+
     /// Gets the resolution of a detector for a given particle.
     /// @param aDetector A detector type.
     /// @param aParametrisation A parametrisation type.
     /// @param aMomentum A particle momentum.
-    G4double GetResolution( Detector aDetector, Parametrisation aParametrisation,
-                            G4double aMomentum );
-    
+    G4double GetResolution(Detector aDetector, Parametrisation aParametrisation,
+                           G4double aMomentum);
+
     /// Gets the efficiency of a detector for a given particle.
     /// @param aDetector A detector type.
     /// @param aParametrisation A parametrisation type.
     /// @param aMomentum A particle momentum.
-    G4double GetEfficiency( Detector aDetector, Parametrisation aParametrisation,
-                            G4double aMomentum );
+    G4double GetEfficiency(Detector aDetector, Parametrisation aParametrisation,
+                           G4double aMomentum);
 };
 
 #endif
-

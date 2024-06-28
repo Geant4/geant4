@@ -36,6 +36,7 @@
 #include "G4UserRunAction.hh"
 #include "G4VProcess.hh"
 #include "globals.hh"
+
 #include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,26 +54,25 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction() override;
+    ~RunAction() override;
 
   public:
-    G4Run* GenerateRun() override;   
+    G4Run* GenerateRun() override;
     void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
-    
+    void EndOfRunAction(const G4Run*) override;
+
     void SetPrintFlag(G4bool);
-                                
+
   private:
-    DetectorConstruction*      fDetector     = nullptr;
-    PrimaryGeneratorAction*    fPrimary      = nullptr;
-    Run*                       fRun          = nullptr;
-    HistoManager*              fHistoManager = nullptr;
-    RunMessenger*              fRunMessenger = nullptr;
-     
-    G4bool   fPrint = true;      //optional printing           
+    DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary = nullptr;
+    Run* fRun = nullptr;
+    HistoManager* fHistoManager = nullptr;
+    RunMessenger* fRunMessenger = nullptr;
+
+    G4bool fPrint = true;  // optional printing
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

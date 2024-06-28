@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,14 +78,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -290,7 +297,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -845,7 +852,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -865,20 +872,20 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 281.112 MeV +- 0 eV 
- mean Energy in Gap      : 74.1401 MeV +- 0 eV 
+ mean Energy in Absorber : 245.231 MeV +- 0 eV 
+ mean Energy in Gap      : 64.6941 MeV +- 0 eV 
 
- mean trackLength in Absorber : 69.2721 cm  +- 0 fm 
- mean trackLength in Gap      : 37.7451 cm  +- 0 fm 
+ mean trackLength in Absorber : 60.8807 cm  +- 0 fm 
+ mean trackLength in Gap      : 32.6255 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 281.112 MeV rms = 0 eV 
-EGap: mean = 74.1401 MeV rms = 0 eV 
-LAbs: mean = 69.2721 cm  rms = 0 fm 
-LGap: mean = 37.7451 cm  rms = 0 fm 
+EAbs: mean = 245.231 MeV rms = 0 eV 
+EGap: mean = 64.6941 MeV rms = 0 eV 
+LAbs: mean = 60.8807 cm  rms = 0 fm 
+LGap: mean = 32.6255 cm  rms = 0 fm 
 ... write file : AnaEx01.hdf5 - done
 ... close file : AnaEx01.hdf5 - done
 
@@ -923,20 +930,20 @@ There are histograms that can be viewed with visualization:
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 190.633 MeV +- 48.8718 MeV
- mean Energy in Gap      : 46.5146 MeV +- 13.3975 MeV
+ mean Energy in Absorber : 186.264 MeV +- 50.8208 MeV
+ mean Energy in Gap      : 45.8735 MeV +- 13.843 MeV
 
- mean trackLength in Absorber : 47.0418 cm  +- 12.1398 cm 
- mean trackLength in Gap      : 23.5952 cm  +- 6.83896 cm 
+ mean trackLength in Absorber : 46.0323 cm  +- 12.6521 cm 
+ mean trackLength in Gap      : 23.2729 cm  +- 7.04724 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 190.633 MeV rms = 48.8718 MeV
-EGap: mean = 46.5146 MeV rms = 13.3975 MeV
-LAbs: mean = 47.0418 cm  rms = 12.1398 cm 
-LGap: mean = 23.5952 cm  rms = 6.83896 cm 
+EAbs: mean = 186.264 MeV rms = 50.8208 MeV
+EGap: mean = 45.8735 MeV rms = 13.843 MeV
+LAbs: mean = 46.0323 cm  rms = 12.6521 cm 
+LGap: mean = 23.246 cm  rms = 6.99942 cm 
 ... write file : AnaEx01.hdf5 - done
 ... close file : AnaEx01.hdf5 - done
 

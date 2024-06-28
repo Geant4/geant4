@@ -5,6 +5,33 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2024-01-29 Dennis Wright (hadr-casc-V11-02-02)
+- G4CascadeFinalStateAlgorithm::GenerateCosTheta() 
+    For 4-body and higher-body generation of cosTheta, use direct sampling
+    of exp(1 - cosTheta) instead of previously used rejection method on
+    sinTheta * exp(-sinTheta). This removes the reflection about cosTheta = 0
+    that caused a symmetric double bump in the Feynman-x distribution.
+
+## 2024-01-24 Dennis Wright (hadr-casc-V11-02-01)
+- G4InuclSpecialFunctions::inuclRndm() is just a wrapper of G4UniformRand()
+    remove method from class G4InuclSpecialFunctions and replace all
+    occurrences of inuclRndm() with G4UniformRand() in files
+    G4BigBanger.cc
+    G4CascadeFinalStateAlgorithm.cc
+    G4EquilibriumEvaporator.cc
+    G4Fissioner.cc
+    G4IntraNucleiCascader.cc
+    G4InuclParamAngDst.cc
+    G4InuclSpecialFunctions.cc
+    G4NonEquilibriumEvaporator.cc
+    G4NucleiModel.cc
+
+## 2023-12-11 Dennis Wright (hadr-casc-V11-02-00)
+- improved calculation of di-nucleon density using Levinger quasi-deuteron
+  model proposed by Einar Elen (Lund) and Natalia Toro (SLAC) : 
+    - add method G4NucleiModel::setDinucleonDensityScale() to calculate
+      correction factor to be applied to dinucleon densities
+    - modify method G4NucleiModel::getCurrentDensity() to apply this factor 
 
 ## 2023-11-17 Vladimir Ivantchenko (hadr-casc-V11-01-03)
 - G4CascadeParamMessenger - fixed memory leak at exit and simplified the code.

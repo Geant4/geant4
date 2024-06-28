@@ -37,7 +37,7 @@ namespace Common
 
 /// Physics list with geantino and charged geantino only
 
-class GeantinoPhysicsList: public G4VUserPhysicsList
+class GeantinoPhysicsList : public G4VUserPhysicsList
 {
   public:
     GeantinoPhysicsList();
@@ -49,7 +49,6 @@ class GeantinoPhysicsList: public G4VUserPhysicsList
     void ConstructProcess() override;
 };
 
-}
+}  // namespace Common
 
 #endif
-

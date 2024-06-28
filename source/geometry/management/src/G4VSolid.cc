@@ -162,6 +162,21 @@ G4ThreeVector G4VSolid::GetPointOnSurface() const
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Returns total number of constituents that was used for construction
+// of the solid. For non-Boolean solids the return value is one.
+
+G4int G4VSolid::GetNumOfConstituents() const
+{ return 1; }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Returns true if the solid has only planar faces, false otherwise.
+
+G4bool G4VSolid::IsFaceted() const
+{ return false; }
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Dummy implementations ...
 
 const G4VSolid* G4VSolid::GetConstituentSolid(G4int) const

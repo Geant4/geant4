@@ -24,32 +24,31 @@
 // ********************************************************************
 #ifdef G4_USE_FLUKA
 
+#  include "string_conversion.h"
 
-#include "string_conversion.h"
+namespace cpp_to_fortran
+{
 
-
-namespace cpp_to_fortran {
-
-	std::vector<char> convertStringNoSizeNeeded(const std::string& cString) {
-		std::vector<char> fString(cString.c_str(), cString.c_str() + cString.size());
-		return fString;
-	}
-
+std::vector<char> convertStringNoSizeNeeded(const std::string& cString)
+{
+  std::vector<char> fString(cString.c_str(), cString.c_str() + cString.size());
+  return fString;
 }
 
+}  // namespace cpp_to_fortran
 
-namespace fortran_to_cpp {
+namespace fortran_to_cpp
+{
 
-	std::string convertString(const char* fString, const int fStringLength) {
-
-		std::string cString(fStringLength, ' ');
-		for (int charIndex = 0; charIndex < fStringLength - 1; ++charIndex) {
-			cString[charIndex] = *(fString + charIndex);
-		}
-		return cString;
-	}
-
+std::string convertString(const char* fString, const int fStringLength)
+{
+  std::string cString(fStringLength, ' ');
+  for (int charIndex = 0; charIndex < fStringLength - 1; ++charIndex) {
+    cString[charIndex] = *(fString + charIndex);
+  }
+  return cString;
 }
 
+}  // namespace fortran_to_cpp
 
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

@@ -39,17 +39,13 @@ class G4VPhysicalVolume;
 
 class GB05DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  
-  GB05DetectorConstruction();
-  ~GB05DetectorConstruction();
-  
-public:
-  
-  virtual G4VPhysicalVolume* Construct();
-  virtual void     ConstructSDandField();
+  public:
+    GB05DetectorConstruction();
+    ~GB05DetectorConstruction();
 
+  public:
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 };
 
 #endif
-

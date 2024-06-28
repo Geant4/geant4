@@ -131,7 +131,8 @@
  
    Execute NeutronSource in 'batch' mode from macro files :
 \verbatim   
-% NeutronSource   run1.mac
+% NeutronSource  run1.mac
+% NeutronSource  neutronSource.in > neutronSource.out
 \endverbatim
  		
    Execute NeutronSource in 'interactive mode' with visualization :

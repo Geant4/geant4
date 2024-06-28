@@ -25,35 +25,33 @@
 //
 #ifndef DicomVFile__HH
 #define DicomVFile__HH
-#include <vector>
+#include "dcmtk/dcmdata/dcfilefo.h"
+
 #include "globals.hh"
 
-#include "dcmtk/dcmdata/dcfilefo.h"
+#include <vector>
 
 class DcmDataset;
 
-class DicomVFile 
+class DicomVFile
 {
-public:
-  DicomVFile(){};
-  DicomVFile(DcmDataset* dset);
-  ~DicomVFile(){};
+  public:
+    DicomVFile() {};
+    DicomVFile(DcmDataset* dset);
+    ~DicomVFile() {};
 
-  void SetFileName( G4String fName ) {
-    fFileName = fName;
-  }
+    void SetFileName(G4String fName) { fFileName = fName; }
 
-protected:
-  virtual void ReadData() = 0;
+  protected:
+    virtual void ReadData() = 0;
 
-  virtual std::vector<G4double> Read1Data( DcmDataset * dset, DcmTagKey tagKey, G4int nData );
-  virtual OFString Read1DataStr( DcmDataset * dset, DcmTagKey tagKey );
+    virtual std::vector<G4double> Read1Data(DcmDataset* dset, DcmTagKey tagKey, G4int nData);
+    virtual OFString Read1DataStr(DcmDataset* dset, DcmTagKey tagKey);
 
-  DcmDataset * theDataset;
+    DcmDataset* theDataset;
 
-protected:
-  G4String fFileName;
-
+  protected:
+    G4String fFileName;
 };
 
 #endif

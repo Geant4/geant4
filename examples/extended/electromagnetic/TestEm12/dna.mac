@@ -1,27 +1,41 @@
 #
 # Macro file for TestEm12
 #
-# limit the step size from histos 1 and 8
-#
 /control/cout/ignoreThreadsExcept 0
+#
+# Verbosity
+#
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_WATER
-/testem/det/setRadius  100 nm
+# Material selection for Geant4-DNA
 #
-/testem/phys/addPhysics  dna_opt2	
-#/testem/phys/addPhysics  dna_opt4	
-#/testem/phys/addPhysics  dna_opt6	
+/testem/det/setMat G4_WATER
+#
+# Define sphere radius
+#
+/testem/det/setRadius 100 nm
+#
+# Select Geant4-DNA physics
+#
+/testem/phys/addPhysics dna_opt2
+#/testem/phys/addPhysics dna_opt4
+#/testem/phys/addPhysics dna_opt6
 #
 /run/initialize
+#
+# Incident particle
 #
 /gun/particle e-
 /gun/energy 1 keV
 #
+# Output file name and two histograms 1 & 3
+#
 /analysis/setFileName dna
-/analysis/h1/set 1 50  0.   100 nm	#edep profile
-/analysis/h1/set 3 50  0.   300 nm	#true track length
+/analysis/h1/set 1 50 0. 100 nm	#edep profile
+/analysis/h1/set 3 50 0. 300 nm	#true track length
+#
+# Apply maximum step size from histogram binning
 #
 /testem/applyAutomaticStepMax true
 #

@@ -37,7 +37,7 @@
 // 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef TargetSD_h
 #define TargetSD_h 1
@@ -53,19 +53,16 @@ class HistoManager;
 
 class TargetSD : public G4VSensitiveDetector
 {
-public: // Without description
+  public:  // Without description
+    explicit TargetSD(const G4String&);
+    ~TargetSD() override = default;
 
-  explicit TargetSD(const G4String&);
-  ~TargetSD() override = default;
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
-
-private:
-
-  HistoManager*  fHisto;
+  private:
+    HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

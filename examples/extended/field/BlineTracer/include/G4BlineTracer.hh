@@ -47,12 +47,12 @@
 #ifndef G4BlineTracer_h
 #define G4BlineTracer_h 1
 
-#include <vector>
+#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "G4Types.hh"
 #include "G4UserRunAction.hh"
 
-#include "CLHEP/Units/SystemOfUnits.h"
+#include <vector>
 
 class G4VUserPrimaryGeneratorAction;
 class G4MagneticField;
@@ -67,43 +67,38 @@ class G4BlineEquation;
 
 class G4BlineTracer : public G4UserRunAction
 {
-   public:  // with description
+  public:  // with description
+    G4BlineTracer();
+    ~G4BlineTracer() override;
 
-     G4BlineTracer();
-     ~G4BlineTracer() override;
+    void BeginOfRunAction(const G4Run* aRun) override;
+    void EndOfRunAction(const G4Run* aRun) override;
 
-     void BeginOfRunAction(const G4Run* aRun) override;
-     void EndOfRunAction(const G4Run* aRun) override;
+    void ComputeBlines(G4int nlines);
 
-     void ComputeBlines(G4int nlines);
+    inline void SetMaxTrackingStep(G4double max_step) { fMaxTrackingStep = max_step; }
+    inline G4BlineEventAction* GetEventAction() { return fEventAction; }
 
-     inline void SetMaxTrackingStep(G4double max_step)
-       { fMaxTrackingStep=max_step; }
-     inline G4BlineEventAction* GetEventAction()
-       { return fEventAction; }
+  private:
+    void ResetChordFinders();
 
-   private:
+  private:
+    G4BlineTracerMessenger* fMessenger = nullptr;
+    G4BlineSteppingAction* fSteppingAction = nullptr;
+    G4BlineEventAction* fEventAction = nullptr;
+    G4BlinePrimaryGeneratorAction* fPrimaryGeneratorAction = nullptr;
+    G4double fMaxTrackingStep = 1000. * CLHEP::m;
+    G4bool fWas_ResetChordFinders_already_called = false;
 
-     void ResetChordFinders();
+    // G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
+    //  User defined primary generator action
 
-   private:
-
-     G4BlineTracerMessenger* fMessenger = nullptr;
-     G4BlineSteppingAction* fSteppingAction = nullptr;
-     G4BlineEventAction* fEventAction = nullptr;
-     G4BlinePrimaryGeneratorAction* fPrimaryGeneratorAction = nullptr;
-     G4double fMaxTrackingStep = 1000. * CLHEP::m;
-     G4bool fWas_ResetChordFinders_already_called = false;
-
-     //G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
-       // User defined primary generator action
-
-     std::vector<G4ChordFinder* > fVecChordFinders;
-     std::vector<G4FieldManager* > fVecFieldManagers;
-     std::vector<G4MagneticField* > fVecMagneticFields;
-     std::vector<G4BlineEquation* > fVecEquationOfMotion;
-       // ChordFinders, detector fields, equation of motions, and field
-       // manager for the different local and global magnetic fields.
+    std::vector<G4ChordFinder*> fVecChordFinders;
+    std::vector<G4FieldManager*> fVecFieldManagers;
+    std::vector<G4MagneticField*> fVecMagneticFields;
+    std::vector<G4BlineEquation*> fVecEquationOfMotion;
+    // ChordFinders, detector fields, equation of motions, and field
+    // manager for the different local and global magnetic fields.
 };
 
 #endif

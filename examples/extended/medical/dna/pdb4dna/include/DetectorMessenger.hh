@@ -44,10 +44,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#  define DetectorMessenger_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#  include "G4UImessenger.hh"
+#  include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -64,28 +64,28 @@ class G4UIcmdWithoutParameter;
 /// - /PDB4DNA/det/drawNucleotidesWithBounding
 /// - /PDB4DNA/det/drawResiduesWithBounding
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
-  DetectorMessenger(DetectorConstruction*);
-  virtual ~DetectorMessenger();
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    virtual ~DetectorMessenger();
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-private:
-  DetectorConstruction*  fpDetectorConstruction;
+  private:
+    DetectorConstruction* fpDetectorConstruction;
 
-  G4UIdirectory*                fpDirectory;
-  G4UIdirectory*                fpDetDirectory;
-  G4UIcmdWithAString*           fpLoadPdbCmd;
-  G4UIcmdWithoutParameter*      fpBuildBoundingV;
+    G4UIdirectory* fpDirectory;
+    G4UIdirectory* fpDetDirectory;
+    G4UIcmdWithAString* fpLoadPdbCmd;
+    G4UIcmdWithoutParameter* fpBuildBoundingV;
 
-  G4UIcmdWithoutParameter*      fpDrawAtoms;
-  G4UIcmdWithoutParameter*      fpDrawNucleotides;
-  G4UIcmdWithoutParameter*      fpDrawResidues;
-  G4UIcmdWithoutParameter*      fpDrawAtomsWithBounding;
-  G4UIcmdWithoutParameter*      fpDrawNucleotidesWithBounding;
-  G4UIcmdWithoutParameter*      fpDrawResiduesWithBounding;
+    G4UIcmdWithoutParameter* fpDrawAtoms;
+    G4UIcmdWithoutParameter* fpDrawNucleotides;
+    G4UIcmdWithoutParameter* fpDrawResidues;
+    G4UIcmdWithoutParameter* fpDrawAtomsWithBounding;
+    G4UIcmdWithoutParameter* fpDrawNucleotidesWithBounding;
+    G4UIcmdWithoutParameter* fpDrawResiduesWithBounding;
 };
 
 #endif

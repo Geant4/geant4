@@ -39,30 +39,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingAction_h
-#define SteppingAction_h 1
+#  define SteppingAction_h 1
 
-#include "G4UserSteppingAction.hh"
-#include "RunInitObserver.hh"
-#include "globals.hh"
+#  include "RunInitObserver.hh"
+
+#  include "G4UserSteppingAction.hh"
+#  include "globals.hh"
 
 class EventAction;
 class DetectorConstruction;
 
 class SteppingAction : public G4UserSteppingAction, public RunInitObserver
 {
-public:
-  SteppingAction();
-  ~SteppingAction();
+  public:
+    SteppingAction();
+    ~SteppingAction();
 
-  virtual void UserSteppingAction(const G4Step*);
-  virtual void Initialize();
+    virtual void UserSteppingAction(const G4Step*);
+    virtual void Initialize();
 
-private:
-  G4bool CheckAndProcessDNAHit(
-      G4double x,G4double y, G4double z,
-      G4double edep);
-  EventAction* fpEventAction;
-  DetectorConstruction* fpDetector;
+  private:
+    G4bool CheckAndProcessDNAHit(G4double x, G4double y, G4double z, G4double edep);
+    EventAction* fpEventAction;
+    DetectorConstruction* fpDetector;
 };
 
 #endif

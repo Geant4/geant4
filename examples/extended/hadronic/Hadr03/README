@@ -130,6 +130,7 @@
  	Idle> exit
 	
  Macros provided in this example:
+  - hadr03.in: macro used in Geant4 testing
   - Au196.mac: neutron (1 MeV) on Au195
   - elastic.mac: proton (10 MeV) on Mo100. Elastic collisions alone
   - fusion.mac: deuteron (400 keV) on tritium 

@@ -77,10 +77,10 @@ struct G4ExitNormal
 
 class G4ReplicaNavigation
 {
-  public:  // with description
+  public:
 
     G4ReplicaNavigation();
-   ~G4ReplicaNavigation();
+   ~G4ReplicaNavigation() = default;
 
     inline G4bool LevelLocate( G4NavigationHistory& history,
                          const G4VPhysicalVolume* blockedVol,

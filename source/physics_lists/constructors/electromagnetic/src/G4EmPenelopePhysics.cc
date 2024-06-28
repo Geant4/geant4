@@ -125,6 +125,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   param->SetFluctuationType(fUrbanFluctuation);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
   param->SetPIXEElectronCrossSectionModel("Penelope");
+  param->SetPositronAtRestModelType(fAllisonPositronium);
   SetPhysicsType(bElectromagnetic);
 }
 

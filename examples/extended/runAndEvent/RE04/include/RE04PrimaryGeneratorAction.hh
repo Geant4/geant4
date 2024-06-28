@@ -40,14 +40,14 @@ class G4Event;
 /// User primary particle generator class
 ///
 /// - void GeneratePrimaries(G4Event*)
-///     an incident particle is mu- with 10 GeV energy at the position 
+///     an incident particle is mu- with 10 GeV energy at the position
 ///     (-75 cm,y,0) toward the (1,0,0) direction. The y position is uniformly
 ///     varied from 95.5 cm to 96.5 cm.
 //
 class RE04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    RE04PrimaryGeneratorAction();    
+    RE04PrimaryGeneratorAction();
     virtual ~RE04PrimaryGeneratorAction();
 
   public:
@@ -55,9 +55,6 @@ class RE04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     G4ParticleGun* fParticleGun;
-
 };
 
 #endif
-
-

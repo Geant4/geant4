@@ -29,15 +29,13 @@
 //
 #include "RE04ParallelWorldParam.hh"
 
-#include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Material.hh"
-#include "G4SystemOfUnits.hh"    
+#include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE04ParallelWorldParam::RE04ParallelWorldParam()
- : G4VPVParameterisation(), 
-   fWater(0), fPb(0)
+RE04ParallelWorldParam::RE04ParallelWorldParam() : G4VPVParameterisation(), fWater(0), fPb(0)
 {
   fWater = G4Material::GetMaterial("G4_WATER");
   fPb = G4Material::GetMaterial("G4_Pb");
@@ -45,18 +43,22 @@ RE04ParallelWorldParam::RE04ParallelWorldParam()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04ParallelWorldParam::~RE04ParallelWorldParam()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04ParallelWorldParam::ComputeTransformation(const G4int copyNo,
-                                     G4VPhysicalVolume* physVol) const
+                                                   G4VPhysicalVolume* physVol) const
 {
-  G4double x = copyNo ? -10.0*cm : 10.0*cm;
-  physVol->SetTranslation(G4ThreeVector(x,x,0.));
+  G4double x = copyNo ? -10.0 * cm : 10.0 * cm;
+  physVol->SetTranslation(G4ThreeVector(x, x, 0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* RE04ParallelWorldParam::ComputeMaterial(const G4int copyNo,
-      G4VPhysicalVolume* /*currentVol*/,const G4VTouchable* /*parentTouch*/)
-{ return copyNo ? fWater: fPb; }
-
+                                                    G4VPhysicalVolume* /*currentVol*/,
+                                                    const G4VTouchable* /*parentTouch*/)
+{
+  return copyNo ? fWater : fPb;
+}

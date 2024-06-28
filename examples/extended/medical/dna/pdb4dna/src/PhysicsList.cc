@@ -37,15 +37,15 @@
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
+
 #include "G4EmDNAPhysics.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  SetDefaultCutValue(1.0*micrometer);
+  SetDefaultCutValue(1.0 * micrometer);
   SetVerboseLevel(1);
 
   // EM physics
@@ -54,8 +54,6 @@ PhysicsList::PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()
-{
-}
+PhysicsList::~PhysicsList() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

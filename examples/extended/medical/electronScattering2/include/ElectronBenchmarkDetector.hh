@@ -30,10 +30,10 @@
 #ifndef ElectronBenchmarkDetector_h
 #define ElectronBenchmarkDetector_h 1
 
+#include "G4Cache.hh"
+#include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
-#include "G4Cache.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -47,19 +47,18 @@ class ElectronBenchmarkDetectorMessenger;
 
 class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
 {
-public:
-    
+  public:
     ElectronBenchmarkDetector();
     ~ElectronBenchmarkDetector() override;
-    
+
     G4VPhysicalVolume* Construct() override;
-    
+
     // Sensitive Detector
     void ConstructSDandField() override;
-    
+
     // Material Definition
     void DefineMaterials();
-    
+
     // Geometry Definition
     G4VPhysicalVolume* CreateWorld();
     void CreateExitWindow(G4LogicalVolume* logicWorld);
@@ -68,60 +67,60 @@ public:
     void CreateHeliumBag(G4LogicalVolume* logicWorld);
     void CreateScorer(G4LogicalVolume* logicWorld);
     G4VPhysicalVolume* CreateGeometry();
-    
+
     // Command Interface
     void SetPrimFoilMaterial(const G4String& matname);
     void SetPrimFoilThickness(G4double thicknessPrimFoil);
-    
-private:
+
+  private:
     // Exit Window.
     G4double fPosWindow0;
     G4double fPosWindow1;
-    
+
     // Primary Foil
     G4Material* fMaterialPrimFoil = nullptr;
     G4double fHalfThicknessPrimFoil;
     G4double fPosPrimFoil;
     G4LogicalVolume* fLogPrimFoil = nullptr;
-    G4Tubs* fSolidPrimFoil; 
+    G4Tubs* fSolidPrimFoil;
 
     // Monitor Chambers
     G4double fPosMon0;
     G4double fPosMon1;
-    
+
     // Helium Bag
     G4double fPosBag0;
     G4double fPosBag1;
     G4double fPosHelium0;
     G4double fPosHelium1;
     G4double fThicknessRing;
-    
+
     // Scoring Plane
     G4double fPosScorer;
     G4double fThicknessScorer;
     G4double fWidthScorerRing;
     G4LogicalVolume* fScorerRingLog = nullptr;
-    
+
     // Radii
     G4double fRadOverall;
     G4double fRadRingInner;
-    
+
     // Extra space remaining in world volume around apparatus
     G4double fPosDelta;
     G4double fRadDelta;
-    
+
     // World volume
     G4LogicalVolume* fLogWorld = nullptr;
     G4VPhysicalVolume* fPhysiWorld = nullptr;
-    
+
     // SensitiveDetector
     // G4Cache mechanism is necessary for multi-threaded operation
     // as it allows us to store separate detector pointer per thread
     const G4Cache<G4MultiFunctionalDetector*> fSensitiveDetectorCache;
-    
+
     // Messenger
     ElectronBenchmarkDetectorMessenger* fMessenger = nullptr;
-    
+
     // Visualization Attributes
     G4VisAttributes* fWorldVisAtt = nullptr;
     G4VisAttributes* fWindowVisAtt = nullptr;

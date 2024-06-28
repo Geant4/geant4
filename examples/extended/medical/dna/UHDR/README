@@ -128,6 +128,19 @@
     The results show the molecular species (G values) as a function of
     time (ns). Please correct the dose in the TTree *tree = (TTree *) dir->Get("0.010000");
 
+  11 - Periodic Boundary Condition (PBC)
+
+    The Periodic Boundary Condition is implemented based on https://github.com/amentumspace/g4pbc
+    to calculate microdosimetry.
+    This requires a maximum dose (xxx) to abort the event. This to avoid the high energy of
+    secondary electrons deposit a large energy inside the micro volume.
+
+    /scorer/Dose/abortedDose xxx Gy
+
+    Use the following command to activate or deactivate PBC.
+
+    /UHDR/Detector/PBC true
+
  Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
- Contact: H. Tran (tran@cenbg.in2p3.fr)
+ Contact: H. Tran (tran@lp2ib.in2p3.fr)
  CNRS, lp2i, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France

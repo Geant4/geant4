@@ -25,7 +25,7 @@
 //
 /// \file SAXSDetectorConstructionMessenger.hh
 /// \brief Implementation of the SAXSDetectorConstructionMessenger class
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSDetectorConstructionMessenger_h
@@ -48,44 +48,44 @@ class G4UIcmdWithAString;
 
 /// DetectorConstruction messenger.
 
-class SAXSDetectorConstructionMessenger: public G4UImessenger
+class SAXSDetectorConstructionMessenger : public G4UImessenger
 {
-public:
+  public:
     SAXSDetectorConstructionMessenger(SAXSDetectorConstruction* detconstr);
     ~SAXSDetectorConstructionMessenger();
 
-    virtual void SetNewValue(G4UIcommand* command,G4String newValues);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
 
-private:
+  private:
     SAXSDetectorConstruction* fDetector;
-    
-    G4UIdirectory* fCmdDir;   
-    
-        G4UIcmdWithAString*        fSetCustomMatFFfilename;        
-        G4UIcmdWithADouble* fSetCustomMatDensityCmd;
-        G4UIcmdWithADouble* fSetCustomMatHmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatCmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatNmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatOmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatNamassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatPmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatSmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatClmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatKmassfractCmd;
-        G4UIcmdWithADouble* fSetCustomMatCamassfractCmd;
-        
-    G4UIcmdWithAnInteger* fPhantomMaterialCmd;        
+
+    G4UIdirectory* fCmdDir;
+
+    G4UIcmdWithAString* fSetCustomMatFFfilename;
+    G4UIcmdWithADouble* fSetCustomMatDensityCmd;
+    G4UIcmdWithADouble* fSetCustomMatHmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatCmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatNmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatOmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatNamassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatPmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatSmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatClmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatKmassfractCmd;
+    G4UIcmdWithADouble* fSetCustomMatCamassfractCmd;
+
+    G4UIcmdWithAnInteger* fPhantomMaterialCmd;
     G4UIcmdWithADoubleAndUnit* fPhantomDiameterCmd;
     G4UIcmdWithADoubleAndUnit* fPhantomHeightCmd;
     G4UIcmdWithADoubleAndUnit* fPhantomZCmd;
-    
+
     G4UIcmdWithADouble* fSetComp0Cmd;
     G4UIcmdWithADouble* fSetComp1Cmd;
     G4UIcmdWithADouble* fSetComp2Cmd;
-    G4UIcmdWithADouble* fSetComp3Cmd;   
-    
-    G4UIcmdWithADouble* fThetaSetupCmd;   
-    
+    G4UIcmdWithADouble* fSetComp3Cmd;
+
+    G4UIcmdWithADouble* fThetaSetupCmd;
+
     G4UIcmdWithABool* fSetSlitsCmd;
     G4UIcmdWithADoubleAndUnit* fSlit1ThicknessCmd;
     G4UIcmdWithADoubleAndUnit* fSlit2ThicknessCmd;
@@ -98,13 +98,13 @@ private:
     G4UIcmdWithADoubleAndUnit* fSlit1xApertureCmd;
     G4UIcmdWithADoubleAndUnit* fSlit2xApertureCmd;
     G4UIcmdWithADoubleAndUnit* fSlit3xApertureCmd;
-    G4UIcmdWithADoubleAndUnit* fSlit4xApertureCmd; 
+    G4UIcmdWithADoubleAndUnit* fSlit4xApertureCmd;
     G4UIcmdWithADoubleAndUnit* fSlit1yApertureCmd;
     G4UIcmdWithADoubleAndUnit* fSlit2yApertureCmd;
     G4UIcmdWithADoubleAndUnit* fSlit3yApertureCmd;
-    G4UIcmdWithADoubleAndUnit* fSlit4yApertureCmd; 
-    
-        G4UIcmdWithADoubleAndUnit* fDetectorThicknessCmd;   
+    G4UIcmdWithADoubleAndUnit* fSlit4yApertureCmd;
+
+    G4UIcmdWithADoubleAndUnit* fDetectorThicknessCmd;
     G4UIcmdWithADoubleAndUnit* fDetectorSizeCmd;
     G4UIcmdWithADoubleAndUnit* fDetectorDistanceCmd;
 };
@@ -112,4 +112,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

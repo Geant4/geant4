@@ -29,9 +29,9 @@
 // Med. Phys. 37 (2010) 4692-4708
 // and papers
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
-// O. Belov et al. Physica Medica 32 (2016) 1510-1520 
+// O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -47,33 +47,32 @@
 
 class TimeStepAction : public G4UserTimeStepAction
 {
-public:
-  TimeStepAction();
-  virtual ~TimeStepAction();
-  TimeStepAction(const TimeStepAction& other);
-  TimeStepAction& operator=(const TimeStepAction& other);
+  public:
+    TimeStepAction();
+    virtual ~TimeStepAction();
+    TimeStepAction(const TimeStepAction& other);
+    TimeStepAction& operator=(const TimeStepAction& other);
 
-  virtual void StartProcessing(){;}
+    virtual void StartProcessing() { ; }
 
-  /** In this method, the user can use :
-   * G4ITTimeStepper::Instance()->GetGlobalTime(),
-   *    to know the current simulation time
-   * G4ITTimeStepper::Instance()->GetTimeStep(),
-   *    to know the selected minimum time
-   * WARNING :
-   *    The call of this method happens before the call of DoIT methods
-   */
-  virtual void UserPreTimeStepAction(){;}
-  virtual void UserPostTimeStepAction();
+    /** In this method, the user can use :
+     * G4ITTimeStepper::Instance()->GetGlobalTime(),
+     *    to know the current simulation time
+     * G4ITTimeStepper::Instance()->GetTimeStep(),
+     *    to know the selected minimum time
+     * WARNING :
+     *    The call of this method happens before the call of DoIT methods
+     */
+    virtual void UserPreTimeStepAction() { ; }
+    virtual void UserPostTimeStepAction();
 
-  /**
-   * Inform about a reaction
-   */
-  virtual void UserReactionAction(const G4Track& /*trackA*/,
-                                  const G4Track& /*trackB*/,
-                                  const std::vector<G4Track*>* /*products*/);
+    /**
+     * Inform about a reaction
+     */
+    virtual void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                                    const std::vector<G4Track*>* /*products*/);
 
-  virtual void EndProcessing(){;}
+    virtual void EndProcessing() { ; }
 };
 
-#endif // ITACTION_H
+#endif  // ITACTION_H

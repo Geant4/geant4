@@ -44,12 +44,12 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(TrackingAction*);
-   ~SteppingAction() override = default;
+    ~SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step*) override;
-    
+
   private:
-    TrackingAction* fTrackingAction = nullptr;    
+    TrackingAction* fTrackingAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

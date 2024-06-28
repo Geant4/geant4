@@ -28,11 +28,12 @@
 /// \brief Implementation of the B5::CellParameterisation class
 
 #include "CellParameterisation.hh"
+
 #include "Constants.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
 
 namespace B5
 {
@@ -41,22 +42,22 @@ namespace B5
 
 CellParameterisation::CellParameterisation()
 {
-  for (auto copyNo=0; copyNo<kNofEmCells; copyNo++) {
-    auto column = copyNo / kNofEmRows ;
+  for (auto copyNo = 0; copyNo < kNofEmCells; copyNo++) {
+    auto column = copyNo / kNofEmRows;
     auto row = copyNo % kNofEmRows;
-    fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
-    fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
+    fXCell[copyNo] = (column - 9) * 15. * cm - 7.5 * cm;
+    fYCell[copyNo] = (row - 1) * 15 * cm - 7.5 * cm;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void CellParameterisation::ComputeTransformation(
-       const G4int copyNo,G4VPhysicalVolume *physVol) const
+void CellParameterisation::ComputeTransformation(const G4int copyNo,
+                                                 G4VPhysicalVolume* physVol) const
 {
-  physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
+  physVol->SetTranslation(G4ThreeVector(fXCell[copyNo], fYCell[copyNo], 0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B5

@@ -52,16 +52,14 @@ class RMC01EventActionMessenger;
 
 class RMC01EventAction : public G4UserEventAction
 {
- public:
-   RMC01EventAction();
-   virtual ~RMC01EventAction();
+  public:
+    RMC01EventAction();
+    virtual ~RMC01EventAction();
 
-   virtual void  BeginOfEventAction(const G4Event*);
-   virtual void  EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

@@ -33,8 +33,8 @@
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
@@ -42,23 +42,20 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class PhysicsListMessenger : public G4UImessenger
 {
   public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
+    PhysicsListMessenger(PhysicsList*);
+    ~PhysicsListMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-  
-    PhysicsList*               fPhysicsList;
-    
-    G4UIcmdWithAString*        fListCmd;    
+    PhysicsList* fPhysicsList;
+
+    G4UIcmdWithAString* fListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

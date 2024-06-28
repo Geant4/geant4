@@ -39,14 +39,13 @@
 
 class SteppingAction : public G4UserSteppingAction
 {
-public:
+  public:
+    SteppingAction();
+    ~SteppingAction();
 
-  SteppingAction();
-  ~SteppingAction();
+    virtual void UserSteppingAction(const G4Step*);
 
-  virtual void UserSteppingAction(const G4Step*);
-    
-private:
+  private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

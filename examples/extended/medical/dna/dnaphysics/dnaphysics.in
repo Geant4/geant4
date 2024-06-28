@@ -7,8 +7,9 @@
 /run/numberOfThreads 2
 #
 # Material
-#/dna/test/setMat G4_WATER_MODIFIED
 /dna/test/setMat G4_WATER
+# or alternatively
+#/dna/test/setMat G4_WATER_MODIFIED
 #
 # Atomic deexcitation
 /process/em/fluo true
@@ -18,9 +19,11 @@
 #
 # Physics
 # - To use Geant4-DNA constructor X, X=0, 2, 4, or 6 (recommended)
+#/dna/test/addPhysics DNA_Opt0
 /dna/test/addPhysics DNA_Opt2
-#   OR to use Geant4-DNA activator for World region, X = 0, 2, 4, or 6
-#/process/em/AddDNARegion World DNA_OptX
+#/dna/test/addPhysics DNA_Opt4
+#/dna/test/addPhysics DNA_Opt6
+#
 # - To add radioactive radioactive decay
 /dna/test/addPhysics raddecay
 #

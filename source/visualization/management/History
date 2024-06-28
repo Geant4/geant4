@@ -6,9 +6,140 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-03-18 Gabriele Cosmo (visman-V11-01-33)
+## 2024-06-04 John Allison (visman-V11-02-12)
+- G4VisManager:
+  - Implement EventReadyForVis, used by G4SubEvtRunManager.
+  - Restructure EndOfEvent functions to accommodate this, and avoid
+    code duplication. This involved introducing:
+    - Relinquishable, EndOfEventKernel and EndOfEventCleanup.
+  - Correct the use of KeepForPostProcessing/PostProcessingFinished.
+
+## 2024-05-30 Guy Barrand (visman-V11-02-11)
+- G4VisExecutive.icc: Qt6: restore vis/OGL as default driver.
+
+## 2024-03-18 Gabriele Cosmo (visman-V11-02-10)
 - G4VisExecutive.icc: fixed use of static symbol 'fVerbosity' and replaced
   with call to dedicated static method, to avoid linkage problems on Windows.
+
+## 2024-03-04 John Allison (visman-V11-02-09)
+- G4VViewer.cc: Coverity fix.
+  - Add return statement after G4Exception(...FatalException...) so Coverity
+    does not think a null pointer might be being allowed.
+  - This is a fix to a fix in visman-V11-02-07.
+
+## 2024-02-05 John Allison (visman-V11-02-08)
+- G4VisCommandsTouchable.cc:
+  - "/vis/touchable/dump" and "findPath" do not need a scene handler nor a
+    viewer. Move them to the beginning of G4VisCommandsTouchable::SetNewValue,
+    before the check on scene handler and viewer.
+  - This allows the user to "/vis/touchable/dump" even if he/she has
+    not yet opened a viewer.
+
+## 2024-02-03 John Allison (visman-V11-02-07)
+- G4VViewer.cc: Coverity fix.
+  - A previous tag changed class G4VViewer::SceneTreeScene to require a
+    G4PhysicalVolumeModel*. Previous to that, it was programmed for a
+    general G4VModel*, which required a check on the type. That check 
+    inadvertently remained, even though now not necessary. It seems to
+    confuse Coverity - something to do with the fact that it is called
+    in a virtual function, which has already involved a de-referencing,
+    whereas my checks implied the pointer could be null. It now *must*
+    be valid by construction, so I have removed the checks, and, just
+    to be sure, added a G4Exception on null pointer in the constructor.  
+
+## 2024-02-02 John Allison (visman-V11-02-06)
+- G4VSceneHandler.cc:
+  - Coverity fix: "const auto&" instead of "auto" to prevent copying.
+
+## 2024-01-23 John Allison (visman-V11-02-05)
+- Rationalisation, simplification and much tidying of visman-V11-02-04.
+- G4VViewer:
+  - Check validity of arguments in SceneTreeScene constructor.
+  - Pre-calculation of quantities in SceneTreeScene constructor.
+    - Avoids repeated calculations in ProcessVolume.
+  - More logical order of some functions.
+G4VSceneHandler.cc:
+  - Specify the G4PhysicalVolumeModel for construction of scene tree scene.
+
+## 2024-01-22 John Allison (visman-V11-02-04)
+- Co-works with modeling-V11-02-01, interfaces-V11-02-01 and greps-V11-02-00.
+- Limit the number of scene tree items.
+  - For complex geometries, the scene tree can take up a lot of space, and,
+    anyway, not easy to navigate. This tag suppresses the scene tree if the
+    number of touchables exceeds 10,000 (equivalent to about 20 MB).
+    - Better to suppress altogether than create a partial tree?
+- G4VViewer:
+  - Pre-calculate number of touchables. If >10,000, suppress them in the
+    scene tree and add some information about it to the model item so that
+    it pops up as a tooltip in the GUI.
+  - Some tidying and rationalisation.
+- G4VSceneHandler:
+  - Simplify loop over models, add some printing (verbosity >= confirmations).
+  - Some tidying and rationalisation.
+- G4VisCommandsViewer.cc:
+  - Use GetSceneTree (const) rather than AccessSceneTree when not necessary.
+
+## 2024-01-17 John Allison (visman-V11-02-03)
+- G4VSceneHandler:
+  - Print number of touchables by depth (if verbosity >= confirmations).
+  - Print problematic volumes (if verbosity >= confirmations).
+- G4VisCommandsTouchable.cc:
+  - Protect polyhedron pointer in /vis/touchable/dump.
+
+## 2024-01-16 John Allison (visman-V11-02-02)
+- Co-works with modeling-V11-02-00 and interfaces-V11-02-00
+- Improve identification of scene tree models - use full description, including
+  embedded blanks.
+- G4VisCommandScene.cc:
+  - G4VisCommandSceneActivateModel::SetNewValue:
+    -  Need to handle the possibility that the search string
+       contains embedded blanks within quotation marks.
+       (This arises if the search string is automatically generated from the
+       global description, as in G4UIQt, clicking on check box.)
+    - Tidy model searches.
+- G4VisCommandSceneAdd.cc:
+  - Text and Text2D: Use single quote (') to delineate actual text in description.
+    - This is so that normal quotes can be used in G4VisCommandSceneActivateModel.
+
+## 2024-01-12 John Allison (visman-V11-02-01)
+- G4VisExecutive.icc:
+  - Trap use of run-time vis driver choice - not allowed in batch mode.
+  - And (if using run-time choice) insist UI session is instantiated
+    *before* G4VisExecutive.
+- G4VisManager.cc:
+  - Improve messaging.
+- G4VSceneHandler.cc:
+  - Minor typo.
+
+## 2023-12-31 John Allison (visman-V11-02-00)
+- Delay determination of the run-time-chosen default driver (see visman-V11-01-26).
+  - This run-time-chosen default driver is not actually used until the first
+    use of /vis/open or /vis/sceneHandler/create without driver parameter,
+    so we delay to this point.
+  - This catches the situation when the user instantiates the UI session
+    *after* instantiating the vis manager.
+    - This choice depends on whether or not the user instantiates a
+      UI session, and, indeed, if instantiated, what type, so in this case
+      we *have* to delay.
+    - Note that Geant4 recommends instantiating the UI session as early as
+      possible in order to capture output streams. However, this is not
+      enforceable and even some of our examples do not follow this.
+  - G4VisExecutive:
+    - Keep argc, argv and user-specified system, if specified, for delayed use.
+    - Move informational (G4warn) from G4VisManager.
+  - G4VisManager:
+     - Make GetDefaultGraphicsSystemName() virtual and non const.
+       - It has to be virtual so that the derived class (G4VisExecutive) can
+         override it.
+       - And non-const because on first pass it may/should determine
+         these run-time-chosen defaults.
+       - The code for choosing a default driver *has to be* in user space, i.e.,
+         in G4VisExecutive, so that it has access to use flags. Hence we have to
+         use the virtual function mechanism.
+     - Modify the informational (G4warn) in PrintAvailableGraphicsSystems to give
+       advice and point to further information to be given after /vis/open.
+  - G4VViewer.cc:
+    - Minor, purely cosmetic improvement.
 
 ## 2023-11-12 John Allison (visman-V11-01-32)
 - G4VisExecutive.icc:

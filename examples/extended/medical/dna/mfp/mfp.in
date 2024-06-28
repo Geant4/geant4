@@ -1,31 +1,43 @@
-#
+# MT mode
 /run/numberOfThreads 8
 #
+# Sphere material
 /mfp/det/setMat G4_WATER
+#
+# Sphere radius
 /mfp/det/setRadius 10 m
 #
-# Register physics constructor
+# Physics constructor
 #/mfp/phys/addPhysics  dna
 /mfp/phys/addPhysics  dna_opt2
 #/mfp/phys/addPhysics  dna_opt4
 #/mfp/phys/addPhysics  dna_opt6
 #
+# Run initialization
 /run/initialize
 #
+# Run progress
 #/run/printProgress 10000
 #
+# Tracking verbosity
 /tracking/verbose 0
 #
-## uncomment for inelastic mfp
+# Restriction to inelastic mfp:
+# -> uncomment to get inelastic mfp only
 #/process/inactivate e-_G4DNAElastic
 #
-## uncomment if sub-excitation processes not needed
+# Subexcitation processes for electrons:
+# -> uncomment if sub-excitation processes are not needed
 #/process/inactivate e-_G4DNAAttachment
 #/process/inactivate e-_G4DNAVibExcitation
 #
+# Incident particle type
 /gun/particle e-
 #
+# Incident particule energy
 /gun/energy 10 eV
+#
+# Beam on
 /run/beamOn 10000
 #
 /gun/energy 20 eV

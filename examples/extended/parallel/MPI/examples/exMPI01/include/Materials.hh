@@ -32,12 +32,13 @@
 
 #include "globals.hh"
 
-class Materials {
-public:
-  Materials();
-  ~Materials();
+class Materials
+{
+  public:
+    Materials();
+    ~Materials();
 
-  void Construct();
+    void Construct();
 };
 
 #endif

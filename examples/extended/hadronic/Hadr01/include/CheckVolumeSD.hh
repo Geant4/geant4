@@ -37,11 +37,10 @@
 // 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef CheckVolumeSD_h
 #define CheckVolumeSD_h 1
-
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
@@ -54,20 +53,16 @@ class HistoManager;
 
 class CheckVolumeSD : public G4VSensitiveDetector
 {
-public: // Without description
+  public:  // Without description
+    CheckVolumeSD(const G4String&);
+    ~CheckVolumeSD() override = default;
 
-  CheckVolumeSD(const G4String&);
-  ~CheckVolumeSD() override = default;
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
-  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
-
-private:
-
-  HistoManager*  fHisto;
-
+  private:
+    HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

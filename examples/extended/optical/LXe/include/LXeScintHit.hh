@@ -31,39 +31,39 @@
 #ifndef LXeScintHit_h
 #define LXeScintHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 #include "G4VPhysicalVolume.hh"
 
 class LXeScintHit : public G4VHit
 {
- public:
-  LXeScintHit() = default;
-  LXeScintHit(G4VPhysicalVolume* pVol);
-  ~LXeScintHit() override = default;
+  public:
+    LXeScintHit() = default;
+    LXeScintHit(G4VPhysicalVolume* pVol);
+    ~LXeScintHit() override = default;
 
-  LXeScintHit(const LXeScintHit& right);
-  const LXeScintHit& operator=(const LXeScintHit& right);
-  G4bool operator==(const LXeScintHit& right) const;
+    LXeScintHit(const LXeScintHit& right);
+    const LXeScintHit& operator=(const LXeScintHit& right);
+    G4bool operator==(const LXeScintHit& right) const;
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* aHit);
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
-  inline void SetEdep(G4double de) { fEdep = de; }
-  inline void AddEdep(G4double de) { fEdep += de; }
-  inline G4double GetEdep() { return fEdep; }
+    inline void SetEdep(G4double de) { fEdep = de; }
+    inline void AddEdep(G4double de) { fEdep += de; }
+    inline G4double GetEdep() { return fEdep; }
 
-  inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
-  inline G4ThreeVector GetPos() { return fPos; }
+    inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+    inline G4ThreeVector GetPos() { return fPos; }
 
-  inline const G4VPhysicalVolume* GetPhysV() { return fPhysVol; }
+    inline const G4VPhysicalVolume* GetPhysV() { return fPhysVol; }
 
- private:
-  G4double fEdep = 0.;
-  G4ThreeVector fPos;
-  const G4VPhysicalVolume* fPhysVol = nullptr;
+  private:
+    G4double fEdep = 0.;
+    G4ThreeVector fPos;
+    const G4VPhysicalVolume* fPhysVol = nullptr;
 };
 
 typedef G4THitsCollection<LXeScintHit> LXeScintHitsCollection;
@@ -72,14 +72,13 @@ extern G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator;
 
 inline void* LXeScintHit::operator new(size_t)
 {
-  if(!LXeScintHitAllocator)
-    LXeScintHitAllocator = new G4Allocator<LXeScintHit>;
-  return (void*) LXeScintHitAllocator->MallocSingle();
+  if (!LXeScintHitAllocator) LXeScintHitAllocator = new G4Allocator<LXeScintHit>;
+  return (void*)LXeScintHitAllocator->MallocSingle();
 }
 
 inline void LXeScintHit::operator delete(void* aHit)
 {
-  LXeScintHitAllocator->FreeSingle((LXeScintHit*) aHit);
+  LXeScintHitAllocator->FreeSingle((LXeScintHit*)aHit);
 }
 
 #endif

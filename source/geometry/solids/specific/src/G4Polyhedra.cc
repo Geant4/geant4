@@ -742,6 +742,13 @@ G4GeometryType G4Polyhedra::GetEntityType() const
   return {"G4Polyhedra"};
 }
 
+// IsFaceted
+//
+G4bool G4Polyhedra::IsFaceted() const
+{
+  return true;
+}
+
 // Make a clone of the object
 //
 G4VSolid* G4Polyhedra::Clone() const

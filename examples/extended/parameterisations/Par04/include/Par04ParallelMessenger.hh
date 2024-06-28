@@ -27,8 +27,9 @@
 #ifndef PAR04PARALLELMESSENGER_H
 #define PAR04PARALLELMESSENGER_H
 
-#include <G4String.hh>       // for G4String
 #include "G4UImessenger.hh"  // for G4UImessenger
+
+#include <G4String.hh>  // for G4String
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
@@ -47,29 +48,29 @@ class Par04ParallelFullWorld;
 
 class Par04ParallelMessenger : public G4UImessenger
 {
- public:
-  Par04ParallelMessenger(Par04ParallelFullWorld*);
-  ~Par04ParallelMessenger();
+  public:
+    Par04ParallelMessenger(Par04ParallelFullWorld*);
+    ~Par04ParallelMessenger();
 
-  /// Invokes appropriate methods based on the typed command
-  virtual void SetNewValue(G4UIcommand*, G4String) final;
-  /// Retrieves the current settings
-  virtual G4String GetCurrentValue(G4UIcommand*) final;
+    /// Invokes appropriate methods based on the typed command
+    virtual void SetNewValue(G4UIcommand*, G4String) final;
+    /// Retrieves the current settings
+    virtual G4String GetCurrentValue(G4UIcommand*) final;
 
- private:
-  /// Parallel world to setup
-  Par04ParallelFullWorld* fParallel = nullptr;
-  /// Command to set the directory common to all messengers in this example
-  /// /Par04
-  G4UIdirectory* fExampleDir = nullptr;
-  /// Command to set the directory for parallel settings /Par04/parallel
-  G4UIdirectory* fParallelDir = nullptr;
-  /// Command printing current settings
-  G4UIcmdWithoutParameter* fPrintCmd;
-  /// Command to set the number of slices
-  G4UIcmdWithAnInteger* fNbSlicesCmd = nullptr;
-  /// Command to set the number of rows
-  G4UIcmdWithAnInteger* fNbRowsCmd = nullptr;
+  private:
+    /// Parallel world to setup
+    Par04ParallelFullWorld* fParallel = nullptr;
+    /// Command to set the directory common to all messengers in this example
+    /// /Par04
+    G4UIdirectory* fExampleDir = nullptr;
+    /// Command to set the directory for parallel settings /Par04/parallel
+    G4UIdirectory* fParallelDir = nullptr;
+    /// Command printing current settings
+    G4UIcmdWithoutParameter* fPrintCmd;
+    /// Command to set the number of slices
+    G4UIcmdWithAnInteger* fNbSlicesCmd = nullptr;
+    /// Command to set the number of rows
+    G4UIcmdWithAnInteger* fNbRowsCmd = nullptr;
 };
 
 #endif

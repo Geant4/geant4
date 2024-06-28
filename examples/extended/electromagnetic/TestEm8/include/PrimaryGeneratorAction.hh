@@ -45,8 +45,8 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
 class G4Event;
@@ -54,20 +54,20 @@ class TestParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-public:
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction() override;
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event *) override;
+    void GeneratePrimaries(G4Event*) override;
 
-  PrimaryGeneratorAction &operator=
-  (const PrimaryGeneratorAction &right) = delete;
-  PrimaryGeneratorAction(const PrimaryGeneratorAction &) = delete;
+    PrimaryGeneratorAction& operator=(const PrimaryGeneratorAction& right) = delete;
+    PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
 
-private:
-  G4ParticleGun *fParticleGun;
-  TestParameters *fParam;
+  private:
+    G4ParticleGun* fParticleGun;
+    TestParameters* fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

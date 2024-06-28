@@ -42,15 +42,15 @@ class RunAction;
 
 class SteppingAction : public G4UserSteppingAction
 {
-public:
-  SteppingAction(RunAction*);
- ~SteppingAction();
+  public:
+    SteppingAction(RunAction*);
+    ~SteppingAction();
 
-  virtual void UserSteppingAction(const G4Step*);
-    
-private:
-  RunAction* fRunAction;
-  G4double   fMuonMass;
+    virtual void UserSteppingAction(const G4Step*);
+
+  private:
+    RunAction* fRunAction;
+    G4double fMuonMass;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -29,37 +29,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#  include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+#  include "G4RunManager.hh"
 #endif
-
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4AnalysisManager.hh"
 
 #include "SAXSEventAction.hh"
 #include "SAXSSensitiveDetectorHit.hh"
 
+#include "G4AnalysisManager.hh"
+#include "G4Event.hh"
+#include "G4EventManager.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Trajectory.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4UImanager.hh"
+#include "G4VHitsCollection.hh"
+#include "G4VVisManager.hh"
+#include "G4ios.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SAXSEventAction::SAXSEventAction():
-  G4UserEventAction(),
-  fSensitiveDetector_ID(-1),
-  fVerboseLevel(0),
-  fNRi(0),
-  fNCi(0),
-  fNDi(0),
-  fEventWeight(0.)
+SAXSEventAction::SAXSEventAction()
+  : G4UserEventAction(),
+    fSensitiveDetector_ID(-1),
+    fVerboseLevel(0),
+    fNRi(0),
+    fNCi(0),
+    fNDi(0),
+    fEventWeight(0.)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -79,61 +79,57 @@ void SAXSEventAction::BeginOfEventAction(const G4Event*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void SAXSEventAction::EndOfEventAction(const G4Event* aEvent)
-{   
-  //instantiating The Sensitive Detector Manager
+{
+  // instantiating The Sensitive Detector Manager
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  
-  //Hit Detection System
-  if (fSensitiveDetector_ID==-1) {
+
+  // Hit Detection System
+  if (fSensitiveDetector_ID == -1) {
     G4String SensitiveDetectorName;
-    if (SDman->FindSensitiveDetector(SensitiveDetectorName="det",0)) {
-      fSensitiveDetector_ID =
-        SDman->GetCollectionID(SensitiveDetectorName="det/collection");
+    if (SDman->FindSensitiveDetector(SensitiveDetectorName = "det", 0)) {
+      fSensitiveDetector_ID = SDman->GetCollectionID(SensitiveDetectorName = "det/collection");
     }
   }
-  
+
   SensitiveDetectorHitsCollection* fSensitiveDetectorHC = 0;
   G4HCofThisEvent* HCE = aEvent->GetHCofThisEvent();
-  
+
   if (HCE) {
     if (fSensitiveDetector_ID != -1) {
       G4VHitsCollection* aHC = HCE->GetHC(fSensitiveDetector_ID);
       fSensitiveDetectorHC = (SensitiveDetectorHitsCollection*)(aHC);
     }
   }
-  
-  //instantiating The Analysis Manager
+
+  // instantiating The Analysis Manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  //get the Event Number
-  G4int eventNumber =
-    G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
-  
-  //filling the SD scoring ntuple
+
+  // get the Event Number
+  G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+
+  // filling the SD scoring ntuple
   if (fSensitiveDetectorHC) {
     size_t vNumberOfHit = fSensitiveDetectorHC->entries();
-    for (size_t i=0; i<vNumberOfHit; i++) {
+    for (size_t i = 0; i < vNumberOfHit; i++) {
       SAXSSensitiveDetectorHit* aHit = (*fSensitiveDetectorHC)[i];
-      analysisManager->FillNtupleDColumn(0,0,aHit->GetEnergy()/CLHEP::keV);
-      analysisManager->FillNtupleDColumn(0,1,aHit->GetPos().x()/CLHEP::mm);
-      analysisManager->FillNtupleDColumn(0,2,aHit->GetPos().y()/CLHEP::mm);
-      analysisManager->FillNtupleDColumn(0,3,aHit->GetPos().z()/CLHEP::mm);
-      analysisManager->FillNtupleDColumn(0,4,aHit->GetMom().x());
-      analysisManager->FillNtupleDColumn(0,5,aHit->GetMom().y());
-      analysisManager->FillNtupleDColumn(0,6,aHit->GetMom().z());
-      analysisManager->FillNtupleDColumn(0,7,aHit->GetTime()/CLHEP::ns);
-      analysisManager->FillNtupleIColumn(0,8,aHit->GetType());
-      analysisManager->FillNtupleIColumn(0,9,aHit->GetTrackID());
-      analysisManager->FillNtupleIColumn(0,10,fNRi);
-      analysisManager->FillNtupleIColumn(0,11,fNCi);
-      analysisManager->FillNtupleIColumn(0,12,fNDi);
-      analysisManager->FillNtupleIColumn(0,13,eventNumber);
-      analysisManager->FillNtupleDColumn(0,14,aHit->GetWeight());
-      analysisManager->AddNtupleRow(0);  
+      analysisManager->FillNtupleDColumn(0, 0, aHit->GetEnergy() / CLHEP::keV);
+      analysisManager->FillNtupleDColumn(0, 1, aHit->GetPos().x() / CLHEP::mm);
+      analysisManager->FillNtupleDColumn(0, 2, aHit->GetPos().y() / CLHEP::mm);
+      analysisManager->FillNtupleDColumn(0, 3, aHit->GetPos().z() / CLHEP::mm);
+      analysisManager->FillNtupleDColumn(0, 4, aHit->GetMom().x());
+      analysisManager->FillNtupleDColumn(0, 5, aHit->GetMom().y());
+      analysisManager->FillNtupleDColumn(0, 6, aHit->GetMom().z());
+      analysisManager->FillNtupleDColumn(0, 7, aHit->GetTime() / CLHEP::ns);
+      analysisManager->FillNtupleIColumn(0, 8, aHit->GetType());
+      analysisManager->FillNtupleIColumn(0, 9, aHit->GetTrackID());
+      analysisManager->FillNtupleIColumn(0, 10, fNRi);
+      analysisManager->FillNtupleIColumn(0, 11, fNCi);
+      analysisManager->FillNtupleIColumn(0, 12, fNDi);
+      analysisManager->FillNtupleIColumn(0, 13, eventNumber);
+      analysisManager->FillNtupleDColumn(0, 14, aHit->GetWeight());
+      analysisManager->AddNtupleRow(0);
     }
   }
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

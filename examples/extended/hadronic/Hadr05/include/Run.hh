@@ -38,6 +38,7 @@
 #include "G4Run.hh"
 #include "G4VProcess.hh"
 #include "globals.hh"
+
 #include <map>
 
 class DetectorConstruction;
@@ -49,35 +50,35 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction*);
-   ~Run() override = default;
+    ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
-    void CountProcesses(const G4VProcess* process);      
-    void SumEdepPerAbsorber(G4int,G4double,G4double);    
-    void SumEnergies (G4double edeptot, G4double eleak0, G4double eleak1);       
-    void SumEnergyFlow (G4int plane, G4double Eflow);
-                
+    void CountProcesses(const G4VProcess* process);
+    void SumEdepPerAbsorber(G4int, G4double, G4double);
+    void SumEnergies(G4double edeptot, G4double eleak0, G4double eleak1);
+    void SumEnergyFlow(G4int plane, G4double Eflow);
+
     void Merge(const G4Run*) override;
     void EndOfRun();
-     
+
   private:
-    DetectorConstruction*  fDetector = nullptr;
-    G4ParticleDefinition*  fParticle = nullptr;
-    G4double               fEkin = 0.;
-                           
-    G4double fSumEAbs [kMaxAbsor], fSum2EAbs [kMaxAbsor]; 
-    G4double fSumLAbs [kMaxAbsor], fSum2LAbs [kMaxAbsor];
-    
+    DetectorConstruction* fDetector = nullptr;
+    G4ParticleDefinition* fParticle = nullptr;
+    G4double fEkin = 0.;
+
+    G4double fSumEAbs[kMaxAbsor], fSum2EAbs[kMaxAbsor];
+    G4double fSumLAbs[kMaxAbsor], fSum2LAbs[kMaxAbsor];
+
     G4double fEdepTot = 0., fEdepTot2 = 0.;
-    
+
     G4double fEnergyLeak[2] = {0., 0.};
     G4double fEleakTot = 0., fEleakTot2 = 0.;
-    
+
     G4double fEtotal = 0., fEtotal2 = 0.;
-    
-    std::map<G4String,G4int> fProcCounter;            
-    std::vector<G4double>    fEnergyFlow;
+
+    std::map<G4String, G4int> fProcCounter;
+    std::vector<G4double> fEnergyFlow;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

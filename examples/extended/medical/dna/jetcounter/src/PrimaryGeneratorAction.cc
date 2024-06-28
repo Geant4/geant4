@@ -28,31 +28,34 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+
 #include <fstream>
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction *detector)
-    : G4VUserPrimaryGeneratorAction(), fDetector(detector){
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* detector)
+  : G4VUserPrimaryGeneratorAction(), fDetector(detector)
+{
   fpParticleGun = std::make_unique<G4ParticleGun>();
-  fpParticleGun->SetParticleEnergy(
-      -1); // default value - can be overridden in the macro file
+  fpParticleGun->SetParticleEnergy(-1);  // default value - can be overridden in the macro file
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
   // user can set the energy in the macro file
   G4double energy = fpParticleGun->GetParticleEnergy();
 
   // only first check is important as only user can set energy to -1,
   // hopefully...
-  if (energy == -1) { // if energy is larger than zero, then the beam is
-                      // mono-energetic if the energy is set to zero, then the
-                      // energy is randomized, based on spectrum file
+  if (energy == -1) {  // if energy is larger than zero, then the beam is
+                       // mono-energetic if the energy is set to zero, then the
+                       // energy is randomized, based on spectrum file
     fMonoEnergetic = false;
   }
 
@@ -61,19 +64,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   }
 
   fpParticleGun->SetParticleEnergy(energy);
-  fpParticleGun->SetParticlePosition(
-      GenerateParticlePosition()); // point of emission
+  fpParticleGun->SetParticlePosition(GenerateParticlePosition());  // point of emission
   fpParticleGun->SetParticleMomentumDirection(
-      GenerateParticleDirection()); // direction of emission
+    GenerateParticleDirection());  // direction of emission
 
-  fpParticleGun->GeneratePrimaryVertex(anEvent); // sending the particle
+  fpParticleGun->GeneratePrimaryVertex(anEvent);  // sending the particle
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double PrimaryGeneratorAction::GenerateParticleEnergy() {
-  if (fEnergySpectrum_length ==
-      0) { // reading the spectrum file if not loaded yet
+G4double PrimaryGeneratorAction::GenerateParticleEnergy()
+{
+  if (fEnergySpectrum_length == 0) {  // reading the spectrum file if not loaded yet
     std::ifstream fin(fEnergySpectrumFilename);
     G4String len, gain, offset, counts;
     fin >> len >> gain >> offset;
@@ -100,8 +102,7 @@ G4double PrimaryGeneratorAction::GenerateParticleEnergy() {
   G4int left = fEnergySpectrum_counts[en_id - 1];
   G4int right = fEnergySpectrum_counts[en_id];
 
-  G4double en_left =
-      (en_id - 1) * fEnergySpectrum_gain + fEnergySpectrum_offset;
+  G4double en_left = (en_id - 1) * fEnergySpectrum_gain + fEnergySpectrum_offset;
   G4double en_right = en_id * fEnergySpectrum_gain + fEnergySpectrum_offset;
 
   // linear interpolation:
@@ -111,7 +112,8 @@ G4double PrimaryGeneratorAction::GenerateParticleEnergy() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreeVector PrimaryGeneratorAction::GenerateParticlePosition() {
+G4ThreeVector PrimaryGeneratorAction::GenerateParticlePosition()
+{
   // the source is an infinitely thin disk of radius r
   G4double r = std::sqrt(G4UniformRand()) * fDetector->GetCollDiameter() / 2.;
   G4double phi = G4UniformRand() * twopi;
@@ -125,7 +127,8 @@ G4ThreeVector PrimaryGeneratorAction::GenerateParticlePosition() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreeVector PrimaryGeneratorAction::GenerateParticleDirection() {
+G4ThreeVector PrimaryGeneratorAction::GenerateParticleDirection()
+{
   G4double phi, theta;
   G4double px, py, pz;
 
@@ -138,7 +141,7 @@ G4ThreeVector PrimaryGeneratorAction::GenerateParticleDirection() {
   // Even with this restriction only 1 in 4 projectiles pass through the
   // collimator.
   G4double cos_max_theta =
-      std::cos(std::atan(fDetector->GetCollDiameter() / fDetector->GetCollLength()));
+    std::cos(std::atan(fDetector->GetCollDiameter() / fDetector->GetCollLength()));
   theta = std::acos(cos_max_theta + G4UniformRand() * (1 - cos_max_theta));
 
   px = std::cos(theta);

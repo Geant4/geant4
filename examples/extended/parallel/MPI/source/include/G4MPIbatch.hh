@@ -28,23 +28,25 @@
 #ifndef G4MPI_BATCH_H
 #define G4MPI_BATCH_H
 
-#include <fstream>
 #include "G4VMPIsession.hh"
 
-class G4MPIbatch : public G4VMPIsession {
-public:
-  G4MPIbatch(const G4String& fname = "", G4bool qbatch = false);
-  ~G4MPIbatch();
+#include <fstream>
 
-  virtual G4UIsession* SessionStart();
+class G4MPIbatch : public G4VMPIsession
+{
+  public:
+    G4MPIbatch(const G4String& fname = "", G4bool qbatch = false);
+    ~G4MPIbatch();
 
-protected:
-  std::ifstream batch_stream_;
-  G4bool is_opened_;
-  G4bool is_batch_mode_;
+    virtual G4UIsession* SessionStart();
 
-  // get a command from a batch script file
-  G4String ReadCommand();
+  protected:
+    std::ifstream batch_stream_;
+    G4bool is_opened_;
+    G4bool is_batch_mode_;
+
+    // get a command from a batch script file
+    G4String ReadCommand();
 };
 
 #endif

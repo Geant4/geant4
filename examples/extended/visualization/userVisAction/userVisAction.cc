@@ -26,29 +26,26 @@
 /// \file visualization/userVisAction/userVisAction.cc
 /// \brief Main program of the visualization/userVisAction example
 
-#include "B1DetectorConstruction.hh"
 #include "B1ActionInitialization.hh"
-
-#include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
+#include "B1DetectorConstruction.hh"
 #include "QBBC.hh"
-
-#include "G4UIExecutive.hh"
-#include "G4VisExecutive.hh"
 #include "UVA_VisAction.hh"
 
-#include "Randomize.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -78,20 +75,19 @@ int main(int argc,char** argv)
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   // Register User Vis Action with optional extent
-  visManager->RegisterRunDurationUserVisAction
-  ("My nice logo",
-   new UVA_VisAction,
-   G4VisExtent(-20*cm,-10*cm,-25*cm,-15*cm,20*cm,40*cm));
+  visManager->RegisterRunDurationUserVisAction(
+    "My nice logo", new UVA_VisAction,
+    G4VisExtent(-20 * cm, -10 * cm, -25 * cm, -15 * cm, 20 * cm, 40 * cm));
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( ! ui ) {
+  if (!ui) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
   else {
     // interactive mode

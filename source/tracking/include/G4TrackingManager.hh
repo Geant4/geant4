@@ -60,9 +60,6 @@ class G4TrackingManager
 ////////////////////////
 {
  public:
-  using ProfilerConfig = G4Track::ProfilerConfig;
-
- public:
   // Constructor/Destructor
 
   // G4TrackingManger should be dynamically allocated, therefore you

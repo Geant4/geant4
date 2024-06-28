@@ -39,7 +39,7 @@ class G4Event;
 class GB03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    GB03PrimaryGeneratorAction();    
+    GB03PrimaryGeneratorAction();
     virtual ~GB03PrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event*);
@@ -49,4 +49,3 @@ class GB03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 };
 
 #endif
-

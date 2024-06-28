@@ -346,8 +346,8 @@ void G4IntraNucleiCascader::setupCascade() {
 	theExitonConfiguration.incrementQP(knd);
       };
       
-      G4int ihn = G4int(2 * (ab-zb) * inuclRndm() + 0.5);
-      G4int ihz = G4int(2 * zb * inuclRndm() + 0.5);
+      G4int ihn = G4int(2 * (ab-zb)*G4UniformRand() + 0.5);
+      G4int ihz = G4int(2.*zb*G4UniformRand() + 0.5);
       
       for (i = 0; i < ihn; i++) theExitonConfiguration.incrementHoles(2);
       for (i = 0; i < ihz; i++) theExitonConfiguration.incrementHoles(1);

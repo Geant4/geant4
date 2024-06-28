@@ -105,10 +105,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       G4double Egamma = (*secondary)[lp - 1]->GetTotalEnergy();
       ++run->f_n_Xray_Refl;
       analysisManager->FillH1(1, Egamma, 1. / run->GetNumberOfEventToBeProcessed());
-      if (analysisManager->GetVerboseLevel() > 1 && run->f_n_Xray_Refl < nprint ) 
+      if (analysisManager->GetVerboseLevel() > 1 && run->f_n_Xray_Refl < nprint)
         G4cout << __FILE__ << " line " << __LINE__ << " " << __FUNCTION__
-               << " iCalled=" << std::setw(3) << iCalled
-               << " eventID=" << std::setw(3) << eventID
+               << " iCalled=" << std::setw(3) << iCalled << " eventID=" << std::setw(3) << eventID
                << " f_n_Xray_Refl=" << run->f_n_Xray_Refl
                << " ProcessName=" << process->GetProcessName()
                << " direction=" << trk->GetMomentumDirection() << " Egamma=" << Egamma / keV
@@ -118,7 +117,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 
   const G4VProcess* creator = trk->GetCreatorProcess();
-  G4int CreatorProcessSubType=0;
+  G4int CreatorProcessSubType = 0;
   if (creator != nullptr) CreatorProcessSubType = creator->GetProcessSubType();
   if (CreatorProcessSubType == fGammaReflection) {  // transportation after XrayReflection
     if (IncomingPhotonDirection != G4ThreeVector(0, 0, 0)) {
@@ -128,8 +127,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       analysisManager->FillH1(4, IncidentAngle, 1. / run->GetNumberOfEventToBeProcessed());
       if (analysisManager->GetVerboseLevel() > 1 && iCalled < nprint)
         G4cout << __FILE__ << " line " << __LINE__ << " " << __FUNCTION__
-               << " iCalled=" << std::setw(3) << iCalled
-               << " eventID=" << std::setw(3) << eventID
+               << " iCalled=" << std::setw(3) << iCalled << " eventID=" << std::setw(3) << eventID
                << " CreatorProcname=" << creator->GetProcessName()
                << " ProcessName=" << process->GetProcessName()
                << " IncomingPhotonDirection=" << IncomingPhotonDirection

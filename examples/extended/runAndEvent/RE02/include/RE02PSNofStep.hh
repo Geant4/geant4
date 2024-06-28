@@ -43,15 +43,14 @@
 
 class RE02PSNofStep : public G4PSNofStep
 {
-   public: // with description
-      RE02PSNofStep(G4String name,G4int nx,G4int ny, G4int nz);
-      virtual ~RE02PSNofStep();
+  public:  // with description
+    RE02PSNofStep(G4String name, G4int nx, G4int ny, G4int nz);
+    virtual ~RE02PSNofStep();
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+  protected:  // with description
+    virtual G4int GetIndex(G4Step*);
 
   private:
-      G4int fNx, fNy, fNz;
+    G4int fNx, fNy, fNz;
 };
 #endif
-

@@ -29,34 +29,30 @@
 //
 
 #include "RE05TrackerHit.hh"
-#include "G4VVisManager.hh"
+
+#include "G4AttCheck.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4UnitsTable.hh"
-#include "G4AttValue.hh"
-#include "G4AttDef.hh"
-#include "G4AttCheck.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
-G4ThreadLocal G4Allocator<RE05TrackerHit>* RE05TrackerHitAllocator=0;
-std::map<G4String,G4AttDef> RE05TrackerHit::fAttDefs;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RE05TrackerHit::RE05TrackerHit()
-: G4VHit(),
-  fEdep(0.),fPos()
-{}
+G4ThreadLocal G4Allocator<RE05TrackerHit>* RE05TrackerHitAllocator = 0;
+std::map<G4String, G4AttDef> RE05TrackerHit::fAttDefs;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05TrackerHit::~RE05TrackerHit()
-{}
+RE05TrackerHit::RE05TrackerHit() : G4VHit(), fEdep(0.), fPos() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05TrackerHit::RE05TrackerHit(const RE05TrackerHit &right)
-  : G4VHit()
+RE05TrackerHit::~RE05TrackerHit() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RE05TrackerHit::RE05TrackerHit(const RE05TrackerHit& right) : G4VHit()
 {
   fEdep = right.fEdep;
   fPos = right.fPos;
@@ -64,7 +60,7 @@ RE05TrackerHit::RE05TrackerHit(const RE05TrackerHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const RE05TrackerHit& RE05TrackerHit::operator=(const RE05TrackerHit &right)
+const RE05TrackerHit& RE05TrackerHit::operator=(const RE05TrackerHit& right)
 {
   fEdep = right.fEdep;
   fPos = right.fPos;
@@ -73,9 +69,9 @@ const RE05TrackerHit& RE05TrackerHit::operator=(const RE05TrackerHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool RE05TrackerHit::operator==(const RE05TrackerHit &right) const
+G4bool RE05TrackerHit::operator==(const RE05TrackerHit& right) const
 {
-  return (this==&right) ? true : false;
+  return (this == &right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,12 +79,11 @@ G4bool RE05TrackerHit::operator==(const RE05TrackerHit &right) const
 void RE05TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if (pVVisManager) {
     G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -97,12 +92,11 @@ void RE05TrackerHit::Draw()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const std::map<G4String,G4AttDef>* RE05TrackerHit::GetAttDefs() const
+const std::map<G4String, G4AttDef>* RE05TrackerHit::GetAttDefs() const
 {
   // G4AttDefs have to have long life.  Use static member...
   if (fAttDefs.empty()) {
-    fAttDefs["HitType"] =
-      G4AttDef("HitType","Type of hit","Physics","","G4String");
+    fAttDefs["HitType"] = G4AttDef("HitType", "Type of hit", "Physics", "", "G4String");
   }
   return &fAttDefs;
 }
@@ -113,16 +107,13 @@ std::vector<G4AttValue>* RE05TrackerHit::CreateAttValues() const
 {
   // Create expendable G4AttsValues for picking...
   std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
-  attValues->push_back
-    (G4AttValue("HitType","RE05TrackerHit",""));
-  //G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
+  attValues->push_back(G4AttValue("HitType", "RE05TrackerHit", ""));
+  // G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
   return attValues;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05TrackerHit::Print()
-{}
+void RE05TrackerHit::Print() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

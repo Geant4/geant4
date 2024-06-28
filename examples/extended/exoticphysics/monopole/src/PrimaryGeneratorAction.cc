@@ -31,19 +31,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "DetectorConstruction.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleDefinition.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-  :G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(det),
-   fPrimPositionDefined(false)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fDetector(det), fPrimPositionDefined(false)
 {
-  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun = new G4ParticleGun(1);
   fParticleGun->SetParticleEnergy(100 * GeV);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
 }
@@ -59,15 +60,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
-  if(0 == anEvent->GetEventID() || !fPrimPositionDefined) {
-    G4double x0 = -0.5*(fDetector->GetWorldSizeX()) + 1*um;
-    fParticleGun->SetParticlePosition(G4ThreeVector(x0,0.0,0.0));
+  // this function is called at the begining of event
+  if (0 == anEvent->GetEventID() || !fPrimPositionDefined) {
+    G4double x0 = -0.5 * (fDetector->GetWorldSizeX()) + 1 * um;
+    fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0.0, 0.0));
     fPrimPositionDefined = true;
-  }  
+  }
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

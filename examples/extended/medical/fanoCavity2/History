@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-03-11 Vladimir Ivantchenko (fano2-V11-02-00)
+- Make PhysicsLists of the example to be coherent with physics_list library
+  of Geant4 11.2ref02
 
 ## 2021-12-27 Vladimir Ivantchenko (fano2-V11-00-01)
 - Make PhysicsLists of the example to be coherent with physics_list library

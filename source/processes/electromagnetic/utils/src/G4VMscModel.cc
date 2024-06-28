@@ -74,7 +74,7 @@ G4VMscModel::~G4VMscModel() = default;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ParticleChangeForMSC* 
-G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
+G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition*)
 {
   // recomputed for each new run
   if(nullptr == safetyHelper) {
@@ -87,25 +87,6 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
     change = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
   } else {
     change = new G4ParticleChangeForMSC();
-  }
-  if(IsMaster() && nullptr != p) {
-
-    // table is always built for low mass particles 
-    if(p->GetParticleName() != "GenericIon" &&
-       (p->GetPDGMass() < CLHEP::GeV || ForceBuildTableFlag()) ) {
-
-      G4EmParameters* param = G4EmParameters::Instance();
-      G4LossTableBuilder* builder = 
-	G4LossTableManager::Instance()->GetTableBuilder();
-      G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
-      G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
-      emin = std::max(emin, param->MinKinEnergy());
-      emax = std::min(emax, param->MaxKinEnergy());
-      if(emin < emax) {
-	xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
-						    emin, emax, useSpline);
-      }
-    }
   }
   return change;
 }

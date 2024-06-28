@@ -26,14 +26,16 @@
 #ifndef PAR04SENSITIVEDETECTOR_HH
 #define PAR04SENSITIVEDETECTOR_HH
 
-#include <CLHEP/Units/SystemOfUnits.h>     // for m, pi
-#include <G4String.hh>                     // for G4String
-#include <G4Types.hh>                      // for G4bool, G4int
-#include "G4SystemOfUnits.hh"              // for m
-#include "G4ThreeVector.hh"                // for G4ThreeVector
+#include "Par04Hit.hh"  // for Par04Hit (ptr only), Par04...
+
+#include "G4SystemOfUnits.hh"  // for m
+#include "G4ThreeVector.hh"  // for G4ThreeVector
 #include "G4VFastSimSensitiveDetector.hh"  // for G4VFastSimSensitiveDetector
-#include "G4VSensitiveDetector.hh"         // for G4VSensitiveDetector
-#include "Par04Hit.hh"                     // for Par04Hit (ptr only), Par04...
+#include "G4VSensitiveDetector.hh"  // for G4VSensitiveDetector
+
+#include <CLHEP/Units/SystemOfUnits.h>  // for m, pi
+#include <G4String.hh>  // for G4String
+#include <G4Types.hh>  // for G4bool, G4int
 #include <unordered_map>
 class G4FastHit;
 class G4FastTrack;
@@ -55,43 +57,41 @@ class G4TouchableHistory;
  *
  */
 
-class Par04SensitiveDetector
-  : public G4VSensitiveDetector
-  , public G4VFastSimSensitiveDetector
+class Par04SensitiveDetector : public G4VSensitiveDetector, public G4VFastSimSensitiveDetector
 {
- public:
-  Par04SensitiveDetector(G4String aName);
-  Par04SensitiveDetector(G4String aName, G4ThreeVector aNbOfCells, G4ThreeVector aNSizeOfCells);
-  virtual ~Par04SensitiveDetector();
-  /// Create hit collection
-  virtual void Initialize(G4HCofThisEvent* HCE) final;
-  /// Process energy deposit from the full simulation.
-  virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* aROhist) final;
-  /// Process energy deposit from the fast simulation.
-  virtual G4bool ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
-                             G4TouchableHistory* aROhist) final;
-  /// Process energy deposit - common part for full and fast simulation
-  /// It is invoked from ProcessHits() methods, and sets basic hit properties
-  /// (position, etc.), common for hit from fast and full simulation.
-  Par04Hit* RetrieveAndSetupHit(G4ThreeVector aPosition);
-  /// Rewrite hits map to a vector
-  virtual void EndOfEvent(G4HCofThisEvent* aHC) final;
+  public:
+    Par04SensitiveDetector(G4String aName);
+    Par04SensitiveDetector(G4String aName, G4ThreeVector aNbOfCells, G4ThreeVector aNSizeOfCells);
+    virtual ~Par04SensitiveDetector();
+    /// Create hit collection
+    virtual void Initialize(G4HCofThisEvent* HCE) final;
+    /// Process energy deposit from the full simulation.
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* aROhist) final;
+    /// Process energy deposit from the fast simulation.
+    virtual G4bool ProcessHits(const G4FastHit* aHit, const G4FastTrack* aTrack,
+                               G4TouchableHistory* aROhist) final;
+    /// Process energy deposit - common part for full and fast simulation
+    /// It is invoked from ProcessHits() methods, and sets basic hit properties
+    /// (position, etc.), common for hit from fast and full simulation.
+    Par04Hit* RetrieveAndSetupHit(G4ThreeVector aPosition);
+    /// Rewrite hits map to a vector
+    virtual void EndOfEvent(G4HCofThisEvent* aHC) final;
 
- private:
-  /// Collection of hits
-  Par04HitsCollection* fHitsCollection = nullptr;
-  /// Map of hits to be used in runtime
-  std::unordered_map<G4int, std::unique_ptr<Par04Hit>> fHitsMap;
-  /// ID of collection of hits
-  G4int fHitCollectionID = -1;
-  /// Number of mesh readout cells in cylindrical coordinates
-  G4ThreeVector fMeshNbOfCells = { 10, 10, 10 };
-  /// Size of mesh readout cells in cylindrical coordinates.
-  G4ThreeVector fMeshSizeOfCells = { 1 * m, 2 * CLHEP::pi / 10., 1 * m };
-  /// Retrieved once per event: position of entering particle
-  G4ThreeVector fEntrancePosition = { -1, -1, -1 };
-  /// Retrieved once per event: direction of entering particle
-  G4ThreeVector fEntranceDirection = { -1, -1, -1 };
+  private:
+    /// Collection of hits
+    Par04HitsCollection* fHitsCollection = nullptr;
+    /// Map of hits to be used in runtime
+    std::unordered_map<G4int, std::unique_ptr<Par04Hit>> fHitsMap;
+    /// ID of collection of hits
+    G4int fHitCollectionID = -1;
+    /// Number of mesh readout cells in cylindrical coordinates
+    G4ThreeVector fMeshNbOfCells = {10, 10, 10};
+    /// Size of mesh readout cells in cylindrical coordinates.
+    G4ThreeVector fMeshSizeOfCells = {1 * m, 2 * CLHEP::pi / 10., 1 * m};
+    /// Retrieved once per event: position of entering particle
+    G4ThreeVector fEntrancePosition = {-1, -1, -1};
+    /// Retrieved once per event: direction of entering particle
+    G4ThreeVector fEntranceDirection = {-1, -1, -1};
 };
 
 #endif /* PAR04SENSITIVEDETECTOR_HH */

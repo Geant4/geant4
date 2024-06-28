@@ -35,8 +35,9 @@
 #ifndef DicomRegularDetectorConstruction_h
 #define DicomRegularDetectorConstruction_h 1
 
-#include "globals.hh"
 #include "DicomDetectorConstruction.hh"
+
+#include "globals.hh"
 
 //*******************************************************
 /// DicomRegularDetectorConstruction class
@@ -49,15 +50,12 @@
 
 class DicomRegularDetectorConstruction : public DicomDetectorConstruction
 {
-public:
+  public:
+    DicomRegularDetectorConstruction();
+    ~DicomRegularDetectorConstruction();
 
-  DicomRegularDetectorConstruction();
-  ~DicomRegularDetectorConstruction();
-
-private:
-
-  virtual void ConstructPhantom();
-
+  private:
+    virtual void ConstructPhantom();
 };
 
 #endif

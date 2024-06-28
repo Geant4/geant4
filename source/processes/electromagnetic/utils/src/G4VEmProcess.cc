@@ -153,7 +153,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
     G4String pname = part.GetParticleName();
     if(pname != "deuteron" && pname != "triton" &&
-       pname != "alpha" && pname != "alpha+" &&
+       pname != "He3" && pname != "alpha" && pname != "alpha+" &&
        pname != "helium" && pname != "hydrogen") {
 
       particle = G4GenericIon::GenericIon();
@@ -272,8 +272,14 @@ void G4VEmProcess::StreamInfo(std::ostream& out,
   }
   if(fXSType != fEmNoIntegral)  { out << " XStype:" << fXSType; }
   if(applyCuts) { out << " applyCuts:1 "; }
-  out << " SubType=" << GetProcessSubType();
-  if(biasFactor != 1.0) { out << "  BiasingFactor= " << biasFactor; }
+  G4int subtype = GetProcessSubType();
+  out << " SubType=" << subtype;
+  if (subtype == fAnnihilation) {
+    G4int mod = theParameters->PositronAtRestModelType();
+    const G4String namp[2] = {"Simple", "Allison"};
+    out << " AtRestModel:" << namp[mod];
+  }
+  if(biasFactor != 1.0) { out << "  BiasingFactor=" << biasFactor; }
   out << " BuildTable=" << buildLambdaTable << G4endl;
   if(buildLambdaTable) {
     if(particle == &part) { 
@@ -554,7 +560,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     G4double time = track.GetGlobalTime();
 
     G4int n1(0), n2(0);
-    if(num > mainSecondaries) { 
+    if(num0 > mainSecondaries) { 
       currentModel->FillNumberOfSecondaries(n1, n2);
     }
      
@@ -608,7 +614,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
                 t->SetCreatorModelID(augerID);
               }
             } else {
-              t->SetCreatorModelID(secID);
+              t->SetCreatorModelID(biasID);
             }
           }
           /* 

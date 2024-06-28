@@ -29,12 +29,12 @@
 //
 
 #include "ExErrorMagneticField.hh"
+
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExErrorMagneticField::ExErrorMagneticField()
-  : G4UniformMagField(G4ThreeVector())
+ExErrorMagneticField::ExErrorMagneticField() : G4UniformMagField(G4ThreeVector())
 {
   GetGlobalFieldManager()->SetDetectorField(this);
   GetGlobalFieldManager()->CreateChordFinder(this);
@@ -44,28 +44,27 @@ ExErrorMagneticField::ExErrorMagneticField()
 ExErrorMagneticField::ExErrorMagneticField(G4ThreeVector fieldVector)
   : G4UniformMagField(fieldVector)
 {
-  GetGlobalFieldManager()->SetDetectorField(this);    
+  GetGlobalFieldManager()->SetDetectorField(this);
   GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExErrorMagneticField::SetFieldValue(G4double fieldValue)
 {
-  G4UniformMagField::SetFieldValue(G4ThreeVector(0,0,fieldValue));
-
+  G4UniformMagField::SetFieldValue(G4ThreeVector(0, 0, fieldValue));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExErrorMagneticField::SetFieldValue(G4ThreeVector fieldVector)
 {
   // Find the Field Manager for the global field
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
-    
-  if(fieldVector!=G4ThreeVector(0.,0.,0.))
-  { 
+  G4FieldManager* fieldMgr = GetGlobalFieldManager();
+
+  if (fieldVector != G4ThreeVector(0., 0., 0.)) {
     G4UniformMagField::SetFieldValue(fieldVector);
     fieldMgr->SetDetectorField(this);
-  } else {
+  }
+  else {
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
     G4MagneticField* magField = NULL;
@@ -74,8 +73,7 @@ void ExErrorMagneticField::SetFieldValue(G4ThreeVector fieldVector)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4FieldManager*  ExErrorMagneticField::GetGlobalFieldManager()
+G4FieldManager* ExErrorMagneticField::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()->GetFieldManager();
 }
-

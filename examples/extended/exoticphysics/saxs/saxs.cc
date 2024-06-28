@@ -27,81 +27,78 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManagerFactory.hh"
-
-#include "G4UImanager.hh"
-
-#include "SAXSDetectorConstruction.hh"
-#include "SAXSPhysicsList.hh"
 #include "SAXSActionInitialization.hh"
-#include "SAXSRunAction.hh"
+#include "SAXSDetectorConstruction.hh"
 #include "SAXSEventAction.hh"
+#include "SAXSPhysicsList.hh"
+#include "SAXSRunAction.hh"
 #include "SAXSSteppingAction.hh"
 
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4Timer.hh"
-
+#include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 #include "Randomize.hh"
+
 #include <time.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
-
   G4Timer* theTimer = new G4Timer();
   theTimer->Start();
 
-  //Choose the Random engine and reset the seed (before the RunManager)
+  // Choose the Random engine and reset the seed (before the RunManager)
   /*
     G4int seed = time(0);
     G4cout << "Random seed: " << seed << G4endl;
     CLHEP::HepRandom::setTheSeed(seed);
   */
-  //Construct the run manager
+  // Construct the run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   int vNumberOfThreads = 2;
-  if (argc>2) {
+  if (argc > 2) {
     vNumberOfThreads = atoi(argv[2]);
   }
   if (vNumberOfThreads > 0) {
     runManager->SetNumberOfThreads(vNumberOfThreads);
   }
 
-  //Set mandatory initialization classes
+  // Set mandatory initialization classes
   runManager->SetUserInitialization(new SAXSDetectorConstruction);
   runManager->SetUserInitialization(new SAXSPhysicsList());
 
-  //Set user action classes
+  // Set user action classes
   runManager->SetUserInitialization(new SAXSActionInitialization());
- 
-  //Get the pointer to the User Interface manager
+
+  // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  //No arguments: set the batch mode
-  if (argc!=1) {
-    //Batch mode
+  // No arguments: set the batch mode
+  if (argc != 1) {
+    // Batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  } else {
-    //Visualization manager
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else {
+    // Visualization manager
     G4VisManager* visManager = new G4VisExecutive;
     visManager->Initialize();
 
-    //Define UI session for interactive mode
-    G4UIExecutive* ui = new G4UIExecutive(argc,argv);
+    // Define UI session for interactive mode
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute init_vis.mac");
-    if (ui->IsGUI())
-      UImanager->ApplyCommand("/control/execute gui.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();
 
     delete ui;
     delete visManager;
   }
 
-  //Job termination
+  // Job termination
   delete runManager;
 
   theTimer->Stop();
@@ -113,4 +110,3 @@ int main(int argc,char** argv)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-

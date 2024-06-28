@@ -31,7 +31,10 @@
 #define B5HodoscopeSD_h 1
 
 #include "G4VSensitiveDetector.hh"
+
 #include "HodoscopeHit.hh"
+
+#include "globals.hh"
 
 class G4Step;
 class G4HCofThisEvent;
@@ -48,15 +51,15 @@ class HodoscopeSD : public G4VSensitiveDetector
     HodoscopeSD(G4String name);
     ~HodoscopeSD() override = default;
 
-    void Initialize(G4HCofThisEvent*HCE) override;
-    G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) override;
+    void Initialize(G4HCofThisEvent* HCE) override;
+    G4bool ProcessHits(G4Step* step, G4TouchableHistory* ROhist) override;
 
   private:
     HodoscopeHitsCollection* fHitsCollection = nullptr;
     G4int fHCID = -1;
 };
 
-}
+}  // namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

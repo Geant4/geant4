@@ -47,15 +47,9 @@ class VRadiobiologicalAccumulable : public G4VAccumulable
   public:
     virtual void Accumulate(Hit*) = 0;
 
-    VRadiobiologicalAccumulable(G4String name) : G4VAccumulable(name)
-    {
-      
-    }
+    VRadiobiologicalAccumulable(G4String name) : G4VAccumulable(name) {}
 
-    virtual ~VRadiobiologicalAccumulable()
-    {
-      
-    }
+    virtual ~VRadiobiologicalAccumulable() {}
 };
 
 }  // namespace RadioBio

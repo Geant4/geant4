@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//This example is provided by the Geant4-DNA collaboration
+// This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
@@ -35,34 +35,29 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-    : G4VUserActionInitialization()
-{
-}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{
-}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-ActionInitialization::BuildForMaster() const
+void ActionInitialization::BuildForMaster() const
 {
   // In MT mode, to be clearer, the RunAction class for the master thread might
   // bz different than the one used for the workers.
   // This RunAction will be called before and after starting the
   // workers.
   // For more details, please refer to :
-  //https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
+  // https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
   //
   // RunAction* runAction= new RunAction(fDetectorConstruction);
   // SetUserAction(runAction);
@@ -70,12 +65,11 @@ ActionInitialization::BuildForMaster() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void
-ActionInitialization::Build() const
+void ActionInitialization::Build() const
 {
-//  G4cout << "Build for = "
-//      << G4RunManager::GetRunManager()->GetRunManagerType()
-//      << G4endl;
+  //  G4cout << "Build for = "
+  //      << G4RunManager::GetRunManager()->GetRunManagerType()
+  //      << G4endl;
 
   SetUserAction(new PrimaryGeneratorAction);
   SetUserAction(new RunAction());

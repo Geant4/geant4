@@ -23,72 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/wvalue/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 
 #include "EventAction.hh"
-#include "Run.hh"
+
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:G4UserEventAction()
-{ }
+EventAction::EventAction() : G4UserEventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
-{ }
+EventAction::~EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
-{    
- //energy deposited per event
- fTotalEdep = 0.;   
+{
+  // Energy deposited per event
+  fTotalEdep = 0.;
 
- //nb of inelastic events per event
- fNbInelastic = 0.;   
+  // Nb of inelastic events per event
+  fNbInelastic = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  //plot nb of inelastic interactions per event
-  //
+  // Plot nb of inelastic interactions per event
+
   if (fNbInelastic > 0.) {
+    Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
-    Run* run
-    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-    
     run->AddInelastic(fNbInelastic);
-    
-    //G4cout << "*** Nb of cumulated inelastic interactions = " 
+
+    // G4cout << "*** Nb of cumulated inelastic interactions = "
     // << run->GetInelastic() << G4endl;
-    
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-    analysisManager->FillH1(1,fNbInelastic);
-  }  
 
-  //plot energy deposited per event
-  //
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillH1(1, fNbInelastic);
+  }
+
+  // Plot energy deposited per event
+
   if (fTotalEdep > 0.) {
-    
-    Run* run
-    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-    
-    run->AddEdep(fTotalEdep);
-    
-    //G4cout << "*** Edep cumulated (eV) = " << run->GetEdep()/eV << G4endl;
-    //G4cout << "*** Edep (eV) = " << fTotalEdep/eV << G4endl;
-    
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-    analysisManager->FillH1(2,fTotalEdep);
-  }  
+    Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
+    run->AddEdep(fTotalEdep);
+
+    // G4cout << "*** Edep cumulated (eV) = " << run->GetEdep()/eV << G4endl;
+    // G4cout << "*** Edep (eV) = " << fTotalEdep/eV << G4endl;
+
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillH1(2, fTotalEdep);
+  }
 }

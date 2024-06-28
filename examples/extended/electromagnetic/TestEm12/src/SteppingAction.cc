@@ -31,54 +31,51 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "Run.hh"
+
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(EventAction* event)
-: fEventAction(event)
-{ }
+SteppingAction::SteppingAction(EventAction* event) : fEventAction(event) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
- G4double edep = step->GetTotalEnergyDeposit();
- if (edep <= 0.) return;
- 
- //total energy deposit in absorber
- //
- fEventAction->AddEdep(edep);     
- 
- //longitudinal profile of deposited energy
- //        
- G4ThreeVector prePoint  = step->GetPreStepPoint() ->GetPosition();
- G4ThreeVector postPoint = step->GetPostStepPoint()->GetPosition();
- G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
- if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0) point = postPoint;
- G4double r = point.mag();
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
- analysisManager->FillH1(1, r, edep);
- 
- Run* run
-   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-    
- G4double r0 = run->GetCsdaRange();
- if (r0 > 0.) analysisManager->FillH1(8, r/r0, edep);
- 
- //step size of primary particle or charged secondaries
- //
- G4double steplen = step->GetStepLength();
- const G4Track* track = step->GetTrack();
- if      (track->GetTrackID() == 1) analysisManager->FillH1(4, steplen);
- else if (track->GetDefinition()->GetPDGCharge() != 0.)
-                                    analysisManager->FillH1(7, steplen); 
+  G4double edep = step->GetTotalEnergyDeposit();
+  if (edep <= 0.) return;
+
+  // total energy deposit in absorber
+  //
+  fEventAction->AddEdep(edep);
+
+  // longitudinal profile of deposited energy
+  //
+  G4ThreeVector prePoint = step->GetPreStepPoint()->GetPosition();
+  G4ThreeVector postPoint = step->GetPostStepPoint()->GetPosition();
+  G4ThreeVector point = prePoint + G4UniformRand() * (postPoint - prePoint);
+  if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0) point = postPoint;
+  G4double r = point.mag();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, r, edep);
+
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  G4double r0 = run->GetCsdaRange();
+  if (r0 > 0.) analysisManager->FillH1(8, r / r0, edep);
+
+  // step size of primary particle or charged secondaries
+  //
+  G4double steplen = step->GetStepLength();
+  const G4Track* track = step->GetTrack();
+  if (track->GetTrackID() == 1)
+    analysisManager->FillH1(4, steplen);
+  else if (track->GetDefinition()->GetPDGCharge() != 0.)
+    analysisManager->FillH1(7, steplen);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

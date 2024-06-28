@@ -7,6 +7,8 @@
 #/UHDR/env/volume 0.8 um # for UHDR
 /UHDR/env/volume 1.6 um # for CONV
 
+/UHDR/Detector/PBC true
+
 /run/initialize
 
 # time structure (not available)
@@ -16,7 +18,7 @@
 /UHDR/env/pH 5.5
 
 # Oxygen concentration
-/UHDR/env/scavenger O2 19 %
+/UHDR/env/scavenger O2 21 %
 
 /chem/reaction/print
 
@@ -31,6 +33,8 @@
 /scorer/Gvalues/nOfTimeBins 80
 
 /run/printProgress 10
+
+/scorer/Dose/abortedDose 0.05 Gy
 
 /scorer/Dose/cutoff 0.01 Gy
 /UHDR/source/particle e-

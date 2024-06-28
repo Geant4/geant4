@@ -33,32 +33,32 @@
 #ifndef EventAction_h
 #define EventAction_h 1
 
+#include "DetectorConstruction.hh"
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
-#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
- public:
-  EventAction(DetectorConstruction*);
+  public:
+    EventAction(DetectorConstruction*);
 
-  void BeginOfEventAction(const G4Event*) override;
-  void EndOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
-  void SumEnergy(G4int k, G4double de, G4double dl)
-  {
-    fEnergyDeposit[k] += de;
-    fTrackLengthCh[k] += dl;
-  };
+    void SumEnergy(G4int k, G4double de, G4double dl)
+    {
+      fEnergyDeposit[k] += de;
+      fTrackLengthCh[k] += dl;
+    };
 
- private:
-  DetectorConstruction* fDetector;
+  private:
+    DetectorConstruction* fDetector;
 
-  G4double fEnergyDeposit[kMaxAbsor];
-  G4double fTrackLengthCh[kMaxAbsor];
+    G4double fEnergyDeposit[kMaxAbsor];
+    G4double fTrackLengthCh[kMaxAbsor];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

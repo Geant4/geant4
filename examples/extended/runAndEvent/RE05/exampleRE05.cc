@@ -31,27 +31,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
+#include "QBBC.hh"
+#include "RE05ActionInitialization.hh"
+#include "RE05CalorimeterParallelWorld.hh"
+#include "RE05DetectorConstruction.hh"
 #include "RE05SteppingVerbose.hh"
 
-#include "G4UImanager.hh"
-
-#include "RE05DetectorConstruction.hh"
-#include "RE05CalorimeterParallelWorld.hh"
-#include "QBBC.hh"
 #include "G4ParallelWorldPhysics.hh"
-#include "RE05ActionInitialization.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -65,13 +62,11 @@ int main(int argc,char** argv)
   // User Initialization classes (mandatory)
   //
   auto detector = new RE05DetectorConstruction();
-  detector->RegisterParallelWorld
-       (new RE05CalorimeterParallelWorld(parallelWorldName));
+  detector->RegisterParallelWorld(new RE05CalorimeterParallelWorld(parallelWorldName));
   runManager->SetUserInitialization(detector);
   //
   auto physicsList = new QBBC;
-  physicsList
-   ->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
+  physicsList->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
   runManager->SetUserInitialization(physicsList);
   //
   auto actions = new RE05ActionInitialization;
@@ -82,16 +77,16 @@ int main(int argc,char** argv)
   auto visManager = new G4VisExecutive;
   visManager->Initialize();
 
-  //get the pointer to the User Interface manager   
-  auto UImanager = G4UImanager::GetUIpointer();  
+  // get the pointer to the User Interface manager
+  auto UImanager = G4UImanager::GetUIpointer();
 
-  if (!ui)   // batch mode
+  if (!ui)  // batch mode
   {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
-  else           // interactive mode : define UI session
+  else  // interactive mode : define UI session
   {
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();

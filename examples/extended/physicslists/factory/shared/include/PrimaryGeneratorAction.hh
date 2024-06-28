@@ -45,17 +45,17 @@ class G4Event;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction() override;
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
-  void GeneratePrimaries(G4Event* event) override;
+    void GeneratePrimaries(G4Event* event) override;
 
-  // set methods
-  void SetRandomFlag(G4bool value);
+    // set methods
+    void SetRandomFlag(G4bool value);
 
-private:
-  G4ParticleGun*  fParticleGun = nullptr; // G4 particle gun
+  private:
+    G4ParticleGun* fParticleGun = nullptr;  // G4 particle gun
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

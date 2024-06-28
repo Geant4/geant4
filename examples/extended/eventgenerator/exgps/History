@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-03-11 Ben Morgan (exgps-V11-02-00)
+- Move CTests definitions to tests/ctests_examples
+
 ## 2023-01-09 Ben Morgan (exgps-V11-01-00)
 - Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
   scope version to ease use of Geant4 as a CMake subproject. 

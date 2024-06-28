@@ -41,10 +41,10 @@
 
 #include "TSPhysicsList.hh"
 
-#include "G4RunManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4ProcessManager.hh"
+#include "G4RunManager.hh"
 
 // Hadrons
 #include "G4BaryonConstructor.hh"
@@ -65,20 +65,19 @@
 
 // Physics List Helper
 #include "G4PhysicsListHelper.hh"
-
 #include "G4StepLimiter.hh"
 
 // Constructors
+#include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4RadioactiveDecayPhysics.hh"
-#include "G4HadronPhysicsQGSP_BERT.hh"
-#include "G4HadronPhysicsQGSP_BERT_HP.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
-#include "G4IonElasticPhysics.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT_HP.hh"
 #include "G4IonBinaryCascadePhysics.hh"
-#include "G4DecayPhysics.hh"
+#include "G4IonElasticPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 #include <set>
 
@@ -101,7 +100,7 @@ TSPhysicsList::TSPhysicsList()
 
 TSPhysicsList::~TSPhysicsList()
 {
-  for(auto ite : fConstructors)
+  for (auto ite : fConstructors)
     delete ite;
 }
 
@@ -109,8 +108,7 @@ TSPhysicsList::~TSPhysicsList()
 
 void TSPhysicsList::ConstructParticle()
 {
-  for(auto c : fConstructors)
-  {
+  for (auto c : fConstructors) {
     c->ConstructParticle();
   }
 }
@@ -123,8 +121,7 @@ void TSPhysicsList::ConstructProcess()
   //
   AddTransportation();
 
-  for(auto c : fConstructors)
-  {
+  for (auto c : fConstructors) {
     c->ConstructProcess();
   }
 
@@ -148,13 +145,11 @@ void TSPhysicsList::ConstructProcess()
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  while((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
-    G4String pname                 = particle->GetParticleName();
+    G4String pname = particle->GetParticleName();
 
-    if(step_limit_particles.find(pname) != step_limit_particles.end() ||
-       particle->GetPDGCharge())
+    if (step_limit_particles.find(pname) != step_limit_particles.end() || particle->GetPDGCharge())
     {
       ph->RegisterProcess(new G4StepLimiter, particle);
     }

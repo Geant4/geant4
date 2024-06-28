@@ -77,6 +77,7 @@ class G4MaterialScanner
     inline G4bool GetRegionSensitive() const { return regionSensitive; }
     G4bool SetRegionName(const G4String& val);
     inline const G4String& GetRegionName() const { return regionName; }
+    inline void SetVerbosity(G4int v) { verbosity = v; };
 
   private:
     void DoScan();
@@ -115,6 +116,12 @@ class G4MaterialScanner
     G4bool regionSensitive = false;
     G4String regionName = "notDefined";
     G4Region* theRegion = nullptr;
+
+    /// Configure degree of verbosity of Material Scan
+    /// verbosity 0: default
+    /// verbosity 1: call PrintIntegratedMaterialVerbose
+    /// verbosity 2: call PrintEachMaterialVerbose
+    G4int verbosity = 0;
 };
 
 #endif

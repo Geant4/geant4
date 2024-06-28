@@ -30,65 +30,64 @@
 #ifndef PAR02_EMCAL_FAST_SIM_MODEL_H
 #define PAR02_EMCAL_FAST_SIM_MODEL_H
 
-#include "G4VFastSimulationModel.hh"
 #include "Par02DetectorParametrisation.hh"
+
 #include "G4Step.hh"
+#include "G4VFastSimulationModel.hh"
 
 /// Shortcut to the ordinary tracking for electromagnetic calorimeters.
 ///
 /// The fast simulation model describes what should be done instead of a
 /// normal tracking. Instead of the ordinary tracking, a particle deposits
 /// its energy at the entrance to the electromagnetic calorimeter and its value
-/// is smeared (by Par02Smearer::SmearMomentum()). Based on G4 
+/// is smeared (by Par02Smearer::SmearMomentum()). Based on G4
 /// examples/extended/parametrisations/Par01/include/Par01EMShowerModel.hh .
 /// @author Anna Zaborowska
 
-class Par02FastSimModelEMCal : public G4VFastSimulationModel {
+class Par02FastSimModelEMCal : public G4VFastSimulationModel
+{
   public:
-    
     /// A constructor.
     /// @param aModelName A name of the fast simulation model.
     /// @param aEnvelope A region where the model can take over the ordinary tracking.
     /// @param aParamType A parametrisation type.
-    Par02FastSimModelEMCal( G4String aModelName, G4Region* aEnvelope, 
-                            Par02DetectorParametrisation::Parametrisation aParamType );
-    
+    Par02FastSimModelEMCal(G4String aModelName, G4Region* aEnvelope,
+                           Par02DetectorParametrisation::Parametrisation aParamType);
+
     /// A constructor.
     /// @param aModelName A name of the fast simulation model.
     /// @param aEnvelope A region where the model can take over the ordinary tracking.
-    Par02FastSimModelEMCal( G4String aModelName, G4Region* aEnvelope );
-    
+    Par02FastSimModelEMCal(G4String aModelName, G4Region* aEnvelope);
+
     /// A constructor.
     /// @param aModelName A name of the fast simulation model.
-    Par02FastSimModelEMCal( G4String aModelName );
+    Par02FastSimModelEMCal(G4String aModelName);
 
     ~Par02FastSimModelEMCal();
 
     /// Checks if this model should be applied to this particle type.
     /// @param aParticle A particle definition (type).
-    virtual G4bool IsApplicable( const G4ParticleDefinition& aParticle );
-    
+    virtual G4bool IsApplicable(const G4ParticleDefinition& aParticle);
+
     /// Checks if the model should be applied, taking into account the
     /// kinematics of a track.
     /// @param aFastTrack A track.
-    virtual G4bool ModelTrigger( const G4FastTrack & aFastTrack );
-    
-    /// Smears the energy deposit and saves it, together with the 
+    virtual G4bool ModelTrigger(const G4FastTrack& aFastTrack);
+
+    /// Smears the energy deposit and saves it, together with the
     /// position of the deposit, the electromagnetic calorimeter resolution
     /// and efficiency to the Par02PrimaryParticleInformation.
     /// @param aFastTrack A track.
     /// @param aFastStep A step.
-    virtual void DoIt( const G4FastTrack& aFastTrack, G4FastStep& aFastStep );
+    virtual void DoIt(const G4FastTrack& aFastTrack, G4FastStep& aFastStep);
 
   private:
-    
     /// A pointer to Par02DetectorParametrisation used to get the efficiency and
     /// resolution of the detector for a given particle and parametrisation type.
     Par02DetectorParametrisation* fCalculateParametrisation;
-    
+
     /// A parametrisation type.
     Par02DetectorParametrisation::Parametrisation fParametrisation;
 };
 
 #endif
-

@@ -32,42 +32,46 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger( DetectorConstruction* myDet ) : fDetector( myDet ) {
-  fDetectorDir = new G4UIdirectory( "/mydet/" );
-  fDetectorDir->SetGuidance( "Detector control." );
+DetectorMessenger::DetectorMessenger(DetectorConstruction* myDet) : fDetector(myDet)
+{
+  fDetectorDir = new G4UIdirectory("/mydet/");
+  fDetectorDir->SetGuidance("Detector control.");
 
-  fMaterial = new G4UIcmdWithAString( "/mydet/material", this );
-  fMaterial->SetGuidance( "Choice of the material:" );
-  fMaterial->SetGuidance( "   a Geant4 NIST material, e.g. G4_Fe " );
-  fMaterial->SetParameterName( "choiceMaterial", true );
-  fMaterial->SetDefaultValue( "G4_Fe" );
-  fMaterial->AvailableForStates( G4State_PreInit, G4State_Idle );
-  
-  fRadius = new G4UIcmdWithADoubleAndUnit( "/mydet/radius", this );
-  fRadius->SetParameterName( "choiceRadius", true );
-  fRadius->SetGuidance( "Target sphere radius" );
-  fRadius->SetDefaultValue( 1000.0 ); // default: 1 meter.
-  fRadius->AvailableForStates( G4State_PreInit, G4State_Idle );
+  fMaterial = new G4UIcmdWithAString("/mydet/material", this);
+  fMaterial->SetGuidance("Choice of the material:");
+  fMaterial->SetGuidance("   a Geant4 NIST material, e.g. G4_Fe ");
+  fMaterial->SetParameterName("choiceMaterial", true);
+  fMaterial->SetDefaultValue("G4_Fe");
+  fMaterial->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fUpdateCommand = new G4UIcmdWithoutParameter( "/mydet/update", this);
-  fUpdateCommand->SetGuidance( "Update geometry." );
-  fUpdateCommand->SetGuidance( "This command MUST be applied before \"beamOn\" " );
-  fUpdateCommand->SetGuidance( "if you changed geometrical value(s)." );
-  fUpdateCommand->AvailableForStates( G4State_Idle ); 
+  fRadius = new G4UIcmdWithADoubleAndUnit("/mydet/radius", this);
+  fRadius->SetParameterName("choiceRadius", true);
+  fRadius->SetGuidance("Target sphere radius");
+  fRadius->SetDefaultValue(1000.0);  // default: 1 meter.
+  fRadius->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fUpdateCommand = new G4UIcmdWithoutParameter("/mydet/update", this);
+  fUpdateCommand->SetGuidance("Update geometry.");
+  fUpdateCommand->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCommand->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCommand->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger() {
+DetectorMessenger::~DetectorMessenger()
+{
   delete fDetectorDir;
   delete fMaterial;
   delete fRadius;
@@ -76,14 +80,15 @@ DetectorMessenger::~DetectorMessenger() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue( G4UIcommand* command, G4String newValue ) { 
-  if ( command == fMaterial ) { 
-    fDetector->SetMaterial( newValue );
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fMaterial) {
+    fDetector->SetMaterial(newValue);
   }
-  if ( command == fRadius ) { 
-    fDetector->SetRadius( fRadius->GetNewDoubleValue( newValue ) );
+  if (command == fRadius) {
+    fDetector->SetRadius(fRadius->GetNewDoubleValue(newValue));
   }
-  if ( command == fUpdateCommand ) {
+  if (command == fUpdateCommand) {
     fDetector->UpdateGeometry();
   }
 }

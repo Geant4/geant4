@@ -45,10 +45,10 @@
 #ifndef CHEM6_Run_h
 #define CHEM6_Run_h 1
 
+#include "ScoreSpecies.hh"
+
 #include "G4Run.hh"
 #include "G4THitsMap.hh"
-
-#include "ScoreSpecies.hh"
 
 /// Run class
 ///
@@ -57,22 +57,22 @@
 class G4VPrimitiveScorer;
 class Run : public G4Run
 {
-public:
-  Run();
-  virtual ~Run();
-  
-  virtual void RecordEvent(const G4Event*);
-  virtual void Merge(const G4Run*);
-  
-  G4double GetSumDose()   const { return fSumEne; }
-  G4VPrimitiveScorer* GetPrimitiveScorer() const { return fScorerRun;}
-  G4THitsMap<G4double>* GetLET() {return fTotalLET;}
-  
-private:
-  G4double fSumEne;
-  G4VPrimitiveScorer* fScorerRun;
-  G4VPrimitiveScorer* fLETScorerRun;
-  G4THitsMap<G4double>* fTotalLET;
+  public:
+    Run();
+    virtual ~Run();
+
+    virtual void RecordEvent(const G4Event*);
+    virtual void Merge(const G4Run*);
+
+    G4double GetSumDose() const { return fSumEne; }
+    G4VPrimitiveScorer* GetPrimitiveScorer() const { return fScorerRun; }
+    G4THitsMap<G4double>* GetLET() { return fTotalLET; }
+
+  private:
+    G4double fSumEne;
+    G4VPrimitiveScorer* fScorerRun;
+    G4VPrimitiveScorer* fLETScorerRun;
+    G4THitsMap<G4double>* fTotalLET;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

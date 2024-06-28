@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// and the DNA geometry given in the Geom_DNA example 
+// Any report or published results obtained using the Geant4-DNA software
+// and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
 // [1] NIM B 298 (2013) 47-54
 // [2] Med. Phys. 37 (2010) 4692-4708
@@ -40,15 +40,13 @@
 
 #include "G4UserSteppingAction.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class SteppingAction : public G4UserSteppingAction
 {
-public:
-
-  SteppingAction();
-  virtual ~SteppingAction();
-  virtual void UserSteppingAction(const G4Step*);
+  public:
+    SteppingAction();
+    virtual ~SteppingAction();
+    virtual void UserSteppingAction(const G4Step*);
 };
 #endif

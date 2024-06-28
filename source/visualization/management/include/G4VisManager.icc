@@ -98,8 +98,12 @@ inline const G4Event* G4VisManager::GetRequestedEvent() const {
   return fpRequestedEvent;
 }
 
-inline G4int G4VisManager::GetNKeepRequests () const {
-  return fNKeepRequests;
+inline G4int G4VisManager::GetNKeepForPostProcessingRequests () const {
+  return fNKeepForPostProcessingRequests;
+}
+
+inline G4int G4VisManager::GetNKeepTheEventRequests () const {
+  return fNKeepTheEventRequests;
 }
 
 inline G4bool G4VisManager::GetReviewingKeptEvents() const {
@@ -134,7 +138,7 @@ inline G4bool G4VisManager::GetWaitOnEventQueueFull () const {
 
 #endif
 
-inline const G4String& G4VisManager::GetDefaultGraphicsSystemName () const {
+inline const G4String& G4VisManager::GetDefaultGraphicsSystemName () {
   return fDefaultGraphicsSystemName;
 }
 

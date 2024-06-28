@@ -31,14 +31,13 @@
 #ifndef F04Materials_h
 #define F04Materials_h 1
 
-#include "globals.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "globals.hh"
 
 class F04Materials
 {
   public:
-
     virtual ~F04Materials();
 
     static F04Materials* GetInstance();
@@ -46,22 +45,19 @@ class F04Materials
     G4Material* GetMaterial(G4String);
 
   private:
-
     F04Materials();
 
     void CreateMaterials();
 
   private:
+    static F04Materials* fInstance;
 
-  static F04Materials* fInstance;
+    G4NistManager* fNistMan = nullptr;
 
-  G4NistManager*     fNistMan = nullptr;
-
-  G4Material*        fVacuum = nullptr;
-  G4Material*        fAir = nullptr;
-  G4Material*        fSci = nullptr;
-  G4Material*        fBeO = nullptr;
-
+    G4Material* fVacuum = nullptr;
+    G4Material* fAir = nullptr;
+    G4Material* fSci = nullptr;
+    G4Material* fBeO = nullptr;
 };
 
 #endif /*F04Materials_h*/

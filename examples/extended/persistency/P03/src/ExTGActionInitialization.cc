@@ -28,25 +28,23 @@
 /// \brief Implementation of the ExTGActionInitialization class
 
 #include "ExTGActionInitialization.hh"
-#include "ExTGRunAction.hh"
+
 #include "ExTGPrimaryGeneratorAction.hh"
+#include "ExTGRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExTGActionInitialization::ExTGActionInitialization()
- : G4VUserActionInitialization()
-{}
+ExTGActionInitialization::ExTGActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExTGActionInitialization::~ExTGActionInitialization()
-{}
+ExTGActionInitialization::~ExTGActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExTGActionInitialization::BuildForMaster() const
 {
- SetUserAction(new ExTGRunAction);
+  SetUserAction(new ExTGRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,6 +53,6 @@ void ExTGActionInitialization::Build() const
 {
   SetUserAction(new ExTGRunAction);
   SetUserAction(new ExTGPrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -31,63 +31,55 @@
 #ifndef RE01TrackerHit_h
 #define RE01TrackerHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
 #include "G4Types.hh"
+#include "G4VHit.hh"
 
 class G4AttDef;
 class G4AttValue;
 
 class RE01TrackerHit : public G4VHit
 {
-public:
+  public:
+    RE01TrackerHit();
+    virtual ~RE01TrackerHit();
 
-  RE01TrackerHit();
-  virtual ~RE01TrackerHit();
-  
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
-  
-  virtual void Draw();
-  virtual void Print();
-  virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-  virtual std::vector<G4AttValue>* CreateAttValues() const;
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
 
-public:
-  inline void SetEdep(G4double de)
-  { fEdep = de; }
-  inline G4double GetEdep() const
-  { return fEdep; }
-  inline void SetPos(G4ThreeVector xyz)
-  { fPos = xyz; }
-  inline void SetTrackID(G4int i)
-  { fTrackID = i; }
-  inline G4int GetTrackID() const
-  { return fTrackID; }
+    virtual void Draw();
+    virtual void Print();
+    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-private:
-  G4double fEdep;
-  G4ThreeVector fPos;
-  G4int fTrackID;
+  public:
+    inline void SetEdep(G4double de) { fEdep = de; }
+    inline G4double GetEdep() const { return fEdep; }
+    inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+    inline void SetTrackID(G4int i) { fTrackID = i; }
+    inline G4int GetTrackID() const { return fTrackID; }
 
+  private:
+    G4double fEdep;
+    G4ThreeVector fPos;
+    G4int fTrackID;
 };
 
 typedef G4THitsCollection<RE01TrackerHit> RE01TrackerHitsCollection;
 
-extern G4ThreadLocal G4Allocator<RE01TrackerHit> * RE01TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<RE01TrackerHit>* RE01TrackerHitAllocator;
 
 inline void* RE01TrackerHit::operator new(size_t)
 {
-  if(!RE01TrackerHitAllocator)
-    RE01TrackerHitAllocator = new G4Allocator<RE01TrackerHit>;
-  return (void *) RE01TrackerHitAllocator->MallocSingle();
+  if (!RE01TrackerHitAllocator) RE01TrackerHitAllocator = new G4Allocator<RE01TrackerHit>;
+  return (void*)RE01TrackerHitAllocator->MallocSingle();
 }
 
-inline void RE01TrackerHit::operator delete(void *aHit)
+inline void RE01TrackerHit::operator delete(void* aHit)
 {
-  RE01TrackerHitAllocator->FreeSingle((RE01TrackerHit*) aHit);
+  RE01TrackerHitAllocator->FreeSingle((RE01TrackerHit*)aHit);
 }
 
 #endif

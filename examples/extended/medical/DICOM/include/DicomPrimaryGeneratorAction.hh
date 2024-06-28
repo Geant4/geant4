@@ -42,7 +42,7 @@
 // + Université Laval, Québec (QC) Canada
 //
 // History: 30.11.07  P.Arce modified so that some particles reach phantom voxels
-// 
+//
 //*******************************************************
 
 #ifndef DicomPrimaryGeneratorAction_h
@@ -56,16 +56,14 @@ class G4Event;
 
 class DicomPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  DicomPrimaryGeneratorAction();
-  ~DicomPrimaryGeneratorAction();
-  
-  virtual void GeneratePrimaries(G4Event*);
-  
-private:
-  G4ParticleGun* fParticleGun;
+  public:
+    DicomPrimaryGeneratorAction();
+    ~DicomPrimaryGeneratorAction();
+
+    virtual void GeneratePrimaries(G4Event*);
+
+  private:
+    G4ParticleGun* fParticleGun;
 };
 
 #endif
-
-

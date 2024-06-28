@@ -35,28 +35,24 @@ class G4DNAMolecularReactionTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ChemistryList
-  : public G4VUserChemistryList
-  , public G4VPhysicsConstructor
+class ChemistryList : public G4VUserChemistryList, public G4VPhysicsConstructor
 {
- public:
-  ChemistryList();
+  public:
+    ChemistryList();
 
-  ~ChemistryList() override = default;
+    ~ChemistryList() override = default;
 
-  void ConstructParticle() override;
+    void ConstructParticle() override;
 
-  void ConstructMolecule() override;
+    void ConstructMolecule() override;
 
-  void ConstructProcess() override;
+    void ConstructProcess() override;
 
-  void ConstructDissociationChannels() override;
+    void ConstructDissociationChannels() override;
 
-  void ConstructReactionTable(
-    G4DNAMolecularReactionTable* reactionTable) override;
+    void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable) override;
 
-  void ConstructTimeStepModel(
-    G4DNAMolecularReactionTable* reactionTable) override;
+    void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable) override;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

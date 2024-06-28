@@ -37,23 +37,22 @@
 // Date  : 2005-08-29
 //
 // --------------------------------------------------------------
-#ifndef INCLUDE_MCTRUTHEVENTACTION_H 
+#ifndef INCLUDE_MCTRUTHEVENTACTION_H
 #define INCLUDE_MCTRUTHEVENTACTION_H 1
 
-#include "G4UserEventAction.hh"
 #include "MCTruthManager.hh"
+
+#include "G4UserEventAction.hh"
 
 class MCTruthEventAction : public G4UserEventAction
 {
-public: 
+  public:
+    MCTruthEventAction();
 
-  MCTruthEventAction( ); 
+    virtual ~MCTruthEventAction();
 
-  virtual ~MCTruthEventAction( ); 
-
-  virtual void BeginOfEventAction(const G4Event* anEvent);
-  virtual void EndOfEventAction(const G4Event* anEvent);
-
+    virtual void BeginOfEventAction(const G4Event* anEvent);
+    virtual void EndOfEventAction(const G4Event* anEvent);
 };
 
-#endif // INCLUDE_MCTRUTHEVENTACTION_H
+#endif  // INCLUDE_MCTRUTHEVENTACTION_H

@@ -43,22 +43,22 @@
 //*******************************************************
 #include "DicomPrimaryGeneratorAction.hh"
 
+#include "CLHEP/Random/RandFlat.h"
+#include "DicomRegularDetectorConstruction.hh"
+
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "DicomRegularDetectorConstruction.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "CLHEP/Random/RandFlat.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPrimaryGeneratorAction::DicomPrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   G4int nParticle = 1;
-  fParticleGun  = new G4ParticleGun(nParticle);               
+  fParticleGun = new G4ParticleGun(nParticle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,23 +68,22 @@ DicomPrimaryGeneratorAction::~DicomPrimaryGeneratorAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
+void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle(particleName = "e-");
   fParticleGun->SetParticleDefinition(particle);
-  // put the e- in the x direction of the patient (z in the accelerator axs) 
+  // put the e- in the x direction of the patient (z in the accelerator axs)
   // to hit patient in the central slice of the phantom
-  G4ThreeVector dir(0,0,1);
-  //G4ThreeVector dir(2.*CLHEP::RandFlat::shoot()-1.,
-  //2.*CLHEP::RandFlat::shoot()-1.,-CLHEP::RandFlat::shoot());
+  G4ThreeVector dir(0, 0, 1);
+  // G4ThreeVector dir(2.*CLHEP::RandFlat::shoot()-1.,
+  // 2.*CLHEP::RandFlat::shoot()-1.,-CLHEP::RandFlat::shoot());
   dir /= dir.mag();
-  fParticleGun->SetParticleMomentumDirection(dir);       
-  fParticleGun->SetParticleEnergy(100.*MeV);
-  //put it at SAD = 1 m on xy plane of central slice
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-120.));
-  //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-22.));
+  fParticleGun->SetParticleMomentumDirection(dir);
+  fParticleGun->SetParticleEnergy(100. * MeV);
+  // put it at SAD = 1 m on xy plane of central slice
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -120.));
+  // fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-22.));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

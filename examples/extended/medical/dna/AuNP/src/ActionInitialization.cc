@@ -28,34 +28,30 @@
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
-#include "G4SystemOfUnits.hh"
-#include "G4UnitsTable.hh"
-
-#include "G4RunManager.hh"
-#include "G4Scheduler.hh"
-
-#include "G4DNAChemistryManager.hh"
-
 #include "ActionInitialization.hh"
+
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
+#include "StackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "TimeStepAction.hh"
-#include "StackingAction.hh"
+#include "TrackingAction.hh"
+
+#include "G4DNAChemistryManager.hh"
+#include "G4RunManager.hh"
+#include "G4Scheduler.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
- : G4VUserActionInitialization()
-{}
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,31 +67,29 @@ void ActionInitialization::Build() const
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
   SetUserAction(primary);
 
-  SetUserAction(new RunAction()); 
-  
+  SetUserAction(new RunAction());
+
   SetUserAction(new EventAction());
-   
+
   SetUserAction(new TrackingAction(primary));
-  
+
   SetUserAction(new SteppingAction());
 
   SetUserAction(new StackingAction());
 
   // chemistry part
-  if (G4DNAChemistryManager::IsActivated())
-    {
-      G4Scheduler::Instance() ->SetUserAction(new TimeStepAction());
-      G4VScheduler::Instance()->SetEndTime(1e6 * picosecond);
-      G4VScheduler::Instance()->SetVerbose(0);
-    }
-  
-}  
+  if (G4DNAChemistryManager::IsActivated()) {
+    G4Scheduler::Instance()->SetUserAction(new TimeStepAction());
+    G4VScheduler::Instance()->SetEndTime(1e6 * picosecond);
+    G4VScheduler::Instance()->SetVerbose(0);
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
 {
   return new SteppingVerbose();
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -53,18 +53,17 @@ class HistoManager;
 
 class SteppingAction : public G4UserSteppingAction
 {
-public:
-  SteppingAction();
-  ~SteppingAction() override = default;
+  public:
+    SteppingAction();
+    ~SteppingAction() override = default;
 
-  void UserSteppingAction(const G4Step*) override;
+    void UserSteppingAction(const G4Step*) override;
 
-  SteppingAction & operator=(const SteppingAction &right) = delete;
-  SteppingAction(const SteppingAction&) = delete;
+    SteppingAction& operator=(const SteppingAction& right) = delete;
+    SteppingAction(const SteppingAction&) = delete;
 
-private:
-
-  HistoManager* fHisto;
+  private:
+    HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -28,39 +28,38 @@
 
 #include "dcmtk/dcmrt/seq/drtcos.h"
 
-#include <vector>
 #include <iostream>
+#include <vector>
 
-class DicomBeamCompensator 
-{ 
-public:
-  DicomBeamCompensator(DRTCompensatorSequence::Item bcompItem);
-  ~DicomBeamCompensator(){};
+class DicomBeamCompensator
+{
+  public:
+    DicomBeamCompensator(DRTCompensatorSequence::Item bcompItem);
+    ~DicomBeamCompensator() {};
 
-public:
+  public:
+    void Print(std::ostream& out);
 
-  void Print( std::ostream& out );
+    void DumpToFile(std::ofstream& out);
 
-  void DumpToFile( std::ofstream& out );
-
-private:
-  OFString theAccessoryCode;
-  Sint32 theCompensatorColumns;
-  OFString theCompensatorDescription;
-  OFString theCompensatorDivergence;
-  OFString theCompensatorID;
-  OFString theCompensatorMountingPosition;
-  Sint32 theCompensatorNumber;
-  OFVector<Float64> theCompensatorPixelSpacing;
-  OFVector<Float64> theCompensatorPosition;
-  Sint32 theCompensatorRows;
-  OFVector<Float64> theCompensatorThicknessData;
-  OFVector<Float64> theCompensatorTransmissionData;
-  OFString theCompensatorTrayID;
-  OFString theCompensatorType;
-  OFString theMaterialID;
-  OFVector<Float64> theSourceToCompensatorDistance;
-  Float64 theSourceToCompensatorTrayDistance;
+  private:
+    OFString theAccessoryCode;
+    Sint32 theCompensatorColumns;
+    OFString theCompensatorDescription;
+    OFString theCompensatorDivergence;
+    OFString theCompensatorID;
+    OFString theCompensatorMountingPosition;
+    Sint32 theCompensatorNumber;
+    OFVector<Float64> theCompensatorPixelSpacing;
+    OFVector<Float64> theCompensatorPosition;
+    Sint32 theCompensatorRows;
+    OFVector<Float64> theCompensatorThicknessData;
+    OFVector<Float64> theCompensatorTransmissionData;
+    OFString theCompensatorTrayID;
+    OFString theCompensatorType;
+    OFString theMaterialID;
+    OFVector<Float64> theSourceToCompensatorDistance;
+    Float64 theSourceToCompensatorTrayDistance;
 };
 
-#endif  
+#endif

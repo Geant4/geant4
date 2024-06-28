@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // In order for Geant4-DNA to be maintained and still open-source,
-// article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// article citations are crucial.
+// If you use Geant4-DNA chemistry and you publish papers about your software,
 // in addition to the general paper on Geant4-DNA:
 //
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
@@ -45,21 +45,21 @@
 #ifndef DNADAMAGE2_ScavengerMolecules_h
 #define DNADAMAGE2_ScavengerMolecules_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4MoleculeDefinition.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4DMSO : public G4MoleculeDefinition
 {
-private:
+  private:
     static /*G4ThreadLocal*/ G4DMSO* fDMSOInstance;
     G4DMSO() {}
     ~G4DMSO() override = default;
 
-public:
+  public:
     static G4DMSO* Definition();
 };
 
@@ -67,12 +67,12 @@ public:
 
 class G4OxygenB : public G4MoleculeDefinition
 {
-private:
+  private:
     static /*G4ThreadLocal*/ G4OxygenB* fOxygenBInstance;
     G4OxygenB() {}
     ~G4OxygenB() override = default;
 
-public:
+  public:
     static G4OxygenB* Definition();
 };
 

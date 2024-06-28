@@ -35,12 +35,12 @@
 
 enum LXeTrackStatus
 {
-  active           = 1,
-  hitPMT           = 2,
-  absorbed         = 4,
+  active = 1,
+  hitPMT = 2,
+  absorbed = 4,
   boundaryAbsorbed = 8,
-  hitSphere        = 16,
-  inactive         = 14
+  hitSphere = 16,
+  inactive = 14
 };
 
 /*LXeTrackStatus:
@@ -56,30 +56,30 @@ enum LXeTrackStatus
 
 class LXeUserTrackInformation : public G4VUserTrackInformation
 {
- public:
-  LXeUserTrackInformation() = default;
-  ~LXeUserTrackInformation() override = default;
+  public:
+    LXeUserTrackInformation() = default;
+    ~LXeUserTrackInformation() override = default;
 
-  // Sets the track status to s (does not check validity of flags)
-  void SetTrackStatusFlags(int s) { fStatus = s; }
-  // Does a smart add of track status flags (disabling old flags that conflict)
-  // If s conflicts with itself it will not be detected
-  void AddTrackStatusFlag(int s);
+    // Sets the track status to s (does not check validity of flags)
+    void SetTrackStatusFlags(int s) { fStatus = s; }
+    // Does a smart add of track status flags (disabling old flags that conflict)
+    // If s conflicts with itself it will not be detected
+    void AddTrackStatusFlag(int s);
 
-  int GetTrackStatus() const { return fStatus; }
+    int GetTrackStatus() const { return fStatus; }
 
-  void IncReflections() { ++fReflections; }
-  G4int GetReflectionCount() const { return fReflections; }
+    void IncReflections() { ++fReflections; }
+    G4int GetReflectionCount() const { return fReflections; }
 
-  void SetForceDrawTrajectory(G4bool b) { fForcedraw = b; }
-  G4bool GetForceDrawTrajectory() { return fForcedraw; }
+    void SetForceDrawTrajectory(G4bool b) { fForcedraw = b; }
+    G4bool GetForceDrawTrajectory() { return fForcedraw; }
 
-  inline virtual void Print() const override {};
+    inline virtual void Print() const override {};
 
- private:
-  int fStatus = active;
-  G4int fReflections = 0;
-  G4bool fForcedraw = false;
+  private:
+    int fStatus = active;
+    G4int fReflections = 0;
+    G4bool fForcedraw = false;
 };
 
 #endif

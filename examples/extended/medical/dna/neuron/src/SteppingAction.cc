@@ -31,90 +31,90 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
 //
-/// \file SteppingAction.cc 
+/// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+
 #include "PrimaryGeneratorAction.hh"
+#include "Run.hh"
+#include "RunAction.hh"
+
 #include "G4AnalysisManager.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4SteppingManager.hh"
-#include "G4VTouchable.hh"
-#include "G4ios.hh"  
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "Run.hh"
 #include "G4RunManager.hh"
+#include "G4SteppingManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* run)  
-: G4UserSteppingAction(), fRunAction(run)
-{}
+SteppingAction::SteppingAction(RunAction* run) : G4UserSteppingAction(), fRunAction(run) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
-{ 
-  if (step->GetPostStepPoint()->GetProcessDefinedStep()->
-      GetProcessName()!="Transportation") {
-    G4double edepStep = step->GetTotalEnergyDeposit() ;
+{
+  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() != "Transportation") {
+    G4double edepStep = step->GetTotalEnergyDeposit();
     G4VPhysicalVolume* volumeStep = step->GetPreStepPoint()->GetPhysicalVolume();
     G4TouchableHandle touchStep = step->GetPreStepPoint()->GetTouchableHandle();
     G4VPhysicalVolume* volumeMedium = G4PhysicalVolumeStore::GetInstance()->GetVolume("Medium");
-    G4VPhysicalVolume* volumeSlice = G4PhysicalVolumeStore::GetInstance()->GetVolume("BoundingSlice");
- 
+    G4VPhysicalVolume* volumeSlice =
+      G4PhysicalVolumeStore::GetInstance()->GetVolume("BoundingSlice");
+
     // count processes
-    // 
+    //
     const G4StepPoint* endPoint = step->GetPostStepPoint();
-    const G4VProcess* process   = endPoint->GetProcessDefinedStep();
+    const G4VProcess* process = endPoint->GetProcessDefinedStep();
     Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
     run->CountProcesses(process);
 
     // Edep in all volume
-    if (edepStep > 0. ) {
+    if (edepStep > 0.) {
       fRunAction->AddEdepALL(edepStep);
 
       // Edep in a target volume (Bounding slice)
       if (volumeStep == volumeSlice) {
-	fRunAction->AddEdepSlice(edepStep);
+        fRunAction->AddEdepSlice(edepStep);
       }
 
       // Edep in Soma
       if (volumeStep->GetName() == "Soma") {
-	fRunAction->AddEdepSoma(edepStep);  
-	run->AddSomaCompart(touchStep->GetCopyNumber(), edepStep);    
+        fRunAction->AddEdepSoma(edepStep);
+        run->AddSomaCompart(touchStep->GetCopyNumber(), edepStep);
       }
 
       // Edep in Dendrites
       if (volumeStep->GetName() == "Dendrites") {
-	fRunAction->AddEdepDend(edepStep);
-	run->AddDendCompart(touchStep->GetCopyNumber(), edepStep);
+        fRunAction->AddEdepDend(edepStep);
+        run->AddDendCompart(touchStep->GetCopyNumber(), edepStep);
       }
 
       // Edep in Axon
       if (volumeStep->GetName() == "Axon") {
-	fRunAction->AddEdepAxon(edepStep); 
-	run->AddAxonCompart(touchStep->GetCopyNumber(), edepStep);
+        fRunAction->AddEdepAxon(edepStep);
+        run->AddAxonCompart(touchStep->GetCopyNumber(), edepStep);
       }
-  
+
       // Edep in whole Neuron
       if (volumeStep != volumeMedium && volumeStep != volumeSlice) {
-	fRunAction->AddEdepNeuron(edepStep); 
+        fRunAction->AddEdepNeuron(edepStep);
       }
 
       // Edep outside bounding scice
       if (volumeStep == volumeMedium) {
-	fRunAction->AddEdepMedium(edepStep);
+        fRunAction->AddEdepMedium(edepStep);
       }
-    } // end edep>0  
+    }  // end edep>0
   }
-}    
+}

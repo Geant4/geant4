@@ -29,65 +29,64 @@
 //
 
 #include "RE01SteppingAction.hh"
+
 #include "RE01RegionInformation.hh"
 #include "RE01TrackInformation.hh"
 
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4StepPoint.hh"
-#include "G4TrackStatus.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 #include "G4SteppingManager.hh"
+#include "G4Track.hh"
+#include "G4TrackStatus.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE01SteppingAction::RE01SteppingAction()
-  : G4UserSteppingAction()
-{;}
+RE01SteppingAction::RE01SteppingAction() : G4UserSteppingAction()
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01SteppingAction::~RE01SteppingAction()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RE01SteppingAction::UserSteppingAction(const G4Step * theStep)
+void RE01SteppingAction::UserSteppingAction(const G4Step* theStep)
 {
   // Suspend a track if it is entering into the calorimeter
 
   // check if it is alive
-  G4Track * theTrack = theStep->GetTrack();
-  if(theTrack->GetTrackStatus()!=fAlive) { return; }
+  G4Track* theTrack = theStep->GetTrack();
+  if (theTrack->GetTrackStatus() != fAlive) {
+    return;
+  }
 
   // get region information
-  G4StepPoint * thePrePoint = theStep->GetPreStepPoint();
-  G4LogicalVolume * thePreLV = 
-    thePrePoint->GetPhysicalVolume()->GetLogicalVolume();
-  RE01RegionInformation* thePreRInfo
-   = (RE01RegionInformation*)(thePreLV->GetRegion()->GetUserInformation());
-  G4StepPoint * thePostPoint = theStep->GetPostStepPoint();
-  G4LogicalVolume * thePostLV = 
-    thePostPoint->GetPhysicalVolume()->GetLogicalVolume();
-  RE01RegionInformation* thePostRInfo
-   = (RE01RegionInformation*)(thePostLV->GetRegion()->GetUserInformation());
+  G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
+  G4LogicalVolume* thePreLV = thePrePoint->GetPhysicalVolume()->GetLogicalVolume();
+  RE01RegionInformation* thePreRInfo =
+    (RE01RegionInformation*)(thePreLV->GetRegion()->GetUserInformation());
+  G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
+  G4LogicalVolume* thePostLV = thePostPoint->GetPhysicalVolume()->GetLogicalVolume();
+  RE01RegionInformation* thePostRInfo =
+    (RE01RegionInformation*)(thePostLV->GetRegion()->GetUserInformation());
 
   // check if it is entering to the calorimeter volume
-  if(!(thePreRInfo->IsCalorimeter()) && (thePostRInfo->IsCalorimeter()))
-  {
+  if (!(thePreRInfo->IsCalorimeter()) && (thePostRInfo->IsCalorimeter())) {
     // if the track had already been suspended at the previous step, let it go.
-    RE01TrackInformation* trackInfo
-     = static_cast<RE01TrackInformation*>(theTrack->GetUserInformation());
-    if(trackInfo->GetSuspendedStepID()>-1)
-    {
-      if(fpSteppingManager->GetverboseLevel()>0)
-      {
-        G4cout<<"++++ This track had already been suspended at step #"
-            <<trackInfo->GetSuspendedStepID()<<". Tracking resumed."
-            <<G4endl;
+    RE01TrackInformation* trackInfo =
+      static_cast<RE01TrackInformation*>(theTrack->GetUserInformation());
+    if (trackInfo->GetSuspendedStepID() > -1) {
+      if (fpSteppingManager->GetverboseLevel() > 0) {
+        G4cout << "++++ This track had already been suspended at step #"
+               << trackInfo->GetSuspendedStepID() << ". Tracking resumed." << G4endl;
       }
     }
-    else
-    {
+    else {
       trackInfo->SetSuspendedStepID(theTrack->GetCurrentStepNumber());
       theTrack->SetTrackStatus(fSuspend);
     }

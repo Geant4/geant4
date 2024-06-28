@@ -30,82 +30,77 @@
 #ifndef GB06BOptnSplitAndKillByImportance_hh
 #define GB06BOptnSplitAndKillByImportance_hh 1
 
-#include "G4VBiasingOperation.hh"
 #include "G4ParticleChange.hh"
 #include "G4ParticleChangeForNothing.hh"
 #include "G4TouchableHandle.hh"
+#include "G4VBiasingOperation.hh"
 class G4BiasingProcessSharedData;
 #include <map>
 
+class GB06BOptnSplitAndKillByImportance : public G4VBiasingOperation
+{
+  public:
+    // -- Constructor :
+    GB06BOptnSplitAndKillByImportance(G4String name);
+    // -- destructor:
+    virtual ~GB06BOptnSplitAndKillByImportance();
 
-class GB06BOptnSplitAndKillByImportance : public G4VBiasingOperation {
-public:
-  // -- Constructor :
-  GB06BOptnSplitAndKillByImportance(G4String name);
-  // -- destructor:
-  virtual ~GB06BOptnSplitAndKillByImportance();
+  public:
+    // ----------------------------------------------
+    // -- Methods from G4VBiasingOperation interface:
+    // ----------------------------------------------
+    // -- Unused:
+    virtual const G4VBiasingInteractionLaw*
+    ProvideOccurenceBiasingInteractionLaw(const G4BiasingProcessInterface*, G4ForceCondition&) final
+    {
+      return 0;
+    }
+    virtual G4VParticleChange* ApplyFinalStateBiasing(const G4BiasingProcessInterface*,
+                                                      const G4Track*, const G4Step*, G4bool&) final
+    {
+      return 0;
+    }
 
-public:
-  // ----------------------------------------------
-  // -- Methods from G4VBiasingOperation interface:
-  // ----------------------------------------------
-  // -- Unused:
-  virtual const G4VBiasingInteractionLaw*
-  ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*,
-                                         G4ForceCondition&                 ) final
-  {return 0;}
-  virtual G4VParticleChange*                            
-  ApplyFinalStateBiasing               ( const G4BiasingProcessInterface*,
-                                         const G4Track*,
-                                         const G4Step*,
-                                         G4bool&                           ) final
-  {return 0;}
+    // -- Used methods ("non-physics biasing methods"):
+    // ------------------------------------------------
+    // -- Method to return the distance or the condition under which
+    // -- requesting the biasing.
+    // -- Here we use the condition "forced" and the distance returned
+    // -- is "dummy" (DBL_MAX).
+    virtual G4double DistanceToApplyOperation(const G4Track*, G4double,
+                                              G4ForceCondition* condition) final;
+    // -- Method the generate the final state, which is:
+    // --  - made of the primary with half of its original weight, and a clone of it in
+    // --    case of splitting
+    // --  - the primary with increased weight or the primary killed, in case of killing
+    virtual G4VParticleChange* GenerateBiasingFinalState(const G4Track*, const G4Step*) final;
 
-  // -- Used methods ("non-physics biasing methods"):
-  // ------------------------------------------------
-  // -- Method to return the distance or the condition under which
-  // -- requesting the biasing.
-  // -- Here we use the condition "forced" and the distance returned
-  // -- is "dummy" (DBL_MAX).
-  virtual G4double
-  DistanceToApplyOperation              ( const G4Track*,
-                                          G4double,
-                                          G4ForceCondition* condition      ) final;
-  // -- Method the generate the final state, which is:
-  // --  - made of the primary with half of its original weight, and a clone of it in
-  // --    case of splitting
-  // --  - the primary with increased weight or the primary killed, in case of killing
-  virtual G4VParticleChange* 
-  GenerateBiasingFinalState             ( const G4Track*,
-                                          const G4Step*                    ) final;
+    // -- Specific to this example:
+    // ----------------------------
+    // -- The parallel world index refers to the index in the list of parallel worlds
+    // -- handled by the G4ParallelGeometriesLimiterProcess intance:
+    void SetParallelWorldIndex(G4int parallelWorldIndex)
+    {
+      fParallelWorldIndex = parallelWorldIndex;
+    }
+    G4int GetParallelWorldIndex() const { return fParallelWorldIndex; }
+    // -- Method to set the biasing shared data, they contain many
+    // -- of the information we need related to parallel geometry:
+    void SetBiasingSharedData(const G4BiasingProcessSharedData* sharedData)
+    {
+      fBiasingSharedData = sharedData;
+    }
+    // -- Set the importance map to be used:
+    void SetImportanceMap(std::map<G4int, G4int>* importanceMap) { fImportanceMap = importanceMap; }
 
-  // -- Specific to this example:
-  // ----------------------------
-  // -- The parallel world index refers to the index in the list of parallel worlds
-  // -- handled by the G4ParallelGeometriesLimiterProcess intance:
-  void  SetParallelWorldIndex( G4int parallelWorldIndex )
-  { fParallelWorldIndex = parallelWorldIndex; }
-  G4int GetParallelWorldIndex() const
-  { return fParallelWorldIndex; }
-  // -- Method to set the biasing shared data, they contain many
-  // -- of the information we need related to parallel geometry:
-  void SetBiasingSharedData( const G4BiasingProcessSharedData* sharedData )
-  { fBiasingSharedData = sharedData; }
-  // -- Set the importance map to be used:
-  void SetImportanceMap( std::map< G4int, G4int >* importanceMap )
-  { fImportanceMap = importanceMap; }
-  
-  
-private:
-  G4int                                   fParallelWorldIndex;
-  const G4BiasingProcessSharedData*        fBiasingSharedData;
-  G4TouchableHandle                  fPreStepTouchableHistory;
-  G4TouchableHandle                 fPostStepTouchableHistory;
-  G4ParticleChange                            fParticleChange;
-  G4ParticleChangeForNothing             fDummyParticleChange;
-  std::map< G4int, G4int >*                    fImportanceMap;
-  
-
+  private:
+    G4int fParallelWorldIndex;
+    const G4BiasingProcessSharedData* fBiasingSharedData;
+    G4TouchableHandle fPreStepTouchableHistory;
+    G4TouchableHandle fPostStepTouchableHistory;
+    G4ParticleChange fParticleChange;
+    G4ParticleChangeForNothing fDummyParticleChange;
+    std::map<G4int, G4int>* fImportanceMap;
 };
 
 #endif

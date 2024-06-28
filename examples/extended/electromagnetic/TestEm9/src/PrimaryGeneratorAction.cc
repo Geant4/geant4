@@ -45,22 +45,22 @@
 #include "PrimaryGeneratorAction.hh"
 
 #include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 
+#include "G4Electron.hh"
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
-#include "G4Electron.hh"
-#include "HistoManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-  :G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(det)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(0), fDetector(det)
 {
-  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun = new G4ParticleGun(1);
   fParticleGun->SetParticleDefinition(G4Electron::Electron());
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(1.*GeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(1. * GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,15 +74,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(anEvent->GetEventID() == 0) {
-    G4double zVertex = - (fDetector->GetWorldSizeZ());
-    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  if (anEvent->GetEventID() == 0) {
+    G4double zVertex = -(fDetector->GetWorldSizeZ());
+    fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., zVertex));
     (HistoManager::GetPointer())->SetBeamEnergy(fParticleGun->GetParticleEnergy());
     G4cout << "### PrimaryGeneratorAction::GeneratePrimaries ##########" << G4endl;
     G4cout << "### " << fParticleGun->GetParticleDefinition()->GetParticleName()
-           << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV << G4endl;
-    G4cout << "########################################################"
-           << G4endl;
+           << "  E(MeV)= " << fParticleGun->GetParticleEnergy() / MeV << G4endl;
+    G4cout << "########################################################" << G4endl;
   }
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

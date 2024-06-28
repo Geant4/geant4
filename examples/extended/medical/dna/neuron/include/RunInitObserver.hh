@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -43,36 +43,36 @@
 #define RUNINITOBSERVER_HH_
 
 #include "globals.hh"
+
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunInitObserver
 {
-public:
-  RunInitObserver();
-  virtual
-  ~RunInitObserver();
+  public:
+    RunInitObserver();
+    virtual ~RunInitObserver();
 
-  virtual void Initialize() = 0;
+    virtual void Initialize() = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunInitManager
 {
-public:
-  static RunInitManager* Instance();
-  void Initialize();
+  public:
+    static RunInitManager* Instance();
+    void Initialize();
 
-protected:
-  friend class RunInitObserver;
-  RunInitManager();
-  ~RunInitManager();
-  void Insert(RunInitObserver*);
+  protected:
+    friend class RunInitObserver;
+    RunInitManager();
+    ~RunInitManager();
+    void Insert(RunInitObserver*);
 
-  std::vector<RunInitObserver*> fObservers;
-  static G4ThreadLocal RunInitManager* fgInstance;
+    std::vector<RunInitObserver*> fObservers;
+    static G4ThreadLocal RunInitManager* fgInstance;
 };
 
 #endif /* RUNINITOBSERVER_HH_ */

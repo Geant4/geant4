@@ -29,25 +29,27 @@
 #define G4VMPI_SEED_GENERATOR_H
 
 #include "globals.hh"
+
 #include <vector>
 
-class G4VMPIseedGenerator {
-public:
-  G4VMPIseedGenerator();
-  virtual ~G4VMPIseedGenerator();
+class G4VMPIseedGenerator
+{
+  public:
+    G4VMPIseedGenerator();
+    virtual ~G4VMPIseedGenerator();
 
-  // set/get methods
-  void SetMasterSeed(G4long aseed); // trigger GenerateSeeds()
-  G4long GetMasterSeed() const;
+    // set/get methods
+    void SetMasterSeed(G4long aseed);  // trigger GenerateSeeds()
+    G4long GetMasterSeed() const;
 
-  const std::vector<G4long>& GetSeedList() const;
+    const std::vector<G4long>& GetSeedList() const;
 
-protected:
-  G4long master_seed_;
-  std::vector<G4long> seed_list_;
+  protected:
+    G4long master_seed_;
+    std::vector<G4long> seed_list_;
 
-  // generate seeds for MPI nodes
-  virtual void GenerateSeeds() = 0;
+    // generate seeds for MPI nodes
+    virtual void GenerateSeeds() = 0;
 };
 
 // ====================================================================

@@ -37,8 +37,8 @@
 #ifndef G02DetectorMessenger_h
 #define G02DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G02DetectorConstruction;
 class G4UIdirectory;
@@ -49,23 +49,20 @@ class G4UIcmdWithAnInteger;
 
 /// Detector messenger class used in GDML read/write example
 
-class G02DetectorMessenger: public G4UImessenger
+class G02DetectorMessenger : public G4UImessenger
 {
-
   public:
+    G02DetectorMessenger(G02DetectorConstruction*);
+    ~G02DetectorMessenger();
 
-    G02DetectorMessenger( G02DetectorConstruction* );
-   ~G02DetectorMessenger();
-    
-    virtual void SetNewValue( G4UIcommand*, G4String );
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
-
-    G02DetectorConstruction*      fTheDetector;
-    G4UIdirectory*             fTheDetectorDir;
-    G4UIcmdWithAString*        fTheReadCommand;
-    G4UIcmdWithAString*        fTheWriteCommand;
-    G4UIcmdWithAString*        fTheStepCommand;
+    G02DetectorConstruction* fTheDetector;
+    G4UIdirectory* fTheDetectorDir;
+    G4UIcmdWithAString* fTheReadCommand;
+    G4UIcmdWithAString* fTheWriteCommand;
+    G4UIcmdWithAString* fTheStepCommand;
 };
 
 // ----------------------------------------------------------------------------

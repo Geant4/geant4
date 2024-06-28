@@ -23,27 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 ////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  File:   G4RadioactiveDecayMessenger.cc                                    //
-//  Author: D.H. Wright (SLAC)                                                //
-//  Date:   29 August 2017                                                    //
-//  Description: messenger class for the non-biased version of                //
-//               G4RadioactiveDecay.  Based on the code of F. Lei and         //
-//               P.R. Truscott.                                               //
-//                                                                            //
+//
+//  GEANT4 Class source file
+//
+//  G4RadioactiveDecayMessenger
+//  Author: D.H. Wright (SLAC)
+//  Date:   29 August 2017
+//
+//  Based on the code of F. Lei and P.R. Truscott.
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4RadioactiveDecayMessenger.hh"
 #include "G4NuclearLevelData.hh"
+#include "G4VRadioactiveDecay.hh"
+
 #include <sstream>
 #include "G4HadronicException.hh"
 
 
-G4RadioactiveDecayMessenger::G4RadioactiveDecayMessenger 
-(G4RadioactiveDecay* theRadioactiveDecayContainer1)
-:theRadioactiveDecayContainer(theRadioactiveDecayContainer1)
+G4RadioactiveDecayMessenger::G4RadioactiveDecayMessenger(G4VRadioactiveDecay* ptr)
+:theRadDecay(ptr)
 {
   rdmDirectory = new G4UIdirectory("/process/had/rdm/");
   rdmDirectory->SetGuidance("Controls for the Radioactive Decay Module.");
@@ -159,27 +160,27 @@ void
 G4RadioactiveDecayMessenger::SetNewValue(G4UIcommand *command, G4String newValues)
 {
   if ( command == nucleuslimitsCmd ) {
-    theRadioactiveDecayContainer->
+    theRadDecay->
     SetNucleusLimits( nucleuslimitsCmd->GetNewNucleusLimitsValue( newValues ) );
   } else if ( command == avolumeCmd ) {
-    theRadioactiveDecayContainer->SelectAVolume( newValues );
+    theRadDecay->SelectAVolume( newValues );
   } else if ( command == deavolumeCmd ) {
-    theRadioactiveDecayContainer->DeselectAVolume( newValues );
+    theRadDecay->DeselectAVolume( newValues );
   } else if ( command == allvolumesCmd ) {
-    theRadioactiveDecayContainer->SelectAllVolumes();
+    theRadDecay->SelectAllVolumes();
   } else if ( command == deallvolumesCmd ) {
-    theRadioactiveDecayContainer->DeselectAllVolumes();
+    theRadDecay->DeselectAllVolumes();
   } else if (command == verboseCmd) {
-    theRadioactiveDecayContainer->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues) );
+    theRadDecay->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues) );
   } else if (command == armCmd) {
-    theRadioactiveDecayContainer->SetARM(armCmd->GetNewBoolValue(newValues) );
+    theRadDecay->SetARM(armCmd->GetNewBoolValue(newValues) );
   } else if ( command == userDecayDataCmd ) {
     G4int Z,A;
     G4String file_name;
     const char* nv = (const char*)newValues;
     std::istringstream is(nv);
     is >> Z >> A >> file_name;
-    theRadioactiveDecayContainer->AddUserDecayDataFile(Z,A,file_name);
+    theRadDecay->AddUserDecayDataFile(Z,A,file_name);
   } else if ( command == userEvaporationDataCmd ) {
     G4int Z,A;
     G4String file_name;
@@ -188,11 +189,11 @@ G4RadioactiveDecayMessenger::SetNewValue(G4UIcommand *command, G4String newValue
     is >> Z >> A >> file_name;
     G4NuclearLevelData::GetInstance()->AddPrivateData(Z,A,file_name);
   } else if ( command == colldirCmd ) {
-    theRadioactiveDecayContainer->SetDecayDirection( colldirCmd->GetNew3VectorValue( newValues ) );
+    theRadDecay->SetDecayDirection( colldirCmd->GetNew3VectorValue( newValues ) );
   } else if ( command == collangleCmd ) {
-    theRadioactiveDecayContainer->SetDecayHalfAngle( collangleCmd->GetNewDoubleValue( newValues ) );
+    theRadDecay->SetDecayHalfAngle( collangleCmd->GetNewDoubleValue( newValues ) );
   } else if (command == thresholdForVeryLongDecayTimeCmd) {
-    theRadioactiveDecayContainer->SetThresholdForVeryLongDecayTime(thresholdForVeryLongDecayTimeCmd->GetNewDoubleValue(newValues) );
+    theRadDecay->SetThresholdForVeryLongDecayTime(thresholdForVeryLongDecayTimeCmd->GetNewDoubleValue(newValues) );
   }
 }
 

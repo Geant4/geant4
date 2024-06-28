@@ -84,7 +84,6 @@ class G4Track;  // Forward reference for parameter configuration
 class G4FieldManager
 {
   public:  // with description
-
     G4FieldManager(G4Field* detectorField = nullptr, 
                    G4ChordFinder* pChordFinder = nullptr, 
                    G4bool b = true ); // fieldChangesEnergy is taken from field
@@ -137,6 +136,10 @@ class G4FieldManager
       // relying on the current track's energy, particle identity, ..
       // Note: in addition to the values of member variables, 
       //       a user can use this to change the ChordFinder, the field, ...
+
+    // static functions to handle global field
+    static void SetGlobalFieldManager(G4FieldManager* fieldManager);
+    static G4FieldManager* GetGlobalFieldManager();
 
   public:  // with description
    
@@ -201,7 +204,6 @@ class G4FieldManager
                                 G4String& name) const;
   
   private:
-
     G4Field* fDetectorField = nullptr;
     G4ChordFinder* fChordFinder = nullptr;
       // Dependent objects -- with state that depends on tracking
@@ -233,6 +235,11 @@ class G4FieldManager
     G4double fEpsilonMax;
       // Values for the small possible relative accuracy of a step
       // (corresponding to the greatest possible integration accuracy)
+
+    static G4ThreadLocal G4FieldManager* fGlobalFieldManager;
+      // Global field manager set by G4TransportationManager
+      // to allow accessing the global field without dependency
+      // on navigation
 };
 
 // Implementation of inline functions

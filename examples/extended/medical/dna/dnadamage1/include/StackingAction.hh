@@ -30,12 +30,10 @@
 #pragma once
 #include "G4UserStackingAction.hh"
 
-class StackingAction 
-    : public G4UserStackingAction
-{    
-public:
+class StackingAction : public G4UserStackingAction
+{
+  public:
     StackingAction();
-    ~StackingAction() override
-    {;}
+    ~StackingAction() override { ; }
     void NewStage() override;
 };

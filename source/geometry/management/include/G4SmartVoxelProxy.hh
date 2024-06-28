@@ -43,7 +43,6 @@
 
 #include "geomwdefs.hh"
 #include "G4Types.hh"
-#include "G4Allocator.hh"
 
 class G4SmartVoxelNode;
 class G4SmartVoxelHeader;
@@ -79,11 +78,6 @@ class G4SmartVoxelProxy
     G4bool operator == (const G4SmartVoxelProxy& v) const;
       // Equality operator.
       // True when objects share same address.
-
-    inline void* operator new(std::size_t);
-      // Override "new" for "G4Allocator".
-    inline void operator delete(void* aProxy);
-      // Override "delete" for "G4Allocator".
 
   private:
 

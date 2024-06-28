@@ -6,6 +6,10 @@
 /run/verbose 1
 /event/verbose 0
 
+##
+
+/Physics/addPhysics standard_opt4
+
 ##########################
 # Initialisation procedure
 #

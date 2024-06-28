@@ -7,9 +7,9 @@
 # use Step-by-Step (SBS), independent reaction time (IRT)
 # or synchronized IRT (IRT_syn),
 # SBS ( is only for TDC, set 0 )
-/chem6/TimeStepModel IRT
-#/chem6/TimeStepModel IRT_syn
-#/chem6/TimeStepModel SBS
+/process/chem/TimeStepModel IRT
+#/process/chem/TimeStepModel SBS
+#/process/chem/TimeStepModel IRT_syn
 
 /run/initialize
 

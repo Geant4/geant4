@@ -62,6 +62,7 @@ class G4ParticleHPMessenger : public G4UImessenger
     G4UIcmdWithADouble* MinADBRCCmd;
     G4UIcmdWithADoubleAndUnit* MinEnergyDBRCCmd;
     G4UIcmdWithADoubleAndUnit* MaxEnergyDBRCCmd;
+    G4UIcmdWithAString* PTformatCmd;
 };
 
 #endif

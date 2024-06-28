@@ -39,9 +39,9 @@
 
 #include "G4UserTrackingAction.hh"
 
-class TrackingAction: public G4UserTrackingAction
+class TrackingAction : public G4UserTrackingAction
 {
-public:
+  public:
     TrackingAction();
     virtual ~TrackingAction();
     virtual void PreUserTrackingAction(const G4Track*);

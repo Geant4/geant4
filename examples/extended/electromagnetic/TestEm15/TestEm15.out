@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -357,7 +357,7 @@ eBrem:  for e+  XStype:0  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ SubType=5 BuildTable=0
+annihil:  for e+ SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -563,7 +563,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.058249s Sys=0.000000s
+  User=0.050000s Real=0.050327s Sys=0.000000s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -635,7 +635,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.104763s Sys=0.000000s
+  User=0.060000s Real=0.063707s Sys=0.000000s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -663,11 +663,12 @@ mixmax state, file version 1.0
 N=17 V[N]={310976880687426508, 1713548588833330960, 1561521303267605489, 588569209103310290, 1954856900276614597, 724140034554777249, 713551730147133754, 402013335515644345, 971644034657465189, 193536399066193402, 893980623575290694, 766203625014548430, 498977489459909191, 1292557791726455116, 505565288099017699, 1782657595941510752, 964103503856943415} counter= 14sumtot= 2003346278501013374
 ---------------------------------------
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
+Deleting G4Run (id:1) 
+UserDetectorConstruction deleted 0xdc3970
+UserPhysicsList deleted 0xe07840
+UserActionInitialization deleted 0
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.

@@ -30,13 +30,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include <TH1D.h>
-#include <TFile.h>
-#include <TTree.h>
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "HistoManager.hh"
+
 #include "G4UnitsTable.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+#include <TFile.h>
+#include <TH1D.h>
+#include <TTree.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,24 +54,23 @@ void HistoManager::Book()
   // This tree is associated to an output file.
   //
   G4String fileName = "AnaEx02.root";
-  fRootFile = new TFile(fileName,"RECREATE");
+  fRootFile = new TFile(fileName, "RECREATE");
   if (fRootFile == nullptr) {
     G4cout << " HistoManager::Book :"
-           << " problem creating the ROOT TFile "
-           << G4endl;
+           << " problem creating the ROOT TFile " << G4endl;
     return;
   }
 
   // id = 0
-  fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800*CLHEP::MeV);
+  fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800 * CLHEP::MeV);
   // id = 1
-  fHisto[1] = new TH1D("EGap", "Edep in gap (MeV)", 100, 0., 100*CLHEP::MeV);
+  fHisto[1] = new TH1D("EGap", "Edep in gap (MeV)", 100, 0., 100 * CLHEP::MeV);
   // id = 2
-  fHisto[2] = new TH1D("LAbs", "trackL in absorber (mm)", 100, 0., 1*CLHEP::m);
+  fHisto[2] = new TH1D("LAbs", "trackL in absorber (mm)", 100, 0., 1 * CLHEP::m);
   // id = 3
-  fHisto[3] = new TH1D("LGap", "trackL in gap (mm)", 100, 0., 50*CLHEP::cm);
+  fHisto[3] = new TH1D("LGap", "trackL in gap (mm)", 100, 0., 50 * CLHEP::cm);
 
-  for ( G4int i=0; i<kMaxHisto; ++i ) {
+  for (G4int i = 0; i < kMaxHisto; ++i) {
     if (fHisto[i] == nullptr) {
       G4cout << "\n can't create histo " << i << G4endl;
     }
@@ -93,11 +93,12 @@ void HistoManager::Book()
 
 void HistoManager::Save()
 {
-  if (fRootFile == nullptr) { return;
-}
+  if (fRootFile == nullptr) {
+    return;
+  }
 
-  fRootFile->Write();       // Writing the histograms to the file
-  fRootFile->Close();       // and closing the tree (and the file)
+  fRootFile->Write();  // Writing the histograms to the file
+  fRootFile->Close();  // and closing the tree (and the file)
 
   G4cout << "\n----> Histograms and ntuples are saved\n" << G4endl;
 }
@@ -108,11 +109,12 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 {
   if (ih >= kMaxHisto) {
     G4cerr << "---> warning from HistoManager::FillHisto() : histo " << ih
-           << " does not exist. (xbin=" << xbin << " weight=" << weight << ")"
-           << G4endl;
+           << " does not exist. (xbin=" << xbin << " weight=" << weight << ")" << G4endl;
     return;
   }
-  if  (fHisto[ih] != nullptr) { fHisto[ih]->Fill(xbin, weight); }
+  if (fHisto[ih] != nullptr) {
+    fHisto[ih]->Fill(xbin, weight);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,16 +133,20 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
-                              G4double trackLAbs , G4double trackLGap )
+void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap, G4double trackLAbs,
+                              G4double trackLGap)
 {
   fEabs = energyAbs;
   fEgap = energyGap;
   fLabs = trackLAbs;
   fLgap = trackLGap;
 
-  if (fNtuple1 != nullptr) { fNtuple1->Fill(); }
-  if (fNtuple2 != nullptr) { fNtuple2->Fill(); }
+  if (fNtuple1 != nullptr) {
+    fNtuple1->Fill();
+  }
+  if (fNtuple2 != nullptr) {
+    fNtuple2->Fill();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -152,13 +158,15 @@ void HistoManager::PrintStatistic()
     const G4String name = h1->GetName();
 
     G4String unitCategory;
-    if (name[0] == 'E' ) { unitCategory = "Energy"; }
-    if (name[0] == 'L' ) { unitCategory = "Length"; }
+    if (name[0] == 'E') {
+      unitCategory = "Energy";
+    }
+    if (name[0] == 'L') {
+      unitCategory = "Length";
+    }
 
-    G4cout << name
-           << ": mean = " << G4BestUnit(h1->GetMean(), unitCategory)
-           << " rms = " << G4BestUnit(h1->GetRMS(), unitCategory )
-           << G4endl;
+    G4cout << name << ": mean = " << G4BestUnit(h1->GetMean(), unitCategory)
+           << " rms = " << G4BestUnit(h1->GetRMS(), unitCategory) << G4endl;
   }
 }
 

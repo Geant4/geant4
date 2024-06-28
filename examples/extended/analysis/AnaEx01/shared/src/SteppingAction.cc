@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
-: fDetector(det), fEventAction(evt)
+  : fDetector(det), fEventAction(evt)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,8 +51,7 @@ SteppingAction::~SteppingAction() = default;
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // get volume of the current step
-  G4VPhysicalVolume* volume =
-    aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+  G4VPhysicalVolume* volume = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
 
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -62,8 +61,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     stepl = aStep->GetStepLength();
   }
 
-  if (volume == fDetector->GetAbsorber()) { fEventAction->AddAbs(edep,stepl); }
-  if (volume == fDetector->GetGap())      { fEventAction->AddGap(edep,stepl); }
+  if (volume == fDetector->GetAbsorber()) {
+    fEventAction->AddAbs(edep, stepl);
+  }
+  if (volume == fDetector->GetGap()) {
+    fEventAction->AddGap(edep, stepl);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,7 +38,7 @@
 #include "globals.hh"
 
 class G4Material;
- 
+
 class G4UniformGravityField;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,24 +46,20 @@ class G4UniformGravityField;
 class ExUCNDetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
- 
     ExUCNDetectorConstruction();
     virtual ~ExUCNDetectorConstruction();
 
   public:
- 
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 
   private:
- 
-    G4Material*        fVacuum;
-    G4Material*        fGuideMaterial;
+    G4Material* fVacuum;
+    G4Material* fGuideMaterial;
 
     static G4ThreadLocal G4UniformGravityField* fField;
 
   private:
- 
     void DefineMaterials();
 };
 

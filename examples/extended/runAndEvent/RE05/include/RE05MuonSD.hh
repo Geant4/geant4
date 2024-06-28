@@ -31,29 +31,29 @@
 #ifndef RE05MuonSD_h
 #define RE05MuonSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "RE05MuonHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
 class RE05MuonSD : public G4VSensitiveDetector
 {
-
   public:
-      RE05MuonSD(G4String name);
-      virtual ~RE05MuonSD();
+    RE05MuonSD(G4String name);
+    virtual ~RE05MuonSD();
 
-      virtual void Initialize(G4HCofThisEvent*HCE);
-      virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      virtual void EndOfEvent(G4HCofThisEvent*HCE);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+    virtual void Initialize(G4HCofThisEvent* HCE);
+    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+    virtual void EndOfEvent(G4HCofThisEvent* HCE);
+    virtual void clear();
+    virtual void DrawAll();
+    virtual void PrintAll();
 
   private:
-      RE05MuonHitsCollection* fMuonCollection;
-      G4double fPositionResolution;
+    RE05MuonHitsCollection* fMuonCollection;
+    G4double fPositionResolution;
 };
 
 #endif

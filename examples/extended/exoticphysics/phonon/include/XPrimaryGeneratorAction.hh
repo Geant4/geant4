@@ -38,9 +38,9 @@ class G4Event;
 
 class XPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  XPrimaryGeneratorAction();    
-  virtual ~XPrimaryGeneratorAction();
+  public:
+    XPrimaryGeneratorAction();
+    virtual ~XPrimaryGeneratorAction();
 
   public:
     virtual void GeneratePrimaries(G4Event*);
@@ -49,7 +49,4 @@ public:
     G4ParticleGun* fParticleGun;
 };
 
-
 #endif
-
-

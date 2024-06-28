@@ -42,14 +42,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
-#include "G4Event.hh"
-#include "G4Electron.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "TestParameters.hh"
+
+#include "G4Electron.hh"
+#include "G4Event.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction() {
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+{
   fParticleGun = new G4ParticleGun(1);
   fParticleGun->SetParticleDefinition(G4Electron::Electron());
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
@@ -59,11 +62,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction() { delete fParticleGun; }
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
+{
+  delete fParticleGun;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
   G4double z = fParam->GetPositionZ();
   fParam->SetBeamParticle(fParticleGun->GetParticleDefinition());
   fParam->SetBeamEnergy(fParticleGun->GetParticleEnergy());

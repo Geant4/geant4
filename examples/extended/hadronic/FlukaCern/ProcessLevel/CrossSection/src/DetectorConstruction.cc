@@ -39,34 +39,26 @@
 #include "DetectorConstruction.hh"
 
 #include "G4Box.hh"
-#include "G4NistManager.hh"
-#include "G4Material.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
-
 #include "G4SystemOfUnits.hh"
-
+#include "G4VPhysicalVolume.hh"
 
 // ***************************************************************************
 // Returns a 1-cm sided box filled with G4_Galactic.
 // ***************************************************************************
-G4VPhysicalVolume* DetectorConstruction::Construct() {
-
-  
-  G4Box* const worldSolid = new G4Box("World", 1.*CLHEP::cm, 1.*CLHEP::cm, 1.*CLHEP::cm);
+G4VPhysicalVolume* DetectorConstruction::Construct()
+{
+  G4Box* const worldSolid = new G4Box("World", 1. * CLHEP::cm, 1. * CLHEP::cm, 1. * CLHEP::cm);
 
   G4Material* const worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
   G4LogicalVolume* const worldLogicalVol = new G4LogicalVolume(worldSolid, worldMaterial, "World");
   // NB: G4LogicalVolumeStore owns all logical volumes.
 
-  G4VPhysicalVolume* const worldPhysicalVol  = new G4PVPlacement(nullptr, 
-                                                              G4ThreeVector(),
-                                                              worldLogicalVol, 
-                                                              "World", 
-                                                              nullptr, 
-                                                              false, 
-                                                              0);
+  G4VPhysicalVolume* const worldPhysicalVol =
+    new G4PVPlacement(nullptr, G4ThreeVector(), worldLogicalVol, "World", nullptr, false, 0);
   // NB: G4PhysicalVolumeStore owns all physical volumes.
 
   return worldPhysicalVol;

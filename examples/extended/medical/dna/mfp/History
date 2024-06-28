@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-14 Sebastien Incerti (mfp-V11-02-01)
+- Cleaned mfp.cc
+
+## 2024-04-14 Sebastien Incerti (mfp-V11-02-00)
+- Cleaned example
 
 ## 2021-12-10 Ben Morgan (mfp-V11-00-00)
 - Change to new Markdown History format
@@ -41,4 +46,3 @@ be used as a substitute for writing good git commit messages!
 
 15-06-17 SI - tag mfp-V10-03-00
 - created
-

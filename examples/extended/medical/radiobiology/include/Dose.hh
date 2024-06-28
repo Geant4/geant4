@@ -63,10 +63,7 @@ class Dose : public VRadiobiologicalQuantity
     void PrintParameters() override;
 
     // Get a copy of the dose object
-    inline array_type GetDose() const
-    {
-      return fDose;
-    }
+    inline array_type GetDose() const { return fDose; }
 
   private:
     // Deposited energy and dose array
@@ -74,14 +71,8 @@ class Dose : public VRadiobiologicalQuantity
     array_type fDose = {};
 
     // To be used for accumulation
-    void SetEnergyDeposit(const array_type Dep)
-    {
-      fEnDep = Dep;
-    }
-    void AddEnergyDeposit(const array_type Dep)
-    {
-      fEnDep += Dep;
-    }
+    void SetEnergyDeposit(const array_type Dep) { fEnDep = Dep; }
+    void AddEnergyDeposit(const array_type Dep) { fEnDep += Dep; }
 };
 
 }  // namespace RadioBio

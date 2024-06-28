@@ -24,48 +24,47 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/slowing/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
+
 #include "DetectorConstruction.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
-G4UImessenger(), fpDetector(Det), 
-fpTestDir(0), fpDetDir(0), fpMaterCmd(0), fpTrackingCutCmd(0)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
+  : G4UImessenger(), fpDetector(Det), fpTestDir(0), fpDetDir(0), fpMaterCmd(0), fpTrackingCutCmd(0)
 {
   fpTestDir = new G4UIdirectory("/slowing/");
-  fpTestDir->SetGuidance(" detector control.");
-  
+  fpTestDir->SetGuidance("Detector control");
+
   fpDetDir = new G4UIdirectory("/slowing/det/");
-  fpDetDir->SetGuidance("detector construction commands");
-      
+  fpDetDir->SetGuidance("Detector construction commands");
+
   fpMaterCmd = new G4UIcmdWithAString("/slowing/det/setMat", this);
-  fpMaterCmd->SetGuidance("Select material of the world.");
-  fpMaterCmd->SetParameterName("choice", false);
+  fpMaterCmd->SetGuidance("Select material of the world");
+  fpMaterCmd->SetParameterName("Choice", false);
   fpMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fpTrackingCutCmd = 
-    new G4UIcmdWithADoubleAndUnit("/slowing/det/setTrackingCut",this);
+  fpTrackingCutCmd = new G4UIcmdWithADoubleAndUnit("/slowing/det/setTrackingCut", this);
   fpTrackingCutCmd->SetGuidance("Set tracking cut");
-  fpTrackingCutCmd->SetParameterName("Cut",false);
+  fpTrackingCutCmd->SetParameterName("Cut", false);
   fpTrackingCutCmd->SetRange("Cut>0.");
   fpTrackingCutCmd->SetUnitCategory("Energy");
-  fpTrackingCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fpTrackingCutCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fpTrackingCutCmd->SetToBeBroadcasted(false);
 }
 
@@ -83,12 +82,11 @@ DetectorMessenger::~DetectorMessenger()
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
+  if (command == fpMaterCmd) {
+    fpDetector->SetMaterial(newValue);
+  }
 
-  if( command == fpMaterCmd )
-   { fpDetector->SetMaterial(newValue);}
-
-  if( command == fpTrackingCutCmd )
-   { fpDetector->SetTrackingCut(fpTrackingCutCmd->GetNewDoubleValue(newValue));}
+  if (command == fpTrackingCutCmd) {
+    fpDetector->SetTrackingCut(fpTrackingCutCmd->GetNewDoubleValue(newValue));
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

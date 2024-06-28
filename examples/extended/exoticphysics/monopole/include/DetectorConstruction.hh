@@ -33,8 +33,8 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "G4Cache.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
 class G4LogicalVolume;
@@ -47,49 +47,45 @@ class G4GlobalMagFieldMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  
-  DetectorConstruction();
-  ~DetectorConstruction();
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
-  // set geometry and field parameters
-  void SetSizeX(G4double);
-  void SetSizeYZ(G4double);              
-  void SetMaterial(const G4String&);            
-  void SetMaxStepSize(G4double);
+    // set geometry and field parameters
+    void SetSizeX(G4double);
+    void SetSizeYZ(G4double);
+    void SetMaterial(const G4String&);
+    void SetMaxStepSize(G4double);
 
-  virtual void ConstructSDandField();
-          
-  // access to geometry
-  inline G4double     GetWorldSizeX()    {return fWorldSizeX;};
-  inline G4double     GetAbsorSizeX()    {return fAbsorSizeX;};
-  inline G4double     GetMaxStepSize()   {return fMaxStepSize;};
-  inline const G4Material* GetAbsorMaterial() {return fAbsorMaterial;};
+    virtual void ConstructSDandField();
 
-  G4MonopoleFieldSetup* GetMonopoleFieldSetup() const { return fMonFieldSetup.Get(); }
-                           
-private:
+    // access to geometry
+    inline G4double GetWorldSizeX() { return fWorldSizeX; };
+    inline G4double GetAbsorSizeX() { return fAbsorSizeX; };
+    inline G4double GetMaxStepSize() { return fMaxStepSize; };
+    inline const G4Material* GetAbsorMaterial() { return fAbsorMaterial; };
 
-  void PrintParameters();
-  
-  G4double            fWorldSizeX;
-  G4double            fWorldSizeYZ;
-  G4Material*         fWorldMaterial;           
-  G4double            fAbsorSizeX;
-  G4double            fAbsorSizeYZ;
-  G4double            fMaxStepSize;
-  G4Material*         fAbsorMaterial;
-  G4LogicalVolume*    fLogAbsor;
+    G4MonopoleFieldSetup* GetMonopoleFieldSetup() const { return fMonFieldSetup.Get(); }
 
-  G4Cache<G4MonopoleFieldSetup*> fMonFieldSetup;
-               
-  DetectorMessenger*  fDetectorMessenger;
+  private:
+    void PrintParameters();
 
+    G4double fWorldSizeX;
+    G4double fWorldSizeYZ;
+    G4Material* fWorldMaterial;
+    G4double fAbsorSizeX;
+    G4double fAbsorSizeYZ;
+    G4double fMaxStepSize;
+    G4Material* fAbsorMaterial;
+    G4LogicalVolume* fLogAbsor;
+
+    G4Cache<G4MonopoleFieldSetup*> fMonFieldSetup;
+
+    DetectorMessenger* fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

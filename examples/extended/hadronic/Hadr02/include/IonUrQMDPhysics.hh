@@ -34,9 +34,9 @@
 //
 // Author:    2012 Andrea Dotti
 //
-// 
 //
-// Modified:     
+//
+// Modified:
 //
 // ------------------------------------------------------------
 //
@@ -53,35 +53,24 @@ class G4UrQMD1_3Model;
 
 class IonUrQMDPhysics : public G4VHadronPhysics
 {
-public:
+  public:
+    IonUrQMDPhysics(G4int ver = 0);
+    virtual ~IonUrQMDPhysics();
 
-  IonUrQMDPhysics(G4int ver = 0);
-  virtual ~IonUrQMDPhysics();
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type
+    virtual void ConstructProcess();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  private:
+    void AddProcess(const G4String&, G4ParticleDefinition*);
 
-private:
+    G4VCrossSectionDataSet* fIonXS;
 
-  void AddProcess(const G4String&, G4ParticleDefinition*);
+    G4UrQMD1_3Model* fModel;
 
-  G4VCrossSectionDataSet* fIonXS;
-  
-  G4UrQMD1_3Model * fModel;
-
-  G4int  fVerbose;
-  G4bool fWasActivated;
+    G4int fVerbose;
+    G4bool fWasActivated;
 };
 
-
 #endif
-
-
-
-
-
-
-
-

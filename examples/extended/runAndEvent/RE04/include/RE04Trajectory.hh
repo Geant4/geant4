@@ -30,20 +30,22 @@
 #ifndef RE04Trajectory_h
 #define RE04Trajectory_h 1
 
-#include "G4VTrajectory.hh"
+#include "RE04TrajectoryPoint.hh"  // Include from 'tracking'
+
 #include "G4Allocator.hh"
-#include <stdlib.h>                 // Include from 'system'
-#include "G4ios.hh"                 // Include from 'system'
-#include <vector>                   // G4RWTValOrderedVector
-#include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
-#include "RE04TrajectoryPoint.hh"   // Include from 'tracking'
-#include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4VTrajectory.hh"
+#include "G4ios.hh"  // Include from 'system'
+#include "globals.hh"  // Include from 'global'
 
-class G4Polyline;                   // Forward declaration.
+#include <stdlib.h>  // Include from 'system'
+#include <vector>  // G4RWTValOrderedVector
 
-typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
+class G4Polyline;  // Forward declaration.
+
+typedef std::vector<G4VTrajectoryPoint*> TrajectoryPointContainer;
 
 //
 /// User trajectory class
@@ -68,7 +70,7 @@ typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 /// - int GetPointEntries() const
 ///     returns the number of point entries
 ///
-/// - G4VTrajectoryPoint* GetPoint(G4int i) const 
+/// - G4VTrajectoryPoint* GetPoint(G4int i) const
 ///     gets the i-th trajectory point
 ///
 /// - void MergeTrajectory(G4VTrajectory* secondTrajectory)
@@ -80,7 +82,7 @@ typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 /// - const std::map<G4String,G4AttDef>* GetAttDefs() const
 ///    defines the track ID, the parent ID, the particle name, the charge,
 ///    the PDG encoding, the initial kinetic energy, the initial momentum,
-///    the initial momentum magnitude and the number of points as attiributes 
+///    the initial momentum magnitude and the number of points as attiributes
 ///
 /// - std::vector<G4AttValue>* CreateAttValues() const
 ///    sets and returns the attributes
@@ -89,76 +91,65 @@ typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 class RE04Trajectory : public G4VTrajectory
 ///////////////////
 {
+    //--------
+  public:
+    //--------
 
-//--------
-public: 
-//--------
+    // Constructor/Destrcutor
 
-// Constructor/Destrcutor
+    RE04Trajectory();
 
-   RE04Trajectory();
+    RE04Trajectory(const G4Track* aTrack);
+    RE04Trajectory(RE04Trajectory&);
+    virtual ~RE04Trajectory();
 
-   RE04Trajectory(const G4Track* aTrack);
-   RE04Trajectory(RE04Trajectory &);
-   virtual ~RE04Trajectory();
+    // Operators
+    inline void* operator new(size_t);
+    inline void operator delete(void*);
+    inline int operator==(const RE04Trajectory& right) const { return (this == &right); }
 
-// Operators
-   inline void* operator new(size_t);
-   inline void  operator delete(void*);
-   inline int operator == (const RE04Trajectory& right) const
-   {return (this==&right);} 
+    // Get/Set functions
+    inline virtual G4int GetTrackID() const { return fTrackID; }
+    inline virtual G4int GetParentID() const { return fParentID; }
+    inline virtual G4String GetParticleName() const { return fParticleName; }
+    inline virtual G4double GetCharge() const { return fPDGCharge; }
+    inline virtual G4int GetPDGEncoding() const { return fPDGEncoding; }
+    inline virtual G4double GetInitialKineticEnergy() const { return fInitialKineticEnergy; }
+    inline virtual G4ThreeVector GetInitialMomentum() const { return fInitialMomentum; }
 
-// Get/Set functions 
-   inline virtual G4int GetTrackID() const
-   { return fTrackID; }
-   inline virtual G4int GetParentID() const
-   { return fParentID; }
-   inline virtual G4String GetParticleName() const
-   { return fParticleName; }
-   inline virtual G4double GetCharge() const
-   { return fPDGCharge; }
-   inline virtual G4int GetPDGEncoding() const
-   { return fPDGEncoding; }
-   inline virtual G4double GetInitialKineticEnergy() const
-   { return fInitialKineticEnergy; }
-   inline virtual G4ThreeVector GetInitialMomentum() const
-   { return fInitialMomentum; }
+    // Other member functions
+    virtual void ShowTrajectory(std::ostream& os = G4cout) const;
+    // virtual void DrawTrajectory() const;
+    virtual void DrawTrajectory() const;
+    virtual void AppendStep(const G4Step* aStep);
+    virtual int GetPointEntries() const { return fPositionRecord->size(); }
+    virtual G4VTrajectoryPoint* GetPoint(G4int i) const { return (*fPositionRecord)[i]; }
+    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
-// Other member functions
-   virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-   //virtual void DrawTrajectory() const;
-   virtual void DrawTrajectory() const;
-   virtual void AppendStep(const G4Step* aStep);
-   virtual int GetPointEntries() const { return fPositionRecord->size(); }
-   virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
-   { return (*fPositionRecord)[i]; }
-   virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
+    G4ParticleDefinition* GetParticleDefinition();
 
-   G4ParticleDefinition* GetParticleDefinition();
+    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual std::vector<G4AttValue>* CreateAttValues() const;
+    //---------
+  private:
+    //---------
 
-//---------
-   private:
-//---------
-
-  TrajectoryPointContainer* fPositionRecord;
-  G4int                     fTrackID;
-  G4int                     fParentID;
-  G4int                     fPDGEncoding;
-  G4double                  fPDGCharge;
-  G4String                  fParticleName;
-  G4double                  fInitialKineticEnergy;
-  G4ThreeVector             fInitialMomentum;
-
+    TrajectoryPointContainer* fPositionRecord;
+    G4int fTrackID;
+    G4int fParentID;
+    G4int fPDGEncoding;
+    G4double fPDGCharge;
+    G4String fParticleName;
+    G4double fInitialKineticEnergy;
+    G4ThreeVector fInitialMomentum;
 };
 
-extern G4ThreadLocal G4Allocator<RE04Trajectory> * faTrajAllocator;
+extern G4ThreadLocal G4Allocator<RE04Trajectory>* faTrajAllocator;
 
 inline void* RE04Trajectory::operator new(size_t)
 {
-  if(!faTrajAllocator) faTrajAllocator = new G4Allocator<RE04Trajectory>;
+  if (!faTrajAllocator) faTrajAllocator = new G4Allocator<RE04Trajectory>;
   return (void*)faTrajAllocator->MallocSingle();
 }
 
@@ -168,4 +159,3 @@ inline void RE04Trajectory::operator delete(void* aTrajectory)
 }
 
 #endif
-

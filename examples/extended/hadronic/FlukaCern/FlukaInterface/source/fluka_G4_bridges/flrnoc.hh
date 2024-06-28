@@ -29,20 +29,16 @@
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef FLRNOC_HH
-#define FLRNOC_HH
+#  ifndef FLRNOC_HH
+#    define FLRNOC_HH
 
+#    include "globals.hh"
 
-#include "globals.hh"
-
-
-extern "C" {
-
-	void flrnoc_(const G4int& /*dummySeed1*/, const G4int& /*dummySeed2*/, 
-		     G4int& randomCallMod1BCounter, const G4int& /*dummyRandomCallBillionCounter*/);
-
+extern "C"
+{
+  void flrnoc_(const G4int& /*dummySeed1*/, const G4int& /*dummySeed2*/,
+               G4int& randomCallMod1BCounter, const G4int& /*dummyRandomCallBillionCounter*/);
 }
 
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

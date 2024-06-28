@@ -26,23 +26,35 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4DNABoundingBox.hh"
+#include "G4GenericMessenger.hh"
+#include "G4VChemistryWorld.hh"
 #include "G4VUserDetectorConstruction.hh"
+
 #include <memory>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 class G4VPhysicalVolume;
-class G4VChemistryWorld;
 class G4VPrimitiveScorer;
-class DetectorConstruction : public G4VUserDetectorConstruction {
-public:
-  DetectorConstruction();
-  ~DetectorConstruction() override = default;
 
-  G4VPhysicalVolume *Construct() final;
-  void ConstructSDandField() final;
-  G4VChemistryWorld* GetChemistryWorld() const { return fpChemistryWorld.get(); }
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    DetectorConstruction();
+    ~DetectorConstruction() override = default;
 
-private:
-  std::unique_ptr<G4VChemistryWorld> fpChemistryWorld;
+    G4VPhysicalVolume* Construct() final;
+    void ConstructSDandField() final;
+    G4VChemistryWorld* GetChemistryWorld() const { return fpChemistryWorld.get(); }
+
+  private:
+    std::unique_ptr<G4VChemistryWorld> fpChemistryWorld;
+    G4bool fPBC = false;
+    G4VPhysicalVolume* fpPhysWorld = nullptr;
+    G4LogicalVolume* fpPBCLogicVolume = nullptr;
+    std::unique_ptr<G4GenericMessenger> fPBCMessenger;
+    void DefineCommands();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

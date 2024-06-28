@@ -36,18 +36,18 @@
 #include "F05DetectorConstruction.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05PrimaryGeneratorAction::F05PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("mu+");
@@ -66,22 +66,22 @@ F05PrimaryGeneratorAction::~F05PrimaryGeneratorAction()
 
 void F05PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  // this function is called at the begining of event
   //
 
-  G4double Pmu = 517.6*MeV;
-  G4double mu_mass = 105.658*MeV;
-  G4double Emu = std::sqrt(Pmu*Pmu + mu_mass*mu_mass);
+  G4double Pmu = 517.6 * MeV;
+  G4double mu_mass = 105.658 * MeV;
+  G4double Emu = std::sqrt(Pmu * Pmu + mu_mass * mu_mass);
   G4double Kmu = Emu - mu_mass;
 
-  G4double x0 = -6.99*m;
-  G4double y0 =  0.00*m;
-  G4double z0 =  0.00*m;
+  G4double x0 = -6.99 * m;
+  G4double y0 = 0.00 * m;
+  G4double z0 = 0.00 * m;
 
   fParticleGun->SetParticleEnergy(Kmu);
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  fParticleGun->SetParticlePolarization(G4ThreeVector(0.,1.,0.));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,1.,0.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
+  fParticleGun->SetParticlePolarization(G4ThreeVector(0., 1., 0.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 1., 0.));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

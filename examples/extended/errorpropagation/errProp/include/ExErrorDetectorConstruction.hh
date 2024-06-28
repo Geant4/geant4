@@ -31,9 +31,10 @@
 #ifndef ExErrorDetectorConstruction_hh
 #define ExErrorDetectorConstruction_hh 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "ExErrorMagneticField.hh"
+
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -44,7 +45,7 @@ class G4UserLimits;
 
 /// Detector construction class
 ///
-///  Creates a simplified typical HEP detector: 
+///  Creates a simplified typical HEP detector:
 ///    An air beamline ( BEAM )
 ///    An air central detector ( CDET )
 ///    A copper calorimeter, divided in four ( ECAL )
@@ -53,38 +54,36 @@ class G4UserLimits;
 ///
 /// History:
 /// Created:  May 2007
-/// \author   P. Arce 
+/// \author   P. Arce
 //------------------------------------------------------------------------
 
 class ExErrorDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  
-  ExErrorDetectorConstruction();
-  ~ExErrorDetectorConstruction();
-  
-  virtual G4VPhysicalVolume* Construct();
-  
-  void SetMagField(G4double);
+  public:
+    ExErrorDetectorConstruction();
+    ~ExErrorDetectorConstruction();
 
-private:
-  G4double fXBEAM;
-  G4double fXCDET;
-  G4double fXECAL;
-  G4double fXSOLN;
-  G4double fXHCAL;
-  G4double fXMUON;
-  G4double fNdivECAL;
-  G4double fNdivHCAL;
-  G4double fYZLength;
-  G4double fXHalfWorldLength;
+    virtual G4VPhysicalVolume* Construct();
 
+    void SetMagField(G4double);
 
-  G4UserLimits* fUserLimits;
-  
-  ExErrorMagneticField* fMagField;   // pointer to the magnetic field 
-  
-  ExErrorDetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
+  private:
+    G4double fXBEAM;
+    G4double fXCDET;
+    G4double fXECAL;
+    G4double fXSOLN;
+    G4double fXHCAL;
+    G4double fXMUON;
+    G4double fNdivECAL;
+    G4double fNdivHCAL;
+    G4double fYZLength;
+    G4double fXHalfWorldLength;
+
+    G4UserLimits* fUserLimits;
+
+    ExErrorMagneticField* fMagField;  // pointer to the magnetic field
+
+    ExErrorDetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -43,7 +43,7 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class F02PrimaryGeneratorMessenger: public G4UImessenger
+class F02PrimaryGeneratorMessenger : public G4UImessenger
 {
   public:
     F02PrimaryGeneratorMessenger(F02PrimaryGeneratorAction*);
@@ -53,7 +53,7 @@ class F02PrimaryGeneratorMessenger: public G4UImessenger
 
   private:
     F02PrimaryGeneratorAction* fAction = nullptr;
-    G4UIcmdWithAString*        fRndmCmd = nullptr;
+    G4UIcmdWithAString* fRndmCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetXVertexCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetYVertexCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetZVertexCmd = nullptr;

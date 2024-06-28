@@ -33,20 +33,18 @@
 #include "RunActionMessenger.hh"
 
 #include "RunAction.hh"
-#include "G4UIdirectory.hh"
+
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunActionMessenger::RunActionMessenger(RunAction * ra)
- : G4UImessenger(),
-   fRunAction(ra),
-   fActDir(0),    
-   fBinSizeCmd(0)
-{   
+RunActionMessenger::RunActionMessenger(RunAction* ra)
+  : G4UImessenger(), fRunAction(ra), fActDir(0), fBinSizeCmd(0)
+{
   fActDir = new G4UIdirectory("/testex/run/");
   fActDir->SetGuidance("run commands");
-      
+
   fBinSizeCmd = new G4UIcmdWithADouble("/testex/run/binSize", this);
   fBinSizeCmd->SetGuidance("Set bin size.");
   fBinSizeCmd->SetParameterName("binSize", false);
@@ -63,10 +61,11 @@ RunActionMessenger::~RunActionMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fBinSizeCmd )
-   { fRunAction->SetBinSize(fBinSizeCmd->GetNewDoubleValue(newValue));}
+void RunActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fBinSizeCmd) {
+    fRunAction->SetBinSize(fBinSizeCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

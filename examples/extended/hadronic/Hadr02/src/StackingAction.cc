@@ -36,28 +36,23 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #include "StackingAction.hh"
 
 #include "HistoManager.hh"
 #include "StackingMessenger.hh"
 
-#include "G4Track.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
- : G4UserStackingAction(),
-   fHistoManager(0),
-   fStackMessenger(0),
-   fKillAll(true),
-   fKillEM(true)
+  : G4UserStackingAction(), fHistoManager(0), fStackMessenger(0), fKillAll(true), fKillEM(true)
 {
   fStackMessenger = new StackingMessenger(this);
-  fHistoManager   = HistoManager::GetPointer();
+  fHistoManager = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,27 +64,29 @@ StackingAction::~StackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* track)
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* track)
 {
   G4ClassificationOfNewTrack status = fUrgent;
 
   fHistoManager->ScoreNewTrack(track);
 
-  if (fHistoManager->GetVerbose() > 1 ) {
-    G4cout << "Track #"
-           << track->GetTrackID() << " of " 
+  if (fHistoManager->GetVerbose() > 1) {
+    G4cout << "Track #" << track->GetTrackID() << " of "
            << track->GetDefinition()->GetParticleName()
-           << " E(MeV)= " << track->GetKineticEnergy()/MeV
-           << " ID= " << track->GetParentID()
+           << " E(MeV)= " << track->GetKineticEnergy() / MeV << " ID= " << track->GetParentID()
            << G4endl;
   }
-  if (track->GetTrackID() == 1) { return status; }
+  if (track->GetTrackID() == 1) {
+    return status;
+  }
 
-  //stack or delete secondaries
-  if (fKillAll)  { status = fKill; }
-  else if(fKillEM && track->GetDefinition()->GetPDGMass() < MeV) 
-    { status = fKill; }
+  // stack or delete secondaries
+  if (fKillAll) {
+    status = fKill;
+  }
+  else if (fKillEM && track->GetDefinition()->GetPDGMass() < MeV) {
+    status = fKill;
+  }
 
   return status;
 }

@@ -29,12 +29,12 @@
 #ifndef MOLECULAR_EVENT_ACTION_HH
 #define MOLECULAR_EVENT_ACTION_HH
 
-#include "G4UserEventAction.hh"
 #include "G4ThreeVector.hh"
-
+#include "G4UserEventAction.hh"
 #include "globals.hh"
-#include <vector>
+
 #include <map>
+#include <vector>
 
 class AnalysisManager;
 
@@ -48,39 +48,39 @@ class DNAGeometry;
 
 class EventAction : public G4UserEventAction
 {
- public:
-  explicit EventAction(AnalysisManager*);
+  public:
+    explicit EventAction(AnalysisManager*);
 
-  ~EventAction() override = default;
+    ~EventAction() override = default;
 
-  void BeginOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event*) override;
 
-  void EndOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
-  void AddDNAHit(const DNAHit* hit) { fDNAHits.push_back(hit); };
+    void AddDNAHit(const DNAHit* hit) { fDNAHits.push_back(hit); };
 
-  void AddChromosomeEdep(const G4String&, const G4double&, const G4bool&);
+    void AddChromosomeEdep(const G4String&, const G4double&, const G4bool&);
 
-  void AddCellEdep(const G4double&);
+    void AddCellEdep(const G4double&);
 
-  void AddTrackLengthCell(const G4double&);
+    void AddTrackLengthCell(const G4double&);
 
-  void AddTrackLengthChro(const G4double&);
+    void AddTrackLengthChro(const G4double&);
 
-  void SetPrimStopPos(const G4ThreeVector& pos) { fprimstoppos = pos; };
+    void SetPrimStopPos(const G4ThreeVector& pos) { fprimstoppos = pos; };
 
-  void Initialize();
+    void Initialize();
 
- private:
-  G4bool fInitialized = false;
-  AnalysisManager* fAnalysisManager;
-  DNAGeometry* fDNAGeometry = nullptr;
-  std::map<uint32_t, ChromosomeHit*> fChromoHitMap;
-  std::vector<const DNAHit*> fDNAHits;
-  G4double fEdepCell         = 0;  // dousatsu
-  G4double fTraLenCell       = 0;  // dousatsu
-  G4double fTraLenChro       = 0;  // dousatsu
-  G4ThreeVector fprimstoppos = G4ThreeVector(0., 0., 0.);
+  private:
+    G4bool fInitialized = false;
+    AnalysisManager* fAnalysisManager;
+    DNAGeometry* fDNAGeometry = nullptr;
+    std::map<uint32_t, ChromosomeHit*> fChromoHitMap;
+    std::vector<const DNAHit*> fDNAHits;
+    G4double fEdepCell = 0;  // dousatsu
+    G4double fTraLenCell = 0;  // dousatsu
+    G4double fTraLenChro = 0;  // dousatsu
+    G4ThreeVector fprimstoppos = G4ThreeVector(0., 0., 0.);
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

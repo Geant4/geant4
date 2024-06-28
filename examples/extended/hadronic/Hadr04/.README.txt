@@ -109,7 +109,7 @@
  
    Execute Hadr04 in 'batch' mode from macro files :
 \verbatim   
-% Hadr04   run01.mac
+% Hadr04  run01.mac
 \endverbatim
  		
    Execute Hadr04 in 'interactive mode' with visualization :
@@ -123,6 +123,7 @@ Idle> control/execute vis.mac
 \endverbatim
 	
  Macros provided in this example:
+  - hadr04.in: macro used in Geant4 testing
   - graphite.mac: neutron (2 MeV) in graphite
   - run01.mac: neutron (2 MeV) in Water_ts
     

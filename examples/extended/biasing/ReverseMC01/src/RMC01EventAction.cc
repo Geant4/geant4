@@ -39,41 +39,48 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RMC01EventAction.hh"
-#include "G4Event.hh"
+
 #include "RMC01AnalysisManager.hh"
+
+#include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RMC01EventAction::RMC01EventAction()
- : G4UserEventAction()
-{;
+RMC01EventAction::RMC01EventAction() : G4UserEventAction()
+{
+  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01EventAction::~RMC01EventAction()
-{;
+{
+  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01EventAction::BeginOfEventAction(const G4Event* anEvent )
+void RMC01EventAction::BeginOfEventAction(const G4Event* anEvent)
 {
-  G4int i_event=anEvent->GetEventID();
-  G4bool print_nb=false;
-  if (i_event <100) print_nb =true;
-  else if (i_event<500 && (i_event/100)*100 == i_event) print_nb = true;
-  else if (i_event<5000 && (i_event/500)*500 == i_event) print_nb = true;
-  else if ((i_event/5000)*5000 == i_event) print_nb = true;
-  if (print_nb) G4cout<<"nb event "<<i_event<<std::endl;
+  G4int i_event = anEvent->GetEventID();
+  G4bool print_nb = false;
+  if (i_event < 100)
+    print_nb = true;
+  else if (i_event < 500 && (i_event / 100) * 100 == i_event)
+    print_nb = true;
+  else if (i_event < 5000 && (i_event / 500) * 500 == i_event)
+    print_nb = true;
+  else if ((i_event / 5000) * 5000 == i_event)
+    print_nb = true;
+  if (print_nb) G4cout << "nb event " << i_event << std::endl;
   RMC01AnalysisManager::GetInstance()->BeginOfEvent(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01EventAction::EndOfEventAction(const G4Event*  anEvent)
+void RMC01EventAction::EndOfEventAction(const G4Event* anEvent)
 {
   RMC01AnalysisManager::GetInstance()->EndOfEvent(anEvent);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,28 +35,23 @@
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "StackingAction.hh"
 
 #include "G4DNAChemistryManager.hh"
+#include "G4H2O.hh"
 #include "G4MoleculeCounter.hh"
 #include "G4Scheduler.hh"
 
-#include "G4H2O.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
- : G4VUserActionInitialization()
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{
-}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,10 +67,9 @@ void ActionInitialization::Build() const
 {
   G4MoleculeCounter::Instance()->Use();
   G4MoleculeCounter::Instance()->DontRegister(G4H2O::Definition());
-  
+
   // sequential mode
-  if(G4Threading::IsMultithreadedApplication() == false)
-  {
+  if (G4Threading::IsMultithreadedApplication() == false) {
     G4DNAChemistryManager::Instance()->ResetCounterWhenRunEnds(false);
   }
 

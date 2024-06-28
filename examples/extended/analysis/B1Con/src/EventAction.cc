@@ -28,6 +28,7 @@
 /// \brief Implementation of the B1::EventAction class
 
 #include "EventAction.hh"
+
 #include "RunAction.hh"
 
 #include "G4Event.hh"
@@ -38,9 +39,7 @@ namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(B1Con::RunAction* runAction)
-: fRunAction(runAction)
-{}
+EventAction::EventAction(B1Con::RunAction* runAction) : fRunAction(runAction) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,4 +58,4 @@ void EventAction::EndOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B1

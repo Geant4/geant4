@@ -25,56 +25,51 @@
 //
 //
 #include "ActionInitialization.hh"
-#include "G4SystemOfUnits.hh"
-#include "SteppingAction.hh"
+
+#include "DetectorConstruction.hh"
+#include "ITTrackingInteractivity.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "StackingAction.hh"
-#include "DetectorConstruction.hh"
-#include "G4Scheduler.hh"
+#include "SteppingAction.hh"
 #include "TimeStepAction.hh"
-#include "ITTrackingInteractivity.hh"
-#include "G4RunManager.hh"
-#include "G4MoleculeGun.hh"
-#include "PrimaryGeneratorAction.hh"
+
 #include "G4DNAChemistryManager.hh"
+#include "G4MoleculeGun.hh"
+#include "G4RunManager.hh"
+#include "G4Scheduler.hh"
+#include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 ActionInitialization::ActionInitialization(DetectorConstruction* pDetector)
-    : G4VUserActionInitialization()
-    , fpDetector(pDetector)
+  : G4VUserActionInitialization(), fpDetector(pDetector)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ActionInitialization::BuildForMaster() const
-{}
+void ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void ActionInitialization::Build() const
 {
-    SetUserAction(new PrimaryGeneratorAction);
-    RunAction* pRunAction = new RunAction();
-    SetUserAction(pRunAction);
-    SteppingAction* pSteppingAction = new SteppingAction(fpDetector);
-    SetUserAction(pSteppingAction);
-    SetUserAction(new StackingAction());
-    if(G4DNAChemistryManager::IsActivated())
-    {
-        G4Scheduler::Instance()->
-        SetUserAction(new TimeStepAction());
-//stop at this time
-        G4Scheduler::Instance()->SetEndTime(2.5*nanosecond);
-        G4Scheduler::Instance()->SetVerbose(1);
-        ITTrackingInteractivity* itInteractivity = 
-        new ITTrackingInteractivity();
-        G4Scheduler::Instance()->SetInteractivity(itInteractivity);
-        G4DNAChemistryManager::Instance()->
-        SetGun(((DetectorConstruction*)fpDetector)->GetGun());
-    }
+  SetUserAction(new PrimaryGeneratorAction);
+  RunAction* pRunAction = new RunAction();
+  SetUserAction(pRunAction);
+  SteppingAction* pSteppingAction = new SteppingAction(fpDetector);
+  SetUserAction(pSteppingAction);
+  SetUserAction(new StackingAction());
+  if (G4DNAChemistryManager::IsActivated()) {
+    G4Scheduler::Instance()->SetUserAction(new TimeStepAction());
+    // stop at this time
+    G4Scheduler::Instance()->SetEndTime(2.5 * nanosecond);
+    G4Scheduler::Instance()->SetVerbose(1);
+    ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
+    G4Scheduler::Instance()->SetInteractivity(itInteractivity);
+    G4DNAChemistryManager::Instance()->SetGun(((DetectorConstruction*)fpDetector)->GetGun());
+  }
 }

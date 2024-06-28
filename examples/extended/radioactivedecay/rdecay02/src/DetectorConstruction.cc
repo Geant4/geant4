@@ -31,46 +31,46 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
+
 #include "DetectorMessenger.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
-
-#include "G4Tubs.hh"
-#include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-
-#include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-#include "G4RunManager.hh"
-
-#include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4RunManager.hh"
+#include "G4SolidStore.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
 {
-  fTargetLength      = 1*cm; 
-  fTargetRadius      = 0.5*cm;
-  fDetectorLength    = 5*cm; 
-  fDetectorThickness = 2*cm;
-  
-  fWorldLength = std::max(fTargetLength,fDetectorLength);
+  fTargetLength = 1 * cm;
+  fTargetRadius = 0.5 * cm;
+  fDetectorLength = 5 * cm;
+  fDetectorThickness = 2 * cm;
+
+  fWorldLength = std::max(fTargetLength, fDetectorLength);
   fWorldRadius = fTargetRadius + fDetectorThickness;
-      
+
   DefineMaterials();
-    
+
   fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete fDetectorMessenger;}
+{
+  delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -85,27 +85,26 @@ void DetectorConstruction::DefineMaterials()
 {
   // build materials
   //
-  fDetectorMater = 
-  new G4Material("Germanium", 32, 72.61*g/mole, 5.323*g/cm3);
-  
+  fDetectorMater = new G4Material("Germanium", 32, 72.61 * g / mole, 5.323 * g / cm3);
 
-  G4Element* N  = new G4Element("Nitrogen", "N", 7, 14.01*g/mole);
-  G4Element* O  = new G4Element("Oxygen",   "O", 8, 16.00*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", 7, 14.01 * g / mole);
+  G4Element* O = new G4Element("Oxygen", "O", 8, 16.00 * g / mole);
   //
-  G4int ncomponents; G4double fractionmass;      
-  G4Material* Air20 = new G4Material("Air", 1.205*mg/cm3, ncomponents=2,
-                      kStateGas, 293.*kelvin, 1.*atmosphere);
-    Air20->AddElement(N, fractionmass=0.7);
-    Air20->AddElement(O, fractionmass=0.3);
+  G4int ncomponents;
+  G4double fractionmass;
+  G4Material* Air20 = new G4Material("Air", 1.205 * mg / cm3, ncomponents = 2, kStateGas,
+                                     293. * kelvin, 1. * atmosphere);
+  Air20->AddElement(N, fractionmass = 0.7);
+  Air20->AddElement(O, fractionmass = 0.3);
   //
   fWorldMater = Air20;
-  
+
   // or use G4 materials data base
   //
-  G4NistManager* man = G4NistManager::Instance();  
+  G4NistManager* man = G4NistManager::Instance();
   fTargetMater = man->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-                   
- ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
+  /// G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,72 +116,65 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-  
+
   // World
   //
   // (re) compute World dimensions if necessary
-  fWorldLength = std::max(fTargetLength,fDetectorLength);
+  fWorldLength = std::max(fTargetLength, fDetectorLength);
   fWorldRadius = fTargetRadius + fDetectorThickness;
-    
-  G4Tubs*
-  sWorld = new G4Tubs("World",                                 //name
-                 0.,fWorldRadius, 0.5*fWorldLength, 0.,twopi); //dimensions  
-                   
-  G4LogicalVolume*
-  lWorld = new G4LogicalVolume(sWorld,                  //shape
-                             fWorldMater,               //material
-                             "World");                  //name
 
-  fPhysiWorld = new G4PVPlacement(0,                    //no rotation
-                            G4ThreeVector(),            //at (0,0,0)
-                            lWorld,                     //logical volume
-                            "World",                    //name
-                            0,                          //mother volume
-                            false,                      //no boolean operation
-                            0);                         //copy number
-                            
+  G4Tubs* sWorld = new G4Tubs("World",  // name
+                              0., fWorldRadius, 0.5 * fWorldLength, 0., twopi);  // dimensions
+
+  G4LogicalVolume* lWorld = new G4LogicalVolume(sWorld,  // shape
+                                                fWorldMater,  // material
+                                                "World");  // name
+
+  fPhysiWorld = new G4PVPlacement(0,  // no rotation
+                                  G4ThreeVector(),  // at (0,0,0)
+                                  lWorld,  // logical volume
+                                  "World",  // name
+                                  0,  // mother volume
+                                  false,  // no boolean operation
+                                  0);  // copy number
+
   // Target
   //
-  G4Tubs* 
-  sTarget = new G4Tubs("Target",                                   //name
-                  0., fTargetRadius, 0.5*fTargetLength, 0.,twopi); //dimensions
+  G4Tubs* sTarget = new G4Tubs("Target",  // name
+                               0., fTargetRadius, 0.5 * fTargetLength, 0., twopi);  // dimensions
 
+  fLogicTarget = new G4LogicalVolume(sTarget,  // shape
+                                     fTargetMater,  // material
+                                     "Target");  // name
 
-  fLogicTarget = new G4LogicalVolume(sTarget,           //shape
-                             fTargetMater,              //material
-                             "Target");                 //name
-                               
-           new G4PVPlacement(0,                         //no rotation
-                           G4ThreeVector(),             //at (0,0,0)
-                           fLogicTarget,                //logical volume
-                           "Target",                    //name
-                           lWorld,                      //mother  volume
-                           false,                       //no boolean operation
-                           0);                          //copy number
+  new G4PVPlacement(0,  // no rotation
+                    G4ThreeVector(),  // at (0,0,0)
+                    fLogicTarget,  // logical volume
+                    "Target",  // name
+                    lWorld,  // mother  volume
+                    false,  // no boolean operation
+                    0);  // copy number
 
   // Detector
   //
-  G4Tubs* 
-  sDetector = new G4Tubs("Detector",  
-                fTargetRadius, fWorldRadius, 0.5*fDetectorLength, 0.,twopi);
+  G4Tubs* sDetector =
+    new G4Tubs("Detector", fTargetRadius, fWorldRadius, 0.5 * fDetectorLength, 0., twopi);
 
+  fLogicDetector = new G4LogicalVolume(sDetector,  // shape
+                                       fDetectorMater,  // material
+                                       "Detector");  // name
 
-  fLogicDetector = new G4LogicalVolume(sDetector,       //shape
-                             fDetectorMater,            //material
-                             "Detector");               //name
-                               
-           new G4PVPlacement(0,                         //no rotation
-                           G4ThreeVector(),             //at (0,0,0)
-                           fLogicDetector,              //logical volume
-                           "Detector",                  //name
-                           lWorld,                      //mother  volume
-                           false,                       //no boolean operation
-                           0);                          //copy number
-
+  new G4PVPlacement(0,  // no rotation
+                    G4ThreeVector(),  // at (0,0,0)
+                    fLogicDetector,  // logical volume
+                    "Detector",  // name
+                    lWorld,  // mother  volume
+                    false,  // no boolean operation
+                    0);  // copy number
 
   PrintParameters();
-  
-  //always return the root volume
+
+  // always return the root volume
   //
   return fPhysiWorld;
 }
@@ -191,12 +183,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n Target : Length = " << G4BestUnit(fTargetLength,"Length")
-         << " Radius = " << G4BestUnit(fTargetRadius,"Length")  
+  G4cout << "\n Target : Length = " << G4BestUnit(fTargetLength, "Length")
+         << " Radius = " << G4BestUnit(fTargetRadius, "Length")
          << " Material = " << fTargetMater->GetName();
-  G4cout << "\n Detector : Length = " << G4BestUnit(fDetectorLength,"Length")
-         << " Tickness = " << G4BestUnit(fDetectorThickness,"Length")  
-         << " Material = " << fDetectorMater->GetName() << G4endl;          
+  G4cout << "\n Detector : Length = " << G4BestUnit(fDetectorLength, "Length")
+         << " Tickness = " << G4BestUnit(fDetectorThickness, "Length")
+         << " Material = " << fDetectorMater->GetName() << G4endl;
   G4cout << "\n" << fTargetMater << "\n" << fDetectorMater << G4endl;
 }
 
@@ -205,17 +197,19 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial =
-     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);   
-  
-  if (pttoMaterial) { 
+  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if (pttoMaterial) {
     fTargetMater = pttoMaterial;
-    if(fLogicTarget) { fLogicTarget->SetMaterial(fTargetMater); }
+    if (fLogicTarget) {
+      fLogicTarget->SetMaterial(fTargetMater);
+    }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  } else {
-    G4cout << "\n--> warning from DetectorConstruction::SetTargetMaterial : "
-           << materialChoice << " not found" << G4endl;
-  }              
+  }
+  else {
+    G4cout << "\n--> warning from DetectorConstruction::SetTargetMaterial : " << materialChoice
+           << " not found" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -223,17 +217,19 @@ void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
 void DetectorConstruction::SetDetectorMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial =
-     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);   
-  
-  if (pttoMaterial) { 
+  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if (pttoMaterial) {
     fDetectorMater = pttoMaterial;
-    if(fLogicDetector) { fLogicDetector->SetMaterial(fDetectorMater); }
+    if (fLogicDetector) {
+      fLogicDetector->SetMaterial(fDetectorMater);
+    }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  } else {
-    G4cout << "\n--> warning from DetectorConstruction::SetDetectorMaterial : "
-           << materialChoice << " not found" << G4endl;
-  }              
+  }
+  else {
+    G4cout << "\n--> warning from DetectorConstruction::SetDetectorMaterial : " << materialChoice
+           << " not found" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

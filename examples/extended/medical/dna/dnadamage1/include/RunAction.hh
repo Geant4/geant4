@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 #pragma once
-#include "G4UserRunAction.hh"
 #include "G4String.hh"
+#include "G4UserRunAction.hh"
 
 class G4Run;
 
@@ -34,14 +34,14 @@ class G4Run;
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
     RunAction();
     ~RunAction() override;
 
     void BeginOfRunAction(const G4Run*) override;
     void EndOfRunAction(const G4Run*) override;
 
-private:
+  private:
     void CreateNtuple(const G4String& fileName);
     void WriteNtuple();
 };

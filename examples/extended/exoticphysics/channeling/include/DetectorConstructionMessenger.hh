@@ -42,27 +42,25 @@ class G4UIcmdWithADouble;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class DetectorConstructionMessenger: public G4UImessenger
+class DetectorConstructionMessenger : public G4UImessenger
 {
   public:
-    DetectorConstructionMessenger(
-                    DetectorConstruction* mpga);
+    DetectorConstructionMessenger(DetectorConstruction* mpga);
     ~DetectorConstructionMessenger();
 
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
   private:
-    DetectorConstruction * fTarget;
+    DetectorConstruction* fTarget;
 
     G4UIdirectory* fMyXtalDirectory;
-    
-    G4UIcmdWithAString*  fXtalMaterialCmd;
+
+    G4UIcmdWithAString* fXtalMaterialCmd;
     G4UIcmdWith3VectorAndUnit* fXtalSizeCmd;
     G4UIcmdWith3VectorAndUnit* fXtalBRCmd;
     G4UIcmdWith3VectorAndUnit* fXtalAngleCmd;
-    G4UIcmdWithAString*  fXtalECCmd;
-
+    G4UIcmdWithAString* fXtalECCmd;
 };
 
 #endif

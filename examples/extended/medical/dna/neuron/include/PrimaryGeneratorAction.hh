@@ -29,9 +29,9 @@
 // Med. Phys. 37 (2010) 4692-4708
 // and papers
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
-// O. Belov et al. Physica Medica 32 (2016) 1510-1520 
+// O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -42,28 +42,25 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
+    PrimaryGeneratorAction();
+    ~PrimaryGeneratorAction() override;
 
-  PrimaryGeneratorAction();    
-  ~PrimaryGeneratorAction() override;
-  
-  void GeneratePrimaries(G4Event*) override;
+    void GeneratePrimaries(G4Event*) override;
 
-  G4ParticleGun* GetParticleGun() const { return fpParticleGun; }
-  G4double GetGunArea() const { return fGunArea; }
-  
-private:
+    G4ParticleGun* GetParticleGun() const { return fpParticleGun; }
+    G4double GetGunArea() const { return fGunArea; }
 
-  G4ParticleGun* fpParticleGun;
-  G4double fGunArea;
-
+  private:
+    G4ParticleGun* fpParticleGun;
+    G4double fGunArea;
 };
 
 #endif

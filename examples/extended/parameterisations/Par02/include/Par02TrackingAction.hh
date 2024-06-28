@@ -39,9 +39,9 @@
 /// The class needs to be set in G4RunManager::SetUserAction().
 /// @author Anna Zaborowska
 
-class Par02TrackingAction : public G4UserTrackingAction {
+class Par02TrackingAction : public G4UserTrackingAction
+{
   public:
-    
     /// A default constructor.
     Par02TrackingAction();
 
@@ -49,14 +49,13 @@ class Par02TrackingAction : public G4UserTrackingAction {
 
     /// Defines the actions at the start of processing the track.
     /// It checks the pseudorapidity range and if the particle is a primary.
-    virtual void  PreUserTrackingAction( const G4Track* track );
-    
-    /// Defines the actions at the end of processing the track. 
+    virtual void PreUserTrackingAction(const G4Track* track);
+
+    /// Defines the actions at the end of processing the track.
     /// It saves the information of MC data (PDG code, initial momentum),
     /// tracker (momentum), EMCal and HCal (energy deposit and its position)
     /// as well as resolution and efficiency for all the detectors.
-    virtual void  PostUserTrackingAction( const G4Track* track );
+    virtual void PostUserTrackingAction(const G4Track* track);
 };
 
 #endif
-

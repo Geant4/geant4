@@ -24,27 +24,32 @@
 // ********************************************************************
 //
 #include "PhysicsList.hh"
+
 #include "DetectorConstruction.hh"
 #include "EmDNAChemistry.hh"
+#include "PeriodicBoundaryPhysics.hh"
+
 #include "G4EmDNAPhysics_option2.hh"
 #include "G4PhysicsConstructorRegistry.hh"
 #include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction *pDetector)
-    : G4VModularPhysicsList(),
-      fEmDNAPhysicsList(new G4EmDNAPhysics_option2(verboseLevel)),
-      fEmDNAChemistryList(new EmDNAChemistry) {
+PhysicsList::PhysicsList(DetectorConstruction* pDetector)
+  : G4VModularPhysicsList(),
+    fEmDNAPhysicsList(new G4EmDNAPhysics_option2(verboseLevel)),
+    fEmDNAChemistryList(new EmDNAChemistry)
+{
   G4double currentDefaultCut = 0.01 * mm;
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV,
-                                                                  1 * GeV);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV, 1 * GeV);
   SetDefaultCutValue(currentDefaultCut);
   fEmDNAChemistryList->SetChemistryWorld(*(pDetector->GetChemistryWorld()));
+  fPBC = std::make_unique<PeriodicBoundaryPhysics>("Periodic", true, true, true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructParticle() {
+void PhysicsList::ConstructParticle()
+{
   if (fEmDNAPhysicsList != nullptr) {
     fEmDNAPhysicsList->ConstructParticle();
   }
@@ -54,13 +59,17 @@ void PhysicsList::ConstructParticle() {
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructProcess() {
+void PhysicsList::ConstructProcess()
+{
   AddTransportation();
   if (fEmDNAPhysicsList != nullptr) {
     fEmDNAPhysicsList->ConstructProcess();
   }
   if (fEmDNAChemistryList != nullptr) {
     fEmDNAChemistryList->ConstructProcess();
+  }
+  if (fPBC != nullptr) {
+    fPBC->ConstructProcess();
   }
 }
 

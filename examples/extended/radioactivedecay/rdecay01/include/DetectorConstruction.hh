@@ -26,9 +26,9 @@
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -41,20 +41,17 @@
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
     DetectorConstruction();
-   ~DetectorConstruction() override = default;
-     
+    ~DetectorConstruction() override = default;
+
     G4VPhysicalVolume* Construct() override;
-                        
-    G4double GetWorldSize() {return fWorldSize;}; 
+
+    G4double GetWorldSize() { return fWorldSize; };
 
   private:
-  
     G4double fWorldSize = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

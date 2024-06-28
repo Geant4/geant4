@@ -82,39 +82,15 @@ class LET : public VRadiobiologicalQuantity
     // std::ofstream ofs;
 
     // To be used for accumulation
-    void SetNTotalLETT(const array_type NTotalLETT)
-    {
-      fNTotalLETT = NTotalLETT;
-    }
-    void SetNTotalLETD(const array_type NTotalLETD)
-    {
-      fNTotalLETD = NTotalLETD;
-    }
-    void SetDTotalLETT(const array_type DTotalLETT)
-    {
-      fDTotalLETT = DTotalLETT;
-    }
-    void SetDTotalLETD(const array_type DTotalLETD)
-    {
-      fDTotalLETD = DTotalLETD;
-    }
+    void SetNTotalLETT(const array_type NTotalLETT) { fNTotalLETT = NTotalLETT; }
+    void SetNTotalLETD(const array_type NTotalLETD) { fNTotalLETD = NTotalLETD; }
+    void SetDTotalLETT(const array_type DTotalLETT) { fDTotalLETT = DTotalLETT; }
+    void SetDTotalLETD(const array_type DTotalLETD) { fDTotalLETD = DTotalLETD; }
 
-    void AddNTotalLETT(const array_type NTotalLETT)
-    {
-      fNTotalLETT += NTotalLETT;
-    }
-    void AddNTotalLETD(const array_type NTotalLETD)
-    {
-      fNTotalLETD += NTotalLETD;
-    }
-    void AddDTotalLETT(const array_type DTotalLETT)
-    {
-      fDTotalLETT += DTotalLETT;
-    }
-    void AddDTotalLETD(const array_type DTotalLETD)
-    {
-      fDTotalLETD += DTotalLETD;
-    }
+    void AddNTotalLETT(const array_type NTotalLETT) { fNTotalLETT += NTotalLETT; }
+    void AddNTotalLETD(const array_type NTotalLETD) { fNTotalLETD += NTotalLETD; }
+    void AddDTotalLETT(const array_type DTotalLETT) { fDTotalLETT += DTotalLETT; }
+    void AddDTotalLETD(const array_type DTotalLETD) { fDTotalLETD += DTotalLETD; }
 
     // To use to add an ion to the store (or merge data)
     void AddIon(const IonLet ion);

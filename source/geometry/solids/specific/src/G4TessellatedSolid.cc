@@ -681,7 +681,7 @@ G4int G4TessellatedSolid::CheckStructure() const
     nedge += facet.GetNumberOfVertices();
     volume += facet.GetArea()*(facet.GetVertex(0).dot(facet.GetSurfaceNormal()));
   }
-  G4int ivolume = static_cast<G4int>(volume <= 0.);
+  auto  ivolume = static_cast<G4int>(volume <= 0.);
 
   // Create sorted vector of edges
   //
@@ -695,7 +695,7 @@ G4int G4TessellatedSolid::CheckStructure() const
     {
       int64_t i1 = facet.GetVertexIndex((k == 0) ? nnode - 1 : k - 1);
       int64_t i2 = facet.GetVertexIndex(k);
-      int64_t inverse = static_cast<int64_t>(i2 > i1);
+      auto  inverse = static_cast<int64_t>(i2 > i1);
       if (inverse != 0) std::swap(i1, i2);
       iedge[kk++] = i1*1000000000 + i2*2 + inverse;
     }
@@ -1746,6 +1746,15 @@ G4TessellatedSolid::SafetyFromInside (const G4ThreeVector& p, G4bool) const
 G4GeometryType G4TessellatedSolid::GetEntityType () const
 {
   return fGeometryType;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// IsFaceted
+//
+G4bool G4TessellatedSolid::IsFaceted () const
+{
+  return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

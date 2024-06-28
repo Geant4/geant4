@@ -24,20 +24,21 @@
 // ********************************************************************
 #ifdef G4_USE_FLUKA
 
-#include "flush.h"
+#  include "flush.h"
 
-
-extern "C" {
-	extern void flushf_();
+extern "C"
+{
+  extern void flushf_();
 }
 
-namespace cpp_to_fortran {
+namespace cpp_to_fortran
+{
 
-  void flush() {
-    flushf_();
-  }
-
+void flush()
+{
+  flushf_();
 }
 
+}  // namespace cpp_to_fortran
 
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

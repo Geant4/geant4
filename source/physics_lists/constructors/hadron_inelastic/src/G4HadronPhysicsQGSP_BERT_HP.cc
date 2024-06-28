@@ -73,6 +73,7 @@
 #include "G4NeutronFissionVI.hh"
 #include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
+#include "G4NuDEXNeutronCaptureModel.hh"
 
 #include "G4HadronicParameters.hh"
 
@@ -131,7 +132,11 @@ void G4HadronPhysicsQGSP_BERT_HP::Neutron()
   auto capture = new G4NeutronCaptureProcess( "nCaptureHP" );
   neutron->GetProcessManager()->AddDiscreteProcess(capture);
   capture->AddDataSet( new G4NeutronHPCaptureXS() );
-  capture->RegisterMe( new G4NeutronRadCaptureHP() );
+  if (param->EnableNUDEX()) {
+    capture->RegisterMe( new G4NuDEXNeutronCaptureModel() );
+  } else {
+    capture->RegisterMe( new G4NeutronRadCaptureHP() );
+  }
   
   auto fission = new G4NeutronFissionProcess( "nFissionHP" );
   neutron->GetProcessManager()->AddDiscreteProcess(fission);

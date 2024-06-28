@@ -51,6 +51,8 @@
 #ifndef G4UI_EXECUTIVE_HH
 #define G4UI_EXECUTIVE_HH
 
+#include "G4String.hh"
+#include "G4Types.hh"
 #include "G4VUIshell.hh"
 
 #include <map>

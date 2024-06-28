@@ -43,8 +43,8 @@
 #include "G4Polymarker.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
-#include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
 G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator = nullptr;
 
@@ -53,34 +53,32 @@ G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator = nullptr;
 WLSTrajectory::WLSTrajectory(const G4Track* aTrack)
 {
   fParticleDefinition = aTrack->GetDefinition();
-  fParticleName       = fParticleDefinition->GetParticleName();
-  fPDGCharge          = fParticleDefinition->GetPDGCharge();
-  fPDGEncoding        = fParticleDefinition->GetPDGEncoding();
-  fTrackID            = aTrack->GetTrackID();
-  fParentID           = aTrack->GetParentID();
-  fInitialMomentum    = aTrack->GetMomentum();
-  fpPointsContainer   = new WLSTrajectoryPointContainer();
+  fParticleName = fParticleDefinition->GetParticleName();
+  fPDGCharge = fParticleDefinition->GetPDGCharge();
+  fPDGEncoding = fParticleDefinition->GetPDGEncoding();
+  fTrackID = aTrack->GetTrackID();
+  fParentID = aTrack->GetParentID();
+  fInitialMomentum = aTrack->GetMomentum();
+  fpPointsContainer = new WLSTrajectoryPointContainer();
   // Following is for the first trajectory point
   fpPointsContainer->push_back(new WLSTrajectoryPoint(aTrack));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSTrajectory::WLSTrajectory(WLSTrajectory& right)
-  : G4VTrajectory()
+WLSTrajectory::WLSTrajectory(WLSTrajectory& right) : G4VTrajectory()
 {
   fParticleDefinition = right.fParticleDefinition;
-  fParticleName       = right.fParticleName;
-  fPDGCharge          = right.fPDGCharge;
-  fPDGEncoding        = right.fPDGEncoding;
-  fTrackID            = right.fTrackID;
-  fParentID           = right.fParentID;
-  fInitialMomentum    = right.fInitialMomentum;
-  fpPointsContainer   = new WLSTrajectoryPointContainer();
+  fParticleName = right.fParticleName;
+  fPDGCharge = right.fPDGCharge;
+  fPDGEncoding = right.fPDGEncoding;
+  fTrackID = right.fTrackID;
+  fParentID = right.fParentID;
+  fInitialMomentum = right.fInitialMomentum;
+  fpPointsContainer = new WLSTrajectoryPointContainer();
 
-  for(size_t i = 0; i < right.fpPointsContainer->size(); ++i)
-  {
-    auto rightPoint = (WLSTrajectoryPoint*) ((*(right.fpPointsContainer))[i]);
+  for (size_t i = 0; i < right.fpPointsContainer->size(); ++i) {
+    auto rightPoint = (WLSTrajectoryPoint*)((*(right.fpPointsContainer))[i]);
     fpPointsContainer->push_back(new WLSTrajectoryPoint(*rightPoint));
   }
 }
@@ -89,9 +87,8 @@ WLSTrajectory::WLSTrajectory(WLSTrajectory& right)
 
 WLSTrajectory::~WLSTrajectory()
 {
-  for(size_t i = 0; i < fpPointsContainer->size(); ++i)
-  {
-    delete(*fpPointsContainer)[i];
+  for (size_t i = 0; i < fpPointsContainer->size(); ++i) {
+    delete (*fpPointsContainer)[i];
   }
   fpPointsContainer->clear();
   delete fpPointsContainer;
@@ -124,17 +121,15 @@ G4ParticleDefinition* WLSTrajectory::GetParticleDefinition()
 
 void WLSTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
-  if(!secondTrajectory)
-    return;
+  if (!secondTrajectory) return;
 
-  auto second = (WLSTrajectory*) secondTrajectory;
-  G4int ent   = second->GetPointEntries();
+  auto second = (WLSTrajectory*)secondTrajectory;
+  G4int ent = second->GetPointEntries();
   // initial point of the second trajectory should not be merged
-  for(G4int i = 1; i < ent; ++i)
-  {
+  for (G4int i = 1; i < ent; ++i) {
     fpPointsContainer->push_back((*(second->fpPointsContainer))[i]);
   }
-  delete(*second->fpPointsContainer)[0];
+  delete (*second->fpPointsContainer)[0];
   second->fpPointsContainer->clear();
 }
 
@@ -143,11 +138,9 @@ void WLSTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 const std::map<G4String, G4AttDef>* WLSTrajectory::GetAttDefs() const
 {
   G4bool isNew;
-  std::map<G4String, G4AttDef>* store =
-    G4AttDefStore::GetInstance("Trajectory", isNew);
+  std::map<G4String, G4AttDef>* store = G4AttDefStore::GetInstance("Trajectory", isNew);
 
-  if(isNew)
-  {
+  if (isNew) {
     G4String ID("ID");
     (*store)[ID] = G4AttDef(ID, "Track ID", "Bookkeeping", "", "G4int");
 
@@ -164,13 +157,12 @@ const std::map<G4String, G4AttDef>* WLSTrajectory::GetAttDefs() const
     (*store)[PDG] = G4AttDef(PDG, "PDG Encoding", "Physics", "", "G4int");
 
     G4String IMom("IMom");
-    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
-                              "Physics", "G4BestUnit", "G4ThreeVector");
+    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory", "Physics",
+                              "G4BestUnit", "G4ThreeVector");
 
     G4String IMag("IMag");
-    (*store)[IMag] =
-      G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
-               "Physics", "G4BestUnit", "G4double");
+    (*store)[IMag] = G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
+                              "Physics", "G4BestUnit", "G4double");
 
     G4String NTP("NTP");
     (*store)[NTP] = G4AttDef(NTP, "No. of points", "Bookkeeping", "", "G4int");
@@ -184,28 +176,21 @@ std::vector<G4AttValue>* WLSTrajectory::CreateAttValues() const
 {
   auto values = new std::vector<G4AttValue>;
 
-  values->push_back(
-    G4AttValue("ID", G4UIcommand::ConvertToString(fTrackID), ""));
+  values->push_back(G4AttValue("ID", G4UIcommand::ConvertToString(fTrackID), ""));
 
-  values->push_back(
-    G4AttValue("PID", G4UIcommand::ConvertToString(fParentID), ""));
+  values->push_back(G4AttValue("PID", G4UIcommand::ConvertToString(fParentID), ""));
 
   values->push_back(G4AttValue("PN", fParticleName, ""));
 
-  values->push_back(
-    G4AttValue("Ch", G4UIcommand::ConvertToString(fPDGCharge), ""));
+  values->push_back(G4AttValue("Ch", G4UIcommand::ConvertToString(fPDGCharge), ""));
 
-  values->push_back(
-    G4AttValue("PDG", G4UIcommand::ConvertToString(fPDGEncoding), ""));
+  values->push_back(G4AttValue("PDG", G4UIcommand::ConvertToString(fPDGEncoding), ""));
 
-  values->push_back(
-    G4AttValue("IMom", G4BestUnit(fInitialMomentum, "Energy"), ""));
+  values->push_back(G4AttValue("IMom", G4BestUnit(fInitialMomentum, "Energy"), ""));
 
-  values->push_back(
-    G4AttValue("IMag", G4BestUnit(fInitialMomentum.mag(), "Energy"), ""));
+  values->push_back(G4AttValue("IMag", G4BestUnit(fInitialMomentum.mag(), "Energy"), ""));
 
-  values->push_back(
-    G4AttValue("NTP", G4UIcommand::ConvertToString(GetPointEntries()), ""));
+  values->push_back(G4AttValue("NTP", G4UIcommand::ConvertToString(GetPointEntries()), ""));
 
   return values;
 }

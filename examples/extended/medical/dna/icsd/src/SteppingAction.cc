@@ -34,91 +34,80 @@
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
-#include "EventAction.hh"
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+
 #include "DetectorConstruction.hh"
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+
 #include "G4AnalysisManager.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
-#include "G4VTouchable.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Threading.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 
-
-//#ifdef G4MULTITHREADED
-//  #include "G4MTRunManager.hh"
-//#else
-  #include "G4RunManager.hh"
-//#endif
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingAction::SteppingAction(EventAction* event)
-: G4UserSteppingAction(),
-  fpEventaction(event)
-{}
-
+// #ifdef G4MULTITHREADED
+//   #include "G4MTRunManager.hh"
+// #else
+#include "G4RunManager.hh"
+// #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingAction::~SteppingAction()
-{}
+SteppingAction::SteppingAction(EventAction* event) : G4UserSteppingAction(), fpEventaction(event) {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-    //#ifdef G4MULTITHREADED
-    //    G4MTRunManager *rm = G4MTRunManager::GetRunManager();
-    //#else
-    G4RunManager *rm = G4RunManager::GetRunManager();
-    //#endif
+  // #ifdef G4MULTITHREADED
+  //     G4MTRunManager *rm = G4MTRunManager::GetRunManager();
+  // #else
+  G4RunManager* rm = G4RunManager::GetRunManager();
+  // #endif
 
-    G4int eventID= rm->GetCurrentEvent()->GetEventID();
+  G4int eventID = rm->GetCurrentEvent()->GetEventID();
 
-    G4double flagProcess (0.);
-    G4double x,y,z;
-    G4double dE;
-    G4String process_name;
-    process_name=step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  G4double flagProcess(0.);
+  G4double x, y, z;
+  G4double dE;
+  G4String process_name;
+  process_name = step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
 
+  // only ionizations in the target will be recorded
+  if (step->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Target") {
+    if (process_name == "e-_G4DNAElastic")
+      flagProcess = 1;
+    else if (process_name == "e-_G4DNAExcitation")
+      flagProcess = 2;
+    else if (process_name == "e-_G4DNAIonisation")
+      flagProcess = 3;
 
-    // only ionizations in the target will be recorded
-    if(step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target")
-    {
-        if (process_name=="e-_G4DNAElastic")
-            flagProcess=1;
-        else if(process_name=="e-_G4DNAExcitation")
-            flagProcess=2;
-        else if(process_name=="e-_G4DNAIonisation")
-            flagProcess=3;
+    // Energy deposited and position of the interaction are saved
+    dE = step->GetTotalEnergyDeposit() / eV;
 
-        // Energy deposited and position of the interaction are saved
-        dE= step->GetTotalEnergyDeposit()/eV;
+    if (dE != 0) {
+      x = step->GetPostStepPoint()->GetPosition().x() / nanometer;
+      y = step->GetPostStepPoint()->GetPosition().y() / nanometer;
+      z = step->GetPostStepPoint()->GetPosition().z() / nanometer;
 
-        if (dE!=0)
-        {
-            x=step->GetPostStepPoint()->GetPosition().x()/nanometer;
-            y=step->GetPostStepPoint()->GetPosition().y()/nanometer;
-            z=step->GetPostStepPoint()->GetPosition().z()/nanometer;
+      // get analysis manager
+      G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-            // get analysis manager
-            G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+      // fill ntuple
+      analysisManager->FillNtupleDColumn(2, 0, eventID);
+      analysisManager->FillNtupleDColumn(2, 1, flagProcess);
+      analysisManager->FillNtupleDColumn(2, 2, x);
+      analysisManager->FillNtupleDColumn(2, 3, y);
+      analysisManager->FillNtupleDColumn(2, 4, z);
+      analysisManager->FillNtupleDColumn(2, 5, dE);
+      analysisManager->AddNtupleRow(2);
 
-            // fill ntuple
-            analysisManager->FillNtupleDColumn(2,0, eventID);
-            analysisManager->FillNtupleDColumn(2,1, flagProcess);
-            analysisManager->FillNtupleDColumn(2,2, x);
-            analysisManager->FillNtupleDColumn(2,3, y);
-            analysisManager->FillNtupleDColumn(2,4, z);
-            analysisManager->FillNtupleDColumn(2,5, dE);
-            analysisManager->AddNtupleRow(2);
-
-            // histogram
-            if (flagProcess==3)
-                fpEventaction-> AddEventIn(1);
-        }
+      // histogram
+      if (flagProcess == 3) fpEventaction->AddEventIn(1);
     }
-}    
+  }
+}

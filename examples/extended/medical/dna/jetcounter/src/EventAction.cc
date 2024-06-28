@@ -29,12 +29,14 @@
 //
 //
 #include "EventAction.hh"
+
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction() {
+EventAction::EventAction()
+{
   G4int tid = G4Threading::G4GetThreadId();
   // each thread will store cluster size history in a separate file:
   auto filename = "CShistory_t" + G4UIcommand::ConvertToString(tid);
@@ -43,18 +45,22 @@ EventAction::EventAction() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event *) { fClusterSize = 0; }
+void EventAction::BeginOfEventAction(const G4Event*)
+{
+  fClusterSize = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event *anEvent) {
+void EventAction::EndOfEventAction(const G4Event* anEvent)
+{
   if (fValidEvent && fFinalEnergy > 0) {
-    fTextFile << fClusterSize << " " << fInitialEnergy << " "
-              << fInteractionEnergy << " " << fFinalEnergy << std::endl;
+    fTextFile << fClusterSize << " " << fInitialEnergy << " " << fInteractionEnergy << " "
+              << fFinalEnergy << std::endl;
 
     if (anEvent->GetEventID() % 1000 == 0) {
       G4cout << "ev: " << anEvent->GetEventID()
-             << G4endl; // notify user after each 1000 particles simulated
+             << G4endl;  // notify user after each 1000 particles simulated
     }
   }
   fValidEvent = true;
@@ -62,26 +68,37 @@ void EventAction::EndOfEventAction(const G4Event *anEvent) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::AddIonisation() {
-  fClusterSize += 1; // simple counter
+void EventAction::AddIonisation()
+{
+  fClusterSize += 1;  // simple counter
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::InvalidEvent() { fValidEvent = false; }
+void EventAction::InvalidEvent()
+{
+  fValidEvent = false;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::RecordInitialEnergy(const G4double& en) { fInitialEnergy = en; }
+void EventAction::RecordInitialEnergy(const G4double& en)
+{
+  fInitialEnergy = en;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::RecordInteractionEnergy(const G4double& en) {
+void EventAction::RecordInteractionEnergy(const G4double& en)
+{
   fInteractionEnergy = en;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::RecordFinalEnergy(const G4double& en) { fFinalEnergy = en; }
+void EventAction::RecordFinalEnergy(const G4double& en)
+{
+  fFinalEnergy = en;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

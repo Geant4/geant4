@@ -29,22 +29,22 @@
 //
 // ***************************************************************************
 #ifdef G4_USE_FLUKA
-#ifndef CMCYL_HH
-#define CMCYL_HH
+#  ifndef CMCYL_HH
+#    define CMCYL_HH
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-	extern struct {
-		G4int npcycl[6][IDMAXP];
-		G4int ievt;
-		G4int lout;
-	} cmcycl_;
-#ifdef __cplusplus
+#    ifdef __cplusplus
+extern "C"
+{
+#    endif
+  extern struct
+  {
+      G4int npcycl[6][IDMAXP];
+      G4int ievt;
+      G4int lout;
+  } cmcycl_;
+#    ifdef __cplusplus
 }
-#endif
+#    endif
 
-
-#endif
-#endif // G4_USE_FLUKA
+#  endif
+#endif  // G4_USE_FLUKA

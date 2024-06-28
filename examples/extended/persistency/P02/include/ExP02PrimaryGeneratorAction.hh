@@ -29,7 +29,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #ifndef ExP02PrimaryGeneratorAction_h
 #define ExP02PrimaryGeneratorAction_h 1
 
@@ -41,13 +41,13 @@ class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/// Primary generator action 
+/// Primary generator action
 
 class ExP02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    ExP02PrimaryGeneratorAction();    
-   ~ExP02PrimaryGeneratorAction();
+    ExP02PrimaryGeneratorAction();
+    ~ExP02PrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event*);
 
@@ -58,5 +58,3 @@ class ExP02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

@@ -51,22 +51,23 @@ class G4TouchableHistory;
 class G4HCofThisEvent;
 class Run;
 
-class TargetSD : public G4VSensitiveDetector {
-public:
-  explicit TargetSD(const G4String &);
-  ~TargetSD() override = default;
+class TargetSD : public G4VSensitiveDetector
+{
+  public:
+    explicit TargetSD(const G4String&);
+    ~TargetSD() override = default;
 
-  void Initialize(G4HCofThisEvent *) override;
-  G4bool ProcessHits(G4Step *, G4TouchableHistory *) override;
-  void EndOfEvent(G4HCofThisEvent *) override;
-  void clear() override;
-  void PrintAll() override;
+    void Initialize(G4HCofThisEvent*) override;
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
+    void clear() override;
+    void PrintAll() override;
 
-  TargetSD &operator = (const TargetSD &right) = delete;
-  TargetSD(const TargetSD &) = delete;
+    TargetSD& operator=(const TargetSD& right) = delete;
+    TargetSD(const TargetSD&) = delete;
 
-private:
-  Run *fRun = nullptr;
+  private:
+    Run* fRun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

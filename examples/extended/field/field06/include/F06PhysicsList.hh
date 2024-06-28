@@ -34,15 +34,14 @@
 #ifndef F06PhysicsList_h
 #define F06PhysicsList_h 1
 
-#include "globals.hh"
 #include "G4VModularPhysicsList.hh"
+#include "globals.hh"
 
 class G4VPhysicsConstructor;
 
-class F06PhysicsList: public G4VModularPhysicsList
+class F06PhysicsList : public G4VModularPhysicsList
 {
   public:
-
     F06PhysicsList();
     ~F06PhysicsList() override = default;
 
@@ -50,7 +49,6 @@ class F06PhysicsList: public G4VModularPhysicsList
     void ConstructProcess() override;
 
     void SetCuts() override;
-
 };
 
 #endif

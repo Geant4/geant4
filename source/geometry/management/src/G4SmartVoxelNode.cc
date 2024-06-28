@@ -32,13 +32,6 @@
 #include "G4SmartVoxelNode.hh"
 
 // --------------------------------------------------------------------
-G4Allocator<G4SmartVoxelNode>*& aNodeAllocator()
-{
-  G4ThreadLocalStatic G4Allocator<G4SmartVoxelNode>* _instance = nullptr;
-  return _instance;
-}
-
-// --------------------------------------------------------------------
 // Return true if contents equal
 //
 // Preconditions:

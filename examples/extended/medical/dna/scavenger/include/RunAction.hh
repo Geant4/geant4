@@ -39,20 +39,21 @@ class DetectorConstruction;
 namespace scavenger
 {
 
-class RunAction : public G4UserRunAction {
-public:
-  RunAction();
+class RunAction : public G4UserRunAction
+{
+  public:
+    RunAction();
 
-  ~RunAction() override = default;
+    ~RunAction() override = default;
 
-  G4Run *GenerateRun() override;
+    G4Run* GenerateRun() override;
 
-  void BeginOfRunAction(const G4Run *) override;
+    void BeginOfRunAction(const G4Run*) override;
 
-  void EndOfRunAction(const G4Run *) override;
+    void EndOfRunAction(const G4Run*) override;
 };
 
-}
+}  // namespace scavenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

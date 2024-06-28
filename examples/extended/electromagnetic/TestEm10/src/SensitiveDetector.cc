@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,20 +36,17 @@
 #include "SensitiveDetector.hh"
 
 #include "G4AnalysisManager.hh"
-#include "G4Step.hh"  
+#include "G4Step.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SensitiveDetector::SensitiveDetector(G4String name)
- : G4VSensitiveDetector(name), fEdep(0.)
-{}
+SensitiveDetector::SensitiveDetector(G4String name) : G4VSensitiveDetector(name), fEdep(0.) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SensitiveDetector::~SensitiveDetector()
-{}
+SensitiveDetector::~SensitiveDetector() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,10 +63,10 @@ G4bool SensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*)
   fEdep += edep;
 
   // verbose level can be set via /hits/verbose command
-  if (verboseLevel>1) {
-    G4cout << " Energy added to the hit: " <<  G4BestUnit(edep, "Energy") << G4endl;
+  if (verboseLevel > 1) {
+    G4cout << " Energy added to the hit: " << G4BestUnit(edep, "Energy") << G4endl;
   }
-    
+
   return true;
 }
 
@@ -82,9 +79,9 @@ void SensitiveDetector::EndOfEvent(G4HCofThisEvent*)
   analysisManager->FillH1(5, fEdep);
 
   // verbose level can be set via /hits/verbose command
-  if (verboseLevel>0) {
+  if (verboseLevel > 0) {
     G4cout << " Absorber: total energy:  " << G4BestUnit(fEdep, "Energy") << G4endl;
-  }        
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

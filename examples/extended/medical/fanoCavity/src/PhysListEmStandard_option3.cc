@@ -31,65 +31,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_option3.hh"
+
 #include "DetectorConstruction.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-
-#include "G4ComptonScattering.hh"
 #include "MyKleinNishinaCompton.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
-
-#include "G4eMultipleScattering.hh"
-
-#include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
 
+#include "G4BuilderType.hh"
+#include "G4ComptonScattering.hh"
+#include "G4EmParameters.hh"
+#include "G4GammaConversion.hh"
+#include "G4MscStepLimitType.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4ProcessManager.hh"
+#include "G4RayleighScattering.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eIonisation.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4eplusAnnihilation.hh"
 #include "G4hIonisation.hh"
 #include "G4hMultipleScattering.hh"
-
-#include "G4EmParameters.hh"
-#include "G4MscStepLimitType.hh"
-
-#include "G4BuilderType.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4EmParameters.hh"
-#include "G4MscStepLimitType.hh"
-
-#include "G4BuilderType.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard_option3::PhysListEmStandard_option3(const G4String& name,
-                               DetectorConstruction* det)
-: G4VPhysicsConstructor(name), fDetector(det)
+                                                       DetectorConstruction* det)
+  : G4VPhysicsConstructor(name), fDetector(det)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(1);
-  param->SetMinEnergy(10*eV);
-  param->SetMaxEnergy(10*GeV);
+  param->SetMinEnergy(10 * eV);
+  param->SetMaxEnergy(10 * GeV);
   param->SetNumberOfBinsPerDecade(20);
-  param->SetLowestElectronEnergy(100*eV);
-  param->SetStepFunction(0.2, 100*um);
+  param->SetLowestElectronEnergy(100 * eV);
+  param->SetStepFunction(0.2, 100 * um);
   param->SetBuildCSDARange(true);
-  param->SetMaxEnergyForCSDARange(10*GeV);
-  param->SetMscStepLimitType(fUseSafetyPlus); 
+  param->SetMaxEnergyForCSDARange(10 * GeV);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetLateralDisplacementAlg96(true);
-  param->SetMscRangeFactor(0.03);
+  param->SetFluctuationType(fUrbanFluctuation);
   SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard_option3::~PhysListEmStandard_option3()
-{}
+PhysListEmStandard_option3::~PhysListEmStandard_option3() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,54 +86,52 @@ void PhysListEmStandard_option3::ConstructProcess()
   // Add standard EM Processes
   //
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while( (*particleIterator)() ){
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
+
     if (particleName == "gamma") {
       // gamma
-    
+
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = 
-        new MyKleinNishinaCompton(fDetector);
-      comptonModel->SetCSFactor(1000.);      
-      compton->SetEmModel(comptonModel );
-            
+      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
+      comptonModel->SetCSFactor(1000.);
+      compton->SetEmModel(comptonModel);
+
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(compton);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-      
-    } else if (particleName == "e-") {
-      //electron
+    }
+    else if (particleName == "e-") {
+      // electron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-            
+
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
-                         
-      pmanager->AddProcess(msc,                       -1, 1,-1);
-      pmanager->AddProcess(eIoni,                     -1, 2, 1);
-            
-    } else if (particleName == "e+") {
-      //positron
+
+      pmanager->AddProcess(msc, -1, 1, -1);
+      pmanager->AddProcess(eIoni, -1, 2, 1);
+    }
+    else if (particleName == "e+") {
+      // positron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-            
+
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
-                               
-      pmanager->AddProcess(msc,                       -1, 1,-1);
-      pmanager->AddProcess(pIoni,                     -1, 2, 1);
-      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 2);
-             
-    } else if( particleName == "proton" ) {
-      //proton  
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1,-1);
-      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+
+      pmanager->AddProcess(msc, -1, 1, -1);
+      pmanager->AddProcess(pIoni, -1, 2, 1);
+      pmanager->AddProcess(new G4eplusAnnihilation, 0, -1, 2);
+    }
+    else if (particleName == "proton") {
+      // proton
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, -1);
+      pmanager->AddProcess(new G4hIonisation, -1, 2, 2);
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

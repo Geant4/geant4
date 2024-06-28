@@ -31,7 +31,7 @@
 //
 // ClassName:   PhysicsList
 //
-// Authors:  01.06.17 V.Ivanchenko 
+// Authors:  01.06.17 V.Ivanchenko
 //
 //
 ///////////////////////////////////////////
@@ -39,45 +39,45 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
+
 #include "PhysicsListMessenger.hh"
 
+#include "G4DecayPhysics.hh"
+#include "G4EmConfigurator.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4EmParameters.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmStandardPhysicsGS.hh"
-#include "G4EmStandardPhysicsSS.hh"
-#include "G4EmStandardPhysicsWVI.hh"
-#include "G4EmLivermorePhysics.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLowEPPhysics.hh"
-#include "G4DecayPhysics.hh"
-
+#include "G4LDMBremModel.hh"
+#include "G4LDMBremsstrahlung.hh"
 #include "G4LDMHi.hh"
 #include "G4LDMHiBar.hh"
 #include "G4LDMPhoton.hh"
-#include "G4LDMBremsstrahlung.hh"
-#include "G4LDMBremModel.hh"
-
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4EmConfigurator.hh"
-#include "G4EmParameters.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-  :G4VModularPhysicsList(),
-   fLDMPhotonMass(0.5*CLHEP::GeV),fLDMHiMass(0.1*CLHEP::GeV),
-   fLDMPhoton(true),fLDMHi(false)
-{ 
+  : G4VModularPhysicsList(),
+    fLDMPhotonMass(0.5 * CLHEP::GeV),
+    fLDMHiMass(0.1 * CLHEP::GeV),
+    fLDMPhoton(true),
+    fLDMHi(false)
+{
   fMessenger = new PhysicsListMessenger(this);
 
   // Decay Physics is always defined
@@ -103,10 +103,12 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  SetDefaultCutValue(1*mm);
+  SetDefaultCutValue(1 * mm);
   fDecayPhysicsList->ConstructParticle();
-  if(fLDMPhoton) { G4LDMPhoton::LDMPhotonDefinition(fLDMPhotonMass); }
-  if(fLDMHi) { 
+  if (fLDMPhoton) {
+    G4LDMPhoton::LDMPhotonDefinition(fLDMPhotonMass);
+  }
+  if (fLDMHi) {
     G4LDMHi::LDMHiDefinition(fLDMHiMass);
     G4LDMHiBar::LDMHiBarDefinition(fLDMHiMass);
   }
@@ -117,7 +119,7 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  fEmPhysicsList->ConstructProcess(); 
+  fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
   AddDarkMatter();
 }
@@ -126,70 +128,69 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  //G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
-  if (name == fEmName) { 
-    return; 
-
-  } else if (name == "emstandard_opt0") {
+  // G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  if (name == fEmName) {
+    return;
+  }
+  else if (name == "emstandard_opt0") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
-
-  } else if (name == "emstandard_opt1") {
+  }
+  else if (name == "emstandard_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1();
-
-  } else if (name == "emstandard_opt2") {
+  }
+  else if (name == "emstandard_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2();
-
-  } else if (name == "emstandard_opt3") {
+  }
+  else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
-
-  } else if (name == "emstandard_opt4") {
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-
-  } else if (name == "emstandardWVI") {
+  }
+  else if (name == "emstandardWVI") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsWVI();
-
-  } else if (name == "emstandardSS") {
+  }
+  else if (name == "emstandardSS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
-
-  } else if (name == "emstandardGS") {
+  }
+  else if (name == "emstandardGS") {
     fEmName = name;
     delete fEmPhysicsList;
-    
-    fEmPhysicsList = new G4EmStandardPhysicsGS();
 
-  } else if (name == "emlivermore") {
-    fEmName = name;    
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
+  }
+  else if (name == "emlivermore") {
+    fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics();
-
-  } else if (name == "empenelope") {
+  }
+  else if (name == "empenelope") {
     fEmName = name;
-    delete fEmPhysicsList;    
+    delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
-
-  } else if (name == "emlowenergy") {
+  }
+  else if (name == "emlowenergy") {
     fEmName = name;
-    delete fEmPhysicsList;    
+    delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics();
-
-  } else {
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
     return;
   }
 }
@@ -198,8 +199,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100.*eV,1e5);
-  if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100. * eV, 1e5);
+  if (verboseLevel > 0) {
+    DumpCutValuesTable();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -207,8 +210,8 @@ void PhysicsList::SetCuts()
 void PhysicsList::AddDarkMatter()
 {
   G4cout << " PhysicsList::AddDarkMatter: " << fLDMPhoton << G4endl;
-  if(fLDMPhoton) {
-    //G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  if (fLDMPhoton) {
+    // G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
     G4LDMBremsstrahlung* ldmb = new G4LDMBremsstrahlung();
     G4ParticleDefinition* p = G4Proton::Proton();
     G4ProcessManager* man = p->GetProcessManager();
@@ -218,20 +221,19 @@ void PhysicsList::AddDarkMatter()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::SetLDMPhotonMass(G4double val) 
-{ 
-  G4cout << "### PhysicsList::SetLDMPhotonMass: new value " << val/GeV
-         << " GeV" << G4endl;
-  fLDMPhotonMass = val; 
-  fLDMPhoton = true; 
+void PhysicsList::SetLDMPhotonMass(G4double val)
+{
+  G4cout << "### PhysicsList::SetLDMPhotonMass: new value " << val / GeV << " GeV" << G4endl;
+  fLDMPhotonMass = val;
+  fLDMPhoton = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetLDMHiMass(G4double val)
-{ 
-  fLDMHiMass = val; 
-  fLDMHi = true; 
+{
+  fLDMHiMass = val;
+  fLDMHi = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

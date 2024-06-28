@@ -32,19 +32,18 @@
 
 #include "StackingAction.hh"
 
-#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 #include "StackingMessenger.hh"
 
+#include "G4EmSecondaryParticleType.hh"
 #include "G4RunManager.hh"
 #include "G4Track.hh"
-#include "G4EmSecondaryParticleType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(EventAction* event)
- : fEventAction(event)
+StackingAction::StackingAction(EventAction* event) : fEventAction(event)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -58,72 +57,76 @@ StackingAction::~StackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  //keep primary particle
-  if (aTrack->GetParentID() == 0) { return fUrgent; }
+  // keep primary particle
+  if (aTrack->GetParentID() == 0) {
+    return fUrgent;
+  }
 
   G4int procID = aTrack->GetCreatorProcess()->GetProcessSubType();
   G4int modelID = aTrack->GetCreatorModelID();
 
-  //count secondary particles
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+  // count secondary particles
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->CountParticles(aTrack->GetDefinition());
   /*
-  G4cout << "###StackingAction: new " 
+  G4cout << "###StackingAction: new "
          << aTrack->GetDefinition()->GetParticleName()
          << " E(MeV)= " << aTrack->GetKineticEnergy()
          << "  " << aTrack->GetMomentumDirection() << G4endl;
   */
   //
-  //energy spectrum of secondaries
+  // energy spectrum of secondaries
   //
   G4double energy = aTrack->GetKineticEnergy();
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
 
   if (charge != 0.) {
-    analysisManager->FillH1(2,energy);
-    analysisManager->FillH1(4,energy);
-    if(procID >= 51 && procID <= 65) { 
-      analysisManager->FillH1(58,energy);
-      analysisManager->FillH1(60,energy);
-    } else if(_AugerElectron == modelID) {
-      analysisManager->FillH1(50,energy);
-      analysisManager->FillH1(52,energy);
-    } else if(_ePIXE == modelID) {
-      analysisManager->FillH1(54,energy);
-      analysisManager->FillH1(56,energy);
+    analysisManager->FillH1(2, energy);
+    analysisManager->FillH1(4, energy);
+    if (procID >= 51 && procID <= 65) {
+      analysisManager->FillH1(58, energy);
+      analysisManager->FillH1(60, energy);
+    }
+    else if (_AugerElectron == modelID) {
+      analysisManager->FillH1(50, energy);
+      analysisManager->FillH1(52, energy);
+    }
+    else if (_ePIXE == modelID) {
+      analysisManager->FillH1(54, energy);
+      analysisManager->FillH1(56, energy);
     }
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
-    analysisManager->FillH1(3,energy);
-    analysisManager->FillH1(5,energy);
-    if(procID >= 51 && procID <= 65) { 
-      analysisManager->FillH1(59,energy);
-      analysisManager->FillH1(61,energy);
-    } else if(_Fluorescence == modelID) {
-      analysisManager->FillH1(51,energy);
-      analysisManager->FillH1(53,energy);
-    } else if(_GammaPIXE == modelID) {
-      analysisManager->FillH1(55,energy);
-      analysisManager->FillH1(57,energy);
+    analysisManager->FillH1(3, energy);
+    analysisManager->FillH1(5, energy);
+    if (procID >= 51 && procID <= 65) {
+      analysisManager->FillH1(59, energy);
+      analysisManager->FillH1(61, energy);
     }
-  }  
+    else if (_Fluorescence == modelID) {
+      analysisManager->FillH1(51, energy);
+      analysisManager->FillH1(53, energy);
+    }
+    else if (_GammaPIXE == modelID) {
+      analysisManager->FillH1(55, energy);
+      analysisManager->FillH1(57, energy);
+    }
+  }
 
-  //stack or delete secondaries
+  // stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
   if (0 < fKillSecondary) {
     if (fKillSecondary == 1) {
       fEventAction->AddEnergy(energy);
-    }  
+    }
     status = fKill;
   }
-    
+
   return status;
 }
 

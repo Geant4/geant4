@@ -33,16 +33,17 @@
 #include "MyKleinNishinaMessenger.hh"
 
 #include "MyKleinNishinaCompton.hh"
+
 #include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyKleinNishinaMessenger::MyKleinNishinaMessenger(MyKleinNishinaCompton* pPhys)
-:fKleinNishina(pPhys), fCsFactor(0)
-{  
-  fCsFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor",this);
+  : fKleinNishina(pPhys), fCsFactor(0)
+{
+  fCsFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor", this);
   fCsFactor->SetGuidance("multiply Compton cross section");
-  fCsFactor->SetParameterName("factor",false);
+  fCsFactor->SetParameterName("factor", false);
   fCsFactor->SetRange("factor>=0");
 }
 
@@ -55,11 +56,11 @@ MyKleinNishinaMessenger::~MyKleinNishinaMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void MyKleinNishinaMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
+void MyKleinNishinaMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fCsFactor)
-   {fKleinNishina->SetCSFactor(fCsFactor->GetNewDoubleValue(newValue));}        
+  if (command == fCsFactor) {
+    fKleinNishina->SetCSFactor(fCsFactor->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

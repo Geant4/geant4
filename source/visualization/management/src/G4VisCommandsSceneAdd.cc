@@ -2643,8 +2643,8 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Text \"" << text
-	     << "\" has been added to scene \"" << currentSceneName << "\"."
+      G4cout << "Text '" << text
+	     << "' has been added to scene \"" << currentSceneName << "\"."
 	     << G4endl;
     }
   }
@@ -2731,8 +2731,8 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
   model->SetType("Text2D");
   model->SetGlobalTag("Text2D");
   std::ostringstream oss;
-  oss << "Text2D: \"" << g4text.GetText()
-  << "\" at " << g4text.GetPosition().x() << ',' << g4text.GetPosition().y()
+  oss << "Text2D: '" << g4text.GetText()
+  << "' at " << g4text.GetPosition().x() << ',' << g4text.GetPosition().y()
   << " with size " << g4text.GetScreenSize()
   << " with offsets " << g4text.GetXOffset() << ',' << g4text.GetYOffset();
   model->SetGlobalDescription(oss.str());
@@ -2740,8 +2740,8 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "2D text \"" << text
-	     << "\" has been added to scene \"" << currentSceneName << "\"."
+      G4cout << "2D text '" << text
+	     << "' has been added to scene \"" << currentSceneName << "\"."
 	     << G4endl;
     }
   }

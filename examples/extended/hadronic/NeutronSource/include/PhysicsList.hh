@@ -36,25 +36,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
- ~PhysicsList() override = default;
+  public:
+    PhysicsList();
+    ~PhysicsList() override = default;
 
-public:
-  void ConstructProcess() override;
-  void SetCuts()override;
+  public:
+    void ConstructProcess() override;
+    void SetCuts() override;
 
-private:
-   G4VPhysicsConstructor* fHadronElastic    = nullptr;
-   G4VPhysicsConstructor* fHadronInelastic  = nullptr;
-   G4VPhysicsConstructor* fIonElastic       = nullptr;
-   G4VPhysicsConstructor* fIonInelastic     = nullptr;
-   G4VPhysicsConstructor* fGammaNuclear     = nullptr;
-   G4VPhysicsConstructor* fElectromagnetic  = nullptr;
-   G4VPhysicsConstructor* fDecay            = nullptr;
-   G4VPhysicsConstructor* fRadioactiveDecay = nullptr;
+  private:
+    G4VPhysicsConstructor* fHadronElastic = nullptr;
+    G4VPhysicsConstructor* fHadronInelastic = nullptr;
+    G4VPhysicsConstructor* fIonElastic = nullptr;
+    G4VPhysicsConstructor* fIonInelastic = nullptr;
+    G4VPhysicsConstructor* fGammaNuclear = nullptr;
+    G4VPhysicsConstructor* fElectromagnetic = nullptr;
+    G4VPhysicsConstructor* fDecay = nullptr;
+    G4VPhysicsConstructor* fRadioactiveDecay = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

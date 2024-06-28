@@ -33,16 +33,16 @@
 #include "StackingMessenger.hh"
 
 #include "StackingAction.hh"
+
 #include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingMessenger::StackingMessenger(StackingAction* stack)
- :G4UImessenger(),fStackAction(stack)
-{   
-  fKillCmd = new G4UIcmdWithABool("/testex/killSecondaries",this);
+StackingMessenger::StackingMessenger(StackingAction* stack) : G4UImessenger(), fStackAction(stack)
+{
+  fKillCmd = new G4UIcmdWithABool("/testex/killSecondaries", this);
   fKillCmd->SetGuidance("Kill secondary charged particles");
-  fKillCmd->SetParameterName("choice",true);
+  fKillCmd->SetParameterName("choice", true);
   fKillCmd->SetDefaultValue(false);
 }
 
@@ -56,9 +56,10 @@ StackingMessenger::~StackingMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{     
-  if(command == fKillCmd)
-    {fStackAction->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));}
+{
+  if (command == fKillCmd) {
+    fStackAction->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

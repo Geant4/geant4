@@ -31,7 +31,6 @@
 #define B2PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -52,14 +51,14 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() override;
 
-    void GeneratePrimaries(G4Event* ) override;
+    void GeneratePrimaries(G4Event*) override;
 
-    G4ParticleGun* GetParticleGun() {return fParticleGun;}
+    G4ParticleGun* GetParticleGun() { return fParticleGun; }
 
   private:
-    G4ParticleGun* fParticleGun = nullptr; // G4 particle gun
+    G4ParticleGun* fParticleGun = nullptr;  // G4 particle gun
 };
 
-}
+}  // namespace B2
 
 #endif

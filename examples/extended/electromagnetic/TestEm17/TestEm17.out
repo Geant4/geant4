@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -287,7 +287,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax= 1000 PeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -629,7 +629,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.390000s Real=1.525925s Sys=0.010000s
+  User=1.320000s Real=1.363002s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -685,7 +685,7 @@ N=17 V[N]={432129628493770164, 1814378723063674975, 1209460836733901477, 4037844
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.310000s Real=1.488824s Sys=0.010000s
+  User=1.280000s Real=1.291411s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -740,7 +740,7 @@ N=17 V[N]={666189274156109320, 913680459780043419, 495444254095043894, 163299520
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.330000s Real=1.406382s Sys=0.010000s
+  User=1.140000s Real=1.234717s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -748,11 +748,12 @@ Run Summary
  Simulation: total CrossSection = 0.47686 /cm	 MeanFreePath = 2.0971 cm 	 massicCrossSection = 0.060592 cm2/g
 #
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
+Deleting G4Run (id:2) 
+UserDetectorConstruction deleted 0x1786650
+UserPhysicsList deleted 0x17c5a18
+UserActionInitialization deleted 0
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.

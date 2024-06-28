@@ -5,6 +5,13 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-04-29 Ivana Hrivnacova (fieldex03-V11-02-00)
+- Replaced FieldSetup and FieldMessenger classes with usage of new
+  field builder class (G4FieldBuilder)
+- Moved setting field value (ThreeVector) from FieldSetup (removed)
+  in DetectorConstruction and its messenger and removed
+  setting Z-value only
+
 ## 2023-07-05 I. Hrivnacova (fieldex03-V11-01-00)
 - Clang-tidy, new coding guidelines
 - Clean-up trailing white-spaces

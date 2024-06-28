@@ -43,15 +43,16 @@
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction *det)
-  : fDetector(det) {
+DetectorMessenger::DetectorMessenger(DetectorConstruction* det) : fDetector(det)
+{
   fDetDir = new G4UIdirectory("/testem/");
   fDetDir->SetGuidance("Detector control.");
 
@@ -115,7 +116,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction *det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger() {
+DetectorMessenger::~DetectorMessenger()
+{
   delete fGasMaterCmd;
   delete fGasThickCmd;
   delete fGasRadCmd;
@@ -129,22 +131,30 @@ DetectorMessenger::~DetectorMessenger() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   if (command == fGasMaterCmd) {
     fDetector->SetGasMaterial(newValue);
-  } else if (command == fWindowMaterCmd) {
+  }
+  else if (command == fWindowMaterCmd) {
     fDetector->SetContainerMaterial(newValue);
-  } else if (command == fWorldMaterCmd) {
+  }
+  else if (command == fWorldMaterCmd) {
     fDetector->SetWorldMaterial(newValue);
-  } else if (command == fGasThickCmd) {
+  }
+  else if (command == fGasThickCmd) {
     fDetector->SetGasThickness(fGasThickCmd->GetNewDoubleValue(newValue));
-  } else if (command == fGasRadCmd) {
+  }
+  else if (command == fGasRadCmd) {
     fDetector->SetGasRadius(fGasRadCmd->GetNewDoubleValue(newValue));
-  } else if (command == fWinThickCmd) {
+  }
+  else if (command == fWinThickCmd) {
     fDetector->SetContainerThickness(fWinThickCmd->GetNewDoubleValue(newValue));
-  } else if (command == fStepMaxCmd) {
+  }
+  else if (command == fStepMaxCmd) {
     fDetector->SetMaxChargedStep(fStepMaxCmd->GetNewDoubleValue(newValue));
-  } else if (command == fIonCmd) {
+  }
+  else if (command == fIonCmd) {
     fDetector->SetPairEnergy(fIonCmd->GetNewDoubleValue(newValue));
   }
 }

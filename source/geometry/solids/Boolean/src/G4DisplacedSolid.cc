@@ -467,6 +467,24 @@ G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Return the number of constituents used for construction of the solid
+
+G4int G4DisplacedSolid::GetNumOfConstituents() const
+{
+  return fPtrSolid->GetNumOfConstituents();
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return true if the solid has only planar faces
+
+G4bool G4DisplacedSolid::IsFaceted() const
+{
+  return fPtrSolid->IsFaceted();  
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Return object type name
 
 G4GeometryType G4DisplacedSolid::GetEntityType() const 

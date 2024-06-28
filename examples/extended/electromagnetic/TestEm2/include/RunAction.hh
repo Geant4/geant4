@@ -33,9 +33,9 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "G4UserRunAction.hh"
-#include "G4ThreeVector.hh"
 #include "G4AnalysisManager.hh"
+#include "G4ThreeVector.hh"
+#include "G4UserRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,39 +48,36 @@ class Run;
 
 class RunAction : public G4UserRunAction
 {
-public:
+  public:
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    ~RunAction() override;
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
- ~RunAction() override;
+    virtual G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
-  virtual G4Run* GenerateRun() override;
-  void BeginOfRunAction(const G4Run*) override;
-  void   EndOfRunAction(const G4Run*) override;
+    void SetVerbose(G4int val);
 
-  void SetVerbose(G4int val);
+    // Acceptance parameters
+    void SetEdepAndRMS(G4ThreeVector);
 
-  // Acceptance parameters
-  void  SetEdepAndRMS(G4ThreeVector);
-     
-private:
-  void BookHisto();
-  
-private:
-  DetectorConstruction*   fDet = nullptr;
-  PrimaryGeneratorAction* fKin = nullptr;
-  RunActionMessenger*     fRunMessenger = nullptr;
-  G4AnalysisManager*      fAnalysisManager = nullptr;
-  Run*  fRun = nullptr;
+  private:
+    void BookHisto();
 
-  G4int    fVerbose   = 0;
-    
-  G4double fEdeptrue  = 1.;
-  G4double fRmstrue   = 1.;
-  G4double fLimittrue = DBL_MAX;
+  private:
+    DetectorConstruction* fDet = nullptr;
+    PrimaryGeneratorAction* fKin = nullptr;
+    RunActionMessenger* fRunMessenger = nullptr;
+    G4AnalysisManager* fAnalysisManager = nullptr;
+    Run* fRun = nullptr;
 
+    G4int fVerbose = 0;
+
+    G4double fEdeptrue = 1.;
+    G4double fRmstrue = 1.;
+    G4double fLimittrue = DBL_MAX;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -50,18 +50,18 @@
 // -- Physics list, and tool to modify it and activate fast simulation:
 //---------------------------------------------------------------------
 #include "FTFP_BERT.hh"
-#include "G4FastSimulationPhysics.hh"
 
-#include "G4UImanager.hh"
+#include "G4FastSimulationPhysics.hh"
 #include "G4RunManagerFactory.hh"
+#include "G4UImanager.hh"
 
 // ----------------------------------------------------------------
 // -- Action initialization (includes the primary generator action:
 // ----------------------------------------------------------------
 #include "Par01ActionInitialization.hh"
 
-#include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -95,9 +95,9 @@ int main(int argc, char** argv)
   // -- Create a physics list (note : FTFP_BERT is a G4VModularPhysicsList
   // -- which allows to use the subsequent G4FastSimulationPhysics tool to
   // -- activate the fast simulation):
-  auto  physicsList = new FTFP_BERT;
+  auto physicsList = new FTFP_BERT;
   // -- Create helper tool, used to activate the fast simulation:
-  auto  fastSimulationPhysics = new G4FastSimulationPhysics();
+  auto fastSimulationPhysics = new G4FastSimulationPhysics();
   fastSimulationPhysics->BeVerbose();
   // -- activation of fast simulation for particles having fast simulation models
   // -- attached in the mass geometry:
@@ -106,17 +106,17 @@ int main(int argc, char** argv)
   fastSimulationPhysics->ActivateFastSimulation("gamma");
   // -- activation of fast simulation for particles having fast simulation models
   // -- attached in the parallel geometry:
-  fastSimulationPhysics->ActivateFastSimulation("pi+","pionGhostWorld");
-  fastSimulationPhysics->ActivateFastSimulation("pi-","pionGhostWorld");
+  fastSimulationPhysics->ActivateFastSimulation("pi+", "pionGhostWorld");
+  fastSimulationPhysics->ActivateFastSimulation("pi-", "pionGhostWorld");
   // -- Attach the fast simulation physics constructor to the physics list:
-  physicsList->RegisterPhysics( fastSimulationPhysics );
+  physicsList->RegisterPhysics(fastSimulationPhysics);
   // -- Finally passes the physics list to the run manager:
   runManager->SetUserInitialization(physicsList);
 
   //-------------------------------
   // UserAction classes
   //-------------------------------
-  runManager->SetUserInitialization( new Par01ActionInitialization );
+  runManager->SetUserInitialization(new Par01ActionInitialization);
 
   // Initialize Run manager
   runManager->Initialize();
@@ -126,22 +126,20 @@ int main(int argc, char** argv)
   //----------------
   G4cout << "Instantiating Visualization Manager......." << G4endl;
   G4VisManager* visManager = new G4VisExecutive;
-  visManager -> Initialize ();
+  visManager->Initialize();
 
-  if(ui)
-  {
+  if (ui) {
     //--------------------------
     // Define (G)UI
     //--------------------------
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
+  else {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    G4UImanager * UImanager = G4UImanager::GetUIpointer();
-    UImanager->ApplyCommand(command+fileName);
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    UImanager->ApplyCommand(command + fileName);
   }
 
   // Free the store: user actions, physics_list and detector_description are

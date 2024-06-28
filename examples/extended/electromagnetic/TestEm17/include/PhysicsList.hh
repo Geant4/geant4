@@ -41,26 +41,24 @@ class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList();
+    ~PhysicsList();
 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
     void AddPhysicsList(const G4String& name);
 
   private:
-    
     G4VPhysicsConstructor* fEmPhysicsList;
     G4VPhysicsConstructor* fMuNuclPhysicsList;
-    G4String               fEmName;
+    G4String fEmName;
 
-    PhysicsListMessenger*  fMessenger;
+    PhysicsListMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

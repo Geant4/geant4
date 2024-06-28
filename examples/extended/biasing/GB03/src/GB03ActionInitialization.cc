@@ -28,17 +28,16 @@
 /// \brief Implementation of the GB03ActionInitialization class
 
 #include "GB03ActionInitialization.hh"
+
 #include "GB03PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB03ActionInitialization::GB03ActionInitialization()
-{}
+GB03ActionInitialization::GB03ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB03ActionInitialization::~GB03ActionInitialization()
-{}
+GB03ActionInitialization::~GB03ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,8 +48,6 @@ void GB03ActionInitialization::Build() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void GB03ActionInitialization::BuildForMaster() const
-{}
+void GB03ActionInitialization::BuildForMaster() const {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

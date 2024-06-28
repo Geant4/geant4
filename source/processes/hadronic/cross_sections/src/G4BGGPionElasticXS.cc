@@ -57,11 +57,7 @@ G4double G4BGGPionElasticXS::theGlauberFacPiPlus[93] = {0.0};
 G4double G4BGGPionElasticXS::theCoulombFacPiPlus[93] = {0.0};
 G4double G4BGGPionElasticXS::theGlauberFacPiMinus[93] = {0.0};
 G4double G4BGGPionElasticXS::theCoulombFacPiMinus[93] = {0.0};
-G4int    G4BGGPionElasticXS::theA[93] = {0};
-
-#ifdef G4MULTITHREADED
-G4Mutex G4BGGPionElasticXS::pionElasticXSMutex = G4MUTEX_INITIALIZER;
-#endif
+G4int G4BGGPionElasticXS::theA[93] = {0};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,23 +65,24 @@ G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition* p)
  : G4VCrossSectionDataSet("BarashenkovGlauberGribov") 
 {
   verboseLevel = 0;
-  fGlauberEnergy = 91.*GeV;
-  fLowEnergy = 20.*MeV;
-  fLowestEnergy = 1.*MeV;
+  fGlauberEnergy = 91.*CLHEP::GeV;
+  fLowEnergy = 20.*CLHEP::MeV;
+  fLowestEnergy = 1.*CLHEP::MeV;
   SetMinKinEnergy(0.0);
   SetMaxKinEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
-  fPion = nullptr;
-  fGlauber = nullptr;
-  fHadron  = nullptr;
+  fPion    = new G4UPiNuclearCrossSection();
+  fGlauber = new G4ComponentGGHadronNucleusXsc();
+  fHadron  = new G4HadronNucleonXsc();
 
-  fG4pow   = G4Pow::GetInstance();
+  fG4pow = G4Pow::GetInstance();
 
-  theProton= G4Proton::Proton();
-  thePiPlus= G4PionPlus::PionPlus();
+  theProton = G4Proton::Proton();
+  thePiPlus = G4PionPlus::PionPlus();
   isPiplus = (p == thePiPlus);
-  isMaster = false;
   SetForAllAtomsAndEnergies(true);
+
+  if (0 == theA[0]) { Initialise(); } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,6 +133,7 @@ G4BGGPionElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
       cross = fPion->GetElasticCrossSection(dp, Z, theA[Z]);
     }
   }
+#ifdef G4VERBOSE
   if(verboseLevel > 1) {
     G4cout << "G4BGGPionElasticXS::GetElementCrossSection  for "
            << dp->GetDefinition()->GetParticleName()
@@ -144,12 +142,15 @@ G4BGGPionElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
            << " XS(b)= " << cross/barn 
            << G4endl;
   }
+#endif
   return cross;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double
 G4BGGPionElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp, 
-                                       G4int Z, G4int A, 
+                                       G4int, G4int A, 
                                        const G4Isotope*,
                                        const G4Element*,
                                        const G4Material*)
@@ -159,14 +160,16 @@ G4BGGPionElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
                               dp->GetKineticEnergy());
   G4double cross = A*fHadron->GetElasticHadronNucleonXsc();
 
+#ifdef G4VERBOSE
   if(verboseLevel > 1) {
     G4cout << "G4BGGPionElasticXS::GetIsoCrossSection  for "
            << dp->GetDefinition()->GetParticleName()
            << "  Ekin(GeV)= " << dp->GetKineticEnergy()
-           << " in nucleus Z= " << Z << "  A= " << A
+           << " in nucleus Z=1  A=" << A
            << " XS(b)= " << cross/barn 
            << G4endl;
   }
+#endif
   return cross;
 }
 
@@ -174,7 +177,6 @@ G4BGGPionElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 
 void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(fPion) { return; }
   if(verboseLevel > 1) {
     G4cout << "G4BGGPionElasticXS::BuildPhysicsTable for " 
            << p.GetParticleName() << G4endl;
@@ -187,80 +189,61 @@ void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
        << p.GetParticleName() << G4endl; 
     G4Exception("G4BGGPionElasticXS::BuildPhysicsTable", "had001", 
                 FatalException, ed);
-    return;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4BGGPionElasticXS::Initialise()
+{
+  theA[0] = theA[1] = 1;
+  G4ThreeVector mom(0.0,0.0,1.0);
+  G4DynamicParticle dp(thePiPlus, mom, fGlauberEnergy);
+
+  G4NistManager* nist = G4NistManager::Instance();
+
+  G4double csup, csdn;
+  for (G4int iz=2; iz<93; ++iz) {
+
+    G4int A = G4lrint(nist->GetAtomicMassAmu(iz));
+    theA[iz] = A;
+
+    csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);
+    csdn = fPion->GetElasticCrossSection(&dp, iz, A);
+    theGlauberFacPiPlus[iz] = csdn/csup;
   }
 
-  fPion    = new G4UPiNuclearCrossSection();
-  fGlauber = new G4ComponentGGHadronNucleusXsc();
-  fHadron  = new G4HadronNucleonXsc();
+  dp.SetDefinition(G4PionMinus::PionMinus());
+  for (G4int iz=2; iz<93; ++iz) {
+    csup = fGlauber->GetElasticGlauberGribov(&dp, iz, theA[iz]);
+    csdn = fPion->GetElasticCrossSection(&dp, iz, theA[iz]);
+    theGlauberFacPiMinus[iz] = csdn/csup;
 
-  fPion->BuildPhysicsTable(p);
-
-  if(0 == theA[0]) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&pionElasticXSMutex);
-    if(0 == theA[0]) { 
-#endif
-      isMaster = true;
-#ifdef G4MULTITHREADED
+    if (verboseLevel > 1) {
+      G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
+	     << " factorPiPlus= " << theGlauberFacPiPlus[iz] 
+	     << " factorPiMinus= " << theGlauberFacPiMinus[iz] 
+	     << G4endl; 
     }
-    G4MUTEXUNLOCK(&pionElasticXSMutex);
-#endif
-  } else {
-    return;
   }
+  theCoulombFacPiPlus[1] = 1.0;
+  theCoulombFacPiMinus[1]= 1.0;
+  dp.SetKineticEnergy(fLowEnergy);
+  dp.SetDefinition(thePiPlus);
+  for (G4int iz=2; iz<93; ++iz) {
+    theCoulombFacPiPlus[iz] = fPion->GetElasticCrossSection(&dp, iz, theA[iz])
+      /CoulombFactorPiPlus(fLowEnergy, iz);
+  }
+  dp.SetDefinition(G4PionMinus::PionMinus());
+  for(G4int iz=2; iz<93; ++iz) {
+    theCoulombFacPiMinus[iz] = fPion->GetElasticCrossSection(&dp, iz, theA[iz])
+      /FactorPiMinus(fLowEnergy);
 
-  if(isMaster && 0 == theA[0]) {
-
-    theA[0] = theA[1] = 1;
-    G4ThreeVector mom(0.0,0.0,1.0);
-    G4DynamicParticle dp(thePiPlus, mom, fGlauberEnergy);
-
-    G4NistManager* nist = G4NistManager::Instance();
-
-    G4double csup, csdn;
-    for(G4int iz=2; iz<93; ++iz) {
-
-      G4int A = G4lrint(nist->GetAtomicMassAmu(iz));
-      theA[iz] = A;
-
-      csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);
-      csdn = fPion->GetElasticCrossSection(&dp, iz, A);
-      theGlauberFacPiPlus[iz] = csdn/csup;
-    }
-
-    dp.SetDefinition(G4PionMinus::PionMinus());
-    for(G4int iz=2; iz<93; ++iz) {
-      csup = fGlauber->GetElasticGlauberGribov(&dp, iz, theA[iz]);
-      csdn = fPion->GetElasticCrossSection(&dp, iz, theA[iz]);
-      theGlauberFacPiMinus[iz] = csdn/csup;
-
-      if(verboseLevel > 0) {
-        G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
-               << " factorPiPlus= " << theGlauberFacPiPlus[iz] 
-               << " factorPiMinus= " << theGlauberFacPiMinus[iz] 
-               << G4endl; 
-      }
-    }
-    theCoulombFacPiPlus[1] = 1.0;
-    theCoulombFacPiMinus[1]= 1.0;
-    dp.SetKineticEnergy(fLowEnergy);
-    dp.SetDefinition(thePiPlus);
-    for(G4int iz=2; iz<93; ++iz) {
-      theCoulombFacPiPlus[iz] = fPion->GetElasticCrossSection(&dp, iz, theA[iz])
-        /CoulombFactorPiPlus(fLowEnergy, iz);
-    }
-    dp.SetDefinition(G4PionMinus::PionMinus());
-    for(G4int iz=2; iz<93; ++iz) {
-      theCoulombFacPiMinus[iz] = fPion->GetElasticCrossSection(&dp, iz, theA[iz])
-        /FactorPiMinus(fLowEnergy);
-
-      if(verboseLevel > 0) {
-        G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
-               << " CoulombFactorPiPlus= " << theCoulombFacPiPlus[iz] 
-               << " CoulombFactorPiMinus= " << theCoulombFacPiMinus[iz] 
-               << G4endl; 
-      }
+    if(verboseLevel > 1) {
+      G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
+	     << " CoulombFactorPiPlus= " << theCoulombFacPiPlus[iz] 
+	     << " CoulombFactorPiMinus= " << theCoulombFacPiMinus[iz] 
+	     << G4endl; 
     }
   }
 }

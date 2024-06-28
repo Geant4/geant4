@@ -34,28 +34,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4UserEventAction.hh"
 #include "G4Event.hh"
+#include "G4UserEventAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class EventAction : public G4UserEventAction
 {
-public: 
+  public:
+    EventAction();
+    ~EventAction() override = default;
 
-  EventAction();
-  ~EventAction() override = default;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
-  void BeginOfEventAction(const G4Event*) override;
-  void EndOfEventAction(const G4Event*) override;
+    EventAction& operator=(const EventAction& right) = delete;
+    EventAction(const EventAction&) = delete;
 
-  EventAction & operator=(const EventAction &right) = delete;
-  EventAction(const EventAction&) = delete;
-
-private:
-
-  G4int fVerbose;
+  private:
+    G4int fVerbose;
 };
 
 #endif

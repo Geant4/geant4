@@ -27,7 +27,7 @@
 /// \brief Definition of the B03PVolumeStore class
 //
 //
-// GEANT4 tag 
+// GEANT4 tag
 //
 // ----------------------------------------------------------------------
 // Class B03PVolumeStore
@@ -42,24 +42,26 @@
 #ifndef B03PVolumeStore_hh
 #define B03PVolumeStore_hh B03PVolumeStore_hh
 
-#include "globals.hh"
-#include <set>
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
+#include "globals.hh"
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B03SetGeometryCell;
+#include <set>
 
-class B03PVolumeStore {
-public:
-  B03PVolumeStore();
-  ~B03PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4String GetPNames() const;
+typedef std::set<G4GeometryCell, G4GeometryCellComp> B03SetGeometryCell;
 
-private:
-  B03SetGeometryCell fSetGeometryCell;
+class B03PVolumeStore
+{
+  public:
+    B03PVolumeStore();
+    ~B03PVolumeStore();
+
+    void AddPVolume(const G4GeometryCell& cell);
+    const G4VPhysicalVolume* GetPVolume(const G4String& name) const;
+    G4String GetPNames() const;
+
+  private:
+    B03SetGeometryCell fSetGeometryCell;
 };
 
 #endif

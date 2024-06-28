@@ -33,46 +33,49 @@
 #ifndef F02CalorHit_h
 #define F02CalorHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4VHit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02CalorHit : public G4VHit
 {
   public:
+    F02CalorHit() = default;
+    F02CalorHit(const F02CalorHit&);
+    ~F02CalorHit() override = default;
 
-      F02CalorHit() = default;
-      F02CalorHit(const F02CalorHit&);
-      ~F02CalorHit() override = default;
+    const F02CalorHit& operator=(const F02CalorHit&);
+    G4bool operator==(const F02CalorHit&) const;
 
-      const F02CalorHit& operator=(const F02CalorHit&);
-      G4bool operator==(const F02CalorHit&) const;
+    inline void* operator new(size_t);
+    inline void operator delete(void*);
 
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
-
-      void Print() override;
+    void Print() override;
 
   public:
+    void AddAbs(G4double de, G4double dl)
+    {
+      fEdepAbs += de;
+      fTrackLengthAbs += dl;
+    };
+    void AddGap(G4double de, G4double dl)
+    {
+      fEdepGap += de;
+      fTrackLengthGap += dl;
+    };
 
-      void AddAbs(G4double de, G4double dl)
-           {fEdepAbs += de; fTrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl)
-           {fEdepGap += de; fTrackLengthGap += dl;};
-
-      G4double GetEdepAbs()    { return fEdepAbs; };
-      G4double GetTrackAbs()   { return fTrackLengthAbs; };
-      G4double GetEdepGap()    { return fEdepGap; };
-      G4double GetTrackGap()   { return fTrackLengthGap; };
+    G4double GetEdepAbs() { return fEdepAbs; };
+    G4double GetTrackAbs() { return fTrackLengthAbs; };
+    G4double GetEdepGap() { return fEdepGap; };
+    G4double GetTrackGap() { return fTrackLengthGap; };
 
   private:
-
-      G4double fEdepAbs = 0.;
-      G4double fTrackLengthAbs = 0.;
-      G4double fEdepGap = 0.;
-      G4double fTrackLengthGap = 0.;
+    G4double fEdepAbs = 0.;
+    G4double fTrackLengthAbs = 0.;
+    G4double fEdepGap = 0.;
+    G4double fTrackLengthGap = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,16 +88,15 @@ extern G4ThreadLocal G4Allocator<F02CalorHit>* F02CalorHitAllocator;
 
 inline void* F02CalorHit::operator new(size_t)
 {
-    if(!F02CalorHitAllocator)
-      F02CalorHitAllocator = new G4Allocator<F02CalorHit>;
-    return (void*) F02CalorHitAllocator->MallocSingle();
+  if (!F02CalorHitAllocator) F02CalorHitAllocator = new G4Allocator<F02CalorHit>;
+  return (void*)F02CalorHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void F02CalorHit::operator delete(void* aHit)
 {
-  F02CalorHitAllocator->FreeSingle((F02CalorHit*) aHit);
+  F02CalorHitAllocator->FreeSingle((F02CalorHit*)aHit);
 }
 
 #endif

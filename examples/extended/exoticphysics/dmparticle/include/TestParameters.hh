@@ -48,66 +48,61 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TestParameters
 {
+  public:
+    // With description
 
-public:
-  // With description
+    static TestParameters* GetPointer();
 
-  static TestParameters* GetPointer();
+  private:
+    TestParameters();
 
-private:
+  public:  // Without description
+    ~TestParameters();
 
-  TestParameters();
+    void SetMaxEnergy(G4double value);
 
-public: // Without description
+    G4double GetMaxEnergy() const;
 
-  ~TestParameters();
+    void SetNumberBins(G4int value);
 
-  void SetMaxEnergy(G4double value);
+    G4int GetNumberBins() const;
 
-  G4double GetMaxEnergy() const;
+    void SetPositionZ(G4double val);
 
-  void SetNumberBins(G4int value);
+    G4double GetPositionZ() const;
 
-  G4int GetNumberBins() const;
+    void SetBeamEnergy(G4double val);
 
-  void SetPositionZ(G4double val);
+    G4double GetBeamEnergy() const;
 
-  G4double GetPositionZ() const;
+    void SetAlphaFactor(G4double val);
 
-  void SetBeamEnergy(G4double val);
+    G4double GetAlphaFactor() const;
 
-  G4double GetBeamEnergy() const;
+    void SetBeamParticle(const G4ParticleDefinition*);
 
-  void SetAlphaFactor(G4double val);
+    const G4ParticleDefinition* GetBeamParticle() const;
 
-  G4double GetAlphaFactor() const;
+  private:
+    static TestParameters* fManager;
 
-  void SetBeamParticle(const G4ParticleDefinition*);
+    G4double fMaxEnergy;
+    G4double fPositionZ;
+    G4double fBeamEnergy;
+    G4double fEpsilon;
 
-  const G4ParticleDefinition* GetBeamParticle() const;
+    G4int fBinsE;
 
-private:
-
-  static TestParameters* fManager;
-
-  G4double fMaxEnergy;
-  G4double fPositionZ;
-  G4double fBeamEnergy;
-  G4double fEpsilon;
-
-  G4int fBinsE; 
-
-  const G4ParticleDefinition* fParticle;
+    const G4ParticleDefinition* fParticle;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

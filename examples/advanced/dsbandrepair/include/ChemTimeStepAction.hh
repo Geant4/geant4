@@ -31,13 +31,13 @@
 #define CHEMITACTION_H
 
 #include "G4UserTimeStepAction.hh"
-#include "G4VUserChemistryList.hh"
+#include "G4ChemTimeStepModel.hh"
 #include "ChemNtupleManager.hh"
 
 class ChemTimeStepAction : public G4UserTimeStepAction
 {
     public:
-    ChemTimeStepAction(ChemNtupleManager* histo, TimeStepModel md = fSBS);
+    ChemTimeStepAction(ChemNtupleManager* histo, G4ChemTimeStepModel md = G4ChemTimeStepModel::SBS);
     ~ChemTimeStepAction() override = default;
     ChemTimeStepAction(const ChemTimeStepAction& other);
     ChemTimeStepAction& operator=(const ChemTimeStepAction& other);

@@ -31,8 +31,8 @@
 #ifndef LXeEventMessenger_h
 #define LXeEventMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class LXeEventAction;
 class G4UIcmdWithABool;
@@ -40,18 +40,18 @@ class G4UIcmdWithAnInteger;
 
 class LXeEventMessenger : public G4UImessenger
 {
- public:
-  LXeEventMessenger(LXeEventAction*);
-  ~LXeEventMessenger() override;
+  public:
+    LXeEventMessenger(LXeEventAction*);
+    ~LXeEventMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  LXeEventAction* fLXeEvent = nullptr;
-  G4UIcmdWithAnInteger* fVerboseCmd = nullptr;
-  G4UIcmdWithAnInteger* fPmtThresholdCmd = nullptr;
-  G4UIcmdWithABool* fForceDrawPhotonsCmd = nullptr;
-  G4UIcmdWithABool* fForceDrawNoPhotonsCmd = nullptr;
+  private:
+    LXeEventAction* fLXeEvent = nullptr;
+    G4UIcmdWithAnInteger* fVerboseCmd = nullptr;
+    G4UIcmdWithAnInteger* fPmtThresholdCmd = nullptr;
+    G4UIcmdWithABool* fForceDrawPhotonsCmd = nullptr;
+    G4UIcmdWithABool* fForceDrawNoPhotonsCmd = nullptr;
 };
 
 #endif

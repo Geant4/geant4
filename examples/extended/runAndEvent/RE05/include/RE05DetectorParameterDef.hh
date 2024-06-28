@@ -28,47 +28,47 @@
 /// \brief Definition of the RE05DetectorParameterDef class
 //
 
-     G4double fExpHall_x;
-     G4double fExpHall_y;
-     G4double fExpHall_z;
+G4double fExpHall_x;
+G4double fExpHall_y;
+G4double fExpHall_z;
 
-     G4double fTrkTubs_rmax;
-     G4double fTrkTubs_rmin;
-     G4double fTrkTubs_dz;
-     G4double fTrkTubs_sphi;
-     G4double fTrkTubs_dphi;
+G4double fTrkTubs_rmax;
+G4double fTrkTubs_rmin;
+G4double fTrkTubs_dz;
+G4double fTrkTubs_sphi;
+G4double fTrkTubs_dphi;
 
-     G4int fNotrkLayers;
-     G4double fTracker_radius[5];
-     G4double fTracker_thick;
-     G4double fTracker_length[5];
+G4int fNotrkLayers;
+G4double fTracker_radius[5];
+G4double fTracker_thick;
+G4double fTracker_length[5];
 
-     G4double fCaloTubs_rmax;
-     G4double fCaloTubs_rmin;
-     G4double fCaloTubs_dz;
-     G4double fCaloTubs_sphi;
-     G4double fCaloTubs_dphi;
+G4double fCaloTubs_rmax;
+G4double fCaloTubs_rmin;
+G4double fCaloTubs_dz;
+G4double fCaloTubs_sphi;
+G4double fCaloTubs_dphi;
 
-     G4int fNocaloLayers;
-     G4double fAbsorber_thick;
-     G4double fScinti_thick;
+G4int fNocaloLayers;
+G4double fAbsorber_thick;
+G4double fScinti_thick;
 
-     G4int fSegmentsinZ;
-     G4double fCaloRing_rmax;
-     G4double fCaloRing_rmin;
-     G4double fCaloRing_dz;
-     G4double fCaloRing_sphi;
-     G4double fCaloRing_dphi;
+G4int fSegmentsinZ;
+G4double fCaloRing_rmax;
+G4double fCaloRing_rmin;
+G4double fCaloRing_dz;
+G4double fCaloRing_sphi;
+G4double fCaloRing_dphi;
 
-     G4int fSegmentsinPhi;
-     G4double fCaloCell_rmax;
-     G4double fCaloCell_rmin;
-     G4double fCaloCell_dz;
-     G4double fCaloCell_sphi;
-     G4double fCaloCell_dphi;
+G4int fSegmentsinPhi;
+G4double fCaloCell_rmax;
+G4double fCaloCell_rmin;
+G4double fCaloCell_dz;
+G4double fCaloCell_sphi;
+G4double fCaloCell_dphi;
 
-     G4int fNomucounter;
-     G4double fMuBox_radius;
-     G4double fMuBox_width;
-     G4double fMuBox_thick;
-     G4double fMuBox_length;
+G4int fNomucounter;
+G4double fMuBox_radius;
+G4double fMuBox_width;
+G4double fMuBox_thick;
+G4double fMuBox_length;

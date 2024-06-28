@@ -31,8 +31,8 @@
 #ifndef F04FieldMessenger_h
 #define F04FieldMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class F04GlobalField;
 class G4UIdirectory;
@@ -43,25 +43,24 @@ class G4UIcmdWithoutParameter;
 
 class F04DetectorConstruction;
 
-class F04FieldMessenger: public G4UImessenger
+class F04FieldMessenger : public G4UImessenger
 {
   public:
-    F04FieldMessenger(F04GlobalField*, F04DetectorConstruction* );
+    F04FieldMessenger(F04GlobalField*, F04DetectorConstruction*);
     ~F04FieldMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
+    F04GlobalField* fGlobalField = nullptr;
 
-    F04GlobalField*            fGlobalField = nullptr;
-
-    G4UIdirectory*             fDetDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
 
     G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fTransferBCmd = nullptr;
 
-    G4UIcmdWithAnInteger*      fStepperCMD = nullptr;
+    G4UIcmdWithAnInteger* fStepperCMD = nullptr;
     G4UIcmdWithADoubleAndUnit* fMinStepCMD = nullptr;
     G4UIcmdWithADoubleAndUnit* fDeltaChordCMD = nullptr;
     G4UIcmdWithADoubleAndUnit* fDeltaOneStepCMD = nullptr;
@@ -69,7 +68,7 @@ class F04FieldMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fEpsMinCMD = nullptr;
     G4UIcmdWithADoubleAndUnit* fEpsMaxCMD = nullptr;
 
-    F04DetectorConstruction*   fDetector = nullptr;
+    F04DetectorConstruction* fDetector = nullptr;
 };
 
 #endif

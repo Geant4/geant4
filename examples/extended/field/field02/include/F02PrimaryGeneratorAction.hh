@@ -35,8 +35,8 @@
 #ifndef F02PrimaryGeneratorAction_h
 #define F02PrimaryGeneratorAction_h 1
 
-#include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -62,11 +62,11 @@ class F02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static G4String GetPrimaryName();
 
   private:
-    G4ParticleGun*                fParticleGun = nullptr; //pointer a to G4 service class
-    F02DetectorConstruction*      fDetector = nullptr;    //pointer to the geometry
+    G4ParticleGun* fParticleGun = nullptr;  // pointer a to G4 service class
+    F02DetectorConstruction* fDetector = nullptr;  // pointer to the geometry
 
-    F02PrimaryGeneratorMessenger* fGunMessenger = nullptr; //messenger of this class
-    G4String                      fRndmFlag = "off";       //flag for random impact point
+    F02PrimaryGeneratorMessenger* fGunMessenger = nullptr;  // messenger of this class
+    G4String fRndmFlag = "off";  // flag for random impact point
 
     static G4ParticleDefinition* fgPrimaryParticle;
     G4double fXVertex = 0.;

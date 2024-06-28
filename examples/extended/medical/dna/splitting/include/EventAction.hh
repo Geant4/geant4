@@ -29,35 +29,34 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EventAction_h
-#define EventAction_h 1
+#  define EventAction_h 1
 
-#include "globals.hh"
-#include "G4UserEventAction.hh"
+#  include "G4UserEventAction.hh"
+#  include "globals.hh"
 
-#include <vector>
+#  include <vector>
 
 class PhysicsList;
 
 class EventAction : public G4UserEventAction
 {
-public:
+  public:
     EventAction(PhysicsList* physicsList);
     ~EventAction();
 
-public:
+  public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
     void AddEdepEvent(G4double edep);
     void AddIonizationEvent(G4int idx, G4int n);
 
-private:
+  private:
     PhysicsList* fPhysicsList;
     G4double fTotalEnergyDeposit;
     G4int fNumberOfSplit;
     // This array has a length equal to the number of split.
     std::vector<G4int> fNumberOfIonizations;
-
 };
 
 #endif

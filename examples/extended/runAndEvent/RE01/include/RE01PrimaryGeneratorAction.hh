@@ -38,27 +38,22 @@ class G4VPrimaryGenerator;
 class G4Event;
 class RE01PrimaryGeneratorMessenger;
 
-class RE01PrimaryGeneratorAction:public G4VUserPrimaryGeneratorAction
+class RE01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  RE01PrimaryGeneratorAction();
-  virtual ~RE01PrimaryGeneratorAction();
+  public:
+    RE01PrimaryGeneratorAction();
+    virtual ~RE01PrimaryGeneratorAction();
 
-public:
-  virtual void GeneratePrimaries(G4Event* anEvent);
-  inline  void SetHEPEvtGenerator(G4bool f)
-  { fUseHEPEvt = f; }
-  inline G4bool GetHEPEvtGenerator()
-  { return fUseHEPEvt; }
+  public:
+    virtual void GeneratePrimaries(G4Event* anEvent);
+    inline void SetHEPEvtGenerator(G4bool f) { fUseHEPEvt = f; }
+    inline G4bool GetHEPEvtGenerator() { return fUseHEPEvt; }
 
-private:
-  G4VPrimaryGenerator* fHEPEvt;
-  G4VPrimaryGenerator* fParticleGun;
-  RE01PrimaryGeneratorMessenger* fMessenger;
-  G4bool fUseHEPEvt;
-
+  private:
+    G4VPrimaryGenerator* fHEPEvt;
+    G4VPrimaryGenerator* fParticleGun;
+    RE01PrimaryGeneratorMessenger* fMessenger;
+    G4bool fUseHEPEvt;
 };
 
 #endif
-
-

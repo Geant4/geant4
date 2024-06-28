@@ -31,25 +31,23 @@
 #ifndef F04EventActionMessenger_h
 #define F04EventActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class F04EventAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 
-class F04EventActionMessenger: public G4UImessenger
+class F04EventActionMessenger : public G4UImessenger
 {
   public:
-
     F04EventActionMessenger(F04EventAction*);
     ~F04EventActionMessenger() override;
 
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
-
     F04EventAction* fEventAction = nullptr;
 
     G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;

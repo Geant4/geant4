@@ -29,34 +29,36 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSRunActionMessenger.hh"
+
 #include "SAXSRunAction.hh"
 
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSRunActionMessenger::SAXSRunActionMessenger(SAXSRunAction* runaction): 
-G4UImessenger(), 
-fSetFileNameCmd(0)
+SAXSRunActionMessenger::SAXSRunActionMessenger(SAXSRunAction* runaction)
+  : G4UImessenger(), fSetFileNameCmd(0)
 {
   fRunAction = runaction;
-  
-  fSetFileNameCmd = new G4UIcmdWithAString("/run/setfilenamesave",this);
+
+  fSetFileNameCmd = new G4UIcmdWithAString("/run/setfilenamesave", this);
   fSetFileNameCmd->SetGuidance("Set File Name Save");
-  fSetFileNameCmd->SetParameterName("SetFileNameSave",false);
+  fSetFileNameCmd->SetParameterName("SetFileNameSave", false);
   fSetFileNameCmd->SetDefaultValue("output");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSRunActionMessenger::~SAXSRunActionMessenger() {delete fSetFileNameCmd;}
+SAXSRunActionMessenger::~SAXSRunActionMessenger()
+{
+  delete fSetFileNameCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SAXSRunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void SAXSRunActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fSetFileNameCmd) fRunAction->SetFileName(newValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -38,17 +38,18 @@
 //----------------------------------------------------------------------------
 //
 #ifdef G4_USE_HIJING
-#include "HIJINGNeutronBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4HadronicParameters.hh"
-#include "G4SystemOfUnits.hh"
+#  include "HIJINGNeutronBuilder.hh"
+
+#  include "G4HadronicParameters.hh"
+#  include "G4ParticleDefinition.hh"
+#  include "G4ParticleTable.hh"
+#  include "G4ProcessManager.hh"
+#  include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HIJINGNeutronBuilder::HIJINGNeutronBuilder() 
+HIJINGNeutronBuilder::HIJINGNeutronBuilder()
 {
-  fMin = 0*MeV;
+  fMin = 0 * MeV;
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   fModel = new G4HIJING_Model();
   captureModel = new G4NeutronRadCapture();
@@ -57,7 +58,7 @@ HIJINGNeutronBuilder::HIJINGNeutronBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HIJINGNeutronBuilder::Build(G4HadronInelasticProcess * aP)
+void HIJINGNeutronBuilder::Build(G4HadronInelasticProcess* aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);
@@ -66,18 +67,16 @@ void HIJINGNeutronBuilder::Build(G4HadronInelasticProcess * aP)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HIJINGNeutronBuilder::~HIJINGNeutronBuilder() 
-{}
+HIJINGNeutronBuilder::~HIJINGNeutronBuilder() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HIJINGNeutronBuilder::Build(G4HadronElasticProcess * )
-{}
+void HIJINGNeutronBuilder::Build(G4HadronElasticProcess*) {}
 
 void HIJINGNeutronBuilder::Build(G4NeutronFissionProcess* aP)
 {
   fissionModel->SetMinEnergy(0.0);
-  fissionModel->SetMaxEnergy(20.0*TeV);
+  fissionModel->SetMaxEnergy(20.0 * TeV);
   aP->RegisterMe(fissionModel);
 }
 
@@ -86,4 +85,4 @@ void HIJINGNeutronBuilder::Build(G4NeutronCaptureProcess* aP)
   aP->RegisterMe(captureModel);
 }
 
-#endif //G4_USE_HIJING
+#endif  // G4_USE_HIJING

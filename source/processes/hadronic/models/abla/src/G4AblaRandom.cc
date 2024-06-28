@@ -24,33 +24,19 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Jose Luis Rodriguez, UDC (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (initial translation of ablav3p)
 // Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
-#define ABLAXX_IN_GEANT4_MODE 1
-
-#include "globals.hh"
 
 #include "G4AblaRandom.hh"
-
-#ifdef ABLAXX_IN_GEANT4_MODE
-#include "globals.hh"
 #include "Randomize.hh"
-#else
-#include "G4INCLRandom.hh"
-#endif // ABLAXX_IN_GEANT4_MODE
+#include "globals.hh"
 
-namespace G4AblaRandom {
+namespace G4AblaRandom
+{
 
-  double flat() {
-#ifdef ABLAXX_IN_GEANT4_MODE
-    return G4UniformRand();
-#else
-    return G4INCL::Random::shoot();
-#endif
-  }
-}
-
+    G4double flat() { return G4UniformRand(); }
+} // namespace G4AblaRandom

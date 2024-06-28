@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 #include "Par03RunAction.hh"
+
 #include "Par03DetectorConstruction.hh"
 
 #include "G4AnalysisManager.hh"
 
 Par03RunAction::Par03RunAction(Par03DetectorConstruction* aDetector)
-  : G4UserRunAction()
-  , fDetector(aDetector)
+  : G4UserRunAction(), fDetector(aDetector)
 {
   // Create analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -49,9 +49,9 @@ Par03RunAction::~Par03RunAction() = default;
 void Par03RunAction::BeginOfRunAction(const G4Run*)
 {
   // Get detector dimensions
-  G4int cellNumZ       = fDetector->GetNbOfLayers();
-  G4int cellNumRho     = fDetector->GetNbOfRhoCells();
-  G4double cellSizeZ   = fDetector->GetLength() / cellNumZ;
+  G4int cellNumZ = fDetector->GetNbOfLayers();
+  G4int cellNumRho = fDetector->GetNbOfRhoCells();
+  G4double cellSizeZ = fDetector->GetLength() / cellNumZ;
   G4double cellSizeRho = fDetector->GetRadius() / cellNumRho;
   // Default max value of energy stored in histogram (in GeV)
   G4double maxEnergy = 100;
@@ -60,50 +60,36 @@ void Par03RunAction::BeginOfRunAction(const G4Run*)
   auto analysisManager = G4AnalysisManager::Instance();
 
   // Creating control histograms
-  analysisManager->CreateH1("energyParticle",
-                            "Primary energy;E_{MC} (GeV);Entries", 256, 0,
+  analysisManager->CreateH1("energyParticle", "Primary energy;E_{MC} (GeV);Entries", 256, 0,
                             1.1 * maxEnergy);
-  analysisManager->CreateH1("energyDeposited",
-                            "Deposited energy;E_{MC} (GeV);Entries", 256, 0,
+  analysisManager->CreateH1("energyDeposited", "Deposited energy;E_{MC} (GeV);Entries", 256, 0,
                             1.1 * maxEnergy);
   analysisManager->CreateH1(
-    "energyRatio",
-    "Ratio of energy deposited to primary;E_{dep} /  E_{MC};Entries", 1024, 0,
-    1);
-  analysisManager->CreateH1("time", "Simulation time; time (s);Entries", 2048,
-                            0, 30);
-  analysisManager->CreateH1(
-    "longProfile", "Longitudinal profile;t (mm);#LTE#GT (MeV)", cellNumZ,
-    -0.5 * cellSizeZ, (cellNumZ - 0.5) * cellSizeZ);
-  analysisManager->CreateH1(
-    "transProfile", "Transverse profile;r (mm);#LTE#GT (MeV)", cellNumRho,
-    -0.5 * cellSizeRho, (cellNumRho - 0.5) * cellSizeRho);
-  analysisManager->CreateH1(
-    "longFirstMoment",
-    "First moment of longitudinal distribution;#LT#lambda#GT (mm);Entries",
-    1024, -0.5 * cellSizeZ,
-    cellNumZ * cellSizeZ / 2);  // arbitrary scaling of max value on axis
+    "energyRatio", "Ratio of energy deposited to primary;E_{dep} /  E_{MC};Entries", 1024, 0, 1);
+  analysisManager->CreateH1("time", "Simulation time; time (s);Entries", 2048, 0, 30);
+  analysisManager->CreateH1("longProfile", "Longitudinal profile;t (mm);#LTE#GT (MeV)", cellNumZ,
+                            -0.5 * cellSizeZ, (cellNumZ - 0.5) * cellSizeZ);
+  analysisManager->CreateH1("transProfile", "Transverse profile;r (mm);#LTE#GT (MeV)", cellNumRho,
+                            -0.5 * cellSizeRho, (cellNumRho - 0.5) * cellSizeRho);
+  analysisManager->CreateH1("longFirstMoment",
+                            "First moment of longitudinal distribution;#LT#lambda#GT (mm);Entries",
+                            1024, -0.5 * cellSizeZ,
+                            cellNumZ * cellSizeZ / 2);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1("transFirstMoment",
                             "First moment of transverse distribution;#LTr#GT "
                             "(mm);Entries",
                             1024, -0.5 * cellSizeRho,
-                            cellNumRho * cellSizeRho /
-                              10);  // arbitrary scaling of max value on axis
+                            cellNumRho * cellSizeRho
+                              / 10);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1(
     "longSecondMoment",
     "Second moment of longitudinal distribution;#LT#lambda^{2}#GT "
     "(mm^{2});Entries",
-    1024, 0,
-    std::pow(cellNumZ * cellSizeZ, 2) /
-      25);  // arbitrary scaling of max value on axis
+    1024, 0, std::pow(cellNumZ * cellSizeZ, 2) / 25);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1(
-    "transSecondMoment",
-    "Second moment of transverse distribution;#LTr^{2}#GT (mm^{2});Entries",
-    1024, 0,
-    std::pow(cellNumRho * cellSizeRho, 2) /
-      25);  // arbitrary scaling of max value on axis
-  analysisManager->CreateH1(
-    "hitType", "hit type;type (0=full, 1= fast);Entries", 2, -0.5, 1.5);
+    "transSecondMoment", "Second moment of transverse distribution;#LTr^{2}#GT (mm^{2});Entries",
+    1024, 0, std::pow(cellNumRho * cellSizeRho, 2) / 25);  // arbitrary scaling of max value on axis
+  analysisManager->CreateH1("hitType", "hit type;type (0=full, 1= fast);Entries", 2, -0.5, 1.5);
 
   // Open an output file
   analysisManager->OpenFile();

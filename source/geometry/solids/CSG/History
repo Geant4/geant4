@@ -6,11 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-12-22 Evgueni Tcherniaev (geom-csg-V11-01-02)
+## 2024-05-29 Evgueni Tcherniaev (geom-csg-V11-02-03)
+- Added new methods GetNumOfConstituents() and IsFaceted().
+
+## 2024-04-02 Gabriele Cosmo (geom-csg-V11-02-02)
+- Applied trivial clang-tidy fixes to G4CSGSolid, i.e. use of 'override'.
+
+## 2023-12-22 Evgueni Tcherniaev (geom-csg-V11-02-01)
 - Use GetThetaCosPhi() and GetThetaSinPhi() in wrapper method G4UTrap::GetVertices(),
   this fixes the problem with trapezoid arised in CMSSW after migration to VecGeom 1.2.6
 
-## 2023-12-18 Gabriele Cosmo
+## 2023-12-18 Gabriele Cosmo (geom-csg-V11-02-00)
 - Fixed typo in wrapper method G4UTrap::SetAllParameters(), setter used in
   parameterisation of shape dimensions.
 

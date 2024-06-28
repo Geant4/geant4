@@ -29,44 +29,41 @@
 //
 
 #include "RE05CalorimeterHit.hh"
-#include "G4ios.hh"
-#include "G4VVisManager.hh"
+
+#include "G4AttCheck.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
-#include "G4AttValue.hh"
-#include "G4AttDef.hh"
-#include "G4AttCheck.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<RE05CalorimeterHit>* RE05CalorimeterHitAllocator=0;
+G4ThreadLocal G4Allocator<RE05CalorimeterHit>* RE05CalorimeterHitAllocator = 0;
 
-std::map<G4String,G4AttDef> RE05CalorimeterHit::fAttDefs;
+std::map<G4String, G4AttDef> RE05CalorimeterHit::fAttDefs;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05CalorimeterHit::RE05CalorimeterHit()
-: G4VHit(),
-  fZCellID(-1),fPhiCellID(-1),fEdep(0.),fPos(),fRot(),fLogV(0)
+  : G4VHit(), fZCellID(-1), fPhiCellID(-1), fEdep(0.), fPos(), fRot(), fLogV(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05CalorimeterHit::RE05CalorimeterHit(G4LogicalVolume* logVol,G4int z,G4int phi)
-: G4VHit(),
-  fZCellID(z), fPhiCellID(phi),fEdep(0.),fPos(),fRot(),fLogV(logVol)
+RE05CalorimeterHit::RE05CalorimeterHit(G4LogicalVolume* logVol, G4int z, G4int phi)
+  : G4VHit(), fZCellID(z), fPhiCellID(phi), fEdep(0.), fPos(), fRot(), fLogV(logVol)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05CalorimeterHit::~RE05CalorimeterHit()
-{}
+RE05CalorimeterHit::~RE05CalorimeterHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RE05CalorimeterHit::RE05CalorimeterHit(const RE05CalorimeterHit &right)
-  : G4VHit()
+RE05CalorimeterHit::RE05CalorimeterHit(const RE05CalorimeterHit& right) : G4VHit()
 {
   fZCellID = right.fZCellID;
   fPhiCellID = right.fPhiCellID;
@@ -78,7 +75,7 @@ RE05CalorimeterHit::RE05CalorimeterHit(const RE05CalorimeterHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const RE05CalorimeterHit& RE05CalorimeterHit::operator=(const RE05CalorimeterHit &right)
+const RE05CalorimeterHit& RE05CalorimeterHit::operator=(const RE05CalorimeterHit& right)
 {
   fZCellID = right.fZCellID;
   fPhiCellID = right.fPhiCellID;
@@ -91,9 +88,9 @@ const RE05CalorimeterHit& RE05CalorimeterHit::operator=(const RE05CalorimeterHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool RE05CalorimeterHit::operator==(const RE05CalorimeterHit &right) const
+G4bool RE05CalorimeterHit::operator==(const RE05CalorimeterHit& right) const
 {
-  return ((fZCellID==right.fZCellID)&&(fPhiCellID==right.fPhiCellID));
+  return ((fZCellID == right.fZCellID) && (fPhiCellID == right.fPhiCellID));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,31 +98,28 @@ G4bool RE05CalorimeterHit::operator==(const RE05CalorimeterHit &right) const
 void RE05CalorimeterHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Transform3D trans(fRot,fPos);
+  if (pVVisManager) {
+    G4Transform3D trans(fRot, fPos);
     G4VisAttributes attribs;
     const G4VisAttributes* pVA = fLogV->GetVisAttributes();
-    if(pVA) attribs = *pVA;
-    G4Colour colour(1.,0.,0.);
+    if (pVA) attribs = *pVA;
+    G4Colour colour(1., 0., 0.);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*fLogV,attribs,trans);
+    pVVisManager->Draw(*fLogV, attribs, trans);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const std::map<G4String,G4AttDef>* RE05CalorimeterHit::GetAttDefs() const
+const std::map<G4String, G4AttDef>* RE05CalorimeterHit::GetAttDefs() const
 {
   // G4AttDefs have to have long life.  Use static member...
   if (fAttDefs.empty()) {
-    fAttDefs["HitType"] =
-      G4AttDef("HitType","Type of hit","Physics","","G4String");
-    fAttDefs["ZID"] = G4AttDef("ZID","Z Cell ID","Physics","","G4int");
-    fAttDefs["PhiID"] = G4AttDef("PhiID","Phi Cell ID","Physics","","G4int");
-    fAttDefs["EDep"] =
-      G4AttDef("EDep","Energy defPosited","Physics","G4BestUnit","G4double");
+    fAttDefs["HitType"] = G4AttDef("HitType", "Type of hit", "Physics", "", "G4String");
+    fAttDefs["ZID"] = G4AttDef("ZID", "Z Cell ID", "Physics", "", "G4int");
+    fAttDefs["PhiID"] = G4AttDef("PhiID", "Phi Cell ID", "Physics", "", "G4int");
+    fAttDefs["EDep"] = G4AttDef("EDep", "Energy defPosited", "Physics", "G4BestUnit", "G4double");
   }
   return &fAttDefs;
 }
@@ -136,22 +130,16 @@ std::vector<G4AttValue>* RE05CalorimeterHit::CreateAttValues() const
 {
   // Create expendable G4AttsValues for picking...
   std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
-  attValues->push_back
-    (G4AttValue("HitType","RE05CalorimeterHit",""));
-  attValues->push_back
-    (G4AttValue("ZID",G4UIcommand::ConvertToString(fZCellID),""));
-  attValues->push_back
-    (G4AttValue("PhiID",G4UIcommand::ConvertToString(fPhiCellID),""));
-  attValues->push_back
-    (G4AttValue("EDep",G4BestUnit(fEdep,"Energy"),""));
-  //G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
+  attValues->push_back(G4AttValue("HitType", "RE05CalorimeterHit", ""));
+  attValues->push_back(G4AttValue("ZID", G4UIcommand::ConvertToString(fZCellID), ""));
+  attValues->push_back(G4AttValue("PhiID", G4UIcommand::ConvertToString(fPhiCellID), ""));
+  attValues->push_back(G4AttValue("EDep", G4BestUnit(fEdep, "Energy"), ""));
+  // G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
   return attValues;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE05CalorimeterHit::Print()
-{}
+void RE05CalorimeterHit::Print() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

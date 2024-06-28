@@ -53,6 +53,8 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
+
+macro verbose.mac illustrate capability of verbosity
   		
 \section TestEm4_s7 USING HISTOGRAMS
 

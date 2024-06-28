@@ -28,14 +28,16 @@
 //
 
 #pragma once
-#include <map>
+#include "DNAVolumeType.hh"
+
+#include "G4MoleculeGun.hh"
 #include "G4String.hh"
 #include "G4ThreeVector.hh"
+
+#include <map>
 #include <memory>
-#include <vector>
 #include <unordered_map>
-#include "DNAVolumeType.hh"
-#include "G4MoleculeGun.hh"
+#include <vector>
 
 class G4MoleculeGun;
 class G4VPhysicalVolume;
@@ -47,28 +49,22 @@ class G4Orb;
 
 class DNAParser
 {
-public:
-    using GeoData = std::unordered_map<const G4VPhysicalVolume*, 
-                                       DNAVolumeType>;
+  public:
+    using GeoData = std::unordered_map<const G4VPhysicalVolume*, DNAVolumeType>;
     DNAParser();
     ~DNAParser();
     G4LogicalVolume* CreateLogicVolume();
-    G4double GetVoxelSize();      
-    
-    std::unique_ptr<G4MoleculeGun> ReleaseMoleculeGun()
-    {
-        return std::move(fpGun);
-    }
-    
-    GeoData ReleaseGeoData()
-    {
-        return std::move(fGeometryMap);
-    }
-    
+    G4double GetVoxelSize();
+
+    std::unique_ptr<G4MoleculeGun> ReleaseMoleculeGun() { return std::move(fpGun); }
+
+    GeoData ReleaseGeoData() { return std::move(fGeometryMap); }
+
     struct Molecule;
-    
+
     void ParseFile(const std::string&);
-private:
+
+  private:
     G4double fSize;
     std::string fGeoName;
     std::map<G4String, G4double> fRadiusMap;
@@ -79,8 +75,5 @@ private:
     std::map<std::string, DNAVolumeType> fEnumMap;
     GeoData fGeometryMap;
     void EnumParser();
-    G4VSolid* CreateCutSolid(G4Orb*,
-                             Molecule&,
-                             std::vector<Molecule>&,
-                             G4bool);
+    G4VSolid* CreateCutSolid(G4Orb*, Molecule&, std::vector<Molecule>&, G4bool);
 };

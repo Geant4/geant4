@@ -278,6 +278,11 @@ void G4HadronicParameters::SetEnableNeutronGeneralProcess( G4bool val ) {
 } 
 
 
+void G4HadronicParameters::SetEnableNUDEX( G4bool val ) {
+  if ( ! IsLocked() ) fEnableNUDEX = val;
+} 
+
+
 void G4HadronicParameters::SetEnableCoherentChargeExchange( G4bool val ) {
   if ( ! IsLocked() )  fChargeExchange = val;
 }

@@ -26,7 +26,7 @@
 /// \file SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,21 +34,23 @@
 #ifndef SteppingAction_H
 #define SteppingAction_H 1
 
-#include "globals.hh"
-#include "G4UserSteppingAction.hh"
 #include "G4ThreeVector.hh"
+#include "G4UserSteppingAction.hh"
+#include "globals.hh"
+
 #include <array>
 
 class Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class SteppingAction : public G4UserSteppingAction {
-  public:  
+class SteppingAction : public G4UserSteppingAction
+{
+  public:
     SteppingAction();
     ~SteppingAction() override = default;
-  
-    void UserSteppingAction( const G4Step* ) override;
+
+    void UserSteppingAction(const G4Step*) override;
     // This is the main method where the step lengths of particles inside
     // the scoring volumes are collected, and then the corresponding fluences
     // are filled up in the Run object where they are stored (and then
@@ -62,7 +64,7 @@ class SteppingAction : public G4UserSteppingAction {
     // This is necessary because different runs can have different primary particle
     // types, kinetic energies, and detector configurations.
 
-    void SetRunPointer( Run* inputValue = nullptr ) { fRunPtr = inputValue; }
+    void SetRunPointer(Run* inputValue = nullptr) { fRunPtr = inputValue; }
     // This method is called by RunAction::BeginOfRunAction for providing to the
     // stepping-action the pointer to the run object at the beginning of each Run.
     // This pointer is then used to pass the information collected by the stepping-action
@@ -74,20 +76,20 @@ class SteppingAction : public G4UserSteppingAction {
     // the sum of step lengths in those scoring volumes.
     // Notice that two of the three scoring volumes - upstream and downstream -
     // have the same cubic-volume, that we call "fCubicVolumeScoringUpDown".
-  
-    static const G4int fkNumberScoringVolumes = 3;    // downstream, side, upstream
+
+    static const G4int fkNumberScoringVolumes = 3;  // downstream, side, upstream
     static const G4int fkNumberKinematicRegions = 3;  // all, below 20 MeV, above 20 MeV
-    static const G4int fkNumberParticleTypes = 11;    // all, e, gamma, mu, nu, pi, n, p, ions,
+    static const G4int fkNumberParticleTypes = 11;  // all, e, gamma, mu, nu, pi, n, p, ions,
                                                     // other-mesons, other-baryons
     static const G4int fkNumberCombinations =
-      fkNumberScoringVolumes*fkNumberKinematicRegions*fkNumberParticleTypes;
-    static const std::array< G4String, fkNumberScoringVolumes > fkArrayScoringVolumeNames;
-    static const std::array< G4String, fkNumberKinematicRegions > fkArrayKinematicRegionNames;
-    static const std::array< G4String, fkNumberParticleTypes > fkArrayParticleTypeNames;
-    static G4int GetIndex( const G4int iScoringVolume, const G4int iKinematicRegion,
-                           const G4int iParticleType );
- 
-  private:   
+      fkNumberScoringVolumes * fkNumberKinematicRegions * fkNumberParticleTypes;
+    static const std::array<G4String, fkNumberScoringVolumes> fkArrayScoringVolumeNames;
+    static const std::array<G4String, fkNumberKinematicRegions> fkArrayKinematicRegionNames;
+    static const std::array<G4String, fkNumberParticleTypes> fkArrayParticleTypeNames;
+    static G4int GetIndex(const G4int iScoringVolume, const G4int iKinematicRegion,
+                          const G4int iParticleType);
+
+  private:
     Run* fRunPtr;  // Pointer to the Run object
     G4int fPrimaryParticleId;
     G4double fPrimaryParticleEnergy;
@@ -99,8 +101,8 @@ class SteppingAction : public G4UserSteppingAction {
     G4bool fIsFirstStepInScoringSide;
     G4double fCubicVolumeScoringUpDown;
     G4double fCubicVolumeScoringSide;
-  
-    std::array< G4double, fkNumberCombinations > fArraySumStepLengths;
+
+    std::array<G4double, fkNumberCombinations> fArraySumStepLengths;
     // Array to collect the sum of step lengths in the scoring volumes for the whole run,
     // according to the various cases (kinematical region and particle type).
     // Note that the fluence in a scoring volume is defined as sum of step lengths

@@ -35,6 +35,7 @@
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
+
 #include <map>
 
 class G4ParticleDefinition;
@@ -45,12 +46,12 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction() = default;
-   ~SteppingAction() override = default;
+    ~SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step*) override;
-    
+
   private:
-    std::map<G4ParticleDefinition*,G4int> fParticleFlag;    
+    std::map<G4ParticleDefinition*, G4int> fParticleFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

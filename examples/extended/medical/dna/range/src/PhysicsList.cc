@@ -23,10 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/range/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
+
 #include "PhysicsListMessenger.hh"
 
 #include "G4EmDNAPhysics.hh"
@@ -37,11 +48,9 @@
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
-
-#include "G4EmStandardPhysics_option3.hh"
-
-#include "G4UnitsTable.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4UserSpecialCuts.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,16 +84,13 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  // transportation
-  //
+  // Transportation
   AddTransportation();
-  
-  // electromagnetic physics list
-  //
+
+  // Electromagnetic physics list
   fEmPhysicsList->ConstructProcess();
-      
-  // tracking cut
-  //
+
+  // Tracking cut
   AddTrackingCut();
 }
 
@@ -92,7 +98,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -102,7 +108,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics();
-  } 
+  }
   else if (name == "dna_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
@@ -138,15 +144,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option7();
   }
-  else if(name == "std_opt3") {
+  else if (name == "std_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option3();
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
   }
   else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -156,13 +161,11 @@ void PhysicsList::AddTrackingCut()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
-    if (particle->GetPDGCharge() != 0.0 && !particle->IsShortLived())
-    {
+    if (particle->GetPDGCharge() != 0.0 && !particle->IsShortLived()) {
       ph->RegisterProcess(new G4UserSpecialCuts(), particle);
     }
   }

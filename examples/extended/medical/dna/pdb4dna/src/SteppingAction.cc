@@ -39,8 +39,9 @@
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4EventManager.hh"
 #include "EventAction.hh"
+
+#include "G4EventManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
@@ -49,57 +50,46 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction()
-:G4UserSteppingAction(),RunInitObserver(),fpEventAction(0),fpDetector(0)
-{
-}
+  : G4UserSteppingAction(), RunInitObserver(), fpEventAction(0), fpDetector(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{
-}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::Initialize()
 {
-  fpEventAction = (EventAction*) G4EventManager::GetEventManager()->
-      GetUserEventAction();
-  fpDetector = (DetectorConstruction*)G4RunManager::GetRunManager()->
-      GetUserDetectorConstruction();
+  fpEventAction = (EventAction*)G4EventManager::GetEventManager()->GetUserEventAction();
+  fpDetector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* theStep)
 {
-  if(theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!=
-      "Transportation")
-  {
+  if (theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() != "Transportation") {
     // Get position and edep of current step
     //
-    G4double x = theStep->GetPreStepPoint()->GetPosition().x()/nanometer;
-    G4double y = theStep->GetPreStepPoint()->GetPosition().y()/nanometer;
-    G4double z = theStep->GetPreStepPoint()->GetPosition().z()/nanometer;
-    G4double edepStep = theStep->GetTotalEnergyDeposit()/eV;
+    G4double x = theStep->GetPreStepPoint()->GetPosition().x() / nanometer;
+    G4double y = theStep->GetPreStepPoint()->GetPosition().y() / nanometer;
+    G4double z = theStep->GetPreStepPoint()->GetPosition().z() / nanometer;
+    G4double edepStep = theStep->GetTotalEnergyDeposit() / eV;
 
-    G4LogicalVolume* targetVolume =
-        G4LogicalVolumeStore::GetInstance()->GetVolume("BoundingLV");
+    G4LogicalVolume* targetVolume = G4LogicalVolumeStore::GetInstance()->GetVolume("BoundingLV");
     G4LogicalVolume* theVolume =
-        theStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume();
+      theStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume();
 
-    if ((edepStep > 0.) && (theVolume==targetVolume))
-    {
+    if ((edepStep > 0.) && (theVolume == targetVolume)) {
       // Add edep to this event
       //
       fpEventAction->AddEdepEvent(edepStep);
-      if (fpDetector->GetBarycenterList()==NULL)
-      {
+      if (fpDetector->GetBarycenterList() == NULL) {
         G4cout << "Barycenter list is null!!!" << G4endl;
       }
-      else
-      {
-        CheckAndProcessDNAHit(x,y,z,edepStep);
+      else {
+        CheckAndProcessDNAHit(x, y, z, edepStep);
       }
     }
   }
@@ -107,32 +97,28 @@ void SteppingAction::UserSteppingAction(const G4Step* theStep)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool SteppingAction::CheckAndProcessDNAHit(G4double x,G4double y, G4double z,
-    G4double edepStep)
+G4bool SteppingAction::CheckAndProcessDNAHit(G4double x, G4double y, G4double z, G4double edepStep)
 {
-  int numStrand=0;
-  int numNucl=0;
-  int intResidue=-1; // 0 for Phospat, 1 for Sugar, 2 for Base
-  unsigned short int hit = (fpDetector->GetPDBlib()).ComputeMatchEdepDNA(
-      fpDetector->GetBarycenterList(),
-      fpDetector->GetMoleculeList(),
-      x*10., y*10., z*10.,// x10 => angstrom<->nm
-      numStrand, numNucl, intResidue);
+  int numStrand = 0;
+  int numNucl = 0;
+  int intResidue = -1;  // 0 for Phospat, 1 for Sugar, 2 for Base
+  unsigned short int hit =
+    (fpDetector->GetPDBlib())
+      .ComputeMatchEdepDNA(fpDetector->GetBarycenterList(), fpDetector->GetMoleculeList(), x * 10.,
+                           y * 10., z * 10.,  // x10 => angstrom<->nm
+                           numStrand, numNucl, intResidue);
 
-  if (hit==1)
-  {
-    if ((intResidue==0)||(intResidue==1)) //Edep in Phosphate or Sugar
+  if (hit == 1) {
+    if ((intResidue == 0) || (intResidue == 1))  // Edep in Phosphate or Sugar
     {
-      fpEventAction->AddEdepToNucleotide(numStrand,numNucl,edepStep);
+      fpEventAction->AddEdepToNucleotide(numStrand, numNucl, edepStep);
       return true;
     }
-    else
-    {
+    else {
       return false;
     }
   }
-  else
-  {
+  else {
     return false;
   }
 }

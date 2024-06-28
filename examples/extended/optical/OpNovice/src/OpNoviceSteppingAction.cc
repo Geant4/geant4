@@ -28,7 +28,9 @@
 /// \brief Implementation of the OpNoviceSteppingAction class
 
 #include "OpNoviceSteppingAction.hh"
+
 #include "OpNoviceRun.hh"
+
 #include "G4Event.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
@@ -39,51 +41,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNoviceSteppingAction::OpNoviceSteppingAction(OpNoviceEventAction* event)
-  : G4UserSteppingAction()
-  , fEventAction(event)
+  : G4UserSteppingAction(), fEventAction(event)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
 {
-  static G4ParticleDefinition* opticalphoton =
-    G4OpticalPhoton::OpticalPhotonDefinition();
+  static G4ParticleDefinition* opticalphoton = G4OpticalPhoton::OpticalPhotonDefinition();
 
   const G4ParticleDefinition* particleDef =
     step->GetTrack()->GetDynamicParticle()->GetParticleDefinition();
 
-  if(particleDef == opticalphoton)
-  {
+  if (particleDef == opticalphoton) {
     G4StepPoint* endPoint = step->GetPostStepPoint();
     const G4VProcess* pds = endPoint->GetProcessDefinedStep();
-    G4String procname     = pds->GetProcessName();
-    if(procname == "OpRayleigh")
+    G4String procname = pds->GetProcessName();
+    if (procname == "OpRayleigh")
       fEventAction->AddRayleigh();
-    else if(procname == "OpAbsorption")
+    else if (procname == "OpAbsorption")
       fEventAction->AddAbsorption();
-    else if(procname == "OpMieHG")
+    else if (procname == "OpMieHG")
       fEventAction->AddMie();
 
     // for boundary scattering, process name in 'transportation'.
     // Need to check differently:
-    if(endPoint->GetStepStatus() == fGeomBoundary)
-    {
+    if (endPoint->GetStepStatus() == fGeomBoundary) {
       G4OpBoundaryProcessStatus theStatus = Undefined;
-      G4ProcessManager* opManager         = opticalphoton->GetProcessManager();
+      G4ProcessManager* opManager = opticalphoton->GetProcessManager();
       G4int n_proc = opManager->GetPostStepProcessVector(typeDoIt)->entries();
-      G4ProcessVector* postStepDoItVector =
-        opManager->GetPostStepProcessVector(typeDoIt);
-      for(G4int i = 0; i < n_proc; ++i)
-      {
+      G4ProcessVector* postStepDoItVector = opManager->GetPostStepProcessVector(typeDoIt);
+      for (G4int i = 0; i < n_proc; ++i) {
         G4VProcess* currentProcess = (*postStepDoItVector)[i];
 
         auto opProc = dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
-        if(opProc)
-          theStatus = opProc->GetStatus();
+        if (opProc) theStatus = opProc->GetStatus();
       }
-      if(theStatus != Undefined && theStatus != NotAtBoundary &&
-         theStatus != StepTooSmall)
-      {
+      if (theStatus != Undefined && theStatus != NotAtBoundary && theStatus != StepTooSmall) {
         fEventAction->AddBoundary();
       }
     }

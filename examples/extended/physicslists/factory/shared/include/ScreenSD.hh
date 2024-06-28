@@ -43,9 +43,9 @@ class ScreenSD : public G4VSensitiveDetector
     ScreenSD(const G4String& name);
     ~ScreenSD() override = default;
 
-    void   Initialize(G4HCofThisEvent* hce) override;
+    void Initialize(G4HCofThisEvent* hce) override;
     G4bool ProcessHits(G4Step* step, G4TouchableHistory* history) override;
-    void   EndOfEvent(G4HCofThisEvent* hce) override;
+    void EndOfEvent(G4HCofThisEvent* hce) override;
 };
 
 #endif

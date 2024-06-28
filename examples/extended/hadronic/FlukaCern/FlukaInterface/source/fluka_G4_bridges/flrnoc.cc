@@ -25,28 +25,26 @@
 //
 #ifdef G4_USE_FLUKA
 
+#  include "flrnoc.hh"
 
-#include "flrnoc.hh"
+#  include "G4Exception.hh"
+#  include "Randomize.hh"
 
-#include "Randomize.hh"
-#include "G4Exception.hh"
+void flrnoc_(const G4int& /*dummySeed1*/, const G4int& /*dummySeed2*/,
+             G4int& randomCallMod1BCounter, const G4int& /*dummyRandomCallBillionCounter*/)
+{
+  randomCallMod1BCounter = 1;
 
-
-void flrnoc_(const G4int& /*dummySeed1*/, const G4int& /*dummySeed2*/, 
-	     G4int& randomCallMod1BCounter, const G4int& /*dummyRandomCallBillionCounter*/) {
-
-	randomCallMod1BCounter = 1;
-
-	G4Exception("flrnoc_",
-		    "Calls to flrnoc are not supported.\n" \
-		    "Would require access to G4 random engine internal status (number of generated numbers).\n" \
-		    "This would be overkill, because:\n" \
-		    "(1) Display of random engine internal status should be done through FL64WR anyway (calling G4Random).\n" \
-		    "(2) External use of random engine internal status is bad practice. To trace back where a call is from, could just use booleans passed as arguments.\n",
-		    FatalException,
-		    "Unsupported function call.");
-
+  G4Exception(
+    "flrnoc_",
+    "Calls to flrnoc are not supported.\n"
+    "Would require access to G4 random engine internal status (number of generated numbers).\n"
+    "This would be overkill, because:\n"
+    "(1) Display of random engine internal status should be done through FL64WR anyway (calling "
+    "G4Random).\n"
+    "(2) External use of random engine internal status is bad practice. To trace back where a call "
+    "is from, could just use booleans passed as arguments.\n",
+    FatalException, "Unsupported function call.");
 }
 
-
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA

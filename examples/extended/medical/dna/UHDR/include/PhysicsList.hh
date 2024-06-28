@@ -36,26 +36,34 @@
 /// \brief Definition of the PhysicsList class
 
 #ifndef _PhysicsList_h
-#define _PhysicsList_h 1
+#  define _PhysicsList_h 1
 
-#include "G4EmDNAChemistry.hh"
-#include "G4EmDNAChemistry_option3.hh"
-#include "EmDNAChemistry.hh"
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-#include <memory>
+#  include "EmDNAChemistry.hh"
+
+#  include "G4EmDNAChemistry.hh"
+#  include "G4EmDNAChemistry_option3.hh"
+#  include "G4VModularPhysicsList.hh"
+#  include "globals.hh"
+
+#  include <memory>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 class G4VPhysicsConstructor;
 class DetectorConstruction;
-class PhysicsList : public G4VModularPhysicsList {
-public:
-  explicit PhysicsList(DetectorConstruction *det);
-  ~PhysicsList() override = default;
+class PeriodicBoundaryPhysics;
+class PhysicsList : public G4VModularPhysicsList
+{
+  public:
+    explicit PhysicsList(DetectorConstruction* det);
+    ~PhysicsList() override = default;
 
-  void ConstructParticle() final;
-  void ConstructProcess() final;
+    void ConstructParticle() final;
+    void ConstructProcess() final;
 
-private:
-  std::unique_ptr<G4VPhysicsConstructor> fEmDNAPhysicsList;
-  std::unique_ptr<EmDNAChemistry> fEmDNAChemistryList;
+  private:
+    std::unique_ptr<G4VPhysicsConstructor> fEmDNAPhysicsList;
+    std::unique_ptr<EmDNAChemistry> fEmDNAChemistryList;
+    std::unique_ptr<PeriodicBoundaryPhysics> fPBC;
 };
 #endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -35,18 +35,16 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class XPhysicsList : public G4VUserPhysicsList {
-public:
-  XPhysicsList(G4int verbose=0);
-  ~XPhysicsList();
-  
-  // Construct particle and physics
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
+class XPhysicsList : public G4VUserPhysicsList
+{
+  public:
+    XPhysicsList(G4int verbose = 0);
+    ~XPhysicsList();
+
+    // Construct particle and physics
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+    virtual void SetCuts();
 };
 
-#endif  /* XPhysicsList_h */
-
-
-
+#endif /* XPhysicsList_h */

@@ -42,8 +42,8 @@
 #ifndef EventActionMessenger_h
 #define EventActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class EventAction;
 class G4UIcmdWithAString;
@@ -51,21 +51,18 @@ class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventActionMessenger: public G4UImessenger
+class EventActionMessenger : public G4UImessenger
 {
-public:
+  public:
+    EventActionMessenger(EventAction*);
+    ~EventActionMessenger() override;
 
-  EventActionMessenger(EventAction*);
-  ~EventActionMessenger() override;
-    
-  void SetNewValue(G4UIcommand*, G4String) override;
-  
-private:
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  EventAction* fEventAction;   
-  G4UIcmdWithAnInteger* fPrintCmd;    
-  G4UIcmdWithAnInteger* fCmd;    
-
+  private:
+    EventAction* fEventAction;
+    G4UIcmdWithAnInteger* fPrintCmd;
+    G4UIcmdWithAnInteger* fCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

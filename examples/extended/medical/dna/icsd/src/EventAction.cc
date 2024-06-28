@@ -35,47 +35,41 @@
 /// \brief Implementation of the EventAction class
 
 #include "EventAction.hh"
+
 #include "RunAction.hh"
 #include "SteppingAction.hh"
+
 #include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
+#include "G4TrajectoryContainer.hh"
 #include "G4VVisManager.hh"
 #include "Randomize.hh"
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#  include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+#  include "G4RunManager.hh"
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+EventAction::EventAction() : G4UserEventAction(), fEventIn(0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-EventAction::EventAction()
-: G4UserEventAction(),
-  fEventIn(0)
-{}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-EventAction::~EventAction()
-{}
-
+EventAction::~EventAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void EventAction::BeginOfEventAction(const G4Event*)
 {
-    fEventIn=0;
+  fEventIn = 0;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void EventAction::EndOfEventAction(const G4Event*)
-{ 
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-    analysisManager->FillNtupleDColumn(1,0, fEventIn);
-    analysisManager->AddNtupleRow(1);
+  analysisManager->FillNtupleDColumn(1, 0, fEventIn);
+  analysisManager->AddNtupleRow(1);
 }

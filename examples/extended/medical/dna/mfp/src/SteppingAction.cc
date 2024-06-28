@@ -23,30 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
+// Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
-#include "Run.hh"
+
 #include "HistoManager.hh"
+#include "Run.hh"
 
-#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
-#include "G4Electron.hh"
-#include "G4Gamma.hh"
-#include "G4Proton.hh"
-#include "G4DNAGenericIonsManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()
-:G4UserSteppingAction()
-{}
+SteppingAction::SteppingAction() : G4UserSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
+SteppingAction::~SteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,52 +57,59 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
-  
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-  
-  G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
-  if (transmit) { run->CountProcesses(procName); }
-  else {                         
-    // count real processes and sum track length
+
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);
+  if (transmit) {
+    run->CountProcesses(procName);
+  }
+  else {
+    // Count processes and sum track length
     G4double stepLength = aStep->GetStepLength();
-    run->CountProcesses(procName);  
+    run->CountProcesses(procName);
     run->SumTrack(stepLength);
   }
-  
-  // plot final state
+
+  // Call analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-     
-  // scattered primary particle
+
+  // Scattered primary particle
   G4int id = 1;
   if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
-    G4double energy = endPoint->GetKineticEnergy();      
-    analysisManager->FillH1(id,energy);
+    G4double energy = endPoint->GetKineticEnergy();
+    analysisManager->FillH1(id, energy);
     id = 2;
     G4ThreeVector direction = endPoint->GetMomentumDirection();
-    // assuming incident particle shot along x
-    G4double costeta = direction.x(); 
-    analysisManager->FillH1(id,costeta);     
-  }  
-  
-  //secondaries
-  const std::vector<const G4Track*>* secondary 
-                                    = aStep->GetSecondaryInCurrentStep();    
-  for (size_t lp=0; lp<(*secondary).size(); lp++) {
+    // Assuming incident particle shot along x
+    G4double costeta = direction.x();
+    analysisManager->FillH1(id, costeta);
+  }
+
+  // Secondaries
+  const std::vector<const G4Track*>* secondary = aStep->GetSecondaryInCurrentStep();
+  for (size_t lp = 0; lp < (*secondary).size(); lp++) {
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
-    if (charge != 0.) { id = 3; } else { id = 5; }
+    if (charge != 0.) {
+      id = 3;
+    }
+    else {
+      id = 5;
+    }
     G4double energy = (*secondary)[lp]->GetKineticEnergy();
-    analysisManager->FillH1(id,energy);
+    analysisManager->FillH1(id, energy);
 
     ++id;
-    G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
+    G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();
     G4double costeta = direction.x();
-    analysisManager->FillH1(id,costeta);
-      
-    // energy tranferred to charged secondaries
-    if (charge != 0.) { run->SumeTransf(energy); }         
+    analysisManager->FillH1(id, costeta);
+
+    // Energy tranferred to charged secondaries
+    if (charge != 0.) {
+      run->SumeTransf(energy);
+    }
   }
-         
-  // kill event after first interaction
-  G4RunManager::GetRunManager()->AbortEvent();  
+
+  // Kill event after first interaction
+  G4RunManager::GetRunManager()->AbortEvent();
 }

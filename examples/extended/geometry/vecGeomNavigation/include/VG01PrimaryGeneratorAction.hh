@@ -34,42 +34,46 @@
 //    - 'free'    which is configured by UI - initialised in con/tor
 //    - 'axis'    directing secondaries by rotation to x, y & z axis
 //    - 'fixed'   along x axis, and near it ( y = 0.1 or z = 0.1)
-// 
+//
 //  Authors: J. Apostolakis & S. Wenzel (CERN)  2018-2021
 //
-//  Started from FullCMS code by Mihaly Novak (CERN) 2017  
+//  Started from FullCMS code by Mihaly Novak (CERN) 2017
 
 #ifndef _G01PRIMARYGENERATORACTION_H_
 #define _G01PRIMARYGENERATORACTION_H_
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-
 #include "globals.hh"
 
 class G4Event;
 class G4ParticleGun;
 
-/// Configurable primary generator action to demonstrate use of 
+/// Configurable primary generator action to demonstrate use of
 ///   VecGeom Navigation
 
 class VG01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-
   public:
-   enum EGeneratorMode { kFixedMode, kUniformMode, kAxisMode,  kFreeMode};
-  //                     x Axis       random dir    x, y, z     UI directed
+    enum EGeneratorMode
+    {
+      kFixedMode,
+      kUniformMode,
+      kAxisMode,
+      kFreeMode
+    };
+    //                     x Axis       random dir    x, y, z     UI directed
 
-    VG01PrimaryGeneratorAction( EGeneratorMode mode = kUniformMode );
-   ~VG01PrimaryGeneratorAction();
+    VG01PrimaryGeneratorAction(EGeneratorMode mode = kUniformMode);
+    ~VG01PrimaryGeneratorAction();
 
-   void GeneratePrimaries(G4Event* anEvent) override;
+    void GeneratePrimaries(G4Event* anEvent) override;
 
-   void SetGeneratorMode(EGeneratorMode val) { fMode = val;} 
-   EGeneratorMode GetGeneratorMode() { return fMode;}
+    void SetGeneratorMode(EGeneratorMode val) { fMode = val; }
+    EGeneratorMode GetGeneratorMode() { return fMode; }
+
   private:
-
     G4ParticleGun* fParticleGun;
-    EGeneratorMode  fMode;
+    EGeneratorMode fMode;
 };
 
 #endif

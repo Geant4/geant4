@@ -33,26 +33,27 @@
 
 class G4DNAMolecularReactionTable;
 class G4VChemistryWorld;
-class EmDNAChemistry : public G4VUserChemistryList,
-                       public G4VPhysicsConstructor {
-public:
-  EmDNAChemistry();
-  ~EmDNAChemistry() override;
+class EmDNAChemistry : public G4VUserChemistryList, public G4VPhysicsConstructor
+{
+  public:
+    EmDNAChemistry();
+    ~EmDNAChemistry() override;
 
-  void ConstructParticle() override { ConstructMolecule(); }
-  void ConstructMolecule() final;
-  void ConstructProcess() final;
+    void ConstructParticle() override { ConstructMolecule(); }
+    void ConstructMolecule() final;
+    void ConstructProcess() final;
 
-  void ConstructDissociationChannels() final;
-  void ConstructReactionTable(G4DNAMolecularReactionTable *reactionTable) final;
-  void ConstructTimeStepModel(G4DNAMolecularReactionTable *reactionTable) final;
+    void ConstructDissociationChannels() final;
+    void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable) final;
+    void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable) final;
 
-  void SetChemistryWorld(G4VChemistryWorld &chemistryWorld) {
-    fpChemistryWorld = &chemistryWorld;
-  }
+    void SetChemistryWorld(G4VChemistryWorld& chemistryWorld)
+    {
+      fpChemistryWorld = &chemistryWorld;
+    }
 
-private:
-  G4VChemistryWorld *fpChemistryWorld = nullptr;
+  private:
+    G4VChemistryWorld* fpChemistryWorld = nullptr;
 };
 
 #endif

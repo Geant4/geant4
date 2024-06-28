@@ -38,35 +38,34 @@ class G4LogicalVolume;
 
 class LXeWLSFiber : public G4PVPlacement
 {
- public:
-  LXeWLSFiber(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
-              G4LogicalVolume* pMotherLogical, G4bool pMany, G4int pCopyNo,
-              LXeDetectorConstruction* c);
+  public:
+    LXeWLSFiber(G4RotationMatrix* pRot, const G4ThreeVector& tlate, G4LogicalVolume* pMotherLogical,
+                G4bool pMany, G4int pCopyNo, LXeDetectorConstruction* c);
 
- private:
-  void CopyValues();
+  private:
+    void CopyValues();
 
-  static G4LogicalVolume* fClad2_log;
+    static G4LogicalVolume* fClad2_log;
 
-  G4double fFiber_rmin = 0.;
-  G4double fFiber_rmax = 0.;
-  G4double fFiber_z = 0.;
-  G4double fFiber_sphi = 0.;
-  G4double fFiber_ephi = 0.;
+    G4double fFiber_rmin = 0.;
+    G4double fFiber_rmax = 0.;
+    G4double fFiber_z = 0.;
+    G4double fFiber_sphi = 0.;
+    G4double fFiber_ephi = 0.;
 
-  G4double fClad1_rmin = 0.;
-  G4double fClad1_rmax = 0.;
-  G4double fClad1_z = 0.;
-  G4double fClad1_sphi = 0.;
-  G4double fClad1_ephi = 0.;
+    G4double fClad1_rmin = 0.;
+    G4double fClad1_rmax = 0.;
+    G4double fClad1_z = 0.;
+    G4double fClad1_sphi = 0.;
+    G4double fClad1_ephi = 0.;
 
-  G4double fClad2_rmin = 0.;
-  G4double fClad2_rmax = 0.;
-  G4double fClad2_z = 0.;
-  G4double fClad2_sphi = 0.;
-  G4double fClad2_ephi = 0.;
+    G4double fClad2_rmin = 0.;
+    G4double fClad2_rmax = 0.;
+    G4double fClad2_z = 0.;
+    G4double fClad2_sphi = 0.;
+    G4double fClad2_ephi = 0.;
 
-  LXeDetectorConstruction* fConstructor = nullptr;
+    LXeDetectorConstruction* fConstructor = nullptr;
 };
 
 #endif

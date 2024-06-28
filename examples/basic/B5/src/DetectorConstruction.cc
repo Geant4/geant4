@@ -28,42 +28,33 @@
 /// \brief Implementation of the B5::DetectorConstruction class
 
 #include "DetectorConstruction.hh"
-#include "MagneticField.hh"
+
 #include "CellParameterisation.hh"
-#include "HodoscopeSD.hh"
+#include "Constants.hh"
 #include "DriftChamberSD.hh"
 #include "EmCalorimeterSD.hh"
 #include "HadCalorimeterSD.hh"
+#include "HodoscopeSD.hh"
+#include "MagneticField.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4Mag_UsualEqRhs.hh"
-
-#include "G4Material.hh"
-#include "G4Element.hh"
-#include "G4MaterialTable.hh"
-#include "G4NistManager.hh"
-
-#include "G4VSolid.hh"
 #include "G4Box.hh"
-#include "G4Tubs.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4PVParameterised.hh"
-#include "G4PVReplica.hh"
-#include "G4UserLimits.hh"
-
-#include "G4SDManager.hh"
-#include "G4VSensitiveDetector.hh"
-#include "G4RunManager.hh"
-#include "G4GenericMessenger.hh"
-
-#include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
-#include "G4ios.hh"
+#include "G4FieldManager.hh"
+#include "G4GenericMessenger.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4PVParameterised.hh"
+#include "G4PVPlacement.hh"
+#include "G4PVReplica.hh"
+#include "G4RotationMatrix.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4Tubs.hh"
+#include "G4UserLimits.hh"
+#include "G4VisAttributes.hh"
 
 namespace B5
 {
@@ -99,7 +90,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Construct materials
   ConstructMaterials();
   auto air = G4Material::GetMaterial("G4_AIR");
-  //auto argonGas = G4Material::GetMaterial("_Ar");
+  // auto argonGas = G4Material::GetMaterial("_Ar");
   auto argonGas = G4Material::GetMaterial("G4_Ar");
   auto scintillator = G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
   auto csI = G4Material::GetMaterial("G4_CESIUM_IODIDE");
@@ -111,174 +102,138 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // geometries --------------------------------------------------------------
   // experimental hall (world volume)
-  auto worldSolid
-    = new G4Box("worldBox",10.*m,3.*m,10.*m);
-  auto worldLogical
-    = new G4LogicalVolume(worldSolid,air,"worldLogical");
-  auto worldPhysical = new G4PVPlacement(
-    nullptr, G4ThreeVector(), worldLogical, "worldPhysical", nullptr, false, 0, checkOverlaps);
+  auto worldSolid = new G4Box("worldBox", 10. * m, 3. * m, 10. * m);
+  auto worldLogical = new G4LogicalVolume(worldSolid, air, "worldLogical");
+  auto worldPhysical = new G4PVPlacement(nullptr, G4ThreeVector(), worldLogical, "worldPhysical",
+                                         nullptr, false, 0, checkOverlaps);
 
   // Tube with Local Magnetic field
 
-  auto magneticSolid
-    = new G4Tubs("magneticTubs",0.,1.*m,1.*m,0.,360.*deg);
+  auto magneticSolid = new G4Tubs("magneticTubs", 0., 1. * m, 1. * m, 0., 360. * deg);
 
-  fMagneticLogical
-    = new G4LogicalVolume(magneticSolid, air, "magneticLogical");
+  fMagneticLogical = new G4LogicalVolume(magneticSolid, air, "magneticLogical");
 
   // placement of Tube
 
   auto fieldRot = new G4RotationMatrix();
-  fieldRot->rotateX(90.*deg);
-  new G4PVPlacement(fieldRot,G4ThreeVector(),fMagneticLogical,
-                    "magneticPhysical",worldLogical,
-                    false,0,checkOverlaps);
+  fieldRot->rotateX(90. * deg);
+  new G4PVPlacement(fieldRot, G4ThreeVector(), fMagneticLogical, "magneticPhysical", worldLogical,
+                    false, 0, checkOverlaps);
 
   // set step limit in tube with magnetic field
   auto userLimits = new G4UserLimits(1 * m);
   fMagneticLogical->SetUserLimits(userLimits);
 
   // first arm
-  auto firstArmSolid
-    = new G4Box("firstArmBox",1.5*m,1.*m,3.*m);
-  auto firstArmLogical
-    = new G4LogicalVolume(firstArmSolid,air,"firstArmLogical");
+  auto firstArmSolid = new G4Box("firstArmBox", 1.5 * m, 1. * m, 3. * m);
+  auto firstArmLogical = new G4LogicalVolume(firstArmSolid, air, "firstArmLogical");
   new G4PVPlacement(nullptr, G4ThreeVector(0., 0., -5. * m), firstArmLogical, "firstArmPhysical",
-    worldLogical, false, 0, checkOverlaps);
+                    worldLogical, false, 0, checkOverlaps);
 
   // second arm
-  auto secondArmSolid
-    = new G4Box("secondArmBox",2.*m,2.*m,3.5*m);
-  auto secondArmLogical
-    = new G4LogicalVolume(secondArmSolid,air,"secondArmLogical");
-  auto x = -5.*m * std::sin(fArmAngle);
-  auto z = 5.*m * std::cos(fArmAngle);
-  fSecondArmPhys
-    = new G4PVPlacement(fArmRotation,G4ThreeVector(x,0.,z),secondArmLogical,
-                        "fSecondArmPhys",worldLogical,
-                        false,0,checkOverlaps);
+  auto secondArmSolid = new G4Box("secondArmBox", 2. * m, 2. * m, 3.5 * m);
+  auto secondArmLogical = new G4LogicalVolume(secondArmSolid, air, "secondArmLogical");
+  auto x = -5. * m * std::sin(fArmAngle);
+  auto z = 5. * m * std::cos(fArmAngle);
+  fSecondArmPhys = new G4PVPlacement(fArmRotation, G4ThreeVector(x, 0., z), secondArmLogical,
+                                     "fSecondArmPhys", worldLogical, false, 0, checkOverlaps);
 
   // hodoscopes in first arm
-  auto hodoscope1Solid
-    = new G4Box("hodoscope1Box",5.*cm,20.*cm,0.5*cm);
-  fHodoscope1Logical
-    = new G4LogicalVolume(hodoscope1Solid,scintillator,"hodoscope1Logical");
+  auto hodoscope1Solid = new G4Box("hodoscope1Box", 5. * cm, 20. * cm, 0.5 * cm);
+  fHodoscope1Logical = new G4LogicalVolume(hodoscope1Solid, scintillator, "hodoscope1Logical");
 
-  for (auto i=0;i<kNofHodoscopes1;i++) {
-      G4double x1 = (i-kNofHodoscopes1/2)*10.*cm;
-      new G4PVPlacement(nullptr, G4ThreeVector(x1, 0., -1.5 * m), fHodoscope1Logical,
-        "hodoscope1Physical", firstArmLogical, false, i, checkOverlaps);
+  for (auto i = 0; i < kNofHodoscopes1; i++) {
+    G4double x1 = (i - kNofHodoscopes1 / 2) * 10. * cm;
+    new G4PVPlacement(nullptr, G4ThreeVector(x1, 0., -1.5 * m), fHodoscope1Logical,
+                      "hodoscope1Physical", firstArmLogical, false, i, checkOverlaps);
   }
 
   // drift chambers in first arm
-  auto chamber1Solid
-    = new G4Box("chamber1Box",1.*m,30.*cm,1.*cm);
-  auto chamber1Logical
-    = new G4LogicalVolume(chamber1Solid,argonGas,"chamber1Logical");
+  auto chamber1Solid = new G4Box("chamber1Box", 1. * m, 30. * cm, 1. * cm);
+  auto chamber1Logical = new G4LogicalVolume(chamber1Solid, argonGas, "chamber1Logical");
 
-  for (auto i=0;i<kNofChambers;i++) {
-    G4double z1 = (i-kNofChambers/2)*0.5*m;
+  for (auto i = 0; i < kNofChambers; i++) {
+    G4double z1 = (i - kNofChambers / 2) * 0.5 * m;
     new G4PVPlacement(nullptr, G4ThreeVector(0., 0., z1), chamber1Logical, "chamber1Physical",
-      firstArmLogical, false, i, checkOverlaps);
+                      firstArmLogical, false, i, checkOverlaps);
   }
 
   // "virtual" wire plane
-  auto wirePlane1Solid
-    = new G4Box("wirePlane1Box",1.*m,30.*cm,0.1*mm);
-  fWirePlane1Logical
-    = new G4LogicalVolume(wirePlane1Solid,argonGas,"wirePlane1Logical");
+  auto wirePlane1Solid = new G4Box("wirePlane1Box", 1. * m, 30. * cm, 0.1 * mm);
+  fWirePlane1Logical = new G4LogicalVolume(wirePlane1Solid, argonGas, "wirePlane1Logical");
   new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fWirePlane1Logical, "wirePlane1Physical",
-    chamber1Logical, false, 0, checkOverlaps);
+                    chamber1Logical, false, 0, checkOverlaps);
 
   // hodoscopes in second arm
-  auto hodoscope2Solid
-    = new G4Box("hodoscope2Box",5.*cm,20.*cm,0.5*cm);
-  fHodoscope2Logical
-    = new G4LogicalVolume(hodoscope2Solid,scintillator,"hodoscope2Logical");
+  auto hodoscope2Solid = new G4Box("hodoscope2Box", 5. * cm, 20. * cm, 0.5 * cm);
+  fHodoscope2Logical = new G4LogicalVolume(hodoscope2Solid, scintillator, "hodoscope2Logical");
 
-  for (auto i=0;i<kNofHodoscopes2;i++) {
-      G4double x2 = (i-kNofHodoscopes2/2)*10.*cm;
-      new G4PVPlacement(nullptr, G4ThreeVector(x2, 0., 0.), fHodoscope2Logical,
-        "hodoscope2Physical", secondArmLogical, false, i, checkOverlaps);
+  for (auto i = 0; i < kNofHodoscopes2; i++) {
+    G4double x2 = (i - kNofHodoscopes2 / 2) * 10. * cm;
+    new G4PVPlacement(nullptr, G4ThreeVector(x2, 0., 0.), fHodoscope2Logical, "hodoscope2Physical",
+                      secondArmLogical, false, i, checkOverlaps);
   }
 
   // drift chambers in second arm
-  auto chamber2Solid
-    = new G4Box("chamber2Box",1.5*m,30.*cm,1.*cm);
-  auto chamber2Logical
-    = new G4LogicalVolume(chamber2Solid,argonGas,"chamber2Logical");
+  auto chamber2Solid = new G4Box("chamber2Box", 1.5 * m, 30. * cm, 1. * cm);
+  auto chamber2Logical = new G4LogicalVolume(chamber2Solid, argonGas, "chamber2Logical");
 
-  for (auto i=0;i<kNofChambers;i++) {
-    G4double z2 = (i-kNofChambers/2)*0.5*m - 1.5*m;
+  for (auto i = 0; i < kNofChambers; i++) {
+    G4double z2 = (i - kNofChambers / 2) * 0.5 * m - 1.5 * m;
     new G4PVPlacement(nullptr, G4ThreeVector(0., 0., z2), chamber2Logical, "chamber2Physical",
-      secondArmLogical, false, i, checkOverlaps);
+                      secondArmLogical, false, i, checkOverlaps);
   }
 
   // "virtual" wire plane
-  auto wirePlane2Solid
-    = new G4Box("wirePlane2Box",1.5*m,30.*cm,0.1*mm);
-  fWirePlane2Logical
-    = new G4LogicalVolume(wirePlane2Solid,argonGas,"wirePlane2Logical");
+  auto wirePlane2Solid = new G4Box("wirePlane2Box", 1.5 * m, 30. * cm, 0.1 * mm);
+  fWirePlane2Logical = new G4LogicalVolume(wirePlane2Solid, argonGas, "wirePlane2Logical");
   new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fWirePlane2Logical, "wirePlane2Physical",
-    chamber2Logical, false, 0, checkOverlaps);
+                    chamber2Logical, false, 0, checkOverlaps);
 
   // CsI calorimeter
-  auto emCalorimeterSolid
-    = new G4Box("EMcalorimeterBox",1.5*m,30.*cm,15.*cm);
-  auto emCalorimeterLogical
-    = new G4LogicalVolume(emCalorimeterSolid,csI,"EMcalorimeterLogical");
+  auto emCalorimeterSolid = new G4Box("EMcalorimeterBox", 1.5 * m, 30. * cm, 15. * cm);
+  auto emCalorimeterLogical = new G4LogicalVolume(emCalorimeterSolid, csI, "EMcalorimeterLogical");
   new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 2. * m), emCalorimeterLogical,
-    "EMcalorimeterPhysical", secondArmLogical, false, 0, checkOverlaps);
+                    "EMcalorimeterPhysical", secondArmLogical, false, 0, checkOverlaps);
 
   // EMcalorimeter cells
-  auto cellSolid
-    = new G4Box("cellBox",7.5*cm,7.5*cm,15.*cm);
-  fCellLogical
-    = new G4LogicalVolume(cellSolid,csI,"cellLogical");
+  auto cellSolid = new G4Box("cellBox", 7.5 * cm, 7.5 * cm, 15. * cm);
+  fCellLogical = new G4LogicalVolume(cellSolid, csI, "cellLogical");
   G4VPVParameterisation* cellParam = new CellParameterisation();
-  new G4PVParameterised("cellPhysical",fCellLogical,emCalorimeterLogical,
-                        kXAxis,kNofEmCells,cellParam);
+  new G4PVParameterised("cellPhysical", fCellLogical, emCalorimeterLogical, kXAxis, kNofEmCells,
+                        cellParam);
 
   // hadron calorimeter
-  auto hadCalorimeterSolid
-    = new G4Box("HadCalorimeterBox",1.5*m,30.*cm,50.*cm);
-  auto hadCalorimeterLogical
-    = new G4LogicalVolume(hadCalorimeterSolid,lead,"HadCalorimeterLogical");
+  auto hadCalorimeterSolid = new G4Box("HadCalorimeterBox", 1.5 * m, 30. * cm, 50. * cm);
+  auto hadCalorimeterLogical =
+    new G4LogicalVolume(hadCalorimeterSolid, lead, "HadCalorimeterLogical");
   new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 3. * m), hadCalorimeterLogical,
-    "HadCalorimeterPhysical", secondArmLogical, false, 0, checkOverlaps);
+                    "HadCalorimeterPhysical", secondArmLogical, false, 0, checkOverlaps);
 
   // hadron calorimeter column
-  auto HadCalColumnSolid
-    = new G4Box("HadCalColumnBox",15.*cm,30.*cm,50.*cm);
-  auto HadCalColumnLogical
-    = new G4LogicalVolume(HadCalColumnSolid,lead,"HadCalColumnLogical");
-  new G4PVReplica("HadCalColumnPhysical",HadCalColumnLogical,
-                  hadCalorimeterLogical,kXAxis,kNofHadColumns,30.*cm);
+  auto HadCalColumnSolid = new G4Box("HadCalColumnBox", 15. * cm, 30. * cm, 50. * cm);
+  auto HadCalColumnLogical = new G4LogicalVolume(HadCalColumnSolid, lead, "HadCalColumnLogical");
+  new G4PVReplica("HadCalColumnPhysical", HadCalColumnLogical, hadCalorimeterLogical, kXAxis,
+                  kNofHadColumns, 30. * cm);
 
   // hadron calorimeter cell
-  auto HadCalCellSolid
-    = new G4Box("HadCalCellBox",15.*cm,15.*cm,50.*cm);
-  auto HadCalCellLogical
-    = new G4LogicalVolume(HadCalCellSolid,lead,"HadCalCellLogical");
-  new G4PVReplica("HadCalCellPhysical",HadCalCellLogical,
-                  HadCalColumnLogical,kYAxis,kNofHadRows,30.*cm);
+  auto HadCalCellSolid = new G4Box("HadCalCellBox", 15. * cm, 15. * cm, 50. * cm);
+  auto HadCalCellLogical = new G4LogicalVolume(HadCalCellSolid, lead, "HadCalCellLogical");
+  new G4PVReplica("HadCalCellPhysical", HadCalCellLogical, HadCalColumnLogical, kYAxis, kNofHadRows,
+                  30. * cm);
 
   // hadron calorimeter layers
-  auto HadCalLayerSolid
-    = new G4Box("HadCalLayerBox",15.*cm,15.*cm,2.5*cm);
-  auto HadCalLayerLogical
-    = new G4LogicalVolume(HadCalLayerSolid,lead,"HadCalLayerLogical");
-  new G4PVReplica("HadCalLayerPhysical",HadCalLayerLogical,
-                  HadCalCellLogical,kZAxis,kNofHadCells,5.*cm);
+  auto HadCalLayerSolid = new G4Box("HadCalLayerBox", 15. * cm, 15. * cm, 2.5 * cm);
+  auto HadCalLayerLogical = new G4LogicalVolume(HadCalLayerSolid, lead, "HadCalLayerLogical");
+  new G4PVReplica("HadCalLayerPhysical", HadCalLayerLogical, HadCalCellLogical, kZAxis,
+                  kNofHadCells, 5. * cm);
 
   // scintillator plates
-  auto HadCalScintiSolid
-    = new G4Box("HadCalScintiBox",15.*cm,15.*cm,0.5*cm);
-  fHadCalScintiLogical
-    = new G4LogicalVolume(HadCalScintiSolid,scintillator,
-                          "HadCalScintiLogical");
+  auto HadCalScintiSolid = new G4Box("HadCalScintiBox", 15. * cm, 15. * cm, 0.5 * cm);
+  fHadCalScintiLogical =
+    new G4LogicalVolume(HadCalScintiSolid, scintillator, "HadCalScintiLogical");
   new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 2. * cm), fHadCalScintiLogical,
-    "HadCalScintiPhysical", HadCalLayerLogical, false, 0, checkOverlaps);
+                    "HadCalScintiPhysical", HadCalLayerLogical, false, 0, checkOverlaps);
 
   // visualization attributes ------------------------------------------------
 
@@ -327,27 +282,27 @@ void DetectorConstruction::ConstructSDandField()
   auto sdManager = G4SDManager::GetSDMpointer();
   G4String SDname;
 
-  auto hodoscope1 = new HodoscopeSD(SDname="/hodoscope1");
+  auto hodoscope1 = new HodoscopeSD(SDname = "/hodoscope1");
   sdManager->AddNewDetector(hodoscope1);
   fHodoscope1Logical->SetSensitiveDetector(hodoscope1);
 
-  auto hodoscope2 = new HodoscopeSD(SDname="/hodoscope2");
+  auto hodoscope2 = new HodoscopeSD(SDname = "/hodoscope2");
   sdManager->AddNewDetector(hodoscope2);
   fHodoscope2Logical->SetSensitiveDetector(hodoscope2);
 
-  auto chamber1 = new DriftChamberSD(SDname="/chamber1");
+  auto chamber1 = new DriftChamberSD(SDname = "/chamber1");
   sdManager->AddNewDetector(chamber1);
   fWirePlane1Logical->SetSensitiveDetector(chamber1);
 
-  auto chamber2 = new DriftChamberSD(SDname="/chamber2");
+  auto chamber2 = new DriftChamberSD(SDname = "/chamber2");
   sdManager->AddNewDetector(chamber2);
   fWirePlane2Logical->SetSensitiveDetector(chamber2);
 
-  auto emCalorimeter = new EmCalorimeterSD(SDname="/EMcalorimeter");
+  auto emCalorimeter = new EmCalorimeterSD(SDname = "/EMcalorimeter");
   sdManager->AddNewDetector(emCalorimeter);
   fCellLogical->SetSensitiveDetector(emCalorimeter);
 
-  auto hadCalorimeter = new HadCalorimeterSD(SDname="/HadCalorimeter");
+  auto hadCalorimeter = new HadCalorimeterSD(SDname = "/HadCalorimeter");
   sdManager->AddNewDetector(hadCalorimeter);
   fHadCalScintiLogical->SetSensitiveDetector(hadCalorimeter);
 
@@ -404,16 +359,16 @@ void DetectorConstruction::ConstructMaterials()
 void DetectorConstruction::SetArmAngle(G4double val)
 {
   if (!fSecondArmPhys) {
-      G4cerr << "Detector has not yet been constructed." << G4endl;
-      return;
+    G4cerr << "Detector has not yet been constructed." << G4endl;
+    return;
   }
 
   fArmAngle = val;
   *fArmRotation = G4RotationMatrix();  // make it unit vector
   fArmRotation->rotateY(fArmAngle);
-  auto x = -5.*m * std::sin(fArmAngle);
-  auto z = 5.*m * std::cos(fArmAngle);
-  fSecondArmPhys->SetTranslation(G4ThreeVector(x,0.,z));
+  auto x = -5. * m * std::sin(fArmAngle);
+  auto z = 5. * m * std::cos(fArmAngle);
+  fSecondArmPhys->SetTranslation(G4ThreeVector(x, 0., z));
 
   // tell G4RunManager that we change the geometry
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
@@ -424,15 +379,11 @@ void DetectorConstruction::SetArmAngle(G4double val)
 void DetectorConstruction::DefineCommands()
 {
   // Define /B5/detector command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this,
-                                      "/B5/detector/",
-                                      "Detector control");
+  fMessenger = new G4GenericMessenger(this, "/B5/detector/", "Detector control");
 
   // armAngle command
-  auto& armAngleCmd
-    = fMessenger->DeclareMethodWithUnit("armAngle","deg",
-                                &DetectorConstruction::SetArmAngle,
-                                "Set rotation angle of the second arm.");
+  auto& armAngleCmd = fMessenger->DeclareMethodWithUnit(
+    "armAngle", "deg", &DetectorConstruction::SetArmAngle, "Set rotation angle of the second arm.");
   armAngleCmd.SetParameterName("angle", true);
   armAngleCmd.SetRange("angle>=0. && angle<180.");
   armAngleCmd.SetDefaultValue("30.");
@@ -440,4 +391,4 @@ void DetectorConstruction::DefineCommands()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+}  // namespace B5

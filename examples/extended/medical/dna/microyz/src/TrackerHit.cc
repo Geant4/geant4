@@ -24,31 +24,31 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file TrackerHit.cc
 /// \brief Implementation of the TrackerHit class
 
 #include "TrackerHit.hh"
+
+#include "G4Circle.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
-#include "G4Circle.hh"
-#include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-#include <iomanip>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackerHit::TrackerHit()
- : G4VHit()
-{}
+TrackerHit::TrackerHit() : G4VHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,12 +56,11 @@ TrackerHit::~TrackerHit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackerHit::TrackerHit(const TrackerHit& right)
-  : G4VHit()
+TrackerHit::TrackerHit(const TrackerHit& right) : G4VHit()
 {
-  fTrackID   = right.fTrackID;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
+  fTrackID = right.fTrackID;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   fIncidentEnergy = right.fIncidentEnergy;
 }
 
@@ -69,10 +68,10 @@ TrackerHit::TrackerHit(const TrackerHit& right)
 
 const TrackerHit& TrackerHit::operator=(const TrackerHit& right)
 {
-  fTrackID   = right.fTrackID;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
-  fIncidentEnergy      = right.fIncidentEnergy;
+  fTrackID = right.fTrackID;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
+  fIncidentEnergy = right.fIncidentEnergy;
 
   return *this;
 }
@@ -89,12 +88,11 @@ G4bool TrackerHit::operator==(const TrackerHit& right) const
 void TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if (pVVisManager) {
     G4Circle circle(fPos);
     circle.SetScreenSize(4.);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -105,15 +103,9 @@ void TrackerHit::Draw()
 
 void TrackerHit::Print()
 {
-  G4cout
-     << "  trackID: " << fTrackID 
-     << "Edep: "
-     << std::setw(7) << G4BestUnit(fEdep,"Energy")
-     << " Position: "
-     << std::setw(7) << G4BestUnit( fPos,"Length")
-     << "IncidentEnergy: "
-     << std::setw(7) << G4BestUnit(fIncidentEnergy,"Energy")
-     << G4endl;
+  G4cout << "  trackID: " << fTrackID << "Edep: " << std::setw(7) << G4BestUnit(fEdep, "Energy")
+         << " Position: " << std::setw(7) << G4BestUnit(fPos, "Length")
+         << "IncidentEnergy: " << std::setw(7) << G4BestUnit(fIncidentEnergy, "Energy") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

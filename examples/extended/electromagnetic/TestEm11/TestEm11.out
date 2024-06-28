@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -235,7 +235,7 @@ ePairProd:  for e+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -546,32 +546,32 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=0.770000s Real=0.824748s Sys=0.000000s
+  User=1.100000s Real=1.135229s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 450.260 keV	(18.817 keV-->500.000 keV)
- Energy leakage     = 49.740 keV	(8.040 keV-->481.183 keV)
+ Edep in absorber 1 = 447.180 keV	(18.269 keV-->500.000 keV)
+ Energy leakage     = 52.820 keV	(5.072 keV-->481.731 keV)
  Energy total       = 500.000 keV	(500.000 keV-->500.000 keV)
 
- Track length of primary track = 885.708 um  +- 190.262 um 
+ Track length of primary track = 881.351 um  +- 193.309 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 324.348 um  +- 193.880 um 
+ Projected range               = 323.879 um  +- 193.234 um 
 
- Nb of steps of primary track  = 11.41 +- 2.86	 Step size= 80.444 um  +- 20.879 um 
+ Nb of steps of primary track  = 14.61 +- 5.07	 Step size= 66.099 um  +- 23.531 um 
 
- absorbed = 78.69 %   transmit = 4.96 %   reflected = 16.34 % 
+ absorbed = 77.59 %   transmit = 5.58 %   reflected = 16.82 % 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 154048955, 2063978683
+ Current couple of seeds = 1091870006, 631061454
 ----------------------------------------
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.016 MB
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.015 MB
 ============================================================

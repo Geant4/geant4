@@ -63,6 +63,7 @@ G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
+#if QT_VERSION < 0x060000
   makeCurrent();
   
   fQGLWidgetInitialiseCompleted = false;
@@ -79,6 +80,15 @@ void G4OpenGLImmediateQtViewer::Initialise() {
   }
   
   fQGLWidgetInitialiseCompleted = true;
+#else
+  fQGLWidgetInitialiseCompleted = false;
+  CreateMainWindow (this,QString(GetName()));
+  if(G4QGLWidgetType::isValid()) { //G.Barrand: macOS: isValid() needed at startup.
+    makeCurrent();
+    glDrawBuffer (GL_BACK);
+  }
+  fQGLWidgetInitialiseCompleted = true;
+#endif
 }
 
 void G4OpenGLImmediateQtViewer::initializeGL () {
@@ -106,6 +116,13 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
 
 void  G4OpenGLImmediateQtViewer::DrawView() {
+#if QT_VERSION < 0x060000
+#else
+  if(IsGettingPickInfos()) {
+    paintGL();
+    return;
+  }
+#endif
 #ifdef G4MULTITHREADED
   if (G4Threading::G4GetThreadId() == G4Threading::MASTER_ID) {
     updateQWidget();
@@ -154,7 +171,11 @@ void G4OpenGLImmediateQtViewer::resizeGL(
 ,int aHeight)
 {  
   if ((aWidth > 0) && (aHeight > 0)) {
+#if QT_VERSION < 0x060000
     ResizeWindow(aWidth,aHeight);
+#else
+    ResizeWindow(devicePixelRatio()*aWidth,devicePixelRatio()*aHeight);
+#endif
     fHasToRepaint = sizeHasChanged();
   }
 }
@@ -162,7 +183,11 @@ void G4OpenGLImmediateQtViewer::resizeGL(
 
 void G4OpenGLImmediateQtViewer::paintGL()
 {
+#if QT_VERSION < 0x060000
   updateToolbarAndMouseContextMenu();
+#else
+  //G.Barrand: don't do any change in the GUI here, just "paint" this widget!
+#endif
 
   if (fPaintEventLock) {
 //    return ;
@@ -175,6 +200,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
       return;
   }
 
+#if QT_VERSION < 0x060000
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !fHasToRepaint) {
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
@@ -197,6 +223,12 @@ void G4OpenGLImmediateQtViewer::paintGL()
       }
     }
   }
+#endif
+
+#if QT_VERSION < 0x060000
+#else
+  InitializeGLView ();
+#endif
 
   SetView();
    
@@ -261,6 +293,7 @@ void G4OpenGLImmediateQtViewer::contextMenuEvent(QContextMenuEvent *e)
   G4manageContextMenuEvent(e);
 }
 
+#if QT_VERSION < 0x060000
 void G4OpenGLImmediateQtViewer::paintEvent(QPaintEvent *) {
   if (! fQGLWidgetInitialiseCompleted) {
     return;
@@ -276,6 +309,7 @@ void G4OpenGLImmediateQtViewer::paintEvent(QPaintEvent *) {
 #endif
   }
 }
+#endif
 
 
 void G4OpenGLImmediateQtViewer::updateQWidget() {
@@ -289,9 +323,14 @@ void G4OpenGLImmediateQtViewer::updateQWidget() {
   
   fUpdateGLLock = true;
   fHasToRepaint= true;
+#if QT_VERSION < 0x060000
   repaint();
   updateViewerPropertiesTableWidget();
   updateSceneTreeWidget();
+#else
+  //G.Barrand: don't do any change in the GUI here, just ask to "paint" this widget!
+  update();
+#endif
   fUpdateGLLock= false;
 }
 

@@ -32,6 +32,10 @@
 
 #include "PhysicsList.hh"
 
+#include "PhysicsListEmSpecialized.hh"
+#include "PhysicsListEmStandardTracking.hh"
+#include "PhysicsListMessenger.hh"
+
 #include "G4BaryonConstructor.hh"
 #include "G4BosonConstructor.hh"
 #include "G4EmStandardPhysics.hh"
@@ -39,10 +43,6 @@
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
-
-#include "PhysicsListEmSpecialized.hh"
-#include "PhysicsListEmStandardTracking.hh"
-#include "PhysicsListMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,26 +24,16 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Jose Luis Rodriguez, UDC (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (initial translation of ablav3p)
 // Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
-#define ABLAXX_IN_GEANT4_MODE 1
+
+#pragma once
 
 #include "globals.hh"
-
-#ifndef G4AblaVirtualData_hh
-#define G4AblaVirtualData_hh 1
-
-#ifdef ABLAXX_IN_GEANT4_MODE
-#include "globals.hh"
-#else
-#include "G4INCLGeant4Compat.hh"
-#include "G4INCLConfig.hh"
-#endif
-
 
 /**
  * An interface to data used by ABLA. This interface allows
@@ -54,16 +44,12 @@
 
 class G4AblaVirtualData {
 protected:
-
   /**
    * Constructor, destructor
    */
-#ifdef ABLAXX_IN_GEANT4_MODE
   G4AblaVirtualData();
-#else
-  G4AblaVirtualData(G4INCL::Config *);
-#endif
-  virtual ~G4AblaVirtualData();
+
+  virtual ~G4AblaVirtualData() = default;
 
 public:
   /**
@@ -80,11 +66,6 @@ public:
    * Set the value of Vgsld.
    */
   G4bool setVgsld(G4int A, G4int Z, G4double value);
-
-  /**
-   * Set the value of Pace2.
-   */
-  G4bool setPace2(G4int A, G4int Z, G4double value);
 
   /**
    * Set the value of RMS.
@@ -111,7 +92,6 @@ public:
    */
   G4bool setBeta4(G4int A, G4int Z, G4double value);
 
-
   /**
    * Get the value of Alpha.
    */
@@ -127,12 +107,7 @@ public:
    */
   G4double getVgsld(G4int A, G4int Z);
 
-  /**
-   * Get the value of Pace2.
-   */
-  G4double getPace2(G4int A, G4int Z);
-
-  /**
+  /*
    * Get the value of RMS.
    */
   G4double getRms(G4int A, G4int Z);
@@ -157,40 +132,21 @@ public:
    */
   G4double getBeta4(G4int A, G4int Z);
 
-  G4int getAlphaRows();
-  G4int getAlphaCols();
-
-  G4int getPaceRows();
-  G4int getPaceCols();
-
   virtual G4bool readData() = 0;
-	
+
 private:
+  static const G4int sRows = 180;
+  static const G4int sCols = 122;
 
-  static const G4int alphaRows = 154;
-  static const G4int alphaCols = 99;
-
-  static const G4int paceRows = 500;
-  static const G4int paceCols = 500;
-
-  static const G4int rmsRows = 154;
-  static const G4int rmsCols = 99;
-
-  static const G4int betaRows = 251;
+  static const G4int betaRows = sCols + sRows;
   static const G4int betaCols = 137;
 
-  static const G4int massRows = 154;
-  static const G4int massCols = 13;
-
-  G4double alpha[alphaRows][alphaCols];
-  G4double ecnz[alphaRows][alphaCols];
-  G4double vgsld[alphaRows][alphaCols];
-  G4double pace2[paceRows][paceCols];
-  G4double rms[rmsRows][rmsCols];
-  G4double mexp[massRows][massCols];
-  G4int mexpid[massRows][massCols];
+  G4double alpha[sRows][sCols];
+  G4double ecnz[sRows][sCols];
+  G4double vgsld[sRows][sCols];
+  G4double rms[sRows][sCols];
+  G4double mexp[sRows][sCols];
+  G4int mexpid[sRows][sCols];
   G4double beta2[betaRows][betaCols];
   G4double beta4[betaRows][betaCols];
 };
-
-#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//ROTATIONS: http://dicom.nema.org/medical/dicom/2014c/output/chtml/part03/sect_C.31.3.html
+// ROTATIONS: http://dicom.nema.org/medical/dicom/2014c/output/chtml/part03/sect_C.31.3.html
 // http://arxiv.org/pdf/1406.0014.pdf
 
 #ifndef DicomFilePlan__HH
@@ -34,22 +34,22 @@ class DcmDataSet;
 class DicomBeam;
 
 class DicomFilePlan : public DicomVFile
-{ 
-public:
-  DicomFilePlan(DcmDataset* dset);
-  ~DicomFilePlan(){};
+{
+  public:
+    DicomFilePlan(DcmDataset* dset);
+    ~DicomFilePlan() {};
 
-public:
-  virtual void ReadData();
-  void CheckData0(OFString title, Sint32 val);
+  public:
+    virtual void ReadData();
+    void CheckData0(OFString title, Sint32 val);
 
-  void DumpToFile();
+    void DumpToFile();
 
-  void SetControlPointMetersets();
-  
-private:
-  std::vector<DicomBeam*> theBeams;
-  Sint32 theNumberOfBeams;
+    void SetControlPointMetersets();
+
+  private:
+    std::vector<DicomBeam*> theBeams;
+    Sint32 theNumberOfBeams;
 };
 
 #endif

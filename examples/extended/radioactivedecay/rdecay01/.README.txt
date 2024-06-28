@@ -88,7 +88,8 @@ allows to limit to single decay or full decay chain (default).
  
   - Execute rdecay01 in 'batch' mode from macro files
 \verbatim
-% rdecay01   singleDecay.mac
+% rdecay01  singleDecay.mac
+% rdecay01  rdecay01.in > rdecay01.out	
 \endverbatim
  		
   - Execute rdecay01 in 'interactive mode' with visualization

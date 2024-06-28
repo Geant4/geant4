@@ -29,42 +29,44 @@
 //
 
 #include "RE01EventAction.hh"
-#include "RE01TrackerHit.hh"
+
 #include "RE01CalorimeterHit.hh"
+#include "RE01TrackerHit.hh"
+#include "RE01Trajectory.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-#include "RE01Trajectory.hh"
-#include "G4PrimaryVertex.hh"
 #include "G4PrimaryParticle.hh"
-#include "G4SystemOfUnits.hh"    
+#include "G4PrimaryVertex.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4UImanager.hh"
+#include "G4VHitsCollection.hh"
+#include "G4VVisManager.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-RE01EventAction::RE01EventAction()
-  :G4UserEventAction(),
-   fTrackerCollID(-1),fCalorimeterCollID(-1)
-{;}
+RE01EventAction::RE01EventAction() : G4UserEventAction(), fTrackerCollID(-1), fCalorimeterCollID(-1)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01EventAction::~RE01EventAction()
-{;}
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01EventAction::BeginOfEventAction(const G4Event*)
 {
-  G4SDManager * SDman = G4SDManager::GetSDMpointer();
-  if(fTrackerCollID<0||fCalorimeterCollID<0)
-  {
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  if (fTrackerCollID < 0 || fCalorimeterCollID < 0) {
     G4String colNam;
-    fTrackerCollID = SDman->GetCollectionID(colNam="trackerCollection");
-    fCalorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
+    fTrackerCollID = SDman->GetCollectionID(colNam = "trackerCollection");
+    fCalorimeterCollID = SDman->GetCollectionID(colNam = "calCollection");
   }
 }
 
@@ -72,53 +74,45 @@ void RE01EventAction::BeginOfEventAction(const G4Event*)
 void RE01EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Summary of Event " << evt->GetEventID() << G4endl;
-  if(evt->GetNumberOfPrimaryVertex()==0)
-  {
+  if (evt->GetNumberOfPrimaryVertex() == 0) {
     G4cout << "Event is empty." << G4endl;
     return;
   }
-  
-  if(fTrackerCollID<0||fCalorimeterCollID<0) return;
 
-  G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
+  if (fTrackerCollID < 0 || fCalorimeterCollID < 0) return;
+
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   RE01TrackerHitsCollection* THC = 0;
   RE01CalorimeterHitsCollection* CHC = 0;
-  if(HCE)
-  {
+  if (HCE) {
     THC = (RE01TrackerHitsCollection*)(HCE->GetHC(fTrackerCollID));
     CHC = (RE01CalorimeterHitsCollection*)(HCE->GetHC(fCalorimeterCollID));
   }
 
-  if(THC)
-  {
+  if (THC) {
     int n_hit = THC->entries();
     G4cout << G4endl;
-    G4cout << "Tracker hits " <<
-      "--------------------------------------------------------------" 
-           << G4endl;
-    G4cout << n_hit << " hits are stored in RE01TrackerHitsCollection." 
-           << G4endl;
-    if(fpEventManager->GetVerboseLevel()>0)
-    {
+    G4cout << "Tracker hits "
+           << "--------------------------------------------------------------" << G4endl;
+    G4cout << n_hit << " hits are stored in RE01TrackerHitsCollection." << G4endl;
+    if (fpEventManager->GetVerboseLevel() > 0) {
       G4cout << "List of hits in tracker" << G4endl;
-      for(int i=0;i<n_hit;i++)
-      { (*THC)[i]->Print(); }
+      for (int i = 0; i < n_hit; i++) {
+        (*THC)[i]->Print();
+      }
     }
   }
-  if(CHC)
-  {
+  if (CHC) {
     int n_hit = CHC->entries();
     G4cout << G4endl;
-    G4cout << "Calorimeter hits "<<
-      "--------------------------------------------------------------" 
-           << G4endl;
-    G4cout << n_hit << " hits are stored in RE01CalorimeterHitsCollection." 
-           << G4endl;
+    G4cout << "Calorimeter hits "
+           << "--------------------------------------------------------------" << G4endl;
+    G4cout << n_hit << " hits are stored in RE01CalorimeterHitsCollection." << G4endl;
     G4double totE = 0;
-    for(int i=0;i<n_hit;i++)
-    { totE += (*CHC)[i]->GetEdep(); }
-    G4cout << "     Total energy deposition in calorimeter : "
-         << totE / GeV << " (GeV)" << G4endl;
+    for (int i = 0; i < n_hit; i++) {
+      totE += (*CHC)[i]->GetEdep();
+    }
+    G4cout << "     Total energy deposition in calorimeter : " << totE / GeV << " (GeV)" << G4endl;
   }
 
   // get number of stored trajectories
@@ -127,37 +121,28 @@ void RE01EventAction::EndOfEventAction(const G4Event* evt)
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
   // extract the trajectories and print them out
   G4cout << G4endl;
-  G4cout << "Trajectories in tracker "<<
-    "--------------------------------------------------------------" 
-         << G4endl;
-  if(fpEventManager->GetVerboseLevel()>0)
-  {
-    for(G4int i=0; i<n_trajectories; i++) 
-    {
-      RE01Trajectory* trj = 
-        (RE01Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
+  G4cout << "Trajectories in tracker "
+         << "--------------------------------------------------------------" << G4endl;
+  if (fpEventManager->GetVerboseLevel() > 0) {
+    for (G4int i = 0; i < n_trajectories; i++) {
+      RE01Trajectory* trj = (RE01Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
       trj->ShowTrajectory();
     }
   }
-    
+
   G4cout << G4endl;
-  G4cout << "Primary particles "<<
-    "--------------------------------------------------------------" 
-         << G4endl;
+  G4cout << "Primary particles "
+         << "--------------------------------------------------------------" << G4endl;
   G4int n_vertex = evt->GetNumberOfPrimaryVertex();
-  for(G4int iv=0;iv<n_vertex;iv++)
-  {
+  for (G4int iv = 0; iv < n_vertex; iv++) {
     G4PrimaryVertex* pv = evt->GetPrimaryVertex(iv);
     G4cout << G4endl;
-    G4cout << "Primary vertex "
-           << G4ThreeVector(pv->GetX0(),pv->GetY0(),pv->GetZ0())
-           << "   at t = " << (pv->GetT0())/ns << " [ns]" << G4endl;
-    if(fpEventManager->GetVerboseLevel()>0)
-    {
+    G4cout << "Primary vertex " << G4ThreeVector(pv->GetX0(), pv->GetY0(), pv->GetZ0())
+           << "   at t = " << (pv->GetT0()) / ns << " [ns]" << G4endl;
+    if (fpEventManager->GetVerboseLevel() > 0) {
       G4PrimaryParticle* pp = pv->GetPrimary();
-      while(pp)
-      {
-        PrintPrimary(pp,0);
+      while (pp) {
+        PrintPrimary(pp, 0);
         pp = pp->GetNext();
       }
     }
@@ -165,27 +150,29 @@ void RE01EventAction::EndOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RE01EventAction::PrintPrimary(G4PrimaryParticle* pp,G4int ind)
+void RE01EventAction::PrintPrimary(G4PrimaryParticle* pp, G4int ind)
 {
-  for(G4int ii=0;ii<=ind;ii++)
-  { G4cout << "  "; }
+  for (G4int ii = 0; ii <= ind; ii++) {
+    G4cout << "  ";
+  }
   G4cout << "==PDGcode " << pp->GetPDGcode() << " ";
-  if(pp->GetG4code()!=0)
-  { G4cout << "(" << pp->GetG4code()->GetParticleName() << ")"; }
-  else
-  { G4cout << "is not defined in G4"; }
-  G4cout << " " << pp->GetMomentum()/GeV << " [GeV] ";
-  if(pp->GetTrackID()<0)
-  { G4cout << G4endl; }
-  else
-  { G4cout << ">>> G4Track ID " << pp->GetTrackID() << G4endl; }
+  if (pp->GetG4code() != 0) {
+    G4cout << "(" << pp->GetG4code()->GetParticleName() << ")";
+  }
+  else {
+    G4cout << "is not defined in G4";
+  }
+  G4cout << " " << pp->GetMomentum() / GeV << " [GeV] ";
+  if (pp->GetTrackID() < 0) {
+    G4cout << G4endl;
+  }
+  else {
+    G4cout << ">>> G4Track ID " << pp->GetTrackID() << G4endl;
+  }
 
   G4PrimaryParticle* daughter = pp->GetDaughter();
-  while(daughter)
-  {
-    PrintPrimary(daughter,ind+1);
+  while (daughter) {
+    PrintPrimary(daughter, ind + 1);
     daughter = daughter->GetNext();
   }
 }
-
-

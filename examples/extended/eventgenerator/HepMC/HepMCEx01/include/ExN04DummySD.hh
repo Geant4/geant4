@@ -38,23 +38,21 @@
 #include "G4VSensitiveDetector.hh"
 class G4Step;
 
-class ExN04DummySD : public G4VSensitiveDetector {
-public:
-  ExN04DummySD();
-  ~ExN04DummySD() {}
+class ExN04DummySD : public G4VSensitiveDetector
+{
+  public:
+    ExN04DummySD();
+    ~ExN04DummySD() {}
 
-  virtual void Initialize(G4HCofThisEvent*) {}
-  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
-  virtual void EndOfEvent(G4HCofThisEvent*) {}
-  virtual void clear() {}
-  virtual void DrawAll() {}
-  virtual void PrintAll() {}
+    virtual void Initialize(G4HCofThisEvent*) {}
+    virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*) { return false; }
+    virtual void EndOfEvent(G4HCofThisEvent*) {}
+    virtual void clear() {}
+    virtual void DrawAll() {}
+    virtual void PrintAll() {}
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04DummySD::ExN04DummySD()
-  : G4VSensitiveDetector("dummySD")
-{
-}
+ExN04DummySD::ExN04DummySD() : G4VSensitiveDetector("dummySD") {}
 
 #endif

@@ -33,9 +33,9 @@
 
 #include "G4VUserVisAction.hh"
 
-class UVA_VisAction: public G4VUserVisAction {
-  virtual void Draw();
+class UVA_VisAction : public G4VUserVisAction
+{
+    virtual void Draw();
 };
 
 #endif
-

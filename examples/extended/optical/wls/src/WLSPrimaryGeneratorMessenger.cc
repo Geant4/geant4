@@ -38,15 +38,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPrimaryGeneratorMessenger::WLSPrimaryGeneratorMessenger(
-  WLSPrimaryGeneratorAction* gun)
+WLSPrimaryGeneratorMessenger::WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction* gun)
   : fAction(gun)
 {
   fGunDir = new G4UIdirectory("/WLS/gun/");
   fGunDir->SetGuidance("WLSPrimaryGenerator control");
 
-  fSetPolarizationCmd =
-    new G4UIcmdWithADoubleAndUnit("/WLS/gun/optPhotonPolar", this);
+  fSetPolarizationCmd = new G4UIcmdWithADoubleAndUnit("/WLS/gun/optPhotonPolar", this);
   fSetPolarizationCmd->SetGuidance("Set linear polarization");
   fSetPolarizationCmd->SetGuidance("  angle w.r.t. (k,n) plane");
   fSetPolarizationCmd->SetParameterName("angle", true);
@@ -54,8 +52,7 @@ WLSPrimaryGeneratorMessenger::WLSPrimaryGeneratorMessenger(
   fSetPolarizationCmd->SetDefaultValue(0.);
   fSetPolarizationCmd->AvailableForStates(G4State_Idle);
 
-  fSetDecayTimeConstantCmd =
-    new G4UIcmdWithADoubleAndUnit("/WLS/gun/setDecayTimeConstant", this);
+  fSetDecayTimeConstantCmd = new G4UIcmdWithADoubleAndUnit("/WLS/gun/setDecayTimeConstant", this);
   fSetDecayTimeConstantCmd->SetGuidance("Set the decay time constant");
   fSetDecayTimeConstantCmd->SetGuidance("for the starting time of each photon");
   fSetDecayTimeConstantCmd->SetParameterName("time_const", false);
@@ -81,15 +78,12 @@ WLSPrimaryGeneratorMessenger::~WLSPrimaryGeneratorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String val)
+void WLSPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String val)
 {
-  if(command == fSetPolarizationCmd)
-    fAction->SetOptPhotonPolar(
-      G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
-  else if(command == fSetDecayTimeConstantCmd)
-    fAction->SetDecayTimeConstant(
-      G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+  if (command == fSetPolarizationCmd)
+    fAction->SetOptPhotonPolar(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+  else if (command == fSetDecayTimeConstantCmd)
+    fAction->SetDecayTimeConstant(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   // else if ( command == fSetUseSampledEnergyCmd )
   //   fAction->
   //     SetUseSampledEnergy(G4UIcmdWithABool::GetNewBoolValue(val));

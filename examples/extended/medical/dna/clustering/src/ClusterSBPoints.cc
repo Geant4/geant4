@@ -36,20 +36,20 @@
 /// \brief Implementation of the ClusterSBPoints class
 
 #include "ClusterSBPoints.hh"
+
 #include "G4SystemOfUnits.hh"
+
 #include <iostream>
 
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ClusterSBPoints::ClusterSBPoints(std::set<SBPoint*> pSBPoints):
-    fpRegisteredSBPoints()
+ClusterSBPoints::ClusterSBPoints(std::set<SBPoint*> pSBPoints) : fpRegisteredSBPoints()
 {
   UpdateDoubleStrand();
   std::set<SBPoint*>::iterator itPt;
-  for(itPt = pSBPoints.begin(); itPt != pSBPoints.end(); ++itPt)
-  {
+  for (itPt = pSBPoints.begin(); itPt != pSBPoints.end(); ++itPt) {
     AddSBPoint(*itPt);
   }
 }
@@ -64,10 +64,7 @@ ClusterSBPoints::~ClusterSBPoints()
 void ClusterSBPoints::Clear()
 {
   std::set<SBPoint*>::iterator itPt;
-  for(itPt = fpRegisteredSBPoints.begin();
-      itPt != fpRegisteredSBPoints.end();
-      ++itPt)
-  {
+  for (itPt = fpRegisteredSBPoints.begin(); itPt != fpRegisteredSBPoints.end(); ++itPt) {
     (*itPt)->CleanCluster();
   }
   fpRegisteredSBPoints.clear();
@@ -75,7 +72,7 @@ void ClusterSBPoints::Clear()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ClusterSBPoints::AddSBPoint(SBPoint* pSBPoint )
+void ClusterSBPoints::AddSBPoint(SBPoint* pSBPoint)
 {
   assert(pSBPoint);
   fpRegisteredSBPoints.insert(pSBPoint);
@@ -92,20 +89,15 @@ G4ThreeVector ClusterSBPoints::GetBarycenter() const
   G4double y = 0;
   G4double z = 0;
 
-  std::set<SBPoint* >::iterator itSDSPt;
-  for(itSDSPt = fpRegisteredSBPoints.begin();
-      itSDSPt != fpRegisteredSBPoints.end();
-      ++itSDSPt)
-  {
-    x+= (*itSDSPt)->GetPosition().x();
-    y+= (*itSDSPt)->GetPosition().y();
-    z+= (*itSDSPt)->GetPosition().z();
+  std::set<SBPoint*>::iterator itSDSPt;
+  for (itSDSPt = fpRegisteredSBPoints.begin(); itSDSPt != fpRegisteredSBPoints.end(); ++itSDSPt) {
+    x += (*itSDSPt)->GetPosition().x();
+    y += (*itSDSPt)->GetPosition().y();
+    z += (*itSDSPt)->GetPosition().z();
   }
 
-  return G4ThreeVector(
-      x/fpRegisteredSBPoints.size(),
-      y/fpRegisteredSBPoints.size(),
-      z/fpRegisteredSBPoints.size());
+  return G4ThreeVector(x / fpRegisteredSBPoints.size(), y / fpRegisteredSBPoints.size(),
+                       z / fpRegisteredSBPoints.size());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,11 +105,8 @@ G4ThreeVector ClusterSBPoints::GetBarycenter() const
 G4double ClusterSBPoints::GetEdep() const
 {
   G4double res = 0;
-  std::set<SBPoint* >::iterator itSDSPt;
-  for(itSDSPt = fpRegisteredSBPoints.begin();
-      itSDSPt != fpRegisteredSBPoints.end();
-      ++itSDSPt)
-  {
+  std::set<SBPoint*>::iterator itSDSPt;
+  for (itSDSPt = fpRegisteredSBPoints.begin(); itSDSPt != fpRegisteredSBPoints.end(); ++itSDSPt) {
     res += (*itSDSPt)->GetEdep();
   }
   return res;
@@ -131,27 +120,20 @@ void ClusterSBPoints::UpdateDoubleStrand()
   bool firstStrandTouch = false;
   bool secondStrandTouch = false;
 
-  std::set<SBPoint* >::iterator itSDSPt;
-  for(itSDSPt = fpRegisteredSBPoints.begin();
-      itSDSPt != fpRegisteredSBPoints.end();
-      ++itSDSPt)
-  {
+  std::set<SBPoint*>::iterator itSDSPt;
+  for (itSDSPt = fpRegisteredSBPoints.begin(); itSDSPt != fpRegisteredSBPoints.end(); ++itSDSPt) {
     // if the SDSPoint is localized on the first strand
-    if( ((*itSDSPt)->GetTouchedStrand() == 0 ) && !firstStrandTouch )
-    {
+    if (((*itSDSPt)->GetTouchedStrand() == 0) && !firstStrandTouch) {
       firstStrandTouch = true;
-      if(secondStrandTouch)
-      {
+      if (secondStrandTouch) {
         fIsDoubleSB = true;
         return;
       }
     }
     // if the SDSPoint is localized on the second strand
-    if( ((*itSDSPt)->GetTouchedStrand() == 1 ) && !secondStrandTouch )
-    {
+    if (((*itSDSPt)->GetTouchedStrand() == 1) && !secondStrandTouch) {
       secondStrandTouch = true;
-      if(firstStrandTouch)
-      {
+      if (firstStrandTouch) {
         fIsDoubleSB = true;
         return;
       }
@@ -161,58 +143,53 @@ void ClusterSBPoints::UpdateDoubleStrand()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-bool AreOnTheSameCluster(const SBPoint* pPt1, const SBPoint* pPt2,
-    G4double pMinDist)
+bool AreOnTheSameCluster(const SBPoint* pPt1, const SBPoint* pPt2, G4double pMinDist)
 {
   assert(pPt1);
   assert(pPt2);
 
-  G4double x1=pPt1->GetPosition().x()/nm;
-  G4double y1=pPt1->GetPosition().y()/nm;
-  G4double z1=pPt1->GetPosition().z()/nm;
+  G4double x1 = pPt1->GetPosition().x() / nm;
+  G4double y1 = pPt1->GetPosition().y() / nm;
+  G4double z1 = pPt1->GetPosition().z() / nm;
 
-  G4double x2=pPt2->GetPosition().x()/nm;
-  G4double y2=pPt2->GetPosition().y()/nm;
-  G4double z2=pPt2->GetPosition().z()/nm;
+  G4double x2 = pPt2->GetPosition().x() / nm;
+  G4double y2 = pPt2->GetPosition().y() / nm;
+  G4double z2 = pPt2->GetPosition().z() / nm;
 
   // if the two points are closed enough
-  if(((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2))<=
-      (pMinDist/nm*pMinDist/nm))
+  if (((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2))
+      <= (pMinDist / nm * pMinDist / nm))
   {
     return true;
-  }else
-  {
+  }
+  else {
     return false;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ClusterSBPoints::FindAllPointsPossible(std::vector<SBPoint*>* pPtsToCheck,
-    G4int pMinPts, G4double pMinDist)
+void ClusterSBPoints::FindAllPointsPossible(std::vector<SBPoint*>* pPtsToCheck, G4int pMinPts,
+                                            G4double pMinDist)
 {
   assert((unsigned int)pMinPts > this->GetSize());
   std::vector<SBPoint*>::iterator itPt = pPtsToCheck->begin();
-  while(itPt != pPtsToCheck->end() )
-  {
-
+  while (itPt != pPtsToCheck->end()) {
     // If 1- each SBpoint is part of only one cluster
     //    2- the point isn't already in the cluster
     //    3- the point is close enough of the barycenter
-    if( (!(*itPt)->HasCluster())
-        && (fpRegisteredSBPoints.find(*itPt) == fpRegisteredSBPoints.end())
-        && HasInBarycenter(*itPt, pMinDist)) // first version used HasIn method
+    if ((!(*itPt)->HasCluster()) && (fpRegisteredSBPoints.find(*itPt) == fpRegisteredSBPoints.end())
+        && HasInBarycenter(*itPt, pMinDist))  // first version used HasIn method
     {
       // the point is added
       this->AddSBPoint(*itPt);
-      if(this->GetSize() >= (unsigned int)pMinPts)
-      {
+      if (this->GetSize() >= (unsigned int)pMinPts) {
         return;
       }
       // restart from scratch
       itPt = pPtsToCheck->begin();
-    }else
-    {
+    }
+    else {
       ++itPt;
     }
   }
@@ -224,16 +201,12 @@ bool ClusterSBPoints::HasIn(const SBPoint* pPtToCheck, G4double pMinDist)
 {
   // check if the given point is near one of the cluster's point
   std::set<SBPoint*>::iterator itClusPt;
-  for(itClusPt = fpRegisteredSBPoints.begin();
-      itClusPt != fpRegisteredSBPoints.end();
-      ++itClusPt)
+  for (itClusPt = fpRegisteredSBPoints.begin(); itClusPt != fpRegisteredSBPoints.end(); ++itClusPt)
   {
     // if are two different pts
-    if((*pPtToCheck != *(*itClusPt)))
-    {
+    if ((*pPtToCheck != *(*itClusPt))) {
       // if close enought of an include point of the cluster
-      if( AreOnTheSameCluster(pPtToCheck, *itClusPt, pMinDist) )
-      {
+      if (AreOnTheSameCluster(pPtToCheck, *itClusPt, pMinDist)) {
         return true;
       }
     }
@@ -243,25 +216,23 @@ bool ClusterSBPoints::HasIn(const SBPoint* pPtToCheck, G4double pMinDist)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-bool ClusterSBPoints::HasInBarycenter(const SBPoint* pPtToCheck,
-    G4double pMinDist)
+bool ClusterSBPoints::HasInBarycenter(const SBPoint* pPtToCheck, G4double pMinDist)
 {
+  G4double x1 = pPtToCheck->GetPosition().x() / nm;
+  G4double y1 = pPtToCheck->GetPosition().y() / nm;
+  G4double z1 = pPtToCheck->GetPosition().z() / nm;
 
-  G4double x1=pPtToCheck->GetPosition().x()/nm;
-  G4double y1=pPtToCheck->GetPosition().y()/nm;
-  G4double z1=pPtToCheck->GetPosition().z()/nm;
-
-  G4double x2=this->GetBarycenter().x()/nm;
-  G4double y2=this->GetBarycenter().y()/nm;
-  G4double z2=this->GetBarycenter().z()/nm;
+  G4double x2 = this->GetBarycenter().x() / nm;
+  G4double y2 = this->GetBarycenter().y() / nm;
+  G4double z2 = this->GetBarycenter().z() / nm;
 
   // if the two points are closed enough
-  if(((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2))<=
-      (pMinDist/nm*pMinDist/nm))
+  if (((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2))
+      <= (pMinDist / nm * pMinDist / nm))
   {
     return true;
-  }else
-  {
+  }
+  else {
     return false;
   }
 }
@@ -275,9 +246,7 @@ void ClusterSBPoints::MergeWith(ClusterSBPoints* pCluster)
   std::set<SBPoint*> points = pCluster->GetRegistredSBPoints();
   pCluster->Clear();
   std::set<SBPoint*>::iterator itPt;
-  for(itPt = points.begin(); itPt != points.end(); ++itPt)
-  {
+  for (itPt = points.begin(); itPt != points.end(); ++itPt) {
     this->AddSBPoint(*itPt);
   }
 }
-

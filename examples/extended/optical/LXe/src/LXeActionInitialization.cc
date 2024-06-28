@@ -39,10 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeActionInitialization::LXeActionInitialization(
-  const LXeDetectorConstruction* det)
-  : G4VUserActionInitialization()
-  , fDetector(det)
+LXeActionInitialization::LXeActionInitialization(const LXeDetectorConstruction* det)
+  : G4VUserActionInitialization(), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,33 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Derived from 
+// Derived from
 //  https://twiki.cern.ch/twiki/bin/view/Geant4/QuickMigrationGuideForGeant4V10
 // Courtesy of A. Dotti
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
-// Med. Phys. 37 (2010) 4692-4708
+// Med. Phys. 45 (2018) e722-e739
 // Phys. Med. 31 (2015) 861-874
+// Med. Phys. 37 (2010) 4692-4708
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 /// \file medical/dna/svalue/include/MyFileReader.hh
 /// \brief Declaration of the MyFileReader class
 
-#include <list>
-#include <fstream>
 #include "G4String.hh"
+
+#include <fstream>
+#include <list>
 
 class MyFileReader
 {
- public:
-   MyFileReader();
-   ~MyFileReader();
+  public:
+    MyFileReader();
+    ~MyFileReader();
 
-   G4double GetAnEvent();
-   
- private:
-   std::ifstream fInputFile;
-   std::list<G4double> fEvList;
+    G4double GetAnEvent();
+
+  private:
+    std::ifstream fInputFile;
+    std::list<G4double> fEvList;
 };

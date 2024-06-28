@@ -45,12 +45,12 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(RunAction*, HistoManager*);
-   ~SteppingAction();
+    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
-    
+
   private:
-    RunAction*    fRunAction;
+    RunAction* fRunAction;
     HistoManager* fHistoManager;
 };
 

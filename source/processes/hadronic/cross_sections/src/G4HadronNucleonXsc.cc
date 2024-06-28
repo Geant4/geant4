@@ -49,25 +49,28 @@
 #include "G4KaonZeroShort.hh"
 #include "G4KaonZeroLong.hh"
 
-static const G4double invGeV  = 1.0/CLHEP::GeV;
-static const G4double invGeV2 = 1.0/(CLHEP::GeV*CLHEP::GeV);
-// PDG fit constants
-static const G4double minLogP = 3.5;    // min of (lnP-minLogP)^2 
-static const G4double cofLogE = .0557;  // elastic (lnP-minLogP)^2 
-static const G4double cofLogT = .3;     // total (lnP-minLogP)^2 
-static const G4double pMin = .1;        // fast LE calculation 
-static const G4double pMax = 1000.;     // fast HE calculation 
-static const G4double ekinmin = 0.1*CLHEP::MeV;   // protection against zero ekin 
-static const G4double ekinmaxQB = 100*CLHEP::MeV; // max kinetic energy for Coulomb barrier  
+namespace
+{
+  const G4double invGeV  = 1.0/CLHEP::GeV;
+  const G4double invGeV2 = 1.0/(CLHEP::GeV*CLHEP::GeV);
+  // PDG fit constants
+  const G4double minLogP = 3.5;    // min of (lnP-minLogP)^2 
+  const G4double cofLogE = .0557;  // elastic (lnP-minLogP)^2 
+  const G4double cofLogT = .3;     // total (lnP-minLogP)^2 
+  const G4double pMin = .1;        // fast LE calculation 
+  const G4double pMax = 1000.;     // fast HE calculation 
+  const G4double ekinmin = 0.1*CLHEP::MeV;   // protection against zero ekin 
+  const G4double ekinmaxQB = 100*CLHEP::MeV; // max kinetic energy for Coulomb barrier  
+}
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
-  : fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0)
 {
+  // basic hadrons
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
   thePiPlus   = G4PionPlus::PionPlus();
 
-  // strange
+  // basic strange mesons
   theKPlus    = G4KaonPlus::KaonPlus();
   theKMinus   = G4KaonMinus::KaonMinus();
   theK0S      = G4KaonZeroShort::KaonZeroShort();
@@ -75,9 +78,6 @@ G4HadronNucleonXsc::G4HadronNucleonXsc()
 
   g4calc = G4Pow::GetInstance();
 }
-
-G4HadronNucleonXsc::~G4HadronNucleonXsc()
-{}
 
 void G4HadronNucleonXsc::CrossSectionDescription(std::ostream& outFile) const
 {

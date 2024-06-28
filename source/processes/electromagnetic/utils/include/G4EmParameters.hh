@@ -60,8 +60,9 @@
 #include "G4EmFluoDirectory.hh"
 #include "G4EmSaturation.hh"
 #include "G4ThreeVector.hh"
+#include "G4ChemTimeStepModel.hh"
 #include <vector>
-
+#include <map>
 enum G4eSingleScatteringType
 {
   fWVI = 0,
@@ -81,6 +82,12 @@ enum G4EmFluctuationType
   fDummyFluctuation = 0,
   fUniversalFluctuation,
   fUrbanFluctuation
+};
+
+enum G4PositronAtRestModelType 
+{
+  fSimplePositronium = 0,
+  fAllisonPositronium
 };
 
 class G4EmParametersMessenger;
@@ -172,6 +179,12 @@ public:
 
   void SetFluctuationType(G4EmFluctuationType val);
   G4EmFluctuationType FluctuationType() const;
+
+  void SetPositronAtRestModelType(G4PositronAtRestModelType val);
+  G4PositronAtRestModelType PositronAtRestModelType() const;
+
+  void SetOrtoPsFraction(G4double val);
+  G4double  OrtoPsFraction() const;
 
   void SetDNAFast(G4bool val);
   G4bool DNAFast() const;
@@ -327,6 +340,9 @@ public:
   void SetDNAeSolvationSubType(G4DNAModelSubType val);
   G4DNAModelSubType DNAeSolvationSubType() const;
 
+  //DNA chemistry model
+  void SetTimeStepModel(const G4ChemTimeStepModel& model);
+  G4ChemTimeStepModel GetTimeStepModel() const;
   //5d
   void  SetConversionType(G4int val);
   G4int GetConversionType() const;
@@ -469,6 +485,8 @@ private:
   G4NuclearFormfactorType nucFormfactor;
   G4eSingleScatteringType fSStype;
   G4EmFluctuationType fFluct;
+  G4PositronAtRestModelType fPositronium;
+  G4double fOrtoPsFraction;
 
   G4String fDirLEDATA;
 };

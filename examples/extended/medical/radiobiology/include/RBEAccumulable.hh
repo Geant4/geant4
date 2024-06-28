@@ -75,18 +75,9 @@ class RBEAccumulable : public VRadiobiologicalAccumulable
     using array_type = std::valarray<G4double>;
 
     // Access to stored data (to be called on the merged data)
-    const array_type GetAlphaNumerator() const
-    {
-      return fAlphaNumerator;
-    }
-    const array_type GetBetaNumerator() const
-    {
-      return fBetaNumerator;
-    }
-    const array_type GetDenominator() const
-    {
-      return fDenominator;
-    }
+    const array_type GetAlphaNumerator() const { return fAlphaNumerator; }
+    const array_type GetBetaNumerator() const { return fBetaNumerator; }
+    const array_type GetDenominator() const { return fDenominator; }
 
     // Verbosity, shared with RBE
     G4int GetVerboseLevel() const;

@@ -48,7 +48,10 @@ ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const { SetUserAction(new RunAction(fDetector)); }
+void ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new RunAction(fDetector));
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -37,27 +37,27 @@
 
 F05PhysicsList::F05PhysicsList() : G4VModularPhysicsList()
 {
-    RegisterPhysics(new G4SpinDecayPhysics());
-    RegisterPhysics(new G4StepLimiterPhysics());
+  RegisterPhysics(new G4SpinDecayPhysics());
+  RegisterPhysics(new G4StepLimiterPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::ConstructParticle()
 {
-    G4VModularPhysicsList::ConstructParticle();
+  G4VModularPhysicsList::ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::ConstructProcess()
 {
-    G4VModularPhysicsList::ConstructProcess();
+  G4VModularPhysicsList::ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::SetCuts()
 {
-    SetCutsWithDefault();
+  SetCutsWithDefault();
 }

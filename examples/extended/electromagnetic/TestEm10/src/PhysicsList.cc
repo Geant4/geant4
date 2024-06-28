@@ -42,43 +42,39 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
-#include "DetectorConstruction.hh"
 
+#include "DetectorConstruction.hh"
+#include "PhysicsListMessenger.hh"
+#include "StepMax.hh"
+#include "TransitionRadiationPhysics.hh"
+
+#include "G4DecayPhysics.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4EmParameters.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmStandardPhysicsGS.hh"
-#include "G4EmStandardPhysicsSS.hh"
-#include "G4EmStandardPhysicsWVI.hh"
-#include "G4EmLivermorePhysics.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLowEPPhysics.hh"
-#include "G4DecayPhysics.hh"
-#include "TransitionRadiationPhysics.hh"
-
-#include "G4EmParameters.hh"
-
-#include "StepMax.hh"
-
 #include "G4ProcessManager.hh"
-//#include "G4ParticleTypes.hh"
-//#include "G4ParticleTable.hh"
+// #include "G4ParticleTypes.hh"
+// #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 
 G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction* ptr) 
-: G4VModularPhysicsList(),
-  fVerbose(1)
+PhysicsList::PhysicsList(DetectorConstruction* ptr) : G4VModularPhysicsList(), fVerbose(1)
 {
-  SetDefaultCutValue(1*CLHEP::mm);
+  SetDefaultCutValue(1 * CLHEP::mm);
   SetVerboseLevel(fVerbose);
- 
+
   fMessenger = new PhysicsListMessenger(this);
 
   // Decay Physics is always defined to define all particles
@@ -116,7 +112,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
-  fXTRPhysicsList->ConstructProcess(); 
+  fXTRPhysicsList->ConstructProcess();
   AddStepMax();
 }
 
@@ -130,78 +126,65 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == fEmName) {
     return;
-
-  } else if (name == "emstandard_opt0") {
-
+  }
+  else if (name == "emstandard_opt0") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics(fVerbose);
-
-  } else if (name == "emstandard_opt1") {
-
+  }
+  else if (name == "emstandard_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1(fVerbose);
-
-  } else if (name == "emstandard_opt2") {
-
+  }
+  else if (name == "emstandard_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2(fVerbose);
-
-  } else if (name == "emstandard_opt3") {
-
+  }
+  else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3(fVerbose);
-
-  } else if (name == "emstandard_opt4") {
-
+  }
+  else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4(fVerbose);
-
-  } else if (name == "emstandardWVI") {
-
+  }
+  else if (name == "emstandardWVI") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsWVI(fVerbose);
-
-  } else if (name == "emstandardSS") {
-
+  }
+  else if (name == "emstandardSS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS(fVerbose);
-
-  } else if (name == "emstandardGS") {
-
+  }
+  else if (name == "emstandardGS") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsGS(fVerbose);
-
-  } else if (name == "emlivermore") {
-
+  }
+  else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics(fVerbose);
-
-  } else if (name == "empenelope") {
-
+  }
+  else if (name == "empenelope") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics(fVerbose);
-
-  } else if (name == "emlowenergy") {
-
+  }
+  else if (name == "emlowenergy") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics(fVerbose);
-
-  } else {
-
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
@@ -219,19 +202,16 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   fStepMaxProcess = new StepMax();
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
+  while ((*particleIterator)()) {
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fStepMaxProcess->IsApplicable(*particle))
-    {
+    if (fStepMaxProcess->IsApplicable(*particle)) {
       pmanager->AddDiscreteProcess(fStepMaxProcess);
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

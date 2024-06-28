@@ -35,48 +35,39 @@
 //
 // ClassName:   G4LDMHi
 //
-// Authors:   15.03.17 V. Grichine based on G4Monopole 
+// Authors:   15.03.17 V. Grichine based on G4Monopole
 //
 // Modified:
 //
-//  
+//
 //
 ///////////////////////////////////////////
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
-
-#include "CLHEP/Units/SystemOfUnits.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4LDMHi : public G4ParticleDefinition
 {
-private:
+  private:
+    static G4LDMHi* theLDMHi;
 
-  static G4LDMHi*  theLDMHi;
+    G4LDMHi(const G4String& aName, G4double mass, G4double width, G4double charge, G4int iSpin,
+            G4int iParity, G4int iConjugation, G4int iIsospin, G4int iIsospin3, G4int gParity,
+            const G4String& pType, G4int lepton, G4int baryon, G4int encoding, G4bool stable,
+            G4double lifetime, G4DecayTable* decaytable);
 
-  G4LDMHi(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable );
+    virtual ~G4LDMHi();
 
-  virtual ~G4LDMHi();
+  public:
+    static G4LDMHi* LDMHiDefinition(G4double mass);
 
-public: 
-  
-  static G4LDMHi* LDMHiDefinition( G4double mass);
-
-  static G4LDMHi* LDMHi();
-
+    static G4LDMHi* LDMHi();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

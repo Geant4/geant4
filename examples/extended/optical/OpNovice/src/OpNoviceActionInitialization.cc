@@ -28,6 +28,7 @@
 /// \brief Implementation of the OpNoviceActionInitialization class
 
 #include "OpNoviceActionInitialization.hh"
+
 #include "OpNoviceEventAction.hh"
 #include "OpNovicePrimaryGeneratorAction.hh"
 #include "OpNoviceRunAction.hh"

@@ -27,49 +27,48 @@
 /// \brief Definition of the B01RunAction class
 //
 //
-// 
+//
 
 #ifndef B01RunAction_h
 #define B01RunAction_h 1
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+
 #include <vector>
 
 class G4Run;
 
 //=======================================================================
 // B01RunAction
-//   
+//
 //
 //
 //=======================================================================
 //
 class B01RunAction : public G4UserRunAction
 {
-public:
-  // constructor and destructor
-  B01RunAction();
-  virtual ~B01RunAction();
+  public:
+    // constructor and destructor
+    B01RunAction();
+    virtual ~B01RunAction();
 
-public:
-  // virtual method from G4UserRunAction.
-  virtual G4Run* GenerateRun();
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
+  public:
+    // virtual method from G4UserRunAction.
+    virtual G4Run* GenerateRun();
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-public:
-  void PrintHeader(std::ostream *out);
-  std::string FillString(const std::string &name, char c, G4int n
-                        , G4bool back=true);
+  public:
+    void PrintHeader(std::ostream* out);
+    std::string FillString(const std::string& name, char c, G4int n, G4bool back = true);
 
-private:
-  // Data member 
-  // - vector of MultiFunctionalDetector names.
-  std::vector<G4String> fSDName;  
-  //  G4int fFieldName;
-  G4int fFieldValue;
-
+  private:
+    // Data member
+    // - vector of MultiFunctionalDetector names.
+    std::vector<G4String> fSDName;
+    //  G4int fFieldName;
+    G4int fFieldValue;
 };
 
 //

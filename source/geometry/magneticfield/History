@@ -6,9 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-17 Ben Morgan (field-V11-01-07)
+## 2024-06-20 Ivana Hrivnacova (field-V11-02-03)
+- Fix in G4FieldBuilder for local fields:
+  apply the local fields in the order of user setting
+
+## 2024-04-29 Ivana Hrivnacova (field-V11-02-02)
+- Added classes for automatic field construction from paremeters:
+  - G4FieldBuilder[Messenger], G4FieldParameters[Messenger], G4FieldSetup
+  - No changes in other Geant4 classes
+
+## 2024-04-17 Ben Morgan (field-V11-02-01)
 - Fix maybe-uninitialized warnings found in ATLAS builds
   - Reported in internal ATLASSIM-6058 ticket.
+
+## 2024-04-02 Gabriele Cosmo (field-V11-02-00)
+- Applied trivial clang-tidy fixes to classes, i.e. use of default
+  constructor/destructor, auto and using statements.
+- Minor cleanup in QSS classes.
 
 ## 2023-11-03 Gabriele Cosmo (field-V11-01-06)
 - Reinstated default DormandPrince745 stepper.

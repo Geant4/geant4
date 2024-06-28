@@ -30,25 +30,24 @@
 #ifndef MOLECULAR_DNA_GEOMETRY_HH
 #define MOLECULAR_DNA_GEOMETRY_HH
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VTouchable.hh"
-
-#include "UtilityFunctions.hh"
-#include "MoleculeList.hh"
-#include "DamageModel.hh"
 #include "ChromosomeMapper.hh"
 #include "DNAWorld.hh"
-#include "G4VDNAMolecularGeometry.hh"
+#include "DamageModel.hh"
+#include "MoleculeList.hh"
+#include "UtilityFunctions.hh"
 
-#include <vector>
+#include "G4LogicalVolume.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4VDNAMolecularGeometry.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
+#include "globals.hh"
+
+#include <array>
 #include <map>
 #include <unordered_map>
-#include <array>
+#include <vector>
 
 class G4Material;
 
@@ -77,276 +76,254 @@ using placement = std::tuple<G4LogicalVolume*, int64_t, int64_t, G4ThreeVector,
 //           to a 180 degree rotation of the DNA >
 //         < Boolean to indicate if volume has actually been placed >
 using placement_transform =
-  std::tuple<std::array<int, 8>, std::array<int64_t, 8>, std::array<int64_t, 8>,
-             G4bool, G4bool>;
+  std::tuple<std::array<int, 8>, std::array<int64_t, 8>, std::array<int64_t, 8>, G4bool, G4bool>;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct molecule_t
 {
-  G4String fname;
-  G4String fshape;
-  int64_t fchain_id;
-  int64_t fstrand_id;
-  int64_t fbase_idx;
-  G4ThreeVector fposition;
-  G4ThreeVector frotation;
-  G4ThreeVector fsize;
+    G4String fname;
+    G4String fshape;
+    int64_t fchain_id;
+    int64_t fstrand_id;
+    int64_t fbase_idx;
+    G4ThreeVector fposition;
+    G4ThreeVector frotation;
+    G4ThreeVector fsize;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct compareLVByName
 {
-  bool operator()(const G4LogicalVolume* lhs, const G4LogicalVolume* rhs) const;
+    bool operator()(const G4LogicalVolume* lhs, const G4LogicalVolume* rhs) const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DNAGeometry : public G4VDNAMolecularGeometry
 {
- public:
-  DNAGeometry();
+  public:
+    DNAGeometry();
 
-  ~DNAGeometry() override;
+    ~DNAGeometry() override;
 
-  void BuildDNA(G4LogicalVolume*);
+    void BuildDNA(G4LogicalVolume*);
 
-  inline DNAWorld* GetDNAWorld();
+    inline DNAWorld* GetDNAWorld();
 
-  void AddVoxelFile(const G4String& vname, const G4String& fname,
-                    const G4bool& twist)
-  {
-    fVoxelNames[vname] = fname;
-    fVoxelTwist[vname] = twist;
-  }
+    void AddVoxelFile(const G4String& vname, const G4String& fname, const G4bool& twist)
+    {
+      fVoxelNames[vname] = fname;
+      fVoxelTwist[vname] = twist;
+    }
 
-  void SetFractalFilename(const G4String& fname)
-  {
-    fFractalCurveFile = fname;
-    FillVoxelVectors();
-  }
+    void SetFractalFilename(const G4String& fname)
+    {
+      fFractalCurveFile = fname;
+      FillVoxelVectors();
+    }
 
-  void SetFractalAnglesAsPi(const G4bool& value) { fAnglesAsPi = value; }
+    void SetFractalAnglesAsPi(const G4bool& value) { fAnglesAsPi = value; }
 
-  void EnableCustomMoleculeSizes(const G4bool& value)
-  {
-    fEnableCustomMoleculeSizes = value;
-  }
+    void EnableCustomMoleculeSizes(const G4bool& value) { fEnableCustomMoleculeSizes = value; }
 
-  void AddChangeMoleculeSize(const G4String& name, const G4ThreeVector& size);
+    void AddChangeMoleculeSize(const G4String& name, const G4ThreeVector& size);
 
-  inline void SetVoxelSideLength(const G4ThreeVector& length)
-  { fVoxelSideLength = length; }
+    inline void SetVoxelSideLength(const G4ThreeVector& length) { fVoxelSideLength = length; }
 
-  inline void SetFractalScaling(const G4ThreeVector& length)
-  { fFractalScaling = length; }
+    inline void SetFractalScaling(const G4ThreeVector& length) { fFractalScaling = length; }
 
-  OctreeNode* GetTopOctreeNode(G4LogicalVolume*) const;
+    OctreeNode* GetTopOctreeNode(G4LogicalVolume*) const;
 
-  const PlacementVolumeInfo* GetPVInfo(const G4LogicalVolume*) const;
+    const PlacementVolumeInfo* GetPVInfo(const G4LogicalVolume*) const;
 
-  inline auto GetChromosomeMapper() const
-  { return fpChromosomeMapper; };
+    inline auto GetChromosomeMapper() const { return fpChromosomeMapper; };
 
-  inline void SetOverlaps(G4bool overlap)
-  { fCheckOverlaps = overlap; };
+    inline void SetOverlaps(G4bool overlap) { fCheckOverlaps = overlap; };
 
-  inline G4bool GetOverlaps() const { return fCheckOverlaps; };
+    inline G4bool GetOverlaps() const { return fCheckOverlaps; };
 
-  inline void SetDrawCellVolumes(G4bool b) { fDrawCellVolumes = b; };
+    inline void SetDrawCellVolumes(G4bool b) { fDrawCellVolumes = b; };
 
-  inline G4bool GetDrawCellVolumes() const { return fDrawCellVolumes; };
+    inline G4bool GetDrawCellVolumes() const { return fDrawCellVolumes; };
 
-  inline void SetVerbosity(G4int i) { fVerbosity = i; };
+    inline void SetVerbosity(G4int i) { fVerbosity = i; };
 
-  inline G4int GetVerbosity() const { return fVerbosity; };
+    inline G4int GetVerbosity() const { return fVerbosity; };
 
-  inline void SetSmartless(G4int i) { fSmartless = i; };
+    inline void SetSmartless(G4int i) { fSmartless = i; };
 
-  inline G4int GetSmartless() const { return fSmartless; };
+    inline G4int GetSmartless() const { return fSmartless; };
 
-  inline void SetMediumMaterial(G4Material* mat) { fpMediumMaterial = mat; };
+    inline void SetMediumMaterial(G4Material* mat) { fpMediumMaterial = mat; };
 
-  inline G4LogicalVolume* GetDNAChemVolumePointer() const;
+    inline G4LogicalVolume* GetDNAChemVolumePointer() const;
 
-  inline G4LogicalVolume* GetDNAPhysicsVolumePointer() const;
+    inline G4LogicalVolume* GetDNAPhysicsVolumePointer() const;
 
-  G4LogicalVolume* GetMatchingChemVolume(G4LogicalVolume*) const;
+    G4LogicalVolume* GetMatchingChemVolume(G4LogicalVolume*) const;
 
-  G4LogicalVolume* GetMatchingPhysVolume(G4LogicalVolume*) const;
+    G4LogicalVolume* GetMatchingPhysVolume(G4LogicalVolume*) const;
 
-  void PrintOctreeStats();
+    void PrintOctreeStats();
 
-  inline void SetDirectInteractionRange(G4double r)
-  { fDirectInteractionRange = r; };
+    inline void SetDirectInteractionRange(G4double r) { fDirectInteractionRange = r; };
 
-  void SetRadicalKillDistance(G4double r) { fRadicalKillDistance = r; };
+    void SetRadicalKillDistance(G4double r) { fRadicalKillDistance = r; };
 
-  void SetHistoneScav(G4bool hf) { fUseHistoneScav = hf; };
+    void SetHistoneScav(G4bool hf) { fUseHistoneScav = hf; };
 
-  inline G4double GetDirectInteractionRange() const
-  {
-    return fDirectInteractionRange;
-  };
+    inline G4double GetDirectInteractionRange() const { return fDirectInteractionRange; };
 
-  G4double GetRadicalKillDistance() const
-  {
-    return fRadicalKillDistance;
-  };
+    G4double GetRadicalKillDistance() const { return fRadicalKillDistance; };
 
-  const DamageModel* GetDamageModel() { return fpDamageModel; };
+    const DamageModel* GetDamageModel() { return fpDamageModel; };
 
-  // Tests
-  void ChromosomeTest();
+    // Tests
+    void ChromosomeTest();
 
-  void BasePairIndexTest();
+    void BasePairIndexTest();
 
-  void UniqueIDTest();
+    void UniqueIDTest();
 
-  int64_t GetGlobalUniqueIDTest(  // dousatsu
-    int64_t, int64_t, int64_t, int64_t, int64_t) const;   // dousatsu
+    int64_t GetGlobalUniqueIDTest(  // dousatsu
+      int64_t, int64_t, int64_t, int64_t, int64_t) const;  // dousatsu
 
- private:
-  DNAGeometryMessenger* fpMessenger;
-  G4String fFractalCurveFile;
-  G4bool fAnglesAsPi = false;
-  G4bool fEnableCustomMoleculeSizes = false;
-  G4bool fCheckOverlaps = false;
-  G4bool fDrawCellVolumes = false;
-  G4int fVerbosity = 0;
-  G4bool fUseHistoneScav = true;
-  // vis attrs to draw cells
-  G4VisAttributes* fpDrawCellAttrs;
-  // Materials
-  G4Material* fpMediumMaterial;
-  G4Material *fpSugarMaterial, *fpPhosphateMaterial;
-  G4Material *fpGuanineMaterial, *fpAdenineMaterial, *fpThymineMaterial;
-  G4Material *fpCytosineMaterial, *fpHistoneMaterial;
+  private:
+    DNAGeometryMessenger* fpMessenger;
+    G4String fFractalCurveFile;
+    G4bool fAnglesAsPi = false;
+    G4bool fEnableCustomMoleculeSizes = false;
+    G4bool fCheckOverlaps = false;
+    G4bool fDrawCellVolumes = false;
+    G4int fVerbosity = 0;
+    G4bool fUseHistoneScav = true;
+    // vis attrs to draw cells
+    G4VisAttributes* fpDrawCellAttrs;
+    // Materials
+    G4Material* fpMediumMaterial;
+    G4Material *fpSugarMaterial, *fpPhosphateMaterial;
+    G4Material *fpGuanineMaterial, *fpAdenineMaterial, *fpThymineMaterial;
+    G4Material *fpCytosineMaterial, *fpHistoneMaterial;
 
-  // Placement of molecules
-  void FillParameterisedSpace();
+    // Placement of molecules
+    void FillParameterisedSpace();
 
-  G4VPhysicalVolume* PlacePhosphate(G4LogicalVolume*, const molecule_t&,
+    G4VPhysicalVolume* PlacePhosphate(G4LogicalVolume*, const molecule_t&, const molecule_t&);
+
+    G4VPhysicalVolume* PlaceSugar(G4LogicalVolume*, const molecule_t&, const molecule_t&);
+
+    G4VPhysicalVolume* PlaceBase(G4LogicalVolume*, const molecule_t&, const molecule_t&,
+                                 const molecule_t&, const molecule_t&);
+
+    G4VPhysicalVolume* PlaceHistone(G4LogicalVolume*,  // dousatsu
                                     const molecule_t&);
 
-  G4VPhysicalVolume* PlaceSugar(G4LogicalVolume*, const molecule_t&,
-                                const molecule_t&);
+    // defining voxels
+    std::pair<G4LogicalVolume*, PlacementVolumeInfo*> LoadVoxelVolume(const G4String&,
+                                                                      const G4String&);
 
-  G4VPhysicalVolume* PlaceBase(G4LogicalVolume*, const molecule_t&,
-                               const molecule_t&, const molecule_t&,
-                               const molecule_t&);
+    void FillVoxelVectors();
 
-  G4VPhysicalVolume* PlaceHistone(G4LogicalVolume*,  // dousatsu
-                                  const molecule_t&);
+    G4LogicalVolume *fpDNAVolumePhys{}, *fpDNAVolumeChem{};
+    std::map<const G4LogicalVolume*, G4LogicalVolume*> fPhysToChem;
+    std::map<const G4LogicalVolume*, G4LogicalVolume*> fChemToPhys;
+    std::vector<G4ThreeVector> fVoxelPositions;
+    std::vector<G4ThreeVector> fVoxelRotations;
+    std::vector<G4String> fVoxelTypes;
+    std::vector<G4int> fVoxelIndices;
+    // std::vector<G4LogicalVolume *> fVoxelLogicalVolumes;
+    G4ThreeVector fVoxelSideLength = G4ThreeVector(75 * nm, 75 * nm, 75 * nm);
+    G4ThreeVector fFractalScaling = G4ThreeVector(1, 1, 1);
+    std::map<G4String, G4String> fVoxelNames;  // For these, the first el.
+    std::map<G4String, G4bool> fVoxelTwist;  // is also lv->GetName()
 
-  // defining voxels
-  std::pair<G4LogicalVolume*, PlacementVolumeInfo*> LoadVoxelVolume(
-    const G4String&, const G4String&);
+    std::map<const G4LogicalVolume*, PlacementVolumeInfo*> fInfoMap;
+    std::map<G4String, G4ThreeVector> fMoleculeSizes;
+    G4double fSmartless = 2.0;
+    G4double fRadicalKillDistance = 10 * nm, fDirectInteractionRange = 6 * angstrom;
+    G4double fHistoneInteractionRadius = 25 * angstrom;
 
-  void FillVoxelVectors();
+    ChromosomeMapper* fpChromosomeMapper;
+    DamageModel* fpDamageModel;
+    DNAWorld* fpDNAPhysicsWorld;
 
-  G4LogicalVolume *fpDNAVolumePhys{}, *fpDNAVolumeChem{};
-  std::map<const G4LogicalVolume*, G4LogicalVolume*> fPhysToChem;
-  std::map<const G4LogicalVolume*, G4LogicalVolume*> fChemToPhys;
-  std::vector<G4ThreeVector> fVoxelPositions;
-  std::vector<G4ThreeVector> fVoxelRotations;
-  std::vector<G4String> fVoxelTypes;
-  std::vector<G4int> fVoxelIndices;
-  // std::vector<G4LogicalVolume *> fVoxelLogicalVolumes;
-  G4ThreeVector fVoxelSideLength = G4ThreeVector(75 * nm, 75 * nm, 75 * nm);
-  G4ThreeVector fFractalScaling = G4ThreeVector(1, 1, 1);
-  std::map<G4String, G4String> fVoxelNames;  // For these, the first el.
-  std::map<G4String, G4bool> fVoxelTwist;    // is also lv->GetName()
+    // Members for placement transformations
+  public:
+    inline int64_t GetNumberOfPlacements() const
+    {
+      return (int64_t)fPlacementTransformations.size();
+    }
 
-  std::map<const G4LogicalVolume*, PlacementVolumeInfo*> fInfoMap;
-  std::map<G4String, G4ThreeVector> fMoleculeSizes;
-  G4double fSmartless = 2.0;
-  G4double fRadicalKillDistance = 10 * nm,
-           fDirectInteractionRange = 6 * angstrom;
-  G4double fHistoneInteractionRadius = 25 * angstrom;
+    G4int GetGlobalChain(G4int vol_idx, G4int local_chain) const
+    {
+      return std::get<0>(fPlacementTransformations[vol_idx])[local_chain];
+    };
 
-  ChromosomeMapper* fpChromosomeMapper;
-  DamageModel* fpDamageModel;
-  DNAWorld* fpDNAPhysicsWorld;
+    G4int GetLocalChain(G4int vol_idx, G4int global_chain) const;
 
-  // Members for placement transformations
- public:
-  inline int64_t GetNumberOfPlacements() const
-  {
-    return (int64_t) fPlacementTransformations.size();
-  }
+    inline int64_t GetStartIdx(int64_t vol_idx,
+                               int64_t global_chn) const  // dousatsu
+    {
+      return std::get<1>(fPlacementTransformations[vol_idx])[global_chn];
+    };
 
-  G4int GetGlobalChain(G4int vol_idx, G4int local_chain) const
-  {
-    return std::get<0>(fPlacementTransformations[vol_idx])[local_chain];
-  };
+    inline int64_t GetEndIdx(int64_t vol_idx,
+                             int64_t global_chn) const  // dousatsu
+    {
+      return std::get<2>(fPlacementTransformations[vol_idx])[global_chn];
+    };
 
-  G4int GetLocalChain(G4int vol_idx, G4int global_chain) const;
+    int64_t GetMaxBPIdx() const;
 
-  inline int64_t GetStartIdx(int64_t vol_idx,
-                                    int64_t global_chn) const  // dousatsu
-  {
-    return std::get<1>(fPlacementTransformations[vol_idx])[global_chn];
-  };
+    inline G4int GetNumberOfChains() const
+    {
+      return std::get<0>(fPlacementTransformations[0]).size();
+    };
 
-  inline int64_t GetEndIdx(int64_t vol_idx,
-                                  int64_t global_chn) const  // dousatsu
-  {
-    return std::get<2>(fPlacementTransformations[vol_idx])[global_chn];
-  };
+    inline G4bool GetStrandsFlipped(G4int vol_idx) const
+    {
+      return std::get<3>(fPlacementTransformations[vol_idx]);
+    };
 
-  int64_t GetMaxBPIdx() const;
+  private:
+    std::vector<placement_transform> fPlacementTransformations;
 
-  inline G4int GetNumberOfChains() const
-  {
-    return std::get<0>(fPlacementTransformations[0]).size();
-  };
+    void AddNewPlacement(const G4LogicalVolume*, std::array<int, 8>, G4bool, G4bool);
 
-  inline G4bool GetStrandsFlipped(G4int vol_idx) const
-  {
-    return std::get<3>(fPlacementTransformations[vol_idx]);
-  };
+    void AddFourChainPlacement(std::vector<placement>::iterator, std::vector<placement>::iterator,
+                               G4bool);
 
- private:
-  std::vector<placement_transform> fPlacementTransformations;
+    void AddSingleChainPlacement(std::vector<placement>::iterator, std::vector<placement>::iterator,
+                                 G4bool);
 
-  void AddNewPlacement(const G4LogicalVolume*, std::array<int, 8>, G4bool,
-                       G4bool);
+    // Lookup methods for chemistry handling
+  public:
+    // Unique ID generators
+    inline int64_t GetGlobalPairID(G4int, G4int, int64_t) const;
 
-  void AddFourChainPlacement(std::vector<placement>::iterator,
-                             std::vector<placement>::iterator, G4bool);
+    int64_t GetGlobalUniqueID(G4VPhysicalVolume*,  // dousatsu
+                              const G4VTouchable*) const;
 
-  void AddSingleChainPlacement(std::vector<placement>::iterator,
-                               std::vector<placement>::iterator, G4bool);
+    // And reconstructors from unique ID
+    int64_t GetBasePairFromUniqueID(int64_t) const;
 
-  // Lookup methods for chemistry handling
- public:
-  // Unique ID generators
-  inline int64_t GetGlobalPairID(G4int, G4int, int64_t) const;
+    static inline molecule GetMoleculeFromUniqueID(int64_t);
 
-  int64_t GetGlobalUniqueID(G4VPhysicalVolume*,  // dousatsu
-                            const G4VTouchable*) const;
+    G4Material* GetMaterialFromUniqueID(int64_t) const;
 
-  // And reconstructors from unique ID
-  int64_t GetBasePairFromUniqueID(int64_t) const;
+    G4int GetChainIDFromUniqueID(int64_t) const;
 
-  static inline molecule GetMoleculeFromUniqueID(int64_t);
+    G4int GetStrandIDFromUniqueID(int64_t) const;
 
-  G4Material* GetMaterialFromUniqueID(int64_t) const;
+    G4int GetPlacementIndexFromUniqueID(int64_t) const;
 
-  G4int GetChainIDFromUniqueID(int64_t) const;
+    void FindNearbyMolecules(const G4LogicalVolume* motherLogical,
+                             const G4ThreeVector& localPosition,
+                             std::vector<G4VPhysicalVolume*>& out, double searchRange) override;
 
-  G4int GetStrandIDFromUniqueID(int64_t) const;
-
-  G4int GetPlacementIndexFromUniqueID(int64_t) const;
-
-  void FindNearbyMolecules(const G4LogicalVolume* motherLogical,
-                           const G4ThreeVector& localPosition,
-                           std::vector<G4VPhysicalVolume*>& out,
-                           double searchRange) override;
-
-  G4bool IsInsideHistone(const G4LogicalVolume* motherLogical,
-                         const G4ThreeVector& localPosition) const;
+    G4bool IsInsideHistone(const G4LogicalVolume* motherLogical,
+                           const G4ThreeVector& localPosition) const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -372,7 +349,10 @@ inline G4LogicalVolume* DNAGeometry::GetDNAPhysicsVolumePointer() const
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline DNAWorld* DNAGeometry::GetDNAWorld() { return fpDNAPhysicsWorld; }
+inline DNAWorld* DNAGeometry::GetDNAWorld()
+{
+  return fpDNAPhysicsWorld;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

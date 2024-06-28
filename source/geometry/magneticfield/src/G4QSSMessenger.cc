@@ -25,7 +25,7 @@
 //
 // G4QSSMessenger implementation
 //
-// Author: Leandro Gomez Vidal - October 2021.
+// Author: Leandro Gomez Vidal (Univ. Buenos Aires) - October 2021
 // --------------------------------------------------------------------
 
 #include "G4QSSMessenger.hh"

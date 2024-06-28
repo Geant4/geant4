@@ -33,28 +33,27 @@
 #ifndef MyKleinNishinaMessenger_h
 #define MyKleinNishinaMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class MyKleinNishinaCompton;
 class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class MyKleinNishinaMessenger: public G4UImessenger
+class MyKleinNishinaMessenger : public G4UImessenger
 {
-  public:  
-    MyKleinNishinaMessenger(MyKleinNishinaCompton* );
-   ~MyKleinNishinaMessenger();
-    
+  public:
+    MyKleinNishinaMessenger(MyKleinNishinaCompton*);
+    ~MyKleinNishinaMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
-  private:  
-    MyKleinNishinaCompton* fKleinNishina;  
-    G4UIcmdWithADouble*    fCsFactor;
+
+  private:
+    MyKleinNishinaCompton* fKleinNishina;
+    G4UIcmdWithADouble* fCsFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -37,8 +37,9 @@
 #ifndef G03ColorWriter_H
 #define G03ColorWriter_H 1
 
-#include <vector>
 #include "G4GDMLWriteStructure.hh"
+
+#include <vector>
 
 class G4LogicalVolume;
 class G4VisAttributes;
@@ -47,23 +48,18 @@ class G4VisAttributes;
 
 class G03ColorWriter : public G4GDMLWriteStructure
 {
+  public:
+    G03ColorWriter();
+    ~G03ColorWriter();
 
- public:
+    void AddExtension(xercesc::DOMElement* volumeElement, const G4LogicalVolume* const vol);
+    void ExtensionWrite(xercesc::DOMElement* element);
+    void ColorWrite(xercesc::DOMElement* volumeElement, const G4VisAttributes* const att);
 
-   G03ColorWriter();
-  ~G03ColorWriter();
+    G4bool BookAttribute(const G4VisAttributes* const att);
 
-   void AddExtension(xercesc::DOMElement* volumeElement,
-                     const G4LogicalVolume* const vol);
-   void ExtensionWrite(xercesc::DOMElement* element);
-   void ColorWrite(xercesc::DOMElement* volumeElement,
-                   const G4VisAttributes* const att);
-
-   G4bool BookAttribute(const G4VisAttributes* const att);
-
- private:
-
-   std::vector<const G4VisAttributes*> fAttribs;
+  private:
+    std::vector<const G4VisAttributes*> fAttribs;
 };
 
 #endif

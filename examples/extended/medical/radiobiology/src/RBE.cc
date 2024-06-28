@@ -209,7 +209,7 @@ void RBE::LoadLEMTable(G4String path)
       std::vector<size_t> idx(tableEnergy.size());
       iota(idx.begin(), idx.end(), 0);
       std::sort(idx.begin(), idx.end(),
-           [&tableEnergy](size_t i1, size_t i2) { return tableEnergy[i1] < tableEnergy[i2]; });
+                [&tableEnergy](size_t i1, size_t i2) { return tableEnergy[i1] < tableEnergy[i2]; });
 
       std::vector<std::vector<G4double>*> tables = {&tableEnergy, &tableAlpha, &tableBeta};
       for (std::vector<G4double>* table : tables) {
@@ -343,34 +343,34 @@ std::tuple<G4double, G4double> RBE::GetHitAlphaAndBeta(G4double E, G4int Z)
 // Zaider & Rossi alpha & Beta mean
 void RBE::ComputeAlphaAndBeta()
 {
-    // Skip RBE computation if calculation not enabled.
-    if (!fCalculationEnabled) {
-        if (fVerboseLevel > 0) {
-            G4cout << "RBE::ComputeAlphaAndBeta() called but skipped as calculation not enabled"
-                   << G4endl;
-        }
-        return;
-    }
-
+  // Skip RBE computation if calculation not enabled.
+  if (!fCalculationEnabled) {
     if (fVerboseLevel > 0) {
-        G4cout << "RBE: Computing alpha and beta..." << G4endl;
+      G4cout << "RBE::ComputeAlphaAndBeta() called but skipped as calculation not enabled"
+             << G4endl;
+    }
+    return;
+  }
+
+  if (fVerboseLevel > 0) {
+    G4cout << "RBE: Computing alpha and beta..." << G4endl;
+  }
+
+  // Re-initialize the number of voxels
+  fAlpha.resize(fAlphaNumerator.size());  // Initialize with the same number of elements
+  fBeta.resize(fBetaNumerator.size());  // Initialize with the same number of elements
+
+  for (size_t ii = 0; ii < fDenominator.size(); ii++) {
+    if (fDenominator[ii] > 0) {
+      fAlpha[ii] = fAlphaNumerator[ii] / (fDenominator[ii] * gray);
+      fBeta[ii] = std::pow(fBetaNumerator[ii] / (fDenominator[ii] * gray), 2.0);
     }
 
-    // Re-initialize the number of voxels
-    fAlpha.resize(fAlphaNumerator.size()); // Initialize with the same number of elements
-    fBeta.resize(fBetaNumerator.size());   // Initialize with the same number of elements
-
-    for (size_t ii = 0; ii < fDenominator.size(); ii++) {
-        if (fDenominator[ii] > 0) {
-            fAlpha[ii] = fAlphaNumerator[ii] / (fDenominator[ii] * gray);
-            fBeta[ii] = std::pow(fBetaNumerator[ii] / (fDenominator[ii] * gray), 2.0);
-        } 
-        
-        else {
-            fAlpha[ii] = 0.;
-            fBeta[ii] = 0.;
-        }
+    else {
+      fAlpha[ii] = 0.;
+      fBeta[ii] = 0.;
     }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -397,8 +397,8 @@ void RBE::ComputeRBE()
     }
     else if (fDose[i] <= fDoseCut) {
       fLnS[i] = -(fAlpha[i] * fDose[i]) - (fBeta[i] * (std::pow(fDose[i], 2.0)));
-      fDoseX[i] =
-        std::sqrt((-fLnS[i] / fBetaX) + std::pow((fAlphaX / (2 * fBetaX)), 2.0)) - (fAlphaX / (2 * fBetaX));
+      fDoseX[i] = std::sqrt((-fLnS[i] / fBetaX) + std::pow((fAlphaX / (2 * fBetaX)), 2.0))
+                  - (fAlphaX / (2 * fBetaX));
     }
     else {
       G4double ln_Scut = -(fAlpha[i] * fDoseCut) - (fBeta[i] * (std::pow((fDoseCut), 2.0)));

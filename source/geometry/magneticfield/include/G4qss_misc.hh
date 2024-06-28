@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors:  Lucio Santi, Rodrigo Castro         2018-21 
-
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021 
+// --------------------------------------------------------------------
 #ifndef _QSS_MISC_H_
-#define _QSS_MISC_H_
+#define _QSS_MISC_H_ 1
 
-typedef struct QSS_simulator_ *QSS_simulator;
-typedef struct QSSSubstep_ *QSSSubstep;
+#include "G4Types.hh"
+
+using QSS_simulator = struct QSS_simulator_*;
+using QSSSubstep = struct QSSSubstep_*;
 
 namespace Qss_misc { 
   // Convention of Geant4 notation of indices
@@ -85,38 +87,38 @@ namespace Qss_misc {
 
 struct QSSSubstep_
 {
-  double x[Qss_misc::VAR_IDX_END*(Qss_misc::MAX_QSS_STEPPER_ORDER+1)];
-  double tx[Qss_misc::VAR_IDX_END];
+  G4double x[Qss_misc::VAR_IDX_END*(Qss_misc::MAX_QSS_STEPPER_ORDER+1)];
+  G4double tx[Qss_misc::VAR_IDX_END];
 
-  double start_time;
-  double len;
+  G4double start_time;
+  G4double len;
 };
 
 struct QSS_simulator_
 {
-  double x[Qss_misc::VAR_IDX_END*(Qss_misc::MAX_QSS_STEPPER_ORDER+1)];
-  double tx[Qss_misc::VAR_IDX_END];
+  G4double x[Qss_misc::VAR_IDX_END*(Qss_misc::MAX_QSS_STEPPER_ORDER+1)];
+  G4double tx[Qss_misc::VAR_IDX_END];
 
-  double q[Qss_misc::VAR_IDX_END*(Qss_misc::MAX_QSS_STEPPER_ORDER+1)];
-  double tq[Qss_misc::VAR_IDX_END];
+  G4double q[Qss_misc::VAR_IDX_END*(Qss_misc::MAX_QSS_STEPPER_ORDER+1)];
+  G4double tq[Qss_misc::VAR_IDX_END];
 
-  double nextStateTime[Qss_misc::VAR_IDX_END];
-  double time;
-  int minIndex;
+  G4double nextStateTime[Qss_misc::VAR_IDX_END];
+  G4double time;
+  G4int minIndex;
 
-  double dQMin[Qss_misc::VAR_IDX_END];
-  double dQRel[Qss_misc::VAR_IDX_END];
-  double lqu[Qss_misc::VAR_IDX_END];
+  G4double dQMin[Qss_misc::VAR_IDX_END];
+  G4double dQRel[Qss_misc::VAR_IDX_END];
+  G4double lqu[Qss_misc::VAR_IDX_END];
 
-  double alg[Qss_misc::VAR_IDX_END];
-  double it;
+  G4double alg[Qss_misc::VAR_IDX_END];
+  G4double it;
 
-  int *SD[Qss_misc::VAR_IDX_END];
-  int states;
+  G4int *SD[Qss_misc::VAR_IDX_END];
+  G4int states;
 
   QSSSubstep substeps;
-  int cur_substep_idx;
-  int max_substep_idx;
+  G4int cur_substep_idx;
+  G4int max_substep_idx;
 };
 
 #endif

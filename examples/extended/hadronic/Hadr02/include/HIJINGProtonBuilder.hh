@@ -31,36 +31,30 @@
 //
 
 #ifndef HIJINGProtonBuilder_h
-#define HIJINGProtonBuilder_h 
+#define HIJINGProtonBuilder_h
 
-#include "globals.hh"
-
+#include "G4HIJING_Model.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
-
-#include "G4HIJING_Model.hh"
+#include "globals.hh"
 
 class HIJINGProtonBuilder : public G4VProtonBuilder
 {
-public: 
+  public:
+    HIJINGProtonBuilder();
+    virtual ~HIJINGProtonBuilder();
 
-  HIJINGProtonBuilder();
-  virtual ~HIJINGProtonBuilder();
+    virtual void Build(G4HadronElasticProcess* aP);
+    virtual void Build(G4HadronInelasticProcess* aP);
 
-  virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4HadronInelasticProcess * aP);
-    
-  inline void SetMinEnergy(G4double aM) {fMin = aM;}
-  inline void SetMaxEnergy(G4double aM) {fMax = aM;}
+    inline void SetMinEnergy(G4double aM) { fMin = aM; }
+    inline void SetMaxEnergy(G4double aM) { fMax = aM; }
 
-private:
-
-  G4HIJING_Model * fModel;    
-  G4double fMin;
-  G4double fMax;
-
+  private:
+    G4HIJING_Model* fModel;
+    G4double fMin;
+    G4double fMax;
 };
 
 #endif
-

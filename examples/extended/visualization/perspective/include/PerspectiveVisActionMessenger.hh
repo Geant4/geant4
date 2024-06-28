@@ -37,18 +37,18 @@ class PerspectiveVisAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-class PerspectiveVisActionMessenger: public G4UImessenger {
-public:
-  PerspectiveVisActionMessenger(PerspectiveVisAction*);
-  ~PerspectiveVisActionMessenger();
-  virtual void SetNewValue (G4UIcommand*, G4String);
+class PerspectiveVisActionMessenger : public G4UImessenger
+{
+  public:
+    PerspectiveVisActionMessenger(PerspectiveVisAction*);
+    ~PerspectiveVisActionMessenger();
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-private:
-  PerspectiveVisAction* fPVA;
-  G4UIdirectory* fpDirectory;
-  G4UIcmdWithAString* fpCommandOS;
-  G4UIcmdWithAString* fpCommandScene;
+  private:
+    PerspectiveVisAction* fPVA;
+    G4UIdirectory* fpDirectory;
+    G4UIcmdWithAString* fpCommandOS;
+    G4UIcmdWithAString* fpCommandScene;
 };
 
 #endif
-

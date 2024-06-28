@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 #include "DicomBeamDevice.hh"
-#include "dcmtk/dcmrt/seq/drtrbs8.h" // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
+#include "dcmtk/dcmrt/seq/drtrbs8.h"  // DRTReferencedBeamSequenceInRTFractionSchemeModule
+
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,17 +38,20 @@ DicomBeamDevice::DicomBeamDevice(DRTBeamLimitingDeviceSequenceInRTBeamsModule::I
   OFVector<Float64> fvfloat;
 
   bldsItem.getRTBeamLimitingDeviceType(fstr);
-  G4cout << "   " << " RTBeamLimitingDeviceType " << fstr << G4endl;
+  G4cout << "   "
+         << " RTBeamLimitingDeviceType " << fstr << G4endl;
   SetType(fstr);
   bldsItem.getSourceToBeamLimitingDeviceDistance(ffloat);
-  G4cout << "   " << " SourceToBeamLimitingDeviceDistance " << ffloat << G4endl;
-  SetSourceToBeamLimitingDeviceDistance( ffloat ); 
+  G4cout << "   "
+         << " SourceToBeamLimitingDeviceDistance " << ffloat << G4endl;
+  SetSourceToBeamLimitingDeviceDistance(ffloat);
   bldsItem.getNumberOfLeafJawPairs(fint);
   SetNumberOfLeafJawPairs(fint);
-  G4cout << "   " << " NumberOfLeafJawPairs " << fint << G4endl;
+  G4cout << "   "
+         << " NumberOfLeafJawPairs " << fint << G4endl;
   bldsItem.getLeafPositionBoundaries(fvfloat);
-  if( fint != 1 ) fint++;
-  for( int ii = 0; ii < fint; ii++ ) {
+  if (fint != 1) fint++;
+  for (int ii = 0; ii < fint; ii++) {
     G4cout << "   " << ii << " LeafPositionBoundaries " << fvfloat[ii] << G4endl;
     AddPositionBoundary(fvfloat[ii]);
   }
@@ -57,22 +62,21 @@ DicomBeamDevice::DicomBeamDevice(DRTBeamLimitingDevicePositionSequence::Item bld
 {
   OFString fstr;
   Float64 ffloat;
-  
+
   bldpsItem.getRTBeamLimitingDeviceType(fstr);
-  G4cout << "    " << " BeamLimitingDeviceType " << fstr << G4endl;
+  G4cout << "    "
+         << " BeamLimitingDeviceType " << fstr << G4endl;
   SetType(fstr);
-  for(size_t ii = 0;; ii++ ){
-    if( bldpsItem.getLeafJawPositions(ffloat,ii) == EC_Normal ){
+  for (size_t ii = 0;; ii++) {
+    if (bldpsItem.getLeafJawPositions(ffloat, ii) == EC_Normal) {
       G4cout << "    " << ii << " LeafPositionBoundaries " << ffloat << G4endl;
       AddPositionBoundary(ffloat);
-    } else {
+    }
+    else {
       break;
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomBeamDevice::Print( std::ostream&  )
-{
-
-}
+void DicomBeamDevice::Print(std::ostream&) {}

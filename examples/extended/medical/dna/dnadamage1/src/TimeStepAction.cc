@@ -28,103 +28,84 @@
 /// \brief Implementation of the TimeStepAction class
 
 #include "TimeStepAction.hh"
-#include <G4Scheduler.hh>
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Molecule.hh"
+
 #include "G4AnalysisManager.hh"
 #include "G4DNAMolecule.hh"
-#include "G4MoleculeTable.hh"
-#include "G4OH.hh"
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
+#include "G4Molecule.hh"
+#include "G4MoleculeTable.hh"
+#include "G4OH.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+
+#include <G4Scheduler.hh>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TimeStepAction::TimeStepAction() 
-    : G4UserTimeStepAction()
+TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
 {
-    AddTimeStep(1*picosecond, 0.35*picosecond);
-    AddTimeStep(10*picosecond, 1*picosecond);
-    AddTimeStep(100*picosecond, 3*picosecond);
-    AddTimeStep(1000*picosecond, 10*picosecond);
-    AddTimeStep(10000*picosecond, 100*picosecond);
+  AddTimeStep(1 * picosecond, 0.35 * picosecond);
+  AddTimeStep(10 * picosecond, 1 * picosecond);
+  AddTimeStep(100 * picosecond, 3 * picosecond);
+  AddTimeStep(1000 * picosecond, 10 * picosecond);
+  AddTimeStep(10000 * picosecond, 100 * picosecond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TimeStepAction::~TimeStepAction()
-{}
+TimeStepAction::~TimeStepAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TimeStepAction::TimeStepAction(const TimeStepAction& other) 
-    : G4UserTimeStepAction(other)
-{}
+TimeStepAction::TimeStepAction(const TimeStepAction& other) : G4UserTimeStepAction(other) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TimeStepAction&
-TimeStepAction::operator=(const TimeStepAction& rhs)
+TimeStepAction& TimeStepAction::operator=(const TimeStepAction& rhs)
 {
-    if (this == &rhs) return *this;
-    return *this;
+  if (this == &rhs) return *this;
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TimeStepAction::UserReactionAction(const G4Track& trackA,
-                                        const G4Track& trackB,
-                                        const std::vector<G4Track*>* 
-                                        pProducts)
+void TimeStepAction::UserReactionAction(const G4Track& trackA, const G4Track& trackB,
+                                        const std::vector<G4Track*>* pProducts)
 {
-    if(pProducts && (GetMolecule((*pProducts)[0])->
-    GetDefinition() != G4DamagedDeoxyribose::Definition()))
-    {
-        return;
-    }
-    
-    //check for the case "no product"
-    if(!pProducts)
-    {
-        return;
-    }
-    
-    auto phyEventId = G4EventManager::GetEventManager()->
-    GetConstCurrentEvent()->GetEventID();
-    
-    const G4Track* DNAElement = nullptr;
-    const G4Track* radical    = nullptr;
-    if(GetMolecule(&trackA)->
-    GetDefinition() == G4Deoxyribose::Definition())
-    {
-        DNAElement = &trackA;
-        radical    = &trackB;
-    }
-    else 
-    {
-        DNAElement = &trackB;
-        radical    = &trackA;
-    }
-    
-    if(GetMolecule(radical)->GetDefinition() != G4OH::Definition())
-    {
-        return;
-    }
-    
-    G4AnalysisManager* analysisManager = 
-    G4AnalysisManager::Instance();
-    analysisManager->FillNtupleDColumn(2, 0, 
-    DNAElement->GetPosition().getX()/nm);
-    analysisManager->FillNtupleDColumn(2, 1, 
-    DNAElement->GetPosition().getY()/nm);
-    analysisManager->FillNtupleDColumn(2, 2, 
-    DNAElement->GetPosition().getZ()/nm);
-    analysisManager->FillNtupleSColumn(2, 3, 
-    GetMolecule(radical)->GetName());
-    analysisManager->FillNtupleIColumn(2, 4, 
-    G4int(phyEventId));
-    analysisManager->AddNtupleRow(2);
-}
+  if (pProducts
+      && (GetMolecule((*pProducts)[0])->GetDefinition() != G4DamagedDeoxyribose::Definition()))
+  {
+    return;
+  }
 
+  // check for the case "no product"
+  if (!pProducts) {
+    return;
+  }
+
+  auto phyEventId = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
+
+  const G4Track* DNAElement = nullptr;
+  const G4Track* radical = nullptr;
+  if (GetMolecule(&trackA)->GetDefinition() == G4Deoxyribose::Definition()) {
+    DNAElement = &trackA;
+    radical = &trackB;
+  }
+  else {
+    DNAElement = &trackB;
+    radical = &trackA;
+  }
+
+  if (GetMolecule(radical)->GetDefinition() != G4OH::Definition()) {
+    return;
+  }
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillNtupleDColumn(2, 0, DNAElement->GetPosition().getX() / nm);
+  analysisManager->FillNtupleDColumn(2, 1, DNAElement->GetPosition().getY() / nm);
+  analysisManager->FillNtupleDColumn(2, 2, DNAElement->GetPosition().getZ() / nm);
+  analysisManager->FillNtupleSColumn(2, 3, GetMolecule(radical)->GetName());
+  analysisManager->FillNtupleIColumn(2, 4, G4int(phyEventId));
+  analysisManager->AddNtupleRow(2);
+}

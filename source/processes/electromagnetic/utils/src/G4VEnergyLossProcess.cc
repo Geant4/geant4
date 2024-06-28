@@ -218,6 +218,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
 
   tablesAreBuilt = false;
+  if (GetProcessSubType() == fIonisation) { SetIonisation(true); }
 
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
   lManager->PreparePhysicsTable(&part, this);
@@ -962,7 +963,18 @@ void G4VEnergyLossProcess::FillSecondariesAlongStep(G4double wt)
     if(nullptr != t) {
       t->SetWeight(weight); 
       pParticleChange->AddSecondary(t);
-      if(i >= n0) { t->SetCreatorModelID(biasID); }
+      G4int pdg = t->GetDefinition()->GetPDGEncoding();
+      if (i < n0) {
+        if (pdg == 22) {
+	  t->SetCreatorModelID(gpixeID);
+        } else if (pdg == 11) {
+          t->SetCreatorModelID(epixeID);
+        } else {
+          t->SetCreatorModelID(biasID);
+	}
+      } else {
+	t->SetCreatorModelID(biasID);
+      }
     }
   }
   scTracks.clear();
@@ -1110,17 +1122,19 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
 {
   if (!isMaster || nullptr != baseParticle || part != particle ) return true;
   for(std::size_t i=0; i<7; ++i) {
-    if(nullptr != theData->Table(i)) {
-      if(1 < verboseLevel) {
-	G4cout << "G4VEnergyLossProcess::StorePhysicsTable i=" << i
-	       << "  " << particle->GetParticleName()
-	       << "  " << GetProcessName()
-	       << "  " << tnames[i] << "  " << theData->Table(i) << G4endl;
-      }
-      if(!G4EmTableUtil::StoreTable(this, part, theData->Table(i), 
-				    dir, tnames[i], verboseLevel, ascii)) { 
-	return false;
-      }
+    // ionisation table only for ionisation process
+    if (nullptr == theData->Table(i) || (!isIonisation && 1 == i)) {
+      continue;
+    }
+    if (-1 < verboseLevel) {
+      G4cout << "G4VEnergyLossProcess::StorePhysicsTable i=" << i
+	     << "  " << particle->GetParticleName()
+	     << "  " << GetProcessName()
+	     << "  " << tnames[i] << "  " << theData->Table(i) << G4endl;
+    }
+    if (!G4EmTableUtil::StoreTable(this, part, theData->Table(i),
+				   dir, tnames[i], verboseLevel, ascii)) { 
+      return false;
     }
   }
   return true;
@@ -1134,6 +1148,8 @@ G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 {
   if (!isMaster || nullptr != baseParticle || part != particle ) return true;
   for(std::size_t i=0; i<7; ++i) {
+    // ionisation table only for ionisation process
+    if (!isIonisation && 1 == i) { continue; }
     if(!G4EmTableUtil::RetrieveTable(this, part, theData->Table(i), dir, tnames[i],
                                      verboseLevel, ascii, spline)) { 
       return false;

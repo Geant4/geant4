@@ -52,5 +52,3 @@ class Par01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 };
 
 #endif
-
-

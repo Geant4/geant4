@@ -28,39 +28,36 @@
 //
 //
 
+#include "ExN04CalorimeterParametrisation.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
 #include "G4VPhysicalVolume.hh"
-#include "ExN04CalorimeterParametrisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation()
-  : G4VPVParameterisation()
+ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation() : G4VPVParameterisation()
 {
 #include "ExN04DetectorParameterDef.icc"
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExN04CalorimeterParametrisation::~ExN04CalorimeterParametrisation()
-{
-}
+ExN04CalorimeterParametrisation::~ExN04CalorimeterParametrisation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04CalorimeterParametrisation::ComputeTransformation
-    (const G4int, G4VPhysicalVolume* physVol) const
+void ExN04CalorimeterParametrisation::ComputeTransformation(const G4int,
+                                                            G4VPhysicalVolume* physVol) const
 {
   G4ThreeVector origin;
-  physVol-> SetTranslation(origin);
+  physVol->SetTranslation(origin);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void ExN04CalorimeterParametrisation::ComputeDimensions
-     (G4Tubs& calorimeterLayer, const G4int copyNo,
-                                const G4VPhysicalVolume*) const
+void ExN04CalorimeterParametrisation::ComputeDimensions(G4Tubs& calorimeterLayer,
+                                                        const G4int copyNo,
+                                                        const G4VPhysicalVolume*) const
 {
-  G4double innerRad = fcaloTubs_rmin +
-                      copyNo * (fabsorber_thick + fscinti_thick);
+  G4double innerRad = fcaloTubs_rmin + copyNo * (fabsorber_thick + fscinti_thick);
   calorimeterLayer.SetInnerRadius(innerRad);
   calorimeterLayer.SetOuterRadius(innerRad + fabsorber_thick);
   calorimeterLayer.SetZHalfLength(fcaloTubs_dz);

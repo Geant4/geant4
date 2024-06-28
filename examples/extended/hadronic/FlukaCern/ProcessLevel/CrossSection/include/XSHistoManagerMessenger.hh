@@ -41,43 +41,36 @@
 #ifndef HISTO_MANAGER_MESSENGER_HH
 #define HISTO_MANAGER_MESSENGER_HH
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-#include "G4UIdirectory.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-
+#include "G4UIdirectory.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class XSHistoManager;
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class XSHistoManagerMessenger: public G4UImessenger {
+class XSHistoManagerMessenger : public G4UImessenger
+{
+  public:
+    XSHistoManagerMessenger(XSHistoManager* const histoManager);
 
-public:
+    virtual void SetNewValue(G4UIcommand*, G4String) override;
 
-  XSHistoManagerMessenger(XSHistoManager* const histoManager);
+  private:
+    XSHistoManager* fHisto = nullptr;
 
-  virtual void SetNewValue(G4UIcommand*, G4String) override;
-
-
-private:
-
-  XSHistoManager* fHisto = nullptr;
-
-  G4UIcmdWithAString fOutputFileNameCmd;
-  G4UIcmdWithAString fParticleNameCmd;
-  G4UIcmdWithAString fElementNameCmd;
-  G4UIcmdWithAString fNonElementaryMaterialNameCmd;
-  G4UIcmdWithAnInteger fNumBinsCmd;
-  G4UIcmdWithADoubleAndUnit fMinKineticEnergyCmd;
-  G4UIcmdWithADoubleAndUnit fMaxKineticEnergyCmd;
+    G4UIcmdWithAString fOutputFileNameCmd;
+    G4UIcmdWithAString fParticleNameCmd;
+    G4UIcmdWithAString fElementNameCmd;
+    G4UIcmdWithAString fNonElementaryMaterialNameCmd;
+    G4UIcmdWithAnInteger fNumBinsCmd;
+    G4UIcmdWithADoubleAndUnit fMinKineticEnergyCmd;
+    G4UIcmdWithADoubleAndUnit fMaxKineticEnergyCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif

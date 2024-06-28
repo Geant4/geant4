@@ -34,7 +34,7 @@
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
 //
 // -------------------------------------------------------------
 
@@ -43,21 +43,18 @@
 
 #include "G4UserRunAction.hh"
 
-class FFRunAction
-:   public G4UserRunAction
+class FFRunAction : public G4UserRunAction
 {
-public:
-// Constructor
+  public:
+    // Constructor
     FFRunAction();
-    
-// Function
+
+    // Function
     virtual void BeginOfRunAction(const G4Run*);
     virtual void EndOfRunAction(const G4Run*);
-    
-// Destructor
+
+    // Destructor
     virtual ~FFRunAction();
 };
 
-#endif //FFRUNACTION
-
-
+#endif  // FFRUNACTION

@@ -44,50 +44,47 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4LDMBremsstrahlung.hh"
-#include "G4SystemOfUnits.hh"
+
+#include "G4EmParameters.hh"
 #include "G4LDMBremModel.hh"
 #include "G4LDMPhoton.hh"
-#include "G4EmParameters.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-G4LDMBremsstrahlung::G4LDMBremsstrahlung(const G4String& name)
-  : G4MuBremsstrahlung(name)
-{
-}
+G4LDMBremsstrahlung::G4LDMBremsstrahlung(const G4String& name) : G4MuBremsstrahlung(name) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LDMBremsstrahlung::~G4LDMBremsstrahlung()
-{}
+G4LDMBremsstrahlung::~G4LDMBremsstrahlung() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4LDMBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 110.0*MeV);
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 110.0 * MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4LDMBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                               const G4Material*, G4double)
+G4double G4LDMBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*, const G4Material*,
+                                               G4double)
 {
   return MinKinEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LDMBremsstrahlung::InitialiseEnergyLossProcess(
-                                 const G4ParticleDefinition*,
-                                 const G4ParticleDefinition*)
+void G4LDMBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                                      const G4ParticleDefinition*)
 {
-  if(!isInitialised) {
-
+  if (!isInitialised) {
     isInitialised = true;
-    if (!EmModel()) { SetEmModel(new G4LDMBremModel()); }
+    if (!EmModel()) {
+      SetEmModel(new G4LDMBremModel());
+    }
 
     G4VEmFluctuationModel* fm = nullptr;
     G4EmParameters* param = G4EmParameters::Instance();
@@ -98,4 +95,3 @@ void G4LDMBremsstrahlung::InitialiseEnergyLossProcess(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

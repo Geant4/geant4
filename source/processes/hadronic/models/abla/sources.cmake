@@ -19,7 +19,6 @@ geant4_add_module(G4hadronic_abla
 geant4_module_link_libraries(G4hadronic_abla
   PUBLIC
     G4globman
-    G4hadronic_inclxx_utils
     G4hadronic_mgt
     G4hadronic_util
   PRIVATE

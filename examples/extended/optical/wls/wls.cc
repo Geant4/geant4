@@ -29,10 +29,10 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "FTFP_BERT.hh"
 #include "WLSActionInitialization.hh"
 #include "WLSDetectorConstruction.hh"
 
-#include "FTFP_BERT.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4OpticalPhysics.hh"
 #include "G4RunManagerFactory.hh"
@@ -47,15 +47,13 @@ int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if(argc == 1)
-  {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   auto runManager = G4RunManagerFactory::CreateRunManager();
-  G4int seed      = 123;
-  if(argc > 2)
-    seed = atoi(argv[argc - 1]);
+  G4int seed = 123;
+  if (argc > 2) seed = atoi(argv[argc - 1]);
 
   // Choose the Random engine and set the seed
   // G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -86,17 +84,14 @@ int main(int argc, char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(ui)
-  {
+  if (ui) {
     // Define (G)UI terminal for interactive mode
-    if(ui->IsGUI())
-      UImanager->ApplyCommand("/control/execute gui.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
-    G4String command  = "/control/execute ";
+  else {
+    G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command + fileName);
   }

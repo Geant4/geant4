@@ -41,10 +41,10 @@
 
 class ITSteppingAction : public G4UserSteppingAction
 {
-public:
+  public:
     ITSteppingAction();
     virtual ~ITSteppingAction();
     virtual void UserSteppingAction(const G4Step*);
 };
 
-#endif // ITSTEPPINGACTION_HH
+#endif  // ITSTEPPINGACTION_HH

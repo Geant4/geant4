@@ -975,6 +975,26 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable += 1;
 
+  tmp.processTypeName = "DNATripleIoni";
+  tmp.processType = fElectromagnetic;
+  tmp.processSubType = fLowEnergyTripleIonisation;
+  tmp.ordering[0] = -1;
+  tmp.ordering[1] = -1;
+  tmp.ordering[2] = 1000;
+  tmp.isDuplicable = false;
+  theTable->push_back(tmp);
+  sizeOfTable += 1;
+
+  tmp.processTypeName = "DNAQuadrupleIoni";
+  tmp.processType = fElectromagnetic;
+  tmp.processSubType = fLowEnergyQuadrupleIonisation;
+  tmp.ordering[0] = -1;
+  tmp.ordering[1] = -1;
+  tmp.ordering[2] = 1000;
+  tmp.isDuplicable = false;
+  theTable->push_back(tmp);
+  sizeOfTable += 1;
+
   tmp.processTypeName = "HadElastic";
   tmp.processType = fHadronic;
   tmp.processSubType = fHadronElastic;

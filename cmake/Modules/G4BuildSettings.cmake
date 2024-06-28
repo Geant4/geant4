@@ -101,14 +101,14 @@ set(CMAKE_CXX_FLAGS_TESTRELEASE "${CMAKE_CXX_FLAGS_TESTRELEASE_INIT}"
 mark_as_advanced(CMAKE_CXX_FLAGS_TESTRELEASE)
 
 #.rst:
-# - ``Maintainer``:
-#   For development of the toolkit. It adds debugging, and enables the use
-#   of library specific debugging via standardized definitions.
+# - ``FullRelWithDebInfo``:
+#   For trial production and extended testing. Maximum optimization
+#   and debugging symbols
 #
-set(CMAKE_CXX_FLAGS_MAINTAINER "${CMAKE_CXX_FLAGS_MAINTAINER_INIT}"
-  CACHE STRING "Flags used by the compiler during Maintainer builds"
+set(CMAKE_CXX_FLAGS_FULLRELWITHDEBINFO "${CMAKE_CXX_FLAGS_FULLRELWITHDEBINFO_INIT}"
+  CACHE STRING "Flags used by the compiler during FullRelWithDebInfo builds"
   )
-mark_as_advanced(CMAKE_CXX_FLAGS_MAINTAINER)
+mark_as_advanced(CMAKE_CXX_FLAGS_FULLRELWITHDEBINFO)
 
 #.rst:
 # Compiler flags specific to these build types are set in the cache, and
@@ -117,17 +117,17 @@ mark_as_advanced(CMAKE_CXX_FLAGS_MAINTAINER)
 #
 if(NOT CMAKE_CONFIGURATION_TYPES)
   # Single mode build tools like Make, Ninja,
-  set(__g4buildmodes "" Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer)
+  set(__g4buildmodes "" Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo FullRelWithDebInfo)
   if(NOT CMAKE_BUILD_TYPE)
     # Default to a Release build if nothing else...
     set(CMAKE_BUILD_TYPE Release
-      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer."
+      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo FullRelWithDebInfo."
       FORCE
       )
   else()
     # Force to the cache, but use existing value.
     set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
-      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer."
+      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo FullRelWithDebInfo."
       FORCE
       )
   endif()
@@ -136,7 +136,7 @@ else()
   # Multimode tools like VS, Xcode
   list(APPEND CMAKE_CONFIGURATION_TYPES Debug_FPE)
   list(APPEND CMAKE_CONFIGURATION_TYPES TestRelease)
-  list(APPEND CMAKE_CONFIGURATION_TYPES Maintainer)
+  list(APPEND CMAKE_CONFIGURATION_TYPES FullRelWithDebInfo)
   list(REMOVE_DUPLICATES CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}"
     CACHE STRING "Geant4 configurations for multimode build tools"
@@ -363,6 +363,19 @@ if(GEANT4_BUILD_MULTITHREADED)
   endif()
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
+endif()
+
+#-----------------------------------------------------------------------
+# Link-time optimization
+#-----------------------------------------------------------------------
+# If LTO is enabled via CMAKE_INTERPROCEDURAL_OPTIMIZATION, then add
+# additional flags to force identify/check ODR violations for GCC only (at present)
+# Note that these are _nominally_ enabled by default in GCC with flto, so
+# they are added explicitly for the sake of clarity. Also, some are only valid for 
+# older GCC versions, but they do not break things.
+# TODO: Review with experiments what recommended options are here.
+if(CMAKE_INTERPROCEDURAL_OPTIMIZATION AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
+  string(APPEND CMAKE_CXX_FLAGS " -Wodr -fipa-icf -flto-odr-type-merging") 
 endif()
 
 #-----------------------------------------------------------------------

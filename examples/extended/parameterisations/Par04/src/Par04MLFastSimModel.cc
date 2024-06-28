@@ -24,38 +24,43 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE
-#include "Par04MLFastSimModel.hh"
-#include <stddef.h>                      // for size_t
-#include <G4FastStep.hh>                 // for G4FastStep
-#include <G4FastTrack.hh>                // for G4FastTrack
-#include <G4Track.hh>                    // for G4Track
-#include <G4VFastSimulationModel.hh>     // for G4VFastSimulationModel
-#include "G4Electron.hh"                 // for G4Electron
-#include "G4FastHit.hh"                  // for G4FastHit
-#include "G4FastSimHitMaker.hh"          // for G4FastSimHitMaker
-#include "G4Gamma.hh"                    // for G4Gamma
-#include "G4Positron.hh"                 // for G4Positron
-#include "Par04InferenceSetup.hh"        // for Par04InferenceSetup
+#  include "Par04MLFastSimModel.hh"
+
+#  include "Par04InferenceSetup.hh"  // for Par04InferenceSetup
+
+#  include "G4Electron.hh"  // for G4Electron
+#  include "G4FastHit.hh"  // for G4FastHit
+#  include "G4FastSimHitMaker.hh"  // for G4FastSimHitMaker
+#  include "G4Gamma.hh"  // for G4Gamma
+#  include "G4Positron.hh"  // for G4Positron
+
+#  include <G4FastStep.hh>  // for G4FastStep
+#  include <G4FastTrack.hh>  // for G4FastTrack
+#  include <G4Track.hh>  // for G4Track
+#  include <G4VFastSimulationModel.hh>  // for G4VFastSimulationModel
+#  include <stddef.h>  // for size_t
 class G4ParticleDefinition;
 class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04MLFastSimModel::Par04MLFastSimModel(G4String aModelName, G4Region* aEnvelope)
-  : G4VFastSimulationModel(aModelName, aEnvelope)
-  , fInference(new Par04InferenceSetup)
-  , fHitMaker(new G4FastSimHitMaker)
-  , fParallelHitMaker(new G4FastSimHitMaker) {
+  : G4VFastSimulationModel(aModelName, aEnvelope),
+    fInference(new Par04InferenceSetup),
+    fHitMaker(new G4FastSimHitMaker),
+    fParallelHitMaker(new G4FastSimHitMaker)
+{
   fParallelHitMaker->SetNameOfWorldWithSD("parallelWorldFastSim");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04MLFastSimModel::Par04MLFastSimModel(G4String aModelName)
-  : G4VFastSimulationModel(aModelName)
-  , fInference(new Par04InferenceSetup)
-  , fHitMaker(new G4FastSimHitMaker)
-  , fParallelHitMaker(new G4FastSimHitMaker) {
+  : G4VFastSimulationModel(aModelName),
+    fInference(new Par04InferenceSetup),
+    fHitMaker(new G4FastSimHitMaker),
+    fParallelHitMaker(new G4FastSimHitMaker)
+{
   fParallelHitMaker->SetNameOfWorldWithSD("parallelWorldFastSim");
 }
 
@@ -67,9 +72,9 @@ Par04MLFastSimModel::~Par04MLFastSimModel() {}
 
 G4bool Par04MLFastSimModel::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-  return &aParticleType == G4Electron::ElectronDefinition() ||
-         &aParticleType == G4Positron::PositronDefinition() ||
-         &aParticleType == G4Gamma::GammaDefinition();
+  return &aParticleType == G4Electron::ElectronDefinition()
+         || &aParticleType == G4Positron::PositronDefinition()
+         || &aParticleType == G4Gamma::GammaDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,7 +93,7 @@ void Par04MLFastSimModel::DoIt(const G4FastTrack& aFastTrack, G4FastStep& aFastS
   aFastStep.SetPrimaryTrackPathLength(0.0);
   G4double energy = aFastTrack.GetPrimaryTrack()->GetKineticEnergy();
   aFastStep.SetTotalEnergyDeposited(energy);
-  G4ThreeVector position  = aFastTrack.GetPrimaryTrack()->GetPosition();
+  G4ThreeVector position = aFastTrack.GetPrimaryTrack()->GetPosition();
   G4ThreeVector direction = aFastTrack.GetPrimaryTrack()->GetMomentumDirection();
 
   // calculate the incident angle
@@ -101,8 +106,7 @@ void Par04MLFastSimModel::DoIt(const G4FastTrack& aFastTrack, G4FastStep& aFastS
 
   // deposit energy in the detector using calculated values of energy deposits
   // and positions
-  for(size_t iHit = 0; iHit < fPositions.size(); iHit++)
-  {
+  for (size_t iHit = 0; iHit < fPositions.size(); iHit++) {
     if (fEnergies[iHit] > 0.0005) {
       // Place hit in the physical readout of the detector
       fParallelHitMaker->make(G4FastHit(fPositions[iHit], fEnergies[iHit]), aFastTrack);

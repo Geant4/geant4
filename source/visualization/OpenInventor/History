@@ -6,6 +6,53 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-06 Guy Barrand (openinventor-V11-02-01)
+- G4OpenInventorQtViewer: Qt6: reparent the G4OpenInventorQtExaminerViewer
+  in its own QWidget (and not in the global SoQt::getTopLevelWidget()).
+  It permits to restore a goood behaviour of multiple "/vis/open OIQt".
+   Handle a "destroyed signal/slot" on the parent QWidget so that
+  deleting a viewer deletes also the G4OpenInventorQtExaminerViewer.
+   Have the "addInTab" done in the Initialise() method. Clearly the
+  existing mechanism done on the G4OpenInventorQtExaminerViewer::afterRealizeHook()
+  does not work properly; we see that some "QWidget::show" does not trigger it!
+  (This is related to a problem in SoQt itself).
+   Have what is done concerning scene graph in the afterRealizeHook()
+  done now in some G4OpenInventorQtExaminerViewer::setupSceneGraph(), and call
+  this in the Initialise() method.
+   Avoid to do an examiner viewer "move/resize" in the Initialise() method,
+  it confuses SoQt and we have strange widget rendering behaviour;
+  then we let the QTabWidget and SoQt decide of the "move/resize".
+   With the upper modifications we have a good behaviour when creating/deleting
+  multiple viewers.
+- G4OpenInventorQtExaminerViewer: Qt6: then avoid the usage of the afterRealizeHook() logic
+  and have a setupSceneGraph() method called from the G4OpenInventorQtViewer::Intialise().
+- G4OpenInventorQtExaminerViewer: Qt6: avoid to map at startup the "Bookmark AuxWindow dialog",
+  it is cumbersome; but have this done when asking to create a new bookmark from the
+  dedicated "app button" of each viewer. Moreover, like that, it permits to map again
+  the dialog in case someone closed it with the mouse.
+- G4OpenInventorQtExaminerViewer: Qt6: enforce, even on macOS, each viewer QMenuBar triggered
+  from a new "app button" of each viewer. The today logic, especially on macOS, is not adapted
+  to the case of multiple viewers. Then have the QMenuBar on an "app button" and not as parent
+  of the examiner viewer "getRenderAreaWidget". Like that it let free the full area of the render area.
+  It works nicely on all platforms. (In fact with the last SoQt working on Qt6, parenting on the
+  render area does not work at all on Linux and Windows).
+- G4OpenInventorQtExaminerViewer: Qt6: have the "detached logic" in a standalone QDialog.
+  Have the title window reflecting the name of the viewer. Have that "closing" induces "destroying",
+  else if closing with the mouse, we have a dandling hidden viewer with no way to map it back.
+  (I did not find a multiplatform way to get rid of the close button on this detached window).
+- G4OpenInventorQtExaminerViewer: Qt6: have "curViewPtName", "viewPtData/viewPtName" on an std::string.
+  Having them on "char*" appears to be very crashy. Protect "viewPtIdx" to be sure it
+  is in the range of the viewPtList std::vector.
+- G4OpenInventorQtExaminerViewer: Qt6 : in case of MT, I put the "viewer->newEvents = true;" done
+  on "EndOfRun" instead of "EndOfEvent" since the HookEventProcState (a G4VStateDependent)
+  is not called anymore from the master thread in case of MT. This permits to have the
+  "set default fly path" done anyway. Note that multiple "/run/beamOn" done within multiple viewers
+  looks ok with MT.
+- G4OpenInventorQtExaminerViewer: Qt6 : remove unsued methods, fields.
+
+## 2024-01-11 Ben Morgan (openinventor-V11-02-00)
+- Make headers of implementation details private.
+
 ## 2023-09-05 Ben Morgan (openinventor-V11-01-10)
 - Set AUTOMOC property on module when Qt used.
 

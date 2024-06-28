@@ -36,57 +36,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace G4::hashing
-  {
-    namespace crc32
-    {
-      uint32_t Hash(const char* str, size_t len)
-      {
-        uint32_t remainder = 0xFFFFFFFF;
-        for(size_t idx = 0; idx < len; ++idx)
-        {
-          remainder =
-            (remainder >> 8) ^ fCrc_table[(remainder ^ str[idx]) & 0x000000FF];
-        }
-        return remainder ^ 0xFFFFFFFF;
-      }
+{
+namespace crc32
+{
+uint32_t Hash(const char* str, size_t len)
+{
+  uint32_t remainder = 0xFFFFFFFF;
+  for (size_t idx = 0; idx < len; ++idx) {
+    remainder = (remainder >> 8) ^ fCrc_table[(remainder ^ str[idx]) & 0x000000FF];
+  }
+  return remainder ^ 0xFFFFFFFF;
+}
 
-      uint32_t Hash(const std::string& str)
-      {
-        return Hash(str.c_str(), str.size());
-      }
-    }  // namespace crc32
+uint32_t Hash(const std::string& str)
+{
+  return Hash(str.c_str(), str.size());
+}
+}  // namespace crc32
 
-    namespace fnv
-    {
-      size_t Hash(const std::string& str)
-      {
-        size_t hash = fnv_offset_basis;
-        for(size_t i = 0; i < str.length(); i++)
-        {
-          hash = hash ^ (str[i]);   // xor  the low 8 bits
-          hash = hash * fnv_prime;  // multiply by the magic number
-        }
-        return hash;
-      }
-    }  // namespace fnv
+namespace fnv
+{
+size_t Hash(const std::string& str)
+{
+  size_t hash = fnv_offset_basis;
+  for (size_t i = 0; i < str.length(); i++) {
+    hash = hash ^ (str[i]);  // xor  the low 8 bits
+    hash = hash * fnv_prime;  // multiply by the magic number
+  }
+  return hash;
+}
+}  // namespace fnv
 
-    namespace larson
-    {
-      size_t Hash(const char* str, unsigned int seed)
-      {
-        size_t hash = seed;
-        while(*str != 0)
-        {
-          hash = hash * 101 + *str++;
-        }
-        return hash;
-      }
+namespace larson
+{
+size_t Hash(const char* str, unsigned int seed)
+{
+  size_t hash = seed;
+  while (*str != 0) {
+    hash = hash * 101 + *str++;
+  }
+  return hash;
+}
 
-      size_t Hash(std::string str, unsigned int seed)
-      {
-        return Hash(str.c_str(), seed);
-      }
-    }  // namespace larson
-  }  // namespace G4
+size_t Hash(std::string str, unsigned int seed)
+{
+  return Hash(str.c_str(), seed);
+}
+}  // namespace larson
+}  // namespace G4::hashing
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

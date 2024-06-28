@@ -28,39 +28,38 @@
 /// brief: Implementation of virt chromosome class for rod chromosomes
 
 #include "EllipticalChromosome.hh"
-#include "Randomize.hh"
-#include "G4RandomDirection.hh"
+
 #include "G4PhysicalConstants.hh"
+#include "G4RandomDirection.hh"
+#include "Randomize.hh"
 
 const G4String EllipticalChromosome::fShape = "ellipse";
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EllipticalChromosome::EllipticalChromosome(const G4String& name,
-                                           const G4ThreeVector& pos,
-                                           const G4double& sx,
-                                           const G4double& sy,
+EllipticalChromosome::EllipticalChromosome(const G4String& name, const G4ThreeVector& pos,
+                                           const G4double& sx, const G4double& sy,
                                            const G4double& sz)
-  : VirtualChromosome(name)
-  , fCenter(pos)
-  , fSemiX(std::abs(sx))
-  , fSemiY(std::abs(sy))
-  , fSemiZ(std::abs(sz))
-  , fRotation(G4RotationMatrix())
+  : VirtualChromosome(name),
+    fCenter(pos),
+    fSemiX(std::abs(sx)),
+    fSemiY(std::abs(sy)),
+    fSemiZ(std::abs(sz)),
+    fRotation(G4RotationMatrix())
 {
   fInverseRotation = fRotation.inverse();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EllipticalChromosome::EllipticalChromosome(
-  const G4String& name, const G4ThreeVector& pos, const G4double& sx,
-  const G4double& sy, const G4double& sz, const G4RotationMatrix& rot)
-  : VirtualChromosome(name)
-  , fCenter(pos)
-  , fSemiX(std::abs(sx))
-  , fSemiY(std::abs(sy))
-  , fSemiZ(std::abs(sz))
-  , fRotation(rot)
+EllipticalChromosome::EllipticalChromosome(const G4String& name, const G4ThreeVector& pos,
+                                           const G4double& sx, const G4double& sy,
+                                           const G4double& sz, const G4RotationMatrix& rot)
+  : VirtualChromosome(name),
+    fCenter(pos),
+    fSemiX(std::abs(sx)),
+    fSemiY(std::abs(sy)),
+    fSemiZ(std::abs(sz)),
+    fRotation(rot)
 {
   fInverseRotation = fRotation.inverse();
 }
@@ -74,12 +73,13 @@ EllipticalChromosome::~EllipticalChromosome() = default;
 G4bool EllipticalChromosome::PointInChromosome(G4ThreeVector const& pos)
 {
   G4ThreeVector rpos = pos - fCenter;
-  rpos               = fInverseRotation(rpos);
+  rpos = fInverseRotation(rpos);
 
   //====================dousatsu=========================
-  G4bool ok = ((std::pow(rpos.getX(), 2) / std::pow(fSemiX, 2) +
-                std::pow(rpos.getY(), 2) / std::pow(fSemiY, 2) +
-                std::pow(rpos.getZ(), 2) / std::pow(fSemiZ, 2)) <= 1.);
+  G4bool ok = ((std::pow(rpos.getX(), 2) / std::pow(fSemiX, 2)
+                + std::pow(rpos.getY(), 2) / std::pow(fSemiY, 2)
+                + std::pow(rpos.getZ(), 2) / std::pow(fSemiZ, 2))
+               <= 1.);
   //====================dousatsu=========================
   //// TODO: This is a box, not an ellipsoid
   //// Check that (x/a)**2 + (y/b)**2 + (z/c)**2 <= 1 instead

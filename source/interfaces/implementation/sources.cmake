@@ -2,7 +2,7 @@
 
 # Define the Geant4 Module.
 geant4_add_module(G4UIimplementation PUBLIC_HEADERS G4UIExecutive.hh SOURCES G4UIExecutive.cc)
-geant4_module_link_libraries(G4UIimplementation PUBLIC G4UIcore PRIVATE G4intercoms G4globman)
+geant4_module_link_libraries(G4UIimplementation PUBLIC G4UIcore G4globman PRIVATE G4intercoms)
 
 # Win32 terminal only for MSVC builds, but always built here
 # ... not in G4UIcore because of the requirement to have G4Win32 interactor manager

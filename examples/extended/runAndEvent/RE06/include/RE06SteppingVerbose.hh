@@ -33,51 +33,50 @@ class RE06SteppingVerbose;
 #ifndef RE06SteppingVerbose_h
 #define RE06SteppingVerbose_h 1
 
-#include <vector>
-#include "G4VSteppingVerbose.hh"
 #include "G4SliceTimer.hh"
+#include "G4VSteppingVerbose.hh"
+
+#include <vector>
 
 class G4Region;
 
 class RE06SteppingVerbose : public G4VSteppingVerbose
 {
- public:   
-  RE06SteppingVerbose();
-  virtual ~RE06SteppingVerbose();
+  public:
+    RE06SteppingVerbose();
+    virtual ~RE06SteppingVerbose();
 
-  virtual G4VSteppingVerbose* Clone()
-  { return new RE06SteppingVerbose; }
+    virtual G4VSteppingVerbose* Clone() { return new RE06SteppingVerbose; }
 
-  void InitializeTimers();
-  void Report();
+    void InitializeTimers();
+    void Report();
 
-  virtual void NewStep();
-  virtual void StepInfo();
+    virtual void NewStep();
+    virtual void StepInfo();
 
-  // Following methods are not used
-  virtual void TrackBanner() {}
-  virtual void AtRestDoItInvoked() {}
-  virtual void AlongStepDoItAllDone() {}
-  virtual void PostStepDoItAllDone() {}
-  virtual void AlongStepDoItOneByOne() {}
-  virtual void PostStepDoItOneByOne() {}
-  virtual void TrackingStarted() {}
-  virtual void DPSLStarted() {}
-  virtual void DPSLUserLimit() {}
-  virtual void DPSLPostStep() {}
-  virtual void DPSLAlongStep() {}
-  virtual void VerboseTrack() {}
-  virtual void VerboseParticleChange() {}
+    // Following methods are not used
+    virtual void TrackBanner() {}
+    virtual void AtRestDoItInvoked() {}
+    virtual void AlongStepDoItAllDone() {}
+    virtual void PostStepDoItAllDone() {}
+    virtual void AlongStepDoItOneByOne() {}
+    virtual void PostStepDoItOneByOne() {}
+    virtual void TrackingStarted() {}
+    virtual void DPSLStarted() {}
+    virtual void DPSLUserLimit() {}
+    virtual void DPSLPostStep() {}
+    virtual void DPSLAlongStep() {}
+    virtual void VerboseTrack() {}
+    virtual void VerboseParticleChange() {}
 
- private:
-  G4int FindRegion(G4Region*);
+  private:
+    G4int FindRegion(G4Region*);
 
-  std::vector<G4SliceTimer*> fTimers;
-  G4int fNofRegions;
-  G4int fNofTimers;
-  G4int fRegIdx;
-  G4bool fEp;
+    std::vector<G4SliceTimer*> fTimers;
+    G4int fNofRegions;
+    G4int fNofTimers;
+    G4int fRegIdx;
+    G4bool fEp;
 };
-
 
 #endif

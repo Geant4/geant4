@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 #ifndef TimeStepAction_h
-#define TimeStepAction_h
+#define TimeStepAction_h 1
 
 #include "G4DNAMesh.hh"
 #include "G4UserTimeStepAction.hh"
-#include <set>
+
+#include <memory>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4DNAEventScheduler;
 
@@ -38,41 +41,44 @@ class PulseAction;
 
 class G4VChemistryWorld;
 
-class TimeStepAction : public G4UserTimeStepAction {
-public:
-  explicit TimeStepAction(const G4VChemistryWorld*, PulseAction* pPulse = nullptr);
+class G4Scheduler;
 
-  ~TimeStepAction() override = default;
+class TimeStepAction : public G4UserTimeStepAction
+{
+  public:
+    explicit TimeStepAction(const G4VChemistryWorld*, PulseAction* pPulse = nullptr);
 
-  TimeStepAction(const TimeStepAction &other) = delete;
+    ~TimeStepAction() override = default;
 
-  TimeStepAction &operator=(const TimeStepAction &other) = delete;
+    TimeStepAction(const TimeStepAction& other) = delete;
 
-  void StartProcessing() override { ; }
+    TimeStepAction& operator=(const TimeStepAction& other) = delete;
 
-  void UserPreTimeStepAction() override;
+    void StartProcessing() override;
 
-  void UserPostTimeStepAction() override;
+    void UserPreTimeStepAction() override;
 
-  void UserReactionAction(const G4Track & /*trackA*/,
-                          const G4Track & /*trackB*/,
-                          const std::vector<G4Track *> * /*products*/) override;
+    void UserPostTimeStepAction() override;
 
-  void EndProcessing() override;
+    void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                            const std::vector<G4Track*>* /*products*/) override;
 
-  G4DNAEventScheduler *GetEventScheduler() const;
+    void EndProcessing() override;
 
-  void SetInitialPixel();
+    G4DNAEventScheduler* GetEventScheduler() const;
 
-private:
-  std::unique_ptr<G4DNAEventScheduler> fpEventScheduler;
+    void SetInitialPixel();
 
-  void CompartmentBased();
+  private:
+    std::unique_ptr<G4DNAEventScheduler> fpEventScheduler;
 
-  PulseAction* fpPulse = nullptr;
-  const G4VChemistryWorld* fpChemWorld = nullptr;
-  G4int fPixel = 0;
+    void CompartmentBased();
 
+    PulseAction* fpPulse = nullptr;
+    const G4VChemistryWorld* fpChemWorld = nullptr;
+    G4int fPixel = 0;
+    G4Scheduler* fScheduler = nullptr;
 };
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

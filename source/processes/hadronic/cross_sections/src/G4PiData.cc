@@ -35,9 +35,7 @@
 G4PiData::G4PiData(const G4double * aT, const G4double * aIn, 
                    const G4double * anE, G4int nP)
 {
-  G4int i=0;
-
-  for( i = 0; i < nP; i++ )
+  for(G4int i = 0; i < nP; ++i )
   {
     std::pair<G4double, G4double> x;
     x.first=aT[i]*millibarn;
@@ -46,23 +44,27 @@ G4PiData::G4PiData(const G4double * aT, const G4double * aIn,
     aP.first=anE[i]*GeV;
     aP.second=x;
     push_back(aP);
+    if (i == 0) {
+      fMinE = aP.first;
+      fTot0 = x.first;
+      fInel0 = x.second;
+    } else if (i+1 == nP) {
+      fMaxE = aP.first;
+      fTot1 = x.first;
+      fInel1 = x.second;
+    }
   }
-}
-
-////////////////////////////////////////////////////////////////////////
-
-G4bool G4PiData::AppliesTo(G4double kineticEnergy)
-{
-  return (kineticEnergy<=back().first);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 G4double G4PiData::ReactionXSection(G4double kineticEnergy)
 {
-  G4double result = 0;
+  if (kineticEnergy <= fMinE) { return fInel0; }
+  if (kineticEnergy >= fMaxE) { return fInel1; }
+
   G4PiData::iterator it=begin();
-  while(it!=end()&&kineticEnergy>(*it).first) {it++;}  /* Loop checking, 08.01.2016, W. Pokorski */
+  while(it!=end()&&kineticEnergy>(*it).first) {++it;}  /* Loop checking, 08.01.2016, W. Pokorski */
   if(it==end()) 
   {
     G4ExceptionDescription ed;
@@ -76,15 +78,16 @@ G4double G4PiData::ReactionXSection(G4double kineticEnergy)
   x1=(*(it-1)).second.second;
   e2=(*(it)).first;
   x2=(*(it)).second.second;
-  result = std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
-  return result;
+  return std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 G4double G4PiData::ElasticXSection(G4double kineticEnergy)
 {
-  G4double result = 0;
+  if (kineticEnergy <= fMinE) { return fTot0 - fInel0; }
+  if (kineticEnergy >= fMaxE) { return fTot1 - fInel1; }
+
   G4PiData::iterator it=begin();
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}  /* Loop checking, 08.01.2016, W. Pokorski */
   if(it==end()) 
@@ -100,15 +103,16 @@ G4double G4PiData::ElasticXSection(G4double kineticEnergy)
   x1=(*(it-1)).second.first - (*(it-1)).second.second;
   e2=(*(it)).first;
   x2=(*(it)).second.first - (*(it)).second.second;
-  result = std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
-  return result;
+  return std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 G4double G4PiData::TotalXSection(G4double kineticEnergy)
 {
-  G4double result = 0;
+  if (kineticEnergy <= fMinE) { return fTot0; }
+  if (kineticEnergy >= fMaxE) { return fTot1; }
+
   G4PiData::iterator it=begin();
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}  /* Loop checking, 08.01.2016, W. Pokorski */
   if(it==end()) 
@@ -124,6 +128,5 @@ G4double G4PiData::TotalXSection(G4double kineticEnergy)
   x1=(*(it-1)).second.first;
   e2=(*(it)).first;
   x2=(*(it)).second.first;
-  result = std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
-  return result;
+  return std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
 }

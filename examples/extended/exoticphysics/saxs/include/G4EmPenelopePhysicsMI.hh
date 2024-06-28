@@ -31,27 +31,26 @@
 #ifndef G4EmPenelopePhysicsMI_h
 #define G4EmPenelopePhysicsMI_h 1
 
-#include "G4VPhysicsConstructor.hh"
 #include "G4EmParticleList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4EmPenelopePhysicsMI : public G4VPhysicsConstructor
 {
-public:
-  explicit G4EmPenelopePhysicsMI(G4int ver=1, const G4String& name="",
-                                 G4bool useMI=true);
-  
-  virtual ~G4EmPenelopePhysicsMI();
-  
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  
-private:
-  G4int  fVerbose;
-  G4EmParticleList fPartList;
-  G4bool fUseMIFlag;
+  public:
+    explicit G4EmPenelopePhysicsMI(G4int ver = 1, const G4String& name = "", G4bool useMI = true);
+
+    virtual ~G4EmPenelopePhysicsMI();
+
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+
+  private:
+    G4int fVerbose;
+    G4EmParticleList fPartList;
+    G4bool fUseMIFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -51,7 +51,6 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UImanager.hh"
 #include "G4EmLowEParameters.hh"
-
 #include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -164,6 +163,13 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dnaSolCmd->AvailableForStates(G4State_PreInit);
   dnaSolCmd->SetToBeBroadcasted(false);
 
+  dnaChemModel = new G4UIcmdWithAString("/process/chem/TimeStepModel",this);
+  dnaChemModel->SetGuidance("The name of DNA chemistry time step model");
+  dnaChemModel->SetParameterName("TimeStepModel",true);
+  dnaChemModel->SetCandidates("SBS IRT IRT_syn");
+  dnaChemModel->AvailableForStates(G4State_PreInit);
+  dnaChemModel->SetToBeBroadcasted(false);
+
   meCmd = new G4UIcmdWithAString("/process/em/AddMicroElecRegion",this);
   meCmd->SetGuidance("Activate MicroElec model in the G4Region");
   meCmd->SetParameterName("MicroElec",true);
@@ -225,6 +231,7 @@ G4EmLowEParametersMessenger::~G4EmLowEParametersMessenger()
   delete pixeeXsCmd;
   delete livCmd;
   delete dnaSolCmd;
+  delete dnaChemModel;
   delete direFluoCmd;
   delete meCmd;
   delete dnaCmd;
@@ -278,6 +285,16 @@ void G4EmLowEParametersMessenger::SetNewValue(G4UIcommand* command,
       ttt = fKreipl2009eSolvation;
     }
     theParameters->SetDNAeSolvationSubType(ttt);
+  } else if (command == dnaChemModel) {
+    G4ChemTimeStepModel stepM = G4ChemTimeStepModel::Unknown;
+    if(newValue == "IRT") {
+      stepM = G4ChemTimeStepModel::IRT;
+    } else if(newValue == "SBS") {
+      stepM = G4ChemTimeStepModel::SBS;
+    } else if (newValue == "IRT_syn") {
+      stepM = G4ChemTimeStepModel::IRT_syn;
+    }
+    theParameters->SetChemTimeStepModel(stepM);
   } else if (command == direFluoCmd) {
     G4EmFluoDirectory ttt = fluoDefault;
     if(newValue == "Bearden") { ttt = fluoBearden; }

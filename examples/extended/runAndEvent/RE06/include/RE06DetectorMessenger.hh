@@ -31,8 +31,8 @@
 #ifndef RE06DetectorMessenger_h
 #define RE06DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class RE06DetectorConstruction;
 class G4UIdirectory;
@@ -40,29 +40,27 @@ class G4UIcmdWithAString;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 
-class RE06DetectorMessenger: public G4UImessenger
+class RE06DetectorMessenger : public G4UImessenger
 {
   public:
-    RE06DetectorMessenger(RE06DetectorConstruction* );
+    RE06DetectorMessenger(RE06DetectorConstruction*);
     virtual ~RE06DetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    
+    virtual G4String GetCurrentValue(G4UIcommand* command);
+
   private:
     void UpdateMaterialList();
 
     RE06DetectorConstruction* fDetector;
-    
-    G4UIdirectory*             fDirectory;
-    G4UIcmdWithAString*        fAbsMaterialCmd;
-    G4UIcmdWithAString*        fGapMaterialCmd;
-    G4UIcmdWithAnInteger*      fNumLayerCmd;
-    G4UIcmdWithABool*          fSerialCmd;
-    G4UIcmdWithAnInteger*      fVerboseCmd;
-    G4UIcmdWithABool*          fAddMaterialCmd;
+
+    G4UIdirectory* fDirectory;
+    G4UIcmdWithAString* fAbsMaterialCmd;
+    G4UIcmdWithAString* fGapMaterialCmd;
+    G4UIcmdWithAnInteger* fNumLayerCmd;
+    G4UIcmdWithABool* fSerialCmd;
+    G4UIcmdWithAnInteger* fVerboseCmd;
+    G4UIcmdWithABool* fAddMaterialCmd;
 };
 
-
 #endif
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file eventgenerator/pythia/pythia8decayer/include/Py8DecayerPhysics
 /// \brief Definition of the Py8DecayerPhysics class
 ///
@@ -38,10 +38,10 @@
 
 class G4Decay;
 
-class Py8DecayerPhysics: public G4VPhysicsConstructor
+class Py8DecayerPhysics : public G4VPhysicsConstructor
 {
   public:
-    Py8DecayerPhysics(G4int verb=1);
+    Py8DecayerPhysics(G4int verb = 1);
     virtual ~Py8DecayerPhysics();
 
   protected:
@@ -49,7 +49,6 @@ class Py8DecayerPhysics: public G4VPhysicsConstructor
     // construct particle and physics
     virtual void ConstructParticle();
     virtual void ConstructProcess();
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

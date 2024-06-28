@@ -33,8 +33,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -44,27 +44,24 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger() override;
-    
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override;
+
     void SetNewValue(G4UIcommand*, G4String) override;
-    
+
   private:
-  
-    DetectorConstruction*      fDetector = nullptr;
-    
-    G4UIdirectory*             fTestemDir   = nullptr;
-    G4UIdirectory*             fDetDir      = nullptr;
-    G4UIcmdWithAString*        fMaterCmd    = nullptr;
-    G4UIcmdWithADoubleAndUnit* fRadiusCmd   = nullptr;
-    G4UIcmdWithAnInteger*      fNbLayersCmd = nullptr;
+    DetectorConstruction* fDetector = nullptr;
+
+    G4UIdirectory* fTestemDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIcmdWithAString* fMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fRadiusCmd = nullptr;
+    G4UIcmdWithAnInteger* fNbLayersCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

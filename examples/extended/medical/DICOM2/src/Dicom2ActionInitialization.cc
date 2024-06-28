@@ -28,39 +28,37 @@
 /// \brief Implementation of the Dicom2ActionInitialization class
 
 #include "Dicom2ActionInitialization.hh"
+
 #include "Dicom2PrimaryGeneratorAction.hh"
-#include "DicomPrimaryGeneratorAction.hh"
 #include "Dicom2RunAction.hh"
 #include "DicomEventAction.hh"
+#include "DicomPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Dicom2ActionInitialization::Dicom2ActionInitialization()
- : G4VUserActionInitialization()
-{}
+Dicom2ActionInitialization::Dicom2ActionInitialization() : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Dicom2ActionInitialization::~Dicom2ActionInitialization()
-{}
+Dicom2ActionInitialization::~Dicom2ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Dicom2ActionInitialization::BuildForMaster() const
 {
-    // DICOM2 overload
-    SetUserAction(new Dicom2RunAction);
+  // DICOM2 overload
+  SetUserAction(new Dicom2RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Dicom2ActionInitialization::Build() const
 {
-    // DICOM2 overload
-    SetUserAction(new Dicom2RunAction);
-    SetUserAction(new Dicom2PrimaryGeneratorAction);
-    // from original DICOM
-    SetUserAction(new DicomEventAction);
+  // DICOM2 overload
+  SetUserAction(new Dicom2RunAction);
+  SetUserAction(new Dicom2PrimaryGeneratorAction);
+  // from original DICOM
+  SetUserAction(new DicomEventAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

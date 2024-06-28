@@ -46,55 +46,42 @@
 /// \brief define a cluster of SB Points
 class ClusterSBPoints
 {
-public:
-  ClusterSBPoints(std::set<SBPoint*> pPoints);
-  ~ClusterSBPoints();
+  public:
+    ClusterSBPoints(std::set<SBPoint*> pPoints);
+    ~ClusterSBPoints();
 
-  bool IsDSB() const
-  {
-    return fIsDoubleSB;
-  }
+    bool IsDSB() const { return fIsDoubleSB; }
 
-  bool IsSSB() const
-  {
-    return ! IsDSB();
-  }
+    bool IsSSB() const { return !IsDSB(); }
 
-  unsigned int GetSize() const
-  {
-    return fpRegisteredSBPoints.size();
-  }
+    unsigned int GetSize() const { return fpRegisteredSBPoints.size(); }
 
-  void AddSBPoint(SBPoint* pSBPoint );
-  G4ThreeVector GetBarycenter() const;
+    void AddSBPoint(SBPoint* pSBPoint);
+    G4ThreeVector GetBarycenter() const;
 
-  G4double GetEdep() const;
+    G4double GetEdep() const;
 
-  void FindAllPointsPossible(std::vector<SBPoint*>* ptToCheck,
-      G4int minPts, G4double minDist);
+    void FindAllPointsPossible(std::vector<SBPoint*>* ptToCheck, G4int minPts, G4double minDist);
 
-  /// \brief will set to all store SBPoint they are part of this cluster
-  void NoticeInternalPts();
+    /// \brief will set to all store SBPoint they are part of this cluster
+    void NoticeInternalPts();
 
-  bool HasIn(const SBPoint*, G4double);
-  bool HasInBarycenter(const SBPoint*, G4double);
+    bool HasIn(const SBPoint*, G4double);
+    bool HasInBarycenter(const SBPoint*, G4double);
 
-  void MergeWith(ClusterSBPoints*);
+    void MergeWith(ClusterSBPoints*);
 
-  std::set<SBPoint* > GetRegistredSBPoints() const
-      {
-    return fpRegisteredSBPoints;
-      }
+    std::set<SBPoint*> GetRegistredSBPoints() const { return fpRegisteredSBPoints; }
 
-  void Clear();
+    void Clear();
 
-private:
-  void UpdateDoubleStrand();
+  private:
+    void UpdateDoubleStrand();
 
-  unsigned int fSize;
-  bool fIsDoubleSB; // is a double strand break ?
+    unsigned int fSize;
+    bool fIsDoubleSB;  // is a double strand break ?
 
-  std::set<SBPoint* > fpRegisteredSBPoints;
+    std::set<SBPoint*> fpRegisteredSBPoints;
 };
 
-#endif //CLUSTER_SB_POINT_HH
+#endif  // CLUSTER_SB_POINT_HH

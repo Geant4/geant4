@@ -38,27 +38,25 @@
 //
 // --------------------------------------------------------------
 
-#include "G4Types.hh"
-
-#include "G4RunManagerFactory.hh"
-#include "G4UImanager.hh"
-
-#include "RE01DetectorConstruction.hh"
-#include "RE01CalorimeterROGeometry.hh"
 #include "QGSP_BERT.hh"
-#include "G4UnknownDecayPhysics.hh"
-#include "G4ParallelWorldPhysics.hh"
 #include "RE01ActionInitialization.hh"
+#include "RE01CalorimeterROGeometry.hh"
+#include "RE01DetectorConstruction.hh"
 
-#include "G4VisExecutive.hh"
+#include "G4ParallelWorldPhysics.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
+#include "G4UImanager.hh"
+#include "G4UnknownDecayPhysics.hh"
+#include "G4VisExecutive.hh"
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
-   ui = new G4UIExecutive(argc, argv);
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
   }
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
@@ -68,34 +66,28 @@ int main(int argc,char** argv)
   visManager->Initialize();
 
   G4String parallelWorldName = "ReadoutWorld";
-  G4VUserDetectorConstruction* detector
-     = new RE01DetectorConstruction();
-  detector->RegisterParallelWorld(
-       new RE01CalorimeterROGeometry(parallelWorldName));
+  G4VUserDetectorConstruction* detector = new RE01DetectorConstruction();
+  detector->RegisterParallelWorld(new RE01CalorimeterROGeometry(parallelWorldName));
   runManager->SetUserInitialization(detector);
 
   G4VModularPhysicsList* physicsList = new QGSP_BERT;
   physicsList->RegisterPhysics(new G4UnknownDecayPhysics);
-  physicsList->RegisterPhysics(
-       new G4ParallelWorldPhysics(parallelWorldName));
+  physicsList->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
   runManager->SetUserInitialization(physicsList);
 
-  runManager->SetUserInitialization(
-       new RE01ActionInitialization);
+  runManager->SetUserInitialization(new RE01ActionInitialization);
 
   runManager->Initialize();
 
-  if(ui)
-  {
+  if (ui) {
     ui->SessionStart();
     delete ui;
   }
-  else
-  {
+  else {
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command + fileName);
   }
 
   delete visManager;
@@ -104,4 +96,3 @@ int main(int argc,char** argv)
 
   return 0;
 }
-

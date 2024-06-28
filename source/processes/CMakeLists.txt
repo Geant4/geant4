@@ -52,6 +52,7 @@ foreach(modfile
     hadronic/models/gamma_nuclear/sources.cmake
     hadronic/models/lend/sources.cmake
     hadronic/models/lepto_nuclear/sources.cmake
+    hadronic/models/nudex/sources.cmake
     hadronic/models/particle_hp/sources.cmake
     hadronic/models/parton_string/diffraction/sources.cmake
     hadronic/models/parton_string/hadronization/sources.cmake
@@ -123,6 +124,7 @@ geant4_add_category(G4processes
     G4had_gamma_nuclear
     G4had_lend
     G4had_lept_nuclear
+    G4hadronic_nudex
     G4had_par_hp
     G4had_string_diff
     G4had_string_frag

@@ -25,13 +25,18 @@
 /// @file G4MPIstatus.cc
 /// @brief status of MPI application
 
-#include "G4ApplicationState.hh"
 #include "G4MPIstatus.hh"
+
+#include "G4ApplicationState.hh"
 
 // --------------------------------------------------------------------------
 G4MPIstatus::G4MPIstatus()
-  : rank_(0), run_id_(0), nevent_to_be_processed_(0), event_id_(0),
-    cputime_(0.), g4state_(G4State_Quit)
+  : rank_(0),
+    run_id_(0),
+    nevent_to_be_processed_(0),
+    event_id_(0),
+    cputime_(0.),
+    g4state_(G4State_Quit)
 {
   timer_ = new G4Timer;
 }
@@ -45,13 +50,13 @@ G4MPIstatus::~G4MPIstatus()
 // --------------------------------------------------------------------------
 void G4MPIstatus::StartTimer()
 {
-  timer_-> Start();
+  timer_->Start();
 }
 
 // --------------------------------------------------------------------------
 void G4MPIstatus::StopTimer()
 {
-  timer_-> Stop();
+  timer_->Stop();
 }
 
 // --------------------------------------------------------------------------
@@ -63,8 +68,10 @@ void G4MPIstatus::SetStatus(G4int arank, G4int runid, G4int noe, G4int evtid,
   nevent_to_be_processed_ = noe;
   event_id_ = evtid;
   g4state_ = state;
-  if ( timer_-> IsValid() ) cputime_= timer_-> GetRealElapsed();
-  else cputime_ = 0.;
+  if (timer_->IsValid())
+    cputime_ = timer_->GetRealElapsed();
+  else
+    cputime_ = 0.;
 }
 
 // --------------------------------------------------------------------------
@@ -76,7 +83,7 @@ void G4MPIstatus::Pack(G4int* data) const
   data[3] = event_id_;
   data[4] = g4state_;
 
-  G4double* ddata = (G4double*)(data+5);
+  G4double* ddata = (G4double*)(data + 5);
   ddata[0] = cputime_;
 }
 
@@ -89,7 +96,7 @@ void G4MPIstatus::UnPack(G4int* data)
   event_id_ = data[3];
   g4state_ = (G4ApplicationState)data[4];
 
-  G4double* ddata = (G4double*)(data+5);
+  G4double* ddata = (G4double*)(data + 5);
   cputime_ = ddata[0];
 }
 
@@ -97,12 +104,9 @@ void G4MPIstatus::UnPack(G4int* data)
 void G4MPIstatus::Print() const
 {
   // * rank= 001 run= 10002 event= 00001 / 100000 state= Idle"
-  G4cout << "* rank= " << rank_
-         << " run= " << run_id_
-         << " event= " << event_id_ << " / " << nevent_to_be_processed_
-         << " state= " << GetStateString(g4state_)
-         << " time= " << cputime_ << "s"
-         << G4endl;
+  G4cout << "* rank= " << rank_ << " run= " << run_id_ << " event= " << event_id_ << " / "
+         << nevent_to_be_processed_ << " state= " << GetStateString(g4state_)
+         << " time= " << cputime_ << "s" << G4endl;
 }
 
 // --------------------------------------------------------------------------
@@ -110,31 +114,31 @@ G4String G4MPIstatus::GetStateString(G4ApplicationState astate) const
 {
   G4String sname;
 
-  switch(astate) {
-  case G4State_PreInit:
-    sname = "PreInit";
-    break;
-  case G4State_Init:
-    sname = "Init";
-    break;
-  case G4State_Idle:
-    sname = "Idle";
-    break;
-  case G4State_GeomClosed:
-    sname = "GeomClosed";
-    break;
-  case G4State_EventProc:
-    sname = "EventProc";
-    break;
-  case G4State_Quit:
-    sname = "Quit";
-    break;
-  case G4State_Abort:
-    sname = "Abort";
-    break;
-  default:
-    sname = "Unknown";
-    break;
+  switch (astate) {
+    case G4State_PreInit:
+      sname = "PreInit";
+      break;
+    case G4State_Init:
+      sname = "Init";
+      break;
+    case G4State_Idle:
+      sname = "Idle";
+      break;
+    case G4State_GeomClosed:
+      sname = "GeomClosed";
+      break;
+    case G4State_EventProc:
+      sname = "EventProc";
+      break;
+    case G4State_Quit:
+      sname = "Quit";
+      break;
+    case G4State_Abort:
+      sname = "Abort";
+      break;
+    default:
+      sname = "Unknown";
+      break;
   }
 
   return sname;

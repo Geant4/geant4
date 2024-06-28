@@ -29,6 +29,9 @@
 #define FlashPhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
+#include "G4EmConfigurator.hh"
+
+class FlashPhysicsListMessenger;
 
 class FlashPhysicsList : public G4VModularPhysicsList {
 public:
@@ -36,6 +39,19 @@ public:
   virtual ~FlashPhysicsList();
 
   virtual void SetCuts();
+  //add
+    void AddPhysicsList(const G4String& name);
+   void ConstructProcess();
+   void ConstructParticle();
+    void AddPackage(const G4String& name);
+private:
+  G4EmConfigurator em_config;
+    FlashPhysicsListMessenger* pMessenger;
+  G4String                             emName;
+  G4VPhysicsConstructor*               emPhysicsList;
+  G4VPhysicsConstructor*   decPhysicsList;
+    G4VPhysicsConstructor*   radPhysicsList; 
+  
 };
 
 #endif

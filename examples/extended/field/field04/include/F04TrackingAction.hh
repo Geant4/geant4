@@ -33,16 +33,14 @@
 
 #include "G4UserTrackingAction.hh"
 
-class F04TrackingAction : public G4UserTrackingAction {
-
+class F04TrackingAction : public G4UserTrackingAction
+{
   public:
-
     F04TrackingAction() = default;
     ~F04TrackingAction() override = default;
 
     void PreUserTrackingAction(const G4Track*) override;
     void PostUserTrackingAction(const G4Track*) override;
-
 };
 
 #endif

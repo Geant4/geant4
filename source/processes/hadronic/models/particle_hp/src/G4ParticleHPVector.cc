@@ -191,6 +191,18 @@ G4double G4ParticleHPVector::GetXsec(G4double e)
   return y;
 }
 
+G4int G4ParticleHPVector::GetEnergyIndex(G4double &e)
+{
+  // returns energy index of the bin in which ekin is lower then emax and higher than emin for CALENDF
+  // returns energy index of emax for NJOY
+  if (nEntries == 0) return 0;
+  if ( ( ! theHash.Prepared() ) && ( ! G4Threading::IsWorkerThread() ) ) Hash();
+  G4int min = theHash.GetMinIndex(e);
+  G4int i = 0;
+  for (i=min ; i < nEntries; i++) if (theData[i].GetX() >= e) break;
+  return i;
+}
+
 void G4ParticleHPVector::Dump()
 {
   G4cout << nEntries << G4endl;

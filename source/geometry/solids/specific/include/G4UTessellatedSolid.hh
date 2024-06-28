@@ -61,6 +61,8 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
 
     inline G4GeometryType GetEntityType() const override;
 
+    inline G4bool IsFaceted() const override;
+
     void SetSolidClosed(const G4bool t);
     G4bool GetSolidClosed() const;
 
@@ -106,6 +108,11 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
 inline G4GeometryType G4UTessellatedSolid::GetEntityType() const
 {
   return "G4TessellatedSolid";
+}
+
+inline G4bool G4UTessellatedSolid::IsFaceted() const
+{
+  return true;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

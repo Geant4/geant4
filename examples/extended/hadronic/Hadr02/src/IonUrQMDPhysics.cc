@@ -37,58 +37,58 @@
 // Modified:
 //
 // ------------------------------------------------------------
-// 
+//
 #ifdef G4_USE_URQMD
-#include "IonUrQMDPhysics.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4He3.hh"
-#include "G4Alpha.hh"
-#include "G4GenericIon.hh"
+#  include "IonUrQMDPhysics.hh"
 
-#include "G4HadronInelasticProcess.hh"
-#include "G4CrossSectionInelastic.hh"
-#include "G4ComponentGGNuclNuclXsc.hh"
-
-#include "G4UrQMD1_3Model.hh"
-
-#include "G4BuilderType.hh"
-#include "G4HadronicParameters.hh"
-#include "G4SystemOfUnits.hh"
+#  include "G4Alpha.hh"
+#  include "G4BuilderType.hh"
+#  include "G4ComponentGGNuclNuclXsc.hh"
+#  include "G4CrossSectionInelastic.hh"
+#  include "G4Deuteron.hh"
+#  include "G4GenericIon.hh"
+#  include "G4HadronInelasticProcess.hh"
+#  include "G4HadronicParameters.hh"
+#  include "G4He3.hh"
+#  include "G4ParticleDefinition.hh"
+#  include "G4ProcessManager.hh"
+#  include "G4SystemOfUnits.hh"
+#  include "G4Triton.hh"
+#  include "G4UrQMD1_3Model.hh"
 
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 IonUrQMDPhysics::IonUrQMDPhysics(G4int ver)
-  : G4VHadronPhysics("ionInelasticUrQMD"),verbose(ver),
-    fWasActivated(false)
+  : G4VHadronPhysics("ionInelasticUrQMD"), verbose(ver), fWasActivated(false)
 {
   fIonXS = nullptr;
   fModel = nullptr;
   SetPhysicsType(bIons);
-  if(fVerbose > 1) { G4cout << "### IonUrQMDPhysics" << G4endl; }
+  if (fVerbose > 1) {
+    G4cout << "### IonUrQMDPhysics" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonUrQMDPhysics::~IonUrQMDPhysics()
-{}
+IonUrQMDPhysics::~IonUrQMDPhysics() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void IonUrQMDPhysics::ConstructProcess()
 {
-  if(fWasActivated) { return; }
+  if (fWasActivated) {
+    return;
+  }
   fWasActivated = true;
 
-  G4double emin = 0.*MeV;
+  G4double emin = 0. * MeV;
   G4double emax = G4HadronicParameters::Instance()->GetMaxEnergy();
 
   fModel = new G4UrQMD1_3Model();
-  fModel->SetMinEnergy( emin );
-  fModel->SetMaxEnergy( emax );
+  fModel->SetMinEnergy(emin);
+  fModel->SetMaxEnergy(emax);
 
   fIonXS = new G4CrossSectionInelastic(new G4ComponentGGNuclNuclXsc);
 
@@ -98,9 +98,8 @@ void IonUrQMDPhysics::ConstructProcess()
   AddProcess("alphaInelastic", G4Alpha::Alpha());
   AddProcess("ionInelastic", G4GenericIon::GenericIon());
 
-  if(fVerbose > 1) {
-    G4cout << "IonUrQMDPhysics::ConstructProcess done! " 
-           << G4endl;
+  if (fVerbose > 1) {
+    G4cout << "IonUrQMDPhysics::ConstructProcess done! " << G4endl;
   }
 }
 
@@ -116,4 +115,4 @@ void IonUrQMDPhysics::AddProcess(const G4String& name, G4ParticleDefinition* par
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#endif //URQMD
+#endif  // URQMD

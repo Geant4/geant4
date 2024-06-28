@@ -4,6 +4,19 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
+## 2024-05-08 G. Cosmo (UHDR-V11-02-02)
+- Fixed compilation errors on macOS/clang with C++23 enabled, for incomplete
+  types of smart-pointers through defaulted destructors.
+
+## 2024-04-26 H. Tran (UHDR-V11-02-01)
+- Implemented PBC based on https://github.com/amentumspace/g4pbc
+  to calculate microdosimetry
+- Added a maximum dose (2 times of cut-off dose) to abort the event.
+
+## 2024-04-18 H. Tran (UHDR-V11-02-00)
+- Updated bounce off condition based on Karamitros M.
+  et al.2020,arXiv:2006.14225 (2020) https://doi.org/10.48550/arXiv.2006.14225
+
 ## 2023-11-10 H. Tran (UHDR-V11-01-04)
 - Added info in .README.txt and README files
 

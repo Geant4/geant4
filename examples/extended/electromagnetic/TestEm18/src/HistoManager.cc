@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
+
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,37 +50,36 @@ void HistoManager::Book()
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
-  analysisManager->SetActivation(true);   //enable inactivation of histograms
-  
+  analysisManager->SetActivation(true);  // enable inactivation of histograms
+
   // Define histograms start values
   const G4int kMaxHisto = 14;
-  const G4String id[] = { "0", "1", "2", "3" , "4", "5", "6", "7", "8", "9",
-                          "10", "11", "12", "13"};
-  const G4String title[] =
-           { "dummy",                                                    //0
-             "step size of primary track",                               //1
-             "energy continuously deposited along primary track",        //2
-             "energy transfered to secondaries by ionisation",           //3
-             "energy transfered to secondaries by Bremsstrahlung",       //4
-             "energy transfered to secondaries by (e+,e-) production",   //5
-             "total energy transfered to secondaries",                   //6
-             "total energy lost by primary track",                       //7
-             "total energy lost by primary track from energy balance",   //8
-             "energy continuously deposited along secondary tracks",     //9
-             "total energy deposited",                                   //10
-             "energy spectrum of gamma",                                 //11
-             "energy spectrum of e-",                                    //12
-             "energy spectrum of e+"                                     //13
-            };
-            
-  // Default values (to be reset via /analysis/h1/set command)               
+  const G4String id[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
+  const G4String title[] = {
+    "dummy",  // 0
+    "step size of primary track",  // 1
+    "energy continuously deposited along primary track",  // 2
+    "energy transfered to secondaries by ionisation",  // 3
+    "energy transfered to secondaries by Bremsstrahlung",  // 4
+    "energy transfered to secondaries by (e+,e-) production",  // 5
+    "total energy transfered to secondaries",  // 6
+    "total energy lost by primary track",  // 7
+    "total energy lost by primary track from energy balance",  // 8
+    "energy continuously deposited along secondary tracks",  // 9
+    "total energy deposited",  // 10
+    "energy spectrum of gamma",  // 11
+    "energy spectrum of e-",  // 12
+    "energy spectrum of e+"  // 13
+  };
+
+  // Default values (to be reset via /analysis/h1/set command)
   G4int nbins = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;
 
-  // Create all histograms as inactivated 
+  // Create all histograms as inactivated
   // as we have not yet set nbins, vmin, vmax
-  for (G4int k=0; k<kMaxHisto; k++) {
+  for (G4int k = 0; k < kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);
   }

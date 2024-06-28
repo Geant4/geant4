@@ -26,91 +26,93 @@
 #ifndef DicomVFileImage__HH
 #define DicomVFileImage__HH
 
-#include "DicomVFile.hh"
 #include "DicomFileMgr.hh"
+#include "DicomVFile.hh"
+
 #include "G4ThreeVector.hh"
 
 class DicomVFileImage : public DicomVFile
-{ 
-public:
-  DicomVFileImage();
-  DicomVFileImage(DcmDataset* dset);
-  ~DicomVFileImage(){};
+{
+  public:
+    DicomVFileImage();
+    DicomVFileImage(DcmDataset* dset);
+    ~DicomVFileImage() {};
 
-public:
-  virtual void ReadData();
+  public:
+    virtual void ReadData();
 
-  void operator+=( const DicomVFileImage& rhs );
-  DicomVFileImage operator+( const DicomVFileImage& rhs );
-  // add two slices that have the same dimensions, merging them in Z
+    void operator+=(const DicomVFileImage& rhs);
+    DicomVFileImage operator+(const DicomVFileImage& rhs);
+    // add two slices that have the same dimensions, merging them in Z
 
-  void DumpHeaderToTextFile(std::ofstream& fout);
+    void DumpHeaderToTextFile(std::ofstream& fout);
 
- // Get and set methods
-  G4int GetNoVoxelsX() const { return fNoVoxelsX; };
-  G4int GetNoVoxelsY() const { return fNoVoxelsY; };
-  G4int GetNoVoxelsZ() const { return fNoVoxelsZ; };
-  G4int GetNoVoxels() const { return fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ; };
-    
-  G4double GetMinX() const { return fMinX; };
-  G4double GetMinY() const { return fMinY; };
-  G4double GetMinZ() const { return fMinZ; };
-  G4double GetMaxX() const { return fMaxX; };
-  G4double GetMaxY() const { return fMaxY; };
-  G4double GetMaxZ() const { return fMaxZ; };
-  
-  void SetNoVoxelsX(const G4int& val) { fNoVoxelsX = val; }
-  void SetNoVoxelsY(const G4int& val) { fNoVoxelsY = val; }
-  void SetNoVoxelsZ(const G4int& val) { fNoVoxelsZ = val; }
-  
-  void SetMinX(const G4double& val) { fMinX = val; };
-  void SetMaxX(const G4double& val) { fMaxX = val; };
-  void SetMinY(const G4double& val) { fMinY = val; };
-  void SetMaxY(const G4double& val) { fMaxY = val; };
-  void SetMinZ(const G4double& val) { fMinZ = val; };
-  void SetMaxZ(const G4double& val) { fMaxZ = val; };
-    
-  const G4double& GetLocation() const { return fLocation; }
-  
-  void SetLocation(const G4double& val) { fLocation = val; }
+    // Get and set methods
+    G4int GetNoVoxelsX() const { return fNoVoxelsX; };
+    G4int GetNoVoxelsY() const { return fNoVoxelsY; };
+    G4int GetNoVoxelsZ() const { return fNoVoxelsZ; };
+    G4int GetNoVoxels() const { return fNoVoxelsX * fNoVoxelsY * fNoVoxelsZ; };
 
-  G4ThreeVector GetOrientationRows() const { return fOrientationRows; }
-  G4ThreeVector GetOrientationColumns() const { return fOrientationColumns; }
-  
-private:
-  template <typename T> inline bool CheckConsistency(const T&, const T&, G4String);
+    G4double GetMinX() const { return fMinX; };
+    G4double GetMinY() const { return fMinY; };
+    G4double GetMinZ() const { return fMinZ; };
+    G4double GetMaxX() const { return fMaxX; };
+    G4double GetMaxY() const { return fMaxY; };
+    G4double GetMaxZ() const { return fMaxZ; };
 
-  void ReadPixelData();
-  void Print( std::ostream& out );
-  
-protected:
-  G4double fLocation;
-  G4double fBitAllocated;
-  G4double fRescaleSlope;
-  G4double fRescaleIntercept;
+    void SetNoVoxelsX(const G4int& val) { fNoVoxelsX = val; }
+    void SetNoVoxelsY(const G4int& val) { fNoVoxelsY = val; }
+    void SetNoVoxelsZ(const G4int& val) { fNoVoxelsZ = val; }
 
-  G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;  // number of voxels in each dimensions
-  G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position of wall)
-  G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position of wall)
-  G4double fVoxelDimX,fVoxelDimY,fVoxelDimZ; // maximum extension of voxels (position of wall)
+    void SetMinX(const G4double& val) { fMinX = val; };
+    void SetMaxX(const G4double& val) { fMaxX = val; };
+    void SetMinY(const G4double& val) { fMinY = val; };
+    void SetMaxY(const G4double& val) { fMaxY = val; };
+    void SetMinZ(const G4double& val) { fMinZ = val; };
+    void SetMaxZ(const G4double& val) { fMaxZ = val; };
 
-  G4ThreeVector fOrientationRows;
-  G4ThreeVector fOrientationColumns;
-  
-  std::vector<int> fHounsfieldV;
-  
-  DicomFileMgr* theFileMgr;
+    const G4double& GetLocation() const { return fLocation; }
+
+    void SetLocation(const G4double& val) { fLocation = val; }
+
+    G4ThreeVector GetOrientationRows() const { return fOrientationRows; }
+    G4ThreeVector GetOrientationColumns() const { return fOrientationColumns; }
+
+  private:
+    template<typename T>
+    inline bool CheckConsistency(const T&, const T&, G4String);
+
+    void ReadPixelData();
+    void Print(std::ostream& out);
+
+  protected:
+    G4double fLocation;
+    G4double fBitAllocated;
+    G4double fRescaleSlope;
+    G4double fRescaleIntercept;
+
+    G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;  // number of voxels in each dimensions
+    G4double fMinX, fMinY, fMinZ;  // minimum extension of voxels (position of wall)
+    G4double fMaxX, fMaxY, fMaxZ;  // maximum extension of voxels (position of wall)
+    G4double fVoxelDimX, fVoxelDimY, fVoxelDimZ;  // maximum extension of voxels (position of wall)
+
+    G4ThreeVector fOrientationRows;
+    G4ThreeVector fOrientationColumns;
+
+    std::vector<int> fHounsfieldV;
+
+    DicomFileMgr* theFileMgr;
 };
 
 //============================================================================
-template <typename T>
-inline bool DicomVFileImage::CheckConsistency(const T& val1, const T& val2, 
-                                                       G4String category) {
-  if(val1 != val2) {
-    G4Exception("DicomVFileImager::CheckConsistency", 
-                "Consistency Mismatch : Keeping previous value if nonzero",
-                JustWarning, category.c_str());
-        return false;
+template<typename T>
+inline bool DicomVFileImage::CheckConsistency(const T& val1, const T& val2, G4String category)
+{
+  if (val1 != val2) {
+    G4Exception("DicomVFileImager::CheckConsistency",
+                "Consistency Mismatch : Keeping previous value if nonzero", JustWarning,
+                category.c_str());
+    return false;
   }
   return true;
 }

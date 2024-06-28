@@ -30,38 +30,46 @@
 
 #include "DrawGeometryVisAction.hh"
 
-#include "G4VVisManager.hh"
 #include "DetectorConstruction.hh"
-#include "G4VPhysicalVolume.hh"
+
 #include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
+#include "G4PhysicalVolumeModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VSolid.hh"
+#include "G4VVisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DrawGeometryVisAction::DrawGeometryVisAction() {
+DrawGeometryVisAction::DrawGeometryVisAction()
+{
   // Get a physical volume from your detector construction
   fDetectorConstruction = new B1::DetectorConstruction();
   // (I think, properly, we should delete this in the destructor.)
   fPhysicalVolume = fDetectorConstruction->Construct();
   // (I think the deletion of constructed volumes is handled by the volume stores.)
-  // Give this an overall transform to avoid clash with other vis action(s)
-  fTransform = G4Translate3D(-20*cm,20*cm,0);
-  fExtent = fPhysicalVolume->GetLogicalVolume()->GetSolid()->GetExtent().Transform(fTransform);
+  // Give this an overall transform to avoid clash with other vis action(s) in this case
+  fTransform = G4Translate3D(-20 * cm, 20 * cm, 0);
+  // Get extent and transform if required
+  G4PhysicalVolumeModel pvModel(fPhysicalVolume);
+  fExtent = pvModel.GetExtent();
+  fExtent.Transform(fTransform);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DrawGeometryVisAction::~DrawGeometryVisAction() {
+DrawGeometryVisAction::~DrawGeometryVisAction()
+{
   delete fDetectorConstruction;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DrawGeometryVisAction::Draw() {
+void DrawGeometryVisAction::Draw()
+{
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
   if (pVisManager) {
-    pVisManager->DrawGeometry(fPhysicalVolume,fTransform);
+    pVisManager->DrawGeometry(fPhysicalVolume, fTransform);
   }
 }
 

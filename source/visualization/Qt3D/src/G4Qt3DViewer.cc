@@ -72,7 +72,9 @@ void G4Qt3DViewer::Initialise()
 }
 
 G4Qt3DViewer::~G4Qt3DViewer()
-{}
+{
+  setRootEntity(nullptr);
+}
 
 void G4Qt3DViewer::SetView()
 {

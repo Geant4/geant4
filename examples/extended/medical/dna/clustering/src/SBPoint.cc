@@ -41,11 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-SBPoint::SBPoint(unsigned int pId, G4ThreeVector pPos, G4double pEdep ):
-fId(pId),
-fPosition(pPos),
-fEdep(pEdep),
-fpCluster(0)
+SBPoint::SBPoint(unsigned int pId, G4ThreeVector pPos, G4double pEdep)
+  : fId(pId), fPosition(pPos), fEdep(pEdep), fpCluster(0)
 {
   // pick randomly one strand
   fStrand = (G4UniformRand() < 0.5) ? 0 : 1;
@@ -53,34 +50,32 @@ fpCluster(0)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SBPoint::~SBPoint()
-{
-}
+SBPoint::~SBPoint() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-bool SBPoint::operator != (const SBPoint& pPt) const
+bool SBPoint::operator!=(const SBPoint& pPt) const
 {
   return pPt.fId != fId;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-bool SBPoint::operator == (const SBPoint& pPt) const
+bool SBPoint::operator==(const SBPoint& pPt) const
 {
   return pPt.fId == fId;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-bool SBPoint::operator < (const SBPoint& pPt) const
+bool SBPoint::operator<(const SBPoint& pPt) const
 {
   return pPt.fId < fId;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-bool SBPoint::operator > (const SBPoint& pPt) const
+bool SBPoint::operator>(const SBPoint& pPt) const
 {
   return pPt.fId > fId;
 }

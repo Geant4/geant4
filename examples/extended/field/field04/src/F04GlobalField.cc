@@ -28,22 +28,22 @@
 /// \brief Implementation of the F04GlobalField class
 //
 
-#include <ctime>
+#include "F04GlobalField.hh"
 
-#include "Randomize.hh"
-#include "G4TransportationManager.hh"
+#include "F04FocusSolenoid.hh"
+#include "F04SimpleSolenoid.hh"
 
+#include "G4CashKarpRKF45.hh"
+#include "G4ClassicalRK4.hh"
 #include "G4ExplicitEuler.hh"
 #include "G4ImplicitEuler.hh"
-#include "G4SimpleRunge.hh"
 #include "G4SimpleHeum.hh"
-#include "G4ClassicalRK4.hh"
-#include "G4CashKarpRKF45.hh"
+#include "G4SimpleRunge.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4TransportationManager.hh"
+#include "Randomize.hh"
 
-#include "F04GlobalField.hh"
-#include "F04SimpleSolenoid.hh"
-#include "F04FocusSolenoid.hh"
+#include <ctime>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,10 +51,9 @@ G4ThreadLocal F04GlobalField* F04GlobalField::fObject = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04GlobalField::F04GlobalField(F04DetectorConstruction* det)
-  : fDetectorConstruction(det)
+F04GlobalField::F04GlobalField(F04DetectorConstruction* det) : fDetectorConstruction(det)
 {
-  fFieldMessenger = new F04FieldMessenger(this,det);
+  fFieldMessenger = new F04FieldMessenger(this, det);
 
   fFields = new FieldList();
 
@@ -86,17 +85,16 @@ void F04GlobalField::ConstructField()
   Clear();
 
   //  Construct equ. of motion of particles through B fields
-//  fEquation = new G4Mag_EqRhs(this);
+  //  fEquation = new G4Mag_EqRhs(this);
   //  Construct equ. of motion of particles through e.m. fields
-//  fEquation = new G4EqMagElectricField(this);
+  //  fEquation = new G4EqMagElectricField(this);
   //  Construct equ. of motion of particles including spin through B fields
-//  fEquation = new G4Mag_SpinEqRhs(this);
+  //  fEquation = new G4Mag_SpinEqRhs(this);
   //  Construct equ. of motion of particles including spin through e.m. fields
   fEquation = new G4EqEMFieldWithSpin(this);
 
   //  Get transportation, field, and propagator managers
-  G4TransportationManager* transportManager =
-         G4TransportationManager::GetTransportationManager();
+  G4TransportationManager* transportManager = G4TransportationManager::GetTransportationManager();
 
   fFieldManager = GetGlobalFieldManager();
 
@@ -114,10 +112,10 @@ void F04GlobalField::ConstructField()
 
   //  Create a cord finder providing the (global field, min step length,
   //  a pointer to the stepper)
-  fChordFinder = new G4ChordFinder((G4MagneticField*)this,fMinStep,fStepper);
+  fChordFinder = new G4ChordFinder((G4MagneticField*)this, fMinStep, fStepper);
 
   // Set accuracy parameters
-  fChordFinder->SetDeltaChord( fDeltaChord );
+  fChordFinder->SetDeltaChord(fDeltaChord);
 
   fFieldManager->SetAccuraciesWithDeltaOneStep(fDeltaOneStep);
 
@@ -126,14 +124,12 @@ void F04GlobalField::ConstructField()
   fFieldPropagator->SetMinimumEpsilonStep(fEpsMin);
   fFieldPropagator->SetMaximumEpsilonStep(fEpsMax);
 
-  G4cout << "Accuracy Parameters:" <<
-            " MinStep=" << fMinStep <<
-            " DeltaChord=" << fDeltaChord <<
-            " DeltaOneStep=" << fDeltaOneStep << G4endl;
-  G4cout << "                    " <<
-            " DeltaIntersection=" << fDeltaIntersection <<
-            " EpsMin=" << fEpsMin <<
-            " EpsMax=" << fEpsMax <<  G4endl;
+  G4cout << "Accuracy Parameters:"
+         << " MinStep=" << fMinStep << " DeltaChord=" << fDeltaChord
+         << " DeltaOneStep=" << fDeltaOneStep << G4endl;
+  G4cout << "                    "
+         << " DeltaIntersection=" << fDeltaIntersection << " EpsMin=" << fEpsMin
+         << " EpsMax=" << fEpsMax << G4endl;
 
   fFieldManager->SetChordFinder(fChordFinder);
 
@@ -142,35 +138,30 @@ void F04GlobalField::ConstructField()
   G4double B2 = fDetectorConstruction->GetCaptureMgntB2();
 
   G4LogicalVolume* logicCaptureMgnt = fDetectorConstruction->GetCaptureMgnt();
-  G4ThreeVector captureMgntCenter =
-                                 fDetectorConstruction->GetCaptureMgntCenter();
+  G4ThreeVector captureMgntCenter = fDetectorConstruction->GetCaptureMgntCenter();
 
-  auto  focusSolenoid =
-           new F04FocusSolenoid(B1, B2, l, logicCaptureMgnt,captureMgntCenter);
-  focusSolenoid -> SetHalf(true);
+  auto focusSolenoid = new F04FocusSolenoid(B1, B2, l, logicCaptureMgnt, captureMgntCenter);
+  focusSolenoid->SetHalf(true);
 
   G4double B = fDetectorConstruction->GetTransferMgntB();
 
-  G4LogicalVolume* logicTransferMgnt =
-                                      fDetectorConstruction->GetTransferMgnt();
-  G4ThreeVector transferMgntCenter =
-                                fDetectorConstruction->GetTransferMgntCenter();
+  G4LogicalVolume* logicTransferMgnt = fDetectorConstruction->GetTransferMgnt();
+  G4ThreeVector transferMgntCenter = fDetectorConstruction->GetTransferMgntCenter();
 
-  auto  simpleSolenoid =
-             new F04SimpleSolenoid(B, l, logicTransferMgnt,transferMgntCenter);
+  auto simpleSolenoid = new F04SimpleSolenoid(B, l, logicTransferMgnt, transferMgntCenter);
 
   simpleSolenoid->SetColor("1,0,1");
   simpleSolenoid->SetColor("0,1,1");
-  simpleSolenoid->SetMaxStep(1.5*mm);
-  simpleSolenoid->SetMaxStep(2.5*mm);
+  simpleSolenoid->SetMaxStep(1.5 * mm);
+  simpleSolenoid->SetMaxStep(2.5 * mm);
 
   if (fFields) {
-     if (fFields->size()>0) {
-        FieldList::iterator i;
-        for (i=fFields->begin(); i!=fFields->end(); ++i){
-            (*i)->Construct();
-        }
-     }
+    if (fFields->size() > 0) {
+      FieldList::iterator i;
+      for (i = fFields->begin(); i != fFields->end(); ++i) {
+        (*i)->Construct();
+      }
+    }
   }
 }
 
@@ -196,39 +187,39 @@ void F04GlobalField::SetStepper()
 {
   delete fStepper;
 
-  switch ( fStepperType )
-  {
+  switch (fStepperType) {
     case 0:
-//      fStepper = new G4ExplicitEuler( fEquation, 8 ); // no spin tracking
-      fStepper = new G4ExplicitEuler( fEquation, 12 ); // with spin tracking
+      //      fStepper = new G4ExplicitEuler( fEquation, 8 ); // no spin tracking
+      fStepper = new G4ExplicitEuler(fEquation, 12);  // with spin tracking
       G4cout << "G4ExplicitEuler is called" << G4endl;
       break;
     case 1:
-//      fStepper = new G4ImplicitEuler( fEquation, 8 ); // no spin tracking
-      fStepper = new G4ImplicitEuler( fEquation, 12 ); // with spin tracking
+      //      fStepper = new G4ImplicitEuler( fEquation, 8 ); // no spin tracking
+      fStepper = new G4ImplicitEuler(fEquation, 12);  // with spin tracking
       G4cout << "G4ImplicitEuler is called" << G4endl;
       break;
     case 2:
-//      fStepper = new G4SimpleRunge( fEquation, 8 ); // no spin tracking
-      fStepper = new G4SimpleRunge( fEquation, 12 ); // with spin tracking
+      //      fStepper = new G4SimpleRunge( fEquation, 8 ); // no spin tracking
+      fStepper = new G4SimpleRunge(fEquation, 12);  // with spin tracking
       G4cout << "G4SimpleRunge is called" << G4endl;
       break;
     case 3:
-//      fStepper = new G4SimpleHeum( fEquation, 8 ); // no spin tracking
-      fStepper = new G4SimpleHeum( fEquation, 12 ); // with spin tracking
+      //      fStepper = new G4SimpleHeum( fEquation, 8 ); // no spin tracking
+      fStepper = new G4SimpleHeum(fEquation, 12);  // with spin tracking
       G4cout << "G4SimpleHeum is called" << G4endl;
       break;
     case 4:
-//      fStepper = new G4ClassicalRK4( fEquation, 8 ); // no spin tracking
-      fStepper = new G4ClassicalRK4( fEquation, 12 ); // with spin tracking
+      //      fStepper = new G4ClassicalRK4( fEquation, 8 ); // no spin tracking
+      fStepper = new G4ClassicalRK4(fEquation, 12);  // with spin tracking
       G4cout << "G4ClassicalRK4 (default) is called" << G4endl;
       break;
     case 5:
-//      fStepper = new G4CashKarpRKF45( fEquation, 8 ); // no spin tracking
-      fStepper = new G4CashKarpRKF45( fEquation, 12 ); // with spin tracking
+      //      fStepper = new G4CashKarpRKF45( fEquation, 8 ); // no spin tracking
+      fStepper = new G4CashKarpRKF45(fEquation, 12);  // with spin tracking
       G4cout << "G4CashKarpRKF45 is called" << G4endl;
       break;
-    default: fStepper = nullptr;
+    default:
+      fStepper = nullptr;
   }
 }
 
@@ -236,8 +227,7 @@ void F04GlobalField::SetStepper()
 
 G4FieldManager* F04GlobalField::GetGlobalFieldManager()
 {
-  return G4TransportationManager::GetTransportationManager()
-                                ->GetFieldManager();
+  return G4TransportationManager::GetTransportationManager()->GetFieldManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,18 +241,17 @@ void F04GlobalField::GetFieldValue(const G4double* point, G4double* field) const
   field[0] = field[1] = field[2] = field[3] = field[4] = field[5] = 0.0;
 
   // protect against Geant4 bug that calls us with point[] NaN.
-  if(point[0] != point[0]) return;
+  if (point[0] != point[0]) return;
 
   // (can't use fNfp or fFp, as they may change)
-  if (fFirst) ((F04GlobalField*)this)->SetupArray();   // (cast away const)
+  if (fFirst) ((F04GlobalField*)this)->SetupArray();  // (cast away const)
 
-  for (int i=0; i<fNfp; ++i) {
-      const F04ElementField* p = fFp[i];
-      if (p->IsInBoundingBox(point)) {
-         p->AddFieldValue(point,field);
-      }
+  for (int i = 0; i < fNfp; ++i) {
+    const F04ElementField* p = fFp[i];
+    if (p->IsInBoundingBox(point)) {
+      p->AddFieldValue(point, field);
+    }
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -270,14 +259,15 @@ void F04GlobalField::GetFieldValue(const G4double* point, G4double* field) const
 void F04GlobalField::Clear()
 {
   if (fFields) {
-     if (fFields->size()>0) {
-        FieldList::iterator i;
-        for (i=fFields->begin(); i!=fFields->end(); ++i) delete *i;
-        fFields->clear();
-     }
+    if (fFields->size() > 0) {
+      FieldList::iterator i;
+      for (i = fFields->begin(); i != fFields->end(); ++i)
+        delete *i;
+      fFields->clear();
+    }
   }
 
-  delete [] fFp;
+  delete[] fFp;
   fFirst = true;
   fNfp = 0;
   fFp = nullptr;
@@ -289,6 +279,7 @@ void F04GlobalField::SetupArray()
 {
   fFirst = false;
   fNfp = fFields->size();
-  fFp = new const F04ElementField* [fNfp+1]; // add 1 so it's never 0
-  for (int i=0; i<fNfp; ++i) fFp[i] = (*fFields)[i];
+  fFp = new const F04ElementField*[fNfp + 1];  // add 1 so it's never 0
+  for (int i = 0; i < fNfp; ++i)
+    fFp[i] = (*fFields)[i];
 }

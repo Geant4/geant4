@@ -43,16 +43,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MCTruthTrackInformation::MCTruthTrackInformation() 
- : G4VUserTrackInformation(),
-   fDirectParent(true)
-{
-}
+MCTruthTrackInformation::MCTruthTrackInformation() : G4VUserTrackInformation(), fDirectParent(true)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MCTruthTrackInformation::~MCTruthTrackInformation() 
-{
-} 
+MCTruthTrackInformation::~MCTruthTrackInformation() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

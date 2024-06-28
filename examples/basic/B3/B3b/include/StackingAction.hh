@@ -31,7 +31,8 @@
 #define B3StackingAction_h 1
 
 #include "G4UserStackingAction.hh"
-#include "globals.hh"
+
+#include "G4ClassificationOfNewTrack.hh"
 
 namespace B3
 {
@@ -50,9 +51,8 @@ class StackingAction : public G4UserStackingAction
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
 };
 
-}
+}  // namespace B3
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

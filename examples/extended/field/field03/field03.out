@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
+ Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -218,9 +218,8 @@ Checking overlaps for volume Radiator:0 (G4Tubs) ... OK!
 100.5 mm	Checking overlaps for volume RadSlice:1 (G4Tubs) ... OK! 
 
 Checking overlaps for volume Absorber:0 (G4Tubs) ... OK! 
-F03FieldSetup::UpdateField> The minimal step is equal to 0.25 mm
-                            Stepper Type chosen = 4
-G4ClassicalRK4 (default) is called
+Global field created with stepper DormandPrince745
+Local (in Radiator) field created with stepper DormandPrince745
  G4ChordFinder: stepperDriverId: 2
  G4ChordFinder: stepperDriverId: 2
 
@@ -254,14 +253,21 @@ Registered graphics systems are:
   RayTracerX (RayTracerX)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-Default graphics system is: TSG_OFFSCREEN (based on batch session).
-Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
-Note: Parameters specified on the command line will override these defaults.
-      Use "vis/open" without parameters to get these defaults.
+You may choose a graphics system (driver) with a parameter of
+the command "/vis/open" or "/vis/sceneHandler/create",
+or you may omit the driver parameter and choose at run time:
+- by argument in the construction of G4VisExecutive
+- by environment variable "G4VIS_DEFAULT_DRIVER"
+- by entry in "~/.g4session"
+- by build flags.
+- Note: This feature is not allowed in batch mode.
+For further information see "examples/basic/B1/exampleB1.cc"
+and "vis.mac".
 
 Registering model factories...
 
@@ -294,11 +300,24 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
-                            Stepper Type chosen = 4
-G4ClassicalRK4 (default) is called
- G4ChordFinder: stepperDriverId: 2
- G4ChordFinder: stepperDriverId: 2
+#/control/cout/ignoreThreadsExcept 0
+#
+#
+#
+/field/stepperType ClassicalRK4
+/field/setMinimumStep 10 mm
+/field/Radiator/stepperType ClassicalRK4
+/field/Radiator/setMinimumStep 10 mm
+#/field/printParameters
+#
+/run/initialize
+#
+/run/particle/dumpCutValues
+#
+/gun/particle e-
+/gun/energy 500.0 MeV
+#
+/run/beamOn 1
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -442,7 +461,7 @@ eBrem:  for e+  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 AtRestModel:Simple BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
@@ -997,7 +1016,7 @@ Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
@@ -1033,7 +1052,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     4          0 fm  14.060739 cm    21.6395 m         500 MeV0.30481745 meV 12.503127 cm  38.651942 cm   RadSlice  Transportation           0 fm    691.81427 um    -722.0755 um 
     5          0 fm  19.745298 cm    21.5885 m         500 MeV0.18636264 meV 7.6442989 cm  46.296241 cm   Radiator  Transportation           0 fm    792.62153 um   -609.71395 um 
     6          0 fm  81.438088 cm    21.5885 m         500 MeV 1.6174637 meV 66.345788 cm  1.1264203 m       World  Transportation           0 fm    792.62217 um    609.71312 um 
-    7          0 fm  87.122647 cm    21.6395 m         500 MeV0.18636264 meV 7.6442989 cm  1.2028633 m    Radiator  Transportation           0 fm    691.81502 um    722.07477 um 
+    7          0 fm  87.122647 cm    21.6395 m         500 MeV0.18636263 meV 7.6442989 cm  1.2028633 m    Radiator  Transportation           0 fm    691.81502 um    722.07477 um 
     8          0 fm   91.00273 cm  21.685122 m         500 MeV0.14609435 meV 5.9925578 cm  1.2627889 m    RadSlice  Transportation           0 fm    601.63793 um    798.76893 um 
     9          0 fm  93.778668 cm  21.725986 m         500 MeV0.12048347 meV 4.9420403 cm  1.3122093 m    RadSlice  Transportation           0 fm    520.86605 um    853.63842 um 
    10          0 fm  94.574777 cm    21.7395 m         500 MeV0.038239746 meV 1.5685336 cm  1.3278946 m    RadSlice  Transportation           0 fm    494.15393 um    869.37443 um 
@@ -1046,16 +1065,20 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    17          0 fm  1.0054861 m   21.909616 m         500 MeV0.052096501 meV 2.1369156 cm  1.5091632 m    RadSlice  Transportation           0 fm    157.90025 um    987.45507 um 
    18          0 fm  1.0081517 m   21.928582 m         500 MeV0.046694118 meV 1.9153185 cm  1.5283164 m    RadSlice  Transportation           0 fm    120.41257 um    992.72394 um 
    19          0 fm  1.0093559 m     21.9395 m         500 MeV0.026779122 meV  1.098437 cm  1.5393007 m    RadSlice  Transportation           0 fm    98.832029 um    995.10413 um 
-   20          0 fm  1.0106905 m   21.955524 m         500 MeV0.039201339 meV 1.6079766 cm  1.5553805 m    Radiator  Transportation           0 fm    67.159602 um    997.74225 um 
-   21          0 fm  1.0114553 m   21.969961 m         500 MeV0.035246867 meV 1.4457704 cm  1.5698382 m    Radiator  Transportation           0 fm    38.623322 um    999.25384 um 
-   22          0 fm  1.0117905 m   21.982962 m         500 MeV0.031708167 meV 1.3006186 cm  1.5828444 m    Radiator  Transportation           0 fm    12.924399 um    999.91648 um 
-   23          0 fm  1.0118328 m     21.9895 m         500 MeV0.015939436 meV 6.5381032 mm  1.5893825 m    Radiator  Transportation           0 fm    1.4708264 nm         1000 um 
-   24          0 fm  1.0118318 m     21.9905 m         500 MeV0.0024379313 meV 1.0000006 mm  1.5903825 m    Absorber  Transportation           0 fm   -1.9751403 um    999.99805 um 
-   25          0 fm  1.0117238 m          22 m         500 MeV0.023162168 meV 9.5007532 mm  1.5998833 m  OutOfWorld  Transportation           0 fm   -20.752946 um    999.78463 um 
+   20          0 fm  1.0106905 m   21.955524 m         500 MeV0.039201339 meV 1.6079766 cm  1.5553805 m    Radiator  Transportation           0 fm    67.159601 um    997.74225 um 
+   21          0 fm  1.0114553 m   21.969961 m         500 MeV0.035246867 meV 1.4457704 cm  1.5698382 m    Radiator  Transportation           0 fm    38.623321 um    999.25384 um 
+   22          0 fm  1.0117905 m   21.982962 m         500 MeV0.031708167 meV 1.3006186 cm  1.5828444 m    Radiator  Transportation           0 fm    12.924398 um    999.91648 um 
+   23          0 fm  1.0118328 m     21.9895 m         500 MeV0.015939436 meV 6.5381032 mm  1.5893825 m    Radiator  Transportation           0 fm    1.4704143 nm         1000 um 
+   24          0 fm  1.0118318 m     21.9905 m         500 MeV0.0024379313 meV 1.0000006 mm  1.5903825 m    Absorber  Transportation           0 fm   -1.9751407 um    999.99805 um 
+   25          0 fm  1.0117238 m          22 m         500 MeV0.023162168 meV 9.5007532 mm  1.5998833 m  OutOfWorld  Transportation           0 fm   -20.752947 um    999.78463 um 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001218s Sys=0.000000s
+  User=0.000000s Real=0.001158s Sys=0.000000s
+#
+/tracking/verbose 0
+/run/printProgress 50
+/run/beamOn 100
 
 ========= Table of registered couples ============================
 
@@ -1074,8 +1097,12 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.012193s Sys=0.000000s
-Set global field value to (0,0,1000) Gauss 
+  User=0.010000s Real=0.011162s Sys=0.000000s
+#
+/field03/setField 0. 0. 1.0 kG
+ G4ChordFinder: stepperDriverId: 2
+#
+/run/beamOn 10
 
 ========= Table of registered couples ============================
 
@@ -1093,14 +1120,13 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002529s Sys=0.000000s
-Set global field value to (33000,0,0) Gauss 
-F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
-                            Stepper Type chosen = 4
-G4ClassicalRK4 (default) is called
+  User=0.010000s Real=0.002668s Sys=0.000000s
+#
+/tracking/verbose 1
+/field03/setField 3.3 0 0 tesla
  G4ChordFinder: stepperDriverId: 2
- G4ChordFinder: stepperDriverId: 2
-Set local field value to (0,0,0) Gauss 
+/field03/setLocalField 0 0 0 tesla
+/run/beamOn 1
 
 ========= Table of registered couples ============================
 
@@ -1138,7 +1164,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000276s Sys=0.000000s
+  User=0.000000s Real=0.000403s Sys=0.000000s
+#
+# Test commands defined in this example
+/control/verbose 2
 /tracking/verbose 0
 #
 /calor/setAbsMat Xe20CO2
@@ -1180,6 +1209,9 @@ Checking overlaps for volume Radiator:0 (G4Tubs) ... OK!
 100.5 mm	Checking overlaps for volume RadSlice:1 (G4Tubs) ... OK! 
 
 Checking overlaps for volume Absorber:0 (G4Tubs) ... OK! 
+Global field created with stepper ClassicalRK4
+Local (in Radiator) field created with stepper ClassicalRK4
+ G4ChordFinder: stepperDriverId: 2
 
 ========= Table of registered couples ============================
 
@@ -1211,7 +1243,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.270000s Real=0.280955s Sys=0.000000s
+  User=0.210000s Real=0.221811s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

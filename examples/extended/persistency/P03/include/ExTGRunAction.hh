@@ -40,9 +40,8 @@ class G4Run;
 class ExTGRunAction : public G4UserRunAction
 {
   public:
-
     ExTGRunAction();
-   ~ExTGRunAction();
+    ~ExTGRunAction();
 
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);

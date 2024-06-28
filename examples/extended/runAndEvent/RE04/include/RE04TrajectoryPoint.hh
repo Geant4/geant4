@@ -30,10 +30,10 @@
 #ifndef RE04TrajectoryPoint_h
 #define RE04TrajectoryPoint_h 1
 
+#include "G4Allocator.hh"
+#include "G4ThreeVector.hh"
 #include "G4VTrajectoryPoint.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
-#include "G4Allocator.hh"
 class G4Material;
 
 //
@@ -48,65 +48,58 @@ class G4Material;
 ///    gets material that this trajectory has.
 ///
 /// - const std::map<G4String,G4AttDef>* GetAttDefs() const
-///    defines the position and the material as attiributes 
+///    defines the position and the material as attiributes
 ///
 /// - std::vector<G4AttValue>* CreateAttValues() const
 ///    sets and returns the attributes
 //
 ////////////////////////
 class RE04TrajectoryPoint : public G4VTrajectoryPoint
-//////////////////////// 
+////////////////////////
 {
+    //--------
+  public:
+    //--------
 
-//--------
-public: 
-//--------
+    // Constructor/Destructor
+    RE04TrajectoryPoint();
+    RE04TrajectoryPoint(G4ThreeVector pos, const G4Material* mat);
+    RE04TrajectoryPoint(const RE04TrajectoryPoint& right);
+    virtual ~RE04TrajectoryPoint();
 
-// Constructor/Destructor
-   RE04TrajectoryPoint();
-   RE04TrajectoryPoint(G4ThreeVector pos,const G4Material* mat);
-   RE04TrajectoryPoint(const RE04TrajectoryPoint &right);
-   virtual ~RE04TrajectoryPoint();
+    // Operators
+    inline void* operator new(size_t);
+    inline void operator delete(void* aTrajectoryPoint);
+    inline G4bool operator==(const RE04TrajectoryPoint& right) const { return (this == &right); };
 
-// Operators
-   inline void *operator new(size_t);
-   inline void operator delete(void *aTrajectoryPoint);
-   inline G4bool operator==(const RE04TrajectoryPoint& right) const
-   { return (this==&right); };
+    // Get/Set functions
+    inline virtual const G4ThreeVector GetPosition() const { return fPosition; };
+    inline const G4Material* GetMaterial() const { return fpMaterial; };
 
-// Get/Set functions
-   inline virtual const G4ThreeVector GetPosition() const
-   { return fPosition; };
-   inline const G4Material* GetMaterial() const
-   { return fpMaterial; };
+    // Get method for HEPRep style attributes
+    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-// Get method for HEPRep style attributes
-   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual std::vector<G4AttValue>* CreateAttValues() const;
+    //---------
+  private:
+    //---------
 
-//---------
-   private:
-//---------
-
-// Member data
-   G4ThreeVector fPosition;
-   const G4Material* fpMaterial;
-
+    // Member data
+    G4ThreeVector fPosition;
+    const G4Material* fpMaterial;
 };
 
-extern G4ThreadLocal G4Allocator<RE04TrajectoryPoint> * faTrajPointAllocator;
+extern G4ThreadLocal G4Allocator<RE04TrajectoryPoint>* faTrajPointAllocator;
 
 inline void* RE04TrajectoryPoint::operator new(size_t)
 {
-  if(!faTrajPointAllocator)
-    faTrajPointAllocator = new G4Allocator<RE04TrajectoryPoint>;
-  return (void *) faTrajPointAllocator->MallocSingle();
+  if (!faTrajPointAllocator) faTrajPointAllocator = new G4Allocator<RE04TrajectoryPoint>;
+  return (void*)faTrajPointAllocator->MallocSingle();
 }
 
-inline void RE04TrajectoryPoint::operator delete(void *aTrajectoryPoint)
+inline void RE04TrajectoryPoint::operator delete(void* aTrajectoryPoint)
 {
-   faTrajPointAllocator->FreeSingle((RE04TrajectoryPoint *) aTrajectoryPoint);
+  faTrajPointAllocator->FreeSingle((RE04TrajectoryPoint*)aTrajectoryPoint);
 }
 
 #endif
-

@@ -1,39 +1,48 @@
-#/run/numberOfThreads 2
+# MT mode
 /run/numberOfThreads 8
 #
+# Verbosity
 /tracking/verbose 0
 #
-#/microyz/phys/addPhysics  liv	        
-#/microyz/phys/addPhysics  pene	        
-/microyz/phys/addPhysics  dna_opt2	        
-#/microyz/phys/addPhysics  dna_opt4	        
-#/microyz/phys/addPhysics  dna_opt6	        
+# Physics
+#/microyz/phys/addPhysics  liv
+#/microyz/phys/addPhysics  pene
+/microyz/phys/addPhysics  dna_opt2
+#/microyz/phys/addPhysics  dna_opt4
+#/microyz/phys/addPhysics  dna_opt6
 #
+# Tracking cut
 /microyz/det/setTrackingCut 11 eV
 #
-# *** For Geant4 (condensed history) only ***
+# Settings for Geant4 (condensed history) only
 #/run/setCut 1 nm
 #/cuts/setLowEdge 100 eV
 #/process/em/lowestElectronEnergy 100 eV
 #/microyz/det/setMaxStepSize 1 nm
+#
+# Sphere radius
 /microyz/det/Radius 2 nm
-# ***
 #
 /run/initialize
 #
+# Activation of atomic deexcitation
 /process/em/fluo true
 /process/em/auger true
 /process/em/augerCascade true
 /process/em/pixe true
-/process/em/deexcitationIgnoreCut true 
+/process/em/deexcitationIgnoreCut true
 #
+# Incident particle type
 /gun/particle e-
 #
+# Incident particle energy
 /gun/energy 1 keV
 #
+# Display run progress
 /run/printProgress 100
 #
-# *** For Geant4-DNA only ***
+# Inactivation of some Physics processes if needed (e.g. for dna_opt2)
+# (For Geant4-DNA only)
 /process/inactivate e-_G4DNAVibExcitation
 /process/inactivate e-_G4DNAAttachment
 #

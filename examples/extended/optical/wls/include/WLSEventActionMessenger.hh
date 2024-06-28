@@ -42,16 +42,16 @@ class G4UIcmdWithAnInteger;
 
 class WLSEventActionMessenger : public G4UImessenger
 {
- public:
-  WLSEventActionMessenger(WLSEventAction*);
-  ~WLSEventActionMessenger() override;
+  public:
+    WLSEventActionMessenger(WLSEventAction*);
+    ~WLSEventActionMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  WLSEventAction* fEventAction = nullptr;
+  private:
+    WLSEventAction* fEventAction = nullptr;
 
-  G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;
+    G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;
 };
 
 #endif

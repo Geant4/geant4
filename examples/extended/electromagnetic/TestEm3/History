@@ -4,8 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-03 Michel Maire (testem3-V11-02-00)
+- Readme: documente stepMax.mac
+
 ## 2023-05-04 Vladimir Ivantchenko (testem3-V11-01-02)
-- Run - fixed division by zero for the case if energy deposition in a layer is zero
+- Run.cc: fixed division by zero for the case if energy deposition in a layer is zero
 
 ## 2023-04-15 Michel Maire (testem3-V11-01-01)
 - revision of all headers

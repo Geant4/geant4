@@ -31,26 +31,22 @@
 #ifndef F04GlobalField_h
 #define F04GlobalField_h 1
 
-#include <vector>
+#include "F04DetectorConstruction.hh"
+#include "F04ElementField.hh"
+#include "F04FieldMessenger.hh"
 
-#include "G4FieldManager.hh"
-#include "G4PropagatorInField.hh"
-#include "G4MagIntegratorStepper.hh"
 #include "G4ChordFinder.hh"
-
-#include "G4MagneticField.hh"
 #include "G4ElectroMagneticField.hh"
-
+#include "G4EqEMFieldWithSpin.hh"
+#include "G4EqMagElectricField.hh"
+#include "G4FieldManager.hh"
+#include "G4MagIntegratorStepper.hh"
 #include "G4Mag_EqRhs.hh"
 #include "G4Mag_SpinEqRhs.hh"
+#include "G4MagneticField.hh"
+#include "G4PropagatorInField.hh"
 
-#include "G4EqMagElectricField.hh"
-#include "G4EqEMFieldWithSpin.hh"
-
-#include "F04FieldMessenger.hh"
-#include "F04ElementField.hh"
-
-#include "F04DetectorConstruction.hh"
+#include <vector>
 
 //  F04GlobalField - handles the global ElectroMagnetic field
 //
@@ -62,128 +58,124 @@
 //  represents an element with an EM field must add the appropriate
 //  ElementField to the global GlobalField object.
 
-using FieldList = std::vector<F04ElementField *>;
+using FieldList = std::vector<F04ElementField*>;
 
-class F04GlobalField : public G4ElectroMagneticField {
-//class F04GlobalField : public G4MagneticField {
+class F04GlobalField : public G4ElectroMagneticField
+{
+    // class F04GlobalField : public G4MagneticField {
 
-private:
+  private:
+    F04GlobalField(F04DetectorConstruction* const);
+    F04GlobalField(const F04GlobalField&);
 
-  F04GlobalField(F04DetectorConstruction* const);
-  F04GlobalField(const F04GlobalField&);
+    F04GlobalField& operator=(const F04GlobalField&);
 
-  F04GlobalField& operator=(const F04GlobalField&);
+    void SetupArray();
 
-  void SetupArray();
+  public:
+    ~F04GlobalField() override;
 
-public:
+    /// GetObject() returns the single F04GlobalField object.
+    /// It is constructed, if necessary.
+    static F04GlobalField* GetObject(F04DetectorConstruction* const);
+    static F04GlobalField* GetObject();
 
-  ~F04GlobalField() override;
+    /// GetFieldValue() returns the field value at a given point[].
+    /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
+    /// point[] is in global coordinates: x,y,z,t.
+    void GetFieldValue(const G4double* point, G4double* field) const override;
 
-  /// GetObject() returns the single F04GlobalField object.
-  /// It is constructed, if necessary.
-  static F04GlobalField* GetObject(F04DetectorConstruction* const);
-  static F04GlobalField* GetObject();
+    /// DoesFieldChangeEnergy() returns true.
+    G4bool DoesFieldChangeEnergy() const override { return true; }
 
-  /// GetFieldValue() returns the field value at a given point[].
-  /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
-  /// point[] is in global coordinates: x,y,z,t.
-  void GetFieldValue(const G4double* point, G4double* field) const override;
+    /// AddElementField() adds the ElementField object for a single
+    /// element to the global field.
+    void AddElementField(F04ElementField* f)
+    {
+      if (fFields) fFields->push_back(f);
+    }
 
-  /// DoesFieldChangeEnergy() returns true.
-  G4bool DoesFieldChangeEnergy() const override { return true; }
+    /// Clear() removes all ElementField-s from the global object,
+    /// and destroys them. Used before the geometry is completely
+    /// re-created.
+    void Clear();
 
-  /// AddElementField() adds the ElementField object for a single
-  /// element to the global field.
-  void AddElementField(F04ElementField* f)
-  {
-    if (fFields) fFields->push_back(f);
-  }
+    /// constructs all field tracking objects
+    void ConstructField();
 
-  /// Clear() removes all ElementField-s from the global object,
-  /// and destroys them. Used before the geometry is completely
-  /// re-created.
-  void Clear();
+    /// Set the Stepper types
+    void SetStepperType(G4int i) { fStepperType = i; }
 
-  /// constructs all field tracking objects
-  void ConstructField();
+    /// Set the Stepper
+    void SetStepper();
 
-  /// Set the Stepper types
-  void SetStepperType( G4int i ) { fStepperType = i; }
+    /// Set the minimum step length
+    void SetMinStep(G4double stp) { fMinStep = stp; }
 
-  /// Set the Stepper
-  void SetStepper();
+    /// Set the delta chord length
+    void SetDeltaChord(G4double dcr) { fDeltaChord = dcr; }
 
-  /// Set the minimum step length
-  void SetMinStep(G4double stp) { fMinStep = stp; }
+    /// Set the delta one step length
+    void SetDeltaOneStep(G4double stp) { fDeltaOneStep = stp; }
 
-  /// Set the delta chord length
-  void SetDeltaChord(G4double dcr) { fDeltaChord = dcr; }
+    /// Set the delta intersection length
+    void SetDeltaIntersection(G4double its) { fDeltaIntersection = its; }
 
-  /// Set the delta one step length
-  void SetDeltaOneStep(G4double stp) { fDeltaOneStep = stp; }
+    /// Set the minimum eps length
+    void SetEpsMin(G4double eps) { fEpsMin = eps; }
 
-  /// Set the delta intersection length
-  void SetDeltaIntersection(G4double its) { fDeltaIntersection = its; }
+    /// Set the maximum eps length
+    void SetEpsMax(G4double eps) { fEpsMax = eps; }
 
-  /// Set the minimum eps length
-  void SetEpsMin(G4double eps) { fEpsMin = eps; }
+    /// Return the list of Element Fields
+    FieldList* GetFields() { return fFields; }
 
-  /// Set the maximum eps length
-  void SetEpsMax(G4double eps) { fEpsMax = eps; }
+  protected:
+    /// Get the global field manager
+    G4FieldManager* GetGlobalFieldManager();
 
-  /// Return the list of Element Fields
-  FieldList* GetFields() { return fFields; }
+  private:
+    static G4ThreadLocal F04GlobalField* fObject;
 
-protected:
+    G4int fNfp = 0;
+    G4bool fFirst = true;
 
-  /// Get the global field manager
-  G4FieldManager* GetGlobalFieldManager();
+    FieldList* fFields = nullptr;
 
-private:
+    const F04ElementField** fFp = nullptr;
 
-  static G4ThreadLocal F04GlobalField* fObject;
+  private:
+    // A. INVARIANTS:
+    // --------------
+    // INVARIANT: an integer to indicate the type of RK integration method ('stepper') used
+    G4int fStepperType = 4;  // ClassicalRK4 is default stepper;
 
-  G4int fNfp = 0;
-  G4bool fFirst = true;
+    // INVARIANTS: Accuracy parameters of field propagation (and the integration it uses.)
+    // 1. These values are lengths - initialised in src
+    G4double fMinStep = 0.01 * CLHEP::mm;
+    G4double fDeltaChord = 3.0 * CLHEP::mm;
+    G4double fDeltaOneStep = 0.01 * CLHEP::mm;
+    G4double fDeltaIntersection = 0.1 * CLHEP::mm;
+    // 2. Dimensionless numbers - can initialise here
+    G4double fEpsMin = 2.5e-7;  // Relative accuracy of integration (minimum)
+    G4double fEpsMax = 0.001;  // Relative accuracy of integration (maximum)
 
-  FieldList* fFields = nullptr;
+    // B. STATE: objects which carry out the propagation and are modified during tracking
+    // --------
+    //  G4Mag_EqRhs*            fEquation;
+    //  G4Mag_SpinEqRhs*        fEquation;
 
-  const F04ElementField **fFp = nullptr;
+    //  G4EqMagElectricField*   fEquation;
+    G4EqEMFieldWithSpin* fEquation = nullptr;
 
-private:
+    G4FieldManager* fFieldManager = nullptr;
+    G4PropagatorInField* fFieldPropagator = nullptr;
+    G4MagIntegratorStepper* fStepper = nullptr;
+    G4ChordFinder* fChordFinder = nullptr;
 
-  // A. INVARIANTS:
-  // --------------
-  // INVARIANT: an integer to indicate the type of RK integration method ('stepper') used
-  G4int fStepperType = 4; // ClassicalRK4 is default stepper;
-
-  // INVARIANTS: Accuracy parameters of field propagation (and the integration it uses.)
-  // 1. These values are lengths - initialised in src
-  G4double fMinStep    = 0.01 * CLHEP::mm;
-  G4double fDeltaChord = 3.0 * CLHEP::mm;
-  G4double fDeltaOneStep = 0.01 * CLHEP::mm;
-  G4double fDeltaIntersection = 0.1 * CLHEP::mm;
-  // 2. Dimensionless numbers - can initialise here
-  G4double fEpsMin = 2.5e-7; // Relative accuracy of integration (minimum)
-  G4double fEpsMax = 0.001;  // Relative accuracy of integration (maximum)
-
-  // B. STATE: objects which carry out the propagation and are modified during tracking
-  // --------
-//  G4Mag_EqRhs*            fEquation;
-//  G4Mag_SpinEqRhs*        fEquation;
-
-//  G4EqMagElectricField*   fEquation;
-  G4EqEMFieldWithSpin*     fEquation        = nullptr;
-
-  G4FieldManager*          fFieldManager    = nullptr;
-  G4PropagatorInField*     fFieldPropagator = nullptr;
-  G4MagIntegratorStepper*  fStepper         = nullptr;
-  G4ChordFinder*           fChordFinder     = nullptr;
-
-  // INVARIANTS during tracking: Auxiliary class & information - used for setup
-  F04FieldMessenger*       fFieldMessenger;
-  F04DetectorConstruction* fDetectorConstruction= nullptr;
+    // INVARIANTS during tracking: Auxiliary class & information - used for setup
+    F04FieldMessenger* fFieldMessenger;
+    F04DetectorConstruction* fDetectorConstruction = nullptr;
 };
 
 #endif

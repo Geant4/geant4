@@ -24,60 +24,56 @@
 // ********************************************************************
 #ifdef G4_USE_FLUKA
 
+#  include "FLUKAHadronInelasticPhysicsConstructor.hh"
 
-#include "FLUKAHadronInelasticPhysicsConstructor.hh"
+// G4
+#  include "G4BaryonConstructor.hh"
+#  include "G4MesonConstructor.hh"
+#  include "G4ShortLivedConstructor.hh"
+// G4
+#  include "G4ParticleDefinition.hh"
+#  include "G4PhysicsListHelper.hh"
+// G4
+#  include "G4HadParticles.hh"
+#  include "G4HadronicParameters.hh"
+// G4
+#  include "G4NeutronCaptureProcess.hh"
+#  include "G4NeutronRadCapture.hh"
+#  include "G4ParticleHPCapture.hh"
+#  include "G4ParticleHPCaptureData.hh"
+// G4
+#  include "G4HadronInelasticProcess.hh"
+#  include "G4ParticleHPInelastic.hh"
+#  include "G4ParticleHPInelasticData.hh"
+// G4
+#  include "FLUKAInelasticScatteringXS.hh"
+#  include "FLUKANuclearInelasticModel.hh"
+#  include "build_G4_process_helpers.hh"
 
-// G4
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-// G4
-#include "G4ParticleDefinition.hh"
-#include "G4PhysicsListHelper.hh"
-// G4
-#include "G4HadParticles.hh"
-#include "G4HadronicParameters.hh"
-// G4
-#include "G4NeutronCaptureProcess.hh"
-#include "G4ParticleHPCaptureData.hh"
-#include "G4ParticleHPCapture.hh"
-#include "G4NeutronRadCapture.hh"
-// G4
-#include "G4HadronInelasticProcess.hh"
-#include "G4ParticleHPInelasticData.hh"
-#include "G4ParticleHPInelastic.hh"
-// G4
-#include "G4NeutronFissionProcess.hh"
-#include "G4ParticleHPFissionData.hh"
-#include "G4ParticleHPFission.hh"
-#include "G4LFission.hh"
-
-#include "build_G4_process_helpers.hh"
-
-#include "FLUKAInelasticScatteringXS.hh"
-#include "FLUKANuclearInelasticModel.hh"
-
+#  include "G4LFission.hh"
+#  include "G4NeutronFissionProcess.hh"
+#  include "G4ParticleHPFission.hh"
+#  include "G4ParticleHPFissionData.hh"
 
 // DEBUG: CHERRY PICK FTFP_BERT XS / MODELS INSTEAD
-//#include "G4BGGNucleonInelasticXS.hh"
-//#include "G4TheoFSGenerator.hh"
-//#include "G4GeneratorPrecompoundInterface.hh"
-//#include "G4FTFModel.hh"
-//#include "G4ExcitedStringDecay.hh"
-//#include "G4QuasiElasticChannel.hh"
-
+// #include "G4BGGNucleonInelasticXS.hh"
+// #include "G4TheoFSGenerator.hh"
+// #include "G4GeneratorPrecompoundInterface.hh"
+// #include "G4FTFModel.hh"
+// #include "G4ExcitedStringDecay.hh"
+// #include "G4QuasiElasticChannel.hh"
 
 // ***************************************************************************
 // Construct hadron inelastic physics processes with FLUKA.CERN XS and models.
 // ***************************************************************************
 FLUKAHadronInelasticPhysicsConstructor::FLUKAHadronInelasticPhysicsConstructor(G4int verbose)
-:  G4VPhysicsConstructor("hInelastic FLUKA"),
-// HP only:
-  fNeutronHPMaxE(20*CLHEP::MeV),
-//fNeutronFLUKAMinE(19.9*CLHEP::MeV),
-  fNeutronFLUKAMinE(20*CLHEP::MeV)
+  : G4VPhysicsConstructor("hInelastic FLUKA"),
+    // HP only:
+    fNeutronHPMaxE(20 * CLHEP::MeV),
+    // fNeutronFLUKAMinE(19.9*CLHEP::MeV),
+    fNeutronFLUKAMinE(20 * CLHEP::MeV)
 {
-  if (verbose > 1) { 
+  if (verbose > 1) {
     G4cout << "### FLUKA Hadron Inelastic Physics" << G4endl;
   }
 
@@ -85,11 +81,11 @@ FLUKAHadronInelasticPhysicsConstructor::FLUKAHadronInelasticPhysicsConstructor(G
   param->SetEnableBCParticles(true);
 }
 
-
 // ***************************************************************************
-// Construct particles. 
+// Construct particles.
 // ***************************************************************************
-void FLUKAHadronInelasticPhysicsConstructor::ConstructParticle() {
+void FLUKAHadronInelasticPhysicsConstructor::ConstructParticle()
+{
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
 
@@ -97,25 +93,24 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructParticle() {
   pBaryonConstructor.ConstructParticle();
 
   G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
+  pShortLivedConstructor.ConstructParticle();
 }
 
-
 // ***************************************************************************
-// For each particle of interest, 
+// For each particle of interest,
 // processes are created, assigned XS and models, and registered to the process manager.
 //
-// IMPORTANT NB: The XS (G4VCrossSectionDataSet), models (G4HadronicInteraction), 
-// and even processes (G4HadronInelasticProcess) 
+// IMPORTANT NB: The XS (G4VCrossSectionDataSet), models (G4HadronicInteraction),
+// and even processes (G4HadronInelasticProcess)
 // are constructed in a similar way as for any other G4 physics list in G4 source code.
-// They do not seem to be OWNED by the G4CrossSectionDataStore, G4EnergyRangeManager 
+// They do not seem to be OWNED by the G4CrossSectionDataStore, G4EnergyRangeManager
 // and G4ProcessManager respectively, HENCE THEY ARE NEVER DELETED
 // (true for ANY physics list).
-// Should not matter too much though, because the destructions 
+// Should not matter too much though, because the destructions
 // should have happened at the very end of the run anyway.
 // ***************************************************************************
-void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
-
+void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess()
+{
   const auto helper = G4PhysicsListHelper::GetPhysicsListHelper();
 
   // FLUKA hadron - nucleus inelastic XS
@@ -124,16 +119,13 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
   // FLUKA hadron - nucleus model
   const auto flukaModel = new FLUKANuclearInelasticModel();
 
-
   // PROTON
-  build_G4_process_helpers::buildInelasticProcess(G4Proton::Proton(),
-                                                  helper,
-                                                  flukaInelasticScatteringXS,
-                                                  flukaModel);
-	
+  build_G4_process_helpers::buildInelasticProcess(G4Proton::Proton(), helper,
+                                                  flukaInelasticScatteringXS, flukaModel);
+
   // DEBUG: CHERRY PICK G4 XS / MODELS INSTEAD
-  /*auto protonInelasticProcess = new G4HadronInelasticProcess("protonInelastic", G4Proton::Proton());
-    helper->RegisterProcess(protonInelasticProcess, G4Proton::Proton());	
+  /*auto protonInelasticProcess = new G4HadronInelasticProcess("protonInelastic",
+    G4Proton::Proton()); helper->RegisterProcess(protonInelasticProcess, G4Proton::Proton());
     protonInelasticProcess->AddDataSet(flukaInelasticScatteringXS);
     //auto BGG = new G4BGGNucleonInelasticXS(G4Proton::Proton());
     //protonInelasticProcess->AddDataSet(BGG);
@@ -150,7 +142,6 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
     //theModel->SetMaxEnergy(G4HadronicParameters::Instance()->GetMaxEnergy());
     //protonInelasticProcess->RegisterMe(theModel);
     */
-	       
 
   // NEUTRON
   const auto neutron = G4Neutron::Neutron();
@@ -162,7 +153,7 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
 
   // Also non-HP: FLUKA neutron inelastic
   // IMPORTANT NB: Since flukaInelasticScatteringXS is SetForAllAtomsAndEnergies,
-  // it needs to be set first (would erase any previously defined dataset, 
+  // it needs to be set first (would erase any previously defined dataset,
   // see G4CrossSectionDataStore::AddDataSet).
   neutronInelasticProcess->AddDataSet(flukaInelasticScatteringXS);
   const auto flukaNeutronModel = new FLUKANuclearInelasticModel();
@@ -176,12 +167,10 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
   neutronHPInelasticModel->SetMaxEnergy(fNeutronHPMaxE);
   neutronInelasticProcess->RegisterMe(neutronHPInelasticModel);
 
-	
-  // TO DO: Not elegant to have G4 neutron capture and fission included in FLUKA inelastic. 
-  // Create a Physics constructor just for it? 
-  // (NB: CANNOT use the neutron builders, 
+  // TO DO: Not elegant to have G4 neutron capture and fission included in FLUKA inelastic.
+  // Create a Physics constructor just for it?
+  // (NB: CANNOT use the neutron builders,
   // because they would ALSO create a G4HadronInelasticProcess, while we use the FLUKA one).
-
 
   // NEUTRON CAPTURE
   const auto neutronCaptureProcess = new G4NeutronCaptureProcess();
@@ -199,8 +188,7 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
   const auto neutronHPCaptureModel = new G4ParticleHPCapture();
   neutronHPCaptureModel->SetMaxEnergy(fNeutronHPMaxE);
   neutronCaptureProcess->RegisterMe(neutronHPCaptureModel);
-		
-    
+
   // NEUTRON FISSION
   const auto neutronFissionProcess = new G4NeutronFissionProcess();
   // NB: XS (G4ZeroXS) is already added, in the process's constructor.
@@ -212,60 +200,41 @@ void FLUKAHadronInelasticPhysicsConstructor::ConstructProcess() {
   neutronLEPFissionModel->SetMaxEnergy(G4HadronicParameters::Instance()->GetMaxEnergy());
   neutronFissionProcess->RegisterMe(neutronLEPFissionModel);
 
-  // HP only: neutron HP fission	
+  // HP only: neutron HP fission
   const auto neutronHPFissionXS = new G4ParticleHPFissionData();
-  neutronFissionProcess->AddDataSet(neutronHPFissionXS);	
+  neutronFissionProcess->AddDataSet(neutronHPFissionXS);
   const auto neutronHPFissionModel = new G4ParticleHPFission();
   neutronHPFissionModel->SetMaxEnergy(fNeutronHPMaxE);
   neutronFissionProcess->RegisterMe(neutronHPFissionModel);
 
-
   // PI+, PI-
-  build_G4_process_helpers::buildInelasticProcess(G4PionPlus::PionPlus(),
-                                                  helper,
-                                                  flukaInelasticScatteringXS,
-                                                  flukaModel);
-  build_G4_process_helpers::buildInelasticProcess(G4PionMinus::PionMinus(),
-                                                  helper,
-                                                  flukaInelasticScatteringXS,
-                                                  flukaModel);
-
+  build_G4_process_helpers::buildInelasticProcess(G4PionPlus::PionPlus(), helper,
+                                                  flukaInelasticScatteringXS, flukaModel);
+  build_G4_process_helpers::buildInelasticProcess(G4PionMinus::PionMinus(), helper,
+                                                  flukaInelasticScatteringXS, flukaModel);
 
   // KAONS
-  build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetKaons(), 
-                                                                 helper,
-                                                                 flukaInelasticScatteringXS,
-                                                                 flukaModel);
-
+  build_G4_process_helpers::buildInelasticProcessForEachParticle(
+    G4HadParticles::GetKaons(), helper, flukaInelasticScatteringXS, flukaModel);
 
   const auto param = G4HadronicParameters::Instance();
   if (param->GetMaxEnergy() > param->EnergyThresholdForHeavyHadrons()) {
-
     // HYPERONS, ANTI-HYPERONS
-    build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetHyperons(),
-                                                                   helper,
-                                                                   flukaInelasticScatteringXS,
-                                                                   flukaModel);
-    build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetAntiHyperons(),
-                                                                   helper,
-                                                                   flukaInelasticScatteringXS,
-                                                                   flukaModel);
+    build_G4_process_helpers::buildInelasticProcessForEachParticle(
+      G4HadParticles::GetHyperons(), helper, flukaInelasticScatteringXS, flukaModel);
+    build_G4_process_helpers::buildInelasticProcessForEachParticle(
+      G4HadParticles::GetAntiHyperons(), helper, flukaInelasticScatteringXS, flukaModel);
 
     // LIGHT ANTI-IONS: PBAR, NBAR, ANTI LIGHT IONS
-    build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetLightAntiIons(),
-                                                                   helper,
-                                                                   flukaInelasticScatteringXS,
-                                                                   flukaModel);
+    build_G4_process_helpers::buildInelasticProcessForEachParticle(
+      G4HadParticles::GetLightAntiIons(), helper, flukaInelasticScatteringXS, flukaModel);
 
     // B-, C- BARYONS AND MESONS
-    if (G4HadronicParameters::Instance()->EnableBCParticles() ) {
-      build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetBCHadrons(),
-                                                                     helper,
-                                                                     flukaInelasticScatteringXS,
-                                                                     flukaModel);
+    if (G4HadronicParameters::Instance()->EnableBCParticles()) {
+      build_G4_process_helpers::buildInelasticProcessForEachParticle(
+        G4HadParticles::GetBCHadrons(), helper, flukaInelasticScatteringXS, flukaModel);
     }
   }
 }
 
-
-#endif // G4_USE_FLUKA
+#endif  // G4_USE_FLUKA
