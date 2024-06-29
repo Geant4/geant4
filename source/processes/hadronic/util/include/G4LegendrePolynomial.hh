@@ -56,8 +56,16 @@ class G4LegendrePolynomial
 
     // Evaluation functions
     G4double EvalLegendrePoly(G4int order, G4double x);
+
+    G4double EvalAssocLegendrePoly(G4int l, G4int m, G4double x);
+
+    // cache is not used; use EvalAssocLegendrePoly(l, m, x) instead.
     G4double EvalAssocLegendrePoly(G4int l, G4int m, G4double x,
-                                   std::map<G4int, std::map<G4int, G4double> >* cache = NULL);
+      std::map<G4int, std::map<G4int, G4double> >* cache)
+    {
+      (void) cache; // suppress compiler warning for unused cache
+      return EvalAssocLegendrePoly(l, m, x); 
+    }
 
   protected: // Cache coefficients for speed
     void BuildUpToOrder(size_t order);
