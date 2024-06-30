@@ -94,7 +94,6 @@ class G4ParticleMessenger : public G4UImessenger
     G4UIcmdWithAnInteger* verboseCmd = nullptr;
 
     G4ParticleTable* theParticleTable = nullptr;
-    G4ParticleDefinition* currentParticle = nullptr;
 
     G4ParticlePropertyMessenger* fParticlePropertyMessenger = nullptr;
 };
