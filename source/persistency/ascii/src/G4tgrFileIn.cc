@@ -342,6 +342,22 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
 
   wordlist = wordlist2;
 
+  // check for macros
+  for (auto& w : wordlist)
+  {
+    auto it = theMacros.find(w);
+    if (it != theMacros.end())
+    {
+#ifdef G4VERBOSE
+      if(G4tgrMessenger::GetVerboseLevel() >= 3)
+      {
+        G4cout << " G4tgrFileIn::GetWordsInLine() - Replacing '" << w << "' by '" << (*it).second << "'" << G4endl;
+      }
+#endif
+      w = (*it).second;
+    }
+  }
+
   // Or why not like this (?):
   // typedef std::istream_iterator<G4String, ptrdiff_t> string_iter;
   // std::copy(string_iter(istr_line), string_iter(), back_inserter(wordlist));
