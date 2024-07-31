@@ -37,6 +37,7 @@
 #include "G4tgrFileIn.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrUtils.hh"
+#include "G4tgrParameterMgr.hh"
 #include "G4UIcommand.hh"
 
 G4ThreadLocal std::vector<G4tgrFileIn*>* G4tgrFileIn::theInstances = nullptr;
@@ -454,7 +455,12 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       G4cout << " G4tgrFileIn::GetWordsInLine() - Ifdef found !" << G4endl;
     }
 #endif
-    if (theMacros.find(wordlist[1]) == theMacros.end())
+    G4bool macroFound = theMacros.find(wordlist[1]) != theMacros.end();
+    G4bool paramFound = false;
+    if(wordlist[1][0] == '$')
+      paramFound = G4tgrParameterMgr::GetInstance()->FindParameter(
+                     wordlist[1].substr(1, wordlist[1].size()), false) != "";
+    if(!macroFound && !paramFound)
       ignoreLine = true;
     else
       ignoreLine = false;
@@ -479,7 +485,12 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       G4cout << " G4tgrFileIn::GetWordsInLine() - Ifndef found !" << G4endl;
     }
 #endif
-    if (theMacros.find(wordlist[1]) == theMacros.end())
+    G4bool macroFound = theMacros.find(wordlist[1]) != theMacros.end();
+    G4bool paramFound = false;
+    if(wordlist[1][0] == '$')
+      paramFound = G4tgrParameterMgr::GetInstance()->FindParameter(
+                     wordlist[1].substr(1, wordlist[1].size()), false) != "";
+    if(!macroFound && !paramFound)
       ignoreLine = false;
     else
       ignoreLine = true;
