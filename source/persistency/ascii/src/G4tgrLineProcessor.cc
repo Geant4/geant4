@@ -67,6 +67,10 @@ G4bool G4tgrLineProcessor::ProcessLine(const std::vector<G4String>& wl)
   }
 #endif
 
+  // ignore empty word list
+  if(!wl.size())
+    return true;
+
   G4String wl0 = wl[0];
   for(G4int ii = 0; ii < (G4int)wl0.length(); ++ii)
   {
