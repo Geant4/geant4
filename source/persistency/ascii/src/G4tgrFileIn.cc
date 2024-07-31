@@ -342,19 +342,22 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
 
   wordlist = wordlist2;
 
-  // check for macros
-  for (auto& w : wordlist)
+  // check for macro replacements (exclude # directives)
+  if (wordlist[0][0] != '#')
   {
-    auto it = theMacros.find(w);
-    if (it != theMacros.end())
+    for (auto& w : wordlist)
     {
-#ifdef G4VERBOSE
-      if(G4tgrMessenger::GetVerboseLevel() >= 3)
+      auto it = theMacros.find(w);
+      if (it != theMacros.end() && (*it).second != "")
       {
-        G4cout << " G4tgrFileIn::GetWordsInLine() - Replacing '" << w << "' by '" << (*it).second << "'" << G4endl;
-      }
+#ifdef G4VERBOSE
+        if(G4tgrMessenger::GetVerboseLevel() >= 3)
+        {
+          G4cout << " G4tgrFileIn::GetWordsInLine() - Replacing '" << w << "' by '" << (*it).second << "'" << G4endl;
+        }
 #endif
-      w = (*it).second;
+        w = (*it).second;
+      }
     }
   }
 
