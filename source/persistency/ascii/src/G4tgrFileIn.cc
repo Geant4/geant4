@@ -545,10 +545,7 @@ G4bool G4tgrFileIn::EndOfFile()
     }
 #endif
     --theCurrentFile;
-    if(theCurrentFile != -1)  // Last file will be closed by the user
-    {
-      Close();
-    }
+    Close();
   }
 
   // Only real closing if all files are closed
@@ -582,6 +579,7 @@ void G4tgrFileIn::Close()
 
   theFiles[theCurrentFile + 1]->close();
   theFiles.pop_back();
+  theNames.pop_back();
 }
 
 // --------------------------------------------------------------------
