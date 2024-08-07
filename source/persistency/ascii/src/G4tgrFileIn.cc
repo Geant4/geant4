@@ -107,6 +107,8 @@ void G4tgrFileIn::OpenNewFile(const char* filename)
 
   theNames.push_back(filename);
 
+  ignoreLines.push_back({});
+
 #ifndef OS_SUN_4_2
   if(!fin->is_open())
   {
@@ -384,8 +386,16 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       G4cout << " G4tgrFileIn::GetWordsInLine() - Include found !" << G4endl;
     }
 #endif
-    OpenNewFile(wordlist[1].c_str());
-    isok = GetWordsInLine(wordlist);
+    if(IgnoreLine())
+    {
+      wordlist.pop_back();
+      wordlist.pop_back();
+    }
+    else
+    {
+      OpenNewFile(wordlist[1].c_str());
+      isok = GetWordsInLine(wordlist);
+    }
   }
   // check for 'define'
   else if(wordlist[0] == "#define")
@@ -461,9 +471,9 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       paramFound = G4tgrParameterMgr::GetInstance()->FindParameter(
                      wordlist[1].substr(1, wordlist[1].size()), false) != "";
     if(!macroFound && !paramFound)
-      ignoreLine = true;
+      ignoreLines.back().push_back(true);
     else
-      ignoreLine = false;
+      ignoreLines.back().push_back(false);
     wordlist.pop_back();
     wordlist.pop_back();
   }
@@ -491,9 +501,9 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       paramFound = G4tgrParameterMgr::GetInstance()->FindParameter(
                      wordlist[1].substr(1, wordlist[1].size()), false) != "";
     if(!macroFound && !paramFound)
-      ignoreLine = false;
+      ignoreLines.back().push_back(false);
     else
-      ignoreLine = true;
+      ignoreLines.back().push_back(true);
     wordlist.pop_back();
     wordlist.pop_back();
   }
@@ -506,7 +516,7 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       G4cout << " G4tgrFileIn::GetWordsInLine() - else found !" << G4endl;
     }
 #endif
-    ignoreLine = !ignoreLine;
+    ignoreLines.back().back() = !ignoreLines.back().back();
     wordlist.pop_back();
   }
   // check for 'endif'
@@ -518,7 +528,13 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       G4cout << " G4tgrFileIn::GetWordsInLine() - endif found !" << G4endl;
     }
 #endif
-    ignoreLine = false;
+    if(!ignoreLines.back().size())
+    {
+      G4String ErrMessage = "#endif without if in file " + theNames[theCurrentFile];
+      G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput", FatalException,
+                  ErrMessage);
+    }
+    ignoreLines.back().pop_back();
     wordlist.pop_back();
   }
 
@@ -530,6 +546,16 @@ void G4tgrFileIn::ErrorInLine()
 {
   G4cerr << "!! EXITING: ERROR IN LINE No " << theLineNo[theCurrentFile]
          << " file: " << theNames[theCurrentFile] << " : ";
+}
+
+// --------------------------------------------------------------------
+G4bool G4tgrFileIn::IgnoreLine() const
+{
+  if(std::find(ignoreLines.back().begin(), ignoreLines.back().end(), true)
+       != ignoreLines.back().end())
+    return true;
+  else
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -576,6 +602,14 @@ void G4tgrFileIn::Close()
            << theFiles.size() << G4endl;
   }
 #endif
+
+  if(ignoreLines.back().size())
+  {
+    G4String ErrMessage = "Missing #endif in file " + theNames[theCurrentFile + 1];
+    G4Exception("G4tgrFileIn::Close()", "InvalidInput", FatalException,
+                ErrMessage);
+  }
+  ignoreLines.pop_back();
 
   theFiles[theCurrentFile + 1]->close();
   theFiles.pop_back();

@@ -61,7 +61,7 @@ class G4tgrFileIn
     // Access data members
 
     G4int Nline() { return theLineNo[theCurrentFile]; }
-    G4bool IgnoreLine() const { return ignoreLine; }
+    G4bool IgnoreLine() const;
 
     const G4String& GetName() { return theName; }
 
@@ -85,7 +85,7 @@ class G4tgrFileIn
 
     std::map<G4String, G4String> theMacros;
 
-    G4bool ignoreLine = false;
+    std::vector<std::vector<G4bool>> ignoreLines;
 
     G4int theCurrentFile = -1;
       // Index of file being read in theFiles
