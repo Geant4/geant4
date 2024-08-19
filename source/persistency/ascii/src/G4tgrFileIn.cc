@@ -37,6 +37,7 @@
 #include "G4tgrFileIn.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrUtils.hh"
+#include "G4tgrParameterMgr.hh"
 #include "G4UIcommand.hh"
 
 G4ThreadLocal std::vector<G4tgrFileIn*>* G4tgrFileIn::theInstances = nullptr;
@@ -105,6 +106,8 @@ void G4tgrFileIn::OpenNewFile(const char* filename)
   theLineNo.push_back(0);
 
   theNames.push_back(filename);
+
+  ignoreLines.push_back({});
 
 #ifndef OS_SUN_4_2
   if(!fin->is_open())
@@ -342,6 +345,25 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
 
   wordlist = wordlist2;
 
+  // check for macro replacements (exclude # directives)
+  if (wordlist[0][0] != '#')
+  {
+    for (auto& w : wordlist)
+    {
+      auto it = theMacros.find(w);
+      if (it != theMacros.end() && (*it).second != "")
+      {
+#ifdef G4VERBOSE
+        if(G4tgrMessenger::GetVerboseLevel() >= 3)
+        {
+          G4cout << " G4tgrFileIn::GetWordsInLine() - Replacing '" << w << "' by '" << (*it).second << "'" << G4endl;
+        }
+#endif
+        w = (*it).second;
+      }
+    }
+  }
+
   // Or why not like this (?):
   // typedef std::istream_iterator<G4String, ptrdiff_t> string_iter;
   // std::copy(string_iter(istr_line), string_iter(), back_inserter(wordlist));
@@ -364,8 +386,156 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       G4cout << " G4tgrFileIn::GetWordsInLine() - Include found !" << G4endl;
     }
 #endif
-    OpenNewFile(wordlist[1].c_str());
-    isok = GetWordsInLine(wordlist);
+    if(IgnoreLine())
+    {
+      wordlist.pop_back();
+      wordlist.pop_back();
+    }
+    else
+    {
+      OpenNewFile(wordlist[1].c_str());
+      isok = GetWordsInLine(wordlist);
+    }
+  }
+  // check for 'define'
+  else if(wordlist[0] == "#define")
+  {
+    if(wordlist.size() != 2 && wordlist.size() != 3)
+    {
+      ErrorInLine();
+      G4String ErrMessage =
+        "'#define' should have one or two arguments (macro name, [macro body])!";
+      G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput",
+                  FatalException, ErrMessage);
+    }
+
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrFileIn::GetWordsInLine() - Define found !" << G4endl;
+    }
+#endif
+    G4String macroBody;
+    if(wordlist.size() == 3)
+    {
+      macroBody = wordlist[2];
+      wordlist.pop_back();
+    }
+    theMacros[wordlist[1]] = macroBody;
+    wordlist.pop_back();
+    wordlist.pop_back();
+  }
+  // check for 'undef'
+  else if(wordlist[0] == "#undef")
+  {
+    if(wordlist.size() != 2)
+    {
+      ErrorInLine();
+      G4String ErrMessage =
+        "'#undef' should have as second argument, the macro name !";
+      G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput",
+                  FatalException, ErrMessage);
+    }
+
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrFileIn::GetWordsInLine() - Undef found !" << G4endl;
+    }
+#endif
+    theMacros.erase(wordlist[1]);
+    wordlist.pop_back();
+    wordlist.pop_back();
+  }
+  // check for 'ifdef'
+  else if(wordlist[0] == "#ifdef")
+  {
+    if(wordlist.size() != 2)
+    {
+      ErrorInLine();
+      G4String ErrMessage =
+        "'#ifdef' should have as second argument, the macro name!";
+      G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput",
+                  FatalException, ErrMessage);
+    }
+
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrFileIn::GetWordsInLine() - Ifdef found !" << G4endl;
+    }
+#endif
+    G4bool macroFound = theMacros.find(wordlist[1]) != theMacros.end();
+    G4bool paramFound = false;
+    if(wordlist[1][0] == '$')
+      paramFound = G4tgrParameterMgr::GetInstance()->FindParameter(
+                     wordlist[1].substr(1, wordlist[1].size()), false) != "";
+    if(!macroFound && !paramFound)
+      ignoreLines.back().push_back(true);
+    else
+      ignoreLines.back().push_back(false);
+    wordlist.pop_back();
+    wordlist.pop_back();
+  }
+  // check for 'ifndef'
+  else if(wordlist[0] == "#ifndef")
+  {
+    if(wordlist.size() != 2)
+    {
+      ErrorInLine();
+      G4String ErrMessage =
+        "'#ifndef' should have as second argument, the macro name!";
+      G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput",
+                  FatalException, ErrMessage);
+    }
+
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrFileIn::GetWordsInLine() - Ifndef found !" << G4endl;
+    }
+#endif
+    G4bool macroFound = theMacros.find(wordlist[1]) != theMacros.end();
+    G4bool paramFound = false;
+    if(wordlist[1][0] == '$')
+      paramFound = G4tgrParameterMgr::GetInstance()->FindParameter(
+                     wordlist[1].substr(1, wordlist[1].size()), false) != "";
+    if(!macroFound && !paramFound)
+      ignoreLines.back().push_back(false);
+    else
+      ignoreLines.back().push_back(true);
+    wordlist.pop_back();
+    wordlist.pop_back();
+  }
+  // check for 'else'
+  else if(wordlist[0] == "#else")
+  {
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrFileIn::GetWordsInLine() - else found !" << G4endl;
+    }
+#endif
+    ignoreLines.back().back() = !ignoreLines.back().back();
+    wordlist.pop_back();
+  }
+  // check for 'endif'
+  else if(wordlist[0] == "#endif")
+  {
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrFileIn::GetWordsInLine() - endif found !" << G4endl;
+    }
+#endif
+    if(!ignoreLines.back().size())
+    {
+      G4String ErrMessage = "#endif without if in file " + theNames[theCurrentFile];
+      G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput", FatalException,
+                  ErrMessage);
+    }
+    ignoreLines.back().pop_back();
+    wordlist.pop_back();
   }
 
   return isok;
@@ -376,6 +546,16 @@ void G4tgrFileIn::ErrorInLine()
 {
   G4cerr << "!! EXITING: ERROR IN LINE No " << theLineNo[theCurrentFile]
          << " file: " << theNames[theCurrentFile] << " : ";
+}
+
+// --------------------------------------------------------------------
+G4bool G4tgrFileIn::IgnoreLine() const
+{
+  if(std::find(ignoreLines.back().begin(), ignoreLines.back().end(), true)
+       != ignoreLines.back().end())
+    return true;
+  else
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -391,10 +571,7 @@ G4bool G4tgrFileIn::EndOfFile()
     }
 #endif
     --theCurrentFile;
-    if(theCurrentFile != -1)  // Last file will be closed by the user
-    {
-      Close();
-    }
+    Close();
   }
 
   // Only real closing if all files are closed
@@ -426,8 +603,17 @@ void G4tgrFileIn::Close()
   }
 #endif
 
+  if(ignoreLines.back().size())
+  {
+    G4String ErrMessage = "Missing #endif in file " + theNames[theCurrentFile + 1];
+    G4Exception("G4tgrFileIn::Close()", "InvalidInput", FatalException,
+                ErrMessage);
+  }
+  ignoreLines.pop_back();
+
   theFiles[theCurrentFile + 1]->close();
   theFiles.pop_back();
+  theNames.pop_back();
 }
 
 // --------------------------------------------------------------------
