@@ -255,7 +255,7 @@ void G4DNAPTBExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
                                                 const G4DynamicParticle* aDynamicParticle,
                                                 G4double /*tmin*/, G4double /*tmax*/)
 {
-  const std::size_t& materialID = (std::size_t)couple->GetIndex();
+  const std::size_t& materialID = (std::size_t)couple->GetMaterial()->GetIndex();
 
   // Get the incident particle kinetic energy
   G4double k = aDynamicParticle->GetKineticEnergy();

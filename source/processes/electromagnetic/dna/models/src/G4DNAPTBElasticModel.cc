@@ -368,7 +368,7 @@ void G4DNAPTBElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*
   }
 
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
-  const std::size_t& materialID = couple->GetIndex();
+  const std::size_t& materialID = couple->GetMaterial()->GetIndex();
   auto p = aDynamicElectron->GetParticleDefinition();
 
   // set killBelowEnergy value for material
