@@ -23,9 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VHit
 //
+// Class description:
 //
-
+// This is the base class of hit object. The user should derive this
+// base class to make his/her own hit class. Two virtual method Draw()
+// and Print() can be implemented if the user wants these functionalities.
+// If a concrete hit class is used as a transient class, G4Allocator
+// must be used.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VHit_h
 #define G4VHit_h 1
 
@@ -37,24 +46,17 @@
 class G4AttDef;
 class G4AttValue;
 
-// class description:
-//
-//  This is the base class of hit object. The user should derive this
-// base class to make his/her own hit class. Two virtual method Draw()
-// and Print() can be implemented if the user wants these functionarities.
-//  If a concrete hit class is used as a transient class, G4Allocator
-// must be used.
-
 class G4VHit
 {
  public:
+
   G4VHit() = default;
   virtual ~G4VHit() = default;
 
   G4bool operator==(const G4VHit&) const { return false; }
 
-  virtual void Draw(){};
-  virtual void Print(){};
+  virtual void Draw() {}
+  virtual void Print() {}
 
   // Returns pointer to map of attribute definitions for this hit
   // Caller is responsible for checking validity of returned pointer.

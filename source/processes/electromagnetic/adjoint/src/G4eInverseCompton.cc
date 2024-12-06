@@ -38,16 +38,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 G4eInverseCompton::G4eInverseCompton(
-  G4bool whichScatCase, G4String process_name,
+  G4bool whichScatCase, const G4String& process_name,
   G4AdjointComptonModel* aComptonAdjointModel)
   : G4VAdjointReverseReaction(process_name, whichScatCase)
 {
   fAdjointModel = aComptonAdjointModel;
   fAdjointModel->SetSecondPartOfSameType(false);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-G4eInverseCompton::~G4eInverseCompton() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 void G4eInverseCompton::ProcessDescription(std::ostream& out) const

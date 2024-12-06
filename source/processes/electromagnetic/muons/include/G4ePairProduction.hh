@@ -60,7 +60,7 @@ public:
 
   explicit G4ePairProduction(const G4String& processName = "ePairProd");
 
-  ~G4ePairProduction() = default;
+  ~G4ePairProduction() override = default;
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 

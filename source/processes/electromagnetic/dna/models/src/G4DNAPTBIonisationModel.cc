@@ -308,7 +308,7 @@ void G4DNAPTBIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   // Get the current particle name
   const auto& p = aDynamicParticle->GetDefinition();
-  auto materialName = pCouple->GetMaterial()->GetName();
+  const auto& materialName = pCouple->GetMaterial()->GetName();
   // Get the energy limits
   G4double lowLim = fpModelData->GetLowELimit(materialID, p);
   G4double highLim = fpModelData->GetHighELimit(materialID, p);

@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4ScoreQuantityMessenger
 //
 // ---------------------------------------------------------------------
 // Modifications
-// 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
-//  24-Mar-2011  T.Aso  Add StepChecker for debugging.
-//  24-Mar-2011  T.Aso  Size and segmentation for replicated cylinder.
-//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options
-//                      in flatCurrent and flatFulx commands.
-//  27-Mar-2013  T.Aso  Unit option in the kineticEnergy filter was
-//                     supported.
-//
+//  08-Oct-2010 T.Aso Remove unit of G4PSPassageCellCurrent.
+//  24-Mar-2011 T.Aso Add StepChecker for debugging.
+//  24-Mar-2011 T.Aso Size and segmentation for replicated cylinder.
+//  01-Jun-2012 T.Aso Support weighted/dividedByArea options
+//                    in flatCurrent and flatFulx commands.
+//  27-Mar-2013 T.Aso Unit option in the kineticEnergy filter was supported.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -1062,7 +1060,7 @@ G4String G4ScoreQuantityMessenger::GetCurrentValue(G4UIcommand* /*command*/)
   return val;
 }
 
-void G4ScoreQuantityMessenger::FillTokenVec(G4String newValues,
+void G4ScoreQuantityMessenger::FillTokenVec(const G4String& newValues,
                                             G4TokenVec& token)
 {
   G4Tokenizer next(newValues);
@@ -1108,7 +1106,7 @@ void G4ScoreQuantityMessenger::FParticleWithEnergyCommand(G4VScoringMesh* mesh,
 }
 
 G4bool G4ScoreQuantityMessenger::CheckMeshPS(G4VScoringMesh* mesh,
-                                             G4String& psname,
+                                             const G4String& psname,
                                              G4UIcommand* command)
 {
   if(!mesh->FindPrimitiveScorer(psname))

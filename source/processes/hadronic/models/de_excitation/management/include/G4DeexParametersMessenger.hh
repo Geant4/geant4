@@ -66,12 +66,16 @@ class G4DeexPrecoParameters;
 
 class G4DeexParametersMessenger: public G4UImessenger
 {
-public:   // with description
+public:
   
   explicit G4DeexParametersMessenger(G4DeexPrecoParameters*);
   ~G4DeexParametersMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
+
+  G4DeexParametersMessenger& operator=
+  (const G4DeexParametersMessenger& right) = delete;
+  G4DeexParametersMessenger(const G4DeexParametersMessenger&) = delete;
 
 private:
 
@@ -86,7 +90,7 @@ private:
 
   G4UIcmdWithAnInteger*      maxjCmd;
   G4UIcmdWithAnInteger*      verbCmd;
-
+  G4UIcommand* xsTypeCmd;
 };
 
 #endif

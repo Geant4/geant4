@@ -1,0 +1,9 @@
+#
+# Macro file gflasha example
+# when runing in batch mode
+#
+
+# set calo material
+/exgflash/det/setMat G4_CESIUM_IODIDE
+
+/control/execute testLong.mac

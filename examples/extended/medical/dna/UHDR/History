@@ -4,6 +4,13 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
+## 2024-10-22 Hoang Tran (UHDR-V11-02-04)
+- updated visu mode for physical stage and corrected README files
+
+## 2024-10-03 Hoang Tran (UHDR-V11-02-03)
+- Modified the molecule names of OH, HO2, O in MoleculeDefinition.
+  Each molecule configuration has a molecule definition.
+
 ## 2024-05-08 G. Cosmo (UHDR-V11-02-02)
 - Fixed compilation errors on macOS/clang with C++23 enabled, for incomplete
   types of smart-pointers through defaulted destructors.

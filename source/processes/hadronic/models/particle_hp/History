@@ -6,6 +6,54 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-28 Vladimir Ivanchenko (hadr-hpp-V11-02-16)
+- G4ParticleHPElasticData, G4ParticleHPInelasticData, G4ParticleHPCaptureData,
+  G4ParticleHPFissionData, G4ParticleHPThermalScatteringData,
+  G4ParticleHPThermalScattering - use const pointer of G4ElementTable, remove
+  unnecessary thread local variables, dead code and commented code
+
+## 2024-10-22 Alberto Ribon (hadr-hpp-V11-02-15)
+- G4ParticleHPElasticURR : added boolean argument to the constructor to know
+  whether thermal scattering is activated (false by default).
+
+## 2024-09-26 Alberto Ribon (hadr-hpp-V11-02-14)
+- G4ParticleHPManager, G4ParticleHPProbabilityTablesStore,
+  G4ParticleHPInelasticDataPT, G4ParticleHPInelasticURR : update to use the
+  class G4HadronicParameters to select the type of PT table for the URR 
+  treatment.
+  Thanks to Marek Zmeskal for these changes.
+
+## 2024-09-18 Vladimir Ivanchenko (hadr-hpp-V11-02-13)
+- G4CrossSectionXP - fixed cross section computation with Doppler broading
+    effect due to media temperature.
+
+## 2024-08-26 Gabriele Cosmo (hadr-hpp-V11-02-12)
+- More fixes for reported Coverity defects on use of std::move() and
+  const G4String&.
+
+## 2024-08-21 Gabriele Cosmo (hadr-hpp-V11-02-11)
+- Fixed reported Coverity defects for use of std::move() and const G4String&.
+- Use const qualifier for methods where possible.
+
+## 2024-08-02 Alberto Ribon (hadr-hpp-V11-02-10)
+- G4ParticleHPMessenger : removed ther recently introduced UI command for
+  selecting the type of PT table (choice between  "calendf"  and  "njoy" )
+  for the URR treatment.
+  ( Note: this has been replaced with a C++ interface in G4HadronicParameters
+          that allows the selection to be made at initialization time. )
+
+## 2024-07-18 Alberto Ribon (hadr-hpp-V11-02-09)
+- G4ParticleHPInelastic : fixed missed call to
+  `G4ParticleHPManager::RegisterInelasticFinalStates` in the method
+  `G4ParticleHPInelastic::BuildPhysicsTable`.
+  Thanks to Marek Zmeskal for finding this issue.
+
+## 2024-07-04 Alberto Ribon (hadr-hpp-V11-02-08)
+- G4ParticleHPProbabilityTablesStore, G4ParticleHPIsoProbabilityTable_NJOY,
+  G4ParticleHPIsoProbabilityTable_CALENDF : fixed mistakes in the access to
+  the compressed dataset G4URRPTDATA.
+  Thanks to Marek Zmeskal for reporting this issue.
+
 ## 2024-06-17 Gabriele Cosmo (hadr-hpp-V11-02-07)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode.
 

@@ -23,30 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoringManager
 //
+// Class description:
 //
-
+// This is a singleton class which manages the interactive scoring.
+// The user cannot access to the constructor. The pointer of the
+// only existing object can be got via G4ScoringManager::GetScoringManager()
+// static method. The first invocation of this static method makes
+// the singleton object.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4ScoringManager_h
 #define G4ScoringManager_h 1
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
+#include "G4VScoreWriter.hh"
+
 #include <vector>
 #include <map>
+
 class G4ScoringMessenger;
 class G4ScoreQuantityMessenger;
 class G4VHitsCollection;
 class G4VScoreColorMap;
-#include "G4VScoreWriter.hh"
-
-// class description:
-//
-//  This is a singleton class which manages the interactive scoring.
-// The user cannot access to the constructor. The pointer of the
-// only existing object can be got via G4ScoringManager::GetScoringManager()
-// static method. The first invokation of this static method makes
-// the singleton object.
-//
 
 using MeshVec = std::vector<G4VScoringMesh *>;
 using MeshVecItr = MeshVec::iterator;
@@ -60,15 +62,18 @@ using MeshMapConstItr = MeshMap::const_iterator;
 
 class G4ScoringManager
 {
- public:  // with description
+ public:
+
   static G4ScoringManager* GetScoringManager();
   // Returns the pointer to the singleton object.
   
   static G4ScoringManager* GetScoringManagerIfExist();
 
+  G4ScoringManager(const G4ScoringManager&) = delete;
+  G4ScoringManager& operator=(const G4ScoringManager&) = delete;
+
   ~G4ScoringManager();
 
- public:
   static void SetReplicaLevel(G4int);
   static G4int GetReplicaLevel();
 
@@ -109,7 +114,7 @@ class G4ScoringManager
       writer->SetVerboseLevel(vl);
   }
   inline G4int GetVerboseLevel() const { return verboseLevel; }
-  inline size_t GetNumberOfMesh() const { return fMeshVec.size(); }
+  inline std::size_t GetNumberOfMesh() const { return fMeshVec.size(); }
   inline void RegisterScoringMesh(G4VScoringMesh* scm)
   {
     scm->SetVerboseLevel(verboseLevel);
@@ -117,12 +122,11 @@ class G4ScoringManager
     SetCurrentMesh(scm);
   }
   inline G4VScoringMesh* GetMesh(G4int i) const { return fMeshVec[i]; }
-  inline G4String GetWorldName(G4int i) const
+  inline const G4String& GetWorldName(G4int i) const
   {
     return fMeshVec[i]->GetWorldName();
   }
 
- public:  // with description
   inline void SetScoreWriter(G4VScoreWriter* sw)
   {
     delete writer;
@@ -132,7 +136,6 @@ class G4ScoringManager
   }
   // Replace score writers.
 
- public:
   inline void SetFactor(G4double val = 1.0)
   {
     if(writer != nullptr)
@@ -149,16 +152,14 @@ class G4ScoringManager
   }
 
  protected:
+
   G4ScoringManager();
 
  private:
-  // Disable copy constructor and assignement operator
-  G4ScoringManager(const G4ScoringManager&);
-  G4ScoringManager& operator=(const G4ScoringManager&);
 
- private:
   static G4ThreadLocal G4ScoringManager* fSManager;
   static G4ThreadLocal G4int replicaLevel;
+
   G4int verboseLevel;
   G4ScoringMessenger* fMessenger;
   G4ScoreQuantityMessenger* fQuantityMessenger;

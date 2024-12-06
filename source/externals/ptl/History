@@ -6,6 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-14 Ben Morgan (ptl-V11-02-03)
+- Add max CMake version in PTLConfig.cmake.in to suppress warnings in latest
+  CMake versions about support for 3.10 being dropped.
+
+## 2024-11-01 Ben Morgan (ptl-V11-02-02)
+- Fix Coverity warnings:
+  - 105693: use std:move to avoid direct copy
+  - 105524: remove structurally dead code
+
+## 2024-05-14 Ben Morgan (ptl-V11-02-01)
+- Import latest PTL master (f892a93d) from GitHub, patched for Geant4 source layout
+  - Local changes since ptl-V11-00-03 retained
+- Includes upstream changes since ptl-V11-00-03:
+  - 44: Simplification and refactor of main API
+  - 45: Removal of env vars for ThreadPool config
+  - 46: Bump version to 3.0.0
+
 ## 2024-04-24 Pere Mato (ptl-V11-02-00)
 - Changed Windows.h to windows.h since for MinGW always seems to be lower case, not relevant for native builds.
 

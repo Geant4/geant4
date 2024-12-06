@@ -50,12 +50,13 @@
 
 class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
 {
-public:
+ public:
+
   G4ParticleHPInelasticCompFS();
   ~G4ParticleHPInelasticCompFS() override;
 
-  void Init(G4double A, G4double Z, G4int M, G4String& dirName,
-            G4String& aSFType, G4ParticleDefinition*) override;
+  void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+            const G4String& aSFType, G4ParticleDefinition*) override;
 
   void InitGammas(G4double AR, G4double ZR);
 
@@ -63,12 +64,12 @@ public:
 
   G4ParticleHPFinalState* New() override = 0;
 
-  G4double GetXsec(G4double anEnergy) override
+  G4double GetXsec(G4double anEnergy) const override
   {
     return std::max(0., theXsection[50]->GetY(anEnergy));
   }
 
-  G4ParticleHPVector* GetXsec() override { return theXsection[50]; }
+  G4ParticleHPVector* GetXsec() const override { return theXsection[50]; }
 
   G4int SelectExitChannel(G4double eKinetic);
 
@@ -79,10 +80,9 @@ public:
 				    G4ReactionProduct& aTarget, G4int it);
 
   G4ParticleHPInelasticCompFS(G4ParticleHPInelasticCompFS&) = delete;
-  G4ParticleHPInelasticCompFS& operator=
-  (const G4ParticleHPInelasticCompFS &right) = delete;
+  G4ParticleHPInelasticCompFS& operator=(const G4ParticleHPInelasticCompFS &right) = delete;
 
-private:
+ private:
 
   void two_body_reaction(G4ReactionProduct* proj, G4ReactionProduct* targ,
 			 G4ReactionProduct* product, G4double exEnergy);
@@ -93,7 +93,7 @@ private:
 
   G4NRESP71M03 nresp71_model;
 
-protected:
+ protected:
 
   G4ParticleHPVector* theXsection[51];
   G4ParticleHPEnergyDistribution* theEnergyDistribution[51];

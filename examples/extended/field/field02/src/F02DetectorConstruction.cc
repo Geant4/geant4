@@ -305,7 +305,7 @@ void F02DetectorConstruction::SetAbsorberThickness(G4double val)
   // change Absorber thickness and recompute the calorimeter parameters
   fAbsorberThickness = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -315,7 +315,7 @@ void F02DetectorConstruction::SetAbsorberRadius(G4double val)
   // change the transverse size and recompute the calorimeter parameters
   fAbsorberRadius = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -325,7 +325,7 @@ void F02DetectorConstruction::SetWorldSizeZ(G4double val)
   fWorldChanged = true;
   fWorldSizeZ = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -335,7 +335,7 @@ void F02DetectorConstruction::SetWorldSizeR(G4double val)
   fWorldChanged = true;
   fWorldSizeR = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -344,7 +344,7 @@ void F02DetectorConstruction::SetAbsorberZpos(G4double val)
 {
   fZAbsorber = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

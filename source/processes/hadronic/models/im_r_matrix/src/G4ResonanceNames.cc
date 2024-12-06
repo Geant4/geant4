@@ -71,10 +71,10 @@ G4ResonanceNames::G4ResonanceNames()
 
   // Delta
 
-  G4String d1232Minus("delta-");
-  G4String d1232Zero("delta0");
-  G4String d1232Plus("delta+");
-  G4String d1232PlusPlus("delta++");
+  const G4String& d1232Minus("delta-");
+  const G4String& d1232Zero("delta0");
+  const G4String& d1232Plus("delta+");
+  const G4String& d1232PlusPlus("delta++");
   nameDelta.push_back(d1232Minus);
   nameDelta.push_back(d1232Zero);
   nameDelta.push_back(d1232Plus);

@@ -56,7 +56,8 @@ public:
   G4VPhysicalVolume *physicalTreatmentRoom;
   G4LogicalVolume *logicTreatmentRoom;
   G4VPhysicalVolume *ConstructPhantom(G4double CollPos);
-  G4VPhysicalVolume *ConstructDetector();
+  // G4VPhysicalVolume *ConstructDetector();
+  void ConstructDetector();
 
   FlashDetectorConstruction();
   virtual ~FlashDetectorConstruction();
@@ -73,7 +74,7 @@ public:
    void SetDetector_subThickness(G4double thickness_sub);
   void SetDetectorWidth(G4double width);
    void SetDetectorPosition(G4double position);
- void SetAirGap_water_detector(G4double spost);
+ void ActivateDetArray(G4bool);
 
   G4VisAttributes *skyBlue;
   G4VisAttributes *red;
@@ -92,7 +93,9 @@ private:
   G4double fAirGap;
   G4double fPhantomSizeX, fPhantomSizeY, fPhantomSizeZ, fPhantom_coordinateX,fPosition_coefficient;
   G4ThreeVector fPhantomPosition;
-  G4double fDet_thickness,fDet_width,fDet_sub_thickness,fDetectorPosition,fAirGap_phantom_det;
+  G4double fDet_thickness,fDet_width,fDet_sub_thickness,fDetectorPosition;
+  G4int nDet;
+  G4double fDet_ctc; 
   G4Element *Si;
   G4Element *C;
   G4Material *SiC;
@@ -103,11 +106,13 @@ private:
 
   G4Box *fDet_box;
   G4LogicalVolume *fDetLogicalVolume;
-  G4VPhysicalVolume *fDet_phys;
+  // G4VPhysicalVolume *fDet_phys;
+  std::vector<G4VPhysicalVolume *> fDet_phys;
+    std::vector<G4VPhysicalVolume *> fDet_sub_phys;
 
- G4Box *fDet_sub;
- G4LogicalVolume *fDet_sub_LogicalVolume;
- G4VPhysicalVolume *fDet_sub_phys;
+  G4Box *fDet_sub;
+  G4LogicalVolume *fDet_sub_LogicalVolume;
+  //G4VPhysicalVolume *fDet_sub_phys;
 
   
   void DefineMaterials();
@@ -118,7 +123,7 @@ private:
   G4VPhysicalVolume *fPhantom_physical;
     
   G4UserLimits *fStepLimit;
-  G4bool fCheckOverlaps;
+  G4bool fCheckOverlaps, fActivateDet;
  
   G4NistManager *nist;
 

@@ -97,7 +97,17 @@ public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
 #ifdef G4MULTITHREADED
-  // In MT mode these functions are called in the following order for each run:
+  // For switching threads in MT mode
+  // Note: the order of calling of MovingToVisSubThread and SwitchToVisSubThread
+  // is undefined, so we have to use mutexes to ensure required information,
+  // namely the vis sub-thread address, is available before moving objects.
+  // To summarise, the order of calling is
+  //   DoneWithMasterThread
+  //   MovingToVisSubThread ) or ( SwitchToVisSubThread
+  //   SwitchToVisSubThread )    ( MovingToVisSubThread
+  //   DoneWithVisSubThread
+  //   MovingToMasterThread
+  //   SwitchToMasterThread
   // Called on the master thread before starting the vis sub-thread.
   virtual void DoneWithMasterThread ();
   // Called on the master thread after starting the vis sub-thread.
@@ -116,6 +126,7 @@ private:
   G4OpenGLQtViewer (const G4OpenGLQtViewer&);
   G4OpenGLQtViewer& operator= (const G4OpenGLQtViewer&);
 public:
+  virtual G4bool ReadyToDraw();
   virtual void updateQWidget()=0;
   void updateSceneTreeWidget();
   void updateViewerPropertiesTableWidget();
@@ -194,10 +205,12 @@ protected:
   void savePPMToTemp();
   int fRecordFrameNumber;
 
+#if QT_VERSION < 0x060000
   bool fHasToRepaint;
   bool fUpdateGLLock;
   bool fQGLWidgetInitialiseCompleted;
   bool fPaintEventLock;
+#endif
 
   // Flag to indicate that action was initiated by interaction (mouse
   // click) on the scene tree.  It is used and reset in
@@ -265,15 +278,6 @@ private:
   std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
   QString GetCommandParameterList (const G4UIcommand *aCommand);
   void changeColorAndTransparency(GLuint index, G4Color color);
-
-#ifdef G4MULTITHREADED
-  inline void SetQGLContextVisSubThread(QThread *th) {
-    fQGLContextVisSubThread = th;
-  }
-  inline void SetQGLContextMainThread(QThread *th) {
-    fQGLContextMainThread = th;
-  }
-#endif
   
   QMenu *fContextMenu;
   QPoint fLastPos1;
@@ -386,12 +390,6 @@ private:
 #ifdef G4MULTITHREADED
   QThread* fQGLContextVisSubThread;
   QThread* fQGLContextMainThread;
-  G4Mutex fmWaitForVisSubThreadQtOpenGLContextMoved;
-  G4Mutex fmWaitForVisSubThreadQtOpenGLContextInitialized;
-  G4Condition fc1_VisSubThreadQtOpenGLContextInitialized;
-  G4Condition fc2_VisSubThreadQtOpenGLContextMoved;
-  G4AutoLock* flWaitForVisSubThreadQtOpenGLContextInitialized;
-  G4AutoLock* flWaitForVisSubThreadQtOpenGLContextMoved;
 #endif
 
 public Q_SLOTS :

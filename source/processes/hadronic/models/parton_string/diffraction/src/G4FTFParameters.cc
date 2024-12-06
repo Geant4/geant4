@@ -371,7 +371,7 @@ void G4FTFParameters::InitForInteraction( const G4ParticleDefinition* particle,
 
   // Geometrical parameters
   SetTotalCrossSection( Xtotal );
-  SetElastisCrossSection( Xelastic );
+  SetElasticCrossSection( Xelastic );
   SetInelasticCrossSection( Xtotal - Xelastic );
 
   // Interactions with elastic and inelastic collisions

@@ -80,7 +80,7 @@ G4bool G4THnToolsManager<kDim1, tools::histo::h1d>::FillHT(
   tools::histo::h1d* ht, const G4HnInformation& hnInformation, 
   std::array<G4double, kDim1>& value, G4double weight)
 {
-  auto xInfo = hnInformation.GetHnDimensionInformation(kX);
+  const auto& xInfo = hnInformation.GetHnDimensionInformation(kX);
 
   // Apply hn information to value
   Update(value[kX], xInfo);

@@ -43,7 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fpDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
+:G4UImessenger(), fpDetector(Det)
 {
   fpTestDir = std::make_unique<G4UIdirectory>("/microyz/");
   fpTestDir->SetGuidance(" detector control.");

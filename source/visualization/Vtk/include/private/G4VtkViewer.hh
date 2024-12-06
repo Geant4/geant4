@@ -229,6 +229,7 @@ class G4VtkViewer : public G4VViewer
     void ExportVRMLScene(G4String);
     void ExportVTPScene(G4String);
     void ExportGLTFScene(G4String);
+    void ExportX3DScene(G4String);
     void ExportJSONRenderWindowScene(G4String);
     void ExportVTPCutter(G4String fileName);
     void ExportFormatStore(G4String fileName, G4String store);

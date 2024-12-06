@@ -49,7 +49,7 @@ class G4FTFParameters {
     // Set geometrical parameteres
     void SethNcmsEnergy( const G4double s );
     void SetTotalCrossSection( const G4double Xtotal );
-    void SetElastisCrossSection( const G4double Xelastic );
+    void SetElasticCrossSection( const G4double Xelastic );
     void SetInelasticCrossSection( const G4double Xinelastic );
     void SetProbabilityOfElasticScatt( const G4double Xtotal, const G4double Xelastic );
     void SetProbabilityOfElasticScatt( const G4double aValue );
@@ -242,7 +242,7 @@ inline void G4FTFParameters::SetTotalCrossSection( const G4double Xtotal ) {
   FTFXtotal = Xtotal;
 }
 
-inline void G4FTFParameters::SetElastisCrossSection( const G4double Xelastic ) {
+inline void G4FTFParameters::SetElasticCrossSection( const G4double Xelastic ) {
   FTFXelastic = Xelastic;
 }
 

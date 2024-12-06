@@ -39,7 +39,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(G4String name, G4int ni,
+G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(const G4String& name, G4int ni,
                                                    G4int nj, G4int nk,
                                                    G4int depi, G4int depj,
                                                    G4int depk)
@@ -51,7 +51,7 @@ G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(G4String name, G4int ni,
   SetNijk(ni, nj, nk);
 }
 
-G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(G4String name,
+G4PSPassageTrackLength3D::G4PSPassageTrackLength3D(const G4String& name,
                                                    const G4String& unit,
                                                    G4int ni, G4int nj, G4int nk,
                                                    G4int depi, G4int depj,

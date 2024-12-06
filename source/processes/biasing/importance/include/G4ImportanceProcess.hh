@@ -57,7 +57,7 @@ class G4PathFinder;
 class G4ImportanceProcess : public G4VProcess, public G4VTrackTerminator
 {
 
-public:  // with description
+ public:
 
   G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
                       const G4VIStore &aIstore,
@@ -69,13 +69,14 @@ public:  // with description
   virtual ~G4ImportanceProcess();
     // delete the G4ParticleChange
 
+  G4ImportanceProcess(const G4ImportanceProcess &) = delete;
+  G4ImportanceProcess &operator=(const G4ImportanceProcess &) = delete;
 
   //--------------------------------------------------------------
   // Set Parallel World
   //--------------------------------------------------------------
 
-  void SetParallelWorld(const G4String &parallelWorldName);
-  //  void SetParallelWorld(const G4VPhysicalVolume* parallelWorld);
+  void SetParallelWorld(const G4String& parallelWorldName);
 
   //--------------------------------------------------------------
   //     Process interface
@@ -86,19 +87,17 @@ public:  // with description
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-                                       G4double   previousStepSize,
+                                       G4double previousStepSize,
                                        G4ForceCondition* condition);
     // make process beeing forced
-  virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
+
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
     // manage the importance sampling in the "mass" geometry
 
   virtual void KillTrack() const;
     // used in case no scoring process follows that does the killing
 
-  virtual const G4String &GetName() const;
-
-
-public:  // without description
+  virtual const G4String& GetName() const;
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
 
@@ -112,21 +111,12 @@ public:  // without description
   AtRestGetPhysicalInteractionLength(const G4Track& ,
                                      G4ForceCondition*);
   
-  virtual G4VParticleChange* 
-  AtRestDoIt(const G4Track&, const G4Step&);
-
-
-  virtual G4VParticleChange* 
-  AlongStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
   
-private:
-  
-  G4ImportanceProcess(const G4ImportanceProcess &);
-  G4ImportanceProcess &operator=(const G4ImportanceProcess &);
-  
-private:
+ private:
 
-  void CopyStep(const G4Step & step);
+  void CopyStep(const G4Step& step);
 
   G4Step* fGhostStep = nullptr;
   G4StepPoint* fGhostPreStepPoint = nullptr;
@@ -138,7 +128,7 @@ private:
   G4SamplingPostStepAction* fPostStepAction = nullptr;
 
   G4TransportationManager* fTransportationManager = nullptr;
-  G4PathFinder*        fPathFinder = nullptr;
+  G4PathFinder* fPathFinder = nullptr;
 
   // -------------------------------
   // Navigation in the Ghost World:
@@ -156,7 +146,6 @@ private:
   G4bool               fParaflag = false;
   G4FieldTrack         fEndTrack = '0';
   ELimited             feLimited = kDoNot;
-
 };
 
 #endif

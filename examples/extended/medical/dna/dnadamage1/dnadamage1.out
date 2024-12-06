@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,7 +33,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -128,10 +127,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -595,22 +597,23 @@ Index : 0     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   2913 kByte
-    Total CPU time elapsed for geometry optimisation: 7.36 seconds
+    Total CPU time elapsed for geometry optimisation: 7.17 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      99.05         7.29         0.00         2914k VoxelStraight_logic
+      99.44         7.13         0.01         2914k VoxelStraight_logic
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00       2913k     20884    21735      54614         7.29    VoxelStraight_logic
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
+     100.00       2913k     20884    21735      54614         7.13    VoxelStraight_logic
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
 
 ----> Histogram file is opened in output.root
@@ -626,29 +629,29 @@ H3O^1 + Histone^0 -> Histone^0                    0                             
 ------------------------------------------------------------------------------------------------------------------------------------
 OH^-1 + Histone^0 -> Histone^0                    0                             2.4958
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                           2.95e+10                      0.506256
+°OH^0 + e_aq^-1 -> OH^-1                         2.95e+10                      0.506256
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                             4.4e+09                       0.207651
+°OH^0 + °OH^0 -> H2O2^0                         4.4e+09                       0.207651
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + H^0 -> No product                          1.44e+10                      0.194167
+°OH^0 + H^0 -> No product                        1.44e+10                      0.194167
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + Deoxyribose^0 -> Damaged_Deoxyribose^0     1.8e+09                       0.0849481
+°OH^0 + Deoxyribose^0 -> Damaged_Deoxyribose^0   1.8e+09                       0.0849481
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + Adenine^0 -> Damaged_Adenine^0             6.1e+09                       0.28788
+°OH^0 + Adenine^0 -> Damaged_Adenine^0           6.1e+09                       0.28788
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + Guanine^0 -> Damaged_Guanine^0             9.2e+09                       0.434179
+°OH^0 + Guanine^0 -> Damaged_Guanine^0           9.2e+09                       0.434179
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + Thymine^0 -> Damaged_Thymine^0             6.4e+09                       0.302038
+°OH^0 + Thymine^0 -> Damaged_Thymine^0           6.4e+09                       0.302038
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + Cytosine^0 -> Damaged_Cytosine^0           6.1e+09                       0.28788
+°OH^0 + Cytosine^0 -> Damaged_Cytosine^0         6.1e+09                       0.28788
 ------------------------------------------------------------------------------------------------------------------------------------
-OH^0 + Histone^0 -> Histone^0                     0                             2.4958
+°OH^0 + Histone^0 -> Histone^0                   0                             2.4958
 ------------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> OH^-1 + OH^-1 + H_2^0        5e+09                         0.134838
 ------------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + H^0 -> OH^-1 + H_2^0                    2.65e+10                      0.294265
 ------------------------------------------------------------------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0                  1.41e+10                      0.295745
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0                1.41e+10                      0.295745
 ------------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + Deoxyribose^0 -> Damaged_Deoxyribose^0  1e+07                         0.000269677
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -680,126 +683,126 @@ H2O2^0 + Histone^0 -> Histone^0                   0                             
 ------------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 *** G4Scheduler starts processing 
-At time :       1 ps  Reaction : OH^0 (-14623) + Guanine^0 (-2931) -> Damaged_Guanine^0 (-14637)
-At time :       1 ps  Reaction : OH^0 (-14622) + Thymine^0 (-2928) -> Damaged_Thymine^0 (-14638)
-At time :       1 ps  Reaction : OH^0 (-14558) + OH^0 (-14611) -> H2O2^0 (-14639)
-At time :       1 ps  Reaction : OH^0 (-14584) + Cytosine^0 (-2932) -> Damaged_Cytosine^0 (-14640)
-At time :       1 ps  Reaction : OH^0 (-14536) + OH^0 (-14544) -> H2O2^0 (-14641)
-At time :    1.35 ps  Reaction : OH^0 (-14577) + OH^0 (-14619) -> H2O2^0 (-14642)
-At time :    1.35 ps  Reaction : Cytosine^0 (-2636) + OH^0 (-14533) -> Damaged_Cytosine^0 (-14643)
-At time :     1.7 ps  Reaction : OH^0 (-14556) + OH^0 (-14609) -> H2O2^0 (-14644)
-At time :     1.7 ps  Reaction : OH^0 (-14567) + OH^0 (-14566) -> H2O2^0 (-14645)
+At time :       1 ps  Reaction : °OH^0 (-14623) + Guanine^0 (-2931) -> Damaged_Guanine^0 (-14637)
+At time :       1 ps  Reaction : °OH^0 (-14622) + Thymine^0 (-2928) -> Damaged_Thymine^0 (-14638)
+At time :       1 ps  Reaction : °OH^0 (-14558) + °OH^0 (-14611) -> H2O2^0 (-14639)
+At time :       1 ps  Reaction : °OH^0 (-14584) + Cytosine^0 (-2932) -> Damaged_Cytosine^0 (-14640)
+At time :       1 ps  Reaction : °OH^0 (-14536) + °OH^0 (-14544) -> H2O2^0 (-14641)
+At time :    1.35 ps  Reaction : °OH^0 (-14577) + °OH^0 (-14619) -> H2O2^0 (-14642)
+At time :    1.35 ps  Reaction : Cytosine^0 (-2636) + °OH^0 (-14533) -> Damaged_Cytosine^0 (-14643)
+At time :     1.7 ps  Reaction : °OH^0 (-14556) + °OH^0 (-14609) -> H2O2^0 (-14644)
+At time :     1.7 ps  Reaction : °OH^0 (-14567) + °OH^0 (-14566) -> H2O2^0 (-14645)
 At time :     2.4 ps  Reaction : Adenine^0 (-2959) + e_aq^-1 (-14535) -> Damaged_Adenine^0 (-14646)
-At time :    2.75 ps  Reaction : OH^0 (-14571) + OH^0 (-14613) -> H2O2^0 (-14647)
-At time :     3.1 ps  Reaction : OH^0 (-14617) + OH^0 (-14615) -> H2O2^0 (-14648)
-At time :     4.5 ps  Reaction : H^0 (-14634) + OH^0 (-14548) -> No product
-At time :     4.5 ps  Reaction : OH^0 (-14528) + OH^0 (-14529) -> H2O2^0 (-14649)
-At time :    6.25 ps  Reaction : OH^0 (-14563) + OH^0 (-14560) -> H2O2^0 (-14650)
-At time :     7.3 ps  Reaction : OH^0 (-14590) + OH^0 (-14588) -> H2O2^0 (-14651)
-At time :  10.581 ps  Reaction : OH^0 (-14564) + H^0 (-14608) -> No product
-At time :  12.281 ps  Reaction : H^0 (-14585) + OH^0 (-14580) -> No product
-At time :  14.281 ps  Reaction : OH^0 (-14582) + Thymine^0 (-2936) -> Damaged_Thymine^0 (-14652)
-At time :  15.281 ps  Reaction : OH^0 (-14586) + Guanine^0 (-2627) -> Damaged_Guanine^0 (-14653)
-At time :  26.281 ps  Reaction : OH^0 (-14603) + H^0 (-14604) -> No product
+At time :    2.75 ps  Reaction : °OH^0 (-14571) + °OH^0 (-14613) -> H2O2^0 (-14647)
+At time :     3.1 ps  Reaction : °OH^0 (-14617) + °OH^0 (-14615) -> H2O2^0 (-14648)
+At time :     4.5 ps  Reaction : H^0 (-14634) + °OH^0 (-14548) -> No product
+At time :     4.5 ps  Reaction : °OH^0 (-14528) + °OH^0 (-14529) -> H2O2^0 (-14649)
+At time :    6.25 ps  Reaction : °OH^0 (-14563) + °OH^0 (-14560) -> H2O2^0 (-14650)
+At time :     7.3 ps  Reaction : °OH^0 (-14590) + °OH^0 (-14588) -> H2O2^0 (-14651)
+At time :  10.581 ps  Reaction : °OH^0 (-14564) + H^0 (-14608) -> No product
+At time :  12.281 ps  Reaction : H^0 (-14585) + °OH^0 (-14580) -> No product
+At time :  14.281 ps  Reaction : °OH^0 (-14582) + Thymine^0 (-2936) -> Damaged_Thymine^0 (-14652)
+At time :  15.281 ps  Reaction : °OH^0 (-14586) + Guanine^0 (-2627) -> Damaged_Guanine^0 (-14653)
+At time :  26.281 ps  Reaction : °OH^0 (-14603) + H^0 (-14604) -> No product
 At time :  27.281 ps  Reaction : H^0 (-14593) + H^0 (-14545) -> H_2^0 (-14654)
 At time :  29.281 ps  Reaction : H^0 (-14591) + Cytosine^0 (-2628) -> Damaged_Cytosine^0 (-14655)
-At time :  68.632 ps  Reaction : OH^0 (-14552) + Guanine^0 (-12203) -> Damaged_Guanine^0 (-14656)
-At time :  77.632 ps  Reaction : OH^0 (-14572) + Guanine^0 (-7421) -> Damaged_Guanine^0 (-14657)
-At time :  79.632 ps  Reaction : OH^0 (-14592) + OH^0 (-14594) -> H2O2^0 (-14658)
+At time :  68.632 ps  Reaction : °OH^0 (-14552) + Guanine^0 (-12203) -> Damaged_Guanine^0 (-14656)
+At time :  77.632 ps  Reaction : °OH^0 (-14572) + Guanine^0 (-7421) -> Damaged_Guanine^0 (-14657)
+At time :  79.632 ps  Reaction : °OH^0 (-14592) + °OH^0 (-14594) -> H2O2^0 (-14658)
 At time :  86.632 ps  Reaction : H^0 (-14636) + Thymine^0 (-7746) -> Damaged_Thymine^0 (-14659)
-At time :  89.632 ps  Reaction : OH^0 (-14576) + e_aq^-1 (-14526) -> OH^-1 (-14660)
-At time :  95.632 ps  Reaction : OH^0 (-14599) + OH^0 (-14602) -> H2O2^0 (-14661)
+At time :  89.632 ps  Reaction : °OH^0 (-14576) + e_aq^-1 (-14526) -> OH^-1 (-14660)
+At time :  95.632 ps  Reaction : °OH^0 (-14599) + °OH^0 (-14602) -> H2O2^0 (-14661)
 At time :  137.69 ps  Reaction : H^0 (-14561) + H^0 (-14610) -> H_2^0 (-14662)
-At time :  173.69 ps  Reaction : OH^0 (-14554) + Deoxyribose^0 (-12213) -> Damaged_Deoxyribose^0 (-14663)
+At time :  173.69 ps  Reaction : °OH^0 (-14554) + Deoxyribose^0 (-12213) -> Damaged_Deoxyribose^0 (-14663)
 At time :   273.4 ps  Reaction : H^0 (-14583) + Deoxyribose^0 (-2945) -> Damaged_Deoxyribose^0 (-14664)
 At time :  376.29 ps  Reaction : Histone^0 (-6454) + H3O^1 (-14525) -> Histone^0 (-14665)
-At time :  385.29 ps  Reaction : Adenine^0 (-2623) + OH^0 (-14530) -> Damaged_Adenine^0 (-14666)
-At time :  400.29 ps  Reaction : H^0 (-14539) + OH^0 (-14631) -> No product
+At time :  385.29 ps  Reaction : Adenine^0 (-2623) + °OH^0 (-14530) -> Damaged_Adenine^0 (-14666)
+At time :  400.29 ps  Reaction : H^0 (-14539) + °OH^0 (-14631) -> No product
 At time :  406.29 ps  Reaction : H^0 (-14569) + Histone^0 (-7255) -> Histone^0 (-14667)
 At time :  409.29 ps  Reaction : H^0 (-14612) + Thymine^0 (-6901) -> Damaged_Thymine^0 (-14668)
 At time :   461.8 ps  Reaction : Histone^0 (-14667) + H^0 (-14559) -> Histone^0 (-14669)
 At time :   470.8 ps  Reaction : H^0 (-14555) + Deoxyribose^0 (-12250) -> Damaged_Deoxyribose^0 (-14670)
-At time :  556.82 ps  Reaction : H^0 (-14597) + OH^0 (-14606) -> No product
-At time :  593.21 ps  Reaction : OH^0 (-14607) + Deoxyribose^0 (-7744) -> Damaged_Deoxyribose^0 (-14671)
-At time :  614.21 ps  Reaction : OH^0 (-14540) + OH^0 (-14547) -> H2O2^0 (-14672)
+At time :  556.82 ps  Reaction : H^0 (-14597) + °OH^0 (-14606) -> No product
+At time :  593.21 ps  Reaction : °OH^0 (-14607) + Deoxyribose^0 (-7744) -> Damaged_Deoxyribose^0 (-14671)
+At time :  614.21 ps  Reaction : °OH^0 (-14540) + °OH^0 (-14547) -> H2O2^0 (-14672)
 At time :  617.21 ps  Reaction : H^0 (-14616) + Cytosine^0 (-6841) -> Damaged_Cytosine^0 (-14673)
 At time :  626.21 ps  Reaction : H3O^1 (-14573) + Histone^0 (-14669) -> Histone^0 (-14674)
-At time :  704.65 ps  Reaction : Adenine^0 (-2943) + OH^0 (-14524) -> Damaged_Adenine^0 (-14675)
+At time :  704.65 ps  Reaction : Adenine^0 (-2943) + °OH^0 (-14524) -> Damaged_Adenine^0 (-14675)
 At time :  717.62 ps  Reaction : H^0 (-14537) + Histone^0 (-1648) -> Histone^0 (-14676)
-At time :  732.77 ps  Reaction : OH^0 (-14632) + Guanine^0 (-13348) -> Damaged_Guanine^0 (-14677)
-At time :  751.78 ps  Reaction : OH^0 (-14635) + OH^0 (-14568) -> H2O2^0 (-14678)
+At time :  732.77 ps  Reaction : °OH^0 (-14632) + Guanine^0 (-13348) -> Damaged_Guanine^0 (-14677)
+At time :  751.78 ps  Reaction : °OH^0 (-14635) + °OH^0 (-14568) -> H2O2^0 (-14678)
 At time :  785.45 ps  Reaction : Histone^0 (-2449) + H3O^1 (-14534) -> Histone^0 (-14679)
 At time :  788.45 ps  Reaction : H^0 (-14579) + Deoxyribose^0 (-2065) -> Damaged_Deoxyribose^0 (-14680)
-At time :  804.05 ps  Reaction : OH^0 (-14553) + Thymine^0 (-12208) -> Damaged_Thymine^0 (-14681)
-At time :  983.44 ps  Reaction : OH^0 (-14542) + H^0 (-14620) -> No product
+At time :  804.05 ps  Reaction : °OH^0 (-14553) + Thymine^0 (-12208) -> Damaged_Thymine^0 (-14681)
+At time :  983.44 ps  Reaction : °OH^0 (-14542) + H^0 (-14620) -> No product
 At time :  1.0364 ns  Reaction : H_2^0 (-14654) + Histone^0 (-14676) -> Histone^0 (-14682)
-At time :  1.4601 ns  Reaction : OH^0 (-14578) + Guanine^0 (-2939) -> Damaged_Guanine^0 (-14683)
+At time :  1.4601 ns  Reaction : °OH^0 (-14578) + Guanine^0 (-2939) -> Damaged_Guanine^0 (-14683)
 At time :  1.4701 ns  Reaction : H^0 (-14589) + Deoxyribose^0 (-2049) -> Damaged_Deoxyribose^0 (-14684)
 At time :  1.4901 ns  Reaction : H_2^0 (-14562) + Histone^0 (-14674) -> Histone^0 (-14685)
 At time :  1.5001 ns  Reaction : H^0 (-14543) + Histone^0 (-14665) -> Histone^0 (-14686)
 At time :  1.5401 ns  Reaction : Thymine^0 (-3421) + e_aq^-1 (-14532) -> Damaged_Thymine^0 (-14687)
 At time :  1.6664 ns  Reaction : Histone^0 (-14679) + H^0 (-14618) -> Histone^0 (-14688)
-At time :  1.7664 ns  Reaction : OH^0 (-14538) + Guanine^0 (-12507) -> Damaged_Guanine^0 (-14689)
+At time :  1.7664 ns  Reaction : °OH^0 (-14538) + Guanine^0 (-12507) -> Damaged_Guanine^0 (-14689)
 At time :  1.9524 ns  Reaction : H^0 (-14541) + Adenine^0 (-8538) -> Damaged_Adenine^0 (-14690)
-At time :  2.0342 ns  Reaction : OH^0 (-14549) + Cytosine^0 (-12492) -> Damaged_Cytosine^0 (-14691)
+At time :  2.0342 ns  Reaction : °OH^0 (-14549) + Cytosine^0 (-12492) -> Damaged_Cytosine^0 (-14691)
 At time :  2.3763 ns  Reaction : H2O2^0 (-14642) + Histone^0 (-14685) -> Histone^0 (-14692)
 At time :  2.4699 ns  Reaction : Histone^0 (-3250) + H3O^1 (-14531) -> Histone^0 (-14693)
 *** G4Scheduler ends at time : 2.5 ns 
 ___________________________________
 Physics stage ends
 *** G4Scheduler starts processing 
-At time :       1 ps  Reaction : OH^0 (-14590) + OH^0 (-14661) -> H2O2^0 (-14675)
-At time :       1 ps  Reaction : e_aq^-1 (-24) + OH^0 (-14641) -> OH^-1 (-14676)
-At time :       1 ps  Reaction : OH^0 (-14638) + Cytosine^0 (-2100) -> Damaged_Cytosine^0 (-14677)
-At time :       1 ps  Reaction : OH^0 (-14624) + OH^0 (-14626) -> H2O2^0 (-14678)
-At time :       1 ps  Reaction : OH^0 (-14622) + Guanine^0 (-6881) -> Damaged_Guanine^0 (-14679)
-At time :       1 ps  Reaction : OH^0 (-14558) + OH^0 (-14610) -> H2O2^0 (-14680)
-At time :       1 ps  Reaction : OH^0 (-14570) + OH^0 (-14598) -> H2O2^0 (-14681)
-At time :       1 ps  Reaction : Guanine^0 (-2099) + OH^0 (-14578) -> Damaged_Guanine^0 (-14682)
-At time :     1.7 ps  Reaction : OH^0 (-14572) + OH^0 (-14617) -> H2O2^0 (-14683)
+At time :       1 ps  Reaction : °OH^0 (-14590) + °OH^0 (-14661) -> H2O2^0 (-14675)
+At time :       1 ps  Reaction : e_aq^-1 (-24) + °OH^0 (-14641) -> OH^-1 (-14676)
+At time :       1 ps  Reaction : °OH^0 (-14638) + Cytosine^0 (-2100) -> Damaged_Cytosine^0 (-14677)
+At time :       1 ps  Reaction : °OH^0 (-14624) + °OH^0 (-14626) -> H2O2^0 (-14678)
+At time :       1 ps  Reaction : °OH^0 (-14622) + Guanine^0 (-6881) -> Damaged_Guanine^0 (-14679)
+At time :       1 ps  Reaction : °OH^0 (-14558) + °OH^0 (-14610) -> H2O2^0 (-14680)
+At time :       1 ps  Reaction : °OH^0 (-14570) + °OH^0 (-14598) -> H2O2^0 (-14681)
+At time :       1 ps  Reaction : Guanine^0 (-2099) + °OH^0 (-14578) -> Damaged_Guanine^0 (-14682)
+At time :     1.7 ps  Reaction : °OH^0 (-14572) + °OH^0 (-14617) -> H2O2^0 (-14683)
 At time :     2.4 ps  Reaction : H^0 (-14637) + Histone^0 (-1673) -> Histone^0 (-14684)
-At time :     2.4 ps  Reaction : OH^0 (-14566) + OH^0 (-14594) -> H2O2^0 (-14685)
-At time :    3.45 ps  Reaction : OH^0 (-14616) + OH^0 (-14612) -> H2O2^0 (-14686)
-At time :    3.45 ps  Reaction : Deoxyribose^0 (-11361) + OH^0 (-14599) -> Damaged_Deoxyribose^0 (-14687)
-At time :    3.45 ps  Reaction : OH^0 (-14562) + OH^0 (-14588) -> H2O2^0 (-14688)
-At time :  9.5926 ps  Reaction : OH^0 (-14583) + OH^0 (-14580) -> H2O2^0 (-14689)
-At time :  13.343 ps  Reaction : OH^0 (-14564) + OH^0 (-14592) -> H2O2^0 (-14690)
-At time :  14.343 ps  Reaction : Guanine^0 (-2107) + OH^0 (-14642) -> Damaged_Guanine^0 (-14691)
-At time :  14.343 ps  Reaction : OH^0 (-14549) + OH^0 (-14621) -> H2O2^0 (-14692)
-At time :  16.343 ps  Reaction : OH^0 (-14636) + OH^0 (-14670) -> H2O2^0 (-14693)
+At time :     2.4 ps  Reaction : °OH^0 (-14566) + °OH^0 (-14594) -> H2O2^0 (-14685)
+At time :    3.45 ps  Reaction : °OH^0 (-14616) + °OH^0 (-14612) -> H2O2^0 (-14686)
+At time :    3.45 ps  Reaction : Deoxyribose^0 (-11361) + °OH^0 (-14599) -> Damaged_Deoxyribose^0 (-14687)
+At time :    3.45 ps  Reaction : °OH^0 (-14562) + °OH^0 (-14588) -> H2O2^0 (-14688)
+At time :  9.5926 ps  Reaction : °OH^0 (-14583) + °OH^0 (-14580) -> H2O2^0 (-14689)
+At time :  13.343 ps  Reaction : °OH^0 (-14564) + °OH^0 (-14592) -> H2O2^0 (-14690)
+At time :  14.343 ps  Reaction : Guanine^0 (-2107) + °OH^0 (-14642) -> Damaged_Guanine^0 (-14691)
+At time :  14.343 ps  Reaction : °OH^0 (-14549) + °OH^0 (-14621) -> H2O2^0 (-14692)
+At time :  16.343 ps  Reaction : °OH^0 (-14636) + °OH^0 (-14670) -> H2O2^0 (-14693)
 At time :  16.343 ps  Reaction : Histone^0 (-6479) + H^0 (-14575) -> Histone^0 (-14694)
-At time :  17.343 ps  Reaction : OH^0 (-14601) + e_aq^-1 (-128) -> OH^-1 (-14695)
+At time :  17.343 ps  Reaction : °OH^0 (-14601) + e_aq^-1 (-128) -> OH^-1 (-14695)
 At time :  23.343 ps  Reaction : Adenine^0 (-2103) + H^0 (-14579) -> Damaged_Adenine^0 (-14696)
-At time :  27.343 ps  Reaction : Cytosine^0 (-7799) + OH^0 (-14668) -> Damaged_Cytosine^0 (-14697)
-At time :  28.343 ps  Reaction : OH^0 (-14576) + H^0 (-14577) -> No product
+At time :  27.343 ps  Reaction : Cytosine^0 (-7799) + °OH^0 (-14668) -> Damaged_Cytosine^0 (-14697)
+At time :  28.343 ps  Reaction : °OH^0 (-14576) + H^0 (-14577) -> No product
 At time :  31.343 ps  Reaction : e_aq^-1 (-146) + Guanine^0 (-2123) -> Damaged_Guanine^0 (-14698)
-At time :  32.343 ps  Reaction : OH^0 (-14645) + H^0 (-14648) -> No product
-At time :  38.343 ps  Reaction : H^0 (-14656) + OH^0 (-14657) -> No product
+At time :  32.343 ps  Reaction : °OH^0 (-14645) + H^0 (-14648) -> No product
+At time :  38.343 ps  Reaction : H^0 (-14656) + °OH^0 (-14657) -> No product
 At time :  38.343 ps  Reaction : e_aq^-1 (-14551) + H^0 (-14623) -> OH^-1 (-14699) + H_2^0 (-14700)
 At time :  49.479 ps  Reaction : OH^-1 (-14676) + H3O^1 (-14671) -> No product
-At time :  53.479 ps  Reaction : OH^0 (-14653) + OH^0 (-14673) -> H2O2^0 (-14701)
-At time :  54.479 ps  Reaction : OH^0 (-14630) + Adenine^0 (-6581) -> Damaged_Adenine^0 (-14702)
-At time :  54.479 ps  Reaction : OH^0 (-14628) + H^0 (-14627) -> No product
-At time :  55.479 ps  Reaction : Thymine^0 (-6590) + OH^0 (-14574) -> Damaged_Thymine^0 (-14703)
-At time :  58.479 ps  Reaction : H^0 (-14563) + OH^0 (-14587) -> No product
+At time :  53.479 ps  Reaction : °OH^0 (-14653) + °OH^0 (-14673) -> H2O2^0 (-14701)
+At time :  54.479 ps  Reaction : °OH^0 (-14630) + Adenine^0 (-6581) -> Damaged_Adenine^0 (-14702)
+At time :  54.479 ps  Reaction : °OH^0 (-14628) + H^0 (-14627) -> No product
+At time :  55.479 ps  Reaction : Thymine^0 (-6590) + °OH^0 (-14574) -> Damaged_Thymine^0 (-14703)
+At time :  58.479 ps  Reaction : H^0 (-14563) + °OH^0 (-14587) -> No product
 At time :  64.479 ps  Reaction : Histone^0 (-14684) + H^0 (-14650) -> Histone^0 (-14704)
 At time :  68.479 ps  Reaction : H^0 (-14602) + H^0 (-14571) -> H_2^0 (-14705)
-At time :  72.479 ps  Reaction : Thymine^0 (-11352) + OH^0 (-14597) -> Damaged_Thymine^0 (-14706)
-At time :  77.915 ps  Reaction : H^0 (-14639) + OH^0 (-14643) -> No product
+At time :  72.479 ps  Reaction : Thymine^0 (-11352) + °OH^0 (-14597) -> Damaged_Thymine^0 (-14706)
+At time :  77.915 ps  Reaction : H^0 (-14639) + °OH^0 (-14643) -> No product
 At time :  78.915 ps  Reaction : Histone^0 (-14694) + H3O^1 (-14550) -> Histone^0 (-14707)
-At time :  113.41 ps  Reaction : OH^0 (-14620) + Deoxyribose^0 (-6880) -> Damaged_Deoxyribose^0 (-14708)
-At time :  113.41 ps  Reaction : H^0 (-14609) + OH^0 (-14607) -> No product
+At time :  113.41 ps  Reaction : °OH^0 (-14620) + Deoxyribose^0 (-6880) -> Damaged_Deoxyribose^0 (-14708)
+At time :  113.41 ps  Reaction : H^0 (-14609) + °OH^0 (-14607) -> No product
 At time :  128.41 ps  Reaction : OH^-1 (-14699) + H3O^1 (-14667) -> No product
 At time :  140.41 ps  Reaction : Deoxyribose^0 (-11941) + H^0 (-14593) -> Damaged_Deoxyribose^0 (-14709)
 At time :  161.41 ps  Reaction : e_aq^-1 (-134) + Adenine^0 (-7850) -> Damaged_Adenine^0 (-14710)
 At time :  182.41 ps  Reaction : H^0 (-14625) + Histone^0 (-14707) -> Histone^0 (-14711)
-At time :  213.17 ps  Reaction : H^0 (-14646) + OH^0 (-14651) -> No product
-At time :  243.17 ps  Reaction : OH^0 (-14568) + Deoxyribose^0 (-11645) -> Damaged_Deoxyribose^0 (-14712)
-At time :  252.17 ps  Reaction : OH^0 (-14633) + Deoxyribose^0 (-6595) -> Damaged_Deoxyribose^0 (-14713)
-At time :  258.17 ps  Reaction : e_aq^-1 (-142) + H2O2^0 (-14693) -> OH^-1 (-14714) + OH^0 (-14715)
+At time :  213.17 ps  Reaction : H^0 (-14646) + °OH^0 (-14651) -> No product
+At time :  243.17 ps  Reaction : °OH^0 (-14568) + Deoxyribose^0 (-11645) -> Damaged_Deoxyribose^0 (-14712)
+At time :  252.17 ps  Reaction : °OH^0 (-14633) + Deoxyribose^0 (-6595) -> Damaged_Deoxyribose^0 (-14713)
+At time :  258.17 ps  Reaction : e_aq^-1 (-142) + H2O2^0 (-14693) -> OH^-1 (-14714) + °OH^0 (-14715)
 At time :  285.17 ps  Reaction : H^0 (-14629) + Histone^0 (-14711) -> Histone^0 (-14716)
-At time :  300.17 ps  Reaction : Guanine^0 (-2660) + OH^0 (-14672) -> Damaged_Guanine^0 (-14717)
-At time :  336.17 ps  Reaction : Deoxyribose^0 (-1765) + OH^0 (-14647) -> Damaged_Deoxyribose^0 (-14718)
+At time :  300.17 ps  Reaction : Guanine^0 (-2660) + °OH^0 (-14672) -> Damaged_Guanine^0 (-14717)
+At time :  336.17 ps  Reaction : Deoxyribose^0 (-1765) + °OH^0 (-14647) -> Damaged_Deoxyribose^0 (-14718)
 At time :  372.17 ps  Reaction : H^0 (-14567) + Thymine^0 (-11360) -> Damaged_Thymine^0 (-14719)
 At time :  456.47 ps  Reaction : Deoxyribose^0 (-11406) + H^0 (-14604) -> Damaged_Deoxyribose^0 (-14720)
 At time :  465.47 ps  Reaction : Histone^0 (-11285) + H^0 (-14662) -> Histone^0 (-14721)
@@ -810,38 +813,38 @@ At time :  674.53 ps  Reaction : H3O^1 (-14553) + OH^-1 (-14723) -> No product
 At time :   726.1 ps  Reaction : H^0 (-14631) + Deoxyribose^0 (-6599) -> Damaged_Deoxyribose^0 (-14726)
 At time :   732.1 ps  Reaction : H^0 (-14613) + Histone^0 (-14721) -> Histone^0 (-14727)
 At time :  738.78 ps  Reaction : H^0 (-14559) + H^0 (-14565) -> H_2^0 (-14728)
-At time :  791.88 ps  Reaction : Adenine^0 (-11327) + OH^0 (-14666) -> Damaged_Adenine^0 (-14729)
-At time :  835.39 ps  Reaction : H^0 (-14573) + OH^0 (-14606) -> No product
+At time :  791.88 ps  Reaction : Adenine^0 (-11327) + °OH^0 (-14666) -> Damaged_Adenine^0 (-14729)
+At time :  835.39 ps  Reaction : H^0 (-14573) + °OH^0 (-14606) -> No product
 At time :  849.84 ps  Reaction : Histone^0 (-14725) + H^0 (-14654) -> Histone^0 (-14730)
 At time :  910.89 ps  Reaction : OH^-1 (-14714) + H3O^1 (-14669) -> No product
 At time :  1.0233 ns  Reaction : H^0 (-14611) + Deoxyribose^0 (-11330) -> Damaged_Deoxyribose^0 (-14731)
-At time :  1.1533 ns  Reaction : Cytosine^0 (-11356) + OH^0 (-14603) -> Damaged_Cytosine^0 (-14732)
+At time :  1.1533 ns  Reaction : Cytosine^0 (-11356) + °OH^0 (-14603) -> Damaged_Cytosine^0 (-14732)
 At time :  1.1633 ns  Reaction : Histone^0 (-14716) + OH^-1 (-14695) -> Histone^0 (-14733)
 At time :  1.1733 ns  Reaction : Histone^0 (-12086) + H^0 (-14600) -> Histone^0 (-14734)
 At time :  1.2833 ns  Reaction : Histone^0 (-7280) + H_2^0 (-14705) -> Histone^0 (-14735)
 At time :  1.3133 ns  Reaction : H3O^1 (-14634) + Histone^0 (-2474) -> Histone^0 (-14736)
 At time :  1.3233 ns  Reaction : H_2^0 (-14619) + Histone^0 (-14735) -> Histone^0 (-14737)
-At time :  1.3738 ns  Reaction : H^0 (-14595) + OH^0 (-14663) -> No product
+At time :  1.3738 ns  Reaction : H^0 (-14595) + °OH^0 (-14663) -> No product
 At time :  1.3738 ns  Reaction : Thymine^0 (-11448) + e_aq^-1 (-137) -> Damaged_Thymine^0 (-14738)
 At time :  1.3838 ns  Reaction : H3O^1 (-14632) + Histone^0 (-14737) -> Histone^0 (-14739)
-At time :  1.6438 ns  Reaction : OH^0 (-14555) + Thymine^0 (-11952) -> Damaged_Thymine^0 (-14740)
+At time :  1.6438 ns  Reaction : °OH^0 (-14555) + Thymine^0 (-11952) -> Damaged_Thymine^0 (-14740)
 At time :  1.7138 ns  Reaction : Deoxyribose^0 (-11669) + H^0 (-14591) -> Damaged_Deoxyribose^0 (-14741)
-At time :   1.896 ns  Reaction : OH^0 (-14608) + Guanine^0 (-7774) -> Damaged_Guanine^0 (-14742)
+At time :   1.896 ns  Reaction : °OH^0 (-14608) + Guanine^0 (-7774) -> Damaged_Guanine^0 (-14742)
 *** G4Scheduler ends at time : 2.5 ns 
 ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=148.090000s Real=154.884010s Sys=0.080000s
+  User=152.190000s Real=158.493074s Sys=0.060000s
 
 ----> Histograms are saved
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xdb1a00
-UserPhysicsList deleted 0xdb3600
-UserActionInitialization deleted 0x1065ed0
+UserDetectorConstruction deleted 0x188dc90
+UserPhysicsList deleted 0x188e930
+UserActionInitialization deleted 0x1b41040
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -851,7 +854,7 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 29119
+Total navigation history collections cleaned: 29120
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 27.9 MB

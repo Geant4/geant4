@@ -62,12 +62,12 @@ G4VtkMessenger::G4VtkMessenger()
   fpCommandExport->SetGuidance("Export a screenshot or OBJ file of current Vtk viewer");
 
   // File type for export
-  auto parameterExport = new G4UIparameter("format", 's', omitable = true);
-  fpCommandExport->SetGuidance("File type (jpg,tiff,eps,ps,obj,vtp,gltf,vrml)");
+  auto parameterExport = new G4UIparameter("format", 's', omitable = false);
+  fpCommandExport->SetGuidance("File type (jpg,tiff,eps,ps,obj,vtp,gltf,vrml,x3d)");
   fpCommandExport->SetParameter(parameterExport);
 
   // File name for export
-  parameterExport = new G4UIparameter("file-name", 's', omitable = true);
+  parameterExport = new G4UIparameter("file-name", 's', omitable = false);
   fpCommandExport->SetGuidance("File name");
   fpCommandExport->SetParameter(parameterExport);
 
@@ -332,6 +332,8 @@ void G4VtkMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       pVtkViewer->ExportVTPScene(name);
     else if (format == "gltf")
       pVtkViewer->ExportGLTFScene(name);
+    else if (format == "x3d")
+      pVtkViewer->ExportX3DScene(name);
     else
       G4cout << "Unknown /vis/vtk/export file format" << G4endl;
   }

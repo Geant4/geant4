@@ -188,6 +188,11 @@ void Run::Merge(const G4Run* run)
     fLateralEleak[k] += localRun->fLateralEleak[k];
   }
 
+  for (G4int k=0; k<kMaxAbsor; k++) {
+    fEnergyDeposit[k].insert(fEnergyDeposit[k].end(),
+    localRun->fEnergyDeposit[k].begin(), localRun->fEnergyDeposit[k].end());
+  }  
+
   fChargedStep += localRun->fChargedStep;
   fNeutralStep += localRun->fNeutralStep;
 

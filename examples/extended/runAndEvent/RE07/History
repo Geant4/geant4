@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-20 Gabriele Cosmo (exampleRE07-V11-02-01)
+- In TrackingManagerHelper, fixed compilation warning on clang-19 for unused
+  variable. Fixed use of G4 types.
+
 ## 2024-05-02 Gabriele Cosmo (exampleRE07-V11-02-00)
 - Fixed compilation warnings for potentially initialised local variable
   in EmStandardPhysicsTrackingManager::PostStepDoIt().

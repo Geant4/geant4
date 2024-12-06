@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-13 John Allison (greps-V11-02-06)
+- G4AttDef.hh: Deprecate output operator<< that uses pointer.
+- G4VMarker.cc: Minor improvements to messages in output operator<<.
+- G4Visible.cc: Minor improvements to messages in output operator<<.
+
+## 2024-09-02 Evgueni Tcherniaev (greps-V11-02-05)
+- BooleanProcessor.src: fixed defect reported by Coverity.
+
+## 2024-07-10 Evgueni Tcherniaev (greps-V11-02-04)
+- BooleanProcessor.src, HepPolyhedronProcessor.src:
+  - Fixed defects reported by Coverity.
+
+## 2024-05-31 Ben Morgan (greps-V11-02-03)
+- Provide all base class interfaces in Seq and MT mode, with an empty implementation
+  modelling the Sequential case.
+
 ## 2024-05-30 John Allison (greps-V11-02-02)
 - G4VVisManager:
   - Add EventReadyForVis, used by G4SubEvtRunManager.

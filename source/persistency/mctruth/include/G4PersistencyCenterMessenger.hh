@@ -72,8 +72,8 @@ class G4PersistencyCenterMessenger : public G4UImessenger
     G4UIcmdWithAnInteger* verboseCmd = nullptr;
     G4UIcmdWithAString* select = nullptr;
     G4UIcmdWithAString* regHitIO = nullptr;
-    std::vector<std::string> wrObj;
-    std::vector<std::string> rdObj;
+    std::vector<G4String> wrObj;
+    std::vector<G4String> rdObj;
     std::vector<G4UIcmdWithAString*> storeObj;
     std::vector<G4UIcmdWithAString*> setWrFile;
     std::vector<G4UIcmdWithAString*> setRdFile;

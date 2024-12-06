@@ -23,20 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleChangeForOccurenceBiasing
+// --------------------------------------------------------------------
+
 #include "G4ParticleChangeForOccurenceBiasing.hh"
 
-G4ParticleChangeForOccurenceBiasing::G4ParticleChangeForOccurenceBiasing(G4String name)
+G4ParticleChangeForOccurenceBiasing::
+G4ParticleChangeForOccurenceBiasing(const G4String& name)
   : G4VParticleChange(),
-    fName(name),
-    fWrappedParticleChange(0),
-    fOccurenceWeightForNonInteraction(-1.0),
-    fOccurenceWeightForInteraction(-1.0)
+    fName(name)
 {}
 
-G4ParticleChangeForOccurenceBiasing::~G4ParticleChangeForOccurenceBiasing()
-{}
-
-void G4ParticleChangeForOccurenceBiasing::SetWrappedParticleChange(G4VParticleChange* wpc)
+void G4ParticleChangeForOccurenceBiasing::
+SetWrappedParticleChange(G4VParticleChange* wpc)
 {
   fWrappedParticleChange = wpc;
 }
@@ -45,14 +44,13 @@ void G4ParticleChangeForOccurenceBiasing::StealSecondaries()
 {
   SetNumberOfSecondaries( fWrappedParticleChange->GetNumberOfSecondaries() );
   for (G4int isecond = 0; isecond < fWrappedParticleChange->GetNumberOfSecondaries(); isecond++) 
-    {
-      G4Track* secondary =  fWrappedParticleChange->GetSecondary(isecond);
-      secondary->SetWeight ( secondary->GetWeight() * fOccurenceWeightForInteraction );
-      AddSecondary( secondary );
-    }
+  {
+    G4Track* secondary =  fWrappedParticleChange->GetSecondary(isecond);
+    secondary->SetWeight ( secondary->GetWeight() * fOccurenceWeightForInteraction );
+    AddSecondary( secondary );
+  }
   fWrappedParticleChange->Clear();
 }
-
 
 G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForAtRest(G4Step* step)
 {
@@ -62,12 +60,13 @@ G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForAtRest(G4Step* step)
 G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForAlongStep(G4Step* step)
 {
   // -- make particle change of wrapped process to apply its changes:
-  if ( fWrappedParticleChange ) fWrappedParticleChange->UpdateStepForAlongStep( step );
-  
+  if ( fWrappedParticleChange )
+    fWrappedParticleChange->UpdateStepForAlongStep( step );
+
   // -- multiply parent weight by weight due to occurrence biasing:
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
-  postStepPoint->SetWeight( postStepPoint->GetWeight() * fOccurenceWeightForNonInteraction );
-  
+  postStepPoint->SetWeight( postStepPoint->GetWeight()*fOccurenceWeightForNonInteraction );
+
   return step;
 }
 
@@ -77,7 +76,7 @@ G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForPostStep(G4Step* step)
   fWrappedParticleChange->UpdateStepForPostStep(step);
   // -- then apply weight correction due to occurrence biasing:
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
-  postStepPoint->SetWeight( postStepPoint->GetWeight() * fOccurenceWeightForInteraction );
+  postStepPoint->SetWeight( postStepPoint->GetWeight()*fOccurenceWeightForInteraction );
 
   return step;
 }

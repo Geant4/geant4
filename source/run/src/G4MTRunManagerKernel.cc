@@ -174,7 +174,7 @@ void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
     }
   }
   // Now initialise worker part of shared objects (geometry/physics)
-  wThreadContext->BuildGeometryAndPhysicsVector();
+  G4WorkerThread::BuildGeometryAndPhysicsVector();
   G4WorkerRunManager* wrm = masterRM->GetUserWorkerThreadInitialization()->CreateWorkerRunManager();
   wrm->SetWorkerThread(wThreadContext);
   G4AutoLock wrmm(&workerRMMutex);
@@ -229,7 +229,7 @@ void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
   //===============================
   // Step-7: Cleanup split classes
   //===============================
-  wThreadContext->DestroyGeometryAndPhysicsVector();
+  G4WorkerThread::DestroyGeometryAndPhysicsVector();
   wThreadContext = nullptr;
 
   G4Threading::WorkerThreadLeavesPool();

@@ -27,8 +27,6 @@
 
 // /vis/multithreading commands - John Allison  29th September 2015
 
-#ifdef G4MULTITHREADED
-
 #ifndef G4VISCOMMANDSMULTITHREADING_HH
 #define G4VISCOMMANDSMULTITHREADING_HH
 
@@ -64,7 +62,5 @@ private:
   (const G4VisCommandMultithreadingMaxEventQueueSize&);
   G4UIcmdWithAnInteger* fpCommand;
 };
-
-#endif
 
 #endif

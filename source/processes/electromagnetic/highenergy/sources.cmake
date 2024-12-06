@@ -6,6 +6,9 @@ geant4_add_module(G4emhighenergy
     G4AnnihiToMuPair.hh
     G4BetheBlochNoDeltaModel.hh
     G4BraggNoDeltaModel.hh
+    G4DynamicParticleFluctuation.hh
+    G4DynamicParticleIonisation.hh
+    G4DynamicParticleMSC.hh
     G4GammaConversionToMuons.hh
     G4ICRU73NoDeltaModel.hh
     G4Vee2hadrons.hh
@@ -30,6 +33,9 @@ geant4_add_module(G4emhighenergy
     G4AnnihiToMuPair.cc
     G4BetheBlochNoDeltaModel.cc
     G4BraggNoDeltaModel.cc
+    G4DynamicParticleFluctuation.cc
+    G4DynamicParticleIonisation.cc
+    G4DynamicParticleMSC.cc
     G4GammaConversionToMuons.cc
     G4ICRU73NoDeltaModel.cc
     G4ee2KChargedModel.cc

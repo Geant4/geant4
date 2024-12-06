@@ -23,8 +23,9 @@
 //
 
 #include "PTL/Threading.hh"
-#include "PTL/Types.hh"
-#include "PTL/Utility.hh"
+
+#include "PTL/ConsumeParameters.hh"
+#include "PTL/Macros.hh"
 
 #if defined(PTL_WINDOWS)
 #    include <windows.h>
@@ -36,22 +37,25 @@
 
 #if defined(PTL_LINUX)
 #    include <fstream>
+#    include <set>
 #endif
 
-using namespace PTL;
+#include <cstddef>
+#include <thread>
 
 //======================================================================================//
 
 namespace
 {
-thread_local int ThreadID = Threading::MASTER_ID;
-
+thread_local int ThreadID = PTL::Threading::MASTER_ID;
 }  // namespace
 
 //======================================================================================//
 
+namespace PTL
+{
 Pid_t
-Threading::GetPidId()
+GetPidId()
 {
     // In multithreaded mode return Thread ID
     return std::this_thread::get_id();
@@ -60,7 +64,7 @@ Threading::GetPidId()
 //======================================================================================//
 
 unsigned
-Threading::GetNumberOfCores()
+GetNumberOfCores()
 {
     return std::thread::hardware_concurrency();
 }
@@ -68,7 +72,7 @@ Threading::GetNumberOfCores()
 //======================================================================================//
 
 unsigned
-Threading::GetNumberOfPhysicalCpus()
+GetNumberOfPhysicalCpus()
 {
 #if defined(PTL_MACOS)
     int    count;
@@ -96,7 +100,7 @@ Threading::GetNumberOfPhysicalCpus()
                     while((_pos = line.find(itr)) != _npos)
                         line = line.replace(_pos, itr.length(), "");
                 }
-                core_ids.insert(line);
+                core_ids.insert(std::move(line));
             }
         }
         core_id_count = static_cast<unsigned>(core_ids.size());
@@ -112,13 +116,13 @@ Threading::GetNumberOfPhysicalCpus()
 //======================================================================================//
 
 void
-Threading::SetThreadId(int value)
+SetThreadId(int value)
 {
     ThreadID = value;
 }
 
 int
-Threading::GetThreadId()
+GetThreadId()
 {
     return ThreadID;
 }
@@ -126,7 +130,7 @@ Threading::GetThreadId()
 //======================================================================================//
 
 bool
-Threading::SetPinAffinity(int _cpu)
+SetPinAffinity(int _cpu)
 {
 #if defined(__linux__) || defined(_AIX)
     cpu_set_t _cpu_set{};
@@ -143,7 +147,7 @@ Threading::SetPinAffinity(int _cpu)
 //======================================================================================//
 
 bool
-Threading::SetThreadPriority(int _prio)
+SetThreadPriority(int _prio)
 {
 #if defined(__linux__) || defined(_AIX)
     return (pthread_setschedprio(pthread_self(), _prio) == 0);
@@ -156,7 +160,7 @@ Threading::SetThreadPriority(int _prio)
 //======================================================================================//
 
 bool
-Threading::SetPinAffinity(int _cpu, NativeThread& _t)
+SetPinAffinity(int _cpu, NativeThread& _t)
 {
 #if defined(__linux__) || defined(_AIX)
     cpu_set_t _cpu_set{};
@@ -173,7 +177,7 @@ Threading::SetPinAffinity(int _cpu, NativeThread& _t)
 //======================================================================================//
 
 bool
-Threading::SetThreadPriority(int _prio, NativeThread& _t)
+SetThreadPriority(int _prio, NativeThread& _t)
 {
 #if defined(__linux__) || defined(_AIX)
     return (pthread_setschedprio(static_cast<pthread_t>(_t), _prio) == 0);
@@ -184,3 +188,5 @@ Threading::SetThreadPriority(int _prio, NativeThread& _t)
 }
 
 //======================================================================================//
+
+}  // namespace PTL

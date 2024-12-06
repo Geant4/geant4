@@ -65,35 +65,29 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::instance = nullptr;
+
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
-  static thread_local auto* _instance = new G4HadronicProcessStore{};
-  return _instance;
+  if (nullptr == instance) {
+    static G4ThreadLocalSingleton<G4HadronicProcessStore> inst;
+    instance = inst.Instance();
+  }
+  return instance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4HadronicProcessStore::~G4HadronicProcessStore()
 {
-  Clean();
   delete theEPTestMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void G4HadronicProcessStore::Clean()
-{
-  for (auto const& itr : process)
-    delete itr;
-  process.clear();
-
-  for (auto const& itr : extraProcess)
-    delete itr;
-  extraProcess.clear();
-
-  for (auto const& it : ep_map)
-    delete it.second;
-
+  if (!process.empty()) {
+    for (auto const& itr : process) {
+      delete itr;
+    }
+    process.clear();
+  }
+  ep_map.clear();
   m_map.clear();
   p_map.clear();
 
@@ -464,7 +458,6 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
   for(G4int i=0; i<n_proc; ++i) {
     if(process[i] == proc) {
       process[i] = nullptr;
-      DeRegisterExtraProcess((G4VProcess*)proc);      
       return;
     }
   }

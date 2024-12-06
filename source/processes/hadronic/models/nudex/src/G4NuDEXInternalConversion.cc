@@ -214,6 +214,7 @@ G4double G4NuDEXInternalConversion::GetICC(G4double Ene,G4int multipolarity,G4in
 G4NuDEXInternalConversion::G4NuDEXInternalConversion(G4int Z){
   theZ=Z;
   NShells=0;
+  Ne=Ng=0;
   for(G4int i=0;i<ICC_MAXNSHELLS;i++){
     Eg[i]=0; np[i]=0;  BindingEnergy[i]=0;
     for(G4int j=0;j<ICC_NMULTIP;j++){

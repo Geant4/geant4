@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paternò (modifications & testing)
 
 #include "G4ChannelingFastSimCrystalData.hh"
 #include "G4SystemOfUnits.hh"
@@ -35,8 +37,10 @@ G4ChannelingFastSimCrystalData::G4ChannelingFastSimCrystalData()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ChannelingFastSimCrystalData::SetMaterialProperties(const G4Material *crystal,
-							   const G4String &lattice)
+void G4ChannelingFastSimCrystalData::SetMaterialProperties(
+                                     const G4Material *crystal,
+                                     const G4String &lattice,
+                                     const G4String &filePath)
 {
     G4String filename=crystal->GetName(); //input file
     filename.erase(0,3);
@@ -46,9 +50,9 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(const G4Material *cry
 	G4cout << 
 	  "======================================================================="  
 	       << G4endl;
-	G4cout << 
-	  "======                 Crystal lattice data                    ========"  
-	       << G4endl;
+    G4cout <<
+      "======                 Crystal lattice data                    ========"
+           << G4endl;
 	G4cout << 
 	  "======================================================================="  
 	       << G4endl;    
@@ -74,6 +78,18 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(const G4Material *cry
     //input file:
     filename = filename + lattice.substr(1,(lattice.length())-2) + ".dat";
 
+    if(filePath=="")
+    {
+      //standard file path if another one is not set
+      filename = "/" + filename;  
+      filename = G4FindDataDir("G4CHANNELINGDATA") + filename;
+    }
+    else
+    {
+      //custom file path
+      filename = filePath + filename;
+    }
+
     fNelements=(G4int)crystal->GetNumberOfElements();
     for(G4int i=0; i<fNelements; i++)
     {
@@ -87,6 +103,17 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(const G4Material *cry
 
     std::ifstream vfilein;
     vfilein.open(filename);
+    //check if the input file was found, otherwise return an exception
+    if(!vfilein.is_open())
+    {
+        G4String outputMessage="Input file " +
+                               filename +
+                               " is not found!";
+        G4Exception("SetMaterialProperties",
+                    "001",
+                     FatalException,
+                    outputMessage);
+    }
 
     //read nuclear concentration
     for(G4int i=0; i<fNelements; i++)
@@ -275,6 +302,8 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(const G4Material *cry
       fK40.push_back(3.76*std::pow(CLHEP::fine_structure_const*fZ1[i],2.));
 
       fKD.push_back(fK30*fZ1[i]*fN0[i]);
+
+      fLogPlasmaEdI0.push_back(G4Log((crystal->GetIonisation()->GetPlasmaEnergy())/fI0[i]));
     }
 
     fBB.resize(fNelements);

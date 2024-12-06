@@ -46,14 +46,14 @@ RunAction::RunAction(HistoManager* histo) : fHistoManager(histo)
 {
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->RegisterAccumulable(fSumEAbs);
-  accumulableManager->RegisterAccumulable(fSum2EAbs);
-  accumulableManager->RegisterAccumulable(fSumEGap);
-  accumulableManager->RegisterAccumulable(fSum2EGap);
-  accumulableManager->RegisterAccumulable(fSumLAbs);
-  accumulableManager->RegisterAccumulable(fSum2LAbs);
-  accumulableManager->RegisterAccumulable(fSumLGap);
-  accumulableManager->RegisterAccumulable(fSum2LGap);
+  accumulableManager->Register(fSumEAbs);
+  accumulableManager->Register(fSum2EAbs);
+  accumulableManager->Register(fSumEGap);
+  accumulableManager->Register(fSum2EGap);
+  accumulableManager->Register(fSumLAbs);
+  accumulableManager->Register(fSum2LAbs);
+  accumulableManager->Register(fSumLGap);
+  accumulableManager->Register(fSum2LGap);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -65,7 +65,7 @@ public:
   explicit G4MuonToMuonPairProductionModel(const G4ParticleDefinition* p = nullptr,
                                            const G4String& nam = "muToMuonPairProd");
 
-  ~G4MuonToMuonPairProductionModel() = default;
+  ~G4MuonToMuonPairProductionModel() override = default;
 
   // hide assignment operator and copy constructor
   G4MuonToMuonPairProductionModel & operator=

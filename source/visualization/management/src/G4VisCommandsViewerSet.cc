@@ -43,6 +43,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <utility>
 
 #define G4warn G4cout
 
@@ -1302,7 +1303,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	if (iEnd == G4String::npos) {
 	  iEnd = newValue.length();
 	}
-	G4String name(newValue.substr(iBegin,iEnd-iBegin));
+	const G4String& name(newValue.substr(iBegin,iEnd-iBegin));
 	iBegin = newValue.find_first_not_of(' ',iEnd);
 	if (iBegin == G4String::npos) {
 	  if (verbosity >= G4VisManager::warnings) {

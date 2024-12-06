@@ -47,7 +47,10 @@ G4ThreadLocal G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::theIns
 
 G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::Instance()
 {
-  if(nullptr == theInstance) theInstance = new G4PhysicsConstructorRegistry;
+  if (nullptr == theInstance) {
+    static G4ThreadLocalSingleton<G4PhysicsConstructorRegistry> inst;
+    theInstance = inst.Instance();
+  }
   return theInstance;
 }
 
@@ -61,41 +64,25 @@ G4PhysicsConstructorRegistry::~G4PhysicsConstructorRegistry()
 
 void G4PhysicsConstructorRegistry::Clean()
 {
-  std::size_t n = physConstr.size();
-  if(n > 0) {
-    for (std::size_t i=0; i<n; ++i) {
-      if(physConstr[i]) {
-	G4VPhysicsConstructor* p = physConstr[i];
-	physConstr[i] = nullptr;
-	delete p;
-      }
-    }
-    physConstr.clear();
-  }
+  for (auto const & ptr : physConstr) { delete ptr; }
+  physConstr.clear();
 }
 
 void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 {
-  if(nullptr == p) return;
-  std::size_t n = physConstr.size();
-  if(n > 0) {
-    for (std::size_t i=0; i<n; ++i) {
-      if(physConstr[i] == p) { return; }
-    }
-  }
+  if (nullptr == p) { return; }
+  for (auto const & ptr : physConstr) { if (p == ptr) { return; } }
   physConstr.push_back(p);
 }
 
 void G4PhysicsConstructorRegistry::DeRegister(G4VPhysicsConstructor* p)
 {
-  if (nullptr == p) return;
+  if (nullptr == p || physConstr.empty()) { return; }
   std::size_t n = physConstr.size();
-  if ( n > 0 ) {
-    for (std::size_t i=0; i<n; ++i) {
-      if ( physConstr[i] == p ) {
-        physConstr[i] = nullptr;
-	return;
-      }
+  for (std::size_t i=0; i<n; ++i) {
+    if ( physConstr[i] == p ) {
+      physConstr[i] = nullptr;
+      return;
     }
   }
 }

@@ -58,6 +58,7 @@ class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 
     void SetLBining(G4ThreeVector);
     void SetRBining(G4ThreeVector);
+
     void SetVerbose(G4int val) { fVerbose = val; }
 
     void SetMaterial(G4String mat);
@@ -70,8 +71,21 @@ class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
     G4double GetdRradl() const { return fDRradl; }
 
     G4double GetSDRadLen() const { return fSDRadLen; }
+    G4double GetSDRm() const { return fSDRm; }
+
+    G4int GetNbOfCrystals() const { return fNbOfCrystals; }
+
+    G4double GetCrystalWidth() const { return fCrystalWidth; }
+    G4double GetCrystalLength() const { return fCrystalLength; }
+
+    void SetNbOfCrystals(G4int n) { fNbOfCrystals = n; }
+
+    void SetCrystalWidth(G4double cw) { fCrystalWidth = cw; }
+    void SetCrystalLength(G4double cl) { fCrystalLength = cl; }
 
   private:
+    void DefineMaterials();
+
     G4int fNbOfCrystals{10};  // cube of nb x nb crystals
 
     G4double fCrystalWidth;  // x,y size
@@ -79,15 +93,19 @@ class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume* fCrystal_log{nullptr};
     G4Material* fDetMat{nullptr};
+    G4Material* fHallMat{nullptr};
+
     G4Region* fRegion{nullptr};
 
-    G4double fSDRadLen;  // SD material Rad Lenght
+    G4double fSDRadLen{1.0};  // SD material Rad Length
+    G4double fSDRm{1.0};  // SD material Moliere Radius
 
-    G4int fVerbose{0};
-    G4int fNLtot{40}, fNRtot{50};  // nb of bins: longitudinal and radial
-    G4double fDLradl{0.5}, fDRradl{0.1};  // bin thickness (in radl unit)
+    G4int fVerbose{1};
 
-    ExGflashMessenger* fGflashMessenger;
+    G4int fNLtot{112}, fNRtot{80};  // nb of bins: longitudinal and radial
+    G4double fDLradl{0.25}, fDRradl{0.05};  // bin thickness (in fraction of radl)
+
+    ExGflashMessenger* fGflashMessenger{nullptr};
 
     inline static G4ThreadLocal GFlashShowerModel* fFastShowerModel = nullptr;
     inline static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation = nullptr;

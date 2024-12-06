@@ -44,7 +44,7 @@
 class G4PSTermination : public G4VPrimitiveScorer
 {
  public:
-  G4PSTermination(G4String name, G4int depth = 0);
+  G4PSTermination(const G4String& name, G4int depth = 0);
   ~G4PSTermination() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

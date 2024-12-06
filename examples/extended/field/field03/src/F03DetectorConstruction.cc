@@ -60,12 +60,12 @@ F03DetectorConstruction::F03DetectorConstruction()
   fDetectorMessenger = new F03DetectorMessenger(this);
 
   // create field builder
-  // this will create commands for field parameters
-  G4FieldBuilder::Instance();
-  // G4FieldBuilder::Instance()->SetVerboseLevel(2);
+  // this will create commands for field parameters 
+  G4FieldBuilder* fieldBuilder = G4FieldBuilder::Instance();
+  // fieldBuilder->SetVerboseLevel(2);
 
-  auto globalFieldParameters = G4FieldBuilder::Instance()->GetFieldParameters();
-  auto localFieldParameters = G4FieldBuilder::Instance()->CreateFieldParameters("Radiator");
+  auto globalFieldParameters = fieldBuilder->GetFieldParameters();
+  auto localFieldParameters = fieldBuilder->CreateFieldParameters("Radiator");
 
   // set default min step 0.25 mm
   globalFieldParameters->SetMinimumStep(0.25 * mm);
@@ -351,7 +351,7 @@ void F03DetectorConstruction::SetAbsorberThickness(G4double val)
   // change Absorber thickness and recompute the calorimeter parameters
   fAbsorberThickness = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -361,7 +361,7 @@ void F03DetectorConstruction::SetAbsorberRadius(G4double val)
   // change the transverse size and recompute the calorimeter parameters
   fAbsorberRadius = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -370,7 +370,7 @@ void F03DetectorConstruction::SetWorldSizeZ(G4double val)
 {
   fWorldSizeZ = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -379,7 +379,7 @@ void F03DetectorConstruction::SetWorldSizeR(G4double val)
 {
   fWorldSizeR = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -388,7 +388,7 @@ void F03DetectorConstruction::SetAbsorberZpos(G4double val)
 {
   fZAbsorber = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

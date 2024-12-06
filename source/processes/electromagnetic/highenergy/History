@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-10 Alberto Ribon (emhighenergy-V11-02-01)
+- G4DynamicParticleIonisation, G4DynamicParticleMSC : added missing methods
+  (GetMeanFreePath and GetContinuousStepLimit) to make them concrete classes.
+
+## 2024-08-23 Vladimir Ivanchenko (emhighenergy-V11-02-00)
+- Added new processes G4DynamicParticleIonisation, G4DynamicParticleMSC,
+    G4DynamicParticleFluctuation, which perform computations
+    on fly using only G4DynamicParticle data, G4ParticleDefinition is not used.
+
 ## 2023-06-06 Helmut Burkhardt (emhighenergy-V11-01-01)
 - G4GammaConversionToMuons removing using namespace std + cling-tidy
 - G4AnnihiToMuPair removing using namespace std + cling-tidy

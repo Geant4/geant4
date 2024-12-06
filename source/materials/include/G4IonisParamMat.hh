@@ -124,6 +124,11 @@ class G4IonisParamMat
   inline void SetMeanEnergyPerIonPair(G4double value) { fMeanEnergyPerIon = value; };
   inline G4double GetMeanEnergyPerIonPair() const { return fMeanEnergyPerIon; };
 
+  // parameter for sampling of positron annihilation at rest
+  inline void SetOrtoPositroniumFraction(G4double value) { fOrtoPositroniumFraction = value; };
+  inline G4double GetOrtoPositroniumFraction() const { return fOrtoPositroniumFraction; };
+
+  
   // operators
   G4bool operator==(const G4IonisParamMat&) const = delete;
   G4bool operator!=(const G4IonisParamMat&) const = delete;
@@ -186,6 +191,8 @@ class G4IonisParamMat
   // average energy per ion pair
   G4double fMeanEnergyPerIon;
   G4double twoln10;
+  // parameter for sampling of positron annihilation at rest
+  G4double fOrtoPositroniumFraction{0.035};
 
   // static data created only once
   static G4DensityEffectData* fDensityData;

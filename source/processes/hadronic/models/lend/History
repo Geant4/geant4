@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-08-21 Gabriele Cosmo (hadr-lend-V11-02-05)
+- Fixed reported Coverity defects for:
+  o pointless expression condition in ptwXY_div_ptwXY() operator;
+  o dead code statement in MCGIDI_angularEnergy_parsePointwiseFromTOM() and
+    in MCGIDI_energyAngular_linear_parseFromTOM().
+
+## 2024-08-14 Gabriele Cosmo (hadr-lend-V11-02-04)
+- Fixed reported Coverity defects for use of std::move() and const std::string&.
+
 ## 2024-05-02 Gabriele Cosmo (hadr-lend-V11-02-03)
 - Fixed compilation warnings for potentially initialised local variables in
   ptwXY_createFromFunctionZeroCrossing().

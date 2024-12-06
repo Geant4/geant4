@@ -23,35 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4LEPTSDistribution_h
-#define G4LEPTSDistribution_h 1
+// G4LEPTSDistribution
+//
+// Author: Pedro Arce (CIEMAT), 2014
+// --------------------------------------------------------------------
+#ifndef G4LEPTSDistribution_hh
+#define G4LEPTSDistribution_hh 1
 
 #include "globals.hh"
 #include "Randomize.hh"
-#include <string.h>
-#include <stdio.h>
-#include <string>
-#include <iostream> 
 
-class G4LEPTSDistribution {
+class G4LEPTSDistribution
+{
 
-public:
+ public:
 
-  G4LEPTSDistribution();    // Constructor
-  void ReadFile( G4String fileName );          // Read file
+  G4LEPTSDistribution() = default;
+  void ReadFile( const G4String& fileName );
   G4bool ReadFile( FILE* fp, G4int nData );
-  G4double Sample( G4double, G4double);
+  G4double Sample( G4double, G4double );
 
-  G4bool IsFileFound() const {
-    return bFileFound;
-  }
+  G4bool IsFileFound() const { return bFileFound; }
 
-private:
-  int    NoBins;
+ private:
+
+  G4int NoBins;
 #define NMAX 20000
   G4double E[NMAX], f[NMAX], F[NMAX], eF[NMAX];
   G4bool bFileFound;
 };
-
 
 #endif

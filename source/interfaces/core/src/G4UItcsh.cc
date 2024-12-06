@@ -550,7 +550,7 @@ void G4UItcsh::CompleteCommand()
   input += (vpath + stream);
   if (nMatch == 0) input += strtail;
 
-  commandLine = input;
+  commandLine = std::move(input);
   cursorPosition = G4int(commandLine.length() + 1);
 }
 

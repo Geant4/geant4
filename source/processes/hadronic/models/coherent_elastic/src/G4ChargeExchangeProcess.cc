@@ -58,6 +58,8 @@
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName,fChargeExchange), first(true)
 {
+  G4cout << "###=== The class G4ChargeExchangeProcess is obsolete!!!" << G4endl;
+  G4cout << "###=== It will be removed at the next public release" << G4endl;
   thEnergy = 20.*MeV;
   pPDG = 0;
   verboseLevel= 1;

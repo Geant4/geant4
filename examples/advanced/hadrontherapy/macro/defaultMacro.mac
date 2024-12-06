@@ -1,30 +1,27 @@
-# G.A.P.Cirrone, pablo.cirrone@lns.infn.it
+# Macro file for the initialization of example B1
+# in interactive session
 #
-# Default macro file with visualisation. It is called if no argument is provided at run
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
 #
-#########################
-# Set of the verboses
-#
-/control/verbose 0
-/tracking/verbose 0
-/run/verbose 0
-/event/verbose 0
+# Change the default number of threads (in multi-threaded mode)
+/run/numberOfThreads 4
 
 ##########################
 # Set of the physic models
 #
+#/Physics/addPhysics HADRONTHERAPY_1
+/Physics/addPhysics QGSP_BIC_HP
 
+#/run/numberOfThreads 1
 
-/Physics/addPhysics HADRONTHERAPY_1
-/run/numberOfThreads 10
-
-##########################
-# Initialisation procedure
-#
+# Initialize kernel
 /run/initialize
 
 # Set a very high time threshold to allow all decays to happen
-/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 ####################################################
 # Set here the CUT and the STEP MAX for the tracking.
@@ -137,6 +134,9 @@
 # Default material is water liquid
 /changePhantom/material G4_WATER
 
-
 /run/printProgress 1000
-/run/beamOn 50000
+/run/beamOn 100000
+
+# Visualization setting (in case you wish it)
+#
+# /control/execute vis.mac

@@ -54,12 +54,7 @@ struct G4HnDimension
       }
 
   G4HnDimension(const std::vector<G4double>& edges)
-    : fNBins(0),
-      fMinValue(0.),
-      fMaxValue(0.),
-      fEdges(edges)
-      {}
-
+    : fEdges(edges) {}
   G4HnDimension() = default;
   G4HnDimension(const G4HnDimension& rhs) = default;
   G4HnDimension& operator=(const G4HnDimension& rhs) = default;

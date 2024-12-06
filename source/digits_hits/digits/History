@@ -1,9 +1,15 @@
 # Category detdigits History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-07-12 Gabriele Cosmo (detdigits-V11-02-00)
+- Fixed reported Coverity defects, use consistently 'const G4String&' to
+  avoid implicit copy.
+- Fixed class description in headers.
 
 ## 2022-22-12 Ben Morgan (detdigits-V11-01-00)
 - Apply standard clang-tidy and clang-format fixes

@@ -111,9 +111,9 @@ G4double G4UImessenger::StoD(const G4String& str)
 }
 
 // --------------------------------------------------------------------
-G4bool G4UImessenger::StoB(G4String str)
+G4bool G4UImessenger::StoB(const G4String& str)
 {
-  G4String v = G4StrUtil::to_upper_copy(std::move(str));
+  const G4String& v = G4StrUtil::to_upper_copy(str);
   return (v == "Y" || v == "YES" || v == "1" || v == "T" || v == "TRUE");
 }
 
@@ -141,7 +141,7 @@ void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc,
   }
   else {
     baseDir = new G4UIdirectory(fullpath.c_str(), commandsToBeBroadcasted);
-    baseDirName = fullpath;
+    baseDirName = std::move(fullpath);
     baseDir->SetGuidance(dsc.c_str());
   }
 }

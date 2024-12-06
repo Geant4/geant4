@@ -34,10 +34,10 @@
 #ifndef G4PERSISTENCYCENTER_HH
 #define G4PERSISTENCYCENTER_HH 1
 
-#include "G4Types.hh"
-#include <string>
 #include <vector>
 #include <map>
+
+#include "G4Types.hh"
 #include "G4HCIOcatalog.hh"
 #include "G4DCIOcatalog.hh"
 

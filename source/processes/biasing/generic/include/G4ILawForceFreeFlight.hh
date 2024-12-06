@@ -23,23 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
 // G4ILawForceFreeFlight
 //
 // Class Description:
-//     A G4VBiasingInteractionLaw representing the "interaction" law
-//  for a force free flight, ie, a particle which does not interact.
-//  It is a limit case for which the non-interaction probability over
-//  a segment is always 1, and the effective cross-section always
-//  zero.
-//     This singular behavior is signaled by the IsSingular()
-//  method returning always true.
 //
-// ---------------------------------------------------------------
-//   Initial version                         Nov. 2013 M. Verderi
+// A G4VBiasingInteractionLaw representing the "interaction" law
+// for a force free flight, ie, a particle which does not interact.
+// It is a limit case for which the non-interaction probability over
+// a segment is always 1, and the effective cross-section always
+// zero. This singular behavior is signaled by the IsSingular()
+// method returning always true.
+//
+// Author: Marc Verderi, November 2013.
+// --------------------------------------------------------------------
 #ifndef G4ILawForceFreeFlight_hh
 #define G4ILawForceFreeFlight_hh 1
 
@@ -47,18 +43,19 @@
 
 class G4ILawForceFreeFlight : public G4VBiasingInteractionLaw
 {
-public:
-  G4ILawForceFreeFlight(G4String name = "forceFreeFlightLaw");
-  virtual ~G4ILawForceFreeFlight();
+  public:
+
+    G4ILawForceFreeFlight(const G4String& name = "forceFreeFlightLaw");
+    virtual ~G4ILawForceFreeFlight();
   
-public:
-  virtual G4double     ComputeEffectiveCrossSectionAt(G4double               length) const;
-  virtual G4double ComputeNonInteractionProbabilityAt(G4double               length) const;
-  // -- sample the distribution
-  virtual  G4double           SampleInteractionLength();
-  // -- move by true path length, this position becomes the new initial point
-  virtual G4double     UpdateInteractionLengthForStep(G4double       truePathLength);
-  virtual G4bool IsSingular() const {return true;}
+    virtual G4double ComputeEffectiveCrossSectionAt(G4double length) const;
+    virtual G4double ComputeNonInteractionProbabilityAt(G4double length) const;
+
+    // -- sample the distribution
+    virtual  G4double SampleInteractionLength();
+    // -- move by true path length, this position becomes the new initial point
+    virtual G4double UpdateInteractionLengthForStep(G4double truePathLength);
+    virtual G4bool IsSingular() const { return true; }
 };
 
 #endif

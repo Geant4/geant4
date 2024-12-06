@@ -26,21 +26,22 @@
 
 // Value type independent base class for accumulables handled by Geant4 analysis
 //
-// Author: Ivana Hrivnacova, 04/09/2015  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 04/09/2015
 
 #ifndef G4VAccumulable_h
 #define G4VAccumulable_h 1
 
-#include "globals.hh"
+#include "G4AccType.hh"
+#include "G4MergeMode.hh"
 
+#include "globals.hh"
 
 class G4VAccumulable
 {
-  // To allow G4AccumulableManager set name if not defined by user
-  friend class G4AccumulableManager;
-
   public:
-    G4VAccumulable(G4String name = "");
+    G4VAccumulable(G4MergeMode mergeMode = G4MergeMode::kAddition);
+    G4VAccumulable(const G4String& name,
+                   G4MergeMode mergeMode = G4MergeMode::kAddition);
     G4VAccumulable(const G4VAccumulable& rhs) = default;
     G4VAccumulable(G4VAccumulable&& rhs) = default;
     virtual ~G4VAccumulable() = default;
@@ -52,12 +53,26 @@ class G4VAccumulable
     // Methods
     virtual void Merge(const G4VAccumulable& other) = 0;
     virtual void Reset() = 0;
+    virtual void Print(G4PrintOptions options = G4PrintOptions()) const;
+    virtual void SetMergeMode(G4MergeMode value);
+
+    // Set methods
+    void SetName(const G4String& name);
+    void SetId(G4int id);
 
     // Get methods
     G4String  GetName() const;
+    G4MergeMode GetMergeMode() const;
+    G4int GetId() const;
+
+    virtual G4AccType GetType() const { return G4AccType::kUser; }
 
   protected:
+    void PrintBase(G4PrintOptions options) const;
+
     G4String  fName;
+    G4MergeMode  fMergeMode = G4MergeMode::kAddition;
+    G4int fId = G4Accumulables::kInvalidId;
  };
 
 #include "G4VAccumulable.icc"

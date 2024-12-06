@@ -282,7 +282,7 @@ void G4SBBremTable::InitSamplingTables() {
             stZ->fGamCutIndxToMatCutIndx[i] = stZ->fGamCutIndxToMatCutIndx[j];
             stZ->fGammaECuts[j]             = dum0;
             stZ->fLogGammaECuts[j]          = dum1;
-            stZ->fGamCutIndxToMatCutIndx[j] = dumv;
+            stZ->fGamCutIndxToMatCutIndx[j] = std::move(dumv);
           }
         }
       }

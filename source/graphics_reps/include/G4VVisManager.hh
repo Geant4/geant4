@@ -222,12 +222,8 @@ public: // With description
   virtual G4bool FilterDigi(const G4VDigi&) = 0;
   // Digi filter
 
-#ifdef G4MULTITHREADED
-
-  virtual void SetUpForAThread() = 0;
+  virtual void SetUpForAThread() {}
   // This method is invoked by G4WorkerRunManager
-
-#endif
 
   virtual void EventReadyForVis(const G4Event*) {}
   // This is invoked by G4SubEvtRunManager

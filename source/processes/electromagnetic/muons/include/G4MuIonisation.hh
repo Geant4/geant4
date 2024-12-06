@@ -86,7 +86,7 @@ public:
 
   explicit G4MuIonisation(const G4String& name = "muIoni");
 
-  ~G4MuIonisation() = default;
+  ~G4MuIonisation() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition& p) override;
 

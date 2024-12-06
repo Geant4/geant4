@@ -4,6 +4,7 @@
 geant4_add_module(G4phys_ctor_glnuclear
   PUBLIC_HEADERS
     G4BertiniElectroNuclearBuilder.hh
+    G4CoherentPairProductionPhysics.hh
     G4EmExtraPhysics.hh
     G4EmMessenger.hh
     G4LENDBertiniGammaElectroNuclearBuilder.hh
@@ -11,6 +12,7 @@ geant4_add_module(G4phys_ctor_glnuclear
     G4NeutrinoPhysicsMessenger.hh
   SOURCES
     G4BertiniElectroNuclearBuilder.cc
+    G4CoherentPairProductionPhysics.cc
     G4EmExtraPhysics.cc
     G4EmMessenger.cc
     G4LENDBertiniGammaElectroNuclearBuilder.cc
@@ -24,6 +26,7 @@ geant4_module_link_libraries(G4phys_ctor_glnuclear
     G4hadronic_proc
     G4intercoms
     G4run
+    G4channeling
   PRIVATE
     G4baryons
     G4bosons
@@ -49,4 +52,6 @@ geant4_module_link_libraries(G4phys_ctor_glnuclear
     G4phys_ctor_em
     G4phys_ctor_factory
     G4procman
+    G4parameterisation
+    G4geometrymng
     G4xrays)

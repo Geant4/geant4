@@ -6,6 +6,34 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-24 Guy Barrand (g4tools-V11-02-05)
+- wroot/file: in compress_buffer(): to fix bugzilla-2625: arrange to have a greater
+  output buffer size when using deflate(), and check at end, that in case of some
+  compressions being done, "a_klen<a_buffer.length()" to comply to the ROOT/IO specification
+  that the overall output size should be stricly lower than the input size.
+  (A "specification" encoded in ROOT/TKey.cxx/TKey::ReadObj() method in the form
+  of a "if (fObjlen > fNbytes-fKeylen) {}"). In case "a_klen>=a_buffer.length()", the
+  input buffer is returned.
+- wroot/basket: in write_on_file(): suppress the test "if(klen>m_object_size)" now done
+  in file::compress_buffer().
+- tools/version: pass to 6.3.3.
+
+## 2024-09-26 Ben Morgan (g4tools-V11-02-04)
+- Fix typo in member name that is picked up by clang19 compilation on Linux
+  - Discovered/fixed by ATLAS (Johannes Elmsheuser) in Geant4 10.6.3(!) (ATLASSIM-7265),
+    but remains in current version.
+
+## 2024-09-04 Guy Barrand (g4tools-V11-02-03)
+- streamers: in TH_read_1D(), fix a "std::move" minor Coverity issue.
+- axis: in avoid_labels_overlap(), fix a "divide by zero" medium Coverity issue.
+- tools/version: pass to 6.3.2.
+
+## 2024-07-11 Guy Barrand (g4tools-V11-02-02)
+- fix twenty "std::move" Coverity issues.
+- wroot/buffer: have argument of write_array[2](std::vector) passed as a const reference.
+- tess_contour: have argument of getFilledArea(std::vector) passed as a const reference.
+- tools/version: pass to 6.3.1.
+
 ## 2024-03-13 Gabriele Cosmo (g4tools-V11-02-01)
 - Fixed string assignments in 'window' and 'pixwin', to support either UNICODE
   or UTF-16 encoding on Windows. Addressing problem report #2599.

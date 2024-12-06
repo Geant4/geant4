@@ -41,11 +41,11 @@
 //              vs. track weight (y)                 (Makoto Asai)
 //
 
-G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
+G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(const G4String& name, G4int depth)
   : G4PSMinKinEAtGeneration(name, "MeV", depth) 
 {}
 
-G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name,
+G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(const G4String& name,
                                                  const G4String& unit,
                                                  G4int depth)
   : G4VPrimitivePlotter(name, depth)

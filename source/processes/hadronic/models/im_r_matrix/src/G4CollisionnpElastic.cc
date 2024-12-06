@@ -42,8 +42,8 @@
 G4CollisionnpElastic::G4CollisionnpElastic()
 { 
   // Subtype of interacting particles
-  G4String subType1 = G4Proton::ProtonDefinition()->GetParticleSubType();
-  G4String subType2 = G4Neutron::NeutronDefinition()->GetParticleSubType();
+  const G4String& subType1 = G4Proton::ProtonDefinition()->GetParticleSubType();
+  const G4String& subType2 = G4Neutron::NeutronDefinition()->GetParticleSubType();
 
   colliders1.push_back(subType1);
   colliders2.push_back(subType2);

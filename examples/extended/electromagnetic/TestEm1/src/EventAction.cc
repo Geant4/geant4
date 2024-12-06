@@ -34,8 +34,10 @@
 #include "EventAction.hh"
 
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,14 +46,22 @@ void EventAction::BeginOfEventAction(const G4Event*)
 {
   fTotalEnergyDeposit = 0.;
   fNIEL = 0.;
+  fEnergyLeak = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
+  //get Run
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  if (fEnergyLeak > 0.) run->AddEleak(fEnergyLeak);
+  
   G4AnalysisManager::Instance()->FillH1(4, fTotalEnergyDeposit);
   G4AnalysisManager::Instance()->FillH1(7, fNIEL);
+  G4AnalysisManager::Instance()->FillH1(8, fEnergyLeak);
+  G4AnalysisManager::Instance()->FillH1(9, fTotalEnergyDeposit+fEnergyLeak);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

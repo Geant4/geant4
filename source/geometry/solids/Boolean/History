@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
+## 2024-07-26 Evgueni Tcherniaev (geom-bool-V11-02-03)
+- G4MultiUnion::GetCubicVolume(): used EstimateCubicVolume().
+- G4BooleanSolid::SetCubVolStatistics(), G4BooleanSolid::SetCubVolEpsilon():
+  added check for G4MultiUnion to avoid memory corruption.
+
 ## 2024-06-04 Evgueni Tcherniaev (geom-bool-V11-02-02)
 - G4BooleanSolid::SetCubVolStatistics(st), G4BooleanSolid::SetCubVolEpsilon(ep):
   propagate parameter to all constituents.

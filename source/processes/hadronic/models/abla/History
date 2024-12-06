@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-02 Gabriele Cosmo (hadr-abla-V11-02-06)
+- Fixed reported Coverity defects for uninitialised data in G4Abla.
+
+## 2024-08-21 Gabriele Cosmo (hadr-abla-V11-02-05)
+- Fixed reported Coverity defects for uninitialised data in G4VarNtp.
+
 ## 2024-04-29 Jose Luis Rodriguez Sanchez (hadr-abla-V11-02-04)
 - Added the dissipation parameter for heavy hypernuclei
 

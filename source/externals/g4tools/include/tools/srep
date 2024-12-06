@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "forit"
 
@@ -37,7 +38,7 @@ inline bool replace(std::string& a_string,const std::string& a_old,const std::st
       status = true;
     }
   }
-  a_string = snew;
+  a_string = std::move(snew);
   return status;
 }
 

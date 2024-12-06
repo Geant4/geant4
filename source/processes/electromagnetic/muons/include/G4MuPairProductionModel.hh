@@ -76,7 +76,7 @@ public:
   explicit G4MuPairProductionModel(const G4ParticleDefinition* p = nullptr,
                                    const G4String& nam = "muPairProd");
 
-  ~G4MuPairProductionModel() = default;
+  ~G4MuPairProductionModel() override = default;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 

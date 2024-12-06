@@ -183,6 +183,7 @@ public:
   uint32 last() const {return m_last;}
 
   void set_nev(uint32 a_last,uint32 a_nev_buf_size,uint32 a_nev,const int* a_entry_offset,const int* a_displacement) {
+    //used in mpi_create_basket.
     m_last = a_last;
     m_nev_buf_size = a_nev_buf_size;
     m_nev = a_nev;
@@ -305,16 +306,6 @@ public:
     uint32 klen = 0;
     bool kdelete = false;
     a_file.compress_buffer(m_data,kbuf,klen,kdelete);
-
-    if(klen>m_object_size) {
-      m_out << "tools::wroot::basket::write_on_file :"
-            << " compression anomaly "
-            << " m_object_size " << m_object_size
-            << " klen " << klen
-            << std::endl;
-      if(kdelete) delete [] kbuf;
-      return false;
-    }
 
     if(!initialize(a_file,klen)) { //it will do a m_seek_key = a_file.END() and then a_file.set_END(...)
       m_out << "tools::wroot::basket::write_on_file :"

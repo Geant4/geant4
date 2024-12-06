@@ -102,3 +102,7 @@ geant4_module_link_libraries(G4vis_management
 if(GEANT4_BUILD_MULTITHREADED)
   geant4_module_link_libraries(G4vis_management PRIVATE G4volumes)
 endif()
+
+if(GEANT4_USE_FREETYPE)
+  geant4_module_compile_definitions(G4vis_management PRIVATE TOOLS_USE_FREETYPE)
+endif()

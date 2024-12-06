@@ -3,6 +3,7 @@
 # Define the Geant4 Module.
 geant4_add_module(G4phys_ctor_em
   PUBLIC_HEADERS
+    G4ChargedUnknownPhysics.hh
     G4EmBuilder.hh
     G4EmDNABuilder.hh
     G4EmDNAChemistry.hh
@@ -42,6 +43,7 @@ geant4_add_module(G4phys_ctor_em
     G4ChemDissociationChannels.hh
     G4ChemDissociationChannels_option1.hh
   SOURCES
+    G4ChargedUnknownPhysics.cc
     G4EmBuilder.cc
     G4EmDNABuilder.cc
     G4EmDNAChemistry.cc

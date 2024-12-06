@@ -60,7 +60,6 @@ G4ParticleHPFissionData::G4ParticleHPFissionData() : G4VCrossSectionDataSet("Neu
   material_cache = nullptr;
   ke_cache = 0.0;
   xs_cache = 0.0;
-  // BuildPhysicsTable(*G4Neutron::Neutron());
 }
 
 G4ParticleHPFissionData::~G4ParticleHPFissionData()
@@ -97,12 +96,8 @@ G4double G4ParticleHPFissionData::GetIsoCrossSection(const G4DynamicParticle* dp
   return xs;
 }
 
-void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
+void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if (&aP != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__,
-                              "Attempt to use NeutronHP data for particles other than neutrons!!!");
-
   if (G4Threading::IsWorkerThread()) {
     theCrossSections = G4ParticleHPManager::GetInstance()->GetFissionCrossSections();
     return;
@@ -116,8 +111,7 @@ void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   // make a PhysicsVector for each element
 
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
   for (std::size_t i = 0; i < numberOfElements; ++i) {
     G4PhysicsVector* physVec = G4ParticleHPData::Instance(G4Neutron::Neutron())
                                  ->MakePhysicsVector((*theElementTable)[i], this);
@@ -127,12 +121,8 @@ void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   G4ParticleHPManager::GetInstance()->RegisterFissionCrossSections(theCrossSections);
 }
 
-void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
+void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition&)
 {
-  if (&aP != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__,
-                              "Attempt to use NeutronHP data for particles other than neutrons!!!");
-
 #ifdef G4VERBOSE
   if (G4HadronicParameters::Instance()->GetVerboseLevel() == 0) return;
 
@@ -152,8 +142,7 @@ void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   G4cout << G4endl;
 
   std::size_t numberOfElements = G4Element::GetNumberOfElements();
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
 
   for (std::size_t i = 0; i < numberOfElements; ++i) {
     G4cout << (*theElementTable)[i]->GetName() << G4endl;

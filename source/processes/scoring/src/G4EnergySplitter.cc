@@ -61,6 +61,10 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep)
 
   G4double edep = aStep->GetTotalEnergyDeposit();
 
+  if( edep == 0. ) {
+    return 0; 
+  }
+  
 #ifdef VERBOSE_ENERSPLIT
   G4bool verbose = 1;
   if (verbose)

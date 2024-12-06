@@ -48,16 +48,7 @@ G4Run::~G4Run()
   {
     for(auto& itr : *eventVector)
     {
-//      if(itr->ToBeKept()) {
-//        G4ExceptionDescription ede;
-//        ede << "Deleting G4Event (id:" << itr->GetEventID()
-//          << ") that has ToBeKept() flag on.\n"
-//          << " KeepEventFlag : " << itr->KeepTheEventFlag()
-//          << " NoOfGrip : " << itr->GetNumberOfGrips()
-//          << " NoOfSubEvt : " << itr->GetNumberOfRemainingSubEvents();
-//        G4Exception("G4Run::~G4Run()","Run0002",JustWarning,ede);
-//      }
-//      G4RunManager::GetRunManager()->ReportEventDeletion(itr);
+      G4RunManager::GetRunManager()->ReportEventDeletion(itr);
       delete itr;
     }
   }
@@ -82,6 +73,18 @@ void G4Run::Merge(const G4Run* right)
 void G4Run::StoreEvent(G4Event* evt)
 {
   eventVector->push_back(evt);
+}
+
+// --------------------------------------------------------------------
+G4int G4Run::GetNumberOfKeptEvents() const
+{
+  G4int n = 0;
+  if(eventVector!=nullptr && eventVector->size()>0)
+  {
+    for(auto& ev : *eventVector)
+    { if(ev->KeepTheEventFlag()) n++; }
+  }
+  return n;
 }
 
 // --------------------------------------------------------------------

@@ -23,19 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4WeightWindowConfigurator
+// G4WeightWindowConfigurator
 //
 // Class description:
+//
 // Configuration of weight window processes.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-
+//
+// Author: Michael Dressel, CERN
+// --------------------------------------------------------------------
 #ifndef G4WeightWindowConfigurator_hh
-#define G4WeightWindowConfigurator_hh G4WeightWindowConfigurator_hh
+#define G4WeightWindowConfigurator_hh 1
 
 #include "G4Types.hh"
 #include "G4ProcessPlacer.hh"
@@ -50,36 +47,33 @@ class G4VPhysicalVolume;
 class G4WeightWindowConfigurator : public G4VSamplerConfigurator
 {
 
-public:  // with description
+ public:
 
   G4WeightWindowConfigurator(const G4VPhysicalVolume* worldvolume,
-			     const G4String &particlename,
-                              G4VWeightWindowStore &wwstore,
-                              const G4VWeightWindowAlgorithm *wwAlg,
-                              G4PlaceOfAction placeOfAction,
-			     G4bool paraflag);
+			     const G4String& particlename,
+                                   G4VWeightWindowStore& wwstore,
+                             const G4VWeightWindowAlgorithm* wwAlg,
+                                   G4PlaceOfAction placeOfAction,
+                                   G4bool paraflag);
 
   virtual ~G4WeightWindowConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
-  virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
-private:
+  G4WeightWindowConfigurator(const G4WeightWindowConfigurator &) = delete;
+  G4WeightWindowConfigurator& operator=(const G4WeightWindowConfigurator &) = delete;
 
-  G4WeightWindowConfigurator(const G4WeightWindowConfigurator &);
-  G4WeightWindowConfigurator &
-  operator=(const G4WeightWindowConfigurator &);
+  virtual void Configure(G4VSamplerConfigurator* preConf);
+  virtual const G4VTrackTerminator* GetTrackTerminator() const;
 
-  const G4VPhysicalVolume* fWorld;
+ private:
+
+  const G4VPhysicalVolume* fWorld = nullptr;
   G4ProcessPlacer fPlacer;
-  G4VWeightWindowStore &fWeightWindowStore;
-  G4bool fDeleteWWalg;
-  const G4VWeightWindowAlgorithm *fWWalgorithm;
-  G4WeightWindowProcess *fWeightWindowProcess;
+  G4VWeightWindowStore& fWeightWindowStore;
+  G4bool fDeleteWWalg = false;
+  const G4VWeightWindowAlgorithm* fWWalgorithm = nullptr;
+  G4WeightWindowProcess* fWeightWindowProcess = nullptr;
   G4PlaceOfAction fPlaceOfAction;
-
-
-  G4bool paraflag;
-
+  G4bool paraflag = false;
 };
 
 #endif

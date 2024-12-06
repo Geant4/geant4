@@ -23,24 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysListRegistry
 //
-//
-// -------------------------------------------------------------------
-//
-// GEANT4 Class file
-//
-// File name:    G4PhysListRegistry
-//
-// Author  R. Hatcher  2014-10-15
-//
-// Modifications:  based on G4PhysicsConstructorRegistry
-//
-//#define G4VERBOSE 1
+// Author: R. Hatcher, 2014-10-15
+// --------------------------------------------------------------------
 
-#include "G4ios.hh"
 #include <iomanip>
 #include <algorithm>
 
+#include "G4ios.hh"
 #include "G4PhysListRegistry.hh"
 #include "G4VModularPhysicsList.hh"
 #include "G4PhysListStamper.hh"
@@ -56,40 +47,39 @@
 // include this with this compilation unit so static builds pull them in
 #include "G4RegisterPhysLists.icc"
 
-G4ThreadLocal G4PhysListRegistry* G4PhysListRegistry::theInstance = 0;
+G4ThreadLocal G4PhysListRegistry* G4PhysListRegistry::theInstance = nullptr;
 
-const int doReplace  = 0x01;  // _ (ReplacePhysics) vs. + (RegisterPhysics)
-const int isCtorName = 0x02;  // true if actual physCtor name vs. ext name
+const G4int doReplace  = 0x01;  // _ (ReplacePhysics) vs. + (RegisterPhysics)
+const G4int isCtorName = 0x02;  // true if actual physCtor name vs. ext name
 
 G4PhysListRegistry* G4PhysListRegistry::Instance()
 {
-  if ( 0 == theInstance) {
-    static G4ThreadLocal G4PhysListRegistry *manager_G4MT_TLS_ = 0;
-    if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new G4PhysListRegistry;
-    G4PhysListRegistry &manager = *manager_G4MT_TLS_;
-    theInstance = &manager;
+  if ( nullptr == theInstance) {
+    theInstance = new G4PhysListRegistry;
+
+    // common EM overrides
+    theInstance->AddPhysicsExtension("EM0","G4EmStandardPhysics");
+    theInstance->AddPhysicsExtension("EMV","G4EmStandardPhysics_option1");
+    theInstance->AddPhysicsExtension("EMX","G4EmStandardPhysics_option2");
+    theInstance->AddPhysicsExtension("EMY","G4EmStandardPhysics_option3");
+    theInstance->AddPhysicsExtension("EMZ","G4EmStandardPhysics_option4");
+    theInstance->AddPhysicsExtension("LIV","G4EmLivermorePhysics");
+    theInstance->AddPhysicsExtension("PEN","G4EmPenelopePhysics");
+    // the GS EM extension originally required double underscores
+    // support either one or two as __GS is confusing to users
+    // same for __SS
+    theInstance->AddPhysicsExtension("GS" ,"G4EmStandardPhysicsGS");
+    theInstance->AddPhysicsExtension("_GS","G4EmStandardPhysicsGS");
+    theInstance->AddPhysicsExtension("SS" ,"G4EmStandardPhysicsSS");
+    theInstance->AddPhysicsExtension("_SS","G4EmStandardPhysicsSS");
+
+    theInstance->AddPhysicsExtension("EM0","G4EmStandardPhysics");
+    theInstance->AddPhysicsExtension("WVI","G4EmStandardPhysicsWVI");
+    theInstance->AddPhysicsExtension("LE" ,"G4EmLowEPPhysics");
+    theInstance->AddPhysicsExtension("_LE","G4EmLowEPPhysics");
+
+    theInstance->AddPhysicsExtension("HPT","G4ThermalNeutrons");
   }
-
-  // common EM overrides
-  theInstance->AddPhysicsExtension("EM0","G4EmStandardPhysics");
-  theInstance->AddPhysicsExtension("EMV","G4EmStandardPhysics_option1");
-  theInstance->AddPhysicsExtension("EMX","G4EmStandardPhysics_option2");
-  theInstance->AddPhysicsExtension("EMY","G4EmStandardPhysics_option3");
-  theInstance->AddPhysicsExtension("EMZ","G4EmStandardPhysics_option4");
-  theInstance->AddPhysicsExtension("LIV","G4EmLivermorePhysics");
-  theInstance->AddPhysicsExtension("PEN","G4EmPenelopePhysics");
-  // the GS EM extension originally required double underscores
-  // support either one or two as __GS is confusing to users
-  // same for __SS
-  theInstance->AddPhysicsExtension("GS" ,"G4EmStandardPhysicsGS");
-  theInstance->AddPhysicsExtension("_GS","G4EmStandardPhysicsGS");
-  theInstance->AddPhysicsExtension("SS" ,"G4EmStandardPhysicsSS");
-  theInstance->AddPhysicsExtension("_SS","G4EmStandardPhysicsSS");
-
-  theInstance->AddPhysicsExtension("EM0","G4EmStandardPhysics");
-  theInstance->AddPhysicsExtension("WVI","G4EmStandardPhysicsWVI");
-  theInstance->AddPhysicsExtension("LE" ,"G4EmLowEPPhysics");
-  theInstance->AddPhysicsExtension("_LE","G4EmLowEPPhysics");
 
   return theInstance;
 }
@@ -134,12 +124,12 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
   G4bool allKnown =
     DeconstructPhysListName(name,plBase,physExt,physReplace,verbose);
 
-  size_t npc = physExt.size();
+  std::size_t npc = physExt.size();
   if ( verbose > 0 ) {
     G4cout << "G4PhysListRegistry::GetModularPhysicsList <"
            << name << ">"
            << ", as \"" << plBase << "\" with extensions \"";
-    for ( size_t ipc = 0; ipc < npc; ++ipc )
+    for ( std::size_t ipc = 0; ipc < npc; ++ipc )
       G4cout << ((physReplace[ipc]&doReplace)?"_":"+") << physExt[ipc];
     G4cout << "\"" << G4endl;
   }
@@ -148,7 +138,7 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
     // couldn't match what the user wanted ...
     G4cout << "### G4PhysListRegistry WARNING: " << name
            << " is not known" << G4endl << G4endl;
-    if ( ! unknownFatal ) return 0;
+    if ( ! unknownFatal ) return nullptr;
 
     G4ExceptionDescription ED;
     ED << "The factory for the physicslist ["<< name << "] does not exist!"
@@ -157,14 +147,14 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
       ED << "Could determine no sensible base physics list" << G4endl;
     } else {
       ED << "One or more of the extensions does not exist [ ";
-      for ( size_t ipc = 0; ipc < physExt.size(); ++ipc ) {
+      for ( std::size_t ipc = 0; ipc < physExt.size(); ++ipc ) {
         ED << physExt[ipc] << " ";
       }
       ED << "]" << G4endl;
     }
     G4Exception("G4PhysListRegistry::GetModularPhysicsList",
                 "PhysicsList002", FatalException, ED);
-    return 0;
+    return nullptr;
   }
 
   // if we want this method "const" then the next line becomes more complex
@@ -175,7 +165,7 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
     G4PhysicsConstructorRegistry::Instance();
   G4int ver = pl->GetVerboseLevel();
   pl->SetVerboseLevel(0);
-  for ( size_t ipc = 0; ipc < npc; ++ipc ) {
+  for ( std::size_t ipc = 0; ipc < npc; ++ipc ) {
     // got back a list of short names, need to use the map to get the
     // full physics constructor name
     G4String extName = physExt[ipc];
@@ -250,7 +240,7 @@ G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
   plBase = "";
   physExt.clear();
   replace.clear();
-  bool allKnown = false;
+  G4bool allKnown = false;
 
   G4String workingName = name;
 
@@ -297,7 +287,7 @@ G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
         physicsExtensions.find(extraName);
       G4String pcname = "";
       if ( itr != physicsExtensions.end() ) pcname = itr->second;
-      bool realknown = physConstRegistry->IsKnownPhysicsConstructor(pcname);
+      G4bool realknown = physConstRegistry->IsKnownPhysicsConstructor(pcname);
       if ( ! realknown ) allKnown = false;
 #ifdef G4VERBOSE
       if ( verb > 2 ) {
@@ -350,25 +340,52 @@ G4bool G4PhysListRegistry::FindLongestMatch(const G4String& workingName,
                                             G4int verb) const
 {
   bestMatch = "";
-  bool found = false;
+  G4bool found = false;
 
-  size_t n = validNames.size();
-  for (size_t i=0;  i<n; ++i) {
+  std::size_t n = validNames.size();
+  for (std::size_t i=0;  i<n; ++i) {
     const G4String& testName = validNames[i];
-    size_t ipos = workingName.find(testName);
+    std::size_t ipos = workingName.find(testName);
     if ( ipos == 0 ) {
-      if ( testName.size() > bestMatch.size() )  {
-        bestMatch = testName;
-        found     = true;
-        if ( verb > 3 ) {
-          G4cout << "  " << searchName << " current best guess: "
-                 << testName << G4endl;
+      std::size_t testNameSize = testName.size();
+      std::size_t workNameSize = workingName.size();
+      G4bool match = true;
+      if ( searchName == "base" ) {
+        // if searching for a valid base impose extra restrictions
+        // either must exactly match or the next character must be
+        // one of the standard delimiters of "_" or "+"
+        if (workNameSize > testNameSize) {
+          char nextChar = workingName[(G4int)testNameSize];
+          if ( nextChar != '_' && nextChar != '+' ) match = false;
+          if ( verb > 3 ) {
+            G4cout << "  " << searchName << " longer "
+                   << testName << " nextChar " << nextChar << G4endl;
+          }
+        }
+      }
+      if ( verb > 3 ) {
+        G4cout << "  " << searchName << " match " << (match?"yes":"no")
+               << " " << testName << G4endl;
+      }
+      if ( match ) {
+        if ( testName.size() > bestMatch.size() )  {
+          bestMatch = testName;
+          found     = true;
+          if ( verb > 3 ) {
+            G4cout << "  " << searchName << " current best guess: "
+                   << testName << G4endl;
+          }
+        } else {
+          if ( verb > 3 ) {
+            G4cout << "  " << searchName << " match but shorter than previous: "
+                   << testName << G4endl;
+          }
         }
       } else {
-        if ( verb > 3 ) {
-          G4cout << "  " << searchName << " match but shorter: "
-                 << testName << G4endl;
-        }
+          if ( verb > 3 ) {
+            G4cout << "  " << searchName << " ipos=0 but no match "
+                   << testName << G4endl;
+          }
       }
     } else {
       if ( verb > 3 ) {
@@ -417,8 +434,8 @@ void G4PhysListRegistry::PrintAvailablePhysLists() const
          << G4endl;
   if ( avail.empty() ) G4cout << "... no registered lists" << G4endl;
   else {
-    size_t n = avail.size();
-    for (size_t i=0; i<n; ++i ) {
+    std::size_t n = avail.size();
+    for (std::size_t i=0; i<n; ++i ) {
       G4cout << " [" << std::setw(3) << i << "] "
              << " \"" << avail[i] << "\"" << G4endl;
     }
@@ -430,7 +447,7 @@ void G4PhysListRegistry::PrintAvailablePhysLists() const
   G4cout << "Replacement mappings in G4PhysListRegistry are:"
          << G4endl;
   for ( itr = physicsExtensions.begin(); itr != physicsExtensions.end(); ++itr ) {
-    bool known = physConstRegistry->IsKnownPhysicsConstructor(itr->second);
+    G4bool known = physConstRegistry->IsKnownPhysicsConstructor(itr->second);
 
     G4cout << "    " << std::setw(10) << itr->first << " => "
            << std::setw(30) << itr->second << " "

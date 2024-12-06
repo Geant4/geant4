@@ -26,10 +26,10 @@
 #include "PTL/UserTaskQueue.hh"
 
 #include "PTL/AutoLock.hh"
+#include "PTL/ScopeDestructor.hh"
 #include "PTL/TaskGroup.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/Utility.hh"
 
 #include <cassert>
 #include <chrono>
@@ -37,12 +37,11 @@
 #include <iostream>
 #include <map>
 #include <stdexcept>
-#include <system_error>
 #include <thread>
 #include <utility>
 
-using namespace PTL;
-
+namespace PTL
+{
 //======================================================================================//
 
 UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
@@ -61,26 +60,6 @@ UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
         for(intmax_t i = 0; i < nworkers + 1; ++i)
             m_subqueues->emplace_back(new TaskSubQueue(m_ntasks));
     }
-
-#if defined(DEBUG)
-    if(GetEnv<int>("PTL_VERBOSE", 0) > 3)
-    {
-        RecursiveAutoLock l(TypeMutex<decltype(std::cout), RecursiveMutex>());
-        std::stringstream ss;
-        ss << ThreadPool::get_this_thread_id() << "> " << ThisThread::get_id() << " ["
-           << __FUNCTION__ << ":" << __LINE__ << "] "
-           << "this = " << this << ", "
-           << "clone = " << std::boolalpha << m_is_clone << ", "
-           << "thread = " << m_thread_bin << ", "
-           << "insert = " << m_insert_bin << ", "
-           << "hold = " << m_hold->load() << " @ " << m_hold << ", "
-           << "tasks = " << m_ntasks->load() << " @ " << m_ntasks << ", "
-           << "subqueue = " << m_subqueues << ", "
-           << "size = " << true_size() << ", "
-           << "empty = " << true_empty();
-        std::cout << ss.str() << std::endl;
-    }
-#endif
 }
 
 //======================================================================================//
@@ -311,7 +290,6 @@ UserTaskQueue::InsertTask(task_pointer&& task, ThreadData* data, intmax_t subq)
         if(insert_task(_n))
             return _n;
     }
-    return GetThreadBin();
 }
 
 //======================================================================================//
@@ -470,3 +448,5 @@ UserTaskQueue::ReleaseHold()
 }
 
 //======================================================================================//
+
+}  // namespace PTL

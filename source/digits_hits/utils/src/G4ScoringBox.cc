@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4ScoringBox
+// --------------------------------------------------------------------
 
 #include "G4ScoringBox.hh"
 
@@ -50,7 +50,7 @@
 #include <map>
 #include <fstream>
 
-G4ScoringBox::G4ScoringBox(G4String wName)
+G4ScoringBox::G4ScoringBox(const G4String& wName)
   : G4VScoringMesh(wName)
   , fSegmentDirection(-1)
 {
@@ -242,29 +242,29 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
   if(pVisManager != nullptr)
   {
     // cell vectors
-    std::vector<std::vector<std::vector<double>>> cell;  // cell[X][Y][Z]
-    std::vector<double> ez;
-    for(int z = 0; z < fNSegment[2]; z++)
+    std::vector<std::vector<std::vector<G4double>>> cell;  // cell[X][Y][Z]
+    std::vector<G4double> ez;
+    for(G4int z = 0; z < fNSegment[2]; z++)
       ez.push_back(0.);
-    std::vector<std::vector<double>> eyz;
-    for(int y = 0; y < fNSegment[1]; y++)
+    std::vector<std::vector<G4double>> eyz;
+    for(G4int y = 0; y < fNSegment[1]; y++)
       eyz.push_back(ez);
-    for(int x = 0; x < fNSegment[0]; x++)
+    for(G4int x = 0; x < fNSegment[0]; x++)
       cell.push_back(eyz);
 
-    std::vector<std::vector<double>> xycell;  // xycell[X][Y]
-    std::vector<double> ey;
-    for(int y = 0; y < fNSegment[1]; y++)
+    std::vector<std::vector<G4double>> xycell;  // xycell[X][Y]
+    std::vector<G4double> ey;
+    for(G4int y = 0; y < fNSegment[1]; y++)
       ey.push_back(0.);
-    for(int x = 0; x < fNSegment[0]; x++)
+    for(G4int x = 0; x < fNSegment[0]; x++)
       xycell.push_back(ey);
 
-    std::vector<std::vector<double>> yzcell;  // yzcell[Y][Z]
-    for(int y = 0; y < fNSegment[1]; y++)
+    std::vector<std::vector<G4double>> yzcell;  // yzcell[Y][Z]
+    for(G4int y = 0; y < fNSegment[1]; y++)
       yzcell.push_back(ez);
 
-    std::vector<std::vector<double>> xzcell;  // xzcell[X][Z]
-    for(int x = 0; x < fNSegment[0]; x++)
+    std::vector<std::vector<G4double>> xzcell;  // xzcell[X][Z]
+    for(G4int x = 0; x < fNSegment[0]; x++)
       xzcell.push_back(ez);
 
     // projections
@@ -282,16 +282,16 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
     // search max. & min. values in each slice
     G4double xymin = DBL_MAX, yzmin = DBL_MAX, xzmin = DBL_MAX;
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
-    for(int x = 0; x < fNSegment[0]; x++)
+    for(G4int x = 0; x < fNSegment[0]; x++)
     {
-      for(int y = 0; y < fNSegment[1]; y++)
+      for(G4int y = 0; y < fNSegment[1]; y++)
       {
         if(xymin > xycell[x][y])
           xymin = xycell[x][y];
         if(xymax < xycell[x][y])
           xymax = xycell[x][y];
       }
-      for(int z = 0; z < fNSegment[2]; z++)
+      for(G4int z = 0; z < fNSegment[2]; z++)
       {
         if(xzmin > xzcell[x][z])
           xzmin = xzcell[x][z];
@@ -299,9 +299,9 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           xzmax = xzcell[x][z];
       }
     }
-    for(int y = 0; y < fNSegment[1]; y++)
+    for(G4int y = 0; y < fNSegment[1]; y++)
     {
-      for(int z = 0; z < fNSegment[2]; z++)
+      for(G4int z = 0; z < fNSegment[2]; z++)
       {
         if(yzmin > yzcell[y][z])
           yzmin = yzcell[y][z];
@@ -326,9 +326,9 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
         colorMap->SetMinMax(xymin, xymax);
       }
       G4ThreeVector zhalf(0., 0., fSize[2] / fNSegment[2] - thick);
-      for(int x = 0; x < fNSegment[0]; x++)
+      for(G4int x = 0; x < fNSegment[0]; x++)
       {
-        for(int y = 0; y < fNSegment[1]; y++)
+        for(G4int y = 0; y < fNSegment[1]; y++)
         {
           G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
           G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2] - 1) +
@@ -378,9 +378,9 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
         colorMap->SetMinMax(yzmin, yzmax);
       }
       G4ThreeVector xhalf(fSize[0] / fNSegment[0] - thick, 0., 0.);
-      for(int y = 0; y < fNSegment[1]; y++)
+      for(G4int y = 0; y < fNSegment[1]; y++)
       {
-        for(int z = 0; z < fNSegment[2]; z++)
+        for(G4int z = 0; z < fNSegment[2]; z++)
         {
           G4ThreeVector pos(GetReplicaPosition(0, y, z) - xhalf);
           G4ThreeVector pos2(GetReplicaPosition(fNSegment[0] - 1, y, z) +
@@ -430,9 +430,9 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
         colorMap->SetMinMax(xzmin, xzmax);
       }
       G4ThreeVector yhalf(0., fSize[1] / fNSegment[1] - thick, 0.);
-      for(int x = 0; x < fNSegment[0]; x++)
+      for(G4int x = 0; x < fNSegment[0]; x++)
       {
-        for(int z = 0; z < fNSegment[2]; z++)
+        for(G4int z = 0; z < fNSegment[2]; z++)
         {
           G4ThreeVector pos(GetReplicaPosition(x, 0, z) - yhalf);
           G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1] - 1, z) +
@@ -518,29 +518,29 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
     pVisManager->BeginDraw();
 
     // cell vectors
-    std::vector<std::vector<std::vector<double>>> cell;  // cell[X][Y][Z]
-    std::vector<double> ez;
-    for(int z = 0; z < fNSegment[2]; z++)
+    std::vector<std::vector<std::vector<G4double>>> cell;  // cell[X][Y][Z]
+    std::vector<G4double> ez;
+    for(G4int z = 0; z < fNSegment[2]; z++)
       ez.push_back(0.);
-    std::vector<std::vector<double>> eyz;
-    for(int y = 0; y < fNSegment[1]; y++)
+    std::vector<std::vector<G4double>> eyz;
+    for(G4int y = 0; y < fNSegment[1]; y++)
       eyz.push_back(ez);
-    for(int x = 0; x < fNSegment[0]; x++)
+    for(G4int x = 0; x < fNSegment[0]; x++)
       cell.push_back(eyz);
 
-    std::vector<std::vector<double>> xycell;  // xycell[X][Y]
-    std::vector<double> ey;
-    for(int y = 0; y < fNSegment[1]; y++)
+    std::vector<std::vector<G4double>> xycell;  // xycell[X][Y]
+    std::vector<G4double> ey;
+    for(G4int y = 0; y < fNSegment[1]; y++)
       ey.push_back(0.);
-    for(int x = 0; x < fNSegment[0]; x++)
+    for(G4int x = 0; x < fNSegment[0]; x++)
       xycell.push_back(ey);
 
-    std::vector<std::vector<double>> yzcell;  // yzcell[Y][Z]
-    for(int y = 0; y < fNSegment[1]; y++)
+    std::vector<std::vector<G4double>> yzcell;  // yzcell[Y][Z]
+    for(G4int y = 0; y < fNSegment[1]; y++)
       yzcell.push_back(ez);
 
-    std::vector<std::vector<double>> xzcell;  // xzcell[X][Z]
-    for(int x = 0; x < fNSegment[0]; x++)
+    std::vector<std::vector<G4double>> xzcell;  // xzcell[X][Z]
+    for(G4int x = 0; x < fNSegment[0]; x++)
       xzcell.push_back(ez);
 
     // projections
@@ -567,16 +567,16 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
     // search max. & min. values in each slice
     G4double xymin = DBL_MAX, yzmin = DBL_MAX, xzmin = DBL_MAX;
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
-    for(int x = 0; x < fNSegment[0]; x++)
+    for(G4int x = 0; x < fNSegment[0]; x++)
     {
-      for(int y = 0; y < fNSegment[1]; y++)
+      for(G4int y = 0; y < fNSegment[1]; y++)
       {
         if(xymin > xycell[x][y])
           xymin = xycell[x][y];
         if(xymax < xycell[x][y])
           xymax = xycell[x][y];
       }
-      for(int z = 0; z < fNSegment[2]; z++)
+      for(G4int z = 0; z < fNSegment[2]; z++)
       {
         if(xzmin > xzcell[x][z])
           xzmin = xzcell[x][z];
@@ -584,9 +584,9 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
           xzmax = xzcell[x][z];
       }
     }
-    for(int y = 0; y < fNSegment[1]; y++)
+    for(G4int y = 0; y < fNSegment[1]; y++)
     {
-      for(int z = 0; z < fNSegment[2]; z++)
+      for(G4int z = 0; z < fNSegment[2]; z++)
       {
         if(yzmin > yzcell[y][z])
           yzmin = yzcell[y][z];
@@ -607,9 +607,9 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
       {
         colorMap->SetMinMax(xymin, xymax);
       }
-      for(int x = 0; x < fNSegment[0]; x++)
+      for(G4int x = 0; x < fNSegment[0]; x++)
       {
-        for(int y = 0; y < fNSegment[1]; y++)
+        for(G4int y = 0; y < fNSegment[1]; y++)
         {
           G4Box xyplate("xy", fSize[0] / fNSegment[0], fSize[1] / fNSegment[1],
                         fSize[2] / fNSegment[2]);
@@ -644,9 +644,9 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
       {
         colorMap->SetMinMax(yzmin, yzmax);
       }
-      for(int y = 0; y < fNSegment[1]; y++)
+      for(G4int y = 0; y < fNSegment[1]; y++)
       {
-        for(int z = 0; z < fNSegment[2]; z++)
+        for(G4int z = 0; z < fNSegment[2]; z++)
         {
           G4Box yzplate("yz", fSize[0] / fNSegment[0], fSize[1] / fNSegment[1],
                         fSize[2] / fNSegment[2]);
@@ -681,9 +681,9 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
       {
         colorMap->SetMinMax(xzmin, xzmax);
       }
-      for(int x = 0; x < fNSegment[0]; x++)
+      for(G4int x = 0; x < fNSegment[0]; x++)
       {
-        for(int z = 0; z < fNSegment[2]; z++)
+        for(G4int z = 0; z < fNSegment[2]; z++)
         {
           G4Box xzplate("xz", fSize[0] / fNSegment[0], fSize[1] / fNSegment[1],
                         fSize[2] / fNSegment[2]);

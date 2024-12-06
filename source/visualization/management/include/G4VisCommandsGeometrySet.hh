@@ -186,7 +186,7 @@ private:
 
 class G4VVisCommandGeometrySet: public G4VVisCommandGeometry {
 protected:
-  void Set(G4String logVolName, const G4VVisCommandGeometrySetFunction&,
+  void Set(const G4String& logVolName, const G4VVisCommandGeometrySetFunction&,
 	   G4int requestedDepth);
   void SetLVVisAtts(G4LogicalVolume*, const G4VVisCommandGeometrySetFunction&,
 		    G4int depth, G4int requestedDepth);

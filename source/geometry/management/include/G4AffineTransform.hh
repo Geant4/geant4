@@ -54,7 +54,7 @@
 // - conversion of the rotation matrix to angle & axis used to get
 //   a possibility to remove "friend" from the G4RotationMatrix class
 // 06.05.2018 E.Tcherniaev:
-// - optimized InverseProduct
+// - optimised InverseProduct
 // - added methods for inverse transformation: InverseTrasformPoint,  
 //   InverseTransformAxis, InverseNetRotation, InverseNetTranslation
 // --------------------------------------------------------------------

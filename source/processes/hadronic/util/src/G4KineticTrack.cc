@@ -175,7 +175,7 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 //
 
  G4DecayTable* theDecayTable = theDefinition->GetDecayTable();
- if (theDecayTable != 0)
+ if (theDecayTable != nullptr)
     {
      nChannels = theDecayTable->entries();
 
@@ -199,7 +199,7 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
   theDaughterMass = 0;
   theDaughterWidth = 0;
   theActualWidth = 0;
-  G4bool * theDaughterIsShortLived = 0;
+  G4bool * theDaughterIsShortLived = nullptr;
   
   if(nChannels!=0) theActualWidth = new G4double[nChannels];
 
@@ -388,11 +388,11 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
           theActualWidth[index] = thePoleWidth * theMassRatio *
                                   theMomRatio;
           delete [] theDaughterMass;
-	  theDaughterMass = 0;
+	  theDaughterMass = nullptr;
           delete [] theDaughterWidth;
-	  theDaughterWidth = 0;
+	  theDaughterWidth = nullptr;
 	  delete [] theDaughterIsShortLived;
-          theDaughterIsShortLived = 0;
+          theDaughterIsShortLived = nullptr;
 	}
       
       else //  nDaughter = 1 ( e.g. K0  decays 50% to Kshort, 50% Klong 
@@ -466,7 +466,7 @@ G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      theTotal4Momentum = right.theTotal4Momentum;
      theNucleon = right.theNucleon;
      theStateToNucleus = right.theStateToNucleus;
-     if (theActualWidth != 0) delete [] theActualWidth;
+     delete [] theActualWidth;
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
      for (G4int i = 0; i < nChannels; ++i) theActualWidth[i] = right.theActualWidth[i];
@@ -509,7 +509,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
   {
     G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
     G4cerr << "  track has no particle definition associated."<<G4endl;
-    return 0;
+    return nullptr;
   }
   G4DecayTable* theDecayTable = thisDefinition->GetDecayTable();
   if(!theDecayTable)
@@ -517,7 +517,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
     G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
     G4cerr << "  particle definition has no decay table associated."<<G4endl;
     G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
-    return 0;
+    return nullptr;
   }
  
  G4int chargeBalance = G4lrint(theDefinition->GetPDGCharge() );     
@@ -557,7 +557,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
        //	 cout << "DECAY Total Width " << theSumActualWidth << G4endl;
        //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
        G4double r = theTotalActualWidth * G4UniformRand();
-       G4VDecayChannel* theDecayChannel(0);
+       G4VDecayChannel* theDecayChannel(nullptr);
        chosench=-1;
        for (G4int index = nChannels - 1; index >= 0; --index)
           {
@@ -572,13 +572,13 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 
        delete [] theCumActualWidth;
    
-       if(!theDecayChannel)
+       if(theDecayChannel == nullptr)
        {
          G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
          G4cerr << "  decay channel has 0x0 channel associated."<<G4endl;
          G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
          G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
-         return 0;
+         return nullptr;
        }
        theParentName = theDecayChannel->GetParentName();
        theParentMass = this->GetActualMass();
@@ -694,7 +694,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 		                                        theDaughtersName4,
 							masses);
      G4DecayProducts* theDecayProducts = thePhaseSpaceDecayChannel.DecayIt();
-     if(!theDecayProducts)
+     if(theDecayProducts == nullptr)
      {
        G4ExceptionDescription ed;
        ed << "Error condition encountered: phase-space decay failed." << G4endl
@@ -704,7 +704,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
           << theDaughtersName1 << " " << theDaughtersName2 << " " << theDaughtersName3 << " " 
           << theDaughtersName4 << G4endl;
        G4Exception( "G4KineticTrack::Decay ", "HAD_KINTRACK_001", JustWarning, ed );
-       return 0;
+       return nullptr;
      }
 		                                        
 //
@@ -720,7 +720,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4LorentzVector momentumBalanceCMS(0);
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
-     const G4ParticleDefinition * aProduct = 0;
+     const G4ParticleDefinition * aProduct = nullptr;
      // Use the integer round mass in keV to get an unique ID for the parent resonance
      G4int uniqueID = static_cast< G4int >( round( Get4Momentum().mag() / CLHEP::keV ) );
      for (G4int i=dEntries; i > 0; --i)
@@ -757,7 +757,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
     }
  else
     {
-     return 0;
+     return nullptr;
     }
 }
 
@@ -862,11 +862,3 @@ G4double G4KineticTrack::IntegrateCMMomentum2() const
 						   theLowerLimit, theUpperLimit, nIterations);
   return theIntegralOverMass2;
 }
-
-
-
-
-
-
-
-

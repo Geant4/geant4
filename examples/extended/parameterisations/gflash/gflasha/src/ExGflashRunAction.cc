@@ -54,6 +54,7 @@ void ExGflashRunAction::BeginOfRunAction(const G4Run* aRun)
   // histograms file
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   if (analysis->IsActive()) {
+    fHistoManager->SetBinning();
     analysis->OpenFile();
   }
 

@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file 
+// G4VBiasingInteractionLaw
 //
 // Class Description:
 //
@@ -43,13 +40,8 @@
 //    - an effective cross-section which is the
 //      sum on the individual effective cross-sections.
 //
-//      ----------------G4VBiasingInteractionLaw ----------------
-//
 // Author: M.Verderi (LLR), November 2013
-// - 05/11/13 : First Implementation
 // --------------------------------------------------------------------
-
-
 #ifndef G4VBiasingInteractionLaw_hh
 #define G4VBiasingInteractionLaw_hh 1
 
@@ -58,58 +50,60 @@
 
 class G4BiasingProcessInterface;
 
-class G4VBiasingInteractionLaw {
-public:
-  G4VBiasingInteractionLaw(G4String name) : fName(name), fSampledInteractionLength(DBL_MAX) {}
-  virtual ~G4VBiasingInteractionLaw() {}
+class G4VBiasingInteractionLaw
+{
+  public:
 
-public:
-  const G4String&       GetName() const { return fName; }
-  
-  // ----------------------------
-  // -- Interface to sub-classes:
-  // ----------------------------
-protected:
-  // -- Sample the distribution for point like interaction (PostStep ones)
-  virtual G4double            SampleInteractionLength()                              = 0;
-public:
-  // -- Compute non-interaction probability and effective cross-section:
-  // -- (probability of interaction over dl =  effective_cross-section* dl)
-  virtual G4double ComputeNonInteractionProbabilityAt(G4double               length) const = 0;
-  virtual G4double     ComputeEffectiveCrossSectionAt(G4double               length) const = 0;
-protected:
-  // -- Convenience method, used in many daughters classes :
-  // -- update the distribution for a made step of truePathLength size:
-  virtual G4double     UpdateInteractionLengthForStep(G4double   /* truePathLength */)  { return DBL_MAX; }
-public:
-  // -- Methods to deal with singularities : null cross sections or infinite ones.
-  // -- In such cases, weight can not always be computed.
-  // -- Tells if this interaction law has singularities:
-  virtual G4bool                      IsSingular() const {return false;}
+    G4VBiasingInteractionLaw(const G4String& name)
+      : fName(name), fSampledInteractionLength(DBL_MAX) {}
+    virtual ~G4VBiasingInteractionLaw() = default;
+
+    const G4String& GetName() const { return fName; }
+
+    // -- Compute non-interaction probability and effective cross-section:
+    // -- (probability of interaction over dl =  effective_cross-section* dl)
+    virtual G4double ComputeNonInteractionProbabilityAt(G4double length) const = 0;
+    virtual G4double ComputeEffectiveCrossSectionAt(G4double length) const = 0;
+
+    // -- Methods to deal with singularities : null cross sections or infinite ones.
+    // -- In such cases, weight can not always be computed.
+    // -- Tells if this interaction law has singularities:
+    virtual G4bool IsSingular() const { return false; }
     // -- method interrogated only in case interaction law is IsSingular() == true:
-  virtual G4bool IsEffectiveCrossSectionInfinite() const {return false;}
-  
-  
-  // -----------------------------------------
-  // -- public interface to protected methods:
-  // -----------------------------------------
-public:
-  G4double Sample()
-  {
-    fSampledInteractionLength = SampleInteractionLength();
-    return fSampledInteractionLength;
-  }
-  G4double UpdateForStep(G4double truePathLength)
-  {
-    fSampledInteractionLength = UpdateInteractionLengthForStep(truePathLength);
-    return fSampledInteractionLength;
-  }
-  G4double GetSampledInteractionLength() const { return fSampledInteractionLength; }
+    virtual G4bool IsEffectiveCrossSectionInfinite() const { return false; }
 
-  
-private:
-  G4String                     fName;
-  G4double fSampledInteractionLength;
+    // -----------------------------------------
+    // -- public interface to protected methods:
+    // -----------------------------------------
+    G4double Sample()
+    {
+      fSampledInteractionLength = SampleInteractionLength();
+      return fSampledInteractionLength;
+    }
+    G4double UpdateForStep(G4double truePathLength)
+    {
+      fSampledInteractionLength = UpdateInteractionLengthForStep(truePathLength);
+      return fSampledInteractionLength;
+    }
+    G4double GetSampledInteractionLength() const
+    {
+      return fSampledInteractionLength;
+    }
+
+  protected:
+
+    // -- Sample the distribution for point like interaction (PostStep ones)
+    virtual G4double SampleInteractionLength() = 0;
+
+    // -- Convenience method, used in many daughters classes :
+    // -- update the distribution for a made step of truePathLength size:
+    virtual G4double UpdateInteractionLengthForStep(G4double /* truePathLength */)
+      { return DBL_MAX; }
+
+  private:
+
+    G4String fName;
+    G4double fSampledInteractionLength;
 };
 
 #endif

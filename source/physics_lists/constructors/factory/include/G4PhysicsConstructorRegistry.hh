@@ -48,13 +48,16 @@
 #include <vector>
 #include <map>
 #include "globals.hh"
-
+#include "G4ThreadLocalSingleton.hh"
 
 class G4VPhysicsConstructor;
 class G4VBasePhysConstrFactory;
 
 class G4PhysicsConstructorRegistry
 {
+
+  friend class G4ThreadLocalSingleton<G4PhysicsConstructorRegistry>;
+
 public:
 
   static G4PhysicsConstructorRegistry* Instance();
@@ -87,9 +90,9 @@ private:
 
   static G4ThreadLocal G4PhysicsConstructorRegistry* theInstance;
 
-  std::vector <G4VPhysicsConstructor*> physConstr;
+  std::vector<G4VPhysicsConstructor*> physConstr;
 
-  std::map <G4String, G4VBasePhysConstrFactory*> factories;
+  std::map<G4String, G4VBasePhysConstrFactory*> factories;
 
 };
 

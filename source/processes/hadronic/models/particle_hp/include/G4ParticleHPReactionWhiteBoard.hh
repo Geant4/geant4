@@ -42,26 +42,27 @@
 class G4ParticleHPReactionWhiteBoard
 {
   public:
+
     G4ParticleHPReactionWhiteBoard();
     ~G4ParticleHPReactionWhiteBoard();
 
-  public:
-    void Dump();
+    void Dump() const;
 
     void SetTargZ(G4int Z) { targZ = Z; };
     void SetTargA(G4int A) { targA = A; };
     void SetTargM(G4int M) { targM = M; };
-    G4int GetTargZ() { return targZ; };
-    G4int GetTargA() { return targA; };
-    G4int GetTargM() { return targM; };
+    G4int GetTargZ() const { return targZ; };
+    G4int GetTargA() const { return targA; };
+    G4int GetTargM() const { return targM; };
 
-    bool AddRecord(std::pair<G4String, G4String>);
-    G4String GetValue(G4String);
+    G4bool AddRecord(std::pair<G4String, G4String>);
+    G4String GetValue(const G4String&) const;
     // "0" or "0.0" will retrun for invalid key by following two methods
-    G4int GetValueInInt(G4String);
-    G4double GetValueInDouble(G4String);
+    G4int GetValueInInt(const G4String&) const;
+    G4double GetValueInDouble(const G4String&) const;
 
   private:
+
     G4int targZ{0};
     G4int targA{0};
     G4int targM{0};

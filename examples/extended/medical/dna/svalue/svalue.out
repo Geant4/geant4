@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,7 +30,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -141,10 +140,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -630,13 +632,11 @@ Index : 0     used in the geometry : Yes
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.250000s Real=0.285621s Sys=0.000000s
+  User=0.220000s Real=0.228200s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -656,13 +656,6 @@ Run Summary
  Nb of steps of primary track  = 43.48 +- 42.08
 
  Step size                     = 3.201 Ang +- 83299.677 fm 
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 200 eV
 /run/beamOn 1000
 
@@ -681,7 +674,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.430000s Real=0.447455s Sys=0.000000s
+  User=0.410000s Real=0.414663s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -701,13 +694,6 @@ Run Summary
  Nb of steps of primary track  = 50.72 +- 45.14
 
  Step size                     = 3.961 Ang +- 1.121 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 300 eV
 /run/beamOn 1000
 
@@ -726,7 +712,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.640000s Real=0.678533s Sys=0.000000s
+  User=0.580000s Real=0.585119s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -746,13 +732,6 @@ Run Summary
  Nb of steps of primary track  = 53.30 +- 39.45
 
  Step size                     = 4.700 Ang +- 1.313 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 400 eV
 /run/beamOn 1000
 
@@ -771,7 +750,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.820000s Real=0.823176s Sys=0.000000s
+  User=0.760000s Real=0.760200s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -791,13 +770,6 @@ Run Summary
  Nb of steps of primary track  = 58.72 +- 40.37
 
  Step size                     = 5.482 Ang +- 1.675 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 500 eV
 /run/beamOn 1000
 
@@ -816,7 +788,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.020000s Real=1.104115s Sys=0.000000s
+  User=0.920000s Real=0.933352s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -836,13 +808,6 @@ Run Summary
  Nb of steps of primary track  = 60.09 +- 37.44
 
  Step size                     = 6.220 Ang +- 1.880 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 600 eV
 /run/beamOn 1000
 
@@ -861,7 +826,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.270000s Real=1.483004s Sys=0.000000s
+  User=1.140000s Real=1.146983s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -881,13 +846,6 @@ Run Summary
  Nb of steps of primary track  = 68.03 +- 41.33
 
  Step size                     = 6.926 Ang +- 2.131 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 700 eV
 /run/beamOn 1000
 
@@ -906,7 +864,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.440000s Real=1.637571s Sys=0.000000s
+  User=1.310000s Real=1.325521s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -926,13 +884,6 @@ Run Summary
  Nb of steps of primary track  = 69.85 +- 37.85
 
  Step size                     = 7.780 Ang +- 2.314 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 800 eV
 /run/beamOn 1000
 
@@ -951,7 +902,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.590000s Real=1.656162s Sys=0.000000s
+  User=1.510000s Real=1.546109s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -971,13 +922,6 @@ Run Summary
  Nb of steps of primary track  = 75.25 +- 40.33
 
  Step size                     = 8.558 Ang +- 2.628 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 900 eV
 /run/beamOn 1000
 
@@ -996,7 +940,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.720000s Real=1.765558s Sys=0.000000s
+  User=1.660000s Real=1.720913s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1016,13 +960,6 @@ Run Summary
  Nb of steps of primary track  = 77.65 +- 39.50
 
  Step size                     = 9.337 Ang +- 2.703 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 1 keV
 /run/beamOn 1000
 
@@ -1041,7 +978,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.950000s Real=2.071871s Sys=0.000000s
+  User=1.860000s Real=1.919173s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1061,13 +998,6 @@ Run Summary
  Nb of steps of primary track  = 80.54 +- 37.61
 
  Step size                     = 1.016 nm  +- 2.826 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 2 keV
 /run/beamOn 1000
 
@@ -1086,7 +1016,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.860000s Real=4.064111s Sys=0.000000s
+  User=3.650000s Real=3.718345s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1106,13 +1036,6 @@ Run Summary
  Nb of steps of primary track  = 121.71 +- 45.00
 
  Step size                     = 1.787 nm  +- 4.505 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 3 keV
 /run/beamOn 1000
 
@@ -1131,7 +1054,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.750000s Real=5.950401s Sys=0.000000s
+  User=5.460000s Real=5.545792s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1151,13 +1074,6 @@ Run Summary
  Nb of steps of primary track  = 152.29 +- 44.49
 
  Step size                     = 2.548 nm  +- 5.601 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 4 keV
 /run/beamOn 1000
 
@@ -1176,7 +1092,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.720000s Real=8.147755s Sys=0.000000s
+  User=7.240000s Real=7.306508s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1196,13 +1112,6 @@ Run Summary
  Nb of steps of primary track  = 181.46 +- 43.40
 
  Step size                     = 3.333 nm  +- 6.713 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 5 keV
 /run/beamOn 1000
 
@@ -1221,7 +1130,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.490000s Real=9.705832s Sys=0.000000s
+  User=8.980000s Real=9.233426s Sys=0.010000s
 
  ======================== run summary =====================
 
@@ -1241,13 +1150,6 @@ Run Summary
  Nb of steps of primary track  = 212.23 +- 51.55
 
  Step size                     = 4.078 nm  +- 7.540 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 6 keV
 /run/beamOn 1000
 
@@ -1266,7 +1168,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.570000s Real=11.943036s Sys=0.010000s
+  User=10.790000s Real=10.972351s Sys=0.010000s
 
  ======================== run summary =====================
 
@@ -1286,13 +1188,6 @@ Run Summary
  Nb of steps of primary track  = 244.09 +- 50.68
 
  Step size                     = 4.783 nm  +- 8.492 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 7 keV
 /run/beamOn 1000
 
@@ -1311,7 +1206,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=13.600000s Real=14.337362s Sys=0.000000s
+  User=14.100000s Real=14.510479s Sys=0.020000s
 
  ======================== run summary =====================
 
@@ -1331,13 +1226,6 @@ Run Summary
  Nb of steps of primary track  = 269.13 +- 56.48
 
  Step size                     = 5.563 nm  +- 9.321 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 8 keV
 /run/beamOn 1000
 
@@ -1356,7 +1244,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=15.730000s Real=16.847953s Sys=0.010000s
+  User=14.450000s Real=14.628458s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1376,13 +1264,6 @@ Run Summary
  Nb of steps of primary track  = 297.96 +- 62.40
 
  Step size                     = 6.250 nm  +- 9.969 Ang
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 9 keV
 /run/beamOn 1000
 
@@ -1401,7 +1282,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=17.660000s Real=18.913143s Sys=0.000000s
+  User=16.750000s Real=17.502675s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1421,13 +1302,6 @@ Run Summary
  Nb of steps of primary track  = 329.39 +- 62.43
 
  Step size                     = 6.999 nm  +- 1.026 nm 
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 /gun/energy 10 keV
 /run/beamOn 1000
 
@@ -1446,7 +1320,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=19.580000s Real=20.227582s Sys=0.000000s
+  User=18.590000s Real=19.626809s Sys=0.010000s
 
  ======================== run summary =====================
 
@@ -1466,13 +1340,6 @@ Run Summary
  Nb of steps of primary track  = 358.85 +- 64.76
 
  Step size                     = 7.717 nm  +- 1.069 nm 
-There are histograms that can be viewed with visualization:
-  11 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

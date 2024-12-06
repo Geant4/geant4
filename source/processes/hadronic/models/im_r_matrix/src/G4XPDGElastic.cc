@@ -126,13 +126,13 @@ G4XPDGElastic::G4XPDGElastic()
 
   xMap[nn] = ppData;
   xMap[pp] = ppData;
-  xMap[pn] = ppData;
-  xMap[piPlusp] = pPiPlusData;
-  xMap[piMinusp] = pPiMinusData;
-  xMap[KPlusp] = pKPlusData;
-  xMap[KMinusp] = pKMinusData;
-  xMap[ppbar] = ppbarData;
-  xMap[npbar] = npbarData;
+  xMap[pn] = std::move(ppData);
+  xMap[piPlusp] = std::move(pPiPlusData);
+  xMap[piMinusp] = std::move(pPiMinusData);
+  xMap[KPlusp] = std::move(pKPlusData);
+  xMap[KMinusp] = std::move(pKMinusData);
+  xMap[ppbar] = std::move(ppbarData);
+  xMap[npbar] = std::move(npbarData);
 }
 
 

@@ -27,14 +27,15 @@
 
 // /vis/multithreading commands - John Allison  29th September 2015
 
-#include "G4Types.hh"
-#ifdef G4MULTITHREADED
-
 #include "G4VisCommandsMultithreading.hh"
 
+#include "G4Threading.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4VisManager.hh"
+
+// For future use with additional G4ios logging streams
+#define G4warn G4cout
 
 ////////////// /vis/multithreading/actionOnEventQueueFull ///////////////////////////////////////
 
@@ -63,6 +64,14 @@ G4String G4VisCommandMultithreadingActionOnEventQueueFull::GetCurrentValue(G4UIc
 void G4VisCommandMultithreadingActionOnEventQueueFull::SetNewValue(G4UIcommand*, G4String newValue)
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  // Only relevant in a MT application
+  if(!G4Threading::IsMultithreadedApplication()) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4warn << "command /vis/multithreading/actionOnEventQueueFull ignored in sequential mode" << G4endl;
+    }
+    return;
+  }
 
   if (newValue == "wait") {
     fpVisManager->SetWaitOnEventQueueFull(true);
@@ -116,6 +125,14 @@ void G4VisCommandMultithreadingMaxEventQueueSize::SetNewValue(G4UIcommand*, G4St
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
+  // Only relevant in a MT application
+  if(!G4Threading::IsMultithreadedApplication()) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4warn << "command /vis/multithreading/maxEventQueueSize ignored in sequential mode" << G4endl;
+    }
+    return;
+  }
+
   G4int maxEventQueueSize = fpCommand->GetNewIntValue(newValue);
   fpVisManager->SetMaxEventQueueSize(maxEventQueueSize);
 
@@ -126,5 +143,3 @@ void G4VisCommandMultithreadingMaxEventQueueSize::SetNewValue(G4UIcommand*, G4St
 	   << G4endl;
   }
 }
-
-#endif

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-07-18 Gabriele Cosmo (proc-biasimp-V11-02-00)
+- Fixed reported Coverity defects, to use 'const G4String&' for avoiding
+  implicit copies.
+- Some code cleanup.
+
 ## 2023-11-21 Alexander Howard (proc-biasimp-V11-01-01)
 - Put in protection against on world boundary in PostStepDoIt of
   G4ImportanceProces - addresses bug #1991.

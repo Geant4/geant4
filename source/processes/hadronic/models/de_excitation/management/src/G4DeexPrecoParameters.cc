@@ -69,7 +69,7 @@ void G4DeexPrecoParameters::Initialise()
   fPrecoHighEnergy = 30*CLHEP::MeV;
   fPhenoFactor = 1.0;
 
-  fPrecoType = 3;
+  fPrecoType = 1;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
 
@@ -94,7 +94,7 @@ void G4DeexPrecoParameters::Initialise()
   fTwoJMAX = 10;
 
   fCorrelatedGamma = false;
-  fStoreAllLevels = false;
+  fStoreAllLevels = true;
   fInternalConversion = true;
   fLD = true;  // use simple level density model 
   fFD = false; // use transition to discrete level 

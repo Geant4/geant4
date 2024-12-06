@@ -35,7 +35,6 @@
 #include "G4DNAMolecularIRTModel.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4DNASancheExcitationModel.hh"
-#include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
 #include "G4DNAVibExcitation.hh"
 #include "G4DNAWaterDissociationDisplacer.hh"
 #include "G4DNAWaterExcitationStructure.hh"
@@ -46,13 +45,7 @@
 // particles
 #include "G4Electron.hh"
 #include "G4Electron_aq.hh"
-#include "G4FakeMolecule.hh"
-#include "G4H2.hh"
 #include "G4H2O.hh"
-#include "G4H2O2.hh"
-#include "G4H3O.hh"
-#include "G4HO2.hh"
-#include "G4Hydrogen.hh"
 #include "G4MoleculeTable.hh"
 #include "G4O2.hh"
 #include "G4O3.hh"
@@ -65,6 +58,8 @@
 /****/
 // factory
 #include "G4PhysicsConstructorFactory.hh"
+#include "G4ChemDissociationChannels_option1.hh"
+#include "G4ChemDissociationChannels_option1.hh"
 namespace scavenger
 {
 
@@ -97,17 +92,7 @@ void EmDNAChemistry::SetNewValue(G4UIcommand* command, G4String newValue)
 void EmDNAChemistry::ConstructMolecule()
 {
   // Create the definition
-  G4H2O::Definition();
-  G4Hydrogen::Definition();
-  G4H3O::Definition();
-  G4OH::Definition();
-  G4Electron_aq::Definition();
-  G4H2O2::Definition();
-  G4H2::Definition();
-  G4Oxygen::Definition();
-  G4HO2::Definition();
-  G4O2::Definition();
-  G4O3::Definition();
+  G4ChemDissociationChannels_option1::ConstructMolecule();
 
   auto G4NO2 = new G4MoleculeDefinition("NO_2",
                                         /*mass*/ 46.0055 * g / Avogadro * c_squared,
@@ -124,107 +109,6 @@ void EmDNAChemistry::ConstructMolecule()
                                         /*radius*/ 0.35 * nm);  // can be adjusted
   //____________________________________________________________________________
   // Note: Parameters Value changed according to Plante Paper
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H3Op", G4H3O::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H3Op")->SetDiffusionCoefficient(9.46e-9
-                                                                                 * (m2 / s));
-  G4MoleculeTable::Instance()->GetConfiguration("H3Op")->SetVanDerVaalsRadius(0.25 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("OH", G4OH::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("OH")->SetDiffusionCoefficient(2.2e-9 * (m2 / s));
-  G4MoleculeTable::Instance()->GetConfiguration("OH")->SetVanDerVaalsRadius(0.22 * nm);
-
-  G4MolecularConfiguration* OHm = G4MoleculeTable::Instance()->CreateConfiguration(
-    "OHm",  // just a tag to store and retrieve from
-    // G4MoleculeTable
-    G4OH::Definition(),
-    -1,  // charge
-    5.3e-9 * (m2 / s));
-  OHm->SetMass(17.0079 * g / Avogadro * c_squared);
-  OHm->SetVanDerVaalsRadius(0.33 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("e_aq", G4Electron_aq::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("e_aq")->SetVanDerVaalsRadius(0.50 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H", G4Hydrogen::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H")->SetVanDerVaalsRadius(0.19 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H2", G4H2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H2")->SetDiffusionCoefficient(4.8e-9 * (m2 / s));
-  G4MoleculeTable::Instance()->GetConfiguration("H2")->SetVanDerVaalsRadius(0.14 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H2O2", G4H2O2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H2O2")->SetDiffusionCoefficient(2.3e-9 * (m2 / s));
-  G4MoleculeTable::Instance()->GetConfiguration("H2O2")->SetVanDerVaalsRadius(0.21 * nm);
-
-  // molecules extension (RITRACKS)
-
-  G4MoleculeTable::Instance()->CreateConfiguration("HO2", G4HO2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("HO2")->SetVanDerVaalsRadius(0.21 * nm);
-
-  auto HO2m = G4MoleculeTable::Instance()->CreateConfiguration(
-    "HO2m",  // just a tag to store and retrieve from
-    // G4MoleculeTable
-    G4HO2::Definition(),
-    -1,  // charge
-    1.4e-9 * (m2 / s));
-  HO2m->SetMass(33.00396 * g / Avogadro * c_squared);
-  HO2m->SetVanDerVaalsRadius(0.25 * nm);
-
-  // Oxygen 3P
-  G4MoleculeTable::Instance()->CreateConfiguration("Oxy", G4Oxygen::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("Oxy")->SetVanDerVaalsRadius(0.20 * nm);
-
-  G4MolecularConfiguration* Om =
-    G4MoleculeTable::Instance()->CreateConfiguration("Om",  // just a tag to store and retrieve from
-                                                            // G4MoleculeTable
-                                                     G4Oxygen::Definition(),
-                                                     -1,  // charge
-                                                     2.0e-9 * (m2 / s));
-  Om->SetMass(15.99829 * g / Avogadro * c_squared);
-  Om->SetVanDerVaalsRadius(0.25 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("O2", G4O2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("O2")->SetVanDerVaalsRadius(0.17 * nm);
-
-  auto O2m = G4MoleculeTable::Instance()->CreateConfiguration(
-    "O2m",  // just a tag to store and retrieve from
-    // G4MoleculeTable
-    G4O2::Definition(),
-    -1,  // charge
-    1.75e-9 * (m2 / s));
-  O2m->SetMass(31.99602 * g / Avogadro * c_squared);
-  O2m->SetVanDerVaalsRadius(0.22 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("O3", G4O3::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("O3")->SetVanDerVaalsRadius(0.20 * nm);
-
-  auto O3m = G4MoleculeTable::Instance()->CreateConfiguration(
-    "O3m",  // just a tag to store and retrieve from
-    // G4MoleculeTable
-    G4O3::Definition(),
-    -1,  // charge
-    2.0e-9 * (m2 / s));
-  O3m->SetMass(47.99375 * g / Avogadro * c_squared);
-  O3m->SetVanDerVaalsRadius(0.20 * nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H2O(B)",  // just a tag to store and retrieve
-                                                              // from G4MoleculeTable
-                                                   G4H2O::Definition(),
-                                                   0,  // charge
-                                                   0 * (m2 / s));
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H3Op(B)",  // just a tag to store and retrieve
-                                                               // from G4MoleculeTable
-                                                   G4H3O::Definition(),
-                                                   1,  // charge
-                                                   0 * (m2 / s));
-
-  G4MoleculeTable::Instance()->CreateConfiguration("OHm(B)",  // just a tag to store and retrieve
-                                                              // from G4MoleculeTable
-                                                   G4OH::Definition(),
-                                                   -1,  // charge
-                                                   0 * (m2 / s));
 
   G4MoleculeTable::Instance()->CreateConfiguration("O2(B)",  // just a tag to store and retrieve
                                                              // from G4MoleculeTable
@@ -244,8 +128,6 @@ void EmDNAChemistry::ConstructMolecule()
                                                    -1,  // charge
                                                    0 * (m2 / s));
 
-  // For first-order reactions
-  G4MoleculeTable::Instance()->CreateConfiguration("NoneM", G4FakeMolecule::Definition());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -254,7 +136,7 @@ void EmDNAChemistry::ConstructDissociationChannels()
 {
   //-----------------------------------
   // Get the molecular configuration
-  auto OH = G4MoleculeTable::Instance()->GetConfiguration("OH");
+  auto OH = G4MoleculeTable::Instance()->GetConfiguration("°OH");
   auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm");
   auto e_aq = G4MoleculeTable::Instance()->GetConfiguration("e_aq");
   auto H2 = G4MoleculeTable::Instance()->GetConfiguration("H2");

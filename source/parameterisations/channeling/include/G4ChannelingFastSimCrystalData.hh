@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paternò (modifications & testing)
 
 #ifndef G4ChannelingFastSimCrystalData_h
 #define G4ChannelingFastSimCrystalData_h 1
@@ -60,7 +61,9 @@ public:
 
     ///find and upload crystal lattice input files, calculate all the basic values
     ///(to do only once)
-    void SetMaterialProperties(const G4Material* crystal, const G4String &lattice);
+    void SetMaterialProperties(const G4Material* crystal,
+                               const G4String &lattice,
+                               const G4String &filePath);
 
     ///calculate the coordinates in the co-rotating reference system
     ///within a channel (periodic cell)
@@ -87,6 +90,10 @@ public:
 
     ///auxialiary function to transform the horizontal angle
     G4double AngleXShift(G4double z){return fMiscutAngle + z*fCurv;}
+
+    ///get channel width in x and y
+    G4double GetChannelWidthX(){return fDx;}
+    G4double GetChannelWidthY(){return fDy;}
 
 private:
 

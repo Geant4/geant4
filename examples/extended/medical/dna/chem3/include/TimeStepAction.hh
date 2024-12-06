@@ -38,16 +38,19 @@
 #define ITACTION_H
 
 #include "G4UserTimeStepAction.hh"
+class G4MolecularConfiguration;
 
 class TimeStepAction : public G4UserTimeStepAction
 {
   public:
     TimeStepAction();
-    virtual ~TimeStepAction();
-    TimeStepAction(const TimeStepAction& other);
-    TimeStepAction& operator=(const TimeStepAction& other);
+    ~TimeStepAction() override = default;
+    TimeStepAction(const TimeStepAction& other) = delete;
+    TimeStepAction& operator=(const TimeStepAction& other) = delete;
 
-    virtual void StartProcessing() { ; }
+    void StartProcessing() override { ; }
+
+    static void PrintSpecieInfo(G4MolecularConfiguration* molconf);
 
     /** In this method, the user can use :
      * G4ITTimeStepper::Instance()->GetGlobalTime(),
@@ -57,16 +60,16 @@ class TimeStepAction : public G4UserTimeStepAction
      * WARNING :
      *    The call of this method happens before the call of DoIT methods
      */
-    virtual void UserPreTimeStepAction() { ; }
-    virtual void UserPostTimeStepAction();
+    void UserPreTimeStepAction() override { ; }
+    void UserPostTimeStepAction() override;
 
     /**
      * Inform about a reaction
      */
-    virtual void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
-                                    const std::vector<G4Track*>* /*products*/);
+    void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
+                                    const std::vector<G4Track*>* /*products*/) override;
 
-    virtual void EndProcessing() { ; }
+    void EndProcessing() override { ; }
 };
 
 #endif  // ITACTION_H

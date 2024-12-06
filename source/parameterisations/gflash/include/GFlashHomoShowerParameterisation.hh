@@ -49,13 +49,11 @@ class G4Material;
 class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
 {
   public:  // with description
-  
-    GFlashHomoShowerParameterisation(G4Material * aMat,
-                                     GVFlashHomoShowerTuning * aPar = 0);
+    GFlashHomoShowerParameterisation(G4Material* aMat, GVFlashHomoShowerTuning* aPar = 0);
     ~GFlashHomoShowerParameterisation();
 
     void ComputeRadialParameters(G4double y, G4double Tau);
-    void GenerateLongitudinalProfile(G4double Energy); 
+    void GenerateLongitudinalProfile(G4double Energy);
     void ComputeZAX0EFFetc();
 
     G4double IntegrateEneLongitudinal(G4double LongitudinalStep);
@@ -63,71 +61,69 @@ class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
     G4double ComputeTau(G4double LongitudinalPosition);
 
     G4double GeneratePhi();
-    G4double GenerateRadius(G4int ispot, G4double Energy,
-    G4double LongitudinalPosition);
+    G4double GenerateRadius(G4int ispot, G4double Energy, G4double LongitudinalPosition);
     G4double GenerateExponential(G4double Energy);
-    void SetMaterial(G4Material *mat);
+    void SetMaterial(G4Material* mat);
 
-    inline G4double GetAveR99() {return (3.5 * Rm);}
-    inline G4double GetAveR90() {return (1.5 * Rm);} //ok
+    inline G4double GetAveR99() { return (3.5 * Rm); }
+    inline G4double GetAveR90() { return (1.5 * Rm); }  // ok
 
     inline G4double GetAveTmx() {return (X0 * std::exp(AveLogTmaxh));}
     inline G4double GetAveT99() {return (X0 * AveLogTmaxh/(AveLogAlphah-1.00));}
     inline G4double GetAveT90() {return (2.5* X0*std::exp( AveLogTmaxh) );}
 
     inline   G4double GetNspot(){ return NSpot;}
-    inline   G4double GetX0(){return X0;}  
-    inline   G4double GetEc(){return Ec;} 
-    inline   G4double GetRm(){return Rm;} 
+    inline G4double GetX0() { return X0; }
+    inline G4double GetEc() { return Ec; }
+    inline G4double GetRm() { return Rm; }
 
   private:
+    G4Material* material;
 
-    G4Material *material;
-
-    //Resolution
-    G4double ConstantResolution; 
-    G4double NoiseResolution;   
+    // Resolution
+    G4double ConstantResolution;
+    G4double NoiseResolution;
     G4double SamplingResolution;
 
     // parametrization parameters
-    GVFlashHomoShowerTuning * thePar;
+    GVFlashHomoShowerTuning* thePar;
 
-    // Cashed parameters:  
+    // Cashed parameters:
     // Longitudinal Coefficients for a homogeneous calo
     G4double ParAveT1;
-    G4double ParAveA1,ParAveA2,ParAveA3;
-    G4double ParSigLogT1,ParSigLogT2;
-    G4double ParSigLogA1,ParSigLogA2;
-    G4double ParRho1,ParRho2;
+    G4double ParAveA1, ParAveA2, ParAveA3;
+    G4double ParSigLogT1, ParSigLogT2;
+    G4double ParSigLogA1, ParSigLogA2;
+    G4double ParRho1, ParRho2;
 
     void ComputeLongitudinalParameters(G4double y);
     void GenerateEnergyProfile(G4double y);
     void GenerateNSpotProfile(G4double y);
 
     // Radial Coefficients
-    G4double ParRC1,ParRC2,ParRC3,ParRC4;
-    G4double ParWC1,ParWC2,ParWC3;
-    G4double ParWC4,ParWC5,ParWC6;
-    G4double ParRT1,ParRT2,ParRT3,ParRT4;
-    G4double ParRT5,ParRT6;
+    G4double ParRC1, ParRC2, ParRC3, ParRC4;
+    G4double ParWC1, ParWC2, ParWC3;
+    G4double ParWC4, ParWC5, ParWC6;
+    G4double ParRT1, ParRT2, ParRT3, ParRT4;
+    G4double ParRT5, ParRT6;
 
     // Spot multiplicity Coefficients
-    G4double ParSpotT1,ParSpotT2,ParSpotA1, ParSpotA2;
-    G4double ParSpotN1,ParSpotN2;
+    G4double ParSpotT1, ParSpotT2, ParSpotA1, ParSpotA2;
+    G4double ParSpotN1, ParSpotN2;
 
     // PARAMETRISATION variables (Energy & position dependent)
-    // Longitudinal 
+    // Longitudinal
     // homogeneous
-    G4double AveLogAlphah,AveLogTmaxh;
-    G4double SigmaLogAlphah,SigmaLogTmaxh;
+    G4double AveLogAlphah, AveLogTmaxh;
+    G4double SigmaLogAlphah, SigmaLogTmaxh;
     G4double Rhoh;
-    G4double Alphah,Tmaxh,Betah;  
+    G4double Alphah, Tmaxh, Betah;
 
     // Multiplicity
-    G4double NSpot,AlphaNSpot,TNSpot,BetaNSpot;
+    G4double NSpot, AlphaNSpot, TNSpot, BetaNSpot;
 
-    //Radial
-    G4double RadiusCore, WeightCore,RadiusTail;
+    // Radial
+    G4double RadiusCore, WeightCore, RadiusTail;
 };
 
 #endif

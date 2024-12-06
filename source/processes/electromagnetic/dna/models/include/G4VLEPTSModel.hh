@@ -58,8 +58,7 @@ enum XSType {XSEnergy=0,
 
 class G4VLEPTSModel : public G4VEmModel
 {
-
-public: 
+ public: 
   
   G4VLEPTSModel(const G4String& processName);
   ~G4VLEPTSModel() override;
@@ -76,14 +75,16 @@ public:
   G4VLEPTSModel& operator=(const G4VLEPTSModel &right); //hide assignment operator
   G4VLEPTSModel(const G4VLEPTSModel& );
   
-protected:
+ protected:
+
   void Init();
-  G4bool ReadParam(G4String fileName, const G4Material* aMaterial);
-  virtual std::map<G4int,std::vector<G4double> > ReadIXS(G4String fileName, const G4Material* aMaterial);
+  G4bool ReadParam(const G4String& fileName, const G4Material* aMaterial);
+  virtual std::map<G4int,std::vector<G4double> > ReadIXS(const G4String& fileName, const G4Material* aMaterial);
   G4double SampleEnergyLoss(const G4Material* aMaterial, G4double eMin, G4double eMax);
   void BuildMeanFreePathTable( const G4Material* aMaterial, std::map< G4int, std::vector<G4double> >& integralXS );
   
-protected:
+ protected:
+
   G4PhysicsTable * theMeanFreePathTable;
   
   G4double theLowestEnergyLimit;

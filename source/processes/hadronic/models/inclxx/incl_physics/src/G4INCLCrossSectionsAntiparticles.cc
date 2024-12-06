@@ -188,9 +188,9 @@ namespace G4INCL {
         }
         else{ // ppbar or nnbar
             if(p1->getType()==antiProton || p1->getType()==Proton)
-                sigma = KinematicsUtils::compute_xs(BFMM204, pLab); // ppbar case
+                sigma = KinematicsUtils::compute_xs(std::move(BFMM204), pLab); // ppbar case
             else
-                sigma = KinematicsUtils::compute_xs(BFMM204nn, pLab); // nnbar case
+                sigma = KinematicsUtils::compute_xs(std::move(BFMM204nn), pLab); // nnbar case
             return sigma;
         }
     }
@@ -234,15 +234,12 @@ namespace G4INCL {
         
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
-        if(iso == 2 || iso == -2){ //npbar or pnbar
-            sigma = KinematicsUtils::compute_xs(BFMM472, pLab);
+        if(iso == 2 || iso == -2){ // npbar or pnbar
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM472), pLab);
             return sigma;
         }
-        else{ // ppbar or nnbar
-            if(p1->getType()==antiProton || p1->getType()==Proton)
-                sigma = KinematicsUtils::compute_xs(BFMM2, pLab); // ppbar case
-            else
-                sigma = KinematicsUtils::compute_xs(BFMM2, pLab); // nnbar case
+        else { // ppbar or nnbar
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM2), pLab);
             return sigma;
         }
     }
@@ -332,10 +329,10 @@ namespace G4INCL {
             return sigma;
         }
         else{ // ppbar or nnbar
-            sigma = KinematicsUtils::compute_xs(BFMM113, pLab) 
-            +KinematicsUtils::compute_xs(BFMM139, pLab) +KinematicsUtils::compute_xs(BFMM136, pLab)
-            +KinematicsUtils::compute_xs(BFMM146, pLab)+KinematicsUtils::compute_xs(BFMM143, pLab) 
-            +KinematicsUtils::compute_xs(BFMM121, pLab)+KinematicsUtils::compute_xs(BFMM149, pLab)
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM113), pLab) 
+            +KinematicsUtils::compute_xs(std::move(BFMM139), pLab)+KinematicsUtils::compute_xs(std::move(BFMM136), pLab)
+            +KinematicsUtils::compute_xs(std::move(BFMM146), pLab)+KinematicsUtils::compute_xs(std::move(BFMM143), pLab) 
+            +KinematicsUtils::compute_xs(std::move(BFMM121), pLab)+KinematicsUtils::compute_xs(std::move(BFMM149), pLab)
             +BFMM144 +BFMM101; // nnbar case totally same as ppbar
             return sigma;
         }
@@ -402,11 +399,11 @@ namespace G4INCL {
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
         if(iso == 2 || iso == -2){ //npbar or pnbar
-            sigma = KinematicsUtils::compute_xs(BFMM491, pLab) + KinematicsUtils::compute_xs(BFMM185, pLab) + KinematicsUtils::compute_xs(BFMM188, pLab);
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM491), pLab) + KinematicsUtils::compute_xs(std::move(BFMM185), pLab) + KinematicsUtils::compute_xs(std::move(BFMM188), pLab);
             return sigma;
         }
         else{ // ppbar or nnbar
-            sigma = KinematicsUtils::compute_xs(BFMM199, pLab) + KinematicsUtils::compute_xs(BFMM185, pLab) + KinematicsUtils::compute_xs(BFMM188, pLab);
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM199), pLab) + KinematicsUtils::compute_xs(std::move(BFMM185), pLab) + KinematicsUtils::compute_xs(std::move(BFMM188), pLab);
             return sigma;
         }
     }
@@ -471,11 +468,11 @@ namespace G4INCL {
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
         if(iso == 2 || iso == -2){ // pnbar or npbar
-            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM167, pLab) + KinematicsUtils::compute_xs(BFMM198, pLab);
+            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(std::move(BFMM167), pLab) + KinematicsUtils::compute_xs(std::move(BFMM198), pLab);
             return sigma;
         }
         else{ // ppbar or nnbar
-            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM492, pLab) + KinematicsUtils::compute_xs(BFMM494, pLab);
+            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(std::move(BFMM492), pLab) + KinematicsUtils::compute_xs(std::move(BFMM494), pLab);
             return sigma;
         }
     }
@@ -536,11 +533,11 @@ namespace G4INCL {
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
         if(iso == 2 || iso == -2){ // pnbar or npbar
-            sigma = KinematicsUtils::compute_xs(BFMM169, pLab) + KinematicsUtils::compute_xs(BFMM169, pLab) + KinematicsUtils::compute_xs(BFMM197, pLab) + KinematicsUtils::compute_xs(BFMM161, pLab);
+            sigma = KinematicsUtils::compute_xs(BFMM169, pLab) + KinematicsUtils::compute_xs(BFMM169, pLab) + KinematicsUtils::compute_xs(std::move(BFMM197), pLab) + KinematicsUtils::compute_xs(std::move(BFMM161), pLab);
             return sigma;
         }
         else{ // ppbar or nnbar
-            sigma = KinematicsUtils::compute_xs(BFMM161, pLab) + KinematicsUtils::compute_xs(BFMM169, pLab) + KinematicsUtils::compute_xs(BFMM197, pLab) + KinematicsUtils::compute_xs(BFMM201, pLab);
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM161), pLab) + KinematicsUtils::compute_xs(std::move(BFMM169), pLab) + KinematicsUtils::compute_xs(std::move(BFMM197), pLab) + KinematicsUtils::compute_xs(std::move(BFMM201), pLab);
             return sigma;
         }
     }
@@ -580,15 +577,15 @@ namespace G4INCL {
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
         if(iso == 2 || iso == -2){ // pnbar or npbar
-            sigma = KinematicsUtils::compute_xs(BFMM6, pLab)*KinematicsUtils::compute_xs(BFMM471, pLab)/KinematicsUtils::compute_xs(BFMM1, pLab);
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM6), pLab)*KinematicsUtils::compute_xs(std::move(BFMM471), pLab)/KinematicsUtils::compute_xs(std::move(BFMM1), pLab);
             return sigma;
         }
         else if(p1->getType()==antiProton || p2->getType()==Proton){ // ppbar case
-            sigma = KinematicsUtils::compute_xs(BFMM6, pLab);
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM6), pLab);
             return sigma;
         }
         else{ // nnbar case
-            sigma = KinematicsUtils::compute_xs(BFMM6, pLab)*KinematicsUtils::compute_xs(BFMM471, pLab)/KinematicsUtils::compute_xs(BFMM1, pLab);
+            sigma = KinematicsUtils::compute_xs(std::move(BFMM6), pLab)*KinematicsUtils::compute_xs(std::move(BFMM471), pLab)/KinematicsUtils::compute_xs(std::move(BFMM1), pLab);
             return sigma;
         }
     }

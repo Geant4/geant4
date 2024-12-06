@@ -23,33 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoringCylinder
 //
-//
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4ScoringCylinder_h
 #define G4ScoringCylinder_h 1
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
+
+#include <vector>
+
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VPrimitiveScorer;
 
-#include <vector>
-
 class G4ScoringCylinder : public G4VScoringMesh
 {
  public:
-  G4ScoringCylinder(G4String wName);
+
+  G4ScoringCylinder(const G4String& wName);
   ~G4ScoringCylinder() override = default;
 
-
- public:
   void List() const override;
   void Draw(RunScore* map, G4VScoreColorMap* colorMap,
-                    G4int axflg = 111) override;
+            G4int axflg = 111) override;
   void DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
-                          G4int idxProj, G4int idxColumn) override;
+                  G4int idxProj, G4int idxColumn) override;
 
   void SetRMin(G4double rMin) { fSize[0] = rMin; }
   void SetRMax(G4double rMax) { fSize[1] = rMax; }
@@ -61,9 +62,11 @@ class G4ScoringCylinder : public G4VScoringMesh
   void GetRZPhi(G4int index, G4int q[3]) const;
 
  protected:
+
   void SetupGeometry(G4VPhysicalVolume* fWorldPhys) override;
 
  private:
+
   // Xin Dong 09302011 for Scorers
   enum IDX
   {

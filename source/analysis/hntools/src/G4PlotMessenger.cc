@@ -92,7 +92,7 @@ void G4PlotMessenger::SetStyleCmd()
     "inlib_default";
 #endif
 
-  fSetStyleCmd = CreateCommand<G4UIcmdWithAString>("setStyle", guidance);
+  fSetStyleCmd = CreateCommand<G4UIcmdWithAString>("setStyle", std::move(guidance));
   fSetStyleCmd->SetParameterName("Style", false);
   fSetStyleCmd->SetCandidates("inlib_default");
 }

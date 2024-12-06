@@ -44,8 +44,8 @@
 class G4PSCellCharge : public G4VPrimitiveScorer
 {
  public:
-  G4PSCellCharge(G4String name, G4int depth = 0);
-  G4PSCellCharge(G4String name, const G4String& unit, G4int depth = 0);
+  G4PSCellCharge(const G4String& name, G4int depth = 0);
+  G4PSCellCharge(const G4String& name, const G4String& unit, G4int depth = 0);
   ~G4PSCellCharge() override = default;
 
   void Initialize(G4HCofThisEvent*) override;

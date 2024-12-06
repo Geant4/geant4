@@ -45,7 +45,7 @@ class G4UIcmdWithADoubleAndUnit : public G4UIcommand
     // and the pointer to the messenger must be given
     G4UIcmdWithADoubleAndUnit(const char* theCommandPath, G4UImessenger* theMessenger);
 
-    G4int DoIt(G4String parameterList) override;
+    G4int DoIt(const G4String& parameterList) override;
 
     // Convert a double value to a string of digits and unit. Best unit is
     // chosen from the unit category of default unit (in case SetDefaultUnit()

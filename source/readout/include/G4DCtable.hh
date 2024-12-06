@@ -53,18 +53,14 @@ class G4DCtable
     G4DCtable();
     ~G4DCtable();
 
-  public:
-    G4int Registor(G4String SDname,G4String DCname);
-    G4int GetCollectionID(G4String DCname) const;
+    G4int Registor(const G4String& SDname, const G4String& DCname);
+    G4int GetCollectionID(const G4String& DCname) const;
     G4int GetCollectionID(G4VDigitizerModule* aDM) const;
 
-  private:
-    std::vector<G4String> DMlist;
-    std::vector<G4String> DClist;
-
-  public:
     inline G4int entries() const
-    { return G4int(DClist.size()); }
+    {
+      return G4int(DClist.size());
+    }
     inline G4String GetDMname(G4int i) const
     {
       if(i<0||i>entries()) return "***Not Defined***";
@@ -75,6 +71,10 @@ class G4DCtable
       if(i<0||i>entries()) return "***Not Defined***";
       return DClist[i];
     }
+
+  private:
+    std::vector<G4String> DMlist;
+    std::vector<G4String> DClist;
 };
 
 #endif

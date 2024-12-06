@@ -1,0 +1,269 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            moleculardna
+                            ------------
+
+A Geant4-DNA application for simulating DNA damage.
+
+AUTHORS (alphabetical order)
+
+J.M.C. Brown, K. Chatzipapas, P. Dondero, M. Dordevic, S. Incerti, M. Karamitros,
+N. Lampe, D. Sakata, W.G. Shin, R. Stanzani, H. Tran (*), S. Zein
+
+(*) contact: tran@lp2ib.in2p3.fr
+
+Dedicated website:
+http://moleculardna.org
+or
+https://geant4-dna.github.io/molecular-docs/
+
+This example is provided by the Geant4-DNA collaboration.
+(http://geant4-dna.org)
+
+These two PhD theses describe the chain:
+W.-G. Shin (2020): https://tel.archives-ouvertes.fr/tel-03161030
+N. Lampe (2017): http://www.theses.fr/2017CLFAC011
+
+Any report or published results obtained using the Geant4-DNA software
+shall cite the following Geant4-DNA collaboration publications:
+Med. Phys. (2024) in press (https://doi.org/10.1002/mp.17256)
+Med. Phys. 45 (2018) e722-e739
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+
+Related publications can be found at:
+http://geant4-dna.org
+
+0 - INTRODUCTION
+
+    This example shows how to simulate physics, physico-chemistry and
+    chemistry processes in DNA geometries to predict early damage.
+
+    A more detailed description is available at http://moleculardna.org
+
+    To build the example:
+    mkdir build
+    cd build
+    cmake ../pathToExamples/moleculardna
+    make
+
+    To run the example:
+    ./molecular -m cylinders.mac -t 2 -p 2
+    # -m : macro file
+    # -t : number of threads to run
+    # -p : physics list option
+
+    Macro files can control every aspect of the simulation, see this introduction:
+    https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
+
+    The macro commands of this example are listed in:
+    https://geant4-dna.github.io/molecular-docs/docs/overview/configuration
+
+1 - GEOMETRY DEFINITION
+
+    The geometry is built from text files for cylinders (cylinders.mac),
+    ecoli (ecoli.mac) and human cell (human_cell*.mac) geometries.
+
+    - cylinders.mac: to build a 3 μm sphere filled with 200,000 individual 216 bp
+      long straight DNA segments in a 100×30×30 nm placement volume.
+      This is a geometry used for parameter (optimization) studies.
+
+    - plasmid.mac: to model a cube of liquid water (side 4.84 um) containing around
+      10 000 plasmids (pBR322, 4367 base pairs) randomly oriented in a supercoiled conformation.
+
+    - ecoli.mac: to demonstrate a simple model where the bacterial DNA follows a
+      large scale fractal ‘Hilbert curve’ geometry.
+
+    - human_cell.mac, human_cell_HTB177.mac and human_cell_MCF7.mac: to model
+      three different cell geometries, as detailed in [1]. These mac file may
+      be used to produce data that serve as input to the repair models.
+
+    - human_cell_chromosomes.mac: to model the chromosomal type of cell geometry,
+      as detailed in [4].
+
+    More geometry information can be found in https://geant4-dna.github.io/molecular-docs/docs/examples
+
+    To construct other DNA geometries, see http://natl.github.io/fractaldna/
+
+    To construct chromosomal or other complex DNA geometries, see https://github.com/konhat88/complexDNA
+
+    Macro commands can be used to control the geometry parameters, see for example cylinders.mac:
+
+    # Commands for world and cell dimensions
+    /world/worldSize 10200 nm
+    /cell/radiusSize 3 3 3 um
+
+    # Command to select the chemistry model (only IRT_syn for this example)
+    /process/chem/TimeStepModel IRT_syn
+
+    # End time of chemistry simulation
+    /scheduler/endTime 1 us
+
+    # Set voxel optimisation
+    /dnageom/setSmartVoxels 1
+
+    # Check overlaps in DNA geometry region
+    /dnageom/checkOverlaps false
+
+    # Distance from base pairs at which radicals are killed
+    /dnageom/radicalKillDistance 9 nm
+
+    # Deposited energy accumulation range limit to start recording SBs from direct effects
+    /dnageom/interactionDirectRange 7 angstrom
+
+    # Side length for each placement (x, y, z)
+    /dnageom/placementSize 30 30 100 nm
+
+    # Scaling of XYZ in fractal definition file
+    /dnageom/fractalScaling 1 1 1 nm
+
+    # Path to file that defines placement locations
+    /dnageom/definitionFile geometries/prisms200k_r3000.txt
+
+    # Set a placement volume [format] [name path]
+    /dnageom/placementVolume prism geometries/straight-216-0.txt
+
+    # Take the angles in the voxel placement file as multiples of pi
+    # E.g. set to true if the angle 0.5 should mean 90 degrees
+    /dnageom/setVoxelPlacementAnglesAsMultiplesOfPi false # default
+
+    # The molecule size columns are optional, as they can either
+    # fall back onto the default sizes or be set to custom sizes in the macro
+    # used default moleculeSize (as belows)
+    /dnageom/useCustomMoleculeSizes false # default
+    #/dnageom/moleculeSize
+
+    # Draw cell/chromosome volumes rather than DNA (makes DNA invisible)
+    /dnageom/drawCellVolumes false # default
+
+    # Activate Histone scavenging function with default radius
+    /dnageom/activateHistoneScavenging true # default
+
+    # DNA geometries are only ever placed in a chromosome
+    /chromosome/add cylinder sphere 3000 0 0 0 nm
+
+    # For the visualisation of DNA geometries, the following line can be used
+    /control/execute vis.mac
+    # More specifically, start moleculardna using the command ./molecular, to
+    # to open the Qt visualiser. Then use the mac file that you want, e.g.
+    # /control/execute cylinders.mac
+    # For the visualization, large amount of RAM is needed. For example
+    # using cylinders DNA geometries, to visualize 200 cylinders, ~2.5 GB
+    # are needed. For 2000 cylinders, ~11 GB are needed.
+
+    The DNA parallel world can be activated using the "useParallelPhysicsWorld" flag
+    in the PhysicsList.cc and DetectorConstruction.cc files for the physics stage.
+    Setting "useParallelPhysicsWorld = false" means that particles will only interact
+    with the water volume. Energy deposition in water caused by direct damage is
+    recorded using octree data structures associated with DNA volumes.
+
+2 - PHYSICS LIST
+
+    The physics list can use the recommended G4EmDNAPhysics_option2,
+    G4EmDNAPhysics_option4 or
+    G4EmDNAPhysics_option6 constructors.
+
+3 - PRIMARY GENERATOR
+
+    The source can be specified via General Particle Source in the provided
+    macro files.
+
+4 - DNA DAMAGE MODEL
+
+    Mechanistic DNA simulations are dependent upon a
+    DNA damage model to relate energy depositions close to DNA,
+    and chemical reactions with DNA, to actual DNA damage
+
+    The following macro commands can be used to control the damage parameters:
+
+    # Direct damage threshold
+    /dnadamage/directDamageLower 17.5 eV
+    /dnadamage/directDamageUpper 17.5 eV
+
+    # Indirect damage probability to create a SSB for
+    # OH radical + DNA base
+    /dnadamage/indirectOHBaseChance 1.0
+    /dnadamage/indirectOHStrandChance 0.65
+    /dnadamage/inductionOHChance 0.0
+
+    # H radicals + DNA base
+    /dnadamage/indirectHBaseChance 1.0
+    /dnadamage/indirectHStrandChance 0.65
+    /dnadamage/inductionHChance 0.0
+
+    # e_aq radicals + base
+    /dnadamage/indirectEaqBaseChance 1.0
+    /dnadamage/indirectEaqStrandChance 0.65
+    /dnadamage/inductionEaqChance 0.0
+
+5 - RESULTS
+
+    # Bool to set whether strands ought be saved
+    /analysisDNA/saveStrands false # default
+
+    # Directory to save DNA damage fragments
+    /analysisDNA/strandDir
+
+    # Gap between DNA fragments in base pairs
+    # Set to zero to score placement volumes independently
+    /analysisDNA/fragmentGap 0
+
+    # To save the position of hits histos only on one chain
+    /analysisDNA/diagnosticChain
+
+    Several ROOT macro files are provided in the analysis directory:
+    - cylinders.C: to plot damage from cylinders geometry
+    - ecoli.C: to plot damage from ecoli geometry
+    - human_cell.C: to plot damage and fragments distribution from human_cell*
+      geometries. The human_cell_alphas.C macro can be used as shown in [1].
+    - plasmid.C: to plot damage and fragments distribution from plasmid geometries
+    - human_cell_chromosomes.C: to plot damage and fragments distribution
+      from human_cell_chromosomes geometries.
+
+    A python macro file is provided to modify ROOT output in SDD file format [2]:
+    - createSDD.py:  to use it, insert the command "python3 createSDD.py".
+                     If error with ROOT, simply
+                     source /path/to/root/bin/thisroot.(c)sh,
+                     do "pip install pyroot" and try again.
+
+    A python macro file is provided to analyse the output of chromosomal geometry simulation [4]:
+    - human_cell_chromosomes.py: to use it, insert the command "python3 human_cell_chromosomes.py".
+
+
+    A python macro file to calculate repair kinetics is located in the folder
+    repair_survival_models. This script can be used with the output of the mac
+    file human_cell (10^5 primaries) to reproduce data published in [3]:
+    - molecularDNArepair.py:  to use it, insert the command "python3 molecularDNArepair.py".
+                              The molecular-dna.root file is also needed to run it, as produced by
+                              the human-cell.mac macro.
+
+    A python macro file to calculate the survival probability of cells is located
+    in the folder repair_survival_models. This script is early released and needs to be optimized
+    to fit any data.
+    - molecularDNAsurvival.py:  to use it, insert the command "python3 molecularDNAsurvival.py".
+                                The molecular-dna.root file is needed to run it, as produced by
+                                the human-cell.mac macro.
+
+6 - PHASE SPACE READING
+
+    The example can read a phase space file as source for the primary generation,
+    defined in the csv format used by the GRAS Two-Stage Analysis [5].
+    An example of phase space file and the macro to read it are provided in the
+    "/phase_space" subdirectory.
+    This simple phase space file only provides 20 electrons with an energy of
+    45 keV on a randomly shaped surface based on the cylinders.mac macro file.
+
+7 - REFERENCES
+
+    [1] https://doi.org/10.1016/j.ejmp.2023.102613
+    [2] https://doi.org/10.1667/RR15209.1
+    [3] https://doi.org/10.1002/pro6.1186
+    [4] https://doi.org/10.1016/j.ejmp.2024.104839
+    [5] https://spitfire.estec.esa.int/trac/GRAS/wiki/GRAS/GRAS-05-02/UserGuideTwoStage
+
+An alternative example for DNA damage calculation can be found in /examples/advanced/dna/dsbandrepair

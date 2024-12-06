@@ -33,6 +33,7 @@
 #include "G4Track.hh"
 #include "G4VTrajectory.hh"
 #include "G4Event.hh"
+#include "G4EventManager.hh"
 
 G4SubEventTrackStack::~G4SubEventTrackStack()
 {
@@ -71,7 +72,8 @@ void G4SubEventTrackStack::PushToStack(const G4StackedTrack& aStackedTrack)
   else if(fCurrentSE->size()==fMaxEnt)
   {
     // current sus-event is already full. Transfer it to G4Event and create a new sub-event.
-    auto nSubEv = fCurrentEvent->StoreSubEvent(fSubEventType,fCurrentSE);
+    auto nSubEv = G4EventManager::GetEventManager()
+                    ->StoreSubEvent(fCurrentEvent,fSubEventType,fCurrentSE);
     if(verboseLevel>1)
     {
       G4cout << "### event id " << fCurrentEvent->GetEventID()
@@ -107,7 +109,8 @@ void G4SubEventTrackStack::ReleaseSubEvent()
   }
   if(fCurrentSE!=nullptr)
   {
-    auto nSubEv = fCurrentEvent->StoreSubEvent(fSubEventType,fCurrentSE);
+    auto nSubEv = G4EventManager::GetEventManager()
+                    ->StoreSubEvent(fCurrentEvent,fSubEventType,fCurrentSE);
     if(verboseLevel>1)
     {
       G4cout << "### event id " << fCurrentEvent->GetEventID()

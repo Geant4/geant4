@@ -125,7 +125,6 @@ class G4NistElementBuilder
   G4Element* BuildElement(G4int Z);
 
  private:
-  G4String elmSymbol[maxNumElements];
   G4double atomicMass[maxNumElements];  // amu
   G4double bindingEnergy[maxNumElements];
   G4int nIsotopes[maxNumElements];
@@ -141,7 +140,7 @@ class G4NistElementBuilder
   G4int index;
   G4int verbose;
 
-  std::vector<G4String> elmNames;
+  std::vector<G4String> elmSymbol;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,7 +217,7 @@ inline G4int G4NistElementBuilder::GetNumberOfNistIsotopes(G4int Z) const
 
 inline const std::vector<G4String>& G4NistElementBuilder::GetElementNames() const
 {
-  return elmNames;
+  return elmSymbol;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

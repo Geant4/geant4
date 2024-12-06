@@ -22,6 +22,7 @@
 #endif
 
 #include <istream>
+#include <utility>
 
 namespace tools {
 namespace rcsv {
@@ -196,7 +197,7 @@ public:
           }
           planes.push_back(value);
         }
-        hdata.m_in_range_plane_Sxyw = planes;
+        hdata.m_in_range_plane_Sxyw = std::move(planes);
 
       } else if(_words[0]=="#bin_number") {
         if(_words.size()!=2) {
@@ -335,8 +336,8 @@ public:
     tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pdata(hdata); //to be filled correctly.
     if(is_profile) {
       pdata.m_is_profile = true;
-      pdata.m_bin_Svw = _bin_Svw;
-      pdata.m_bin_Sv2w = _bin_Sv2w;
+      pdata.m_bin_Svw = std::move(_bin_Svw);
+      pdata.m_bin_Sv2w = std::move(_bin_Sv2w);
       pdata.m_cut_v = _cut_v;
       pdata.m_min_v = _min_v;
       pdata.m_max_v = _max_v;
@@ -359,7 +360,7 @@ public:
               << ", mean " << h->mean() << ", rms " << h->rms()
               << std::endl;
       }
-      a_class = _class;
+      a_class = std::move(_class);
       a_obj = h;
 
     } else if(_class==tools::histo::h2d::s_class()) {
@@ -380,7 +381,7 @@ public:
               << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
               << std::endl;
       }
-      a_class = _class;
+      a_class = std::move(_class);
       a_obj = h;
 
     } else if(_class==tools::histo::h3d::s_class()) {
@@ -402,7 +403,7 @@ public:
               << ", mean_z " << h->mean_z() << ", rms_z " << h->rms_z()
               << std::endl;
       }
-      a_class = _class;
+      a_class = std::move(_class);
       a_obj = h;
 
     } else if(_class==tools::histo::p1d::s_class()) {
@@ -422,7 +423,7 @@ public:
               << ", mean " << h->mean() << ", rms " << h->rms()
               << std::endl;
       }
-      a_class = _class;
+      a_class = std::move(_class);
       a_obj = h;
 
     } else if(_class==tools::histo::p2d::s_class()) {
@@ -443,7 +444,7 @@ public:
               << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
               << std::endl;
       }
-      a_class = _class;
+      a_class = std::move(_class);
       a_obj = h;
 
 /*

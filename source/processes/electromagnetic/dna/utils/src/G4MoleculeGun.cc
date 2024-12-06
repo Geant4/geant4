@@ -122,7 +122,7 @@ void G4MoleculeGun::AddMolecule(const G4String& name,
   shoot->fMoleculeName = name;
   shoot->fPosition = position;
   shoot->fTime = time;
-  fShoots.push_back(shoot);
+  fShoots.push_back(std::move(shoot));
 }
 
 //------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ void G4MoleculeGun::AddNMolecules(std::size_t n,
   shoot->fMoleculeName = moleculeName;
   shoot->fPosition = position;
   shoot->fTime = time;
-  fShoots.push_back(shoot);
+  fShoots.push_back(std::move(shoot));
 }
 
 //------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ G4MoleculeGun::AddMoleculesRandomPositionInBox(std::size_t n,
   shoot->fPosition = boxCenter;
   shoot->fBoxSize = new G4ThreeVector(boxSize);
   shoot->fTime = time;
-  fShoots.push_back(shoot);
+  fShoots.push_back(std::move(shoot));
 }
 
 //------------------------------------------------------------------------------
@@ -225,5 +225,5 @@ void G4MoleculeGun::AddMoleculeInCMRepresentation(std::size_t n,
   shoot->fNumber = (G4int)n;
   shoot->fMoleculeName = moleculeName;
   shoot->fTime = time;
-  fShoots.push_back(shoot);
+  fShoots.push_back(std::move(shoot));
 }

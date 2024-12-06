@@ -48,7 +48,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCellFluxForCylinder3D::G4PSCellFluxForCylinder3D(G4String name, G4int ni,
+G4PSCellFluxForCylinder3D::G4PSCellFluxForCylinder3D(const G4String& name, G4int ni,
                                                      G4int nj, G4int nk,
                                                      G4int depi, G4int depj,
                                                      G4int depk)
@@ -57,7 +57,7 @@ G4PSCellFluxForCylinder3D::G4PSCellFluxForCylinder3D(G4String name, G4int ni,
   nSegment[0] = nSegment[1] = nSegment[2] = 0;
 }
 
-G4PSCellFluxForCylinder3D::G4PSCellFluxForCylinder3D(G4String name,
+G4PSCellFluxForCylinder3D::G4PSCellFluxForCylinder3D(const G4String& name,
                                                      const G4String& unit,
                                                      G4int ni, G4int nj,
                                                      G4int nk, G4int depi,

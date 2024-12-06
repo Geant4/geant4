@@ -43,6 +43,7 @@ class G4ParticleDefinition;
 class G4ParticleHPIsoData
 {
   public:
+
     G4ParticleHPIsoData() = default;
 
     ~G4ParticleHPIsoData() { delete theChannelData; }
@@ -52,12 +53,12 @@ class G4ParticleHPIsoData
       return std::max(0., theChannelData->GetXsec(energy));
     }
 
-    G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)
+    G4bool Init(G4int A, G4int Z, G4double abun, const G4String& dirName, const G4String& aFSType)
     {
       return Init(A, Z, 0, abun, dirName, aFSType);
-    };
+    }
 
-    G4bool Init(G4int A, G4int Z, G4int M, G4double abun, G4String dirName, G4String aFSType);
+    G4bool Init(G4int A, G4int Z, G4int M, G4double abun, const G4String& dirName, const G4String& aFSType);
 
     void Init(G4int A, G4int Z, G4double abun, G4ParticleDefinition* projectile,
               const char* dataDirVariable)
@@ -68,13 +69,13 @@ class G4ParticleHPIsoData
     void Init(G4int A, G4int Z, G4int M, G4double abun, G4ParticleDefinition* projectile,
               const char* dataDirVariable);  // fill PhysicsVector for this Isotope
 
-    G4ParticleHPVector* MakeElasticData() { return theElasticData; }
-    G4ParticleHPVector* MakeFissionData() { return theFissionData; }
-    G4ParticleHPVector* MakeCaptureData() { return theCaptureData; }
-    G4ParticleHPVector* MakeInelasticData() { return theInelasticData; }
-    G4ParticleHPVector* MakeChannelData() { return theChannelData; }
+    G4ParticleHPVector* MakeElasticData() const { return theElasticData; }
+    G4ParticleHPVector* MakeFissionData() const { return theFissionData; }
+    G4ParticleHPVector* MakeCaptureData() const { return theCaptureData; }
+    G4ParticleHPVector* MakeInelasticData() const { return theInelasticData; }
+    G4ParticleHPVector* MakeChannelData() const { return theChannelData; }
 
-    G4String GetName(G4int A, G4int Z, G4String base, G4String rest);
+    G4String GetName(G4int A, G4int Z, const G4String& base, const G4String& rest);
 
     void FillChannelData(G4ParticleHPVector* aBuffer);
 
@@ -90,6 +91,7 @@ class G4ParticleHPIsoData
     G4ParticleHPIsoData(const G4ParticleHPIsoData&) = delete;
 
   private:
+
     G4ParticleHPVector* theFissionData{nullptr};
     G4ParticleHPVector* theCaptureData{nullptr};
     G4ParticleHPVector* theElasticData{nullptr};

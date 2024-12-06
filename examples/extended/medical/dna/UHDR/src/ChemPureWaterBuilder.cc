@@ -36,13 +36,13 @@ void ChemPureWaterBuilder::WaterScavengerReaction(G4DNAMolecularReactionTable* p
   // Get the molecular configuration
   auto table = G4MoleculeTable::Instance();
 
-  G4MolecularConfiguration* OH = table->GetConfiguration("OH");
+  G4MolecularConfiguration* OH = table->GetConfiguration("°OH");
   G4MolecularConfiguration* OHm = table->GetConfiguration("OHm");
   G4MolecularConfiguration* H3Op = table->GetConfiguration("H3Op");
   G4MolecularConfiguration* e_aq = table->GetConfiguration("e_aq");
   G4MolecularConfiguration* H = table->GetConfiguration("H");
   G4MolecularConfiguration* H2O2 = table->GetConfiguration("H2O2");
-  G4MolecularConfiguration* HO2 = table->GetConfiguration("HO2");
+  G4MolecularConfiguration* HO2 = table->GetConfiguration("HO2°");
   G4MolecularConfiguration* HO2m = table->GetConfiguration("HO2m");
   G4MolecularConfiguration* Om = table->GetConfiguration("Om");
   G4MolecularConfiguration* O2 = table->GetConfiguration("O2");

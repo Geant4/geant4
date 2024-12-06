@@ -65,7 +65,7 @@ G4tgrSolidScaled::G4tgrSolidScaled(const std::vector<G4String>& wl)
   {
     wl2[ii] = (char)std::toupper(wl2[ii]);
   }
-  theType = wl2;
+  theType = std::move(wl2);
 
 #ifdef G4VERBOSE
   if(G4tgrMessenger::GetVerboseLevel() >= 1)

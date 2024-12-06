@@ -34,7 +34,6 @@
 #ifndef G4DCIOENTRYT_HH
 #define G4DCIOENTRYT_HH 1
 
-#include <string>
 #include "G4Types.hh"
 #include "G4VPDigitsCollectionIO.hh"
 
@@ -46,7 +45,7 @@ class G4DCIOentryT : public G4VDCIOentry
 {
   public:
 
-    G4DCIOentryT<T>(std::string n) : G4VDCIOentry(n)
+    G4DCIOentryT<T>(const G4String& n) : G4VDCIOentry(n)
     {
       if(m_verbose > 2)
       {

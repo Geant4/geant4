@@ -1687,7 +1687,8 @@ void G4UIQt::SceneTreeItemDoubleClicked(QTreeWidgetItem* item)
   if (sceneTreeItem->GetType() != G4SceneTreeItem::touchable) return;
 
   auto oldQColor = ConvertG4ColourToQColor(sceneTreeItem->GetVisAttributes().GetColour());
-  auto newQColor = QColorDialog::getColor(oldQColor, fNewSceneTreeItemTreeWidget, "", QColorDialog::ShowAlphaChannel);
+  auto newQColor = QColorDialog::getColor
+  (oldQColor, fNewSceneTreeItemTreeWidget, "", QColorDialog::ShowAlphaChannel);
   if (!newQColor.isValid()) return;
   if (newQColor == oldQColor) return;
 
@@ -1698,6 +1699,16 @@ void G4UIQt::SceneTreeItemDoubleClicked(QTreeWidgetItem* item)
   auto uiMan = G4UImanager::GetUIpointer();
   uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
   uiMan->ApplyCommand("/vis/touchable/set/colour " + oss.str());
+
+  // Normally the sceneTreeItem will be updated when the scene is processed after the above
+  // commands, but if the user sets the opacity to zero, G4PhysicalVolumeModel does not
+  // transmit it (this is because some users set the opacity to zero to make a volume
+  // invisible - perhaps they should use the visibility flag, but hey-ho).
+  // By design, the sceneTreeItem remains, so it can still be interacted with, but
+  // the colour will not be updated, so we do it here.
+  if (newColour.GetAlpha() == 0.) {
+    sceneTreeItem->AccessVisAttributes().SetColour(newColour);
+  }
 }
 
 void G4UIQt::SceneTreeItemExpanded(QTreeWidgetItem* item)
@@ -1901,7 +1912,7 @@ void G4UIQt::NewSceneTreeItemTreeWidget::ActWithAnInteger
 {
   G4bool ok = true;
   auto newValue = QInputDialog::getInt(this, action.c_str(), action.c_str(),
-                                       0, 0, 999, 1, &ok);
+                                       0, 0, 9999999, 1, &ok);
   if (ok) {
     auto uiMan = G4UImanager::GetUIpointer();
     uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
@@ -2420,7 +2431,7 @@ G4UIsession* G4UIQt::SessionStart()
 /**   Display the prompt in the prompt area
    @param aPrompt : string to display as the promt label
 */
-void G4UIQt::Prompt(G4String aPrompt)
+void G4UIQt::Prompt(const G4String& aPrompt)
 {
   if (aPrompt == nullptr) return;
 
@@ -2460,7 +2471,7 @@ void G4UIQt::PauseSessionStart(const G4String& aState)
    Begin the secondary loop
    @param a_prompt : label to display as the prompt label
  */
-void G4UIQt::SecondaryLoop(G4String aPrompt)
+void G4UIQt::SecondaryLoop(const G4String& aPrompt)
 {
   if (aPrompt == nullptr) return;
 
@@ -4078,7 +4089,7 @@ void G4UIQt::UpdateCommandCompleter()
   fCompleter->popup()->installEventFilter(this);
 }
 
-QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd)
+QStandardItemModel* G4UIQt::CreateCompleterModel(const G4String& aCmd)
 {
   QList<QStandardItem*> dirModelList;
   QList<QStandardItem*> commandModelList;
@@ -4529,7 +4540,7 @@ QString G4UIQt::FilterOutput(
   const G4UIOutputString& output, const QString& currentThread, const QString& filter)
 {
 #ifdef G4MULTITHREADED
-  if ((currentThread == "All") || (currentThread == output.fThread)) {
+  if ((currentThread == "All") || (currentThread == output.fThread.data())) {
 #else
   if (currentThread == "") {
 #endif
@@ -4795,7 +4806,7 @@ QMultiMap<G4int, QString> G4UIQt::LookForHelpStringInChildTree(
 }
 #endif
 
-QString G4UIQt::GetShortCommandPath(QString commandPath)
+QString G4UIQt::GetShortCommandPath(QString& commandPath)
 {
   if (commandPath.indexOf("/") == 0) {
     commandPath = commandPath.right(commandPath.size() - 1);
@@ -5449,7 +5460,7 @@ G4QTabWidget::G4QTabWidget()
 {}
 #endif
 
-G4UIOutputString::G4UIOutputString(QString text, G4String origine, G4String outputStream)
+G4UIOutputString::G4UIOutputString(const QString& text, const G4String& origine, const G4String& outputStream)
   : fText(text), fThread(origine)
 {
   if (! GetOutputList().contains(QString(" ") + outputStream + " ")) {
@@ -5549,7 +5560,7 @@ void G4QTabWidget::paintEvent(QPaintEvent*)
 }
 #endif
 
-G4UIDockWidget::G4UIDockWidget(QString txt) : QDockWidget(txt) {}
+G4UIDockWidget::G4UIDockWidget(const QString& txt) : QDockWidget(txt) {}
 
 void G4UIDockWidget::closeEvent(QCloseEvent* aEvent)
 {

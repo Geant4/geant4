@@ -70,22 +70,21 @@ class GVFlashHomoShowerTuning
   public:
     GVFlashHomoShowerTuning() {}
     virtual ~GVFlashHomoShowerTuning() {}
-  
-  public: // with description
 
-    virtual G4double ParAveT1(){ return -0.812; } // t1
-    virtual G4double ParAveA1(){ return  0.81;  } // a1
+  public:  // with description
+    virtual G4double ParAveT1() { return -0.812; }  // t1
+    virtual G4double ParAveA1() { return 0.81; }  // a1
     virtual G4double ParAveA2(){ return  0.458; } // a2
-    virtual G4double ParAveA3(){ return  2.26;  } // a3
-  
-    virtual G4double ParSigLogT1(){ return -1.4; } // t1
-    virtual G4double ParSigLogT2(){ return  1.26;} // t2
-      // std::sqrt(var(ln(T))) = 1/(t+t2*ln(y))
+    virtual G4double ParAveA3() { return 2.26; }  // a3
+
+    virtual G4double ParSigLogT1() { return -1.4; }  // t1
+    virtual G4double ParSigLogT2() { return 1.26; }  // t2
+    // std::sqrt(var(ln(T))) = 1/(t+t2*ln(y))
 
     virtual G4double ParSigLogA1(){ return -0.58; } // a1
     virtual G4double ParSigLogA2(){ return  0.86; } // a2
       // std::sqrt(var(ln(alpha))) = 1/(a1+a2*ln(y))
-  
+
     virtual G4double ParRho1(){ return  0.705; } // r1
     virtual G4double ParRho2(){ return -0.023; } // r2
       // Correlation(ln(T),ln(alpha))=r1+r2*ln(y)
@@ -103,7 +102,7 @@ class GVFlashHomoShowerTuning
       // Rc (t/T)= z1 +z2*t/T
       // z1 = c1+c2*ln(E/GeV)
       // z2 = c3+c4*Z
-  
+
     virtual G4double ParRT1(){ return 0.659;   } // t1
     virtual G4double ParRT2(){ return -0.00309;} // t2
     virtual G4double ParRT3(){ return 0.645;   } // k2
@@ -113,7 +112,7 @@ class GVFlashHomoShowerTuning
       // Rt (t/T)= k1*(std::exp(k3*(t/T-k2))+std::exp(k4*(t/T-k2)))
       // k1 = t1+t2*Z
       // k4 = t5+t6*ln(E/GeV)
-  
+
     virtual G4double ParWC1(){ return 2.632;   } // c1
     virtual G4double ParWC2(){ return -0.00094;} // c2
     virtual G4double ParWC3(){ return 0.401;   } // c3
@@ -141,11 +140,10 @@ class GVFlashHomoShowerTuning
     // alpha_s = alpha*(a1+a2*Z)
 
     virtual G4double ParSpotT1(){ return 0.698;  } // t1
-    virtual G4double ParSpotT2(){ return 0.00212;} // t2
-  
-    virtual G4double ParSpotA1(){ return 0.639;  } //a1
-    virtual G4double ParSpotA2(){ return 0.00334;} //a2
+    virtual G4double ParSpotT2() { return 0.00212; }  // t2
 
+    virtual G4double ParSpotA1() { return 0.639; }  // a1
+    virtual G4double ParSpotA2() { return 0.00334; }  // a2
 };
 
 #endif

@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+##2024-09-03 Dmitri Konstantinov (xrays-V11-02-04)
+- G4VTRModel: Added empty implementation {} to GenerateSecondaries method 
+  to resolve linker error encountered when compiling against Geant4 with clang
+
+## 2024-07-18 Vladimir Ivanchenko (xrays-V11-02-03)
+- G4VXTRenergyLoss - fixed Coverity warning
+
 ## 2024-05-16 Vladimir Grichine (xrays-V11-02-02)
 - G4XTRGaussRadModel.hh/.cc class was added with improved account
   on the origin of theXTR photon

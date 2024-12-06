@@ -6,6 +6,28 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-26 Makoto Asai (event-V11-02-09)
+- Fixing event-V11-02-08 for forgotten deletion of trajectories.
+
+## 2024-09-30 Makoto Asai (event-V11-02-08)
+- G4Event : Change the data member keepTheEvent mutable so that KeepTheEvent()
+  method can be invoked for const G4Event object.
+
+## 2024-08-01 Alberto Ribon (event-V11-02-07)
+- G4PrimaryTransformer : adapt and extend this class after the introduction of
+  the new class G4ChargedUnknownParticle.
+  ( This is part of ATLAS and LHCb request to assign automatically 
+    ionisation and multiple scattering processes to charged primary particles
+    with valid PDG code but not known to Geant4. )
+
+## 2024-07-16 Gabriele Cosmo (event-V11-02-06)
+- Fixed reported Coverity defects: in G4GeneralParticleSourceMessenger for
+  use of 'const auto&' and use of 'const G4String&'; in G4StackManager for
+  copy/paste error in printout.
+
+## 2024-06-28 Makoto Asai (event-V11-02-05)
+- Improve the use of Mutex lock in G4EventManager for sub-event parallel mode
+
 ## 2024-06-01 Makoto Asai (event-V11-02-04)
 - Initial implementation of creation/processing of SubEvents
   - Co-working with track-V11-02-03,

@@ -651,10 +651,8 @@ void G4MuPairProductionModel::SampleSecondaries(
   // create G4DynamicParticle object for e+e-
   eEnergy = std::max(eEnergy - CLHEP::electron_mass_c2, 0.0);
   pEnergy = std::max(pEnergy - CLHEP::electron_mass_c2, 0.0);
-  G4DynamicParticle* aParticle1 =
-    new G4DynamicParticle(theElectron,eDirection,eEnergy);
-  G4DynamicParticle* aParticle2 = 
-    new G4DynamicParticle(thePositron,pDirection,pEnergy);
+  auto aParticle1 = new G4DynamicParticle(theElectron,eDirection,eEnergy);
+  auto aParticle2 = new G4DynamicParticle(thePositron,pDirection,pEnergy);
   // Fill output vector
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
@@ -670,8 +668,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   if (pairEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
-    G4DynamicParticle* newdp = 
-      new G4DynamicParticle(particle, partDirection, kinEnergy);
+    auto newdp = new G4DynamicParticle(particle, partDirection, kinEnergy);
     vdp->push_back(newdp);
   } else { // continue tracking the primary e-/e+ otherwise
     fParticleChange->SetProposedMomentumDirection(partDirection);

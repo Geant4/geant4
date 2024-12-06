@@ -60,7 +60,7 @@ class G4ParticleHPElastic;
 
 class G4ParticleHPElasticURR : public G4HadronicInteraction {
   public:
-    G4ParticleHPElasticURR();
+    G4ParticleHPElasticURR( G4bool isThermalScatteringOn = false );
     ~G4ParticleHPElasticURR();
 
     G4HadFinalState* ApplyYourself( const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus );

@@ -52,12 +52,12 @@ geant4_add_module(G4emstandard
     G4PSTARStopping.hh
     G4PairProductionRelModel.hh
     G4PhotoElectricEffect.hh
+    G4PolarizedOrePowellAtRestModel.hh
     G4SBBremTable.hh
     G4SauterGavrilaAngularDistribution.hh
     G4ScreeningMottCrossSection.hh
     G4SeltzerBergerModel.hh
     G4SimplePositronAtRestModel.hh
-    G4SimplePsAtRestModel.hh
     G4OrePowellAtRestModel.hh
     G4UniversalFluctuation.hh
     G4UrbanFluctuation.hh
@@ -79,7 +79,7 @@ geant4_add_module(G4emstandard
     G4eSingleCoulombScatteringModel.hh
     G4eeToTwoGammaModel.hh
     G4eplusAnnihilation.hh
-    G4eplusTo2GammaOKVIModel.hh
+    G4eplusTo2or3GammaModel.hh
     G4eplusTo3GammaOKVIModel.hh
     G4hCoulombScatteringModel.hh
     G4hIonisation.hh
@@ -134,12 +134,12 @@ geant4_add_module(G4emstandard
     G4PSTARStopping.cc
     G4PairProductionRelModel.cc
     G4PhotoElectricEffect.cc
+    G4PolarizedOrePowellAtRestModel.cc
     G4SBBremTable.cc
     G4SauterGavrilaAngularDistribution.cc
     G4ScreeningMottCrossSection.cc
     G4SeltzerBergerModel.cc
     G4SimplePositronAtRestModel.cc
-    G4SimplePsAtRestModel.cc
     G4OrePowellAtRestModel.cc
     G4UniversalFluctuation.cc
     G4UrbanFluctuation.cc
@@ -161,7 +161,7 @@ geant4_add_module(G4emstandard
     G4eSingleCoulombScatteringModel.cc
     G4eeToTwoGammaModel.cc
     G4eplusAnnihilation.cc
-    G4eplusTo2GammaOKVIModel.cc
+    G4eplusTo2or3GammaModel.cc
     G4eplusTo3GammaOKVIModel.cc
     G4hCoulombScatteringModel.cc
     G4hIonisation.cc

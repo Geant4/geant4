@@ -1,0 +1,72 @@
+# *********************************************************************
+# MANDATORY SETTINGS
+# (before kernel initialization)
+#
+# MT
+/run/numberOfThreads 4
+#
+# Phantom file name
+#/phantom/fileName phantoms/phantomHR.dat
+/phantom/fileName phantoms/phantom.dat
+#
+# World volume size
+/world/sizeXY 1 mm
+/world/sizeZ 100 um
+#
+# Cellular medium size
+/phantom/mediumSizeXY 900 um
+/phantom/mediumSizeZ 95 um
+#
+# *********************************************************************
+# OPTIONAL SETTINGS
+# (before kernel initialization)
+#
+# Change cellular medium material
+#/phantom/mediumMat G4_AIR
+#
+# Change phantom densities
+#/phantom/redDen 2.0 g/cm3  	# red volume density
+#/phantom/greenDen 1.0 g/cm3	# green volume density
+#/phantom/blueDen 3.0 g/cm3		# blue volume density
+#
+# Phantom shift
+#/phantom/shiftX 100 um
+#/phantom/shiftY 50 um
+#/phantom/shiftZ 1.4 um
+#
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+#
+# *********************************************************************
+# RUN
+#
+/run/initialize
+#
+# Set cuts OUTSIDE the phantom region
+/run/setCut 1 mm
+#
+# Set cut for the phantom region
+/run/setCutForRegion phantomRegion 1 nm
+#
+# Print a summary of particles/regions/cuts
+/run/dumpCouples
+#
+/gps/particle proton
+/gps/energy 3. MeV
+#
+# Square plane source
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/direction 0 0 1
+/gps/pos/rot1 1 0 0
+/gps/pos/rot2 0 1 0
+/gps/pos/centre 0. 0. -50 um
+/gps/pos/halfx 350 um
+/gps/pos/halfy 350 um
+#/gps/pos/halfx 0 um
+#/gps/pos/halfy 0 um
+#
+/run/printProgress 100
+#
+/run/beamOn 10000

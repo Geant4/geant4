@@ -6,6 +6,12 @@ geant4_add_module(G4tracking
     G4AdjointCrossSurfChecker.hh
     G4AdjointSteppingAction.hh
     G4AdjointTrackingAction.hh
+    G4ClonedRichTrajectory.hh
+    G4ClonedRichTrajectoryPoint.hh
+    G4ClonedSmoothTrajectory.hh
+    G4ClonedSmoothTrajectoryPoint.hh
+    G4ClonedTrajectory.hh
+    G4ClonedTrajectoryPoint.hh
     G4RichTrajectory.hh
     G4RichTrajectoryPoint.hh
     G4SmoothTrajectory.hh
@@ -30,6 +36,12 @@ geant4_add_module(G4tracking
     G4AdjointCrossSurfChecker.cc
     G4AdjointSteppingAction.cc
     G4AdjointTrackingAction.cc
+    G4ClonedRichTrajectory.cc
+    G4ClonedRichTrajectoryPoint.cc
+    G4ClonedSmoothTrajectory.cc
+    G4ClonedSmoothTrajectoryPoint.cc
+    G4ClonedTrajectory.cc
+    G4ClonedTrajectoryPoint.cc
     G4RichTrajectory.cc
     G4RichTrajectoryPoint.cc
     G4SmoothTrajectory.cc

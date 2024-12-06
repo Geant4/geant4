@@ -1,3 +1,4 @@
+// -*- C++ -*-
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor                            Date:    10.12.99 *
@@ -727,9 +728,13 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
         iedge = edges[iedge].inext;
       }
       if (ii[i] == (int)nodes.size()) {
-        d3 = d2-d1; d1 = d1/d3; d2 = d2/d3;
-        nodes.emplace_back(d2*nodes[i1].v-d1*nodes[i2].v, iedge);
-      }  
+        d3 = d2-d1;
+        if (d3 != 0.)
+        {
+          d1 = d1/d3; d2 = d2/d3;
+          nodes.emplace_back(d2*nodes[i1].v-d1*nodes[i2].v, iedge);
+        }
+      }
     }
     edge.inext = 0;
     if (s1 == MINUS_PLUS || s1 == ZERO_PLUS) {
@@ -1916,7 +1921,7 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
   //   A L L O C A T E   M E M O R Y
 
   ExtPolyhedron polyhedron;
-  if (nface == 0) return HepPolyhedron(polyhedron);
+  if (nface == 0) return HepPolyhedron(std::move(polyhedron));
   polyhedron.AllocateMemory(nnode, nface);
 
   //   S E T   N O D E S
@@ -1954,7 +1959,7 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     polyhedron.pF[faces[i].inew] =
       G4Facet(v[0],f[0], v[1],f[1], v[2],f[2], v[3],f[3]); 
   }
-  return HepPolyhedron(polyhedron);
+  return HepPolyhedron(std::move(polyhedron));
 }
 
 G4ThreadLocal int BooleanProcessor::ishift = 0; //G.Barrand

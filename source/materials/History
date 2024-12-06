@@ -6,6 +6,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-04 Philippe Canal (materials-V11-02-08)
+- Improve stability of static initialization: simplified G4NistManager
+  singleton initialization; migrated Isotopes, Materials, Elements's table
+  to function static; delete the element of table at the same time as the table.
+
+## 2024-09-31 Vladimir Ivanchenko (materials-V11-02-07)
+- G4IonisParamMat - fixed Coverity warnings
+
+## 2024-10-26 Vladimir Ivanchenko (materials-V11-02-06)
+- G4NistManager, G4NistElementBuilder, G4Material, G4Element, G4Isotope -
+  general clean-up: use std::size_t, simplified expressions, do not use
+  static methods in class destructors, introduced const G4ElementTable
+  for access method
+
+## 2024-09-28 Vladimir Ivanchenko (materials-V11-02-05)
+- G4IonisParamMat, G4Material - fixed Coverity warnings
+
+## 2024-09-17 Vladimir Ivanchenko (materials-V11-02-04)
+- G4IonisParamMat, G4Material - fixed Coverity warnings
+- G4Element - use std::size_t 
+
+## 2024-08-31 Vladimir Ivanchenko (materials-V11-02-03)
+- G4IonisParamMat - added parameter - fraction of Orto positronium at rest
+- G4NistMessenger - added extra UI command for Orto-positronium fraction,
+    updated all commands for multi-threading
+
+## 2024-07-17 Vladimir Ivanchenko (materials-V11-02-02)
+- G4LatticePhysical - fixed Coverity warnings
+
+## 2024-07-02 Vladimir Ivanchenko (materials-V11-02-01)
+- G4Material, G4NistElementBuilder, G4IonisParamMat - fixed Coverity warnings
+
 ## 2024-04-04 Vladimir Ivanchenko (materials-V11-02-00)
 - G4NistMaterialBuilder in the method HepAndNuclearMaterials()
     G4_BRASS, G4_BRONZE, and G4_STAILESS_STEEL are defined using

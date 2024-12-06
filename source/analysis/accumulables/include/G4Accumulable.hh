@@ -24,60 +24,14 @@
 // ********************************************************************
 //
 
-// Class template for accumulables handled by Geant4 analysis
-//
-// Author: Ivana Hrivnacova, 07/09/2015  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 06/08/2024
 
 #ifndef G4Accumulable_h
 #define G4Accumulable_h 1
 
-#include "G4VAccumulable.hh"
-#include "G4MergeMode.hh"
+#include "G4AccValue.hh"
 
-#include "globals.hh"
-
-template <typename T>
-class G4Accumulable : public G4VAccumulable
-{
-  public:
-    G4Accumulable(const G4String& name, T initValue,
-                G4MergeMode mergeMode = G4MergeMode::kAddition);
-    G4Accumulable(T initValue = 0,
-                G4MergeMode mergeMode = G4MergeMode::kAddition);
-    G4Accumulable(const G4Accumulable& rhs);
-    G4Accumulable(G4Accumulable&& rhs) noexcept;
-    ~G4Accumulable() override = default;
-
-    // Operators
-    G4Accumulable<T>& operator= (const G4Accumulable<T>& rhs);
-    G4Accumulable<T>& operator=(G4Accumulable<T>&& rhs) noexcept;
-    G4Accumulable<T>& operator+=(const G4Accumulable<T>& rhs);
-    G4Accumulable<T>& operator*=(const G4Accumulable<T>& rhs);
-    G4Accumulable<T>  operator++(int); // postfix increment
-    G4Accumulable<T>& operator++();    // prefix increment
-
-    G4Accumulable<T>& operator= (const T& rhs);
-    G4Accumulable<T>& operator+=(const T& rhs);
-    G4Accumulable<T>& operator*=(const T& rhs);
-
-    // Methods
-    void Merge(const G4VAccumulable& other) final;
-    void Reset() final;
-
-    // Get methods
-    T  GetValue() const;
-    G4MergeMode GetMergeMode() const;
-
-  private:
-    // Data members
-    T  fValue;
-    T  fInitValue;
-    G4MergeMode  fMergeMode;
-    G4MergeFunction<T> fMergeFunction;
- };
-
-// inline functions
-
-#include "G4Accumulable.icc"
+template<typename T>
+using G4Accumulable = G4AccValue<T>;
 
 #endif

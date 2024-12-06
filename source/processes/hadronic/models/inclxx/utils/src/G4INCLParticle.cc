@@ -199,7 +199,7 @@ namespace G4INCL {
     for(ParticleIter i = (*this).begin(), e = (*this).end(); i!=e; ++i){
         MergedVector = Particle::MergeVectorBias(MergedVector,(*i));
     }
-    return Particle::getBiasFromVector(MergedVector);
+    return Particle::getBiasFromVector(std::move(MergedVector));
   }
 
   std::vector<G4int> ParticleList::getParticleListBiasVector() const {
@@ -316,6 +316,6 @@ namespace G4INCL {
   }
 
   void Particle::setINCLBiasVector(std::vector<G4double> NewVector) {
-      Particle::INCLBiasVector = NewVector;
+      Particle::INCLBiasVector = std::move(NewVector);
   }
 }

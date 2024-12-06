@@ -23,7 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+// G4TScoreHistFiller
+//
+// Class description:
+//
+// This class implements filling histogram.
+// In order to avoid introducing dependency on the analysis category,
+// the analysis manager type is defined via template.
+//
+// Author: Makoto Asai, September 2020
+// --------------------------------------------------------------------
 #ifndef G4TScoreHistFiller_h
 #define G4TScoreHistFiller_h 1
 
@@ -31,15 +40,6 @@
 #include "globals.hh"
 
 #include <memory>
-
-// class description:
-//
-// This class implements filling histogram
-// In order to avoid introducing dependency on the analysis category,
-// the analysis manager type is defined via template.
-//
-// Created : M. Asai (Sept. 2020)
-//
 
 template <typename T>
 class G4TScoreHistFiller : public G4VScoreHistFiller

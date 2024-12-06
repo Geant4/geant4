@@ -7,7 +7,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/run/initialize
+#/run/initialize
 #
 # Open a viewer
 /vis/open
@@ -26,7 +26,7 @@
 #/vis/viewer/set/viewpointThetaPhi 90. 0.
 #
 # Specify zoom value:
-/vis/viewer/zoom 10.5
+##/vis/viewer/zoom 10.5
 #
 # Specify style (surface or wireframe):
 #/vis/viewer/set/style wireframe

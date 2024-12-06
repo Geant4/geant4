@@ -42,9 +42,9 @@ class G4VEmAdjointModel;
 class G4eInverseIonisation : public G4VAdjointReverseReaction
 {
  public:
-  G4eInverseIonisation(G4bool whichScatCase, G4String process_name,
+  G4eInverseIonisation(G4bool whichScatCase, const G4String& process_name,
                        G4VEmAdjointModel* aEmAdjointModel);
-  ~G4eInverseIonisation();
+  ~G4eInverseIonisation() override = default;
 
   void ProcessDescription(std::ostream&) const override;
   void DumpInfo() const override { ProcessDescription(G4cout); };

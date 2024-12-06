@@ -26,36 +26,34 @@
 #ifndef G4LEPTSDiffXS_h
 #define G4LEPTSDiffXS_h 1
 
-#include <string>
 #include "G4Types.hh"
 
-class G4LEPTSDiffXS {
+class G4LEPTSDiffXS
+{
+ public:
 
-public:
-
-  G4LEPTSDiffXS(std::string);   // Constructor
+  G4LEPTSDiffXS(const G4String&);   // Constructor
 
   void readDXS();    // Read file
   void BuildCDXS();
   void BuildCDXS(G4double, G4double);
   void NormalizeCDXS();
   void InterpolateCDXS();
-  void PrintDXS(int);
+  void PrintDXS(G4int);
 
   G4double SampleAngle(G4double);
   G4double SampleAngleMT(G4double, G4double);
   G4double SampleAngleEthylene(G4double, G4double);
-  G4bool IsFileFound() const {
-    return bFileFound;
-  }
+  G4bool IsFileFound() const { return bFileFound; }
 
-private:
-  std::string fileName;
-  int NumAng;
-  int INumAng;
-  int NumEn;
+ private:
+
+  G4String fileName;
+  G4int NumAng;
+  G4int INumAng;
+  G4int NumEn;
   char DXSTypeName[8];
-  int DXSType;
+  G4int DXSType;
   G4double Eb[100];
   //  G4double DXS[100][190], CDXS[100][190], IDXS[100][19000], ICDXS[100][19000];
   G4double DXS[100][190], CDXS[100][190], ICDXS[100][19000];

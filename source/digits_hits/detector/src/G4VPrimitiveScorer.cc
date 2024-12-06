@@ -36,7 +36,7 @@
 #include "G4VPVParameterisation.hh"
 #include "G4VSolid.hh"
 
-G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
+G4VPrimitiveScorer::G4VPrimitiveScorer(const G4String& name, G4int depth)
   : primitiveName(name), indexDepth(depth)
 {}
 

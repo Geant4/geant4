@@ -155,6 +155,13 @@ class G4HadronicParameters {
     void SetEnableNUDEX( G4bool val );
     // NUDEX gamma de-excitation is enabled/disabled.
 
+    inline const G4String& GetTypeTablePT() const;
+    void SetTypeTablePT( const G4String& typeTablePT );
+    // Specify the type of PT table - between  "calendf"  and  "njoy"  for
+    // the URR (Unresolved Resonance Region) treatment of low-energy neutrons.
+    // ( Note that there is no default: an empty string "" is returned if
+    //   it is not set explicitly. )
+
     inline G4double GetEPRelativeLevel() const;
     inline G4double GetEPAbsoluteLevel() const;
     inline G4int GetEPReportLevel() const;
@@ -220,6 +227,7 @@ class G4HadronicParameters {
     G4bool fChargeExchange = false;
     G4bool fBinaryDebug = false;
 
+    G4String fTypeTablePT = "";
     G4String fDirPARTICLEXS = "";
     G4String fPhysListDocDir = "";
     G4String fPhysListName = "";
@@ -322,6 +330,10 @@ inline G4bool G4HadronicParameters::EnableNeutronGeneralProcess() const {
 
 inline G4bool G4HadronicParameters::EnableNUDEX() const {
   return fEnableNUDEX;
+}
+
+inline const G4String& G4HadronicParameters::GetTypeTablePT() const {
+  return fTypeTablePT;
 }
 
 inline G4bool G4HadronicParameters::EnableCoherentChargeExchange() const {

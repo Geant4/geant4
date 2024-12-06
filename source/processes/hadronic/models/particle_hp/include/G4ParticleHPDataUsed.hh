@@ -45,12 +45,12 @@ public:
   void SetM(G4int aM) { theM = aM; }
   void SetName(const G4String& aName) { theName = aName; }
 
-  G4int GetZ() { return theZ; }
-  G4int GetA() { return theA; }
-  G4int GetM() { return theM; }
-  G4String& GetName() { return theName; }
+  G4int GetZ() const { return theZ; }
+  G4int GetA() const { return theA; }
+  G4int GetM() const { return theM; }
+  const G4String& GetName() const { return theName; }
 
-  G4bool IsThisNaturalAbundance() { return nat; };
+  G4bool IsThisNaturalAbundance() const { return nat; };
   void SetNaturalAbundanceFlag() { nat = TRUE; };
 
 private:

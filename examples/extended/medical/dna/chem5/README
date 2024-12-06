@@ -162,4 +162,16 @@ G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1
     in the header of each file. Further information is available in Phys. Med. Biol. 63(10) (2018) 105014-12pp.
 
     A gnuplot script (plot.gp) file is provided to display the output data with the experimental data
-    
+
+ 11 - HOW TO START ?
+
+    To run the example in batch mode:
+      ./chem5 -mac beam.in
+    or
+      ./chem5
+    then the macro beam.in is processed by default
+
+    In interactive mode, run:
+      ./chem5 -gui
+    or
+      ./chem5 -gui gui.mac

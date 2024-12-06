@@ -62,7 +62,7 @@ G4CsvAnalysisManager::G4CsvAnalysisManager()
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4CsvNtupleFileManager>(fState);
   SetNtupleFileManager(fNtupleFileManager);
-  fNtupleFileManager->SetFileManager(fileManager);
+  fNtupleFileManager->SetFileManager(std::move(fileManager));
   fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 

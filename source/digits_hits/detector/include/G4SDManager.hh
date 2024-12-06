@@ -23,32 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SDManager
 //
+// Class description:
 //
-
+// This is a singleton class which manages the sensitive detectors.
+// The user cannot access to the constructor. The pointer of the
+// only existing object can be got via G4SDManager::GetSDMpointer()
+// static method. The first invokation of this static method makes
+// the singleton object.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4SDManager_h
 #define G4SDManager_h 1
 
 #include "G4HCtable.hh"
 #include "G4SDStructure.hh"
 #include "globals.hh"
-class G4VHitsCollection;
-class G4VSensitiveDetector;
-class G4HCofThisEvent;
-class G4SDmessenger;
-
 #include "G4VSDFilter.hh"
 
 #include <vector>
 
-// class description:
-//
-//  This is a singleton class which manages the sensitive detectors.
-// The user cannot access to the constructor. The pointer of the
-// only existing object can be got via G4SDManager::GetSDMpointer()
-// static method. The first invokation of this static method makes
-// the singleton object.
-//
+class G4VHitsCollection;
+class G4VSensitiveDetector;
+class G4HCofThisEvent;
+class G4SDmessenger;
 
 class G4SDManager
 {
@@ -71,18 +71,18 @@ class G4SDManager
   // Activate/inactivate the registered sensitive detector.
   // For the inactivated detectors, hits collections will not be stored to the G4HCofThisEvent
   // object.
-  void Activate(G4String dName, G4bool activeFlag);
+  void Activate(const G4String& dName, G4bool activeFlag);
 
   // Return ID number of sensitive detector with given name
-  G4int GetCollectionID(G4String colName);
+  G4int GetCollectionID(const G4String& colName);
 
   // Return ID number of sensitive detector creating given hits collection
   G4int GetCollectionID(G4VHitsCollection* aHC);
 
-  G4VSensitiveDetector* FindSensitiveDetector(G4String dName, G4bool warning = true);
+  G4VSensitiveDetector* FindSensitiveDetector(const G4String& dName, G4bool warning = true);
   G4HCofThisEvent* PrepareNewEvent();
   void TerminateCurrentEvent(G4HCofThisEvent* HCE);
-  void AddNewCollection(G4String SDname, G4String DCname);
+  void AddNewCollection(const G4String& SDname, const G4String& DCname);
 
   inline void SetVerboseLevel(G4int vl)
   {

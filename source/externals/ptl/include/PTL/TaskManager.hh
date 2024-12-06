@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "PTL/Globals.hh"
+#include "PTL/Macros.hh"
 #include "PTL/Task.hh"
 #include "PTL/TaskGroup.hh"
 #include "PTL/ThreadPool.hh"

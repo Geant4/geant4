@@ -26,7 +26,6 @@
 #pragma once
 
 #include "PTL/ThreadPool.hh"
-#include "PTL/VUserTaskQueue.hh"
 
 #include <cstddef>
 #include <cstdint>
@@ -35,6 +34,7 @@
 namespace PTL
 {
 class TaskManager;
+class VUserTaskQueue;
 
 //======================================================================================//
 
@@ -68,8 +68,6 @@ public:
     ThreadPool*  GetThreadPool() const { return m_thread_pool; }
     TaskManager* GetTaskManager() const { return m_task_manager; }
     bool         IsInitialized() const { return m_is_initialized; }
-    int          GetVerbose() const { return m_verbose; }
-    void         SetVerbose(int val) { m_verbose = val; }
 
 public:  // with description
     // Singleton implementing master thread behavior
@@ -83,8 +81,8 @@ private:
 protected:
     // Barriers: synch points between master and workers
     bool            m_is_initialized = false;
-    int             m_verbose        = 0;
     uint64_t        m_workers        = 0;
+    bool            m_use_tbb        = false;
     VUserTaskQueue* m_task_queue     = nullptr;
     ThreadPool*     m_thread_pool    = nullptr;
     TaskManager*    m_task_manager   = nullptr;

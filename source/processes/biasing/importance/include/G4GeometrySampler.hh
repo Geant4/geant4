@@ -23,20 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
 // Class G4GeometrySampler
 //
 // Class description:
+//
 // This class inherits from G4VSampler. It is used for scoring and 
 // importance sampling in the tracking (mass) geometry.
 // See also the description in G4VSampler.hh.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+//
+// Author: Michael Dressel, CERN
+// --------------------------------------------------------------------
 #ifndef G4GeometrySampler_hh
-#define G4GeometrySampler_hh G4GeometrySampler_hh
+#define G4GeometrySampler_hh 1
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -45,18 +43,19 @@
 
 class G4ImportanceConfigurator;
 class G4WeightWindowConfigurator;
-//class G4ScoreConfigurator;
 class G4WeightCutOffConfigurator;
-//class G4VGCellFinder;
 
 class G4GeometrySampler : public G4VSampler
 {
 
-public:  // with description
+ public:
  
   explicit G4GeometrySampler(G4VPhysicalVolume *worldvolume, const G4String &particlename);
-  explicit G4GeometrySampler(G4String worldvolumeName, const G4String &particlename);
+  explicit G4GeometrySampler(const G4String& worldvolumeName, const G4String &particlename);
   virtual ~G4GeometrySampler();
+
+  G4GeometrySampler(const G4GeometrySampler &) = delete;
+  G4GeometrySampler& operator=(const G4GeometrySampler &) = delete;
 
   //  virtual void PrepareScoring(G4VScorer *Scorer);
   virtual void PrepareImportanceSampling(G4VIStore* istore,
@@ -80,32 +79,21 @@ public:  // with description
   void SetWorld(const G4VPhysicalVolume* world);
   void SetParticle(const G4String &particlename);
 
-  inline G4String GetParticleName(){return fParticleName;};
+  inline const G4String& GetParticleName() { return fParticleName; }
   
-private:
-
-  G4GeometrySampler(const G4GeometrySampler &);
-  G4GeometrySampler &
-  operator=(const G4GeometrySampler &);
-
-private:
+ private:
 
   G4String fParticleName;
-  const G4VPhysicalVolume* fWorld;
+  const G4VPhysicalVolume* fWorld = nullptr;
   G4String fWorldName;
-  G4ImportanceConfigurator *fImportanceConfigurator;
-  //  G4ScoreConfigurator *fScoreConfigurator;
-  //  G4VGCellFinder *fGCellFinder;
-  G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
-  G4VIStore* fIStore;
-  G4WeightWindowConfigurator *fWeightWindowConfigurator;
-  G4VWeightWindowStore *fWWStore;
-  G4bool fIsConfigured;
+  G4ImportanceConfigurator* fImportanceConfigurator = nullptr;
+  G4WeightCutOffConfigurator* fWeightCutOffConfigurator = nullptr;
+  G4VIStore* fIStore = nullptr;
+  G4WeightWindowConfigurator* fWeightWindowConfigurator = nullptr;
+  G4VWeightWindowStore* fWWStore = nullptr;
+  G4bool fIsConfigured = false;
   G4Configurators fConfigurators;
-  
-  G4bool paraflag;
-
+  G4bool paraflag = false;
 };
   
 #endif
-

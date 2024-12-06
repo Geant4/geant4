@@ -51,10 +51,12 @@ class EventAction : public G4UserEventAction
     inline void AddEdep(G4double Edep) { fTotalEnergyDeposit += Edep; };
     inline void AddNIEL(G4double Edep) { fNIEL += Edep; };
     inline G4double GetEnergyDeposit() { return fTotalEnergyDeposit; };
-
+    inline void AddEleak(G4double eleak) {fEnergyLeak += eleak;};
+    
   private:
     G4double fTotalEnergyDeposit = 0.;
     G4double fNIEL = 0.;
+    G4double fEnergyLeak = 0.;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

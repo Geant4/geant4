@@ -85,7 +85,7 @@ G4double G4AdjointInterpolator::ExponentialInterpolation(
 G4double G4AdjointInterpolator::Interpolation(G4double& x, G4double& x1,
                                               G4double& x2, G4double& y1,
                                               G4double& y2,
-                                              G4String InterPolMethod)
+                                              const G4String& InterPolMethod)
 {
   if(InterPolMethod == "Log")
   {
@@ -111,15 +111,15 @@ G4double G4AdjointInterpolator::Interpolation(G4double& x, G4double& x1,
 
 ///////////////////////////////////////////////////////
 // only valid if x_vec is monotically increasing
-size_t G4AdjointInterpolator::FindPosition(G4double& x,
-                                           std::vector<G4double>& x_vec, size_t,
-                                           size_t)
+std::size_t G4AdjointInterpolator::FindPosition(G4double& x,
+                                           std::vector<G4double>& x_vec, std::size_t,
+                                           std::size_t)
 {
   // most rapid method could be used probably
 
-  size_t ndim = x_vec.size();
-  size_t ind1 = 0;
-  size_t ind2 = ndim - 1;
+  std::size_t ndim = x_vec.size();
+  std::size_t ind1 = 0;
+  std::size_t ind2 = ndim - 1;
 
   if(ndim > 1)
   {
@@ -127,7 +127,7 @@ size_t G4AdjointInterpolator::FindPosition(G4double& x,
     {  // increasing
       do
       {
-        size_t midBin = (ind1 + ind2) / 2;
+        std::size_t midBin = (ind1 + ind2) / 2;
         if(x < x_vec[midBin])
           ind2 = midBin;
         else
@@ -138,7 +138,7 @@ size_t G4AdjointInterpolator::FindPosition(G4double& x,
     {
       do
       {
-        size_t midBin = (ind1 + ind2) / 2;
+        std::size_t midBin = (ind1 + ind2) / 2;
         if(x < x_vec[midBin])
           ind1 = midBin;
         else
@@ -152,7 +152,7 @@ size_t G4AdjointInterpolator::FindPosition(G4double& x,
 
 ///////////////////////////////////////////////////////
 // only valid if x_vec is monotically increasing
-size_t G4AdjointInterpolator::FindPositionForLogVector(
+std::size_t G4AdjointInterpolator::FindPositionForLogVector(
   G4double& log_x, std::vector<G4double>& log_x_vec)
 {
   // most rapid method could be used probably
@@ -163,9 +163,9 @@ size_t G4AdjointInterpolator::FindPositionForLogVector(
 G4double G4AdjointInterpolator::Interpolate(G4double& x,
                                             std::vector<G4double>& x_vec,
                                             std::vector<G4double>& y_vec,
-                                            G4String InterPolMethod)
+                                            const G4String& InterPolMethod)
 {
-  size_t i = FindPosition(x, x_vec);
+  std::size_t i = FindPosition(x, x_vec);
   return Interpolation(x, x_vec[i], x_vec[i + 1], y_vec[i], y_vec[i + 1],
                        InterPolMethod);
 }
@@ -173,19 +173,19 @@ G4double G4AdjointInterpolator::Interpolate(G4double& x,
 ///////////////////////////////////////////////////////
 G4double G4AdjointInterpolator::InterpolateWithIndexVector(
   G4double& x, std::vector<G4double>& x_vec, std::vector<G4double>& y_vec,
-  std::vector<size_t>& index_vec, G4double x0,
+  std::vector<std::size_t>& index_vec, G4double x0,
   G4double dx)  // only linear interpolation possible
 {
-  size_t ind = 0;
+  std::size_t ind = 0;
   if(x > x0)
-    ind = int((x - x0) / dx);
+    ind = G4int((x - x0) / dx);
   if(ind >= index_vec.size() - 1)
     ind = index_vec.size() - 2;
-  size_t ind1 = index_vec[ind];
-  size_t ind2 = index_vec[ind + 1];
+  std::size_t ind1 = index_vec[ind];
+  std::size_t ind2 = index_vec[ind + 1];
   if(ind1 > ind2)
   {
-    size_t ind11 = ind1;
+    std::size_t ind11 = ind1;
     ind1         = ind2;
     ind2         = ind11;
   }
@@ -199,7 +199,7 @@ G4double G4AdjointInterpolator::InterpolateForLogVector(
   G4double& log_x, std::vector<G4double>& log_x_vec,
   std::vector<G4double>& log_y_vec)
 {
-  size_t i = FindPositionForLogVector(log_x, log_x_vec);
+  std::size_t i = FindPositionForLogVector(log_x, log_x_vec);
 
   G4double log_y = LinearInterpolation(log_x, log_x_vec[i], log_x_vec[i + 1],
                                        log_y_vec[i], log_y_vec[i + 1]);

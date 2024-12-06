@@ -71,7 +71,7 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii) const
   std::size_t size = dataVector.size();
   fOut.write((char*) (&size), sizeof size);
 
-  G4double* value = new G4double[2 * size];
+  auto value = new G4double[2 * size];
   for (std::size_t i = 0; i < size; ++i)
   {
     value[2 * i]     = binVector[i];
@@ -104,7 +104,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     G4int siz0 = 0;
     fIn >> siz0;
     if (siz0 < 2) { return false; }
-    std::size_t siz = static_cast<std::size_t>(siz0);
+    auto siz = static_cast<std::size_t>(siz0);
     if (fIn.fail() || siz != numberOfNodes)
     {
       return false;
@@ -140,7 +140,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   std::size_t size;
   fIn.read((char*) (&size), sizeof size);
 
-  G4double* value = new G4double[2 * size];
+  auto value = new G4double[2 * size];
   fIn.read((char*) (value), 2 * size * (sizeof(G4double)));
   if (static_cast<G4int>(fIn.gcount()) != static_cast<G4int>(2 * size * (sizeof(G4double))))
   {
@@ -295,7 +295,7 @@ void G4PhysicsVector::ComputeSecDerivative1()
 // World Scientific, 2000
 {
   std::size_t n = numberOfNodes - 1;
-  G4double* u = new G4double[n];
+  auto u = new G4double[n];
   G4double p, sig;
 
   u[1] = ((dataVector[2] - dataVector[1]) / (binVector[2] - binVector[1]) -
@@ -362,7 +362,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
 // Cambridge University Press, 1997.
 {
   std::size_t n = numberOfNodes - 1;
-  G4double* u = new G4double[n];
+  auto u = new G4double[n];
   G4double p, sig, un;
 
   u[0] = (6.0 / (binVector[1] - binVector[0])) *

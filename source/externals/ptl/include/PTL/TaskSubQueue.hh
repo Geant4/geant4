@@ -20,7 +20,7 @@
 #ifndef G4GMAKE
 #include "PTL/Config.hh"  // IWYU pragma: keep
 #endif
-#include "PTL/Globals.hh"
+#include "PTL/Macros.hh"
 #include "PTL/VTask.hh"
 #if defined(PTL_USE_LOCKS)
 #    include "PTL/AutoLock.hh"

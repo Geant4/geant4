@@ -27,16 +27,8 @@
 /// \file field/field04/field04.cc
 /// \brief Main program of the field/field04 example
 //
-//
-// --------------------------------------------------------------
-//
-//      GEANT 4 - Example F04
-//
-// --------------------------------------------------------------
-// Comments
-//
-//
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef WIN32
 #  include <unistd.h>
@@ -44,13 +36,8 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#  include "G4MTRunManager.hh"
-#else
-#  include "F04SteppingVerbose.hh"
-
-#  include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
+#include "F04SteppingVerbose.hh"
 
 #include "F04ActionInitialization.hh"
 #include "F04DetectorConstruction.hh"
@@ -107,23 +94,19 @@ int main(int argc, char** argv)
   }
 
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  //
   G4UIExecutive* ui = nullptr;
   if (!macro.size()) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
+  // Setting the application-specific SteppingVerbose
   //
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  auto verbosity = new F04SteppingVerbose;
 
   // Construct the default run manager
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);
-  auto runManager = new G4RunManager;
-#endif
+  auto runManager = G4RunManagerFactory::CreateRunManager();
 
   G4Random::setTheSeed(randomSeed);
 
@@ -186,6 +169,7 @@ int main(int argc, char** argv)
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
+  delete verbosity;
   delete visManager;
   delete runManager;
 

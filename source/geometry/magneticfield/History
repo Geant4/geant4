@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-26 Ivana Hrivnacova (field-V11-02-06)
+- Better names for the G4EquationType enum constants
+
+## 2024-11-04 Philippe Canal (field-V11-02-05)
+- Improve stability of static initialization for StepperType() and
+  StepperDescription() in G4DormandPrince745.
+
+## 2024-09-10 Ivana Hrivnacova (field-V11-02-04)
+- Coverity fixes:
+  - Use std::move, const auto& instead of auto to avoid copying
+
 ## 2024-06-20 Ivana Hrivnacova (field-V11-02-03)
 - Fix in G4FieldBuilder for local fields:
   apply the local fields in the order of user setting

@@ -271,7 +271,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|.*Clang")
     # Add flags - longer term, make compile/link options
     # frame pointer flag to get more meaningful stack traces
     # May need others for better/reliable output
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=${GEANT4_BUILD_SANITIZER}")
+    set(__geant4_sanitizer_flags "-fno-omit-frame-pointer -fsanitize=${GEANT4_BUILD_SANITIZER}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${__geant4_sanitizer_flags}")
+    # Xcode does not forward CXX_FLAGS to the linker, and sanitizer link flags need propagating to final
+    # link steps
+    if(CMAKE_GENERATOR MATCHES Xcode)
+      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${__geant4_sanitizer_flags}")
+      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${__geant4_sanitizer_flags}")
+    endif()
 
     geant4_add_feature(GEANT4_BUILD_SANITIZER "Compiling/linking with sanitizer '${GEANT4_BUILD_SANITIZER}'")
   endif()

@@ -171,6 +171,11 @@ The following paragraphs are common to all basic examples
    (since they require no external libraries), but the OGL driver requires
    that the Geant4 libraries have been built with the OpenGL option.
 
+   Since 11.1, the TSG visualization driver can also produce the "offscrean"
+   file output in png, jpeg, gl2ps formats without drawing on the screen.
+   It can be controlled via UI commands provided in '/vis/tsg' which are
+   demonstrated in the tsg_offscreen.mac macro in example B5.
+
    For more information on visualization, including information on how to
    install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
    for example,\n
@@ -188,9 +193,15 @@ The following paragraphs are common to all basic examples
 
    The user command interface is set via the G4UIExecutive class
    in the main () function in exampleB3.cc
+
    The selection of the user command interface is then done automatically
    according to the Geant4 configuration or it can be done explicitly via
    the third argument of the G4UIExecutive constructor (see exampleB4a.cc).
+
+   The gui.mac macros are provided in examples B2, B4 and B5. This macro
+   is automatically executed if Geant4 is built with any GUI session.
+   It is also possible to customise the icons menu bar which is
+   demonstrated in the icons.mac macro in example B5.
 
 \section B3_C HOW TO RUN
 

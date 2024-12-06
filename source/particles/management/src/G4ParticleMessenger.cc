@@ -201,14 +201,8 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand* command)
     }
     selectCmd->SetCandidates((const char*)(candidates));
 
-    static const G4String noName("none");
-    // current value
-    if (currentParticle == nullptr) {
-      // no particle is selected. return null
-      return noName;
-    }
-
-    return currentParticle->GetParticleName();
+    const G4ParticleDefinition* currentParticle = theParticleTable->GetSelectedParticle();
+    return (currentParticle == nullptr) ? G4String("none") : currentParticle->GetParticleName();
   }
   if (command == verboseCmd) {
     // Command   /particle/verbose

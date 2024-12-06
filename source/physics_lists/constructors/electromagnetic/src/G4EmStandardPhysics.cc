@@ -50,6 +50,7 @@
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermorePolarizedRayleighModel.hh"
 #include "G4PhotoElectricAngularGeneratorPolarized.hh"
+#include "G4eplusTo2or3GammaModel.hh"
 
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
@@ -96,8 +97,7 @@ G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::~G4EmStandardPhysics()
-{}
+G4EmStandardPhysics::~G4EmStandardPhysics() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -209,9 +209,15 @@ void G4EmStandardPhysics::ConstructProcess()
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
+  // annihilation
+  auto anni = new G4eplusAnnihilation();
+  if (param->Use3GammaAnnihilationOnFly()) {
+    anni->SetEmModel(new G4eplusTo2or3GammaModel());
+  }
+
   ph->RegisterProcess(new G4eIonisation(), particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-  ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+  ph->RegisterProcess(anni, particle);
   ph->RegisterProcess(ss, particle);
 
   // generic ion

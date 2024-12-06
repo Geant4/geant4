@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2024-10-08 Jonas Hahnfeld (transport-V11-02-00)
+- Introduce `TRANSPORTATION_WITH_MSC` process sub type
+
 ## 2023-01-26 John Apostolakis (transport-V11-01-02)
 - Added a method to set both warning & important energies in G4TransporationParameters
   Added method to report lock errors.

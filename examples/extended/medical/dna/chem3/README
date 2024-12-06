@@ -47,8 +47,23 @@ How to implement user actions in the chemistry module.
 
  4 - HOW TO START ?
 
-  Run the example from this directory.
+  Run the example from build directory.
+
+  To run the example in batch mode:
+    ./chem3 -mac beam.in
+  or
+    ./chem3
+  then the macro beam.in is processed by default
+
+  In interactive mode, run:
+    ./chem3 -gui
+  or
+    ./chem3 -gui gui.mac
+
   The user interface will be launched. Continue using /run/beamOn 1 command.
+  By default, the vis.mac visualization macro is called.
+  The vis_vm,.mac macro is used only in the context of the G4DNA tutorial
+  hands-ons.
 
  5 - OUTPUT
 
@@ -57,12 +72,15 @@ How to implement user actions in the chemistry module.
   Chemical reactions are printed.
   In the GUI window a cummulative trajectory of the chemical species is drawn.
 
+  The functions in TimeStepAction show how to get species
+  ID, positions at each time step or in a chemical reaction
+
  6 - TIME EVOLUTION VISUALIZATION
 
   User can start a visualization of the chemical track evolution in time and space
-  using /control/execute movie.mac.
+  using /control/execute movie.mac. (The movie.mac macro then executes
+  the movie_prep.mac, movie_chemistry.mac and movie_physics.mac macros.)
   Note, that in default setup the simulation requires machine with 6 GB of RAM.
   To lower memory requirements, either decrease energy of the incident electron
   in prep.mac or/and shorten the simulation using SetEndTime setting in 
   src/ActionInitialization.cc.
-

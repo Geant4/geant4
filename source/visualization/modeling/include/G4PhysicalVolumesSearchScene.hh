@@ -61,13 +61,11 @@ public:
      G4VPhysicalVolume* pFoundPV,
      G4int foundPVCopyNo = 0,
      G4int foundDepth = 0,
-     std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>
-     foundBasePVPath =
-     std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>(),
-     std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>
-     foundFullPVPath =
-     std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>(),
-     G4Transform3D foundObjectTransformation = G4Transform3D())
+     const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
+       foundBasePVPath = std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>(),
+     const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
+       foundFullPVPath = std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>(),
+     const G4Transform3D& foundObjectTransformation = G4Transform3D())
     : fpSearchPV(pSearchPV)
     , fpFoundPV(pFoundPV)
     , fFoundPVCopyNo(foundPVCopyNo)

@@ -29,16 +29,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 G4eInverseBremsstrahlung::G4eInverseBremsstrahlung(
-  G4bool whichScatCase, G4String process_name,
+  G4bool whichScatCase, const G4String& process_name,
   G4VEmAdjointModel* aBremAdjointModel)
   : G4VAdjointReverseReaction(process_name, whichScatCase)
 {
   fAdjointModel = aBremAdjointModel;
   fAdjointModel->SetSecondPartOfSameType(false);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-G4eInverseBremsstrahlung::~G4eInverseBremsstrahlung() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 void G4eInverseBremsstrahlung::ProcessDescription(std::ostream& out) const

@@ -42,7 +42,7 @@ class G4AdjointPhotoElectricModel;
 class G4InversePEEffect : public G4VAdjointReverseReaction
 {
  public:
-  explicit G4InversePEEffect(G4String process_name,
+  explicit G4InversePEEffect(const G4String& process_name,
                              G4AdjointPhotoElectricModel* aModel);
   ~G4InversePEEffect() override;
 

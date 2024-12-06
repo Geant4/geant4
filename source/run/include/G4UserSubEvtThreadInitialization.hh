@@ -33,19 +33,8 @@
 #ifndef G4UserSubEvtThreadInitialization_hh
 #define G4UserSubEvtThreadInitialization_hh
 
-class G4VUserPrimaryGeneratorAction;
-class G4UserRunAction;
-class G4UserEventAction;
-class G4UserStackingAction;
-class G4UserTrackingAction;
-class G4UserSteppingAction;
-
-class G4WorkerThread;
-class G4WorkerTaskRunManager;
-
 #include "G4Threading.hh"
 #include "G4UserTaskThreadInitialization.hh"
-#include "Randomize.hh"
 
 class G4UserSubEvtThreadInitialization : public G4UserTaskThreadInitialization
 {
@@ -56,7 +45,7 @@ class G4UserSubEvtThreadInitialization : public G4UserTaskThreadInitialization
     // Called by StartThread function to create a run-manager implementing worker
     // behvior. User should re-implemtn this function in derived class to
     // instantiate his/her user-defined WorkerRunManager. By default this method
-    // instantiates G4WorkerTaskRunManager object.
+    // instantiates G4WorkerSubEvtRunManager object.
     G4WorkerRunManager* CreateWorkerRunManager() const override;
 };
 

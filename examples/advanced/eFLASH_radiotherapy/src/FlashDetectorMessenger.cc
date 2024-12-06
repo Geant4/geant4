@@ -33,6 +33,9 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"  
+#include "G4UIcmdWithABool.hh"
+
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 FlashDetectorMessenger::FlashDetectorMessenger(FlashDetectorConstruction* detector)
@@ -49,20 +52,16 @@ FlashDetectorMessenger::FlashDetectorMessenger(FlashDetectorConstruction* detect
     fChangeThePhantomMaterialCmd -> SetDefaultValue("G4_WATER");
     fChangeThePhantomMaterialCmd -> AvailableForStates(G4State_Idle);
 
-   
- 
     // fChange Detector size
     fChangeTheDetectorDir = new G4UIdirectory("/changeDetector/");
     fChangeTheDetectorDir -> SetGuidance("Command to fChange the Detector Size");
 
-// fChange Detector material 
+    // fChange Detector material 
     fChangeTheDetectorMaterialCmd = new G4UIcmdWithAString("/changeDetector/material", this);
     fChangeTheDetectorMaterialCmd  -> SetGuidance("fChange the Phantom and the detector material"); 
     fChangeTheDetectorMaterialCmd  -> SetParameterName("PhantomMaterial", false);
-   
     fChangeTheDetectorMaterialCmd  -> AvailableForStates(G4State_Idle);
 
-    
 
     fUpdateCmd = new G4UIcmdWithoutParameter("/changePhantom/update",this);
     fUpdateCmd->SetGuidance("Update Phantom/Detector geometry.");
@@ -75,9 +74,12 @@ FlashDetectorMessenger::FlashDetectorMessenger(FlashDetectorConstruction* detect
     fUpdateCmd_d->SetGuidance("This command MUST be applied before \"beamOn\" ");
     fUpdateCmd_d->SetGuidance("if you fChanged geometrical value(s).");
     fUpdateCmd_d->AvailableForStates(G4State_Idle);
-    
 
-
+    fActivateDetArrayCmd = new G4UIcmdWithABool("/changeDetector/activateArray", this);
+    fActivateDetArrayCmd -> SetParameterName("true/false", true);
+    fActivateDetArrayCmd -> SetGuidance("Activate detector array.");
+    fActivateDetArrayCmd -> SetGuidance("This command must be applied before /run/initialize");
+    fActivateDetArrayCmd -> AvailableForStates(G4State_PreInit);
    }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -90,6 +92,8 @@ FlashDetectorMessenger::~FlashDetectorMessenger()
   
     delete fChangeThePhantomMaterialCmd;
     delete fChangeTheDetectorMaterialCmd; 
+
+    delete fActivateDetArrayCmd;
     
 }
 
@@ -107,7 +111,10 @@ void FlashDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   {
       flashDetector -> SetDetectorMaterial(newValue);
   }
-  
-  
+
+  else if (command == fActivateDetArrayCmd){
+    G4bool fbool = fActivateDetArrayCmd -> GetNewBoolValue(newValue);
+    flashDetector -> ActivateDetArray(fbool);
+  }
   
 }

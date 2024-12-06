@@ -75,7 +75,7 @@
 #include "G4BraggIonModel.hh"
 #include "G4IonFluctuations.hh"
 #include "G4NuclearStopping.hh"
-#include "G4eplusTo2GammaOKVIModel.hh"
+#include "G4eplusTo2or3GammaModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -214,7 +214,7 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
   G4eplusAnnihilation* ann = new G4eplusAnnihilation();
-  ann->SetEmModel(new G4eplusTo2GammaOKVIModel());
+  ann->SetEmModel(new G4eplusTo2or3GammaModel());
 
   ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(new G4eIonisation(), particle);

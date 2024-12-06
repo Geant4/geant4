@@ -114,7 +114,7 @@ protected:
     auto  shoot =
         new G4MoleculeShootMessenger(name,
                                      this,
-                                     moleculeShoot);
+                                     std::move(moleculeShoot));
     fMultipleGun.push_back(shoot);
     fpMoleculeGun->AddMoleculeShoot(shoot->GetShoot());
     return shoot;

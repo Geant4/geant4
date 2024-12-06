@@ -61,7 +61,7 @@ public:
   G4double GetAlphaParam(G4double energy);
 
 private:
-  G4int num_node_;
+  G4int num_node_{0};
   std::vector<G4double> Eion_;
   std::vector<G4double> alpha_;
 

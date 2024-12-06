@@ -47,6 +47,7 @@
 
 #include "G4ParticleHPInelasticURR.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4ParticleHPChannel.hh"
 #include "G4ParticleHPInelastic.hh"
 #include "G4ParticleHPProbabilityTablesStore.hh"
@@ -124,9 +125,9 @@ G4HadFinalState* G4ParticleHPInelasticURR::ApplyYourself( const G4HadProjectile&
 
 void G4ParticleHPInelasticURR::BuildPhysicsTable( const G4ParticleDefinition& ) {
   particleHPinelastic->BuildPhysicsTable( *(G4Neutron::Neutron()) );
-  if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "njoy" ) {
+  if ( G4HadronicParameters::Instance()->GetTypeTablePT() == "njoy" ) {
     doNOTusePTforInelastic = true;
-  } else if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "calendf" ) {
+  } else if ( G4HadronicParameters::Instance()->GetTypeTablePT() == "calendf" ) {
     doNOTusePTforInelastic = false;
     // in the case of calendf probability tables, it sets the limits of the URR
     URRlimits = G4ParticleHPManager::GetInstance()->GetURRlimits();

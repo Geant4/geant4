@@ -58,6 +58,7 @@ class Run : public G4Run
     void CountProcesses(const G4String& procName);
 
     void AddEdep(G4double val) { fEdep += val; }
+    void AddEleak(G4double val){ fEleak += val;}
     void AddNIEL(G4double val) { fNIEL += val; }
     void AddTrueRange(G4double l)
     {
@@ -85,7 +86,7 @@ class Run : public G4Run
 
     G4int fNbOfTraks0 = 0, fNbOfTraks1 = 0;
     G4int fNbOfSteps0 = 0, fNbOfSteps1 = 0;
-    G4double fEdep = 0., fNIEL = 0.;
+    G4double fEdep = 0., fEleak = 0., fNIEL = 0.;
     G4double fTrueRange = 0., fTrueRange2 = 0.;
     G4double fProjRange = 0., fProjRange2 = 0.;
     G4double fTransvDev = 0., fTransvDev2 = 0.;

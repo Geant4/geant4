@@ -473,7 +473,7 @@ G4double G4DNAIRTMoleculeEncounterStepper::CalculateMinTimeStep(G4double current
         return fSampledMinTimeStep;
     }
 
-    auto fReactionSetInTime = fReactionSet->GetReactionsPerTime();
+    const auto& fReactionSetInTime = fReactionSet->GetReactionsPerTime();
     fSampledMinTimeStep = fReactionSetInTime.begin()->get()->GetTime() - currentGlobalTime;
 
     return fSampledMinTimeStep;

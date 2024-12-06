@@ -7,6 +7,25 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-29 Vladimir Ivanchenko (hadr-util-V11-02-05)
+- G4LegendrePolynomial - optimized implementation by Isaac Kunen GitHub PR #70
+
+## 2024-09-09 Vladimir Ivanchenko (hadr-util-V11-02-04)
+- G4IsotopeList - added table with low-energy threshold energies per atomic number.
+- G4NucleaRadii - added two static function to describe threshold shape by the
+    old parameterisations derived from GHEISHA.
+
+## 2024-08-21 Gabriele Cosmo (hadr-util-V11-02-03)
+- Fixed reported Coverity defects for use of std::move() and const G4String&;
+  in G4HadronicDeveloperParameters use const G4String& and const_iterator.
+
+## 2024-08-02 Alberto Ribon (hadr-util-V11-02-02)
+- G4HadronicParameters : introduced Getter/Setter for selecting the PT table
+  type (a choice between  "calendf"  and  "njoy" ) for the URR treatment of
+  low-energy neutrons.
+  ( Note that this choice must be done at initialization time, therefore it
+    cannot be made via UI command in ParticleHP. )
+
 ## 2024-06-06 Vladimir Ivanchenko (hadr-util-V11-02-01)
 - G4HadronicParameters: introduced Getter/Setter of flag of the NUDEX gamma
   de-excitation module. 

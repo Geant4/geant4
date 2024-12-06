@@ -101,7 +101,6 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot* aSpot, G4TouchableHi
   caloHit->SetEdep(e);
   caloHit->SetPos(aSpot->GetEnergySpot()->GetPosition());
   fCaloHitsCollection->insert(caloHit);
-  //  if (ROhist){;}
 
   return true;
 }

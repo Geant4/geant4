@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,7 +31,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -92,12 +91,8 @@ Some /vis commands (optionally) take a string to specify colour.
 /tracking/verbose 0
 /run/verbose 1
 /event/verbose 0
-/Physics/addPhysics standard_opt4
-PhysicsList::AddPhysicsList: <standard_opt4>
-THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option4
+/changeDetector/activateArray false
 /run/initialize
-Checking overlaps for volume DetPhys:0 (G4Box) ... OK! 
-Checking overlaps for volume Det_sub_Phys:0 (G4Box) ... OK! 
 --- G4CoupledTransportation is used 
 /process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 /control/execute 9MeVEF.mac
@@ -190,15 +185,28 @@ Checking overlaps for volume Det_sub_Phys:0 (G4Box) ... OK!
 /score/mesh/translate/xyz 60 0 0 mm
 /score/quantity/doseDeposit dose Gy
 /score/close
+/score/create/boxMesh boxMesh_2
+/score/mesh/boxSize 2 2 75 mm
+/score/mesh/nBin 1 1 150
+.... G4ScoringMessenger::MeshBinCommand - G4ScoringBox
+/score/mesh/translate/xyz 13 0 0 mm
+/score/quantity/doseDeposit dose Gy
+/score/close
 /score/list
-G4ScoringManager has 1 scoring meshes.
+G4ScoringManager has 2 scoring meshes.
 G4ScoringBox : boxMesh_1 --- Shape: Box mesh
  Size (x, y, z): (6, 0.2, 0.2) [cm]
  # of segments: (120, 1, 1)
  displacement: (6, 0, 0) [cm]
  registered primitve scorers : 
    0  dose
-/run/beamOn 500000
+G4ScoringBox : boxMesh_2 --- Shape: Box mesh
+ Size (x, y, z): (0.2, 0.2, 7.5) [cm]
+ # of segments: (1, 1, 150)
+ displacement: (1.3, 0, 0) [cm]
+ registered primitve scorers : 
+   0  dose
+/run/beamOn 200000
 /run/geometryModified
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
@@ -221,10 +229,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 1
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -378,7 +389,7 @@ ePairProd:  for e+  XStype:1  SubType=4
 
 annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        eplus2ggOKVI : Emin=    0 eV  Emax=  100 TeV
+    eplusTo2or3gamma : Emin=    0 eV  Emax=  100 TeV
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
@@ -761,13 +772,6 @@ Index : 7     used in the geometry : Yes
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes
- Material : SiC
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  7.0291 keV    e-  711.152 keV    e+  682.032 keV proton 100 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
  Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 0 eV 
@@ -776,8 +780,6 @@ Index : 9     used in the geometry : Yes
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
 
@@ -786,25 +788,17 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 ---> Begin of event: 100000
 ---> End of event: 100000
-
----> Begin of event: 200000
----> End of event: 200000
-
----> Begin of event: 300000
----> End of event: 300000
-
----> Begin of event: 400000
----> End of event: 400000
  Run terminated.
 Run Summary
-  Number of events processed : 500000
-  User=1182.840000s Real=1210.648224s Sys=4.520000s
+  Number of events processed : 200000
+  User=559.630000s Real=586.238363s Sys=2.650000s
 
 --------------------End of Global Run-----------------------
-  The run was 500000 events /score/dumpQuantityToFile boxMesh_1 dose dose.out
+  The run was 200000 events /score/dumpQuantityToFile boxMesh_1 dose dose_longitudinal.out
+/score/dumpQuantityToFile boxMesh_2 dose dose_transversal.out
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.14 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.13 MB
 ============================================================

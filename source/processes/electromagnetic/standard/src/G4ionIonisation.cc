@@ -137,7 +137,13 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
       SetFluctModel(G4EmStandUtil::ModelOfFluctuations(true));
     }
 
-    if (nullptr == EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
+    if (nullptr == EmModel(0)) {
+      if (pdg == 1000020040) {
+	SetEmModel(new G4BraggIonModel());
+      } else {
+        SetEmModel(new G4BraggModel());
+      }
+    }
     // to compute ranges correctly we have to use low-energy
     // model even if activation limit is high
     EmModel(0)->SetLowEnergyLimit(emin);

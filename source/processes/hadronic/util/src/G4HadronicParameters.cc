@@ -283,6 +283,11 @@ void G4HadronicParameters::SetEnableNUDEX( G4bool val ) {
 } 
 
 
+void G4HadronicParameters::SetTypeTablePT( const G4String& typeTablePT ) {
+  if ( ! IsLocked() ) fTypeTablePT = typeTablePT;
+}
+
+
 void G4HadronicParameters::SetEnableCoherentChargeExchange( G4bool val ) {
   if ( ! IsLocked() )  fChargeExchange = val;
 }

@@ -89,24 +89,15 @@ extern "C" {
 }
 
 void G4OpenGLXViewer::SetView () {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsMasterThread()) {
     glXMakeCurrent (dpy, win, cxMaster);
   } else {
     glXMakeCurrent (dpy, win, cxVisSubThread);
   }
-#else
-  glXMakeCurrent (dpy, win, cxMaster);
-#endif
   G4OpenGLViewer::SetView ();
 }
 
 void G4OpenGLXViewer::ShowView () {
-#ifdef G4MULTITHREADED
-//  G4int thread_id = G4Threading::G4GetThreadId();
-//  G4cout << "G4OpenGLXViewer::ShowView: thread " << thread_id << G4endl;
-#endif
-  
 //  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propagated before progressing.
 // JA: Commented out July 2021 - slows rendering down in some cases and I
@@ -131,24 +122,22 @@ void G4OpenGLXViewer::ShowView () {
   }
 }
 
-#ifdef G4MULTITHREADED
-
 void G4OpenGLXViewer::SwitchToVisSubThread()
 {
-//  G4cout << "G4OpenGLXViewer::SwitchToVisSubThread" << G4endl;
+#ifdef G4MULTITHREADED
   cxVisSubThread = glXCreateContext (dpy, vi, cxMaster, true);
   glXMakeCurrent (dpy, win, cxVisSubThread);
+#endif
 }
 
 void G4OpenGLXViewer::SwitchToMasterThread()
 {
-//  G4cout << "G4OpenGLXViewer::SwitchToMasterThread" << G4endl;
+#ifdef G4MULTITHREADED
   glXMakeCurrent (dpy, win, cxMaster);
   // and destroy sub-thread context
   glXDestroyContext (dpy, cxVisSubThread);
-}
-
 #endif
+}
 
 void G4OpenGLXViewer::GetXConnection () {
 // get a connection.

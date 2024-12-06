@@ -38,7 +38,9 @@
 #include "G4TouchablePropertiesScene.hh"
 #include "G4TransportationManager.hh"
 #include "G4BoundingExtentScene.hh"
+
 #include <sstream>
+#include <utility>
 
 #define G4warn G4cout
 
@@ -440,7 +442,7 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
     if (iEnd == G4String::npos) {
       iEnd = newValue.length();
     }
-    G4String name(newValue.substr(iBegin,iEnd-iBegin));
+    const G4String& name(newValue.substr(iBegin,iEnd-iBegin));
     iBegin = newValue.find_first_not_of(' ',iEnd);
     if (iBegin == G4String::npos) {
       if (verbosity >= G4VisManager::warnings) {

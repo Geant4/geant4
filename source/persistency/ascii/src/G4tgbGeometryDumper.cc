@@ -230,7 +230,7 @@ void G4tgbGeometryDumper::DumpPVPlacement(G4VPhysicalVolume* pv,
     *rotMat = (*rotMat).inverse();
     pvName += "_refl";
   }
-  G4String rotName  = DumpRotationMatrix(rotMat);
+  const G4String& rotName  = DumpRotationMatrix(rotMat);
   G4ThreeVector pos = pv->GetTranslation();
 
   if(copyNo == -999)  // for parameterisations copy number is provided
@@ -238,8 +238,8 @@ void G4tgbGeometryDumper::DumpPVPlacement(G4VPhysicalVolume* pv,
     copyNo = pv->GetCopyNo();
   }
 
-  G4String fullname = pvName + "#" + G4UIcommand::ConvertToString(copyNo) +
-                      "/" + pv->GetMotherLogical()->GetName();
+  const G4String& fullname = pvName + "#" + G4UIcommand::ConvertToString(copyNo)
+                           + "/" + pv->GetMotherLogical()->GetName();
 
   if(!CheckIfPhysVolExists(fullname, pv))
   {
@@ -414,7 +414,7 @@ void G4tgbGeometryDumper::DumpPVReplica(G4PVReplica* pv, const G4String& lvName)
       break;
   }
 
-  G4String fullname = lvName + "/" + pv->GetMotherLogical()->GetName();
+  const G4String& fullname = lvName + "/" + pv->GetMotherLogical()->GetName();
 
   if(!CheckIfPhysVolExists(fullname, pv))
   {
@@ -463,14 +463,14 @@ G4String G4tgbGeometryDumper::DumpLogVol(G4LogicalVolume* lv,
   }
 
   //---- Dump solid
-  G4String solidName = DumpSolid(solid, extraName);
+  const G4String& solidName = DumpSolid(solid, extraName);
 
   //---- Dump material
   if(mate == nullptr)
   {
     mate = lv->GetMaterial();
   }
-  G4String mateName = DumpMaterial(mate);
+  const G4String& mateName = DumpMaterial(mate);
 
   //---- Dump logical volume (solid + material)
   (*theFile) << ":VOLU " << SubstituteRefl(AddQuotes(lvName)) << " "
@@ -485,7 +485,7 @@ G4String G4tgbGeometryDumper::DumpLogVol(G4LogicalVolume* lv,
 // --------------------------------------------------------------------
 G4String G4tgbGeometryDumper::DumpMaterial(G4Material* mat)
 {
-  G4String mateName = GetObjectName(mat, theMaterials);
+  const G4String& mateName = GetObjectName(mat, theMaterials);
   if(theMaterials.find(mateName) != theMaterials.cend())  // alredy dumped
   {
     return mateName;
@@ -559,7 +559,7 @@ G4String G4tgbGeometryDumper::DumpMaterial(G4Material* mat)
 // --------------------------------------------------------------------
 void G4tgbGeometryDumper::DumpElement(G4Element* ele)
 {
-  G4String elemName = GetObjectName(ele, theElements);
+  const G4String& elemName = GetObjectName(ele, theElements);
 
   if(theElements.find(elemName) != theElements.cend())  // alredy dumped
   {
@@ -605,7 +605,7 @@ void G4tgbGeometryDumper::DumpElement(G4Element* ele)
 // --------------------------------------------------------------------
 void G4tgbGeometryDumper::DumpIsotope(G4Isotope* isot)
 {
-  G4String isotName = GetObjectName(isot, theIsotopes);
+  const G4String& isotName = GetObjectName(isot, theIsotopes);
   if(theIsotopes.find(isotName) != theIsotopes.cend())  // alredy dumped
   {
     return;
@@ -725,11 +725,10 @@ void G4tgbGeometryDumper::DumpBooleanVolume(const G4String& solidType,
     pos     = G4ThreeVector();
   }
 
-  G4String bsoName = GetObjectName(so, theSolids);
-  if(theSolids.find(bsoName) != theSolids.cend())
-    return;  // alredy dumped
-  G4String solid0Name = FindSolidName(solid0);
-  G4String solid1Name = FindSolidName(solid1);
+  const G4String& bsoName = GetObjectName(so, theSolids);
+  if(theSolids.find(bsoName) != theSolids.cend()) return;  // alredy dumped
+  const G4String& solid0Name = FindSolidName(solid0);
+  const G4String& solid1Name = FindSolidName(solid1);
 
   (*theFile) << ":SOLID " << AddQuotes(bsoName) << " " << AddQuotes(solidType)
              << " " << AddQuotes(solid0Name) << " " << AddQuotes(solid1Name)
@@ -750,16 +749,16 @@ void G4tgbGeometryDumper::DumpMultiUnionVolume( G4VSolid* so)
       std::vector<G4String> rotList;
       for( G4int iso = 0; iso < nSolids; iso++ ) {
 	G4Transform3D trans = muun->GetTransformation(iso);
-	G4String rotName = DumpRotationMatrix( new G4RotationMatrix(trans.getRotation()));
+	const G4String& rotName = DumpRotationMatrix( new G4RotationMatrix(trans.getRotation()));
 	rotList.push_back(rotName);
 	G4VSolid* solN = muun->GetSolid(iso);
 	DumpSolid(solN);
       }
-      G4String bsoName = GetObjectName(const_cast<G4VSolid*>(so), theSolids);
+      const G4String& bsoName = GetObjectName(const_cast<G4VSolid*>(so), theSolids);
       (*theFile) << ":SOLID " << AddQuotes(bsoName) << " MULTIUNION "
 		 << nSolids;
       
-      for( G4int iso = 0; iso < nSolids; iso++ ) {
+      for( G4int iso = 0; iso < nSolids; ++iso ) {
 	G4VSolid* solN = muun->GetSolid(iso);
 	G4Transform3D trans = muun->GetTransformation(iso);
 	G4ThreeVector pos = trans.getTranslation();  // translation is of mother frame
@@ -1109,7 +1108,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams(const G4VSolid* so)
   }
   else
   {
-    G4String ErrMessage = "Solid type not supported, sorry... " + solidType;
+    const G4String& ErrMessage = "Solid type not supported, sorry... " + solidType;
     G4Exception("G4tgbGeometryDumper::DumpSolidParams()", "NotImplemented",
                 FatalException, ErrMessage);
   }
@@ -1298,7 +1297,7 @@ G4String G4tgbGeometryDumper::GetIsotopeName(G4Isotope* isot)
                        // with same name
         for(;; ++ii)
         {
-          G4String newIsotName =
+          const G4String& newIsotName =
             isotName + "_" + G4UIcommand::ConvertToString(ii);
           std::map<G4String, G4Isotope*>::const_iterator ite2 =
             theIsotopes.find(newIsotName);
@@ -1354,7 +1353,7 @@ G4String G4tgbGeometryDumper::GetObjectName(
       G4int ii = 2;
       for(;; ++ii)
       {
-        G4String newObjName = objName + "_" + G4UIcommand::ConvertToString(ii);
+        const G4String& newObjName = objName + "_" + G4UIcommand::ConvertToString(ii);
         typename std::map<G4String, TYP*>::const_iterator ite2 =
           objectsDumped.find(newObjName);
         if(ite2 == objectsDumped.cend())

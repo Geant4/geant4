@@ -47,7 +47,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation(function pFunction, G4int n,
 {
   G4int i = 0, j = 0;
   G4double rootSum = 0.0, cofj = 0.0;
-  G4double* tempFunction = new G4double[fNumber];
+  auto tempFunction = new G4double[fNumber];
   G4double weight        = 2.0 / fNumber;
   G4double cof           = 0.5 * weight * pi;  // pi/n
 
@@ -93,7 +93,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation(function pFunction, G4int nx,
   }
   G4int i = 0, j = 0;
   G4double rootSum = 0.0, cofj = 0.0;
-  G4double* tempFunction = new G4double[fNumber];
+  auto tempFunction = new G4double[fNumber];
   G4double weight        = 2.0 / fNumber;
   G4double cof           = 0.5 * weight * pi;  // pi/nx
 
@@ -143,7 +143,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation(function pFunction,
 {
   G4int i = 0, j = 0;
   G4double rootSum = 0.0, cofj = 0.0;
-  G4double* tempFunction = new G4double[fNumber];
+  auto tempFunction = new G4double[fNumber];
   G4double weight        = 2.0 / fNumber;
   G4double cof           = 0.5 * weight * pi;  // pi/n
 

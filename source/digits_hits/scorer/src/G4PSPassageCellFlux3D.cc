@@ -41,7 +41,7 @@
 // Created: 2007-08-14  Tsukasa ASO
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name, G4int ni, G4int nj,
+G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(const G4String& name, G4int ni, G4int nj,
                                              G4int nk, G4int di, G4int dj,
                                              G4int dk)
   : G4PSPassageCellFlux(name)
@@ -52,7 +52,7 @@ G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name, G4int ni, G4int nj,
   SetNijk(ni, nj, nk);
 }
 
-G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name,
+G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(const G4String& name,
                                              const G4String& unit, G4int ni,
                                              G4int nj, G4int nk, G4int di,
                                              G4int dj, G4int dk)

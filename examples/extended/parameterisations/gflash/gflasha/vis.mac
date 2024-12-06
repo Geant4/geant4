@@ -2,12 +2,8 @@
 # Macro file for the initialization phase of gflash example
 # when runing in interactive mode
 #
-# Sets some default verbose
-/gps/position 0 0 0
-/gps/particle e+
-/gps/energy   2.0 GeV
-/gps/direction  0. 0. 1.0
-#
+# Initialize kernel
+/run/initialize
 # Open a viewer
 /vis/open
 # This opens the default viewer - see examples/basic/B1/vis.mac for a
@@ -66,9 +62,3 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
-#
-#/tracking/verbose 0
-#/GFlash/flag 1
-#/run/beamOn 2
-
-

@@ -1326,10 +1326,6 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4doub
 
         SigmaQT = SigmaQTw;
 
-        if ( loopCounter >= maxNumberOfLoops ) {
-            AvailablePz2 = 0.0;
-        }
-
 	AvailablePz2= sqr(InitialMass*InitialMass - sqr(MassMt) - sqr(AntiMassMt)) -
 				4.*sqr(MassMt*AntiMassMt);
 

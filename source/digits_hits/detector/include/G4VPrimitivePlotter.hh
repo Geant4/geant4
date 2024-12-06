@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPrimitivePlotter
 //
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VPrimitivePlotter_H
 #define G4VPrimitivePlotter_H 1
 

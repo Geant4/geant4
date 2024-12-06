@@ -1,0 +1,125 @@
+### Plasmid default geometry
+
+#
+# See more details on moleculardna specific UI commands:
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/configuration
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
+# - the README file
+# - the messenger classes of the moleculardna example
+#
+
+# Physics: choice of thermalization model
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+# Verbosity: settings
+/run/verbose 2
+/tracking/verbose 0
+/control/verbose 1
+/dnageom/verbose 1
+
+# Chemistry: selection of IRT_syn
+/process/chem/TimeStepModel IRT_syn
+
+# Chemistry: activation
+/chem/activate true
+
+# Chemistry: verbosity
+/scheduler/verbose 0
+
+# Material: verbosity
+/material/verbose 2
+
+# Geometry: size of World volume
+/world/worldSize 4.84 um
+
+# Geometry: optimisation of voxelisation
+/dnageom/setSmartVoxels 1
+/dnageom/checkOverlaps false
+
+# Geometry: creation
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/bacterial-cell
+#  - Side length for each placement
+/dnageom/placementSize 200 200 200 nm
+#  - Scaling of XYZ in fractal definition file
+/dnageom/fractalScaling 1 1 1 nm
+#  - Path to file that defines placement locations
+/dnageom/definitionFile geometries/prisms_plasmids_positions_500ngpul.txt
+#  - Set placement volumes
+/dnageom/placementVolume prism geometries/plasmid_4367.txt
+
+# Geometry: take the angles in the voxel placement file as multiples of pi
+/dnageom/setVoxelPlacementAnglesAsMultiplesOfPi false
+
+# Geometry: enable custom molecule sizes
+/dnageom/useCustomMoleculeSizes false
+
+# Geometry: draw cell/chromosome volumes rather than DNA
+/dnageom/drawCellVolumes false
+
+# Geometry: distance from base pairs at which radicals are killed
+/dnageom/radicalKillDistance 9 nm
+
+# Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
+/dnageom/interactionDirectRange 7 angstrom
+
+# Geometry: activate Histone scavenging function
+/dnageom/activateHistoneScavenging true
+
+# Analysis: add box chromosomal region of interest, with the name "plasmid"
+/chromosome/add plasmid box 2.21 2.21 2.42 0 0 0 um
+
+# Damage: model settings
+/dnadamage/directDamageLower 17.5 eV
+/dnadamage/directDamageUpper 17.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.65
+/dnadamage/inductionOHChance 0.0
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.65
+/dnadamage/inductionHChance 0.00
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.65
+/dnadamage/inductionEaqChance 0.00
+
+# Analysis: set whether strands ought be saved
+/analysisDNA/saveStrands false
+
+# Analysis: gap between DNA fragments in base pair
+#  Set to zero to score placement volumes independently
+/analysisDNA/fragmentGap 0  # do not join
+
+# Draw cell/chromosome volumes rather than DNA (makes DNA invisible)
+/dnageom/drawCellVolumes false
+
+# Run: initialization
+/run/initialize
+
+# --> Unit tests
+#/dnatests/uniqueid
+#/dnatests/basepairs
+#/dnatests/chromosome
+#/analysisDNA/testClassifier
+# --> End unit tests
+
+# Run: progress display
+/run/printProgress 100
+
+# Source geometry
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/centre 0 0 -2.42 um
+/gps/pos/halfx 2.21 um
+/gps/pos/halfy 2.21 um
+
+# Source particle, energy and angular distribution
+/gps/particle proton
+/gps/energy 3 MeV
+/gps/direction 0 0 1
+
+# Beam on
+/run/beamOn 10

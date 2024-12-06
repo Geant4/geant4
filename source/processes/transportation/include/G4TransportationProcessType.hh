@@ -43,6 +43,7 @@ enum G4TransportationProcessType
 {
   TRANSPORTATION = 91 ,
   COUPLED_TRANSPORTATION = 92 ,
+  TRANSPORTATION_WITH_MSC = 93,
   // following processes belong to 'General' type
   STEP_LIMITER = 401,
   USER_SPECIAL_CUTS = 402,

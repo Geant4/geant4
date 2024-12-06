@@ -228,8 +228,7 @@ inline
 void G4TrackingInformation::RecordProcessState(G4shared_ptr<G4ProcessState_Lock> state,
                                                size_t index)
 {
-  // G4cout << "G4TrackingInformation::RecordProcessState" << G4endl;
-  fProcessState[index] = state;
+  fProcessState[index] = std::move(state);
 }
 
 inline G4double G4TrackingInformation::GetPreStepGlobalTime() const

@@ -37,7 +37,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name, G4int ni, G4int nj,
+G4PSDoseDeposit3D::G4PSDoseDeposit3D(const G4String& name, G4int ni, G4int nj,
                                      G4int nk, G4int di, G4int dj, G4int dk)
   : G4PSDoseDeposit(name)
   , fDepthi(di)
@@ -47,7 +47,7 @@ G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name, G4int ni, G4int nj,
   SetNijk(ni, nj, nk);
 }
 
-G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name, const G4String& unit,
+G4PSDoseDeposit3D::G4PSDoseDeposit3D(const G4String& name, const G4String& unit,
                                      G4int ni, G4int nj, G4int nk, G4int di,
                                      G4int dj, G4int dk)
   : G4PSDoseDeposit3D(name, ni, nj, nk, di, dj, dk) 

@@ -47,6 +47,15 @@
 
 G4bool G4VTrajectory::operator==(const G4VTrajectory& right) const { return (this == &right); }
 
+G4VTrajectory* G4VTrajectory::CloneForMaster() const
+{
+  // Base-class method must not be invoked.
+  // Each concrete class should implement its own method.
+   G4Exception("G4VTrajectory::CloneForMaster()","traj0100",FatalException,
+     "CloneForMaster() of G4VTrajectory base-class is invoked. Each concrete class should implement its own method.");
+   return nullptr;
+}
+
 void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 {
   // Makes use of attribute values implemented in the concrete class.

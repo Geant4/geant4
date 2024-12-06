@@ -381,7 +381,7 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateMinTimeStep(G4double /*cu
     if (sampledMinTimeStep < fTSTimeStep) {
       fTSTimeStep = sampledMinTimeStep;
       if (reactants) {
-        fReactionSet->AddReactions(fTSTimeStep, const_cast<G4Track*>(pTrack), reactants);
+        fReactionSet->AddReactions(fTSTimeStep, const_cast<G4Track*>(pTrack), std::move(reactants));
 
         fSampledPositions[pTrack->GetTrackID()] = pTrack->GetPosition();
         for (const auto& it : *fReactants) {
@@ -392,7 +392,7 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateMinTimeStep(G4double /*cu
       }
     }
     else if (fTSTimeStep == sampledMinTimeStep && G4bool(reactants)) {
-      fReactionSet->AddReactions(fTSTimeStep, const_cast<G4Track*>(pTrack), reactants);
+      fReactionSet->AddReactions(fTSTimeStep, const_cast<G4Track*>(pTrack), std::move(reactants));
 
       fSampledPositions[pTrack->GetTrackID()] = pTrack->GetPosition();
       for (const auto& it : *fReactants) {

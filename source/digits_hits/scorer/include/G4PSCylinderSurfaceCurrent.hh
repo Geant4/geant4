@@ -60,8 +60,8 @@
 class G4PSCylinderSurfaceCurrent : public G4VPrimitivePlotter
 {
  public: 
-  G4PSCylinderSurfaceCurrent(G4String name, G4int direction, G4int depth = 0);
-  G4PSCylinderSurfaceCurrent(G4String name, G4int direction,
+  G4PSCylinderSurfaceCurrent(const G4String& name, G4int direction, G4int depth = 0);
+  G4PSCylinderSurfaceCurrent(const G4String& name, G4int direction,
                              const G4String& unit, G4int depth = 0);
   ~G4PSCylinderSurfaceCurrent() override = default;
 

@@ -55,45 +55,45 @@ class G4AdjointCSMatrix
   void Clear();
 
   void AddData(G4double aPrimEnergy, G4double aCS,
-               std::vector<double>* aLogSecondEnergyVector,
-               std::vector<double>* aLogProbVector, size_t n_pro_decade = 0);
+               std::vector<G4double>* aLogSecondEnergyVector,
+               std::vector<G4double>* aLogProbVector, std::size_t n_pro_decade = 0);
 
   G4bool GetData(unsigned int i, G4double& aPrimEnergy, G4double& aCS,
-                 G4double& log0, std::vector<double>*& aLogSecondEnergyVector,
-                 std::vector<double>*& aLogProbVector,
-                 std::vector<size_t>*& aLogProbVectorIndex);
+                 G4double& log0, std::vector<G4double>*& aLogSecondEnergyVector,
+                 std::vector<G4double>*& aLogProbVector,
+                 std::vector<std::size_t>*& aLogProbVectorIndex);
 
-  inline std::vector<double>* GetLogPrimEnergyVector()
+  inline std::vector<G4double>* GetLogPrimEnergyVector()
   {
     return &fLogPrimEnergyVector;
   }
 
-  inline std::vector<double>* GetLogCrossSectionvector()
+  inline std::vector<G4double>* GetLogCrossSectionvector()
   {
     return &fLogCrossSectionVector;
   }
 
   inline G4bool IsScatProjToProj() { return fScatProjToProj; }
 
-  void Write(G4String file_name);
+  void Write(const G4String& file_name);
 
-  void Read(G4String file_name);
+  void Read(const G4String& file_name);
 
  private:
-  std::vector<double> fLogPrimEnergyVector;
+  std::vector<G4double> fLogPrimEnergyVector;
   // Adjoint Cross sections as functions of primary energy
-  std::vector<double> fLogCrossSectionVector;
+  std::vector<G4double> fLogCrossSectionVector;
 
-  std::vector<std::vector<double>*> fLogSecondEnergyMatrix;
-  std::vector<std::vector<double>*> fLogProbMatrix;
+  std::vector<std::vector<G4double>*> fLogSecondEnergyMatrix;
+  std::vector<std::vector<G4double>*> fLogProbMatrix;
   // Each column represents the integrated probability of
   // getting a secondary
 
   // index of equidistant LogProb
-  std::vector<std::vector<size_t>*> fLogProbMatrixIndex;
-  std::vector<double> fLog0Vector;
+  std::vector<std::vector<std::size_t>*> fLogProbMatrixIndex;
+  std::vector<G4double> fLog0Vector;
 
-  size_t fNbPrimEnergy = 0;
+  std::size_t fNbPrimEnergy = 0;
 
   G4bool fScatProjToProj;
 };

@@ -9,7 +9,10 @@
 # Material
 /dna/test/setMat G4_WATER
 # or alternatively
-#/dna/test/setMat G4_WATER_MODIFIED
+#/dna/test/setMatDens G4_WATER_MODIFIED 1.200 g/cm3
+#
+# Size of World volume
+/dna/test/setSize 100 um
 #
 # Atomic deexcitation
 /process/em/fluo true

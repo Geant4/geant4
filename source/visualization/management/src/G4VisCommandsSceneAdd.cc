@@ -448,7 +448,7 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
   model->SetGlobalTag("Date");
   model->SetGlobalDescription("Date: " + newValue);
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  G4bool successful = pScene -> AddEndOfEventModel(model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Date has been added to scene \""
@@ -745,8 +745,7 @@ void G4VisCommandSceneAddEventID::EventID::operator()
       // Only use if NOT reviewing kept events
       if (fpVisManager->GetReviewingKeptEvents()) return;
       const G4int nEvents = currentRun->GetNumberOfEventToBeProcessed();
-      const auto* events = currentRun->GetEventVector();
-      size_t nKeptEvents = events? events->size(): 0;
+      size_t nKeptEvents = (size_t)(currentRun->GetNumberOfKeptEvents());
       oss << "Run " << currentRunID << " (" << nEvents << " event";
       if (nEvents != 1) oss << 's';
       oss << ", " << nKeptEvents << " kept)";
@@ -1883,7 +1882,11 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   G4Tubs tG("tG",ri,ro,d2,0.15*pi,1.85*pi);
   G4Box bG("bG",w2,ro2,d2);
   G4UnionSolid logoG("logoG",&tG,&bG,G4Translate3D(ri+w2,-ro2,0.));
+  // Create with these vis atts (force solid) and current no of sides per circle.
+  G4Polyhedron::SetNumberOfRotationSteps
+  (fpVisManager->GetCurrentViewer()->GetViewParameters().GetNoOfSides());
   fpG = logoG.CreatePolyhedron();
+  G4Polyhedron::ResetNumberOfRotationSteps ();
   fpG->SetVisAttributes(visAtts);
   fpG->Transform(G4Translate3D(-0.55*h,0.,0.));
   fpG->Transform(transform);

@@ -46,7 +46,7 @@
 #include "G4GeometryTolerance.hh"
 #include "G4VScoreHistFiller.hh"
 
-G4PSVolumeFlux::G4PSVolumeFlux(G4String name, G4int direction, G4int depth)
+G4PSVolumeFlux::G4PSVolumeFlux(const G4String& name, G4int direction, G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , fDirection(direction)
 {}

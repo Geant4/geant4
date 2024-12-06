@@ -6,6 +6,27 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-28 Makoto Asai (tracking-V11-02-05)
+- Moving check of cloned trajectory from G4Trackingmanager to G4TrackingMessenger
+  to avoid unnecessary check.
+
+## 2024-10-03 Makoto Asai (tracking-V11-02-04)
+- Refining CloneForMaster() method with introducing G4ClonedTrajectory and
+  G4ClonedTrajectoryPoint classes for clean and safe use of G4Allocator.
+  Also G4ClonedSmoothTrajectory and G4ClonedSmoothTrajectoryPoint.
+- G4RichTrajectory and G4RichTrajectoryPoint are modified to directly
+  inherit G4VTrajectory and G4VTrajectoryPoint abstract base-classes to
+  avoid double use of G4Allocator. And G4ClonedRichTrajectory and
+  G4ClonedRichTrajectoryPoint are added.
+
+## 2024-09-30 Makoto Asai (tracking-V11-02-03)
+- G4Trajectory and G4TrajectoryPoint - Adding CloneForMaster() method for
+  merging trajectories created by worker thread in suevent parallel mode.
+
+## 2024-10-10 Gabriele Cosmo (tracking-V11-02-02)
+- Fixed reported Coverity defects for use of std::move() in
+  G4AdjointCrossSurfChecker.
+
 ## 2024-05-03 Ben Morgan (tracking-V11-02-01)
 - Remove use of no longer supported TiMemory.
 

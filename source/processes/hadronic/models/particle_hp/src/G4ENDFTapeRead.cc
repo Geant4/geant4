@@ -44,7 +44,7 @@
 #include <map>
 #include <vector>
 
-G4ENDFTapeRead::G4ENDFTapeRead(G4String FileLocation, G4String FileName,
+G4ENDFTapeRead::G4ENDFTapeRead(const G4String& FileLocation, const G4String& FileName,
                                G4FFGEnumerations::YieldType WhichYield,
                                G4FFGEnumerations::FissionCause /*WhichCause*/)
   : /* Cause_(WhichCause),*/
@@ -55,7 +55,7 @@ G4ENDFTapeRead::G4ENDFTapeRead(G4String FileLocation, G4String FileName,
   Initialize(FileLocation + FileName);
 }
 
-G4ENDFTapeRead::G4ENDFTapeRead(G4String FileLocation, G4String FileName,
+G4ENDFTapeRead::G4ENDFTapeRead(const G4String& FileLocation, const G4String& FileName,
                                G4FFGEnumerations::YieldType WhichYield,
                                G4FFGEnumerations::FissionCause /*WhichCause*/, G4int Verbosity)
   : /*Cause_(WhichCause),*/
@@ -77,7 +77,7 @@ G4ENDFTapeRead::G4ENDFTapeRead(std::istringstream& dataStream,
   Initialize(dataStream);
 }
 
-void G4ENDFTapeRead::Initialize(G4String dataFile)
+void G4ENDFTapeRead::Initialize(const G4String& dataFile)
 {
   std::istringstream dataStream(std::ios::in);
   G4ParticleHPManager::GetInstance()->GetDataStream(dataFile, dataStream);
@@ -107,7 +107,7 @@ void G4ENDFTapeRead::Initialize(std::istringstream& dataStream)
   G4FFG_FUNCTIONLEAVE__
 }
 
-G4double* G4ENDFTapeRead::G4GetEnergyGroupValues()
+G4double* G4ENDFTapeRead::G4GetEnergyGroupValues() const
 {
   G4FFG_FUNCTIONENTER__
 
@@ -115,7 +115,7 @@ G4double* G4ENDFTapeRead::G4GetEnergyGroupValues()
   return EnergyGroupValues_;
 }
 
-G4int G4ENDFTapeRead::G4GetNumberOfEnergyGroups()
+G4int G4ENDFTapeRead::G4GetNumberOfEnergyGroups() const
 {
   G4FFG_FUNCTIONENTER__
 
@@ -123,7 +123,7 @@ G4int G4ENDFTapeRead::G4GetNumberOfEnergyGroups()
   return EnergyGroups_;
 }
 
-G4int G4ENDFTapeRead::G4GetNumberOfFissionProducts()
+G4int G4ENDFTapeRead::G4GetNumberOfFissionProducts() const
 {
   G4FFG_FUNCTIONENTER__
 
@@ -133,7 +133,7 @@ G4int G4ENDFTapeRead::G4GetNumberOfFissionProducts()
   return NumberOfElements;
 }
 
-G4ENDFYieldDataContainer* G4ENDFTapeRead::G4GetYield(G4int WhichYield)
+G4ENDFYieldDataContainer* G4ENDFTapeRead::G4GetYield(G4int WhichYield) const
 {
   G4FFG_DATA_FUNCTIONENTER__
 

@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-07-09 Gabriele Cosmo (mctruth-V11-02-00)
+- Use G4String type consistently.
+
 ## 2022-11-16 Gabriele Cosmo (mctruth-V11-00-03)
 - Fixed more compilation warnings for implicit type conversions on
   macOS/XCode 14.1 in G4MCTGenEvent source.

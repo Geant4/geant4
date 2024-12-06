@@ -112,7 +112,7 @@ void G4VLEPTSModel::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   //LOOP TO MATERIALS IN GEOMETRY 
   const G4MaterialTable * materialTable = G4Material::GetMaterialTable() ;
   std::vector<G4Material*>::const_iterator matite;
-  for( matite = materialTable->begin(); matite != materialTable->end(); matite++ ) {
+  for( matite = materialTable->cbegin(); matite != materialTable->cend(); ++matite ) {
     const G4Material * aMaterial = (*matite);
     G4String mateName = aMaterial->GetName();
 
@@ -322,7 +322,7 @@ G4double G4VLEPTSModel::SampleEnergyLoss(const G4Material* aMaterial, G4double e
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool G4VLEPTSModel::ReadParam(G4String fnParam, const G4Material* aMaterial ) 
+G4bool G4VLEPTSModel::ReadParam(const G4String& fnParam, const G4Material* aMaterial ) 
 {
   std::ifstream fin(fnParam);
   if (!fin.is_open()) {
@@ -361,7 +361,7 @@ G4bool G4VLEPTSModel::ReadParam(G4String fnParam, const G4Material* aMaterial )
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-std::map< G4int, std::vector<G4double> > G4VLEPTSModel::ReadIXS(G4String fnIXS, const G4Material* aMaterial ) 
+std::map< G4int, std::vector<G4double> > G4VLEPTSModel::ReadIXS(const G4String& fnIXS, const G4Material* aMaterial ) 
 {
   std::map< G4int, std::vector<G4double> > integralXS; // process type - energy
   //G4cout << "fnIXS (" << fnIXS << ")" << G4endl;

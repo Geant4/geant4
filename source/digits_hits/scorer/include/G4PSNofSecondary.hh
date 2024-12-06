@@ -53,7 +53,7 @@
 class G4PSNofSecondary : public G4VPrimitivePlotter
 {
  public:
-  G4PSNofSecondary(G4String name, G4int depth = 0);
+  G4PSNofSecondary(const G4String& name, G4int depth = 0);
   ~G4PSNofSecondary() override = default;
 
   // Scoring option

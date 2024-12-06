@@ -64,7 +64,7 @@ class G4SimplexDownhill
  private:
   G4double getValue(std::vector<G4double> x)
   {
-    return target->GetValueOfMinimizingFunction(x);
+    return target->GetValueOfMinimizingFunction(std::move(x));
   }
 
   void initialize();

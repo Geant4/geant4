@@ -52,6 +52,7 @@
 #include <vtkOBJImporter.h>
 #include <vtkGLTFExporter.h>
 #include <vtkOOGLExporter.h>
+#include <vtkX3DExporter.h>
 #include <vtkJSONRenderWindowExporter.h>
 #include <vtkVtkJSSceneGraphSerializer.h>
 //#include <vtkBufferedArchiver.h>
@@ -416,6 +417,14 @@ void G4VtkViewer::ExportGLTFScene(G4String fileName) {
   exporter->InlineDataOn();
   exporter->Write();
 }
+
+void G4VtkViewer::ExportX3DScene(G4String fileName) {
+  vtkSmartPointer<vtkX3DExporter> exporter = vtkSmartPointer<vtkX3DExporter>::New();
+  exporter->SetRenderWindow(_renderWindow);
+  exporter->SetFileName((fileName+".x3d").c_str());
+  exporter->Write();
+}
+
 
 void G4VtkViewer::ExportJSONRenderWindowScene(G4String /*fileName*/) {
   vtkSmartPointer<vtkJSONRenderWindowExporter> exporter = vtkSmartPointer<vtkJSONRenderWindowExporter>::New();

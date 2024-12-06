@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -72,10 +72,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 1
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -134,7 +137,7 @@ Type of PIXE cross section for e+-                 Livermore
 #
 /run/initialize
 
- Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -236,36 +239,36 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=73.480000s Real=93.646424s Sys=0.160000s
+  User=73.600000s Real=89.648758s Sys=0.140000s
 
  ======================== run summary ======================
 
  The run was 100000 proton of 3 MeV through 50 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 3 MeV +- 36.45 eV 
+ Total energy deposit in absorber per event = 3 MeV +- 76.71 eV 
 
- -----> Mean dE/dx = 600 MeV/cm	(31.05 MeV*cm2/g)
+ -----> Mean dE/dx = 599.9 MeV/cm	(31.05 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 676.4 MeV/cm	(35.01 MeV*cm2/g)
    full dEdx       = 676.5 MeV/cm	(35.01 MeV*cm2/g)
 
- Leakage :  primary = 65.74 eV  +- 35.92 eV    secondaries = 14.07 eV  +- 1.179 eV 
+ Leakage :  primary = 278.1 eV  +- 76.3 eV    secondaries = 14.72 eV  +- 955.4 meV
  Energy balance :  edep + eleak = 3 MeV
 
- Total track length (charged) in absorber per event = 31.06 um  +- 1.083 nm 
- Total track length (neutral) in absorber per event = 362.7 nm  +- 3.184 nm 
+ Total track length (charged) in absorber per event = 31.06 um  +- 1.249 nm 
+ Total track length (neutral) in absorber per event = 355.2 nm  +- 3.118 nm 
 
- Number of steps (charged) in absorber per event = 141.8 +- 0.1263
- Number of steps (neutral) in absorber per event = 0.5861 +- 0.002446
+ Number of steps (charged) in absorber per event = 141.8 +- 0.1266
+ Number of steps (neutral) in absorber per event = 0.5817 +- 0.002434
 
- Number of secondaries per event : Gammas = 0.5839   electrons = 109.6   positrons = 0
+ Number of secondaries per event : Gammas = 0.5798   electrons = 109.6   positrons = 0
 
  Number of events with the primary particle transmitted = 0 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 0 %
 
- Number of events with the primary particle reflected = 0.005 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.005 %
+ Number of events with the primary particle reflected = 0.016 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.016 %
 
  MultipleScattering:
   rms proj angle of transmit primary particle = 0 mrad (central part only)
@@ -273,19 +276,19 @@ Run Summary
   central part defined as +- 699.8 mrad   Tail ratio = 0 %
 
  Gamma process counts:
-   Photoeffect 58109
-   Compton     3
+   Photoeffect 57671
+   Compton     2
    Conversion  0
-   Rayleigh    218
+   Rayleigh    195
 ... write file : pixe.root - done
 ... close file : pixe.root - done
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={944671353633884230, 300194246912256983, 1338926093308238266, 1441599044978111444, 559828476273747537, 976665045002376518, 1655586542061687849, 1507013437582523992, 2052944524787068341, 2173254900581545545, 733849232472135636, 379249519059016924, 877093410379007237, 1488918075031648810, 1263787258307413205, 589725557209658928, 749180548014423557} counter= 14sumtot= 585743191885193394
+N=17 V[N]={1865847532392181060, 99825406610688157, 359444420570531604, 1595240065015446652, 893119202495921306, 1324979107203650855, 852295147626347754, 826571437727771892, 2049915322115205500, 757520833902555854, 348265068551329111, 748267151128822368, 1950628009764165982, 1535417471323711813, 1798702300717679741, 1338321521261254999, 2232042557627417187} counter= 15sumtot= 2129658482325130227
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.16 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.15 MB
 ============================================================

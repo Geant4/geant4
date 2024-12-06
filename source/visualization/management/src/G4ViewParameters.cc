@@ -1011,7 +1011,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
 
   os << "\n  Default TextVisAttributes:\n  " << v.fDefaultTextVisAttributes;
 
-  os << "\n  Default marker: " << v.fDefaultMarker;
+  os << "\n  Default marker:\n    " << v.fDefaultMarker;
 
   os << "\n  Global marker scale: " << v.fGlobalMarkerScale;
 
@@ -1048,7 +1048,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   default: os << "unrecognised"; break;
   }
 
-  os << "\n  Vis attributes modifiers: ";
+  os << "\nVis attributes modifiers: ";
   const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
     v.fVisAttributesModifiers;
   if (vams.empty()) {
@@ -1057,7 +1057,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     os << vams;
   }
 
-  os << "\n  Time window parameters:"
+  os << "\nTime window parameters:"
   << "\n  Start time:  " << v.fStartTime/ns << " ns"
   << "\n  End time:    " << v.fEndTime/ns << " ns"
   << "\n  Fade factor: " << v.fFadeFactor;
@@ -1083,7 +1083,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     << ' ' << v.fDisplayLightFrontGreen << ' ' << v.fDisplayLightFrontBlue;
   }
 
-  os << "\n  Special Mesh Rendering";
+  os << "\nSpecial Mesh Rendering";
   if (v.fSpecialMeshRendering) {
     os << " requested with option \"" << v.fSpecialMeshRenderingOption;
     os << "\" for ";

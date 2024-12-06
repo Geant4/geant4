@@ -173,14 +173,14 @@ G4HnMessenger::CreateSetAxisLogCommand(unsigned int idim)
   G4String commandName = "set" + axis + "axisLog";
   G4String guidance =  "Activate " + axis + "-axis  log scale for plotting of the ";
 
-  auto command = CreateCommand<G4UIcommand>(commandName, guidance);
+  auto command = CreateCommand<G4UIcommand>(std::move(commandName), guidance);
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // Add Id parameter
   AddIdParameter(*command);
 
   auto parAxisLog = new G4UIparameter("axis", 'b', false);
-  guidance = GetObjectType() + " " + axis + "-axis log scale";
+  guidance = GetObjectType() + " " + std::move(axis) + "-axis log scale";
   parAxisLog->SetGuidance(guidance.c_str());
   command->SetParameter(parAxisLog);
 

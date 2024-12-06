@@ -60,8 +60,8 @@ class G4PolarizationTransition
   typedef std::vector< std::vector<G4complex> > POLAR;
 
   public:
-    explicit G4PolarizationTransition();
-    ~G4PolarizationTransition();
+    G4PolarizationTransition();
+    ~G4PolarizationTransition() = default;
 
     void SampleGammaTransition(G4NuclearPolarization* np, 
 			       G4int twoJ1, G4int twoJ2, 

@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-10 Ivana Hrivnacova (geomvol-V11-02-04)
+- Coverity fix in G4ReflectionFactory:
+  Do not pass the same G4VisAttributes object to the reflected LV
+
+## 2024-08-07 Gabriele Cosmo (geomvol-V11-02-03)
+- Access G4GeometryManager singleton through its GetInstance() in
+  G4AssemblyStore.
+
 ## 2024-04-02 Gabriele Cosmo (geomvol-V11-02-02)
 - Applied trivial clang-tidy fixes to G4AssemblyStore, i.e. removed
   unnecessary 'if' check for null pointer in Clean() method.

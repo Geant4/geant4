@@ -92,9 +92,9 @@ class G4Isotope
 
   static const G4IsotopeTable* GetIsotopeTable();
 
-  static size_t GetNumberOfIsotopes();
+  static std::size_t GetNumberOfIsotopes();
 
-  size_t GetIndex() const { return fIndexInTable; }
+  std::size_t GetIndex() const { return fIndexInTable; }
 
   friend std::ostream& operator<<(std::ostream&, const G4Isotope*);
 
@@ -114,9 +114,9 @@ class G4Isotope
   G4double fA;  // atomic mass of a mole
   G4int fm;  // isomer level
 
-  static G4IsotopeTable theIsotopeTable;
+  static G4IsotopeTable& GetIsotopeTableRef();
 
-  size_t fIndexInTable;  // index in the Isotope table
+  std::size_t fIndexInTable;  // index in the Isotope table
 };
 
 #endif

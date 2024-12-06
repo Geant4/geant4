@@ -31,7 +31,6 @@
 // 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CookShellCorrections.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
 
 // Data comes from:
 // J.L. Cook, H. Ferguson and A.R.de L. Musgrove, Aust. J. Phys., 20, 477(1967)
@@ -47,7 +46,6 @@ G4double G4CookShellCorrections::ShellZTable[] = {
    -6.64,     -7.68,     -7.89,     -8.41,     -8.49,     -7.88,     -6.30,     -5.47,     -4.78,     -4.37,
    -4.17,     -4.13,     -4.32,     -4.55,     -5.04,     -5.28,     -6.06,     -6.28,
 };
-
 
 // S(N) 118 values from N = 33 to N = 150
 G4double G4CookShellCorrections::ShellNTable[] = {
@@ -65,10 +63,5 @@ G4double G4CookShellCorrections::ShellNTable[] = {
    5.09,     5.03,     4.93,     5.28,     5.49,     5.50,     5.37,     5.30
 };
 
-G4CookShellCorrections::G4CookShellCorrections()
-{
-  for(size_t i=0; i<ZTableSize; ++i) { ShellZTable[i] *= CLHEP::MeV; }
-  for(size_t i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
-}
-
+G4CookShellCorrections::G4CookShellCorrections() {}
 

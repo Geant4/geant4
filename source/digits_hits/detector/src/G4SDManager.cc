@@ -85,7 +85,7 @@ void G4SDManager::AddNewDetector(G4VSensitiveDetector* aSD)
   }
 }
 
-void G4SDManager::AddNewCollection(G4String SDname, G4String DCname)
+void G4SDManager::AddNewCollection(const G4String& SDname, const G4String& DCname)
 {
   G4int i = HCtable->Registor(SDname, DCname);
   if (verboseLevel > 0) {
@@ -110,21 +110,21 @@ G4HCofThisEvent* G4SDManager::PrepareNewEvent()
 
 void G4SDManager::TerminateCurrentEvent(G4HCofThisEvent* HCE) { treeTop->Terminate(HCE); }
 
-void G4SDManager::Activate(G4String dName, G4bool activeFlag)
+void G4SDManager::Activate(const G4String& dName, G4bool activeFlag)
 {
   G4String pathName = dName;
   if (pathName[0] != '/') pathName.insert(0, "/");
   treeTop->Activate(pathName, activeFlag);
 }
 
-G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(G4String dName, G4bool warning)
+G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(const G4String& dName, G4bool warning)
 {
   G4String pathName = dName;
   if (pathName[0] != '/') pathName.insert(0, "/");
   return treeTop->FindSensitiveDetector(pathName, warning);
 }
 
-G4int G4SDManager::GetCollectionID(G4String colName)
+G4int G4SDManager::GetCollectionID(const G4String& colName)
 {
   G4int id = HCtable->GetCollectionID(colName);
   if (id == -1) {

@@ -59,7 +59,17 @@ class G4VtkQtViewer : public QVTKOpenGLNativeWidget, public G4VtkViewer
     void Initialise() override;
     virtual void CreateMainWindow(QVTKOpenGLNativeWidget*, const QString&);
 #ifdef G4MULTITHREADED
-    // In MT mode these functions are called in the following order for each run:
+    // For switching threads in MT mode
+    // Note: the order of calling of MovingToVisSubThread and SwitchToVisSubThread
+    // is undefined, so we have to use mutexes to ensure required information,
+    // namely the vis sub-thread address, is available before moving objects.
+    // To summarise, the order of calling is
+    //   DoneWithMasterThread
+    //   MovingToVisSubThread ) or ( SwitchToVisSubThread
+    //   SwitchToVisSubThread )    ( MovingToVisSubThread
+    //   DoneWithVisSubThread
+    //   MovingToMasterThread
+    //   SwitchToMasterThread
     // Called on the master thread before starting the vis sub-thread.
     void DoneWithMasterThread() override;
     // Called on the master thread after starting the vis sub-thread.
@@ -69,12 +79,9 @@ class G4VtkQtViewer : public QVTKOpenGLNativeWidget, public G4VtkViewer
     // Called on the vis sub-thread when all events have been processed.
     void DoneWithVisSubThread() override;
     // Called on the vis sub-thread when all events have been processed.
-    // virtual void MovingToMasterThread ();  Not used in G4OpenGLQtViewer.
+    // virtual void MovingToMasterThread ();  Not used in G4VtkQtViewer.
     // Called on the master thread after the vis sub-thread has terminated.
     void SwitchToMasterThread() override;
-
-    inline void SetQGLContextVisSubThread(QThread* th) { fQGLContextVisSubThread = th; }
-    inline void SetQGLContextMainThread(QThread* th) { fQGLContextMainThread = th; }
 #endif
 
     void FinishView() override;
@@ -103,14 +110,8 @@ class G4VtkQtViewer : public QVTKOpenGLNativeWidget, public G4VtkViewer
     QWidget* fGLWidget;
 
 #ifdef G4MULTITHREADED
-    QThread* fQGLContextVisSubThread;
-    QThread* fQGLContextMainThread;
-    G4Mutex fmWaitForVisSubThreadQtOpenGLContextMoved;
-    G4Mutex fmWaitForVisSubThreadQtOpenGLContextInitialized;
-    G4Condition fc1_VisSubThreadQtOpenGLContextInitialized;
-    G4Condition fc2_VisSubThreadQtOpenGLContextMoved;
-    G4AutoLock* flWaitForVisSubThreadQtOpenGLContextInitialized;
-    G4AutoLock* flWaitForVisSubThreadQtOpenGLContextMoved;
+    QThread* fQVtkContextVisSubThread;
+    QThread* fQVtkContextMainThread;
 #endif
 };
 

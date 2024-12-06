@@ -46,55 +46,51 @@
 class MyGamma;
 class G4Material;
 
-
 class GVFlashShowerParameterisation
 {
-public:  // with description
-  
-  GVFlashShowerParameterisation();
-  virtual ~GVFlashShowerParameterisation();
-  
-  virtual void ComputeRadialParameters(G4double y, G4double Tau)       = 0;
-  virtual void GenerateLongitudinalProfile(G4double Energy)            = 0; 
-  virtual G4double IntegrateEneLongitudinal(G4double LongitudinalStep) = 0;
-  virtual G4double IntegrateNspLongitudinal(G4double LongitudinalStep) = 0;
-  virtual G4double ComputeTau(G4double LongitudinalPosition)           = 0;
-  virtual G4double GenerateRadius(G4int ispot, G4double Energy,
-				  G4double LongitudinalPosition)       = 0; 
-  virtual void ComputeLongitudinalParameters(G4double y)               = 0;
-  virtual void GenerateEnergyProfile(G4double y)                       = 0;
-  virtual void GenerateNSpotProfile(G4double y)                        = 0;
-  virtual G4double GenerateExponential(G4double Energy)                = 0;
-  
-  virtual G4double GetAveR99() = 0;
-  virtual G4double GetAveR90() = 0;
-  
-  virtual G4double GetAveTmx() = 0;
-  virtual G4double GetAveT99() = 0; 
-  virtual G4double GetAveT90() = 0; 
-  
-  virtual G4double GetNspot()  = 0;
-  virtual G4double GetX0()     = 0;
-  virtual G4double GetEc()     = 0;
-  virtual G4double GetRm()     = 0;
-  
-  G4double GeneratePhi();
-  G4double GetEffZ(const G4Material * material);
-  G4double GetEffA(const G4Material * material);   
-  G4double gam(G4double x, G4double a) const; // @@@@ gamma function
-  void PrintMaterial(const G4Material * mat);
-  
-protected:
-  
-  GVFlashHomoShowerTuning * thePar;
-  // Parameterisation parameters
-  G4double  density, A, Z, X0, Ec, Rm;
-  // Medium related quantities
-  G4double NSpot;
-  
-private:
-  MyGamma* fGamma;
-  
+  public:  // with description
+    GVFlashShowerParameterisation();
+    virtual ~GVFlashShowerParameterisation();
+
+    virtual void ComputeRadialParameters(G4double y, G4double Tau) = 0;
+    virtual void GenerateLongitudinalProfile(G4double Energy) = 0;
+    virtual G4double IntegrateEneLongitudinal(G4double LongitudinalStep) = 0;
+    virtual G4double IntegrateNspLongitudinal(G4double LongitudinalStep) = 0;
+    virtual G4double ComputeTau(G4double LongitudinalPosition) = 0;
+    virtual G4double GenerateRadius(G4int ispot, G4double Energy,
+                                    G4double LongitudinalPosition) = 0;
+    virtual void ComputeLongitudinalParameters(G4double y) = 0;
+    virtual void GenerateEnergyProfile(G4double y) = 0;
+    virtual void GenerateNSpotProfile(G4double y) = 0;
+    virtual G4double GenerateExponential(G4double Energy) = 0;
+
+    virtual G4double GetAveR99() = 0;
+    virtual G4double GetAveR90() = 0;
+
+    virtual G4double GetAveTmx() = 0;
+    virtual G4double GetAveT99() = 0;
+    virtual G4double GetAveT90() = 0;
+
+    virtual G4double GetNspot() = 0;
+    virtual G4double GetX0() = 0;
+    virtual G4double GetEc() = 0;
+    virtual G4double GetRm() = 0;
+
+    G4double GeneratePhi();
+    G4double GetEffZ(const G4Material* material);
+    G4double GetEffA(const G4Material* material);
+    G4double gam(G4double x, G4double a) const;  // @@@@ gamma function
+    void PrintMaterial(const G4Material* mat);
+
+  protected:
+    GVFlashHomoShowerTuning* thePar;
+    // Parameterisation parameters
+    G4double density, A, Z, X0, Ec, Rm;
+    // Medium related quantities
+    G4double NSpot;
+
+  private:
+    MyGamma* fGamma;
 };
 
 #endif

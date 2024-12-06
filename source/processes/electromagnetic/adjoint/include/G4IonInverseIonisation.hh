@@ -42,16 +42,15 @@ class G4AdjointIonIonisationModel;
 class G4IonInverseIonisation : public G4VAdjointReverseReaction
 {
  public:
-  explicit G4IonInverseIonisation(G4bool whichScatCase, G4String process_name,
+  explicit G4IonInverseIonisation(G4bool whichScatCase, const G4String& process_name,
                                   G4AdjointIonIonisationModel* aEmAdjointModel);
-  ~G4IonInverseIonisation() override;
+  ~G4IonInverseIonisation() override = default;
 
   void ProcessDescription(std::ostream&) const override;
-  void DumpInfo() const override { ProcessDescription(G4cout); };
+  void DumpInfo() const override { ProcessDescription(G4cout); }
 
   G4IonInverseIonisation(G4IonInverseIonisation&) = delete;
-  G4IonInverseIonisation& operator=(const G4IonInverseIonisation& right) =
-    delete;
+  G4IonInverseIonisation& operator=(const G4IonInverseIonisation& right) = delete;
 };
 
 #endif

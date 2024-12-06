@@ -6,6 +6,59 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-08 V.Ivanchenko (emstand-V11-02-21)
+- G4BraggModel - fixed problem of 4.12 MeV mu+ range reported in
+    the Forum #12312.
+
+## 2024-11-07 V.Ivanchenko (emstand-V11-02-20)
+- G4WentzelOKandVIxSection - Fixed rejection factor for sampling of single
+    scattering with nuclear formfactor (Bugzilla problem report #2627)
+- Fixed ion ionisation problem reported in the Forum #12885 and #13018:
+- G4BetheBlochModel - set flags isIon and isAlpha at Initialisation and not
+    change in run time
+- G4ionIonisation - use G4BraggIonModel only for alpha and G4BraggModel for
+    other ions in the default EM physics
+    
+## 2024-11-04 Philippe Canal (emstand-V11-02-19)
+- Static initialization improvement for G4eBremsstrahlungRelModel.
+  Use std::shared_ptr for LPMFuncs and ElementData.
+
+## 2024-10-31 V.Ivanchenko (emstand-V11-02-18)
+- G4WentzelVIModel - fixed Coverity warning
+
+## 2024-10-17 V.Ivanchenko (emstand-V11-02-17)
+- renamed G4eplusTo2GammaOKVIModel to G4eplusTo2or3GammaModel to avoid confusions 
+
+## 2024-09-17 V.Ivanchenko (emstand-V11-02-16)
+- G4WentzelVIModel - fixed Coverity warning
+
+## 2024-09-04 V.Ivanchenko (emstand-V11-02-15)
+- G4eplusAnnihilation - use orto positronium fraction from material property
+    and not from EM parameters
+
+## 2024-08-26 V.Ivanchenko (emstand-V11-02-14)
+- G4BetheHeitlerModel - include optional possibility to use EPICS2017 x-section
+- G4SimplePsAtRestModel is removed because other solution is used for positron
+    annihilation at rest
+
+## 2024-08-02 V.Ivanchenko (emstand-V11-02-13)
+- G4eplusAnnihilation - updated configuration of models AtRest, the
+    choice of 2-gamma, 3-gamma final states is implemented in one place
+
+## 2024-07-26 I.Semeniouk & D.Bernard (emstand-V11-02-12)
+- G4SimpleoPsAtRestModel - use base class pointers
+- G4PolarizedOrePowellAtRestModel - fix spelling in model name
+- new G4PolarizedOrePowellAtRestModel - Polarized Orel & Powell
+  orto positronium decay model AtRest, polarisation based on R. M. Drisko
+
+## 2024-07-18 V.Ivanchenko (emstand-V11-02-11)
+- G4BraggModel, G4GSMottCorrection, G4GSPWACorrections, G4SBBremTable,
+  G4WentzelVIModel, G4WentzelVIRelModel, G4eplusAnnihilation - fixed
+    Coverity warnings
+
+## 2024-07-07 V.Ivanchenko (emstand-V11-02-10)
+- G4BetheHeitler5DModel - added extra protection against division by zero
+
 ## 2024-06-06 I.Semeniouk & D.Bernard (emstand-V11-02-09)
 - new G4OrePowellAtRestModel - Orel & Powell orto positronium decay model AtRest
 - new G4SimpleoPsAtRestModel - simples orto para positronium chooser

@@ -134,9 +134,6 @@ G4TaskRunManager::G4TaskRunManager(G4VUserTaskQueue* task_queue, G4bool useTBB, 
   }
   useTBB = false;
 #endif
-
-  // handle TBB
-  G4ThreadPool::set_use_tbb(useTBB);
 }
 
 //============================================================================//
@@ -240,7 +237,6 @@ void G4TaskRunManager::InitializeThreadPool()
     return;
   }
 
-  PTL::TaskRunManager::SetVerbose(GetVerbose());
   PTL::TaskRunManager::Initialize(nworkers);
 
   // create the joiners
@@ -320,7 +316,7 @@ void G4TaskRunManager::ComputeNumberOfTasks()
   numberOfEventsPerTask = nEvtsPerTask;
   eventModulo = numberOfEventsPerTask;
 
-  if (fakeRun && verboseLevel > 1) {
+  if (fakeRun && verboseLevel > 2) {
     std::stringstream msg;
     msg << "--> G4TaskRunManager::ComputeNumberOfTasks() --> " << numberOfTasks << " tasks with "
         << numberOfEventsPerTask << " events/task...";
@@ -349,8 +345,8 @@ void G4TaskRunManager::CreateAndStartWorkers()
     if (initializeStarted) {
       auto initCmdStack = GetCommandStack();
       if (!initCmdStack.empty()) {
-        threadPool->execute_on_all_threads([initCmdStack]() {
-          for (auto& itr : initCmdStack)
+        threadPool->execute_on_all_threads([cmds = std::move(initCmdStack)]() {
+          for (auto& itr : cmds)
             G4UImanager::GetUIpointer()->ApplyCommand(itr);
           G4WorkerTaskRunManager::GetWorkerRunManager()->DoWork();
         });
@@ -374,8 +370,8 @@ void G4TaskRunManager::CreateAndStartWorkers()
   else {
     auto initCmdStack = GetCommandStack();
     if (!initCmdStack.empty()) {
-      threadPool->execute_on_all_threads([initCmdStack]() {
-        for (auto& itr : initCmdStack)
+      threadPool->execute_on_all_threads([cmds = std::move(initCmdStack)]() {
+        for (auto& itr : cmds)
           G4UImanager::GetUIpointer()->ApplyCommand(itr);
       });
     }
@@ -409,8 +405,11 @@ void G4TaskRunManager::CreateAndStartWorkers()
 
 void G4TaskRunManager::AddEventTask(G4int nt)
 {
-  if (verboseLevel > 1) G4cout << "Adding task " << nt << " to task-group..." << G4endl;
-  workTaskGroup->exec([]() { G4TaskRunManagerKernel::ExecuteWorkerTask(); });
+  if (verboseLevel > 3) G4cout << "Adding task " << nt << " to task-group..." << G4endl;
+  workTaskGroup->exec([this, nt]() {
+    if (verboseLevel > 3) G4cout << "Starting task " << nt << "..." << G4endl;
+    G4TaskRunManagerKernel::ExecuteWorkerTask();
+  });
 }
 
 //============================================================================//
@@ -538,7 +537,7 @@ void G4TaskRunManager::ConstructScoringWorlds()
   // Call base class stuff...
   G4RunManager::ConstructScoringWorlds();
 
-  masterWorlds.clear();
+  GetMasterWorlds().clear();
   auto nWorlds = (G4int)G4TransportationManager::GetTransportationManager()->GetNoWorlds();
   auto itrW = G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
   for (G4int iWorld = 0; iWorld < nWorlds; ++iWorld) {

@@ -1,0 +1,234 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 07/09/2015
+
+//
+// public functions
+//
+
+using namespace G4Accumulables;
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>::G4AccValue(
+  const G4String& name, T initValue, G4MergeMode mergeMode)
+ : G4VAccumulable(name, mergeMode),
+   fValue(initValue),
+   fInitValue(initValue),
+   fMergeFunction(GetMergeFunction<T>(mergeMode))
+{}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>::G4AccValue(T initValue, G4MergeMode mergeMode)
+ : G4VAccumulable(),
+   fValue(initValue),
+   fInitValue(initValue),
+   fMergeFunction(GetMergeFunction<T>(mergeMode))
+{}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>::G4AccValue(const G4AccValue& rhs)
+  : G4VAccumulable(rhs),
+    fValue(rhs.fValue),
+    fInitValue(rhs.fInitValue),
+    fMergeFunction(rhs.fMergeFunction)
+{}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>::G4AccValue(G4AccValue&& rhs) noexcept
+  : G4VAccumulable(std::move(rhs)),
+    fValue(std::move(rhs.fValue)),
+    fInitValue(std::move(rhs.fInitValue)),
+    fMergeFunction(rhs.fMergeFunction)
+{}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator=(const G4AccValue<T>& rhs)
+{
+  // check assignment to self
+  if (this == &rhs) {
+    return *this;
+  }
+
+  // base class assignment
+  G4VAccumulable::operator=(rhs);
+
+  // this class data assignment
+  fValue = rhs.fValue;
+  fInitValue = rhs.fInitValue;
+  fMergeFunction = rhs.fMergeFunction;
+
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>& G4AccValue<T>::operator=(G4AccValue<T>&& rhs) noexcept
+{
+  // check assignment to self
+  if (this == &rhs) {
+    return *this;
+  }
+
+  // base class assignment
+  G4VAccumulable::operator=(rhs);
+
+  // this class data assignment
+  fValue = std::move(rhs.fValue);
+  fInitValue = std::move(rhs.fInitValue);
+  fMergeFunction = rhs.fMergeFunction;
+
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator+=(const G4AccValue<T>& rhs)
+{
+  // only update the value from rhs
+  fValue += rhs.fValue;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator*=(const G4AccValue<T>& rhs)
+{
+  // only update the value from rhs
+  fValue *= rhs.fValue;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator=(const T& value)
+{
+  // only update the value
+  fValue = value;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator+=(const T& value)
+{
+  // only update the value
+  fValue += value;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator*=(const T& value)
+{
+  // only update the value from rhs
+  fValue *= value;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>
+G4AccValue<T>::operator++(int)
+{
+  // postfix increment
+  G4AccValue<T> temp = *this;
+  fValue++;
+  return temp;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4AccValue<T>&
+G4AccValue<T>::operator++()
+{
+  // prefix increment
+  fValue++;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+void G4AccValue<T>::Merge(const G4VAccumulable& other)
+{
+  if (G4Accumulables::VerboseLevel > 2 ) {
+    G4cout << "Merging other: " << other.GetName() << " "
+            << static_cast<const G4AccValue<T>&>(other).fValue << G4endl;
+    G4cout << "    to master: " << fName << " " << fValue << G4endl;
+  }
+
+  fValue = fMergeFunction(fValue, static_cast<const G4AccValue<T>&>(other).fValue);
+
+  if (G4Accumulables::VerboseLevel > 2 ) {
+    G4cout << "    new value: " << fName << " " << fValue << G4endl;
+  }
+}
+
+//_____________________________________________________________________________
+template <typename T>
+void G4AccValue<T>::Reset()
+{
+  fValue = fInitValue;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+void G4AccValue<T>::Print(G4PrintOptions options) const
+{
+  if (options.Has(G4PrintOptions::kType)) {
+    G4cout << typeid(T).name() << ": ";
+  }
+
+  PrintBase(options);
+
+  G4cout << fValue << G4endl;
+}
+
+//_____________________________________________________________________________
+template <class T>
+void  G4AccValue<T>::SetMergeMode(G4MergeMode value)
+{
+  G4VAccumulable::SetMergeMode(value);
+  fMergeFunction = GetMergeFunction<T>(fMergeMode);
+}
+
+//_____________________________________________________________________________
+template <typename T>
+T  G4AccValue<T>::GetValue() const
+{
+  return fValue;
+}

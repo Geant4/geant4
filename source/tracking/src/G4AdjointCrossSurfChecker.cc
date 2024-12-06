@@ -327,7 +327,7 @@ G4bool G4AdjointCrossSurfChecker::AddanExtSurfaceOfAvolume(
     ListOfSphereRadius[ind] = 0.;
     ListOfSphereCenter[ind] = G4ThreeVector(0., 0., 0.);
     ListOfVol1Name[ind] = volume_name;
-    ListOfVol2Name[ind] = mother_vol_name;
+    ListOfVol2Name[ind] = std::move(mother_vol_name);
     AreaOfSurface[ind] = Area;
   }
   else {
@@ -336,7 +336,7 @@ G4bool G4AdjointCrossSurfChecker::AddanExtSurfaceOfAvolume(
     ListOfSphereRadius.push_back(0.);
     ListOfSphereCenter.emplace_back(0., 0., 0.);
     ListOfVol1Name.push_back(volume_name);
-    ListOfVol2Name.push_back(mother_vol_name);
+    ListOfVol2Name.push_back(std::move(mother_vol_name));
     AreaOfSurface.push_back(Area);
   }
   return true;

@@ -198,17 +198,17 @@ public:
   /**
    * Excit energy at fis.
    */
-  G4double estfis;
+  G4double estfis = 0.;
 
   /**
    * Z of fiss nucleus.
    */
-  G4int izfis;
+  G4int izfis = 0;
 
   /**
    * A of fiss nucleus.
    */
-  G4int iafis;
+  G4int iafis = 0;
 
   /**
    * Number of particles.
@@ -221,7 +221,7 @@ public:
    * true = do fermi break-up (and skip ABLA part)
    * false = use ABLA
    */
-  G4bool needsFermiBreakup;
+  G4bool needsFermiBreakup = false;
 
   /**
    * emitted in cascade (0) or evaporation (1).

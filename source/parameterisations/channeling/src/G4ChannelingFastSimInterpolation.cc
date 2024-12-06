@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author:      Alexei Sytov
 
 /// \file G4ChannelingFastSimInterpolation.cc
 /// \brief Implementation of the G4ChannelingFastSimInterpolation class

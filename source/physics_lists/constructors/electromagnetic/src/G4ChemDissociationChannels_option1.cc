@@ -72,6 +72,18 @@ void G4ChemDissociationChannels_option1::ConstructMolecule()
   G4Oxygen::Definition();
   G4O3::Definition();
 
+  auto G4OHm = new G4MoleculeDefinition("OH",/*mass*/ 17.00734 * g / Avogadro * c_squared,
+                                        2.8e-9 * (m * m / s), -1,
+                                          5, 0.958 * angstrom, // radius
+                                          2 // number of atoms
+                                        );
+
+  auto G4HO2m = new G4MoleculeDefinition("HO_2", 33.0034 * g / Avogadro * c_squared,
+                                         2.3e-9 * (m * m / s), -1, 0,
+                                        2.1 * angstrom, 3);
+  auto G4Om = new G4MoleculeDefinition("O", 15.99773 * g / Avogadro * c_squared,
+                                       2.0e-9 * (m * m / s), 0, 0,
+                                       2.0 * angstrom, 1);
   //____________________________________________________________________________
   auto molTable = G4MoleculeTable::Instance();
   molTable->CreateConfiguration("H3Op", G4H3O::Definition());
@@ -79,14 +91,14 @@ void G4ChemDissociationChannels_option1::ConstructMolecule()
                                                                                  * (m2 / s));
   molTable->GetConfiguration("H3Op")->SetVanDerVaalsRadius(0.25 * nm);
 
-  molTable->CreateConfiguration("OH", G4OH::Definition());
-  molTable->GetConfiguration("OH")->SetDiffusionCoefficient(2.2e-9 * (m2 / s));
-  molTable->GetConfiguration("OH")->SetVanDerVaalsRadius(0.22 * nm);
+  molTable->CreateConfiguration("°OH", G4OH::Definition());
+  molTable->GetConfiguration("°OH")->SetDiffusionCoefficient(2.2e-9 * (m2 / s));
+  molTable->GetConfiguration("°OH")->SetVanDerVaalsRadius(0.22 * nm);
 
   G4MolecularConfiguration* OHm =
     molTable->CreateConfiguration("OHm",  // just a tag to store and retrieve
                                                              // from G4MoleculeTable
-                                                     G4OH::Definition(),
+                                  G4OHm,
                                                      -1,  // charge
                                                      5.3e-9 * (m2 / s));
   OHm->SetMass(17.0079 * g / Avogadro * c_squared);
@@ -108,13 +120,13 @@ void G4ChemDissociationChannels_option1::ConstructMolecule()
 
   // molecules extension (RITRACKS)
 
-  molTable->CreateConfiguration("HO2", G4HO2::Definition());
-  molTable->GetConfiguration("HO2")->SetVanDerVaalsRadius(0.21 * nm);
+  molTable->CreateConfiguration("HO2°", G4HO2::Definition());
+  molTable->GetConfiguration("HO2°")->SetVanDerVaalsRadius(0.21 * nm);
 
   G4MolecularConfiguration* HO2m =
     molTable->CreateConfiguration("HO2m",  // just a tag to store and retrieve
                                                               // from G4MoleculeTable
-                                                     G4HO2::Definition(),
+                                                        G4HO2m,
                                                      -1,  // charge
                                                      1.4e-9 * (m2 / s));
   HO2m->SetMass(33.00396 * g / Avogadro * c_squared);
@@ -126,7 +138,7 @@ void G4ChemDissociationChannels_option1::ConstructMolecule()
   G4MolecularConfiguration* Om =
     molTable->CreateConfiguration("Om",  // just a tag to store and retrieve from
                                                             // G4MoleculeTable
-                                                     G4Oxygen::Definition(),
+                                                      G4Om,
                                                      -1,  // charge
                                                      2.0e-9 * (m2 / s));
   Om->SetMass(15.99829 * g / Avogadro * c_squared);
@@ -170,7 +182,7 @@ void G4ChemDissociationChannels_option1::ConstructMolecule()
 
   molTable->CreateConfiguration("OHm(B)",  // just a tag to store and retrieve
                                                               // from G4MoleculeTable
-                                                   G4OH::Definition(),
+                                                    G4OHm,
                                                    -1,  // charge
                                                    0 * (m2 / s));
 
@@ -184,7 +196,7 @@ void G4ChemDissociationChannels_option1::ConstructDissociationChannels()
   //-----------------------------------
   // Get the molecular configuration
   auto molTable = G4MoleculeTable::Instance();
-  G4MolecularConfiguration* OH = molTable->GetConfiguration("OH");
+  G4MolecularConfiguration* OH = molTable->GetConfiguration("°OH");
   G4MolecularConfiguration* OHm = molTable->GetConfiguration("OHm");
   G4MolecularConfiguration* e_aq = molTable->GetConfiguration("e_aq");
   G4MolecularConfiguration* H2 = molTable->GetConfiguration("H2");

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -220,19 +220,19 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=152.610000s Real=158.345588s Sys=0.030000s
+  User=150.490000s Real=158.128130s Sys=0.030000s
 /control/doifBatch /score/dumpAllQuantitiesToFile Probes Probes.csv
 /score/dumpAllQuantitiesToFile Probes Probes.csv
 # Mesh or volume name: Probes  -- # Primitive scorer name: dose
-  bin 0,0,0 : statistical error 27.747(%)
-   to reduce the statistical error below 10%, increase number of events approximately 7.69898 times.
+  bin 0,0,0 : statistical error 27.4517(%)
+   to reduce the statistical error below 10%, increase number of events approximately 7.53597 times.
 # Mesh or volume name: Probes  -- # Primitive scorer name: protonFlux
-  bin 0,0,0 : statistical error 33.5269(%)
-   to reduce the statistical error below 10%, increase number of events approximately 11.2405 times.
+  bin 0,0,0 : statistical error 22.7266(%)
+   to reduce the statistical error below 10%, increase number of events approximately 5.16497 times.
 # Mesh or volume name: Probes  -- # Primitive scorer name: volFlx
-  bin 0,0,0 : statistical error 26.7392(%)
-   to reduce the statistical error below 10%, increase number of events approximately 7.14983 times.
+  bin 0,0,0 : statistical error 22.4495(%)
+   to reduce the statistical error below 10%, increase number of events approximately 5.0398 times.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 2.4 MB
+Dynamic pools deleted: 12 / Total memory freed: 1.2 MB
 ============================================================

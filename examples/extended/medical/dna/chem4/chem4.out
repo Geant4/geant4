@@ -1,4 +1,4 @@
-Seed used : 1719414300
+Seed used : 1733190372
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -38,7 +38,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -115,7 +114,7 @@ H3O^1                    9e-09                          0.25
 _____________________________________________________________________________
 OH^-1                    5e-09                          0.33
 _____________________________________________________________________________
-OH^0                   2.8e-09                          0.22
+°OH^0                 2.8e-09                          0.22
 _____________________________________________________________________________
 e_aq^-1                4.9e-09                           0.5
 _____________________________________________________________________________
@@ -151,6 +150,8 @@ H2O^0                    2e-09                         0.275
 _____________________________________________________________________________
 H2O^0                    2e-09                         0.275
 _____________________________________________________________________________
+OH^-1                  2.8e-09                        0.0958
+_____________________________________________________________________________
 O2^0                   2.4e-09                             0
 _____________________________________________________________________________
 Number of chemical species involved in reactions = 6
@@ -160,17 +161,17 @@ H3O^1 + OH^-1 -> No product                 1.43e+11
 ----------------------------------------------------------------------------
 H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      
 ----------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      
+°OH^0 + e_aq^-1 -> OH^-1                   2.95e+10                      
 ----------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                       4.4e+09                       
+°OH^0 + °OH^0 -> H2O2^0                   4.4e+09                       
 ----------------------------------------------------------------------------
-OH^0 + H^0 -> No product                    1.44e+10                      
+°OH^0 + H^0 -> No product                  1.44e+10                      
 ----------------------------------------------------------------------------
 e_aq^-1 + H^0 -> H_2^0 + OH^-1              2.65e+10                      
 ----------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> H_2^0 + OH^-1 + OH^-1  5e+09                         
 ----------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.41e+10                      
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0          1.41e+10                      
 ----------------------------------------------------------------------------
 H^0 + H^0 -> H_2^0                          1.2e+10                       
 ----------------------------------------------------------------------------
@@ -195,10 +196,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -635,8 +639,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 Particle: e- with 100 keV
 Start event 0
@@ -647,29 +649,25 @@ H3O^1 + OH^-1 -> No product                 1.43e+11                      1.3497
 ------------------------------------------------------------------------------------------------------------------------------
 H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      0.200589
 ------------------------------------------------------------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      0.506256
+°OH^0 + e_aq^-1 -> OH^-1                   2.95e+10                      0.506256
 ------------------------------------------------------------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                       4.4e+09                       0.207651
+°OH^0 + °OH^0 -> H2O2^0                   4.4e+09                       0.207651
 ------------------------------------------------------------------------------------------------------------------------------
-OH^0 + H^0 -> No product                    1.44e+10                      0.194167
+°OH^0 + H^0 -> No product                  1.44e+10                      0.194167
 ------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + H^0 -> H_2^0 + OH^-1              2.65e+10                      0.294265
 ------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> H_2^0 + OH^-1 + OH^-1  5e+09                         0.134838
 ------------------------------------------------------------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.41e+10                      0.295745
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0          1.41e+10                      0.295745
 ------------------------------------------------------------------------------------------------------------------------------
 H^0 + H^0 -> H_2^0                          1.2e+10                       0.226528
 ------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 Start event 1
- * PrimaryKiller: aborts event 1, energy loss is too large. 
- * Energy loss by primary is: 6.0986 keV. Event is aborted if the Eloss is > 2 keV
 Start event 2
 Start event 3
 Start event 4
- * PrimaryKiller: aborts event 4, energy loss is too large. 
- * Energy loss by primary is: 2.3463 keV. Event is aborted if the Eloss is > 2 keV
 Start event 5
 Start event 6
 Start event 7
@@ -677,9 +675,9 @@ Start event 8
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 8 events 
-Number of events recorded by the species scorer = 8
- Total energy deposited in the world volume : 8744.4 eV
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 11757 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

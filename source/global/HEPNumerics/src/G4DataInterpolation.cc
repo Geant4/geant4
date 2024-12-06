@@ -65,7 +65,7 @@ G4DataInterpolation::G4DataInterpolation(G4double pX[], G4double pY[],
   G4int i    = 0;
   G4double p = 0.0, qn = 0.0, sig = 0.0, un = 0.0;
   const G4double maxDerivative = 0.99e30;
-  G4double* u                  = new G4double[fNumber - 1];
+  auto u                  = new G4double[fNumber - 1];
 
   for(i = 0; i < fNumber; ++i)
   {
@@ -152,8 +152,8 @@ G4double G4DataInterpolation::PolynomInterpolation(G4double pX,
   G4int i = 0, j = 1, k = 0;
   G4double mult = 0.0, difi = 0.0, deltaLow = 0.0, deltaUp = 0.0, cd = 0.0,
            y    = 0.0;
-  G4double* c   = new G4double[fNumber];
-  G4double* d   = new G4double[fNumber];
+  auto c   = new G4double[fNumber];
+  auto d   = new G4double[fNumber];
   G4double diff = std::fabs(pX - fArgument[0]);
   for(i = 0; i < fNumber; ++i)
   {
@@ -205,7 +205,7 @@ void G4DataInterpolation::PolIntCoefficient(G4double cof[]) const
   G4int i = 0, j = 0;
   G4double factor;
   G4double reducedY = 0.0, mult = 1.0;
-  G4double* tempArgument = new G4double[fNumber];
+  auto tempArgument = new G4double[fNumber];
 
   for(i = 0; i < fNumber; ++i)
   {
@@ -252,8 +252,8 @@ G4double G4DataInterpolation::RationalPolInterpolation(G4double pX,
   G4int i = 0, j = 1, k = 0;
   const G4double tolerance = 1.6e-24;
   G4double mult = 0.0, difi = 0.0, cd = 0.0, y = 0.0, cof = 0.0;
-  G4double* c   = new G4double[fNumber];
-  G4double* d   = new G4double[fNumber];
+  auto c   = new G4double[fNumber];
+  auto d   = new G4double[fNumber];
   G4double diff = std::fabs(pX - fArgument[0]);
   for(i = 0; i < fNumber; ++i)
   {

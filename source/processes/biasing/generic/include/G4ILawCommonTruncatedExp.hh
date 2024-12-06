@@ -23,23 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
 // G4ILawCommonTruncatedExp
 //
 // Class Description:
-//     A G4VBiasingInteractionLaw representing a truncated exponential
-//  law : an exponential law acting on [0,L] segment. This law is
-//  Common as it collects several process cross-sections, which sum
-//  is used to drive the law.
 //
-// ---------------------------------------------------------------
-//   Refactored version                      Oct. 2014 M. Verderi
-//   Initial version                         Nov. 2013 M. Verderi
-
-
+// A G4VBiasingInteractionLaw representing a truncated exponential
+// law : an exponential law acting on [0,L] segment. This law is
+// Common as it collects several process cross-sections, which sum
+// is used to drive the law.
+//
+// Author: Marc Verderi, November 2013.
+// --------------------------------------------------------------------
 #ifndef G4ILawCommonTruncatedExp_hh
 #define G4ILawCommonTruncatedExp_hh 1
 
@@ -49,38 +43,46 @@
 
 class G4ILawCommonTruncatedExp : public G4VBiasingInteractionLaw
 {
-public:
-  G4ILawCommonTruncatedExp(G4String name = "expSharedForceInteractionLaw");
-  virtual ~G4ILawCommonTruncatedExp();
+  public:
+
+    G4ILawCommonTruncatedExp(const G4String& name = "expSharedForceInteractionLaw");
+    virtual ~G4ILawCommonTruncatedExp();
   
-public:
-  virtual G4bool                             IsSingular() const
-  {return fExpInteractionLaw.IsSingular();}
-  virtual G4bool        IsEffectiveCrossSectionInfinite() const
-  {return fExpInteractionLaw.IsEffectiveCrossSectionInfinite();}
-private:
-  // -- sample the distribution:
-  virtual G4double              SampleInteractionLength();
-  // -- move by true path length, this position becomes the new initial point
-  // -- in this case, cheat by returning DBL_MAX, to let operation proposing the
-  // -- step length in the alongGPIL
-  virtual G4double       UpdateInteractionLengthForStep(G4double       truePathLength);
-public:
-  virtual G4double       ComputeEffectiveCrossSectionAt(G4double               length) const;
-  virtual G4double   ComputeNonInteractionProbabilityAt(G4double               length) const;
+    virtual G4bool IsSingular() const
+      { return fExpInteractionLaw.IsSingular(); }
+    virtual G4bool IsEffectiveCrossSectionInfinite() const
+      { return fExpInteractionLaw.IsEffectiveCrossSectionInfinite(); }
 
-public:
-  void             SetForceCrossSection( G4double xs )    {        fExpInteractionLaw.SetForceCrossSection( xs ); }
-  void     SetSelectedProcessXSfraction( G4double fXS )   {        fSelectedProcessXSfraction = fXS;              }
-  G4double  SetSelectedProcessXSfraction() const          { return fSelectedProcessXSfraction;                    }
-  void               SetMaximumDistance(G4double d)       {        fExpInteractionLaw.SetMaximumDistance(d);      }
-  G4double           GetMaximumDistance() const           { return fExpInteractionLaw.GetMaximumDistance();       }
-  G4double       GetInteractionDistance() const           { return fExpInteractionLaw.GetInteractionDistance();   }
+    virtual G4double ComputeEffectiveCrossSectionAt(G4double length) const;
+    virtual G4double ComputeNonInteractionProbabilityAt(G4double length) const;
 
-private:
-  G4ILawTruncatedExp         fExpInteractionLaw;
-  G4double           fSelectedProcessXSfraction;
-  G4double                 fInteractionDistance;
+    void SetForceCrossSection( G4double xs )
+      { fExpInteractionLaw.SetForceCrossSection( xs ); }
+    void SetSelectedProcessXSfraction( G4double fXS )
+      { fSelectedProcessXSfraction = fXS; }
+    G4double SetSelectedProcessXSfraction() const
+      { return fSelectedProcessXSfraction; }
+    void SetMaximumDistance(G4double d)
+      { fExpInteractionLaw.SetMaximumDistance(d); }
+    G4double GetMaximumDistance() const
+      { return fExpInteractionLaw.GetMaximumDistance(); }
+   G4double GetInteractionDistance() const
+      { return fExpInteractionLaw.GetInteractionDistance(); }
+
+  private:
+
+    // -- sample the distribution:
+    virtual G4double SampleInteractionLength();
+    // -- move by true path length, this position becomes the new initial point
+    // -- in this case, cheat by returning DBL_MAX, to let operation proposing the
+    // -- step length in the alongGPIL
+    virtual G4double UpdateInteractionLengthForStep(G4double truePathLength);
+
+  private:
+
+    G4ILawTruncatedExp fExpInteractionLaw;
+    G4double fSelectedProcessXSfraction = 0.0;
+    G4double fInteractionDistance = 0.0;
 };
 
 #endif

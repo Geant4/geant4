@@ -168,9 +168,8 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
       G4int np = pmanager->GetProcessListLength();
   
       if(1 < verbose) {
-	G4cout << "Check process <" << processName << "> for " 
-	       << particleName << " in list of " << np << " processes" 
-	       << G4endl;
+        G4cout << "Check process <" << processName << "> for " << particleName << " in list of "
+               << np << " processes" << G4endl;
       }
       G4VProcess* proc = nullptr;
       for(G4int i=0; i<np; ++i) {
@@ -179,68 +178,77 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
           break;
         }
       }
-      G4bool isCombinedMscTrans = false;
-      G4TransportationWithMsc* trans = nullptr;
       if(nullptr == proc) {
         if(processName == "msc") {
-	  for(G4int i=0; i<np; ++i) {
-            trans = dynamic_cast<G4TransportationWithMsc*>((*plist)[i]);
-            if(nullptr != trans) {
-	      G4cout << "G4TransportationWithMsc is found out!" << G4endl;
-	      isCombinedMscTrans = true;
+          for (G4int i = 0; i < np; ++i) {
+            auto* trans = dynamic_cast<G4TransportationWithMsc*>((*plist)[i]);
+            if (nullptr != trans) {
+              G4cout << "G4TransportationWithMsc is found out!" << G4endl;
               proc = trans;
-	      break;
-	    }
-	  }
-	}
-	if(nullptr == proc) { 
-	  if(0 < verbose) {
-	    G4cout << "### G4EmConfigurator WARNING: fails to find a process <"
-		   << processName << "> for " << particleName << G4endl;
-	  }
-	  return;
-	}
+              break;
+            }
+          }
+        }
+        if (nullptr == proc) {
+          if (0 < verbose) {
+            G4cout << "### G4EmConfigurator WARNING: fails to find a process <" << processName
+                   << "> for " << particleName << G4endl;
+          }
+          return;
+        }
       }
 
       if(!UpdateModelEnergyRange(mod, emin, emax)) { return; }
       // classify process
       G4int ii = proc->GetProcessSubType();
       auto msc = dynamic_cast<G4VMscModel*>(mod);
-      if(isCombinedMscTrans && nullptr != msc) {
-	trans->AddMscModel(msc, index, reg);
-	if(1 < verbose) {
-	  G4cout << "### Added msc model order= " << index << " for " 
-		 << particleName << " and " << proc->GetProcessName()
-		 << G4endl;
-	}
-      } else if(10 == ii && nullptr != msc) {
-	auto p = dynamic_cast<G4VMultipleScattering*>(proc);
-	if(nullptr != p) {
-	  p->AddEmModel(index, msc, reg);
-	  if(1 < verbose) {
-	    G4cout << "### Added msc model order= " << index << " for " 
-		   << particleName << " and " << processName << G4endl;
-	  }
-	}
-      } else if(2 <= ii && 4 >= ii) {
-	auto p = dynamic_cast<G4VEnergyLossProcess*>(proc);
-	if(nullptr != p) {
-	  p->AddEmModel(index,mod,fm,reg);
-	  if(1 < verbose) {
-	    G4cout << "### Added eloss model order= " << index << " for " 
-		   << particleName << " and " << processName << G4endl;
-	  }
-	}
-      } else {
+      if (nullptr != msc) {
+        if (auto* trans = dynamic_cast<G4TransportationWithMsc*>(proc)) {
+          trans->AddMscModel(msc, index, reg);
+          if (1 < verbose) {
+            G4cout << "### Added msc model order= " << index << " for " << particleName << " and "
+                   << proc->GetProcessName() << G4endl;
+          }
+        }
+        else if (10 == ii) {
+          auto p = dynamic_cast<G4VMultipleScattering*>(proc);
+          if (nullptr != p) {
+            p->AddEmModel(index, msc, reg);
+            if (1 < verbose) {
+              G4cout << "### Added msc model order= " << index << " for " << particleName << " and "
+                     << processName << G4endl;
+            }
+          }
+        }
+        else {
+          G4cout << "### Unable to add msc model for " << particleName << " and " << processName
+                 << G4endl;
+        }
+      }
+      else if (2 <= ii && 4 >= ii) {
+        auto p = dynamic_cast<G4VEnergyLossProcess*>(proc);
+        if (nullptr != p) {
+          p->AddEmModel(index, mod, fm, reg);
+          if (1 < verbose) {
+            G4cout << "### Added eloss model order= " << index << " for " << particleName << " and "
+                   << processName << G4endl;
+          }
+        }
+      }
+      else {
         auto p = dynamic_cast<G4VEmProcess*>(proc);
-	if(nullptr != p) {
-	  p->AddEmModel(index,mod,reg);
-	  if(1 < verbose) {
-	    G4cout << "### Added em model order= " << index << " for " 
-		   << particleName << " and " << processName << G4endl;
-	  }
-	}
-      } 
+        if (nullptr != p) {
+          p->AddEmModel(index, mod, reg);
+          if (1 < verbose) {
+            G4cout << "### Added em model order= " << index << " for " << particleName << " and "
+                   << processName << G4endl;
+          }
+        }
+        else {
+          G4cout << "### Unable to add em model for " << particleName << " and " << processName
+                 << G4endl;
+        }
+      }
       return;
     }
   }
@@ -277,9 +285,8 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
               if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) {
                 p->AddEmModel(index,mod,fm,reg);
                 if(1 < verbose) {
-                  G4cout << "### Added eloss model order= " << index << " for " 
-                         << particleName << " and " << processName 
-			 << " for " << reg->GetName() << G4endl;
+                  G4cout << "### Added eloss model order= " << index << " for " << particleName
+                         << " and " << processName << " for " << reg->GetName() << G4endl;
                 }
               }
             } else if(nullptr != fm) {
@@ -351,20 +358,21 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
     G4String processName = (nullptr == p) ? G4String("msc") : p->GetProcessName();
     for(size_t i=0; i<n; ++i) {
       if(processName == processes[i]) {
-	if((particleName == particles[i]) ||
-	   (particles[i] == "all") ||
-	   (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-	  const G4Region* reg = G4EmUtility::FindRegion(regions[i]);
-	  if(nullptr != reg) {
-	    --index;
-	    auto mod = dynamic_cast<G4VMscModel*>(models[i]);
+        if ((particleName == particles[i]) || (particles[i] == "all")
+            || (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0))
+        {
+          const G4Region* reg = G4EmUtility::FindRegion(regions[i]);
+          if (nullptr != reg) {
+            --index;
+            auto mod = dynamic_cast<G4VMscModel*>(models[i]);
             if(nullptr != mod) {
               if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) {
                 if(nullptr != p) {
-		  p->AddEmModel(index,mod,reg);
-		} else {
-		  trans->AddMscModel(mod,index,reg);
-		}
+                  p->AddEmModel(index, mod, reg);
+                }
+                else {
+                  trans->AddMscModel(mod, index, reg);
+                }
                 //G4cout << "### Added msc model order= " << index << " for " 
                 //   << particleName << " and " << processName << G4endl;
               }

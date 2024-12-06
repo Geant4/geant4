@@ -49,5 +49,25 @@
   Physics initialization and the defined reaction table are printed.
   G4ITStepManager processes the chemical stage time step after time step.
   Chemical reactions are printed.
-*/
 
+\section Chem2_s6 HOW TO START
+
+  To run the example in batch mode
+
+      ./chem2 -mac beam.in
+
+  or
+
+      ./chem2
+
+  then the macro beam.in is processed by default
+
+  In interactive mode, run:
+
+      ./chem2 -gui
+
+  or
+
+      ./chem2 -gui gui.mac
+
+*/

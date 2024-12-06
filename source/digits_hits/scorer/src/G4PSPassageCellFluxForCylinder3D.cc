@@ -45,15 +45,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(
-  G4String name, G4int ni, G4int nj, G4int nk, G4int di, G4int dj, G4int dk)
+  const G4String& name, G4int ni, G4int nj, G4int nk,
+  G4int di, G4int dj, G4int dk)
   : G4PSPassageCellFlux3D(name, ni, nj, nk, di, dj, dk)
 {
   nSegment[0] = nSegment[1] = nSegment[2] = 0;
 }
 
 G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(
-  G4String name, const G4String& unit, G4int ni, G4int nj, G4int nk, G4int di,
-  G4int dj, G4int dk)
+  const G4String& name, const G4String& unit,
+  G4int ni, G4int nj, G4int nk, G4int di, G4int dj, G4int dk)
   : G4PSPassageCellFlux3D(name, unit, ni, nj, nk, di, dj, dk)
 {
   nSegment[0] = nSegment[1] = nSegment[2] = 0;

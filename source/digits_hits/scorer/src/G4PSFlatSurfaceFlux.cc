@@ -60,12 +60,12 @@
 //              vs. cell flux * track weight             (Makoto Asai)
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, G4int direction,
+G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(const G4String& name, G4int direction,
                                          G4int depth)
   : G4PSFlatSurfaceFlux(name, direction, "percm2", depth) 
 {}
 
-G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, G4int direction,
+G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(const G4String& name, G4int direction,
                                          const G4String& unit, G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)

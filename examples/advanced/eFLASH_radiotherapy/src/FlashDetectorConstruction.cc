@@ -67,24 +67,30 @@
 #include "G4VisAttributes.hh"
 #include "FlashDetectorMessenger.hh"
 
+#include "FlashSensitiveDetector.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashDetectorConstruction::FlashDetectorConstruction()
     : G4VUserDetectorConstruction(), physicalTreatmentRoom(0),logicTreatmentRoom(0), Collimator(0), fPhantom(0),
 fPhantomLogicalVolume(0),fPhant_phys(0),
-      fCheckOverlaps(true) {
+      fCheckOverlaps(true),
+      fActivateDet(false)
+       {
 
   DefineMaterials();
   fDetectorMessenger = new FlashDetectorMessenger(this);
 
   SetPhantomSize(30. *cm, 30. *cm, 30. *cm);
   SetAirGap(0*cm); // Set the air gap between the water phantom and the end of the applicator
-  SetDetectorThickness(10*um);
+  SetDetectorThickness(10*um); //Set the SiC detector thickness
   SetDetector_subThickness(370*um);
-  SetDetectorWidth(5*mm);
-  SetAirGap_water_detector(0*cm); // Set the air gap between the end of the water phantom and the entrance of the detector
-
+  SetDetectorWidth(2*mm); //Set the SiC detector width
+  SetDetectorPosition(13*mm); // Position of the single detector and of the SiC array within the water phantom
   
+  // Change the following parameters to change the number of detectors and center to center distance of the SiC array
+  nDet = 40;
+  fDet_ctc = 3 * mm;
   
 }
 
@@ -154,10 +160,10 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
   return fPhant_phys;
 }
 
-G4VPhysicalVolume *
-FlashDetectorConstruction::ConstructDetector(){
- //Detector
 
+void FlashDetectorConstruction::ConstructDetector(){
+ //Detector
+  
 
   G4double fDensity_SiC=3.22*g/cm3;
 
@@ -168,25 +174,68 @@ FlashDetectorConstruction::ConstructDetector(){
  fDetectorMaterial=SiC;
 
 
- fDetectorPosition=fPhantom_coordinateX+fAirGap+fPhantomSizeX/2+fDet_thickness/2+fAirGap_phantom_det;
- 
+
  fDet_box = new G4Box("Detector",fDet_thickness/2,fDet_width/2,fDet_width/2);
  
   // Definition of the logical volume of the Detector
   fDetLogicalVolume =
       new G4LogicalVolume(fDet_box, fDetectorMaterial, "DetectorLog", 0, 0, 0);
-  fDet_phys = new G4PVPlacement(0,G4ThreeVector(fDetectorPosition, 0. * mm, 0. * mm), "DetPhys",fDetLogicalVolume,physicalTreatmentRoom,false, 0, fCheckOverlaps);
 
-  
+
   fDet_sub = new G4Box("Det_sub",fDet_sub_thickness/2,fDet_width/2,fDet_width/2);
  
-  // Definition of the logical volume of the Detector 
-  fDet_sub_LogicalVolume =
-      new G4LogicalVolume(fDet_sub, fDetectorMaterial, "Det_sub_Log", 0, 0, 0);
-  fDet_sub_phys = new G4PVPlacement(0,G4ThreeVector(fDetectorPosition+fDet_thickness+fDet_sub_thickness/2, 0. * mm, 0. * mm), "Det_sub_Phys",fDet_sub_LogicalVolume,physicalTreatmentRoom,false, 0, fCheckOverlaps);
+    // Definition of the logical volume of the Detector substrate
+    fDet_sub_LogicalVolume =
+        new G4LogicalVolume(fDet_sub, fDetectorMaterial, "Det_sub_Log", 0, 0, 0);
+
+    
+  G4double posInit = (nDet - 1) * fDet_ctc / 2; 
 
 
-    return fDet_phys;
+if (fActivateDet) {
+    // Placement physical volumes of the detector array
+    for (int i = 0; i < nDet; i++){
+
+    std::ostringstream os;
+    os << "Det_Phys_";
+    if (i < 10)
+    {
+        os << "00";
+    } else if (i < 100){
+        os << "0";
+    }
+    os << i ;
+    G4String name = os.str();
+
+    G4cout << "Position: " << -posInit + fDet_ctc * i << G4endl;
+
+    fDet_phys.push_back(new G4PVPlacement(
+        0,
+	//  G4ThreeVector(fDetectorPosition, 0, -posInit + fDet_ctc * i),
+	G4ThreeVector(-fPhantomSizeX/2+fDetectorPosition, 0, -posInit + fDet_ctc * i), 
+        name,
+        fDetLogicalVolume, 
+        fPhant_phys,
+        false, 
+        i, 
+        fCheckOverlaps
+    ));
+
+
+    fDet_sub_phys.push_back (new G4PVPlacement
+			     (0,
+			      G4ThreeVector(-fPhantomSizeX/2+fDetectorPosition+fDet_thickness/2+fDet_sub_thickness/2, 0. * mm, -posInit + fDet_ctc * i),
+			      "Det_sub_Phys",
+			      fDet_sub_LogicalVolume,
+			      fPhant_phys,
+			      false,
+			      i,
+			      fCheckOverlaps));
+
+  
+    
+    }
+}
 
 }
 
@@ -228,16 +277,28 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
  fPhantom_physical =
         ConstructPhantom(Collimator->fFinalApplicatorXPositionFlash +
 	Collimator->fHightFinalApplicatorFlash+fAirGap);
- ConstructDetector();
-   
+ 
 
+  ConstructDetector();
+ 
   return physicalTreatmentRoom;
 }
 
 
 
 void FlashDetectorConstruction::ConstructSDandField() {
-//modify this function if you want to insert a sensitive detector
+if (fActivateDet){
+  
+    G4SDManager * SDman = G4SDManager::GetSDMpointer();
+
+    // Sensitive detector
+    FlashSensitiveDetector *fSensDet = new FlashSensitiveDetector("fSensitiveDetector");
+    
+    SDman->AddNewDetector(fSensDet);
+    fDetLogicalVolume->SetSensitiveDetector(fSensDet);
+
+}    
+
 }
 
 
@@ -335,18 +396,12 @@ void FlashDetectorConstruction::SetDetector_subThickness(G4double thickness_sub)
 }
 
 
- 
-
-
- void FlashDetectorConstruction::SetAirGap_water_detector(G4double spost)
-{
-  
-  fAirGap_phantom_det=spost;
-}
-
-
 void FlashDetectorConstruction::SetDetectorPosition(G4double position)
 {
- 
+
    fDetectorPosition=position;
+}
+
+void FlashDetectorConstruction::ActivateDetArray(G4bool fbool){
+    fActivateDet = fbool;
 }

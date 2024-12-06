@@ -42,9 +42,9 @@ class G4AdjointhIonisationModel;
 class G4hInverseIonisation : public G4VAdjointReverseReaction
 {
  public:
-  explicit G4hInverseIonisation(G4bool whichScatCase, G4String process_name,
+  explicit G4hInverseIonisation(G4bool whichScatCase, const G4String& process_name,
                                 G4AdjointhIonisationModel* aEmAdjointModel);
-  ~G4hInverseIonisation() override;
+  ~G4hInverseIonisation() override = default;
 
   G4hInverseIonisation(G4hInverseIonisation&) = delete;
   G4hInverseIonisation& operator=(const G4hInverseIonisation& right) = delete;

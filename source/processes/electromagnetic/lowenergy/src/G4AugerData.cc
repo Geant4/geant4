@@ -294,7 +294,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    (*newEnergyMap)[augerShellId] = *transEnergies;
 	    (*newProbabilityMap)[augerShellId] = *transProbabilities;
 	    
-	    augerTransitionVector.push_back(G4AugerTransition(vacId, identifiers, 
+	    augerTransitionVector.push_back(G4AugerTransition(vacId, std::move(identifiers), 
 							      newIdMap, newEnergyMap, newProbabilityMap));
 	    // Now deleting all the variables I used, and creating new ones for the next shell
 	    delete newIdMap;

@@ -64,6 +64,7 @@
 
 // e+
 #include "G4eplusAnnihilation.hh"
+#include "G4eplusTo2or3GammaModel.hh"
 
 // hadrons
 #include "G4hMultipleScattering.hh"
@@ -138,8 +139,7 @@ G4EmLivermorePhysics::G4EmLivermorePhysics(G4int ver, const G4String& pname)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLivermorePhysics::~G4EmLivermorePhysics()
-{}
+G4EmLivermorePhysics::~G4EmLivermorePhysics() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -290,11 +290,17 @@ void G4EmLivermorePhysics::ConstructProcess()
   brem->SetEmModel(br2);
   br1->SetHighEnergyLimit(GeV);
 
+  // annihilation
+  auto anni = new G4eplusAnnihilation();
+  if (param->Use3GammaAnnihilationOnFly()) {
+    anni->SetEmModel(new G4eplusTo2or3GammaModel());
+  }
+
   // register processes
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
-  ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+  ph->RegisterProcess(anni, particle);
   ph->RegisterProcess(ss, particle);
 
   // generic ion

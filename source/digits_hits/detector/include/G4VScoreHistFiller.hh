@@ -26,24 +26,21 @@
 // Class G4VScoreHistFiller
 //
 // Class description:
-//  Abstract base class that defines functions to fill histogram and
-//  profile plot. This class avoids the direct dependency to G4Analysis
-//  category. Template class G4TScoreHistFiller should be used by the
-//  user to specify the type of the file format.
 //
-//  Created: M. Asai (Sept. 2020)
+// Abstract base class that defines functions to fill histogram and
+// profile plot. This class avoids the direct dependency to G4Analysis
+// category. Template class G4TScoreHistFiller should be used by the
+// user to specify the type of the file format.
+// This class implements the interface for filling histograms from scorer
+// type vith Geant4 analysis tools.
 //
-
+// Author: Makoto Asai, September 2020
+// --------------------------------------------------------------------
 #ifndef G4VScoreHistFiller_h
 #define G4VScoreHistFiller_h 1
 
 #include "G4Threading.hh"
 #include "globals.hh"
-
-// class description:
-//
-// This class implements the interface for filling histograms from scorer
-// type vith Geant4 analysis tools.
 
 class G4VScoreHistFiller
 {

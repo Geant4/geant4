@@ -48,7 +48,6 @@
 #include "G4WorkerThread.hh"
 
 G4ScoringManager* G4MTRunManager::masterScM = nullptr;
-G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::masterWorlds_t();
 G4MTRunManager* G4MTRunManager::fMasterRM = nullptr;
 G4int G4MTRunManager::seedOncePerCommunication = 0;
 G4ThreadId G4MTRunManager::masterThreadId = G4ThisThread::get_id();
@@ -89,13 +88,14 @@ G4ScoringManager* G4MTRunManager::GetMasterScoringManager()
 // --------------------------------------------------------------------
 G4MTRunManager::masterWorlds_t& G4MTRunManager::GetMasterWorlds()
 {
+  static masterWorlds_t masterWorlds;
   return masterWorlds;
 }
 
 // --------------------------------------------------------------------
 void G4MTRunManager::addWorld(G4int counter, G4VPhysicalVolume* w)
 {
-  masterWorlds.insert(std::make_pair(counter, w));
+  GetMasterWorlds().insert(std::make_pair(counter, w));
 }
 
 // --------------------------------------------------------------------
@@ -184,6 +184,7 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM)
       }
     }
   }
+  G4UImanager::GetUIpointer()->SetAlias("RunMode eventParallel");
 }
 
 // --------------------------------------------------------------------
@@ -465,7 +466,7 @@ void G4MTRunManager::ConstructScoringWorlds()
   // Call base class stuff...
   G4RunManager::ConstructScoringWorlds();
 
-  masterWorlds.clear();
+  GetMasterWorlds().clear();
   auto nWorlds = (G4int)G4TransportationManager::GetTransportationManager()->GetNoWorlds();
   auto itrW = G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
   for (G4int iWorld = 0; iWorld < nWorlds; ++iWorld) {

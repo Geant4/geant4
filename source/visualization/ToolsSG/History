@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-21 Ben Morgan (vis_toolssg-V1-02-02)
+- Use runtime checks for MT mode.
+
 ## 2024-04-30 Ben Morgan (vis_toolssg-V11-02-01)
 - Replace TOOLSSG vis driver variables that are just synonyms for more
   fundamental config options (e.g. GEANT4_USE_QT) with the underlying

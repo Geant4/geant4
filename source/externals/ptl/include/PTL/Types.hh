@@ -21,73 +21,60 @@
 
 #pragma once
 
-#if defined(__APPLE__) || defined(__MACH__)
-#    if !defined(PTL_MACOS)
-#        define PTL_MACOS 1
-#    endif
-#    if !defined(PTL_UNIX)
-#        define PTL_UNIX 1
-#    endif
-#endif
+// This file defines types used to expose Tasking threading model.
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
-#    if !defined(PTL_WINDOWS)
-#        define PTL_WINDOWS 1
-#    endif
-#endif
+#pragma once
 
-#if defined(__linux__) || defined(__linux) || defined(linux) || defined(__gnu_linux__)
-#    if !defined(PTL_LINUX)
-#        define PTL_LINUX 1
-#    endif
-#    if !defined(PTL_UNIX)
-#        define PTL_UNIX 1
-#    endif
-#endif
+#include <array>
+#include <cstddef>
+#include <future>
+#include <mutex>
+#include <thread>
 
-#if defined(__unix__) || defined(__unix) || defined(unix)
-#    if !defined(PTL_UNIX)
-#        define PTL_UNIX 1
-#    endif
-#endif
+namespace PTL
+{
+// global thread types
+using Thread       = std::thread;
+using NativeThread = std::thread::native_handle_type;
+// std::thread::id does not cast to integer
+using Pid_t = std::thread::id;
 
-#if defined(PTL_WINDOWS)
-// Disable warning C4786 on WIN32 architectures:
-// identifier was truncated to '255' characters
-// in the debug information
-//
-#    pragma warning(disable : 4786)
-//
-// Define DLL export macro for WIN32 systems for
-// importing/exporting external symbols to DLLs
-//
-#    if defined PTL_BUILD_DLL
-#        define DLLEXPORT __declspec(dllexport)
-#        define DLLIMPORT __declspec(dllimport)
-#    else
-#        define DLLEXPORT
-#        define DLLIMPORT
-#    endif
-//
-// Unique identifier for global module
-//
-#    if defined PTL_ALLOC_EXPORT
-#        define PTL_DLL DLLEXPORT
-#    else
-#        define PTL_DLL DLLIMPORT
-#    endif
-#else
-#    define DLLEXPORT
-#    define DLLIMPORT
-#    define PTL_DLL
-#endif
+// Condition
+using Condition = std::condition_variable;
 
-#if !defined(PTL_DEFAULT_OBJECT)
-#    define PTL_DEFAULT_OBJECT(NAME)                                                     \
-        NAME()            = default;                                                     \
-        ~NAME()           = default;                                                     \
-        NAME(const NAME&) = default;                                                     \
-        NAME(NAME&&)      = default;                                                     \
-        NAME& operator=(const NAME&) = default;                                          \
-        NAME& operator=(NAME&&) = default;
-#endif
+// Thread identifier
+using ThreadId = Thread::id;
+
+// will be used in the future when migrating threading to task-based style
+template <typename Tp>
+using Future = std::future<Tp>;
+template <typename Tp>
+using SharedFuture = std::shared_future<Tp>;
+template <typename Tp>
+using Promise = std::promise<Tp>;
+
+// global mutex types
+using Mutex          = std::mutex;
+using RecursiveMutex = std::recursive_mutex;
+
+// static functions: get_id(), sleep_for(...), sleep_until(...), yield(),
+namespace ThisThread
+{
+using namespace std::this_thread;
+}
+
+// Helper function for getting a unique static mutex for a specific
+// class or type
+// Usage example:
+//		a template class "Cache<T>" that required a static
+//		mutex for specific to type T:
+//			AutoLock l(TypeMutex<Cache<T>>());
+template <typename Tp, typename MutexTp = Mutex, size_t N = 4>
+MutexTp&
+TypeMutex(const unsigned int& _n = 0)
+{
+    static std::array<MutexTp, N> _mutex_array{};
+    return _mutex_array[_n % N];
+}
+
+}  // namespace PTL

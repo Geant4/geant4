@@ -57,8 +57,8 @@ G4bool G4VMarker::operator != (const G4VMarker& mk) const {
 std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   os << "G4VMarker: position: " << marker.fPosition
      << ", world size: " << marker.fWorldSize
-     << ", screen size: " << marker.fScreenSize << '\n'
-     << "           fill style: ";
+     << ", screen size: " << marker.fScreenSize
+     << ", fill style: ";
   switch (marker.fFillStyle) {
   case G4VMarker::noFill:
     os << "no fill";
@@ -72,7 +72,7 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   default:
     os << "unrecognised"; break;
   }
-  os << "\n           " << (const G4Visible&) marker;
+  os << "\n    " << (const G4Visible&) marker;
   return os;
 }
 

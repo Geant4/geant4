@@ -49,7 +49,7 @@ class G4NeutralDefinition;
 class G4SDNeutralFilter : public G4VSDFilter
 {
  public:
-  G4SDNeutralFilter(G4String name);
+  G4SDNeutralFilter(const G4String& name);
   ~G4SDNeutralFilter() override = default;
 
   G4bool Accept(const G4Step*) const override;

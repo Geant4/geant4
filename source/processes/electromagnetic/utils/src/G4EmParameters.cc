@@ -136,6 +136,9 @@ void G4EmParameters::Initialise()
   fMuDataFromFile = false;
   fPEKShell = true;
   fMscPosiCorr = true;
+  fUseEPICS2017XS = false;
+  f3GammaAnnihilationOnFly = false;
+  fUseRiGePairProductionModel = false;
   fDNA = false;
   fIsPrinted = false;
 
@@ -160,7 +163,6 @@ void G4EmParameters::Initialise()
   safetyFactor = 0.6;
   lambdaLimit  = 1.0*CLHEP::mm;
   factorScreen = 1.0;
-  fOrtoPsFraction = 0.0375; // 0.75 * 0.05
 
   nbinsPerDecade = 7;
   verbose = 1;
@@ -174,6 +176,7 @@ void G4EmParameters::Initialise()
   nucFormfactor = fExponentialNF;
   fSStype = fWVI;
   fFluct = fUniversalFluctuation;
+  fPositronium = fSimplePositronium;
 
   const char* data_dir = G4FindDataDir("G4LEDATA");
   if (nullptr != data_dir) {
@@ -534,6 +537,39 @@ void G4EmParameters::SetMscPositronCorrection(G4bool v)
 {
   if(IsLocked()) { return; }
   fMscPosiCorr = v;
+}
+
+G4bool G4EmParameters::UseEPICS2017XS() const
+{
+  return fUseEPICS2017XS;
+}
+
+void G4EmParameters::SetUseEPICS2017XS(G4bool v)
+{
+  if(IsLocked()) { return; }
+  fUseEPICS2017XS = v;
+}
+
+G4bool G4EmParameters::Use3GammaAnnihilationOnFly() const
+{
+  return f3GammaAnnihilationOnFly;
+}
+
+void G4EmParameters::Set3GammaAnnihilationOnFly(G4bool v)
+{
+  if(IsLocked()) { return; }
+  f3GammaAnnihilationOnFly = v;
+}
+
+G4bool G4EmParameters::UseRiGePairProductionModel() const
+{
+  return fUseRiGePairProductionModel;
+}
+
+void G4EmParameters::SetUseRiGePairProductionModel(G4bool v)
+{
+  if (IsLocked()) { return; }
+  fUseRiGePairProductionModel = v;
 }
 
 void G4EmParameters::ActivateDNA()
@@ -1051,18 +1087,6 @@ G4PositronAtRestModelType G4EmParameters::PositronAtRestModelType() const
   return fPositronium;
 }
 
-void G4EmParameters::SetOrtoPsFraction(G4double val)
-{
-  if(IsLocked()) { return; }
-  fOrtoPsFraction = val;
-}
-
-G4double  G4EmParameters::OrtoPsFraction() const
-{
-  return fOrtoPsFraction;
-}
-
-
 void G4EmParameters::SetMscStepLimitType(G4MscStepLimitType val)
 {
   if(IsLocked()) { return; }
@@ -1376,6 +1400,14 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Bremsstrahlung energy threshold above which primary\n" 
      << "  muon/hadron is added to the list of secondary    " 
      <<G4BestUnit(bremsMuHadTh,"Energy") << "\n";
+  G4String name3g = "SimplePositronium";
+  if (fPositronium == fAllisonPositronium) { name3g = "AllisonPositronium"; }
+  else if (fPositronium == fOrePowell) { name3g = "OrePowell"; }
+  else if (fPositronium == fOrePowellPolar) { name3g = "OrePowellPolar"; }
+  os << "Positron annihilation at rest model                " << name3g << "\n";
+  
+  os << "Enable 3 gamma annihilation on fly                 "
+     << f3GammaAnnihilationOnFly << "\n";
   os << "Lowest triplet kinetic energy                      " 
      <<G4BestUnit(lowestTripletEnergy,"Energy") << "\n";
   os << "Enable sampling of gamma linear polarisation       " <<fPolarisation << "\n";
@@ -1385,6 +1417,8 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "5D gamma conversion limit for muon pair            " 
      << max5DEnergyForMuPair/CLHEP::GeV << " GeV\n";
   }
+  os << "Use Ricardo-Gerardo pair production model          "
+     << fUseRiGePairProductionModel << "\n";
   os << "Livermore data directory                           " 
      << fCParameters->LivermoreDataDir() << "\n";
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -29,7 +29,7 @@ Command is ignored.
  	      G4_lAr:    5.7 mm 
 -------------------------------------------------------------
 
- Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -64,15 +64,15 @@ Command is ignored.
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 775.35 MeV :  16.44 MeV      2.12 +- 0.06706 %      54.7 cm  +- 1.26 cm 
-        G4_lAr: 215.06 MeV :  15.96 MeV     7.421 +- 0.2347 %      1.06 m   +- 8.16 cm 
+         G4_Pb:    775 MeV :  17.05 MeV       2.2 +- 0.06956 %      54.7 cm  +- 1.31 cm 
+        G4_lAr: 214.65 MeV :  15.29 MeV     7.124 +- 0.2253 %      1.06 m   +-  7.8 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma       509
- Mean number of e-          873
- Mean number of e+          53.7
- Mean number of charged steps  3681.48
- Mean number of neutral steps  3694.58
+ Mean number of e-          870
+ Mean number of e+          53.6
+ Mean number of charged steps  3662.46
+ Mean number of neutral steps  3688.48
 ------------------------------------------------------------
 

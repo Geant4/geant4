@@ -36,11 +36,13 @@
 
 #include "TimeStepAction.hh"
 
+#include "G4MolecularConfiguration.hh"
+#include "G4Molecule.hh"
+#include "G4MoleculeTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
 #include <G4Scheduler.hh>
-// #include "G4Molecule.hh"
 
 TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
 {
@@ -60,111 +62,60 @@ TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TimeStepAction::~TimeStepAction()
-{
-  // dtor
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TimeStepAction::TimeStepAction(const TimeStepAction& other) : G4UserTimeStepAction(other)
-{
-  // copy ctor
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TimeStepAction& TimeStepAction::operator=(const TimeStepAction& rhs)
-{
-  if (this == &rhs) return *this;  // handle self assignment
-  // assignment operator
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void TimeStepAction::UserPostTimeStepAction()
 {
-  //    G4cout << "_________________" << G4endl;
-  /*
-  G4cout << "Time Step : "
-      << G4BestUnit(G4ITScheduler::Instance()->GetTimeStep(),
-          "Time")
-          << G4endl;
+  if (G4Scheduler::Instance()->GetGlobalTime() > 99 * ns) {
+    G4cout << "_________________" << G4endl;
+    G4cout << "At : " << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time") << G4endl;
 
-  G4cout <<  "End of step: "
-      << G4BestUnit(G4ITScheduler::Instance()->GetGlobalTime(),
-                            "Time")
-      << G4endl;
-   */
+    auto species = G4MoleculeTable::Instance()->GetConfiguration("°OH");
+    PrintSpecieInfo(species);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TimeStepAction::UserReactionAction(const G4Track& /*a*/, const G4Track& /*b*/,
-                                        const std::vector<G4Track*>* /*products*/)
+void TimeStepAction::UserReactionAction(const G4Track& reactantA, const G4Track& reactantB,
+                                        const std::vector<G4Track*>* products)
 {
-  // Example to display reactions with product
-  // S. Incerti, H. Tran
-  // 2019/01/24
+  // this function shows how to get species ID, positions of reaction.
+  G4cout << G4endl;
 
-  /*
-  if (products)
-  {
-    G4cout << G4endl;
-    G4int nbProducts = products->size();
-    for (int i = 0 ; i < nbProducts ; i ++)
-    {
-      G4cout << "-> A = "
-        << GetMolecule(&a)->GetName() << " (TrackID=" << a.GetTrackID() << ")"
-        << " reacts with B = "
-        << GetMolecule(&b)->GetName() << " (TrackID=" << b.GetTrackID() << ")"
-        << " creating product " << i+1 << " ="
-        << GetMolecule((*products)[i])->GetName()
-        << G4endl ;
+  G4cout << "At : " << G4Scheduler::Instance()->GetGlobalTime() / ns
+         << " (ns) reactantA = " << GetMolecule(reactantA)->GetName()
+         << " (ID number = " << reactantA.GetTrackID() << ")"
+         << " at position : " << reactantA.GetPosition() / nm
+         << " reacts with reactantB = " << GetMolecule(&reactantB)->GetName()
+         << " (ID number = " << reactantB.GetTrackID() << ")"
+         << " at position : " << reactantA.GetPosition() / nm << G4endl;
 
-      G4cout
-      <<" A position: x(nm)="<<a.GetPosition().getX()/nm
-      <<" y(nm)="<<a.GetPosition().getY()/nm
-      <<" z(nm)="<<a.GetPosition().getZ()/nm
-      <<G4endl;
-
-      G4cout
-      <<" B position: x(nm)="<<b.GetPosition().getX()/nm
-      <<" y(nm)="<<b.GetPosition().getY()/nm
-      <<" z(nm)="<<b.GetPosition().getZ()/nm
-      <<G4endl;
-
-      G4cout
-      <<" Product " << i+1 << "position: x(nm)="<<(*products)[i]->GetPosition().getX()/nm
-      <<" y(nm)="<<a.GetPosition().getY()/nm
-      <<" z(nm)="<<a.GetPosition().getZ()/nm
-      <<G4endl;
+  if (products) {
+    auto nbProducts = (G4int)products->size();
+    for (G4int i = 0; i < nbProducts; i++) {
+      G4cout << "      creating product " << i + 1 << " =" << GetMolecule((*products)[i])->GetName()
+             << " position : " << (*products)[i]->GetPosition() << G4endl;
     }
   }
+  G4cout << G4endl;
+}
 
-  else
+void TimeStepAction::PrintSpecieInfo(G4MolecularConfiguration* molconf)
+{
+  // this function shows how to get a specific species ID, positions at each time step.
+  auto moleculeID = molconf->GetMoleculeID();
+  const G4String& moleculeName = molconf->GetFormatedName();
+  G4cout << "Get inf of : " << moleculeName << G4endl;
+  auto trackList = G4ITTrackHolder::Instance()->GetMainList(moleculeID);
 
-  {
-     G4cout << G4endl;
-     G4cout << "-> A = "
-        << GetMolecule(&a)->GetName() << " (TrackID=" << a.GetTrackID() << ")"
-        << " reacts with B = "
-        << GetMolecule(&b)->GetName() << " (TrackID=" << b.GetTrackID() << ")"
-        << G4endl ;
-
-      G4cout
-      <<" A position: x(nm)="<<a.GetPosition().getX()/nm
-      <<" y(nm)="<<a.GetPosition().getY()/nm
-      <<" z(nm)="<<a.GetPosition().getZ()/nm
-      <<G4endl;
-
-      G4cout
-      <<" B position: x(nm)="<<b.GetPosition().getX()/nm
-      <<" y(nm)="<<b.GetPosition().getY()/nm
-      <<" z(nm)="<<b.GetPosition().getZ()/nm
-      <<G4endl;
-
+  if (trackList == nullptr) {
+    G4cout << "No species" << G4endl;
+    return;
   }
-  */
+  G4TrackList::iterator it = trackList->begin();
+  G4TrackList::iterator end = trackList->end();
+  for (; it != end; ++it) {
+    auto track = *it;
+    G4cout << "TrackID: " << track->GetTrackID() << "  position : " << track->GetPosition() / nm
+           << G4endl;
+  }
 }

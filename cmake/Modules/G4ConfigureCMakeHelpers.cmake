@@ -206,12 +206,6 @@ configure_file(
   COPYONLY
   )
 
-configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4_internal.cmake
-  ${PROJECT_BINARY_DIR}/UseGeant4_internal.cmake
-  COPYONLY
-  )
-
 #-----------------------------------------------------------------------
 # - Generate Install Tree Configuration Files
 #-----------------------------------------------------------------------
@@ -272,8 +266,9 @@ install(FILES
   COMPONENT Development
   )
 
-# Install the package settings file if required (always for now)
-option(GEANT4_INSTALL_PACKAGE_CACHE "Install file recording build-time locations of required packages" ON)
+# Install the package settings file if required
+# Default to OFF because it's a hand-holding solution that hinders more than helps.
+option(GEANT4_INSTALL_PACKAGE_CACHE "Install file recording build-time locations of required packages" OFF)
 mark_as_advanced(GEANT4_INSTALL_PACKAGE_CACHE)
 if(GEANT4_INSTALL_PACKAGE_CACHE)
   install(FILES ${PROJECT_BINARY_DIR}/Geant4PackageCache.cmake

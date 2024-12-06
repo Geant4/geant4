@@ -79,6 +79,7 @@ class G4ParticleHPInelasticDataPT : public G4VCrossSectionDataSet {
 
    private:
      std::vector< std::pair< G4double, G4double > >* URRlimits;
+     G4bool doNOTusePTforInelastic{ true };
 };
 
 #endif

@@ -54,12 +54,12 @@ class G4VTRModel
 
   const G4String& GetName() const { return fName; };
 
-  virtual void GenerateSecondaries(G4VParticleChange& pChange,
-                                   std::vector<const G4Material*>& materials,
-                                   std::vector<G4double>& steps,
-                                   std::vector<G4ThreeVector>& normals,
-                                   G4ThreeVector& startingPosition,
-                                   const G4Track& track);
+  virtual void GenerateSecondaries(  G4VParticleChange& /* pChange */,
+                                   std::vector<const G4Material*>& /* materials */,
+                                   std::vector<G4double>& /* steps */,
+                                   std::vector<G4ThreeVector>& /* normals */,
+                                   G4ThreeVector& /* startingPosition */,
+                                   const G4Track& /* track */ ) {};
 
   // disable assignment operator & copy constructor
   G4VTRModel& operator=(const G4VTRModel& right) = delete;

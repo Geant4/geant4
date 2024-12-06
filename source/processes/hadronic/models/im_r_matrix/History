@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-08-21 Gabriele Cosmo (had-im_r-V11-02-01, 00)
+- Fixed reported Coverity defects for use of std::move().
+
 ## 2022-11-26 Gabriele Cosmo (had-im_r-V11-00-01)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

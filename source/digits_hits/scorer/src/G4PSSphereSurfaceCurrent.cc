@@ -52,12 +52,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
+G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(const G4String& name,
                                                    G4int direction, G4int depth)
   : G4PSSphereSurfaceCurrent(name, direction, "percm2", depth)
 {}
 
-G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
+G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(const G4String& name,
                                                    G4int direction,
                                                    const G4String& unit,
                                                    G4int depth)

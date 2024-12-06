@@ -43,7 +43,7 @@ class G4ShellCorrection
 {
 public:
 
-  explicit G4ShellCorrection();
+  G4ShellCorrection();
 
   ~G4ShellCorrection() = default;
 
@@ -55,9 +55,9 @@ public:
 
   G4double GetShellCorrection(G4int A, G4int Z) const;
 
-  G4ShellCorrection(const G4ShellCorrection & right) = delete;
-  const G4ShellCorrection & operator=
-  (const G4ShellCorrection & right) = delete;
+  G4ShellCorrection(const G4ShellCorrection& right) = delete;
+  const G4ShellCorrection& operator=
+  (const G4ShellCorrection& right) = delete;
 
 private:
 

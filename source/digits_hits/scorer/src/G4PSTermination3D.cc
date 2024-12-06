@@ -46,7 +46,7 @@
 // Created: 2008-08-14  Tsukasa ASO
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSTermination3D::G4PSTermination3D(G4String name, G4int ni, G4int nj,
+G4PSTermination3D::G4PSTermination3D(const G4String& name, G4int ni, G4int nj,
                                      G4int nk, G4int di, G4int dj, G4int dk)
   : G4PSTermination(name)
   , fDepthi(di)

@@ -1,0 +1,25 @@
+#
+# Macro file gflasha example
+# when runing in batch mode
+# GFLASH off
+#
+/run/initialize
+
+#/gps/pos/centre 0 0 0
+#/gps/particle  e-
+#/gps/energy    50 GeV
+#/gps/direction  0. 0. 1.0
+
+/tracking/verbose 0
+
+# Paramatrisation on (default file name)
+/GFlash/flag 1
+#/analysis/setFileName gflash01
+
+/run/beamOn 500
+
+# Paramatrisation off
+/GFlash/flag 0
+/analysis/setFileName gflash00
+
+/run/beamOn 500

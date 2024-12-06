@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ILawCommonTruncatedExp
+// --------------------------------------------------------------------
+
 #include "G4ILawCommonTruncatedExp.hh"
 #include "G4Track.hh"
 
@@ -30,14 +33,13 @@
 #include "G4BiasingProcessInterface.hh"
 
 
-G4ILawCommonTruncatedExp::G4ILawCommonTruncatedExp(G4String name)
+G4ILawCommonTruncatedExp::G4ILawCommonTruncatedExp(const G4String& name)
   : G4VBiasingInteractionLaw(name),
     fExpInteractionLaw("expLawFor"+name)
 {}
 
 G4ILawCommonTruncatedExp::~G4ILawCommonTruncatedExp()
 {}
-
 
 G4double G4ILawCommonTruncatedExp::ComputeEffectiveCrossSectionAt(G4double distance) const
 {
@@ -49,17 +51,14 @@ G4double G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(G4double d
   G4double niProba = fExpInteractionLaw.ComputeNonInteractionProbabilityAt( distance );
   
   if ( niProba <= 0.0 )
-    {
-      G4ExceptionDescription ed;
-      ed << " Negative probability for `" << GetName() << "' p = " << niProba << " distance = " << distance <<  " !!! " << G4endl;
-      G4Exception(" G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(...)",
-		  "BIAS.GEN.08",
-		  JustWarning,
-		  ed);
-    }
+  {
+    G4ExceptionDescription ed;
+    ed << " Negative probability for `" << GetName() << "' p = " << niProba << " distance = " << distance <<  " !!! " << G4endl;
+    G4Exception(" G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(...)",
+                "BIAS.GEN.08", JustWarning, ed);
+  }
 
   return niProba;
-
 }
 
 G4double G4ILawCommonTruncatedExp::SampleInteractionLength()

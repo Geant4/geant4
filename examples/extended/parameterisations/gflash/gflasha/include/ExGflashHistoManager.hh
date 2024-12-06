@@ -44,10 +44,7 @@ class ExGflashHistoManager
     ~ExGflashHistoManager();
 
     void InitializePerEvent();
-    // void FillPerEvent();
-
-    // inline void FillPerTrack(G4double, G4double);
-    // inline void FillPerStep(G4double, G4int, G4int);
+    void SetBinning();
 
   private:
     void Book();
@@ -55,9 +52,7 @@ class ExGflashHistoManager
 
     ExGflashDetectorConstruction* fDet;
 
-    G4int fVerbose;
+    G4int fVerbose{1};
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

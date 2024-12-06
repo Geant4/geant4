@@ -367,10 +367,10 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
     G4double grej;
     if(nullptr != fMottXSection) {
       fMottXSection->SetupKinematic(tkin, targetZ);
-      grej = fMottXSection->RatioMottRutherfordCosT(std::sqrt(z1))*fm*fm;
+      grej = fMottXSection->RatioMottRutherfordCosT(std::sqrt(z1))*fm;
     } else {
       grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2. - z1))
-      *fm*fm/(1.0 + z1*factD);
+      *fm/(1.0 + z1*factD);
     }
     if(fMottFactor*rndmEngineMod->flat() <= grej ) {
       // exclude "false" scattering due to formfactor and spin effect

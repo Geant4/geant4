@@ -27,12 +27,11 @@
 
 #include "PTL/VUserTaskQueue.hh"
 #include "PTL/TaskRunManager.hh"
-#include "PTL/Utility.hh"  // for PTL
-#include <cstdint>         // for intmax_t
-#include <thread>          // for thread
+#include <cstdint>  // for intmax_t
+#include <thread>   // for thread
 
-using namespace PTL;
-
+namespace PTL
+{
 //======================================================================================//
 
 VUserTaskQueue::VUserTaskQueue(intmax_t nworkers)
@@ -48,3 +47,5 @@ VUserTaskQueue::VUserTaskQueue(intmax_t nworkers)
 }
 
 //======================================================================================//
+
+}  // namespace PTL

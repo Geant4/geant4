@@ -31,6 +31,7 @@
 #include "G4MTRunManager.hh"
 #include "G4RunManager.hh"
 #include "G4TaskRunManager.hh"
+#include "G4SubEvtRunManager.hh"
 #include "G4Threading.hh"
 
 #include "templates.hh"
@@ -68,7 +69,8 @@ G4RunManager* G4RunManagerFactory::CreateRunManager(G4RunManagerType _type,
   // If the supplied type is not ...Only, then allow override from environment
   std::string rm_type = GetName(_type);
   if (_type == G4RunManagerType::SerialOnly || _type == G4RunManagerType::MTOnly
-      || _type == G4RunManagerType::TaskingOnly || _type == G4RunManagerType::TBBOnly)
+      || _type == G4RunManagerType::TaskingOnly || _type == G4RunManagerType::TBBOnly
+      || _type == G4RunManagerType::SubEvtOnly)
   {
     // MUST fail if unavail in this case
     fail_if_unavail = true;
@@ -85,7 +87,7 @@ G4RunManager* G4RunManagerFactory::CreateRunManager(G4RunManagerType _type,
       G4GetEnv<std::string>("G4FORCE_RUN_MANAGER_TYPE", "", "Forcing G4RunManager type...");
 
     if (force_rm.length() > 0) {
-      rm_type = force_rm;
+      rm_type = std::move(force_rm);
       fail_if_unavail = true;
     }
     else if (rm_type.empty()) {
@@ -129,6 +131,15 @@ G4RunManager* G4RunManagerFactory::CreateRunManager(G4RunManagerType _type,
       rm = new G4TaskRunManager(_queue, true);
 #endif
       break;
+    case G4RunManagerType::SubEvt:
+#if defined(G4MULTITHREADED)
+#if defined(GEANT4_USE_TBB)
+      rm = new G4SubEvtRunManager(_queue, true);
+#else
+      rm = new G4SubEvtRunManager(_queue, false);
+#endif
+#endif
+      break;
     // "Only" types are not handled since they are converted above to main type
     case G4RunManagerType::SerialOnly:
       break;
@@ -137,6 +148,8 @@ G4RunManager* G4RunManagerFactory::CreateRunManager(G4RunManagerType _type,
     case G4RunManagerType::TaskingOnly:
       break;
     case G4RunManagerType::TBBOnly:
+      break;
+    case G4RunManagerType::SubEvtOnly:
       break;
     case G4RunManagerType::Default:
       break;
@@ -177,6 +190,7 @@ std::set<std::string> G4RunManagerFactory::GetOptions()
 #  if defined(GEANT4_USE_TBB)
     options.insert("TBB");
 #  endif
+    options.insert("SubEvt");
 #endif
     return options;
   }();
@@ -194,6 +208,7 @@ G4RunManagerType G4RunManagerFactory::GetType(const std::string& key)
   if (std::regex_match(key, std::regex("^(MT).*", opts))) return G4RunManagerType::MT;
   if (std::regex_match(key, std::regex("^(Task).*", opts))) return G4RunManagerType::Tasking;
   if (std::regex_match(key, std::regex("^(TBB).*", opts))) return G4RunManagerType::TBB;
+  if (std::regex_match(key, std::regex("^(SubEvt).*", opts))) return G4RunManagerType::SubEvt;
 
   return G4RunManagerType::Default;
 }
@@ -219,6 +234,10 @@ std::string G4RunManagerFactory::GetName(G4RunManagerType _type)
       return "TBB";
     case G4RunManagerType::TBBOnly:
       return "TBB";
+    case G4RunManagerType::SubEvt:
+      return "SubEvt";
+    case G4RunManagerType::SubEvtOnly:
+      return "SubEvt";
     default:
       break;
   };

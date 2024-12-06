@@ -82,8 +82,8 @@ void G4ParticleHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 }
 
 void G4ParticleHPInelasticBaseFS::Init(G4double A, G4double Z, G4int M,
-                                       G4String& dirName,
-                                       G4String& bit, G4ParticleDefinition*)
+                                       const G4String& dirName,
+                                       const G4String& bit, G4ParticleDefinition*)
 {
   gammaPath = fManager->GetNeutronHPPath() + "/Inelastic/Gammas/";
   G4String tString = dirName;

@@ -37,6 +37,7 @@
 #include "G4VEmissionProbability.hh"
 
 class G4VCoulombBarrier;
+class G4InterfaceToXS;
 
 class G4EvaporationProbability : public G4VEmissionProbability
 {
@@ -45,7 +46,7 @@ public:
   explicit G4EvaporationProbability(G4int anA, G4int aZ, 
                                     G4double aGamma); 
 
-  ~G4EvaporationProbability() override = default;
+  ~G4EvaporationProbability() override;
 
   // general method used for evaporation
   virtual G4double TotalProbability(const G4Fragment& fragment,
@@ -56,8 +57,10 @@ public:
   // main method to compute full probability for OPTx > 2
   G4double ComputeProbability(G4double K, G4double CB) override;
 
-  G4double CrossSection(G4double K, G4double CB);  
+  G4double CrossSection(G4double K, G4double CB);
 
+  G4double RecentXS() const { return recentXS; };
+  
   // Copy constructor
   G4EvaporationProbability(const G4EvaporationProbability &right) = delete;
   const G4EvaporationProbability & operator=
@@ -86,8 +89,10 @@ private:
   // number and S_f is fragment spin
   G4double fGamma;
   G4double pcoeff;
+  G4double recentXS{0.0};
 
-  G4int index;
+  G4InterfaceToXS* fXSection{nullptr};
+  G4int index{0};
 };
 
 #endif

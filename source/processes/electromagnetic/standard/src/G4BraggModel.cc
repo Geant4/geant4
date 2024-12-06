@@ -259,18 +259,20 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
                                             G4double cut)
 {
   const G4double tmax = MaxSecondaryEnergy(p, kinEnergy);
-  const G4double tlim = lowestKinEnergy*massRate;
-  const G4double tmin = std::max(std::min(cut, tmax), tlim);
+  const G4double tkin = kinEnergy/massRate;
+  const G4double cutEnergy = std::max(cut, lowestKinEnergy*massRate);
   G4double dedx  = 0.0;
 
-  if(kinEnergy < tlim) {
-    dedx = DEDX(material, lowestKinEnergy)*std::sqrt(kinEnergy/tlim);
+  // tkin is the scaled energy to proton
+  if (tkin < lowestKinEnergy) {
+    dedx = DEDX(material, lowestKinEnergy)*std::sqrt(tkin/lowestKinEnergy);
   } else {
-    dedx = DEDX(material, kinEnergy);
+    dedx = DEDX(material, tkin);
 
-    if (tmin < tmax) {
+    // correction for low cut value using Bethe-Bloch main term
+    if (cutEnergy < tmax) {
       const G4double tau = kinEnergy/mass;
-      const G4double x   = tmin/tmax;
+      const G4double x = cutEnergy/tmax;
 
       dedx += (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) * 
 	CLHEP::twopi_mc2_rcl2 * material->GetElectronDensity();
@@ -686,7 +688,9 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
     }      
 
     // Chemical factor is taken into account
-    eloss *= ChemicalFactor(kineticEnergy, eloss125) ;
+    if (eloss125 > 0.0) {
+      eloss *= ChemicalFactor(kineticEnergy, eloss125);
+    }
  
   // Brugg's rule calculation
   } else {

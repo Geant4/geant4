@@ -105,9 +105,13 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
        (pname == "proton" || pname == "GenericIon" || pname == "alpha")) {
       fICRU90 = nist->GetICRU90StoppingData();
     }
-    if(particle->GetPDGCharge() > CLHEP::eplus ||
-       pname == "GenericIon") { isIon = true; } 
-    if(pname == "alpha") { isAlpha = true; } 
+    if (pname == "GenericIon") {
+      isIon = true;
+    } else if (pname == "alpha") {
+      isAlpha = true;
+    } else if (particle->GetPDGCharge() > 1.1*CLHEP::eplus) {
+      isIon = true;
+    }
 
     fParticleChange = GetParticleChangeForLoss();
     if(UseAngularGeneratorFlag() && nullptr == GetAngularDistribution()) {
@@ -150,7 +154,6 @@ void G4BetheBlochModel::SetupParameters(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   G4double q = particle->GetPDGCharge()*inveplus;
-  isIon = (!isAlpha && q > 1.1); 
   chargeSquare = q*q;
   ratio = electron_mass_c2/mass;
   constexpr G4double aMag = 1./(0.5*eplus*CLHEP::hbar_Planck*CLHEP::c_squared);

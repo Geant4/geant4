@@ -48,6 +48,8 @@ class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithABool;
+class G4UIcommand;
+class G4UIcmdWithADoubleAndUnit;
 
 class DetectorMessenger : public G4UImessenger
 {
@@ -64,6 +66,8 @@ class DetectorMessenger : public G4UImessenger
     G4UIcmdWithAString* fpMaterCmd;
     G4UIcmdWithAString* fpPhysCmd;
     G4UIcmdWithABool* fpTrackingCutCmd;
+    G4UIcommand* fDensityCmd;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd;
 };
 
 #endif

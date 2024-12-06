@@ -105,7 +105,7 @@ class G4QTabWidget : public QTabWidget
 class G4UIOutputString
 {
  public:
-  G4UIOutputString(QString text, G4String thread = "", G4String outputstream = "info");
+  G4UIOutputString(const QString& text, const G4String& thread = "", const G4String& outputstream = "info");
   inline QString GetOutputList() { return " all info warning error "; };
   QString fText;
   G4String fThread;
@@ -115,7 +115,7 @@ class G4UIOutputString
 class G4UIDockWidget : public QDockWidget
 {
  public:
-  G4UIDockWidget(QString txt);
+  G4UIDockWidget(const QString& txt);
   void closeEvent(QCloseEvent*) override;
 };
 
@@ -244,7 +244,7 @@ class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSessio
 
 public:
   ~G4UIQt() override;
-  void Prompt(G4String);
+  void Prompt(const G4String&);
   void SessionTerminate();
   void PauseSessionStart(const G4String&) override;
   G4int ReceiveG4debug(const G4String&) override;
@@ -253,7 +253,7 @@ public:
   //   G4String GetCommand(Widget);
 
  private:
-  void SecondaryLoop(G4String);  // a VIRER
+  void SecondaryLoop(const G4String&);  // a VIRER
   void CreateHelpWidget();
   void InitHelpTreeAndVisParametersWidget();
   void FillHelpTree();
@@ -307,7 +307,7 @@ public:
   G4UIDockWidget* CreateUITabWidget();
   void CreateViewerWidget();
   void OpenHelpTreeOnCommand(const QString&);
-  QString GetShortCommandPath(QString);
+  QString GetShortCommandPath(QString&);
   QString GetLongCommandPath(QTreeWidgetItem*);
   G4bool IsGUICommand(const G4UIcommand*);
   G4bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, G4int, G4bool isDialog);
@@ -321,7 +321,7 @@ public:
   QString FilterOutput(const G4UIOutputString&, const QString&, const QString&);
   G4String GetThreadPrefix();
   G4bool CheckG4EnvironmentVariable(char* txt, char* version);
-  QStandardItemModel* CreateCompleterModel(G4String aCmd);
+  QStandardItemModel* CreateCompleterModel(const G4String& aCmd);
   void CreateEmptyViewerPropertiesWidget();
   void CreateEmptyPickInfosWidget();
 

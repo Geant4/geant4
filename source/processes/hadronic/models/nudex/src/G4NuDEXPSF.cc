@@ -47,24 +47,26 @@
 G4NuDEXPSF::G4NuDEXPSF(G4int aZ,G4int aA){
   Z_Int=aZ;
   A_Int=aA;
-  nR_E1=0; nR_M1=0; nR_E2=0;
-  x_E1=0; y_E1=0;
-  x_M1=0; y_M1=0;
-  x_E2=0; y_E2=0;
+  nR_E1= nR_M1= nR_E2=0;
+  np_E1= np_M1= np_E2=0;
+  x_E1= y_E1=nullptr;
+  x_M1= y_M1=nullptr;
+  x_E2= y_E2=nullptr;
   E1_normFac=-1; M1_normFac=-1; E2_normFac=-1;
   NormEmin=0; NormEmax=6; //Integral between 0 and 6 MeV
   ScaleFactor_E1=1;
   ScaleFactor_M1=1;
   ScaleFactor_E2=1;
+  theLD=nullptr;
 }
 
 G4NuDEXPSF::~G4NuDEXPSF(){
-  if(x_E1!=0){delete [] x_E1;}
-  if(y_E1!=0){delete [] y_E1;}
-  if(x_M1!=0){delete [] x_M1;}
-  if(y_M1!=0){delete [] y_M1;}
-  if(x_E2!=0){delete [] x_E2;}
-  if(y_E2!=0){delete [] y_E2;}
+  delete [] x_E1;
+  delete [] y_E1;
+  delete [] x_M1;
+  delete [] y_M1;
+  delete [] x_E2;
+  delete [] y_E2;
 }
 
 
@@ -886,7 +888,7 @@ void G4NuDEXPSF::PrintPSFParameters(std::ostream &out){
 void G4NuDEXPSF::PrintPSFParametersInInputFileFormat(std::ostream &out){
 
   out<<" PSF"<<std::endl;
-  out.precision(15);
+  G4long oldprc = out.precision(15);
   out<<nR_E1<<std::endl;
   for(G4int i=0;i<nR_E1;i++){
     out<<"   "<<PSFType_E1[i]<<"  "<<E_E1[i]<<"  "<<G_E1[i]<<"  "<<s_E1[i];
@@ -917,7 +919,7 @@ void G4NuDEXPSF::PrintPSFParametersInInputFileFormat(std::ostream &out){
     if(PSFType_E2[i]==40 || PSFType_E2[i]==41){out<<np_E2; for(G4int j=0;j<np_E2;j++){out<<"  "<<x_E2[j]<<"  "<<y_E2[j];}}
     out<<std::endl;
   }
-
+  out.precision(oldprc);
 }
 
 G4double G4NuDEXPSF::EvaluateFunction(G4double xval,G4int np,G4double* x,G4double* y){

@@ -307,7 +307,7 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   // End of Protection
   //
   const G4double GammaPolarizationMag = GammaPolarization.mag();
-
+  
   //////////////////////////////////////////////////////////////
   // target element
   // select randomly one element constituting the material
@@ -505,16 +505,22 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     const G4double Jacob1 = 2.*X1*lnPairInvMassRange*PairInvMass;
     const G4double Jacob2 = std::abs(sinThetaLept);
 
+    // there is no probability to have a lepton with zero momentum
+    // X and Y components of momentum may be zero, in that case SinPhi=1, cosPhi=0
     const G4double EPlus = LeptonPlus.t();
     const G4double PPlus = LeptonPlus.vect().mag();
-    const G4double sinThetaPlus = LeptonPlus.vect().perp()/PPlus;
-    const G4double cosThetaPlus = LeptonPlus.vect().cosTheta();
-
-    const G4double pPX  = LeptonPlus.x();
-    const G4double pPY  = LeptonPlus.y();
-    const G4double dum1 = 1./std::sqrt( pPX*pPX + pPY*pPY );
-    const G4double cosPhiPlus = pPX*dum1;
-    const G4double sinPhiPlus = pPY*dum1;
+    const G4double pPX = LeptonPlus.x();
+    const G4double pPY = LeptonPlus.y();
+    const G4double pPZ = LeptonPlus.z();
+    G4double sinPhiPlus = 1.0;
+    G4double cosPhiPlus = 0.0;
+    G4double sinThetaPlus = 0.0;
+    G4double cosThetaPlus = pPZ/PPlus;
+    if (cosThetaPlus < 1.0 && cosThetaPlus > -1.0) {
+      sinThetaPlus = std::sqrt((1.0 - cosThetaPlus)*(1.0 + cosThetaPlus));
+      sinPhiPlus = pPY/(PPlus*sinThetaPlus);
+      cosPhiPlus = pPX/(PPlus*sinThetaPlus);
+    }
 
     // denominators:
     // the two cancelling leading terms for forward emission at high energy, removed
@@ -523,16 +529,22 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     const G4double DPlus     = (elMassCTP*elMassCTP + ePlusSTP*ePlusSTP)
                               /(EPlus + PPlus*cosThetaPlus);
 
+    // there is no probability to have a lepton with zero momentum
+    // X and Y components of momentum may be zero, in that case SinPhi=0, cosPhi=1
     const G4double EMinus = LeptonMinus.t();
     const G4double PMinus = LeptonMinus.vect().mag();
-    const G4double sinThetaMinus = LeptonMinus.vect().perp()/PMinus;
-    const G4double cosThetaMinus = LeptonMinus.vect().cosTheta();
-
-    const G4double ePX  = LeptonMinus.x();
-    const G4double ePY  = LeptonMinus.y();
-    const G4double dum2 = 1./std::sqrt( ePX*ePX + ePY*ePY );
-    const G4double cosPhiMinus =  ePX*dum2;
-    const G4double sinPhiMinus =  ePY*dum2;
+    const G4double ePX = LeptonMinus.x();
+    const G4double ePY = LeptonMinus.y();
+    const G4double ePZ = LeptonMinus.z();
+    G4double sinPhiMinus = 0.0;
+    G4double cosPhiMinus = 1.0;
+    G4double sinThetaMinus = 0.0;
+    G4double cosThetaMinus = ePZ/PMinus;
+    if (cosThetaMinus < 1.0 && cosThetaMinus > -1.0) {
+      sinThetaMinus = std::sqrt((1.0 - cosThetaMinus)*(1.0 + cosThetaMinus));
+      sinPhiMinus = ePY/(PMinus*sinThetaMinus);
+      cosPhiMinus = ePX/(PMinus*sinThetaMinus);
+    }
 
     const G4double elMassCTM = LeptonMass*cosThetaMinus;
     const G4double eMinSTM   = EMinus*sinThetaMinus;

@@ -44,7 +44,7 @@ G4Parton::G4Parton(G4int PDGcode)
 	if (theDefinition == NULL)
 	{
 	  G4cout << "Encoding = "<<PDGencoding<<G4endl;
-	  G4String text = "G4Parton::GetDefinition(): Encoding not in particle table";
+	  const G4String& text = "G4Parton::GetDefinition(): Encoding not in particle table";
 	  throw G4HadronicException(__FILE__, __LINE__, text);
 	}
 	//
@@ -69,7 +69,7 @@ G4Parton::G4Parton(G4int PDGcode)
 	}
 	else {
 	  G4cout << "Encoding = "<<PDGencoding<<G4endl;
-	  G4String text = "G4Parton::GetDefinition(): Particle is not a parton";
+	  const G4String& text = "G4Parton::GetDefinition(): Particle is not a parton";
 	  throw G4HadronicException(__FILE__, __LINE__, text);
 	}
 	//  

@@ -38,6 +38,8 @@
 #include "G4UIcommand.hh"
 #include "G4AttValue.hh"
 
+#include <utility>
+
 #define G4warn G4cout
 
 namespace G4TrajectoryDrawerUtils {
@@ -203,8 +205,8 @@ namespace G4TrajectoryDrawerUtils {
       }
     }
 
-    trajectoryLine = newTrajectoryLine;
-    trajectoryLineTimes = newTrajectoryLineTimes;
+    trajectoryLine = std::move(newTrajectoryLine);
+    trajectoryLineTimes = std::move(newTrajectoryLineTimes);
   }
 
   static void DrawWithoutTime(const G4VisTrajContext& myContext,

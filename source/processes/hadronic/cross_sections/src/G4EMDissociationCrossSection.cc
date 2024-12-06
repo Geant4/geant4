@@ -139,7 +139,8 @@ G4double G4EMDissociationCrossSection::GetElementCrossSection
   const G4ParticleDefinition *definitionP = theDynamicParticle->GetDefinition();
   G4double AP   = definitionP->GetBaryonNumber();
   G4double ZP   = definitionP->GetPDGCharge();
-  G4double b    = theDynamicParticle->Get4Momentum().beta();
+  G4double b    = theDynamicParticle->GetBeta();
+  if (b <= 0.0 && b >= 1.0) { return 0.0; }
   
   G4double AT   = G4NistManager::Instance()->GetAtomicMassAmu(Z);
   G4double ZT   = (G4double)Z;
@@ -179,7 +180,7 @@ G4EMDissociationCrossSection::GetCrossSectionForProjectile (G4double AP,
 //
 // Initialise variables and calculate the energies for the GDR and GQR.
 //
-  G4double AProot3 = G4Pow::GetInstance()->powA(AP,1.0/3.0);
+  G4double AProot3 = G4Pow::GetInstance()->A13(AP);
   G4double u       = 3.0 * J / Qprime / AProot3;
   G4double R0      = r0 * AProot3;
   G4double E_GDR  = hbarc / std::sqrt(0.7*amu_c2*R0*R0/8.0/J*

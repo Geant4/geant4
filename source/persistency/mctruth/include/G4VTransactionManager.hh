@@ -36,7 +36,6 @@
 #define G4VTRANSACTIONMANAGER_HH 1
 
 #include "G4Types.hh"
-#include <string>
 
 class G4VTransactionManager
 {
@@ -48,13 +47,15 @@ class G4VTransactionManager
     virtual ~G4VTransactionManager() {}
       // Destructor
 
-    void SetVerboseLevel(int v) { m_verbose = v; }
+    void SetVerboseLevel(G4int v) { m_verbose = v; }
       // Set verbose level
 
-    virtual G4bool SelectReadFile(std::string obj, std::string file) = 0;
+    virtual G4bool SelectReadFile(const G4String& obj,
+                                  const G4String& file) = 0;
       // Set the input file name and open it for the object type "obj"
 
-    virtual G4bool SelectWriteFile(std::string obj, std::string file) = 0;
+    virtual G4bool SelectWriteFile(const G4String& obj,
+                                   const G4String& file) = 0;
       // Set the output file name and open it for the object type "obj"
 
     virtual G4bool StartUpdate() = 0;

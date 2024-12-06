@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -24,13 +24,10 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-ExGflashDetectorConstruction::Detector constructor
 G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 <<< Geant4 Physics List simulation engine: FTFP_BERT
 
 
-
-----> Histogram file gflash01
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -43,7 +40,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -101,10 +97,9 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-Defining the materials
-There are 10 crystals per row in the calorimeter, so in total 100 crystals
-Total Calorimeter size30 cm x 30 cm x 24 cm
-They have width of  3  cm and a length of  24 cm. The Material is  Material: G4_PbWO4    density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.740 cm 
+There are 5 crystals per row in the calorimeter, so in total 25 crystals
+They have width of  3.52  cm and a length of  25 cm.
+ Material: G4_PbWO4    density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.740 cm 
                        Imean: 542.741 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
@@ -127,24 +122,20 @@ They have width of  3  cm and a length of  24 cm. The Material is  Material: G4_
          --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance: 30.640 %
          --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance: 28.430 %
           ElmMassFraction:  40.40 %  ElmAbundance  16.67 % 
- Total: 26.8922 X0
 
- ---> DetectorConstruction Region Definition
-
---> Creating shower parameterization models
+Total Calorimeter size 17.6 cm x 17.6 cm x 25 cm
 /********************************************/ 
   - GVFlashShowerParameterisation::Material -  
         Material : G4_PbWO4
    Z  = 68.3609
    A  = 170.881
    X0 = 0.892453 cm
-   Rm = 1.73762 cm
+   Rm = 1.75417 cm
    Ec = 10.7858 MeV
 /********************************************/ 
 /********************************************/ 
   - GFlashHomoShowerParameterisation::Constructor -  
 /********************************************/ 
-end shower parameterization.
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
@@ -174,10 +165,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -348,7 +342,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -830,7 +824,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -855,12 +849,10 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 ... set ntuple merging row mode : row-wise - done
 ... create file : gflash01.root - done
@@ -868,45 +860,31 @@ See commands in /vis/modeling/trajectories/ for other options.
 ... open analysis file : gflash01.root - done
 
 ******************************************
-Run Real Elapsed Time is: 0.861834
-Run System Elapsed Time: 0.01
-Run GetUserElapsed Time: 0.85
+Run Real Elapsed Time is: 0.574205
+Run System Elapsed Time: 0
+Run GetUserElapsed Time: 0.56
 ******************************************
 number of event = 100
 ... write file : gflash01.root - done
 ... close file : gflash01.root - done
-There are histograms that can be viewed with visualization:
-  3 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 ### Run 1 start.
 ... create file : gflash00.root - done
 ... open analysis file : gflash00.root - done
 ... open analysis file : gflash00.root - done
 
 ******************************************
-Run Real Elapsed Time is: 57.7755
-Run System Elapsed Time: 0.36
-Run GetUserElapsed Time: 55.67
+Run Real Elapsed Time is: 35.7097
+Run System Elapsed Time: 0.03
+Run GetUserElapsed Time: 34.36
 ******************************************
 number of event = 100
 ... write file : gflash00.root - done
 ... close file : gflash00.root - done
-There are histograms that can be viewed with visualization:
-  3 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...
 
 ******************************************
-Total Real Elapsed Time is: 62.5078
-Total System Elapsed Time: 0.62
-Total GetUserElapsed Time: 59.08
+Total Real Elapsed Time is: 39.9502
+Total System Elapsed Time: 0.24
+Total GetUserElapsed Time: 37.73
 ******************************************

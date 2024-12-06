@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-07 A. Sciuto (hadrontherapy-V11-02-03)
+- Update of readme, main, macros, physics list, run action and passive proton beamline:
+  general cleanup, bugfixing and readability improvement.	 
+
+
+## 2024-08-12 I. Hrivnacova (hadrontherapy-V11-02-02)
+- Updated for changes in accumulables:
+  use new "Register" method with shorter name
+
 ## 2024-04-24 Gabriele Cosmo (hadrontherapy-V11-02-01)
 - Fixed compilation error on Windows VC++ with C++20 Standard enabled.
   Make proper use of G4String in HadrontherapyInteractionParameters.

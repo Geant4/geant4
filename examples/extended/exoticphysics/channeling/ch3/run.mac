@@ -1,0 +1,33 @@
+/random/setSeeds 19577794 424238336
+#setting number of cores
+/run/numberOfThreads 2
+
+/run/initialize
+
+#settings
+/control/verbose 0
+/run/verbose 0
+/tracking/verbose 0
+
+#beam
+/gps/particle gamma
+
+#coordinate distribution (radial Gauss)
+/gps/pos/centre 0. 0. -1. cm
+/gps/pos/type Beam
+/gps/pos/sigma_x 1 mm
+/gps/pos/sigma_y 1 mm
+
+#angular distribution (radial Gauss)
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
+/gps/ang/sigma_x 1.E-3 rad
+/gps/ang/sigma_y 1.E-3 rad
+
+#energy distribution (constant)
+/gps/ene/mono 100 GeV
+
+#statistics
+/run/printProgress 10
+/run/beamOn 1000

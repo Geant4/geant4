@@ -5,6 +5,8 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2024-10-28 G. Milluzzo (exp_microdosimetry-V11-02-00)
+- Added the SiC microdosimeter geometry in DetectorConstruction
 
 ## 2023-11-15 I. Hrivnacova (exp_microdosimetry-V11-01-03)
 - Updated vis.mac: changed "/vis/open XYZ [600x600-0+0]" to "/vis/open"

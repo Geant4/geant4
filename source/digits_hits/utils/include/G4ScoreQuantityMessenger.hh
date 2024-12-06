@@ -23,21 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoreQuantityMessenger
 //
+// Class description:
 //
-// (HISTORY)
-//  03-Sep-2007  T.Aso Command definitions are introduced.
-//  01-Nov-2007  M.Asai Class is splited into two.
-//  20-Jul-2010  T.Aso  Specify unit for scorer
-//  24-Mar-2011  T.Aso  Add StepChecker for debugging.
-
+// This is a concrete class of G4UImessenger which handles the
+// commands for G4ScoringManager.
+//
+// Author: Tsukasa Aso (KEK), September 2007
+// --------------------------------------------------------------------
 #ifndef G4ScoreQuantityMessenger_h
 #define G4ScoreQuantityMessenger_h 1
 
+#include "G4String.hh"
 #include "G4UImessenger.hh"
 
 #include <vector>
-#include "G4String.hh"
 
 class G4ScoringManager;
 class G4VScoringMesh;
@@ -48,15 +49,10 @@ class G4UIcommand;
 
 using G4TokenVec = std::vector<G4String>;
 
-// class description:
-//
-//  This is a concrete class of G4UImessenger which handles the commands for
-// G4ScoringManager.
-//
-
 class G4ScoreQuantityMessenger : public G4UImessenger
 {
  public:
+
   G4ScoreQuantityMessenger(G4ScoringManager* SManager);
 
   ~G4ScoreQuantityMessenger() override;
@@ -66,19 +62,22 @@ class G4ScoreQuantityMessenger : public G4UImessenger
   G4String GetCurrentValue(G4UIcommand*) override;
 
  protected:
-  void FillTokenVec(G4String newValues, G4TokenVec& token);
+
+  void FillTokenVec(const G4String& newValues, G4TokenVec& token);
 
   void FParticleCommand(G4VScoringMesh* mesh, G4TokenVec& token);
   void FParticleWithEnergyCommand(G4VScoringMesh* mesh, G4TokenVec& token);
 
-  G4bool CheckMeshPS(G4VScoringMesh* mesh, G4String& psname,
+  G4bool CheckMeshPS(G4VScoringMesh* mesh, const G4String& psname,
                      G4UIcommand* command);
 
  private:
+
   void QuantityCommands();
   void FilterCommands();
 
  private:
+
   G4ScoringManager* fSMan;
   //
   // Quantity commands

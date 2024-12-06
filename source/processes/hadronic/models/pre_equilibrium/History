@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-09 Vladimir Ivanchenko (hadr-pre-V11-02-03)
+- G4PreCompoundFragment, G4VPreCompoundFragment - use G4InterfaceToXS class
+    instead of obsolete G4XSectionXS
+
+## 2024-08-18 Vladimir Ivanchenko (hadr-pre-V11-02-02)
+- G4PreCompoundFragment, G4VPreCompoundFragment - removed shadowing and minor
+    memory leak at exit, moved initialisation to constructors, define OPTxs
+    parameter only in class constructor
+
+## 2024-08-14 V. Ivanchenko (hadr-pre-V11-02-01)
+- G4PreCompoundFragment - complete implementation of usage of XS cross section
+
+## 2024-07-16 V. Ivanchenko (hadr-pre-V11-02-00)
+- G4VPreCompoundFragment, G4PreCompoundFragment - added a new option to use
+    G4XSectionXS cross section class
+
 ## 2023-07-12 V. Ivanchenko (hadr-pre-V11-01-00)
 - clean-up of the sub-library: use the default Coulomb barrier computation,
   fix format, removed unused data and methods

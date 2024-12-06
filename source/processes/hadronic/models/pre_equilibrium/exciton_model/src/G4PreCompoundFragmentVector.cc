@@ -77,15 +77,13 @@ G4double G4PreCompoundFragmentVector::CalculateProbabilities(
   //G4cout << "## G4PreCompoundFragmentVector::CalculateProbabilities nCh= " 
   //	 << nChannels << G4endl;
   G4double probtot = 0.0;  
-  for (G4int i=0; i< nChannels; ++i) { 
-    (*theChannels)[i]->Initialize(aFragment);
-    G4double prob = ((*theChannels)[i]->IsItPossible(aFragment)) 
-      ? (*theChannels)[i]->CalcEmissionProbability(aFragment)
-      : 0.0;
-    probtot += prob;
+  for (G4int i=0; i<nChannels; ++i) { 
+    if ((*theChannels)[i]->Initialize(aFragment)) {
+      G4double prob = (*theChannels)[i]->CalcEmissionProbability(aFragment);
+      probtot += prob;
+    }
     probabilities[i] = probtot;
-    //G4cout<<" prob= " << prob << " probtot= " << probtot 
-    //	  << " for "<< i << "-th channel" <<G4endl;
+    //G4cout<< "   probtot= " << probtot << " for "<< i << "-th channel" <<G4endl;
   }
   return probtot;
 }

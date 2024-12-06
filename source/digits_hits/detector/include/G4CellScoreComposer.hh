@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4CellScoreComposer
+// G4CellScoreComposer
 //
 // Class description:
 // This class will be created for every cell standard
@@ -36,12 +33,10 @@
 // sums of scores and delivers the results in
 // G4CellScoreValues.
 //
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-
+// Author: Michael Dressel, CERN
+// --------------------------------------------------------------------
 #ifndef G4CellScoreComposer_hh
-#define G4CellScoreComposer_hh G4CellScoreComposer_hh
+#define G4CellScoreComposer_hh 1
 
 #include "G4CellScoreValues.hh"
 

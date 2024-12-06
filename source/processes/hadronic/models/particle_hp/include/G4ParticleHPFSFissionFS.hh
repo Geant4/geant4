@@ -52,11 +52,12 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
     };
 
   public:
+
     G4ParticleHPFSFissionFS() { hasXsec = true; }
     ~G4ParticleHPFSFissionFS() override = default;
 
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
-              G4ParticleDefinition*) override;
+    void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+              const G4String& aFSType, G4ParticleDefinition*) override;
 
     G4DynamicParticleVector* ApplyYourself(G4int Prompt, G4int delayed, G4double* decayconst);
 
@@ -66,7 +67,7 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
       return theNew;
     }
 
-    inline G4double GetMass() { return theFinalStateNeutrons.GetTargetMass(); }
+    inline G4double GetMass() const { return theFinalStateNeutrons.GetTargetMass(); }
 
     void SampleNeutronMult(G4int& all, G4int& Prompt, G4int& delayed, G4double energy, G4int off);
 
@@ -87,6 +88,7 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
     inline G4ParticleHPFissionERelease* GetEnergyRelease() { return &theEnergyRelease; }
 
   private:
+
     G4HadFinalState* ApplyYourself(const G4HadProjectile&) override { return nullptr; }
 
     G4ParticleHPParticleYield theFinalStateNeutrons;

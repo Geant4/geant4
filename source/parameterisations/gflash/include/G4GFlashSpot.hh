@@ -47,26 +47,26 @@
 class G4GFlashSpot
 {
   public:
+    G4GFlashSpot(const GFlashEnergySpot* aSpot, const G4FastTrack* aTrack, G4TouchableHandle aH)
+      : theSpot(aSpot), theTrack(aTrack), theHandle(aH)
+    {}
 
-    G4GFlashSpot(const GFlashEnergySpot * aSpot,
-                 const G4FastTrack * aTrack, G4TouchableHandle aH)
-      : theSpot(aSpot), theTrack(aTrack), theHandle(aH) {}
-  
     ~G4GFlashSpot() {}
-  
-    const GFlashEnergySpot * GetEnergySpot() const {return theSpot;}
-  
-    const G4FastTrack * GetOriginatorTrack() const {return theTrack;}
-  
-    G4TouchableHandle GetTouchableHandle() const {return theHandle;}
-  
+
+    const GFlashEnergySpot* GetEnergySpot() const { return theSpot; }
+
+    const G4FastTrack* GetOriginatorTrack() const { return theTrack; }
+
+    G4TouchableHandle GetTouchableHandle() const { return theHandle; }
+
     G4ThreeVector GetPosition() const
-     {return GetOriginatorTrack()->GetPrimaryTrack()->GetPosition();}
-    
+    {
+      return GetOriginatorTrack()->GetPrimaryTrack()->GetPosition();
+    }
+
   private:
-  
-    const GFlashEnergySpot * theSpot;
-    const G4FastTrack * theTrack;
+    const GFlashEnergySpot* theSpot;
+    const G4FastTrack* theTrack;
     G4TouchableHandle theHandle;
 };
 

@@ -1419,7 +1419,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   else if(command == applyEnergyWeightCmd1)
     {
       CHECKPG();
-      auto eDisType = fParticleGun->GetEneDist()->GetEnergyDisType();
+      const auto& eDisType = fParticleGun->GetEneDist()->GetEnergyDisType();
       if(eDisType != "Lin")
       {
         G4ExceptionDescription ed;
@@ -1522,7 +1522,7 @@ G4String G4GeneralParticleSourceMessenger::GetCurrentValue(G4UIcommand* command)
   return cv;
 }
 
-void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
+void G4GeneralParticleSourceMessenger::IonCommand(const G4String& newValues)
 {
   if (fShootIon)
   {
@@ -1571,7 +1571,7 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
   }
 }
 
-void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
+void G4GeneralParticleSourceMessenger::IonLvlCommand(const G4String& newValues)
 {
   if (fShootIon)
   {

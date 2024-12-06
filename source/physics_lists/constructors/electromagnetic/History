@@ -6,6 +6,36 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-18 Vladimir Ivanchenko (phys-ctor-em-V11-02-12)
+- G4EmStandardPhysics_option3 - return back positron annihilation lost in
+    previous MR.
+
+## 2024-10-17 Vladimir Ivanchenko (phys-ctor-em-V11-02-11)
+- G4EmStandardPhysics_option3, G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmStandardPhysics, G4EmStandardPhysicsWVI - added a possibility to
+  enable/disable 3 gamma annihilation on fly, take into account rename of the
+  model G4eplusTo2GammaOKVIModel -> G4eplusTo2or3GammaModel. By default it is
+  enabled in G4EmStandardPhysics_option4 only. This option is not added to
+  the G4EmPenelopePhysics class, because it has the original Penelope model
+  for annihilation.
+
+## 2024-10-02 Hoang Tran (phys-ctor-em-V11-02-10)
+- Modified the molecule names of OH, HO2, O in MoleculeDefinition.
+  Each molecule configuration has a molecule definition.
+
+## 2024-09-10 Alberto Ribon (phys-ctor-em-V11-02-09)
+- G4ChargedUnknownPhysics : replaced G4hIonisation and G4hMultipleScattering
+  (which use G4ParticleDefinition) with the corresponding new classes
+  G4DynamicParticleIonisation and G4DynamicParticleMSC (which use only
+  G4DynamicParticle), respectively.
+
+## 2024-08-01 Alberto Ribon (phys-ctor-em-V11-02-08)
+- Created new constructor G4ChargedUnknownPhysics, to be used on top on any
+  reference physics list, to assign ionisation and multiple scattering
+  (as well as transportation) processes to charged primary particles with
+  valid PDG code but not known to Geant4.
+  ( This was requested by ATLAS and LHCb. )
+
 ## 2024-05-23 Hoang Tran (phys-ctor-em-V11-02-07)
 - Use EmParameters to control chemistry models in G4EmDNAChemistry_option3.
 

@@ -58,21 +58,21 @@ class G4AdjointInterpolator
                                     G4double& y1, G4double& y2);
 
   G4double Interpolation(G4double& x, G4double& x1, G4double& x2, G4double& y1,
-                         G4double& y2, G4String InterPolMethod = "Log");
+                         G4double& y2, const G4String& InterPolMethod = "Log");
 
-  size_t FindPosition(G4double& x, std::vector<G4double>& x_vec,
-                      size_t ind_min = 0, size_t ind_max = 0);
+  std::size_t FindPosition(G4double& x, std::vector<G4double>& x_vec,
+                      std::size_t ind_min = 0, std::size_t ind_max = 0);
 
-  size_t FindPositionForLogVector(G4double& x, std::vector<G4double>& x_vec);
+  std::size_t FindPositionForLogVector(G4double& x, std::vector<G4double>& x_vec);
 
   // xvec should monotically increase
   G4double Interpolate(G4double& x, std::vector<G4double>& x_vec,
                        std::vector<G4double>& y_vec,
-                       G4String InterPolMethod = "Log");
+                       const G4String& InterPolMethod = "Log");
 
   G4double InterpolateWithIndexVector(
     G4double& x, std::vector<G4double>& x_vec, std::vector<G4double>& y_vec,
-    std::vector<size_t>& index_vec, G4double x0,
+    std::vector<std::size_t>& index_vec, G4double x0,
     G4double dx);  // xvec should monotically increase
 
   G4double InterpolateForLogVector(G4double& x, std::vector<G4double>& x_vec,

@@ -46,6 +46,7 @@ class ExGflashEventAction : public G4UserEventAction
 
   private:
     G4int fCalorimeterCollectionId{-1};
-    ExGflashDetectorConstruction* fDet;
+    ExGflashDetectorConstruction* fDet{nullptr};
 };
+
 #endif

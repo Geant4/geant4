@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4VScoreWriter
+// --------------------------------------------------------------------
 
 #include "G4VScoreWriter.hh"
 
@@ -110,13 +110,13 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
   }
 
   // write quantity
-  long count = 0;
+  G4long count = 0;
   ofile << std::setprecision(16);  // for double value with 8 bytes
-  for(int x = 0; x < fNMeshSegments[0]; x++)
+  for(G4int x = 0; x < fNMeshSegments[0]; x++)
   {
-    for(int y = 0; y < fNMeshSegments[1]; y++)
+    for(G4int y = 0; y < fNMeshSegments[1]; y++)
     {
-      for(int z = 0; z < fNMeshSegments[2]; z++)
+      for(G4int z = 0; z < fNMeshSegments[2]; z++)
       {
         G4int idx = GetIndex(x, y, z);
 
@@ -161,7 +161,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
 {
   // change the option string into lowercase to the case-insensitive.
   G4String opt = option;
-  std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
+  std::transform(opt.begin(), opt.end(), opt.begin(), (G4int (*)(G4int))(tolower));
 
   // confirm the option
   if(opt.empty())
@@ -220,13 +220,13 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
     }
 
     // write quantity
-    long count = 0;
+    G4long count = 0;
     ofile << std::setprecision(16);  // for double value with 8 bytes
-    for(int x = 0; x < fNMeshSegments[0]; x++)
+    for(G4int x = 0; x < fNMeshSegments[0]; x++)
     {
-      for(int y = 0; y < fNMeshSegments[1]; y++)
+      for(G4int y = 0; y < fNMeshSegments[1]; y++)
       {
-        for(int z = 0; z < fNMeshSegments[2]; z++)
+        for(G4int z = 0; z < fNMeshSegments[2]; z++)
         {
           G4int idx = GetIndex(x, y, z);
 

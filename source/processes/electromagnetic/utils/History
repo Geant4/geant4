@@ -6,6 +6,46 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-31 V.Ivanchenko (emutils-V11-02-20)
+- G4EmCalculator - fixed Coverity warning
+
+## 2024-10-23 V.Ivanchenko (emutils-V11-02-19)
+- G4EmParameters - added flag to enable/disable the new Ricardo-Gerardo model
+    of e+e- pair production
+- G4EmProcessSubType - added coherent channeling pair proction process type
+
+## 2024-10-17 V.Ivanchenko (emutils-V11-02-18)
+- G4EmParameters, G4EmParametersMessenger - added flag to enable/disable
+    3 gamma annihilation on fly
+- G4EmCalculator - fixed Coverity warning
+
+## 2024-10-10 J.Hahnfeld (emutils-V11-02-17)
+- `G4EmConfigurator`: Handle G4TransportationWithMsc process name
+
+## 2024-10-08 J.Hahnfeld (emutils-V11-02-16)
+- `G4TransportationWithMsc`: set `TRANSPORTATION_WITH_MSC` process sub type
+
+## 2024-09-17 V.Ivanchenko (emutils-V11-02-15)
+- G4EmSaturation, G4EmCalculator, G4EmLowEParameters - fixed Coverity warnings
+
+## 2024-09-04 V.Ivanchenko (emutils-V11-02-14)
+- G4EmParameters, G4EmParametersMessenger - removed parameter defining fraction
+    of orto positronium for all materials
+
+## 2024-08-22 V.Ivanchenko (emutils-V11-02-13)
+- G4EmParameters, G4EmParametersMessenger - added Boolean flag UseEPICS2017
+- G4EmProcessSubType - added sub-types for dynamic EM processes
+  (G4ParticleDefinition is not used, all computations on fly)
+- G4EmElementXS - new helper class to x-section data
+
+## 2024-08-02 V.Ivanchenko (emutils-V11-02-12)
+- G4EmParameters, G4EmParametersMessenger - added Ore-Powell models to
+    the list of models for positron annihilation at rest
+
+## 2024-07-02 V.Ivanchenko (emutils-V11-02-11)
+- G4EmCorrections, G4EmParameters, G4EmExtraParameters, G4EmLowEParameters,
+  G4EmSaturation - fixed Coverity warnings
+
 ## 2024-06-19 S.Johnson (emutils-V11-02-10)
 - G4EmParameters - fix segmentation fault when data is unavailable
 

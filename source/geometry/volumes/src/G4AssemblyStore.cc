@@ -70,7 +70,7 @@ void G4AssemblyStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::IsGeometryClosed())
+  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the assembly store"
            << " while geometry closed !" << G4endl;

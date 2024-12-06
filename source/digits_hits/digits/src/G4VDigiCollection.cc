@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-
 // G4VDigiCollection
+// --------------------------------------------------------------------
 
 #include "G4VDigiCollection.hh"
 
-G4VDigiCollection::G4VDigiCollection(G4String DMnam, G4String colNam)
+G4VDigiCollection::G4VDigiCollection(const G4String& DMnam, const G4String& colNam)
   : collectionName(colNam), DMname(DMnam)
 {}
 

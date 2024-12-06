@@ -62,7 +62,7 @@ G4DigiManager::G4DigiManager():verboseLevel(0)
 G4DigiManager::~G4DigiManager()
 {
   //DMtable.clearAndDestroy();
-  for(G4int i=0;i<int(DMtable.size());i++)
+  for(G4int i=0;i<G4int(DMtable.size());++i)
   { delete DMtable[i]; }
   DMtable.clear();
   delete DCtable;
@@ -72,7 +72,7 @@ G4DigiManager::~G4DigiManager()
 void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
 {
   G4String DMname = DM->GetName();
-  for(int j=0;j<int(DMtable.size());j++)
+  for(G4int j=0;j<G4int(DMtable.size());++j)
   {
     if(DMtable[j]==DM)
     { 
@@ -88,7 +88,7 @@ void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
   DMtable.push_back(DM);
 
   G4int numberOfCollections = DM->GetNumberOfCollections();
-  for(int i=0;i<numberOfCollections;i++)
+  for(G4int i=0;i<numberOfCollections;++i)
   {
     G4String DCname = DM->GetCollectionName(i);
     if( DCtable->Registor(DMname,DCname) < 0 )
@@ -107,7 +107,7 @@ void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
   runManager->SetDCtable(DCtable);
 }
 
-void G4DigiManager::Digitize(G4String mName)
+void G4DigiManager::Digitize(const G4String& mName)
 {
   G4VDigitizerModule* aDM = FindDigitizerModule(mName);
   if(aDM)
@@ -116,9 +116,9 @@ void G4DigiManager::Digitize(G4String mName)
   { G4cout << "Unknown digitizer module <" << mName << ">. Digitize() ignored." << G4endl; }
 }
 
-G4VDigitizerModule* G4DigiManager::FindDigitizerModule(G4String mName)
+G4VDigitizerModule* G4DigiManager::FindDigitizerModule(const G4String& mName)
 {
-  for(G4int i=0;i<int(DMtable.size());i++)
+  for(G4int i=0;i<G4int(DMtable.size());++i)
   {
     if(DMtable[i]->GetName() == mName) return DMtable[i];
   }
@@ -155,12 +155,12 @@ const G4VDigiCollection* G4DigiManager::GetDigiCollection(G4int DCID,G4int event
   return DCE->GetDC(DCID);
 }
 
-G4int G4DigiManager::GetHitsCollectionID(G4String HCname)
+G4int G4DigiManager::GetHitsCollectionID(const G4String& HCname)
 {
   return SDManager->GetCollectionID(HCname);
 }
 
-G4int G4DigiManager::GetDigiCollectionID(G4String DCname)
+G4int G4DigiManager::GetDigiCollectionID(const G4String& DCname)
 {
   G4int i = DCtable->GetCollectionID(DCname);
   if(i==-2)
@@ -200,13 +200,13 @@ void G4DigiManager::SetDigiCollection(G4int DCID,G4VDigiCollection* aDC)
 void G4DigiManager::SetVerboseLevel(G4int val)
 {
   verboseLevel = val;
-  for(G4int i=0;i<int(DMtable.size());i++)
+  for(G4int i=0;i<G4int(DMtable.size());++i)
   { DMtable[i]->SetVerboseLevel(val); }
 }
 
 void G4DigiManager::List() const
 {
-  for(G4int i=0;i<int(DMtable.size());i++)
+  for(G4int i=0;i<G4int(DMtable.size());++i)
   { G4cout << "   " << i << " : " << DMtable[i]->GetName() << G4endl; }
 }
 

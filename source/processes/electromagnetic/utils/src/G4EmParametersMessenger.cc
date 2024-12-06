@@ -203,6 +203,20 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mscPCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   mscPCmd->SetToBeBroadcasted(false);
 
+  pepicsCmd = new G4UIcmdWithABool("/process/em/UseEPICS2017XS",this);
+  pepicsCmd->SetGuidance("Use EPICS2017 data for gamma x-ections");
+  pepicsCmd->SetParameterName("pepics",true);
+  pepicsCmd->SetDefaultValue(false);
+  pepicsCmd->AvailableForStates(G4State_PreInit);
+  pepicsCmd->SetToBeBroadcasted(false);
+
+  f3gCmd = new G4UIcmdWithABool("/process/em/3GammaAnnihilationOnFly",this);
+  f3gCmd->SetGuidance("Enable/disable 3 gamma annihilation on fly");
+  f3gCmd->SetParameterName("f3gamma",true);
+  f3gCmd->SetDefaultValue(false);
+  f3gCmd->AvailableForStates(G4State_PreInit);
+  f3gCmd->SetToBeBroadcasted(false);
+
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
   minEnCmd->SetParameterName("emin",true);
@@ -441,16 +455,9 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   posiCmd = new G4UIcmdWithAString("/process/em/setPositronAtRestModel",this);
   posiCmd->SetGuidance("Define model of positron annihilation at rest");
   posiCmd->SetParameterName("Posi",true);
-  posiCmd->SetCandidates("Simple Allison");
+  posiCmd->SetCandidates("Simple Allison OrePawell OrePowellPolar");
   posiCmd->AvailableForStates(G4State_PreInit);
   posiCmd->SetToBeBroadcasted(false);
-
-  ortoCmd = new G4UIcmdWithADouble("/process/em/setOrtoPositronFraction",this);
-  ortoCmd->SetGuidance("Define model of positron annihilation at rest");
-  ortoCmd->SetParameterName("frac",false);
-  ortoCmd->SetRange("frac >= 0.0 && frac <= 1.0");
-  ortoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  ortoCmd->SetToBeBroadcasted(false);
 
   tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
   tripletCmd->SetGuidance("gamma conversion triplet/nuclear generation type:");
@@ -502,7 +509,9 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete icru90Cmd;
   delete mudatCmd;
   delete peKCmd;
+  delete f3gCmd;
   delete mscPCmd;
+  delete pepicsCmd;
 
   delete minEnCmd;
   delete maxEnCmd;
@@ -541,7 +550,6 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete ssCmd;
   delete fluc1Cmd;
   delete posiCmd;
-  delete ortoCmd;
 
   delete dumpCmd;
 }
@@ -595,8 +603,12 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetRetrieveMuDataFromFile(mudatCmd->GetNewBoolValue(newValue));
   } else if (command == peKCmd) {
     theParameters->SetPhotoeffectBelowKShell(peKCmd->GetNewBoolValue(newValue));
+  } else if (command == f3gCmd) {
+    theParameters->Set3GammaAnnihilationOnFly(f3gCmd->GetNewBoolValue(newValue));
   } else if (command == mscPCmd) {
     theParameters->SetMscPositronCorrection(mscPCmd->GetNewBoolValue(newValue));
+  } else if (command == pepicsCmd) {
+    theParameters->SetUseEPICS2017XS(pepicsCmd->GetNewBoolValue(newValue));    
 
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
@@ -733,10 +745,10 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetFluctuationType(x);
   } else if (command == posiCmd) {
     G4PositronAtRestModelType x = fSimplePositronium;
-    if(newValue == "Allison") { x = fAllisonPositronium; }
+    if (newValue == "Allison") { x = fAllisonPositronium; }
+    else if (newValue == "OrePowell") { x = fOrePowell; }
+    else if (newValue == "OrePowellPolar") { x = fOrePowellPolar; }
     theParameters->SetPositronAtRestModelType(x);
-  } else if ( command==ortoCmd ) {
-    theParameters->SetOrtoPsFraction(ortoCmd->GetNewDoubleValue(newValue));
   } else if ( command==tripletCmd ) {
     theParameters->SetConversionType(tripletCmd->GetNewIntValue(newValue));
   } else if ( command==onIsolatedCmd ) {

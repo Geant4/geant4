@@ -105,3 +105,30 @@ void G4AllocatorList::Destroy(G4int nStat, G4int verboseLevel)
   }
   fList.clear();
 }
+
+void G4AllocatorList::Report(G4bool itemize) const
+{
+  auto itr = fList.cbegin();
+  G4int j = 0;
+  G4double mem = 0, tmem = 0;
+  G4cout << "================== Current memory pools ==================="
+         << G4endl;
+  for(; itr != fList.cend(); ++itr)
+  {
+    mem = (*itr)->GetAllocatedSize();
+    ++j;
+    tmem += mem;
+    if(itemize)
+    {
+      G4cout << "Pool ID '" << (*itr)->GetPoolType()
+             << "', size : " << std::setprecision(3) << mem / 1048576
+             << std::setprecision(6) << " MB" << G4endl;
+    }
+  }
+  G4cout << "Number of memory pools allocated: " << Size() << G4endl;
+  G4cout << "Dynamic pools : " << j
+         << " / Total memory : " << std::setprecision(2)
+         << tmem / 1048576 << std::setprecision(6) << " MB" << G4endl;
+  G4cout << "============================================================"
+         << G4endl;
+}

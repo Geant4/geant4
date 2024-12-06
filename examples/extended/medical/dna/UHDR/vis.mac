@@ -1,4 +1,9 @@
 #
+# Set the simulation volume (half Side Length)
+#/UHDR/env/volume 0.8 um # for UHDR
+/UHDR/env/volume 1.6 um # for CONV
+
+/UHDR/Detector/PBC true
 /run/initialize
 # Open a viewer
 /vis/open
@@ -58,3 +63,12 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
+
+# no chemistry for visu
+/chem/activate false
+
+/scorer/Dose/abortedDose 100 Gy
+/scorer/Dose/cutoff 10 Gy
+/UHDR/source/particle proton
+/UHDR/source/energy 100 MeV
+

@@ -60,12 +60,6 @@ ExGflashHit::ExGflashHit(const ExGflashHit& right) : G4VHit(right)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashHit& ExGflashHit::operator=(const ExGflashHit& right) = default;
-// {
-//   G4VHit::operator=(right);
-//   fEdep = right.fEdep;
-//   fPos = right.fPos;
-//   return *this;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -75,7 +75,6 @@ public:
 
   ~G4HadronicProcessStore();
 
-  void Clean();
   G4double GetCrossSectionPerAtom(
     const G4ParticleDefinition* particle,
     G4double kineticEnergy,

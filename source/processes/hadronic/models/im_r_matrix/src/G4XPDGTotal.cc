@@ -125,17 +125,17 @@ G4XPDGTotal::G4XPDGTotal()
       ggData.push_back(gammagammaPDGFit[i]); 
     }
 
-  xMap[pp] = ppData;
-  xMap[pn] = pnData;
+  xMap[pp] = std::move(ppData);
+  xMap[pn] = std::move(pnData);
   xMap[piPlusp] = pipData;
-  xMap[piMinusp] = pipData;
+  xMap[piMinusp] = std::move(pipData);
   xMap[KPlusp] = KpData;
   xMap[KPlusn] = KnData;
-  xMap[KMinusp] = KpData;
-  xMap[KMinusn] = KnData;
-  xMap[gp] = gpData;
-  xMap[gg] = ggData;
-  xMap[nn] = nnData;
+  xMap[KMinusp] = std::move(KpData);
+  xMap[KMinusn] = std::move(KnData);
+  xMap[gp] = std::move(gpData);
+  xMap[gg] = std::move(ggData);
+  xMap[nn] = std::move(nnData);
 }
 
 

@@ -40,11 +40,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSTrackLength::G4PSTrackLength(G4String name, G4int depth)
+G4PSTrackLength::G4PSTrackLength(const G4String& name, G4int depth)
   : G4PSTrackLength(name, "mm", depth)
 {}
 
-G4PSTrackLength::G4PSTrackLength(G4String name, const G4String& unit,
+G4PSTrackLength::G4PSTrackLength(const G4String& name, const G4String& unit,
                                  G4int depth)
   : G4VPrimitiveScorer(name, depth)
   , HCID(-1)

@@ -23,28 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//      ----------------------------------------------------------------------------
-//                              GEANT 4 - Hadrontherapy example
-//      ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+//                         GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
 //
-//                                      MAIN AUTHOR
+//                                     MAIN AUTHORS
 //                                  ====================
-//                                  G.A.P. Cirrone(a)*
-//
-//                 *Corresponding author, email to pablo.cirrone@lns.infn.it
-//
-//                                  ACTUAL CONTRIBUTORS
-//                                  ====================
-//                  G.A.P. Cirrone(a), L. Pandola(a), G. Petringa(a)
+//         G.A.P. Cirrone(a)*, L. Pandola(a), G. Petringa(a), S.Fattori(a), A.Sciuto(a)
+//              *Corresponding author, email to pablo.cirrone@lns.infn.it
 //
 //
-//                      ==========>   PAST CONTRIBUTORS  <==========
+//                 ==========>   PAST CONTRIBUTORS  <==========
 //
-//                      R. Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
-//                      S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-//                      A.Lechner(d), S.E.Mazzaglia(a), Z. Mei(h), M.G.Pia(e),
-//                      F.Romano(a), G.Russo(a,g), M.Russo(a), A. Tramontana (a),
-//                      A.Varisano(a)
+//                    R.Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
+//                    S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
+//                    A.Lechner(d), S.E.Mazzaglia(a), Z. Mei(h), G.Milluzzo(a),
+//                    M.G.Pia(e), F.Romano(a), G.Russo(a,g),
+//                    M.Russo(a), A.Tramontana (a), A.Varisano(a)
 //
 //              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
 //              (b) Helsinki Institute of Physics, Helsinki, Finland
@@ -93,14 +88,16 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
+#include "QBBC.hh"
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc ,char ** argv)
 {
-        G4UIExecutive* ui = 0;
-    if ( argc == 1 ) {
-        ui = new G4UIExecutive(argc, argv);
-    }
-    
+    // Detect interactive mode (if no arguments) and define UI session
+    //
+    G4UIExecutive* ui = nullptr;
+    if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
+
     //Instantiate the G4Timer object, to monitor the CPU time spent for
     //the entire execution
     G4Timer* theTimer = new G4Timer();
@@ -114,17 +111,21 @@ int main(int argc ,char ** argv)
     G4Random::setTheEngine( &defaultEngine );
     G4int seed = (G4int) time( NULL );
     G4Random::setTheSeed( seed );
- 
- auto* runManager = G4RunManagerFactory::CreateRunManager();
- G4int nThreads = 4;
- runManager->SetNumberOfThreads(nThreads); 
+    
+    // Construct the default run manager
+    //
+    auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+    
+    // Define the number of threads for the simulation runs
+    G4int nThreads = 4;
+    runManager->SetNumberOfThreads(nThreads);
 
-    // Geometry controller is responsible for instantiating the
-    // geometries. All geometry specific m tasks are now in class
-    // HadrontherapyGeometryController.
+    // Geometry controller is responsible for instantiating the geometries.
+    //
     HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
     
     // Connect the geometry controller to the G4 user interface
+    //
     HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
     
     G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
@@ -135,30 +136,17 @@ int main(int argc ,char ** argv)
     
     // Initialize the physics
     G4PhysListFactory factory;
-    G4VModularPhysicsList* phys = 0;
-    G4String physName = "";
+    G4VModularPhysicsList* physicsList = 0;
+    physicsList = new HadrontherapyPhysicsList();
     
-    // Physics List name defined via environment variable
-    char* path = std::getenv("PHYSLIST");
-    if (path) { physName = G4String(path); }
-    
-    if(physName != "" && factory.IsReferencePhysList(physName))
-    {
-        phys = factory.GetReferencePhysList(physName);
-    }
-    if (phys)
+    if (physicsList)
     {
         G4cout << "Going to register G4ParallelWorldPhysics" << G4endl;
-        phys->RegisterPhysics(new G4ParallelWorldPhysics("DetectorROGeometry"));
-    }
-    else
-    {
-        G4cout << "Using HadrontherapyPhysicsList()" << G4endl;
-        phys = new HadrontherapyPhysicsList();
+        physicsList -> RegisterPhysics(new G4ParallelWorldPhysics("DetectorROGeometry"));
     }
     
     // Initialisations of physics
-    runManager->SetUserInitialization(phys);
+    runManager->SetUserInitialization(physicsList);
     
     // Initialisation of the Actions
     runManager->SetUserInitialization(new HadrontherapyActionInitialization);
@@ -167,30 +155,32 @@ int main(int argc ,char ** argv)
     G4ScoringManager::GetScoringManager();
     
     // Interaction data: stopping powers
+    //
     HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
     
     // Initialize analysis
+    //
     HadrontherapyAnalysis* analysis = HadrontherapyAnalysis::GetInstance();
     
 
-    
-// Initialise the Visualisation
-    G4VisManager* visManager = new G4VisExecutive;
+    // Initialise the Visualisation
+    //
+    auto visManager = new G4VisExecutive(argc, argv);
     visManager -> Initialize();
     
     //** Get the pointer to the User Interface manager
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    //
+    auto UImanager = G4UImanager::GetUIpointer();
     
     if ( !ui ) {
         // batch mode
         G4String command = "/control/execute ";
         G4String fileName = argv[1];
         UImanager->ApplyCommand(command+fileName);
-        
     }
     
     else {
-
+        UImanager -> ApplyCommand("/control/macroPath macro");
         UImanager -> ApplyCommand("/control/execute macro/defaultMacro.mac");
         ui -> SessionStart();
         delete ui;

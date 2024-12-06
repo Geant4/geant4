@@ -62,7 +62,8 @@ public:
     // ------------------------------------------------------------
     // -- Constructor: takes the name of the particle type to bias:
     // ------------------------------------------------------------
-    G4ChannelingOptrChangeCrossSection(G4String particleToBias, G4String name = "ChannelingChangeXS");
+    G4ChannelingOptrChangeCrossSection(const G4String& particleToBias,
+				       const G4String& name = "ChannelingChangeXS");
     virtual ~G4ChannelingOptrChangeCrossSection();
     virtual void StartRun();
     

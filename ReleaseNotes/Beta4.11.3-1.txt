@@ -133,10 +133,11 @@ List of features and fixes included in this Beta release since 11.2.p02:
       o Minor cleanup in QSS classes.
     + management:
       o Added new capability to run voxel optimisation in threads in MT mode.
-        Parallelises only over volumes. The user must currently call
-        G4GeometryManager::RequestParallelOptimisation(optimise, verbose) to
-        use it. Set 'verbose=true' to obtain statistics on the volumes with
-        biggest contribution to memory size and CPU time for voxelisation.
+        Parallelises only over volumes. The user can call the method
+        RequestParallelOptimisation(optimise, verbose) from G4GeometryManager
+        to turn it on/off. Set 'verbose=true' to obtain statistics on the
+        volumes with biggest contribution to memory size and CPU time for
+        voxelisation.
         New method BuildOptimisationsParallel() can be called by
         G4WorkerRunManager to initialise. New method ReportVoxelInfo() to
         write out for verification. Checked with simple and complex/large

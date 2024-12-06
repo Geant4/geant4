@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -48,7 +48,7 @@ userDetector->Construct() start.
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -145,10 +145,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -319,7 +322,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -591,6 +594,7 @@ Index : 1     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   10 kByte
@@ -605,9 +609,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00         10k         1      197        200         0.00    Check
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=0.540000s Real=1.243057s Sys=0.010000s
+Initialisation time:  User=0.500000s Real=1.238143s Sys=0.010000s
 EventAction: Event #0 started
 EventAction: Event #10 started
 EventAction: Event #20 started
@@ -621,19 +627,19 @@ EventAction: Event #90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.050000s Real=0.045879s Sys=0.000000s
-RunAction::EndOfRunAction:  User=0.050000s Real=0.045955s Sys=0.000000s
+  User=0.040000s Real=0.042571s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.040000s Real=0.042650s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         222   RMS(MeV) 8.956
-Average number of steps              188.6
-Average number of gamma              4.52
-Average number of e-                 9.51
-Average number of e+                 0.05
+Average energy deposit (MeV)         221.9   RMS(MeV) 10.47
+Average number of steps              189.4
+Average number of gamma              4.28
+Average number of e-                 8.81
+Average number of e+                 0.03
 Average number of neutrons           0
 Average number of protons            0
 Average number of antiprotons        0
@@ -654,8 +660,8 @@ Average number of pion leak          0
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x20b3460
-UserPhysicsList deleted 0x20f1558
+UserDetectorConstruction deleted 0xd35b60
+UserPhysicsList deleted 0xd58dc8
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
@@ -666,10 +672,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 13
+Total navigation history collections cleaned: 14
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0183 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0192 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00288 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -680,7 +686,7 @@ Pool ID '7G4Track', size : 0.00481 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.034 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.035 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -93,7 +93,7 @@ void GB06ParallelWorldForSlices::Construct()
 
   // -- get back the solid, a G4box in this case. We cast the pointer to access later on
   // -- the G4Box class specific methods:
-  G4Box* shieldSolid = (G4Box*)shieldLogical->GetSolid();
+  auto shieldSolid = (G4Box*)shieldLogical->GetSolid();
 
   // -- we now re-create a logical volume for the mother volume of the slices:
   G4LogicalVolume* motherForSlicesLogical =
@@ -112,17 +112,17 @@ void GB06ParallelWorldForSlices::Construct()
                                 shieldSolid->GetYHalfLength(), halfSliceZ);
 
   // -- the logical volume for slices:
-  G4LogicalVolume* sliceLogical = new G4LogicalVolume(sliceSolid,  // its solid
-                                                      nullptr,  // no material
-                                                      "slice.logical");  // its name
+  sliceLogical = new G4LogicalVolume(sliceSolid,  // its solid
+                                     nullptr,  // no material
+                                     "slice.logical");  // its name
 
   // -- we use a replica, to place the 20 slices in one go, along the Z axis:
-  new G4PVReplica("slice.physical",  // its name
-                  sliceLogical,  // its logical volume
-                  motherForSlicesLogical,  // its mother volume
-                  kZAxis,  // axis of replication
-                  nSlices,  // number of replica
-                  2 * halfSliceZ);  // width of replica
+  slicePhysical = new G4PVReplica("slice.physical",  // its name
+                                  sliceLogical,  // its logical volume
+                                  motherForSlicesLogical,  // its mother volume
+                                  kZAxis,  // axis of replication
+                                  nSlices,  // number of replica
+                                  2 * halfSliceZ);  // width of replica
 
   // -- 3) place the sliced structure, using the concrete shield placement:
   //       ----------------------------------------------------------------
@@ -159,20 +159,17 @@ void GB06ParallelWorldForSlices::ConstructSD()
   biasingOperator->SetParallelWorld(GetWorld());
 
   // -- Attach to the logical volume where the biasing has to be applied:
-  auto slice = G4LogicalVolumeStore::GetInstance()->GetVolume("slice.logical");
-  biasingOperator->AttachTo(slice);
+  biasingOperator->AttachTo(sliceLogical);
 
   // -- Create a simple "volume importance" map, linking replica numbers to importances:
   //    --------------------------------------------------------------------------------
   // -- we define the map as going from an importance to 2*importance when going from
   // -- a slice to the next one, in the Z direction.
   // -- Get back the replica of slices:
-  G4PVReplica* slicePhysical =
-    (G4PVReplica*)(G4PhysicalVolumeStore::GetInstance()->GetVolume("slice.physical"));
   G4int nReplica = slicePhysical->GetMultiplicity();
   // -- We use and fill the map we defined in the biasing operator:
   G4int importance = 1;
-  for (G4int iReplica = 0; iReplica < nReplica; iReplica++) {
+  for (G4int iReplica = 0; iReplica < nReplica; ++iReplica) {
     (biasingOperator->GetImportanceMap())[iReplica] = importance;
     importance *= 2;
   }

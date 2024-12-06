@@ -6,9 +6,9 @@
 /run/verbose 1
 /event/verbose 0
 
-##
-
-/Physics/addPhysics standard_opt4
+#########################
+# Activate detector array
+/changeDetector/activateArray false
 
 ##########################
 # Initialisation procedure
@@ -26,11 +26,10 @@
 #########################
 
 # Scoring mesh is used to calculate
-#  the dose in the phantom
+#  the dose in the water phantom
 
+##### This scorer compute the depth dose distribution#####
 /score/create/boxMesh boxMesh_1
-
-# scorer for dose in water phantom
 
 /score/mesh/boxSize 60 2 2 mm
 /score/mesh/nBin 120 1 1
@@ -39,9 +38,22 @@
 
 /score/close
 
+
+##### This scorer compute the lateral dose distribution#####
+/score/create/boxMesh boxMesh_2
+
+/score/mesh/boxSize 2 2 75 mm
+/score/mesh/nBin 1 1 150
+/score/mesh/translate/xyz 13 0 0 mm ## The position is set to 13 mm corresponding to the depth at the maximum dose for 9 MeV electron beams
+/score/quantity/doseDeposit dose Gy
+
+/score/close
+
+
 /score/list  
 
-/run/beamOn	500000
+/run/beamOn	200000
 
-/score/dumpQuantityToFile boxMesh_1 dose dose.out
+/score/dumpQuantityToFile boxMesh_1 dose dose_longitudinal.out
+/score/dumpQuantityToFile boxMesh_2 dose dose_transversal.out
 

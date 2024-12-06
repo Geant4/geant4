@@ -48,7 +48,7 @@
 class G4PSTrackCounter : public G4VPrimitivePlotter
 {
  public: 
-  G4PSTrackCounter(G4String name, G4int direction, G4int depth = 0);
+  G4PSTrackCounter(const G4String& name, G4int direction, G4int depth = 0);
   ~G4PSTrackCounter() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

@@ -296,7 +296,6 @@ public:
     }
   }
 
-#ifdef G4MULTITHREADED
   virtual void SwitchToVisSubThread() {}
   
   virtual void SwitchToMasterThread() {
@@ -321,7 +320,6 @@ public:
       }
     }
   }
-#endif
   
   //SG_VIEWER* sg_viewer() {return fSGViewer;}
 protected:

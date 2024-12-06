@@ -60,7 +60,7 @@ G4VReadOutGeometry::G4VReadOutGeometry(const G4VReadOutGeometry& right)
   // VALUE, same for navigator and same for the World+Geom hierachy
 }
 
-G4VReadOutGeometry::G4VReadOutGeometry(G4String n)
+G4VReadOutGeometry::G4VReadOutGeometry(const G4String& n)
   : ROworld(nullptr),
     fincludeList(nullptr),
     fexcludeList(nullptr),

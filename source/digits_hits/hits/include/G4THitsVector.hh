@@ -23,8 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VTHitsVector, G4THitsVector & G4THitsDeque
 //
+// Class description:
 //
+// This is a template class of hits Vector and parametrised by
+// The concrete class of G4VHit. This is a uniform collection for
+// a particular concrete hit class objects.
+// An intermediate layer class G4HitsVector appeared in this
+// header file is used just for G4Allocator, because G4Allocator
+// cannot be instantiated with a template class. Thus G4HitsVector
+// class MUST NOT be directly used by the user.
+//
+// Author: Makoto Asai, Jonathan Madsen
+// --------------------------------------------------------------------
 #ifndef G4THitsVector_h
 #define G4THitsVector_h 1
 
@@ -37,20 +49,11 @@
 #include <unordered_map>
 #include <vector>
 
-// class description:
-//
-//  This is a template class of hits Vector and parametrized by
-// The concrete class of G4VHit. This is a uniform collection for
-// a particular concrete hit class objects.
-//  An intermediate layer class G4HitsVector appeared in this
-// header file is used just for G4Allocator, because G4Allocator
-// cannot be instansiated with a template class. Thus G4HitsVector
-// class MUST NOT be directly used by the user.
-
 template <typename T, typename Vector_t = std::deque<T*>>
 class G4VTHitsVector : public G4HitsCollection
 {
  public:
+
   using this_type = G4VTHitsVector<T, Vector_t>;
   using value_type = T;
   using vector_type = Vector_t;
@@ -77,14 +80,15 @@ class G4VTHitsVector : public G4HitsCollection
 #define is_pointer_t(_Tp) std::is_pointer<_Tp>::value
 #define scast(_Tp) static_cast<_Tp>
 
-  template <bool _Bp, typename _Tp = void>
+  template <G4bool _Bp, typename _Tp = void>
   using enable_if_t = typename std::enable_if<_Bp, _Tp>::type;
 
  public:
+
   // generic constructor
   G4VTHitsVector(G4int init_size = 0);
   // det + collection description constructor
-  G4VTHitsVector(G4String detName, G4String colNam, G4int init_size = 0);
+  G4VTHitsVector(const G4String& detName, const G4String& colNam, G4int init_size = 0);
   // destructor
   ~G4VTHitsVector() override;
   // equivalence operator
@@ -165,7 +169,6 @@ class G4VTHitsVector : public G4HitsCollection
 
   inline map_t* GetMap() const;
 
- public:
   //------------------------------------------------------------------------//
   //  POINTER TYPE
   //------------------------------------------------------------------------//
@@ -219,7 +222,6 @@ class G4VTHitsVector : public G4HitsCollection
     return store_type();
   }
 
- public:
   //------------------------------------------------------------------------//
   // Generic operator += where add(...) overloads handle various
   //  U and VectorU_t types
@@ -269,7 +271,6 @@ class G4VTHitsVector : public G4HitsCollection
   }
   //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   //  Insert a hit object. Total number of hit objects stored in this
   //  map is returned.
@@ -318,7 +319,6 @@ class G4VTHitsVector : public G4HitsCollection
   }
   //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   //  Set a hit object. Total number of hit objects stored in this
   //  map is returned.
@@ -346,7 +346,6 @@ class G4VTHitsVector : public G4HitsCollection
   }
   //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   //  Set a hit object. Total number of hit objects stored in this
   //  map is returned.
@@ -372,9 +371,7 @@ class G4VTHitsVector : public G4HitsCollection
     _assign(theHitsVector, key, &aHit);
     return theHitsVector->size();
   }
-  //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   T* at(G4int key) const
   {
@@ -392,6 +389,7 @@ class G4VTHitsVector : public G4HitsCollection
   //------------------------------------------------------------------------//
 
  protected:
+
   template <typename U = store_type, enable_if_t<(is_pointer_t(U)), G4int> = 0>
   void resize(vector_type*& theHitsVector, const G4int& key) const
   {
@@ -557,7 +555,7 @@ G4VTHitsVector<T, Vector_t>::G4VTHitsVector(G4int init_size)
 //============================================================================//
 
 template <typename T, typename Vector_t>
-G4VTHitsVector<T, Vector_t>::G4VTHitsVector(G4String detName, G4String colNam, G4int init_size)
+G4VTHitsVector<T, Vector_t>::G4VTHitsVector(const G4String& detName, const G4String& colNam, G4int init_size)
   : G4HitsCollection(detName, colNam)
 {
   theCollection = static_cast<void*>(new Vector_t);
@@ -590,7 +588,7 @@ G4bool G4VTHitsVector<T, Vector_t>::operator==(const G4VTHitsVector<T, Vector_t>
 template <typename T, typename Vector_t>
 typename G4VTHitsVector<T, Vector_t>::map_t* G4VTHitsVector<T, Vector_t>::GetMap() const
 {
-  G4ThreadLocalStatic auto  theHitsMap = new map_t();
+  G4ThreadLocalStatic auto theHitsMap = new map_t();
   theHitsMap->clear();
   vector_type* theHitsVector = GetVector();
   for (std::size_t i = 0; i < theHitsVector->size(); ++i) {
@@ -654,7 +652,7 @@ class G4THitsVector : public G4VTHitsVector<_Tp, std::vector<_Tp*>>
 
  public:
   G4THitsVector(G4int init_size = 0) : parent_type(init_size) {}
-  G4THitsVector(G4String detName, G4String colName, G4int init_size = 0)
+  G4THitsVector(const G4String& detName, const G4String& colName, G4int init_size = 0)
     : parent_type(detName, colName, init_size)
   {}
 
@@ -687,7 +685,7 @@ class G4THitsDeque : public G4VTHitsVector<_Tp, std::deque<_Tp*>>
 
  public:
   G4THitsDeque(G4int init_size = 0) : parent_type(init_size) {}
-  G4THitsDeque(G4String detName, G4String colName, G4int init_size = 0)
+  G4THitsDeque(const G4String& detName, const G4String& colName, G4int init_size = 0)
     : parent_type(detName, colName, init_size)
   {}
 

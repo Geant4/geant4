@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paternò (modifications & testing)
+// On the base of the CRYSTALRAD realization of scattering model:
+// A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
 
 #include "G4VChannelingFastSimCrystalData.hh"
 #include "G4SystemOfUnits.hh"
@@ -210,19 +214,19 @@ void G4VChannelingFastSimCrystalData::SetCUParameters(
 void G4VChannelingFastSimCrystalData::SetParticleProperties(G4double etotal,
                                                          G4double mass,
                                                          G4double charge,
-                                                         G4bool ifhadron)
+                                                         const G4String& particleName)
 {
     G4double teta1;
     fZ2=charge;
     G4double zz22=fZ2*fZ2;
-    fHadron=ifhadron;
+    fParticleName=particleName;
 
 //     particle momentum and energy
        G4double t=etotal*etotal-mass*mass; //  economy of operations
        fPz=std::sqrt(t); //  momentum of particle
        fPV=t/etotal;    //  pv
        fBeta=fPz/etotal;   //  velocity/c
-       fTetaL = std::sqrt(fVmax2/fPV); //Lindhard angle
+       fTetaL = std::sqrt(std::abs(fZ2)*fVmax2/fPV); //Lindhard angle
        fChannelingStep = fChangeStep/fTetaL; //standard simulation step
 
 //     Energy losses
@@ -233,6 +237,8 @@ void G4VChannelingFastSimCrystalData::SetParticleProperties(G4double etotal,
        fTmax = fMe2Gamma*fGamma*fV2/
                (CLHEP::electron_mass_c2/mass*CLHEP::electron_mass_c2/mass +
                 1. + fMe2Gamma/mass);
+//     max ionization losses for electrons
+       if(fParticleName=="e-"){fTmax/=2;}
 
        for(G4int i=0; i<fNelements; i++)
        {
@@ -262,24 +268,23 @@ void G4VChannelingFastSimCrystalData::SetParticleProperties(G4double etotal,
          fTetamax2[i]=tetamax*tetamax;
          fTetamax12[i]=fTeta12[i]+fTetamax2[i];
 
-//       a cofficient in a formula for scattering (for high speed of simulation)
-//       fK2=(fZ2*alpha*hdc)**2*4.*pi*fN0*(fZ1/fPV)**2
-//       fK3=(fZ2*alpha*hdc)**2*4.*pi*fN0/(fPV)**2
+//       a coefficient in a formula for scattering (for high speed of simulation)
+//       fK2=(fZ2)**2*alphahbarc2*4.*pi*fN0*(fZ1/fPV)**2
          fK2[i]=fK20[i]*zz22/fPV/fPV;
        }
 
-//     nuclear diffractive scattering angle
-       //tetaQEL=1./sqrt(2.*(9.26-4.94/sqrt(fPz/GeV)+0.28*log(fPz/GeV)));
-
-       fK3=fK30/fV2;
+//     fK3=(fZ2)**2*alphahbarc2*pi/electron_mass_c2/(fV2)**2
+       fK3=fK30*zz22/fV2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VChannelingFastSimCrystalData::GetLindhardAngle(G4double etotal, G4double mass)
+G4double G4VChannelingFastSimCrystalData::GetLindhardAngle(G4double etotal,
+                                                           G4double mass,
+                                                           G4double charge)
 {
     G4double pv0 = etotal-mass*mass/etotal;
-    return std::sqrt(2*fVmax/pv0); //Calculate the value of the Lindhard angle
+       return std::sqrt(2*std::abs(charge)*fVmax/pv0); //Calculate the value of the Lindhard angle
                                    //(!!! the value for a straight crystal)
 }
 
@@ -313,7 +318,8 @@ G4double G4VChannelingFastSimCrystalData::GetSimulationStep(G4double tx,G4double
     }
     else
     {
-        simulationstep = fChangeStep/angle;
+      simulationstep = fChangeStep;
+      if (angle > 0.0) { simulationstep /= angle; }
     }
 
     return simulationstep;
@@ -322,10 +328,11 @@ G4double G4VChannelingFastSimCrystalData::GetSimulationStep(G4double tx,G4double
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VChannelingFastSimCrystalData::GetMaxSimulationStep(G4double etotal,
-                                                            G4double mass)
+                                                               G4double mass,
+                                                               G4double charge)
 {
     //standard value of step for channeling particles which is the maximal possible step
-    return fChangeStep/GetLindhardAngle(etotal, mass);
+    return fChangeStep/GetLindhardAngle(etotal, mass, charge);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -479,11 +486,14 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombElectronScattering(
         G4double e1=eMinIonization/(1.-ksi*(1.-eMinIonization/fTmax));
 
 //      scattering angle
-        G4double t=std::sqrt(e1*(e1+2.*CLHEP::electron_mass_c2))/fPz;
+        G4double t=0;
+        if(fTmax-e1>DBL_EPSILON) //to be sure e1<fTmax
+        {
+            t=std::sqrt(2.*CLHEP::electron_mass_c2*e1*(1-e1/fTmax))/fPz;
+        }
 
         // energy losses
-        if (fHadron) {eloss=e1;} // we don't calculate ionization losses for e+-
-
+        eloss=e1;
         ksi=G4UniformRand();
 
         tx+=t*std::cos(CLHEP::twopi*ksi);
@@ -507,11 +517,33 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombElectronScattering(
 G4double G4VChannelingFastSimCrystalData::IonizationLosses(G4double dz,
                                                     G4int ielement)
 {
+    //amorphous part of ionization losses
+
     G4double elosses = 0.;
-    if (fHadron) {elosses=fKD[ielement]/fV2*
-                (G4Log(fMe2Gamma*fV2/fI0[ielement]/fGamma) - fV2)*dz;}
-    return elosses;
-}
+    // 1/2 already taken into account in fKD
+
+    G4double loge = G4Log(fMe2Gamma*fGamma*fV2/fI0[ielement]);
+    G4double delta= 2*(G4Log(fBeta*fGamma)+fLogPlasmaEdI0[ielement]-0.5);
+    if(delta<0){delta=0;}
+    loge-=delta;
+    if(fParticleName=="e-")
+    {
+       loge+=(-G4Log(2.) + 1
+              -(2*fGamma - 1)/fGamma/fGamma*G4Log(2.) +
+               1/8*((fGamma - 1)/fGamma)*((fGamma - 1)/fGamma));
+    }
+    else if(fParticleName=="e+")
+    {
+       loge+=(-fV2/12*(11 + 14/(fGamma + 1) + 10/(fGamma + 1)/(fGamma + 1) +
+                      4/(fGamma + 1)/(fGamma + 1)/(fGamma + 1)));
+    }
+    else
+    {
+        loge-=fV2;
+    }
+    elosses=fZ2*fZ2*fKD[ielement]/fV2*loge*dz;
+
+    return elosses;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

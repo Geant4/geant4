@@ -30,7 +30,7 @@
 
 #include "G4VSensitiveDetector.hh"
 
-G4int G4HCtable::Registor(G4String SDname, G4String HCname)
+G4int G4HCtable::Registor(const G4String& SDname, const G4String& HCname)
 {
   for (std::size_t i = 0; i < HClist.size(); ++i) {
     if (HClist[i] == HCname && SDlist[i] == SDname) return -1;
@@ -40,7 +40,7 @@ G4int G4HCtable::Registor(G4String SDname, G4String HCname)
   return (G4int)HClist.size();
 }
 
-G4int G4HCtable::GetCollectionID(G4String HCname) const
+G4int G4HCtable::GetCollectionID(const G4String& HCname) const
 {
   G4int i = -1;
   if (HCname.find('/') == std::string::npos)  // HCname only

@@ -30,7 +30,7 @@
 #include "G4ParticleChange.hh"
 #include "G4VEmAdjointModel.hh"
 
-G4VAdjointReverseReaction::G4VAdjointReverseReaction(G4String process_name,
+G4VAdjointReverseReaction::G4VAdjointReverseReaction(const G4String& process_name,
                                                      G4bool whichScatCase)
   : G4VDiscreteProcess(process_name)
 {

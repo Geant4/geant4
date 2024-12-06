@@ -133,6 +133,11 @@ void G4EventManager::DoProcessing(G4Event* anEvent,
 
 #ifdef G4_STORE_TRAJECTORY
   trajectoryContainer = nullptr;
+//  trajectoryContainer = currentEvent->GetTrajectoryContainer();
+//  if(trajectoryContainer==nullptr) {
+//    trajectoryContainer = new G4TrajectoryContainer;
+//    currentEvent->SetTrajectoryContainer(trajectoryContainer);
+//  }
 #endif
 
   sdManager = G4SDManager::GetSDMpointerIfExist();
@@ -375,6 +380,16 @@ void G4EventManager::TerminateSubEvent(const G4SubEvent* se,const G4Event* evt)
 #endif
 }
 
+G4int G4EventManager::StoreSubEvent(G4Event* evt, G4int& subEvtType, G4SubEvent* se)
+{
+  G4AutoLock lock(&EventMgrMutex);
+  if(evt != currentEvent) {
+    G4Exception("G4EventManager::StoreSubEvent","SubEvt1011", FatalException,
+                "StoreSubEvent is invoked with a G4Event that is not the current event. PANIC!");
+  }
+  return evt->StoreSubEvent(subEvtType,se);
+}
+
 void G4EventManager::StackTracks(G4TrackVector* trackVector,
                                  G4bool IDhasAlreadySet)
 {
@@ -435,12 +450,6 @@ void G4EventManager::SetUserAction(G4UserSteppingAction* userAction)
 {
   userSteppingAction = userAction;
   trackManager->SetUserAction(userAction);
-}
-
-void G4EventManager::ProcessOneEventForSERM(G4Event* anEvent)
-{
-  G4AutoLock lock(&EventMgrMutex);
-  ProcessOneEvent(anEvent);
 }
 
 void G4EventManager::ProcessOneEvent(G4Event* anEvent)

@@ -23,9 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TScoreNtupleWriterMessenger
 //
-// Author: Ivana Hrivnacova, 30/10/2018  (ivana@ipno.in2p3.fr)
-
+// Class description:
+//
+// This is a concrete class of G4UImessenger which handles the commands for
+// G4TScoreNtupleWriter. This class has the following commands:
+//   /score/writerFileName filename
+//   /score/writerVerbose value
+//
+// Author: Ivana Hrivnacova, 30/10/2018
+// --------------------------------------------------------------------
 #ifndef G4TScoreNtupleWriterMessenger_h
 #define G4TScoreNtupleWriterMessenger_h 1
 
@@ -38,14 +46,6 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-
-// class description:
-//
-// This is a concrete class of G4UImessenger which handles the commands for
-// G4TScoreNtupleWriter. This class has the following commands:
-//   /score/writerFileName filename
-//   /score/writerVerbose value
-//
 
 template <typename T>
 class G4TScoreNtupleWriterMessenger : public G4UImessenger

@@ -41,9 +41,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ChannelingOptrChangeCrossSection::G4ChannelingOptrChangeCrossSection(G4String particleName,
-                                                                       G4String         name)
-:G4VBiasingOperator(name),
+G4ChannelingOptrChangeCrossSection::G4ChannelingOptrChangeCrossSection(const G4String& particleName,
+                                                                       const G4String& name)
+  :G4VBiasingOperator(name),
 fChannelingID(G4PhysicsModelCatalog::GetModelID("model_channeling")),
 fSetup(true){
     fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
@@ -81,10 +81,10 @@ void G4ChannelingOptrChangeCrossSection::StartRun(){
             for ( size_t i = 0 ; i < (sharedData->GetPhysicsBiasingProcessInterfaces()).size(); i++ ){
                 const G4BiasingProcessInterface* wrapperProcess =
                 (sharedData->GetPhysicsBiasingProcessInterfaces())[i];
-                G4String processName = wrapperProcess->GetWrappedProcess()->GetProcessName();
-                G4String operationName = "channelingChangeXS-" + processName;
+                const G4String& processName = wrapperProcess->GetWrappedProcess()->GetProcessName();
+                const G4String& operationName = "channelingChangeXS-" + processName;
                 fChangeCrossSectionOperations[wrapperProcess] =
-                new G4BOptnChangeCrossSection(operationName);
+		  new G4BOptnChangeCrossSection(operationName);
                 
                 G4ProcessType type = wrapperProcess->GetWrappedProcess()->GetProcessType();
                 G4int subType = wrapperProcess->GetWrappedProcess()->GetProcessSubType();

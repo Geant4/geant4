@@ -1,71 +1,46 @@
-=================================================================
-                     Channeling effect in Geant4
-=================================================================
-            Enrico Bagli - INFN and University Ferrara (Italy)
-			 bagli@fe.infn.it
 
-This example shows how channeling in bent crystal can be simulated
-in Geant4
+            Geant4 extended examples - channeling
+        ----------------------------------------------
 
-1.INTRODUCTION
-The example simulates the channeling of 400 GeV/c protons in bent
-Si crystal. Channeling occurs when particles enter a crystal aligned
-with atomic planes or axes. In bent crystals, the particles are 
-trapped between atomic planes and follow the crystal curvature 
-being deflected. If the particle direction is tangent to a bent
-crystal plane is reflected to the opposite direction with respect
-to channeling, i.e., it suffer ‘volume reflection’. The example 
-provides the physical model for planar channeling and volume
-reflection in bent crystals.
+ Examples in this directory are dedicated to various coherent effects
+ in oriented crystals, in particular, channeling, channeling radiation,
+ coherent bremsstrahlung, coherent pair production etc. as well as their 
+ various applications.
 
-2.GEOMETRY
-The geometry is a bent Si crystal with three Si detectors placed at
--9.998 m, -0.320 m and 10.756 m with respect to the position of
-the bent crystal itself. The Si detectors allows to measure 
-incoming and outgoing angle after the interaction with the Si bent crystal.
-The geometry is all under vacuum.
+ ch0
+ -------
 
-3.PRIMARY EVENT
-The primary events are 400 GeV/c protons launched at -10.5 m from the
-crystal with 13.36 microrad x 11.25 microrad divergence.
+ This example shows how channeling in bent crystal can be simulated
+ in Geant4 using G4Channeling process. The example simulates the channeling 
+ of 400 GeV/c protons in bent Si crystal. It has been moved into channeling/ch0 
+ from the channeling folder.
 
-4.PHYSICS
-In the example the physics of channeling and volume reflection
-has been added to the standard Geant4 physics. The description 
-of the used model can be found in the paper ‘A model for the 
-interaction of high-energy particles in straight and bent 
-crystals implemented in Geant4’ by E. Bagli et al., available
-online at http://arxiv.org/abs/1403.5819
+ ch1
+ -------
+ 
+ This example is an easy demonstration of the minimum requirements necessary
+ to integrate the G4ChannelingFastSimModel and the G4BaierKatkov model 
+ into a project in order to simulate the physics of channeling and 
+ channeling radiation/coherent bremsstrahlung.
 
-5.EXECUTION & OUTPUT 
-The executable must be run from within the source directory of the example
-to ensure that it can find the path for crystal data files.
+ ch2
+ -------
+ 
+ This example is an enhanced version of ch1, providing the user with 
+ the full functionality of both the G4ChannelingFastSimModel and G4BaierKatkov, 
+ with parameters set up via a macro, in order to simulate the physics of 
+ channeling and channeling radiation/coherent bremsstrahlung, and enhanced output.
+ The example can be exploited for a wide range of cases to study coherent effects in
+ a straight, bent or periodically bent crystal (crystalline undulator).
 
-Data files for Si crystal interplanar potential, nuclei and electron density
- are stored in a subdirectory named ’data’
+ ch3
+ -------
 
-Upon execution, the 2009_PLB680_129.mac macro will automatically run the
-example with 1000 protons.
-
-Use
-/xtal/setBR XXX 0. 0. m
-To change crystal bending to XXX meters
-
-Use
-/xtal/setSize 1.0 70. XXX mm
-To change crystal length to XXX millimeter
-
-Use
-/xtal/potfilename data/Si220pl
-To select the (110) Si crystal plane of channeling
-
-GPS commands are used for the primary generator.
-
-The output is the ExExhCh.root file with the TTree ExExChTree
-has the leaves:
-- angXin : incoming particle X angle at the crystal
-- angYin : incoming particle Y angle at the crystal
-- posXin : hitting X position of the particle at the crystal
-- posYin : hitting Y position of the particle at the crystal
-- angXout: outgoing particle X angle out of the the crystal
-- angYout: outgoing particle Y angle out of the the crystal
+ This example is an easy demonstration of the minimum requirements necessary
+ to integrate the G4CoherentPairProduction process along with G4ChannelingFastSimModel 
+ and G4BaierKatkov into a project in order to simulate the physics of electromagnetic
+ shower in an oriented crystal. The simulation includes the physics of channeling, 
+ channeling radiation/coherent bremsstrahlung and coherent pair production.
+ The structure of this example is based on ch1, but with the G4CoherentPairProductionPhysics
+ process included, as well as different output, a different crystal material, alignment and 
+ geometry parameters, and a photon beam as the incoming source instead of charged particles.

@@ -49,12 +49,15 @@ geant4_module_link_libraries(G4hadronic_deex_evaporation
     G4hadronic_deex_management
     G4hadronic_util
   PRIVATE
+    G4baryons
     G4hadronic_deex_fermi_breakup
     G4hadronic_deex_fission
     G4hadronic_deex_gem_evaporation
     G4hadronic_deex_photon_evaporation
     G4hadronic_deex_util
+    G4hadronic_xsect
     G4hepgeometry
     G4heprandom
+    G4ions
     G4materials
     G4partman)

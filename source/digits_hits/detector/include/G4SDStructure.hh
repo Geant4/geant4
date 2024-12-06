@@ -23,9 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SDStructure
 //
+// Class description:
 //
-
+// This class is exclusively used by G4SDManager for handling the tree
+// structure of the user's sensitive detector names.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4SDStructure_h
 #define G4SDStructure_h 1
 
@@ -36,12 +42,6 @@
 #include <vector>
 
 class G4HCofThisEvent;
-
-// class description:
-//
-//  This class is exclusively used by G4SDManager for handling the tree
-// structure of the user's sensitive detector names.
-//
 
 class G4SDStructure
 {

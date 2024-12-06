@@ -41,7 +41,6 @@
 
 #include "G4ElementTable.hh"
 #include "G4Neutron.hh"
-// #include "G4ParticleHPData.hh"
 
 G4ParticleHPThermalScatteringNames::G4ParticleHPThermalScatteringNames()
 {
@@ -211,19 +210,16 @@ G4ParticleHPThermalScatteringNames::G4ParticleHPThermalScatteringNames()
   // "G4_BENZENE" , "C" ) , "benzen" ) );
 }
 
-G4ParticleHPThermalScatteringNames::~G4ParticleHPThermalScatteringNames()
-{
-  ;
-}
-
-G4bool G4ParticleHPThermalScatteringNames::IsThisThermalElement(G4String aname)
+G4bool G4ParticleHPThermalScatteringNames::
+IsThisThermalElement(const G4String& aname) const
 {
   G4bool result = false;
   if (names.find(aname) != names.end()) result = true;
   return result;
 }
 
-G4bool G4ParticleHPThermalScatteringNames::IsThisThermalElement(G4String material, G4String element)
+G4bool G4ParticleHPThermalScatteringNames::
+IsThisThermalElement(const G4String& material, const G4String& element) const
 {
   G4bool result = false;
   if (nist_names.find(std::pair<G4String, G4String>(material, element)) != nist_names.end())
@@ -232,8 +228,8 @@ G4bool G4ParticleHPThermalScatteringNames::IsThisThermalElement(G4String materia
 }
 
 // Name of G4Element , Name of NDL file
-void G4ParticleHPThermalScatteringNames::AddThermalElement(G4String nameG4Element,
-                                                           G4String filename)
+void G4ParticleHPThermalScatteringNames::AddThermalElement(const G4String& nameG4Element,
+                                                           const G4String& filename)
 {
   if (names.find(nameG4Element) == names.end())
     names.insert(std::pair<G4String, G4String>(nameG4Element, filename));

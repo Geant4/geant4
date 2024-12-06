@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,7 +45,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -124,10 +123,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -298,7 +300,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -780,7 +782,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -805,12 +807,10 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -1731,7 +1731,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     9.39     0.109        0        0         0   test.phys initStep
-    1  0.00111 0.000134     9.39         0    0.109  0.00201   0.00201   test.phys ionIoni
+    1 0.000827 9.93e-05     9.39         0    0.109  0.00137   0.00137   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1754,7 +1754,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      166     93.9      147      0.18        0        0         0   test.phys initStep
-    1      166     93.9      147         0     0.18  0.00252   0.00252   test.phys ionIoni
+    1      166     93.9      147         0     0.18  0.00175   0.00175   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -1762,7 +1762,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     61.3    0.0812        0        0         0   test.phys initStep
-    1 -0.000286 -0.000894     61.3         0   0.0812  0.00175   0.00175   test.phys ionIoni
+    1 -0.000218 -0.000681     61.3         0   0.0812  0.00118   0.00118   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1782,7 +1782,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     49.4     0.231        0        0         0   test.phys initStep
-    1 -3.09e-05 0.000676     49.4         0    0.231  0.00269   0.00269   test.phys ionIoni
+    1 -2.24e-05 0.000491     49.4         0    0.231  0.00189   0.00189   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1826,7 +1826,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      301    -2.64      184     0.127        0        0         0   test.phys initStep
-    1      301    -2.64      184         0    0.127  0.00216   0.00216   test.phys ionIoni
+    1      301    -2.64      184         0    0.127  0.00148   0.00148   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 3,   Parent ID = 1
@@ -1834,7 +1834,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -1.91     68.9      178    0.0933        0        0         0   test.phys initStep
-    1    -1.91     68.9      178         0   0.0933  0.00187   0.00187   test.phys ionIoni
+    1    -1.91     68.9      178         0   0.0933  0.00127   0.00127   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -1842,7 +1842,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -37.6     60.6      100    0.0903        0        0         0   test.phys initStep
-    1    -37.6     60.6      100         0   0.0903  0.00184   0.00184   test.phys ionIoni
+    1    -37.6     60.6      100         0   0.0903  0.00125   0.00125   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1865,7 +1865,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      166      118      108     0.116        0        0         0   test.phys initStep
-    1      166      118      108         0    0.116  0.00207   0.00207   test.phys ionIoni
+    1      166      118      108         0    0.116  0.00142   0.00142   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -1873,7 +1873,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     99.1     74.1      158     0.102        0        0         0   test.phys initStep
-    1     99.1     74.1      158         0    0.102  0.00195   0.00195   test.phys ionIoni
+    1     99.1     74.1      158         0    0.102  0.00133   0.00133   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1893,7 +1893,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      107    0.0896        0        0         0   test.phys initStep
-    1 9.84e-05 0.000999      107         0   0.0896  0.00183   0.00183   test.phys ionIoni
+    1 7.42e-05 0.000754      107         0   0.0896  0.00124   0.00124   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1916,7 +1916,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -8.85    -64.2       34      0.11        0        0         0   test.phys initStep
-    1    -8.85    -64.2       34         0     0.11  0.00201   0.00201   test.phys ionIoni
+    1    -8.85    -64.2       34         0     0.11  0.00137   0.00137   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 3,   Parent ID = 1
@@ -1924,7 +1924,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      -53      -58     25.8     0.177        0        0         0   test.phys initStep
-    1      -53      -58     25.8         0    0.177  0.00251   0.00251   test.phys ionIoni
+    1      -53      -58     25.8         0    0.177  0.00174   0.00174   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -1932,7 +1932,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0       34     0.173        0        0         0   test.phys initStep
-    1  0.00038  0.00111       34         0    0.173  0.00249   0.00249   test.phys ionIoni
+    1 0.000277  0.00081       34         0    0.173  0.00173   0.00173   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1953,7 +1953,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -81.1    -78.5     37.4     0.135        0        0         0   test.phys initStep
-    1    -81.1    -78.5     37.4         0    0.135  0.00222   0.00222   test.phys ionIoni
+    1    -81.1    -78.5     37.4         0    0.135  0.00153   0.00153   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -1961,7 +1961,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     7.92    -31.6     44.9      0.12        0        0         0   test.phys initStep
-    1     7.92    -31.6     44.9         0     0.12   0.0021    0.0021   test.phys ionIoni
+    1     7.92    -31.6     44.9         0     0.12  0.00144   0.00144   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -1980,7 +1980,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     83.2     0.344        0        0         0   test.phys initStep
-    1  0.00191  -0.0019     83.2         0    0.344  0.00287   0.00287   test.phys ionIoni
+    1  0.00141  -0.0014     83.2         0    0.344  0.00208   0.00208   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -2000,7 +2000,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.793   -0.511      173     0.254        0        0         0   test.phys initStep
-    1   -0.793   -0.508      173         0    0.254  0.00274   0.00274   test.phys ionIoni
+    1   -0.793   -0.509      173         0    0.254  0.00194   0.00194   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -2008,7 +2008,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      167     0.198        0        0         0   test.phys initStep
-    1  0.00189  0.00122      167         0    0.198  0.00259   0.00259   test.phys ionIoni
+    1  0.00137 0.000885      167         0    0.198  0.00181   0.00181   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -2045,7 +2045,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     11.6      1.53        0        0         0   test.phys initStep
-    1  -0.0013 -0.00195     11.6         0     1.53   0.0033    0.0033   test.phys ionIoni
+    1 -0.00123 -0.00186     11.6         0     1.53  0.00314   0.00314   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 7,   Parent ID = 1
@@ -2099,7 +2099,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      305      219      131      1.35        0        0         0   test.phys initStep
-    1      305      219      131         0     1.35  0.00383   0.00383   test.phys ionIoni
+    1      305      219      131         0     1.35  0.00336   0.00336   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 12,   Parent ID = 3
@@ -2246,7 +2246,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     68.8     75.9     12.1     0.204        0        0         0   test.phys initStep
-    1     68.8     75.9     12.1         0    0.204  0.00261   0.00261   test.phys ionIoni
+    1     68.8     75.9     12.1         0    0.204  0.00183   0.00183   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 2,   Parent ID = 1
@@ -2264,7 +2264,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -1.47    -1.04     17.4     0.955        0        0         0   test.phys initStep
-    1    -1.47    -1.04     17.4         0    0.955  0.00319   0.00319   test.phys ionIoni
+    1    -1.47    -1.04     17.4         0    0.955   0.0026    0.0026   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -2281,7 +2281,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     57.2     0.514        0        0         0   test.phys initStep
-    1  0.00307  0.00144     57.2         0    0.514  0.00355   0.00355   test.phys ionIoni
+    1  0.00231  0.00109     57.2         0    0.514  0.00266   0.00266   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 1
@@ -2527,7 +2527,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      180     0.302        0        0         0   test.phys initStep
-    1 -0.000459 -0.00258      180         0    0.302  0.00282   0.00282   test.phys ionIoni
+    1 -0.000335 -0.00188      180         0    0.302  0.00202   0.00202   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -2547,7 +2547,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     26.9     7.42      161      0.59        0        0         0   test.phys initStep
-    1     26.9     7.42      161         0     0.59  0.00307   0.00307   test.phys ionIoni
+    1     26.9     7.42      161         0     0.59  0.00234   0.00234   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -2555,7 +2555,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     83.2     0.884        0        0         0   test.phys initStep
-    1 -0.00297 -0.000821     83.2         0    0.884  0.00317   0.00317   test.phys ionIoni
+    1  -0.0024 -0.000662     83.2         0    0.884  0.00255   0.00255   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -2583,7 +2583,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -3.12    0.969     42.7      3.72        0        0         0   test.phys initStep
-    1    -3.12    0.971     42.7         0     3.72  0.00275   0.00275   test.phys ionIoni
+    1    -3.12    0.972     42.7         0     3.72  0.00418   0.00418   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 6,   Parent ID = 1
@@ -2627,6 +2627,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     25.6     0.271        0        0         0   test.phys initStep
-    1  0.00242 -0.000753     25.6         0    0.271  0.00277   0.00277   test.phys ionIoni
+    1  0.00176 -0.000548     25.6         0    0.271  0.00197   0.00197   test.phys ionIoni
 Graphics systems deleted.
 Visualization Manager deleting...

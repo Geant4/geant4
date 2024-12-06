@@ -94,9 +94,8 @@ void G4MoleculeGunMessenger::SetNewValue(G4UIcommand* command,
 
 G4MoleculeShootMessenger::G4MoleculeShootMessenger(const G4String& name,
                                                    G4MoleculeGunMessenger*,
-                                                   G4shared_ptr<G4MoleculeShoot>
-                                                      shoot) :
-     fpShoot(shoot)
+                                                   G4shared_ptr<G4MoleculeShoot> shoot)
+  : fpShoot(std::move(shoot))
 {
   G4String dir("/chem/gun/");
   dir += name;
@@ -122,7 +121,7 @@ G4MoleculeShootMessenger::G4MoleculeShootMessenger(const G4String& name,
   tmp += "/rndmPosition";
   fpGunRdnmPosition = new G4UIcmdWith3VectorAndUnit(tmp, this);
 
-  tmp = dir;
+  tmp = std::move(dir);
   tmp += "/type";
   fpGunType = new G4UIcmdWithAString(tmp, this);
 

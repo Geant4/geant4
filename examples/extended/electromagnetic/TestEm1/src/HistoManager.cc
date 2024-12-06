@@ -56,16 +56,18 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);  // enable inactivation of histograms
 
   // Define histograms start values
-  const G4int kMaxHisto = 7;
-  const G4String id[] = {"1", "2", "3", "4", "5", "6", "8"};
+  const G4int kMaxHisto = 9;
+  const G4String id[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9" };
   const G4String title[] = {
-    "total track length of primary particle",  // 1
-    "nb steps of primary particle",  // 2
-    "step size of primary particle",  // 3
-    "total energy deposit",  // 4
-    "energy of charged secondaries at creation",  // 5
-    "energy of neutral secondaries at creation",  // 6
-    "NIEL energy deposit"  // 7
+    "total track length of primary particle",     //1
+    "nb steps of primary particle",               //2
+    "step size of primary particle",              //3
+    "total energy deposit",                       //4
+    "energy of charged secondaries at creation",  //5
+    "energy of neutral secondaries at creation",  //6
+    "NIEL energy deposit",                        //7
+    "energy leakage",                             //8
+    "energy total: deposit + leakage"             //9
   };
   // Default values (to be reset via /analysis/h1/set command)
   G4int nbins = 100;

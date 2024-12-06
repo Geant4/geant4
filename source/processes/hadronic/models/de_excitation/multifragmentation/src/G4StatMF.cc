@@ -148,19 +148,20 @@ G4FragmentVector* G4StatMF::BreakItUp(const G4Fragment &theFragment)
   G4double SavedScaleFactor = 0.0;
   do {
     G4double FragmentsEnergy = 0.0;
-    G4FragmentVector::iterator j;
-    for (j = theResult->begin(); j != theResult->end(); j++) 
-      FragmentsEnergy += (*j)->GetMomentum().e();
+    for (auto const & ptr : *theResult) {
+      FragmentsEnergy += ptr->GetMomentum().e();
+    }
+    if (0.0 == FragmentsEnergy) { break; } 
     SavedScaleFactor = ScaleFactor;
     ScaleFactor = InitialMomentum.e()/FragmentsEnergy;
     G4ThreeVector ScaledMomentum(0.0,0.0,0.0);
-    for (j = theResult->begin(); j != theResult->end(); j++) {
-      ScaledMomentum = ScaleFactor * (*j)->GetMomentum().vect();
-      G4double Mass = (*j)->GetMomentum().m();
+    for (auto const & ptr : *theResult) {
+      ScaledMomentum = ScaleFactor * ptr->GetMomentum().vect();
+      G4double Mass = ptr->GetMomentum().mag();
       G4LorentzVector NewMomentum;
       NewMomentum.setVect(ScaledMomentum);
       NewMomentum.setE(std::sqrt(ScaledMomentum.mag2()+Mass*Mass));
-      (*j)->SetMomentum(NewMomentum);		
+      ptr->SetMomentum(NewMomentum);		
     }
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   } while (ScaleFactor > 1.0+1.e-5 && std::abs(ScaleFactor-SavedScaleFactor)/ScaleFactor > 1.e-10);

@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paternò (modifications & testing)
+// On the base of the CRYSTALRAD realization of channeling model:
+// A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
 
 #ifndef G4ChannelingFastSimModel_h
 #define G4ChannelingFastSimModel_h 1
@@ -63,7 +67,13 @@ public:
   void DoIt(const G4FastTrack&, G4FastStep&) override;
 
   ///special functions
-  void Input(const G4Material* crystal, const G4String &lattice);
+  void Input(const G4Material* crystal,
+             const G4String &lattice)
+            {Input(crystal,lattice,"");}
+
+  void Input(const G4Material* crystal,
+             const G4String &lattice,
+             const G4String &filePath);
 
   void RadiationModelActivate();
 
@@ -80,11 +90,16 @@ public:
   void SetLindhardAngleNumberHighLimit(G4double angleNumber, const G4String& particleName)
    {fLindhardAngleNumberHighLimit[particleTable->FindParticle(particleName)->
               GetParticleDefinitionID()]=angleNumber;}
+  void SetHighAngleLimit(G4double anglemax, const G4String& particleName)
+   {fHighAngleLimit[particleTable->FindParticle(particleName)->
+                       GetParticleDefinitionID()] = anglemax;}
 
   void SetDefaultLowKineticEnergyLimit(G4double ekinetic)
            {fDefaultLowEnergyLimit=ekinetic;}
   void SetDefaultLindhardAngleNumberHighLimit(G4double angleNumber)
            {fDefaultLindhardAngleNumberHighLimit=angleNumber;}
+  void SetDefaultHighAngleLimit(G4double anglemax)
+           {fDefaultHighAngleLimit=anglemax;}
 
 
   /// get the maximal number of photons that can be produced per fastStep
@@ -93,15 +108,6 @@ public:
            {fMaxPhotonsProducedPerStep=nPhotons;}
 
   ///get cuts
-  G4double GetLowKineticEnergyLimit(const G4String& particleName)
-               {return GetLowKineticEnergyLimit(particleTable->
-                                                FindParticle(particleName)->
-                                                GetParticleDefinitionID());}
-  G4double GetLindhardAngleNumberHighLimit(const G4String& particleName)
-               {return GetLindhardAngleNumberHighLimit(particleTable->
-                                                       FindParticle(particleName)->
-                                                       GetParticleDefinitionID());}
-  //the same functions but using particleDefinitionID (needed for faster model execution)
   G4double GetLowKineticEnergyLimit(G4int particleDefinitionID)
                {return (fLowEnergyLimit.count(particleDefinitionID) == 1)
                         ? fLowEnergyLimit[particleDefinitionID]
@@ -110,6 +116,10 @@ public:
                {return (fLindhardAngleNumberHighLimit.count(particleDefinitionID) == 1)
                         ? fLindhardAngleNumberHighLimit[particleDefinitionID]
                         : fDefaultLindhardAngleNumberHighLimit;}
+  G4double GetHighAngleLimit(G4int particleDefinitionID)
+               {return (fHighAngleLimit.count(particleDefinitionID) == 1)
+                              ? fHighAngleLimit[particleDefinitionID]
+                              : fDefaultHighAngleLimit;}
 
   /// get the maximal number of photons that can be produced per fastStep
   G4int GetMaxPhotonsProducedPerStep(){return fMaxPhotonsProducedPerStep;}
@@ -124,12 +134,15 @@ private:
   ///flag of radiation model
   G4bool fRad = false;
 
-  /// maps of cuts
+  /// maps of cuts (angular cuts are chosen as std::max of
+  /// fHighAngleLimit and calculated Lindhard angle)
   std::unordered_map<G4int, G4double> fLowEnergyLimit;
   std::unordered_map<G4int, G4double> fLindhardAngleNumberHighLimit;
+  std::unordered_map<G4int, G4double> fHighAngleLimit;
 
   G4double fDefaultLowEnergyLimit = 200*CLHEP::MeV;
   G4double fDefaultLindhardAngleNumberHighLimit = 100.;
+  G4double fDefaultHighAngleLimit = 0.;
 
   /// the maximal number of photons that can be produced per fastStep
   G4int fMaxPhotonsProducedPerStep=1000.;

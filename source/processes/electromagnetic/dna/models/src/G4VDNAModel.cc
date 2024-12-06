@@ -151,7 +151,7 @@ std::vector<G4String> G4VDNAModel::BuildApplyToMatVect(const G4String& materials
 
     while (materialsNonIdentified.find_first_of('/') != std::string::npos) {
       // we select the first material and stop at the "/" caracter
-      G4String mat = materialsNonIdentified.substr(0, materialsNonIdentified.find_first_of('/'));
+      const G4String& mat = materialsNonIdentified.substr(0, materialsNonIdentified.find_first_of('/'));
       materialVect.push_back(mat);
 
       // we remove the previous material from the materialsNonIdentified string
@@ -162,7 +162,7 @@ std::vector<G4String> G4VDNAModel::BuildApplyToMatVect(const G4String& materials
 
     // we don't find "/" anymore, it means we only have one material string left
     // we get it
-    materialVect.push_back(materialsNonIdentified);
+    materialVect.push_back(std::move(materialsNonIdentified));
   }
 
   return materialVect;

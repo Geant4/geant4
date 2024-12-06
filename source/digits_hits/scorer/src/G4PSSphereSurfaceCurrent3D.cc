@@ -47,7 +47,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSSphereSurfaceCurrent3D::G4PSSphereSurfaceCurrent3D(G4String name,
+G4PSSphereSurfaceCurrent3D::G4PSSphereSurfaceCurrent3D(const G4String& name,
                                                        G4int direction,
                                                        G4int ni, G4int nj,
                                                        G4int nk, G4int depi,
@@ -61,7 +61,7 @@ G4PSSphereSurfaceCurrent3D::G4PSSphereSurfaceCurrent3D(G4String name,
 }
 
 G4PSSphereSurfaceCurrent3D::G4PSSphereSurfaceCurrent3D(
-  G4String name, G4int direction, const G4String& unit, G4int ni, G4int nj,
+  const G4String& name, G4int direction, const G4String& unit, G4int ni, G4int nj,
   G4int nk, G4int depi, G4int depj, G4int depk)
   : G4PSSphereSurfaceCurrent3D(name, direction, ni, nj, nk, depi, depj, depk) 
 {

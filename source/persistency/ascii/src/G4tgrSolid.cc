@@ -150,7 +150,7 @@ void G4tgrSolid::FillSolidParams(const std::vector<G4String>& wl)
   apar.clear();
   apar.insert(0);
   apar.insert(4);
-  angleParams["TWISTED_TUBS"] = apar;
+  angleParams["TWISTED_TUBS"] = std::move(apar);
 
   std::vector<G4double>* vd = new std::vector<G4double>;
   theSolidParams.push_back(vd);

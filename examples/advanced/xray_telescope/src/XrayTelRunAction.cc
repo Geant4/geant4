@@ -86,10 +86,6 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
   else
     G4cout << "### Run : " << runN << " (worker)" << G4endl;
 
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  } 
   // Book histograms and ntuples
   XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
   analysis->book(IsMaster());
@@ -100,9 +96,6 @@ void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
   XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
   analysis->finish(IsMaster());
-
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 }
 
 

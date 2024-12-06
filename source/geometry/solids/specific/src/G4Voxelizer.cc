@@ -306,7 +306,7 @@ void G4Voxelizer::BuildBoundaries()
             reduced.push_back(boundary[i]);
           }
         }
-        boundary = reduced;
+        boundary = std::move(reduced);
       }
     }
   }
@@ -591,7 +591,7 @@ void G4Voxelizer::BuildReduceVoxels(std::vector<G4double> boundaries[],
           skip = mergings[i];
         }
       }
-      boundaries[k] = reducedBoundary;
+      boundaries[k] = std::move(reducedBoundary);
     }
 /*
     G4int count = 0;
@@ -695,7 +695,7 @@ void G4Voxelizer::BuildReduceVoxels2(std::vector<G4double> boundaries[],
       }
     }
     reducedBoundary[destination-1] = boundary[max];
-    boundaries[k] = reducedBoundary;
+    boundaries[k] = std::move(reducedBoundary);
   }
 }
 
@@ -746,7 +746,7 @@ void G4Voxelizer::CreateMiniVoxels(std::vector<G4double> boundaries[],
           }
           fVoxelBoxes.push_back(box);
           std::vector<G4int>(candidates).swap(candidates);
-          fVoxelBoxesCandidates.push_back(candidates);
+          fVoxelBoxesCandidates.push_back(std::move(candidates));
         }
       }
     }

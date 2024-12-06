@@ -56,30 +56,29 @@ GVFlashShowerParameterisation::~GVFlashShowerParameterisation()
   delete fGamma;
 }
 
-G4double GVFlashShowerParameterisation::GetEffZ(const G4Material * mat  )
+G4double GVFlashShowerParameterisation::GetEffZ(const G4Material* mat)
 {
   // Returns Z or effective Z=sum(pi*Zi) (if compound/mixture)
   // of given material
   //
   G4double z = 0.;
   G4int nofElements = (G4int)mat->GetNumberOfElements();
-  if (nofElements > 1) 
-  {
-    for (G4int i=0; i<nofElements; ++i) {
+  if (nofElements > 1) {
+    for (G4int i = 0; i < nofElements; ++i) {
       G4double zOfElement = mat->GetElement(i)->GetZ();
       G4double massFraction = mat->GetFractionVector()[i];
       // cout << mat->GetElement(i)->GetName()
       //      <<" Z= "<<zOfElement << " , Fraction= "<<massFraction <<endl;
-      z += zOfElement*massFraction;
+      z += zOfElement * massFraction;
     }
   }
-  else { 
-    z = mat->GetZ(); 
-  }  
+  else {
+    z = mat->GetZ();
+  }
   return z;
 }
 
-G4double GVFlashShowerParameterisation::GetEffA  (const G4Material * mat  )
+G4double GVFlashShowerParameterisation::GetEffA(const G4Material* mat)
 {
   // Returns A or effective A=sum(pi*Ai) (if compound/mixture)
   // of given material
@@ -87,29 +86,29 @@ G4double GVFlashShowerParameterisation::GetEffA  (const G4Material * mat  )
   G4double a = 0.;
   G4int nofElements = (G4int)mat->GetNumberOfElements();
   if (nofElements > 1) {
-    for (G4int i=0; i<nofElements; ++i) {
-      G4double aOfElement = mat->GetElement(i)->GetA()/(g/mole);
-      G4double massFraction = mat->GetFractionVector()[i];     
-      a += aOfElement*massFraction;
+    for (G4int i = 0; i < nofElements; ++i) {
+      G4double aOfElement = mat->GetElement(i)->GetA() / (g / mole);
+      G4double massFraction = mat->GetFractionVector()[i];
+      a += aOfElement * massFraction;
     }
   }
-  else { 
-    a = mat->GetA()/(g/mole);
+  else {
+    a = mat->GetA() / (g / mole);
   }
   return a;
 }
 
-void GVFlashShowerParameterisation::PrintMaterial(const G4Material * mat)
+void GVFlashShowerParameterisation::PrintMaterial(const G4Material* mat)
 {
-  G4cout<<"/********************************************/ " << G4endl;
-  G4cout<<"  - GVFlashShowerParameterisation::Material -  " << G4endl;
-  G4cout<<"        Material : " << mat->GetName()  << G4endl;
-  G4cout<<"   Z  = " << Z      << G4endl;
-  G4cout<<"   A  = " << A      << G4endl;
-  G4cout<<"   X0 = " << X0/cm  << " cm" << G4endl;
-  G4cout<<"   Rm = " << Rm/cm  << " cm" << G4endl;
-  G4cout<<"   Ec = " << Ec/MeV << " MeV"<< G4endl;
-  G4cout<<"/********************************************/ " << G4endl; 
+  G4cout << "/********************************************/ " << G4endl;
+  G4cout << "  - GVFlashShowerParameterisation::Material -  " << G4endl;
+  G4cout << "        Material : " << mat->GetName() << G4endl;
+  G4cout << "   Z  = " << Z << G4endl;
+  G4cout << "   A  = " << A << G4endl;
+  G4cout << "   X0 = " << X0 / cm << " cm" << G4endl;
+  G4cout << "   Rm = " << Rm / cm << " cm" << G4endl;
+  G4cout << "   Ec = " << Ec / MeV << " MeV" << G4endl;
+  G4cout << "/********************************************/ " << G4endl;
 }
 
 G4double GVFlashShowerParameterisation::GeneratePhi()
@@ -118,7 +117,7 @@ G4double GVFlashShowerParameterisation::GeneratePhi()
   return Phi;
 }
 
-G4double GVFlashShowerParameterisation::gam(G4double x, G4double a) const 
+G4double GVFlashShowerParameterisation::gam(G4double x, G4double a) const
 {
-  return fGamma->Gamma(a, x); 
+  return fGamma->Gamma(a, x);
 }

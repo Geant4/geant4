@@ -178,7 +178,7 @@ void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4Track& track,
         std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
     }
 
-    result = tempResult;
+    result = std::move(tempResult);
 }
 
 template<class T,typename CONTAINER>
@@ -210,7 +210,7 @@ void G4OctreeFinder<T,CONTAINER>::FindNearest(const G4Track& track,
         std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
     }
 
-    result = tempResult;
+    result = std::move(tempResult);
 }
 
 

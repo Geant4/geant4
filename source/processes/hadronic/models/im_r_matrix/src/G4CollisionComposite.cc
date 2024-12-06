@@ -193,7 +193,7 @@ BufferCrossSection(const G4ParticleDefinition * aP, const G4ParticleDefinition *
      G4double sqrts = (a4Momentum+b4Momentum).mag();
      aNewBuff.push_back(sqrts, crossSect);
    }
-   theBuffer.push_back(aNewBuff);
+   theBuffer.push_back(std::move(aNewBuff));
 //   theBuffer.back().Print();
 }
 

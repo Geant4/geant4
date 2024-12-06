@@ -4,6 +4,10 @@
 # Set some default verbose
 /control/verbose 1
 /run/verbose 1
+
+# Activate detector array 
+#/changeDetector/activateArray true
+
 #
 #
 # Initialize kernel

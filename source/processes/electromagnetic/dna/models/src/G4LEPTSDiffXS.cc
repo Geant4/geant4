@@ -25,20 +25,16 @@
 //
 // AMR Simplification /4
 // read Diff XSection & Interpolate
-#include "globals.hh"
 
-#include <cmath>
-#include <cstdio>
-#include <cstring>
-#include <iostream> 
-#include <string>
-using namespace std;
+#include "globals.hh"
+#include "Randomize.hh"
+
 #include "CLHEP/Units/PhysicalConstants.h"
 
 #include "G4LEPTSDiffXS.hh"
 #include "G4Exp.hh"
 
-G4LEPTSDiffXS::G4LEPTSDiffXS(string file) {
+G4LEPTSDiffXS::G4LEPTSDiffXS(const G4String& file) {
   fileName = file;
 
   readDXS();
@@ -54,7 +50,7 @@ G4LEPTSDiffXS::G4LEPTSDiffXS(string file) {
 void G4LEPTSDiffXS::readDXS( ) {
 
   FILE   *fp;
-  float data, data2;
+  G4float data, data2;
 
   if ((fp=fopen(fileName.c_str(), "r"))==nullptr){
     //G4cout << "Error reading " << fileName << G4endl;
@@ -107,8 +103,8 @@ void G4LEPTSDiffXS::readDXS( ) {
       for(G4int eBin=1; eBin<=NumEn; eBin++){
 	G4double A = DXS[0][aBin];                         // Angle
 	G4double E = Eb[eBin];                             // Energy
-	G4double p = sqrt(pow( (E/27.2/137),2) +2*E/27.2); // Momentum
-	KT[eBin][aBin] = p *sqrt(2.-2.*cos(A*CLHEP::twopi/360.)); // Mom. Transfer
+	G4double p = std::sqrt(std::pow( (E/27.2/137),2) +2*E/27.2); // Momentum
+	KT[eBin][aBin] = p *std::sqrt(2.-2.*std::cos(A*CLHEP::twopi/360.)); // Mom. Transfer
 	//G4cout << "aEpKt " << aBin << " " << A << " E " << E << " p " << p << " KT "
 	//   << KT[eBin][aBin] << " DXS " << DXS[eBin][aBin] << G4endl;
       }
@@ -135,7 +131,7 @@ void G4LEPTSDiffXS::BuildCDXS(G4double E, G4double El) {
   for (G4int eBin=1;eBin<=NumEn;eBin++){
     G4double sum=0.0;
     for (G4int aBin=0;aBin<NumAng;aBin++){
-      sum += pow(DXS[eBin][aBin], (1.0-El/E) );
+      sum += std::pow(DXS[eBin][aBin], (1.0-El/E) );
       CDXS[eBin][aBin]=sum;
     }
   }
@@ -197,7 +193,7 @@ void G4LEPTSDiffXS::InterpolateCDXS() {  // *10 angles, linear
 	  ICDXS[eBin][ia] = (y1*(x2-x) + y2*(x-x1))/(x2-x1);
 	}
 	else {           //log-log ordenada
-	  ICDXS[eBin][ia] = G4Exp( (log(y1)*log(x2/x)+log(y2)*log(x/x1))/log(x2/x1) );
+	  ICDXS[eBin][ia] = G4Exp( (std::log(y1)*std::log(x2/x)+std::log(y2)*std::log(x/x1))/std::log(x2/x1) );
 	}
 
 	IKT[eBin][ia] = (z1*(x2-x) + z2*(x-x1))/(x2-x1);
@@ -215,7 +211,6 @@ void G4LEPTSDiffXS::InterpolateCDXS() {  // *10 angles, linear
 
 
 // from ICDXS
-#include "Randomize.hh"
 G4double G4LEPTSDiffXS::SampleAngle(G4double Energy) {
   G4int  ii,jj,kk=0, Ebin;
 
@@ -265,8 +260,8 @@ G4double G4LEPTSDiffXS::SampleAngleMT(G4double Energy, G4double Elost) {
 
   G4double Ei = Energy;
   G4double Ed = Energy - Elost;
-  G4double Pi = sqrt( pow( (Ei/27.2/137),2) +2*Ei/27.2); //incidente
-  G4double Pd = sqrt( pow( (Ed/27.2/137),2) +2*Ed/27.2); //dispersado
+  G4double Pi = std::sqrt( std::pow( (Ei/27.2/137),2) +2*Ei/27.2); //incidente
+  G4double Pd = std::sqrt( std::pow( (Ed/27.2/137),2) +2*Ed/27.2); //dispersado
   G4double Kmin = Pi - Pd;
   G4double Kmax = Pi + Pd;
 
@@ -317,7 +312,7 @@ G4double G4LEPTSDiffXS::SampleAngleMT(G4double Energy, G4double Elost) {
 
   G4double co = (Pi*Pi + Pd*Pd - KR*KR) / (2*Pi*Pd); //cos ang. disp.
   if(co > 1) co =1;
-  G4double x = acos(co); //*360/twopi;            //ang. dispers.
+  G4double x = std::acos(co); //*360/twopi;            //ang. dispers.
 
   // Elastic aprox.
   //x = 2*asin(KR/Pi/2)*360/twopi;
@@ -328,10 +323,6 @@ G4double G4LEPTSDiffXS::SampleAngleMT(G4double Energy, G4double Elost) {
 
 
 void G4LEPTSDiffXS::PrintDXS(G4int NE) {
-// Debug
-//#include <string>
-//using namespace std;
-
 
   G4double dxs;
 

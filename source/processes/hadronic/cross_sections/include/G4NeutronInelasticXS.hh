@@ -129,6 +129,7 @@ private:
   static const G4int MAXZINEL = 93;
   static G4ElementData* data;
   static G4double coeff[MAXZINEL];
+  static G4double lowcoeff[MAXZINEL];
   static G4String gDataDirectory;
 };
 

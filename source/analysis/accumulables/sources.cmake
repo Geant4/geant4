@@ -4,10 +4,20 @@
 geant4_add_module(G4accumulables
   PUBLIC_HEADERS
     G4MergeMode.hh
+    G4Accumulable.hh
     G4AccumulableManager.hh
     G4AccumulableManager.icc
-    G4Accumulable.hh
-    G4Accumulable.icc
+    G4AccValue.hh
+    G4AccValue.icc
+    G4AccArray.hh
+    G4AccArray.icc
+    G4AccMap.hh
+    G4AccMap.icc
+    G4AccUnorderedMap.hh
+    G4AccUnorderedMap.icc
+    G4AccVector.hh
+    G4AccVector.icc
+    G4AccType.hh
     G4VAccumulable.hh
     G4VAccumulable.icc
   SOURCES

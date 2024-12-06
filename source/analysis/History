@@ -6,6 +6,56 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-04 I. Hrivnacova (analysis-V11-02-08)
+- Coverity fixes:
+  - Correct usage of std::move
+
+## 2024-10-16 I. Hrivnacova (analysis-V11-02-07)
+- G4AccVector, G4Acc[Unordered]Map:
+  Replaced inheritance from standard collections with composition,
+  added most frequent functions:
+  - operator[], at, size, [c]begin, [c]end, clear - all
+  - insert, find  - map, unordered_map
+  - push_back, emplace_back, pop_back - vector
+
+## 2024-09-13 I. Hrivnacova (analysis-V11-02-06)
+- Fix setting file compression level in G4GenericFileManager:
+  propagate setting to all registered file managers.
+  (Addressing the problem report #2625.)
+
+## 2024-09-10 I. Hrivnacova (analysis-V11-02-05)
+- Coverity fixes:
+  - Use std::move, const auto& instead of auto to avoid copying
+
+## 2024-08-30 G. Cosmo (analysis-V11-02-04)
+- Fixed compilation warning on macOS/XCode for implicit type conversion in
+  G4AccumulableManager.
+
+## 2024-07-08 I. Hrivnacova (analysis-V11-02-03)
+Added support for accumulable collections, and more:
+- New classes:
+  G4AccArray, G4AccMap, G4AccUnorderedMap, G4AccVector
+- Renamed class G4Accumulable<T> in G4AccValue<T>,
+  and added a using for the old name for backward compatibility
+- Replaced G4AccumulableManager::RegisterAccumulable with Register
+  and deprecated the function with the old name
+- Added G4AccType enumaration for avalable accumulable types
+- Added functions for printing with G4PrintOption argument
+  to all accumulable types and G4AccumulableManager:
+  - Note this will require to update user classes which implement
+    the Print() function without or with different argument(s)
+- Added  G4Accumulables::VerboseLevel and its setter/getter
+  in G4AccumulableManager
+- Extended test08 with new accumulable types
+
+## 2024-07-08 I. Hrivnacova (analysis-V11-02-02)
+- Clang-tidy checks:
+  - Removed virtual keywords for overriding functions
+    (G4GenericFileManager, G4THnToolsManager)
+  - removed redundant data initialization (G4HnInformation)
+  - use emplace-back in G4RootMainNtupleManager.cc
+  - removed redundant data initialization
+
 ## 2024-06-05 I. Hrivnacova (analysis-V11-02-01)
 - Do not delete G4Accumulable<T> default constructor,
   as it prevents from using it in an array without an explicit

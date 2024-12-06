@@ -59,46 +59,35 @@ class GFlashSamplingShowerParameterisation;
 class GFlashShowerModel : public G4VFastSimulationModel
 {
   public:  // with description
+    GFlashShowerModel(G4String, G4Envelope*);
+    GFlashShowerModel(G4String);
+    ~GFlashShowerModel();
+    // Constructors, destructor
 
-    GFlashShowerModel (G4String, G4Envelope*);
-    GFlashShowerModel (G4String);
-    ~GFlashShowerModel ();  
-      // Constructors, destructor
-
-    G4bool ModelTrigger(const G4FastTrack &); 
+    G4bool ModelTrigger(const G4FastTrack&);
     G4bool IsApplicable(const G4ParticleDefinition&);
     void DoIt(const G4FastTrack&, G4FastStep&);
-      // Checks whether conditions of fast parameterisation are fullfilled
-  
+    // Checks whether conditions of fast parameterisation are fullfilled
+
     // setting
 
-    inline void SetFlagParamType(G4int I)
-      { FlagParamType = I; }
-    inline void SetFlagParticleContainment(G4int I)
-      { FlagParticleContainment = I; }
-    inline void SetStepInX0(G4double Lenght)
-      { StepInX0=Lenght; } 
-    inline void SetParameterisation(GVFlashShowerParameterisation &DP)
-      { Parameterisation=&DP;}
-    inline void SetHitMaker(GFlashHitMaker &Maker)
-      { HMaker=&Maker; }
-    inline void SetParticleBounds(GFlashParticleBounds &SpecificBound)
-      { PBound =&SpecificBound; }
-  
+    inline void SetFlagParamType(G4int I) { FlagParamType = I; }
+    inline void SetFlagParticleContainment(G4int I) { FlagParticleContainment = I; }
+    inline void SetStepInX0(G4double Lenght) { StepInX0 = Lenght; }
+    inline void SetParameterisation(GVFlashShowerParameterisation& DP) { Parameterisation = &DP; }
+    inline void SetHitMaker(GFlashHitMaker& Maker) { HMaker = &Maker; }
+    inline void SetParticleBounds(GFlashParticleBounds& SpecificBound) { PBound = &SpecificBound; }
+
     // getting
 
-    inline G4int GetFlagParamType()
-      { return FlagParamType; }
-    inline G4int GetFlagParticleContainment()
-      { return FlagParticleContainment; }  
-    inline G4double GetStepInX0()
-      { return StepInX0; }
+    inline G4int GetFlagParamType() { return FlagParamType; }
+    inline G4int GetFlagParticleContainment() { return FlagParticleContainment; }
+    inline G4double GetStepInX0() { return StepInX0; }
 
   public:  // without description
-
-    // Gets ?  
+    // Gets ?
     GFlashParticleBounds  *PBound;
-    GVFlashShowerParameterisation *Parameterisation;  
+    GVFlashShowerParameterisation* Parameterisation;
 
   private:
 
@@ -107,17 +96,15 @@ class GFlashShowerModel : public G4VFastSimulationModel
     //  void NeutrinoDoIt(const G4FastTrack&, G4FastStep&);
     G4bool CheckParticleDefAndContainment(const G4FastTrack &fastTrack);
     G4bool CheckContainment(const G4FastTrack &fastTrack);
-  
-  private:
 
-    GFlashHitMaker *HMaker;  
+  private:
+    GFlashHitMaker* HMaker;
     GFlashShowerModelMessenger* Messenger;
-  
+
     //Control Flags
     G4int FlagParamType;           ///0=no GFlash 1=only em showers parametrized
     G4int FlagParticleContainment; ///0=no check  ///1=only fully contained...
-    G4double StepInX0;  
+    G4double StepInX0;
     G4double EnergyStop;
-  
 };
 #endif

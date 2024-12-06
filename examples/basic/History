@@ -5,6 +5,17 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-09-18 I. Hrivnacova (exbasic-V11-02-04)
+- Added information about gui.mac and icons.mac
+  in the USER INTERFACES section in README
+
+## 2024-09-16 I. Hrivnacova (exbasic-V11-02-03)
+- Added information about TSG visualization driver and tsg_offscreen.mac
+  in the VISUALIZATION section in README
+
+## 2024-07-01 Ben Morgan (exbasic-V11-02-02)
+- Simplify and modernize CMake scripts for all basic examples
+
 ## 2024-06-10 I. Hrivnacova (exbasic-V11-02-01)
 - Fix includes, simplified local variables names:
   - Applied suggestions of include-what-you-use tools,

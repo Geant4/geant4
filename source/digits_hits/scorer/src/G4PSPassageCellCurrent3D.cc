@@ -39,7 +39,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCellCurrent3D::G4PSPassageCellCurrent3D(G4String name, G4int ni,
+G4PSPassageCellCurrent3D::G4PSPassageCellCurrent3D(const G4String& name, G4int ni,
                                                    G4int nj, G4int nk, G4int di,
                                                    G4int dj, G4int dk)
   : G4PSPassageCellCurrent(name)

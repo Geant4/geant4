@@ -1,0 +1,123 @@
+### MCF7 cell line - irradiation with He4 ions
+
+#
+# See more details on moleculardna specific UI commands:
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/configuration
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
+# - the README file
+# - the messenger classes of the moleculardna example
+#
+
+# Physics: choice of thermalization model
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+# Verbosity: settings
+/run/verbose 1
+/control/verbose 1
+
+# Chemistry: selection of IRT_syn
+/process/chem/TimeStepModel IRT_syn
+
+# Chemistry: end time of chemistry stage
+/scheduler/endTime 5.0 ns
+
+# Chemistry: set maximum allowed zero time steps
+/scheduler/maxNullTimeSteps 10000000
+
+# Geometry: size of World volume
+/world/worldSize 50 um
+
+# Geometry: shape of the cell
+/cell/radiusSize 14 2.5 11 um
+
+# Geometry: creation
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/bacterial-cell
+#  - Side length for each placement
+/dnageom/placementSize 64 64 64 nm
+#  - Scaling of XYZ in fractal definition file
+/dnageom/fractalScaling 64 64 64 nm
+#  - Path to file that defines placement locations
+/dnageom/definitionFile geometries/cube-centred-X-8.txt
+#  - Set placement volumes
+/dnageom/placementVolume turn geometries/turned_solenoid_640_withHistone.txt
+/dnageom/placementVolume turntwist geometries/turned_twisted_solenoid_640_withHistone.txt true
+/dnageom/placementVolume straight geometries/straight_solenoid_640_withHistone.txt
+
+# Geometry: distance from base pairs at which radicals are killed
+/dnageom/radicalKillDistance 9 nm
+
+# Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
+/dnageom/interactionDirectRange 2.0 angstrom
+
+# Damage: model settings
+/dnadamage/directDamageLower 5 eV
+/dnadamage/directDamageUpper 37.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.405
+/dnadamage/inductionOHChance 0.0
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.0
+/dnadamage/inductionHChance 0.0
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.0
+/dnadamage/inductionEaqChance 0.0
+
+# Analysis: add ellipsoid chromosomal region of interest, with the name "cell"
+/chromosome/add cell ellipse 7005 2500 5300 0 0 0 nm 0 0 0
+
+# Run: initialization
+/run/initialize
+
+# Run: print progress
+/run/printProgress 1
+
+# Source geometry
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 0 3000 0 nm
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 1 0 0
+/gps/pos/radius 7005 nm
+/gps/direction 0 -1 0
+
+# Source particle
+/gps/particle ion
+/gps/ion 2 4 2 ### Helium
+
+# Analysis ROOT output file name, particle energy, beam on
+/analysisDNA/fileName MCF5MeV #LET 80.3
+/gps/energy 5 MeV
+/run/beamOn 150
+
+/analysisDNA/fileName MCF7p5MeV #65.9
+/gps/energy 7.5 MeV
+/run/beamOn 180
+
+/analysisDNA/fileName MCF10MeV #53.3
+/gps/energy 10 MeV
+/run/beamOn 220
+
+/analysisDNA/fileName MCF15MeV #39.2
+/gps/energy 15 MeV
+/run/beamOn 300
+
+/analysisDNA/fileName MCF20MeV #31.4
+/gps/energy 20 MeV
+/run/beamOn 390
+
+/analysisDNA/fileName MCF30MeV #22.8
+/gps/energy 30 MeV
+/run/beamOn 550
+
+/analysisDNA/fileName MCF60MeV #13
+/gps/energy 60 MeV
+/run/beamOn 930
+
+/analysisDNA/fileName MCF261MeV #4
+/gps/energy 261 MeV
+/run/beamOn 3000

@@ -367,7 +367,7 @@ G4int G4NuDEXStatisticalNucleus::GenerateCascade(G4int InitialLevel,G4double Exc
   }
 
   G4int Npar=0;
-  G4int f_level=0,multipol;
+  G4int f_level=0,multipol=0;
   G4double alpha,E_trans,Exc_ene_i,Exc_ene_f; //icc factor, energy of the transition, initial/final excitation energy
   G4double EmissionTime=0; //in seconds
   G4int NTransition=0;

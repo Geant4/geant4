@@ -41,17 +41,18 @@
 class G4ParticleHPNInelasticFS : public G4ParticleHPInelasticCompFS
 {
   public:
+
     G4ParticleHPNInelasticFS();
     ~G4ParticleHPNInelasticFS() override = default;
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
-              G4ParticleDefinition*) override;
+
+    void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+              const G4String& aFSType, G4ParticleDefinition*) override;
     G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override;
     G4ParticleHPFinalState* New() override
     {
       auto theNew = new G4ParticleHPNInelasticFS;
       return theNew;
     }
-
-  private:
 };
+
 #endif

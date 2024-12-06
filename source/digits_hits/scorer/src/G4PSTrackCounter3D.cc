@@ -36,7 +36,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSTrackCounter3D::G4PSTrackCounter3D(G4String name, G4int direction, G4int ni,
+G4PSTrackCounter3D::G4PSTrackCounter3D(const G4String& name, G4int direction, G4int ni,
                                        G4int nj, G4int nk, G4int depi,
                                        G4int depj, G4int depk)
   : G4PSTrackCounter(name, direction)

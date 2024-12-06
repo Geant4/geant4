@@ -301,7 +301,7 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
              << " does not use cross section matrices" << G4endl;
       std::vector<G4AdjointCSMatrix*> two_empty_matrices;
       fAdjointCSMatricesForProdToProj.push_back(two_empty_matrices);
-      fAdjointCSMatricesForScatProjToProj.push_back(two_empty_matrices);
+      fAdjointCSMatricesForScatProjToProj.push_back(std::move(two_empty_matrices));
     }
   }
   G4cout << "              All adjoint cross section matrices are computed!"
@@ -1066,11 +1066,10 @@ void G4AdjointCSManager::DefineCurrentMaterial(
 void G4AdjointCSManager::DefineCurrentParticle(
   const G4ParticleDefinition* aPartDef)
 {
-  static G4ParticleDefinition* currentParticleDef = nullptr;
-
-  if(aPartDef != currentParticleDef)
+ 
+  if(aPartDef != fCurrentParticleDef)
   {
-    currentParticleDef = const_cast<G4ParticleDefinition*>(aPartDef);
+    fCurrentParticleDef = const_cast<G4ParticleDefinition*>(aPartDef);
     fMassRatio         = 1.;
     if(aPartDef == fAdjIon)
       fMassRatio = proton_mass_c2 / aPartDef->GetPDGMass();

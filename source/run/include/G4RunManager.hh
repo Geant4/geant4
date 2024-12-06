@@ -415,8 +415,9 @@ class G4RunManager
 
     // if vl = 1 : status before primary particle generation is stored
     // if vl = 2 : status before event processing (after primary particle
-    // generation) is stored if vl = 3 : both are stored if vl = 0 : none is
-    // stored (default).
+    //             generation) is stored
+    // if vl = 3 : both are stored
+    // if vl = 0 : none is stored (default).
     inline void StoreRandomNumberStatusToG4Event(G4int vl)
     {
       storeRandomNumberStatusToG4Event = vl;
@@ -441,7 +442,7 @@ class G4RunManager
       G4String shellCmd = "if not exist " + dirStr + " mkdir ";
 #endif
       shellCmd += dirStr;
-      randomNumberStatusDir = dirStr;
+      randomNumberStatusDir = std::move(dirStr);
       G4int sysret = system(shellCmd);
       if (sysret != 0) {
         G4String errmsg = "\"" + shellCmd + "\" returns non-zero value. Directory creation failed.";
@@ -533,35 +534,56 @@ class G4RunManager
     virtual void RegisterSubEventType(G4int, G4int)
     {
       G4Exception("G4RunManager::RegisterSubEventType","RunSE1000",FatalException,
-        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+        "Base class method is invoked for a RunManager that is not sub-event parallel mode");
+    }
+    virtual void MergeTrajectories(const G4SubEvent*,const G4Event*)
+    {
+      G4Exception("G4RunManager::MergeTrajectories","RunSE1001",FatalException,
+        "Base class method is invoked for a RunManager that is not sub-event parallel mode");
     }
     virtual void UpdateScoringForSubEvent(const G4SubEvent*,const G4Event*)
     {
       G4Exception("G4RunManager::UpdateScoringForSubEvent","RunSE1001",FatalException,
-        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+        "Base class method is invoked for a RunManager that is not sub-event parallel mode");
     }
     virtual const G4SubEvent* GetSubEvent(G4int, G4bool&, 
               G4long&, G4long&, G4long&, G4bool)
     {
       G4Exception("G4RunManager::GetSubEvent","RunSE1002",FatalException,
-        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+        "Base class method is invoked for a RunManager that is not sub-event parallel mode");
       return nullptr;
     }
     virtual void SubEventFinished(const G4SubEvent*,const G4Event*)
     {
       G4Exception("G4RunManager::SubEventFinished","RunSE1003",FatalException,
-        "Base class method is invoked for a RunManager that is not sub-event paralle mode");
+        "Base class method is invoked for a RunManager that is not sub-event parallel mode");
     }
     virtual G4int GetSubEventType() const
     {
       G4Exception("G4RunManager::GetSubEventType","RunSE1010",FatalException,
-        "Base class method is invoked for RunManager that is not a worker in sub-event paralle mode");
+        "Base class method is invoked for RunManager that is not a worker in sub-event parallel mode");
       return -1; 
+    }
+    virtual void SetSubEventType(G4int) 
+    {
+      G4Exception("G4RunManager::SetSubEventType","RunSE1011",FatalException,
+        "Base class method is invoked for RunManager that is not a worker in sub-event parallel mode");
     }
     virtual std::size_t GetMaxNTrack() const
     { return 0; }
+    virtual void TrajectoriesToBeMerged(G4bool)
+    {
+      G4Exception("G4RunManager::TrajectoriesToBeMerged","RunSE1001",FatalException,
+        "Base class method is invoked for a RunManager that is not sub-event parallel mode");
+    }
 
     virtual void ReportEventDeletion(const G4Event* evt);
+
+    // Forcing geometry voxelization at the time of constructing geometry during 
+    // the initialization. If this is not set, voxelization is done when BeamOn 
+    // starts.
+    inline void ResetNavigatorAtInitialization(G4bool val=true)
+    { if(kernel!=nullptr) kernel->ResetNavigatorAtInitialization(val); }
 
   protected:
     // This constructor is called in case of multi-threaded build.
@@ -651,6 +673,7 @@ class G4RunManager
     static G4ThreadLocal G4RunManager* fRunManager;
 
     G4RunMessenger* runMessenger = nullptr;
+
 };
 
 #endif

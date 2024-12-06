@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-28 Ben Morgan (particles-V11-02-01)
+- Apply [GitHub PR 74](https://github.com/Geant4/geant4/pull/74), fixing bug in
+  `G4ParticleMessenger` that never updated the currently selected particle.
+  - Simplified logic in patch to remove local static.
+
+## 2024-08-01 Alberto Ribon (particles-V11-02-00)
+- G4ChargedUnknownParticle : new class, similar to G4UnknownParticle for
+  charged unknown particles.
+  ( This is part of ATLAS and LHCb request to assign automatically 
+    ionisation and multiple scattering processes to charged primary particles
+    with valid PDG code but not known to Geant4. )
+
 ## 2023-11-20 Vladimir Ivanchenko (particles-V11-01-10)
 - G4IonTable - fixed run time memory leak by change of signature of GetIonName(..)
   methods - now they return G4String instead of a reference to a string, code

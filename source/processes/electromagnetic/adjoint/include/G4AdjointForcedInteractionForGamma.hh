@@ -47,7 +47,7 @@ class G4AdjointCSManager;
 class G4AdjointForcedInteractionForGamma : public G4VContinuousDiscreteProcess
 {
  public:
-  explicit G4AdjointForcedInteractionForGamma(G4String process_name);
+  explicit G4AdjointForcedInteractionForGamma(const G4String& process_name);
 
   ~G4AdjointForcedInteractionForGamma() override;
 
@@ -102,6 +102,8 @@ class G4AdjointForcedInteractionForGamma : public G4VContinuousDiscreteProcess
   G4double fTotNbAdjIntLength = 0.;
 
   G4double fNbAdjIntLength = 0.;
+  
+  G4int fLastFreeFlightTrackId = 1000;
 
   G4bool fContinueGammaAsNewFreeFlight = false;
   G4bool fFreeFlightGamma              = false;

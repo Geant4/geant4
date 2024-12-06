@@ -45,13 +45,15 @@
 
 class G4ParticleDefinition;
 class G4ChargeExchangeXS;
+class G4ExcitationHandler;
+class G4NistManager;
 
 class G4ChargeExchange : public G4HadronicInteraction
 {
 public:
 
   explicit G4ChargeExchange(G4ChargeExchangeXS*);
-  ~G4ChargeExchange() override = default;
+  ~G4ChargeExchange() override;
 
   G4ChargeExchange( const G4ChargeExchange &right ) = delete;
   const G4ChargeExchange & operator=( const G4ChargeExchange &right ) = delete;
@@ -66,10 +68,15 @@ public:
 
 private:
 
+  G4bool SampleMass(G4double& mass, const G4double width, const G4double elim);
+  
   G4ChargeExchangeXS* fXSection;
+  G4ExcitationHandler* fHandler;
+  G4NistManager* nist;
 
   G4int secID;  // Creator model ID for the secondaries created by this model
   G4double lowEnergyLimit; // lowest limit to avoid numerical problems
+  G4double fXSWeightFactor;
 };
 
 #endif

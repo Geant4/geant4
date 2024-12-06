@@ -63,10 +63,17 @@ G4ElementData* G4GammaNuclearXS::data = nullptr;
 
 G4double G4GammaNuclearXS::coeff[3][3];
 G4double G4GammaNuclearXS::xs150[] = {0.0};
-const G4double G4GammaNuclearXS::eTransitionBound = 150.*CLHEP::MeV; 
 const G4int G4GammaNuclearXS::freeVectorException[] = {
 4, 6, 7, 8, 27, 39, 45, 65, 67, 69, 73};
 G4String G4GammaNuclearXS::gDataDirectory = "";
+
+namespace
+{
+  // Upper limit of the linear transition between IAEA database and CHIPS model
+  const G4double eTransitionBound = 150.*CLHEP::MeV;
+  // A limit energy to correct CHIPS parameterisation for light isotopes 
+  const G4double ehigh = 10*CLHEP::GeV;
+}
 
 G4GammaNuclearXS::G4GammaNuclearXS() 
   : G4VCrossSectionDataSet(Default_Name()), gamma(G4Gamma::Gamma())
@@ -76,10 +83,11 @@ G4GammaNuclearXS::G4GammaNuclearXS()
     G4cout << "G4GammaNuclearXS::G4GammaNuclearXS Initialise for Z < " 
 	   << MAXZGAMMAXS << G4endl;
   }
-  ggXsection =
-    G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet("PhotoNuclearXS");
-  if (ggXsection == nullptr)
+  ggXsection = dynamic_cast<G4PhotoNuclearCrossSection*>
+    (G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet("PhotoNuclearXS"));
+  if (ggXsection == nullptr) {
     ggXsection = new G4PhotoNuclearCrossSection();
+  }
   SetForAllAtomsAndEnergies(true);
 
   // full data set is uploaded once
@@ -117,18 +125,30 @@ G4bool G4GammaNuclearXS::IsIsoApplicable(const G4DynamicParticle*,
 
 G4double 
 G4GammaNuclearXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
-                                         G4int ZZ, const G4Material* mat)
+                                         G4int Z, const G4Material*)
+{
+  return ElementCrossSection(aParticle->GetKineticEnergy(), Z); 
+}
+
+G4double
+G4GammaNuclearXS::ElementCrossSection(const G4double ekin, const G4int ZZ)
 {
   // check cache
   const G4int Z = (ZZ < MAXZGAMMAXS) ? ZZ : MAXZGAMMAXS - 1;
-  const G4double ekin = aParticle->GetKineticEnergy();
   if(Z == fZ && ekin == fEkin) { return fXS; }
   fZ = Z;
   fEkin = ekin;
 
   auto pv = data->GetElementData(Z);
-  if(pv == nullptr || 1 == Z) {
-    fXS = ggXsection->GetElementCrossSection(aParticle, Z, mat);
+  const G4double limCHIPS1 = 25*CLHEP::MeV;
+  const G4double limCHIPS2 = 16*CLHEP::MeV;
+  if (pv == nullptr || 1 == Z || Z == 40 || Z == 74 ||
+     (Z == 24 && ekin >= limCHIPS1) ||
+     (Z == 39 && ekin >= limCHIPS1) ||
+     (Z == 50 && ekin >= limCHIPS2) ||
+     (Z == 64 && ekin >= limCHIPS2)
+     ) {
+    fXS = ggXsection->ComputeElementXSection(ekin, Z);
     return fXS;
   }
   const G4double emax = pv->GetMaxEnergy();
@@ -138,7 +158,7 @@ G4GammaNuclearXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
     fXS = pv->Value(ekin);
     // high energy CHIPS parameterisation
   } else if(ekin >= eTransitionBound) {
-    fXS = ggXsection->GetElementCrossSection(aParticle, Z, mat);
+    fXS = ggXsection->ComputeElementXSection(ekin, Z);
     // linear interpolation
   } else {
     const G4double rxs = xs150[Z];
@@ -156,12 +176,6 @@ G4GammaNuclearXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   return fXS;
 }
 
-G4double G4GammaNuclearXS::ElementCrossSection(G4double ekin, G4int ZZ)
-{    
-  G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), ekin);
-  return GetElementCrossSection(&theGamma, ZZ);
-}
-
 G4double G4GammaNuclearXS::LowEnergyCrossSection(G4double ekin, G4int ZZ)
 {    
   const G4int Z = (ZZ < MAXZGAMMAXS) ? ZZ : MAXZGAMMAXS - 1;
@@ -169,31 +183,29 @@ G4double G4GammaNuclearXS::LowEnergyCrossSection(G4double ekin, G4int ZZ)
   return pv->Value(ekin);
 }
 
-G4double 
-G4GammaNuclearXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
-{
-  G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), ekin);
-  return GetIsoCrossSection(&theGamma, Z, A);
-}
-
 G4double G4GammaNuclearXS::GetIsoCrossSection(
          const G4DynamicParticle* aParticle,
-	 G4int ZZ, G4int A,
-	 const G4Isotope*, const G4Element*, const G4Material* mat)
+	 G4int Z, G4int A,
+	 const G4Isotope*, const G4Element*, const G4Material*)
+{
+  return IsoCrossSection(aParticle->GetKineticEnergy(), Z, A);
+}
+
+G4double 
+G4GammaNuclearXS::IsoCrossSection(const G4double ekin, const G4int ZZ, const G4int A)
 {
   const G4int Z = (ZZ < MAXZGAMMAXS) ? ZZ : MAXZGAMMAXS - 1;
   // cross section per element
-  G4double xs = GetElementCrossSection(aParticle, Z, mat);
-  const G4double ekin = aParticle->GetKineticEnergy();
+  G4double xs = ElementCrossSection(ekin, Z);
 
   if (Z > 2) {
     xs *= A/aeff[Z];
   } else {
     G4int AA = A - amin[Z];
-    if(ekin >= 10.*CLHEP::GeV && AA >=0 && AA <=2) { 
+    if(ekin >= ehigh && AA >=0 && AA <=2) { 
       xs *= coeff[Z][AA];
     } else {
-      xs = ggXsection->GetIsoCrossSection(aParticle, Z, A);
+      xs = ggXsection->ComputeIsoXSection(ekin, Z, A);
     }
   }
 
@@ -258,7 +270,7 @@ void G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   // prepare isotope selection
   const G4ElementTable* table = G4Element::GetElementTable();
   std::size_t nIso = temp.size();
-  for ( auto & elm : *table ) {
+  for (auto const & elm : *table ) {
     std::size_t n = elm->GetNumberOfIsotopes();
     if (n > nIso) { nIso = n; }
   }
@@ -289,18 +301,16 @@ void G4GammaNuclearXS::Initialise(G4int Z)
 	 << " A= " << Amean << "  Amin= " << amin[Z] 
 	 << "  Amax= " << amax[Z] << G4endl;
   */
-  G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), eTransitionBound);
-  xs150[Z] = ggXsection->GetElementCrossSection(&theGamma, Z, 0);
+  xs150[Z] = ggXsection->ComputeElementXSection(eTransitionBound, Z);
 
   // compute corrections for low Z data
   if(Z <= 2){
-    theGamma.SetKineticEnergy(10*CLHEP::GeV);
     if(amax[Z] > amin[Z]) {
       for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
         G4int AA = A - amin[Z];
 	if(AA >= 0 && AA <= 2) {
-	  G4double sig1 = ggXsection->GetIsoCrossSection(&theGamma, Z, A);
-	  G4double sig2 = ggXsection->GetElementCrossSection(&theGamma, Z, 0);
+	  G4double sig1 = ggXsection->ComputeIsoXSection(ehigh, Z, A);
+	  G4double sig2 = ggXsection->ComputeElementXSection(ehigh, Z);
 	  if(sig2 > 0.) { coeff[Z][AA] = (sig1/sig2); }
 	  else { coeff[Z][AA] = 1.; }
 	}

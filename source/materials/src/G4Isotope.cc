@@ -44,10 +44,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4IsotopeTable G4Isotope::theIsotopeTable;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 // Create an isotope
 //
 G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A, G4int il)
@@ -67,13 +63,13 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A, G4int i
     fA =
       (G4NistManager::Instance()->GetAtomicMass(Z, N)) * CLHEP::g / (CLHEP::mole * CLHEP::amu_c2);
   }
-  theIsotopeTable.push_back(this);
-  fIndexInTable = theIsotopeTable.size() - 1;
+  GetIsotopeTableRef().push_back(this);
+  fIndexInTable = GetIsotopeTableRef().size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Isotope::~G4Isotope() { theIsotopeTable[fIndexInTable] = nullptr; }
+G4Isotope::~G4Isotope() { GetIsotopeTableRef()[fIndexInTable] = nullptr; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -120,27 +116,43 @@ std::ostream& operator<<(std::ostream& flux, const G4IsotopeTable& IsotopeTable)
   // Dump info for all known isotopes
   flux << "\n***** Table : Nb of isotopes = " << IsotopeTable.size() << " *****\n" << G4endl;
 
-  for (auto& i : IsotopeTable) {
+  for (auto const & i : IsotopeTable) {
     flux << i << G4endl;
   }
 
   return flux;
 }
+      
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4IsotopeTable* G4Isotope::GetIsotopeTable() { return &GetIsotopeTableRef(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4IsotopeTable* G4Isotope::GetIsotopeTable() { return &theIsotopeTable; }
+G4IsotopeTable& G4Isotope::GetIsotopeTableRef()
+{
+  struct Holder {
+    G4IsotopeTable instance;
+    ~Holder() {
+      for(auto item : instance)
+        delete item;
+    }
+  };
+  static Holder _holder;
+  return _holder.instance;
+}
+  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-size_t G4Isotope::GetNumberOfIsotopes() { return theIsotopeTable.size(); }
+std::size_t G4Isotope::GetNumberOfIsotopes() { return GetIsotopeTableRef().size(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Isotope* G4Isotope::GetIsotope(const G4String& isotopeName, G4bool warning)
 {
   // search the isotope by its name
-  for (auto& J : theIsotopeTable) {
+  for (auto const & J : GetIsotopeTableRef()) {
     if (J->GetName() == isotopeName) {
       return J;
     }

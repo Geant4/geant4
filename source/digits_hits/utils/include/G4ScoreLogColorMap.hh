@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoreLogColorMap
 //
-//
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4ScoreLogColorMap_h
 #define G4ScoreLogColorMap_h 1
 
@@ -35,10 +36,10 @@
 class G4ScoreLogColorMap : public G4VScoreColorMap
 {
  public:
+
   using G4VScoreColorMap::G4VScoreColorMap;
   ~G4ScoreLogColorMap() override = default;
 
- public:
   void GetMapColor(G4double val, G4double color[4]) override;
 
   // draw a color chart

@@ -23,12 +23,12 @@ scavenger: NO3-   0.5e-3
 # REACTANTS -> PRODUCTS , RATE [1/s/(mole/l)] or [1/s]   TYPE  
 #-------------------------------------------------------------
 e_aq + e_aq + [H2O] + [H2O] -> H2 + OH- + OH- , 6.36e9      type_3
-e_aq + OH -> OH- ,                              2.95e10     type_2	
+e_aq + °OH -> OH- ,                              2.95e10     type_2
 e_aq + H + [H2O] -> H2 + OH- ,                  2.50e10     type_1	
 e_aq + H3O+ -> H + [H2O] ,                      2.11e10     type_4 	
-e_aq + H2O2 -> OH- + OH ,                       1.10e10     type_2  	
-OH + OH -> H2O2 ,                               5.50e9      type_2   
-OH + H -> [H2O] ,                               1.55e10     type_2   
+e_aq + H2O2 -> OH- + °OH ,                       1.10e10     type_2
+°OH + °OH -> H2O2 ,                               5.50e9      type_2
+°OH + H -> [H2O] ,                               1.55e10     type_2
 H + H -> H2 ,                                   5.03e9      type_1  	
 H3O+ + OH- -> [H2O] + [H2O] ,                   1.13e11     type_3   
 
@@ -36,6 +36,6 @@ H3O+ + OH- -> [H2O] + [H2O] ,                   1.13e11     type_3
 # Reactions with the scavengers
 # Specify the scavenger with []
 #-------------------------------
-OH + [NO2-] -> [NO2] + OH- , 8.e9      type_6  # NO2 not implemented; reaction with one product
+°OH + [NO2-] -> [NO2] + OH- , 8.e9      type_6  # NO2 not implemented; reaction with one product
 e_aq + [NO2-] -> [NO2--] ,   3.5e9     type_6  # NO2-- not implemented; reaction without product
 e_aq + [NO3-] -> [NO3--] ,   9.7e9     type_6  # NO3-- not implemented; reaction without product

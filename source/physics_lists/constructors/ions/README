@@ -33,12 +33,23 @@
  cross sections and final states) is used below 200 MeV/n for deuteron,
  triton, He3 and alpha (and BIC used above 190 MeV/n for these light ions).
 
- G4IonQMDPhysic
- --------------
+ G4IonQMDPhysics
+ ---------------
  Inelastic ion-ion processes (for deuteron, triton, He3, alpha and
  generic ion projectiles), with Glauber-Gribov cross section and
  BIC, QMD and FTFP for the final state. These three final-state models
  are used in the following intervals of projectile kinetic energy:
  -  BIC below 110 MeV/nucleon;
  -  QMD between 100 and 6'000 MeV/nucleon;
+ -  FTF above 5990 MeV/nucleon.
+
+ G4IonLightIonQMDPhysics
+ -----------------------
+A variant of G4IonQMDPhysics, in which G4LightIonQMDReaction is used
+in the interval [30 MeV, 510 MeV].
+These four final-state models are used in the following intervals of
+projectile kinetic energy:
+ -  BIC below 40 MeV/nucleon;
+ -  LightIonQMD between 30 and 510 MeV/nucleon;
+ -  QMD between 500 and 6'000 MeV/nucleon;
  -  FTF above 5990 MeV/nucleon.

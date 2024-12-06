@@ -674,7 +674,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
                        clusters_tmp.insert(std::multimap<G4int,G4int>::value_type(it->first, it->second));
                      }
                    }
-                   clusters = clusters_tmp;
+                   clusters = std::move(clusters_tmp);
                  }
                }
              }

@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-01 Evgueni Tcherniaev (geom-specific-V11-02-08)
+- G4GenericTrap: Fixed minor defect reported by Coverity
+
+## 2024-07-18 Alvaro Tolosa-Delgado (geom-specific-V11-02-07)
+- Remove internal state of G4TwistedTubs and G4VTwistedFaceted.
+
+## 2024-07-10 Evgueni Tcherniaev (geom-specific-V11-02-06)
+- G4ExtrudedSolid: Fixed defects reported by Coverity
+
+## 2024-07-08 Gabriele Cosmo (geom-specific-V11-02-05)
+- Fixed reported Coverity defect; in G4Voxelizer, use std::move instead of
+  plain vector copy in methods BuildReduceVoxels(..), BuildReduceVoxels2(..),
+  BuildBoundaries() and CreateMiniVoxels(..).
+
 ## 2024-05-29 Evgueni Tcherniaev (geom-specific-V11-02-04)
 - Added new methods GetNumOfConstituents() and IsFaceted().
 

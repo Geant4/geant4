@@ -76,7 +76,7 @@ public:
 
   explicit G4MuPairProduction(const G4String& processName = "muPairProd");
 
-  ~G4MuPairProduction() = default;
+  ~G4MuPairProduction() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition& p) override;
 

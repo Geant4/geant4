@@ -50,7 +50,7 @@ G4AugerTransition::G4AugerTransition(G4int finalShell, std::vector<G4int> transI
   augerOriginatingShellIdsMap = *idMap;
   augerTransitionEnergiesMap = *energyMap;
   augerTransitionProbabilitiesMap = *probabilityMap;
-  transitionOriginatingShellIds = transIds;
+  transitionOriginatingShellIds = std::move(transIds);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -83,7 +83,7 @@ class G4TNtupleDescription
 
 template <typename NT, typename FT>
 void G4TNtupleDescription<NT, FT>::SetFile(std::shared_ptr<FT> file)
-{ fFile = file; }
+{ fFile = std::move(file); }
 
 template <typename NT, typename FT>
 void G4TNtupleDescription<NT, FT>::SetNtuple(NT* ntuple)

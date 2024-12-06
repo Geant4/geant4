@@ -214,10 +214,10 @@ G4String G4VisCommandList::GetCurrentValue (G4UIcommand*)
 
 void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
 {
-  G4String& verbosityString = newValue;
-  G4VisManager::Verbosity verbosity =
-    fpVisManager->GetVerbosityValue(verbosityString);
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosityValue(newValue);
 
+  G4VisManager::PrintAvailableVerbosity(G4cout);
+  G4cout << G4endl;
   fpVisManager->PrintAvailableGraphicsSystems(verbosity);
   G4cout << G4endl;
   fpVisManager->PrintAvailableModels(verbosity);
@@ -228,6 +228,7 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   G4cout << G4endl;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand("/vis/scene/list ! " + newValue);
+  G4cout << G4endl;
   UImanager->ApplyCommand("/vis/viewer/list ! " + newValue);
 
   G4cout <<
@@ -563,7 +564,7 @@ G4VisCommandVerbose::G4VisCommandVerbose () {
     fpCommand -> SetGuidance(G4VisManager::VerbosityGuidanceStrings[i]);
   }
   fpCommand -> SetParameterName("verbosity", omitable=true);
-  fpCommand -> SetDefaultValue("warnings");
+  fpCommand -> SetDefaultValue("");
 }
 
 G4VisCommandVerbose::~G4VisCommandVerbose () {
@@ -580,6 +581,6 @@ void G4VisCommandVerbose::SetNewValue (G4UIcommand*,
     fpVisManager->GetVerbosityValue(newValue);
   fpVisManager->SetVerboseLevel(verbosity);
   // Always prints whatever the verbosity...
-  G4cout << "Visualization verbosity changed to "
+  G4cout << "Visualization verbosity is now "
 	 << G4VisManager::VerbosityString(verbosity) << G4endl;
 }

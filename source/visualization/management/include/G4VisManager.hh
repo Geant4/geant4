@@ -333,8 +333,6 @@ public: // With description
   G4bool FilterHit(const G4VHit&);
   G4bool FilterDigi(const G4VDigi&);
 
-#ifdef G4MULTITHREADED
-
   virtual void SetUpForAThread();
   // This method is invoked by G4WorkerRunManager
 
@@ -345,7 +343,6 @@ public: // With description
   static G4ThreadFunReturnType G4VisSubThread(G4ThreadFunArgType);
   // Vis sub-thread function.
 
-#endif
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -363,14 +360,10 @@ private:
   void BeginOfEvent ();
 
   void EndOfEvent ();
-  // This is called on change of state (G4ApplicationState).  It is
-  // used to draw hits, digis and trajectories if included in the
-  // current scene at the end of event, as required.
-  G4bool Relinquishable (G4int eventID, G4int nKeptEvents, G4int nRequests);
-  void EndOfEventKernel (const G4Event* event);
-  void EndOfEventCleanup
-  (const G4Event* currentEvent,
-   G4int eventID);  // See EndOfEventKernel: can be == -2?
+  void EndOfEventKernel (const G4Event* currentEvent);
+  void EndOfEventCleanup (const G4Event* currentEvent);
+  G4bool RequiredToBeKeptForVis (G4int eventID);
+  // Cluster of methods to handle end of event.
 
   void EndOfRun ();
 
@@ -419,10 +412,8 @@ public: // With description
   G4bool                       GetReviewingPlots           () const;
   G4bool                       GetAbortReviewPlots         () const;
   const G4ViewParameters&      GetDefaultViewParameters    () const;
-#ifdef G4MULTITHREADED
   G4int                        GetMaxEventQueueSize        () const;
   G4bool                       GetWaitOnEventQueueFull     () const;
-#endif
   virtual const G4String&      GetDefaultGraphicsSystemName();
   // The above has to be virtual so that the derived class, G4VisExecutive,
   // can override and non-const because on first pass it may/should
@@ -452,10 +443,8 @@ public: // With description
   void              SetReviewingPlots           (G4bool);
   void              SetAbortReviewPlots         (G4bool);
   void              SetDefaultViewParameters    (const G4ViewParameters&);
-#ifdef G4MULTITHREADED
   void              SetMaxEventQueueSize        (G4int);
   void              SetWaitOnEventQueueFull     (G4bool);
-#endif
   void              SetDefaultGraphicsSystemName(const G4String&);
   void              SetDefaultXGeometryString   (const G4String&);
   void              SetDefaultGraphicsSystemBasis(const G4String&);
@@ -484,6 +473,8 @@ public: // With description
   
   static std::vector<G4String> VerbosityGuidanceStrings;
   // Guidance on the use of visualization verbosity.
+
+  static void PrintAvailableVerbosity (std::ostream& os);
 
   void PrintAvailableGraphicsSystems (Verbosity, std::ostream& = G4cout) const;
 
@@ -564,10 +555,8 @@ private:
   G4bool                fIsDrawGroup;
   G4int                 fDrawGroupNestingDepth;
   G4bool                fIgnoreStateChanges;
-#ifdef G4MULTITHREADED
   G4int                 fMaxEventQueueSize;
   G4bool                fWaitOnEventQueueFull;
-#endif
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

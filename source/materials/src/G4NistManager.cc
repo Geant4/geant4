@@ -44,10 +44,8 @@
 
 #include "G4NistManager.hh"
 #include "G4AutoLock.hh"
-#include "G4Isotope.hh"
 #include "G4NistMessenger.hh"
 
-G4NistManager* G4NistManager::instance = nullptr;
 
 namespace
 {
@@ -58,28 +56,14 @@ G4Mutex nistManagerMutex = G4MUTEX_INITIALIZER;
 
 G4NistManager* G4NistManager::Instance()
 {
-  if (instance == nullptr) {
-    G4AutoLock l(&nistManagerMutex);
-    if (instance == nullptr) {
-      static G4NistManager manager;
-      instance = &manager;
-    }
-    l.unlock();
-  }
-  return instance;
+  static G4NistManager manager;
+  return &manager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NistManager::~G4NistManager()
 {
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  for (auto const & mat : *theMaterialTable) { delete mat; }
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  for (auto const & elm : *theElementTable) { delete elm; }
-  const G4IsotopeTable* theIsotopeTable = G4Isotope::GetIsotopeTable();
-  for (auto const & iso : *theIsotopeTable) { delete iso; }
-
   delete messenger;
   delete matBuilder;
   delete elmBuilder;
@@ -171,6 +155,10 @@ G4NistManager::G4NistManager()
   nElements = 0;
   nMaterials = 0;
   verbose = 0;
+
+  theMaterialTable = G4Material::GetMaterialTable();
+  theElementTable = G4Element::GetElementTable();
+  theIsotopeTable = G4Isotope::GetIsotopeTable();
 
   elmBuilder = new G4NistElementBuilder(verbose);
   matBuilder = new G4NistMaterialBuilder(elmBuilder, verbose);

@@ -53,6 +53,8 @@
 #include "G4Pow.hh"
 #include "G4Exp.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4EmParameters.hh"
+#include "G4EmElementXS.hh"
 #include "G4AutoLock.hh"
 
 const G4int G4BetheHeitlerModel::gMaxZet = 120; 
@@ -79,6 +81,7 @@ G4BetheHeitlerModel::~G4BetheHeitlerModel()
     for (auto const & ptr : gElementData) { delete ptr; }
     gElementData.clear(); 
   }
+  delete fXSection;
 }
 
 void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p, 
@@ -91,6 +94,12 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
     if (gElementData.empty()) {
       isFirstInstance = true;
       gElementData.resize(gMaxZet+1, nullptr);
+
+      // EPICS2017 flag should be checked only once
+      useEPICS2017 = G4EmParameters::Instance()->UseEPICS2017XS();
+      if (useEPICS2017) {
+	fXSection = new G4EmElementXS(1, 100, "convEPICS2017", "/epics2017/pair/pp-cs-");
+      }
     }
     // static data should be initialised only in the one instance
     InitialiseElementData();
@@ -124,6 +133,12 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   static const G4double kMC2  = CLHEP::electron_mass_c2;
   // zero cross section below the kinematical limit: Eg<2mc^2
   if (Z < 0.9 || gammaEnergy <= 2.0*kMC2) { return xSection; }
+
+  G4int iZ = G4lrint(Z);
+  if (useEPICS2017 && iZ < 101) {
+    return fXSection->GetXS(iZ, gammaEnergy);
+  }
+
   //
   static const G4double gammaEnergyLimit = 1.5*CLHEP::MeV;
   // set coefficients a, b c
@@ -310,7 +325,8 @@ void G4BetheHeitlerModel::InitialiseElementData()
   // create for all elements that are in the detector
   auto elemTable = G4Element::GetElementTable();
   for (auto const & elem : *elemTable) {
-    const G4int iz = std::min(gMaxZet, elem->GetZasInt());
+    const G4int Z = elem->GetZasInt();
+    const G4int iz = std::min(gMaxZet, Z);
     if (nullptr == gElementData[iz]) { // create it if doesn't exist yet
       G4double FZLow     = 8.*elem->GetIonisation()->GetlogZ3();
       G4double FZHigh    = FZLow + 8.*elem->GetfCoulomb();
@@ -319,6 +335,10 @@ void G4BetheHeitlerModel::InitialiseElementData()
       elD->fDeltaMaxHigh = G4Exp((42.038 - FZHigh)/8.29) - 0.958;
       gElementData[iz]   = elD;
     }
+    if (useEPICS2017 && Z < 101) {
+      fXSection->Retrieve(Z);
+    }
   }
+  
 }
 

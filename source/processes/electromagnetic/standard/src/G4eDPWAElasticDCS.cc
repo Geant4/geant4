@@ -691,8 +691,11 @@ void G4eDPWAElasticDCS::ComputeMParams(const G4Material* mat, G4double& theBc,
    }
    const G4double density = mat->GetDensity()*CLHEP::cm3/CLHEP::g; // [g/cm3]
    //
-   theBc  = const1*density*zs/sa*G4Exp(ze/zs)/G4Exp(zx/zs);  //[1/cm]
-   theXc2 = const2*density*zs/sa;  // [MeV2/cm]
+   G4double z0 = (0.0 == sa) ? 0.0 : zs/sa;
+   G4double z1 = (0.0 == zs) ? 0.0 : (ze - zx)/zs;
+   
+   theBc  = const1*density*z0*G4Exp(z1);  //[1/cm]
+   theXc2 = const2*density*z0;  // [MeV2/cm]
    // change to Geant4 internal units of 1/length and energ2/length
    theBc  *= 1.0/CLHEP::cm;
    theXc2 *= CLHEP::MeV*CLHEP::MeV/CLHEP::cm;

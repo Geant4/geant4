@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-10-25 John Allison (exam-ext-vis-standalone-V11-02-01)
+- vis.mac:
+  - Add some commands from examples/basic/B1/vis.mac to get a nice view.
+
 ## 2024-01-30 John Allison (exam-ext-vis-standalone-V11-02-00)
 - A smarter way of getting extent of geometry that ignores invisible volumes.
   Thus, if the world is marked invisible, it ignores it.

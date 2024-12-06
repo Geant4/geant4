@@ -39,7 +39,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSTrackCounter::G4PSTrackCounter(G4String name, G4int direction, G4int depth)
+G4PSTrackCounter::G4PSTrackCounter(const G4String& name, G4int direction, G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , fDirection(direction)
 {

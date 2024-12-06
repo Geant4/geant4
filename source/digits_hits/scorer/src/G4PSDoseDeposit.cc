@@ -45,11 +45,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSDoseDeposit::G4PSDoseDeposit(G4String name, G4int depth)
+G4PSDoseDeposit::G4PSDoseDeposit(const G4String& name, G4int depth)
   : G4PSDoseDeposit(name, "Gy", depth) 
 {}
 
-G4PSDoseDeposit::G4PSDoseDeposit(G4String name, const G4String& unit,
+G4PSDoseDeposit::G4PSDoseDeposit(const G4String& name, const G4String& unit,
                                  G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)

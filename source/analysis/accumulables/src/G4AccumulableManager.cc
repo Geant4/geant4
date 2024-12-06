@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 18/06/2013
 
 #include "G4AccumulableManager.hh"
 #include "G4ThreadLocalSingleton.hh"
@@ -36,6 +36,15 @@
 namespace {
   //Mutex to lock master manager when merging accumulables
   G4Mutex mergeMutex = G4MUTEX_INITIALIZER;
+
+  void RangeException(const G4String& where, const G4String& message)
+  {
+    G4ExceptionDescription description;
+    description << "Invalid range " << message;
+    G4String method("G4AccumulableManager::");
+    method.append(where);
+    G4Exception(where, "Analysis_W001", JustWarning, description);
+  }
 }
 
 //_____________________________________________________________________________
@@ -48,7 +57,9 @@ G4AccumulableManager* G4AccumulableManager::Instance()
 //_____________________________________________________________________________
 G4AccumulableManager::G4AccumulableManager()
 {
-  if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
+  if (!G4Threading::IsWorkerThread()) {
+    fgMasterInstance = this;
+  }
 }
 
 //_____________________________________________________________________________
@@ -76,9 +87,12 @@ G4String G4AccumulableManager::GenerateName() const
 }
 
 //_____________________________________________________________________________
-G4bool G4AccumulableManager::CheckName(const G4String& name, const G4String& where) const
+G4bool G4AccumulableManager::CheckName(
+  const G4String& name, const G4String& where) const
 {
-  if ( fMap.find(name) == fMap.end() ) return true;
+  if (fMap.find(name) == fMap.end()) {
+    return true;
+  }
 
   G4ExceptionDescription description;
   description << "Name " << name << " is already used." << G4endl;
@@ -89,27 +103,64 @@ G4bool G4AccumulableManager::CheckName(const G4String& name, const G4String& whe
   return false;
 }
 
+//_____________________________________________________________________________
+G4bool G4AccumulableManager::CheckType(
+  G4VAccumulable* accumulable, G4AccType type, G4bool warn) const
+{
+  if (accumulable->GetType() != type) {
+    if (warn) {
+      G4ExceptionDescription description;
+      description << "      " << accumulable->GetName() << ": Incompatible type.";
+      G4Exception("G4AccumulableManager::CheckType",
+                  "Analysis_W001", JustWarning, description);
+    }
+    return false;
+  }
+  return true;
+}
+
 //
 // public methods
 //
 
 //_____________________________________________________________________________
-G4bool G4AccumulableManager::RegisterAccumulable(G4VAccumulable* accumulable)
+G4bool G4AccumulableManager::Register(G4VAccumulable* accumulable)
 {
   auto name = accumulable->GetName();
 
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "Going to register accumulable \"" << name << "\"" << G4endl;
+  }
+
   // do not accept name if it is already used
-  if ( ! CheckName(name, "RegisterAccumulable") ) return false;
+  if (!CheckName(name, "RegisterAccumulable")) {
+    return false;
+  }
 
   // generate name if empty
   if (name.length() == 0u) {
     name =  GenerateName();
-    accumulable->fName = name;
+    accumulable->SetName(name);
   }
+
+  // set Id
+  accumulable->SetId((G4int)fVector.size());
 
   fMap[name] = accumulable;
   fVector.push_back(accumulable);
+
+  if (G4Accumulables::VerboseLevel > 0 ) {
+    G4cout << "Accumulable registered as \"" << accumulable->GetName() << "\"" << G4endl;
+  }
+
   return true;
+}
+
+// Deprecated functions with long name
+//_____________________________________________________________________________
+G4bool G4AccumulableManager::RegisterAccumulable(G4VAccumulable* accumulable)
+{
+  return Register(accumulable);
 }
 
 //_____________________________________________________________________________
@@ -154,7 +205,9 @@ void G4AccumulableManager::Merge()
 {
   // Do nothing if  there are no accumulables registered
   // or if master thread
-  if ((fVector.size() == 0u) || (! G4Threading::IsWorkerThread())) return;
+  if ((fVector.size() == 0u) || (!G4Threading::IsWorkerThread())) {
+    return;
+  }
 
   // The manager on mastter must exist
   if (fgMasterInstance == nullptr) {
@@ -186,11 +239,59 @@ void G4AccumulableManager::Merge()
 //_____________________________________________________________________________
 void G4AccumulableManager::Reset()
 {
-// Reset histograms and profiles
+// Reset all accummulables
 
   for ( auto it : fVector ) {
     it->Reset();
   }
 }
 
+//_____________________________________________________________________________
+void G4AccumulableManager::Print(G4PrintOptions options) const
+{
+  for ( auto it : fVector ) {
+    it->Print(options);
+  }
+}
 
+//_____________________________________________________________________________
+void G4AccumulableManager::Print(
+  G4int startId, G4int count, G4PrintOptions options) const
+{
+  // check if range is within limits
+  if ( startId < 0 || startId >= G4int(fVector.size()) ||
+       count <= 0 || startId + count > G4int(fVector.size()) ) {
+    RangeException("Print",
+      std::to_string(startId) + ", " + std::to_string(count));
+    return;
+  }
+
+  for ( auto id = startId; id < startId + count; ++id ) {
+    fVector[id]->Print(options);
+  }
+}
+
+//_____________________________________________________________________________
+void G4AccumulableManager::Print(
+  std::vector<G4VAccumulable*>::iterator startIt,
+  std::vector<G4VAccumulable*>::iterator endIt,
+  G4PrintOptions options) const
+{
+  // check if range is within limits
+  if ( startIt == fVector.end() || endIt == fVector.end() ) {
+    RangeException("Print", "[startIt, endIt]");
+    return;
+  }
+
+  for ( auto it = startIt; it != endIt; ++it ) {
+    (*it)->Print(options);
+  }
+}
+
+//_____________________________________________________________________________
+void G4AccumulableManager::Print(
+  std::vector<G4VAccumulable*>::iterator startIt, std::size_t count,
+  G4PrintOptions options) const
+{
+  Print(startIt, startIt+count, options);
+}

@@ -333,7 +333,7 @@ protected:
      reactionPerTrack = it->second;
     }
 
-    reactionPerTrack->AddReaction(reaction);
+    reactionPerTrack->AddReaction(std::move(reaction));
   }
   G4ITReactionPerTrackMap fReactionPerTrack;
   G4ITReactionPerTime fReactionPerTime;

@@ -35,15 +35,15 @@
 #ifndef G4GMAKE
 #include "PTL/Config.hh"
 #endif
-#include "PTL/Globals.hh"
 #include "PTL/JoinFunction.hh"
+#include "PTL/ScopeDestructor.hh"
 #include "PTL/Task.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/Threading.hh"
-#include "PTL/Utility.hh"
+#include "PTL/Types.hh"
 #include "PTL/VTask.hh"
 #include "PTL/VUserTaskQueue.hh"
+#include "PTL/detail/CxxBackports.hh"
 
 #include <atomic>
 #include <chrono>
@@ -54,6 +54,7 @@
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <sstream>  // IWYU pragma: keep
 #include <stdexcept>
 #include <thread>
 #include <type_traits>
@@ -61,7 +62,7 @@
 #include <vector>
 
 #if defined(PTL_USE_TBB)
-#    include <tbb/task_group.h>
+#    include <tbb/task_group.h>  // IWYU pragma: keep
 #endif
 
 namespace PTL
@@ -733,6 +734,6 @@ TaskGroup<Tp, Arg, MaxDepth>::internal_update()
 }
 
 template <typename Tp, typename Arg, intmax_t MaxDepth>
-int TaskGroup<Tp, Arg, MaxDepth>::f_verbose = GetEnv<int>("PTL_VERBOSE", 0);
+int TaskGroup<Tp, Arg, MaxDepth>::f_verbose = 0;
 
 }  // namespace PTL

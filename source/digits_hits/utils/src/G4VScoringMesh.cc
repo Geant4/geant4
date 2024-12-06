@@ -23,14 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------------
-// Modifications
-// 17-Apr-2012 T.Aso SetSize() and SetNumberOfSegments() is not allowed
-//                   to call twice in same geometrical mesh. Add warning
-//                   message to notify.
-//
+// G4VScoringMesh
 // ---------------------------------------------------------------------
 
 #include "G4VScoringMesh.hh"
@@ -384,7 +377,7 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double>* map)
 {
   G4String psName = map->GetName();
   const auto fMapItr = fMap.find(psName);
-  *(fMapItr->second) += *map;
+  if (fMapItr != fMap.cend())  { *(fMapItr->second) += *map; }
 
   if(verboseLevel > 9)
   {
@@ -408,7 +401,7 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4StatDouble>* map)
 {
   G4String psName = map->GetName();
   const auto fMapItr = fMap.find(psName);
-  *(fMapItr->second) += *map;
+  if (fMapItr != fMap.cend()) { *(fMapItr->second) += *map; }
 
   if(verboseLevel > 9)
   {

@@ -48,7 +48,7 @@ public:
 			G4VCoulombBarrier * aCoulombBarrier);
   
   ~G4PreCompoundFragment() override = default;
-      
+
   // ================================================
   // Methods for calculating the emission probability
   // ================================================
@@ -59,6 +59,10 @@ public:
   
   G4double SampleKineticEnergy(const G4Fragment& aFragment) override;
 
+  G4double CrossSection(G4double ekin);
+
+  G4double RecentXS() const { return recentXS; };
+
   G4PreCompoundFragment(const G4PreCompoundFragment &right) = delete;
   const G4PreCompoundFragment& 
   operator= (const G4PreCompoundFragment &right) = delete;
@@ -67,24 +71,24 @@ public:
 
 protected:
 
-  G4double CrossSection(G4double ekin) const;
-
   virtual G4double 
   ProbabilityDistributionFunction(G4double ekin, 
 				  const G4Fragment & aFragment) = 0; 
 
 private:	
+
   // This method performs integration for probability function over 
   // fragment kinetic energy
   G4double IntegrateEmissionProbability(G4double low, G4double up, 
 					const G4Fragment & aFragment);	
 
   G4double GetOpt0(G4double ekin) const;
+  
+  G4int lastA{0};
 
-  G4int index;
-
-  G4double muu;
-  G4double probmax;
+  G4double muu{0.0};
+  G4double probmax{0.0};
+  G4double recentXS{0.0};
 };
 
 #endif

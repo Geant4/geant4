@@ -94,7 +94,7 @@ G4bool G4DNAMultipleIonisationManager::CheckShellEnergy(
   }
 
   G4bool stop_process{false};
-  for (int i = 0; i < num_shells; i++) {
+  for (G4int i = 0; i < num_shells; i++) {
     if (shell_energy[i] < 0.0) {
       stop_process = true;
       break;

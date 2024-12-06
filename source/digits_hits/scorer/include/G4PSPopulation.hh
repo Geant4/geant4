@@ -47,7 +47,7 @@
 class G4PSPopulation : public G4VPrimitiveScorer
 {
  public:
-  G4PSPopulation(G4String name, G4int depth = 0);
+  G4PSPopulation(const G4String& name, G4int depth = 0);
   ~G4PSPopulation() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

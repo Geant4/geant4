@@ -181,7 +181,7 @@ AddLowerWeights(const G4GeometryCell& gCell,
     map[fGeneralUpperEnergyBound] = lowerWeights[i];
     ++i;
   }
-  fCellToUpEnBoundLoWePairsMap[gCell] = map;
+  fCellToUpEnBoundLoWePairsMap[gCell] = std::move(map);
 }
 
 void G4WeightWindowStore::

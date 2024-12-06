@@ -38,20 +38,8 @@
 
 #pragma once
 
-#ifndef G4GMAKE
-#  include "G4GlobalConfig.hh"
-#endif
+#include "PTL/TaskGroup.hh"
 
-#if defined(GEANT4_USE_TBB)
-#  include "PTL/TBBTaskGroup.hh"
-#else
-#  include "PTL/TaskGroup.hh"
-#endif
-
-#if defined(GEANT4_USE_TBB)
-template <typename Tp, typename Arg = Tp>
-using G4TBBTaskGroup = PTL::TBBTaskGroup<Tp, Arg>;
-#else
+// in new version, TaskGroup handles TBB
 template <typename Tp, typename Arg = Tp>
 using G4TBBTaskGroup = PTL::TaskGroup<Tp, Arg>;
-#endif

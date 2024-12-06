@@ -71,7 +71,7 @@ public:
   explicit G4MuBetheBlochModel(const G4ParticleDefinition* p = nullptr,
                                const G4String& nam = "MuBetheBloch");
 
-  ~G4MuBetheBlochModel() = default;
+  ~G4MuBetheBlochModel() override = default;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 

@@ -37,7 +37,7 @@ G4ParticleHPReactionWhiteBoard::~G4ParticleHPReactionWhiteBoard()
   mapStringPair.clear();
 }
 
-void G4ParticleHPReactionWhiteBoard::Dump()
+void G4ParticleHPReactionWhiteBoard::Dump() const
 {
   G4cout << "G4ParticleHPReactionWhiteBoard::Dump" << G4endl;
   G4cout << "Target Z = " << targZ << G4endl;
@@ -51,7 +51,7 @@ void G4ParticleHPReactionWhiteBoard::Dump()
   G4cout << G4endl;
 }
 
-bool G4ParticleHPReactionWhiteBoard::AddRecord(std::pair<G4String, G4String> new_record)
+G4bool G4ParticleHPReactionWhiteBoard::AddRecord(std::pair<G4String, G4String> new_record)
 {
   if (mapStringPair.find(new_record.first) != mapStringPair.end()) {
     G4cout << "This key is already used in the current reaction white board!" << G4endl;
@@ -61,7 +61,7 @@ bool G4ParticleHPReactionWhiteBoard::AddRecord(std::pair<G4String, G4String> new
   return true;
 }
 
-G4String G4ParticleHPReactionWhiteBoard::GetValue(G4String key)
+G4String G4ParticleHPReactionWhiteBoard::GetValue(const G4String& key) const
 {
   auto it = mapStringPair.find(key);
   if (it == mapStringPair.end()) {
@@ -71,7 +71,7 @@ G4String G4ParticleHPReactionWhiteBoard::GetValue(G4String key)
   return it->second;
 }
 
-G4int G4ParticleHPReactionWhiteBoard::GetValueInInt(G4String key)
+G4int G4ParticleHPReactionWhiteBoard::GetValueInInt(const G4String& key) const
 {
   G4String result = GetValue(key);
   if (result == "NONE") return 0;
@@ -82,7 +82,7 @@ G4int G4ParticleHPReactionWhiteBoard::GetValueInInt(G4String key)
   return i;
 }
 
-G4double G4ParticleHPReactionWhiteBoard::GetValueInDouble(G4String key)
+G4double G4ParticleHPReactionWhiteBoard::GetValueInDouble(const G4String& key) const
 {
   G4String result = GetValue(key);
   if (result == "NONE") return 0.0;

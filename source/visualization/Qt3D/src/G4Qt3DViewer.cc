@@ -63,9 +63,6 @@ void G4Qt3DViewer::Initialise()
     return;
   }
   fUIWidget = QWidget::createWindowContainer(this);
-  fUIWidget->setMinimumSize(QSize(200, 100));
-  fUIWidget->setMaximumSize(screen()->size());
-//  fUIWidget->setFocusPolicy(Qt::NoFocus);  //??
   uiQt->AddTabWidget(fUIWidget,QString(fName));
 
   setRootEntity(fQt3DSceneHandler.fpQt3DScene);
@@ -74,6 +71,10 @@ void G4Qt3DViewer::Initialise()
 G4Qt3DViewer::~G4Qt3DViewer()
 {
   setRootEntity(nullptr);
+}
+
+void G4Qt3DViewer::resizeEvent(QResizeEvent*) {
+  SetView();
 }
 
 void G4Qt3DViewer::SetView()
@@ -158,77 +159,123 @@ void G4Qt3DViewer::DrawView()
 
 void G4Qt3DViewer::ShowView()
 {
+#if QT_VERSION < 0x060000
   // show() may only be called from master thread
   if (G4Threading::IsMasterThread()) {
     show();
   }
   // The way Qt seems to work, we don't seem to need a show() anyway, but
   // we'll leave it in - it seems not to have any effect, good or bad.
+#endif
 }
 
 void G4Qt3DViewer::FinishView()
 {
+#if QT_VERSION < 0x060000
   if (G4Threading::IsMasterThread()) {
     show();
   }
+#endif
 }
+
+// Note: the order of calling of MovingToVisSubThread and SwitchToVisSubThread
+// is undefined. The order of calling is
+//   DoneWithMasterThread
+//   MovingToVisSubThread ) or ( SwitchToVisSubThread
+//   SwitchToVisSubThread )    ( MovingToVisSubThread
+//   DoneWithVisSubThread
+//   MovingToMasterThread
+//   SwitchToMasterThread
+// So regarding the move/switch to the vis sub-thread, we have to employ mutex locks and conditions.
+// If the viewer wishes to accept drawing from the vis sub-thread, Qt3D has to moveToThread.
+// But at this point we are still on the master thread and the value of the sub-thread's QThread is
+// not known. So it has to wait - a conditional wait, conditional on establishment of the sub-thread
+// and the provision of a pointer to the QThread version of the vis sub-thread. In turn, the
+// sub-thread has to wait until the QObjects have been moved to the sub-thread.
 
 namespace {
   QThread* masterQThread = nullptr;
   QThread* visSubThreadQThread = nullptr;
+
+  G4Mutex visSubThreadMutex = G4MUTEX_INITIALIZER;
+  G4Condition waitForVisSubThreadInitialized = G4CONDITION_INITIALIZER;
+  G4bool visSubThreadEstablished = false;
+  G4bool qObjectsSwitched = false;
 }
 
-#  include <chrono>
-
 void G4Qt3DViewer::MovingToVisSubThread()
+// Still on master thread but vis thread has been launched
 {
-#ifdef G4QT3DDEBUG
-  G4cout << "G4Qt3DViewer::MovingToVisSubThread" << G4endl;
-#endif
-  // Still on master thread but vis thread has been launched
   // Make note of master QThread
   masterQThread = QThread::currentThread();
+
   // Wait until SwitchToVisSubThread has found vis sub-thread QThread
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  {
+  G4AutoLock lock(&visSubThreadMutex);
+  G4CONDITIONWAITLAMBDA(&waitForVisSubThreadInitialized, &lock, []{return visSubThreadEstablished;})
+  }
+
   // Move relevant stuff to vis sub-thread QThread
   auto p1 = fQt3DSceneHandler.fpQt3DScene->parent();
-  auto p2 = p1->parent();
-  p2->moveToThread(visSubThreadQThread);
+  if(p1) {
+    auto p2 = p1->parent();
+    if(p2) {
+      p2->moveToThread(visSubThreadQThread);
+    } else {
+      p1->moveToThread(visSubThreadQThread);
+    }
+  }
+
+  // Inform sub-thread
+  G4AutoLock lock(&visSubThreadMutex);
+  qObjectsSwitched = true;
+  lock.unlock();
+  G4CONDITIONBROADCAST(&waitForVisSubThreadInitialized);
 }
 
 void G4Qt3DViewer::SwitchToVisSubThread()
+// On vis sub-thread before any drawing
 {
-#ifdef G4QT3DDEBUG
-  G4cout << "G4Qt3DViewer::SwitchToVisSubThread" << G4endl;
-#endif
-  // On vis sub-thread before any drawing
   // Make note of vis-subthread QThread for MovingToVisSubThread
   visSubThreadQThread = QThread::currentThread();
-  // Wait until SwitchToVisSubThread has moved stuff
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+  // Let MovingToVisSubThread know we have the QThread
+  {
+  G4AutoLock lock(&visSubThreadMutex);
+  visSubThreadEstablished = true;
+  G4CONDITIONBROADCAST(&waitForVisSubThreadInitialized);
+  }
+
+  // Wait until MovingToVisSubThread has moved stuff
+  {
+  G4AutoLock lock(&visSubThreadMutex);
+  G4CONDITIONWAITLAMBDA(&waitForVisSubThreadInitialized, &lock, []{return qObjectsSwitched;})
+  }
 }
 
 void G4Qt3DViewer::MovingToMasterThread()
+// On vis sub-thread just before exit
 {
-#ifdef G4QT3DDEBUG
-  G4cout << "G4Qt3DViewer::MovingToMasterThread" << G4endl;
-#endif
-  // On vis sub-thread just before exit
   // Move relevant stuff to master QThread.
   auto p1 = fQt3DSceneHandler.fpQt3DScene->parent();
-  auto p2 = p1->parent();
-  p2->moveToThread(masterQThread);
-  // Zero - will be different next run
+  if(p1) {
+    auto p2 = p1->parent();
+    if(p2) {
+      p2->moveToThread(masterQThread);
+    } else {
+      p1->moveToThread(masterQThread);
+    }
+  }
+
+  // Reset
   visSubThreadQThread = nullptr;
+  qObjectsSwitched = false;
 }
 
 void G4Qt3DViewer::SwitchToMasterThread()
+// On master thread after vis sub-thread has terminated
 {
-#ifdef G4QT3DDEBUG
-  G4cout << "G4Qt3DViewer::SwitchToMasterThread" << G4endl;
-#endif
-  // On master thread after vis sub-thread has terminated
-  // Nothing to do
+  visSubThreadEstablished = false;
 }
 
 void G4Qt3DViewer::KernelVisitDecision () {

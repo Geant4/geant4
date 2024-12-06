@@ -100,7 +100,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   //-----------------------------------
   //Get the molecular configuration
   G4MolecularConfiguration* OH =
-   G4MoleculeTable::Instance()->GetConfiguration("OH");
+   G4MoleculeTable::Instance()->GetConfiguration("°OH");
   G4MolecularConfiguration* OHm =
    G4MoleculeTable::Instance()->GetConfiguration("OHm");
   G4MolecularConfiguration* e_aq =
@@ -114,7 +114,7 @@ void G4EmDNAChemistry_option3::ConstructReactionTable(G4DNAMolecularReactionTabl
   G4MolecularConfiguration* H2O2 =
    G4MoleculeTable::Instance()->GetConfiguration("H2O2");
   G4MolecularConfiguration* HO2 =
-   G4MoleculeTable::Instance()->GetConfiguration("HO2");
+   G4MoleculeTable::Instance()->GetConfiguration("HO2°");
   G4MolecularConfiguration* HO2m =
    G4MoleculeTable::Instance()->GetConfiguration("HO2m");
   G4MolecularConfiguration* O =

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4ScoringManager
+// --------------------------------------------------------------------
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringMessenger.hh"
@@ -102,7 +102,7 @@ G4VScoringMesh* G4ScoringManager::FindMesh(G4VHitsCollection* map)
   auto msh           = fMeshMap.find(colID);
   if(msh == fMeshMap.end())
   {
-    auto wName      = map->GetSDname();
+    const auto& wName = map->GetSDname();
     sm              = FindMesh(wName);
     fMeshMap[colID] = sm;
   }
@@ -263,7 +263,7 @@ void G4ScoringManager::ListScoreColorMaps()
 
 void G4ScoringManager::Merge(const G4ScoringManager* mgr)
 {
-  for(G4int i = 0; i < (G4int)GetNumberOfMesh(); ++i)
+  for(auto i = 0; i < (G4int)GetNumberOfMesh(); ++i)
   {
     G4VScoringMesh* fMesh  = GetMesh(i);
     G4VScoringMesh* scMesh = mgr->GetMesh(i);

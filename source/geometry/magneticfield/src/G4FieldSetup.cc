@@ -146,7 +146,7 @@ G4EquationOfMotion* G4FieldSetup::CreateEquation(G4EquationType equation)
 
   // magnetic fields
   G4MagneticField* magField = nullptr;
-  if (equation == kMagUsualEqRhs || equation == kMagSpinEqRhs) {
+  if (equation == kEqMagnetic || equation == kEqMagneticWithSpin) {
     magField = dynamic_cast<G4MagneticField*>(fG4Field);
     if (magField == nullptr) {
       G4Exception(
@@ -159,7 +159,7 @@ G4EquationOfMotion* G4FieldSetup::CreateEquation(G4EquationType equation)
 
   // electromagnetic fields
   G4ElectroMagneticField* elMagField = nullptr;
-  if (equation >= kEqMagElectric && equation <= kEqEMFieldWithEDM) {
+  if (equation >= kEqElectroMagnetic && equation <= kEqEMfieldWithEDM) {
     elMagField = dynamic_cast<G4ElectroMagneticField*>(fG4Field);
     if (elMagField == nullptr) {
       G4Exception(
@@ -172,23 +172,23 @@ G4EquationOfMotion* G4FieldSetup::CreateEquation(G4EquationType equation)
 
   // electromagnetic fields
   switch (equation) {
-    case kMagUsualEqRhs:
+    case kEqMagnetic:
       return new G4Mag_UsualEqRhs(magField);
       break;
 
-    case kMagSpinEqRhs:
+    case kEqMagneticWithSpin:
       return new G4Mag_SpinEqRhs(magField);
       break;
 
-    case kEqMagElectric:
+    case kEqElectroMagnetic:
       return new G4EqMagElectricField(elMagField);
       break;
 
-    case kEqEMFieldWithSpin:
+    case kEqEMfieldWithSpin:
       return new G4EqEMFieldWithSpin(elMagField);
       break;
 
-    case kEqEMFieldWithEDM:
+    case kEqEMfieldWithEDM:
       return new G4EqEMFieldWithEDM(elMagField);
       break;
     case kUserEquation:

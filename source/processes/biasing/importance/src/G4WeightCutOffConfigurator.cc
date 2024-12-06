@@ -23,34 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WeightCutOffConfigurator
 //
-//
-// ----------------------------------------------------------------------
-// Class G4WeightCutOffConfigurator
-//
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+// Author: Michael Dressel, CERN
+// --------------------------------------------------------------------
 
 #include "G4WeightCutOffConfigurator.hh"
 #include "G4WeightCutOffProcess.hh"
 
 G4WeightCutOffConfigurator::
 G4WeightCutOffConfigurator(const G4VPhysicalVolume* worldvolume,
-			      const G4String &particlename,
+                           const G4String& particlename,
                                  G4double wsurvival,
                                  G4double wlimit,
                                  G4double isource,
-                                 G4VIStore *istore,
-			         G4bool para)
-  //                           const G4VGCellFinder &aGCellfinder, G4bool para)
+                                 G4VIStore* istore,
+                                 G4bool para)
   : fWorld(worldvolume),
     fPlacer(particlename),
-    fPlaced(false),
     paraflag(para)
 {
   fWeightCutOffProcess =
     new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,"WeightCutOffProcess",paraflag);
-//     new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder,"WeightCutOffProcess",paraflag);
   if (!fWeightCutOffProcess)
   {
     G4Exception("G4WeightCutOffConfigurator::G4WeightCutOffConfigurator()",
@@ -72,15 +66,14 @@ void G4WeightCutOffConfigurator::Configure(G4VSamplerConfigurator *)
 {
   G4cout << " entering new weight window configure " << G4endl;
 
-  if(paraflag) fWeightCutOffProcess->SetParallelWorld(fWorld->GetName());
+  if(paraflag) { fWeightCutOffProcess->SetParallelWorld(fWorld->GetName()); }
 
   fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
   fPlaced = true;
 }
 
-const G4VTrackTerminator
-*G4WeightCutOffConfigurator::GetTrackTerminator() const
+const G4VTrackTerminator*
+G4WeightCutOffConfigurator::GetTrackTerminator() const
 {
-  return 0;
+  return nullptr;
 }
-

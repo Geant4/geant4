@@ -62,19 +62,18 @@
 #include <sstream>
 
 ///--------------------------------------------------------------------------------------
-G4ParticleHPIsoProbabilityTable_CALENDF::G4ParticleHPIsoProbabilityTable_CALENDF() : theInelasticData(0) {}
+G4ParticleHPIsoProbabilityTable_CALENDF::G4ParticleHPIsoProbabilityTable_CALENDF() : theInelasticData(nullptr) {}
 
 ///--------------------------------------------------------------------------------------
 G4ParticleHPIsoProbabilityTable_CALENDF::~G4ParticleHPIsoProbabilityTable_CALENDF() {
-  for ( std::vector< std::vector< G4double >* >::iterator it = theInelasticData->begin(); 
-        it != theInelasticData->end(); ++it ) {
+  for ( auto it = theInelasticData->cbegin(); it != theInelasticData->cend(); ++it ) {
     delete* it;
   }
   delete theInelasticData;
 }
 
 ///--------------------------------------------------------------------------------------
-void G4ParticleHPIsoProbabilityTable_CALENDF::Init( G4int theZ, G4int theA, G4int them, G4double theT, G4String dirName ) {
+void G4ParticleHPIsoProbabilityTable_CALENDF::Init( G4int theZ, G4int theA, G4int them, G4double theT, const G4String& dirName ) {
   Z = theZ;
   A = theA;
   m = them;
@@ -82,7 +81,7 @@ void G4ParticleHPIsoProbabilityTable_CALENDF::Init( G4int theZ, G4int theA, G4in
   G4cout << "The CALENDF probability tables are being initialized for Z=" << Z << " A=" << A << " and T=" << T << " K." << G4endl;
   filename = std::to_string(Z) + "_" + std::to_string(A);
   if ( m != 0 ) filename += "_m" + std::to_string(m);
-  G4String fullPathFileName = dirName + filename + "." + std::to_string( (G4int)(T) ) + ".pt.z"; 
+  G4String fullPathFileName = dirName + filename + "." + std::to_string( (G4int)(T) ) + ".pt"; 
   std::istringstream theData( std::ios::in );
   G4ParticleHPManager::GetInstance()->GetDataStream( fullPathFileName, theData );
   if ( theData.good() ) {    

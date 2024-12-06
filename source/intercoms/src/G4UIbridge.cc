@@ -32,7 +32,8 @@
 #include "G4UImanager.hh"
 
 // --------------------------------------------------------------------
-G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir) : localUImanager(localUI)
+G4UIbridge::G4UIbridge(G4UImanager* localUI, const G4String& dir)
+  : localUImanager(localUI)
 {
   // make sure dirName starts and ends with '/'
   if (dir[0] == '/') {

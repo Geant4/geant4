@@ -134,12 +134,17 @@ void G4OpenGLStoredQtSceneHandler::ClearStore () {
 
   //G4cout << "G4OpenGLStoredQtSceneHandler::ClearStore" << G4endl;
 
-  G4OpenGLStoredSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-  // Should recreate the tree
-  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
-  if ( pGLQtViewer ) {
-    pGLQtViewer->clearTreeWidget();
-  }
+  G4OpenGLStoredSceneHandler::ClearStore ();
+
+  // Not needed - the old scene tree is currently (partially) disabled - but
+  // this code somehow affects the view in rare cases, e.g., after twinkling
+  // the volume does not return to its original colour. So I have disabled
+  // this, pending a review of the old scene tree. JA 31/10/24
+//  // Should recreate the tree
+//  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+//  if ( pGLQtViewer ) {
+//    pGLQtViewer->clearTreeWidget();
+//  }
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {

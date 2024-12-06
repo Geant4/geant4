@@ -139,3 +139,7 @@
 #########################
 
 /run/beamOn 10
+
+
+# Visualization setting in case you wish it)
+/control/execute vis.mac

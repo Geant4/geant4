@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ILawForceFreeFlight
+// --------------------------------------------------------------------
+
 #include "G4ILawForceFreeFlight.hh"
 
-G4ILawForceFreeFlight::G4ILawForceFreeFlight(G4String name)
+G4ILawForceFreeFlight::G4ILawForceFreeFlight(const G4String& name)
   : G4VBiasingInteractionLaw(name)
 {}
 

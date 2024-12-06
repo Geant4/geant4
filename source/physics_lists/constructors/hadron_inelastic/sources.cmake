@@ -7,43 +7,45 @@ geant4_add_module(G4phys_ctor_hinelastic
     G4HadronInelasticQBBC_ABLA.hh
     G4HadronPhysicsFTF_BIC.hh
     G4HadronPhysicsFTFP_BERT.hh
+    G4HadronPhysicsFTFP_BERT_ATL.hh
     G4HadronPhysicsFTFP_BERT_HP.hh
     G4HadronPhysicsFTFP_BERT_TRV.hh
-    G4HadronPhysicsFTFP_BERT_ATL.hh
     G4HadronPhysicsFTFQGSP_BERT.hh
+    G4HadronPhysicsINCLXX.hh
     G4HadronPhysicsNuBeam.hh
     G4HadronPhysicsQGS_BIC.hh
     G4HadronPhysicsQGSP_BERT.hh
     G4HadronPhysicsQGSP_BERT_HP.hh
     G4HadronPhysicsQGSP_BIC.hh
+    G4HadronPhysicsQGSP_BIC_AllHP.hh
     G4HadronPhysicsQGSP_BIC_HP.hh
     G4HadronPhysicsQGSP_FTFP_BERT.hh
-    G4HadronPhysicsINCLXX.hh
     G4HadronPhysicsShielding.hh
     G4HadronPhysicsShieldingLEND.hh
+    G4URRNeutrons.hh
     G4VHadronPhysics.hh
-    G4HadronPhysicsQGSP_BIC_AllHP.hh
   SOURCES
     G4HadronInelasticQBBC.cc
     G4HadronInelasticQBBC_ABLA.cc
     G4HadronPhysicsFTF_BIC.cc
     G4HadronPhysicsFTFP_BERT.cc
+    G4HadronPhysicsFTFP_BERT_ATL.cc
     G4HadronPhysicsFTFP_BERT_HP.cc
     G4HadronPhysicsFTFP_BERT_TRV.cc
-    G4HadronPhysicsFTFP_BERT_ATL.cc
     G4HadronPhysicsFTFQGSP_BERT.cc
+    G4HadronPhysicsINCLXX.cc
     G4HadronPhysicsNuBeam.cc
     G4HadronPhysicsQGS_BIC.cc
     G4HadronPhysicsQGSP_BERT.cc
     G4HadronPhysicsQGSP_BERT_HP.cc
     G4HadronPhysicsQGSP_BIC.cc
+    G4HadronPhysicsQGSP_BIC_AllHP.cc
     G4HadronPhysicsQGSP_BIC_HP.cc
     G4HadronPhysicsQGSP_FTFP_BERT.cc
-    G4HadronPhysicsINCLXX.cc
     G4HadronPhysicsShielding.cc
     G4HadronPhysicsShieldingLEND.cc
-    G4VHadronPhysics.cc
-    G4HadronPhysicsQGSP_BIC_AllHP.cc)
+    G4URRNeutrons.cc
+    G4VHadronPhysics.cc)
 
 geant4_module_link_libraries(G4phys_ctor_hinelastic
   PUBLIC

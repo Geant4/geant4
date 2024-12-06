@@ -149,7 +149,7 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
    if (isoindex == -1) {
       std::ostringstream o;
       o << iso;
-      std::string errMsg = "No Watt spectrum available for iso " + o.str();
+      const std::string& errMsg = "No Watt spectrum available for iso " + o.str();
       G4fissionerr(6, "SmpWatt", errMsg);
    }
    

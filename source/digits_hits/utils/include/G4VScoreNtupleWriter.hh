@@ -23,9 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VScoreNtupleWriter
 //
-// Author: Ivana Hrivnacova, 11/09/2018  (ivana@ipno.in2p3.fr)
-
+// Class description:
+//
+// This class implements the interface for storing hits collections of
+// G4THitsMap<G4double> type vith Geant4 analysis tools.
+//
+// Author: Ivana Hrivnacova, 11/09/2018
+// --------------------------------------------------------------------
 #ifndef G4VScoreNtupleWriter_h
 #define G4VScoreNtupleWriter_h 1
 
@@ -34,14 +40,10 @@
 
 class G4HCofThisEvent;
 
-// class description:
-//
-// This class implements the interface for storing hits collections of
-// G4THitsMap<G4double> type vith Geant4 analysis tools.
-
 class G4VScoreNtupleWriter
 {
  public:
+
   virtual ~G4VScoreNtupleWriter();
 
   // static methods
@@ -54,6 +56,7 @@ class G4VScoreNtupleWriter
   virtual void Write()                                       = 0;
 
  protected:
+
   G4VScoreNtupleWriter();
   virtual G4VScoreNtupleWriter* CreateInstance() const = 0;
 

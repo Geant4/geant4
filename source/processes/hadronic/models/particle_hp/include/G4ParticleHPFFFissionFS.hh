@@ -37,11 +37,12 @@
 class G4ParticleHPFFFissionFS : public G4ParticleHPFissionBaseFS
 {
   public:
+
     G4ParticleHPFFFissionFS() { hasXsec = false; }
     ~G4ParticleHPFFFissionFS() override;
 
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
-              G4ParticleDefinition*) override;
+    void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+              const G4String& aFSType, G4ParticleDefinition*) override;
 
     G4DynamicParticleVector* ApplyYourself(G4int nNeutrons);
 
@@ -55,6 +56,7 @@ class G4ParticleHPFFFissionFS : public G4ParticleHPFissionBaseFS
     void GetAFissionFragment(G4double, G4int&, G4int&, G4int&);
 
   private:
+
     G4HadFinalState* ApplyYourself(const G4HadProjectile&) override { return nullptr; }
 
     //        MT              Energy            FPS    Yield

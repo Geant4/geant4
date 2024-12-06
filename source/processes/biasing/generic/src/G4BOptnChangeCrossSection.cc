@@ -23,21 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BOptnChangeCrossSection
+// --------------------------------------------------------------------
+
 #include "G4BOptnChangeCrossSection.hh"
 #include "G4InteractionLawPhysical.hh"
 
-
-
-G4BOptnChangeCrossSection::G4BOptnChangeCrossSection(G4String name)
-  : G4VBiasingOperation( name  ),
-    fInteractionOccured( false )
+G4BOptnChangeCrossSection::G4BOptnChangeCrossSection(const G4String& name)
+  : G4VBiasingOperation( name  )
 {
   fBiasedExponentialLaw = new G4InteractionLawPhysical("LawForOperation"+name);
 }
 
 G4BOptnChangeCrossSection::~G4BOptnChangeCrossSection()
 {
-  if ( fBiasedExponentialLaw ) delete fBiasedExponentialLaw;
+  delete fBiasedExponentialLaw;
 }
 
 const G4VBiasingInteractionLaw* G4BOptnChangeCrossSection::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& )
@@ -45,7 +45,7 @@ const G4VBiasingInteractionLaw* G4BOptnChangeCrossSection::ProvideOccurenceBiasi
   return fBiasedExponentialLaw;
 }
 
-void G4BOptnChangeCrossSection::SetBiasedCrossSection( G4double xst, bool updateInteractionLength )
+void G4BOptnChangeCrossSection::SetBiasedCrossSection( G4double xst, G4bool updateInteractionLength )
 {
   fBiasedExponentialLaw->SetPhysicalCrossSection( xst );
   if ( updateInteractionLength ) UpdateForStep( 0.0 );

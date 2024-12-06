@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paterno (modifications & testing)
+// On the base of the CRYSTALRAD realization of the Baier-Katkov integral:
+// A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
+
 #ifndef G4BaierKatkov_h
 #define G4BaierKatkov_h 1
 
@@ -113,7 +117,7 @@ public:
 
     ///number of steps in a trajectory small piece before
     ///the next call of the radiation integral
-    void SetNSmallTrajectorySteps(G4double nSmallTrajectorySteps)
+    void SetNSmallTrajectorySteps(G4int nSmallTrajectorySteps)
     {fNSmallTrajectorySteps = nSmallTrajectorySteps;}
 
     ///reinitialize intermediate integrals fFa, fSs, fSc, fSsx, fSsy, fScx, fScy;
@@ -259,7 +263,7 @@ private:
                                            //in sampling, y-plane
     G4double fParamPhotonAngleY=1.e-3*CLHEP::rad; //a parameter radiated photon
                                            //sampling distribution, y-plane
-    G4double fRadiationAngleFactor = 1.; // number of radiation angles 1/gamma:
+    G4double fRadiationAngleFactor = 4.; // number of radiation angles 1/gamma:
                                          // more fRadiationAngleFactor =>
                                          // higher fParamPhotonAngleX and Y
 

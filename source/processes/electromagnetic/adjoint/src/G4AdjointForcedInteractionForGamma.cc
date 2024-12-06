@@ -34,7 +34,7 @@
 #include "G4VEmAdjointModel.hh"
 
 G4AdjointForcedInteractionForGamma::G4AdjointForcedInteractionForGamma(
-  G4String process_name)
+  const G4String& process_name)
   : G4VContinuousDiscreteProcess(process_name)
   , fAdjointComptonModel(nullptr)
   , fAdjointBremModel(nullptr)
@@ -226,13 +226,12 @@ G4double
 G4AdjointForcedInteractionForGamma::PostStepGetPhysicalInteractionLength(
   const G4Track& track, G4double, G4ForceCondition* condition)
 {
-  static G4int lastFreeFlightTrackId = 1000;
   G4int step_id                      = track.GetCurrentStepNumber();
   *condition                         = NotForced;
   fCopyGammaForForced                = false;
   G4int track_id                     = track.GetTrackID();
   fFreeFlightGamma =
-    (track_id != lastFreeFlightTrackId + 1 || fContinueGammaAsNewFreeFlight);
+    (track_id != fLastFreeFlightTrackId + 1 || fContinueGammaAsNewFreeFlight);
   if(fFreeFlightGamma)
   {
     if(step_id == 1 || fContinueGammaAsNewFreeFlight)
@@ -241,7 +240,7 @@ G4AdjointForcedInteractionForGamma::PostStepGetPhysicalInteractionLength(
       // A gamma with same conditions will be generate at next post_step do it
       // for the forced interaction
       fCopyGammaForForced           = true;
-      lastFreeFlightTrackId         = track_id;
+      fLastFreeFlightTrackId         = track_id;
       fAccTrackLength               = 0.;
       fTotNbAdjIntLength            = 0.;
       fContinueGammaAsNewFreeFlight = false;

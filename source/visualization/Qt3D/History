@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-08-14 John Allison (visQt3D-V11-02-03)
+- G4Qt3DViewer:
+  - Resolve the timing issues around switching to the vis sub-thread with the
+    use of G4CONDITIONWAITLAMBDA.
+
+## 2024-07-12 Guy Barrand (visQt3D-V11-02-02)
+- G4Qt3DViewer: implement a resizeEvent() method to avoid a bad aspect ratio at viewer creation.
+- G4Qt3DSceneHandler: in AddPrimitive(G4Polyline), stay with the Qt5 code. The one for Qt6 using
+  Qt3DCore::QGeometryView is crashy.
+- G4Qt3DViewer: in MovingToVisSubThread(), SwitchToMasterThread() protect against nullptr for p1, p2.
+  It permits to avoid crash in case of doing /run/beamOn in vis.mac at startup.
+
 ## 2024-05-23 Guy Barrand (visQt3D-V11-02-01)
 - G4Qt3DSceneHandler::EstablishG4Qt3DQEntities(): have a missing:
    fpPhysicalVolumeObjects.clear();

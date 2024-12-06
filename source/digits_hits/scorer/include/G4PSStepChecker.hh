@@ -43,7 +43,7 @@
 class G4PSStepChecker : public G4VPrimitiveScorer
 {
  public:
-  G4PSStepChecker(G4String name, G4int depth = 0);
+  G4PSStepChecker(const G4String& name, G4int depth = 0);
   ~G4PSStepChecker() override = default;
 
  protected:

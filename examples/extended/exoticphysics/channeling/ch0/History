@@ -1,0 +1,153 @@
+# Example channeling History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2024-09-02 Alexei Sytov (ch0-V11-02-00)
+- moved into the folder channeling/ch0
+- renamed to ch0
+- root file removed
+- output file removed
+
+## 2022-11-02 Vladimir Ivanchenko (channelingExample-V11-00-01)
+- Use SS EM physics instead of Opt4 and disable Coulomb scattering
+
+## 2021-12-10 Ben Morgan (channelingExample-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
+October 06, 2021 I. Hrivnacova (channelingExample-V10-07-03)
+- Migration to new G4AnalysisManager.hh header;
+  removed Analysis.hh,
+  define the output file name with an extension.
+
+August 03, 2021 B. Morgan (channelingExample-V10-07-02)
+- Move test definition to test category
+
+July 19, 2021 I. Hrivnacova (channelingExample-V10-07-01)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+March 19, 2021 V. Ivanchenko (channelingExample-V10-07-00)
+- removed local option4 physics
+
+November 10, 2020 B. Morgan (channelingExample-V10-06-00)
+- Migration to G4RunManagerFactory.
+
+May 08, 2018 B. Morgan (channelingExample-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+August 22, 2017 E. Bagli (channelingExample-V10-03-03)
+- Modified sdht_ID to fSDHT_ID
+- Removed G4VIS_USE, G4UI_USE
+- Removed double blank lines
+
+May 05,2017 E. Bagli (channelingExample-V10-03-00)
+- Added the support to the G4Crystal package implemented in V10-03
+- Added the support to G4Channeling process implemented in V10-03-01
+
+November 02, 2016 I. Hrivnacova (channelingExample-V10-02-04)
+- Added file descriptions for Doxygen documentation
+
+October 17, 2016 E. Bagli (channelingExample-V10-02-03)
+- Removed GPS initialization
+
+October 14, 2016 G.Folger (channelingExample-V10-02-02)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+October 6, 2016 E. Bagli (channelingExample-V10-02-01)
+- Fixed coding guideline violations
+
+May 19, 2016 G. Cosmo (channelingExample-V10-02-00)
+- Fixed compilation warning on gcc-6.1 in XLatticeManager3.
+
+June 16, 2015 E. Bagli (channelingExample-V10-01-05)
+- bug fix passing arguments
+
+June 11, 2015 E. Bagli (channelingExample-V10-01-04)
+- bug fix on analysis macro
+
+June 11, 2015 E. Bagli (channelingExample-V10-01-03)
+- further protection against zero division
+
+June 3, 2015  E. Bagli (channelingExample-V10-01-02)
+- prevent division by zero in ProcessChanneling and Wrappers classes
+
+May 27, 2015 E. Bagli (channeling-Example-V10-01-01)
+- added full integration of particle trajectory into the channeling process
+- added beampipe and detector box to the detector construction
+- modified the wrapper classes to correct bugs in energy loss calculation under channeling
+- added to the wrapper class the InCrystal parameter in order to be completely transparent if the particle is outside a volume with a lattice
+- added the InCrystal parameter to the user info to switch between single and multiple scattering
+- single and multiple scattering are enabled/disabled if the volume has or not a lattice
+- added data files for Si110 and Si111 planar nuclei density, planar electron density and planar electric field
+- minor modification to XPhysicalLattice
+- minor modification to the macro to analyze the output data
+
+Mar 6, 2015 A. Dotti (channelingExample-V10-01-00)
+- Initialization of GPS defaults moved to master
+
+October 16, 2014 E. Bagli (channelingExample-V10-00-15)
+- minor modification to condition for vr
+- minor modification to computation of channeling outgoing angle
+- changed nuclei density to electron and nuclei density for ss cross section computation
+
+July 1,  2014 G.Folger (channelingExample-V10-00-14)
+-  revert change introduced with tag ...-12, CMakeLists.txt rev.82513
+
+June 30, 2014 E. Bagli (channelingExample-V10-00-13)
+- erf function modified to CLHEP::HepStat::erfQ
+
+June 26, 2014 G.Folger (channelingExample-V10-00-12)
+- Build example only if erf() is available on system.
+   erf function misses on Windows up to VC11 (studio 2012) included.
+
+June 22, 2014 E. Bagli (channelingExample-V10-00-11)
+- CLHEP/Random/Stat.h added to XCrystalPlanarMoliereTempPotential.cc
+
+June 21, 2014 E. Bagli (channelingExample-V10-00-10)
+- Changed erfc(x) to 1.-erf(x)
+
+June 20, 2014 E. Bagli (channelingExample-V10-00-09)
+- Modified channelling to channeling in CMakeLists.txt
+
+June 10, 2014 E. Bagli (channelingExample-V10-00-08)
+- Moved Channeling to channeling in CMakeLists.txt and CTestDefinitions.txt
+
+June 4, 2014 A. Dotti (channelingExample-V10-00-07)
+- New GPS MT ready migration
+
+June 2, 2014 E. Bagli (channelingExample-v10-00-06)
+- Modified M_PI to CLHEP::pi
+
+May 30, 2014 E. Bagli (channelingExample-v10-00-05)
+- Removed measurement of time elapsed into channeling.c
+
+May 28, 2014 E. Bagli (channelingExample-v10-00-04)
+- Corrected conversions between data types.
+- Added root reference file (physical/ExExCh.root).
+
+May 27, 2014 A. Dotti (channelingExample-V10-00-03)
+- First version of CTest introduced, via extenral
+  file CTestDefinitions.txt
+
+May 20, 2014 E. Bagli (channelingExample-V10-00-02)
+- Removed src/G4Channeling*.
+- Removed include/G4Channeling*.
+- Removed analysis/merge.sh
+- Wrote History and inserted reference to channeling model adopted
+
+May 19, 2014 E. Bagli (channelingExample-V10-00-01)
+- Class names modified.
+
+May 9, 2014, E. Bagli (channelingExample-V10-00-00)
+- First import.
+

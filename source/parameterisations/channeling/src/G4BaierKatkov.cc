@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paterno (modifications & testing)
+// On the base of the CRYSTALRAD realization of the Baier-Katkov integral:
+// A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
 
 #include "G4BaierKatkov.hh"
 
@@ -446,7 +450,7 @@ G4double G4BaierKatkov::RadIntegral(G4double etotal, G4double mass,
     G4double coefNorm = CLHEP::fine_structure_const/(8*(CLHEP::pi2))*coefNormLogdNMC;
     G4double e2pluseprime2 = 0.;//e2pluseprime2 =e2+eprime2
     G4double coefNormom2deprime2 = 0.; //coefNormom2deprime2 = coefNorm*om2/eprime2;
-    G4double gammaInverse2om = 0.; //gammaInverse2*om
+    G4double gammaInverse2om2 = 0.; //gammaInverse2*om*om
 
     std::size_t nmctotal = fPhotonEnergyInIntegral.size();
     for (std::size_t j=0;j<nmctotal;j++)
@@ -459,7 +463,7 @@ G4double G4BaierKatkov::RadIntegral(G4double etotal, G4double mass,
         omprime=etotal*om/eprime;//om'=(E*om/E')
         omprimed2=omprime/2;
         coefNormom2deprime2 = coefNorm*om*om/eprime2;
-        gammaInverse2om = gammaInverse2*om;
+        gammaInverse2om2 = gammaInverse2*om*om;
 
         for(std::size_t k=kmin;k<nparts;k++)
         {
@@ -506,7 +510,7 @@ G4double G4BaierKatkov::RadIntegral(G4double etotal, G4double mass,
 
             //updating the total radiation probability along the trajectory
             totalRadiationProbabilityPhj = coefNormom2deprime2*fPhotonAngleNormCoef[j]*
-                    (i2*e2pluseprime2+j2*gammaInverse2om);
+                    (i2*e2pluseprime2+j2*gammaInverse2om2);
             fTotalRadiationProbabilityAlongTrajectory[k] += totalRadiationProbabilityPhj;
         }
 

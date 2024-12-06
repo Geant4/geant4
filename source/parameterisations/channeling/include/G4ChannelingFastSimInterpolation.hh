@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author:      Alexei Sytov
 
 #ifndef G4ChannelingFastSimInterpolation_h
 #define G4ChannelingFastSimInterpolation_h

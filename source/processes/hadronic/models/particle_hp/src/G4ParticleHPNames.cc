@@ -76,12 +76,12 @@ G4ParticleHPNames::G4ParticleHPNames(G4int maxOffSet) : theMaxOffSet(maxOffSet)
   fManager = G4ParticleHPManager::GetInstance();
 }
 
-G4String G4ParticleHPNames::GetName(G4int i)
+G4String G4ParticleHPNames::GetName(G4int i) const
 {
   return (i > 0 && i < 100) ? theString[i] : G4String("");
 }
 
-G4String G4ParticleHPNames::itoa(G4int current)
+G4String G4ParticleHPNames::itoa(G4int current) const
 {
   const char theDigits[11] = "0123456789";
   G4String result;
@@ -95,7 +95,7 @@ G4String G4ParticleHPNames::itoa(G4int current)
 }
 
 G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, const G4String& base,
-                                                const G4String& rest, G4bool& aFlag)
+                                                const G4String& rest, G4bool& aFlag) const
 {
   // G4cout << Z << " " << A << " " << M << " " << base << " " << rest << G4endl;
 
@@ -318,7 +318,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, const
   if (Z != result.GetZ() || A != result.GetA()) {
     if (rest == "/CrossSection") {
       G4String reac = base;
-      G4String dir = fManager->GetNeutronHPPath();
+      const G4String& dir = fManager->GetNeutronHPPath();
       reac.erase(0, dir.length());
       if (fManager->GetSkipMissingIsotopes()
           && (Z != result.GetZ() || !result.IsThisNaturalAbundance()))
@@ -329,7 +329,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, const
                  << " is not found and CrossSection set to 0." << G4endl;
         }
 #endif
-        G4String new_name = base + "/" + rest + "/" + "0_0_Zero";
+        const G4String& new_name = base + "/" + rest + "/" + "0_0_Zero";
         result.SetName(new_name);
       }
       else {
@@ -344,7 +344,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, const
                     || (Z == 88 && A == 226))))
 
         {
-          G4String new_name = base + "/" + rest + "/" + "0_0_Zero";
+          const G4String& new_name = base + "/" + rest + "/" + "0_0_Zero";
           result.SetName(new_name);
         }
         else {

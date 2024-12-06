@@ -31,6 +31,15 @@
 //
 // Verbosity level depends on the local verbosity level and the verbosity
 // level of hadronics defined in G4HadronicParameters
+//
+// OPTxs is a type of model for inverse cross section. It is different
+// for pre-compound and de-excitation (fPrecoType and fDeexType).
+// Possible types:
+//    0 - Dostrovski's parameterization
+//    1 - G4NeutronInelasticXS or G4ParticleInelasticXS
+//    2 - Chatterjee's paramaterization
+//    3 - Kalbach's parameterization
+//
 
 #ifndef G4DeexPrecoParameters_h
 #define G4DeexPrecoParameters_h 1
@@ -53,7 +62,7 @@ class G4DeexPrecoParameters
 {
 public:
 
-  explicit G4DeexPrecoParameters();
+  G4DeexPrecoParameters();
 
   ~G4DeexPrecoParameters();
 

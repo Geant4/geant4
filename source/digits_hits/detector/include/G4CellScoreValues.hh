@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4CellScoreValues
+// G4CellScoreValues
 //
 // Class description:
+//
 // This struct holds sums of scores for standard scoring.
 //
-//
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-
+// Author: Michael Dressel, CERN
+// --------------------------------------------------------------------
 #ifndef G4CellScoreValues_hh
-#define G4CellScoreValues_hh G4CellScoreValues_hh
+#define G4CellScoreValues_hh 1
 
 #include "globals.hh"
 

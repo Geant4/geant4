@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -93,10 +93,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -282,7 +285,7 @@ ionIoni:  for GenericIon  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
@@ -750,7 +753,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -828,51 +831,51 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.840000s Real=0.892098s Sys=0.000000s
+  User=0.860000s Real=0.874370s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 eV  through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 813.89 keV  rms = 418.49 keV
- Mean energy deposit in detector, in time window = 18.911 keV  rms = 108.38 keV
+ Mean energy deposit in target,   in time window = 813.67 keV  rms = 418.96 keV
+ Mean energy deposit in detector, in time window = 18.104 keV  rms = 106.08 keV
 
  Process calls frequency in target :
-            NoProcess=  10000      RadioactiveDecay=  50783                  Rayl=    276
-       Transportation=  50277               annihil=    179                 compt=   4327
-                 conv=    190                 eIoni=  26111               ionIoni=  38041
-                  msc=   3957                  phot=   1566 
+            NoProcess=  10000      RadioactiveDecay=  50767                  Rayl=    278
+       Transportation=  50242               annihil=    176                 compt=   4289
+                 conv=    188                 eIoni=  26105               ionIoni=  38047
+                  msc=   3839                  phot=   1579 
 
  Process calls frequency in detector:
-                 Rayl=   1174        Transportation=  45967               annihil=    360
-                compt=  22727                  conv=    354                 eIoni=  27717
-                  msc=   6639                  phot=   4291 
+                 Rayl=   1183        Transportation=  45897               annihil=    359
+                compt=  22830                  conv=    350                 eIoni=  27849
+                  msc=   6677                  phot=   4324 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.405 eV 	( 41.932 eV  --> 804.71 eV )
-  Mg24[1368.672]:    9990  Emean =  169.98 eV 	( 123.85 eV  --> 436.48 eV )
-  Mg24[4122.889]:    9976  Emean =  38.959 eV 	( 181.42 meV --> 74.556 eV )
-  Mg24[5235.120]:       9  Emean =  3.1477 eV 	( 378.2 meV --> 6.3072 eV )
-           Na24:    9990  Emean =  4.9946 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     812  Emean =  27.446 eV 	( 649.04 meV --> 51.389 eV )
-  Na24[472.207]:    9999  Emean =  67.532 eV 	( 101.72 meV --> 133.55 eV )
-  Na24[563.199]:       7  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  974.99 keV	( 31.518 keV --> 5.0943 MeV)
-             e+:     190  Emean =  783.89 keV	( 1.7102 keV --> 1.6964 MeV)
-             e-:   26093  Emean =  640.28 keV	( 72.53 eV  --> 4.5674 MeV)
-          gamma:   31137  Emean =  1.5028 MeV	( 90.991 keV --> 3.8661 MeV)
+           Mg24:   10000  Emean =  42.405 eV 	( 41.931 eV  --> 804.71 eV )
+  Mg24[1368.667]:    9990  Emean =  169.92 eV 	( 169.78 eV  --> 334.58 eV )
+  Mg24[4122.853]:    9984  Emean =  39.091 eV 	( 98.622 meV --> 74.56 eV )
+  Mg24[5235.160]:       6  Emean =  2.6297 eV 	( 1.178 eV  --> 5.646 eV )
+           Na24:    9990  Emean =  4.9933 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.635]:     794  Emean =  27.494 eV 	( 649.04 meV --> 51.388 eV )
+  Na24[472.207]:   10000  Emean =  67.791 eV 	( 101.68 meV --> 133.55 eV )
+  Na24[563.199]:       3  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  975.22 keV	( 29.746 keV --> 5.0943 MeV)
+             e+:     188  Emean =  774.41 keV	( 1.7102 keV --> 1.6964 MeV)
+             e-:   26087  Emean =  640.71 keV	( 72.714 eV  --> 4.5674 MeV)
+          gamma:   31108  Emean =  1.5032 MeV	( 90.992 keV --> 3.8662 MeV)
 
  List of generated particles in detector:
-             e+:     354  Emean =  775.51 keV	( 7.5285 keV --> 2.6942 MeV)
-             e-:   27357  Emean =  375.85 keV	( 111.92 eV  --> 3.5698 MeV)
-          gamma:     718  Emean =  523.56 keV	( 393 keV --> 1.8258 MeV)
+             e+:     350  Emean =  787.78 keV	( 7.5284 keV --> 2.6942 MeV)
+             e-:   27488  Emean =  375.51 keV	( 111.92 eV  --> 3.6219 MeV)
+          gamma:     718  Emean =   525.3 keV	( 393 keV --> 1.8258 MeV)
 
 ... write file : rdecay02.root - done
 ... close file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 668701997, 1729431881
+ Current couple of seeds = 1705873180, 586740664
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0

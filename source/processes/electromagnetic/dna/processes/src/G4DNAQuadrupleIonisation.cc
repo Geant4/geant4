@@ -63,7 +63,7 @@ void G4DNAQuadrupleIonisation::InitialiseProcess(const G4ParticleDefinition* p)
   is_initialized_ = true;
   SetBuildTableFlag(false);
 
-  const auto name = p->GetParticleName();
+  const auto& name = p->GetParticleName();
 
   if (name == "proton") {
 

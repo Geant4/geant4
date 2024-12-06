@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-19 Vladimir Ivanchenko (hadr-man-V11-02-02)
+- G4HadronicProcessStore - fixed minor memory leak at exit by addition of
+    G4ThreadLocalSingleton pattern and removed deletion of extra processes
+    to avoid double deletion at exit.
+
 ## 2024-05-27 Vladimir Ivanchenko (hadr-man-V11-02-01)
 - G4HadronicProcessStore - fixed handling of rare processes: printout, 
     cross section maximum search, and deletion end of run.

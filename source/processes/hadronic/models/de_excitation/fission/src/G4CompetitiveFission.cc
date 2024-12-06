@@ -50,17 +50,9 @@
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission"), theSecID(-1)
 {
   theFissionBarrierPtr = new G4FissionBarrier;
-  myOwnFissionBarrier = true;
-
   theFissionProbabilityPtr = new G4FissionProbability;
-  myOwnFissionProbability = true;
-  
   theLevelDensityPtr = new G4FissionLevelDensityParameter;
-  myOwnLevelDensity = true;
-
-  maxKineticEnergy = fissionBarrier = fissionProbability = 0.0;
   pairingCorrection = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
-
   theSecID = G4PhysicsModelCatalog::GetModelID("model_G4CompetitiveFission");
 }
 
@@ -71,8 +63,18 @@ G4CompetitiveFission::~G4CompetitiveFission()
   if (myOwnLevelDensity) delete theLevelDensityPtr;
 }
 
+void G4CompetitiveFission::Initialise()
+{
+  if (!isInitialised) {
+    isInitialised = true;
+    G4VEvaporationChannel::Initialise();  
+    if (OPTxs == 1) { fFactor = 0.5; }
+  }
+}
+
 G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 {
+  if (!isInitialised) { Initialise(); }
   G4int Z = fragment->GetZ_asInt();
   G4int A = fragment->GetA_asInt();
   fissionProbability = 0.0;
@@ -89,7 +91,7 @@ G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 						      maxKineticEnergy);
     }
   }
-  return fissionProbability;
+  return fissionProbability*fFactor;
 }
 
 G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)

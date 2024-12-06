@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,7 +30,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -109,25 +108,25 @@ H3O^1 + OH^-1 -> No product                 1.13e+11
 ----------------------------------------------------------------------------
 H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      
 ----------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      
+°OH^0 + e_aq^-1 -> OH^-1                   2.95e+10                      
 ----------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                       5.5e+09                       
+°OH^0 + °OH^0 -> H2O2^0                   5.5e+09                       
 ----------------------------------------------------------------------------
-OH^0 + H^0 -> No product                    1.55e+10                      
+°OH^0 + H^0 -> No product                  1.55e+10                      
+----------------------------------------------------------------------------
+°OH^0 + NO_2^-1 -> OH^-1                   80                            
 ----------------------------------------------------------------------------
 e_aq^-1 + H^0 -> H_2^0 + OH^-1              2.5e+10                       
 ----------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.1e+10                       
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0          1.1e+10                       
 ----------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> H_2^0 + OH^-1 + OH^-1  6.36e+09                      
 ----------------------------------------------------------------------------
-e_aq^-1 + O_2^0 -> O_2^-1                   0.9048                        
+e_aq^-1 + NO_2^-1 -> No product             35                            
+----------------------------------------------------------------------------
+e_aq^-1 + NO_3^-1 -> No product             4.85                          
 ----------------------------------------------------------------------------
 H^0 + H^0 -> H_2^0                          5.03e+09                      
-----------------------------------------------------------------------------
-H^0 + O_2^0 -> HO_2^0                       1.092                         
-----------------------------------------------------------------------------
-O^-1 + O_2^0 -> O_3^-1                      0.1924                        
 ----------------------------------------------------------------------------
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
@@ -150,10 +149,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -601,15 +603,13 @@ Index : 0     used in the geometry : Yes
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 starts.
 DNAMolecularIRTModel will be used
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.540000s Real=0.572424s Sys=0.010000s
+  User=1.070000s Real=1.105998s Sys=0.010000s
 
 --------------------End of Global Run-----------------------
   The run has 1 events 
@@ -621,5 +621,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 3.6 MB
+Dynamic pools deleted: 15 / Total memory freed: 4.9 MB
 ============================================================

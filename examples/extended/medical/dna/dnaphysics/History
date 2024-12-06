@@ -4,6 +4,20 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-10-29 Sebastien Incerti, Hoang Tran (dnaphysics-V11-02-04)
+- Fixed issue with visualization by setting default World size and material
+in DetectorConstruction.cc
+
+## 2024-10-05 Sebastien Incerti (dnaphysics-V11-02-03)
+- Updated README
+
+## 2024-09-27 Batmunkh Munkhbaatar, Sebastien Incerti (dnaphysics-V11-02-02)
+- update of README and dnaphysics.in
+- update DetectorConstructor and DetectorMessenger files with given
+    values of material density and World size
+- added messenger for World size change
+- added messenger for material density change
+
 ## 2024-05-09 Sebastien Incerti (dnaphysics-V11-02-02)
 - Added plotDeexcitation.C and deexcitation.in
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// ---------------------------------------------------------------------
+// G4ScoringMessenger
+// --------------------------------------------------------------------
 
 #include "G4ScoringMessenger.hh"
 #include "G4ScoringManager.hh"
@@ -46,6 +46,9 @@
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
 #include "G4VScoreColorMap.hh"
+
+#include "G4VPrimitivePlotter.hh"
+#include "G4VScoreHistFiller.hh"
 
 G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   : fSMan(SManager)
@@ -927,7 +930,7 @@ G4String G4ScoringMessenger::GetCurrentValue(G4UIcommand* command)
   return val;
 }
 
-void G4ScoringMessenger::FillTokenVec(G4String newValues, G4TokenVec& token)
+void G4ScoringMessenger::FillTokenVec(const G4String& newValues, G4TokenVec& token)
 {
   G4Tokenizer next(newValues);
   G4String val;
@@ -970,10 +973,7 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token)
   mesh->SetNumberOfSegments(nSegment);
 }
 
-#include "G4VPrimitivePlotter.hh"
-#include "G4VScoreHistFiller.hh"
-
-void G4ScoringMessenger::Fill1D(G4UIcommand* cmd, G4String newVal)
+void G4ScoringMessenger::Fill1D(G4UIcommand* cmd, const G4String& newVal)
 {
   using MeshShape = G4VScoringMesh::MeshShape;
 

@@ -31,6 +31,7 @@
 #include "G4RunMessenger.hh"
 
 #include "G4MTRunManager.hh"
+#include "G4SubEvtRunManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4RunManager.hh"
 #include "G4Tokenizer.hh"
@@ -90,9 +91,11 @@ G4RunMessenger::G4RunMessenger(G4RunManager* runMgr) : runManager(runMgr)
   verboseCmd->SetGuidance(" 1 : Display main topics");
   verboseCmd->SetGuidance(" 2 : Display main topics and run summary");
   verboseCmd->SetGuidance(" 3 : Display some additional information");
+  verboseCmd->SetGuidance(" 4 : Display detailed information");
+  verboseCmd->SetGuidance(" N.B. 3 or 4 may cause significant performance degradation");
   verboseCmd->SetParameterName("level", true);
   verboseCmd->SetDefaultValue(0);
-  verboseCmd->SetRange("level >=0 && level <=3");
+  verboseCmd->SetRange("level >=0 && level <=4");
 
   printProgCmd = new G4UIcmdWithAnInteger("/run/printProgress", this);
   printProgCmd->SetGuidance("Display begin_of_event information at given frequency.");
@@ -167,8 +170,9 @@ G4RunMessenger::G4RunMessenger(G4RunManager* runMgr) : runManager(runMgr)
   evModCmd->SetGuidance("   group of N events. This option is reserved for the future use when");
   evModCmd->SetGuidance("   Geant4 allows number of threads to be dynamically changed during an");
   evModCmd->SetGuidance("   event loop.");
-  evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
-  evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
+  evModCmd->SetGuidance("This command is valid only for multi-threaded event-level parallel mode.");
+  evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode or in");
+  evModCmd->SetGuidance("sub-event parallel mode.");
   auto emp1 = new G4UIparameter("N", 'i', true);
   emp1->SetDefaultValue(0);
   emp1->SetParameterRange("N >= 0");
@@ -361,6 +365,19 @@ G4RunMessenger::G4RunMessenger(G4RunManager* runMgr) : runManager(runMgr)
   procUICmds->SetGuidance("Force workers to process current stack of UI commands.");
   procUICmds->SetGuidance("This commands is meaningful only in MT mode.");
   procUICmds->AvailableForStates(G4State_PreInit, G4State_Idle, G4State_GeomClosed);
+
+  trajMergeCmd = new G4UIcmdWithABool("/run/trajectoriesToBeMerged",this);
+  trajMergeCmd->SetGuidance("Merge trajectories created in sub-event parallel mode.");
+  trajMergeCmd->SetGuidance("In sub-event parallel mode, trajectories created in worker ");
+  trajMergeCmd->SetGuidance("threads are not merged to the event in the master thread by default ");
+  trajMergeCmd->SetGuidance("due to the performance overhead caused by copying them.");
+  trajMergeCmd->SetGuidance("This command enables the merging.");
+  trajMergeCmd->SetGuidance("/tracking/storeTrajectory command must be set to create trajectories.");
+  trajMergeCmd->SetGuidance("This command is valid only for sub-event parallel mode.");
+  trajMergeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  trajMergeCmd->SetParameterName("flag", true);
+  trajMergeCmd->SetDefaultValue(true);
+  trajMergeCmd->SetToBeBroadcasted(false);
 }
 
 // --------------------------------------------------------------------
@@ -387,6 +404,7 @@ G4RunMessenger::~G4RunMessenger()
   delete randEvtCmd;
   delete constScoreCmd;
   delete procUICmds;
+  delete trajMergeCmd;
 
   delete seedCmd;
   delete savingFlagCmd;
@@ -485,9 +503,13 @@ void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       G4cout << "*** /run/eventModulo command is issued in sequential mode."
              << "\nCommand is ignored." << G4endl;
     }
+    else if (rmType == G4RunManager::subEventMasterRM) {
+      G4cout << "*** /run/eventModulo command is issued in sub-event parallel mode."
+             << "\nCommand is ignored." << G4endl;
+    }
     else {
       G4Exception("G4RunMessenger::ApplyNewCommand", "Run0902", FatalException,
-                  "/run/eventModulo command is issued to local thread.");
+                  "/run/eventModulo command is issued to worker thread.");
     }
   }
   else if (command == dumpRegCmd) {
@@ -594,6 +616,26 @@ void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     else {
       G4Exception("G4RunMessenger::ApplyNewCommand", "Run0129", FatalException,
                   "/run/workersProcessCmds command is issued to local thread.");
+    }
+  }
+  else if (command == trajMergeCmd) {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if (rmType == G4RunManager::subEventMasterRM) {
+      auto rm = dynamic_cast<G4SubEvtRunManager*>(runManager);
+      if (rm != nullptr) {
+        rm->TrajectoriesToBeMerged(trajMergeCmd->GetNewBoolValue(newValue));
+      }
+      else {
+        G4ExceptionDescription ed;
+        ed << "/run/trajectoriesToBeMerged command is issued on a RunManager class "
+           << "instance that is not G4SubEvtRunManager.";
+        G4Exception("G4RunManager::ApplyNewCommand", "Run0129", FatalException, ed);
+      }
+    }
+    else {
+      G4cout << "*** /run/trajectoriesToBeMerged command is issued on a RunManager "
+             << "class instance that is not G4SubEvtRunManager."
+             << "\nCommand is ignored." << G4endl;
     }
   }
 }

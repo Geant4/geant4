@@ -68,9 +68,9 @@ class G4VDigitizerModule
 
     inline G4int GetNumberOfCollections() const
     { return G4int(collectionName.size()); }
-    inline G4String GetCollectionName(G4int i) const
+    inline const G4String& GetCollectionName(G4int i) const
     { return collectionName[i]; }
-    inline G4String GetName() const
+    inline const G4String& GetName() const
     { return moduleName; }
     inline void SetVerboseLevel(G4int val)
     { verboseLevel = val; }

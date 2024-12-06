@@ -32,18 +32,23 @@
 
 #include "TrackingAction.hh"
 
+#include "EventAction.hh"
 #include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
 
+#include "G4Positron.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4RunManager.hh"
+#include "G4StepStatus.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(PrimaryGeneratorAction* prim) : fPrimary(prim) {}
+TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, EventAction* evt) 
+: fPrimary(prim),fEventAction(evt) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -126,6 +131,16 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
       << "   dynam-pdg= " << G4BestUnit (dif2     , "Energy")
       << G4endl;
   */
+  
+  // energy leakage
+  G4StepStatus status = aTrack->GetStep()->GetPostStepPoint()->GetStepStatus();
+  if (status == fWorldBoundary) {
+    G4double eleak = aTrack->GetKineticEnergy();
+    if (aTrack->GetDefinition() == G4Positron::Positron()) {
+      eleak += 2*electron_mass_c2;
+    }      
+    fEventAction->AddEleak(eleak);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

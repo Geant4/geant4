@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// ----------------------------------------------------------------------
-// Class G4TrackLogger
+// G4TrackLogger
 //
 // Class description:
 //
@@ -33,12 +31,10 @@
 // a track has been logged. The loggs are cleared when ever
 // the object has been informed about a new event.
 //
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-//
-
+// Author: Michael Dressel, CERN
+// --------------------------------------------------------------------
 #ifndef G4TrackLogger_hh
-#define G4TrackLogger_hh G4TrackLogger_hh
+#define G4TrackLogger_hh 1
 
 #include "globals.hh"
 

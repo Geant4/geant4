@@ -55,11 +55,11 @@
 /// (taking December as 0, the start of new development of the next major/minor release).
 ///
 #ifndef G4VERSION_REFERENCE_TAG
-  #define G4VERSION_REFERENCE_TAG 06
+  #define G4VERSION_REFERENCE_TAG 00
 #endif
 
 #ifndef G4VERSION_TAG
-  #define G4VERSION_TAG "$Name: geant4-11-03-beta-01 $"
+  #define G4VERSION_TAG "$Name: geant4-11-03 $"
 #endif
 
 // as variables
@@ -68,10 +68,10 @@
 #include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-11-03-beta-01 [MT]$";
+static const G4String G4Version = "$Name: geant4-11-03 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-11-03-beta-01 $";
+static const G4String G4Version = "$Name: geant4-11-03 $";
 #endif
-static const G4String G4Date = "(28-June-2024)";
+static const G4String G4Date = "(6-December-2024)";
 
 #endif

@@ -1,3 +1,29 @@
+6.3.3:
+- wroot/file: in compress_buffer(): to fix bugzilla-2625: arrange to have a greater
+  output buffer size when using deflate(), and check at end, that in case of some
+  compressions being done, "a_klen<a_buffer.length()" to comply to the ROOT/IO specification
+  that the overall output size should be stricly lower than the input size.
+  (A "specification" encoded in ROOT/TKey.cxx/TKey::ReadObj() method in the form
+  of a "if (fObjlen > fNbytes-fKeylen) {}"). In case "a_klen>=a_buffer.length()", the
+  input buffer is returned.
+- wroot/basket: in write_on_file(): suppress the test "if(klen>m_object_size)" now done
+  in file::compress_buffer().
+- tools/version: pass to 6.3.3.
+
+6.3.2:
+- streamers: in TH_read_1D(), fix a "std::move" minor Coverity issue.
+- axis: in avoid_labels_overlap(), fix a "divide by zero" medium Coverity issue.
+- tools/version: pass to 6.3.2.
+
+6.3.1:
+- fix twenty "std::move" Coverity issues.
+- wroot/buffer: have argument of write_array[2](std::vector) passed as a const reference.
+- tess_contour: have argument of getFilledArea(std::vector) passed as a const reference.
+- Fixed string assignments in 'window' and 'pixwin', to support either UNICODE
+  or UTF-16 encoding on Windows. Addressing problem report #2599.
+- Fixed compilation warnings in ccontour and gl2ps on gcc when LTO settings are enabled.
+- tools/version: pass to 6.3.1.
+
 6.3.0:
 - tools/wroot/file: in the constructor, for the streaming of the root directory, take into account the streaming of what would be
   the fUUID (a TUUID in ROOT) field of the TDirectory version 4. This permits to fix the "G4AnalysisManager creates ROOT files

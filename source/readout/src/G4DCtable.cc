@@ -33,7 +33,7 @@ G4DCtable::G4DCtable() {;}
 
 G4DCtable::~G4DCtable() {;}
 
-G4int G4DCtable::Registor(G4String DMname, G4String DCname)
+G4int G4DCtable::Registor(const G4String& DMname, const G4String& DCname)
 {
   for(std::size_t i=0; i<DClist.size(); ++i)
   {
@@ -44,7 +44,7 @@ G4int G4DCtable::Registor(G4String DMname, G4String DCname)
   return (G4int)DClist.size();
 }
 
-G4int G4DCtable::GetCollectionID(G4String DCname) const
+G4int G4DCtable::GetCollectionID(const G4String& DCname) const
 {
   G4int i = -1;
   if(DCname.find("/")==std::string::npos) // DCname only

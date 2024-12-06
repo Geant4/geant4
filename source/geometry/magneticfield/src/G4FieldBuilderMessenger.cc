@@ -54,7 +54,7 @@ G4FieldBuilderMessenger::G4FieldBuilderMessenger(G4FieldBuilder* fieldBuilder)
   fDirectory = new G4UIdirectory(directoryName);
   fDirectory->SetGuidance("Magnetic (or other type) field control commands.");
 
-  G4String commandName = directoryName;
+  G4String commandName = std::move(directoryName);
   commandName.append("verboseLevel");
   fVerboseLevelCmd = new G4UIcmdWithAnInteger(commandName, this);
   fVerboseLevelCmd->SetGuidance("Set verbose level");

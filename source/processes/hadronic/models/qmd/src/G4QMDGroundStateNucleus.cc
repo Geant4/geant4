@@ -88,7 +88,7 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
 
    //edepth = 0.0; 
 
-   for ( int i = 0 ; i < a ; i++ )
+   for ( G4int i = 0 ; i < a ; ++i )
    {
 
       G4ParticleDefinition* pd; 
@@ -109,7 +109,7 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
 
    }
 
-   G4double radious = r00 * G4Pow::GetInstance()->A13( double ( GetMassNumber() ) ); 
+   G4double radious = r00 * G4Pow::GetInstance()->A13( G4double ( GetMassNumber() ) ); 
 
    rt00 = radious - r01; 
    radm = radious - rada * ( gamm - 1.0 ) + radb;

@@ -77,34 +77,36 @@ public:   // with description
 
 private:
 
-  G4EmParameters*            theParameters;
+  G4EmParameters* theParameters;
 
-  G4UIdirectory*             gconvDirectory;
-  G4UIdirectory*             eLossDirectory;
-  G4UIdirectory*             mscDirectory;
-  G4UIdirectory*             emDirectory;
-  G4UIdirectory*             dnaDirectory;
+  G4UIdirectory* gconvDirectory;
+  G4UIdirectory* eLossDirectory;
+  G4UIdirectory* mscDirectory;
+  G4UIdirectory* emDirectory;
+  G4UIdirectory* dnaDirectory;
 
-  G4UIcmdWithABool*          flucCmd;
-  G4UIcmdWithABool*          intCmd;
-  G4UIcmdWithABool*          rangeCmd;
-  G4UIcmdWithABool*          lpmCmd;
-  G4UIcmdWithABool*          rsCmd;
-  G4UIcmdWithABool*          aplCmd;
-  G4UIcmdWithABool*          latCmd;
-  G4UIcmdWithABool*          lat96Cmd;
-  G4UIcmdWithABool*          mulatCmd;
-  G4UIcmdWithABool*          delCmd;
-  G4UIcmdWithABool*          mottCmd;
-  G4UIcmdWithABool*          birksCmd;
-  G4UIcmdWithABool*          sharkCmd;
-  G4UIcmdWithABool*          poCmd;
-  G4UIcmdWithABool*          onIsolatedCmd;
-  G4UIcmdWithABool*          sampleTCmd;
-  G4UIcmdWithABool*          icru90Cmd;
-  G4UIcmdWithABool*          mudatCmd;
-  G4UIcmdWithABool*          peKCmd;
-  G4UIcmdWithABool*          mscPCmd;
+  G4UIcmdWithABool* flucCmd;
+  G4UIcmdWithABool* intCmd;
+  G4UIcmdWithABool* rangeCmd;
+  G4UIcmdWithABool* lpmCmd;
+  G4UIcmdWithABool* rsCmd;
+  G4UIcmdWithABool* aplCmd;
+  G4UIcmdWithABool* latCmd;
+  G4UIcmdWithABool* lat96Cmd;
+  G4UIcmdWithABool* mulatCmd;
+  G4UIcmdWithABool* delCmd;
+  G4UIcmdWithABool* mottCmd;
+  G4UIcmdWithABool* birksCmd;
+  G4UIcmdWithABool* sharkCmd;
+  G4UIcmdWithABool* poCmd;
+  G4UIcmdWithABool* onIsolatedCmd;
+  G4UIcmdWithABool* sampleTCmd;
+  G4UIcmdWithABool* icru90Cmd;
+  G4UIcmdWithABool* mudatCmd;
+  G4UIcmdWithABool* peKCmd;
+  G4UIcmdWithABool* mscPCmd;
+  G4UIcmdWithABool* pepicsCmd;
+  G4UIcmdWithABool* f3gCmd;
 
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
@@ -143,7 +145,6 @@ private:
   G4UIcmdWithAString*        ssCmd;
   G4UIcmdWithAString*        fluc1Cmd;
   G4UIcmdWithAString*        posiCmd;
-  G4UIcmdWithADouble*        ortoCmd;
 
   G4UIcommand*               dumpCmd;
 

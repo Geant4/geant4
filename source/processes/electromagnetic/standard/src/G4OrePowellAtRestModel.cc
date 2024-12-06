@@ -48,7 +48,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4OrePowellAtRestModel::G4OrePowellAtRestModel() : G4VPositronAtRestModel("OrePawell") {}
+G4OrePowellAtRestModel::G4OrePowellAtRestModel() : G4VPositronAtRestModel("OrePowell") {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,13 +63,11 @@ void G4OrePowellAtRestModel::SampleSecondaries(
 
   G4double cos12;
   G4double cos13;
+  G4double sin12;
+  G4double sin13;
   G4double r1;
   G4double r2;
   G4double r3;
-  G4double theta12;
-  G4double theta13;
-  G4double sin12;
-  G4double sin13;
   G4double pdf;
 
   G4double rndmv2[2];
@@ -91,10 +89,9 @@ void G4OrePowellAtRestModel::SampleSecondaries(
       // request both cosines < 1.
     } while ( std::abs(cos12) > 1 || std::abs(cos13) > 1 );
 
-    theta12 =   std::acos(cos12);
-    theta13 = - std::acos(cos13);
-    sin12 = std::sin(theta12);
-    sin13 = std::sin(theta13);
+    sin12 =  std::sqrt((1 + cos12)*(1 - cos12));
+    sin13 = -std::sqrt((1 + cos13)*(1 - cos13));
+
     G4double cos23=cos12*cos13+sin12*sin13;
 
     pdf = (1 - cos12)*(1 - cos12) + (1 - cos13)*(1 - cos13) + (1 - cos23)*(1 - cos23);

@@ -27,7 +27,7 @@
 
 #include <iostream>
 
-G4HadronicException::G4HadronicException(G4String in, G4int at, G4String mess)
+G4HadronicException::G4HadronicException(const G4String& in, G4int at, const G4String& mess)
     : theMessage{mess}, theName{in}, theLine{at} {
 
   std::ostringstream os;

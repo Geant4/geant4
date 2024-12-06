@@ -113,6 +113,7 @@
 // include this prototype will not cause a compilation error - it will merely
 // cause your code to use a default function that outputs the pointer as an
 // address.
+[[deprecated("Use pass-by-reference version instead.")]]
 std::ostream& operator<<
 (std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
 

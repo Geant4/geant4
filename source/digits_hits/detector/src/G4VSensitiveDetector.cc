@@ -30,9 +30,9 @@
 
 #include "G4SDManager.hh"
 
-G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
+G4VSensitiveDetector::G4VSensitiveDetector(const G4String& name)
 {
-  size_t sLast = name.rfind('/');
+  std::size_t sLast = name.rfind('/');
   if (sLast == std::string::npos) {  // detector name only
     SensitiveDetectorName = name;
     thePathName = "/";

@@ -298,7 +298,7 @@ ptwXYPoints *ptwXY_div_ptwXY( ptwXYPoints *ptwXY1, ptwXYPoints *ptwXY2, nfu_stat
     *status = nfu_otherInterpolation;
     if( ptwXY1->interpolation == ptwXY_interpolationOther ) return( NULL );
     if( ptwXY2->interpolation == ptwXY_interpolationOther ) return( NULL );
-    if( ( ptwXY1->interpolation == ptwXY_interpolationFlat ) || ( ptwXY1->interpolation == ptwXY_interpolationFlat ) )
+    if( ( ptwXY1->interpolation == ptwXY_interpolationFlat ) || ( ptwXY2->interpolation == ptwXY_interpolationFlat ) )
         return( ptwXY_div_ptwXY_forFlats( ptwXY1, ptwXY2, status, safeDivide ) );
     
     if( ( *status = ptwXY_areDomainsMutual( ptwXY1, ptwXY2 ) ) != nfu_Okay ) return( NULL );

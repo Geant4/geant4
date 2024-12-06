@@ -112,8 +112,7 @@ G4bool G4Visible::operator != (const G4Visible& right) const {
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {
   os << "G4Visible: ";
-  if (!v.fInfo.empty()) os << "User information: " << v.fInfo;
-  os << '\n';
-  if (v.fpVisAttributes != nullptr) return os << *(v.fpVisAttributes);
+  if (!v.fInfo.empty()) os << "User information: " << v.fInfo << ": ";
+  if (v.fpVisAttributes != nullptr) return os << '\n' << *(v.fpVisAttributes);
   return os << "No Visualization Attributes";
 }

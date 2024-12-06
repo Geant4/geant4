@@ -53,6 +53,7 @@ geant4_module_link_libraries(G4hadronic_coherent_elastic
   PRIVATE
     G4baryons
     G4cuts
+    G4hadronic_deex_handler
     G4heprandom
     G4ions
     G4leptons

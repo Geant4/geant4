@@ -31,7 +31,7 @@
 
 class G4HadronicException : public std::exception {
 public:
-  G4HadronicException(G4String in, G4int at, G4String mess);
+  G4HadronicException(const G4String& in, G4int at, const G4String& mess);
 
   virtual ~G4HadronicException() throw();
 

@@ -50,7 +50,7 @@ class G4ParticleDefinition;
 class G4SDParticleWithEnergyFilter : public G4VSDFilter
 {
  public:
-  G4SDParticleWithEnergyFilter(G4String name, G4double elow = 0.0,
+  G4SDParticleWithEnergyFilter(const G4String& name, G4double elow = 0.0,
                                G4double ehigh = DBL_MAX);
   G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
   G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);

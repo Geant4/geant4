@@ -62,8 +62,8 @@ G4ParticleHPFFFissionFS::~G4ParticleHPFFFissionFS()
   }
 }
 
-void G4ParticleHPFFFissionFS::Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String&,
-                                   G4ParticleDefinition*)
+void G4ParticleHPFFFissionFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                                   const G4String&, G4ParticleDefinition*)
 {
   // G4cout << "G4ParticleHPFFFissionFS::Init" << G4endl;
   G4String aString = "FF";

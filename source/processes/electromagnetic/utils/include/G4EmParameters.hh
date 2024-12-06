@@ -87,7 +87,9 @@ enum G4EmFluctuationType
 enum G4PositronAtRestModelType 
 {
   fSimplePositronium = 0,
-  fAllisonPositronium
+  fAllisonPositronium,
+  fOrePowell,
+  fOrePowellPolar
 };
 
 class G4EmParametersMessenger;
@@ -183,9 +185,6 @@ public:
   void SetPositronAtRestModelType(G4PositronAtRestModelType val);
   G4PositronAtRestModelType PositronAtRestModelType() const;
 
-  void SetOrtoPsFraction(G4double val);
-  G4double  OrtoPsFraction() const;
-
   void SetDNAFast(G4bool val);
   G4bool DNAFast() const;
 
@@ -220,6 +219,15 @@ public:
 
   G4bool MscPositronCorrection() const;
   void SetMscPositronCorrection(G4bool v);
+
+  G4bool UseEPICS2017XS() const;
+  void SetUseEPICS2017XS(G4bool v);
+
+  G4bool Use3GammaAnnihilationOnFly() const;
+  void Set3GammaAnnihilationOnFly(G4bool v);
+
+  G4bool UseRiGePairProductionModel() const;
+  void SetUseRiGePairProductionModel(G4bool v);
 
   // 5d
   void SetOnIsolated(G4bool val);
@@ -446,6 +454,9 @@ private:
   G4bool fMuDataFromFile;
   G4bool fPEKShell;
   G4bool fMscPosiCorr;
+  G4bool fUseEPICS2017XS;
+  G4bool f3GammaAnnihilationOnFly;
+  G4bool fUseRiGePairProductionModel;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
   G4bool fIsPrinted;
@@ -486,7 +497,6 @@ private:
   G4eSingleScatteringType fSStype;
   G4EmFluctuationType fFluct;
   G4PositronAtRestModelType fPositronium;
-  G4double fOrtoPsFraction;
 
   G4String fDirLEDATA;
 };

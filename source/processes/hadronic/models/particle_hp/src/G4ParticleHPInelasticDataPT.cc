@@ -51,6 +51,7 @@
 #include "G4Neutron.hh"
 #include "G4Element.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4ParticleHPProbabilityTablesStore.hh"
 #include "G4HadronicException.hh"
 
@@ -69,11 +70,11 @@ G4ParticleHPInelasticDataPT::~G4ParticleHPInelasticDataPT() {}
 G4bool G4ParticleHPInelasticDataPT::IsIsoApplicable( const G4DynamicParticle* dp , G4int /*Z*/ , G4int /*A*/ ,
                                                      const G4Element* elm, const G4Material* /*mat*/ ) {
   // checks applicability for the element
-  if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "njoy" ) {
+  if ( doNOTusePTforInelastic ) {
       // do not use for njoy
       return false;
-  } else if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "calendf" ) {
-    if ( dp->GetDefinition() != G4Neutron::Neutron() ) {
+  }
+  if ( dp->GetDefinition() != G4Neutron::Neutron() ) {
       return false;
     } else {
       std::size_t elementI = elm->GetIndex();
@@ -83,7 +84,6 @@ G4bool G4ParticleHPInelasticDataPT::IsIsoApplicable( const G4DynamicParticle* dp
       } else if ( eKin > (*URRlimits).at(elementI).second ) {  // kinetic energy above the URR energy range for this element = maxURR(isotopes in element)
         return false;
       }
-    }
     return true;
   }
   return false;
@@ -97,10 +97,12 @@ G4double G4ParticleHPInelasticDataPT::GetIsoCrossSection( const G4DynamicParticl
 
 
 void G4ParticleHPInelasticDataPT::BuildPhysicsTable( const G4ParticleDefinition& aP ) {
-  if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "njoy" ) {
+  if ( G4HadronicParameters::Instance()->GetTypeTablePT() == "njoy" ) {
     SetMinKinEnergy( DBL_MAX );
     SetMaxKinEnergy( 0.0 );
-  } else if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "calendf" ) {
+    doNOTusePTforInelastic = true;
+  } else if ( G4HadronicParameters::Instance()->GetTypeTablePT() == "calendf" ) {
+    doNOTusePTforInelastic = false;
     G4cout << "BuildPhysicsTable in G4ParticleHPInelasticDataPT." << G4endl;
     if ( &aP != G4Neutron::Neutron() ) {
         throw G4HadronicException( __FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!" );

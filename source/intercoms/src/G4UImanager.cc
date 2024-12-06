@@ -337,10 +337,10 @@ void G4UImanager::Loop(const char* macroFile, const char* variableName, G4double
 // --------------------------------------------------------------------
 void G4UImanager::ForeachS(const char* valueList)
 {
-  G4String vl = valueList;
+  const G4String& vl = valueList;
   G4Tokenizer parameterToken(vl);
-  G4String mf = parameterToken();
-  G4String vn = parameterToken();
+  const G4String& mf = parameterToken();
+  const G4String& vn = parameterToken();
   G4String c1 = parameterToken();
   G4String ca;
   while (!((ca = parameterToken()).empty())) {
@@ -348,7 +348,7 @@ void G4UImanager::ForeachS(const char* valueList)
     c1 += ca;
   }
 
-  G4String aliasValue = c1;
+  G4String aliasValue = std::move(c1);
   if (aliasValue[0] == '"') {
     G4String strippedValue;
     if (aliasValue.back() == '"') {
@@ -357,7 +357,7 @@ void G4UImanager::ForeachS(const char* valueList)
     else {
       strippedValue = aliasValue.substr(1, aliasValue.length() - 1);
     }
-    aliasValue = strippedValue;
+    aliasValue = std::move(strippedValue);
   }
 
   //  Foreach(mf,vn,c1);
@@ -445,12 +445,12 @@ G4int G4UImanager::ApplyCommand(const G4String& aCmd)
 // --------------------------------------------------------------------
 G4int G4UImanager::ApplyCommand(const char* aCmd)
 {
-  G4String aCommand = SolveAlias(aCmd);
+  const G4String& aCommand = SolveAlias(aCmd);
   if (aCommand.empty()) {
     return fAliasNotFound;
   }
   if (verboseLevel != 0) {
-    if (isMaster) {
+    if (G4Threading::IsMasterThread()) {
       fLastCommandOutputTreated = false;
     }
     G4cout << aCommand << G4endl;
@@ -551,7 +551,7 @@ G4UIcommand* G4UImanager::FindCommand(const G4String& aCmd)
 // --------------------------------------------------------------------
 G4UIcommand* G4UImanager::FindCommand(const char* aCmd)
 {
-  G4String aCommand = SolveAlias(aCmd);
+  const G4String& aCommand = SolveAlias(aCmd);
   if (aCommand.empty()) {
     return nullptr;
   }
@@ -615,7 +615,7 @@ void G4UImanager::ListCommands(const char* direct)
 // --------------------------------------------------------------------
 G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
 {
-  G4String aDirName = dirName;
+  const G4String& aDirName = dirName;
   G4String targetDir = G4StrUtil::strip_copy(aDirName);
   if (targetDir.back() != '/') {
     targetDir += "/";
@@ -666,9 +666,9 @@ void G4UImanager::SetCoutDestination(G4UIsession* const value)
 // --------------------------------------------------------------------
 void G4UImanager::SetAlias(const char* aliasLine)
 {
-  G4String aLine = aliasLine;
+  const G4String& aLine = aliasLine;
   std::size_t i = aLine.find(' ');
-  G4String aliasName = aLine.substr(0, i);
+  const G4String& aliasName = aLine.substr(0, i);
   G4String aliasValue = aLine.substr(i + 1, aLine.length() - (i + 1));
   if (aliasValue[0] == '"') {
     G4String strippedValue;
@@ -678,7 +678,7 @@ void G4UImanager::SetAlias(const char* aliasLine)
     else {
       strippedValue = aliasValue.substr(1, aliasValue.length() - 1);
     }
-    aliasValue = strippedValue;
+    aliasValue = std::move(strippedValue);
   }
 
   aliasList->ChangeAlias(aliasName, aliasValue);
@@ -687,7 +687,7 @@ void G4UImanager::SetAlias(const char* aliasLine)
 // --------------------------------------------------------------------
 void G4UImanager::RemoveAlias(const char* aliasName)
 {
-  G4String aL = aliasName;
+  const G4String& aL = aliasName;
   G4String targetAlias = G4StrUtil::strip_copy(aL);
   aliasList->RemoveAlias(targetAlias);
 }
@@ -728,7 +728,7 @@ void G4UImanager::ParseMacroSearchPath()
 
   pathstring = searchPath.substr(idxfirst, searchPath.size() - idxfirst);
   if (!pathstring.empty()) {
-    searchDirs.push_back(pathstring);
+    searchDirs.push_back(std::move(pathstring));
   }
 }
 
@@ -751,7 +751,7 @@ G4String G4UImanager::FindMacroPath(const G4String& fname) const
   G4String macrofile = fname;
 
   for (const auto& searchDir : searchDirs) {
-    G4String fullpath = searchDir + "/" + fname;
+    const G4String& fullpath = searchDir + "/" + fname;
     if (FileFound(fullpath)) {
       macrofile = fullpath;
       break;

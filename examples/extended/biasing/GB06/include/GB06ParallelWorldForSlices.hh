@@ -33,6 +33,9 @@
 
 #include "G4VUserParallelWorld.hh"
 
+class G4LogicalVolume;
+class G4PVReplica;
+
 class GB06ParallelWorldForSlices : public G4VUserParallelWorld
 {
   public:
@@ -42,6 +45,9 @@ class GB06ParallelWorldForSlices : public G4VUserParallelWorld
   private:
     virtual void Construct();
     virtual void ConstructSD();
+
+    G4LogicalVolume* sliceLogical = nullptr;
+    G4PVReplica* slicePhysical = nullptr;
 };
 
 #endif

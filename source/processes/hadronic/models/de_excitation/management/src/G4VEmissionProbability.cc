@@ -39,17 +39,18 @@
 #include "G4Exp.hh"
 
 G4VEmissionProbability::G4VEmissionProbability(G4int Z, G4int A)
-  : OPTxs(3), pVerbose(1), theZ(Z), theA(A), elimit(CLHEP::MeV)
+  : pVerbose(1), theZ(Z), theA(A), elimit(CLHEP::MeV)
 {
   pNuclearLevelData = G4NuclearLevelData::GetInstance(); 
   pG4pow = G4Pow::GetInstance();
   if(A > 0) { pEvapMass = G4NucleiProperties::GetNuclearMass(theA, theZ); }
+  G4DeexPrecoParameters* param = pNuclearLevelData->GetParameters();
+  OPTxs = param->GetDeexModelType();
 }
 
 void G4VEmissionProbability::Initialise()
 {
   G4DeexPrecoParameters* param = pNuclearLevelData->GetParameters();
-  OPTxs = param->GetDeexModelType();
   pVerbose = param->GetVerbose();
   fFD = param->GetDiscreteExcitationFlag();
   pTolerance = param->GetMinExcitation();
@@ -191,7 +192,10 @@ G4double G4VEmissionProbability::SampleEnergy()
   do {
     ++n;
     G4double q = rndm->flat();
-    if(q <= p1) {
+    if (p2 == 0.0) {
+      gmax = probmax;
+      ekin = del*q + emin;
+    } else if (q <= p1) {
       gmax = probmax;
       ekin = del*q/p1 + emin;
     } else {

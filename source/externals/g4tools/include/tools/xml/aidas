@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <map>
+#include <utility>
 
 namespace tools {
 namespace xml {
@@ -301,7 +302,7 @@ public: //used in BatchLab::XML_DataReader.
         bins[iaxis] = num;
         mns[iaxis] = mn;
         mxs[iaxis] = mx;
-        edges[iaxis] = borders;
+        edges[iaxis] = std::move(borders);
         if(variableBins) isVariableBins = true;
         found++;
       }

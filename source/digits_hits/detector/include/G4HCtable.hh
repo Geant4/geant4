@@ -23,28 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HCtable
 //
+// Class description:
 //
-
+// This class is used by G4SDManager for book keeping the
+// sensitive detector modules and hits collections. The order of
+// hits collections stored in G4HCofThisEvent is same as the
+// order of HClist.
+// The order may vary from run to run, if the user adds/changes
+// some of his/her sensitive detector modules.
+// In case user wants to make G4Run object persistent, this
+// G4HCtable class object should be copied and stored with
+// G4Run object.
+//
+// Author: Makoto Asai
+// ---------------------------------------------------------------------
 #ifndef G4HCtable_H
 #define G4HCtable_H 1
 
-class G4VSensitiveDetector;
 #include "globals.hh"
 
 #include <vector>
 
-// class description:
-//
-//  This class is used by G4SDManager for book keeping the
-// sensitive detector modules and hits collections. The order of
-// hits collections stored in G4HCofThisEvent is same as the
-// order of HClist.
-//  The order may vary from run to run, if the user adds/changes
-// some of his/her sensitive detector modules.
-//  In case user wants to make G4Run object persistent, this
-// G4HCtable class object should be copied and stored with
-// G4Run object.
+class G4VSensitiveDetector;
 
 class G4HCtable
 {
@@ -53,8 +55,8 @@ class G4HCtable
   ~G4HCtable() = default;
 
  public:
-  G4int Registor(G4String SDname, G4String HCname);
-  G4int GetCollectionID(G4String HCname) const;
+  G4int Registor(const G4String& SDname, const G4String& HCname);
+  G4int GetCollectionID(const G4String& HCname) const;
   G4int GetCollectionID(G4VSensitiveDetector* aSD) const;
 
   inline G4int entries() const { return G4int(HClist.size()); }

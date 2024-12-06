@@ -86,10 +86,10 @@ void G4hParametrisedLossModel::InitializeMe()
   theZieglerFactor = eV*cm2*1.0e-15 ;
 
   // Registration of parametrisation models
-  G4String blank  = G4String(" ") ;
-  G4String ir49p  = G4String("ICRU_R49p") ;
-  G4String ir49He = G4String("ICRU_R49He") ;
-  G4String zi85p  = G4String("Ziegler1985p") ;
+  const G4String& blank(" ");
+  const G4String& ir49p("ICRU_R49p");
+  const G4String& ir49He("ICRU_R49He");
+  const G4String& zi85p("Ziegler1985p");
   if(zi85p == modelName) {
       eStopingPowerTable = new G4hZiegler1985p();
       highEnergyLimit = 100.0*MeV;
@@ -266,7 +266,9 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
     }
 
     // Chemical factor is taken into account
-    eloss *= ChemicalFactor(kineticEnergy, eloss125) ;
+    if (eloss125 > 0.0) {
+      eloss *= ChemicalFactor(kineticEnergy, eloss125);
+    }
 
   // Brugg's rule calculation
   } else {

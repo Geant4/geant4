@@ -23,19 +23,24 @@
 
  To run the example:
 \verbatim
-mkdir UHRD-build
-cd UHRD-build
-cmake ../pathToExamples/UHRD
+mkdir UHDR-build
+cd UHDR-build
+cmake ../pathToExamples/UHDR
 make
+\endverbatim
+
+To visualize (only for physical stage)
+\verbatim
+./UHDR
 \endverbatim
 
 In batch mode, the macro beam.in can be used as follows:
 \verbatim
-./UHRD beam.in
+./UHDR beam.in
 \endverbatim
  or
 \verbatim
-./UHRD beam.in 123
+./UHDR beam.in 123
    # 123 is the user's seed number
 \endverbatim
 
@@ -105,7 +110,7 @@ G-value
 
 \section UHDR_s8 RELEVANT MACRO COMMANDS AND MACRO FILE
 
-The user macro file is: beam.in
+The user macro files are: beam.in (conventional), UHDR.in (Ultra High Dose Rate)
 
 \section UHDR_s9 REACTION BUILDER
 
@@ -141,8 +146,13 @@ TTree *tree = (TTree *) dir->Get("0.010000");
 \section UHDR_s11 - Periodic Boundary Condition (PBC)
 
 The Periodic Boundary Condition is implemented based on https://github.com/amentumspace/g4pbc
-to calculate microdosimetry.
-This requires a maximum dose (xxx) to abort the event. This to avoid the high energy of
+to calculate microdosimetry. The periodic boundary condition (PBC) is used to simulate the
+behavior of secondary electrons during the physical stage.
+When an electron exits an edge of a cubic volume, it re-enters from the opposite edge.
+The PBC helps reduce the edge effects in dose calculations for micrometer-sized volumes
+
+
+The PBC requires a maximum dose (xxx) to abort the event. This to avoid the high energy of
 secondary electrons deposit a large energy inside the micro volume.
 
 \verbatim
@@ -156,6 +166,6 @@ Use the following command to activate or deactivate PBC.
 \endverbatim
 
 Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
-Contact: H. Tran (tran@cenbg.in2p3.fr)
+Contact: H. Tran (tran@lp2ib.in2p3.fr)
 CNRS, lp2i, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France
 */

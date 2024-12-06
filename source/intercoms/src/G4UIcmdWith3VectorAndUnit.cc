@@ -54,7 +54,7 @@ G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit(const char* theCommandPath,
 }
 
 // --------------------------------------------------------------------
-G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
+G4int G4UIcmdWith3VectorAndUnit::DoIt(const G4String& parameterList)
 {
   std::vector<G4String> token_vector;
   G4Tokenizer tkn(parameterList);

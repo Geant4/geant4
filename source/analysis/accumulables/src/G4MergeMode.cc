@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// Author: Ivana Hrivnacova, 22/08/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 22/08/2013
 
 #include "G4MergeMode.hh"
 
@@ -34,8 +34,12 @@ namespace G4Accumulables
 //_____________________________________________________________________________
 G4MergeMode GetMergeMode(const G4String& mergeModeName)
 {
-  if (mergeModeName == "+") return G4MergeMode::kAddition;
-  if (mergeModeName == "*") return G4MergeMode::kMultiplication;
+  if (mergeModeName == "+") {
+    return G4MergeMode::kAddition;
+  }
+  if (mergeModeName == "*") {
+    return G4MergeMode::kMultiplication;
+  }
 
   G4ExceptionDescription description;
   description << "\"" << mergeModeName << "\" merge mode is not supported." << G4endl

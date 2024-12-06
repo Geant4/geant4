@@ -98,7 +98,7 @@ class G4Event
         randomNumberStatusForProcessing = new G4String(st);
         validRandomNumberStatusForProcessing = true;
       }
-    inline void KeepTheEvent(G4bool vl=true)
+    inline void KeepTheEvent(G4bool vl=true) const
       { keepTheEvent = vl; }
     inline G4bool KeepTheEventFlag() const
       { return keepTheEvent; }
@@ -142,7 +142,7 @@ class G4Event
       { return numberOfPrimaryVertex; }
       // Returns number of primary verteces the G4Event object has.
 
-      inline G4PrimaryVertex* GetPrimaryVertex(G4int i=0)  const
+    inline G4PrimaryVertex* GetPrimaryVertex(G4int i=0)  const
       { 
         if( i == 0 )
         { return thePrimaryVertex; }
@@ -234,7 +234,7 @@ class G4Event
     G4bool validRandomNumberStatusForProcessing = false;
 
     // Flag to keep the event until the end of run
-    G4bool keepTheEvent = false;
+    mutable G4bool keepTheEvent = false;
     mutable G4int grips = 0;
 
   //========================= for sub-event parallelism
@@ -242,10 +242,10 @@ class G4Event
 
   public:
     G4SubEvent* PopSubEvent(G4int);
-      // This method is to be invoked from G4RunManager. 
+      // This method is to be invoked from G4SubEvtRunManager. 
       // SpawnSubEvent() is internally invoked.
     G4int TerminateSubEvent(G4SubEvent*);
-      // This method is to be invoked from G4RunManager once a sub-event is
+      // This method is to be invoked from G4SubEvtRunManager once a sub-event is
       // fully processed by a worker thread.
 
     G4int StoreSubEvent(G4int,G4SubEvent*);
@@ -289,9 +289,9 @@ class G4Event
       motherEvent = me;
       subEventType = ty;
     }
-    G4Event* GetMotherEvent() const
+    inline G4Event* GetMotherEvent() const
     { return motherEvent; }
-    G4int GetSubEventType() const
+    inline G4int GetSubEventType() const
     { return subEventType; }
 
   private:

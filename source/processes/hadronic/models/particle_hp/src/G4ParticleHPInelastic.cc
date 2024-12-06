@@ -215,7 +215,7 @@ const std::pair<G4double, G4double> G4ParticleHPInelastic::GetFatalEnergyCheckLe
   return std::pair<G4double, G4double>(10.0 * perCent, 350.0 * CLHEP::GeV);
 }
 
-void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition&)
+void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projectile)
 {
   if (fLock[indexP]) {
     G4AutoLock l(&theHPInelastic);
@@ -294,6 +294,7 @@ void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition&)
     }
 #endif
   }
+  fManager->RegisterInelasticFinalStates( &projectile , theInelastic[indexP] );
   l.unlock();
 }
 

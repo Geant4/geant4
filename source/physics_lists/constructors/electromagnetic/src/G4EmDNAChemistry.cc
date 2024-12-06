@@ -97,7 +97,7 @@ void G4EmDNAChemistry::ConstructReactionTable(G4DNAMolecularReactionTable*
   //-----------------------------------
   //Get the molecular configuration
   G4MolecularConfiguration* OH =
-   G4MoleculeTable::Instance()->GetConfiguration("OH");
+   G4MoleculeTable::Instance()->GetConfiguration("°OH");
   G4MolecularConfiguration* OHm =
    G4MoleculeTable::Instance()->GetConfiguration("OHm");
   G4MolecularConfiguration* e_aq =

@@ -1,0 +1,154 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 18/07/2024
+
+#include <algorithm>
+
+//
+// public functions
+//
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+G4AccArray<T, N>::G4AccArray(
+  const G4String& name, const T& value, G4MergeMode mergeMode)
+: G4VAccumulable(name, mergeMode),
+  fInitValue(value),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccArray ctor1" << G4endl;
+  }
+
+  for (auto& element : fArray ) {
+    element = fInitValue;
+  }
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+template <typename... Args>
+G4AccArray<T, N>::G4AccArray(Args&&... args)
+: G4VAccumulable(),
+  fArray{{std::forward<Args>(args)...}}, fMergeFunction(GetMergeFunction<T>(fMergeMode)) 
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccArray ctor2" << G4endl;
+  }
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+template <typename First, typename... Args>
+G4AccArray<T, N>::G4AccArray(const First& firstArg, Args&&... args)
+: G4VAccumulable(firstArg),
+  fArray{{std::forward<Args>(args)...}}, 
+  fMergeFunction(GetMergeFunction<T>(fMergeMode)) 
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccArray ctor3" << G4endl;
+  }
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+void G4AccArray<T, N>::Merge(const G4VAccumulable& other)
+{
+  const auto& otherArrayAcc = static_cast<const G4AccArray<T,N>&>(other);
+  const auto& otherArray = otherArrayAcc.GetArray();
+
+  if (G4Accumulables::VerboseLevel > 2 ) {
+    G4cout << "G4AccArray<T, N>::Merge: " << G4endl;
+    G4cout << "destination: ";
+    for (auto v : this->fArray) {
+      G4cout << v << ", ";
+    }
+    G4cout << G4endl;
+    G4cout << "merged data: ";
+    for (auto v : otherArray) {
+      G4cout << v << ", ";
+    }
+    G4cout << G4endl;
+  }
+
+  std::transform(fArray.begin(), fArray.end(), otherArray.begin(),
+                 fArray.begin(), fMergeFunction);
+
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccArray<T, N>::Merge: done" << G4endl;
+  }
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+void G4AccArray<T, N>::Reset()
+{
+  for (auto& value : fArray) {
+    value = fInitValue;
+  }
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+void G4AccArray<T, N>::Print(G4PrintOptions options) const
+{
+  if (options.Has(G4PrintOptions::kType)) {
+    G4cout << "array<" << typeid(fInitValue).name() << ">: ";
+  }
+
+  PrintBase(options);
+
+  bool first = true;
+  for (auto& value : fArray) {
+    if (! first) { G4cout << ", "; }
+    G4cout << value;
+    first = false;
+  }
+  G4cout << G4endl;
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+void G4AccArray<T, N>::SetMergeMode(G4MergeMode value)
+{
+  G4VAccumulable::SetMergeMode(value);
+  fMergeFunction = GetMergeFunction<T>(value);
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+std::array<T,N>&  G4AccArray<T, N>::GetArray()
+{
+  return fArray;
+}
+
+//_____________________________________________________________________________
+template <class T, std::size_t N>
+const std::array<T,N>&  G4AccArray<T, N>::GetArray() const
+{
+  return fArray;
+}

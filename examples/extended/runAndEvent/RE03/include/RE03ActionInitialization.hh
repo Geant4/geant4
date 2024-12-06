@@ -38,10 +38,11 @@ class RE03ActionInitialization : public G4VUserActionInitialization
 {
   public:
     RE03ActionInitialization();
-    virtual ~RE03ActionInitialization();
+    ~RE03ActionInitialization() override;
 
   public:
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 };
 
 #endif

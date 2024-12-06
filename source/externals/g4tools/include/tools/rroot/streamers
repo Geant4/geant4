@@ -28,7 +28,7 @@
 
 #include <list>
 #include <cmath> //::log10, ::fabs.
-//#include "../rtausmed"
+#include <utility>
 
 namespace tools {
 namespace rroot {
@@ -155,7 +155,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     std::string title;
     if(!Named_stream(a_buffer,name,title)) return false;
 
-    a_data.m_title = title;
+    a_data.m_title = std::move(title);
 
    {short color,style,width;
     if(!AttLine_stream(a_buffer,color,style,width)) return false;}
@@ -436,7 +436,7 @@ inline histo::h1d* TH1D_stream(buffer& a_buffer){
     if(!a_buffer.check_byte_count(_s,_c,"TH1D")) return 0;
 
     unsigned int binn = data.m_bin_number;
-    data.m_bin_Sw = bins;
+    data.m_bin_Sw = std::move(bins);
 
     data.m_bin_entries.resize(binn,0);
    {std::vector<double> empty;
@@ -555,7 +555,7 @@ inline histo::h2d* TH2D_stream(buffer& a_buffer){
     if(!a_buffer.check_byte_count(_s,_c,"TH2D")) return 0;
 
     unsigned int binn = data.m_bin_number;
-    data.m_bin_Sw = bins;
+    data.m_bin_Sw = std::move(bins);
 
     data.m_bin_entries.resize(binn,0);
    {std::vector<double> empty;
@@ -614,7 +614,7 @@ inline histo::h3d* TH3D_stream(buffer& a_buffer){
     if(!a_buffer.check_byte_count(_s,_c,"TH3D")) return 0;
 
     unsigned int binn = data.m_bin_number;
-    data.m_bin_Sw = bins;
+    data.m_bin_Sw = std::move(bins);
 
     data.m_bin_entries.resize(binn,0);
    {std::vector<double> empty;

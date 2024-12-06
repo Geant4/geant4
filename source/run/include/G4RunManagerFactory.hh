@@ -57,6 +57,8 @@ enum class G4RunManagerType : G4int
   TaskingOnly = 5,
   TBB = 6,
   TBBOnly = 7,
+  SubEvt = 8,
+  SubEvtOnly = 9,
   Default
 };
 

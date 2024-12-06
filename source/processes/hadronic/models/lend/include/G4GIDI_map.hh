@@ -41,7 +41,7 @@ class G4GIDI_map {
         GIDI::statusMessageReporting smr;
         GIDI::MCGIDI_map *map;
 
-        G4GIDI_map( std::string &dataDirectory );       
+        G4GIDI_map( const std::string &dataDirectory );       
         ~G4GIDI_map( );
 
         std::string path( void );

@@ -14,7 +14,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -37,7 +37,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -175,10 +174,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -349,7 +351,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -828,11 +830,10 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -857,7 +858,7 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
@@ -887,6 +888,7 @@ Index : 0     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   5 kByte
@@ -913,13 +915,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
        5.25          0k         1        4          4         0.00    BXD1_3_ENV
        5.25          0k         1        4          4         0.00    BXD1_4_ENV
        5.25          0k         1        4          4         0.00    BXD1_5_ENV
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000432s Sys=0.000000s
+  User=0.000000s Real=0.000447s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -949,7 +951,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000039s Sys=0.000000s
+  User=0.000000s Real=0.000047s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -979,7 +981,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000088s Sys=0.000000s
+  User=0.000000s Real=0.000057s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1009,7 +1011,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000044s Sys=0.000000s
+  User=0.000000s Real=0.000047s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1039,7 +1041,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000074s Sys=0.000000s
+  User=0.000000s Real=0.000088s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1069,7 +1071,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000045s Sys=0.000000s
+  User=0.000000s Real=0.000046s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1129,14 +1131,14 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000038s Sys=0.000000s
+  User=0.000000s Real=0.000053s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:7) 
-UserDetectorConstruction deleted 0xf757b0
-UserPhysicsList deleted 0xf76a30
-UserActionInitialization deleted 0x1131ba0
+UserDetectorConstruction deleted 0xd28a70
+UserPhysicsList deleted 0xd29d10
+UserActionInitialization deleted 0xee4a60
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

@@ -40,7 +40,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4SDKineticEnergyFilter::G4SDKineticEnergyFilter(G4String name, G4double elow,
+G4SDKineticEnergyFilter::G4SDKineticEnergyFilter(const G4String& name, G4double elow,
                                                  G4double ehigh)
   : G4VSDFilter(name)
   , fLowEnergy(elow)

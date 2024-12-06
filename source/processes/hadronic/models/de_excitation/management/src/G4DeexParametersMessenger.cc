@@ -69,6 +69,7 @@ G4DeexParametersMessenger::G4DeexParametersMessenger(G4DeexPrecoParameters* ptr)
   readCmd->SetParameterName("readIC",true);
   readCmd->SetDefaultValue(false);
   readCmd->AvailableForStates(G4State_PreInit);
+  readCmd->SetToBeBroadcasted(false);
 
   icCmd = new G4UIcmdWithABool("/process/had/deex/setIC",this);
   icCmd->SetGuidance("Enable/disable simulation of e- internal conversion.");
@@ -81,24 +82,43 @@ G4DeexParametersMessenger::G4DeexParametersMessenger(G4DeexPrecoParameters* ptr)
   corgCmd->SetParameterName("corrG",true);
   corgCmd->SetDefaultValue(false);
   corgCmd->AvailableForStates(G4State_PreInit);
+  corgCmd->SetToBeBroadcasted(false);
 
   isoCmd = new G4UIcmdWithABool("/process/had/deex/isomerProduction",this);
   isoCmd->SetGuidance("Enable/disable simulation of long lived isomers.");
-  isoCmd->SetParameterName("corrG",true);
+  isoCmd->SetParameterName("isoProd",true);
   isoCmd->SetDefaultValue(false);
   isoCmd->AvailableForStates(G4State_PreInit);
+  isoCmd->SetToBeBroadcasted(false);
 
   maxjCmd = new G4UIcmdWithAnInteger("/process/had/deex/maxTwoJ",this);
   maxjCmd->SetGuidance("Set max value for 2J for simulation of correlated gamma emission.");
   maxjCmd->SetParameterName("max2J",true);
   maxjCmd->SetDefaultValue(10);
   maxjCmd->AvailableForStates(G4State_PreInit);
+  maxjCmd->SetToBeBroadcasted(false);
 
   verbCmd = new G4UIcmdWithAnInteger("/process/had/deex/verbose",this);
   verbCmd->SetGuidance("Set verbosity level.");
   verbCmd->SetParameterName("verb",true);
   verbCmd->SetDefaultValue(1);
   verbCmd->AvailableForStates(G4State_PreInit);
+  verbCmd->SetToBeBroadcasted(false);
+
+  xsTypeCmd = new G4UIcommand("/process/had/deex/TypeXS",this);
+  xsTypeCmd->SetGuidance("Defined type of inverse x-section");
+  xsTypeCmd->SetGuidance("  model      : PRECO or DEEX");
+  xsTypeCmd->SetGuidance("  type of XS : Dostrovski, PARTICLEXS, Chatterjee, Kalbach");
+  xsTypeCmd->AvailableForStates(G4State_PreInit);
+  xsTypeCmd->SetToBeBroadcasted(false);
+
+  auto modName = new G4UIparameter("modName",'s',false);
+  xsTypeCmd->SetParameter(modName);
+  modName->SetParameterCandidates("PRECO DEEX");
+
+  auto mtype = new G4UIparameter("TypeXS",'s',false);
+  xsTypeCmd->SetParameter(mtype);
+  mtype->SetParameterCandidates("Dostrovski, PARTICLEXS, Chatterjee, Kalbach");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,6 +133,7 @@ G4DeexParametersMessenger::~G4DeexParametersMessenger()
   delete isoCmd;
   delete maxjCmd;
   delete verbCmd;
+  delete xsTypeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -132,6 +153,18 @@ void G4DeexParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetTwoJMAX(maxjCmd->GetNewIntValue(newValue));
   } else if (command == verbCmd) { 
     theParameters->SetVerbose(verbCmd->GetNewIntValue(newValue));
+  } else if (command == xsTypeCmd) {
+    G4String s1(""),s2("");
+    std::istringstream is(newValue);
+    is >> s1 >> s2;
+    G4int n;
+    if (s2 == "Dostrovski") { n = 0; }
+    else if (s2 == "PARTICLEXS") { n = 1; }
+    else if (s2 == "Chatterjee") { n = 2; }
+    else if (s2 == "Kalbach") { n = 3; }
+    else { return; }
+    if (s1 == "PRECO") { theParameters->SetPrecoModelType(n); }
+    if (s1 == "DEEX") { theParameters->SetDeexModelType(n); }
   }
 }
 

@@ -86,7 +86,7 @@ void G4DNATripleIonisationModel::Initialise(
 
     // *************************************************************************
     // for protons
-    auto proton = proton_def_->GetParticleName();
+    const auto& proton = proton_def_->GetParticleName();
     elow_tab_[proton] = model_elow_tab_[1];
     eupp_tab_[proton] = 3.0 * MeV;
 
@@ -111,7 +111,7 @@ void G4DNATripleIonisationModel::Initialise(
 
     //**************************************************************************
     // for alpha particles
-    auto alpha = alpha_def_->GetParticleName();
+    const auto& alpha = alpha_def_->GetParticleName();
     elow_tab_[alpha] = model_elow_tab_[4];
     eupp_tab_[alpha] = 23.0 * MeV;
 
@@ -136,7 +136,7 @@ void G4DNATripleIonisationModel::Initialise(
 
     // *************************************************************************
     // for carbon ions
-    auto carbon = carbon_def_->GetParticleName();
+    const auto& carbon = carbon_def_->GetParticleName();
     elow_tab_[carbon] = model_elow_tab_[5] * carbon_def_->GetAtomicMass();
     eupp_tab_[carbon] = 120.0 * MeV;
 

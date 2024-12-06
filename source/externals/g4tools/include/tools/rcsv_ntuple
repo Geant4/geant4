@@ -36,6 +36,8 @@
 #include "mem"
 #endif
 
+#include <utility>
+
 namespace tools {
 namespace rcsv {
 
@@ -599,7 +601,7 @@ public:
     if(!read_commented_header(a_out,m_reader,_title,_sep,_vec_sep,_cols)) return false;
 
     m_sep = _sep;
-    m_title = _title;
+    m_title = std::move(_title);
 
     tools_vforcit(col_desc,_cols,it) {
       const std::string& type = (*it).first;

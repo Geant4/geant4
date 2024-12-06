@@ -1073,16 +1073,6 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     }
   }
 
-  if (fThereWasAViewer) {
-    // ...and if it's still current...
-    auto existingViewer = fpVisManager->GetCurrentViewer();
-    if (existingViewer) {
-      // ...bring view parameters up to date...
-      fExistingVP = existingViewer->GetViewParameters();
-      fExistingSceneTree = existingViewer->GetSceneTree();
-    }
-  }
-
   if (fThereWasAViewer && windowSizeHintString == "none") {
     // The user did not specify a window size hint - get from existing VPs
     windowSizeHintString = fExistingVP.GetXGeometryString();
@@ -1099,6 +1089,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
       // Copy view parameters from existing viewer, except for...
       fExistingVP.SetAutoRefresh(vp.IsAutoRefresh());
       fExistingVP.SetBackgroundColour(vp.GetBackgroundColour());
+      fExistingVP.SetGlobalMarkerScale(vp.GetGlobalMarkerScale());
       // ...including window hint paramaters that have been set already above...
       fExistingVP.SetXGeometryString(vp.GetXGeometryString());
       vp = fExistingVP;

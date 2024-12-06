@@ -33,9 +33,9 @@
 
 #include "G4TrackingManager.hh"
 
+#include "G4Trajectory.hh"
 #include "G4RichTrajectory.hh"
 #include "G4SmoothTrajectory.hh"
-#include "G4Trajectory.hh"
 #include "G4ios.hh"
 
 //////////////////////////////////////
@@ -189,3 +189,11 @@ void G4TrackingManager::TrackBanner()
          << "**************************************************" << G4endl;
   G4cout << G4endl;
 }
+
+//////////////////////////////////////
+void G4TrackingManager::SetStoreTrajectory(G4int value)
+//////////////////////////////////////
+{
+  StoreTrajectory = value;
+}
+

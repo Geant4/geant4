@@ -127,7 +127,7 @@ void G4RootMainNtupleManager::CreateNtuple(RootNtupleDescription* ntupleDescript
 
   // Allocate the ntuple description pair vector element(s) if needed
   while ( index >= G4int(fNtupleDescriptionVector.size()) ) {
-    fNtupleDescriptionVector.push_back(std::make_pair(nullptr, nullptr));
+    fNtupleDescriptionVector.emplace_back(nullptr, nullptr);
   }
 
   // Save ntuple description pair in vectors
@@ -224,7 +224,7 @@ void G4RootMainNtupleManager::CreateNtuplesFromBooking()
 // This function is triggered from workers at new cycle.
 
   for (auto [ntupleDescription, ntupleFile] : fNtupleDescriptionVector) {
-    CreateNtupleFromBooking(ntupleDescription->GetG4NtupleBooking(), ntupleFile);
+    CreateNtupleFromBooking(ntupleDescription->GetG4NtupleBooking(), std::move(ntupleFile));
   }
 
   SetNewCycle(false);

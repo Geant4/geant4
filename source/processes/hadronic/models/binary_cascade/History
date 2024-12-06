@@ -6,7 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-05-22 Gunter Folger  (had-binary-V11-02-00)
+## 2024-08-19 Gabriele Cosmo (had-binary-V11-02-01)
+- Fixed reported Coverity defects for use of std::move() in G4BinaryCascade.
+  Minor code optimisation (use of nullptr, use of const iterators and pre-increment)
+
+## 2024-05-22 Gunter Folger (had-binary-V11-02-00)
 - Address problem reported by Atlas of throwing execption if momentum cannot 
    be corrected. Problem ocurrs for D + H around 1600 MeV
   - The exception is removed,in this rare case the initial state is kept

@@ -42,7 +42,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4SDParticleWithEnergyFilter::G4SDParticleWithEnergyFilter(G4String name,
+G4SDParticleWithEnergyFilter::G4SDParticleWithEnergyFilter(const G4String& name,
                                                            G4double elow,
                                                            G4double ehigh)
   : G4VSDFilter(name)

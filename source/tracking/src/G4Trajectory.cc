@@ -39,8 +39,14 @@
 #include "G4AttValue.hh"
 #include "G4ParticleTable.hh"
 #include "G4TrajectoryPoint.hh"
+#include "G4ClonedTrajectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
+#include "G4AutoLock.hh"
+
+namespace {
+ G4Mutex CloneTrajectoryMutex = G4MUTEX_INITIALIZER;
+}
 
 // #define G4ATTDEBUG
 #ifdef G4ATTDEBUG
@@ -84,6 +90,13 @@ G4Trajectory::G4Trajectory(G4Trajectory& right)
     auto rightPoint = (G4TrajectoryPoint*)i;
     positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
   }
+}
+
+G4VTrajectory* G4Trajectory::CloneForMaster() const
+{
+  G4AutoLock lock(&CloneTrajectoryMutex);
+  auto* cloned = new G4ClonedTrajectory(*this);
+  return cloned;
 }
 
 G4Trajectory::~G4Trajectory()

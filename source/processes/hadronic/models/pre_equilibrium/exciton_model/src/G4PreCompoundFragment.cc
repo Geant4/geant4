@@ -37,42 +37,27 @@
 #include "G4KalbachCrossSection.hh"
 #include "G4ChatterjeeCrossSection.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4InterfaceToXS.hh"
+#include "G4IsotopeList.hh"
 #include "Randomize.hh"
 
 G4PreCompoundFragment::G4PreCompoundFragment(const G4ParticleDefinition* p,
 					     G4VCoulombBarrier* aCoulBarrier)
   : G4VPreCompoundFragment(p, aCoulBarrier)
-{
-  muu = probmax = 0.0;
-  if(0 == theZ)      { index = 0; }
-  else if(1 == theZ) { index = theA; }
-  else               { index = theA + 1; }
-}
+{}
 
 G4double G4PreCompoundFragment::CalcEmissionProbability(const G4Fragment& fr)
 {
-  //G4cout << theCoulombBarrier << "  " << GetMaximalKineticEnergy() << G4endl;
-  // If  theCoulombBarrier effect is included in the emission probabilities
-  // Coulomb barrier is the lower limit of integration over kinetic energy
-
-  theEmissionProbability = 0.0;
-
-  if (theMaxKinEnergy <= theMinKinEnergy) { return 0.0; }    
-
-  // compute power once
-  if(0 < index) { 
-    muu = G4KalbachCrossSection::ComputePowerParameter(theResA, index);
-  }
-  
-  theEmissionProbability = 
-    IntegrateEmissionProbability(theMinKinEnergy, theMaxKinEnergy, fr);
-  /*
+  theEmissionProbability = (Initialize(fr)) ?
+    IntegrateEmissionProbability(theMinKinEnergy, theMaxKinEnergy, fr) : 0.0;
+  /*  
   G4cout << "## G4PreCompoundFragment::CalcEmisProb "
-         << "Z= " << fr.GetZ_asInt() 
-	 << " A= " << fr.GetA_asInt()
-	 << " Elow= " << LowerLimit/MeV
-	 << " Eup= " << UpperLimit/MeV
+         << "Zf= " << fr.GetZ_asInt()
+	 << " Af= " << fr.GetA_asInt()
+	 << " Elow= " << theMinKinEnergy
+	 << " Eup= " << theMaxKinEnergy
 	 << " prob= " << theEmissionProbability
+	 << " index=" << index << " Z=" << theZ << " A=" << theA
 	 << G4endl;
   */
   return theEmissionProbability;
@@ -106,24 +91,37 @@ G4PreCompoundFragment::IntegrateEmissionProbability(G4double low, G4double up,
   return sum;
 }
 
-G4double G4PreCompoundFragment::CrossSection(G4double ekin) const
+G4double G4PreCompoundFragment::CrossSection(G4double ekin)
 {
-  G4double res;
-  if(OPTxs == 0 || (OPTxs == 4 && theMaxKinEnergy < 10.)) { 
-    res = GetOpt0(ekin);
+  /*
+  G4cout << "G4PreCompoundFragment::CrossSection OPTxs=" << OPTxs << " E=" << ekin
+	 << " resZ=" << theResZ << " resA=" << theResA << " index=" << index
+	 << " fXSection:" << fXSection << G4endl;
+  */
+  // compute power once
+  if (OPTxs > 1 && 0 < index && theResA != lastA) {
+    lastA = theResA;
+    muu = G4KalbachCrossSection::ComputePowerParameter(lastA, index);
+  }
+  if (OPTxs == 0) { 
+    recentXS = GetOpt0(ekin);
+  } else if (OPTxs == 1) {
+    G4int Z = std::min(theResZ, ZMAXNUCLEARDATA);
+    //G4double e = std::max(ekin, lowEnergyLimitMeV[Z]);
+    recentXS = fXSection->GetElementCrossSection(ekin, Z)/CLHEP::millibarn;
 
-  } else if(OPTxs <= 2) { 
-    res = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, 
-                                                        theCoulombBarrier, 
-							theResA13, muu, 
-							index, theZ, theResA); 
+  } else if (OPTxs == 2) { 
+    recentXS = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, 
+                                                             theCoulombBarrier, 
+							     theResA13, muu, 
+							     index, theZ, theResA); 
 
   } else { 
-    res = G4KalbachCrossSection::ComputeCrossSection(ekin, theCoulombBarrier, 
-						     theResA13, muu, index,
-						     theZ, theA, theResA);
+    recentXS = G4KalbachCrossSection::ComputeCrossSection(ekin, theCoulombBarrier, 
+						          theResA13, muu, index,
+						          theZ, theA, theResA);
   }
-  return res;
+  return recentXS;
 }  
 
 G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const

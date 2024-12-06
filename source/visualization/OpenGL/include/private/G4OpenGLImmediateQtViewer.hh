@@ -47,7 +47,9 @@ public:
                 const G4String& name = "");
   ~G4OpenGLImmediateQtViewer ();
   void Initialise ();
+#if QT_VERSION < 0x060000
   void initializeGL ();
+#endif
   void DrawView ();
   void resizeGL(int width,int height);
   void paintGL();
@@ -66,7 +68,9 @@ public:
   }
 #endif
 protected:
+#if QT_VERSION < 0x060000
   void showEvent(QShowEvent * event );
+#endif
   void wheelEvent(QWheelEvent *event);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);

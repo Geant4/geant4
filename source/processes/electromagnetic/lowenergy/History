@@ -6,6 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-12-02 A. Ribon (emlowen-V11-02-07)
+- G4UAtomicDeexcitation : clear vector (vacancyArray) in the method
+  G4UAtomicDeexcitation::GenerateParticles, to avoid rare non-reproducibility
+  problems when using EM Opt4 (EMZ).
+  The problem is present since Geant4 version 10.2.
+
+## 2024-10-31 V. Ivanchenko (emlowen-V11-02-06)
+- G4hIonEffChargeSquare - fixed Coverity warning
+
+## 2024-09-17 V. Ivanchenko (emlowen-V11-02-05)
+- G4hIonEffChargeSquare - fixed Coverity warning
+
+## 2024-08-29 L. Pandola (emlowen-V11-02-04)
+- Fix in G4PenelopeBremsstrahlungAngular, causing a crash when the 
+  angular generator is used with a bremsstrahlung model other than 
+  G4PenelopeBremsstrahungModel
+
+## 2024-08-13 G. Cosmo (emlowen-V11-02-03)
+- Fixed reported Coverity defects for use of std::move().
+
+## 2024-07-21 V. Ivanchenko (emlowen-V11-02-02)
+- G4MicroElecCapture - fixed Coverity warning about division by zero via
+  modification of the formula to compute MFP and added an upper limit 500 eV
+  for this process.
+
+## 2024-07-18 V. Ivanchenko (emlowen-V11-02-01)
+- G4FluoData, G4hIonEffChargeSquare, G4MicroElecInelasticModel_new - fixed
+    Coverity warnings
+
 ## 2023-12-11 V. Ivanchenko (emlowen-V11-02-00)
 - G4MicroElecInelasticModel_new - fixed Coverity report on memory leak at exit,
     likely partially; minimal code clean-up.

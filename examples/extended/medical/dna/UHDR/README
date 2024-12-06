@@ -23,15 +23,18 @@
      It allows to simulate chemical reactions longtime (beyond 1 us) of post-irradiation.
 
      To run the example:
-       mkdir UHRD-build
-       cd UHRD-build
-       cmake ../pathToExamples/UHRD
+       mkdir UHDR-build
+       cd UHDR-build
+       cmake ../pathToExamples/UHDR
        make
 
+       To visualize (only for physical stage)
+       ./UHDR
+
        In batch mode, the macro beam.in can be used as follows:
-         ./UHRD beam.in
+         ./UHDR beam.in
          or
-         ./UHRD beam.in 123
+         ./UHDR beam.in 123
  	# 123 is the user's seed number
 
   1 - GEOMETRY DEFINITION
@@ -116,14 +119,14 @@
     can be used to plot the G values vs time for each species.
 
      Execute plot_time as:
-     \verbatim
+
      root plot_time.C
-     \endverbatim
+
 
      or print G values to scorer.txt
-     \verbatim
+
      root plot_time.C > scorer.txt
-     \endverbatim
+
 
     The results show the molecular species (G values) as a function of
     time (ns). Please correct the dose in the TTree *tree = (TTree *) dir->Get("0.010000");
@@ -131,8 +134,13 @@
   11 - Periodic Boundary Condition (PBC)
 
     The Periodic Boundary Condition is implemented based on https://github.com/amentumspace/g4pbc
-    to calculate microdosimetry.
-    This requires a maximum dose (xxx) to abort the event. This to avoid the high energy of
+    to calculate microdosimetry. The periodic boundary condition (PBC) is used to simulate the
+    behavior of secondary electrons during the physical stage.
+    When an electron exits an edge of a cubic volume, it re-enters from the opposite edge.
+    The PBC helps reduce the edge effects in dose calculations for micrometer-sized volumes
+
+
+    The PBC requires a maximum dose (xxx) to abort the event. This to avoid the high energy of
     secondary electrons deposit a large energy inside the micro volume.
 
     /scorer/Dose/abortedDose xxx Gy

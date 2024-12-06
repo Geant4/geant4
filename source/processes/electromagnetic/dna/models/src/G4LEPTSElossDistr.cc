@@ -23,16 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LEPTSElossDistr
+//
+// Author: Pedro Arce (CIEMAT), 2014
+// --------------------------------------------------------------------
+
 #include "G4LEPTSElossDistr.hh"
 #include "G4LEPTSDistribution.hh"
 
+#include <stdio.h>
+#include <iostream>
 
-G4LEPTSElossDistr::G4LEPTSElossDistr(std::string file) {
-  fileName = file;
-
+G4LEPTSElossDistr::G4LEPTSElossDistr(const G4String& fname)
+{
+  fileName = fname;
   ReadFile();
 }
-
 
 void G4LEPTSElossDistr::ReadFile() 
 {
@@ -40,78 +46,81 @@ void G4LEPTSElossDistr::ReadFile()
 
   FILE * fp;
 
-  if ((fp=fopen(fileName.c_str(), "r"))==nullptr){
-    //G4cout << "Error reading " << fileName << G4endl;
+  if ((fp=fopen(fileName.c_str(), "r"))==nullptr)
+  {
     NoBins = 0;
     bFileFound = false;
     return;
   } 
 
   bFileFound = true;
-  //  G4cout << "Read Eloss Distro (" << fileName << ") " << G4endl;
+
   G4int nEnergies;
   G4int nAngles;
   G4int nData;
   (void) fscanf(fp,"%i \n",&nEnergies);
-  for( G4int ie = 0; ie < nEnergies; ie++ ){
-    float energySep; 
+  for( G4int ie = 0; ie < nEnergies; ++ie )
+  {
+    G4float energySep; 
     (void) fscanf(fp,"%f \n",&energySep);
     (void) fscanf(fp,"%i \n",&nAngles);
-    for( G4int ia = 0; ia < nAngles; ia++ ){
-      float angleSep; 
+    for( G4int ia = 0; ia < nAngles; ++ia )
+    {
+      G4float angleSep; 
       (void) fscanf(fp,"%f \n",&angleSep);
-      auto  dist = new G4LEPTSDistribution();
-      theNDistributions ++;
-      mddist angleDist;
+      auto dist = new G4LEPTSDistribution();
+      ++theNDistributions;
+      std::map<G4double, G4LEPTSDistribution *> angleDist;
       angleDist[angleSep] = dist;
-      theDistributions[energySep] = angleDist;
+      theDistributions[energySep] = std::move(angleDist);
       
       (void) fscanf(fp,"%i \n",&nData);
-      if( dist->ReadFile( fp, nData ) ) {
-	G4Exception("G4LEPTSElossDistr",
-		  "",
-		    FatalException,
-		  ("End of file found while reading file"+ fileName).c_str());	
+      if( dist->ReadFile( fp, nData ) )
+      {
+        std::ostringstream message;
+        message << "End of file found while reading file: "
+                << fileName;
+        G4Exception("G4LEPTSElossDistr::ReadFile()", "ReadError",
+                    FatalException, message);	
       }
     }
   }
   
   fclose(fp);
-
 }
 
-
-
-G4double G4LEPTSElossDistr::Sample( G4double eMin, G4double eMax) 
+G4double G4LEPTSElossDistr::Sample( G4double eMin, G4double eMax ) 
 {
-// Sample Energy from Cumulative distr. G4interval [eMin, eMax]
+  // Sample Energy from Cumulative distr. G4interval [eMin, eMax]
 
   if( eMin > eMax) return 0.0;
 
-  //Get the distribution to do the sampling
+  // Get the distribution to do the sampling
   G4LEPTSDistribution* distr  = nullptr;
-  if( theNDistributions == 1 ){
-    distr = (*( (*(theDistributions.begin())).second ).begin()).second;
-  } else{
-    mdmddist::const_iterator itedd;
-    for( itedd = theDistributions.begin(); itedd != theDistributions.end(); itedd++ ){
+  if( theNDistributions == 1 )
+  {
+    distr = (*( (*(theDistributions.cbegin())).second ).cbegin()).second;
+  }
+  else
+  {
+    for( auto itedd = theDistributions.cbegin(); itedd != theDistributions.cend(); ++itedd ){
       G4double energySep = (*itedd).first;
-      if( eMax < energySep ) {
-	//tt	if( eMax <= energySep ) { 
-	mddist dist1 = (*itedd).second;
-	mddist::const_iterator ited;
-	for( ited = dist1.begin(); ited != dist1.end(); ited++ ){
-	  G4double angleSep = (*ited).first;
-	  if( 1 < angleSep ) {
-	    distr = (*ited).second;
-	    break;
-	  }
-	}
-	break;
+      if( eMax < energySep )
+      {
+        const auto& dist1 = (*itedd).second;
+        for( auto ited = dist1.cbegin(); ited != dist1.cend(); ++ited )
+        {
+          G4double angleSep = (*ited).first;
+	  if( 1 < angleSep )
+          {
+            distr = (*ited).second;
+            break;
+          }
+        }
+        break;
       }
     }
   }
 
-  //  G4cout << " LEPTSElossDistr::Sample(  " << distr << " NDIST " << theNDistributions << G4endl; //GDEB
-  return distr->Sample(eMin, eMax);
+  return (nullptr != distr) ? distr->Sample(eMin, eMax) : 0.0;
 }

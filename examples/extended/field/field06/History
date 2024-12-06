@@ -1,11 +1,15 @@
 # Example field06 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
 
-## 2023-07-05 I. Hrivnacova (fieldex06-V11-01-00)
+## 2024-09-18 Gabriele Cosmo (fieldex06-V11-02-00)
+- Use default MixMax random generator.
+
+## 2023-07-05 Ivana Hrivnacova (fieldex06-V11-01-00)
 - Clang-tidy, new coding guidelines
 - Clean-up trailing white-spaces
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -35,7 +35,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -225,10 +224,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 1
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -380,7 +382,7 @@ ePairProd:  for e+  XStype:1  SubType=4
 
 annihil:  for e+ XStype:2 SubType=5 AtRestModel:Allison BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        eplus2ggOKVI : Emin=    0 eV  Emax=  100 TeV
+    eplusTo2or3gamma : Emin=    0 eV  Emax=  100 TeV
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
@@ -923,7 +925,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -948,7 +950,7 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
@@ -1006,8 +1008,6 @@ Index : 6     used in the geometry : Yes
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ... set ntuple merging row mode : row-wise - done
 ... create file : wls.root - done
@@ -1237,80 +1237,85 @@ Arrival time: 6.85676 ns Arrival position: (-376.984 um , 26.4758 um ) Exit posi
 Arrival time: 8.98602 ns Arrival position: (-114.31 um , 276.136 um ) Exit position: (-110.067 um , 249.817 um ) Energy: 2.47931 eV 
 --> Event 8 starts.
 
--------->Hits Collection: in this event there are 36 hits in the photon detector: 
+-------->Hits Collection: in this event there are 34 hits in the photon detector: 
 Arrival time: 6.09312 ns Arrival position: (85.9495 um , -12.4946 um ) Exit position: (91.3889 um , 64.0684 um ) Energy:   2.781 eV 
 Arrival time: 6.31999 ns Arrival position: (-17.025 um , 93.6494 um ) Exit position: (-148.324 um , 121.012 um ) Energy: 2.60552 eV 
-Arrival time: 12.0888 ns Arrival position: (-116.346 um , -176.71 um ) Exit position: (-215.416 um , -298.206 um ) Energy: 2.76862 eV 
-Arrival time: 14.1832 ns Arrival position: ( 360.73 um ,  263.65 um ) Exit position: (277.395 um , 230.807 um ) Energy: 2.58181 eV 
-Arrival time: 7.29751 ns Arrival position: (189.548 um , 26.8723 um ) Exit position: (204.586 um , 561.421 nm ) Energy: 2.87855 eV 
-Arrival time: 7.07867 ns Arrival position: (-148.266 um , 73.7934 um ) Exit position: (-121.566 um , 104.557 um ) Energy: 2.50277 eV 
-Arrival time: 7.91557 ns Arrival position: ( 281.86 um , -314.39 um ) Exit position: (260.576 um , -297.416 um ) Energy: 2.83181 eV 
-Arrival time: 20.1902 ns Arrival position: (-195.524 um , -273.505 um ) Exit position: (-238.306 um , -184.588 um ) Energy: 2.75686 eV 
-Arrival time: 10.6248 ns Arrival position: (89.4068 um , 37.1323 um ) Exit position: ( 123.57 um , -24.8238 um ) Energy: 2.70592 eV 
-Arrival time: 9.97828 ns Arrival position: ( 338.35 um , 73.9917 um ) Exit position: (353.083 um , 58.8047 um ) Energy: 2.30025 eV 
-Arrival time: 7.90636 ns Arrival position: (201.784 um , 147.175 um ) Exit position: (220.427 um , 126.728 um ) Energy: 2.81054 eV 
-Arrival time: 7.82307 ns Arrival position: (104.825 um , -144.215 um ) Exit position: (52.7888 um , -180.587 um ) Energy: 2.37782 eV 
-Arrival time:  20.123 ns Arrival position: (77.5123 um , -19.7292 um ) Exit position: (29.4884 um , -99.9731 um ) Energy: 2.89277 eV 
-Arrival time:  16.718 ns Arrival position: (-254.584 um , 46.2996 um ) Exit position: (-310.304 um , -29.0922 um ) Energy: 2.51497 eV 
-Arrival time: 13.1732 ns Arrival position: (-14.8608 um , -521.324 um ) Exit position: (-73.1146 um , -483.955 um ) Energy: 2.75918 eV 
-Arrival time: 17.7202 ns Arrival position: (173.499 um , 83.1947 um ) Exit position: ( 114.89 um , 217.527 um ) Energy: 2.61517 eV 
-Arrival time: 31.3736 ns Arrival position: (153.526 um , -94.8668 um ) Exit position: (201.612 um , -5.81979 um ) Energy: 2.57422 eV 
-Arrival time: 10.4506 ns Arrival position: (101.315 um ,     284 um ) Exit position: (126.927 um , 169.398 um ) Energy:  2.2735 eV 
-Arrival time: 8.64427 ns Arrival position: (97.3132 um , -147.023 um ) Exit position: (34.8955 um , -209.941 um ) Energy:   2.804 eV 
-Arrival time: 15.6618 ns Arrival position: (248.429 um , -488.006 um ) Exit position: (181.599 um , -423.333 um ) Energy: 2.32852 eV 
-Arrival time: 23.7514 ns Arrival position: (250.875 um , -221.642 um ) Exit position: (372.487 um , -178.542 um ) Energy: 2.65577 eV 
-Arrival time: 18.9748 ns Arrival position: (142.224 um , -139.268 um ) Exit position: ( 157.45 um , -82.4565 um ) Energy: 2.66613 eV 
-Arrival time: 12.5835 ns Arrival position: (-226.979 um , 9.75221 um ) Exit position: (-244.928 um , -106.287 um ) Energy: 2.88788 eV 
-Arrival time: 22.6987 ns Arrival position: (374.581 um , -105.195 um ) Exit position: ( 301.29 um , -95.7413 um ) Energy: 2.62803 eV 
-Arrival time: 6.45002 ns Arrival position: (-134.549 um , 211.281 um ) Exit position: (-259.429 um , 217.269 um ) Energy: 2.51042 eV 
-Arrival time:  14.061 ns Arrival position: (-174.891 um , -307.339 um ) Exit position: (-254.019 um , -318.981 um ) Energy: 2.54078 eV 
-Arrival time: 6.71382 ns Arrival position: (237.771 um , -278.768 um ) Exit position: (308.816 um , -274.417 um ) Energy: 2.78483 eV 
-Arrival time: 19.0568 ns Arrival position: (-420.759 um , 28.0658 um ) Exit position: (-376.064 um , 59.8534 um ) Energy: 2.77003 eV 
-Arrival time: 10.4992 ns Arrival position: (57.8473 um , 293.444 um ) Exit position: (-12.0707 um , 432.479 um ) Energy: 2.82489 eV 
-Arrival time: 15.8967 ns Arrival position: (-17.7886 um , -510.491 um ) Exit position: (100.394 um , -465.238 um ) Energy: 2.18306 eV 
-Arrival time: 33.3326 ns Arrival position: (-31.0175 um , -266.883 um ) Exit position: (-62.4916 um , -353.06 um ) Energy: 2.39482 eV 
-Arrival time: 13.2114 ns Arrival position: (72.3089 um , 426.517 um ) Exit position: (10.9934 um , 493.648 um ) Energy: 2.86136 eV 
-Arrival time: 6.01966 ns Arrival position: (-67.9656 um , -262.333 um ) Exit position: (162.173 nm , -253.165 um ) Energy: 2.31626 eV 
-Arrival time: 9.67212 ns Arrival position: (228.414 um , -550.118 um ) Exit position: (110.879 um , -479.781 um ) Energy:  2.5479 eV 
-Arrival time: 23.9087 ns Arrival position: (70.2678 um , -204.692 um ) Exit position: (89.4818 um , -117.566 um ) Energy: 2.66689 eV 
-Arrival time: 11.5785 ns Arrival position: (-495.534 um , -272.213 um ) Exit position: (-377.518 um , 77.1105 um ) Energy: 2.81459 eV 
+Arrival time: 18.3034 ns Arrival position: (-186.958 um , 36.1635 um ) Exit position: (-189.888 um , 128.048 um ) Energy: 2.44225 eV 
+Arrival time: 11.7154 ns Arrival position: (  67.14 um , -108.824 um ) Exit position: (-9.65532 um , -27.5906 um ) Energy: 2.49514 eV 
+Arrival time:  15.608 ns Arrival position: (-102.839 um , -377.828 um ) Exit position: (-7.61688 um , -389.58 um ) Energy: 2.30362 eV 
+Arrival time:  10.614 ns Arrival position: (-92.6746 um , 288.942 um ) Exit position: (-40.2478 um , 246.465 um ) Energy: 2.73516 eV 
+Arrival time: 22.4449 ns Arrival position: (-86.662 um , -334.155 um ) Exit position: (-106.975 um , -465.067 um ) Energy: 2.51057 eV 
+Arrival time:  11.393 ns Arrival position: (105.934 um , -286.215 um ) Exit position: (154.573 um , -436.812 um ) Energy: 2.68595 eV 
+Arrival time: 13.6993 ns Arrival position: (267.678 um , -382.624 um ) Exit position: (247.234 um , -360.55 um ) Energy: 2.71185 eV 
+Arrival time: 29.0386 ns Arrival position: (170.519 um , -241.627 um ) Exit position: (265.343 um , -283.324 um ) Energy: 2.65841 eV 
+Arrival time: 24.1155 ns Arrival position: (-264.168 um , 101.678 um ) Exit position: ( -341.9 um , 42.1973 um ) Energy: 2.69708 eV 
+Arrival time: 11.6429 ns Arrival position: (234.118 um , -16.5257 um ) Exit position: (161.422 um , -143.671 um ) Energy: 2.30547 eV 
+Arrival time: 19.3962 ns Arrival position: (157.385 um , 97.4306 um ) Exit position: (285.971 um , 119.398 um ) Energy: 2.75044 eV 
+Arrival time: 8.00372 ns Arrival position: (-18.0241 um , -86.9482 um ) Exit position: (-46.1662 um , -139.185 um ) Energy: 2.84318 eV 
+Arrival time: 9.28529 ns Arrival position: (-150.247 um , -204.279 um ) Exit position: (-191.471 um , -287.317 um ) Energy: 2.55788 eV 
+Arrival time: 12.5456 ns Arrival position: (269.853 um , 276.635 um ) Exit position: (136.409 um , 239.229 um ) Energy: 2.64111 eV 
+Arrival time: 8.58583 ns Arrival position: (-454.324 um , -67.7509 um ) Exit position: (-350.294 um , -143.435 um ) Energy: 2.76822 eV 
+Arrival time:  7.9549 ns Arrival position: (-12.4575 um , -447.619 um ) Exit position: (-3.05421 um , -357.992 um ) Energy: 2.28128 eV 
+Arrival time: 7.25433 ns Arrival position: (-35.2695 um , -451.938 um ) Exit position: (-35.2863 um , -499.41 um ) Energy: 2.68042 eV 
+Arrival time: 10.7193 ns Arrival position: (-81.8698 um , -267.769 um ) Exit position: (-11.0361 um , -356.299 um ) Energy: 2.82909 eV 
+Arrival time: 13.8312 ns Arrival position: (244.095 um , -316.872 um ) Exit position: (216.185 um , -359.532 um ) Energy: 2.78367 eV 
+Arrival time: 12.4093 ns Arrival position: (246.728 um , -199.41 um ) Exit position: (246.339 um , -137.539 um ) Energy: 2.44909 eV 
+Arrival time: 11.2698 ns Arrival position: (318.444 um , -123.049 um ) Exit position: (255.552 um , -16.0674 um ) Energy: 2.51424 eV 
+Arrival time: 19.4486 ns Arrival position: (208.599 um , 310.706 um ) Exit position: (110.049 um , 410.357 um ) Energy: 2.83748 eV 
+Arrival time: 11.9785 ns Arrival position: (103.482 um , -59.4118 um ) Exit position: (60.9248 um , -119.516 um ) Energy: 2.27741 eV 
+Arrival time:  22.484 ns Arrival position: (-313.173 um , -13.249 um ) Exit position: (-351.681 um , 57.1861 um ) Energy: 2.47221 eV 
+Arrival time: 8.03614 ns Arrival position: (26.6363 um , 162.458 um ) Exit position: (-30.4136 um , 72.8312 um ) Energy: 2.41338 eV 
+Arrival time: 7.66311 ns Arrival position: (119.644 um ,  155.47 um ) Exit position: (144.991 um , 78.6213 um ) Energy: 2.65622 eV 
+Arrival time: 17.4493 ns Arrival position: (  92.59 um , -573.354 um ) Exit position: (4.86083 um , -444.102 um ) Energy: 2.90045 eV 
+Arrival time: 11.9403 ns Arrival position: (-31.8725 um , -369.977 um ) Exit position: (-41.9586 um , -367.234 um ) Energy: 2.45656 eV 
+Arrival time: 8.35722 ns Arrival position: (-90.2212 um , 555.896 um ) Exit position: (103.084 um , 440.507 um ) Energy: 2.40191 eV 
+Arrival time: 41.6437 ns Arrival position: (-472.999 um , -99.9219 um ) Exit position: (-465.409 um , -101.34 um ) Energy: 2.53666 eV 
+Arrival time: 8.48534 ns Arrival position: (-29.5619 um , -16.8261 um ) Exit position: (-1.4461 um , 16.2227 um ) Energy: 2.66882 eV 
+Arrival time: 20.7456 ns Arrival position: (-463.283 um , -111.727 um ) Exit position: (-334.732 um ,  -160.4 um ) Energy:  2.5158 eV 
 --> Event 9 starts.
 
--------->Hits Collection: in this event there are 1 hits in the photon detector: 
-Arrival time: 6.66111 ns Arrival position: (-282.731 um , -524.081 um ) Exit position: (-336.966 um , -67.3087 um ) Energy: 2.55333 eV 
+-------->Hits Collection: in this event there are 15 hits in the photon detector: 
+Arrival time: 11.0569 ns Arrival position: (167.067 um , -232.929 um ) Exit position: (188.346 um , -283.67 um ) Energy: 2.58407 eV 
+Arrival time: 17.0776 ns Arrival position: (-74.0486 um , 26.1162 um ) Exit position: (-41.1253 um , -42.469 um ) Energy: 2.57635 eV 
+Arrival time: 10.4652 ns Arrival position: (-677.732 nm , -391.392 um ) Exit position: (92.7016 um , -342.738 um ) Energy: 2.40911 eV 
+Arrival time: 6.16444 ns Arrival position: (116.292 um , 419.257 um ) Exit position: (105.072 um ,  388.93 um ) Energy: 2.18943 eV 
+Arrival time:  27.519 ns Arrival position: (-409.202 um , 231.174 um ) Exit position: (-356.139 um , 227.728 um ) Energy: 2.56646 eV 
+Arrival time: 6.49346 ns Arrival position: (-348.344 um , 333.599 um ) Exit position: (-259.515 um , 315.779 um ) Energy: 2.70572 eV 
+Arrival time: 13.3837 ns Arrival position: (-81.6856 um , 68.8633 um ) Exit position: (-172.382 um , 130.925 um ) Energy:  2.8675 eV 
+Arrival time: 8.59687 ns Arrival position: (-307.542 um , -37.073 um ) Exit position: (-378.867 um , 26.9189 um ) Energy: 2.60645 eV 
+Arrival time: 29.2549 ns Arrival position: (-396.035 um , -26.1073 um ) Exit position: (-287.55 um , -11.5339 um ) Energy: 2.88488 eV 
+Arrival time: 11.3346 ns Arrival position: (-202.757 um , -1.04738 um ) Exit position: (-77.3304 um , -29.1786 um ) Energy:  2.7521 eV 
+Arrival time: 18.2138 ns Arrival position: (160.961 um , -352.923 um ) Exit position: (88.2209 um , -300.196 um ) Energy: 2.51946 eV 
+Arrival time: 8.05786 ns Arrival position: (19.7678 um , -63.8176 um ) Exit position: (164.094 um , -83.0461 um ) Energy: 2.56356 eV 
+Arrival time: 11.9025 ns Arrival position: (-283.813 um , 447.258 um ) Exit position: (-210.797 um , 376.598 um ) Energy: 2.52746 eV 
+Arrival time: 14.2209 ns Arrival position: ( 171.12 um , -444.825 um ) Exit position: (149.662 um , -332.044 um ) Energy:  2.3579 eV 
+Arrival time: 28.6004 ns Arrival position: (272.367 um , -35.8856 um ) Exit position: ( 239.23 um , -39.6425 um ) Energy: 2.95542 eV 
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=26.910000s Real=27.216277s Sys=0.000000s
+  User=26.840000s Real=27.666142s Sys=0.000000s
 
  ----> print histograms statistics for the entire run 
 
- Mean number of photons detected/event: 23.5 rms = 27.6884
+ Mean number of photons detected/event: 24.7 rms = 26.7808
 ... write file : wls.root - done
 ... close file : wls.root - done
 
  ======================== run summary =====================
 Average number per event:
- TIR:          2.7e+05 +- 3e+05
- Exiting:      6.07e+05 +- 6.77e+05
- Escaped Mid:  518 +- 590
- Escaped End:  23.9 +- 27.8
- Bounced:      2.22e+04 +- 2.43e+04
+ TIR:          2.85e+05 +- 2.87e+05
+ Exiting:      6.42e+05 +- 6.58e+05
+ Escaped Mid:  563 +- 573
+ Escaped End:  25.1 +- 26.8
+ Bounced:      2.39e+04 +- 2.37e+04
  WLS Bounce:   0 +- 0
- Clad1 Bounce: 1.49e+04 +- 1.62e+04
+ Clad1 Bounce: 1.6e+04 +- 1.59e+04
  Clad2 Bounce: 0 +- 0
- Reflected:    3.24e+04 +- 3.89e+04
- Escaped:      0.4 +- 0.8
- Mirror:       28.1 +- 33.1
- Detector hit: 23.5 +- 27.7
+ Reflected:    3.52e+04 +- 3.78e+04
+ Escaped:      0.4 +- 0.663
+ Mirror:       32.6 +- 33.2
+ Detector hit: 24.7 +- 26.8
 
-There are histograms that can be viewed with visualization:
-  3 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

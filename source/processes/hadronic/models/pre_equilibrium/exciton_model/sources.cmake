@@ -76,5 +76,6 @@ geant4_module_link_libraries(G4had_preequ_exciton
     G4baryons
     G4hadronic_deex_management
     G4hadronic_deex_util
+    G4hadronic_xsect
     G4ions
     G4procman)

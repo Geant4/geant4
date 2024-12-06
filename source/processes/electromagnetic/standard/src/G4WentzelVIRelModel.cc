@@ -174,7 +174,7 @@ void G4WentzelVIRelModel::ComputeEffectiveMass()
 	sum += mass*Z2;
 	norm += Z2;
       }
-      effMass[i] = sum/norm;
+      effMass[i] = (0.0 < norm) ? sum/norm : sum;
     }
   }
   l.unlock();

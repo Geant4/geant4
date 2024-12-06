@@ -35,10 +35,18 @@
 #include "G4PhysicalConstants.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4NucleiProperties.hh"
+#include "G4IsotopeList.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 G4Pow* G4NuclearRadii::fG4pow = G4Pow::GetInstance();
-const G4double fAlpha = 0.5*CLHEP::fine_structure_const*CLHEP::hbarc;
-const G4double fInvep = 1.0/CLHEP::eplus;
+
+namespace
+{
+  const G4double llog10 = G4Log(10.);
+  const G4double fAlpha = 0.5*CLHEP::fine_structure_const*CLHEP::hbarc;
+  const G4double fInvep = 1.0/CLHEP::eplus;
+}
 
 G4double G4NuclearRadii::ExplicitRadius(G4int Z, G4int A)
 {
@@ -138,10 +146,13 @@ G4double G4NuclearRadii::RadiusKNGG(G4int A)
 G4double G4NuclearRadii::RadiusND(G4int A)
 {
   G4double R = CLHEP::fermi;
-  if(1 == A) { return R*0.895; }
-//  G4double x = R*fG4pow->Z13(A);
-//  if(A <= 3.) { x *= 0.8; }
-//  else { x *= 1.7; }
+  if (1 == A) {
+    R *= 0.895;
+  } else {
+    R *= fG4pow->Z13(A);
+    if (A <= 3.) { R *= 0.8; }
+    else { R *= 1.7; }
+  }
   return R;
 }
 
@@ -205,6 +216,38 @@ G4double G4NuclearRadii::CoulombFactor(
   
   G4double bC = fAlpha*pZ*Z/(pR + tR);
   return (totTcm > bC) ? 1. - bC/totTcm : 0.0;
+}
+
+G4double
+G4NuclearRadii::NeutronInelasticShape(G4int Z, G4double ekin)
+{
+  G4double A = (Z < 100) ? aeff[Z] : aeff[100];
+  G4double elog = G4Log(ekin/CLHEP::GeV)/llog10;
+  G4double p3 = 0.6 + 13./A - 0.0005*A;
+  G4double p4 = 7.2449 - 0.018242*A;
+  G4double p5 = 1.36 + 1.8/A + 0.0005*A;
+  G4double p6 = 1. + 200./A + 0.02*A;
+  G4double p7 = 3.0 - (A - 70.)*(A - 200.)/11000.;
+
+  G4double firstexp = G4Exp(-p4*(elog + p5));
+  G4double secondexp = G4Exp(-p6*(elog + p7));
+
+  return (1. + p3*firstexp/(1. + firstexp))/(1. + secondexp);
+}
+
+G4double
+G4NuclearRadii::ProtonInelasticShape(G4int Z, G4double ekin)
+{
+  G4double A = (Z < 100) ? aeff[Z] : aeff[100];
+  G4double elog = G4Log(ekin/CLHEP::GeV)/llog10;
+  G4double ff1 = 5.6  - 0.016*A; // slope of the drop at medium energies.
+  G4double ff2 = 1.37 + 1.37/A;  // start of the slope.
+  G4double ff3 = 0.8  + 18./A - 0.002*A;   // stephight
+  G4double res = (1.0 + ff3*(1.0 - (1.0/(1+G4Exp(-ff1*(elog + ff2))))));
+  ff1 = 8. - 8./A - 0.008*A; // slope of the rise
+  ff2 = 2.34 - 5.4/A - 0.0028*A; // start of the rise
+  res /= (1.0 + G4Exp(-ff1*(elog + ff2)));
+  return res;
 }
 
 const G4double G4NuclearRadii::r0[] = {

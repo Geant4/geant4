@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-07-17 Gabriele Cosmo (procbiasing-V11-02-00)
+- Fixed reported Coverity defects, to use 'const G4String&' for avoiding
+  implicit copies.
+
 ## 2022-11-23 Gabriele Cosmo (procbiasing-V11-00-01)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

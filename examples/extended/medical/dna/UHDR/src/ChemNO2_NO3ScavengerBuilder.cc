@@ -36,7 +36,7 @@ void ChemNO2_NO3ScavengerBuilder ::NO2_NO3ScavengerReaction(
 {
   auto table = G4MoleculeTable::Instance();
   auto e_aq = table->GetConfiguration("e_aq");
-  auto OH = table->GetConfiguration("OH");
+  auto OH = table->GetConfiguration("°OH");
   auto OHm = table->GetConfiguration("OHm");
   auto NO2 = table->GetConfiguration("NO2");
   auto NO2m = table->GetConfiguration("NO2m");

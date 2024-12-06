@@ -41,10 +41,8 @@
 
 class G4VHCIOentry;
 
-using HCIOmap = std::map<std::string, G4VHCIOentry*, std::less<std::string>>;
-
-using HCIOstore = std::map<G4String, G4VPHitsCollectionIO*,
-                           std::less<G4String>>;
+using HCIOmap = std::map<G4String, G4VHCIOentry*, std::less<G4String>>;
+using HCIOstore = std::map<G4String, G4VPHitsCollectionIO*, std::less<G4String>>;
 
 class G4HCIOcatalog
 {

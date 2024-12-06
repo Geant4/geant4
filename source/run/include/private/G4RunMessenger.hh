@@ -95,6 +95,7 @@ class G4RunMessenger : public G4UImessenger
     G4UIcmdWithoutParameter* physCmd = nullptr;
     G4UIcmdWithAnInteger* randEvtCmd = nullptr;
     G4UIcommand* procUICmds = nullptr;
+    G4UIcmdWithABool* trajMergeCmd = nullptr;
 
     G4UIdirectory* randomDirectory = nullptr;
     G4UIcmdWithAString* seedCmd = nullptr;

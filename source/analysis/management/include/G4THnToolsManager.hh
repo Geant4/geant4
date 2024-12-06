@@ -55,7 +55,7 @@ class G4THnToolsManager : public G4VTBaseHnManager<DIM>,
 
   public:
     G4THnToolsManager(const G4AnalysisManagerState& state);
-    virtual ~G4THnToolsManager() = default;
+    ~G4THnToolsManager() override = default;
 
     // deleted copy constructor & assignment operator
     G4THnToolsManager(const G4THnToolsManager& rhs) = delete;
@@ -70,40 +70,42 @@ class G4THnToolsManager : public G4VTBaseHnManager<DIM>,
                const std::array<G4HnDimension, DIM>& bins,
                const std::array<G4HnDimensionInformation, DIM>& hnInfo) override;
 
-    virtual G4bool Scale(G4int id, G4double factor) override;
-    virtual G4int  GetNofHns(G4bool onlyIfExist) const override;
+    G4bool Scale(G4int id, G4double factor) override;
+    G4int GetNofHns(G4bool onlyIfExist) const override;
 
     // Methods to fill histograms
-    virtual G4bool Fill(G4int id, std::array<G4double, DIM> value, G4double weight = 1.0) override;
+    G4bool Fill(G4int id, std::array<G4double, DIM> value,
+                G4double weight = 1.0) override;
 
     // Access methods
-    virtual G4int  GetId(const G4String& name, G4bool warn = true) const  override;
+    G4int GetId(const G4String &name, G4bool warn = true) const override;
 
     // Access to bins parameters
-    virtual G4int    GetNbins(unsigned int idim, G4int id) const  override;
-    virtual G4double GetMinValue(unsigned int idim, G4int id) const override;
-    virtual G4double GetMaxValue(unsigned int idim, G4int id) const override;
-    virtual G4double GetWidth(unsigned int idim, G4int id) const override;
+    G4int GetNbins(unsigned int idim, G4int id) const override;
+    G4double GetMinValue(unsigned int idim, G4int id) const override;
+    G4double GetMaxValue(unsigned int idim, G4int id) const override;
+    G4double GetWidth(unsigned int idim, G4int id) const override;
 
     // Setters for attributes for plotting
-    virtual G4bool SetTitle(G4int id, const G4String& title) override;
-    virtual G4bool SetAxisTitle(unsigned int idim, G4int id, const G4String& title)  override;
+    G4bool SetTitle(G4int id, const G4String &title) override;
+    G4bool SetAxisTitle(unsigned int idim, G4int id,
+                        const G4String &title) override;
 
     // Access attributes for plotting
-    virtual G4String GetTitle(G4int id) const  override;
-    virtual G4String GetAxisTitle(unsigned int idim, G4int id) const override;
+    G4String GetTitle(G4int id) const override;
+    G4String GetAxisTitle(unsigned int idim, G4int id) const override;
 
     // Methods to list/print histograms
-    virtual G4bool WriteOnAscii(std::ofstream& output) override;
-            // Function with specialization per histo type
-    virtual G4bool List(std::ostream& output, G4bool onlyIfActive = true) override;
+    G4bool WriteOnAscii(std::ofstream &output) override;
+    // Function with specialization per histo type
+    G4bool List(std::ostream &output, G4bool onlyIfActive = true) override;
 
     // Methods to delete selected histograms
-    virtual G4bool Delete(G4int id, G4bool keepSetting) override;
+    G4bool Delete(G4int id, G4bool keepSetting) override;
 
     // // Access to Hn manager
-    virtual std::shared_ptr<G4HnManager> GetHnManager() override;
-    virtual const std::shared_ptr<G4HnManager> GetHnManager() const override;
+    std::shared_ptr<G4HnManager> GetHnManager() override;
+    const std::shared_ptr<G4HnManager> GetHnManager() const override;
 
   protected:
     // Functions from base class

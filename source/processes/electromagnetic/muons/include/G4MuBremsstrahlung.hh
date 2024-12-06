@@ -81,7 +81,7 @@ public:
 
   explicit G4MuBremsstrahlung(const G4String& processName = "muBrems");
 
-  ~G4MuBremsstrahlung() = default;
+  ~G4MuBremsstrahlung() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition& p) override;
 

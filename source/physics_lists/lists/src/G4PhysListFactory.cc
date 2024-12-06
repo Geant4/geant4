@@ -93,14 +93,14 @@ G4PhysListFactory::G4PhysListFactory(G4int ver)
     "FTFP_BERT_HPT","FTFP_INCLXX_HPT","QGSP_BERT_HPT","QGSP_BIC_HPT",
     "QGSP_BIC_AllHPT","QGSP_INCLXX_HPT","Shielding_HPT","ShieldingLIQMD_HPT",
     "ShieldingM_HPT"};
-  for(size_t i=0; i<nlists_hadr; ++i) {
+  for (std::size_t i=0; i<nlists_hadr; ++i) {
     listnames_hadr.push_back(ss[i]);
   }
 
   nlists_em = 12;
   G4String s1[12] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN",
 		     "__GS","__SS","_EM0","_WVI","__LE"};
-  for(size_t i=0; i<nlists_em; ++i) {
+  for (std::size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }
 }
@@ -134,7 +134,7 @@ G4VModularPhysicsList*
 G4PhysListFactory::GetReferencePhysList(const G4String& name)
 {
   // analysis on the string 
-  size_t n = name.size();
+  std::size_t n = name.size();
 
   // last characters in the string
   size_t em_opt = 0;
@@ -143,7 +143,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   // check EM options
   if(n > 4) {
     em_name = name.substr(n - 4, 4);
-    for(size_t i=1; i<nlists_em; ++i) { 
+    for (std::size_t i=1; i<nlists_em; ++i) { 
       if(listnames_em[i] == em_name) { 
 	em_opt = i;
         n -= 4;
@@ -247,10 +247,10 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name) const
 {
   G4bool res = false;
-  size_t n = name.size();
+  std::size_t n = name.size();
   if(n > 4) {
     G4String em_name = name.substr(n - 4, 4);
-    for(size_t i=1; i<nlists_em; ++i) { 
+    for (std::size_t i=1; i<nlists_em; ++i) { 
       if(listnames_em[i] == em_name) { 
         n -= 4;
         break; 
@@ -258,7 +258,7 @@ G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name) const
     }
   }
   G4String had_name = name.substr(0, n);
-  for(size_t i=0; i<nlists_hadr; ++i) {
+  for (std::size_t i=0; i<nlists_hadr; ++i) {
     if(had_name == listnames_hadr[i]) {
       res = true;
       break;

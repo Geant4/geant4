@@ -60,38 +60,23 @@
 #include "G4Neutron.hh"
 #include "G4ParticleHPChannel.hh"
 #include "G4ParticleHPChannelList.hh"
+
 #include <string>
 #include <fstream>
 
 ///--------------------------------------------------------------------------------------
-G4ParticleHPIsoProbabilityTable::G4ParticleHPIsoProbabilityTable() : 
-  theEnergies( nullptr ), theProbabilities( nullptr ), theElasticData( nullptr ), 
-  theCaptureData( nullptr ), theFissionData( nullptr ) 
+G4ParticleHPIsoProbabilityTable::~G4ParticleHPIsoProbabilityTable()
 {
-  Z = 0;
-  A = 0;
-  m = -1;
-  T = -1.0;
-  Emin = DBL_MAX;
-  Emax = 0.0;
-}
-
-///--------------------------------------------------------------------------------------
-G4ParticleHPIsoProbabilityTable::~G4ParticleHPIsoProbabilityTable() {
-  for ( std::vector< std::vector< G4double >* >::iterator it = theProbabilities->begin(); 
-        it != theProbabilities->end(); ++it ) {
+  for ( auto it = theProbabilities->cbegin(); it != theProbabilities->cend(); ++it ) {
     delete* it;
   }
-  for ( std::vector< std::vector< G4double >* >::iterator it = theElasticData->begin(); 
-        it != theElasticData->end(); ++it ) {
+  for ( auto it = theElasticData->cbegin(); it != theElasticData->cend(); ++it ) {
     delete* it;
   }
-  for ( std::vector< std::vector< G4double >* >::iterator it = theCaptureData->begin(); 
-        it != theCaptureData->end(); ++it ) {
+  for ( auto it = theCaptureData->cbegin(); it != theCaptureData->cend(); ++it ) {
     delete* it;
   }
-  for ( std::vector< std::vector< G4double >* >::iterator it = theFissionData->begin(); 
-        it != theFissionData->end(); ++it ) {
+  for ( auto it = theFissionData->cbegin(); it != theFissionData->cend(); ++it ) {
     delete* it;
   }
   delete theEnergies;
@@ -102,7 +87,7 @@ G4ParticleHPIsoProbabilityTable::~G4ParticleHPIsoProbabilityTable() {
 }
 
 ///--------------------------------------------------------------------------------------
-void G4ParticleHPIsoProbabilityTable::Init( G4int, G4int, G4int, G4double, G4String ) {}
+void G4ParticleHPIsoProbabilityTable::Init( G4int, G4int, G4int, G4double, const G4String& ) {}
 
 ///--------------------------------------------------------------------------------------
 G4double G4ParticleHPIsoProbabilityTable::GetCorrelatedIsoCrossSectionPT( const G4DynamicParticle*, G4int, 

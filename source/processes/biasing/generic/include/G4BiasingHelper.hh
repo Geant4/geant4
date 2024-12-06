@@ -23,56 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//---------------------------------------------------------------
-//
 // G4BiasingHelper
 //
 // Class Description:
-//    A utility class to help configuring code for biasing.
-//    
 //
-//---------------------------------------------------------------
-//   Initial version                         Sep. 2013 M. Verderi
-
-
+// A utility class to help configuring code for biasing.
+//    
+// Author: Marc Verderi, September 2013.
+// --------------------------------------------------------------------
 #ifndef G4BiasingHelper_h
 #define G4BiasingHelper_h 1
 
 #include "globals.hh"
 
+#include <vector>
+
 class G4ProcessManager;
 class G4ParallelGeometriesLimiterProcess;
 
-#include <vector>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4BiasingHelper
 {
-public:
-  // -- Substitute, in the process manager passed, physics process "physicsProcessToBias"
-  // -- with a version wrapped by a G4BiasingProcessInterface wrapped, to put this physics
-  // -- process under biasing.
-  // -- Only processes of process type 2 (EM), 3 (Optical), 4 (Had.) and 6 (Decay) will be
-  // -- wrapped.
-  // -- A name for this wrapped process can be given (otherwise a default one is provided:
-  // -- e.g. for process "phot" this will be "biasWrapper(phot)").
-  static G4bool    ActivatePhysicsBiasing(G4ProcessManager* pmanager, G4String physicsProcessToBias,
-					  G4String wrappedName = "");
-  // -- Insert, in the process manager passed, a G4BiasingProcessInterface process that
-  // -- will deal with non-modifying physics biasing (splitting, killing). A name for
-  // -- this process can be passed, otherwise the default name "biasWrapper(0)" is used.
-  static void   ActivateNonPhysicsBiasing(G4ProcessManager* pmanager,
-					  G4String nonPhysicsProcessName = "");
-  
-  // -- Add a G4ParallelGeometriesLimiterProcess instance to the given process manager
-  // -- The pointer of the added process is returned.
-  static G4ParallelGeometriesLimiterProcess* AddLimiterProcess(G4ProcessManager* pmanager,
-							       const G4String& processName = "biasLimiter");
-};
+  public:
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    // -- Substitute, in the process manager passed, physics process "physicsProcessToBias"
+    // -- with a version wrapped by a G4BiasingProcessInterface wrapped, to put this physics
+    // -- process under biasing.
+    // -- Only processes of process type 2 (EM), 3 (Optical), 4 (Had.) and 6 (Decay) will be
+    // -- wrapped.
+    // -- A name for this wrapped process can be given (otherwise a default one is provided:
+    // -- e.g. for process "phot" this will be "biasWrapper(phot)").
+    static G4bool ActivatePhysicsBiasing(G4ProcessManager* pmanager,
+                                         const G4String& physicsProcessToBias,
+					 const G4String& wrappedName = "");
+    // -- Insert, in the process manager passed, a G4BiasingProcessInterface process that
+    // -- will deal with non-modifying physics biasing (splitting, killing). A name for
+    // -- this process can be passed, otherwise the default name "biasWrapper(0)" is used.
+    static void ActivateNonPhysicsBiasing(G4ProcessManager* pmanager,
+					  const G4String& nonPhysicsProcessName = "");
+
+    // -- Add a G4ParallelGeometriesLimiterProcess instance to the given process manager
+    // -- The pointer of the added process is returned.
+    static G4ParallelGeometriesLimiterProcess*
+           AddLimiterProcess(G4ProcessManager* pmanager,
+                             const G4String& processName = "biasLimiter");
+};
 
 #endif

@@ -6,16 +6,31 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-08-26 Gabriele Cosmo (geommng-V11-02-06)
+- G4GeometryManager: temporarily disable default parallel optimisation.
+  Fixed spelling for method OptimiseInParallel(..).
+
+## 2024-08-07 Gabriele Cosmo (geommng-V11-02-05)
+- Fixed broken condition for enabling voxels statistics report in
+  G4GeometryManager::UndertakeOptimisation().
+- Further cleanup in G4GeometryManager for usage of static data.
+  Fixed spelling on data members.
+- Access G4GeometryManager singleton through its GetInstance() in stores.
+
+## 2024-08-06 Gabriele Cosmo (geommng-V11-02-04)
+- In G4GeometryManager, removed unnecessary static qualifier for some methods
+  and ordered methods declarations in header.
+
 ## 2024-06-17 Gabriele Cosmo (geommng-V11-02-03)
 - Removed G4SmartVoxelProxy source file, as now empty.
 - Minor code cleanup/indentation.
 
 ## 2024-06-02 John Apostolakis (geommng-V11-02-02)
 - New capability to run voxel optimisation in threads (off by default).
-  First version, parallelises only over volumes. The user must currently call
-  G4GeometryManager::RequestParallelOptimisation(optimise=true, verbose) to use
-  it. Set verbose=true to obtain the volumes with biggest contribution to memory
-  size and CPU time for voxelisation.
+  First version, parallelises only over volumes. The user can call
+  RequestParallelOptimisation(optimise, verbose) from G4GeometryManager
+  to turn it on/off. Set verbose=true to obtain the volumes with biggest
+  contribution to memory size and CPU time for voxelisation.
   Added new method BuildOptimisationsParallel() to be called by
   G4WorkerRunManager to initialize. Added method ReportVoxelInfo() to write out
   for verification. Checked with simple and complex/large geometries.
@@ -252,7 +267,7 @@ May 16, 2018 G.Cosmo (geommng-V10-04-05)
   compilation warnings on gcc-8.1.
 
 May 11, 2018 E.Tcherniaev (geommng-V10-04-04)
-- G4AffineTransform: further optimized InverseProduct(), for the case where
+- G4AffineTransform: further optimised InverseProduct(), for the case where
   tf2 is a pure translation.
 
 May 7, 2018 E.Tcherniaev (geommng-V10-04-03)

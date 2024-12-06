@@ -8,7 +8,10 @@
 channeling
 ----------
 
-This example simulates channeling of 400 GeV/c protons in a bent crystal.
+ Channeling examples are dedicated to various coherent effects
+ in oriented crystals, in particular, channeling, channeling radiation,
+ coherent bremsstrahlung, coherent pair production etc. as well as their
+ various applications.
 
 dmparticle
 ---------

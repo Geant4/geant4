@@ -66,6 +66,7 @@ class G4NistManager;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
+class G4UIcommand;
 
 class G4NistMessenger : public G4UImessenger
 {
@@ -73,7 +74,7 @@ class G4NistMessenger : public G4UImessenger
   explicit G4NistMessenger(G4NistManager*);
   ~G4NistMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) final;
+  void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
   G4NistManager* manager;
@@ -92,6 +93,8 @@ class G4NistMessenger : public G4UImessenger
   G4UIcmdWithAString* g4DensCmd;
   G4UIcmdWithAString* densCmd;
   G4UIcmdWithAString* adensCmd;
+
+  G4UIcommand* fPosiCmd;
 };
 
 #endif

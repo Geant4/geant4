@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-07-11 Gabriele Cosmo (det-V11-02-00)
+- Fixed reported Coverity defects, use consistently 'const G4String&' to
+  avoid implicit copy.
+- Fixed class description in headers.
+
 ## 2022-12-22 Ben Morgan (det-V11-01-00)
 - Apply standard clang-tidy plus range-based for and boolean simplification fixes
 - General code tidy and modernization
@@ -46,7 +51,7 @@ April 28, 2020  John Apostolakis
 - Added ComputeSolid methods to G4VPrimitiveScorer
 
 Febr 26, 2013 Andrea Dotti
-- Adding cloning capbailities to SD
+- Adding cloning capabilities to SD
 
 June 4, 2007, A.Howard
 - Put back some classes required for scoring of geometrical biasing cells:

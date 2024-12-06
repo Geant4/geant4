@@ -234,8 +234,8 @@ void G4VViewer::UpdateGUISceneTree()
 
 void G4VViewer::InsertModelInSceneTree(G4VModel* model)
 {
-  auto modelType = model->GetType();
-  auto modelDescription = model->GetGlobalDescription();
+  const auto& modelType = model->GetType();
+  const auto& modelDescription = model->GetGlobalDescription();
 
   auto type = G4SceneTreeItem::model;
   auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(model);
@@ -442,40 +442,6 @@ std::list<G4SceneTreeItem>::iterator G4VViewer::SceneTreeScene::FindOrInsertTouc
   return childIter;
 }
 // clang-format on
-
-#ifdef G4MULTITHREADED
-
-void G4VViewer::DoneWithMasterThread()
-{
-  // G4cout << "G4VViewer::DoneWithMasterThread" << G4endl;
-}
-
-void G4VViewer::MovingToMasterThread()
-{
-  // G4cout << "G4VViewer::MovingToMasterThread" << G4endl;
-}
-
-void G4VViewer::SwitchToVisSubThread()
-{
-  // G4cout << "G4VViewer::SwitchToVisSubThread" << G4endl;
-}
-
-void G4VViewer::DoneWithVisSubThread()
-{
-  // G4cout << "G4VViewer::DoneWithVisSubThread" << G4endl;
-}
-
-void G4VViewer::MovingToVisSubThread()
-{
-  // G4cout << "G4VViewer::MovingToVisSubThread" << G4endl;
-}
-
-void G4VViewer::SwitchToMasterThread()
-{
-  // G4cout << "G4VViewer::SwitchToMasterThread" << G4endl;
-}
-
-#endif
 
 std::ostream& operator<<(std::ostream& os, const G4VViewer& v)
 {

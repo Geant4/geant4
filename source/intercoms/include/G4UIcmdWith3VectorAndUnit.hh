@@ -46,7 +46,7 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
     // and the pointer to the messenger must be given
     G4UIcmdWith3VectorAndUnit(const char* theCommandPath, G4UImessenger* theMessenger);
 
-    G4int DoIt(G4String parameterList) override;
+    G4int DoIt(const G4String& parameterList) override;
 
     // Convert a 3 vector value to a string of digits and unit. Best unit is
     // chosen from the unit category of default unit (in case SetDefaultUnit()

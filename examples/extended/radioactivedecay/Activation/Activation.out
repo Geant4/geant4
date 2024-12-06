@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -66,10 +66,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -137,7 +140,7 @@ Screening factor                                   1
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
- Use probability tables from     njoy
+ Use probability tables from     
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -179,7 +182,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.140000s Real=0.164742s Sys=0.000000s
+  User=0.130000s Real=0.142702s Sys=0.000000s
 
  The run is 1000 neutron of 25 meV through 1 cm  of G4_Co (density: 8.9 g/cm3 )
 
@@ -194,7 +197,7 @@ Run Summary
            Co59:     161  Emean =  39.114 meV	( 1.4551 meV --> 161.82 meV)	stable
            Co60:     955  Emean =  218.46 eV 	( 1.1195 eV  --> 499.25 eV )	mean life = 7.6098 y  
            Ni60:     955  Emean =  15.907 eV 	( 15.907 eV  --> 15.907 eV )	stable
-      anti_nu_e:     955  Emean =   216.3 keV	( 31.598 keV --> 312.65 keV)	stable
+      anti_nu_e:     955  Emean =   216.3 keV	( 31.601 keV --> 312.65 keV)	stable
              e+:      40  Emean =  1.5381 MeV	( 75.921 keV --> 4.2018 MeV)	stable
              e-:    3251  Emean =  325.19 keV	( 4.0148 eV  --> 6.4789 MeV)	stable
           gamma:    6008  Emean =  1.5952 MeV	( 13.015 eV  --> 7.4329 MeV)	stable
@@ -203,7 +206,7 @@ Run Summary
  Mean energy flow per event    = 8.781 MeV  rms = 2.3009 MeV
 
  List of particles emerging from the target :
-      anti_nu_e:     955  Emean =   216.3 keV	( 31.598 keV --> 312.65 keV) 	Eflow/event = 206.56 keV
+      anti_nu_e:     955  Emean =   216.3 keV	( 31.601 keV --> 312.65 keV) 	Eflow/event = 206.57 keV
              e+:       4  Emean =   1.475 MeV	( 487.7 keV --> 2.458 MeV) 	Eflow/event = 5.8999 keV
              e-:      44  Emean =  1.2389 MeV	( 87.883 keV --> 4.2395 MeV) 	Eflow/event = 54.514 keV
           gamma:    5292  Emean =  1.6089 MeV	( 47.902 keV --> 7.4329 MeV) 	Eflow/event = 8.5141 MeV

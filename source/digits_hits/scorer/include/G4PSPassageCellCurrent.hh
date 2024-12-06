@@ -49,7 +49,7 @@
 class G4PSPassageCellCurrent : public G4VPrimitivePlotter
 {
  public:
-  G4PSPassageCellCurrent(G4String name, G4int depth = 0);
+  G4PSPassageCellCurrent(const G4String& name, G4int depth = 0);
   ~G4PSPassageCellCurrent() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

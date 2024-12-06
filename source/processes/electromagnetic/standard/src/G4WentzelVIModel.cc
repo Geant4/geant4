@@ -324,7 +324,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   //G4cout << "rcut= " << rcut << " rlimit= " << rlimit << " presafety= " 
   // << presafety << " 1-cosThetaMax= " <<1-cosThetaMax 
   //<< " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc << G4endl;
-  if(rcut > rlimit) { rlimit = std::min(rlimit, rcut*sqrt(rlimit/rcut)); }
+  if(rcut > rlimit) { rlimit = std::min(rlimit, rcut*std::sqrt(rlimit/rcut)); }
  
   tlimit = std::min(tlimit, rlimit);
   tlimit = std::max(tlimit, tlimitminfix);
@@ -518,33 +518,27 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4int nMscSteps = 1;
   G4double x0 = tPathLength;
   G4double z0 = x0*invlambda;
-  //G4double zzz = 0.0;
   G4double prob2 = 0.0;
 
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
   // large scattering angle case - two step approach
   if(!singleScatteringMode) {
-    static const G4double zzmin = 0.05;
     if(useSecondMoment) { 
       G4double z1 = invlambda*invlambda;
       G4double z2 = SecondMoment(particle, currentCouple, effKinEnergy);
       prob2 = (z2 - z1)/(1.5*z1 - z2);
     }
-    //    if(z0 > zzmin && safety > tlimitminfix) { 
-    if(z0 > zzmin) { 
+    // numerical limitation on step length for 2-step mode
+    if (z0 > 0.05 && z0 < 30.) { 
       x0 *= 0.5; 
       z0 *= 0.5;
       nMscSteps = 2;
-    } 
-    //if(z0 > zzmin) { zzz = G4Exp(-1.0/z0); }
-    G4double zzz = 0.0;
-    if(z0 > zzmin) { 
-      zzz = G4Exp(-1.0/z0); 
+      G4double zzz = G4Exp(-1.0/z0); 
       z0 += zzz; 
-      prob2 *= (1 + zzz);
+      prob2 *= (1.0 + zzz);
     }
-    prob2 /= (1 + prob2);
+    prob2 /= (1.0 + prob2);
   } 
 
   // step limit due to single scattering
@@ -636,7 +630,6 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       G4bool isFirst = true;
       if(prob2 > 0.0 && rndmEngine->flat() < prob2) { isFirst = false; } 
       do {
-        //z = -z0*G4Log(1.0 - (1.0 - zzz)*rndmEngine->flat());
         if(isFirst) { z = -G4Log(rndmEngine->flat()); }
         else        { z = G4RandGamma::shoot(rndmEngine, 2.0, 2.0); }
         z *= z0;
@@ -648,12 +641,12 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       else if(cost < -1.0) { cost =-1.0; }
       sint = sqrt((1.0 - cost)*(1.0 + cost));
       phi  = twopi*rndmEngine->flat();
-      G4double vx1 = sint*cos(phi);
-      G4double vy1 = sint*sin(phi);
+      G4double vx1 = sint*std::cos(phi);
+      G4double vy1 = sint*std::sin(phi);
 
       // lateral displacement  
       if (latDisplasment) {
-        G4double rms = invsqrt12*sqrt(2*z0);
+        G4double rms = z0 > 0.0 ? invsqrt12*std::sqrt(2*z0) : 0.0;
         G4double r  = x0*mscfac;
         G4double dx = r*(0.5*vx1 + rms*G4RandGauss::shoot(rndmEngine,0.0,1.0));
         G4double dy = r*(0.5*vy1 + rms*G4RandGauss::shoot(rndmEngine,0.0,1.0));
@@ -661,7 +654,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
         // change position
         if(d >= 0.0)  { 
-          temp.set(dx,dy,sqrt(d) - r);
+          temp.set(dx, dy, std::sqrt(d) - r);
           temp.rotateUz(dir); 
           fDisplacement += temp;
         }

@@ -37,15 +37,6 @@
 #include "G4Types.hh"
 #include "G4String.hh"
 
-#include <sys/types.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-#include <string>
-#include <iostream>
-
 class G4FileUtilities
 {
   public:
@@ -59,10 +50,10 @@ class G4FileUtilities
     G4bool FileExists(const G4String& file);
       // checks if the "file" exists.  returns true if it does
 
-    std::string StrErrNo() const { return ::strerror(errno); }
+    G4String StrErrNo() const;
       // returns the error message of the last system call as string
 
-    G4int Shell(const G4String& str) { return ::system(str.c_str()); }
+    G4int Shell(const G4String& str);
       // executes the shell command.  returns zero if success
 
     G4int CopyFile(const G4String& srcFile, const G4String& dstFile);
@@ -71,9 +62,8 @@ class G4FileUtilities
     G4int DeleteFile(const G4String& file, const G4String& option);
       // deletes the "file" with the "option".  returns zero if success
 
-    std::string GetEnv(const G4String& env) { return ::getenv(env.c_str()); }
+    G4String GetEnv(const G4String& env);
       // retuns the value of environment variable as string
-
 };
 
 #endif

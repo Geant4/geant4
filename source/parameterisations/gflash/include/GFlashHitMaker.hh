@@ -52,22 +52,20 @@ class G4Step;
 class G4StepPoint;
 class G4VProcess;
 
-class GFlashHitMaker 
+class GFlashHitMaker
 {
   public:
-
     GFlashHitMaker();
     ~GFlashHitMaker();
-  
-    void make(GFlashEnergySpot * aSpot, const G4FastTrack * aT );
-    inline void SetNameOfWorldWithSD(const G4String& aName) {fWorldWithSdName = aName;};
-  
+
+    void make(GFlashEnergySpot* aSpot, const G4FastTrack* aT);
+    inline void SetNameOfWorldWithSD(const G4String& aName) { fWorldWithSdName = aName; };
+
     inline void SetProcess(G4VProcess* proc) { fpProcess = proc; }
 
-  private:  
-
+  private:
     G4TouchableHandle fTouchableHandle;
-    G4Navigator *fpNavigator;
+    G4Navigator* fpNavigator;
     G4bool fNaviSetup;
     /// Name of the world containing the sensitive detector. If empty, default mass world is used.
     G4String fWorldWithSdName;
@@ -77,12 +75,7 @@ class GFlashHitMaker
     G4VProcess* fpProcess = nullptr;
 
   private:
-
-    GFlashHitMaker(const GFlashHitMaker & ) {}
-    GFlashHitMaker & operator = (const GFlashHitMaker & )
-    {
-      return *this;
-    }
+    GFlashHitMaker(const GFlashHitMaker&) {}
+    GFlashHitMaker& operator=(const GFlashHitMaker&) { return *this; }
 };
 #endif
-
