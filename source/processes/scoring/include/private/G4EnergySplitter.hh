@@ -72,7 +72,6 @@ class G4EnergySplitter
   private:
     void GetStepLength(G4int stepNo, G4double& stepLength);
 
-    void GetPhantomParam(G4bool mustExist);
     G4bool IsPhantomVolume(G4VPhysicalVolume* pv);
 
     G4EnergyLossForExtrapolator* theElossExt;

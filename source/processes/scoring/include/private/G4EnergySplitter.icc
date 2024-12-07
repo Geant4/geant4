@@ -66,7 +66,10 @@ inline void G4EnergySplitter::SetNIterations(G4int niter)
 //-----------------------------------------------------------------------
 inline G4Material* G4EnergySplitter::GetVoxelMaterial(G4int stepNo)
 {
-  if (thePhantomParam == nullptr) GetPhantomParam(true);
+  if (thePhantomParam == nullptr) {
+    G4Exception("G4EnergySplitter::GetVoxelMaterial()", "PhantomParamError",
+                FatalException, "Phantom parameterisation not set -- SplitEnergyInVolumes() must be called first");
+  }
   G4int voxelID;
   GetVoxelID(stepNo, voxelID);
   return thePhantomParam->GetMaterial(voxelID);
