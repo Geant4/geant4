@@ -36,6 +36,7 @@ foreach(modfile
     hadronic/models/de_excitation/ablation/sources.cmake
     hadronic/models/de_excitation/evaporation/sources.cmake
     hadronic/models/de_excitation/fermi_breakup/sources.cmake
+    hadronic/models/de_excitation/alt_fermi_breakup/sources.cmake
     hadronic/models/de_excitation/fission/sources.cmake
     hadronic/models/de_excitation/gem_evaporation/sources.cmake
     hadronic/models/de_excitation/handler/sources.cmake
@@ -107,6 +108,7 @@ geant4_add_category(G4processes
     G4hadronic_coherent_elastic
     G4hadronic_ablation
     G4hadronic_deex_evaporation
+    G4hadronic_deex_alt_fermi_breakup
     G4hadronic_deex_fermi_breakup
     G4hadronic_deex_fission
     G4hadronic_deex_gem_evaporation
