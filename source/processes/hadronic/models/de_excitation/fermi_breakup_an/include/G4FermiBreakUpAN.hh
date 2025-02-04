@@ -70,6 +70,8 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
     // improve performance, reusing allocated memory
     mutable std::vector<G4FermiFloat> weights_;
     mutable G4FermiFragmentSplits splits_;
+
+    G4int secID;
 };
 
 #endif  // G4FERMIBREAKUP_HH

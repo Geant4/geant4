@@ -129,7 +129,9 @@ G4FermiBreakUpAN::G4FermiBreakUpAN()
 
 G4FermiBreakUpAN::G4FermiBreakUpAN(std::unique_ptr<G4FermiSplitCache>&& cache)
   : cache_(std::move(cache))
-{}
+{
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4FermiBreakUpAN");
+}
 
 std::vector<G4FermiParticle>
 G4FermiBreakUpAN::SelectSplit(const G4FermiParticle& particle,
@@ -217,5 +219,8 @@ void G4FermiBreakUpAN::BreakFragment(G4FragmentVector* results, G4Fragment* theN
     results->emplace_back(new G4Fragment(static_cast<G4int>(fragment.GetAtomicMass()),
                                          static_cast<G4int>(fragment.GetChargeNumber()),
                                          fragment.GetMomentum()));
+    const auto time = results.back();
+    results.back()->SetCreationTime(time);
+    results.back()->SetCreatorModelID(secID);
   }
 }

@@ -340,6 +340,9 @@ void G4PhysicsModelCatalog::Initialize() {
     
     // Class: G4FermiBreakUpVI
     InsertModel( 24300, "model_G4FermiBreakUpVI" );
+
+    // ClassL G4FermiBreakUpAN
+    InsertModel( 24301, "model_G4FermiBreakUpAN" );
     
     //     --- Multifragmentation : 24'350 - 24'399 ---
     
