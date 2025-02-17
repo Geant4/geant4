@@ -34,6 +34,7 @@
 
 #include <fstream>
 #include <pthread.h>
+#include <vector>
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
   TypeName(const TypeName&);               \
@@ -123,10 +124,13 @@ class G4MPImanager
     // misc
     void ShowHelp() const;
 
-    const MPI::Intracomm* GetComm() const { return &COMM_G4COMMAND_; }
+    const MPI_Comm* GetComm() const { return &COMM_G4COMMAND_; }
     const MPI_Comm* GetProcessingComm() const { return &processing_comm_; }
     const MPI_Comm* GetCollectingComm() const { return &collecting_comm_; }
     const MPI_Comm* GetAllComm() const { return &all_comm_; }
+
+    std::vector<G4String> ReturnArguments() { return _options; }
+
 
   private:
     DISALLOW_COPY_AND_ASSIGN(G4MPImanager);
@@ -153,11 +157,12 @@ class G4MPImanager
     G4bool is_slave_;
     G4bool is_extra_worker_;
     G4int rank_;
+    G4int provided_;
     G4int size_;  // processing comm size
     G4int world_size_;  // world comm size
 
     // MPI communicator (when no extra ranks)
-    MPI::Intracomm COMM_G4COMMAND_;
+    MPI_Comm COMM_G4COMMAND_;
     // MPI communicator (processing ranks - if ntuple merging)
     MPI_Comm processing_comm_;
     // MPI communicator (collecting ranks - if ntuple merging)
@@ -188,6 +193,8 @@ class G4MPImanager
     // parallel parameters
     G4double master_weight_;
     G4int nof_extra_workers_;
+
+    std::vector<G4String> _options;
 };
 
 // ====================================================================

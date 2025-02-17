@@ -10,7 +10,7 @@ project(${_projname})
 
 cmake_minimum_required(VERSION 3.16...3.27)
 find_package(MPI REQUIRED)
-find_package(Geant4 10.2.0 REQUIRED)
+find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
 
 #------------------------------------------------------------------------------

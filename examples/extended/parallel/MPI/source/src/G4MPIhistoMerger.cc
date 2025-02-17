@@ -52,8 +52,9 @@ void G4MPIhistoMerger::Merge()
     G4cout << "Starting merging of histograms" << G4endl;
   }
 
-  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
-  MPI::Intracomm comm = parentComm->Dup();
+  const MPI_Comm* parentComm = G4MPImanager::GetManager()->GetComm();
+  MPI_Comm comm;// = parentComm->Dup();
+  MPI_Comm_dup(*parentComm, &comm);
 
   G4bool verbose = (verboseLevel > 1);
   G4int tag = G4MPImanager::kTAG_HISTO;
@@ -68,5 +69,5 @@ void G4MPIhistoMerger::Merge()
   if (verboseLevel > 0) {
     G4cout << "End merging of histograms" << G4endl;
   }
-  comm.Free();
+  MPI_Comm_free(&comm);
 }

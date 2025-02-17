@@ -60,12 +60,15 @@ void G4VUserMPIrunMerger::Send(const unsigned int destination)
                                                             << " events to: " << destination);
   input_userdata.clear();
   Pack();  // User code
-  InputUserData(&nevts, MPI::INT, 1);
+  InputUserData(&nevts, MPI_INT, 1);
 
   DestroyBuffer();
   G4int newbuffsize = 0;
+  G4int size_of_type;
+
   for (const const_registered_data& el : input_userdata) {
-    newbuffsize += (el.dt.Get_size() * el.count);
+    MPI_Type_size(el.dt, &size_of_type);
+    newbuffsize += (size_of_type * el.count);
   }
   char* buffer = new char[newbuffsize];
   // Avoid complains from valgrind (i'm not really sure why this is needed, but, beside the
@@ -85,25 +88,28 @@ void G4VUserMPIrunMerger::Send(const unsigned int destination)
              outputBuffer, outputBufferSize, &outputBufferPosition, COMM_G4COMMAND_);
   }
   assert(outputBufferSize == outputBufferPosition);
-  COMM_G4COMMAND_.Send(outputBuffer, outputBufferSize, MPI::PACKED, destination,
-                       G4MPImanager::kTAG_RUN);
+  MPI_Send(outputBuffer, outputBufferSize, MPI_PACKED, destination,
+                       G4MPImanager::kTAG_RUN, COMM_G4COMMAND_);
   bytesSent += outputBufferSize;
   DMSG(2, "G4VUserMPIrunMerger::Send() : Done ");
 }
 
 void G4VUserMPIrunMerger::Receive(const unsigned int source)
 {
-  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
-  DMSG(1, "G4VUserMPIrunMerger::Receive(...) , this rank : " << parentComm->Get_rank()
-                                                             << " and receiving from : " << source);
+  const MPI_Comm* parentComm = G4MPImanager::GetManager()->GetComm();
+  int rank;
+  MPI_Comm_rank(*parentComm, &rank);
+  DMSG(1, "G4VUserMPIrunMerger::Receive(...) , this rank : " << rank << " and receiving from : " << source);
   // DestroyBuffer();
   // Receive from all but one
   // for (G4int rank = 0; rank < commSize-1; ++rank)
   //{
-  MPI::Status status;
-  COMM_G4COMMAND_.Probe(source, G4MPImanager::kTAG_RUN, status);
+  MPI_Status status;
+  MPI_Probe(source, G4MPImanager::kTAG_RUN, COMM_G4COMMAND_, &status);
   // const G4int source = status.Get_source();
-  const G4int newbuffsize = status.Get_count(MPI::PACKED);
+  int newbuffsize1;
+  MPI_Get_count(&status, MPI_PACKED, &newbuffsize1);
+  const G4int newbuffsize = newbuffsize1;
   DMSG(2, "Preparing to receive buffer of size: " << newbuffsize);
   char* buffer = outputBuffer;
   if (newbuffsize > outputBufferSize) {
@@ -117,7 +123,7 @@ void G4VUserMPIrunMerger::Receive(const unsigned int source)
     ownsBuffer = true;
   }
   SetupOutputBuffer(buffer, newbuffsize, 0);
-  COMM_G4COMMAND_.Recv(buffer, newbuffsize, MPI::PACKED, source, G4MPImanager::kTAG_RUN, status);
+  MPI_Recv(buffer, newbuffsize, MPI_PACKED, source, G4MPImanager::kTAG_RUN, COMM_G4COMMAND_, &status);
   DMSG(3, "Buffer Size: " << outputBufferSize << " bytes at: " << (void*)outputBuffer);
   output_userdata.clear();
   // User code, if implemented will return the concrete G4Run class
@@ -125,7 +131,7 @@ void G4VUserMPIrunMerger::Receive(const unsigned int source)
   if (aNewRun == nullptr) aNewRun = new G4Run;
   // Add number of events counter
   G4int nevets = 0;
-  OutputUserData(&nevets, MPI::INT, 1);
+  OutputUserData(&nevets, MPI_INT, 1);
   // now userdata contains all data references, do the real unpacking
   for (const registered_data& el : output_userdata) {
     MPI_Unpack(outputBuffer, outputBufferSize, &outputBufferPosition, el.p_data, el.count, el.dt,
@@ -147,8 +153,10 @@ void G4VUserMPIrunMerger::Merge()
   // G4cout << "G4VUserMPIrunMerger::Merge called" << G4endl;
 
   DMSG(0, "G4VUserMPIrunMerger::Merge called");
-  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
-  const unsigned int myrank = parentComm->Get_rank();
+  const MPI_Comm* parentComm = G4MPImanager::GetManager()->GetComm();
+  int rank;
+  MPI_Comm_rank(*parentComm, &rank);
+  const unsigned int myrank = rank;
   commSize = G4MPImanager::GetManager()->GetActiveSize();
   // do not include extra worker in this communication
 
@@ -156,16 +164,16 @@ void G4VUserMPIrunMerger::Merge()
     DMSG(1, "Comm world size is 1, nothing to do");
     return;
   }
-  COMM_G4COMMAND_ = parentComm->Dup();
+  MPI_Comm_dup(*parentComm, &COMM_G4COMMAND_);
   bytesSent = 0;
-  const G4double sttime = MPI::Wtime();
+  const G4double sttime = MPI_Wtime();
 
   // Use G4MPIutils to optimize communications between ranks
   typedef std::function<void(unsigned int)> handler_t;
   using std::placeholders::_1;
   handler_t sender = std::bind(&G4VUserMPIrunMerger::Send, this, _1);
   handler_t receiver = std::bind(&G4VUserMPIrunMerger::Receive, this, _1);
-  std::function<void(void)> barrier = std::bind(&MPI::Intracomm::Barrier, &COMM_G4COMMAND_);
+  std::function<void(void)> barrier = std::bind(MPI_Barrier, COMM_G4COMMAND_);
   // G4cout << "go to  G4mpi::Merge" << G4endl;
   G4mpi::Merge(sender, receiver, barrier, commSize, myrank);
 
@@ -183,9 +191,9 @@ void G4VUserMPIrunMerger::Merge()
         }
     }
   */
-  const G4double elapsed = MPI::Wtime() - sttime;
+  const G4double elapsed = MPI_Wtime() - sttime;
   long total = 0;
-  COMM_G4COMMAND_.Reduce(&bytesSent, &total, 1, MPI::LONG, MPI::SUM, destinationRank);
+  MPI_Reduce(&bytesSent, &total, 1, MPI_LONG, MPI_SUM, destinationRank, COMM_G4COMMAND_);
   if (verbose > 0 && myrank == destinationRank) {
     // Collect from ranks how much data was sent around
     G4cout << "G4VUserMPIrunMerger::Merge() - data transfer performances: "
@@ -194,6 +202,6 @@ void G4VUserMPIrunMerger::Merge()
            << G4endl;
   }
 
-  COMM_G4COMMAND_.Free();
+  MPI_Comm_free(&COMM_G4COMMAND_);
   DMSG(0, "G4VUserMPIrunMerger::Merge done");
 }
