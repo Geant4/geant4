@@ -103,7 +103,7 @@ class G4MPIscorerMerger
     G4ScoringManager* scoringManager;
     unsigned int commSize;
     unsigned int destinationRank;
-    MPI_Comm comm;  // Changed from MPI::Intracomm to MPI_Comm
+    MPI_Comm comm;
     G4int verbose;
     void G4mpi_barrier(MPI_Comm* comm) {MPI_Barrier(*comm);};
 };

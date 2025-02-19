@@ -53,7 +53,7 @@ void G4MPIhistoMerger::Merge()
   }
 
   const MPI_Comm* parentComm = G4MPImanager::GetManager()->GetComm();
-  MPI_Comm comm;// = parentComm->Dup();
+  MPI_Comm comm;
   MPI_Comm_dup(*parentComm, &comm);
 
   G4bool verbose = (verboseLevel > 1);

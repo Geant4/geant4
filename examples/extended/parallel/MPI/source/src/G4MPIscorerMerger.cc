@@ -175,7 +175,6 @@ void G4MPIscorerMerger::Merge()
   using std::placeholders::_1;
   handler_t sender = std::bind(&G4MPIscorerMerger::Send, this, _1);
   handler_t receiver = std::bind(&G4MPIscorerMerger::Receive, this, _1);
-  //std::function<void(void)> barrier = std::bind(MPI_Barrier, comm);
   std::function<void(void)> barrier = std::bind(MPI_Barrier, comm);
   G4mpi::Merge(sender, receiver, barrier, commSize, myrank);
 

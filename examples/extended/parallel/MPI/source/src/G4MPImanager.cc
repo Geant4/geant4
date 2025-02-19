@@ -181,14 +181,14 @@ void G4MPImanager::Initialize()
   g4mpi_ = this;
 
   // get rank information
-  MPI_Comm_size(MPI_COMM_WORLD, &world_size_);//world_size_ = MPI::COMM_WORLD.Get_size();
+  MPI_Comm_size(MPI_COMM_WORLD, &world_size_);
   if (world_size_ - nof_extra_workers_ <= 0) {
     G4Exception("G4MPImanager::SetExtraWorker()", "MPI001", JustWarning,
                 "Cannot reserve extra ranks: the MPI size is not sufficient.");
     nof_extra_workers_ = 0;
   }
   size_ = world_size_ - nof_extra_workers_;
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank_); //rank_ = MPI::COMM_WORLD.Get_rank();
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
   is_master_ = (rank_ == kRANK_MASTER);
   is_slave_ = (rank_ != kRANK_MASTER);
   is_extra_worker_ = false;
