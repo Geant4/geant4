@@ -277,6 +277,9 @@ void G4MPImanager::ParseArguments(int argc, char** argv)
   {
     G4String arg = argv[i];
 
+    G4String sub = arg.substr(0,5);
+    G4String endsub = arg.substr(arg.length()-4);
+    
     if (arg == "help")
     {
       qhelp = 1;
@@ -295,14 +298,10 @@ void G4MPImanager::ParseArguments(int argc, char** argv)
       qfcout_ = true;
       if (optarg) ofprefix = optarg;
     }
-    else if (arg[0] == 'm')
+    else if (sub=="macro" or endsub==".mac")
     {
-      G4String sub = arg.substr(0,5);
-      if (sub=="macro")
-      {
-        optind = i;
-        qbatchmode_ = true;
-      }
+      optind = i;
+      qbatchmode_ = true;
     }
     //default:
       //G4cerr << "*** invalid options specified." << G4endl;
