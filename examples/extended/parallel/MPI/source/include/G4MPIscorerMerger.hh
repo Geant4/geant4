@@ -105,7 +105,6 @@ class G4MPIscorerMerger
     unsigned int destinationRank;
     MPI_Comm comm;  // Changed from MPI::Intracomm to MPI_Comm
     G4int verbose;
-    void G4mpi_barrier(MPI_Comm* comm) {MPI_Barrier(*comm);};
 };
 
 #endif  // G4MPISCORERMERGER_HH
