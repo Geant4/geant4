@@ -84,7 +84,7 @@ G4MPImanager::G4MPImanager(int nof_extra_workers)
     master_weight_(1.),
     nof_extra_workers_(nof_extra_workers)
 {
-  // MPI::Init();
+  int provided_;
   MPI_Init_thread(nullptr, nullptr, MPI_THREAD_SERIALIZED, &provided_);
   if (provided_ < MPI_THREAD_SERIALIZED) {
     std::cerr << "Warning: MPI does not provide the requested threading support!" << std::endl;
@@ -106,7 +106,7 @@ G4MPImanager::G4MPImanager(int argc, char** argv, int nof_extra_workers)
     master_weight_(1.),
     nof_extra_workers_(nof_extra_workers)
 {
-  int provided;
+  int provided_;
   MPI_Init_thread(nullptr, nullptr, MPI_THREAD_SERIALIZED, &provided_);
   if (provided_ < MPI_THREAD_SERIALIZED) {
     std::cerr << "Warning: MPI does not provide the requested threading support!" << std::endl;
