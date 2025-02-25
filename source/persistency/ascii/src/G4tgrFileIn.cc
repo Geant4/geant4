@@ -39,6 +39,7 @@
 #include "G4tgrUtils.hh"
 #include "G4tgrParameterMgr.hh"
 #include "G4UIcommand.hh"
+#include "G4Filesystem.hh"
 
 G4ThreadLocal std::vector<G4tgrFileIn*>* G4tgrFileIn::theInstances = nullptr;
 
@@ -393,7 +394,20 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
     }
     else
     {
-      OpenNewFile(wordlist[1].c_str());
+      G4fs::path filepath = wordlist[1].c_str();
+      if(filepath.is_relative())
+      {
+        if(theCurrentFile == -1)
+        {
+          filepath = G4fs::canonical(filepath);
+        }
+        else
+        {
+          G4fs::path currpath = G4String(theNames[theCurrentFile]);
+          filepath = currpath.parent_path() / filepath;
+        }
+      }
+      OpenNewFile(filepath.c_str());
       isok = GetWordsInLine(wordlist);
     }
   }

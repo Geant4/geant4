@@ -64,6 +64,7 @@ class G4tgrFileIn
     G4bool IgnoreLine() const;
 
     const G4String& GetName() { return theName; }
+    const G4String& GetCurrentName() { return theNames[theCurrentFile]; }
 
     void OpenNewFile(const char* filename);
     G4bool EndOfFile();
