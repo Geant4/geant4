@@ -139,6 +139,7 @@ G4bool G4tgrFileReader::ReadFiles()
         }
         wl = wlnew;
       }
+      theLineProcessor->SetCurrentFile(fin.GetCurrentName());
     }
 
     if(wl.size() != 0)
