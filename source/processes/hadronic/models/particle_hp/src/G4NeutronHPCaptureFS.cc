@@ -282,7 +282,7 @@ G4NeutronHPCaptureFS::ApplyYourself(const G4HadProjectile& theTrack)
 }
 
 void G4NeutronHPCaptureFS::Init(G4double AA, G4double ZZ, G4int M,
-                                G4String& dirName, G4String&,
+                                const G4String& dirName, const G4String&,
                                 G4ParticleDefinition*)
 {
   G4int Z = G4lrint(ZZ);
@@ -321,12 +321,12 @@ void G4NeutronHPCaptureFS::Init(G4double AA, G4double ZZ, G4int M,
   }
   // TK110430 END
 
-  G4String tString = "/FS";
+  const G4String& tString = "/FS";
   G4bool dbool;
-  G4ParticleHPDataUsed aFile =
+  const G4ParticleHPDataUsed& aFile =
     theNames.GetName(A, Z, M, dirName, tString, dbool);
 
-  G4String filename = aFile.GetName();
+  const G4String& filename = aFile.GetName();
   SetAZMs(A, Z, M, aFile);
   if (!dbool || (Z <= 2 && (theBaseZ != Z || theBaseA != A))) {
     hasAnyData = false;

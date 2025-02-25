@@ -246,7 +246,7 @@ G4DNADoubleIonisationModel::G4DNADoubleIonisationModel(
 //------------------------------------------------------------------------------
 G4DNADoubleIonisationModel::~G4DNADoubleIonisationModel()
 {
-  for (auto x : xs_tab_) {
+  for (const auto& x : xs_tab_) {
     G4DNACrossSectionDataSet* table = x.second;
     if (table) { delete table; }
   }
@@ -275,7 +275,7 @@ void G4DNADoubleIonisationModel::Initialise(
 
     // *************************************************************************
     // for protons
-    auto proton = proton_def_->GetParticleName();
+    const auto& proton = proton_def_->GetParticleName();
     elow_tab_[proton] = model_elow_tab_[1];
     eupp_tab_[proton] = 3.0 * MeV;
 
@@ -300,7 +300,7 @@ void G4DNADoubleIonisationModel::Initialise(
 
     //**************************************************************************
     // for alpha particles
-    auto alpha = alpha_def_->GetParticleName();
+    const auto& alpha = alpha_def_->GetParticleName();
     elow_tab_[alpha] = model_elow_tab_[4];
     eupp_tab_[alpha] = 23.0 * MeV;
 
@@ -325,7 +325,7 @@ void G4DNADoubleIonisationModel::Initialise(
 
     // *************************************************************************
     // for carbon ions
-    auto carbon = carbon_def_->GetParticleName();
+    const auto& carbon = carbon_def_->GetParticleName();
     elow_tab_[carbon] = model_elow_tab_[5] * carbon_def_->GetAtomicMass();
     eupp_tab_[carbon] = 120.0 * MeV;
 
@@ -722,14 +722,13 @@ G4int G4DNADoubleIonisationModel::RandomSelect(
     while (shell > 0) {
       shell--;
       if (valuesBuffer[shell] > value) {
-        if (valuesBuffer) { delete [] valuesBuffer; }
+        delete [] valuesBuffer;
         return (G4int)shell;
       }
       value -= valuesBuffer[shell];
     }
 
-    if (valuesBuffer) { delete [] valuesBuffer; }
-
+    delete [] valuesBuffer;
   }
 
   return 0;

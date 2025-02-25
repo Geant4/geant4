@@ -39,7 +39,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSTermination::G4PSTermination(G4String name, G4int depth)
+G4PSTermination::G4PSTermination(const G4String& name, G4int depth)
   : G4VPrimitiveScorer(name, depth)
 {
   SetUnit("");

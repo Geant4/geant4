@@ -296,7 +296,7 @@ void G4GSMottCorrection::LoadMCDataElement(const G4Element *elem) {
 }
 
 // uncompress one data file into the input string stream
-void G4GSMottCorrection::ReadCompressedFile(std::string fname, std::istringstream &iss) {
+void G4GSMottCorrection::ReadCompressedFile(const std::string& fname, std::istringstream &iss) {
   std::string *dataString = nullptr;
   std::string compfilename(fname+".z");
   // create input stream with binary mode operation and positioning at the end of the file
@@ -381,8 +381,11 @@ void G4GSMottCorrection::InitMCDataMaterial(const G4Material *mat) {
   }
   G4double density = mat->GetDensity()*CLHEP::cm3/CLHEP::g; // [g/cm3]
   //
-  moliereBc  = const1*density*zs/sa*G4Exp(ze/zs)/G4Exp(zx/zs);  //[1/cm]
-  moliereXc2 = const2*density*zs/sa;  // [MeV2/cm]
+  G4double z0 = (0.0 == sa) ? 0.0 : zs/sa;
+  G4double z1 = (0.0 == zs) ? 0.0 : (ze - zx)/zs;
+
+  moliereBc  = const1*density*z0*G4Exp(z1);  //[1/cm]
+  moliereXc2 = const2*density*z0;  // [MeV2/cm]
   // change to Geant4 internal units of 1/length and energ2/length
   moliereBc  *= 1.0/CLHEP::cm;
   moliereXc2 *= CLHEP::MeV*CLHEP::MeV/CLHEP::cm;

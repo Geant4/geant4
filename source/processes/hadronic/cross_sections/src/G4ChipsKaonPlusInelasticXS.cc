@@ -212,8 +212,6 @@ G4double G4ChipsKaonPlusInelasticXS::GetChipsCrossSection(G4double pMom, G4int t
 G4double G4ChipsKaonPlusInelasticXS::CalculateCrossSection(G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  G4double sigma=0.;
-  if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   G4double A=targN+targZ;              // A of the target
 
   if(F<=0)                             // This isotope was not the last used isotop
@@ -257,6 +255,7 @@ G4double G4ChipsKaonPlusInelasticXS::CalculateCrossSection(G4int F, G4int I,
   } // End of parameters udate
   // =--------------------------= NOW the Magic Formula =---------------------------------=
 
+  G4double sigma;
   if (Momentum<lastTH) return 0.;      // It must be already checked in the interface class
   else if (Momentum<Pmin)              // Low Energy region
   {

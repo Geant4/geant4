@@ -6,6 +6,86 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-08 Laurent Desorgher (run-V11-02-26)
+- Change of G4AdjointSimManager G4AdjointSimMessenger to allow AdjointSimulation 
+in MT mode.
+
+## 2024-11-04 Philippe Canal (run-V11-02-25)
+- Static initialization for masterWorlds in G4MTRunManager.
+  Adapted G4SubEvtRunManager and G4TaskRunManager accordingly.
+
+## 2024-11-05 Makoto Asai (run-V11-02-24)
+- Changing verbose levels to reduce printouts during event loop.
+
+## 2024-10-25 Makoto Asai (run-V11-02-23)
+- Setting UI alias that represents the run mode (sequential, eventParallel,
+  subEventParallel). This alias can be used in macro file.
+
+## 2024-10-21 Makoto Asai (run-V11-02-22)
+- G4RunManagerFactory: Adding sub-event parallel mode as an option.
+- G4RunMessenger: Adding a command for trajectory merging in sub-event parallel
+  mode.
+
+## 2024-10-14 Makoto Asai (run-V11-02-21)
+- G4SubEvtRunManager, G4WorkerRunManager, G4WorkerSubEvtRunManager
+  - Adding an option to merge trajectories created by worker threads in
+    sub-event parallel mode.
+  - co-working with tracking-V11-02-04
+
+## 2024-10-10 Jonas Hahnfeld (run-V11-02-20)
+- Fix leak of process and tracking managers in worker threads
+
+## 2024-10-08 Jonas Hahnfeld (run-V11-02-19)
+- G4WorkerTaskRunManager: Process only NumberOfEventsPerTask
+
+## 2024-09-30 Makoto Asai (run-V11-02-18)
+- G4RunManagerKernel, G4RunManager, G4SubEvtRunManager
+  - Cleanly deleting G4Event objects at the end of each run as long as these
+    events are not requested to be kept for redrawing during the following
+    Idle state.
+  - The kept events are deleted at the beginning of next run or at the
+    termination of the program
+ - G4Run 
+  - Add GetNumberOfKeptEvents() method
+ - G4SubEvtRunManager
+  - Properly start the timer.
+ - Co-working with event-V11-02-08 and visman-V11-02-24
+
+## 2024-09-09 Makoto Asai (run-V11-02-17)
+- G4WorkerSubEvtRunManager:
+  - Fix double-counting of the scores of command-based scorers.
+  - Print number of sub-events rather than number of events at the end of run.
+
+## 2024-09-04 Makoto Asai (run-V11-02-16)
+- G4RunManagerKernel: Remove invoking ResetNavigator() during the initialization.
+  ResetNavigator() is now invoked only at the beginning of BeamOn().
+
+## 2024-08-07 Gabriele Cosmo, Ben Morgan (run-V11-02-15)
+- Access G4GeometryManager singleton through its GetInstance() call
+  in G4RunManagerKernel and G4WorkerRunManager.
+
+## 2024-07-22 Makoto Asai (run-V11-02-14)
+- Fix number of random numbers generated as the seeds of workers for sub-event
+  parallel mode.
+
+## 2024-07-19 Ben Morgan (run-V11-02-13)
+- Fixed Coverity defects missed in -12 in Task/SubEvt RunManagers.
+
+## 2024-07-16 Gabriele Cosmo, Ben Morgan (run-V11-02-12)
+- Fixed reported Coverity defects: in G4MSSteppingAction for restoring original
+  stream format state; in G4RunManager and others, for use of std::move() and
+  restructured conditionals.
+
+## 2024-07-13 Laurie Nevay (run-V11-02-11)
+- Add XrayReflection (fGammaReflection) to G4PhysicsListHelper.
+
+## 2024-07-06 Makoto Asai (run-V11-02-10)
+- Clean up G4SubEvtRunManager when to delete events of previous run.
+
+## 2024-06-14 Ben Morgan (run-V11-02-09)
+- Update G4TaskRunManager for changes to underlying PTL API.
+  - No changes to behaviour expected.
+
 ## 2024-06-14 I. Hrivnacova (run-V11-02-08)
 - G4RunManager::ReinitializeGeometry: added call to G4FieldBuilder::Reinitialize
 

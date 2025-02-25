@@ -1,53 +1,27 @@
-# G.A.P.Cirrone,
-# pablo.cirrone@lns.infn.it
+# Macro file for the initialization of example B1
+# in interactive session
 #
-# Default macro file. It is called if no argument is provided at run
-# and when the PHYSLIST enviroment variable is OFF
-# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!>
-
-#########################
-# Set of the verboses
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
 #
-/control/verbose 0
-/tracking/verbose 0
-/run/verbose 0
-/event/verbose 0
+# Change the default number of threads (in multi-threaded mode)
+/run/numberOfThreads 4
 
 ##########################
 # Set of the physic models
 #
+#/Physics/addPhysics HADRONTHERAPY_1
+/Physics/addPhysics QGSP_BIC_HP
 
+#/run/numberOfThreads 1
 
-/Physics/addPhysics HADRONTHERAPY_1
-/run/numberOfThreads 1
-
-##########################
-# Initialisation procedure
-#
+# Initialize kernel
 /run/initialize
 
 # Set a very high time threshold to allow all decays to happen
-/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
-
-##########################
-# Visualisation
-#
-/vis/open OGLI 600x600-0+0
-#/vis/open  ## open the default viewer
-
-# Disable auto refresh and quieten vis messages whilst scene and
-# trajectories are established:
-/vis/viewer/set/autoRefresh false
-/vis/verbose errors
-
-/vis/drawVolume
-/vis/viewer/set/viewpointThetaPhi 30 140 deg
-/vis/viewer/zoom 1
-/vis/viewer/pan -10  0 cm
-/vis/scene/add/trajectories smooth
-/vis/scene/endOfEventAction accumulate
-/vis/viewer/set/autoRefresh true
-/vis/verbose warnings
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 ####################################################
 # Set here the CUT and the STEP MAX for the tracking.
@@ -89,7 +63,6 @@
 
 # the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
 #
-
 /gps/ang/rot1 0 0 1
 /gps/ang/rot2 0 1 0
 /gps/ang/type beam1d
@@ -98,8 +71,8 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 60.0 MeV
-#/gps/ene/sigma 0.25 MeV
+/gps/ene/mono 62.3 MeV
+/gps/ene/sigma 0.25 MeV
 #/gps/ene/mono 744 MeV
 #/gps/ene/sigma 0.740 MeV
 
@@ -128,21 +101,41 @@
 /changePhantom/update
 
 #########################
-# Display the event number
-# during the run
-#
-/event/printEventNumber 100
-
-#########################
 # Start of the run
 #
 # If secondary particles dose & fluence are needed
 /analysis/secondary true
 /analysis/computeLet
 
+
+### RBE
+/rbe/verbose 2
+/rbe/loadLemTable data/rbe/lem1.csv
+/rbe/calculation 1
+/rbe/accumulate 1
+
+## U87
+#/rbe/dcut 8.0 gray
+#/rbe/alphaX 0.11 gray(-1)
+#/rbe/betaX 0.06 gray(-2)
+#/rbe/lemTable data/rbe/U87_LEM.dat
+/rbe/cellLine U87
+
+## AG01522
+#/rbe/dcut 9.5 gray
+#/rbe/alphaX 0.54 gray(-1)
+#/rbe/betaX 0.062 gray(-2)
+#/rbe/lemTable data/rbe/AG01522_LEM.dat
+
+/rbe/doseScale 7777770
+# Dose scale should be: 2e7 / nEvents * voxelSizeInCm2
+
+
 # Default material is water liquid
 /changePhantom/material G4_WATER
 
 /run/printProgress 1000
-/run/beamOn 1000
-/tracking/verbose 0
+/run/beamOn 500
+
+# Visualization setting
+/control/execute vis.mac

@@ -39,19 +39,21 @@
 #define G4DigiManager_hh 1
 
 #include "globals.hh"
-class G4Event;
 #include "G4VDigitizerModule.hh"
+#include "G4DCtable.hh"
+
+#include <vector>
+
+class G4Event;
 class G4VHitsCollection;
 class G4VDigiCollection;
 class G4DMmessenger;
-#include "G4DCtable.hh"
 class G4RunManager;
 class G4SDManager;
-#include <vector>
 
 class G4DigiManager 
 {
-  public: // with description
+  public:
 
       static G4DigiManager* GetDMpointer();
       // Returns the pointer to the singleton object
@@ -63,18 +65,16 @@ class G4DigiManager
       G4DigiManager(const G4DigiManager&) = delete;
       G4DigiManager& operator=(const G4DigiManager&) = delete;
 
-  public: // with description
-
       void AddNewModule(G4VDigitizerModule* DM); 
       //  Registers the user's digitizer mudule. This method must be invoked when
       // the user construct his/her digitizer module(s).
-      void Digitize(G4String mName);
+      void Digitize(const G4String& mName);
       //  Invokes Digitize() method of specified digitizer module. This is a kind
       // of service method. The user can invoke Digitize() method of a particular
       // module without knowing the pointer of the module object. The argument
       // "mName" is the name of the module, which is defined at the constructor
       // of the concrete digitizer module.
-      G4VDigitizerModule* FindDigitizerModule(G4String mName);
+      G4VDigitizerModule* FindDigitizerModule(const G4String& mName);
       //  Returns the pointer to the digitizer module object with the given name.
       // Null will be returned if the name is not defined.
       const G4VHitsCollection* GetHitsCollection(G4int HCID, G4int eventID = 0);
@@ -87,8 +87,8 @@ class G4DigiManager
       // handled. To do this, necessary number of events must be set to G4RunManager
       // by G4RunManager::SetNumberOfEventsToBeStored() method previously to the
       // event loop.
-      G4int GetHitsCollectionID(G4String HCname);
-      G4int GetDigiCollectionID(G4String DCname);
+      G4int GetHitsCollectionID(const G4String& HCname);
+      G4int GetDigiCollectionID(const G4String& DCname);
       //  Returns the ID number of hits and digi collections, respectively. "HCname"
       // and "DCname" can be the collection name if it is unique, or can be detector
       // or module name and the collection name connected by "/".

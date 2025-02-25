@@ -6,6 +6,57 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-15 Vladimir Ivanchenko (hadr-cross-V11-02-18)
+- G4ChargeExchangeXS - handle special case of positive meson scattering off
+    Hydrogen, the cross section is propotional to the percent of deuterons
+
+## 2024-11-07 Vladimir Ivanchenko (hadr-cross-V11-02-17)
+- G4ChargeExchangeXS - switch computations from level of isotopes to level of
+    elements, code become several times faster, accuracy is not lost; added
+    protections against negative components of cross section and potential
+    division by zero, which may be only at extreme high energy.
+
+## 2024-11-03 Vladimir Ivanchenko (hadr-cross-V11-02-16)
+- G4ChargeExchangeXS - fixed problem in pion x-sections according
+    to prescription of original paper.
+
+## 2024-10-21 Vladimir Ivanchenko (hadr-cross-V11-02-15)
+- G4HadronXSDataTable - used const pointers, fixed data structure, and
+    provide propery deletion of objects at exit
+
+## 2024-09-22 Vladimir Ivanchenko (hadr-cross-V11-02-14)
+- G4ChargeExchangeXS - improve comments to the code, minor clean-up of the code
+
+## 2024-09-09 Vladimir Ivanchenko (hadr-cross-V11-02-13)
+- G4InterfaceToXS - new class renamed from G4XSectionXS
+- G4ParticleInelasticXS, G4NeutronInelasticXS - clean-up and fix Coverity warnings
+
+## 2024-08-20 Vladimir Ivanchenko (hadr-cross-V11-02-12)
+- G4ParticleInelasticXS - perform initialisation of data only for given ion,
+    not for all 5 ions
+
+## 2024-08-15 Vladimir Ivanchenko (hadr-cross-V11-02-11)
+- G4ParticleInelasticXS, G4NeutronElasticXS - access to G4PARTICLEXSDATA
+    in class constructor, optimized usage of mutex lock, do not use isInitializer
+    flag anymore.
+
+## 2024-07-23 Vladimir Ivanchenko (hadr-cross-V11-02-10)
+- G4GammaNuclearXS - fixed problem 2609 by usage of CHIPS parameterisation for
+  Zr and W at all energies, for Cr and Y above 25 MeV, for Sn and Gd above 16 MeV.
+  The default transition energy 130 - 150 MeV remains for other targets.
+
+## 2024-07-18 Vladimir Ivanchenko (hadr-cross-V11-02-09)
+- G4EMDissociationCrossSection - fixed Coverity warning
+
+## 2024-07-16 Vladimir Ivanchenko (hadr-cross-V11-02-08)
+- G4GammaNuclearXS, G4PhotoNuclearCrossSection, G4ParticleInelasticXS,
+  G4NeutronInelasticXS - make possibility of reuse of static data when several
+    instances of cross section classes are used
+
+## 2024-07-03 Vladimir Ivanchenko (hadr-cross-V11-02-07)
+- Fixed Coverity warnings in CHIPS inelastic x-sections and inside
+  G4EMDissociationCrossSection 
+
 ## 2024-06-18 Vladimir Ivanchenko (hadr-cross-V11-02-06)
 - G4BGGNucleonInelasticXS - fixed proton x-section below 14 MeV
 

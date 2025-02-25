@@ -43,9 +43,12 @@
 #include "globals.hh"  // Include from 'global'
 
 #include "trkgdefs.hh"
+class G4ClonedTrajectoryPoint;
 
 class G4TrajectoryPoint : public G4VTrajectoryPoint
 {
+  friend class G4ClonedTrajectoryPoint;
+
  public:
   // Constructors/Destructor
 

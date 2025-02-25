@@ -3,7 +3,7 @@
 #/process/dna/e-SolvationSubType Ritchie1994
 #/process/dna/e-SolvationSubType Terrisol1990
 
-/chem/reactionTable/name Rtable_O2.txt  # name of the reaction file
+/chem/reactionTable/name Rtable_NO2_NO3.txt  # name of the reaction file
 /run/initialize
 /chem/reaction/print
 

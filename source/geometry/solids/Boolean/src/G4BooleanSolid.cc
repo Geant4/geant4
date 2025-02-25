@@ -239,7 +239,10 @@ void G4BooleanSolid::SetCubVolStatistics(G4int st)
         ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
         continue;
       }
-      ((G4BooleanSolid*)ptr)->SetCubVolStatistics(st);
+      if (type != "G4MultiUnion") // G4MultiUnion doesn't have SetCubVolStatistics()
+      {
+	((G4BooleanSolid*)ptr)->SetCubVolStatistics(st);
+      }
       break;
     }
   }
@@ -266,7 +269,10 @@ void G4BooleanSolid::SetCubVolStatistics(G4int st)
         ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
         continue;
       }
-      ((G4BooleanSolid*)ptr)->SetCubVolStatistics(st);
+      if (type != "G4MultiUnion") // G4MultiUnion doesn't have SetCubVolStatistics()
+      {
+	((G4BooleanSolid*)ptr)->SetCubVolStatistics(st);
+      }
       break;
     }
   }
@@ -303,7 +309,10 @@ void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
         ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
         continue;
       }
-      ((G4BooleanSolid*)ptr)->SetCubVolEpsilon(ep);
+      if (type != "G4MultiUnion") // G4MultiUnion doesn't have SetCubVolEpsilon()
+      {
+	((G4BooleanSolid*)ptr)->SetCubVolEpsilon(ep);
+      }
       break;
     }
   }
@@ -330,7 +339,10 @@ void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
         ptr = ((G4ScaledSolid*)ptr)->GetUnscaledSolid();
         continue;
       }
-      ((G4BooleanSolid*)ptr)->SetCubVolEpsilon(ep);
+      if (type != "G4MultiUnion") // G4MultiUnion doesn't have SetCubVolEpsilon()
+      {
+	((G4BooleanSolid*)ptr)->SetCubVolEpsilon(ep);
+      }
       break;
     }
   }

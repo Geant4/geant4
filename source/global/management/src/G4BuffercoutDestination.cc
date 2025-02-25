@@ -42,7 +42,7 @@ class G4BuffercoutDestination::BufferImpl
 
  public:
   explicit BufferImpl(std::size_t maxSize) : m_maxSize(maxSize) {}
-  explicit BufferImpl(std::size_t maxSize, FlushFn_t&& f) : m_maxSize(maxSize), m_flushFn(f) {}
+  explicit BufferImpl(std::size_t maxSize, FlushFn_t&& f) : m_maxSize(maxSize), m_flushFn(std::move(f)) {}
 
   ~BufferImpl() = default;
 

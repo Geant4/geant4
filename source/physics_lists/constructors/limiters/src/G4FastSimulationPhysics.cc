@@ -96,7 +96,7 @@ void G4FastSimulationPhysics::ConstructProcess()
       if ( itr != fParticlesUnderFastSimulation.end() )
 	{
 	  std::size_t ipos = itr - fParticlesUnderFastSimulation.begin();
-	  G4String geometry = fGeometries[ipos];
+	  const G4String& geometry = fGeometries[ipos];
 	  if ( geometry == "" ) G4FastSimulationHelper::ActivateFastSimulation(pmanager);
 	  else                  G4FastSimulationHelper::ActivateFastSimulation(pmanager, geometry);
 	}

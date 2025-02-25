@@ -39,72 +39,68 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-
 GFlashParticleBounds::GFlashParticleBounds()
-{    
+{
   // e+e- defaults
-  EMinEneToParametrise = 0.10*GeV;  
-  EMaxEneToParametrise = 10000.00*GeV;  
-  EEneToKill = 0.1*GeV; // Energie at which electrons are killed
+  EMinEneToParametrise = 0.10 * GeV;
+  EMaxEneToParametrise = 10000.00 * GeV;
+  EEneToKill = 0.1 * GeV;  // Energie at which electrons are killed
 }
 
 GFlashParticleBounds::~GFlashParticleBounds()
 {
 }
 
-void GFlashParticleBounds::
-SetMinEneToParametrise(G4ParticleDefinition &particleType, G4double enemin)
-{ 
-  if( &particleType == G4Electron::ElectronDefinition()||
-    &particleType == G4Positron::PositronDefinition()) 
-  EMinEneToParametrise = enemin;
-}
-
-void GFlashParticleBounds::
-SetMaxEneToParametrise(G4ParticleDefinition &particleType, G4double enemax)
+void GFlashParticleBounds::SetMinEneToParametrise(G4ParticleDefinition& particleType,
+                                                  G4double enemin)
 {
-  if( &particleType == G4Electron::ElectronDefinition()||
-    &particleType == G4Positron::PositronDefinition()) 
-  EMaxEneToParametrise = enemax; 
+  if (&particleType == G4Electron::ElectronDefinition()
+      || &particleType == G4Positron::PositronDefinition())
+    EMinEneToParametrise = enemin;
 }
 
-void GFlashParticleBounds::
-SetEneToKill(G4ParticleDefinition &particleType, G4double enekill)
+void GFlashParticleBounds::SetMaxEneToParametrise(G4ParticleDefinition& particleType,
+                                                  G4double enemax)
 {
-  if( &particleType == G4Electron::ElectronDefinition()||
-    &particleType == G4Positron::PositronDefinition()) 
-  EEneToKill = enekill; 
+  if (&particleType == G4Electron::ElectronDefinition()
+      || &particleType == G4Positron::PositronDefinition())
+    EMaxEneToParametrise = enemax;
 }
 
-G4double GFlashParticleBounds::
-GetMinEneToParametrise(G4ParticleDefinition &particleType) 
-{ 
+void GFlashParticleBounds::SetEneToKill(G4ParticleDefinition& particleType, G4double enekill)
+{
+  if (&particleType == G4Electron::ElectronDefinition()
+      || &particleType == G4Positron::PositronDefinition())
+    EEneToKill = enekill;
+}
+
+G4double GFlashParticleBounds::GetMinEneToParametrise(G4ParticleDefinition& particleType)
+{
   G4double result = DBL_MAX;
-  if( &particleType == G4Electron::ElectronDefinition()||
-    &particleType == G4Positron::PositronDefinition()) 
+  if (&particleType == G4Electron::ElectronDefinition()
+      || &particleType == G4Positron::PositronDefinition())
   {
     result = EMinEneToParametrise;
-  }        
-  return result;
-}
-
-G4double GFlashParticleBounds::
-GetMaxEneToParametrise(G4ParticleDefinition &particleType) 
-{ 
-  G4double result = 0;
-  if( &particleType == G4Electron::ElectronDefinition()||
-    &particleType == G4Positron::PositronDefinition()) 
-  {
-    result = EMaxEneToParametrise; 
   }
   return result;
 }
 
-G4double GFlashParticleBounds::
-GetEneToKill(G4ParticleDefinition & particleType) 
+G4double GFlashParticleBounds::GetMaxEneToParametrise(G4ParticleDefinition& particleType)
 {
-  if (&particleType == G4Electron::ElectronDefinition() ||
-    &particleType == G4Positron::PositronDefinition())  
-  return EEneToKill;
-  else return (-DBL_MAX);
+  G4double result = 0;
+  if (&particleType == G4Electron::ElectronDefinition()
+      || &particleType == G4Positron::PositronDefinition())
+  {
+    result = EMaxEneToParametrise;
+  }
+  return result;
+}
+
+G4double GFlashParticleBounds::GetEneToKill(G4ParticleDefinition& particleType)
+{
+  if (&particleType == G4Electron::ElectronDefinition()
+      || &particleType == G4Positron::PositronDefinition())
+    return EEneToKill;
+  else
+    return (-DBL_MAX);
 }

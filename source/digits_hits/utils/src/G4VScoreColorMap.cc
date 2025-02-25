@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4VScoreColorMap
+// --------------------------------------------------------------------
 
 #include "G4VScoreColorMap.hh"
-#include <string>
-#include <sstream>
-#include <iomanip>
-
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Text.hh"
@@ -39,7 +35,11 @@
 #include "G4Colour.hh"
 #include "G4Polyhedron.hh"
 
-G4VScoreColorMap::G4VScoreColorMap(G4String mName)
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+G4VScoreColorMap::G4VScoreColorMap(const G4String& mName)
   : fName(mName)
 {}
 
@@ -91,13 +91,13 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint)
 
   fVisManager->BeginDraw2D();
 
-  for(int n = 0; n < _nPoint; n++)
+  for(G4int n = 0; n < _nPoint; n++)
   {
     G4double a = n / (_nPoint - 1.), b = 1. - a;
     G4double v = (a * max + b * min) / (a + b);
     // background color
 
-    for(int l = 0; l < 21; l++)
+    for(G4int l = 0; l < 21; l++)
     {
       G4Polyline line;
       line.push_back(G4Point3D(-0.9, -0.905 + 0.05 * n + 0.002 * l, 0.));
@@ -128,7 +128,7 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint)
   G4double lpsname = 2. + fPSName.size() * 0.95;
   if(lpsname > 0)
   {
-    for(int l = 0; l < 22; l++)
+    for(G4int l = 0; l < 22; l++)
     {
       G4Polyline line;
       line.push_back(G4Point3D(-0.92, -0.965 + 0.002 * l, 0.));
@@ -154,7 +154,7 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint)
   G4double len = 2. + fPSUnit.size();
   if(len > 0)
   {
-    for(int l = 0; l < 21; l++)
+    for(G4int l = 0; l < 21; l++)
     {
       G4Polyline line;
       line.push_back(G4Point3D(-0.7, -0.9 + 0.002 * l, 0.));

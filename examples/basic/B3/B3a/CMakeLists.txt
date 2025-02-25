@@ -6,22 +6,9 @@ project(B3a)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
-# You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
-# to build a batch mode only executable
+# See the documentation for a guide on how to enable/disable specific components
 #
-option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
-if(WITH_GEANT4_UIVIS)
-  find_package(Geant4 REQUIRED ui_all vis_all)
-else()
-  find_package(Geant4 REQUIRED)
-endif()
-
-#----------------------------------------------------------------------------
-# Setup Geant4 include directories and compile definitions
-# Setup include directory for this project
-#
-include(${Geant4_USE_FILE})
-include_directories(${PROJECT_SOURCE_DIR}/include)
+find_package(Geant4 REQUIRED ui_all vis_all)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -31,10 +18,11 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Add the executable, and link it to the Geant4 libraries
+# Add the executable, use our local headers, and link it to the Geant4 libraries
 #
 add_executable(exampleB3a exampleB3a.cc ${sources} ${headers})
-target_link_libraries(exampleB3a ${Geant4_LIBRARIES})
+target_include_directories(exampleB3a PRIVATE include)
+target_link_libraries(exampleB3a PRIVATE ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -58,14 +46,3 @@ foreach(_script ${EXAMPLEB3_SCRIPTS})
     COPYONLY
     )
 endforeach()
-
-#----------------------------------------------------------------------------
-# For internal Geant4 use - but has no effect if you build this
-# example standalone
-#
-add_custom_target(B3a DEPENDS exampleB3a)
-
-#----------------------------------------------------------------------------
-# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
-#
-install(TARGETS exampleB3a DESTINATION bin )

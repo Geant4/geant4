@@ -138,7 +138,7 @@ class G4UIWin32 : public G4VBasicShell, public G4VInteractiveSession
   static G4String GetToolTips(G4int);
   G4String GetHelpTreeToolTips(HTREEITEM);
 
-  static G4String ConvertNewLines(G4String);
+  static G4String ConvertNewLines(const G4String&);
 
   void HelpTreeDoubleClick(HTREEITEM);
 
@@ -151,7 +151,7 @@ class G4UIWin32 : public G4VBasicShell, public G4VInteractiveSession
 
   G4bool InitHelpTreeItems();
   HTREEITEM AddItemToHelpTree(LPTSTR, HTREEITEM = TVI_ROOT);
-  static G4String GetShortCommandPath(G4String);
+  static G4String GetShortCommandPath(const G4String&);
   LPSTR GetItemPath(HTREEITEM);
 
   void CreateHelpTree(HTREEITEM, G4UIcommandTree*);

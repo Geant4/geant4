@@ -38,16 +38,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 G4IonInverseIonisation::G4IonInverseIonisation(
-  G4bool whichScatCase, G4String process_name,
+  G4bool whichScatCase, const G4String& process_name,
   G4AdjointIonIonisationModel* aEmAdjointModel)
   : G4VAdjointReverseReaction(process_name, whichScatCase)
 {
   fAdjointModel = aEmAdjointModel;
   fAdjointModel->SetSecondPartOfSameType(false);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-G4IonInverseIonisation::~G4IonInverseIonisation() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 void G4IonInverseIonisation::ProcessDescription(std::ostream& out) const

@@ -31,7 +31,7 @@
 // This process is a forced post step process. It will apply
 // weight window biasing on boundaries, collisions 
 // or both according to the G4PlaceOfAction argument.
-
+//
 // Author: Michael Dressel, 2002
 // --------------------------------------------------------------------
 #ifndef G4WeightWindowProcess_hh
@@ -58,26 +58,28 @@ class G4PathFinder;
 class G4WeightWindowProcess : public G4VProcess, public G4VTrackTerminator
 {
 
-public:  // with description
+ public:
 
-  G4WeightWindowProcess(const G4VWeightWindowAlgorithm &
-                             aWeightWindowAlgorithm,
-                             const G4VWeightWindowStore &aWWStore,
-                             const G4VTrackTerminator *TrackTerminator,
-                             G4PlaceOfAction placeOfAction,
-                             const G4String &aName = "WeightWindowProcess",
-                             G4bool para = false);
+  G4WeightWindowProcess(const G4VWeightWindowAlgorithm&
+                              aWeightWindowAlgorithm,
+                        const G4VWeightWindowStore &aWWStore,
+                        const G4VTrackTerminator* TrackTerminator,
+                              G4PlaceOfAction placeOfAction,
+                        const G4String& aName = "WeightWindowProcess",
+                              G4bool para = false);
     // creates a G4ParticleChange
 
   virtual ~G4WeightWindowProcess();
     // delete the G4ParticleChange
 
+  G4WeightWindowProcess(const G4WeightWindowProcess &) = delete;
+  G4WeightWindowProcess &operator=(const G4WeightWindowProcess &) = delete;
 
   //--------------------------------------------------------------
   // Set Parallel World
   //--------------------------------------------------------------
 
-  void SetParallelWorld(const G4String &parallelWorldName);
+  void SetParallelWorld(const G4String& parallelWorldName);
   void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
 
   //--------------------------------------------------------------
@@ -85,12 +87,10 @@ public:  // with description
   //--------------------------------------------------------------
 
   void StartTracking(G4Track*);
-  
-
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-                                       G4double   previousStepSize,
+                                       G4double previousStepSize,
                                        G4ForceCondition* condition);
     // make process beeing forced
   virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
@@ -99,38 +99,22 @@ public:  // with description
   virtual void KillTrack() const;
     // used in case no scoring process follows that does the killing
 
-  virtual const G4String &GetName() const;
-
-
-public:  // without description
+  virtual const G4String& GetName() const;
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
 
   virtual G4double 
-  AlongStepGetPhysicalInteractionLength(const G4Track&,
-                                        G4double  ,
-                                        G4double  ,
-                                        G4double& ,
-                                        G4GPILSelection*);
+  AlongStepGetPhysicalInteractionLength(const G4Track&, G4double, G4double,
+                                        G4double&, G4GPILSelection*);
   virtual G4double 
-  AtRestGetPhysicalInteractionLength(const G4Track& ,
-                                     G4ForceCondition*);
+  AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition*);
   
-  virtual G4VParticleChange* 
-  AtRestDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  
+ private:
 
-
-  virtual G4VParticleChange* 
-  AlongStepDoIt(const G4Track&, const G4Step&);
-  
-private:
-  
-  G4WeightWindowProcess(const G4WeightWindowProcess &);
-  G4WeightWindowProcess &operator=(const G4WeightWindowProcess &);
-  
-private:
-
-  void CopyStep(const G4Step & step);
+  void CopyStep(const G4Step& step);
 
   G4Step* fGhostStep = nullptr;
   G4StepPoint* fGhostPreStepPoint = nullptr;
@@ -143,7 +127,7 @@ private:
   G4PlaceOfAction fPlaceOfAction;
 
   G4TransportationManager* fTransportationManager = nullptr;
-  G4PathFinder*        fPathFinder = nullptr;
+  G4PathFinder* fPathFinder = nullptr;
 
   // -------------------------------
   // Navigation in the Ghost World:

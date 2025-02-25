@@ -254,7 +254,7 @@ G4bool GetValues(G4String newValue, G4int paramn, G4String* params)
       return false;
     }
 
-    params[i] = token;
+    params[i] = std::move(token);
 
     tok = strtok(nullptr, " ");
   }

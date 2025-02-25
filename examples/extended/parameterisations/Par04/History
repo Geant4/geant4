@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-22 Ben Morgan (expar04-V11-02-03)
+- Bump tensorflow version from [GitHub Dependabot PR](https://github.com/Geant4/geant4/pull/75)
+
 ## 2024-06-18 Gabriele Cosmo (expar04-V11-02-02)
 - Bump scikit-learn version from [GitHub Dependabot PR](https://github.com/Geant4/geant4/pull/73)
 

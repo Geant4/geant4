@@ -1308,6 +1308,11 @@ G4int G4MicroElecInelasticModel_new::RandomSelect(G4double k, const G4String& pa
   
   TCSMap::iterator tablepos;
   tablepos = tableTCS.find(currentMaterial);
+  if (tablepos == tableTCS.end()) {
+    G4Exception("G4MicroElecInelasticModel_new::RandomSelect","em0002",FatalException,"Model not applicable to material");
+    return level;
+  }
+
   MapData* tableData = tablepos->second;
   
   std::map< G4String,G4MicroElecCrossSectionDataSet_new*,std::less<G4String> >::iterator pos;

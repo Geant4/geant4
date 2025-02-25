@@ -29,6 +29,9 @@
 //
 // Modified:
 // 21.03.2013 V.Ivanchenko redesigned and cleaned up
+//
+// A correction is given in MeV
+//
 
 #ifndef G4CookShellCorrections_h
 #define G4CookShellCorrections_h 1
@@ -39,7 +42,9 @@ class G4CookShellCorrections
 {
 public:
 
-  explicit G4CookShellCorrections();
+  G4CookShellCorrections();
+
+  ~G4CookShellCorrections() = default;
 
   inline G4bool GetShellCorrection(G4int N, G4int Z, G4double& result) const
   {
@@ -53,10 +58,11 @@ public:
   
   enum  { ZTableSize = 68, NTableSize = 118, ZTableMin = 28, ZTableMax = 95,
 	  NTableMin = 33, NTableMax = 150 };
-private:
   
-  G4CookShellCorrections(const G4CookShellCorrections & right) = delete;
-  const G4CookShellCorrections & operator=(const G4CookShellCorrections & right) = delete;
+  G4CookShellCorrections(const G4CookShellCorrections& right) = delete;
+  const G4CookShellCorrections& operator=(const G4CookShellCorrections& right) = delete;
+
+private:
 
   static G4double ShellZTable[ZTableSize];
   static G4double ShellNTable[NTableSize];

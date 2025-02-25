@@ -49,11 +49,11 @@ void ProcessesCount::Count(const G4String& procName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ProcessesCount::Print()
+void ProcessesCount::Print(G4PrintOptions /*options*/) const
 {
   G4int index = 0;
-  std::map<G4String, G4int>::iterator it;
-  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
+  std::map<G4String, G4int>::const_iterator it;
+  for (it = fProcCounter.cbegin(); it != fProcCounter.cend(); it++) {
     G4String procName = it->first;
     G4int count = it->second;
     G4cout << " " << std::setw(20) << procName << "=" << std::setw(7) << count

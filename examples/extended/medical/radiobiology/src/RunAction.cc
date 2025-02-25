@@ -55,9 +55,9 @@ RunAction::RunAction() : G4UserRunAction()
 
   // Register accumulables to the manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->RegisterAccumulable(fDoseAccumulable);
-  accumulableManager->RegisterAccumulable(fLETAccumulable);
-  accumulableManager->RegisterAccumulable(fRBEAccumulable);
+  accumulableManager->Register(fDoseAccumulable);
+  accumulableManager->Register(fLETAccumulable);
+  accumulableManager->Register(fRBEAccumulable);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

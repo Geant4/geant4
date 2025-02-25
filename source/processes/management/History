@@ -6,13 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-31 Gabriele Cosmo (procman-V11-02-01)
+- Fixed use of std::move() in G4ProcessTableMessenger, reported by Coverity.
+
+## 2024-08-01 Alberto Ribon (procman-V11-02-00)
+- G4ParticleTypes : added the header file of G4ChargedUnknownParticle.
+  ( This is part of ATLAS and LHCb request to assign automatically 
+    ionisation and multiple scattering processes to charged primary particles
+    with valid PDG code but not known to Geant4. )
+
 ## 2022-11-23 Gabriele Cosmo (procman-V11-00-06)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
 ## 2022-11-02 Vladimir Ivanchenko (procman-V11-00-05)
 - G4VRestDiscreteProcess, G4VRestProcess, 
   G4VRestContinuesDiscreteProcess - added protection against arithmetic 
-    operations with DBL_MAX - problem #2452
+  operations with DBL_MAX - problem #2452
 
 ## 2022-10-05 Gabriele Cosmo (procman-V11-00-04)
 - Fixed compilation warnings on Intel/icx compiler for variable set
@@ -23,7 +32,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ## 2022-04-06 Vladimir Ivanchenko (procman-V11-00-02)
 - G4VDiscreteProcess - added virtual method MinPrimaryEnergy(..) for 
-    implementation of integral method
+  implementation of integral method
 
 ## 2022-03-17 Vladimir Ivanchenko (procman-V11-00-01)
 - G4VDiscreteProcess - added virtual method GetCrossSection

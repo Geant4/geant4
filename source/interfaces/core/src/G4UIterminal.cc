@@ -216,7 +216,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
 //////////////////////////////////////////////////
 {
   G4String newCommand = shell->GetCommandLineString(msg);
-  G4String nullString = "";
+  const G4String& nullString = "";
 
   G4String nC = G4StrUtil::lstrip_copy(newCommand);
 

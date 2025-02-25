@@ -80,7 +80,7 @@ void G4EmDNAChemistry_option1::ConstructMolecule()
                           9.46e-9 * (m2/s));
   G4MoleculeTable::Instance()->GetConfiguration("OHm")->SetDiffusionCoefficient(
     5.3e-9 * (m2 / s));
-  G4MoleculeTable::Instance()->GetConfiguration("OH")->SetDiffusionCoefficient(
+  G4MoleculeTable::Instance()->GetConfiguration("°OH")->SetDiffusionCoefficient(
     2.2e-9 * (m2/s));
   G4MoleculeTable::Instance()->GetConfiguration("H2")->SetDiffusionCoefficient(
     4.8e-9 * (m2/s));
@@ -103,7 +103,7 @@ void G4EmDNAChemistry_option1::ConstructReactionTable(G4DNAMolecularReactionTabl
   //-----------------------------------
   //Get the molecular configuration
   G4MolecularConfiguration* OH =
-   G4MoleculeTable::Instance()->GetConfiguration("OH");
+   G4MoleculeTable::Instance()->GetConfiguration("°OH");
   G4MolecularConfiguration* OHm =
    G4MoleculeTable::Instance()->GetConfiguration("OHm");
   G4MolecularConfiguration* e_aq =

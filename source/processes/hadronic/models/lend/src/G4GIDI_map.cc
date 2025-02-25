@@ -34,7 +34,7 @@ using namespace GIDI;
 /*
 ***************************************************************
 */
-G4GIDI_map::G4GIDI_map( std::string &dataDirectory ) {
+G4GIDI_map::G4GIDI_map( const std::string &dataDirectory ) {
 
     smr_initialize( &smr, smr_status_Ok, 0 );
     map = MCGIDI_map_readFile( &smr, NULL, dataDirectory.c_str( ) );

@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-29 John Allison (gMocren-V11-02-02)
+- More Coverity fixes
+
+## 2024-08-31 John Allison (gMocren-V11-02-01)
+- More Coverity fixes
+
+## 2024-07-17 John Allison (gMocren-V11-02-00)
+- Coverity fixes
+
 ## 2023-02-06 Ben Morgan (gMocren-V11-01-00)
 - Isolate private headers and update dependencies
 

@@ -190,3 +190,16 @@ in a range of deposited energy [X;Y] chosen by the user.
     How can I display the step by step information?
      1. Add ITTrackingInteraction to the G4Scheduler singleton (cf. chem3)
      2. Use /chem/tracking/verbose 1
+
+ 13 - HOW TO START ?
+
+     To run the example in batch mode:
+       ./chem4 -mac beam.in
+     or
+       ./chem4
+     then the macro beam.in is processed by default
+
+     In interactive mode, run:
+       ./chem4 -gui
+     or
+       ./chem4 -gui gui.mac

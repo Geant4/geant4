@@ -50,6 +50,7 @@
 
 #include "globals.hh"
 #include "G4ParticleHPIsoProbabilityTable.hh"
+
 #include <vector>
 #include <thread>
 #include <map>
@@ -57,17 +58,19 @@
 class G4DynamicParticle;
 class G4Element;
 
+class G4ParticleHPIsoProbabilityTable_CALENDF : public G4ParticleHPIsoProbabilityTable
+{
+ public:
 
-class G4ParticleHPIsoProbabilityTable_CALENDF : public G4ParticleHPIsoProbabilityTable {
-public:
   G4ParticleHPIsoProbabilityTable_CALENDF();
   ~G4ParticleHPIsoProbabilityTable_CALENDF();
-  void Init( G4int, G4int, G4int, G4double, G4String ) override;
+  void Init( G4int, G4int, G4int, G4double, const G4String& ) override;
   G4double GetCorrelatedIsoCrossSectionPT( const G4DynamicParticle*, G4int, const G4Element*, G4double&, G4double&, 
                                            std::thread::id& ) override;
   G4double GetIsoCrossSectionPT( const G4DynamicParticle*, G4int, const G4Element*, G4double&, 
                                  std::map< std::thread::id, G4double >&, std::thread::id& ) override;
-private:
+ private:
+
   std::map< std::thread::id, G4double > xsinela_cache;
   std::vector< std::vector< G4double >* >* theInelasticData;
 };

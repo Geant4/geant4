@@ -36,6 +36,8 @@
 #include "G4ConversionFatalError.hh"
 #include "G4ConversionUtils.hh"
 
+#include <utility>
+
 namespace {
   
   // Helper classes
@@ -168,8 +170,7 @@ G4AttValueFilterT<T, ConversionErrorPolicy>::LoadIntervalElement(const G4String&
 
   if (!G4ConversionUtils::Convert(input, min, max)) ConversionErrorPolicy::ReportError(input, "Invalid format. Was the input data formatted correctly ?");
 
-  std::pair<T, T> myPair(min, max);
-  fIntervalMap[input] = myPair;
+  fIntervalMap[input] = std::pair<T, T> (min, max);
 }
 
 template <typename T, typename ConversionErrorPolicy>
@@ -180,7 +181,7 @@ G4AttValueFilterT<T, ConversionErrorPolicy>::LoadSingleValueElement(const G4Stri
   
   if (!G4ConversionUtils::Convert(input, output)) ConversionErrorPolicy::ReportError(input, "Invalid format. Was the input data formatted correctly ?");
 
-  fSingleValueMap[input] = output;
+  fSingleValueMap[input] = std::move(output);
 }
 
 template <typename T, typename ConversionErrorPolicy>

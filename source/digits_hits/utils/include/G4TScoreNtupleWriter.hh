@@ -23,9 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TScoreNtupleWriter
 //
-// Author: Ivana Hrivnacova, 30/10/2018  (ivana@ipno.in2p3.fr)
-
+// Class description:
+//
+// This class implements storing hits collections of G4THitsMap<G4double>
+// type vith Geant4 analysis tools.
+// In order to avoid introducing dependency on the analysis category,
+// the analysis manager type is defined via template.
+//
+// An n-tuple with three columns is created for each primitive scorer:
+//   G4int column - eventNumber
+//   G4int column - copyNumber
+//   G4double column - scored value
+//
+// Author: Ivana Hrivnacova, 30/10/2018
+// --------------------------------------------------------------------
 #ifndef G4TScoreNtupleWriter_h
 #define G4TScoreNtupleWriter_h 1
 
@@ -42,22 +55,11 @@ template <typename T>
 class G4TScoreNtupleWriterMessenger;
 class G4HCofThisEvent;
 
-// class description:
-//
-// This class implements storing hits collections of G4THitsMap<G4double>
-// type vith Geant4 analysis tools.
-// In order to avoid introducing dependency on the analysis category,
-// the analysis manager type is defined via template.
-//
-// An ntuple with three columns is created for each primitive scorer:
-// int column - eventNumber
-// int column - copyNumber
-// double column - scored value
-
 template <typename T>
 class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
 {
  public:
+
   G4TScoreNtupleWriter();
   virtual ~G4TScoreNtupleWriter();
 
@@ -74,14 +76,16 @@ class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
   void SetNtupleMerging(G4bool value);
 
   // get methods
-  G4String GetFileName() const { return fFileName; }
+  const G4String& GetFileName() const { return fFileName; }
   G4int GetVerboseLevel() const { return fVerboseLevel; }
 
  protected:
+
   // methods
   virtual G4VScoreNtupleWriter* CreateInstance() const;
 
  private:
+
   // methods
   void CreateAnalysisManager();
 

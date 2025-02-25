@@ -252,7 +252,7 @@ void G4ParticleHPManager::register_data_file(const G4String& filename, const G4S
   mDataEvaluation.insert(std::pair<G4String, G4String>(filename, source));
 }
 
-void G4ParticleHPManager::DumpDataSource()
+void G4ParticleHPManager::DumpDataSource() const
 {
   G4cout << "Data source of this Partile HP calculation are " << G4endl;
   for (const auto& it : mDataEvaluation) {
@@ -280,7 +280,7 @@ void G4ParticleHPManager::DumpSetting()
          << " PHP check                       " << PHP_CHECK << G4endl
          << " CHECK HP NAMES                  " << CHECK_HP_NAMES << G4endl
          << " Enable DEBUG                    " << DEBUG << G4endl
-         << " Use probability tables from     " << USE_PROBABILITY_TABLE_FROM << G4endl
+         << " Use probability tables from     " << G4HadronicParameters::Instance()->GetTypeTablePT() << G4endl
          << "=======================================================" << G4endl << G4endl;
   isPrinted = true;
 }

@@ -56,6 +56,7 @@
 
 class G4ParticleChangeForGamma;
 class G4Pow;
+class G4EmElementXS;
 
 class G4BetheHeitlerModel : public G4VEmModel
 {
@@ -111,8 +112,10 @@ protected:
   const G4ParticleDefinition*       fTheElectron;
   const G4ParticleDefinition*       fThePositron;
   G4ParticleChangeForGamma*         fParticleChange;
+  G4EmElementXS*                    fXSection{nullptr};
 
   G4bool isFirstInstance{false};
+  G4bool useEPICS2017{false};
 
   static std::vector<ElementData*>  gElementData;
 };

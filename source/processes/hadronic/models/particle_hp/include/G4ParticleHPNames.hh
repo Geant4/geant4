@@ -38,19 +38,20 @@ class G4ParticleHPManager;
 class G4ParticleHPNames
 {
   public:
+
     explicit G4ParticleHPNames(G4int maxOffSet = 5);
     ~G4ParticleHPNames() = default;
 
     G4ParticleHPDataUsed GetName(G4int A, G4int Z, const G4String& base,
-                                 const G4String& rest, G4bool& active)
+                                 const G4String& rest, G4bool& active) const
     {
       return GetName(A, Z, 0, base, rest, active);
     }
     G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4int M,
-                                 const G4String& base, const G4String& rest, G4bool& active);
-    G4String GetName(G4int i);
+                                 const G4String& base, const G4String& rest, G4bool& active) const;
+    G4String GetName(G4int i) const;
 
-    G4String itoa(G4int current);
+    G4String itoa(G4int current) const;
 
     void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
 
@@ -58,6 +59,7 @@ class G4ParticleHPNames
     G4ParticleHPNames& operator=(const G4ParticleHPNames &right) = delete;
 
   private:
+
     G4ParticleHPManager* fManager;
     static const G4String theString[100];
     G4int theMaxOffSet;

@@ -224,6 +224,7 @@ class G4AdjointCSManager
   G4double fMassRatio              = 1.;  // ion
   G4double fLastCSCorrectionFactor = 1.;
 
+  G4ParticleDefinition* fCurrentParticleDef = nullptr;
   std::size_t fCurrentParticleIndex = 0;
   std::size_t fCurrentMatIndex      = 0;
 

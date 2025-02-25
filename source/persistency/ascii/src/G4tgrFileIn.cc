@@ -254,10 +254,10 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       else if(comment > 0)
       {
         stemp = stemp.substr(0, comment);
-        wordlist.push_back(stemp);
+        wordlist.push_back(std::move(stemp));
         break;
       }
-      wordlist.push_back(stemp);
+      wordlist.push_back(std::move(stemp));
     }
 
     // These two algorithms should be the more STL-like way, but they don't
@@ -297,9 +297,9 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
     {
       if(imerge != 1)
       {
-        G4String err1 = " word with trailing '\"' while there is no";
-        G4String err2 = " previous word with leading '\"' in line ";
-        G4String err  = err1 + err2;
+        const G4String& err1 = " word with trailing '\"' while there is no";
+        const G4String& err2 = " previous word with leading '\"' in line ";
+        const G4String& err  = err1 + err2;
         DumpException(err);
       }
       imerge = 2;
@@ -337,13 +337,13 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
   }
   if(imerge == 1)
   {
-    G4String err1 = " word with leading '\"' in line while there is no";
-    G4String err2 = " later word with trailing '\"' in line ";
-    G4String err  = err1 + err2;
+    const G4String& err1 = " word with leading '\"' in line while there is no";
+    const G4String& err2 = " later word with trailing '\"' in line ";
+    const G4String& err  = err1 + err2;
     DumpException(err);
   }
 
-  wordlist = wordlist2;
+  wordlist = std::move(wordlist2);
 
   // check for macro replacements (exclude # directives)
   if (wordlist[0][0] != '#')
@@ -619,10 +619,10 @@ void G4tgrFileIn::Close()
 // --------------------------------------------------------------------
 void G4tgrFileIn::DumpException(const G4String& sent)
 {
-  G4String Err1 = sent + " in file " + theName;
-  G4String Err2 =
-    " line No: " + G4UIcommand::ConvertToString(theLineNo[theCurrentFile]);
-  G4String ErrMessage = Err1;
-  G4Exception("G4tgrFileIn::DumpException()", "FileError", FatalException,
-              ErrMessage);
+  const G4String& Err1 = sent + " in file " + theName;
+  const G4String& Err2 =
+    ", line No: " + G4UIcommand::ConvertToString(theLineNo[theCurrentFile]);
+  const G4String& ErrMessage = Err1 + Err2;
+  G4Exception("G4tgrFileIn::DumpException()", "FileError",
+              FatalException, ErrMessage);
 }

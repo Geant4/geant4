@@ -64,6 +64,11 @@ class G4VTrajectory
   // Equality operator
   G4bool operator==(const G4VTrajectory& right) const;
 
+  // Cloning with the master thread allocator
+  // Each concrete class should implement its own method.
+  // This method is used only in the sub-event parallel mode.
+  virtual G4VTrajectory* CloneForMaster() const;
+
   // Accessors
   virtual G4int GetTrackID() const = 0;
   virtual G4int GetParentID() const = 0;

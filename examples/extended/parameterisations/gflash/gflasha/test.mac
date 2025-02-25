@@ -2,9 +2,23 @@
 # Macro file gflasha example
 # when runing in batch mode
 #
+/exgflash/verbose 1
 
-/exgflash/det/setLbin 40 0.5
+# set calo material
+/exgflash/det/setMat G4_PbWO4
+
+#detector geometry 5 x 5 cristal ~5 Rm and ~28 X0
+
+/exgflash/det/setNbCrys 5
+/exgflash/det/setCrysWidth 3.52 cm
+/exgflash/det/setCrysLength 25.0 cm
+
+/exgflash/det/setLbin 56 0.5
 /exgflash/det/setRbin 50 0.1
+
+/analysis/h1/set 0 100 90. 110.     none # total energy deposit(percent of Einc) 
+
+/run/initialize
 
 /gps/pos/centre 0 0 0
 /gps/particle  e-

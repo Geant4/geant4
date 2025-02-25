@@ -39,4 +39,3 @@ geant4_module_link_libraries(G4hadronic_deex_util
   PRIVATE
     G4hadronic_util)
 
-

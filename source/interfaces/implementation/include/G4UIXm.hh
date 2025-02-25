@@ -80,7 +80,7 @@ class G4UIXm : public G4VBasicShell, public G4VInteractiveSession
   // Ex : AddButton("my_menu","Run","/run/beamOn 1");
   void AddButton(const char*, const char*, const char*);
 
-  void Prompt(G4String);
+  void Prompt(const G4String&);
   void SessionTerminate();
   virtual void PauseSessionStart(const G4String&);
   virtual G4int ReceiveG4debug(const G4String&);
@@ -89,7 +89,7 @@ class G4UIXm : public G4VBasicShell, public G4VInteractiveSession
   G4String GetCommand(Widget);
 
  private:
-  void SecondaryLoop(G4String);
+  void SecondaryLoop(const G4String&);
   G4bool GetHelpChoice(G4int&);
   void ExitHelp() const;
   static void CommandEnteredCallback(Widget, XtPointer, XtPointer);

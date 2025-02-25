@@ -6,6 +6,40 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-25 John Allison (interfaces-V11-02-10)
+- G4UIQt.cc:
+  - G4UIQt::FilterOutput(): Fix compilation error, see Bug Report 2633.
+    - Use .data().
+
+## 2024-10-22 John Allison (interfaces-V11-02-09)
+- G4UIQt.cc:
+  - G4UIQt::NewSceneTreeItemTreeWidget::ActWithAnInteger:
+    - Allow larger integers in widget response.
+
+## 2024-10-17 John Allison (interfaces-V11-02-08)
+- G4UIQt.cc:
+  - Fix case of opacity==0 for touchables.
+    - Normally the sceneTreeItem will be updated when the scene is processed after the above
+      commands, but if the user sets the opacity to zero, G4PhysicalVolumeModel does not
+      transmit it (this is because some users set the opacity to zero to make a volume
+      invisible - perhaps they should use the visibility flag, but hey-ho).
+      By design, the sceneTreeItem remains, so it can still be interacted with, but
+      the colour will not be updated, so we do it here.
+  if (newColour.GetAlpha() == 0.) {
+    sceneTreeItem->AccessVisAttributes().SetColour(newColour);
+  }
+
+## 2024-07-15 Gabriele Cosmo (interfaces-V11-02-07)
+- Fixed reported Coverity defects, use consistently 'const G4String&' to
+  avoid implicit copy.
+
+## 2024-07-10 Guy Barrand (interfaces-V11-02-06)
+- G4UIWin32.cc: in ConvertNewLines(), replace:
+    str.replace(index, 2, "\r\n");
+  by:
+    str.replace(index, 1, "\r\n");
+  It fixes a "swallow of first character" bug in the G4cout output WS_EX_CLIENTEDGE widget.
+
 ## 2024-05-30 Guy Barrand (interfaces-V11-02-05)
 - G4UIQt.cc: Qt6: modifications to avoid the G4QTabWidget::paintEvent logic
   and have the "ApplyCommand(/vis/viewer/select)" logic done on the

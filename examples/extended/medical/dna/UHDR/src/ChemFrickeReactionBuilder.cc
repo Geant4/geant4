@@ -33,11 +33,11 @@
 
 void ChemFrickeReactionBuilder::FrickeDosimeterReaction(G4DNAMolecularReactionTable* pReactionTable)
 {
-  auto OH = G4MoleculeTable::Instance()->GetConfiguration("OH");
+  auto OH = G4MoleculeTable::Instance()->GetConfiguration("°OH");
   auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm");
 
   G4MolecularConfiguration* H2O2 = G4MoleculeTable::Instance()->GetConfiguration("H2O2");
-  G4MolecularConfiguration* HO2 = G4MoleculeTable::Instance()->GetConfiguration("HO2");
+  G4MolecularConfiguration* HO2 = G4MoleculeTable::Instance()->GetConfiguration("HO2°");
   G4MolecularConfiguration* HO2m = G4MoleculeTable::Instance()->GetConfiguration("HO2m");
   G4MolecularConfiguration* Fepp = G4MoleculeTable::Instance()->GetConfiguration("Fepp");
   G4MolecularConfiguration* Feppp = G4MoleculeTable::Instance()->GetConfiguration("Feppp");

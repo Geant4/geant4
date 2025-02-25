@@ -414,6 +414,12 @@ G4VisCommandPlot::G4VisCommandPlot ()
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("id", 'i', omitable = false);
   fpCommand -> SetParameter (parameter);
+#ifdef TOOLS_USE_FREETYPE
+  parameter = new G4UIparameter ("style", 's', omitable = true);
+  parameter -> SetParameterCandidates("none ROOT_default hippodraw");
+  parameter -> SetDefaultValue("ROOT_default");
+  fpCommand -> SetParameter (parameter);
+#endif
 }
 
 G4VisCommandPlot::~G4VisCommandPlot ()
@@ -437,9 +443,13 @@ void G4VisCommandPlot::SetNewValue (G4UIcommand*, G4String newValue)
     return;
   }
 
-  G4String type, id;
   std::istringstream is (newValue);
+  G4String type, id;
   is >> type >> id;
+#ifdef TOOLS_USE_FREETYPE
+  G4String style;
+  is >> style;
+#endif
 
   auto keepEnable = fpVisManager->IsEnabled();
 
@@ -455,6 +465,11 @@ void G4VisCommandPlot::SetNewValue (G4UIcommand*, G4String newValue)
   ui->ApplyCommand("/vis/plotter/create " + plotterName);
   ui->ApplyCommand("/vis/scene/add/plotter " + plotterName);
   ui->ApplyCommand("/vis/plotter/add/" + type + ' ' + id + ' ' + plotterName);
+#ifdef TOOLS_USE_FREETYPE
+  if (style != "none") {
+    ui->ApplyCommand("/vis/plotter/addStyle " + plotterName + ' ' + style);
+  }
+#endif
   ui->ApplyCommand("/vis/sceneHandler/attach");
 
   if (!keepEnable) {

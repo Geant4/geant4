@@ -53,7 +53,7 @@ class G4WorkerSubEvtRunManager : public G4WorkerTaskRunManager
   public:
     static G4WorkerSubEvtRunManager* GetWorkerRunManager();
     static G4WorkerSubEvtRunManagerKernel* GetWorkerRunManagerKernel();
-    G4WorkerSubEvtRunManager(G4int subEventType = 1);
+    G4WorkerSubEvtRunManager(G4int subEventType = 0);
     //G4WorkerSubEvtRunManager() = delete;
 
     // Modified for worker behavior
@@ -91,6 +91,7 @@ class G4WorkerSubEvtRunManager : public G4WorkerTaskRunManager
   public:
     G4int GetSubEventType() const override
     { return fSubEventType; }
+    void SetSubEventType(G4int) override;
 };
 
 #endif  // G4WorkerSubEvtRunManager_h

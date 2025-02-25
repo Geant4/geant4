@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4ProcessPlacer.cc
-//
-// ----------------------------------------------------------------------
+// G4ProcessPlacer
+// --------------------------------------------------------------------
 
 #include "G4ProcessPlacer.hh"
 #include "G4ProcessManager.hh"
 #include "G4VProcess.hh"
 #include "G4ParticleTable.hh"
 
-G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
+G4ProcessPlacer::G4ProcessPlacer(const G4String& particlename)
   : fParticleName(particlename)
 {
 }
@@ -46,7 +40,7 @@ G4ProcessPlacer::~G4ProcessPlacer()
 {
 }
 
-void G4ProcessPlacer::RemoveProcess(G4VProcess *process)
+void G4ProcessPlacer::RemoveProcess(G4VProcess* process)
 {
   G4cout << "=== G4ProcessPlacer::RemoveProcess: for: " <<  fParticleName 
          << G4endl;
@@ -75,7 +69,7 @@ void G4ProcessPlacer::RemoveProcess(G4VProcess *process)
   
 }
 
-void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
+void G4ProcessPlacer::AddProcessAs(G4VProcess* process, SecondOrLast sol)
 {
   G4cout << "  Modifying Process Order for ProcessName: " << process->GetProcessName() << G4endl;
 
@@ -116,15 +110,6 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
                                                   idxAlongStep);
     GetProcessManager()->SetProcessOrderingToSecond(process, 
                                                   idxPostStep);
-    // xx test
-    //     if(process->GetProcessName() == "ImportanceProcess") 
-    //bug31/10/07    GetProcessManager()->SetProcessOrdering(process, 
-    //bug31/10/07					    idxAlongStep, 1);
-    // place transportation first again
-//     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-//                                                   idxAlongStep);
-//     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-//                                                   idxPostStep);
   }
   
   // for verification inly
@@ -139,29 +124,29 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
   G4cout << "================================================" << G4endl;
 }
 
-void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process)
+void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess* process)
 {
   G4cout << "=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: " 
          << fParticleName << G4endl;
   AddProcessAs(process, eSecond);
 }
 
-void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process)
+void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess* process)
 {
   G4cout << "=== G4ProcessPlacer::AddProcessAsLastDoIt: for: " 
          << fParticleName << G4endl;
   AddProcessAs(process, eLast);
 }
 
-G4ProcessManager *G4ProcessPlacer::GetProcessManager()
+G4ProcessManager* G4ProcessPlacer::GetProcessManager()
 { 
   // get particle iterator to add processes ---------------------
-  G4ParticleTable* theParticleTable = 0;
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator = 0;
+  G4ParticleTable* theParticleTable = nullptr;
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator = nullptr;
   theParticleTable = G4ParticleTable::GetParticleTable();
   theParticleIterator = theParticleTable->GetIterator();
   // -------------------------------------------------------
-  G4ProcessManager *processmanager = 0;
+  G4ProcessManager* processmanager = nullptr;
   // find process manager ---------------------------
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) /* while checked for unending loop, 30.05.2016, Marc Verderi */

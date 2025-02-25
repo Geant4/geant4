@@ -44,7 +44,7 @@ class G4eAdjointMultipleScattering : public G4VMultipleScattering
  public:
   explicit G4eAdjointMultipleScattering(const G4String& processName = "msc");
 
-  ~G4eAdjointMultipleScattering() override;
+  ~G4eAdjointMultipleScattering() override = default;
 
   void StartTracking(G4Track*) override;
 

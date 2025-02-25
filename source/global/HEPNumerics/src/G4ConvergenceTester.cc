@@ -118,6 +118,8 @@ void G4ConvergenceTester::AddScore(G4double x)
 
 void G4ConvergenceTester::calStat()
 {
+  if (n == 0) return;
+
   efficiency = G4double(nonzero_histories.size()) / n;
 
   mean = sum / n;
@@ -223,10 +225,10 @@ void G4ConvergenceTester::calStat()
   }
   else
   {
-    G4int i = G4int(nonzero_histories.size());
+    auto i = G4int(nonzero_histories.size());
 
     // 5% criterion
-    G4int j = G4int(i * 0.05);
+    auto j = G4int(i * 0.05);
     while(G4int(largest_scores.size()) > j)
     {
       largest_scores.pop_back();
@@ -623,7 +625,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = fom_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), std::move(first_ally), std::move(second_ally));
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t < 0.429318)
@@ -691,7 +693,7 @@ void G4ConvergenceTester::calc_slope_fit(const std::vector<G4double>&)
 {
   // create PDF bins
   G4double max = largest_scores.front();
-  G4int last   = G4int(largest_scores.size());
+  auto last   = G4int(largest_scores.size());
   G4double min = 0.0;
   if(largest_scores.back() != 0)
   {

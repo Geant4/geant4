@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,7 +31,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -153,10 +152,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -320,7 +322,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.001 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 GeV
       ===== Limit on energy threshold has been applied 
 
@@ -462,11 +464,10 @@ Threshold for very long decay time at rest        1e+60 y
 -------------------------------------------------------------------------
                            Hadronic Processes for GenericIon
   Process: RadioactiveDecay
-### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -627,7 +628,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
- Use probability tables from     njoy
+ Use probability tables from     
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -762,8 +763,6 @@ Index : 12     used in the geometry : Yes
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 starts (master).
 
@@ -797,6 +796,8 @@ Particle name: alpha
 /vis/scene/notifyHandlers
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
@@ -808,15 +809,10 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.420000s Real=1.494897s Sys=0.050000s
-There are histograms that can be viewed with visualization:
-  12 h1 histograms(s)
-  2 h2 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  User=1.320000s Real=1.419830s Sys=0.050000s
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 16 of which, static: 0
-Dynamic pools deleted: 16 / Total memory freed: 28 MB
+Number of memory pools allocated: 18 of which, static: 0
+Dynamic pools deleted: 18 / Total memory freed: 28 MB
 ============================================================

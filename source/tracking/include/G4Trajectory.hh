@@ -51,6 +51,7 @@
 #include "G4VTrajectory.hh"
 #include "G4ios.hh"  // Include from 'system'
 #include "globals.hh"  // Include from 'global'
+#include "G4Threading.hh"
 
 #include "trkgdefs.hh"
 #include <stdlib.h>  // Include from 'system'
@@ -58,10 +59,13 @@
 #include <vector>
 
 class G4Polyline;
+class G4ClonedTrajectory;
 
 class G4Trajectory : public G4VTrajectory
 {
   using G4TrajectoryPointContainer = std::vector<G4VTrajectoryPoint*>;
+
+  friend class G4ClonedTrajectory;
 
  public:
   // Constructors/Destructor
@@ -76,6 +80,9 @@ class G4Trajectory : public G4VTrajectory
   inline void* operator new(size_t);
   inline void operator delete(void*);
   inline G4bool operator==(const G4Trajectory& r) const;
+
+  // cloning with the master thread allocator
+  G4VTrajectory* CloneForMaster() const override;
 
   // Get/Set functions
 
@@ -107,7 +114,7 @@ class G4Trajectory : public G4VTrajectory
   G4int fParentID = 0;
   G4int PDGEncoding = 0;
   G4double PDGCharge = 0.0;
-  G4String ParticleName = "";
+  G4String ParticleName = "dummy";
   G4double initialKineticEnergy = 0.0;
   G4ThreeVector initialMomentum;
 };

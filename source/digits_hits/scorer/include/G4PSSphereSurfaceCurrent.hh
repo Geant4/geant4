@@ -58,8 +58,8 @@
 class G4PSSphereSurfaceCurrent : public G4VPrimitiveScorer
 {
  public:
-  G4PSSphereSurfaceCurrent(G4String name, G4int direction, G4int depth = 0);
-  G4PSSphereSurfaceCurrent(G4String name, G4int direction, const G4String& unit,
+  G4PSSphereSurfaceCurrent(const G4String& name, G4int direction, G4int depth = 0);
+  G4PSSphereSurfaceCurrent(const G4String& name, G4int direction, const G4String& unit,
                            G4int depth = 0);
   ~G4PSSphereSurfaceCurrent() override = default;
 

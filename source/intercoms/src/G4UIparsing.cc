@@ -312,7 +312,7 @@ inline yystype G4UIRangeChecker::RelationalExpression()
     result.type = CONSTINT;
   }
   else {
-    result = arg1;
+    result = std::move(arg1);
   }
   return result;
 }
@@ -593,7 +593,7 @@ inline tokenNum G4UIRangeChecker::Yylex()  // reads input and returns token numb
     } while ((c = G4UIpGetc()) != EOF && ((isalnum(c) != 0) || c == '_'));
     G4UIpUngetc(c);
     if (IsParameter(buf) != 0u) {
-      yylval.S = buf;
+      yylval.S = std::move(buf);
       return IDENTIFIER;
     }
 

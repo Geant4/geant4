@@ -1,9 +1,16 @@
 # Example RE03 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-11-11 Gabriele Cosmo (exampleRE03-V11-02-01)
+- Fixed CMake script for missing input macros.
+
+## 2024-11-07 Makoto Asai (exampleRE03-V11-02-00)
+- Adding sub-event parallel mode
 
 ## 2021-12-10 Ben Morgan (exampleRE03-V11-00-00)
 - Change to new Markdown History format

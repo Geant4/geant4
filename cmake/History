@@ -6,6 +6,61 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-25 Ben Morgan (cmake-V11-02-30)
+- Bump RadioactiveDecay dataset version to 6.1.2
+  - Fixes Issue #237
+
+## 2024-11-19 Ben Morgan (cmake-V11-02-29)
+- Bump RadioactiveDecay dataset version to 6.1.1
+
+## 2024-11-08 Ben Morgan (cmake-V11-02-28)
+- Bump dataset versions:
+  - PhotonEvaporation 6.1
+  - RadioactiveDecay 6.1
+  - Fixes Issue 234
+
+## 2024-10-30 Ben Morgan (cmake-V11-02-27)
+- Ensure sanitizer flags are forwarded to the linker when using Xcode, and all
+  linker flags are forwarded to builds of tests done by geant4_add_test.
+  - Fixes Issue #227
+
+## 2024-10-02 Ben Morgan (cmake-V11-02-26)
+- Bump URRPT dataset version to 1.1
+  - Fixes Issue #228
+
+## 2024-09-25 Ben Morgan (cmake-V11-02-25)
+- Default GEANT4_INSTALL_PACKAGE_CACHE to OFF
+  - This file is highly unstable on macOS and SPack installs, and causes more problems
+    for most users than it solves.
+
+## 2024-09-24 Ben Morgan (cmake-V11-02-24)
+- Support running example build-and-run tests in Xcode
+  - Part of Issue #227
+
+## 2024-09-23 Gunter Folger (cmake-V11-02-23)
+- Bump dataset version:
+  - RadioactiveDecay 6.0.1
+  - Fixes Issue #226
+
+## 2024-09-19 Ben Morgan (cmake-V11-02-22)
+- Bump dataset versions:
+  - G4ENSDFSTATE 3.0
+  - PhotonEvaporation 6.0
+  - RadioactiveDecay 6.0
+  - Fixes Issue #224
+
+## 2024-08-28 Ben Morgan (cmake-V11-02-21)
+- Bump G4EMLOW dataset version to 8.6.1
+
+## 2024-08-27 Ben Morgan (cmake-V11-02-20)
+- Add new G4CHANNELING dataset to support channeling physics processes/models.
+
+## 2024-06-24 Ben Morgan (cmake-V11-02-19)
+- Simplify CMake/CTest functions and settings
+  - Move geant4_add_test function to dedicated module, retiring "UseGeant4_internal"
+    file
+  - Reduce oversetting of Geant4_DIR variable for use by tests
+
 ## 2024-06-07 Ben Morgan (cmake-V11-02-18)
 - Add optional install of new URRPT data model
   - Fixes Issue #217

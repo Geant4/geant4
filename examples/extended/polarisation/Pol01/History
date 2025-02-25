@@ -5,6 +5,11 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-08-12 I. Hrivnacova (expol01-V11-02-00)
+- Updated for changes in accumulables:
+  - G4VAccumulable::Print requires 'G4PrintOptions options' argument
+  - Use new "Register" method with shorter name
+
 ## 2023-07-16 Vladimir Ivanchenko (expol01-V11-01-01)
 - removed annoining printout for the default macro
 

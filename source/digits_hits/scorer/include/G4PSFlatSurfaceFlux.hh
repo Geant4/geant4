@@ -63,8 +63,8 @@
 class G4PSFlatSurfaceFlux : public G4VPrimitivePlotter
 {
  public:
-  G4PSFlatSurfaceFlux(G4String name, G4int direction, G4int depth = 0);
-  G4PSFlatSurfaceFlux(G4String name, G4int direction, const G4String& unit,
+  G4PSFlatSurfaceFlux(const G4String& name, G4int direction, G4int depth = 0);
+  G4PSFlatSurfaceFlux(const G4String& name, G4int direction, const G4String& unit,
                       G4int depth = 0);
   ~G4PSFlatSurfaceFlux() override = default;
 

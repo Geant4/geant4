@@ -23,23 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Thermal Neutron Scattering
-// Koi, Tatsumi (SCCS/SLAC)
+// G4ParticleHPThermalScatteringData
 //
-// Class Description
-// Cross Sections for a high precision (based on evaluated data
-// libraries) description of themal neutron scattering below 4 eV;
-// Based on Thermal neutron scattering files
-// from the evaluated nuclear data files ENDF/B-VI, Release2
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with
-// the corresponding process.
-// Class Description - End
-
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
 // 070625 implement clearCurrentXSData to fix memory leaking by T. Koi
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
-//
+// ---------------------------------------------------------------------
 
 #include "G4ParticleHPThermalScatteringData.hh"
 
@@ -209,8 +198,7 @@ void G4ParticleHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefini
   }
 
   // Searching TS Elements
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
   std::size_t numberOfElements = G4Element::GetNumberOfElements();
 
   for (std::size_t i = 0; i < numberOfElements; ++i) {
@@ -308,7 +296,7 @@ void G4ParticleHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefini
 }
 
 std::map<G4double, G4ParticleHPVector*>*
-G4ParticleHPThermalScatteringData::readData(G4String full_name)
+G4ParticleHPThermalScatteringData::readData(const G4String& full_name)
 {
   auto aData = new std::map<G4double, G4ParticleHPVector*>;
 
@@ -405,9 +393,9 @@ G4int G4ParticleHPThermalScatteringData::getTS_ID(const G4Material* material,
   return result;
 }
 
-G4double G4ParticleHPThermalScatteringData::GetX(
-  const G4DynamicParticle* aP, G4double aT,
-  std::map<G4double, G4ParticleHPVector*>* amapTemp_EnergyCross)
+G4double G4ParticleHPThermalScatteringData::
+GetX(const G4DynamicParticle* aP, G4double aT,
+     std::map<G4double, G4ParticleHPVector*>* amapTemp_EnergyCross)
 {
   G4double result = 0;
   if (amapTemp_EnergyCross->empty()) return result;
@@ -454,8 +442,8 @@ G4double G4ParticleHPThermalScatteringData::GetX(
   return result;
 }
 
-void G4ParticleHPThermalScatteringData::AddUserThermalScatteringFile(G4String nameG4Element,
-                                                                     G4String filename)
+void G4ParticleHPThermalScatteringData::AddUserThermalScatteringFile(const G4String& nameG4Element,
+                                                                     const G4String& filename)
 {
   names->AddThermalElement(nameG4Element, filename);
 }

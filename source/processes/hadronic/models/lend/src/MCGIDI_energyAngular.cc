@@ -142,7 +142,6 @@ static int MCGIDI_energyAngular_linear_parseFromTOM( statusMessageReporting *smr
             if( ( pdfXY1 =  MCGIDI_misc_dataFromXYs2ptwXYPointsInUnitsOf( smr, XYs, interpolationXY, multiplicityProbabilityUnits ) ) == NULL ) goto err;
             y = ptwXY_integrateDomain( pdfXY1, &status );
             if( ( status = ptwXY_setValueAtX( pdfXY2, energyOutFactor * XYs->value, y ) ) != nfu_Okay ) goto errA;
-            if( status != nfu_Okay ) goto errA;
 
             if( y == 0 ) {
                 if( ( status = ptwXY_add_double( pdfXY1, 0.5 ) ) != nfu_Okay ) goto errA;

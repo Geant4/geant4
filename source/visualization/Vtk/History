@@ -6,6 +6,25 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-17 John Allison (visVtk-V11-02-07)
+- G4VtkMessenger.cc:
+  - Added x3d to /vis/vtk/export format parameter guidance.
+  - Set parameter omitables to false.
+
+## 2024-10-07 Stewart Boogert (visVtk-V11-02-06)
+- G4VtkViewer:
+  - Added export for X3D file format
+
+## 2024-08-13 John Allison (visVtk-V11-02-05)
+- G4VtkQtViewer:
+  - Resolve the timing issues around switching to the vis sub-thread with the
+    use of G4CONDITIONWAITLAMBDA.
+
+## 2024-07-12 Guy Barrand (visVtk-V11-02-04)
+- G4VtkQtViewer: in DoneWithVisSubThread(), SwitchToMasterThread() protect against a
+  possible null qGLW->context(). It permits to avoid a crash in case of doing /run/beamOn
+  in vis.mac at startup.
+
 ## 2024-05-27 Guy Barrand (visVtk-V11-02-03)
 - G4VtxQtViewer: MT: have the variables mWaitForVisSubThreadQtOpenGLContextMoved,
   mWaitForVisSubThreadQtOpenGLContextInitialized,

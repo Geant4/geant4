@@ -194,7 +194,8 @@ void G4UAtomicDeexcitation::GenerateParticles(
   G4int givenShellId = atomicShell->ShellId();
   minGammaEnergy = gammaCut;
   minElectronEnergy = eCut;
-
+  vacancyArray.clear();
+  
   // generation secondaries
   G4DynamicParticle* aParticle=0;
   G4int provShellId = 0;

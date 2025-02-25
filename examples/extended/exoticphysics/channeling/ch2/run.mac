@@ -1,0 +1,109 @@
+/random/setSeeds 19577794 424238336
+#setting number of cores
+/run/numberOfThreads 2
+
+#crystal geometry
+#change it as you want
+/crystal/setCrystalSize 20. 20. 0.0305 mm
+/crystal/setCrystalBendingAngle 0.905 mrad #default is 0
+/crystal/setCrystalAngleX 0 mrad  #default is 0
+/crystal/setCrystalAngleY 0 mrad  #default is 0
+
+#crystal undulator parameters
+#CAUTION: incompatible with bent crystal
+#CAUTION: needs small detector size (1/gamma) and high photon statistics to observe the effect
+#(see also comments in ConstructSDandField in DetectorConstruction)
+#use if necessary:
+#/crystal/setCrystallineUndulatorAmplitude 1 nm
+#/crystal/setCrystallineUndulatorPeriod 100 um
+#/crystal/setCrystallineUndulatorPhase 0.
+
+#crystal lattice parameters
+#change it according to the data available in G4CHANNELINGDATA
+/crystal/setCrystalMaterial G4_Si  # check G4CHANNELINGDATA dataset
+/crystal/setCrystalLattice  (111)  # check G4CHANNELINGDATA dataset
+
+#detector parameters
+#change it as you want
+/crystal/setDetectorSize 10 10 0.03 cm
+/crystal/setFrontPositionZ 5973 mm
+
+#G4ChannelingFastSimModel parameters
+#change it as you want
+/crystal/setChannelingModel true #switch on/off G4ChannelingFastSimModel
+/crystal/setRadiationModel true  #switch on/off G4BaierKatkov
+                                 #(G4ChannelingFastSimModel must be switched on)
+#the pass to channeling data if different from the default:
+#/crystal/setChannelingDataPath your_path
+
+#the following can be changed or commented:
+#the low energy threshold for particle to enter the G4ChannelingFastSimModel:
+/crystal/setParticleMinKinEnergy 200 MeV # default value for all charged particles
+#the same for specific particles (has priority vs default)
+/crystal/setParticleMinKinEnergy/proton 200 MeV
+/crystal/setParticleMinKinEnergy/anti_proton 200 MeV
+/crystal/setParticleMinKinEnergy/pi+ 200 MeV
+/crystal/setParticleMinKinEnergy/pi- 200 MeV
+/crystal/setParticleMinKinEnergy/e+ 200 MeV
+/crystal/setParticleMinKinEnergy/e- 200 MeV
+/crystal/setParticleMinKinEnergy/mu+ 200 MeV
+/crystal/setParticleMinKinEnergy/mu- 200 MeV
+
+#the following can be changed or commented:
+#high angular threshold for particle to enter the G4ChannelingFastSimModel expressed in Lindhard angles:
+/crystal/setLindhardAngles 100. # default value for all charged particles
+#the same for specific particles (has priority vs default)
+/crystal/setLindhardAngles/proton 100.
+/crystal/setLindhardAngles/anti_proton 100.
+/crystal/setLindhardAngles/pi+ 100.
+/crystal/setLindhardAngles/pi- 100.
+/crystal/setLindhardAngles/e+ 100.
+/crystal/setLindhardAngles/e- 100.
+/crystal/setLindhardAngles/mu+ 100.
+/crystal/setLindhardAngles/mu- 100.
+
+#the following can be changed or commented:
+#G4BaierKatkov parameters
+#(see also comments in ConstructSDandField in DetectorConstruction):
+/crystal/setMinPhotonEnergy 1 MeV # G4BaierKatkov default
+/crystal/setSamplingPhotonsNumber 150 # G4BaierKatkov default
+/crystal/setNSmallTrajectorySteps 10000 # G4BaierKatkov default
+/crystal/setRadiationAngleFactor 4. # G4BaierKatkov default
+
+#add statistics of sampling photons in G4BaierKatkov in specific energy range
+#use if necessary (usually in the crystalline undulator case):
+#CAUTION: this energy range must not be below minimum photon energy
+#(see also comments in ConstructSDandField in DetectorConstruction)
+#/crystal/AddPhotonStatistics/setMinPhotonEnergy 1 MeV
+#/crystal/AddPhotonStatistics/setMaxPhotonEnergy 20 MeV
+#/crystal/AddPhotonStatistics/setMultiplePhotonStatistics 10
+
+/run/initialize
+
+#settings
+/control/verbose 0
+/run/verbose 0
+/tracking/verbose 0
+
+#beam
+/gps/particle e-
+
+#coordinate distribution (radial Gauss)
+/gps/pos/centre 0. 0. -1. cm
+/gps/pos/type Beam
+/gps/pos/sigma_x 0.07 mm
+/gps/pos/sigma_y 0.2 mm
+
+#angular distribution (radial Gauss)
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
+/gps/ang/sigma_x 30.E-6 rad
+/gps/ang/sigma_y 30.E-6 rad
+
+#energy distribution (constant)
+/gps/ene/mono 0.855 GeV
+
+#statistics
+/run/printProgress 10
+/run/beamOn 1000

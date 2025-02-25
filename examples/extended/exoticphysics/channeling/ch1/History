@@ -1,0 +1,15 @@
+# Category ch1 History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2024-09-25 Alexei Sytov (ch1-V11-02-01)
+- Some comments deleted in DetectorConstruction
+- Added {nullptr} in PrimaryGeneratorAction.hh and DetectorConstruction.hh
+- redundant modules deleted
+- CLHEP units added
+- README updated
+
+## 2024-09-02 Alexei Sytov (ch1-V11-02-00)
+- First implementation

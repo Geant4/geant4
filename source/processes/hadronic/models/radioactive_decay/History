@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-08-14 Gabriele Cosmo (radioactive_decay-V11-02-05)
+- Fixed reported Coverity defects for use of std::move().
+
 ## 2024-05-30 Vladimir Ivanchenko (radioactive_decay-V11-02-04)
 - Rename G4RadioactiveDecay -> G4VRadioactiveDecay,
   G4Radioactivation -> G4RadioactiveDecay, the header G4Radioactivation.hh is preserved

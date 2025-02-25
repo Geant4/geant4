@@ -79,7 +79,7 @@ class G4UImessenger
     G4int StoI(const G4String& s);
     G4long StoL(const G4String& s);
     G4double StoD(const G4String& s);
-    G4bool StoB(G4String s);
+    G4bool StoB(const G4String& s);
 
     void AddUIcommand(G4UIcommand* newCommand);
 

@@ -79,7 +79,6 @@ class G4TaskRunManagerKernel : public G4RunManagerKernel
     static void TerminateWorkerRunEventLoop();
     static void TerminateWorker();
     static void TerminateWorkerRunEventLoop(G4WorkerTaskRunManager*);
-    static void TerminateWorker(G4WorkerTaskRunManager*);
 
     static std::vector<G4String>& InitCommandStack();
 

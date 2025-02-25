@@ -193,9 +193,6 @@ G4double G4ChipsKaonMinusInelasticXS::GetChipsCrossSection(G4double pMom, G4int 
 G4double G4ChipsKaonMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  G4double sigma=0.;
-  if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
-  //G4double A=targN+targZ;              // A of the target
   if(F<=0)                             // This isotope was not the last used isotop
   {
     if(F<0)                            // This isotope was found in DAMDB =-----=> RETRIEVE
@@ -234,8 +231,9 @@ G4double G4ChipsKaonMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
       LEN->push_back(lastLEN);         // remember the Low Energy Table
       HEN->push_back(lastHEN);         // remember the High Energy Table
     } // End of creation of the new set of parameters
-  } // End of parameters udate
+  } // End of parameters update
   // =------------------= NOW the Magic Formula =--------------------------=
+  G4double sigma;
   if (Momentum<lastTH) return 0.;      // It must be already checked in the interface class
   else if (Momentum<Pmin)              // High Energy region
   {

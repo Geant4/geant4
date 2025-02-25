@@ -51,6 +51,7 @@
 class G4NuclearLevelData;
 class G4DeexPrecoParameters;
 class G4VCoulombBarrier;
+class G4InterfaceToXS;
 
 class G4VPreCompoundFragment
 {
@@ -70,8 +71,8 @@ public:
   // Pure Virtual methods
   // =====================
   
-  // Initialization method
-  void Initialize(const G4Fragment& aFragment);
+  // Run time initialization method
+  G4bool Initialize(const G4Fragment& aFragment);
     
   // Methods for calculating the emission probability
   // ------------------------------------------------
@@ -83,8 +84,6 @@ public:
   // sample kinetic energy of emitted fragment
   virtual G4double SampleKineticEnergy(const G4Fragment&) = 0;
 
-  inline G4bool IsItPossible(const G4Fragment& aFragment) const;
-  
   inline G4ReactionProduct* GetReactionProduct() const; 	
   
   G4int GetA() const { return theA; }
@@ -113,7 +112,7 @@ public:
   void SetMomentum(const G4LorentzVector& lv) { theMomentum = lv; }
   
   //for inverse cross section choice
-  void SetOPTxs(G4int opt) { OPTxs = opt; }
+  void SetOPTxs(G4int) {}
   //for superimposed Coulomb Barrier for inverse cross sections
   void UseSICB(G4bool use) { useSICB = use; } 
 
@@ -132,6 +131,7 @@ protected:
   G4NuclearLevelData* fNucData;
   G4DeexPrecoParameters* theParameters;
   G4Pow* g4calc;
+  G4InterfaceToXS* fXSection{nullptr};
 
   G4int theA;
   G4int theZ;
@@ -139,6 +139,9 @@ protected:
   G4int theResZ{0};
   G4int theFragA{0};
   G4int theFragZ{0};
+  //for inverse cross section choice
+  G4int OPTxs;
+  G4int index{0};
 
   G4double theResA13{0.0};
   G4double theBindingEnergy{0.0};
@@ -151,8 +154,6 @@ protected:
   G4double theEmissionProbability{0.0};
   G4double theCoulombBarrier{0.0};
 
-  //for inverse cross section choice
-  G4int OPTxs{3};
   //for superimposed Coulomb Barrier for inverse cross sections
   G4bool useSICB{true};
 
@@ -162,14 +163,6 @@ private:
   G4VCoulombBarrier* theCoulombBarrierPtr;
   G4LorentzVector theMomentum{0., 0., 0., 0.};
 };
-
-inline G4bool
-G4VPreCompoundFragment::IsItPossible(const G4Fragment& aFragment) const
-{
-  G4int pplus = aFragment.GetNumberOfCharged();
-  G4int pneut = aFragment.GetNumberOfParticles()-pplus;
-  return (pneut >= theA - theZ && pplus >= theZ && theMaxKinEnergy > 0.0);
-}
 
 inline G4ReactionProduct* G4VPreCompoundFragment::GetReactionProduct() const
 {

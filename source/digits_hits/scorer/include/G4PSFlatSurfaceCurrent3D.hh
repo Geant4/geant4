@@ -52,10 +52,10 @@
 class G4PSFlatSurfaceCurrent3D : public G4PSFlatSurfaceCurrent
 {
  public:
-  G4PSFlatSurfaceCurrent3D(G4String name, G4int direction, G4int ni = 1,
+  G4PSFlatSurfaceCurrent3D(const G4String& name, G4int direction, G4int ni = 1,
                            G4int nj = 1, G4int nk = 1, G4int depi = 2,
                            G4int depj = 1, G4int depk = 0);
-  G4PSFlatSurfaceCurrent3D(G4String name, G4int direction, const G4String& unit,
+  G4PSFlatSurfaceCurrent3D(const G4String& name, G4int direction, const G4String& unit,
                            G4int ni = 1, G4int nj = 1, G4int nk = 1,
                            G4int depi = 2, G4int depj = 1, G4int depk = 0);
   ~G4PSFlatSurfaceCurrent3D() override = default;

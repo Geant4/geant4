@@ -52,10 +52,10 @@
 class G4PSCylinderSurfaceFlux3D : public G4PSCylinderSurfaceFlux
 {
  public:
-  G4PSCylinderSurfaceFlux3D(G4String name, G4int direction, G4int ni = 1,
+  G4PSCylinderSurfaceFlux3D(const G4String& name, G4int direction, G4int ni = 1,
                             G4int nj = 1, G4int nk = 1, G4int di = 2,
                             G4int dj = 1, G4int dk = 0);
-  G4PSCylinderSurfaceFlux3D(G4String name, G4int direction,
+  G4PSCylinderSurfaceFlux3D(const G4String& name, G4int direction,
                             const G4String& unit, G4int ni = 1, G4int nj = 1,
                             G4int nk = 1, G4int di = 2, G4int dj = 1,
                             G4int dk = 0);

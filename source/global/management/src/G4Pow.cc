@@ -92,7 +92,7 @@ G4Pow::G4Pow()
 
   for(G4int i = 1; i < maxZ; ++i)
   {
-    G4double x = G4double(i);
+    auto  x = G4double(i);
     pz13[i]    = std::pow(x, onethird);
     lz[i]      = G4Log(x);
     if(i < maxZfact)
@@ -132,7 +132,7 @@ G4double G4Pow::A13High(const G4double a, const bool invert) const
   G4double res;
   if(a < maxA)
   {
-    const G4int i    = static_cast<G4int>(a + 0.5);
+    const auto  i    = static_cast<G4int>(a + 0.5);
     const G4double x = (a / i - 1.) * onethird;
     res              = pz13[i] * (1. + x - x * x * (1. - 1.666667 * x));
   }
@@ -149,7 +149,7 @@ G4double G4Pow::A13High(const G4double a, const bool invert) const
 G4double G4Pow::A13Low(const G4double a, const G4bool invert) const
 {
   G4double res;
-  const G4int i    = static_cast<G4int>(4. * (a + 0.125));
+  const auto  i    = static_cast<G4int>(4. * (a + 0.125));
   const G4double y = 0.25 * i;
   const G4double x = (a / y - 1.) * onethird;
   res              = lowa13[i] * (1. + x - x * x * (1. - 1.666667 * x));

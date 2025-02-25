@@ -38,7 +38,7 @@ void ChemOxygenWaterBuilder::OxygenScavengerReaction(G4DNAMolecularReactionTable
   // Get the molecular configuration
   auto* e_aq = table->GetConfiguration("e_aq");
   auto* H = table->GetConfiguration("H");
-  auto* HO2 = table->GetConfiguration("HO2");
+  auto* HO2 = table->GetConfiguration("HO2°");
   auto* Om = table->GetConfiguration("Om");
   auto* O2 = table->GetConfiguration("O2");
   auto* O2m = table->GetConfiguration("O2m");
@@ -70,7 +70,7 @@ void ChemOxygenWaterBuilder::SecondOrderReactionExtended(
   //-----------------------------------
   // Get the molecular configuration
   auto table = G4MoleculeTable::Instance();
-  auto* OH = table->GetConfiguration("OH");
+  auto* OH = table->GetConfiguration("°OH");
   auto* OHm = table->GetConfiguration("OHm");
   auto* e_aq = table->GetConfiguration("e_aq");
   auto* H2 = table->GetConfiguration("H2");
@@ -78,7 +78,7 @@ void ChemOxygenWaterBuilder::SecondOrderReactionExtended(
   auto* H = table->GetConfiguration("H");
   auto* H2O2 = table->GetConfiguration("H2O2");
 
-  auto* HO2 = table->GetConfiguration("HO2");
+  auto* HO2 = table->GetConfiguration("HO2°");
   auto* HO2m = table->GetConfiguration("HO2m");
   auto* Om = table->GetConfiguration("Om");
   auto* O2 = table->GetConfiguration("O2");

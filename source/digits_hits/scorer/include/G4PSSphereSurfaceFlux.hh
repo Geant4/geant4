@@ -59,8 +59,8 @@
 class G4PSSphereSurfaceFlux : public G4VPrimitiveScorer
 {
  public:
-  G4PSSphereSurfaceFlux(G4String name, G4int direction, G4int depth = 0);
-  G4PSSphereSurfaceFlux(G4String name, G4int direction, const G4String& unit,
+  G4PSSphereSurfaceFlux(const G4String& name, G4int direction, G4int depth = 0);
+  G4PSSphereSurfaceFlux(const G4String& name, G4int direction, const G4String& unit,
                         G4int depth = 0);
   ~G4PSSphereSurfaceFlux() override = default;
 

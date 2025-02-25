@@ -234,7 +234,7 @@ G4NucleiModel::G4NucleiModel()
   : verboseLevel(0), nuclei_radius(0.), nuclei_volume(0.), number_of_zones(0),
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
-    current_nucl2(0), gammaQDinterp(kebins),
+    current_nucl2(0), dinucleonDensityScale(1.0), gammaQDinterp(kebins),
     crossSectionUnits(G4CascadeParameters::xsecScale()),
     radiusUnits(G4CascadeParameters::radiusScale()),
     skinDepth(0.611207*radiusUnits),
@@ -252,7 +252,7 @@ G4NucleiModel::G4NucleiModel(G4int a, G4int z)
   : verboseLevel(0), nuclei_radius(0.), nuclei_volume(0.), number_of_zones(0),
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
-    current_nucl2(0), gammaQDinterp(kebins),
+    current_nucl2(0), dinucleonDensityScale(1.0), gammaQDinterp(kebins),
     crossSectionUnits(G4CascadeParameters::xsecScale()),
     radiusUnits(G4CascadeParameters::radiusScale()),
     skinDepth(0.611207*radiusUnits),
@@ -272,7 +272,7 @@ G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
   : verboseLevel(0), nuclei_radius(0.), nuclei_volume(0.), number_of_zones(0),
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
-    current_nucl2(0), gammaQDinterp(kebins),
+    current_nucl2(0), dinucleonDensityScale(1.0), gammaQDinterp(kebins),
     crossSectionUnits(G4CascadeParameters::xsecScale()),
     radiusUnits(G4CascadeParameters::radiusScale()),
     skinDepth(0.611207*radiusUnits),
@@ -375,9 +375,9 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   const std::vector<G4double> kp(number_of_zones, kaon_vp);
   const std::vector<G4double> hp(number_of_zones, hyperon_vp);
 
-  zone_potentials.push_back(vp);
-  zone_potentials.push_back(kp);
-  zone_potentials.push_back(hp);
+  zone_potentials.push_back(std::move(vp));
+  zone_potentials.push_back(std::move(kp));
+  zone_potentials.push_back(std::move(hp));
 
   setDinucleonDensityScale();
 

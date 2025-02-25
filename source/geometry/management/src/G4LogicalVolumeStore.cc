@@ -76,7 +76,7 @@ void G4LogicalVolumeStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::IsGeometryClosed())
+  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the logical volume store"
            << " while geometry closed !" << G4endl;

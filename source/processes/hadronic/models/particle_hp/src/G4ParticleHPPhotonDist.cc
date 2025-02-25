@@ -308,7 +308,7 @@ G4ReactionProductVector* G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
 
             if (std::accumulate(photons_e.cbegin(), photons_e.cend(), 0.0) > maximumE) {
               if (std::accumulate(photons_e.cbegin(), photons_e.cend(), 0.0) < best)
-                photons_e_best = photons_e;
+                photons_e_best = std::move(photons_e);
               continue;
             }
             G4int iphot = 0;

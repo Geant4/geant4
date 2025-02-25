@@ -23,39 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// -------------------------------------------------------------------
-//
-// GEANT4 Class header file
-//
-//
-// File name:    G4PhysListRegistry
-//
-// Author  R. Hatcher  2014-10-15
-//
-// Modifications:  based on G4PhysicsConstructorRegistry
-//
+// G4PhysListRegistry
 //
 // Class Description
-// This is a singleton keeping pointers to all physics lists
-// Class Description - End
-
+//
+// This is a singleton keeping pointers to all physics lists.
+// Based on G4PhysicsConstructorRegistry.
+//
+// Author: R. Hatcher, 2014-10-15
+// --------------------------------------------------------------------
 #ifndef G4PhysListRegistry_hh
 #define G4PhysListRegistry_hh 1
 
 #include <vector>
 #include <map>
-#include "globals.hh"
 
+#include "globals.hh"
 
 class G4VModularPhysicsList;
 class G4VBasePhysListStamper;
 
 class G4PhysListRegistry
 {
-public:
+ public:
 
   static G4PhysListRegistry* Instance();
   // access
@@ -101,7 +91,7 @@ public:
 
   inline G4String  GetSystemDefaultPhysList() const { return systemDefault; }
 
-private:
+ private:
 
   G4PhysListRegistry();
 
@@ -123,7 +113,6 @@ private:
   // created upon the call of the method
   mutable std::vector<G4String> availBasePhysLists;
   mutable std::vector<G4String> availExtensions;
-
 };
 
 #endif

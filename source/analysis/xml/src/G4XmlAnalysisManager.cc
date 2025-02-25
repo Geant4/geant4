@@ -62,7 +62,7 @@ G4XmlAnalysisManager::G4XmlAnalysisManager()
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4XmlNtupleFileManager>(fState);
   SetNtupleFileManager(fNtupleFileManager);
-  fNtupleFileManager->SetFileManager(fileManager);
+  fNtupleFileManager->SetFileManager(std::move(fileManager));
   fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 

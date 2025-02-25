@@ -57,20 +57,19 @@ enum G4FieldType
 /// in Geant4
 enum G4EquationType
 {
-  kMagUsualEqRhs,     ///< G4Mag_UsualEqRhs: the standard right-hand side for
-                      ///< equation
-                      /// of motion.
-  kMagSpinEqRhs,      ///< G4Mag_SpinEqRhs: the equation of motion for a particle
+  kEqMagnetic,        ///< G4Mag_UsualEqRhs: the standard right-hand side for
+                      ///< equation of motion.
+  kEqMagneticWithSpin,///< G4Mag_SpinEqRhs: the equation of motion for a particle
                       ///< with spin
-                      /// in a pure magnetic field
-  kEqMagElectric,     ///< G4EqMagElectricField: Equation of motion in a combined
-                      ///  electric and magnetic field
-  kEqEMFieldWithSpin, ///< G4EqEMFieldWithSpin: Equation of motion for a
+                      ///< in a pure magnetic field
+  kEqElectroMagnetic, ///< G4EqMagElectricField: Equation of motion in a combined
+                      ///< electric and magnetic field
+  kEqEMfieldWithSpin, ///< G4EqEMFieldWithSpin: Equation of motion for a
                       ///< particle with spin
-                      ///  in a combined electric and magnetic field
-  kEqEMFieldWithEDM,  ///< G4EqEMFieldWithEDM: Equation of motion in a combined
-                      /// electric and magnetic field, with spin tracking for
-                      /// both MDM and EDM terms
+                      ///< in a combined electric and magnetic field
+  kEqEMfieldWithEDM,  ///< G4EqEMFieldWithEDM: Equation of motion in a combined
+                      ///< electric and magnetic field, with spin tracking for
+                      ///< both MDM and EDM terms
   kUserEquation       ///< User defined equation of motion
 };
 
@@ -259,7 +258,7 @@ class G4FieldParameters
   G4FieldType fField = kMagnetic;
 
   /// Type of equation of motion of a particle in a field
-  G4EquationType fEquation = kMagUsualEqRhs;
+  G4EquationType fEquation = kEqMagnetic;
 
   /// Type of integrator of particle's equation of motion
   G4StepperType fStepper = kDormandPrince745;

@@ -8,4 +8,4 @@ add_subdirectory(B3)
 add_subdirectory(B4)
 add_subdirectory(B5)
 
-add_custom_target(basic DEPENDS B1 B2 B3 B4 B5)
+add_custom_target(basic DEPENDS exampleB1 B2 B3 B4 exampleB5)

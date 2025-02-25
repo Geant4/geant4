@@ -43,7 +43,7 @@
 class G4PSVolumeFlux : public G4VPrimitivePlotter
 {
  public:
-  G4PSVolumeFlux(G4String name, G4int direction = 1, G4int depth = 0);
+  G4PSVolumeFlux(const G4String& name, G4int direction = 1, G4int depth = 0);
   ~G4PSVolumeFlux() override = default;
 
  public:

@@ -33,6 +33,12 @@
 #  ifndef FLUKA_COMMON_DEPENDENCIES_HH
 #    define FLUKA_COMMON_DEPENDENCIES_HH
 
+// clang-format off
+// Special headers with global constants - DO NOT RE-ORDER
+#    include "dblprc.h"
+#    include "dimpar.h"
+#    include "iounit.h"
+// End: special headers with global constants
 #    include "beamcm.h"
 #    include "blnkcm.h"
 #    include "caslim.h"
@@ -40,8 +46,6 @@
 #    include "cmphnu.h"
 #    include "ctitle.h"
 #    include "currpt.h"
-#    include "dblprc.h"
-#    include "dimpar.h"
 #    include "evaflg.h"
 #    include "evapix.h"
 #    include "fheavy.h"
@@ -49,7 +53,6 @@
 #    include "genflg.h"
 #    include "genstk.h"
 #    include "genthr.h"
-#    include "iounit.h"
 #    include "isotop.h"
 #    include "ncsfta.h"
 #    include "ndnicm.h"
@@ -67,6 +70,7 @@
 #    include "sumcou.h"
 #    include "thrscm.h"
 #    include "usryld.h"
+// clang-format on
 
 #  endif
 #endif  // G4_USE_FLUKA

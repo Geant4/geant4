@@ -87,6 +87,10 @@ public:
          const G4ParticleDefinition* theParticle, 
 	 G4double ekin);
 
+  // parameterisation of threshold shape of cross section
+  static G4double NeutronInelasticShape(G4int Z, G4double ekin);
+  static G4double ProtonInelasticShape(G4int Z, G4double ekin);
+
   static G4Pow* fG4pow;
   static const G4double r0[93];
 

@@ -50,7 +50,7 @@ class F04StepMax : public G4VDiscreteProcess
 
     void SetStepMax(G4double);
 
-    G4double GetStepMax() { return fMaxChargedStep; };
+    G4double GetStepMax() { return fMaxChargedStep; }
 
     G4double PostStepGetPhysicalInteractionLength(const G4Track&, G4double,
                                                   G4ForceCondition*) override;

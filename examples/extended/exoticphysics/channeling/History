@@ -4,6 +4,23 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-11-29 I. Hrivnacova (channelingExamples-V11-02-03)
+- Fixes Doxygen pages names & links
+
+## 2024-10-30 A. Sytov (channelingExamples-V11-02-02)
+  -added the ch3 example; readme of channeling folder updated
+  -added the CMakeLists.txt for the channeling examples
+
+## 2024-09-25 A. Sytov (channelingExamples-V11-02-01)
+  -added the ch2 example; readme of channeling folder updated
+  -small updates in ch1 example: README updated, deletion of some comments 
+   in DetectorConstruction, {nullptr} added in PrimaryGeneratorAction.
+
+## 2024-09-02 A. Sytov (channelingExamples-V11-02-00)
+  -moved the channeling example into channeling/ch0
+  -added the ch1 example
+  -updated tests/ctests_examples/CMakeLists.txt 
+  (added new test for ch1 and updated a test for ch0)
 
 ## 2022-11-02 Vladimir Ivanchenko (channelingExample-V11-00-01)
 - Use SS EM physics instead of Opt4 and disable Coulomb scattering
@@ -145,4 +162,3 @@ May 19, 2014 E. Bagli (channelingExample-V10-00-01)
 
 May 9, 2014, E. Bagli (channelingExample-V10-00-00)
 - First import.
-

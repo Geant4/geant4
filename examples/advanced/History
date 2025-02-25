@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-16 Hoang Tran (exadvanced-V11-02-01)
+- Created a new dna category in advanced example
+- Moved moleculardna example from extended dna example to advanced dna example.
+
 ## 2024-06-10 Gabriele Cosmo (exadvanced-V11-02-00)
 - Updated GDML files to use short URL for schema validation.
 - Initial overall History file for extended examples, used for global changes

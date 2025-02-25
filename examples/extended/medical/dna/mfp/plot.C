@@ -12,7 +12,7 @@ gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
 gStyle->SetOptStat(000000);
 
-c1 = new TCanvas ("c1","",60,60,800,800);
+auto c1 = new TCanvas ("c1","",60,60,800,800);
 c1->Divide(1,1);
 
 FILE * fp = fopen("mfp.txt","r");

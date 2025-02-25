@@ -2,41 +2,40 @@
                      	Text version of the Hadrontherapy README file
                  =========================================================
 
-Last revision: 
-Released with the Geant4 10.7 version (December 2020)
-
-------------------------------------------------------------------------------------------------
-ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
-as it has been released in the Geant4 10.7 release
-
-Visit the Hadrontherapy web site (https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy) to request 
-the complete version of this program, together with its documentation;
-'hadrontherapy' (both basic and full version) is supported by the Italian INFN
-Institute in the framework of the MC-INFN Group
-
--------------------------------------------------------------------------------------------------
-
-                     =========================================================
-                    		            HADRONTHERAPY
-                     =========================================================
-==========>    MAIN AUTHORS <==========
-
-   G.A.P. Cirrone(a)*, L. Pandola(a), G.Milluzzo(a), G.Petringa(a)
-
-==========>   PAST AUTHORS  <==========
-
-J.Pipek(a),R. Calcagno(a),  G.Cuttone(a),G.Danielsen (b), F.Di Rosa(a), S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), F.Romano(f), G.Russo(a), M.Russo(a), A.Varisano(a), A. Tramontana (a,f)
+Last revision: November 2024
 
 
-(a) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-(b) Helsinki Institute of Physics, Helsinki, Finland
-(c) University of Wollongong, Australia
-(d) CERN, (CH)
-(e) INFN Section of Genova, Genova, Italy
-(f) Physics and Astronomy Department, University of Catania, Catania, Italy
+'hadrontherapy' example is supported by the Italian INFN
+Institute in the framework of the Geant4 INFN experiment
 
-  *Corresponding author, email to: cirrone@lns.infn.it
+----------------------------------------------------------------------------
+                         GEANT 4 - Hadrontherapy example
+----------------------------------------------------------------------------
+
+                                     MAIN AUTHORS
+                                  ====================
+         G.A.P. Cirrone(a)*, L. Pandola(a), G. Petringa(a), S.Fattori(a), A.Sciuto(a)
+              *Corresponding author, email to pablo.cirrone@lns.infn.it
+
+
+                  ==========>   PAST CONTRIBUTORS  <==========
+
+                    R.Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
+                    S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
+                    A.Lechner(d), S.E.Mazzaglia(a), Z. Mei(h), G.Milluzzo(a),
+                    M.G.Pia(e), F.Romano(a), G.Russo(a,g),
+                    M.Russo(a), A.Tramontana (a), A.Varisano(a)
+
+              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
+              (b) Helsinki Institute of Physics, Helsinki, Finland
+              (c) University of Wallongong, Australia
+              (d) CERN, Geneve, Switzwerland
+              (e) INFN Section of Genova, Genova, Italy
+              (f) Physics and Astronomy Department, Univ. of Catania, Catania, Italy
+              (g) CNR-IBFM, Italy
+              (h) Institute of Applied Electromagnetic Engineering(IAEE)
+                 Huazhong University of Science and Technology(HUST), Wuhan, China
+
 -------------------------------------------------------------------------------------------------
 
 HADRONTHERAPY:
@@ -228,46 +227,26 @@ The user can have the possibility to vary, via messenger, many characteristics o
 PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION
 ===================================================
 
- Physics models in 'hadrontherapy', following the Geant4 organization, can be defined using four different approaches:
+Using the builder concepts of Geant4 we assembled (and tested) two different
+Physics Lists that are particuilarly suited for Hadronterapy applications:
 
-Particular care is addressed to the simulation of the physics processes.
-Three different approaches can be used for the choose of the physic models.
+'HADRONTHERAPY_1' is more suited for protons only
+'HADRONTHERAPY_2' is suggested for better precision with ions
 
-Approach 1:
-Using the macro command:
-/physic/addPhysics/<physics List name>.
+NOTE: to activate the "_HP" physics you have to set the G4PARTICLEHPDATA environment
+variable pointing to the external dataset named "G4TENDL".
 
-In this case, the models (for electromagnetic, hadronic elastic and hadronic inelastic) can be
-activated directly calling the name of the Physics Lists that are available inside the
-Geant4 kernel in the directory:
+The Reference physics lists (already present in the Geant4 kernel) can
+be used as well. In this case the more suitable "Reference physics lists" are:
+"QBBC", "QGSP_BIC", "Shielding", "QGSP_BERT",
+"QGSP_BIC_AllHP" and "QGSP_BIC_HP"
 
-$G4INSTALL/source/physics_lists/builders/include
 
-An example of the use of the Physics List can be found in the macro files:
-default_macro.mac and carbon_beamline.mac
+All the lists can be  activated inside any macro file using the command:
+/Physics/addPhysics
 
-Approach 2:
-
-A set of built-in physic lists are also defined and included in the class HadrontherapyPhisicsList.cc and can be activated by macro command:
-
-/physic/addPhysics/<name>.
-
-Two different physics lists can be selected using this approach:
-- HADRONTHERAPY_1: include HP hadronic physics models
-- HADRONTHERAPY_2: HP physics models are switched off
-
-Approach 3:
-We developed this approach in order to simplify the choice of the physic models to
-be used in the application.
-With this approach the user must only insert a command line in his/her .mac file using the: /physics/addPackage <PACKAGE_NAME>
-This permits to switch-on an already built physics package.
-Various packages are already present in the Geant4 tree: they are in the directory: geant4/source/physics_lists/lists/include
-
-Approach 4:
-Directly call a reference physics list by setting the variable PHYSLIST. Ex.:
- export PHYSLIST=QGSP_BIC_EMY 
-and the export QGSP_BIC_EMY reference physics list will be setted
-
+Examples of usage are:
+/Physics/addPhysics HADRONTHERAPY_1 or /Physics/addPhysics QGSP_BIC_HP
 
 
 INTERACTIVE COMMANDS

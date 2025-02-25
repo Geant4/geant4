@@ -23,34 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SensitiveVolumeList
 //
+// Class description:
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1996
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on Hits+Digi domain
-//      object model of April 1996, S.Piperov
-//
-//   ----------------  G4SensitiveVolumeList  -----------------
-
-#ifndef G4SensitiveVolumeList_h
-#define G4SensitiveVolumeList_h 1
-
-// #include "g4rw/tpordvec.h"
-// #include "g4rw/tvordvec.h"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-
-#include <vector>
-
-// class description:
-//
-//  This class object can have lists of logical and physical volumes.
+// This class object can have lists of logical and physical volumes.
 // In case a sensitive detector is shared by several logical volumes and/or
 // a logical volume is shared by several physical volumes, this class can be
 // used by the veto list for individual logical/physical volumes.
 //
+// Author: S.Piperov, 1996
+// --------------------------------------------------------------------
+#ifndef G4SensitiveVolumeList_h
+#define G4SensitiveVolumeList_h 1
+
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+
+#include <vector>
 
 class G4SensitiveVolumeList
 {

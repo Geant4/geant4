@@ -127,7 +127,7 @@ G4double G4ITModelProcessor::CalculateMinTimeStep(G4double currentGlobalTime,
         if(fTSTimeStep == -1){
             fpActiveModelWithMinTimeStep->GetReactionProcess()->Initialize();
             if(fReactionSet->Empty()) return DBL_MAX;
-            auto fReactionSetInTime = fReactionSet->GetReactionsPerTime();
+            const auto& fReactionSetInTime = fReactionSet->GetReactionsPerTime();
             fTSTimeStep = fReactionSetInTime.begin()->get()->GetTime() - currentGlobalTime;
         }
     }

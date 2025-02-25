@@ -62,9 +62,11 @@ void G4LatticePhysical::SetPhysicalOrientation(const G4RotationMatrix* Rot)
     fGlobalToLocal.invert();
   }
 
-  if (verboseLevel != 0) {
-    G4cout << "G4LatticePhysical::SetPhysicalOrientation " << *Rot
-           << "\nfLocalToGlobal: " << fLocalToGlobal << "\nfGlobalToLocal: " << fGlobalToLocal
+  if (verboseLevel > 0) {
+    G4cout << "G4LatticePhysical::SetPhysicalOrientation ";
+    if (Rot != nullptr) { G4cout << *Rot; }
+    else { G4cout << " 0 "; }
+    G4cout << "\nfLocalToGlobal: " << fLocalToGlobal << "\nfGlobalToLocal: " << fGlobalToLocal
            << G4endl;
   }
 }

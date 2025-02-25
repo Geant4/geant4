@@ -86,7 +86,7 @@ public: // With description
   class PVNameCopyNo {
   public:
     // Normal constructor
-    PVNameCopyNo(G4String name, G4int copyNo)
+    PVNameCopyNo(const G4String& name, G4int copyNo)
     : fName(name), fCopyNo(copyNo) {}
     const G4String& GetName() const {return fName;}
     G4int GetCopyNo() const {return fCopyNo;}

@@ -51,13 +51,27 @@
 #define G4RICHTRAJECTORY_HH
 
 #include "G4TouchableHandle.hh"
-#include "G4Trajectory.hh"
+#include "G4VTrajectory.hh"
+#include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4RichTrajectoryPoint.hh"  // Include from 'tracking'
+#include "G4ios.hh"  // Include from 'system'
+#include "globals.hh"  // Include from 'global'
 
 #include "trkgdefs.hh"
+#include <stdlib.h>  // Include from 'system'
 
-class G4RichTrajectory : public G4Trajectory
+#include <vector>
+
+class G4Polyline;
+class G4ClonedRichTrajectory;
+
+class G4RichTrajectory : public G4VTrajectory
 {
-  using RichTrajectoryPointsContainer = std::vector<G4VTrajectoryPoint*>;
+  using G4TrajectoryPointContainer = std::vector<G4VTrajectoryPoint*>;
+
+  friend class G4ClonedRichTrajectory;
 
  public:
   // Constructors/destructor
@@ -75,6 +89,19 @@ class G4RichTrajectory : public G4Trajectory
   inline void* operator new(size_t);
   inline void operator delete(void*);
 
+  // cloning with the master thread allocator
+  G4VTrajectory* CloneForMaster() const override;
+
+  // Get/Set functions
+
+  inline G4int GetTrackID() const override { return fTrackID; }
+  inline G4int GetParentID() const override { return fParentID; }
+  inline G4String GetParticleName() const override { return ParticleName; }
+  inline G4double GetCharge() const override { return PDGCharge; }
+  inline G4int GetPDGEncoding() const override { return PDGEncoding; }
+  inline G4double GetInitialKineticEnergy() const { return initialKineticEnergy; }
+  inline G4ThreeVector GetInitialMomentum() const override { return initialMomentum; }
+
   // Other (virtual) member functions
   //
   void ShowTrajectory(std::ostream& os = G4cout) const override;
@@ -84,15 +111,26 @@ class G4RichTrajectory : public G4Trajectory
   inline G4int GetPointEntries() const override;
   inline G4VTrajectoryPoint* GetPoint(G4int i) const override;
 
+  G4ParticleDefinition* GetParticleDefinition();
+
   // Get methods for HepRep style attributes
   //
   const std::map<G4String, G4AttDef>* GetAttDefs() const override;
   std::vector<G4AttValue>* CreateAttValues() const override;
 
  private:
+  G4TrajectoryPointContainer* positionRecord = nullptr;
+  G4int fTrackID = 0;
+  G4int fParentID = 0;
+  G4int PDGEncoding = 0;
+  G4double PDGCharge = 0.0;
+  G4String ParticleName = "dummy";
+  G4double initialKineticEnergy = 0.0;
+  G4ThreeVector initialMomentum;
+
   // Extended information (only publicly accessible through AttValues)...
   //
-  RichTrajectoryPointsContainer* fpRichPointsContainer = nullptr;
+  G4TrajectoryPointContainer* fpRichPointContainer = nullptr;
   G4TouchableHandle fpInitialVolume;
   G4TouchableHandle fpInitialNextVolume;
   const G4VProcess* fpCreatorProcess = nullptr;
@@ -120,12 +158,12 @@ inline void G4RichTrajectory::operator delete(void* aRichTrajectory)
 
 inline G4int G4RichTrajectory::GetPointEntries() const
 {
-  return G4int(fpRichPointsContainer->size());
+  return G4int(fpRichPointContainer->size());
 }
 
 inline G4VTrajectoryPoint* G4RichTrajectory::GetPoint(G4int i) const
 {
-  return (*fpRichPointsContainer)[i];
+  return (*fpRichPointContainer)[i];
 }
 
 #endif

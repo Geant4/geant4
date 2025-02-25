@@ -70,7 +70,7 @@ void G4VInteractiveSession::AddInteractor(G4String a_name, G4Interactor a_intera
 }
 
 /***************************************************************************/
-G4Interactor G4VInteractiveSession::GetInteractor(G4String a_name)
+G4Interactor G4VInteractiveSession::GetInteractor(const G4String& a_name)
 {
   G4interactor_map::iterator it;
   if ((it = interactors.find(a_name)) == interactors.end()) return nullptr;

@@ -37,6 +37,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4UnknownParticle.hh"
+#include "G4ChargedUnknownParticle.hh"
 #include "G4UnknownDecay.hh"
 
 // factory
@@ -61,6 +62,7 @@ G4UnknownDecayPhysics::~G4UnknownDecayPhysics()
 void G4UnknownDecayPhysics::ConstructParticle()
 {
   G4UnknownParticle::UnknownParticleDefinition();
+  G4ChargedUnknownParticle::ChargedUnknownParticleDefinition();
 }
 
 void G4UnknownDecayPhysics::ConstructProcess()

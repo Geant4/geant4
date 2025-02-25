@@ -73,7 +73,7 @@ G4ParticleHPJENDLHEData::G4ParticleHPJENDLHEData()
   mIsotope.clear();
 }
 
-G4ParticleHPJENDLHEData::G4ParticleHPJENDLHEData(G4String reaction, G4ParticleDefinition* pd)
+G4ParticleHPJENDLHEData::G4ParticleHPJENDLHEData(const G4String& reaction, G4ParticleDefinition* pd)
   : G4VCrossSectionDataSet("JENDLHE" + reaction + "CrossSection")
 {
   reactionName = reaction;
@@ -86,9 +86,9 @@ void G4ParticleHPJENDLHEData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
   particleName = aP.GetParticleName();
 
-  G4String baseName = G4FindDataDir("G4NEUTRONHPDATA");
-  G4String dirName = baseName + "/JENDL_HE/" + particleName + "/" + reactionName;
-  G4String aFSType = "/CrossSection/";
+  const G4String& baseName = G4FindDataDir("G4NEUTRONHPDATA");
+  const G4String& dirName = baseName + "/JENDL_HE/" + particleName + "/" + reactionName;
+  const G4String& aFSType = "/CrossSection/";
   G4ParticleHPNames theNames;
 
   G4String filename;

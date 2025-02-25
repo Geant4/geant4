@@ -103,34 +103,30 @@ class G4MSSteppingAction : public G4UserSteppingAction
       /// except for the name, they are treated as different
       G4String material_name      = { };
       /// Getter that returns the full material name
-      G4String GetName(){return material_name;};
+      const G4String& GetName() { return material_name; }
       /// Getter that returns the material name, splitted in blocks of length 'column_width'
       G4String GetName(G4int column_width)
       {
-        G4int input_name_length = (G4int)material_name.length();
-        if( input_name_length < column_width) return material_name;
+        auto input_name_length = (G4int)material_name.length();
+        if( input_name_length < column_width)  { return material_name; }
 
-        G4String formated_name;
-
-        for (size_t i = 0; i < material_name.length(); i += column_width)
+        G4String formatted_name;
+        for (std::size_t i = 0; i < material_name.length(); i += column_width)
         {
-            // for each block of characters of length 'column_width', append '\n'
-            formated_name += material_name.substr(i, column_width);
-            if (i + column_width < material_name.length())
-            {
-                formated_name += '\n';
-            }
-            // append spaces for last block of characters so its length corresponds to column_width
-            else
-            {
-                formated_name+=G4String( column_width-(input_name_length%column_width),' ');
-            }
+          // for each block of characters of length 'column_width', append '\n'
+          formatted_name += material_name.substr(i, column_width);
+          if (i + column_width < material_name.length())
+          {
+            formatted_name += '\n';
+          }
+          // append spaces for last block of characters so its length corresponds to column_width
+          else
+          {
+            formatted_name+=G4String( column_width-(input_name_length%column_width),' ');
+          }
         }
-
-        return formated_name;
-
-      };
-
+        return formatted_name;
+      }
     };
     std::vector<shape_mat_info_t> shape_mat_info_v;
 

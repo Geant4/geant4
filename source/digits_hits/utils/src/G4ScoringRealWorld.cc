@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoringRealWorld
+// --------------------------------------------------------------------
+
 #include "G4ScoringRealWorld.hh"
 
 #include "G4LogicalVolume.hh"
@@ -39,7 +42,14 @@
 
 #include "G4SystemOfUnits.hh"
 
-G4ScoringRealWorld::G4ScoringRealWorld(G4String lvName)
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex logvolmutex = G4MUTEX_INITIALIZER;
+}
+
+G4ScoringRealWorld::G4ScoringRealWorld(const G4String& lvName)
   : G4VScoringMesh(lvName)
 {
   fShape          = MeshShape::realWorldLogVol;
@@ -56,17 +66,12 @@ void G4ScoringRealWorld::List() const
   G4VScoringMesh::List();
 }
 
-#include "G4AutoLock.hh"
-namespace
-{
-  G4Mutex logvolmutex = G4MUTEX_INITIALIZER;
-}
 void G4ScoringRealWorld::SetupGeometry(G4VPhysicalVolume*)
 {
   G4AutoLock l(&logvolmutex);
   auto store = G4LogicalVolumeStore::GetInstance();
   auto itr   = store->begin();
-  for(; itr != store->end(); itr++)
+  for(; itr != store->end(); ++itr)
   {
     if((*itr)->GetName() == logVolName)
     {
@@ -74,7 +79,7 @@ void G4ScoringRealWorld::SetupGeometry(G4VPhysicalVolume*)
       G4int nb            = 0;
       auto pvStore        = G4PhysicalVolumeStore::GetInstance();
       auto pvItr          = pvStore->begin();
-      for(; pvItr != pvStore->end(); pvItr++)
+      for(; pvItr != pvStore->end(); ++pvItr)
       {
         if((*pvItr)->GetLogicalVolume() == (*itr))
         {

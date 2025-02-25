@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4ScoringCylinder
+// --------------------------------------------------------------------
 
 #include "G4ScoringCylinder.hh"
 
@@ -45,7 +45,16 @@
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
 
-G4ScoringCylinder::G4ScoringCylinder(G4String wName)
+#include "G4LogicalVolumeStore.hh"
+#include "G4Material.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+#include "G4UnitsTable.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4VSolid.hh"
+
+
+G4ScoringCylinder::G4ScoringCylinder(const G4String& wName)
   : G4VScoringMesh(wName)
 {
   fShape = MeshShape::cylinder;
@@ -248,16 +257,16 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
   if(pVisManager != nullptr)
   {
     // cell vectors
-    std::vector<double> ephi;
-    for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+    std::vector<G4double> ephi;
+    for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       ephi.push_back(0.);
     //-
-    std::vector<std::vector<double>> zphicell;  // zphicell[Z][PHI]
-    for(int z = 0; z < fNSegment[IZ]; z++)
+    std::vector<std::vector<G4double>> zphicell;  // zphicell[Z][PHI]
+    for(G4int z = 0; z < fNSegment[IZ]; z++)
       zphicell.push_back(ephi);
     //-
-    std::vector<std::vector<double>> rphicell;  // rphicell[R][PHI]
-    for(int r = 0; r < fNSegment[IR]; r++)
+    std::vector<std::vector<G4double>> rphicell;  // rphicell[R][PHI]
+    for(G4int r = 0; r < fNSegment[IR]; r++)
       rphicell.push_back(ephi);
 
     // projections
@@ -279,16 +288,16 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
     // search min./max. values
     G4double zphimin = DBL_MAX, rphimin = DBL_MAX;
     G4double zphimax = 0., rphimax = 0.;
-    for(int iphi = 0; iphi < fNSegment[IPHI]; iphi++)
+    for(G4int iphi = 0; iphi < fNSegment[IPHI]; iphi++)
     {
-      for(int iz = 0; iz < fNSegment[IZ]; iz++)
+      for(G4int iz = 0; iz < fNSegment[IZ]; iz++)
       {
         if(zphimin > zphicell[iz][iphi])
           zphimin = zphicell[iz][iphi];
         if(zphimax < zphicell[iz][iphi])
           zphimax = zphicell[iz][iphi];
       }
-      for(int ir = 0; ir < fNSegment[IR]; ir++)
+      for(G4int ir = 0; ir < fNSegment[IR]; ir++)
       {
         if(rphimin > rphicell[ir][iphi])
           rphimin = rphicell[ir][iphi];
@@ -318,9 +327,9 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
       }
 
       G4double zhalf = fSize[2] / fNSegment[IZ];
-      for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+      for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       {
-        for(int z = 0; z < fNSegment[IZ]; z++)
+        for(G4int z = 0; z < fNSegment[IZ]; z++)
         {
           //-
           G4double angle = fAngle[0] + fAngle[1] / fNSegment[IPHI] * phi;
@@ -368,9 +377,9 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
       }
 
       G4double rsize = (fSize[1] - fSize[0]) / fNSegment[IR];
-      for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+      for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       {
-        for(int r = 0; r < fNSegment[IR]; r++)
+        for(G4int r = 0; r < fNSegment[IR]; r++)
         {
           G4double rs[2] = { fSize[0] + rsize * r, fSize[0] + rsize * (r + 1) };
           G4double angle = fAngle[0] + fAngle[1] / fNSegment[IPHI] * phi;
@@ -448,29 +457,29 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
   if(pVisManager != nullptr)
   {
     // cell vectors
-    std::vector<std::vector<std::vector<double>>> cell;  // cell[R][Z][PHI]
-    std::vector<double> ephi;
-    for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+    std::vector<std::vector<std::vector<G4double>>> cell;  // cell[R][Z][PHI]
+    std::vector<G4double> ephi;
+    for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       ephi.push_back(0.);
-    std::vector<std::vector<double>> ezphi;
-    for(int z = 0; z < fNSegment[IZ]; z++)
+    std::vector<std::vector<G4double>> ezphi;
+    for(G4int z = 0; z < fNSegment[IZ]; z++)
       ezphi.push_back(ephi);
-    for(int r = 0; r < fNSegment[IR]; r++)
+    for(G4int r = 0; r < fNSegment[IR]; r++)
       cell.push_back(ezphi);
 
-    std::vector<std::vector<double>> rzcell;  // rzcell[R][Z]
-    std::vector<double> ez;
-    for(int z = 0; z < fNSegment[IZ]; z++)
+    std::vector<std::vector<G4double>> rzcell;  // rzcell[R][Z]
+    std::vector<G4double> ez;
+    for(G4int z = 0; z < fNSegment[IZ]; z++)
       ez.push_back(0.);
-    for(int r = 0; r < fNSegment[IR]; r++)
+    for(G4int r = 0; r < fNSegment[IR]; r++)
       rzcell.push_back(ez);
 
-    std::vector<std::vector<double>> zphicell;  // zphicell[Z][PHI]
-    for(int z = 0; z < fNSegment[IZ]; z++)
+    std::vector<std::vector<G4double>> zphicell;  // zphicell[Z][PHI]
+    for(G4int z = 0; z < fNSegment[IZ]; z++)
       zphicell.push_back(ephi);
 
-    std::vector<std::vector<double>> rphicell;  // rphicell[R][PHI]
-    for(int r = 0; r < fNSegment[IR]; r++)
+    std::vector<std::vector<G4double>> rphicell;  // rphicell[R][PHI]
+    for(G4int r = 0; r < fNSegment[IR]; r++)
       rphicell.push_back(ephi);
 
     // projections
@@ -502,16 +511,16 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
     // search min./max. values
     G4double rzmin = DBL_MAX, zphimin = DBL_MAX, rphimin = DBL_MAX;
     G4double rzmax = 0., zphimax = 0., rphimax = 0.;
-    for(int r = 0; r < fNSegment[IR]; r++)
+    for(G4int r = 0; r < fNSegment[IR]; r++)
     {
-      for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+      for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       {
         if(rphimin > rphicell[r][phi])
           rphimin = rphicell[r][phi];
         if(rphimax < rphicell[r][phi])
           rphimax = rphicell[r][phi];
       }
-      for(int z = 0; z < fNSegment[IZ]; z++)
+      for(G4int z = 0; z < fNSegment[IZ]; z++)
       {
         if(rzmin > rzcell[r][z])
           rzmin = rzcell[r][z];
@@ -519,9 +528,9 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
           rzmax = rzcell[r][z];
       }
     }
-    for(int z = 0; z < fNSegment[IZ]; z++)
+    for(G4int z = 0; z < fNSegment[IZ]; z++)
     {
-      for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+      for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       {
         if(zphimin > zphicell[z][phi])
           zphimin = zphicell[z][phi];
@@ -593,9 +602,9 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
       }
 
       G4double rsize = (fSize[1] - fSize[0]) / fNSegment[IR];
-      for(int phi = 0; phi < fNSegment[IPHI]; phi++)
+      for(G4int phi = 0; phi < fNSegment[IPHI]; phi++)
       {
-        for(int r = 0; r < fNSegment[IR]; r++)
+        for(G4int r = 0; r < fNSegment[IR]; r++)
         {
           G4double rs[2] = { fSize[0] + rsize * r, fSize[0] + rsize * (r + 1) };
           G4double angle = fAngle[0] + fAngle[1] / fNSegment[IPHI] * phi;
@@ -639,9 +648,9 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
       G4double zhalf = fSize[2] / fNSegment[IZ];
       G4double angle = fAngle[0] + fAngle[1] / fNSegment[IPHI] * idxColumn;
       G4double dphi  = fAngle[1] / fNSegment[IPHI];
-      for(int z = 0; z < fNSegment[IZ]; z++)
+      for(G4int z = 0; z < fNSegment[IZ]; z++)
       {
-        for(int r = 0; r < fNSegment[IR]; r++)
+        for(G4int r = 0; r < fNSegment[IR]; r++)
         {
           G4double rs[2] = { fSize[0] + rsize * r, fSize[0] + rsize * (r + 1) };
           G4Tubs cylinder("z-phi", rs[0], rs[1], zhalf, angle, dphi);
@@ -691,14 +700,6 @@ void G4ScoringCylinder::GetRZPhi(G4int index, G4int q[3]) const
   q[j]     = (index - q[i] * jk) / fNSegment[k];
   q[k]     = index - q[j] * fNSegment[k] - q[i] * jk;
 }
-
-#include "G4LogicalVolumeStore.hh"
-#include "G4Material.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-#include "G4UnitsTable.hh"
-#include "G4VSensitiveDetector.hh"
-#include "G4VSolid.hh"
 
 void G4ScoringCylinder::DumpVolumes()
 {

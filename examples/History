@@ -6,6 +6,49 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-12-06 Gabriele Cosmo (examples-V11-03-00)
+- Updated reference outputs according to reference tag geant4-11-03-ref-00.
+- Included tags: doxygen-V11-02-01, dsbandrepair-V11-02-03, ch3-V11-02-00,
+                 molecularDNA-V11-02-13, eFLASH_radiotherapy-V11-02-02,
+                 exp_microdosimetry-V11-02-00, channelingExamples-V11-02-03,
+                 hadrontherapy-V11-02-03, chem3-V11-02-02, FlukaCern-V11-02-01,
+                 exampleRE03-V11-02-01, exampleRE07-V11-02-01.
+
+## 2024-10-31 Gabriele Cosmo (examples-V11-02-09)
+- Updated reference outputs according to reference tag geant4-11-02-ref-09.
+- Included tags: exadvanced-V11-02-01, addna-V11-02-00, dsbandrepair-V11-02-02,
+                 cellularPhantom-V11-02-01, molecularDNA-V11-02-10,
+                 xraytel-V11-02-00, testem1-V11-02-01, testem3-V11-02-02,
+                 testem11-V11-02-01, channelingExamples-V11-02-01,
+                 fieldex01-V11-02-02, fieldex02-V11-02-02, fieldex03-V11-02-03,
+                 fieldex04-V11-02-01, exdna-V11-02-02, chem4-V11-02-01,
+                 chem6-V11-02-02, dnadamage2-V11-02-00, dnaphysics-V11-02-04,
+                 microdosimetry-V11-02-02, microprox-V11-02-01, mfp-V11-02-02,
+                 microyz-V11-02-02, range-V11-02-01, scavenger-V11-02-00,
+                 slowing-V11-02-01, spower-V11-02-02, svalue-V11-02-01,
+                 wvalue-V11-02-01, UHDR-V11-02-04, exgflasha-V11-02-02,
+                 expar04-V11-02-03, exampleRE05-V11-02-01,
+                 exam-ext-vis-standalone-V11-02-01.
+
+## 2024-09-27 Gabriele Cosmo (examples-V11-02-08)
+- Updated reference outputs according to reference tag geant4-11-02-ref-08.
+- Included tags: eRosita-V11-02-00, exbasic-V11-02-04, AnaEx03-V11-02-00,
+                 HepMCEx01-V11-02-01, fieldex01-V11-02-01, fieldex02-V11-02-01,
+                 fieldex03-V11-02-02, fieldex04-V11-02-00, fieldex05-V11-02-00,
+                 fieldex06-V11-02-00, chem1-V11-02-00, chem2-V11-02-00,
+                 chem3-V11-02-01, chem4-V11-02-00, exam-ext-vis-UVA-V11-02-00,
+                 microyz-V11-02-01, molecularDNA-V11-02-05, chem5-V11-02-00,
+                 exampleRE05-V11-02-00, exam-ext-vis-vtk-V11-02-01.
+
+## 2024-08-30 Gabriele Cosmo (examples-V11-02-07)
+- Updated reference outputs according to reference tag geant4-11-02-ref-07.
+- Included tags: eFLASH_radiotherapy-V11-02-01, hadrontherapy-V11-02-02,
+                 fastAerosol-V11-02-00,STCyclotron-V11-02-00, exbasic-V11-02-02,
+                 exampleB1-V11-02-00, exampleB3-V11-02-00, GB06-V11-02-00,
+                 analysisExample-V11-02-00, exam-ext-vis-vtk-V11-02-00,
+                 molecularDNA-V11-02-02, radiobiology-V11-02-00,
+                 expol01-V11-02-00.     
+
 ## 2024-06-28 Gabriele Cosmo (examples-V11-02-06)
 - Updated reference outputs according to reference tag geant4-11-02-ref-06.
 - Included tags: doxygen-V11-02-00, exadvanced-V11-02-00, dsbandrepair-V11-02-00,

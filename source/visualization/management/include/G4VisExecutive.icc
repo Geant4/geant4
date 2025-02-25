@@ -138,10 +138,6 @@
 #include "G4VtkQt.hh" // no_geant4_module_check
 #endif
 
-#if defined (G4VIS_USE_OPENGLQT) || (G4VIS_USE_TOOLSSG_QT_GLES)
-#include <QtGlobal>
-#endif
-
 #include "G4UImanager.hh"
 #include "G4UIsession.hh"
 #include "G4UIbatch.hh"
@@ -346,7 +342,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML2File);
   RegisterGraphicsSystem (new G4GMocrenFile);
-  RegisterGraphicsSystem (new G4ToolsSGOffscreen);
   G4VGraphicsSystem* tsg_offscreen = new G4ToolsSGOffscreen;
   RegisterGraphicsSystem(tsg_offscreen);
   tsg_offscreen->AddNickname("TSG_FILE");

@@ -356,23 +356,23 @@ namespace G4INCL {
            << " by the INCL++ model" << G4endl;
         G4Exception("G4INCLDataFile::readData()","rawppbarFS.dat, ...", FatalException, ed);
       }
-      G4String dataPath0(G4FindDataDir("G4INCLDATA"));
-      G4String dataPathppbar(dataPath0 + "/rawppbarFS.dat");
-      G4String dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");
-      G4String dataPathppbark(dataPath0 + "/rawppbarFSkaonic.dat");
-      G4String dataPathnpbark(dataPath0 + "/rawnpbarFSkaonic.dat");
+      const G4String& dataPath0(G4FindDataDir("G4INCLDATA"));
+      const G4String& dataPathppbar(dataPath0 + "/rawppbarFS.dat");
+//      const G4String& dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");  // NOT used!
+      const G4String& dataPathppbark(dataPath0 + "/rawppbarFSkaonic.dat");
+//      const G4String& dataPathnpbark(dataPath0 + "/rawnpbarFSkaonic.dat");  // NOT used!
 #else
-      G4String path;
+      std::string path;
       if (theConfig) path = theConfig->getINCLXXDataFilePath();
-      G4String dataPathppbar(path + "/rawppbarFS.dat");
+      const std::string& dataPathppbar(path + "/rawppbarFS.dat");
       INCL_DEBUG("Reading https://doi.org/10.1016/0375-9474(92)90362-N ppbar final states" << dataPathppbar << '\n');
-      G4String dataPathnpbar(path + "/rawnpbarFS.dat");
+      const std::string& dataPathnpbar(path + "/rawnpbarFS.dat");
       INCL_DEBUG("Reading https://doi.org/10.1016/0375-9474(92)90362-N npbar final states" << dataPathnpbar << '\n');
-      G4String dataPathppbark(path + "/rawppbarFSkaonic.dat");
+      const std::string& dataPathppbark(path + "/rawppbarFSkaonic.dat");
       INCL_DEBUG("Reading https://doi.org/10.1016/j.physrep.2005.03.002 ppbar kaonic final states" << dataPathppbark << '\n');
-      G4String dataPathnpbark(path + "/rawnpbarFSkaonic.dat");
+      const std::string& dataPathnpbark(path + "/rawnpbarFSkaonic.dat");
       INCL_DEBUG("Reading https://doi.org/10.1007/BF02818764 and https://link.springer.com/article/10.1007/BF02754930 npbar kaonic final states" << dataPathnpbark << '\n');
-      #endif
+#endif
 
       //read probabilities and particle types from file
       std::vector<G4double> probabilities;  //will store each FS yield
@@ -390,7 +390,7 @@ namespace G4INCL {
         sum = read_file(dataPathppbar, probabilities, particle_types);
         rdm = (rdm/(1.-kaonicFSprob))*sum;  //99.88 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return theEventInfo;
         for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
           if (particle_types[n][j] == "pi0") {
@@ -1228,7 +1228,7 @@ namespace G4INCL {
         while (iss >> type) {
           types.push_back(type);
         }
-        particle_types.push_back(types);
+        particle_types.push_back(std::move(types));
       }
     } else {
 #ifdef INCLXX_IN_GEANT4_MODE

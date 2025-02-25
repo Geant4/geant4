@@ -53,6 +53,7 @@
 #define G4eBremsstrahlungRelModel_h 1
 
 #include "G4VEmModel.hh"
+#include <memory>
 
 class G4ParticleChangeForLoss;
 
@@ -218,9 +219,10 @@ private:
     std::vector<G4double>  fLPMFuncPhi;
   };
   //
-  static LPMFuncs                   gLPMFuncs;
-  static std::vector<ElementData*>  gElementData;
-
+  static std::shared_ptr<LPMFuncs> gLPMFuncs();
+  static std::shared_ptr<std::vector<ElementData*>> gElementData();
+  std::shared_ptr<LPMFuncs> fLPMFuncs;
+  std::shared_ptr<std::vector<ElementData*>> fElementData;
 };
 
 #endif

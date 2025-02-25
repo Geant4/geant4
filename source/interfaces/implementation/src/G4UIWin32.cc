@@ -1034,14 +1034,14 @@ G4String G4UIWin32::GetHelpTreeToolTips(HTREEITEM item)
 
 /****************************************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-G4String G4UIWin32::ConvertNewLines(G4String a_string)
+G4String G4UIWin32::ConvertNewLines(const G4String& a_string)
 {
   // Geant4 uses UNIX's style for new lines (\n)
   // we must convert them to Windows' style (\r\n)
-  G4String str = std::move(a_string);
-  size_t index = str.find("\n", 0);
+  G4String str = a_string;
+  std::size_t index = str.find("\n", 0);
   while (index < str.length()) {
-    str.replace(index, 2, "\r\n");
+    str.replace(index, 1, "\r\n");
     // Advance index forward so the next iteration doesn't pick it up as well.
     index = str.find("\n", index + 2);
   }
@@ -1306,9 +1306,9 @@ HTREEITEM G4UIWin32::AddItemToHelpTree(LPTSTR lpszItem, HTREEITEM aParent)
 
 /****************************************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-G4String G4UIWin32::GetShortCommandPath(G4String commandPath)
+G4String G4UIWin32::GetShortCommandPath(const G4String& commandPath)
 {
-  G4String str = std::move(commandPath);
+  G4String str = commandPath;
 
   if (str.find_last_of("/") == (str.size() - 1)) str = str.erase(str.size() - 1, 1);
 

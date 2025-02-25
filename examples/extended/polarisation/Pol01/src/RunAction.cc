@@ -65,11 +65,11 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
   auto fPositronStats = new ParticleStatistics("PositronStats");
   auto fProcCounter = new ProcessesCount("ProcCounter");
 
-  accumulableManager->RegisterAccumulable(fPhotonStats);
-  accumulableManager->RegisterAccumulable(fElectronStats);
-  accumulableManager->RegisterAccumulable(fPositronStats);
+  accumulableManager->Register(fPhotonStats);
+  accumulableManager->Register(fElectronStats);
+  accumulableManager->Register(fPositronStats);
 
-  accumulableManager->RegisterAccumulable(fProcCounter);
+  accumulableManager->Register(fProcCounter);
 
   BookHisto();
 }

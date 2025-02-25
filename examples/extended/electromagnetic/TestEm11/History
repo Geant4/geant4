@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-10-22 Michel Maire (testem11-V11-02-01)
+- TrackingAction: in energy leakage, add special traitement for positron
+
 ## 2024-01-30 Vladimir Ivanchenko (testem11-V11-02-00)
 - PrimaryGeneratorAction - added tiny shift of position of the
     particle gun from the world volume boundary. This fix removes

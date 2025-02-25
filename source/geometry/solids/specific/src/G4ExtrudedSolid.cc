@@ -733,7 +733,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       triangle[0] = c1->second;
       triangle[1] = c2->second;
       triangle[2] = c3->second;
-      fTriangles.push_back(triangle);
+      fTriangles.push_back(std::move(triangle));
 
       // remove the ear point from verticesToBeDone
       //
@@ -772,7 +772,7 @@ G4bool G4ExtrudedSolid::MakeFacets()
     triangle[0] = 0;
     triangle[1] = 1;
     triangle[2] = 2;
-    fTriangles.push_back(triangle);
+    fTriangles.push_back(std::move(triangle));
   }
   
   else if ( fNv == 4 )
@@ -793,13 +793,13 @@ G4bool G4ExtrudedSolid::MakeFacets()
     triangle1[0] = 0;
     triangle1[1] = 1;
     triangle1[2] = 2;
-    fTriangles.push_back(triangle1);
+    fTriangles.push_back(std::move(triangle1));
 
     std::vector<G4int> triangle2(3);
     triangle2[0] = 0;
     triangle2[1] = 2;
     triangle2[2] = 3;
-    fTriangles.push_back(triangle2);
+    fTriangles.push_back(std::move(triangle2));
   }  
   else
   {

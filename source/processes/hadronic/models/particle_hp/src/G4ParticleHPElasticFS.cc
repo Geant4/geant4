@@ -77,15 +77,15 @@ G4ParticleHPElasticFS::G4ParticleHPElasticFS()
 }
 
 void G4ParticleHPElasticFS::Init(G4double A, G4double Z, G4int M,
-                                 G4String& dirName, G4String&,
+                                 const G4String& dirName, const G4String&,
                                  G4ParticleDefinition*)
 {
   G4String tString = "/FS";
   G4bool dbool = true;
   SetA_Z(A, Z, M);
-  G4ParticleHPDataUsed aFile =
+  const G4ParticleHPDataUsed& aFile =
     theNames.GetName(theBaseA, theBaseZ, M, dirName, tString, dbool);
-  G4String filename = aFile.GetName();
+  const G4String& filename = aFile.GetName();
   SetAZMs(aFile);
   if (!dbool) {
     hasAnyData = false;

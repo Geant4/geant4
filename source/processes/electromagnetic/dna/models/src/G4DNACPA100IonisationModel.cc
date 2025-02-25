@@ -355,7 +355,7 @@ void G4DNACPA100IonisationModel::SampleSecondaries(
 
     // SI: only atomic deexcitation from K shell is considered
     // Hoang: only for water
-    if (fpG4_WATER != nullptr && material == G4Material::GetMaterial("G4_WATER")) {
+    if (material == G4Material::GetMaterial("G4_WATER")) {
       std::size_t secNumberInit = 0;  // need to know at a certain point the energy of secondaries
       std::size_t secNumberFinal = 0;  // So I'll make the diference and then sum the energies
       if ((fAtomDeexcitation != nullptr) && shell == 4) {

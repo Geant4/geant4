@@ -42,16 +42,15 @@ class G4VEmAdjointModel;
 class G4eInverseBremsstrahlung : public G4VAdjointReverseReaction
 {
  public:
-  explicit G4eInverseBremsstrahlung(G4bool whichScatCase, G4String process_name,
+  explicit G4eInverseBremsstrahlung(G4bool whichScatCase, const G4String& process_name,
                                     G4VEmAdjointModel* aEmAdjointModel);
-  ~G4eInverseBremsstrahlung() override;
+  ~G4eInverseBremsstrahlung() override = default;
 
   void ProcessDescription(std::ostream&) const override;
-  void DumpInfo() const override { ProcessDescription(G4cout); };
+  void DumpInfo() const override { ProcessDescription(G4cout); }
 
   G4eInverseBremsstrahlung(G4eInverseBremsstrahlung&) = delete;
-  G4eInverseBremsstrahlung& operator=(const G4eInverseBremsstrahlung& right) =
-    delete;
+  G4eInverseBremsstrahlung& operator=(const G4eInverseBremsstrahlung& right) = delete;
 };
 
 #endif

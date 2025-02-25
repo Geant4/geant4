@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,7 +30,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -133,10 +132,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -572,8 +574,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 
  ======================== run summary =====================
 
@@ -585,13 +585,6 @@ See commands in /vis/modeling/trajectories/ for other options.
  CrossSection:	45756510.39 cm^-1 			massic: 45756510.39 cm2/g
 
  mean energy of charged secondaries: 0.00 eV 	mass_energy_transfer coef: 0.00 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -603,13 +596,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	33852715.17 cm^-1 			massic: 33852715.17 cm2/g
 
  mean energy of charged secondaries: 110.88 meV	mass_energy_transfer coef: 187674.00 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -621,13 +607,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	28934278.50 cm^-1 			massic: 28934278.50 cm2/g
 
  mean energy of charged secondaries: 640.29 meV	mass_energy_transfer coef: 617546.31 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -639,13 +618,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	25529446.62 cm^-1 			massic: 25529446.62 cm2/g
 
  mean energy of charged secondaries: 1.54 eV 	mass_energy_transfer coef: 982549.40 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -657,13 +629,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	23743719.57 cm^-1 			massic: 23743719.57 cm2/g
 
  mean energy of charged secondaries: 2.45 eV 	mass_energy_transfer coef: 1161723.19 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -675,13 +640,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	22182243.27 cm^-1 			massic: 22182243.27 cm2/g
 
  mean energy of charged secondaries: 3.31 eV 	mass_energy_transfer coef: 1223217.47 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -693,13 +651,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	21404234.56 cm^-1 			massic: 21404234.56 cm2/g
 
  mean energy of charged secondaries: 3.93 eV 	mass_energy_transfer coef: 1202032.50 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -711,13 +662,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	20979403.03 cm^-1 			massic: 20979403.03 cm2/g
 
  mean energy of charged secondaries: 4.67 eV 	mass_energy_transfer coef: 1225412.34 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -729,13 +673,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	20065022.32 cm^-1 			massic: 20065022.32 cm2/g
 
  mean energy of charged secondaries: 5.21 eV 	mass_energy_transfer coef: 1160670.34 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -747,13 +684,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	19240808.50 cm^-1 			massic: 19240808.50 cm2/g
 
  mean energy of charged secondaries: 5.66 eV 	mass_energy_transfer coef: 1088598.69 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -765,13 +695,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	11794397.22 cm^-1 			massic: 11794397.22 cm2/g
 
  mean energy of charged secondaries: 10.62 eV 	mass_energy_transfer coef: 626275.13 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -783,13 +706,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	9275772.51 cm^-1 			massic: 9275772.51 cm2/g
 
  mean energy of charged secondaries: 12.60 eV 	mass_energy_transfer coef: 389559.45 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -801,13 +717,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	7752710.95 cm^-1 			massic: 7752710.95 cm2/g
 
  mean energy of charged secondaries: 13.37 eV 	mass_energy_transfer coef: 259209.28 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -819,13 +728,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	6649474.36 cm^-1 			massic: 6649474.36 cm2/g
 
  mean energy of charged secondaries: 14.59 eV 	mass_energy_transfer coef: 194080.51 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -837,13 +739,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	5840393.38 cm^-1 			massic: 5840393.38 cm2/g
 
  mean energy of charged secondaries: 15.04 eV 	mass_energy_transfer coef: 146371.88 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -855,13 +750,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	5252510.90 cm^-1 			massic: 5252510.90 cm2/g
 
  mean energy of charged secondaries: 15.88 eV 	mass_energy_transfer coef: 119173.07 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -873,13 +761,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	4791410.32 cm^-1 			massic: 4791410.32 cm2/g
 
  mean energy of charged secondaries: 16.29 eV 	mass_energy_transfer coef: 97570.41 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -891,13 +772,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	4404030.33 cm^-1 			massic: 4404030.33 cm2/g
 
  mean energy of charged secondaries: 16.38 eV 	mass_energy_transfer coef: 80133.04 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -909,13 +783,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	4087223.44 cm^-1 			massic: 4087223.44 cm2/g
 
  mean energy of charged secondaries: 17.74 eV 	mass_energy_transfer coef: 72510.37 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -927,13 +794,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	2338485.36 cm^-1 			massic: 2338485.36 cm2/g
 
  mean energy of charged secondaries: 20.28 eV 	mass_energy_transfer coef: 23709.53 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -945,13 +805,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	1685255.24 cm^-1 			massic: 1685255.24 cm2/g
 
  mean energy of charged secondaries: 22.94 eV 	mass_energy_transfer coef: 12888.63 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -963,13 +816,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	1327178.80 cm^-1 			massic: 1327178.80 cm2/g
 
  mean energy of charged secondaries: 21.95 eV 	mass_energy_transfer coef: 7283.50 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -981,13 +827,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	1103224.70 cm^-1 			massic: 1103224.70 cm2/g
 
  mean energy of charged secondaries: 23.00 eV 	mass_energy_transfer coef: 5075.28 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -999,13 +838,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	944103.90 cm^-1 			massic: 944103.90 cm2/g
 
  mean energy of charged secondaries: 24.51 eV 	mass_energy_transfer coef: 3856.45 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -1017,13 +849,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	810987.25 cm^-1 			massic: 810987.25 cm2/g
 
  mean energy of charged secondaries: 24.57 eV 	mass_energy_transfer coef: 2846.37 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -1035,13 +860,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	722866.36 cm^-1 			massic: 722866.36 cm2/g
 
  mean energy of charged secondaries: 25.43 eV 	mass_energy_transfer coef: 2297.50 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -1053,13 +871,6 @@ There are histograms that can be viewed with visualization:
  CrossSection:	655182.80 cm^-1 			massic: 655182.80 cm2/g
 
  mean energy of charged secondaries: 28.13 eV 	mass_energy_transfer coef: 2047.73 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -1071,10 +882,3 @@ There are histograms that can be viewed with visualization:
  CrossSection:	588506.79 cm^-1 			massic: 588506.79 cm2/g
 
  mean energy of charged secondaries: 26.29 eV 	mass_energy_transfer coef: 1547.32 cm2/g
-There are histograms that can be viewed with visualization:
-  7 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.

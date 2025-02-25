@@ -46,3 +46,38 @@
     (note: mu- and mu+ together, not individually)
  at run time, via macro commands.
 
+
+ G4CoherentPairProductionPhysics
+ -------------
+ Used by G4CoherentPairProduction process (in parameterisations/channeling/)
+ of coherent pair production by high energy gamma in an oriented crystal.
+ - IMPORTANT: with default parameters (incoherent scattering switched off)
+   can work in parallel with a standard physics list.
+ - It is possible to activate incoherent scattering using
+   ActivateIncoherentScattering() function.
+   IMPORTANT: requires switching off gamma conversion in
+   the physics list to not simulate it twice
+ - IMPORTANT: the geometry and material crystal data are contained in
+   G4ChannelingFastSimCrystalData which is automatically copied from
+   G4ChannelingFastSimModel into G4CoherentPairProduction using also
+   the default G4ChannelingFastSimModel and G4Region names ("ChannelingModel"
+   and "Crystal", respectively), which can be changed using
+   SetNameChannelingModel and SetNameG4Region, respectively,
+   being G4CoherentPairProductionPhysics set functions.
+ - IMPORTANT: G4ChannelingFastSimModel and its G4Region are required
+   for G4ChannelingFastSimCrystalData. If not found, an exception will
+   be generated.
+ - The intrinsic parameters of G4CoherentPairProduction can be changed
+   using G4CoherentPairProductionPhysics set functions:
+      - cuts of the model:
+        - SetLowEnergyLimit(G4double energy); default is 1 GeV
+        - SetHighAngleLimit(G4double angle); default is 50 mrad
+        - SetPPKineticEnergyCut(G4double kineticEnergyCut); default is 1 MeV
+      - internal parameters of the model (!!! it is strongly UNRECOMMENDED to decrease them):
+        - SetSamplingPairsNumber(G4int nPairs);
+            //default is 150 (amount of sampling pairs for Baier-Katkov algorithm)
+        - SetChargeParticleAngleFactor(G4double chargeParticleAngleFactor);
+            //default is 4 (angular distribution parameter = 4/gamma)
+        - void SetNTrajectorySteps(G4int nTrajectorySteps);
+            //default is 250 (amount of trajectory steps for tracking of
+            //sampling pair in Baier-Katkov algorithm).

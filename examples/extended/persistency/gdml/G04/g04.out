@@ -22,7 +22,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -63,7 +63,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -144,10 +143,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -318,7 +320,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -800,7 +802,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -825,7 +827,7 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
@@ -855,12 +857,13 @@ Index : 0     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
 
 *********************************************************************************************************
@@ -1085,7 +1088,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.001539s Sys=0.000000s
+  User=0.000000s Real=0.001204s Sys=0.000000s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -1337,7 +1340,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.001063s Sys=0.000000s
+  User=0.010000s Real=0.000854s Sys=0.000000s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -1390,7 +1393,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000205s Sys=0.000000s
+  User=0.000000s Real=0.000126s Sys=0.000000s
 /gun/direction 0.3 -0.2 1
 /run/beamOn 20
 
@@ -1442,7 +1445,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000168s Sys=0.000000s
+  User=0.000000s Real=0.000112s Sys=0.000000s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -1494,14 +1497,14 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000189s Sys=0.000000s
+  User=0.000000s Real=0.000105s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:4) 
-UserDetectorConstruction deleted 0x96dff0
-UserPhysicsList deleted 0x96e350
-UserActionInitialization deleted 0xafd8e0
+UserDetectorConstruction deleted 0x1516800
+UserPhysicsList deleted 0x1516b80
+UserActionInitialization deleted 0x16a6620
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

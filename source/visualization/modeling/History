@@ -6,6 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-22 John Allison (modeling-V11-02-05)
+- G4PhysicalVolumeModel.cc:
+  - Fixed some ragged indentations.
+
+## 2024-10-16 John Allison (modeling-V11-02-04)
+- G4TrajectoryDrawByEncounteredVolume.cc, G4TrajectoryEncounteredVolumeFilter.cc:
+  - Replace check on trajectory type using dynamic_cast with a simple check
+    on the existence on the required G4Att.
+
+## 2024-08-31 John Allison (modeling-V11-02-03)
+- More Coverity fixes
+
+## 2024-07-17 John Allison (modeling-V11-02-02)
+- Coverity fixes
+
 ## 2024-01-22 John Allison (modeling-V11-02-01)
 - Coworks with visman-V11-02-04, greps-V11-02-00 and interfaces-V11-02-01.
 - G4PhysicalVolumeModel:

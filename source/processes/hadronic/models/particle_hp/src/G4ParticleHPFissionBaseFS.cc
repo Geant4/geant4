@@ -43,14 +43,14 @@
 #include "G4ThreeVector.hh"
 #include "G4Triton.hh"
 
-void G4ParticleHPFissionBaseFS::Init(G4double A, G4double Z, G4int M, G4String& dirName,
-                                     G4String& bit, G4ParticleDefinition*)
+void G4ParticleHPFissionBaseFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                                     const G4String& bit, G4ParticleDefinition*)
 {
   G4String tString = dirName;
   G4bool dbool;
-  G4ParticleHPDataUsed aFile =
+  const G4ParticleHPDataUsed& aFile =
     theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, tString, bit, dbool);
-  G4String filename = aFile.GetName();
+  const G4String& filename = aFile.GetName();
   SetAZMs(A, Z, M, aFile);
   // theBaseA = aFile.GetA();
   // theBaseZ = aFile.GetZ();

@@ -42,7 +42,7 @@
 class G4PSTermination3D : public G4PSTermination
 {
  public:
-  G4PSTermination3D(G4String name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
+  G4PSTermination3D(const G4String& name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
                     G4int di = 2, G4int dj = 1, G4int dk = 0);
   ~G4PSTermination3D() override = default;
 

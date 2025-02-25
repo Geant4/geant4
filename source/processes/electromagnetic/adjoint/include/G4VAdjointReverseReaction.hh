@@ -47,7 +47,7 @@ class G4VParticleChange;
 class G4VAdjointReverseReaction : public G4VDiscreteProcess
 {
  public:
-  explicit G4VAdjointReverseReaction(G4String process_name,
+  explicit G4VAdjointReverseReaction(const G4String& process_name,
                                      G4bool whichScatCase);
 
   ~G4VAdjointReverseReaction() override;

@@ -383,12 +383,25 @@ void G4IonisParamMat::ComputeFluctModel()
   for (std::size_t i = 0; i < fMaterial->GetNumberOfElements(); ++i) {
     Zeff += (fMaterial->GetFractionVector())[i] * (*(fMaterial->GetElementVector()))[i]->GetZ();
   }
-  fF2fluct = (Zeff > 2.) ? 2. / Zeff : 0.0;
-
-  fF1fluct = 1. - fF2fluct;
-  fEnergy2fluct = 10. * Zeff * Zeff * CLHEP::eV;
-  fLogEnergy2fluct = G4Log(fEnergy2fluct);
-  fLogEnergy1fluct = (fLogMeanExcEnergy - fF2fluct * fLogEnergy2fluct) / fF1fluct;
+  if (Zeff > 2.1) {
+    fF2fluct = 2.0 / Zeff;
+    fF1fluct = 1. - fF2fluct;
+    fEnergy2fluct = 10. * Zeff * Zeff * CLHEP::eV;
+    fLogEnergy2fluct = G4Log(fEnergy2fluct);
+    fLogEnergy1fluct = (fLogMeanExcEnergy - fF2fluct * fLogEnergy2fluct) / fF1fluct;
+  } else if (Zeff > 1.1) {
+    fF2fluct = 0.0;
+    fF1fluct = 1.0;
+    fEnergy2fluct = 40. * CLHEP::eV;
+    fLogEnergy2fluct = G4Log(fEnergy2fluct);
+    fLogEnergy1fluct = fLogMeanExcEnergy;
+  } else {
+    fF2fluct = 0.0;
+    fF1fluct = 1.0;
+    fEnergy2fluct = 10. * CLHEP::eV;
+    fLogEnergy2fluct = G4Log(fEnergy2fluct);
+    fLogEnergy1fluct = fLogMeanExcEnergy;
+  }
   fEnergy1fluct = G4Exp(fLogEnergy1fluct);
   fEnergy0fluct = 10. * CLHEP::eV;
   fRateionexcfluct = 0.4;
@@ -426,10 +439,11 @@ void G4IonisParamMat::ComputeIonParameters()
       lF += element->GetIonisation()->GetLFactor() * weight;
       a23 += weight / g4pow->A23(element->GetN());
     }
-    z /= norm;
-    vF /= norm;
-    lF /= norm;
-    a23 /= norm;
+    if (norm > 0.0) { norm = 1.0/norm; }
+    z *= norm;
+    vF *= norm;
+    lF *= norm;
+    a23 *= norm;
   }
   fZeff = z;
   fLfactor = lF;

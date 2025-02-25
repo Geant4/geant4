@@ -32,8 +32,8 @@
 #include "G4VTrajectory.hh"
 #include "G4VisTrajContext.hh"
 #include "G4VTrajectoryPoint.hh"
+#include "G4AttDef.hh"
 #include "G4AttValue.hh"
-#include "G4RichTrajectory.hh"
 
 G4TrajectoryDrawByEncounteredVolume::G4TrajectoryDrawByEncounteredVolume
 (const G4String& name, G4VisTrajContext* context)
@@ -46,9 +46,12 @@ G4TrajectoryDrawByEncounteredVolume::~G4TrajectoryDrawByEncounteredVolume() {}
 void
 G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4bool& /*visible*/) const
 {
-  try
-  {
-    const G4RichTrajectory& richTrajectory = dynamic_cast<const G4RichTrajectory&>(traj);
+  // Check the required G4Att exists
+  const auto& aPointAttDefs = traj.GetPoint(0)->GetAttDefs();
+  if (aPointAttDefs->find("PostVPath") != aPointAttDefs->end()) {
+
+    // Must be a rich trajectory
+    const auto& richTrajectory = traj;
 
     G4Colour colour(fDefault);
     G4String soughtPVName("none");
@@ -82,20 +85,18 @@ G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4boo
       << ", with configuration:" << G4endl;
       myContext.Print(G4cout);
     }
-    
-    G4TrajectoryDrawerUtils::DrawLineAndPoints(richTrajectory, myContext);
-    
-  }
 
-  catch (const std::bad_cast&)
-  {
+    G4TrajectoryDrawerUtils::DrawLineAndPoints(richTrajectory, myContext);
+
+  } else {
+
     G4ExceptionDescription ed;
     ed << "Requires G4RichTrajectory - \"/vis/scene/add/trajectories rich\"";
     G4Exception
     ("G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj,...",
      "modeling0125",
      JustWarning, ed);
-    return;
+
   }
 }
 

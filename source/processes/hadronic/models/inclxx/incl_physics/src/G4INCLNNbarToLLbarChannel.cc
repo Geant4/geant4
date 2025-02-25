@@ -215,10 +215,10 @@ namespace G4INCL {
 					nucleon->setType(SigmaPlus);
 					antinucleon->setType(antiSigmaPlus);
 				}
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM121, plab)+BFMM144+BFMM101
-				+KinematicsUtils::compute_xs(BFMM113, plab) + KinematicsUtils::compute_xs(BFMM136, plab)
-				+KinematicsUtils::compute_xs(BFMM146, plab)+KinematicsUtils::compute_xs(BFMM143, plab)
-				+KinematicsUtils::compute_xs(BFMM139, plab)+KinematicsUtils::compute_xs(BFMM149, plab)){ //sm smbar
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM121), plab)+BFMM144+BFMM101
+				+KinematicsUtils::compute_xs(std::move(BFMM113), plab)+KinematicsUtils::compute_xs(std::move(BFMM136), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM146), plab)+KinematicsUtils::compute_xs(std::move(BFMM143), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM139), plab)+KinematicsUtils::compute_xs(std::move(BFMM149), plab)){ //sm smbar
 					nucleon->setType(SigmaMinus);
 					antinucleon->setType(antiSigmaMinus);
 				}
@@ -320,10 +320,10 @@ namespace G4INCL {
 					nucleon->setType(SigmaPlus);
 					antinucleon->setType(antiSigmaPlus);
 				}
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM121, plab)+BFMM144+BFMM101
-				+KinematicsUtils::compute_xs(BFMM113, plab) + KinematicsUtils::compute_xs(BFMM136, plab)
-				+KinematicsUtils::compute_xs(BFMM146, plab)+KinematicsUtils::compute_xs(BFMM143, plab)
-				+KinematicsUtils::compute_xs(BFMM139, plab)+KinematicsUtils::compute_xs(BFMM149, plab)){ //sm smbar
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM121), plab)+BFMM144+BFMM101
+				+KinematicsUtils::compute_xs(std::move(BFMM113), plab)+KinematicsUtils::compute_xs(std::move(BFMM136), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM146), plab)+KinematicsUtils::compute_xs(std::move(BFMM143), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM139), plab)+KinematicsUtils::compute_xs(std::move(BFMM149), plab)){ //sm smbar
 					nucleon->setType(SigmaMinus);
 					antinucleon->setType(antiSigmaMinus);
 				}

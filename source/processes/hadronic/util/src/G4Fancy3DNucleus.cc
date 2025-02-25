@@ -578,7 +578,7 @@ G4bool G4Fancy3DNucleus::ReduceSum()
 		}
 		if ( best < 0 )  
 		{
-		  G4String text = "G4Fancy3DNucleus.cc: Logic error in ReduceSum()";
+		  const G4String& text = "G4Fancy3DNucleus.cc: Logic error in ReduceSum()";
   	          throw G4HadronicException(__FILE__, __LINE__, text);
 		}
 		momentum[testSums[best].Index]-=testSums[best].Vector;

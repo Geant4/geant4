@@ -36,7 +36,7 @@
 // G4PSVolumeFlux3D
 #include "G4PSVolumeFlux3D.hh"
 
-G4PSVolumeFlux3D::G4PSVolumeFlux3D(G4String name, G4int direction, G4int ni,
+G4PSVolumeFlux3D::G4PSVolumeFlux3D(const G4String& name, G4int direction, G4int ni,
                                    G4int nj, G4int nk, G4int depi, G4int depj,
                                    G4int depk)
   : G4PSVolumeFlux(name, direction)

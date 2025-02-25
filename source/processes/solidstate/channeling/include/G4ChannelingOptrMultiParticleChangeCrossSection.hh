@@ -58,7 +58,7 @@ public:
   // -- Each particle type for which its name is passed will be biased; *provided*
   // -- that the proper calls to biasingPhysics->Bias(particleName) have been done
   // -- in the main program.
-    void AddParticle( G4String particleName );
+    void AddParticle(const G4String& particleName );
     void AddChargedParticles();
   
   

@@ -6,8 +6,82 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-29 Vladimir Ivanchenko (hadr-deex-V11-02-18)
+- G4LevelReader - reduced printouts on problems in nuclear level data
+- G4PolarizationTransition - use optimized G4LegendrePolinomial from
+    Isaac Kunen GitHub PR #70
+
+## 2024-10-01 Vladimir Ivanchenko (hadr-deex-V11-02-17)
+- G4LevelReader - changed algorithm of handling of broken levels: do not change
+    number of levels and number of transitions, broken level or transition
+    do not deleted but are protected. For the case of energy of the next level
+    below the previous energy, its energy is set to Enew = Eprevious + 2 eV.
+    For the case of transition to itself, the probability of such transition
+    is set to zero.
+
+## 2024-09-26 Gabriele Cosmo (hadr-deex-V11-02-16)
+- G4LevelReader: fixed compilation warning on macOS/XCode for implicit type
+  conversion.
+
+## 2024-09-25 Vladimir Ivanchenko (hadr-deex-V11-02-15)
+- G4LevelReader - added two new protection to handle broken files with
+  gamma level data: next level energy below previous one - this new level
+  is ignored; transition from given level to itself with zero transition
+  energy - such transition ignored; added two counters for limitation of
+  warning printouts; code clean-up; comments to code improved
+
+## 2024-09-19 Vladimir Ivanchenko (hadr-deex-V11-02-14)
+- G4DeexPrecoParameters - for pre-compound model return applicability
+  interval Eex/A = (0.1 - 30) MeV as used in Geant4 11.2
+
+## 2024-09-09 Vladimir Ivanchenko (hadr-deex-V11-02-13)
+- G4XSectionXS is renamed to G4InterfaceToXS and moved to cross_section subdirectory
+- G4EvaporationProbability uses G4InterfaceToXS
+
+## 2024-08-18 Vladimir Ivanchenko (hadr-deex-V11-02-12)
+- G4EvaporationProbability, G4EvaporationChannel, G4VEmissionProbability - do not
+    apply Coulomb barrier for computation of minimum energy of emitted fragments
+    if OPTxs=1 - use isotope x-section instead, fixed minor memory leak at exit,
+    define OPTxs parameter only in class constructor
+- G4XSectionXS - initialisation inside class constructor only
+
+## 2024-08-14 Vladimir Ivanchenko (hadr-deex-V11-02-11)
+- G4DeexPrecoParameters - for pre-compound model: use XS option 1 instead of 3,
+    changed interval of applicability Eex/A = (0.1 - 3) MeV instead of
+    (0.1 - 30) MeV (outside this interval de-excitation module is used).
+
+## 2024-07-24 Vladimir Ivanchenko (hadr-deex-V11-02-10)
+- G4DeexPrecoParameters - enable read and use of electron conversion data by default
+- G4CoulombBarrier - changed theRho parameter from 0.6 to 0.4
+- G4CompetitiveFission - guaranteed initialisation in unit tests
+
+## 2024-07-18 Vladimir Ivanchenko (hadr-deex-V11-02-09)
+- G4Evaporation, G4EvaporationProbability, G4XSectionXS - provide initialisation
+    of G4XSectionXS class also in the case of unit tests, when general
+    initialisation is not performed, minor code clean-up. Results are not changed
+    for the default configuration
+
+## 2024-07-16 Vladimir Ivanchenko (hadr-deex-V11-02-08)
+- G4XSectionXS - new class to compute inverse cross section uing G4PARTICLEXS
+    cross sections for neutrons and light ions.
+- G4DeexPrecoParameters, G4DeexParametersMessenger - added UI command to define
+    inverse cross section type
+- G4EvaporationProbability, G4VEmissionProbability - added use of G4XSectionXS
+    as an alternative option
+- G4CompetitiveFission - added normalisation factor if G4XSectionXS is used 
+- G4ShellCorrection, G4CookShellCorrections - technical clean-up
+
+## 2024-07-10 Vladimir Ivanchenko (hadr-deex-V11-02-07)
+- G4EvaporationChannel, G4EvaporationProbability - improved implementation of
+  methods ComputeInverseXSection(..) and ComputeProbability(..) needed for
+  unit tests
+
+## 2024-07-03 Vladimir Ivanchenko (hadr-deex-V11-02-06)
+- G4VEmissionProbability, G4StatMF, G4PolarizationTransition - fixed
+    Coverity warnings
+
 ## 2024-05-30 Vladimir Ivanchenko (hadr-deex-V11-02-05)
-- G4ExcitationHandle, G4NeutronRadCapture - correct model ID for IC electrons
+- G4ExcitationHandler, G4NeutronRadCapture - correct model ID for IC electrons
 - G4VCoulombBarrier, G4CoulombBarrier, G4GEMCoulombBarrier,
   G4FermiBreakUpUtil - clean-up Coulomb barrier classes, removed unused 
     headers and variables

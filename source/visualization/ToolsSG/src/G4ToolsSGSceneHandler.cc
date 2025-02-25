@@ -123,9 +123,7 @@ tools::sg::separator* G4ToolsSGSceneHandler::GetOrCreateNode()
 { // Retrieve or create a G4ToolsSGNode node suitable for next solid or primitive
 
   // For time being, avoid errors in MT mode - see G4ToolsSGViewer::SwitchToMasterThread
-#ifdef G4MULTITHREADED
   if (!G4Threading::IsMasterThread()) return nullptr;
-#endif
 
   if (fReadyForTransients) {  // All transients hang from this node
     tools::sg::separator* sep = new tools::sg::separator;

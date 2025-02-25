@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4CollectionNameVector
 //
-//
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4CollectionNameVector_H
 #define G4CollectionNameVector_H 1
 
@@ -39,7 +40,7 @@ class G4CollectionNameVector : public std::vector<G4String>
   G4CollectionNameVector() {}
   virtual ~G4CollectionNameVector() {}
 
-  void insert(G4String str) { push_back(str); }
+  void insert(const G4String& str) { push_back(str); }
 };
 
 #endif

@@ -58,6 +58,7 @@
 #include "G4ParticleHPChannelList.hh"
 #include "G4Nucleus.hh"
 #include "G4Element.hh"
+
 #include <string>
 #include <sstream>
 
@@ -71,7 +72,7 @@ G4ParticleHPIsoProbabilityTable_NJOY::G4ParticleHPIsoProbabilityTable_NJOY() {
 G4ParticleHPIsoProbabilityTable_NJOY::~G4ParticleHPIsoProbabilityTable_NJOY() {}
 
 ///--------------------------------------------------------------------------------------
-void G4ParticleHPIsoProbabilityTable_NJOY::Init( G4int theZ, G4int theA, G4int them, G4double theT, G4String dirName ) {
+void G4ParticleHPIsoProbabilityTable_NJOY::Init( G4int theZ, G4int theA, G4int them, G4double theT, const G4String& dirName ) {
   Z = theZ;
   A = theA;
   m = them;
@@ -84,7 +85,7 @@ void G4ParticleHPIsoProbabilityTable_NJOY::Init( G4int theZ, G4int theA, G4int t
     std::string strm = std::to_string(m);
     filename += "_m" + strm;
   }
-  G4String fullPathFileName = dirName + filename + "." + std::to_string( (G4int)(T) ) + ".pt.z";
+  G4String fullPathFileName = dirName + filename + "." + std::to_string( (G4int)(T) ) + ".pt";
   std::istringstream theData( std::ios::in );
   G4ParticleHPManager::GetInstance()->GetDataStream( fullPathFileName, theData );
   if ( theData.good() ) {    

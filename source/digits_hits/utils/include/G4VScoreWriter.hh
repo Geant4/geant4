@@ -23,27 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VScoreWriter
 //
+// Class description:
 //
-
+// This class represents storing the scored quantity into a file.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VScoreWriter_h
 #define G4VScoreWriter_h 1
 
 #include "globals.hh"
-class G4VScoringMesh;
 
-// class description:
-//
-//  This class represents storing the scored quantity into a file.
-//
+class G4VScoringMesh;
 
 class G4VScoreWriter
 {
  public:
+
   G4VScoreWriter() = default;
   virtual ~G4VScoreWriter() = default;
 
- public:
   // store a quantity into a file
   virtual void DumpQuantityToFile(const G4String& psName,
                                   const G4String& fileName,
@@ -60,10 +61,12 @@ class G4VScoreWriter
   inline G4double GetFactor() const { return fact; }
 
  protected:
+
   // get an index from (x,y,z)
   G4int GetIndex(G4int x, G4int y, G4int z) const;
 
  protected:
+
   G4int fNMeshSegments[3] = {0, 0, 0};  // number of segments of the mesh
   G4VScoringMesh* fScoringMesh = nullptr;
   G4int verboseLevel = 0;

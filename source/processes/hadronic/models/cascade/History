@@ -5,6 +5,13 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2024-08-21 Gabriele Cosmo (hadr-casc-V11-02-04)
+- Fixed reported Coverity defect in G4NucleiModel for use of std::move().
+
+## 2024-08-14 Gabriele Cosmo (hadr-casc-V11-02-03)
+- Fixed reported Coverity defect in G4NucleiModel for unitialised data.
+
 ## 2024-01-29 Dennis Wright (hadr-casc-V11-02-02)
 - G4CascadeFinalStateAlgorithm::GenerateCosTheta() 
     For 4-body and higher-body generation of cosTheta, use direct sampling

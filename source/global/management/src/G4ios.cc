@@ -52,12 +52,6 @@ class G4strstreambuf : public std::basic_streambuf<char>
 
   ~G4strstreambuf() override
   {
-    // flushing buffer...
-    // std::cout is used because destination object may not be alive.
-    if (count != 0) {
-      buffer[count] = '\0';
-      std::cout << buffer;
-    }
     delete[] buffer;
   }
 
@@ -219,6 +213,11 @@ void G4iosInitialization()
 void G4iosFinalization()
 {
   // Reverse order
+  // --- Flush
+  _G4debug_p()->flush();
+  _G4cout_p()->flush();
+  _G4cerr_p()->flush();
+
   // --- Streams
   delete _G4debug_p();
   _G4debug_p() = &std::cout;
@@ -240,17 +239,41 @@ void G4iosFinalization()
 #  define G4coutbuf (*_G4coutbuf_p())
 #  define G4cerrbuf (*_G4cerrbuf_p())
 
-// These two functions are guaranteed to be called at load and
-// unload of the library containing this code.
+// We want to trigger initialization at load time and
+// finalization at unloading time.  Directly manipulating
+// the `.init/.fini` section using the `__attribute__((constructor))`
+// (beside that it does not work on Windows) does not work
+// where Geant4 is built with static libraries but a downstream
+// package is built with shared library and has also executable
+// that are linking against those shared library and directly
+// to the Geant4 static libraries (for example if the executable
+// code calls Geant4 directly in addition to indirectly through
+// the shared library).
+// In this example, the explicit `.init/.fini` manipulations are
+// added twice (because the linker is asked to link with this .o
+// file twice and each time needs to add the init and finalization)
+// This issue appear also for the initialization on an file static
+// including those declared as function static in anonymous namespace.
+// To get the behavior we need (where the G4iosFinalization
+// and G4iosFinalization are called exactly once), we need to
+// associate the initialization with a symbol and/or mechanism that
+// the linker is told to de-duplicate even in the example described
+// above.  So we use an extern object that is guaranteed to be only
+// initialized once.
 namespace
 {
-#  ifndef WIN32
-void setupG4ioSystem() __attribute__((constructor));
-void cleanupG4ioSystem() __attribute__((destructor));
-#  endif
-void setupG4ioSystem() { G4iosInitialization(); }
-void cleanupG4ioSystem() { G4iosFinalization(); }
+struct RAII_G4iosSystem {
+   RAII_G4iosSystem() {
+     G4iosInitialization();
+   }
+   ~RAII_G4iosSystem() {
+     G4iosFinalization();
+   }
+};
 }  // namespace
+// Extern but not user reachable (anonymous type)
+// We want the linker to only create one of those.
+extern "C" RAII_G4iosSystem RAII_G4iosSystemObj;
 
 #else  // Sequential
 
@@ -263,7 +286,11 @@ std::ostream G4cout(&G4coutbuf);
 std::ostream G4cerr(&G4cerrbuf);
 
 void G4iosInitialization() {}
-void G4iosFinalization() {}
+void G4iosFinalization() {
+  G4debug.flush();
+  G4cout.flush();
+  G4cerr.flush();
+}
 
 #endif
 

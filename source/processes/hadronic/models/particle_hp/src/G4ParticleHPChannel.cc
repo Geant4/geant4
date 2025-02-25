@@ -76,19 +76,19 @@ G4ParticleHPChannel::~G4ParticleHPChannel()
   delete[] active;
 }
 
-G4double G4ParticleHPChannel::GetXsec(G4double energy)
+G4double G4ParticleHPChannel::GetXsec(G4double energy) const
 {
   return std::max(0., theChannelData->GetXsec(energy));
 }
 
 G4double G4ParticleHPChannel::GetWeightedXsec(G4double energy,
-					      G4int isoNumber)
+					      G4int isoNumber) const
 {
   return theIsotopeWiseData[isoNumber].GetXsec(energy);
 }
 
 G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy,
-						G4int isoNumber)
+						G4int isoNumber) const
 {
   return theFinalStates[isoNumber]->GetXsec(energy);
 }
@@ -168,7 +168,7 @@ void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index,
   }
   else  // get data from CrossSection directory
   {
-    G4String tString = "/CrossSection";
+    const G4String& tString = "/CrossSection";
     active[index] = theIsotopeWiseData[index].Init(A, Z, M, abundance,
                                                    theDir, tString);
     if (active[index]) theBuffer = theIsotopeWiseData[index].MakeChannelData();
@@ -223,7 +223,7 @@ void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore,
   theStore = theMerge;
 }
 
-G4WendtFissionFragmentGenerator* G4ParticleHPChannel::GetWendtFissionGenerator() {
+G4WendtFissionFragmentGenerator* G4ParticleHPChannel::GetWendtFissionGenerator() const {
   if ( wendtFissionGenerator ) return wendtFissionGenerator;
   else                         return nullptr;
 }
@@ -322,7 +322,7 @@ G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTrack,
   return theFinalState;
 }
 
-void G4ParticleHPChannel::DumpInfo()
+void G4ParticleHPChannel::DumpInfo() const
 {
   G4cout << " Element: " << theElement->GetName() << G4endl;
   G4cout << " Directory name: " << theDir << G4endl;

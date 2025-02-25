@@ -59,6 +59,8 @@
 
 #include "G4ICRU90StoppingData.hh"
 #include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4Isotope.hh"
 #include "G4NistElementBuilder.hh"
 #include "G4NistMaterialBuilder.hh"
 #include "G4Pow.hh"
@@ -78,7 +80,7 @@ class G4NistManager
 
   // Get G4Element by index
   //
-  inline G4Element* GetElement(size_t index) const;
+  inline G4Element* GetElement(std::size_t index) const;
 
   // Find or build G4Element by atomic number
   //
@@ -91,7 +93,7 @@ class G4NistManager
 
   // Get number of elements
   //
-  inline size_t GetNumberOfElements() const;
+  inline std::size_t GetNumberOfElements() const;
 
   // Get atomic number by element symbol
   //
@@ -159,7 +161,7 @@ class G4NistManager
 
   // Get G4Material by index
   //
-  inline G4Material* GetMaterial(size_t index) const;
+  inline G4Material* GetMaterial(std::size_t index) const;
 
   // Find or build a G4Material by name, from the Geant4 dataBase
   //
@@ -215,7 +217,7 @@ class G4NistManager
 
   // Get number of G4Materials
   //
-  inline size_t GetNumberOfMaterials() const;
+  inline std::size_t GetNumberOfMaterials() const;
 
   inline G4int GetVerbose() const;
 
@@ -257,8 +259,6 @@ class G4NistManager
  private:
   G4NistManager();
 
-  static G4NistManager* instance;
-
   std::vector<G4Element*> elements;
   std::vector<G4Material*> materials;
 
@@ -267,24 +267,26 @@ class G4NistManager
   G4NistMaterialBuilder* matBuilder;
   G4NistMessenger* messenger;
   G4Pow* g4pow;
+  const G4MaterialTable* theMaterialTable;
+  const G4ElementTable* theElementTable;
+  const G4IsotopeTable* theIsotopeTable;
 
   G4double POWERA27[101];
   G4double LOGAZ[101];
 
-  size_t nElements;
-  size_t nMaterials;
+  std::size_t nElements;
+  std::size_t nMaterials;
   G4int verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline size_t G4NistManager::GetNumberOfMaterials() const { return nMaterials; }
+inline std::size_t G4NistManager::GetNumberOfMaterials() const { return nMaterials; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4Element* G4NistManager::GetElement(size_t index) const
+inline G4Element* G4NistManager::GetElement(std::size_t index) const
 {
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
   return (index < theElementTable->size()) ? (*theElementTable)[index] : nullptr;
 }
 
@@ -308,7 +310,7 @@ inline G4Element* G4NistManager::FindOrBuildElement(const G4String& symb, G4bool
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline size_t G4NistManager::GetNumberOfElements() const { return nElements; }
+inline std::size_t G4NistManager::GetNumberOfElements() const { return nElements; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -397,9 +399,8 @@ inline void G4NistManager::PrintElement(G4int Z) const { elmBuilder->PrintElemen
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4Material* G4NistManager::GetMaterial(size_t index) const
+inline G4Material* G4NistManager::GetMaterial(std::size_t index) const
 {
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   return (index < theMaterialTable->size()) ? (*theMaterialTable)[index] : nullptr;
 }
 

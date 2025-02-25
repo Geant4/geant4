@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-08-21 Gabriele Cosmo (hadr-nudex-V11-02-04)
+- Fixed reported Coverity defects for unitialised data in G4NuDEXPSF and
+  in G4NuDEXStatisticalNucleus; fixed restoring of ostream format.
+
 ## 2024-06-23 vladimir Ivantchenko (hadr-nudex-V11-02-03)
 - G4NuDEXNeutronCaptureModel : fixed access to the data
 

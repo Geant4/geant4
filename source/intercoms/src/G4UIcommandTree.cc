@@ -170,18 +170,17 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand* aCommand, G4bool workerThreadOn
     return;
   }
   G4String commandPath = aCommand->GetCommandPath();
-  G4String remainingPath = commandPath;
-  remainingPath.erase(0, pathName.length());
-  if (remainingPath.empty()) {
+  commandPath.erase(0, pathName.length());
+  if (commandPath.empty()) {
     guidance = nullptr;
   }
   else {
-    std::size_t i = remainingPath.find('/');
+    std::size_t i = commandPath.find('/');
     if (i == std::string::npos) {
       // Find command
       std::size_t n_commandEntry = command.size();
       for (std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand) {
-        if (remainingPath == command[i_thCommand]->GetCommandName()) {
+        if (commandPath == command[i_thCommand]->GetCommandName()) {
           command.erase(command.begin() + i_thCommand);
           break;
         }
@@ -190,7 +189,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand* aCommand, G4bool workerThreadOn
     else {
       // Find path
       G4String nextPath = pathName;
-      nextPath.append(remainingPath.substr(0, i + 1));
+      nextPath.append(commandPath.substr(0, i + 1));
       std::size_t n_treeEntry = tree.size();
       for (std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree) {
         if (nextPath == tree[i_thTree]->GetPathName()) {
@@ -310,7 +309,7 @@ G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
 
   // directory ...
   for (G4int idir = 1; idir <= Ndir; ++idir) {
-    G4String fpdir = aTree->GetTree(idir)->GetPathName();
+    const G4String& fpdir = aTree->GetTree(idir)->GetPathName();
     // matching test
     if (fpdir.find(remainingPath, 0) == 0) {
       if (nMatch == 0) {

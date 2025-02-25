@@ -685,6 +685,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable += 1;
 
+  tmp.processTypeName = "XrayReflection";
+  tmp.processType = fElectromagnetic;
+  tmp.processSubType = fGammaReflection;
+  tmp.ordering[0] = -1;
+  tmp.ordering[1] = -1;
+  tmp.ordering[2] = 1000;
+  tmp.isDuplicable = false;
+  theTable->push_back(tmp);
+  sizeOfTable += 1;
+
   tmp.processTypeName = "PositronGeneral";
   tmp.processType = fElectromagnetic;
   tmp.processSubType = fPositronGeneralProcess;

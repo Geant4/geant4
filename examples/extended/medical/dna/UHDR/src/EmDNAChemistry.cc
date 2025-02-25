@@ -189,10 +189,10 @@ void EmDNAChemistry::ConstructProcess()
   auto table = G4MoleculeTable::Instance();
   auto O2 = table->GetConfiguration("O2");
   auto O2m = table->GetConfiguration("O2m");
-  auto HO2 = table->GetConfiguration("HO2");
+  auto HO2 = table->GetConfiguration("HO2°");
 
   auto e_aq = table->GetConfiguration("e_aq");
-  auto OH = table->GetConfiguration("OH");
+  auto OH = table->GetConfiguration("°OH");
   auto OHm = table->GetConfiguration("OHm");
 
   auto NO2 = table->GetConfiguration("NO2");

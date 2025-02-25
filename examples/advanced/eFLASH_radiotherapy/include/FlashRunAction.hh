@@ -30,7 +30,6 @@
 #ifndef FlashRunAction_h
 #define FlashRunAction_h 1
 
-#include "G4Accumulable.hh"
 #include "G4RunManager.hh"
 #include "G4UserRunAction.hh"
 #include "globals.hh"

@@ -23,62 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
 // G4ParticleChangeForOccurenceBiasing
 //
 // Class Description:
-//     A G4VParticleChange dedicated to occurrence biasing : it
+//
+// A G4VParticleChange dedicated to occurrence biasing : it
 // applies weights for non-interaction over a step, and for
 // interaction at the end of the step (if interaction occurs) on
 // top of a given particle change, that is the one produced by a
 // physics process (biased in its final state or not).
 //
-// ---------------------------------------------------------------
-//   Initial version                         Nov. 2013 M. Verderi
+// Author: Marc Verderi, November 2013.
 //
+// --------------------------------------------------------------------
 #ifndef G4ParticleChangeForOccurenceBiasing_hh
 #define G4ParticleChangeForOccurenceBiasing_hh 1
 
 #include "G4VParticleChange.hh"
 
-class G4ParticleChangeForOccurenceBiasing : public G4VParticleChange {
-public:
-  G4ParticleChangeForOccurenceBiasing(G4String name);
-  ~G4ParticleChangeForOccurenceBiasing();
+class G4ParticleChangeForOccurenceBiasing : public G4VParticleChange
+{
+  public:
 
-public:
-  void     SetOccurenceWeightForNonInteraction(G4double w)       {fOccurenceWeightForNonInteraction = w;}
-  G4double GetOccurenceWeightForNonInteraction()           const {return fOccurenceWeightForNonInteraction;}
-  void     SetOccurenceWeightForInteraction(G4double w)          {fOccurenceWeightForInteraction = w;}
-  G4double GetOccurenceWeightForInteraction()              const {return fOccurenceWeightForInteraction;}
+    G4ParticleChangeForOccurenceBiasing(const G4String& name);
+    ~G4ParticleChangeForOccurenceBiasing() = default;
 
-public:
-  // -- set a wrapped particle change AND USE IT TO UPDATE this occurrence particle change state:
-  void               SetWrappedParticleChange(G4VParticleChange* wpc);
-  G4VParticleChange* GetWrappedParticleChange()                      const {return fWrappedParticleChange;}
-public:
-  // -- collect the secondaries from the wrapped particle change, apply weight correction, and clear wrapped particle change:
-  void StealSecondaries();
+    void SetOccurenceWeightForNonInteraction(G4double w)
+      { fOccurenceWeightForNonInteraction = w; }
+    G4double GetOccurenceWeightForNonInteraction() const
+      { return fOccurenceWeightForNonInteraction; }
+    void SetOccurenceWeightForInteraction(G4double w)
+      { fOccurenceWeightForInteraction = w; }
+    G4double GetOccurenceWeightForInteraction() const
+      { return fOccurenceWeightForInteraction; }
+
+    // -- set a wrapped particle change AND USE IT TO UPDATE this occurrence
+    //    particle change state:
+    void SetWrappedParticleChange(G4VParticleChange* wpc);
+    G4VParticleChange* GetWrappedParticleChange() const
+      { return fWrappedParticleChange; }
+
+    // -- collect the secondaries from the wrapped particle change,
+    //    apply weight correction, and clear wrapped particle change:
+    void StealSecondaries();
   
-public:
-  // -- from base class G4VParticleChange:
-  virtual G4Step* UpdateStepForAtRest   (G4Step* step);
-  virtual G4Step* UpdateStepForAlongStep(G4Step* step);
-  virtual G4Step* UpdateStepForPostStep (G4Step* step);
+    // -- from base class G4VParticleChange:
+    virtual G4Step* UpdateStepForAtRest (G4Step* step);
+    virtual G4Step* UpdateStepForAlongStep(G4Step* step);
+    virtual G4Step* UpdateStepForPostStep (G4Step* step);
 
-public:
-  const G4String& GetName() const {return fName;}
+    const G4String& GetName() const { return fName; }
 
-private:
-  G4String                                       fName;
-  G4VParticleChange*            fWrappedParticleChange;
-  G4double           fOccurenceWeightForNonInteraction;
-  G4double              fOccurenceWeightForInteraction;
+  private:
 
-  
+    G4String fName;
+    G4VParticleChange* fWrappedParticleChange = nullptr;
+    G4double fOccurenceWeightForNonInteraction = -1.0;
+    G4double fOccurenceWeightForInteraction = -1.0;  
 };
 
 #endif

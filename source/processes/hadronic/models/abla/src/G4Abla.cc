@@ -49,10 +49,11 @@ G4Abla::G4Abla(G4VarNtp* aVarntp)
 
     verboseLevel = 0;
     gammaemission = 0; // 0 presaddle, 1 postsaddle
-    T_freeze_out = 0.;
+    T_freeze_out_in = T_freeze_out = 0.;
     Ainit = 0;
     Zinit = 0;
     Sinit = 0;
+    IEV_TAB_SSC = 0;
 
     ald = std::make_unique<G4Ald>();
     ec2sub = std::make_unique<G4Ec2sub>();

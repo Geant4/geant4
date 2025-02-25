@@ -140,7 +140,7 @@ class G4Element
   G4int GetNbOfShellElectrons(G4int index) const;
 
   // number of isotopes constituing this element:
-  inline size_t GetNumberOfIsotopes() const { return fNumberOfIsotopes; }
+  inline std::size_t GetNumberOfIsotopes() const { return fNumberOfIsotopes; }
 
   // vector of pointers to isotopes constituing this element:
   inline G4IsotopeVector* GetIsotopeVector() const { return theIsotopeVector; }
@@ -151,12 +151,12 @@ class G4Element
   inline const G4Isotope* GetIsotope(G4int iso) const { return (*theIsotopeVector)[iso]; }
 
   // the (static) Table of Elements:
-  static G4ElementTable* GetElementTable();
+  static const G4ElementTable* GetElementTable();
 
-  static size_t GetNumberOfElements();
+  static std::size_t GetNumberOfElements();
 
   // the index of this element in the Table:
-  inline size_t GetIndex() const { return fIndexInTable; }
+  inline std::size_t GetIndex() const { return fIndexInTable; }
 
   // return pointer to an element, given its name:
   static G4Element* GetElement(const G4String& name, G4bool warning = true);
@@ -188,6 +188,9 @@ class G4Element
   void ComputeLradTsaiFactor();
   void AddNaturalIsotopes();
 
+  // Mutable access to the element table.
+  static G4ElementTable& GetElementTableRef();
+
   // Basic data members (which define an Element)
 
   G4String fName;  // name
@@ -207,8 +210,7 @@ class G4Element
                                        // for each constituent
 
   // Set up the static Table of Elements
-  static G4ElementTable theElementTable;
-  size_t fIndexInTable;
+  std::size_t fIndexInTable;
   G4bool fNaturalAbundance;
 
   // Derived data members (computed from the basic data members)

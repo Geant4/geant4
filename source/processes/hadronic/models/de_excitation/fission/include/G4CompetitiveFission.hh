@@ -47,9 +47,11 @@ class G4CompetitiveFission : public G4VEvaporationChannel
 {
 public:
   
-  explicit G4CompetitiveFission();
+  G4CompetitiveFission();
   ~G4CompetitiveFission() override;
 
+  void Initialise() override;
+  
   G4Fragment* EmittedFragment(G4Fragment* theNucleus) override;
 
   G4double GetEmissionProbability(G4Fragment* theNucleus) override;
@@ -65,6 +67,11 @@ public:
   inline G4double GetLevelDensityParameter(void) const;
 
   inline G4double GetMaximalKineticEnergy(void) const;
+
+  G4CompetitiveFission(const G4CompetitiveFission &right) = delete;
+  const G4CompetitiveFission & operator=(const G4CompetitiveFission &right) = delete;
+  G4bool operator==(const G4CompetitiveFission &right) const = delete;
+  G4bool operator!=(const G4CompetitiveFission &right) const = delete;
 
 private:
 
@@ -91,15 +98,11 @@ private:
 
   inline G4double LocalExp(G4double x) const;
 
-  G4CompetitiveFission(const G4CompetitiveFission &right);
-  const G4CompetitiveFission & operator=(const G4CompetitiveFission &right);
-  G4bool operator==(const G4CompetitiveFission &right) const;
-  G4bool operator!=(const G4CompetitiveFission &right) const;
-
   // Maximal Kinetic Energy that can be carried by fragment
-  G4double maxKineticEnergy;
-  G4double fissionBarrier;
-  G4double fissionProbability;
+  G4double maxKineticEnergy{0.0};
+  G4double fissionBarrier{0.0};
+  G4double fissionProbability{0.0};
+  G4double fFactor{1.0};
 
   // For Fission barrier
   G4VFissionBarrier* theFissionBarrierPtr;
@@ -111,13 +114,14 @@ private:
   G4VLevelDensityParameter* theLevelDensityPtr;
   G4PairingCorrection* pairingCorrection;
 
-  G4bool myOwnFissionProbability;
-  G4bool myOwnFissionBarrier;
-  G4bool myOwnLevelDensity;
+  G4bool myOwnFissionProbability{true};
+  G4bool myOwnFissionBarrier{true};
+  G4bool myOwnLevelDensity{true};
 
   G4FissionParameters theParam;
   
   G4int theSecID;  // Creator model ID for the secondaries created by this model
+  G4bool isInitialised{false};
 };
 
 inline G4double G4CompetitiveFission::GetFissionBarrier(void) const 

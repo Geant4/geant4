@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-10-22 Michel Maire (testem3-V11-02-02)
+- TrackingAction: in energy leakage, add special traitement for positron
+
+## 2024-10-01 Michel Maire (testem3-V11-02-01)
+- Run::Merge(): add fEnergyDeposit[k]  (bugzilla 2626)
+
 ## 2024-04-03 Michel Maire (testem3-V11-02-00)
 - Readme: documente stepMax.mac
 

@@ -105,6 +105,8 @@ private:
   G4int nbufmax = 20;
   G4int nbuf1 = 14;
   G4int nbuf2 = 8;
+  G4int count1 = 0;
+  G4int count2 = 0;
 
   G4int fVerbose = 1;
   G4int fLevelMax = 632;

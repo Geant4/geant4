@@ -1,0 +1,38 @@
+# Macro file for the initialization of example ch3
+# in interactive session
+#
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Change the default number of threads (in multi-threaded mode)
+#/run/numberOfThreads 4
+#
+#Initialize kernel
+/run/initialize
+#
+# Initialize kernel
+/run/initialize
+#
+#beam
+/gps/particle gamma
+#
+#coordinate distribution (radial Gauss)
+/gps/pos/centre 0. 0. -1. cm
+/gps/pos/type Beam
+/gps/pos/sigma_x 1 mm
+/gps/pos/sigma_y 1 mm
+#
+#angular distribution (radial Gauss)
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
+/gps/ang/sigma_x 1.E-3 rad
+/gps/ang/sigma_y 1.E-3 rad
+#
+#energy distribution (constant)
+/gps/ene/mono 100 GeV
+#
+# Visualization setting
+/control/execute vis.mac

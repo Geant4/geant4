@@ -32,6 +32,12 @@
 
 #include "G4FileUtilities.hh"
 
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <stdlib.h>
+
 // --------------------------------------------------------------------
 G4FileUtilities::G4FileUtilities()
 {
@@ -61,10 +67,22 @@ G4bool G4FileUtilities::FileExists(const G4String& file)
 }
 
 // --------------------------------------------------------------------
+G4String G4FileUtilities::StrErrNo() const
+{
+  return ::strerror(errno);
+}
+
+// --------------------------------------------------------------------
+G4int G4FileUtilities::Shell(const G4String& str)
+{
+  return ::system(str.c_str());
+}
+
+// --------------------------------------------------------------------
 G4int G4FileUtilities::CopyFile(const G4String& srcFile,
                                 const G4String& dstFile)
 {
-  std::string cmd = "cp " + srcFile + " " + dstFile;
+  G4String cmd = "cp " + srcFile + " " + dstFile;
   return Shell(cmd);
 }
 
@@ -72,8 +90,14 @@ G4int G4FileUtilities::CopyFile(const G4String& srcFile,
 G4int G4FileUtilities::DeleteFile(const G4String& file,
                                   const G4String& option)
 {
-  std::string cmd = "rm " + option + " " + file;
+  G4String cmd = "rm " + option + " " + file;
   return Shell(cmd);
+}
+
+// --------------------------------------------------------------------
+G4String G4FileUtilities::GetEnv(const G4String& env)
+{
+  return ::getenv(env.c_str());
 }
 
 #endif

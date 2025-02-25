@@ -6,6 +6,62 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-09-13 John Allison (opengl-V11-02-09)
+- G4OpenGLStoredQtSceneHandler.cc:
+  - G4OpenGLStoredQtSceneHandler::ClearStore():
+    -  Commented out some code related to the old scene tree. The old scene
+       tree is currently (partially) disabled, but this code somehow affects
+       the view in rare cases, e.g., after twinkling the volume does not return
+       to its original colour. So I have disabled this, pending a review of
+       the old scene tree. 
+
+## 2024-10-25 John Allison (opengl-V11-02-08)
+- G4OpenGLQtViewer.cc:
+  - G4OpenGLQtViewer::currentTabActivated(): Fix compilation error, see Bug Report 2633.
+    - Use .data().
+
+## 2024-09-13 John Allison (opengl-V11-02-07)
+- G4OpenGLQtViewer.cc:
+  - Comment out code that refers to the old scene tree because it adversely impacts
+    the new scene tree.
+    - I would like to extract the old scene tree code completely, but so far I have
+      found it difficult, since it is so entangled with other code. So my efforts so
+      far have been to bop problems on the head as they arise. Not satisfactory, I
+      know, and I will continue to work on it.
+
+## 2024-08-13 John Allison (opengl-V11-02-06)
+- G4OpenGLQtViewer:
+  - Resolve the timing issues around switching to the vis sub-thread with the
+    use of G4CONDITIONWAITLAMBDA.
+  - Fix small memory leak in G4OpenGLQtViewer::DrawText.
+
+## 2024-07-24 Guy Barrand (opengl-V11-02-05)
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer::ShowView: Qt6: do a:
+    ((QApplication*)G4Qt::getInstance ())->processEvents();
+  so that a:
+    /vis/viewer/interpolate viewfiles/movie-1
+  produces truly an animation.
+
+## 2024-07-12 Guy Barrand (opengl-V11-02-04)
+- G4OpenGLQtViewer: Qt6: implement ReadyToDraw(). It permits to avoid a crash in case
+  of /run/beamOn in vis.mac at startup (especially on macOS).
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt5: in Initialise(), displace
+  makeCurrent() after CreateMainWindow(). It avoids a crash in case of /run/beamOn
+  in vis.mac at startup.
+- G4OpenGLQtViewer: Qt5, Qt6: in DoneWithVisSubThread(), SwitchToMasterThread() protect
+  against a possible null qGLW->context(). It permits to avoid a crash in case of
+  doing /run/beamOn in vis.mac at startup.
+- G4OpenGLQtViewer, G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6:
+  remove unused fields: fHasToRepaint, fUpdateGLLock, fQGLWidgetInitialiseCompleted
+  and fPaintEventLock.
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: remove no more needed
+  initializeGL() and showEvent() methods.
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: displace setExportImageFormat("jpg")
+  in Initialise().
+
+## 2024-06-21 Ben Morgan (opengl-V11-02-03)
+- Use runtime checks for MT mode where possible.
+
 ## 2024-05-30 Guy Barrand (opengl-V11-02-02)
 - G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer: Qt6: remove the usage of a paintEvent(),
   the paintGL() should be sufficient. Having an extra paintEvent() is confusing.

@@ -59,12 +59,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
+G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(const G4String& name, G4int direction,
                                                  G4int depth)
   : G4PSCylinderSurfaceFlux(name, direction, "percm2", depth) 
 {}
 
-G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
+G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(const G4String& name, G4int direction,
                                                  const G4String& unit,
                                                  G4int depth)
   : G4VPrimitivePlotter(name, depth)

@@ -284,8 +284,6 @@ class G4Material
 
   G4bool IsLocked();
 
-  static G4MaterialTable theMaterialTable;  // the material table
-
   const G4Material* fBaseMaterial;  // Pointer to the base material
   G4MaterialPropertiesTable* fMaterialPropertiesTable;
 

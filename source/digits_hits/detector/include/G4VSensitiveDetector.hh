@@ -23,9 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VSensitiveDetector
 //
+// Class description:
 //
-
+// This is the abstract base class of the sensitive detector. The user's
+// sensitive detector which generates hits must be derived from this
+// class.
+// In the derived class constructor, name(s) of hits collection(s) which
+// are made by the sensitive detector must be set to "collectionName" string
+// vector.
+//
+// Author: Makoto Asai
+// ---------------------------------------------------------------------
 #ifndef G4VSensitiveDetector_h
 #define G4VSensitiveDetector_h 1
 
@@ -37,22 +47,13 @@
 #include "G4VReadOutGeometry.hh"
 #include "G4VSDFilter.hh"
 
-// class description:
-//
-//  This is the abstract base class of the sensitive detector. The user's
-// sensitive detector which generates hits must be derived from this
-// class.
-//  In the derived class constructor, name(s) of hits collection(s) which
-// are made by the sensitive detector must be set to "collectionName" string
-// vector.
-
 class G4VSensitiveDetector
 {
  public:
   // Constructors. The user's concrete class must use one of these constructors
   // by the constructor initializer of the derived class. The name of
   // the sensitive detector must be unique.
-  explicit G4VSensitiveDetector(G4String name);
+  explicit G4VSensitiveDetector(const G4String& name);
   G4VSensitiveDetector(const G4VSensitiveDetector& right);
   G4VSensitiveDetector& operator=(const G4VSensitiveDetector& right);
   virtual ~G4VSensitiveDetector() = default;
@@ -99,13 +100,13 @@ class G4VSensitiveDetector
   inline void SetFilter(G4VSDFilter* value) { filter = value; }
 
   inline G4int GetNumberOfCollections() const { return G4int(collectionName.size()); }
-  inline G4String GetCollectionName(G4int id) const { return collectionName[id]; }
+  inline const G4String& GetCollectionName(G4int id) const { return collectionName[id]; }
   inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }
   inline void Activate(G4bool activeFlag) { active = activeFlag; }
   inline G4bool isActive() const { return active; }
-  inline G4String GetName() const { return SensitiveDetectorName; }
-  inline G4String GetPathName() const { return thePathName; }
-  inline G4String GetFullPathName() const { return fullPathName; }
+  inline const G4String& GetName() const { return SensitiveDetectorName; }
+  inline const G4String& GetPathName() const { return thePathName; }
+  inline const G4String& GetFullPathName() const { return fullPathName; }
   inline G4VReadOutGeometry* GetROgeometry() const { return ROgeometry; }
   inline G4VSDFilter* GetFilter() const { return filter; }
 

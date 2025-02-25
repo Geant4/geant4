@@ -147,7 +147,7 @@ public:
   
   void SetTrackState(void* adress, G4VTrackStateHandle state)
   {
-    fMultipleTrackStates[adress] = state;
+    fMultipleTrackStates[adress] = std::move(state);
   }
   
   G4VTrackStateHandle GetTrackState(void* adress) const
@@ -243,7 +243,7 @@ public:
 
   virtual void SetTrackState(G4shared_ptr<StateType> state)
   {
-    fpTrackState = state;
+    fpTrackState = std::move(state);
   }
 
   G4VTrackStateHandle PopTrackState() override

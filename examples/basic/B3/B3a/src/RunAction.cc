@@ -61,8 +61,8 @@ RunAction::RunAction()
 
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->RegisterAccumulable(fGoodEvents);
-  accumulableManager->RegisterAccumulable(fSumDose);
+  accumulableManager->Register(fGoodEvents);
+  accumulableManager->Register(fSumDose);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

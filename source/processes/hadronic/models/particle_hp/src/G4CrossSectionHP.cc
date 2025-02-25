@@ -140,23 +140,26 @@ G4double G4CrossSectionHP::IsoCrossSection(const G4double ekin,
 					   const G4int Z, const G4int A,
                                            const G4double T)
 {
-  //G4cout << "G4CrossSectionHP::IsoCrossSection Z=" << Z << " A=" << A
+  // G4cout << "G4CrossSectionHP::IsoCrossSection Z=" << Z << " A=" << A
   // << " E(MeV)=" << ekin/MeV << " T=" << T << "  " << GetName() << G4endl;
   G4double xs = 0.0;
   if (ekin > emax || Z > maxZ || Z < minZ || ekin < elimit) { return xs; }
 
-  const G4PhysicsVector* pv0 = fData->GetElementData(Z - minZ);
+  auto pv0 = fData->GetElementData(Z - minZ);
   if (nullptr == pv0) {
-    InitialiseOnFly(Z);
+    Initialise(Z);
     pv0 = fData->GetElementData(Z - minZ);
   }
+
+  // if there is no element data then no iso data
   if (nullptr == pv0) { return xs; }
-  const G4PhysicsVector* pv = fData->GetComponentDataByID(Z - minZ, A);
+
+  const auto pv = fData->GetComponentDataByID(Z - minZ, A);
   if (nullptr == pv) { return xs; }
 
   // no Doppler broading
-  G4double factT = T/CLHEP::STP_Temperature;
-  if (ekin >= emaxT*factT || fManagerHP->GetNeglectDoppler()) {
+  // G4double factT = T/CLHEP::STP_Temperature;
+  if (ekin >= emaxT*T/CLHEP::STP_Temperature || fManagerHP->GetNeglectDoppler()) {
     xs = pv->LogFreeVectorValue(ekin, logek);
 
   } else {
@@ -165,6 +168,7 @@ G4double G4CrossSectionHP::IsoCrossSection(const G4double ekin,
     G4double e0 = CLHEP::k_Boltzmann*T;
     G4double mass = fParticle->GetPDGMass();
     G4double massTarget = G4NucleiProperties::GetNuclearMass(A, Z);
+    G4double sig = std::sqrt(2.0*e0/(3.0*massTarget));
 
     // projectile
     G4LorentzVector lv(0., 0., std::sqrt(ekin*(ekin + 2*mass)), mass + ekin);
@@ -177,11 +181,12 @@ G4double G4CrossSectionHP::IsoCrossSection(const G4double ekin,
     G4double xs2 = 0.0;
 
     for (G4int i=0; i<nn; ++i) {
-      G4double erand = G4RandGamma::shoot(2.0, e0);
-      auto mom = G4RandomDirection()*std::sqrt(2*massTarget*erand);
-      fLV.set(mom.x(), mom.y(), mom.z(), massTarget + erand);
+      G4double vx = G4RandGauss::shoot(0., sig);
+      G4double vy = G4RandGauss::shoot(0., sig);
+      G4double vz = G4RandGauss::shoot(0., sig);
+      fLV.set(massTarget*vx, massTarget*vy, massTarget*vz, massTarget*(1.0 + 0.5*(vx*vx + vy*vy + vz*vz)));
       fBoost = fLV.boostVector();
-      fLV = lv.boost(fBoost);
+      fLV = lv.boost(-fBoost);
       if (fLV.pz() <= 0.0) { continue; }
       ++ii;
       G4double e = fLV.e() - mass;
@@ -223,7 +228,7 @@ const G4Isotope* G4CrossSectionHP::SelectIsotope(const G4Element* elm,
   // more than 1 isotope
   G4int Z = elm->GetZasInt();
   if (Z >= minZ && Z <= maxZ && nullptr == fData->GetElementData(Z - minZ)) {
-    InitialiseOnFly(Z);
+    Initialise(Z);
   }
   
   const G4double* abundVector = elm->GetRelativeAbundanceVector();
@@ -264,7 +269,7 @@ const G4Isotope* G4CrossSectionHP::SelectIsotope(const G4Element* elm,
 
 void G4CrossSectionHP::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if (verboseLevel > 1){
+  if (verboseLevel > 1) {
     G4cout << "G4CrossSectionHP::BuildPhysicsTable for "
 	   << p.GetParticleName() << " and " << fDataName << G4endl;
   }
@@ -275,9 +280,8 @@ void G4CrossSectionHP::BuildPhysicsTable(const G4ParticleDefinition& p)
   // Access to elements
   for ( auto const & elm : *table ) {
     G4int Z = elm->GetZasInt();
-    if (Z >= minZ && Z <= maxZ &&
-        nullptr == fData->GetElementData(Z - minZ)) { 
-      InitialiseOnFly(Z);
+    if (Z >= minZ && Z <= maxZ && nullptr == fData->GetElementData(Z - minZ)) { 
+      Initialise(Z);
     }
   }
 
@@ -349,13 +353,6 @@ void G4CrossSectionHP::PrepareCache(const G4Material* mat)
   fIsoXS.resize(fZA.size(), 0.0);
 }
 
-void G4CrossSectionHP::InitialiseOnFly(const G4int Z)
-{
-  G4AutoLock l(&theHPXS);
-  Initialise(Z);
-  l.unlock();
-}
-
 void G4CrossSectionHP::Initialise(const G4int Z)
 {
   if (fManagerHP->GetVerboseLevel() > 1) {
@@ -364,6 +361,11 @@ void G4CrossSectionHP::Initialise(const G4int Z)
 	   << " minZ=" << minZ << " maxZ=" << maxZ << G4endl;
   }
   if (Z < minZ || Z > maxZ || nullptr != fData->GetElementData(Z - minZ)) { 
+    return;
+  }
+  G4AutoLock l(&theHPXS);
+  if (nullptr != fData->GetElementData(Z - minZ)) { 
+    l.unlock();
     return;
   }
 
@@ -432,5 +434,6 @@ void G4CrossSectionHP::Initialise(const G4int Z)
     }
   }   
   if (noComp) { fData->InitialiseForComponent(Z - minZ, 0); }
+  l.unlock();
 }
 

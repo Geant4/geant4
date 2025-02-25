@@ -424,7 +424,10 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
                           LV->GetFieldManager(),
                           LV->GetSensitiveDetector(),
                           LV->GetUserLimits());
-  refLV->SetVisAttributes(LV->GetVisAttributes());  // vis-attributes
+
+  if (LV->GetVisAttributes() != nullptr) {
+    refLV->SetVisAttributes(*LV->GetVisAttributes());  // vis-attributes
+  }
   refLV->SetBiasWeight(LV->GetBiasWeight());        // biasing weight
   if (LV->IsRegion())
   {

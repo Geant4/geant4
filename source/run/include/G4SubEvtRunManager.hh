@@ -42,6 +42,9 @@
 #include "G4TaskRunManager.hh"
 
 #include <atomic>
+#include <map>
+
+class G4WorkerSubEvtRunManager;
 
 class G4SubEvtRunManager : public G4TaskRunManager
 {
@@ -77,11 +80,9 @@ class G4SubEvtRunManager : public G4TaskRunManager
     G4int SetUpNEvents(G4Event*, G4SeedsQueue*, G4bool = true) override
     { return -1; }
 
-    void RegisterSubEventType(G4int ty, G4int maxEnt) override
-    {
-      eventManager->UseSubEventParallelism();
-      eventManager->GetStackManager()->RegisterSubEventType(ty,maxEnt);
-    }
+    void RegisterSubEventType(G4int ty, G4int maxEnt) override;
+
+    void RegisterSubEvtWorker(G4WorkerSubEvtRunManager*,G4int);
 
     // The following method should be invoked by G4WorkerSubEvtRunManager for each
     // sub-event. This method returns a sub-event. This sub-event object must not
@@ -189,6 +190,7 @@ class G4SubEvtRunManager : public G4TaskRunManager
 
     void SetUpSeedsForSubEvent(G4long& s1, G4long& s2, G4long& s3);
 
+    void MergeTrajectories(const G4SubEvent* se,const G4Event* evt) override;
     void UpdateScoringForSubEvent(const G4SubEvent* se,const G4Event* evt) override;
 
     void CleanUpUnnecessaryEvents(G4int keepNEvents) override;
@@ -196,6 +198,17 @@ class G4SubEvtRunManager : public G4TaskRunManager
 
   protected:
     std::atomic<G4bool> runInProgress = false;
+
+  private:
+    G4bool trajectoriesToBeMerged = false;
+    std::map<G4int,G4int> fSubEvtTypeMap;
+    std::map<G4WorkerSubEvtRunManager*,G4int> fWorkerMap;
+
+    G4bool CheckSubEvtTypes();
+
+  public:
+    void TrajectoriesToBeMerged(G4bool val=true) override
+    { trajectoriesToBeMerged = val; }
 };
 
 #endif  // G4SubEvtRunManager_hh

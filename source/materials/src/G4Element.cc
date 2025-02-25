@@ -61,8 +61,6 @@
 #include <sstream>
 #include <utility>
 
-G4ElementTable G4Element::theElementTable;
-
 // Constructor to Generate an element from scratch
 
 G4Element::G4Element(const G4String& name, const G4String& symbol, G4double zeff, G4double aeff)
@@ -120,8 +118,6 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
 {
   InitializePointers();
 
-  auto n = size_t(nIsotopes);
-
   if (0 >= nIsotopes) {
     G4ExceptionDescription ed;
     ed << "Failed to create G4Element " << name << " <" << symbol << "> with " << nIsotopes
@@ -129,6 +125,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
     G4Exception("G4Element::G4Element()", "mat012", FatalException, ed);
   }
   else {
+    auto n = (std::size_t)nIsotopes;
     theIsotopeVector = new G4IsotopeVector(n, nullptr);
     fRelativeAbundanceVector = new G4double[nIsotopes];
   }
@@ -239,8 +236,8 @@ G4Element::~G4Element()
   delete[] fNbOfShellElectrons;
   delete fIonisation;
 
-  // remove this element from theElementTable
-  theElementTable[fIndexInTable] = nullptr;
+  // remove this element from the ElementTable
+  GetElementTableRef()[fIndexInTable] = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -250,8 +247,8 @@ void G4Element::ComputeDerivedQuantities()
   // some basic functions of the atomic number
 
   // Store in table
-  theElementTable.push_back(this);
-  fIndexInTable = theElementTable.size() - 1;
+  GetElementTableRef().push_back(this);
+  fIndexInTable = GetElementTableRef().size() - 1;
 
   // Radiation Length
   ComputeCoulombFactor();
@@ -317,7 +314,7 @@ void G4Element::AddNaturalIsotopes()
   G4int N0 = nist->GetNistFirstIsotopeN(Z);
 
   if (fSymbol.empty()) {
-    const std::vector<G4String> elmnames = G4NistManager::Instance()->GetNistElementNames();
+    const std::vector<G4String>& elmnames = G4NistManager::Instance()->GetNistElementNames();
     if (Z < (G4int)elmnames.size()) {
       fSymbol = elmnames[Z];
     }
@@ -332,7 +329,7 @@ void G4Element::AddNaturalIsotopes()
       ++fNumberOfIsotopes;
     }
   }
-  theIsotopeVector = new G4IsotopeVector((unsigned int)fNumberOfIsotopes, nullptr);
+  theIsotopeVector = new G4IsotopeVector((std::size_t)fNumberOfIsotopes, nullptr);
   fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
   G4int idx = 0;
   G4double xsum = 0.0;
@@ -386,19 +383,39 @@ G4int G4Element::GetNbOfShellElectrons(G4int i) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ElementTable* G4Element::GetElementTable() { return &theElementTable; }
+G4ElementTable& G4Element::GetElementTableRef()
+{
+  struct Holder {
+    G4ElementTable instance;
+    ~Holder() {
+      for(auto item : instance)
+        delete item;
+    }
+  };
+  static Holder _holder;
+  return _holder.instance;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-size_t G4Element::GetNumberOfElements() { return theElementTable.size(); }
+const G4ElementTable* G4Element::GetElementTable()
+{
+  return &GetElementTableRef();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+size_t G4Element::GetNumberOfElements() { return GetElementTableRef().size(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Element* G4Element::GetElement(const G4String& elementName, G4bool warning)
 {
   // search the element by its name
-  for (auto J : theElementTable) {
-    if (J->GetName() == elementName) {
+  for (auto const & J : GetElementTableRef())
+  {
+    if(J->GetName() == elementName)
+    {
       return J;
     }
   }
@@ -451,7 +468,7 @@ std::ostream& operator<<(std::ostream& flux, const G4ElementTable& ElementTable)
   // Dump info for all known elements
   flux << "\n***** Table : Nb of elements = " << ElementTable.size() << " *****\n" << G4endl;
 
-  for (auto i : ElementTable) {
+  for (auto const & i : ElementTable) {
     flux << i << G4endl << G4endl;
   }
 
@@ -465,7 +482,7 @@ std::ostream& operator<<(std::ostream& flux, const G4ElementVector& ElementVecto
   // Dump info for all known elements
   flux << "\n***** Vector : Nb of elements = " << ElementVector.size() << " *****\n" << G4endl;
 
-  for (auto i : ElementVector) {
+  for (auto const & i : ElementVector) {
     flux << i << G4endl << G4endl;
   }
 

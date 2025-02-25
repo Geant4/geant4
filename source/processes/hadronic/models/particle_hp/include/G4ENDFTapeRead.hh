@@ -57,7 +57,7 @@ class G4ENDFTapeRead
      *
      *  - Notes: The data will be read in immediately upon construction.
      */
-    G4ENDFTapeRead(G4String FileLocation, G4String FileName,
+    G4ENDFTapeRead(const G4String& FileLocation, const G4String& FileName,
                    G4FFGEnumerations::YieldType WhichYield,
                    G4FFGEnumerations::FissionCause WhichCause);
     /** Overloaded constructor
@@ -70,7 +70,7 @@ class G4ENDFTapeRead
      *
      *  - Notes: The data will be read in immediately upon construction.
      */
-    G4ENDFTapeRead(G4String FileLocation, G4String FileName,
+    G4ENDFTapeRead(const G4String& FileLocation, const G4String& FileName,
                    G4FFGEnumerations::YieldType WhichYield,
                    G4FFGEnumerations::FissionCause WhichCause, G4int Verbosity);
     /** Overloaded constructor
@@ -87,7 +87,7 @@ class G4ENDFTapeRead
 
   protected:
     /** Initialize is a common function called by all constructors. */
-    void Initialize(G4String dataFile);
+    void Initialize(const G4String& dataFile);
     /** Initialize is a common function calles by all constructors */
     void Initialize(std::istringstream& dataStream);
 
@@ -98,21 +98,21 @@ class G4ENDFTapeRead
      *
      *  - Notes:
      */
-    G4double* G4GetEnergyGroupValues();
+    G4double* G4GetEnergyGroupValues() const;
     /** Returns the number of energy yield groups that were extracted from the
      *  ENDF tape file
      *  - Usage: No arguments required
      *
      *  - Notes:
      */
-    G4int G4GetNumberOfEnergyGroups();
+    G4int G4GetNumberOfEnergyGroups() const;
     /** Returns the number of fission products that were extracted from the
      *  ENDF tape file
      *  - Usage: No arguments required
      *
      *  - Notes:
      */
-    G4int G4GetNumberOfFissionProducts();
+    G4int G4GetNumberOfFissionProducts() const;
     /** Returns the data for the requested fission product
      *  - Usage:
      *      - \p WhichYield: 0-based index of the fission product for which to
@@ -122,7 +122,7 @@ class G4ENDFTapeRead
      *      - This will return a pointer to the next G4FissionYieldContainer.
      *        NULL will be returned if no more fission containers exist.
      */
-    G4ENDFYieldDataContainer* G4GetYield(G4int WhichYield);
+    G4ENDFYieldDataContainer* G4GetYield(G4int WhichYield) const;
     /** Sets the verbosity levels
      *  - Usage:
      *      - \p WhichVerbosity: Combination of  levels

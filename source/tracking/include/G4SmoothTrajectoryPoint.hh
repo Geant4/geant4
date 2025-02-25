@@ -45,8 +45,12 @@
 
 #include "trkgdefs.hh"
 
+class G4ClonedSmoothTrajectoryPoint;
+
 class G4SmoothTrajectoryPoint : public G4VTrajectoryPoint
 {
+  friend class G4ClonedSmoothTrajectoryPoint;
+
  public:
   G4SmoothTrajectoryPoint() = default;
   G4SmoothTrajectoryPoint(G4ThreeVector pos, std::vector<G4ThreeVector>* auxiliaryPoints);

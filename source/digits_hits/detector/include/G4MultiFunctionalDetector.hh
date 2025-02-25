@@ -23,9 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiFunctionalDetector
 //
+// Class description:
 //
-
+// This is the base class of the sensitive detector which owns
+// one or more G4VPrimitiveScorer class objects.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4MultiFunctionalDetector_h
 #define G4MultiFunctionalDetector_h 1
 
@@ -39,15 +45,10 @@
 #include <vector>
 class G4VPrimitiveScorer;
 
-// class description:
-//
-//  This is the base class of the sensitive detector which owns
-// one or more G4VPrimitiveScorer class objects.
-
 class G4MultiFunctionalDetector : public G4VSensitiveDetector
 {
  public:
-  G4MultiFunctionalDetector(G4String);
+  G4MultiFunctionalDetector(const G4String&);
   ~G4MultiFunctionalDetector() override;
 
   G4bool RegisterPrimitive(G4VPrimitiveScorer*);

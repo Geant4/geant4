@@ -122,7 +122,7 @@ G4bool G4CsvHnFileManager<HT>::Write(
       G4Analysis::Warn("Failed to get Csv file " + fileName, fkClass, "Write");
       return false;
     }
-    fileName = hnFileName;
+    fileName = std::move(hnFileName);
   }
 
   return Write(*hnFile, ht);

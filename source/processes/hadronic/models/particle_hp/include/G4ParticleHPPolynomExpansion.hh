@@ -39,6 +39,7 @@
 class G4ParticleHPPolynomExpansion
 {
   public:
+
     G4ParticleHPPolynomExpansion()
     {
       theCoeff = nullptr;
@@ -56,7 +57,7 @@ class G4ParticleHPPolynomExpansion
       }
     }
 
-    inline G4double GetValue(G4double anEnergy)
+    inline G4double GetValue(G4double anEnergy) const
     {
       G4int i;
       G4double result = 0;
@@ -70,6 +71,7 @@ class G4ParticleHPPolynomExpansion
     }
 
   private:
+
     G4int nPoly;
     G4double* theCoeff;
 };

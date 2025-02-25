@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-22 Gabriele Cosmo (geomnav-V11-02-03)
+- In G4MultiLevelLocator::EstimateIntersectionPoint(), moved repeated assertion
+  on invalid intersection within G4DEBUG_FIELD, to avoid excess of warning
+  printouts in rare cases of failed convergence, as reported by CMS.
+
 ## 2024-05-15 Ivana Hrivnacova (geomnav-V11-02-02)
 - Let G4TransportationManager notify G4FieldManager about the global
   field via newly added G4FieldManager::SetGlobalFieldManager().

@@ -2,7 +2,7 @@
 // -------------------------------------------------------------------
 //
 // *********************************************************************
-// To execute this macro under ROOT after your simulation ended, 
+// To execute this macro under ROOT after your simulation ended,
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
 //   3 - OR type directly 'root plot.C'
@@ -14,8 +14,8 @@ gROOT->Reset();
 gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
 gStyle->SetOptStat(000000);
-	
-c1 = new TCanvas ("c1","",60,60,800,800);
+
+auto c1 = new TCanvas ("c1","",60,60,800,800);
 c1->Divide(1,1);
 
 FILE * fp = fopen("s.txt","r");
@@ -25,7 +25,7 @@ Int_t ncols = 0;
 Int_t nlines = 0;
 
 TNtuple *ntuple = new TNtuple("ntuple","s","radius:thick:E:sc:ssc:sn:ssn");
-while (1) 
+while (1)
 {
   ncols = fscanf(fp,"%f %f %f %f %f %f %f",&radius,&thick,&E,&sc,&ssc,&sn,&ssn);
   if (ncols < 0) break;
@@ -33,7 +33,7 @@ while (1)
   nlines++;
 }
 fclose(fp);
- 
+
 c1->cd(1);
 gPad->SetLogx();
 gPad->SetLogy();

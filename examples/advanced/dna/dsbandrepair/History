@@ -1,0 +1,25 @@
+# Example dsbandrepair History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2024-11-13 Le Tuan Anh (dsbandrepair-V11-02-03)
+- Merge classes have the same functionality in PhysStage and ChemStage
+
+## 2024-10-15 H. Tran (dsbandrepair-V11-02-02)
+- Moved from to dna folder
+
+## 2024-10-03 H. Tran (dsbandrepair-V11-02-01)
+- Modified the molecule names of OH, HO2, O in MoleculeDefinition.
+  Each molecule configuration has a molecule definition.
+
+## 2024-05-24 H. Tran (dsbandrepair-V11-02-00)
+- used the EmParameter to control chemistry time step model
+
+## 2023-11-09 H. Tran (dsbandrepair-V11-01-01)
+- Added info in .README.txt and README files
+
+## 2023-10-26 LE TUAN ANH (dsbandrepair-V11-01-00)
+- First introduction of dsbandrepair.
+

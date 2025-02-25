@@ -247,9 +247,9 @@ void G4VUIshell::ListCommand(const G4String& dir, const G4String& candidate) con
   }
 
   // check "vcmd" is directory?
-  G4String inputpath = vpath + vcmd;
+  const G4String& inputpath = vpath + vcmd;
   if (! vcmd.empty()) {
-    G4String tmpstr = inputpath + "/";
+    const G4String& tmpstr = inputpath + "/";
     if (GetCommandTree(tmpstr) != nullptr) {
       vpath = tmpstr;
       vcmd = "";

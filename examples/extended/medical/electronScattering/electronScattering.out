@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -149,7 +149,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -220,10 +220,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -394,7 +397,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -694,6 +697,7 @@ Index : 5     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
@@ -710,6 +714,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       55.71          0k         2        2          9         0.00    Frame
       44.29          0k         1        3          4         0.00    Gas
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
 
 ------- MixMaxRng engine status -------
@@ -734,7 +740,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.950000s Real=5.280896s Sys=0.000000s
+  User=5.100000s Real=5.156717s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -749,9 +755,9 @@ N=17 V[N]={139564191965863788, 2302776708230382971, 254581900843411369, 22213365
 ---------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x1278000
-UserPhysicsList deleted 0x15064b0
-UserActionInitialization deleted 0x154a4e0
+UserDetectorConstruction deleted 0x13f5960
+UserPhysicsList deleted 0x1693f20
+UserActionInitialization deleted 0x16d81b0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

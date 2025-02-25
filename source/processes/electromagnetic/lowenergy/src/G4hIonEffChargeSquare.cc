@@ -217,8 +217,10 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
         else if(iz > 91) iz =91 ;
         vF   += vFermi[iz] * weight ;
       }
-    z  /= norm ;
-    vF /= norm ;
+    if (norm > 0.0) {
+      z  /= norm ;
+      vF /= norm ;
+    }
   }
 
   // Helium ion case
@@ -239,7 +241,11 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   } else {
 
     // v1 is ion velocity in vF unit
-    G4double v1 = std::sqrt( reducedEnergy / (25.0 * keV) )/ vF ;
+    G4double v1{0.0}, v2{0.0};
+    if (vF > 0.0) {
+      v1 = std::sqrt( reducedEnergy / (25.0 * keV) )/ vF;
+      v2 = 1.0/ (vF*vF);
+    }
     G4double y ;
     G4double z13 = std::pow(ionCharge, 0.3333) ;
 
@@ -266,7 +272,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
 
     G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
     G4double qeff   = ionCharge * sLocal *
-      ( q + 0.5*(1.0-q) * std::log(1.0 + lambda*lambda) / (vF*vF) ) ;
+      ( q + 0.5*(1.0-q) * std::log(1.0 + lambda*lambda) * v2) ;
     if( 0.1 > qeff ) qeff = 0.1 ;
     return qeff*qeff ;
   }

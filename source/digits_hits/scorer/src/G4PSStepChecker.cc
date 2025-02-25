@@ -36,7 +36,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSStepChecker::G4PSStepChecker(G4String name, G4int depth)
+G4PSStepChecker::G4PSStepChecker(const G4String& name, G4int depth)
   : G4VPrimitiveScorer(name, depth)
 {}
 

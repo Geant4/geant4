@@ -77,7 +77,7 @@ template<typename PointT>
   G4KDNode_Base* G4KDTree::Insert(PointT* pos)
   {
     G4KDNode_Base* node = nullptr;
-    if (!fRoot)
+    if ((fRoot == nullptr) || !(fRoot->IsValid()))
     {
       fRoot = new G4KDNode<PointT>(this, pos, nullptr);
       node = fRoot;

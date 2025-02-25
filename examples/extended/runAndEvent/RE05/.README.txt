@@ -44,7 +44,23 @@ At the third stage, all particles in the RoI (Region of Interest) along
 the isolated muons are tracked. All these examinations are applied in
 RE05StackingAction.
   	
-\section RE05_s5 How to start
+\section RE05_s5 Input macro files
+
+\subsection RE05_s51 exampleRE05.in
+
+ Read "pythia_event.data" and run 10 events. This macro file
+demonstrates the feature described in the previous section.
+
+N.B. For release 11.3, this macro is temporarily altered to shoot
+muons by particle gun. Once HepMC3 interface becomes ready, this
+example will be overhauled and this macro file will be updated
+accordingly.
+
+\subsection RE05_s52 exampleRE05.EMtest.in and exampleRE05.EMtest.large_N.in
+
+ Alternative macros with shooting muons for checking EM physics.
+
+\section RE05_s6 How to start
  
 - Execute RE05 in 'batch' mode from macro files
 \verbatim

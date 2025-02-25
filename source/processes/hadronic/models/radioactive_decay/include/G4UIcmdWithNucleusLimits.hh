@@ -77,14 +77,14 @@ class G4UIcmdWithNucleusLimits : public G4UIcommand
 {
 public: // With description
     G4UIcmdWithNucleusLimits
-    (const char * theCommandPath,G4UImessenger * theMessenger);
+    (const char * theCommandPath, G4UImessenger * theMessenger);
   //    Constructor identifying the command path in the User Interface and the
   //    associated G4UImessenger which will use this G4UIcommand object.
   //
   ~G4UIcmdWithNucleusLimits();
   //  Destructor
   //
-    G4NucleusLimits GetNewNucleusLimitsValue(G4String paramString);
+    G4NucleusLimits GetNewNucleusLimitsValue(const G4String& paramString);
   //    Extracts the values aMin, aMax, zMin, zMax from paramString.
   //    Values returned have aMin, aMax, zMin, and zMax (within the
   //    G4NucleusLimits variable).
@@ -101,4 +101,3 @@ public: // With description
 };
 ////////////////////////////////////////////////////////////////////////////////
 #endif
-

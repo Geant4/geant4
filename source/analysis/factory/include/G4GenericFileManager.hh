@@ -59,7 +59,7 @@ class G4GenericFileManager : public G4VFileManager
     G4bool OpenFile(const G4String& fileName) final;
 
     // Methods applied to all registered files
-    virtual G4bool OpenFiles() final;
+    G4bool OpenFiles() final;
     G4bool WriteFiles() final;
     G4bool CloseFiles() final;
     G4bool DeleteEmptyFiles() final;
@@ -75,6 +75,7 @@ class G4GenericFileManager : public G4VFileManager
 
     G4bool SetHistoDirectoryName(const G4String& dirName) override;
     G4bool SetNtupleDirectoryName(const G4String& dirName) override;
+    void SetCompressionLevel(G4int level) override;
 
     G4String GetFileType() const final { return ""; }
 

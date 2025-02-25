@@ -58,22 +58,21 @@
    
 #include "G4ios.hh"
 #include "globals.hh"
-#include <vector>
 
+#include <vector>
 
 class G4RadioactiveDecayRatesToDaughter
 {
   public:
+
     G4RadioactiveDecayRatesToDaughter();
     virtual ~G4RadioactiveDecayRatesToDaughter();
 
     G4RadioactiveDecayRatesToDaughter(const G4RadioactiveDecayRatesToDaughter&);
     G4RadioactiveDecayRatesToDaughter& operator=(const G4RadioactiveDecayRatesToDaughter&);
 
-    G4bool operator==(const G4RadioactiveDecayRatesToDaughter& right) const
-      {return (this == &right);};
-    G4bool operator!=(const G4RadioactiveDecayRatesToDaughter& right) const
-      {return (this != &right);};
+    G4bool operator==(const G4RadioactiveDecayRatesToDaughter& right) const {return (this == &right);}
+    G4bool operator!=(const G4RadioactiveDecayRatesToDaughter& right) const {return (this != &right);}
 
   public:
 
@@ -81,19 +80,22 @@ class G4RadioactiveDecayRatesToDaughter
     inline G4int GetA() const {return A;}
     inline G4double GetE() const {return E;}
     inline G4int GetGeneration() const {return generation;}
-    inline std::vector<G4double> GetDecayRateC() const
-       {return decayRateC;}
+    inline std::vector<G4double> GetDecayRateC() const {return decayRateC;}
     inline std::vector<G4double> GetTaos() const {return taos;}
 
     inline void SetZ(G4int value) {Z = value;}
     inline void SetA(G4int value) {A = value;}
     inline void SetE(G4double value) {E = value;}
     inline void SetGeneration(G4int value) {generation = value;}
-    inline void SetDecayRateC(std::vector<G4double> value)
-       {decayRateC = value;}
-    inline void SetTaos(std::vector<G4double> value) {taos = value;}
+    inline void SetDecayRateC(std::vector<G4double> value) {decayRateC = std::move(value);}
+    inline void SetTaos(std::vector<G4double> value) {taos = std::move(value);}
+
+    inline void  SetVerboseLevel(G4int value) {verboseLevel = value;}
+    inline G4int GetVerboseLevel() const {return verboseLevel;}
+    void  DumpInfo();
 
   protected:
+
     G4int Z;
     G4int A;
     G4double E;
@@ -101,15 +103,8 @@ class G4RadioactiveDecayRatesToDaughter
     std::vector<G4double> decayRateC;
     std::vector<G4double> taos;
 
-  public:
-
-    inline void  SetVerboseLevel(G4int value)
-      {verboseLevel = value;}
-    inline G4int GetVerboseLevel() const
-      {return verboseLevel;}
-    void  DumpInfo();
-
   private:
+
     G4int verboseLevel;
     // control flag for output message
     // G4int verboseLevel;

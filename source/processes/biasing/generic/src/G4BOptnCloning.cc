@@ -23,22 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BOptnCloning
+// --------------------------------------------------------------------
+
 #include "G4BOptnCloning.hh"
 
-
-G4BOptnCloning::G4BOptnCloning(G4String name)
-  : G4VBiasingOperation( name    ),
-    fClone1W           ( -1.0    ),
-    fClone2W           ( -1.0    ),
-    fParticleChange(),
-    fCloneTrack        ( nullptr )
+G4BOptnCloning::G4BOptnCloning(const G4String& name)
+  : G4VBiasingOperation( name ),
+    fParticleChange()
 {}
 
 G4BOptnCloning::~G4BOptnCloning()
 {}
 
-G4VParticleChange*  G4BOptnCloning::GenerateBiasingFinalState( const G4Track* track,
-                                                               const G4Step*       )
+G4VParticleChange*
+G4BOptnCloning::GenerateBiasingFinalState( const G4Track* track,
+                                           const G4Step*       )
 {
   fParticleChange.Initialize(*track);
   fParticleChange.ProposeParentWeight( fClone1W );

@@ -73,7 +73,7 @@ class G4ConvergenceTester
 
     inline G4double GetValueOfMinimizingFunction(std::vector<G4double> x)
     {
-      return slope_fitting_function(x);
+      return slope_fitting_function(std::move(x));
     }
 
     void ComputeStatistics() { calStat(); }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4TDigiCollection
+// --------------------------------------------------------------------
 
 #include "G4TDigiCollection.hh"
 

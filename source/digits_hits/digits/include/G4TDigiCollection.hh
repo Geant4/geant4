@@ -23,9 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TDigiCollection & G4DigiCollection
 //
+// Class description:
 //
-
+// This is a template class of digi collection and parametrised by
+// The concrete class of G4VDigi. This is a uniform collection for
+// a particular concrete digi class objects.
+// An intermediate layer class G4DigiCollection appeared in this
+// header file is used just for G4Allocator, because G4Allocator
+// cannot be instantiated with a template class. Thus G4DigiCollection
+// class MUST NOT be directly used by the user.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4TDigiCollection_h
 #define G4TDigiCollection_h 1
 
@@ -35,26 +46,18 @@
 
 #include <vector>
 
-// class description:
-//
-//  This is a template class of digi collection and parametrized by
-// The concrete class of G4VDigi. This is a uniform collection for
-// a particular concrete digi class objects.
-//  An intermediate layer class G4DigiCollection appeared in this
-// header file is used just for G4Allocator, because G4Allocator
-// cannot be instansiated with a template class. Thus G4DigiCollection
-// class MUST NOT be directly used by the user.
-
 class G4DigiCollection : public G4VDigiCollection
 {
- public:
-  using G4VDigiCollection::G4VDigiCollection;
-  ~G4DigiCollection() override = default;
+  public:
 
-  G4bool operator==(const G4DigiCollection& right) const { return (this == &right); }
+    using G4VDigiCollection::G4VDigiCollection;
+    ~G4DigiCollection() override = default;
 
- protected:
-  void* theCollection = nullptr;
+    G4bool operator==(const G4DigiCollection& right) const { return (this == &right); }
+
+  protected:
+
+    void* theCollection = nullptr;
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
@@ -66,52 +69,53 @@ extern G4DLLIMPORT G4Allocator<G4DigiCollection>*& aDCAllocator_G4MT_TLS_();
 template <class T>
 class G4TDigiCollection : public G4DigiCollection
 {
- public:
-  G4TDigiCollection();
-  G4TDigiCollection(G4String detName, G4String colNam);
-  ~G4TDigiCollection() override;
+  public:
 
-  G4bool operator==(const G4TDigiCollection& right) const;
+    G4TDigiCollection();
+    G4TDigiCollection(const G4String& detName, const G4String& colNam);
+    ~G4TDigiCollection() override;
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* aDC);
+    G4bool operator==(const G4TDigiCollection& right) const;
 
-  // Invoke Draw() method on all stored digit objects in collection
-  void DrawAllDigi() override;
+    inline void* operator new(std::size_t);
+    inline void operator delete(void* aDC);
 
-  // Invoke Print() method on all stored digit objects in collection
-  void PrintAllDigi() override;
+    // Invoke Draw() method on all stored digit objects in collection
+    void DrawAllDigi() override;
 
-  // Returns pointer to the concrete digi object at index i
-  // Not bounds checked
-  inline T* operator[](size_t i) const { return (*((std::vector<T*>*)theCollection))[i]; }
+    // Invoke Print() method on all stored digit objects in collection
+    void PrintAllDigi() override;
 
-  // Returns pointer to stored collection vector.
-  inline std::vector<T*>* GetVector() const { return (std::vector<T*>*)theCollection; }
+    // Returns pointer to the concrete digi object at index i
+    // Not bounds checked
+    inline T* operator[](std::size_t i) const { return (*((std::vector<T*>*)theCollection))[i]; }
 
-  // Insert a digit object in the collection, taking ownership
-  // Returns the total number of digi objects stored after insertion
-  inline size_t insert(T* aHit)
-  {
-    auto theDigiCollection = (std::vector<T*>*)theCollection;
-    theDigiCollection->push_back(aHit);
-    return theDigiCollection->size();
-  }
+    // Returns pointer to stored collection vector.
+    inline std::vector<T*>* GetVector() const { return (std::vector<T*>*)theCollection; }
 
-  // Returns the number of digi objects stored in this collection.
-  inline size_t entries() const
-  {
-    auto theDigiCollection = (std::vector<T*>*)theCollection;
-    return theDigiCollection->size();
-  }
+    // Insert a digit object in the collection, taking ownership
+    // Returns the total number of digi objects stored after insertion
+    inline std::size_t insert(T* aHit)
+    {
+      auto theDigiCollection = (std::vector<T*>*)theCollection;
+      theDigiCollection->push_back(aHit);
+      return theDigiCollection->size();
+    }
 
-  G4VDigi* GetDigi(size_t i) const override { return (*((std::vector<T*>*)theCollection))[i]; }
+    // Returns the number of digi objects stored in this collection.
+    inline std::size_t entries() const
+    {
+      auto theDigiCollection = (std::vector<T*>*)theCollection;
+      return theDigiCollection->size();
+    }
 
-  size_t GetSize() const override { return ((std::vector<T*>*)theCollection)->size(); }
+    G4VDigi* GetDigi(std::size_t i) const override { return (*((std::vector<T*>*)theCollection))[i]; }
+
+    std::size_t GetSize() const override { return ((std::vector<T*>*)theCollection)->size(); }
 };
 
 template <class T>
-inline void* G4TDigiCollection<T>::operator new(size_t)
+inline void* G4TDigiCollection<T>::operator new(std::size_t)
 {
   if (aDCAllocator_G4MT_TLS_() == nullptr) {
     aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
@@ -133,7 +137,7 @@ G4TDigiCollection<T>::G4TDigiCollection()
 }
 
 template <class T>
-G4TDigiCollection<T>::G4TDigiCollection(G4String detName, G4String colNam)
+G4TDigiCollection<T>::G4TDigiCollection(const G4String& detName, const G4String& colNam)
   : G4DigiCollection(detName, colNam)
 {
   auto theDigiCollection = new std::vector<T*>;

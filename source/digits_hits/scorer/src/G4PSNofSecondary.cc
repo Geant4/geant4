@@ -40,7 +40,7 @@
 //                       (Makoto Asai)
 //
 
-G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
+G4PSNofSecondary::G4PSNofSecondary(const G4String& name, G4int depth)
   : G4VPrimitivePlotter(name, depth)
 {}
 

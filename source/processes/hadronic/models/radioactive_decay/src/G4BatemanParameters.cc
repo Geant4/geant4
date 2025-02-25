@@ -80,8 +80,8 @@ G4BatemanParameters::SetParameters(G4int aZ, G4int anA, G4double anE, G4int aG,
   A = anA;
   E = anE;
   generation = aG;
-  Acoeffs = theCoeffs; 
-  taus = theTaus;
+  Acoeffs = std::move(theCoeffs); 
+  taus = std::move(theTaus);
 }
 
 

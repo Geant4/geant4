@@ -176,7 +176,8 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
   if (!isInitialised) { InitialiseChannels(); }
 
   G4double totprob, prob, oldprob = 0.0;
-  size_t maxchannel, i;
+  const G4double limFact = 1.e-6;
+  std::size_t maxchannel, i;
 
   G4int Amax = theResidualNucleus->GetA_asInt();
   if(fVerbose > 1) {
@@ -194,7 +195,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     if(A <= 1) { break; }
     G4double Eex = theResidualNucleus->GetExcitationEnergy();
 
-    // stop deecitation loop if residual can be deexcited by FBU    
+    // stop deexcitation loop if residual can be deexcited by FBU    
     if(theFBU->IsApplicable(Z, A, Eex)) { break; }
 
     // check if it is stable, then finish evaporation
@@ -220,9 +221,9 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
       probabilities[i] = totprob;
 
       // if two recent probabilities are near zero stop computations
-      if(i>=8 && prob > 0.0) {
-	if(prob <= totprob*1.e-8 && oldprob <= totprob*1.e-8) {
-	  maxchannel = i+1; 
+      if (i > 8) {
+	if (prob <= totprob*limFact && oldprob <= totprob*limFact) {
+	  maxchannel = i + 1; 
 	  break;
 	}
       }

@@ -231,7 +231,6 @@ class G4MTRunManager : public G4RunManager
 
     // Handling of master thread scoring worlds, access is needed by workers
     G4MTRUN_DLL static G4ScoringManager* masterScM;
-    G4MTRUN_DLL static masterWorlds_t masterWorlds;
     // Singleton implementing master thread behavior
     G4MTRUN_DLL static G4MTRunManager* fMasterRM;
 

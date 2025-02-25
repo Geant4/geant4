@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-07-17 Vladimir Ivanchenko (channeling-V11-02-00)
+- G4ChannelingOptrMultiParticleChangeCrossSection,
+  G4ChannelingOptrChangeCrossSection - fixed Coverity warnings
+
 ## 2021-12-10 Ben Morgan (channeling-V11-00-00)
 - Change to new Markdown History format
 

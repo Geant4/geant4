@@ -56,12 +56,12 @@
 // 2014-03-03  T.Aso,  To use always positive value for anglefactor.
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, G4int direction,
+G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(const G4String& name, G4int direction,
                                              G4int depth)
   : G4PSSphereSurfaceFlux(name, direction, "percm2", depth)
 {}
 
-G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, G4int direction,
+G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(const G4String& name, G4int direction,
                                              const G4String& unit, G4int depth)
   : G4VPrimitiveScorer(name, depth)
   , HCID(-1)

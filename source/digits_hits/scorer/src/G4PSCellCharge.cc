@@ -38,11 +38,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCellCharge::G4PSCellCharge(G4String name, G4int depth)
+G4PSCellCharge::G4PSCellCharge(const G4String& name, G4int depth)
   : G4PSCellCharge(name, "e+", depth) 
 {}
 
-G4PSCellCharge::G4PSCellCharge(G4String name, const G4String& unit, G4int depth)
+G4PSCellCharge::G4PSCellCharge(const G4String& name, const G4String& unit, G4int depth)
   : G4VPrimitiveScorer(name, depth)
   , HCID(-1)
   , EvtMap(nullptr)

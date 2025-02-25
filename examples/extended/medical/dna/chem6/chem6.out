@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -32,7 +32,7 @@ Molecular Config | Diffusion Coefficient (m2 / s)       | Radius (nm)
 _____________________________________________________________________________
 H3O^1                 9.46e-09                          0.25
 _____________________________________________________________________________
-OH^0                   2.2e-09                          0.22
+°OH^0                 2.2e-09                          0.22
 _____________________________________________________________________________
 OH^-1                  5.3e-09                          0.33
 _____________________________________________________________________________
@@ -44,11 +44,11 @@ H_2^0                  4.8e-09                          0.14
 _____________________________________________________________________________
 H2O2^0                 2.3e-09                          0.21
 _____________________________________________________________________________
-HO_2^0                 2.3e-09                          0.21
+HO_2°^0               2.3e-09                          0.21
 _____________________________________________________________________________
 HO_2^-1                1.4e-09                          0.25
 _____________________________________________________________________________
-O^0                      2e-09                           0.2
+°O^0                    2e-09                           0.2
 _____________________________________________________________________________
 O^-1                     2e-09                          0.25
 _____________________________________________________________________________
@@ -94,15 +94,21 @@ H2O^0                    2e-09                         0.275
 _____________________________________________________________________________
 H2O^0                    2e-09                         0.275
 _____________________________________________________________________________
-HO_2^0                 2.3e-09                          0.21
+HO_2^-1                2.3e-09                          0.21
+_____________________________________________________________________________
+HO_2°^0               2.3e-09                          0.21
 _____________________________________________________________________________
 None^0                       0                             0
 _____________________________________________________________________________
 O^0                      2e-09                           0.2
 _____________________________________________________________________________
+OH^-1                  2.8e-09                        0.0958
+_____________________________________________________________________________
 O_2^0                  2.4e-09                          0.17
 _____________________________________________________________________________
 O_3^0                    2e-09                           0.2
+_____________________________________________________________________________
+°O^0                    2e-09                           0.2
 _____________________________________________________________________________
 Number of chemical species involved in reactions = 6
 Reaction                                    Reaction Rate [dm3/(mol*s)]   
@@ -111,17 +117,17 @@ H3O^1 + OH^-1 -> No product                 1.13e+11
 ----------------------------------------------------------------------------
 H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      
 ----------------------------------------------------------------------------
-OH^0 + H^0 -> No product                    1.55e+10                      
+°OH^0 + H^0 -> No product                  1.55e+10                      
 ----------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                       5.5e+09                       
+°OH^0 + °OH^0 -> H2O2^0                   5.5e+09                       
 ----------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      
+°OH^0 + e_aq^-1 -> OH^-1                   2.95e+10                      
 ----------------------------------------------------------------------------
 e_aq^-1 + H^0 -> H_2^0 + OH^-1              2.5e+10                       
 ----------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> H_2^0 + OH^-1 + OH^-1  6.36e+09                      
 ----------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.1e+10                       
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0          1.1e+10                       
 ----------------------------------------------------------------------------
 H^0 + H^0 -> H_2^0                          5.03e+09                      
 ----------------------------------------------------------------------------
@@ -146,10 +152,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -594,27 +603,27 @@ DNAMolecularIRTModel will be used
 --------------------End of Global Run-----------------------
   The run has 6 events 
 Number of events recorded by the species scorer = 6
- Total energy deposited in the world volume : 7249 eV
+ Total energy deposited in the world volume : 7248.1 eV
  ------------------------------------------------------------
 
 ### Run 1 starts.
 ### Run 1 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 3 events 
+Number of events recorded by the species scorer = 3
+ Total energy deposited in the world volume : 4823.7 eV
+ ------------------------------------------------------------
+
+### Run 2 starts.
+### Run 2 starts.
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
   The run has 6 events 
 Number of events recorded by the species scorer = 6
- Total energy deposited in the world volume : 9650.5 eV
- ------------------------------------------------------------
-
-### Run 2 starts.
-### Run 2 starts.
---> Event 0 starts.
-
---------------------End of Global Run-----------------------
-  The run has 7 events 
-Number of events recorded by the species scorer = 7
- Total energy deposited in the world volume : 16165 eV
+ Total energy deposited in the world volume : 13879 eV
  ------------------------------------------------------------
 
 ### Run 3 starts.
@@ -624,7 +633,7 @@ Number of events recorded by the species scorer = 7
 --------------------End of Global Run-----------------------
   The run has 1 events 
 Number of events recorded by the species scorer = 1
- Total energy deposited in the world volume : 3800.1 eV
+ Total energy deposited in the world volume : 3832.2 eV
  ------------------------------------------------------------
 
 ### Run 4 starts.
@@ -632,9 +641,9 @@ Number of events recorded by the species scorer = 1
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
-  The run has 4 events 
-Number of events recorded by the species scorer = 4
- Total energy deposited in the world volume : 24077 eV
+  The run has 2 events 
+Number of events recorded by the species scorer = 2
+ Total energy deposited in the world volume : 12004 eV
  ------------------------------------------------------------
 
 ### Run 5 starts.
@@ -642,11 +651,18 @@ Number of events recorded by the species scorer = 4
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
-  The run has 4 events 
-Number of events recorded by the species scorer = 4
- Total energy deposited in the world volume : 32121 eV
+  The run has 5 events 
+Number of events recorded by the species scorer = 5
+ Total energy deposited in the world volume : 40126 eV
  ------------------------------------------------------------
 
 ### Run 6 starts.
 ### Run 6 starts.
 --> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 1 events 
+Number of events recorded by the species scorer = 1
+ Total energy deposited in the world volume : 10069 eV
+ ------------------------------------------------------------
+

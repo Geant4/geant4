@@ -1,12 +1,19 @@
 # Example RE05 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-10-28 Makoto Asai (exampleRE05-V11-02-01)
+- Modify exampleRE05.in to temporarily avoid using the HEPEvt interface.
+
+## 2024-09-20 Gabriele Cosmo (exampleRE05-V11-02-00)
+- Avoid deleting anything after deletion of run-manager in main().
 
 ## 2021-12-10 Ben Morgan (exampleRE05-V11-00-00)
-- Change to new Markdown History format
+- Change to new Markdown History format.
 
 ---
 

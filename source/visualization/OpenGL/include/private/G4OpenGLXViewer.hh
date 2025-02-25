@@ -54,10 +54,8 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-#ifdef G4MULTITHREADED
   void SwitchToVisSubThread();
   void SwitchToMasterThread();
-#endif
   void DrawText(const G4Text&);
 
 protected:
@@ -82,9 +80,7 @@ protected:
   XSetWindowAttributes              swa;
   GLXDrawable                       win;
   GLXContext                        cxMaster;
-#ifdef G4MULTITHREADED
   GLXContext                        cxVisSubThread;
-#endif
   XEvent                            event;
   G4int                             *attributeList,
                                     errorBase,

@@ -96,20 +96,20 @@ int main( int argc, char** argv )
   runManager->SetUserInitialization(new XrayTelPhysicsList);
   runManager->SetUserInitialization(new XrayTelActionInitializer());
 
-  // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-
   //Initialize G4 kernel
   runManager->Initialize();
 
   // get the pointer to the User Interface manager
-  G4UImanager *UImanager = G4UImanager::GetUIpointer();
+  auto* UImanager = G4UImanager::GetUIpointer();
   if ( argc==1 ){
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-       UImanager->ApplyCommand("/control/execute vis.mac");
-       ui->SessionStart();
-       delete ui;
+    auto* visManager = new G4VisExecutive;
+    visManager->Initialize();
+
+    auto* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+    delete visManager;
   }
   else {
     // Create a pointer to the User Interface manager
@@ -121,7 +121,6 @@ int main( int argc, char** argv )
   }
 
   // job termination
-  delete visManager;
   delete runManager;
   return 0;
 }

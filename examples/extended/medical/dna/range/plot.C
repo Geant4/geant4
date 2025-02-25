@@ -12,7 +12,7 @@ gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
 gStyle->SetOptStat(00000);
 
-c1 = new TCanvas ("c1","Range",60,60,700,700);
+auto c1 = new TCanvas ("c1","Range",60,60,700,700);
 c1->Divide(1,1);
 
 c1->cd(1);

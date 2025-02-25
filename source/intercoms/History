@@ -6,6 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-07-29 John Allison (intercoms-V11-02-07)
+- G4UImanager::ApplyCommand:
+  - Replace `isMaster` by `G4Threading::IsMasterThread()`.
+    - This controls highlighting of echoed commands in the Qt GUI.
+    - This was a misunderstanding. I thought `isMaster` referred to the thread.
+      It looks like it refers to a type of run manager. Luckily for MT mode,
+      `isMaster` is true, but for Serial mode, it is false, so highlighting did
+      not work for Serial mode. This was an oversight on my part - I should have
+      tested Serial mode when I introduced highlighting in January and February
+      2020 (intercoms-V10-07-01 and 2).
+
+## 2024-07-16 Gabriele Cosmo (intercoms-V11-02-06)
+- More fixes for Coverity defects.
+
+## 2024-07-15 Gabriele Cosmo (intercoms-V11-02-05)
+- Fixed reported Coverity defects, use consistently 'const G4String&' to
+  avoid implicit copy.
+
 ## 2024-05-18 Makoto Asai (intercoms-V11-02-04)
 - G4GenericMessenger.cc : Further addressing to Bug Report #2606
 

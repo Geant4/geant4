@@ -42,7 +42,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4SDChargedFilter::G4SDChargedFilter(G4String name)
+G4SDChargedFilter::G4SDChargedFilter(const G4String& name)
   : G4VSDFilter(name)
 {}
 

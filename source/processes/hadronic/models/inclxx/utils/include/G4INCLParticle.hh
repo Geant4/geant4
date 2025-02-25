@@ -1180,7 +1180,7 @@ namespace G4INCL {
     /// \brief Set the vector list of biased vertices on the particle path.
     void setBiasCollisionVector(std::vector<G4int> BiasCollisionVector) {
 	  this->theBiasCollisionVector = BiasCollisionVector;
-	  this->setParticleBias(Particle::getBiasFromVector(BiasCollisionVector));
+	  this->setParticleBias(Particle::getBiasFromVector(std::move(BiasCollisionVector)));
 	  }
     
     /** \brief Number of Kaon inside de nucleus

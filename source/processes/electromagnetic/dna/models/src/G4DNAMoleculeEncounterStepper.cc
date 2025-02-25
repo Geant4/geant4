@@ -470,7 +470,7 @@ G4double G4DNAMoleculeEncounterStepper::CalculateMinTimeStep(G4double /*currentG
             {
                 fReactionSet->AddReactions(fTSTimeStep,
                                            const_cast<G4Track*>(pTrack),
-                                           reactants);
+                                           std::move(reactants));
                 ResetReactants();
             }
          }
@@ -478,7 +478,7 @@ G4double G4DNAMoleculeEncounterStepper::CalculateMinTimeStep(G4double /*currentG
          {
              fReactionSet->AddReactions(fTSTimeStep,
                                         const_cast<G4Track*>(pTrack),
-                                        reactants);
+                                        std::move(reactants));
              ResetReactants();
          }
          else if (reactants)

@@ -172,7 +172,7 @@ void G4FieldBuilder::ConstructLocalFields()
   for (auto [lv, field] : GetLocalFields()) {
 
     // Volume name
-    auto volumeName = lv->GetName();
+    const auto& volumeName = lv->GetName();
 
     // Get or create user field parameters
     G4FieldParameters* fieldParameters =
@@ -326,7 +326,7 @@ void G4FieldBuilder::SetFieldType(G4FieldType fieldType)
 
   // change default equation and stepper if other than magnetic field
   if (fieldType == kElectroMagnetic) {
-    fFieldParameters[0]->SetEquationType(kEqMagElectric);
+    fFieldParameters[0]->SetEquationType(kEqElectroMagnetic);
     fFieldParameters[0]->SetStepperType(kClassicalRK4);
   }
 }

@@ -39,13 +39,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 G4hInverseIonisation::G4hInverseIonisation(
-  G4bool whichScatCase, G4String process_name,
+  G4bool whichScatCase, const G4String& process_name,
   G4AdjointhIonisationModel* aEmAdjointModel)
   : G4VAdjointReverseReaction(process_name, whichScatCase)
 {
   fAdjointModel = aEmAdjointModel;
   fAdjointModel->SetSecondPartOfSameType(false);
 }
-
-///////////////////////////////////////////////////////////////////////////////
-G4hInverseIonisation::~G4hInverseIonisation() {}

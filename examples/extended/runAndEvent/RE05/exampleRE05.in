@@ -1,11 +1,17 @@
 #
-/mydet/RoIangle 10 deg
+#/mydet/RoIangle 10 deg
+#/mydet/reqmuon 1
+#/mydet/isomuon 1
+#
+#/particle/createAllIon
+#/control/verbose 2
+#/run/verbose 2
+#/run/beamOn 10
+#
+/mydet/generator particleGun
+/gun/particle mu-
 /mydet/reqmuon 1
 /mydet/isomuon 1
-#
-/particle/createAllIon
-/control/verbose 2
-/run/verbose 2
-/run/beamOn 10
-#
+/gun/energy 100 GeV
+/run/beamOn 10 
 

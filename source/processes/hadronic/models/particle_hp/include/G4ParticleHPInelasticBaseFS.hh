@@ -45,13 +45,13 @@
 
 class G4ParticleHPInelasticBaseFS : public G4ParticleHPFinalState
 {
-public:
+ public:
 
   G4ParticleHPInelasticBaseFS();
   ~G4ParticleHPInelasticBaseFS() override;
 
-  void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& bit,
-	    G4ParticleDefinition*) override;
+  void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+            const G4String& bit, G4ParticleDefinition*) override;
 
   void BaseApply(const G4HadProjectile& theTrack, G4ParticleDefinition** theDefs, G4int nDef);
 
@@ -61,18 +61,17 @@ public:
 
   G4ParticleHPFinalState* New() override = 0;
 
-  G4double GetXsec(G4double anEnergy) override
+  G4double GetXsec(G4double anEnergy) const override
   {
     return std::max(0., theXsection->GetY(anEnergy));
   }
 
-  G4ParticleHPVector* GetXsec() override { return theXsection; }
+  G4ParticleHPVector* GetXsec() const override { return theXsection; }
 
-  G4ParticleHPInelasticBaseFS& operator=
-  (const G4ParticleHPInelasticBaseFS& right) = delete;
+  G4ParticleHPInelasticBaseFS& operator=(const G4ParticleHPInelasticBaseFS& right) = delete;
   G4ParticleHPInelasticBaseFS(const G4ParticleHPInelasticBaseFS&) = delete;
 
-protected:
+ protected:
 
   G4ParticleHPVector* theXsection;
   G4ParticleHPEnergyDistribution* theEnergyDistribution{nullptr};

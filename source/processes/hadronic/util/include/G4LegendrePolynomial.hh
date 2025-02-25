@@ -34,7 +34,7 @@
 // 
 //      Creation date: February 2015
 //
-//      Modifications: 
+//      Modifications: 29 October 2024 Isaac Kunen
 //      
 //      Legendre Polynomial
 //
@@ -51,16 +51,24 @@ class G4LegendrePolynomial
 {
   public:
     // Access to coefficients
-    static size_t GetNCoefficients(size_t order) { return order+1; }
-    G4double GetCoefficient(size_t i, size_t order);
+    static std::size_t GetNCoefficients(std::size_t order) { return order+1; }
+    G4double GetCoefficient(std::size_t i, std::size_t order);
 
     // Evaluation functions
     G4double EvalLegendrePoly(G4int order, G4double x);
+
+    G4double EvalAssocLegendrePoly(G4int l, G4int m, G4double x);
+
+    // cache is not used; use EvalAssocLegendrePoly(l, m, x) instead.
     G4double EvalAssocLegendrePoly(G4int l, G4int m, G4double x,
-                                   std::map<G4int, std::map<G4int, G4double> >* cache = NULL);
+      std::map<G4int, std::map<G4int, G4double> >* cache)
+    {
+      (void) cache; // suppress compiler warning for unused cache
+      return EvalAssocLegendrePoly(l, m, x); 
+    }
 
   protected: // Cache coefficients for speed
-    void BuildUpToOrder(size_t order);
+    void BuildUpToOrder(std::size_t order);
     std::vector< std::vector<G4double> > fCoefficients;
 };
 

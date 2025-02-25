@@ -43,11 +43,10 @@ namespace G4coutFormatters
       G4String::size_type prev_pos = 0, pos = 0;
       while((pos = input.find(separator, pos)) != G4String::npos)
       {
-        G4String substr(input.substr(prev_pos, pos - prev_pos));
-        output.push_back(substr);
+        // TBR: shouldn't be worse than push_back+move
+        output.emplace_back(input.substr(prev_pos, pos - prev_pos));
         prev_pos = ++pos;
       }
-      // output.push_back( input.substr(prev_pos,pos-prev_pos));
       return output;
     }
 

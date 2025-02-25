@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paternò (modifications & testing)
+// On the base of the CRYSTALRAD realization of scattering model:
+// A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
 
 #ifndef G4VChannelingFastSimCrystalData_h
 #define G4VChannelingFastSimCrystalData_h 1
@@ -81,7 +84,7 @@ public:
         //don't put it =0, otherwise division on 0 in CoulombAtomicScattering
 
     ///Calculate the value of the Lindhard angle (!!! the value for a straight crystal)
-    G4double GetLindhardAngle(G4double etotal, G4double mass);
+    G4double GetLindhardAngle(G4double etotal, G4double mass, G4double charge);
     ///Calculate the value of the Lindhard angle (!!! the value for a straight crystal)
     G4double GetLindhardAngle();//return the Lindhard angle value calculated in
                                 //SetParticleProperties
@@ -90,7 +93,7 @@ public:
     ///reduced value for overbarrier particles)
     G4double GetSimulationStep(G4double tx,G4double ty);
     ///Calculate maximal simulation step (standard value for channeling particles)
-    G4double GetMaxSimulationStep(G4double etotal, G4double mass);
+    G4double GetMaxSimulationStep(G4double etotal, G4double mass, G4double charge);
 
     ///get particle velocity/c
     G4double GetBeta(){return fBeta;}
@@ -119,7 +122,8 @@ public:
     ///find and upload crystal lattice input files, calculate all the basic values
     ///(to do only once)
     virtual void SetMaterialProperties(const G4Material* crystal,
-                                       const G4String &lattice) = 0;
+                                       const G4String &lattice,
+                                       const G4String &filePath) = 0;
 
     ///set geometry parameters from current logical volume
     void SetGeometryParameters(const G4LogicalVolume *crystallogic);
@@ -153,7 +157,7 @@ public:
     void SetParticleProperties(G4double etotal,
                                G4double mp,
                                G4double charge,
-                               G4bool ifhadron);
+                               const G4String& particleName);
 
     ///calculate the coordinates in the co-rotating reference system
     ///within a channel (periodic cell)
@@ -280,6 +284,7 @@ protected:
     G4double fK3=0;//a useful coefficient,  fK3=2.*pi*alpha*hdc/electron_mass_c2/(fPV)**2
 
     std::vector <G4double> fKD;  //a useful coefficient for dE/dx
+    std::vector <G4double> fLogPlasmaEdI0;  //item of delta-correction of ionization loss
 
     ///coefficients for multiple scattering suppression
     std::vector <G4double> fPu11;//a useful coefficient for exponent containing u1
@@ -324,7 +329,7 @@ private:
     G4double fTmax=0; // max ionization losses
 
     ///particle properties flags
-    G4bool fHadron=false;//=true (for hadrons); =false (for leptons)
+    G4String fParticleName = "";
     G4double fZ2=0; //particle charge
 
 };

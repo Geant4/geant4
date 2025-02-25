@@ -70,10 +70,10 @@ protected:
 
   void InterpolateViews
   (G4VViewer* currentViewer,
-   std::vector<G4ViewParameters> viewVector,
+   const std::vector<G4ViewParameters>& viewVector,
    const G4int nInterpolationPoints = 50,
    const G4int waitTimePerPointmilliseconds = 20,
-   const G4String exportString = "");
+   const G4String& exportString = "");
 
   void InterpolateToNewView
   (G4VViewer* currentViewer,
@@ -81,7 +81,7 @@ protected:
    const G4ViewParameters& newVP,
    const G4int nInterpolationPoints = 50,
    const G4int waitTimePerPointmilliseconds = 20,
-   const G4String exportString = "");
+   const G4String& exportString = "");
 
   void Twinkle
   // Twinkles the touchables in paths

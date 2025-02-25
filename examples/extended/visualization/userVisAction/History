@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-09-19 Ivana Hrivnacova (exam-ext-vis-UVA-V11-02-00)
+- Removed the run1.mac and run2.mac macros, as they are
+  not useful in this example context
+
 ## 2021-12-10 Ben Morgan (exam-ext-vis-UVA-V11-00-00)
 - Change to new Markdown History format
 

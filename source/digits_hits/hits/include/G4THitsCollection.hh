@@ -23,9 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4THitsCollection & G4HitsCollection
 //
+// Class description:
 //
-
+// This is a template class of hits collection and parametrised by
+// The concrete class of G4VHit. This is a uniform collection for
+// a particular concrete hit class objects.
+// An intermediate layer class G4HitsCollection appeared in this
+// header file is used just for G4Allocator, because G4Allocator
+// cannot be instantiated with a template class. Thus G4HitsCollection
+// class MUST NOT be directly used by the user.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4THitsCollection_h
 #define G4THitsCollection_h 1
 
@@ -35,25 +46,17 @@
 
 #include <vector>
 
-// class description:
-//
-//  This is a template class of hits collection and parametrized by
-// The concrete class of G4VHit. This is a uniform collection for
-// a particular concrete hit class objects.
-//  An intermediate layer class G4HitsCollection appeared in this
-// header file is used just for G4Allocator, because G4Allocator
-// cannot be instansiated with a template class. Thus G4HitsCollection
-// class MUST NOT be directly used by the user.
-
 class G4HitsCollection : public G4VHitsCollection
 {
- public:
-  using G4VHitsCollection::G4VHitsCollection;
-  ~G4HitsCollection() override = default;
-  G4bool operator==(const G4HitsCollection& right) const;
+  public:
 
- protected:
-  void* theCollection = nullptr;
+    using G4VHitsCollection::G4VHitsCollection;
+    ~G4HitsCollection() override = default;
+    G4bool operator==(const G4HitsCollection& right) const;
+
+  protected:
+
+    void* theCollection = nullptr;
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
@@ -65,53 +68,54 @@ extern G4DLLIMPORT G4Allocator<G4HitsCollection>*& anHCAllocator_G4MT_TLS_();
 template <class T>
 class G4THitsCollection : public G4HitsCollection
 {
- public:
-  G4THitsCollection();
-  G4THitsCollection(G4String detName, G4String colNam);
-  ~G4THitsCollection() override;
+  public:
 
-  G4bool operator==(const G4THitsCollection<T>& right) const;
+    G4THitsCollection();
+    G4THitsCollection(const G4String& detName, const G4String& colNam);
+    ~G4THitsCollection() override;
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* anHC);
+    G4bool operator==(const G4THitsCollection<T>& right) const;
 
-  // Invoke Draw() method on all hit objects in collection
-  void DrawAllHits() override;
+    inline void* operator new(std::size_t);
+    inline void operator delete(void* anHC);
 
-  // Invoke Print() method on all hit objects in collection
-  void PrintAllHits() override;
+    // Invoke Draw() method on all hit objects in collection
+    void DrawAllHits() override;
 
-  //  Returns a pointer to the concrete hit object
-  // Returns pointer to the concrete hit object at given index
-  // Not bounds checked
-  inline T* operator[](size_t i) const { return (*((std::vector<T*>*)theCollection))[i]; }
+    // Invoke Print() method on all hit objects in collection
+    void PrintAllHits() override;
 
-  // Return pointer to hit collection
-  inline std::vector<T*>* GetVector() const { return (std::vector<T*>*)theCollection; }
+    //  Returns a pointer to the concrete hit object
+    // Returns pointer to the concrete hit object at given index
+    // Not bounds checked
+    inline T* operator[](std::size_t i) const { return (*((std::vector<T*>*)theCollection))[i]; }
 
-  // Insert a hit object in the collection, taking onwenership
-  // Returns the total number of hit objects stored after insertion
-  inline size_t insert(T* aHit)
-  {
-    auto theHitsCollection = (std::vector<T*>*)theCollection;
-    theHitsCollection->push_back(aHit);
-    return theHitsCollection->size();
-  }
+    // Return pointer to hit collection
+    inline std::vector<T*>* GetVector() const { return (std::vector<T*>*)theCollection; }
 
-  // Returns the number of hit objects stored in this collection.
-  inline size_t entries() const
-  {
-    auto theHitsCollection = (std::vector<T*>*)theCollection;
-    return theHitsCollection->size();
-  }
+    // Insert a hit object in the collection, taking onwenership
+    // Returns the total number of hit objects stored after insertion
+    inline std::size_t insert(T* aHit)
+    {
+      auto theHitsCollection = (std::vector<T*>*)theCollection;
+      theHitsCollection->push_back(aHit);
+      return theHitsCollection->size();
+    }
 
-  G4VHit* GetHit(size_t i) const override { return (*((std::vector<T*>*)theCollection))[i]; }
+    // Returns the number of hit objects stored in this collection.
+    inline std::size_t entries() const
+    {
+      auto theHitsCollection = (std::vector<T*>*)theCollection;
+      return theHitsCollection->size();
+    }
 
-  size_t GetSize() const override { return ((std::vector<T*>*)theCollection)->size(); }
+    G4VHit* GetHit(std::size_t i) const override { return (*((std::vector<T*>*)theCollection))[i]; }
+
+    std::size_t GetSize() const override { return ((std::vector<T*>*)theCollection)->size(); }
 };
 
 template <class T>
-inline void* G4THitsCollection<T>::operator new(size_t)
+inline void* G4THitsCollection<T>::operator new(std::size_t)
 {
   if (anHCAllocator_G4MT_TLS_() == nullptr) {
     anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
@@ -133,7 +137,7 @@ G4THitsCollection<T>::G4THitsCollection()
 }
 
 template <class T>
-G4THitsCollection<T>::G4THitsCollection(G4String detName, G4String colNam)
+G4THitsCollection<T>::G4THitsCollection(const G4String& detName, const G4String& colNam)
   : G4HitsCollection(detName, colNam)
 {
   auto theHitsCollection = new std::vector<T*>;

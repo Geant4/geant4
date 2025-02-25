@@ -108,7 +108,7 @@ namespace G4INCL {
 
         // pnbar total is same as for npbar
         // ppbar total is same as for nnbar
-		const G4double totalppbar = KinematicsUtils::compute_xs(BFMM199, plab) +KinematicsUtils::compute_xs(BFMM185, plab) +KinematicsUtils::compute_xs(BFMM188, plab);
+		const G4double totalppbar = KinematicsUtils::compute_xs(std::move(BFMM199), plab) +KinematicsUtils::compute_xs(BFMM185, plab) +KinematicsUtils::compute_xs(BFMM188, plab);
 		const G4double totalpnbar = KinematicsUtils::compute_xs(BFMM491, plab) +KinematicsUtils::compute_xs(BFMM495, plab) +KinematicsUtils::compute_xs(BFMM188, plab);
 		//totalnnbar == totalppbar;
 		//totalpnbar == totalnpbar;
@@ -128,7 +128,7 @@ namespace G4INCL {
 						antinucleon->setType(Proton);
 					}
 				}
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM185, plab)+KinematicsUtils::compute_xs(BFMM188, plab)){ //pnbarpi- case
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM185), plab)+KinematicsUtils::compute_xs(std::move(BFMM188), plab)){ //pnbarpi- case
 					PionType = PiMinus;
 					if(rdm<0.5){
 						nucleon->setType(Proton);
@@ -163,7 +163,7 @@ namespace G4INCL {
 						antinucleon->setType(Proton);
 					}
 				}
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM491, plab)+KinematicsUtils::compute_xs(BFMM495, plab)){ //pnbarpi0 case
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM491), plab)+KinematicsUtils::compute_xs(std::move(BFMM495), plab)){ //pnbarpi0 case
 					PionType = PiZero;
 					if(rdm<0.5){
 						nucleon->setType(Proton);
@@ -200,7 +200,7 @@ namespace G4INCL {
 						antinucleon->setType(Proton);
 					}
 				}
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM491, plab)+KinematicsUtils::compute_xs(BFMM495, plab)){ //npbarpi0 case
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM491), plab)+KinematicsUtils::compute_xs(std::move(BFMM495), plab)){ //npbarpi0 case
 					PionType = PiZero;
 					if(rdm<0.5){
 						nucleon->setType(Neutron);
@@ -235,7 +235,7 @@ namespace G4INCL {
 						antinucleon->setType(Neutron);
 					}
 				}
-				else if(rdm*totalpnbar < KinematicsUtils::compute_xs(BFMM185, plab)+KinematicsUtils::compute_xs(BFMM188, plab)){ //pnbarpi- case
+				else if(rdm*totalpnbar < KinematicsUtils::compute_xs(std::move(BFMM185), plab)+KinematicsUtils::compute_xs(std::move(BFMM188), plab)){ //pnbarpi- case
 					PionType = PiMinus;
 					if(rdm<0.5){
 						nucleon->setType(Proton);

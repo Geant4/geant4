@@ -56,7 +56,7 @@ G4OpWLS2::G4OpWLS2(const G4String& processName, G4ProcessType type)
 {
   WLSTimeGeneratorProfile = nullptr;
   Initialise();
-  SetProcessSubType(fOpWLS);
+  SetProcessSubType(fOpWLS2);
   theIntegralTable = nullptr;
 
   if(verboseLevel > 0)

@@ -97,9 +97,9 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
 
   // 3rd priority : refer $HOME/.g4session
   if (selected == kNone) {
-    G4String appinput = argv[0];
+    const G4String& appinput = argv[0];
     G4String appname = "";
-    size_t islash = appinput.find_last_of("/\\");
+    std::size_t islash = appinput.find_last_of("/\\");
     if (islash == G4String::npos)
       appname = appinput;
     else
@@ -224,7 +224,7 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
   while (fsession.good()) {
     if (fsession.eof()) break;
     fsession.getline(linebuf, BUFSIZE);
-    G4String aline = G4StrUtil::strip_copy(linebuf);
+    const G4String& aline = G4StrUtil::strip_copy(linebuf);
     if (aline[0] == '#') continue;
     if (aline.empty()) continue;
     if (iline == 1)
@@ -235,7 +235,7 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
       G4String aname = aline.substr(0, idx);
       idx = aline.find_first_not_of(' ', idx);
       if (idx == G4String::npos) break;
-      G4String sname = aline.substr(idx, aline.size() - idx);
+      const G4String& sname = aline.substr(idx, aline.size() - idx);
       sessionMap[aname] = sname;
     }
     iline++;
@@ -247,7 +247,7 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
   if (it != sessionMap.end())
     stype = sessionMap[appname];
   else
-    stype = default_session;
+    stype = std::move(default_session);
   G4StrUtil::to_lower(stype);
 
   // select session...

@@ -39,7 +39,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(G4String name, G4int ni,
+G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(const G4String& name, G4int ni,
                                                      G4int nj, G4int nk,
                                                      G4int depi, G4int depj,
                                                      G4int depk)
@@ -51,7 +51,7 @@ G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(G4String name, G4int ni,
   SetNijk(ni, nj, nk);
 }
 
-G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(G4String name,
+G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(const G4String& name,
                                                      const G4String& unit,
                                                      G4int ni, G4int nj,
                                                      G4int nk, G4int depi,

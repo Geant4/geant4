@@ -256,8 +256,10 @@ G4double G4MicroElecCapture::GetMeanFreePath(const G4Track& aTrack, G4double,
 {											
   G4String material = aTrack.GetMaterial()->GetName();
   // test particle type in order to applied the capture to both electrons, protons and heavy ions
-
-  if ((aTrack.GetParticleDefinition()->GetParticleName()) == "e-")
+  G4double mfp = DBL_MAX;
+  G4double ekin = aTrack.GetKineticEnergy(); 
+  
+  if (ekin < 500*eV && aTrack.GetParticleDefinition()->GetParticleName() == "e-")
   {
     if (material != "G4_ALUMINUM_OXIDE" && material != "G4_SILICON_DIOXIDE"
      && material != "G4_BORON_NITRIDE")
@@ -282,12 +284,11 @@ G4double G4MicroElecCapture::GetMeanFreePath(const G4Track& aTrack, G4double,
       y = 1 * (1 / eV);
     }
 
-    G4double P = S * G4Exp(-y * aTrack.GetKineticEnergy());
-    if (P <= 0) { return DBL_MAX; }
-           else { return 1 / P; }
+    // VI: added numerical protection against extrime value of G4Exp argument
+    y *= ekin;
+    if (S > 0.0 && y < 100.0) { mfp = G4Exp(y) / S; }
   }
-  else return DBL_MAX;
-  
+  return mfp;
 }    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -43,7 +43,7 @@ G4LEPTSExcitationModel::~G4LEPTSExcitationModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4LEPTSExcitationModel::Initialise(const G4ParticleDefinition* aParticle, 
-                          const G4DataVector&)
+                                        const G4DataVector&)
 {
   Init();
   BuildPhysicsTable( *aParticle );
@@ -57,7 +57,7 @@ void G4LEPTSExcitationModel::Initialise(const G4ParticleDefinition* aParticle,
 }
 
 
-std::map<G4int,std::vector<G4double> > G4LEPTSExcitationModel::ReadIXS(G4String fileTXS, const G4Material* aMaterial)
+std::map<G4int,std::vector<G4double> > G4LEPTSExcitationModel::ReadIXS(const G4String& fileTXS, const G4Material* aMaterial)
 {
   std::map<G4int,std::vector<G4double> > integralXS = G4VLEPTSModel::ReadIXS( fileTXS, aMaterial);
 

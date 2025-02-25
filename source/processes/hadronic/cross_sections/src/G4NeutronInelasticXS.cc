@@ -47,6 +47,7 @@
 #include "G4Neutron.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4IsotopeList.hh"
+#include "G4NuclearRadii.hh"
 #include "G4AutoLock.hh"
 
 #include <fstream>
@@ -54,6 +55,7 @@
 #include <thread>
 
 G4double G4NeutronInelasticXS::coeff[] = {1.0};
+G4double G4NeutronInelasticXS::lowcoeff[] = {1.0};
 G4ElementData* G4NeutronInelasticXS::data = nullptr;
 G4String G4NeutronInelasticXS::gDataDirectory = "";
 
@@ -68,10 +70,10 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
   : G4VCrossSectionDataSet(Default_Name()),
     neutron(G4Neutron::Neutron()),
     elimit(20*CLHEP::MeV),
-    lowElimit(1.0e-5*CLHEP::eV)
+    lowElimit(1.0e-7*CLHEP::eV)
 {
   verboseLevel = 0;
-  if (verboseLevel > 0){
+  if (verboseLevel > 0) {
     G4cout << "G4NeutronInelasticXS::G4NeutronInelasticXS Initialise for Z < " 
             << MAXZINEL << G4endl;
   }
@@ -136,6 +138,9 @@ G4NeutronInelasticXS::ElementCrossSection(G4double eKin, G4double logE, G4int ZZ
   G4int Z = std::min(ZZ, MAXZINEL-1);
   G4double ekin = eKin;
   G4double loge = logE;
+  G4double xs;
+
+  // very low energy limit
   if (ekin < lowElimit) { 
     ekin = lowElimit; 
     loge = loglowElimit; 
@@ -144,8 +149,7 @@ G4NeutronInelasticXS::ElementCrossSection(G4double eKin, G4double logE, G4int ZZ
   auto pv = GetPhysicsVector(Z);
 
   const G4double e0 = pv->Energy(0);
-  G4double xs;
-  if (ekin < e0) {
+  if (ekin <= e0) {
     xs = (*pv)[0];
     if (xs > 0.0) { xs *= std::sqrt(e0/ekin); }
   } else if (ekin <= pv->GetMaxEnergy()) {
@@ -190,14 +194,10 @@ G4double
 G4NeutronInelasticXS::IsoCrossSection(G4double eKin, G4double logE, 
                                       G4int ZZ, G4int A)
 {
-  G4double xs = 0.0;
+  G4double xs;
   G4int Z = std::min(ZZ, MAXZINEL-1);
   G4double ekin = eKin;
   G4double loge = logE;
-  if (ekin < lowElimit) { 
-    ekin = lowElimit; 
-    loge = loglowElimit;
-  }
 
   /*  
   G4cout << "G4NeutronInelasticXS::IsoCrossSection  Z= " 
@@ -206,13 +206,14 @@ G4NeutronInelasticXS::IsoCrossSection(G4double eKin, G4double logE,
          << " E(MeV)= " << ekin << " Ncomp="
          << data->GetNumberOfComponents(Z) << G4endl;
   */
+  GetPhysicsVector(Z);
 
   // use isotope cross section if applicable
   if (ekin <= elimit && data->GetNumberOfComponents(Z) > 0) {
     auto pviso = data->GetComponentDataByID(Z, A);
     if (nullptr != pviso) { 
       const G4double e0 = pviso->Energy(0);
-      if (ekin >= e0) {
+      if (ekin > e0) {
         xs = pviso->LogVectorValue(ekin, loge);
       } else {
         xs = (*pviso)[0];
@@ -229,20 +230,9 @@ G4NeutronInelasticXS::IsoCrossSection(G4double eKin, G4double logE,
       return xs;
     }
   }
- 
+
   // use element x-section
-  auto pv = GetPhysicsVector(Z);
-  const G4double e0 = pv->Energy(0);
-  if (ekin < e0) {
-    xs = (*pv)[0];
-    if (xs > 0.0) { xs *= std::sqrt(e0/ekin); }
-  } else if (ekin <= pv->GetMaxEnergy()) {
-    xs = pv->LogVectorValue(ekin, loge);
-  } else {
-    xs = coeff[Z]*ggXsection->GetInelasticElementCrossSection(neutron, ekin,
-                                                              Z, aeff[Z]);
-  }
-  xs *= A/aeff[Z];
+  xs = ElementCrossSection(ekin, loge, Z)*A/aeff[Z];
 
 #ifdef G4VERBOSE
   if(verboseLevel > 1) {
@@ -401,7 +391,7 @@ void G4NeutronInelasticXS::Initialise(G4int Z)
   G4double ehigh= v->GetMaxEnergy();
   G4double sig2 = ggXsection->GetInelasticElementCrossSection(neutron,
                               ehigh, Z, aeff[Z]);
-  coeff[Z] = (sig2 > 0.) ? sig1/sig2 : 1.0; 
+  coeff[Z] = (sig2 > 0.) ? sig1/sig2 : 1.0;
 }
 
 G4PhysicsVector* 

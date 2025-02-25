@@ -81,7 +81,7 @@ G4FieldParametersMessenger::G4FieldParametersMessenger(
   fEquationTypeCmd->SetGuidance(guidance);
   fEquationTypeCmd->SetParameterName("EquationType", false);
   candidates = "";
-  for (G4int i = kMagUsualEqRhs; i <= kEqEMFieldWithEDM; i++) {
+  for (G4int i = kEqMagnetic; i <= kEqEMfieldWithEDM; i++) {
     G4EquationType et = (G4EquationType)i;
     candidates += G4FieldParameters::EquationTypeName(et);
     candidates += " ";
@@ -182,7 +182,7 @@ G4FieldParametersMessenger::G4FieldParametersMessenger(
   fSetConstDistanceCmd->SetRange("ConstDistance >= 0");
   fSetConstDistanceCmd->AvailableForStates(G4State_PreInit);
 
-  commandName = directoryName;
+  commandName = std::move(directoryName);
   commandName.append("printParameters");
   fPrintParametersCmd = new G4UIcmdWithoutParameter(commandName, this);
   fPrintParametersCmd->SetGuidance("Prints all accuracy parameters.");
@@ -230,7 +230,7 @@ void G4FieldParametersMessenger::SetNewValue(
   }
   
   if (command == fEquationTypeCmd) {
-    for (G4int i = kMagUsualEqRhs; i <= kEqEMFieldWithEDM; i++) {
+    for (G4int i = kEqMagnetic; i <= kEqEMfieldWithEDM; i++) {
       G4EquationType et = (G4EquationType)i;
       if (newValues == G4FieldParameters::EquationTypeName(et)) {
         fFieldParameters->SetEquationType(et);

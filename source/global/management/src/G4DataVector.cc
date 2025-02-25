@@ -52,10 +52,10 @@ G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
   }
 
   // Binary Mode
-  G4int sizeV = G4int(size());
+  auto sizeV = G4int(size());
   fOut.write((char*) (&sizeV), sizeof sizeV);
 
-  G4double* value = new G4double[sizeV];
+  auto value = new G4double[sizeV];
   std::size_t i   = 0;
   for(auto itr = cbegin(); itr != cend(); ++itr, ++i)
   {
@@ -108,7 +108,7 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   // retrieve in binary mode
   fIn.read((char*) (&sizeV), sizeof sizeV);
 
-  G4double* value = new G4double[sizeV];
+  auto value = new G4double[sizeV];
   fIn.read((char*) (value), sizeV * (sizeof(G4double)));
   if(G4int(fIn.gcount()) != G4int(sizeV * (sizeof(G4double))))
   {

@@ -6,6 +6,140 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-27 John Allison (visman-V11-02-28)
+- G4VisExecutive.icc:
+  - Remove #include <QtGlobal> - no longer needed.
+    - Was included to resolve some Qt5/6 issues in 11.2.
+
+## 2024-10-16 John Allison (visman-V11-02-27)
+- G4VSceneHandler.cc:
+  - Move some printing outside the loop over models - more hygenic
+  - Improve indentation.
+
+## 2024-10-03 John Allison (visman-V11-02-26)
+- Introduce TOOLS_USE_FREETYPE flag in vis management for /vis/plot command
+- sources.cmake:
+  - Add geant4_module_compile_definitions.
+    - Set cpp flag TOOLS_USE_FREETYPE if built with GEANT4_USE_FREETYPE.
+- G4VisCommandsCompound.cc:
+  - If TOOLS_USE_FREETYPE, augment /vis/plot command to take "style" argument.
+    - Candidates are: "none ROOT_default hippodraw".
+    - Default is: "ROOT_default".
+
+## 2024-10-02 John Allison (visman-V11-02-25)
+- G4VisManager.cc:
+  - Protect KeepForPostProcessing() with an mtVisSubThreadMutex lock.
+    - KeepForPostProcessing() is called on a worker thread, PostProcessingFinished()
+      is called on the vis sub-thread, so should be protected.
+    - Not sure about sub-event parallelism, because KeepForPostProcessing() is still
+      called on a worker thread, but PostProcessingFinished() is called from the
+      G4SubEvtRunManager. But having a short piece of code locked does no harm, so
+      let's do this.
+- G4VisManager.cc, G4VisCommandsSceneAdd.cc:
+  - Tidied redundant comments and corrected some.
+
+## 2024-09-30 Makoto Asai (visman-V11-02-24)
+- G4VisManager.cc, G4VisCommandsSceneAdd.cc:
+  - Optimize the timing of G4Event::KeepForPostProcessing() and
+    G4Event::PostProcessingFinished() so that event object that are not
+    requested to be kept are cleanly deleted at the end of each run.
+    Kept events are deleted at the beginning of the next run or when the
+    program terminates.
+  - Use G4Run::GetNumberOfKeptEvent() to properly display the number of kept 
+    events.
+  - Co-working with run-V11-02-18
+
+## 2024-09-12 John Allison (visman-V11-02-23)
+- G4ViewParameters.cc: Minor improvements to messages in output operator<<.
+- G4VisCommandsSceneAdd.cc:
+  - G4VisCommandSceneAddLogo::SetNewValue (/vis/scene/add/logo):
+    - Ensure the logo respects the current requested number of sides per circle.
+- G4VisCommandsViewer.cc:
+  - G4VisCommandViewerCreate::SetNewValue (/vis/viewer/create):
+    - Simplify the use of view parameters of a pre-existing viewer.
+      - Use the parameters of the most recent viewer whatever its type.
+    - Exclude GlobalMarkerScale from parameters copied from pre-existing viewer.
+      - Thus each viewer is allowed to specify its own GlobalMarkerScale.
+        - Mostly viewers use the default value of 1, but ToolsSG sets it to 2
+          to handle special displays such as Apple's Retina.
+
+## 2024-08-31 John Allison (visman-V11-02-22)
+- Coverity fixes.
+  - Some checks, which gave Coverity concern, are no longer needed, because
+    Begin/EndOfRun/Event are protected by flag set once and for all in
+    BeginOfRun.
+
+## 2024-08-26 John Allison (visman-V11-02-21)
+- G4VisManager.cc:
+  - Protect Begin/EndOfRun against invalid view (includes check on
+    existence of a scene).
+    - A dead-lock in MT mode if there is a view but no scene with OGL.
+      - Seems viewer has trouble changing threads.
+  - Some tidying and streamlining.
+    - Introduced local booleans isValidViewForRun and isFakeRun.
+
+## 2024-08-18 John Allison (visman-V11-02-20)
+- Improve messaging around /vis/verbose and /vis/list.
+- G4VisManager:
+  - Introduce PrintAvailableVerbosity().
+  - GetVerbosityValue: Print verbosity options on unknown or empty argument
+- G4VisCommands.cc:
+  - /vis/list: Add printing of verbosity options.
+  - /vis/verbose: Change default value to empty string (triggers printing
+    of verbosity options in G4VisManager::GetVerbosityValue().
+
+## 2024-08-04 John Allison (visman-V11-02-19)
+- Fix "accumulate" bug in Serial mode, and other small improvements.
+- G4VisManager.cc:
+  - Bug fix: In Serial mode, "accumulate" fails (behaves like "refresh").
+    - This relates to end-of-event action, e.g., trajectory drawing.
+    - Bug was introduced in visman-V11-02-18.
+    - Fix and rationalise by moving the following to EndOfEventCleanup():
+        if (pScene->GetRefreshAtEndOfEvent()) {
+          pViewer->ShowView();
+          pSceneHandler->SetMarkForClearingTransientStore(true);
+        }
+  - Improve printing of colours in PrintAvailableColours and advise on use.
+    - Used in /vis/list.
+  - Tidy further:
+    - Remove some commented-out debug printing to make code cleaner to read.
+    - Fix some errant indentations.
+- G4VisCommandsSceneAdd.cc:
+  - Move date model (/vis/scene/add/date) from run-duration to end-of-event list.
+    - Thus date and time are updated for every event displayed.
+
+## 2024-07-21 John Allison (visman-V11-02-18)
+- G4VisManager: Further rationalising and tidying after visman-V11-02-12.
+  - Replace method `G4bool Relinquishable` (used only if false) by its logical
+    opposite, `G4bool RequiredToBeKeptForVis` - clearer.
+  - Move `void EventReadyForVis` (invoked by G4SubEvtRunManager) to improve
+    readability of code. 
+  - Improve some messaging.
+
+## 2024-07-21 John Allison (visman-V11-02-17)
+- G4VisExecutive.icc:
+  - Remove duplicate instantiation of TOOLSSG_OFFSCREEN
+
+## 2024-07-17 John Allison (visman-V11-02-16)
+- With gMocren-V11-02-00, modeling-V11-02-02
+- Coverity fixes
+
+## 2024-07-12 Guy Barrand (visman-V11-02-15)
+- G4VViewer.hh: add virtual ReadyToDraw(). It helps avoiding a crash on macOS
+  if doing /run/beamOn in vis.mac at startup.
+- G4VSceneHandler.cc: DrawEvent(), DrawEndOfRunModels(): check if viewer is
+  ReadyToDraw() at begin of method.
+
+## 2024-07-06 John Allison (visman-V11-02-14)
+- G4VisManager:
+  - Call PostProcessingFinished for _every_ event in EndOfEventCleanup.
+  - Write lengthy comment about different end-of-event scenarios.
+  - Tidy up previous tag visman-V11-02-12.
+
+## 2024-06-21 Ben Morgan (visman-V11-02-13)
+- Remove use of G4MULTITHREADED symbol where not required, using runtime checks
+  as far as possible.
+
 ## 2024-06-04 John Allison (visman-V11-02-12)
 - G4VisManager:
   - Implement EventReadyForVis, used by G4SubEvtRunManager.

@@ -126,6 +126,7 @@ G4WorkerRunManager::~G4WorkerRunManager()
   userWorkerInitialization = nullptr;
   userWorkerThreadInitialization = nullptr;
   userActionInitialization = nullptr;
+  physicsList->TerminateWorker();
   physicsList = nullptr;
   if (verboseLevel > 1) G4cout << "Destroying WorkerRunManager (" << this << ")" << G4endl;
 }
@@ -144,10 +145,11 @@ void G4WorkerRunManager::InitializeGeometry()
   }
 
   // Step 0: Contribute to the voxelisation of the geometry
-  if( G4GeometryManager::IsParallelOptimisationConfigured() ) {
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  if( geomManager->IsParallelOptimisationConfigured() ) {
     G4cout << "G4RunManager::InitializeGeometry calling GeometryManager's UndertakeOptimisation" 
            << G4endl;  // TODO - suppress / delete this in final version
-    G4GeometryManager::GetInstance()->UndertakeOptimisation();
+    geomManager->UndertakeOptimisation();
   }
   //  A barrier must ensure that all that all threads have finished this work.
   //  Currently we rely on the (later) barrier at the end of initialisation.
@@ -421,38 +423,15 @@ void G4WorkerRunManager::MergePartialResults(G4bool mergeEvents)
   G4MTRunManager* mtRM = G4MTRunManager::GetMasterRunManager();
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if (ScM != nullptr) mtRM->MergeScores(ScM);
-/************************** MAMAMAMAMA
-  if(mergeEvents) {
-    G4int ctr = 0;
-    G4int ctrD = 0;
-    G4int ctrK = 0;
-    G4int ctrG = 0;
+#ifdef G4VERBOSE
+  if(mergeEvents && verboseLevel>3) {
     auto eventVector = currentRun->GetEventVector();
     if(eventVector!=nullptr || !(eventVector->empty())) {
-      auto eItr = eventVector->cbegin();
-      while(eItr != eventVector->cend())
-      {
-        ctr++;
-        const G4Event* ev = *eItr;
-        if(ev->ToBeKept()) { ctrD++; }
-        if(ev->KeepTheEventFlag()) { ctrK++; }
-        if(ev->GetNumberOfGrips()>0) { ctrG++; }
-        eItr++;
-      }
-//        if(!(ev->ToBeKept())) 
-//        {
-//          ReportEventDeletion(ev);
-//          delete ev;
-//          eItr = eventVector->erase(eItr);
-//          ctrD++;
-//        }
-//        else
-//        { eItr++; }
-//      }
+      G4cout<<"G4WorkerRunManager::MergePartialResults : merging "
+            <<eventVector->size()<<" events."<<G4endl;
     }
-G4cout<<"MAMAMAMAMA ctr="<<ctr<<" - ctrD="<<ctrD<<" - ctrK="<<ctrK<<" - ctrG="<<ctrG<<G4endl;
   }
-********************************/
+#endif
   if(mergeEvents) mtRM->MergeRun(currentRun);
 }
 

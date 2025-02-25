@@ -44,6 +44,13 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImanager.hh"
+#include "G4Threading.hh"
+#include "G4ClonedTrajectory.hh"
+#include "G4ClonedTrajectoryPoint.hh"
+#include "G4ClonedRichTrajectory.hh"
+#include "G4ClonedRichTrajectoryPoint.hh"
+#include "G4ClonedSmoothTrajectory.hh"
+#include "G4ClonedSmoothTrajectoryPoint.hh"
 #include "G4ios.hh"
 #include "globals.hh"
 
@@ -142,7 +149,43 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
         ->SetTrajectoryFilter(nullptr);
     }
     trackingManager->SetStoreTrajectory(trajType);
+
+    // Make sure cloning works for sub-event parallel mode
+    if(G4Threading::IsMasterThread() && trajType>0) {
+      static G4bool traj_1 = false, traj_2 = false, traj_3 = false;
+      G4VTrajectory* traj = nullptr;
+      G4VTrajectoryPoint* trajp = nullptr;
+      switch (trajType) {
+       case 1:
+        if(!traj_1) {
+          traj = new G4ClonedTrajectory();
+          trajp = new G4ClonedTrajectoryPoint();
+          traj_1 = true;
+        }
+        break;
+       case 2:
+        if(!traj_2) {
+          traj = new G4ClonedSmoothTrajectory();
+          trajp = new G4ClonedSmoothTrajectoryPoint();
+          traj_2 = true;
+        }
+        break;
+       case 3:
+       case 4:
+        if(!traj_3) {
+          traj = new G4ClonedRichTrajectory();
+          trajp = new G4ClonedRichTrajectoryPoint();
+          traj_3 = true;
+        }
+        break;
+       default:
+        break;
+      }
+      if(traj!=nullptr) delete traj;
+      if(trajp!=nullptr) delete trajp;
+    }
   }
+
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -112,7 +112,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                                                     0);  // copy number
 
   // Visualization attributes
-  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));  // White
+  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(0.0, 0.4, 0.8, 0.5));
   worldVisAtt->SetVisibility(true);
   logicWorld->SetVisAttributes(worldVisAtt);
 

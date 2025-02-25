@@ -1,0 +1,128 @@
+### Random cylinders
+
+#
+# See more details on moleculardna specific UI commands:
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/configuration
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
+# - the README file
+# - the messenger classes of the moleculardna example
+#
+
+# Verbosity: settings
+/control/verbose 1
+/run/verbose 2
+/material/verbose 2
+/dnageom/verbose 1
+
+# Chemistry: selection of IRT_syn
+/process/chem/TimeStepModel IRT_syn
+
+# Chemistry: activation
+/chem/activate true
+
+# Chemistry: verbosity
+/scheduler/verbose 0
+
+# Chemistry: end time of chemistry stage
+/scheduler/endTime 1 us
+
+# Geometry: size of World volume
+/world/worldSize 10200 nm
+
+# Geometry: size of cell volume
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/parameter-study
+/cell/radiusSize 3 3 3 um
+
+# Geometry: optimisation of voxelisation
+/dnageom/setSmartVoxels 1
+
+# Geometry: check overlaps in DNA geometry region
+/dnageom/checkOverlaps false
+
+# Geometry: creation
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/parameter-study
+#  - Side length for each placement
+/dnageom/placementSize 30 30 100 nm
+#  - Scaling of XYZ in fractal definition file
+/dnageom/fractalScaling 1 1 1 nm
+#  - Path to file that defines placement locations
+/dnageom/definitionFile geometries/prisms200k_r3000.txt
+#  - Set a placement volume
+/dnageom/placementVolume prism geometries/straight-216-0.txt
+
+# Geometry: take the angles in the voxel placement file as multiples of pi
+/dnageom/setVoxelPlacementAnglesAsMultiplesOfPi false
+
+# Geometry: enable custom molecule sizes
+/dnageom/useCustomMoleculeSizes false
+
+# Geometry: draw cell/chromosome volumes rather than DNA
+/dnageom/drawCellVolumes false
+
+# Geometry: distance from base pairs at which radicals are killed
+/dnageom/radicalKillDistance 9 nm
+
+# Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
+/dnageom/interactionDirectRange 7 angstrom
+
+# Geometry: activate Histone scavenging function
+/dnageom/activateHistoneScavenging true
+
+# Damage: model settings
+/dnadamage/directDamageLower 17.5 eV
+/dnadamage/directDamageUpper 17.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.65
+/dnadamage/inductionOHChance 0.0
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.65
+/dnadamage/inductionHChance 0.0
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.65
+/dnadamage/inductionEaqChance 0.0
+
+# Analysis: add spherical chromosomal region of interest, with the name "cylinder"
+/chromosome/add cylinder sphere 3000 0 0 0 nm
+
+# Analysis: set whether strands ought be saved
+/analysisDNA/saveStrands false
+
+# Analysis: gap between DNA fragments in base pair
+#  Set to zero to score placement volumes independently
+/analysisDNA/fragmentGap 0
+
+# Analysis: save the position of hits histones only on one chain
+#/analysisDNA/diagnosticChain
+
+# Run: initialization
+/run/initialize
+
+# Visualization: uncomment the next line to visualize cylinder DNA geometry
+#/control/execute vis.mac
+
+# Unit tests only
+#/dnatests/uniqueid
+#/dnatests/basepairs
+#/dnatests/chromosome
+#/analysisDNA/testClassifier
+# End unit tests
+
+# Run: progress display
+/run/printProgress 100
+
+# Source geometry
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/radius 500 nm
+/gps/pos/centre 0 0 0 nm
+
+# Source particle, energy and angular distribution
+/gps/particle e-
+/gps/energy 4.5 keV
+/gps/ang/type iso
+
+# Beam on
+/run/beamOn 10

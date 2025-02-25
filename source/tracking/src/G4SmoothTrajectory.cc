@@ -33,6 +33,7 @@
 // --------------------------------------------------------------------
 
 #include "G4SmoothTrajectory.hh"
+#include "G4ClonedSmoothTrajectory.hh"
 
 #include "G4AttDef.hh"
 #include "G4AttDefStore.hh"
@@ -41,6 +42,11 @@
 #include "G4SmoothTrajectoryPoint.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
+#include "G4AutoLock.hh"
+
+namespace {
+ G4Mutex CloneSmoothTrajectoryMutex = G4MUTEX_INITIALIZER;
+}
 
 // #define G4ATTDEBUG
 #ifdef G4ATTDEBUG
@@ -90,6 +96,13 @@ G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory& right)
     auto rightPoint = (G4SmoothTrajectoryPoint*)i;
     positionRecord->push_back(new G4SmoothTrajectoryPoint(*rightPoint));
   }
+}
+
+G4VTrajectory* G4SmoothTrajectory::CloneForMaster() const
+{
+  G4AutoLock lock(&CloneSmoothTrajectoryMutex);
+  auto* cloned = new G4ClonedSmoothTrajectory(*this);
+  return cloned;
 }
 
 G4SmoothTrajectory::~G4SmoothTrajectory()

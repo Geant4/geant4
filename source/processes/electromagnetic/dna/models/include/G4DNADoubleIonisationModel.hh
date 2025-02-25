@@ -120,9 +120,9 @@ protected:
 
   CrossSectionDataTable xs_tab_;
 
-  G4ParticleDefinition* proton_def_;
-  G4ParticleDefinition* alpha_def_;
-  G4ParticleDefinition* carbon_def_;
+  G4ParticleDefinition* proton_def_{nullptr};
+  G4ParticleDefinition* alpha_def_{nullptr};
+  G4ParticleDefinition* carbon_def_{nullptr};
 
   const std::vector<G4double>* water_density_;
 
@@ -131,7 +131,7 @@ protected:
 
   std::map<G4double, G4double> model_elow_tab_;
 
-  G4DNAMultipleIonisationManager* mioni_manager_;
+  G4DNAMultipleIonisationManager* mioni_manager_{nullptr};
 
   G4bool use_champion_param_;
 

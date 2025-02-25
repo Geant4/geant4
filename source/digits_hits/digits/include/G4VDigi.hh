@@ -23,9 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VDigi
 //
+// Class description:
 //
-
+// This is the base class of digi object. The user should derive this
+// base class to make his/her own digi class. Two virtual method Draw()
+// and Print() can be implemented if the user wants these functionalities.
+// If a concrete digi class is used as a transient class, G4Allocator
+// must be used.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VDigi_h
 #define G4VDigi_h 1
 
@@ -37,36 +46,29 @@
 class G4AttDef;
 class G4AttValue;
 
-// class description:
-//
-//  This is the base class of digi object. The user should derive this
-// base class to make his/her own digi class. Two virtual method Draw()
-// and Print() can be implemented if the user wants these functionarities.
-//  If a concrete digi class is used as a transient class, G4Allocator
-// must be used.
-
 class G4VDigi
 {
- public:
-  G4VDigi() = default;
-  virtual ~G4VDigi() = default;
+  public:
 
-  G4bool operator==(const G4VDigi& right) const { return (this == &right); }
+    G4VDigi() = default;
+    virtual ~G4VDigi() = default;
 
-  virtual void Draw(){};
-  virtual void Print(){};
+    G4bool operator==(const G4VDigi& right) const { return (this == &right); }
 
-  // Returns pointer to map of attribute definitions for this digit
-  // Caller is responsible for checking validity of returned pointer.
-  // See `G4Trajectory` for a concrete implementation.
-  virtual const std::map<G4String, G4AttDef>* GetAttDefs() const { return nullptr; }
+    virtual void Draw() {}
+    virtual void Print() {}
 
-  // Returns pointer to list of attributes for this digit
-  // Each attribute must correspond to a definition returned by `GetAffDefs`.
-  // Caller is responsible for checking validity of returned pointer.
-  // See `G4Trajectory` for a concrete implementation, and
-  // `G4VTrajectory::ShowTrajectory` for an example of its use.
-  virtual std::vector<G4AttValue>* CreateAttValues() const { return nullptr; }
+    // Returns pointer to map of attribute definitions for this digit
+    // Caller is responsible for checking validity of returned pointer.
+    // See `G4Trajectory` for a concrete implementation.
+    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const { return nullptr; }
+
+    // Returns pointer to list of attributes for this digit
+    // Each attribute must correspond to a definition returned by `GetAffDefs`.
+    // Caller is responsible for checking validity of returned pointer.
+    // See `G4Trajectory` for a concrete implementation, and
+    // `G4VTrajectory::ShowTrajectory` for an example of its use.
+    virtual std::vector<G4AttValue>* CreateAttValues() const { return nullptr; }
 };
 
 #endif

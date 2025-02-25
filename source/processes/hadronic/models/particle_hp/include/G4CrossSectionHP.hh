@@ -91,8 +91,6 @@ class G4CrossSectionHP : public G4VCrossSectionDataSet
 
     void Initialise(const G4int Z);
 
-    void InitialiseOnFly(const G4int Z);
-
     void PrepareCache(const G4Material*);
 
     G4double IsoCrossSection(const G4double kinE, const G4double loge,

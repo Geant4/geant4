@@ -72,8 +72,10 @@ G4WorkerSubEvtRunManagerKernel* G4WorkerSubEvtRunManager::GetWorkerRunManagerKer
 //============================================================================//
 
 G4WorkerSubEvtRunManager::G4WorkerSubEvtRunManager(G4int seType)
-: fSubEventType(seType)
-{ runManagerType = subEventWorkerRM; }
+{
+  runManagerType = subEventWorkerRM; 
+  SetSubEventType(seType);
+}
 
 void G4WorkerSubEvtRunManager::RunInitialization()
 {
@@ -160,6 +162,7 @@ void G4WorkerSubEvtRunManager::RunInitialization()
 
   runAborted = false;
   numberOfEventProcessed = 0;
+  if(verboseLevel > 0) timer->Start();
 }
 
 //============================================================================//
@@ -368,10 +371,10 @@ void G4WorkerSubEvtRunManager::TerminateEventLoop()
     G4cout << prefix << "Thread-local run terminated." << G4endl;
     G4cout << prefix << "Run Summary" << G4endl;
     if (runAborted)
-      G4cout << prefix << "  Run Aborted after " << numberOfEventProcessed << " events processed."
+      G4cout << prefix << "  Run Aborted after " << numberOfEventProcessed << " sub-events processed."
              << G4endl;
     else
-      G4cout << prefix << "  Number of events processed : " << numberOfEventProcessed << G4endl;
+      G4cout << prefix << "  Number of sub-events processed : " << numberOfEventProcessed << G4endl;
     G4cout << prefix << "  " << *timer << G4endl;
   }
 }
@@ -421,7 +424,7 @@ void G4WorkerSubEvtRunManager::ProcessUI()
   if (!matching) {
     for (const auto& itr : command_stack)
       G4UImanager::GetUIpointer()->ApplyCommand(itr);
-    processedCommandStack = command_stack;
+    processedCommandStack = std::move(command_stack);
   }
 }
 
@@ -503,6 +506,7 @@ void G4WorkerSubEvtRunManager::DoWork()
       auto masterEvent = subEv->GetEvent();
       G4Event* ev = new G4Event(masterEvent->GetEventID());
       ev->FlagAsSubEvent(masterEvent,fSubEventType);
+      ++numberOfEventProcessed;
 
       // Create a G4TrackVector as the input
       G4TrackVector* tv = new G4TrackVector();
@@ -512,8 +516,6 @@ void G4WorkerSubEvtRunManager::DoWork()
         // and thus they must not be deleted by the worker thread. They must be cloned.
         G4Track* tr = new G4Track();
         tr->CopyTrackInfo(*(stackedTrack.GetTrack()),false);
-
-        //MAMAMAMAMA cloning of trajectory object is not yet implemented.
         tv->push_back(tr);
       }
 
@@ -538,6 +540,13 @@ void G4WorkerSubEvtRunManager::DoWork()
     G4cout << "G4WorkerSubEvtRunManager::DoWork() completed.........." << G4endl;
   }
     
+}
+
+void G4WorkerSubEvtRunManager::SetSubEventType(G4int ty)
+{
+  auto* mrm = G4SubEvtRunManager::GetMasterRunManager();
+  mrm->RegisterSubEvtWorker(this,ty);
+  fSubEventType = ty;
 }
 
 //============================================================================//

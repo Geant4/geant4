@@ -281,7 +281,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           G4LocatorChangeLogger::ReportEndChanges(G4cerr, endChangeA, endChangeB);
         }
       }
-#endif    
+
       if( !validIntersectP )
       {
         G4ExceptionDescription errmsg;
@@ -294,7 +294,8 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         G4Exception("G4MultiLevelLocator::EstimateIntersectionPoint", "GeomNav0004",
                     JustWarning, errmsg);
       }
-      
+#endif    
+
       // F = a point on true AB path close to point E 
       // (the closest if possible)
       //

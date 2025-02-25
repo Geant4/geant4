@@ -126,8 +126,6 @@ inline const G4ViewParameters& G4VisManager::GetDefaultViewParameters() const {
   return fDefaultViewParameters;
 }
 
-#ifdef G4MULTITHREADED
-
 inline G4int G4VisManager::GetMaxEventQueueSize() const {
   return fMaxEventQueueSize;
 }
@@ -135,8 +133,6 @@ inline G4int G4VisManager::GetMaxEventQueueSize() const {
 inline G4bool G4VisManager::GetWaitOnEventQueueFull () const {
   return fWaitOnEventQueueFull;
 }
-
-#endif
 
 inline const G4String& G4VisManager::GetDefaultGraphicsSystemName () {
   return fDefaultGraphicsSystemName;
@@ -212,8 +208,6 @@ inline void G4VisManager::SetDefaultViewParameters
   fDefaultViewParameters = vp;
 }
 
-#ifdef G4MULTITHREADED
-
 inline void G4VisManager::SetMaxEventQueueSize (G4int size) {
   fMaxEventQueueSize = size;
 }
@@ -221,8 +215,6 @@ inline void G4VisManager::SetMaxEventQueueSize (G4int size) {
 inline void G4VisManager::SetWaitOnEventQueueFull (G4bool wait) {
   fWaitOnEventQueueFull = wait;
 }
-
-#endif
 
 inline void G4VisManager::SetDefaultGraphicsSystemName (const G4String& name) {
   fDefaultGraphicsSystemName = name;

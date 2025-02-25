@@ -42,11 +42,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4SDParticleFilter::G4SDParticleFilter(G4String name)
+G4SDParticleFilter::G4SDParticleFilter(const G4String& name)
   : G4VSDFilter(name)
 {}
 
-G4SDParticleFilter::G4SDParticleFilter(G4String name,
+G4SDParticleFilter::G4SDParticleFilter(const G4String& name,
                                        const G4String& particleName)
   : G4VSDFilter(name)
 {
@@ -64,7 +64,7 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
 }
 
 G4SDParticleFilter::G4SDParticleFilter(
-  G4String name, const std::vector<G4String>& particleNames)
+  const G4String& name, const std::vector<G4String>& particleNames)
   : G4VSDFilter(name)
 {
   for(const auto & particleName : particleNames)
@@ -84,7 +84,7 @@ G4SDParticleFilter::G4SDParticleFilter(
 }
 
 G4SDParticleFilter::G4SDParticleFilter(
-  G4String name, const std::vector<G4ParticleDefinition*>& particleDef)
+  const G4String& name, const std::vector<G4ParticleDefinition*>& particleDef)
   : G4VSDFilter(name)
   , thePdef(particleDef)
 {

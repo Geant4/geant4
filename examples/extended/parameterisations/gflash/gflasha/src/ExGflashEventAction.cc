@@ -83,8 +83,7 @@ void ExGflashEventAction::EndOfEventAction(const G4Event* evt)
   if (THC != nullptr) {
     /// Hits in sensitive Detector
     int n_hit = THC->entries();
-    //      G4cout<<"  " << n_hit<< " hits are stored in ExGflashHitsCollection
-    //      "<<G4endl;
+
     G4PrimaryVertex* pvertex = evt->GetPrimaryVertex();
     // Computing (x,y,z) of vertex of initial particles
     G4ThreeVector vtx = pvertex->GetPosition();
@@ -101,7 +100,9 @@ void ExGflashEventAction::EndOfEventAction(const G4Event* evt)
     G4double dLradl = fDet->GetdLradl();
     G4double dRradl = fDet->GetdRradl();
 
-    G4double SDRadl = fDet->GetSDRadLen();  // SD matrial
+    G4double SDRadl = fDet->GetSDRadLen();  // SD matrial rad len
+    G4double SDRm = fDet->GetSDRm();  // SD Radius Moliere
+
     // init to to 0.0
     MyVector dEdL(nLbin, 0.0);
     MyVector dEdR(nRbin, 0.0);
@@ -128,10 +129,12 @@ void ExGflashEventAction::EndOfEventAction(const G4Event* evt)
         G4ThreeVector radial = l - longitudinal;
 
         auto SlideNb = G4int((longitudinal.mag() / SDRadl) / dLradl);
-        auto RingNb = G4int((radial.mag() / SDRadl) / dRradl);
+        auto RingNb = G4int((radial.mag() / SDRm) / dRradl);
 
-        if (SlideNb >= 0 && SlideNb < nLbin) dEdL[SlideNb] += estep;
-        if (RingNb >= 0 && RingNb < nLbin) dEdR[RingNb] += estep;
+        if ((SlideNb >= 0 && SlideNb < nLbin) && (RingNb >= 0 && RingNb < nRbin)) {
+          dEdL[SlideNb] += estep;
+          dEdR[RingNb] += estep;
+        }
       }
     }
 

@@ -30,7 +30,7 @@
 #include "G4VEmAdjointModel.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
-G4InversePEEffect::G4InversePEEffect(G4String process_name,
+G4InversePEEffect::G4InversePEEffect(const G4String& process_name,
                                      G4AdjointPhotoElectricModel* aModel)
   : G4VAdjointReverseReaction(process_name, false)
 {

@@ -50,7 +50,7 @@ class G4ParticleHPJENDLHEData : public G4VCrossSectionDataSet
 {
   public:
     G4ParticleHPJENDLHEData();
-    G4ParticleHPJENDLHEData(G4String, G4ParticleDefinition*);
+    G4ParticleHPJENDLHEData(const G4String&, G4ParticleDefinition*);
 
     ~G4ParticleHPJENDLHEData() override;
 

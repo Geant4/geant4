@@ -34,7 +34,7 @@ using namespace GIDI;
 /*
 ***************************************************************
 */
-G4GIDI::G4GIDI( G4int ip, string &dataDirectory ) {
+G4GIDI::G4GIDI( G4int ip, const string &dataDirectory ) {
 
     init( ip );
     addDataDirectory( dataDirectory );
@@ -103,7 +103,7 @@ G4int G4GIDI::numberOfDataDirectories( void ) {
 /*
 ***************************************************************
 */
-G4int G4GIDI::addDataDirectory( string &dataDirectory ) {
+G4int G4GIDI::addDataDirectory( const string &dataDirectory ) {
 
     for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
         if( (*iter)->path( ) == dataDirectory ) return( 0 );
@@ -117,7 +117,7 @@ G4int G4GIDI::addDataDirectory( string &dataDirectory ) {
 /*
 ***************************************************************
 */
-G4int G4GIDI::removeDataDirectory( string &dataDirectory ) {
+G4int G4GIDI::removeDataDirectory( const string &dataDirectory ) {
 
     for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
         if( dataDirectory == (*iter)->path( ) ) {
@@ -156,7 +156,7 @@ vector<string> *G4GIDI::getDataDirectories( void ) {
 /*
 ***************************************************************
 */
-G4bool G4GIDI::isThisDataAvailable( string &lib_name, G4int iZ, G4int iA, G4int iM ) {
+G4bool G4GIDI::isThisDataAvailable( const string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 
     G4bool b;
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
@@ -170,7 +170,7 @@ G4bool G4GIDI::isThisDataAvailable( string &lib_name, G4int iZ, G4int iA, G4int 
 /*
 ***************************************************************
 */
-G4bool G4GIDI::isThisDataAvailable( string &lib_name, string &targetName ) {
+G4bool G4GIDI::isThisDataAvailable( const string &lib_name, const string &targetName ) {
 
     char *path = dataFilename( lib_name, targetName );
 
@@ -183,7 +183,7 @@ G4bool G4GIDI::isThisDataAvailable( string &lib_name, string &targetName ) {
 /*
 ***************************************************************
 */
-char *G4GIDI::dataFilename( string &lib_name, G4int iZ, G4int iA, G4int iM ) {
+char *G4GIDI::dataFilename( const string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM ), *fileName;
 
@@ -196,7 +196,7 @@ char *G4GIDI::dataFilename( string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 /*
 ***************************************************************
 */
-char *G4GIDI::dataFilename( string &lib_name, string &targetSymbol ) {
+char *G4GIDI::dataFilename( const string &lib_name, const string &targetSymbol ) {
 
    char *path;
 
@@ -223,7 +223,7 @@ vector<string> *G4GIDI::getNamesOfAvailableLibraries( G4int iZ, G4int iA, G4int 
 /*
 ***************************************************************
 */
-vector<string> *G4GIDI::getNamesOfAvailableLibraries( string &targetName ) {
+vector<string> *G4GIDI::getNamesOfAvailableLibraries( const string &targetName ) {
 
     vector<string> *listOfLibraries = new vector<string>( );
 
@@ -259,7 +259,7 @@ vector<string> *G4GIDI::getNamesOfAvailableTargets( void ) {
 /*
 ***************************************************************
 */
-G4GIDI_target *G4GIDI::readTarget( string &lib_name, G4int iZ, G4int iA, G4int iM, G4bool bind ) {
+G4GIDI_target *G4GIDI::readTarget( const string &lib_name, G4int iZ, G4int iA, G4int iM, G4bool bind ) {
 
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
     G4GIDI_target *target;
@@ -273,7 +273,7 @@ G4GIDI_target *G4GIDI::readTarget( string &lib_name, G4int iZ, G4int iA, G4int i
 /*
 ***************************************************************
 */
-G4GIDI_target *G4GIDI::readTarget( string &lib_name, string &targetName, G4bool bind ) {
+G4GIDI_target *G4GIDI::readTarget( const string &lib_name, const string &targetName, G4bool bind ) {
 
     for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         if( (*iter_targets)->name == targetName ) return( nullptr );
@@ -303,7 +303,7 @@ G4GIDI_target *G4GIDI::getAlreadyReadTarget( G4int iZ, G4int iA, G4int iM ) {
 /*
 ***************************************************************
 */
-G4GIDI_target *G4GIDI::getAlreadyReadTarget( string &targetSymbol ) {
+G4GIDI_target *G4GIDI::getAlreadyReadTarget( const string &targetSymbol ) {
 
     for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         if( ( (*iter_targets)->name == targetSymbol ) ) return( *iter_targets );
@@ -341,7 +341,7 @@ G4int G4GIDI::freeTarget( G4int iZ, G4int iA, G4int iM ) {
 /*
 ***************************************************************
 */
-G4int G4GIDI::freeTarget( string &targetSymbol ) {
+G4int G4GIDI::freeTarget( const string &targetSymbol ) {
 
     for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         if( (*iter_targets)->name == targetSymbol ) return( freeTarget( *iter_targets ) );

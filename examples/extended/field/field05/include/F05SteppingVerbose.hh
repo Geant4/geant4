@@ -26,9 +26,6 @@
 /// \file field/field05/include/F05SteppingVerbose.hh
 /// \brief Definition of the F05SteppingVerbose class
 //
-//
-//
-//
 //---------------------------------------------------------------
 //
 // F05SteppingVerbose.hh
@@ -54,7 +51,8 @@ class F05SteppingVerbose : public G4SteppingVerbose
   public:
     F05SteppingVerbose() = default;
     ~F05SteppingVerbose() override = default;
-    // Constructor/Destructor
+
+    G4VSteppingVerbose* Clone() override { return new F05SteppingVerbose; }
 
     void StepInfo() override;
     void TrackingStarted() override;

@@ -50,7 +50,7 @@ ExGflashMessenger::ExGflashMessenger(ExGflashDetectorConstruction* Det) : fDetec
 
   fVerbose = new G4UIcmdWithAnInteger("/exgflash/verbose", this);
   fVerbose->SetGuidance("set exglash verbosity");
-  fVerbose->SetGuidance("0- silent, 1 - on exit, 2 - run , 3 - event");
+  fVerbose->SetGuidance("0- silent, 1 - init, 2 - run, 3 - event");
   fVerbose->SetParameterName("ver", false);
   fVerbose->SetRange("ver >= 0");
   fVerbose->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -59,37 +59,73 @@ ExGflashMessenger::ExGflashMessenger(ExGflashDetectorConstruction* Det) : fDetec
   fDetDir = new G4UIdirectory("/exgflash/det/");
   fDetDir->SetGuidance("detector construction commands");
 
-  fMaterCmd = new G4UIcmdWithAString("/exgflash/det/setMat", this);
-  fMaterCmd->SetGuidance("Select Material.");
-  fMaterCmd->SetParameterName("material", false);
-  fMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  fMaterCmd->SetToBeBroadcasted(false);
-
   fLBinCmd = new G4UIcmdWith3Vector("/exgflash/det/setLbin", this);
   fLBinCmd->SetGuidance("set longitudinal bining");
-  fLBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
-  // must have omitable==true we use 2 values only
-  fLBinCmd->SetParameterName("nLtot", "dLradl", " ", true);
+  fLBinCmd->SetGuidance("nLtot  - nb of bins; bin thickness (in Radl)");
+  fLBinCmd->SetGuidance("dLradl - bin thickness (in fraction of Radl)");
+  fLBinCmd->SetGuidance("LStart - dummy");
+  fLBinCmd->SetParameterName("nLtot", "dLradl", "LStart", true);
+  fLBinCmd->SetDefaultValue(G4ThreeVector{100.0, 0.25, 0.0});
   fLBinCmd->SetRange("nLtot>=1 && dLradl>0");
   fLBinCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fLBinCmd->SetToBeBroadcasted(false);
 
   fRBinCmd = new G4UIcmdWith3Vector("/exgflash/det/setRbin", this);
   fRBinCmd->SetGuidance("set radial bining");
-  fRBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
-  fRBinCmd->SetParameterName("nRtot", "dRradl", " ", true);
+  fRBinCmd->SetGuidance("nRtot  - nb of bins; bin thickness (in Rm)");
+  fRBinCmd->SetGuidance("dRradl - bin thickness (in fraction of Rm)");
+  fRBinCmd->SetGuidance("RStart - dummy");
+  fRBinCmd->SetParameterName("nRtot", "dRradl", "RStart", true);
+  fRBinCmd->SetDefaultValue(G4ThreeVector{80.0, 0.05, 0.0});
   fRBinCmd->SetRange("nRtot>=1 && dRradl>0");
   fRBinCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fRBinCmd->SetToBeBroadcasted(false);
+
+  fMaterCmd = new G4UIcmdWithAString("/exgflash/det/setMat", this);
+  fMaterCmd->SetGuidance("Select Material.");
+  fMaterCmd->SetParameterName("material", false);
+  fMaterCmd->AvailableForStates(G4State_PreInit);
+  fMaterCmd->SetToBeBroadcasted(false);
+
+  fNbCrysCmd = new G4UIcmdWithAnInteger("/exgflash/det/setNbCrys", this);
+  fNbCrysCmd->SetGuidance("set numbber of crystals in row/col");
+  fNbCrysCmd->SetGuidance("ncrys  - number of crystals ");
+  fNbCrysCmd->SetParameterName("ncrys", false);
+  fNbCrysCmd->SetRange("ncrys > 0");
+  fNbCrysCmd->AvailableForStates(G4State_PreInit);
+  fNbCrysCmd->SetToBeBroadcasted(false);
+
+  fWCrysCmd = new G4UIcmdWithADoubleAndUnit("/exgflash/det/setCrysWidth", this);
+  fWCrysCmd->SetGuidance("set crystal width (cm)");
+  fWCrysCmd->SetGuidance("wcrys  - width of crystal ");
+  fWCrysCmd->SetParameterName("wcrys", false);
+  fWCrysCmd->SetRange("wcrys > 0");
+  fWCrysCmd->SetUnitCategory("Length");
+  fWCrysCmd->SetDefaultUnit("cm");
+  fWCrysCmd->AvailableForStates(G4State_PreInit);
+  fWCrysCmd->SetToBeBroadcasted(false);
+
+  fLCrysCmd = new G4UIcmdWithADoubleAndUnit("/exgflash/det/setCrysLength", this);
+  fLCrysCmd->SetGuidance("set crystal length (cm)");
+  fLCrysCmd->SetGuidance("lcrys  - crystal length ");
+  fLCrysCmd->SetParameterName("lcrys", false);
+  fLCrysCmd->SetRange("lcrys > 0");
+  fLCrysCmd->SetUnitCategory("Length");
+  fLCrysCmd->SetDefaultUnit("cm");
+  fLCrysCmd->AvailableForStates(G4State_PreInit);
+  fLCrysCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashMessenger::~ExGflashMessenger()
 {
+  delete fLCrysCmd;
+  delete fWCrysCmd;
+  delete fNbCrysCmd;
+  delete fMaterCmd;
   delete fRBinCmd;
   delete fLBinCmd;
-  delete fMaterCmd;
   delete fDetDir;
   delete fVerbose;
   delete fExGflashDir;
@@ -101,6 +137,18 @@ void ExGflashMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fMaterCmd) {
     fDetector->SetMaterial(newValue);
+  }
+
+  if (command == fNbCrysCmd) {
+    fDetector->SetNbOfCrystals(fNbCrysCmd->GetNewIntValue(newValue));
+  }
+
+  if (command == fWCrysCmd) {
+    fDetector->SetCrystalWidth(fWCrysCmd->GetNewDoubleValue(newValue));
+  }
+
+  if (command == fLCrysCmd) {
+    fDetector->SetCrystalLength(fLCrysCmd->GetNewDoubleValue(newValue));
   }
 
   if (command == fVerbose) {

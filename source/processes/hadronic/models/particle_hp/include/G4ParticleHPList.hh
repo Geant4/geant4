@@ -37,6 +37,7 @@
 class G4ParticleHPList
 {
   public:
+
     G4ParticleHPList()
     {
       theData = new G4double[2];
@@ -52,9 +53,9 @@ class G4ParticleHPList
       Check(i);
       theData[i] = y;
     }
-    G4double GetValue(G4int i);
+    G4double GetValue(G4int i) const;
 
-    inline G4int GetListLength() { return nEntries; }
+    inline G4int GetListLength() const { return nEntries; }
 
     void Dump();
 
@@ -64,9 +65,10 @@ class G4ParticleHPList
 
     inline void SetLabel(G4double aLabel) { theLabel = aLabel; }
 
-    inline G4double GetLabel() { return theLabel; }
+    inline G4double GetLabel() const { return theLabel; }
 
   private:
+
     void Check(G4int i);
 
     G4double theLabel;

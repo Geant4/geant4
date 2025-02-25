@@ -361,19 +361,10 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   polylineEntity->addComponent(material);
 
   auto renderer = new Qt3DRender::QGeometryRenderer;
-#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-  auto geometryView = new Qt3DCore::QGeometryView(polylineGeometry);
-  geometryView->setObjectName("polylineGeometryView");
-  geometryView->setGeometry(polylineGeometry);
-  geometryView->setVertexCount((G4int)(2*nLines));
-  geometryView->setPrimitiveType(Qt3DCore::QGeometryView::Lines);
-  renderer->setView(geometryView);
-#else
   renderer->setObjectName("polylineRenderer");
   renderer->setGeometry(polylineGeometry);
   renderer->setVertexCount(2*(G4int)nLines);
   renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
-#endif
   polylineEntity->addComponent(renderer);
 }
 

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -21,7 +21,7 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -165,10 +165,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -339,7 +342,7 @@ ionIoni:  for GenericIon  XStype:1  SubType=2
       Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax= 1000 PeV
 
 msc:  for alpha  SubType= 10
@@ -604,10 +607,13 @@ Index : 0     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
 ### Run 0 start.
 
@@ -629,12 +635,12 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.320000s Real=1.363002s Sys=0.000000s
+  User=1.520000s Real=1.558747s Sys=0.030000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5613	muIoni : 466065	muPairProd : 63500	muBrems : 637
- Simulation: total CrossSection = 0.53581 /cm	 MeanFreePath = 1.8663 cm 	 massicCrossSection = 0.068083 cm2/g
+ Number of process calls --->	CoulombScat : 5817	muIoni : 465476	muPairProd : 63643	muBrems : 651
+ Simulation: total CrossSection = 0.53559 /cm	 MeanFreePath = 1.8671 cm 	 massicCrossSection = 0.068054 cm2/g
  Theory:     total CrossSection = 0.52947 /cm	 MeanFreePath = 1.8887 cm 	 massicCrossSection = 0.067277 cm2/g
 #
 /gun/particle pi+
@@ -670,7 +676,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={432129628493770164, 1814378723063674975, 1209460836733901477, 40378447318968385, 1166405697066150015, 1712438097955414309, 1162066631942647724, 1377996140163220349, 67315068592747067, 761465620694214575, 1743598615136346759, 196570106205536369, 93293628111674800, 2181392307262736968, 2131942092924136303, 1649029329482157720, 374520013121668153} counter= 11sumtot= 1973479919773108455
+N=17 V[N]={882454084924701664, 2270259229220857311, 818577390581940897, 1426604042526396198, 480266226005173583, 188530774845791518, 1049894952900439173, 2108254491617653549, 67514774349258322, 175092158049147372, 393893130671613424, 1529173506857517301, 1747618713700092971, 2151849549381702022, 721140998242719756, 579078769140434288, 1816672379963618080} counter= 17sumtot= 2265974108483199772
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -685,12 +691,12 @@ N=17 V[N]={432129628493770164, 1814378723063674975, 1209460836733901477, 4037844
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.280000s Real=1.291411s Sys=0.000000s
+  User=1.140000s Real=1.147049s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hPairProd : 59687	hIoni : 437672	CoulombScat : 5542	hBrems : 356
- Simulation: total CrossSection = 0.50326 /cm	 MeanFreePath = 1.9871 cm 	 massicCrossSection = 0.063946 cm2/g
+ Number of process calls --->	hIoni : 436874	hPairProd : 59172	CoulombScat : 5569	hBrems : 393
+ Simulation: total CrossSection = 0.50201 /cm	 MeanFreePath = 1.992 cm 	 massicCrossSection = 0.063788 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -725,7 +731,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={666189274156109320, 913680459780043419, 495444254095043894, 163299520257719017, 104458280747222742, 272215273116300644, 932702107349058568, 885237446869949751, 1190578473375854215, 1090243270728123887, 915443789560795790, 1352586357148823147, 1049018277636030738, 2005118987467449020, 2146158333251440373, 695781257761596764, 1124268770556695881} counter= 9sumtot= 2167366078576093464
+N=17 V[N]={2103257823577124208, 469380737387581810, 386042433805554138, 1802430644607842505, 804448371540535249, 1779466859180359812, 1937382105945851007, 365603651364239426, 1236294566231758049, 530694216919414896, 1036938576786736727, 1786903812069656131, 966308926261532388, 907406917814257267, 1632242837280314955, 454243073969002515, 212028608884676175} counter= 2sumtot= 2270173099130579601
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -740,17 +746,17 @@ N=17 V[N]={666189274156109320, 913680459780043419, 495444254095043894, 163299520
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.140000s Real=1.234717s Sys=0.000000s
+  User=1.210000s Real=1.214799s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 436930	hPairProd : 34302	CoulombScat : 5625	hBrems : 3
- Simulation: total CrossSection = 0.47686 /cm	 MeanFreePath = 2.0971 cm 	 massicCrossSection = 0.060592 cm2/g
+ Number of process calls --->	hIoni : 436614	hPairProd : 33957	CoulombScat : 5719	hBrems : 11
+ Simulation: total CrossSection = 0.4763 /cm	 MeanFreePath = 2.0995 cm 	 massicCrossSection = 0.060521 cm2/g
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:2) 
-UserDetectorConstruction deleted 0x1786650
-UserPhysicsList deleted 0x17c5a18
+UserDetectorConstruction deleted 0x25d1910
+UserPhysicsList deleted 0x2610788
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
@@ -766,15 +772,15 @@ G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0163 MB
+Pool ID '17G4DynamicParticle', size : 0.0154 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.0317 MB
+Pool ID '7G4Track', size : 0.0308 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.061 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

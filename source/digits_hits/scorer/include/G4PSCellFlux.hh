@@ -57,8 +57,8 @@ class G4VSolid;
 class G4PSCellFlux : public G4VPrimitivePlotter
 {
  public:
-  G4PSCellFlux(G4String name, G4int depth = 0);
-  G4PSCellFlux(G4String name, const G4String& unit, G4int depth = 0);
+  G4PSCellFlux(const G4String& name, G4int depth = 0);
+  G4PSCellFlux(const G4String& name, const G4String& unit, G4int depth = 0);
   ~G4PSCellFlux() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

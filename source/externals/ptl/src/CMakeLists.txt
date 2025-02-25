@@ -4,22 +4,25 @@
 # Locate sources and headers for this project - headers are included so they will show up
 # in IDEs
 file(GLOB_RECURSE ptl_headers ${PROJECT_SOURCE_DIR}/include/PTL/*.hh
-     ${PROJECT_SOURCE_DIR}/include/PTL/*.icc)
+     ${PROJECT_SOURCE_DIR}/include/PTL/detail/*.hh)
 file(GLOB_RECURSE ptl_sources ${CMAKE_CURRENT_LIST_DIR}/*.cc)
 
 # -------------------------------------------------------------------------------------- #
 # Config, Version
 # -------------------------------------------------------------------------------------- #
+set(ptl_generated_headers)
 
 configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Config.hh.in
                ${CMAKE_CURRENT_BINARY_DIR}/PTL/Config.hh @ONLY)
 
 list(APPEND ptl_headers ${CMAKE_CURRENT_BINARY_DIR}/PTL/Config.hh)
+list(APPEND ptl_generated_headers ${CMAKE_CURRENT_BINARY_DIR}/PTL/Config.hh)
 
 configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Version.hh.in
                ${CMAKE_CURRENT_BINARY_DIR}/PTL/Version.hh @ONLY)
 
 list(APPEND ptl_headers ${CMAKE_CURRENT_BINARY_DIR}/PTL/Version.hh)
+list(APPEND ptl_generated_headers ${CMAKE_CURRENT_BINARY_DIR}/PTL/Version.hh)
 
 # -------------------------------------------------------------------------------------- #
 # PTL Library
@@ -116,8 +119,10 @@ endif()
 
 if(PTL_INSTALL_HEADERS)
     # headers
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/PTL
+        DESTINATION ${PTL_INSTALL_INCLUDEDIR})
     install(
-        FILES ${ptl_headers}
+        FILES ${ptl_generated_headers}
         DESTINATION ${PTL_INSTALL_INCLUDEDIR}/PTL
         COMPONENT Development)
 endif()

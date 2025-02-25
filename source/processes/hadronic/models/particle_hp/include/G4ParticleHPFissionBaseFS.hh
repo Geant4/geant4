@@ -49,6 +49,7 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
     };
 
   public:
+
     G4ParticleHPFissionBaseFS()
     {
       hasXsec = true;
@@ -57,17 +58,17 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
 
     ~G4ParticleHPFissionBaseFS() override { delete theXsection; }
 
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& bit,
-              G4ParticleDefinition*) override;
+    void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+              const G4String& bit, G4ParticleDefinition*) override;
 
     G4DynamicParticleVector* ApplyYourself(G4int Prompt);
 
-    G4double GetXsec(G4double anEnergy) override
+    G4double GetXsec(G4double anEnergy) const override
     {
       return std::max(0., theXsection->GetY(anEnergy));
     }
 
-    G4ParticleHPVector* GetXsec() override { return theXsection; }
+    G4ParticleHPVector* GetXsec() const override { return theXsection; }
 
     inline void SetNeutronRP(const G4ReactionProduct& aNeutron)
     {
@@ -82,6 +83,7 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
     }
 
   private:
+
     G4HadFinalState* ApplyYourself(const G4HadProjectile&) override { return nullptr; }
 
     G4ParticleHPVector* theXsection;

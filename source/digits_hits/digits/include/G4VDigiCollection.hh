@@ -23,9 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VDigiCollection
 //
+// Class description:
 //
-
+// This is the base class of digi collection. The user is advised to
+// use G4TDigiCollection template class in case his/her collection is
+// transient. While, in case the collection is persistent,
+// the concrete collection class can be directly derived from this
+// class. Geant4 kernel will use this class methods.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VDigiCollection_h
 #define G4VDigiCollection_h 1
 
@@ -33,39 +42,32 @@
 
 class G4VDigi;
 
-// class description:
-//
-//  This is the base class of digi collection. The user is advised to
-// use G4TDigiCollection template class in case his/her collection is
-// transient. While, in case the collection is persistent with ODBMS,
-// the concrete collection class can be directly derived from this
-// class.
-//  Geant4 kernel will use this class methods.
-
 class G4VDigiCollection
 {
- public:
-  G4VDigiCollection() = default;
-  G4VDigiCollection(G4String DMnam, G4String colNam);
-  virtual ~G4VDigiCollection() = default;
-  G4bool operator==(const G4VDigiCollection& right) const;
+  public:
 
-  virtual void DrawAllDigi(){};
-  virtual void PrintAllDigi(){};
+    G4VDigiCollection() = default;
+    G4VDigiCollection(const G4String& DMnam, const G4String& colNam);
+    virtual ~G4VDigiCollection() = default;
+    G4bool operator==(const G4VDigiCollection& right) const;
 
-  inline const G4String& GetName() const { return collectionName; }
-  inline const G4String& GetDMname() const { return DMname; }
+    virtual void DrawAllDigi() {}
+    virtual void PrintAllDigi() {}
 
-  // GetDigi and GetSize are given a default implementation here so
-  // that the template G4TDigiCollection can be used, but they
-  // are re-implemented in G4TDigiCollection.
-  virtual G4VDigi* GetDigi(size_t) const { return nullptr; }
-  virtual size_t GetSize() const { return 0; }
+    inline const G4String& GetName() const { return collectionName; }
+    inline const G4String& GetDMname() const { return DMname; }
 
- protected:
-  // Collection name
-  G4String collectionName = "Unknown";
-  G4String DMname = "Unknown";
+    // GetDigi and GetSize are given a default implementation here so
+    // that the template G4TDigiCollection can be used, but they
+    // are re-implemented in G4TDigiCollection.
+    virtual G4VDigi* GetDigi(std::size_t) const { return nullptr; }
+    virtual std::size_t GetSize() const { return 0; }
+
+  protected:
+
+    // Collection name
+    G4String collectionName = "Unknown";
+    G4String DMname = "Unknown";
 };
 
 #endif

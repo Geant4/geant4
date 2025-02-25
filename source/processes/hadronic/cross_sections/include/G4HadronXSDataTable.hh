@@ -74,7 +74,7 @@ private:
 
   static G4HadronXSDataTable* sInstance;
 
-  std::vector<G4PiData*> fPiData;
+  std::vector<std::vector<G4PiData*>* > fPiData;
   std::vector<G4PhysicsTable*> fTable;
 };
 

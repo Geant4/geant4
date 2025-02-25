@@ -40,11 +40,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, G4int depth)
+G4PSEnergyDeposit::G4PSEnergyDeposit(const G4String& name, G4int depth)
   : G4PSEnergyDeposit(name, "MeV", depth)
 {}
 
-G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, const G4String& unit,
+G4PSEnergyDeposit::G4PSEnergyDeposit(const G4String& name, const G4String& unit,
                                      G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)

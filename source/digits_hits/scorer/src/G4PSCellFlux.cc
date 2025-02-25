@@ -55,11 +55,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
+G4PSCellFlux::G4PSCellFlux(const G4String& name, G4int depth)
   : G4PSCellFlux(name, "percm2", depth)
 {}
 
-G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
+G4PSCellFlux::G4PSCellFlux(const G4String& name, const G4String& unit, G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
   , EvtMap(nullptr)

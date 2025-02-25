@@ -7,15 +7,17 @@
 /vis/drawVolume worlds
 #
 /vis/viewer/set/viewpointThetaPhi 105 165 deg
-# Set specific color for identification
-###/vis/geometry/set/colour Calor-AP_LayerLog ! yellow
-###/vis/geometry/set/colour Calor-BP_LayerLog ! yellow
-###/vis/geometry/set/colour Calor-CP_LayerLog ! yellow
 /vis/viewer/zoom 2.0
-##############/vis/viewer/flush
 #
 # for drawing the tracks
 /vis/scene/endOfEventAction accumulate
 /vis/scene/add/trajectories
+#
+# Un-comment the following line to draw trajectories created in 
+# worker threads for the case of sub-event parallel mode.
+# Please be cautious of the memory consumption! Do not use this
+# with too many events.
+####/control/strdoif {RunMode} == subEventParallel /run/trajectoriesToBeMerged
+#
 # If too many tracks, /vis/disable before running many events
 

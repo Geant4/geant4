@@ -129,6 +129,7 @@ G4RunManager::G4RunManager()
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
+  G4UImanager::GetUIpointer()->SetAlias("RunMode sequential");
 }
 
 // --------------------------------------------------------------------
@@ -580,11 +581,17 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
 
   if (n_perviousEventsToBeStored == 0) {
     if (anEvent->GetNumberOfGrips() == 0) {
-      if (!(anEvent->ToBeKept())) delete anEvent;
+      if (!(anEvent->ToBeKept())) {
+        ReportEventDeletion(anEvent);
+        delete anEvent;
+      }
     }
     else {
       previousEvents->push_back(anEvent);
     }
+  }
+  else {
+    previousEvents->push_back(anEvent);
   }
 
   CleanUpUnnecessaryEvents(n_perviousEventsToBeStored);
@@ -593,8 +600,11 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
 // --------------------------------------------------------------------
 void G4RunManager::ReportEventDeletion(const G4Event* evt)
 {
-  if(verboseLevel > 2) {
-    G4cout << "deleting G4Event(" << evt << ") eventID = " << evt->GetEventID();
+  if(verboseLevel > 3) {
+    G4cout << "deleting G4Event(" << evt << ") eventID = " << evt->GetEventID()
+           << " -- grips = " << evt->GetNumberOfGrips()
+           << " keepFlag = " << evt->KeepTheEventFlag()
+           << " subEvt = " << evt->GetNumberOfRemainingSubEvents();
     if(evt->GetNumberOfCompletedSubEvent()>0) {
       G4cout << " -- contains " << evt->GetNumberOfCompletedSubEvent() << " completed sub-events";
     }

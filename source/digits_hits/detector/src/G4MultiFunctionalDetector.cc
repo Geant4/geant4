@@ -35,7 +35,8 @@
 #include "G4SDManager.hh"
 #include "G4VPrimitiveScorer.hh"
 
-G4MultiFunctionalDetector::G4MultiFunctionalDetector(G4String name) : G4VSensitiveDetector(name)
+G4MultiFunctionalDetector::G4MultiFunctionalDetector(const G4String& name)
+  : G4VSensitiveDetector(name)
 {
   ;
 }

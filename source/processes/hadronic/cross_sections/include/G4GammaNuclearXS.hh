@@ -55,6 +55,7 @@ class G4ParticleDefinition;
 class G4Element;
 class G4ElementData;
 class G4PhysicsVector;
+class G4PhotoNuclearCrossSection;
 
 class G4GammaNuclearXS final : public G4VCrossSectionDataSet
 {
@@ -86,9 +87,9 @@ public:
 
   void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
-  G4double IsoCrossSection(G4double ekin, G4int Z, G4int A);
+  G4double IsoCrossSection(const G4double ekin, const G4int Z, const G4int A);
 
-  G4double ElementCrossSection(G4double ekin, G4int Z);
+  G4double ElementCrossSection(const G4double ekin, const G4int Z);
 
   G4double LowEnergyCrossSection(G4double ekin, G4int Z);
 
@@ -105,7 +106,7 @@ private:
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn, G4int Z);
   
-  G4VCrossSectionDataSet* ggXsection = nullptr;
+  G4PhotoNuclearCrossSection* ggXsection = nullptr;
   const G4ParticleDefinition* gamma;
 
   // Cache
@@ -116,8 +117,6 @@ private:
   static const G4int MAXZGAMMAXS = 95;
   static const G4int MAXNFREE = 11;
   static G4ElementData* data;
-  // Upper limit of the linear transition between IAEA database and CHIPS model
-  static const G4double eTransitionBound; 
   // The list of elements with non-linear parametrisation for better precision 
   static const G4int freeVectorException[MAXNFREE];
   // CHIPS photonuclear model had a problem with high energy parametrisation 

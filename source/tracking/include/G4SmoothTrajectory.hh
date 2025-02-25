@@ -60,10 +60,13 @@
 #include <vector>
 
 class G4Polyline;
+class G4ClonedSmoothTrajectory;
 
 class G4SmoothTrajectory : public G4VTrajectory
 {
   using G4TrajectoryPointContainer = std::vector<G4VTrajectoryPoint*>;
+
+  friend class G4ClonedSmoothTrajectory;
 
  public:
   // Constructors/Destructor
@@ -79,6 +82,9 @@ class G4SmoothTrajectory : public G4VTrajectory
   inline G4bool operator==(const G4SmoothTrajectory& r) const;
   inline void* operator new(size_t);
   inline void operator delete(void*);
+
+  // cloning with the master thread allocator
+  G4VTrajectory* CloneForMaster() const override;
 
   // Get/Set functions
   //

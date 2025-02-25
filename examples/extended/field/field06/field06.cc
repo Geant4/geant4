@@ -27,9 +27,6 @@
 /// \file field/field06/field06.cc
 /// \brief Main program of the field/field06 example
 //
-//
-//
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,10 +95,6 @@ int main(int argc, char** argv)
   if (macro.size() == 0) {
     ui = new G4UIExecutive(argc, argv, session);
   }
-
-  // Choose the Random engine
-  //
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
   //

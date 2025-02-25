@@ -48,7 +48,7 @@ class G4ChargedDefinition;
 class G4SDChargedFilter : public G4VSDFilter
 {
  public:
-  G4SDChargedFilter(G4String name);
+  G4SDChargedFilter(const G4String& name);
   ~G4SDChargedFilter() override = default;
 
   G4bool Accept(const G4Step*) const override;

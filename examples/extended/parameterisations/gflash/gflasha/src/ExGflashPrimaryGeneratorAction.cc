@@ -28,14 +28,22 @@
 //
 #include "ExGflashPrimaryGeneratorAction.hh"
 
+#include "G4Electron.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashPrimaryGeneratorAction::ExGflashPrimaryGeneratorAction()
 {
   fParticleGun = new G4GeneralParticleSource;
+  //  fParticleGun->SetVerbosity(2);
+  auto cursrc = fParticleGun->GetCurrentSource();
+  cursrc->SetParticleDefinition(G4Electron::Definition());
+  cursrc->GetAngDist()->SetParticleMomentumDirection(G4ParticleMomentum(0., 0., 1.));
+  cursrc->GetEneDist()->SetMonoEnergy(50.0 * GeV);
+  // fParticleGun->ListSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

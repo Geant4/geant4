@@ -31,6 +31,8 @@
 #include "G4GaussHermiteQ.hh"
 #include "G4PhysicalConstants.hh"
 
+#include <limits>
+
 // ----------------------------------------------------------
 //
 // Constructor for Gauss-Hermite
@@ -87,7 +89,12 @@ G4GaussHermiteQ::G4GaussHermiteQ(function pFunction, G4int nHermite)
       }
       temp    = std::sqrt((G4double) 2 * nHermite) * temp2;
       newton1 = newton0;
-      newton0 = newton1 - temp1 / temp;
+      G4double ratio = std::numeric_limits<G4double>::max();
+      if(temp > 0.0)
+      {
+        ratio = temp1 / temp;
+      }
+      newton0 = newton1 - ratio;
       if(std::fabs(newton0 - newton1) <= tolerance)
       {
         break;

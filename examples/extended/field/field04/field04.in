@@ -2,7 +2,7 @@
 # Macro file for the test of field04 example
 #
 #/run/verbose 1
-/control/verbose 2
+/control/verbose 0
 /event/verbose 1
 /tracking/verbose 1
 #

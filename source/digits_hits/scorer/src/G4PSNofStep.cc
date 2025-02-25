@@ -40,7 +40,7 @@
 //              in mm vs. number of steps (not weighted)        (Makoto Asai)
 //
 
-G4PSNofStep::G4PSNofStep(G4String name, G4int depth)
+G4PSNofStep::G4PSNofStep(const G4String& name, G4int depth)
   : G4VPrimitivePlotter(name, depth)
 {
   SetUnit("");

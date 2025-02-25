@@ -2,7 +2,7 @@
  RE03 - An extended example for run and event
  --------------------------------------------
 
- Contact : M.Asai (SLAC), A.Kimura (AIT), T.Aso (TNCMT)
+ Contact : M.Asai (SLAC/JLab), A.Kimura (AIT), T.Aso (TNCMT)
 
 1. Introduction
 
@@ -28,16 +28,49 @@ in Geant4.
 
 2. Macro files
 
- "run1.mac" through "run4.mac" macro files should be used 
-independently. Each macro file create its own scoring parallel
-world(s). "vis.mac", "drawSlices.mac" and "drawCylinderSlices.mac" 
-are used internally. Each macro should work for both interactively 
-and batch, but interactive mode is advised for better visualization.
+2.1 "run.mac"
 
- IMPORTANT: DO NOT use more than one of these macro files in one
-execution of this example.
+ "run.mac" is the main macro file of this example for both
+batch and interactive modes.
+ 
+ In interactive mode, trajectories are not visualized by default
+for the sake of execution speed. To visualize them, comment out
+lines of /vis/disable and /vis/enable in "run.mac". 
 
-3. RE03UserScoreWriter
+ In addition, in sub-event parallel mode, only the trajectories
+created in the master thread are visualized by default. 
+Un-comment the line of /run/trajectoriesToBeMerged in "vis.mac"
+to visualize all trajectories.
+
+ "draw.mac" is used by "run.mac" to visualize a score.
+
+2.2 Other macro files
+ 
+ "run2.mac" through "run4.mac" macro files should be used
+independently. They demonstrate additional functionalities of
+command-based scoring. Each macro file create its own scoring
+parallel world(s).
+
+ - "run2.mac" : defining three box meshes of different sizes
+   and granurarities touching to each other
+ - "run3.mac" : defining two box meshes of different sizes and
+   granurarities overlaying one over the other to demonstrate
+   changing granurarity of a box mesh
+ - "run4.mac" " defining a cylindrical mesh
+
+ IMPORTANT: DO NOT use more than one of these macro files in 
+one execution of this example.
+
+"drawSlice.mac" and "drawCylinderSlice.mac" are used internally
+from "run*.mac" to draw a single slice of the corresponding mesh.
+
+3. RE03ActionInitialization
+
+ This UserActionInitialization class works for all Geant4 run
+modes, i.e. sequential mode, event-level paralle mode and 
+sub-event-level parallel mode. 
+
+4. RE03UserScoreWriter
 
  G4ScoringManager has a default score writer which dumps every
 entry of one quantity of a mesh for all quantities of the mesh

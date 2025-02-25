@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "PTL/Types.hh"
+#include "PTL/Macros.hh"
 
 #include <functional>
 #include <utility>

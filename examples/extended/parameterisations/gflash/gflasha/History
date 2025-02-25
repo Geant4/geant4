@@ -1,0 +1,25 @@
+# Example gflash History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2024-10-28   I. Semeniouk  (exgflasha-V11-02-02)
+- ExGflashHistoManager - fix fVerbose used but uninitialised
+
+## 2024-10-21   I. Semeniouk  (exgflasha-V11-02-01)
+ - Code cleanup
+ - Restore setMat functionality, added geometry commands
+ - New commands documented in README
+ - Event generator defaults moved from vis.mac to PrimaryGenerator code
+ - Macro files updated
+
+## 2024-10-02   I. Semeniouk  (exgflasha-V11-02-00)
+ - Added dedicated History
+ - Bigger calo length, radial histos in fraction of radius Moliere,
+ fix index range.
+
+---
+
+# History entries prior to 11.0
+

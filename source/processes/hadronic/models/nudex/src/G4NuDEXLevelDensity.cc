@@ -235,7 +235,7 @@ void G4NuDEXLevelDensity::PrintParametersInInputFileFormat(std::ostream &out){
 
   out<<"LDPARAMETERS"<<std::endl;
   out<<LDType<<std::endl;
-  out.precision(15);
+  G4long oldprc = out.precision(15);
   if(LDType==1){
     out<<dW_ldpar<<"  "<<gamma_ldpar<<"  "<<ainf_ldpar<<"  "<<Delta_ldpar<<std::endl;
   }
@@ -245,6 +245,7 @@ void G4NuDEXLevelDensity::PrintParametersInInputFileFormat(std::ostream &out){
   else if(LDType==3){
     out<<ainf_ldpar<<"  "<<Delta_ldpar<<std::endl;
   }
+  out.precision(oldprc);
   out<<std::endl;
   
 }

@@ -359,14 +359,14 @@ G4THnMessenger<DIM, HT>::CreateSetAxisCommand(unsigned int idim)
   G4String commandName = "set" + axis + "axis";
   G4String guidance = "Set " + axis + "-axis title for the ";;
 
-  auto command = CreateCommand(commandName, guidance);
+  auto command = CreateCommand(std::move(commandName), guidance);
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // Add Id parameter
   AddIdParameter(*command);
 
   auto parAxis = new G4UIparameter("axis", 's', false);
-  guidance = GetObjectType() + " " + axis + "-axis title";
+  guidance = GetObjectType() + " " + std::move(axis) + "-axis title";
   parAxis->SetGuidance(guidance.c_str());
   command->SetParameter(parAxis);
 
@@ -497,8 +497,8 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
 
   if ( command == fCreateCmd.get() ) {
     auto counter = 0;
-    auto name = parameters[counter++];
-    auto title = parameters[counter++];
+    const auto& name = parameters[counter++];
+    const auto& title = parameters[counter++];
     GetData(counter, parameters, bins, info);
     fManager->Create(name, title, bins, info);
     return;
@@ -506,7 +506,7 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
 
   if ( command == fSetCmd.get() ) {
     auto counter = 0;
-    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    const auto& id = G4UIcommand::ConvertToInt(parameters[counter++]);
     GetData(counter, parameters, bins, info);
     fManager->Set(id, bins, info);
     return;
@@ -514,16 +514,16 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
 
   if ( command == fDeleteCmd.get() ) {
     auto counter = 0;
-    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
-    auto keepSetting = G4UIcommand::ConvertToBool(parameters[counter++]);
+    const auto& id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    const auto& keepSetting = G4UIcommand::ConvertToBool(parameters[counter++]);
     fManager->Delete(id, keepSetting);
     return;
   }
 
   if ( command == fSetTitleCmd.get() ) {
     auto counter = 0;
-    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
-    auto title = parameters[counter++];
+    const auto& id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    const auto& title = parameters[counter++];
     fManager->SetTitle(id, title);
     return;
   }
@@ -553,8 +553,8 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
   
   if ( command == fSetTitleCmd.get() ) {
     auto counter = 0;
-    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
-    auto title = parameters[counter++];
+    const auto& id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    const auto& title = parameters[counter++];
     fManager->SetTitle(id, title);
     return;
   }
@@ -563,8 +563,8 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
   for (unsigned int idim = 0; idim < maxDim; ++idim) {
     if ( command == fSetAxisCmd[idim].get() ) {
       auto counter = 0;
-      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
-      auto axisTitle = parameters[counter++];
+      const auto& id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      const auto& axisTitle = parameters[counter++];
       fManager->SetAxisTitle(idim, id, axisTitle);
       return;
     }  
@@ -577,7 +577,7 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
   }
 
   if ( command == fGetTCmd.get() ) {
-    auto id = G4UIcommand::ConvertToInt(newValues);
+    const auto& id = G4UIcommand::ConvertToInt(newValues);
     fTValue = GetTAddress(id);
     return;
   }

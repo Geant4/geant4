@@ -49,17 +49,18 @@ class G4ParticleDefinition;
 class G4ParticleHPFinalState
 {
   public:
+
     G4ParticleHPFinalState();
     virtual ~G4ParticleHPFinalState();
 
-    void Init(G4double A, G4double Z, G4String& dirName, G4String& aFSType,
-              G4ParticleDefinition* p)
+    inline void Init(G4double A, G4double Z, const G4String& dirName,
+                     const G4String& aFSType, G4ParticleDefinition* p)
     {
       theProjectile = p;
       Init(A, Z, 0, dirName, aFSType, p);
     }
-    virtual void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
-                      G4ParticleDefinition*) = 0;
+    virtual void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                      const G4String& aFSType, G4ParticleDefinition*) = 0;
 
     virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&)
     {
@@ -73,12 +74,12 @@ class G4ParticleHPFinalState
     //
     virtual G4ParticleHPFinalState* New() = 0;
 
-    G4bool HasXsec() { return hasXsec; }
-    G4bool HasFSData() { return hasFSData; }
-    G4bool HasAnyData() { return hasAnyData; }
+    inline G4bool HasXsec() const { return hasXsec; }
+    inline G4bool HasFSData() const { return hasFSData; }
+    inline G4bool HasAnyData() const { return hasAnyData; }
 
-    virtual G4double GetXsec(G4double) { return 0; }
-    virtual G4ParticleHPVector* GetXsec() { return nullptr; }
+    virtual G4double GetXsec(G4double) const { return 0.; }
+    virtual G4ParticleHPVector* GetXsec() const { return nullptr; }
 
     void SetA_Z(G4double anA, G4double aZ, G4int aM = 0)
     {
@@ -86,19 +87,19 @@ class G4ParticleHPFinalState
       theBaseZ = G4lrint(aZ);
       theBaseM = aM;
     }
-    G4double GetZ() { return theBaseZ; }
-    G4double GetN() { return theBaseA; }
-    G4double GetA() { return theBaseA; }
-    G4int GetM() { return theBaseM; }
+    G4double GetZ() const { return theBaseZ; }
+    G4double GetN() const { return theBaseA; }
+    G4double GetA() const { return theBaseA; }
+    G4int GetM() const { return theBaseM; }
 
-    void SetAZMs(G4ParticleHPDataUsed used)
+    inline void SetAZMs(const G4ParticleHPDataUsed& used)
     {
       theNDLDataA = G4lrint(used.GetA());
       theNDLDataZ = G4lrint(used.GetZ());
       theNDLDataM = used.GetM();
     }
 
-    void SetAZMs(G4double anA, G4double aZ, G4int aM, G4ParticleHPDataUsed used)
+    inline void SetAZMs(G4double anA, G4double aZ, G4int aM, const G4ParticleHPDataUsed& used)
     {
       theBaseA = G4lrint(anA);
       theBaseZ = G4lrint(aZ);
@@ -108,13 +109,16 @@ class G4ParticleHPFinalState
       theNDLDataM = used.GetM();
     }
 
-    void SetProjectile(G4ParticleDefinition* projectile) { theProjectile = projectile; }
+    inline void SetProjectile(G4ParticleDefinition* projectile)
+    {
+      theProjectile = projectile;
+    }
 
-    G4ParticleHPFinalState& operator=
-    (const G4ParticleHPFinalState& right) = delete;
+    G4ParticleHPFinalState& operator=(const G4ParticleHPFinalState& right) = delete;
     G4ParticleHPFinalState(const G4ParticleHPFinalState&) = delete;
 
   protected:
+
     void adjust_final_state(G4LorentzVector);
 
     G4ParticleDefinition* theProjectile{nullptr};
@@ -139,4 +143,5 @@ class G4ParticleHPFinalState
     G4Cache<G4HadFinalState*> theResult;
 
 };
+
 #endif

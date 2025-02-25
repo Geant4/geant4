@@ -48,25 +48,30 @@
 class G4ParticleHPThermalScatteringNames
 {
   public:
+
     G4ParticleHPThermalScatteringNames();
 
-    ~G4ParticleHPThermalScatteringNames();
+    ~G4ParticleHPThermalScatteringNames() = default;
 
-    G4bool IsThisThermalElement(G4String);
-    G4bool IsThisThermalElement(G4String, G4String);
-    size_t GetSize() { return names.size(); };
-    G4String GetTS_NDL_Name(G4String nameG4Element) { return names.find(nameG4Element)->second; };
-    G4String GetTS_NDL_Name(G4String material, G4String element)
+    G4bool IsThisThermalElement(const G4String&) const;
+    G4bool IsThisThermalElement(const G4String&, const G4String&) const;
+    inline std::size_t GetSize() const { return names.size(); }
+    inline const G4String& GetTS_NDL_Name(const G4String& nameG4Element) const
+    {
+      return names.find(nameG4Element)->second;
+    }
+    inline const G4String& GetTS_NDL_Name(const G4String& material,
+                                          const G4String& element) const
     {
       return nist_names.find(std::pair<G4String, G4String>(material, element))->second;
-    };
-    // G4String GetTS_G4E_Name( G4int i ) { return  names[i]->first; };
+    }
 
     // For user prepared thermal files
     // Name of G4Element , Name of NDL file
-    void AddThermalElement(G4String, G4String);
+    void AddThermalElement(const G4String&, const G4String&);
 
   private:
+
     //              G4Element  NDL name
     std::map<G4String, G4String> names;
 

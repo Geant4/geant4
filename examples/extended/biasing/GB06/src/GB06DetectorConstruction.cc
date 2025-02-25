@@ -32,7 +32,6 @@
 
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -93,9 +92,9 @@ G4VPhysicalVolume* GB06DetectorConstruction::Construct()
   G4double halfz = 1 * cm;
   G4VSolid* solidMeasurement = new G4Box("meas.solid", halfXY, halfXY, halfz);
 
-  G4LogicalVolume* logicMeasurement = new G4LogicalVolume(solidMeasurement,  // its solid
-                                                          worldMaterial,  // its material
-                                                          "meas.logical");  // its name
+  logicMeasurement = new G4LogicalVolume(solidMeasurement,  // its solid
+                                         worldMaterial,  // its material
+                                         "meas.logical");  // its name
 
   new G4PVPlacement(nullptr,  // no rotation
                     G4ThreeVector(0, 0, 2 * halfZ + halfz),  // entrance set after shield
@@ -119,6 +118,5 @@ void GB06DetectorConstruction::ConstructSDandField()
   G4VSensitiveDetector* sd = new GB06SD("Measurer");
   SDman->AddNewDetector(sd);
   // -- Fetch volume for sensitivity and attach sensitive module to it:
-  G4LogicalVolume* logicSD = G4LogicalVolumeStore::GetInstance()->GetVolume("meas.logical");
-  logicSD->SetSensitiveDetector(sd);
+  logicMeasurement->SetSensitiveDetector(sd);
 }

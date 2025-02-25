@@ -1,8 +1,14 @@
 # Category detscorer History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2024-07-09 Gabriele Cosmo (detscorer-V11-02-00)
+- Fixed reported Coverity defects, use "const G4String&" as argument in
+  a consistent way across all classes.
 
 ## 2022-10-03 Ben Morgan (detscorer-V11-00-01)
 - Apply standard clang-tidy plus range-based for and boolean simplification fixes

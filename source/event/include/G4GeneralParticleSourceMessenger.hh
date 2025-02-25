@@ -98,8 +98,8 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
     ~G4GeneralParticleSourceMessenger() override;
       // Destructor: deletes commands
 
-    void IonCommand(G4String newValues);
-    void IonLvlCommand(G4String newValues);
+    void IonCommand(const G4String& newValues);
+    void IonLvlCommand(const G4String& newValues);
 
   private:
 

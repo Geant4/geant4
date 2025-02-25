@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-11-09 G. Milluzzo (eFLASH_radiotherapy-V11-02-02)
+- Added a new geometry in DetectorConstruction:added an array of multiple small size silicon carbide detectors within the water phantom for dose distribution computation
+- Added the sensitive detector class for the silicon carbide array
+- Updated the macro files
+
+## 2024-08-12 I. Hrivnacova (eFLASH_radiotherapy-V11-02-01)
+- Removed unused includes of G4Accumulable[Manager].hh from FlashRunAction
+
 ## 2024-01-10 G. Milluzzo (eFLASH_radiotherapy-V11-02-00)
 - Added the FlashPhysicsListMessenger class to change the physics lists by macro commands (opt3,opt4,penelope and livermore)
 

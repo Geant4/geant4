@@ -1,0 +1,315 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, IJCLab IN2P3/CNRS, 19/07/2024
+
+#include <algorithm>
+
+//
+// public functions
+//
+
+// Default constructor (1)
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4String& name,
+  G4MergeMode mergeMode)
+: G4VAccumulable(name, mergeMode),
+  fUMap(),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor1" << G4endl;
+  }
+}
+
+// Constructor (2)
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  std::size_t bucket_count,
+  G4MergeMode mergeMode,
+  const Allocator& allocator)
+: G4VAccumulable(mergeMode),
+  fUMap(bucket_count, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor2" << G4endl;
+  }
+}
+
+// Constructor (2) with name
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4String& name,
+  std::size_t bucket_count,
+  G4MergeMode mergeMode,
+  const Allocator& allocator)
+: G4VAccumulable(name, mergeMode),
+  fUMap(bucket_count, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor2n" << G4endl;
+  }
+}
+
+// Constructor (3)
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  std::size_t bucket_count,
+  const Allocator& allocator,
+  G4MergeMode mergeMode)
+: G4VAccumulable(mergeMode),
+  fUMap(bucket_count, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor3" << G4endl;
+  }
+}
+
+// Constructor (3) with name
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4String& name,
+  std::size_t bucket_count,
+  const Allocator& allocator,
+  G4MergeMode mergeMode)
+: G4VAccumulable(name, mergeMode),
+  fUMap(bucket_count, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor3n" << G4endl;
+  }
+}
+
+// Constructor (4)
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  std::size_t bucket_count,
+  const Hash& hash,
+  const Allocator& allocator,
+  G4MergeMode mergeMode)
+: G4VAccumulable(mergeMode),
+  fUMap(bucket_count, hash, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor4" << G4endl;
+  }
+}
+
+// Constructor (4) with name
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4String& name,
+  std::size_t bucket_count,
+  const Hash& hash,
+  const Allocator& allocator,
+  G4MergeMode mergeMode)
+: G4VAccumulable(name, mergeMode),
+  fUMap(bucket_count, hash, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor4n" << G4endl;
+  }
+}
+
+// Constructor (5)
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const Allocator& allocator,
+  G4MergeMode mergeMode)
+: G4VAccumulable(mergeMode),
+  fUMap(allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor5" << G4endl;
+  }
+}
+
+// Constructor (5) with name
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4String& name,
+  const Allocator& allocator,
+  G4MergeMode mergeMode)
+: G4VAccumulable(name, mergeMode),
+  fUMap(allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor5n" << G4endl;
+  }
+}
+
+// Constructor (13)
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  std::initializer_list<std::pair<const Key,T>> init,
+  G4MergeMode mergeMode,
+  std::size_t bucket_count,
+  const Hash& hash,
+  const KeyEqual& equal,
+  const Allocator& allocator)
+: G4VAccumulable(mergeMode),
+  fUMap(init, bucket_count, hash, equal, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor13" << G4endl;
+  }
+}
+
+// Constructor (13) with name
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4String& name,
+  std::initializer_list<std::pair<const Key,T>> init,
+  G4MergeMode mergeMode,
+  std::size_t bucket_count,
+  const Hash& hash,
+  const KeyEqual& equal,
+  const Allocator& allocator)
+: G4VAccumulable(name, mergeMode),
+  fUMap(init, bucket_count, hash, equal, allocator),
+  fMergeFunction(GetMergeFunction<T>(mergeMode))
+{
+  if (G4Accumulables::VerboseLevel > 1 ) {
+    G4cout << "G4AccUnorderedMap ctor13n" << G4endl;
+  }
+}
+
+// Copy ctor
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  const G4AccUnorderedMap& rhs,
+  const Allocator& allocator)
+: G4VAccumulable(rhs),
+  fUMap(rhs, allocator),
+  fMergeFunction(rhs.fMergeFunction)
+{}
+
+// Move ctor
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
+  G4AccUnorderedMap&& rhs,
+  const Allocator& allocator)
+: G4VAccumulable(std::move(rhs)),
+  fUMap(std::move(rhs), allocator),
+  fMergeFunction(rhs.fMergeFunction)
+{}
+
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+void G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::Merge(const G4VAccumulable& other)
+{
+  const auto& otherMap = static_cast<const G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>&>(other);
+
+  if (G4Accumulables::VerboseLevel > 2 ) {
+    G4cout << "G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::Merge: " << G4endl;
+    G4cout << "destination: ";
+    for (const auto& [key, v] : fUMap) {
+      G4cout << "[ " << key << ", " << v << " ], ";
+    }
+    G4cout << G4endl;
+    G4cout << "merged data: ";
+    for (const auto& [key, v] : otherMap.fUMap) {
+      G4cout << "[ " << key << ", " << v << " ], ";
+    }
+    G4cout << G4endl;
+  }
+
+  for (const auto& [key, value] : otherMap.fUMap) {
+    if ( fUMap.find(key) == fUMap.end()) {
+      (fUMap)[key] = value;
+    }
+    else {
+      (fUMap)[key] = fMergeFunction((fUMap)[key], value);
+    }
+  }
+}
+
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+void G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::Reset()
+{
+  for (auto& [key, value] : fUMap) {
+    fUMap[key] = fInitValue;
+  }
+}
+
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+void G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::Print(
+  G4PrintOptions options) const
+{
+  if (options.Has(G4PrintOptions::kType)) {
+    G4cout << "unordered_map<" << typeid(Key).name() << ", " << typeid(T).name() << ">: ";
+  }
+
+  PrintBase(options);
+
+  bool first = true;
+  for (const auto& [key, value] : fUMap) {
+    if (! first) { G4cout << ", "; }
+    G4cout << "[ " << key << ", " << value << "] ";
+    first = false;
+  }
+  G4cout << G4endl;
+}
+
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+void G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::SetMergeMode(G4MergeMode value)
+{
+  G4VAccumulable::SetMergeMode(value);
+  fMergeFunction = GetMergeFunction<T>(fMergeMode);
+}
+
+//_____________________________________________________________________________
+template <class Key, class T, class Hash, class KeyEqual, class Allocator>
+void G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::SetInitValue(const T& value)
+{
+  fInitValue = value;
+}

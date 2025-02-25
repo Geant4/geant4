@@ -74,7 +74,7 @@ public:
   explicit G4MuBremsstrahlungModel(const G4ParticleDefinition* p = nullptr,
                                    const G4String& nam = "MuBrem");
 
-  ~G4MuBremsstrahlungModel() = default;
+  ~G4MuBremsstrahlungModel() override = default;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 

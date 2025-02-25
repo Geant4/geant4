@@ -57,7 +57,7 @@ OCTREE::G4Octree(Iterator begin, Iterator end)
 
 template <OCTREE_TEMPLATE>
 OCTREE::G4Octree(Iterator begin, Iterator end, Extractor f)
-    : functor_(f),head_(nullptr),size_(0)
+    : functor_(std::move(f)),head_(nullptr),size_(0)
 {
     std::vector<std::pair<Iterator,Point>> v;
     for(auto it=begin;it!=end;++it)

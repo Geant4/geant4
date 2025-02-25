@@ -44,7 +44,7 @@ fnInteractions(0){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4ChannelingOptrMultiParticleChangeCrossSection::AddParticle(G4String particleName){
+void G4ChannelingOptrMultiParticleChangeCrossSection::AddParticle(const G4String& particleName){
   const G4ParticleDefinition* particle =
     G4ParticleTable::GetParticleTable()->FindParticle( particleName );
   
@@ -59,7 +59,8 @@ void G4ChannelingOptrMultiParticleChangeCrossSection::AddParticle(G4String parti
       return;
     }
   
-  G4ChannelingOptrChangeCrossSection* optr = new G4ChannelingOptrChangeCrossSection(particleName);
+  G4ChannelingOptrChangeCrossSection* optr =
+    new G4ChannelingOptrChangeCrossSection(particleName);
   fParticlesToBias.push_back( particle );
   fBOptrForParticle[ particle ] = optr;
 }

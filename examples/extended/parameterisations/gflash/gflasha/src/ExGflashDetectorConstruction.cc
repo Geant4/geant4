@@ -70,12 +70,15 @@ const G4int kMaxBin = 500;
 
 ExGflashDetectorConstruction::ExGflashDetectorConstruction()
 {
-  G4cout << "ExGflashDetectorConstruction::Detector constructor" << G4endl;
+  if (fVerbose > 3) G4cout << "ExGflashDetectorConstruction::Detector constructor" << G4endl;
   fGflashMessenger = new ExGflashMessenger(this);
 
   // Crystall
   fCrystalWidth = 3 * cm;
-  fCrystalLength = 24 * cm;
+  fCrystalLength = 140 * cm;
+
+  DefineMaterials();
+  SetMaterial("G4_PbWO4");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,23 +94,26 @@ ExGflashDetectorConstruction::~ExGflashDetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
+void ExGflashDetectorConstruction::DefineMaterials()
 {
-  //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
-  G4cout << "Defining the materials" << G4endl;
+  if (fVerbose > 3) G4cout << "Defining the materials" << G4endl;
   // Get nist material manager
   G4NistManager* nistManager = G4NistManager::Instance();
   // Build materials
-  G4Material* air = nistManager->FindOrBuildMaterial("G4_AIR");
-  G4Material* pbWO4 = nistManager->FindOrBuildMaterial("G4_PbWO4");
+  fHallMat = nistManager->FindOrBuildMaterial("G4_AIR");
+  fDetMat = nistManager->FindOrBuildMaterial("G4_PbWO4");
+  nistManager->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+}
 
-  fDetMat = pbWO4;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
+{
+  //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
 
   //------------------------------
   // Calorimeter segments
   //------------------------------
-  // Simplified `CMS-like` PbWO4 crystal calorimeter
-
   // Simplified `CMS-like` PbWO4 crystal calorimeter
 
   // Calorimeter
@@ -125,7 +131,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
                                              experimentalHall_y,  // y size
                                              experimentalHall_z);  // z size
 
-  auto experimentalHall_log = new G4LogicalVolume(experimentalHall_box, air, "expHall_log",
+  auto experimentalHall_log = new G4LogicalVolume(experimentalHall_box, fHallMat, "expHall_log",
                                                   nullptr,  // opt: fieldManager
                                                   nullptr,  // opt: SensitiveDetector
                                                   nullptr);  // opt: UserLimits
@@ -138,7 +144,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
                             calo_xside / 2.,  // size
                             calo_yside / 2., calo_zside / 2.);
   auto calo_log = new G4LogicalVolume(calo_box,  // its solid
-                                      air,  // its material
+                                      fHallMat,  // its material
                                       "calo_log",  // its name
                                       nullptr,  // opt: fieldManager
                                       nullptr,  // opt: SensitiveDetector
@@ -173,11 +179,11 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
   }
   G4cout << "There are " << fNbOfCrystals << " crystals per row in the calorimeter, so in total "
          << fNbOfCrystals * fNbOfCrystals << " crystals" << G4endl;
-  G4cout << "Total Calorimeter size" << calo_xside / cm << " cm x " << calo_yside / cm << " cm x "
-         << calo_zside / cm << " cm" << G4endl;
   G4cout << "They have width of  " << fCrystalWidth / cm << "  cm and a length of  "
-         << fCrystalLength / cm << " cm. The Material is " << fDetMat
-         << " Total: " << fCrystalLength / fDetMat->GetRadlen() << " X0" << G4endl;
+         << fCrystalLength / cm << " cm." << G4endl;
+  G4cout << fDetMat << G4endl;
+  G4cout << "Total Calorimeter size " << calo_xside / cm << " cm x " << calo_yside / cm << " cm x "
+         << calo_zside / cm << " cm" << G4endl;
 
   experimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   auto caloVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
@@ -186,7 +192,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
   fCrystal_log->SetVisAttributes(crystalVisAtt);
 
   // define the fParameterisation region
-  G4cout << "\n ---> DetectorConstruction Region Definition" << G4endl;
+  //  G4cout << "\n ---> DetectorConstruction Region Definition" << G4endl;
   fRegion = new G4Region("crystals");
   calo_log->SetRegion(fRegion);
   fRegion->AddRootLogicalVolume(calo_log);
@@ -198,35 +204,52 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 
 void ExGflashDetectorConstruction::ConstructSDandField()
 {
-  // -- sensitive detectors:
-
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
-  auto SD = new ExGflashSensitiveDetector("Calorimeter", this);
-
-  SDman->AddNewDetector(SD);
-  if (fCrystal_log != nullptr) {
-    fCrystal_log->SetSensitiveDetector(SD);
-  }
-
   // -- fast simulation models:
   // **********************************************
   // * Initializing shower modell
   // ***********************************************
-  G4cout << "\n--> Creating shower parameterization models" << G4endl;
-  fFastShowerModel = new GFlashShowerModel("fFastShowerModel", fRegion);
-  fParameterisation = new GFlashHomoShowerParameterisation(fDetMat, new ExGflashHomoShowerTuning());
-  fFastShowerModel->SetParameterisation(*fParameterisation);
-  // Energy Cuts to kill particles:
-  fParticleBounds = new GFlashParticleBounds();
-  fFastShowerModel->SetParticleBounds(*fParticleBounds);
-  // Makes the EnergieSpots
-  fHitMaker = new GFlashHitMaker();
-  fFastShowerModel->SetHitMaker(*fHitMaker);
-  G4cout << "end shower parameterization." << G4endl;
+  if (fParameterisation != nullptr) {
+    fParameterisation->SetMaterial(fDetMat);
+    if (fVerbose > 3) G4cout << "Info " << __func__ << " Param Mat " << fDetMat << G4endl;
+    fParameterisation->PrintMaterial(fDetMat);
+  }
+  else {
+    // -- sensitive detectors:
+
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+
+    auto SD = new ExGflashSensitiveDetector("Calorimeter", this);
+
+    SDman->AddNewDetector(SD);
+    if (fCrystal_log != nullptr) {
+      fCrystal_log->SetSensitiveDetector(SD);
+    }
+
+    if (fVerbose > 3) G4cout << "\n--> Creating shower parameterization models" << G4endl;
+    fFastShowerModel = new GFlashShowerModel("fFastShowerModel", fRegion);
+    fParameterisation =
+      new GFlashHomoShowerParameterisation(fDetMat, new ExGflashHomoShowerTuning());
+    fFastShowerModel->SetParameterisation(*fParameterisation);
+    // Energy Cuts to kill particles:
+    fParticleBounds = new GFlashParticleBounds();
+    fFastShowerModel->SetParticleBounds(*fParticleBounds);
+    // Makes the EnergieSpots
+    fHitMaker = new GFlashHitMaker();
+    fFastShowerModel->SetHitMaker(*fHitMaker);
+    if (fVerbose > 3) G4cout << "end shower parameterization." << G4endl;
+  }
   // **********************************************
-  // Get Rad Len and R molere ?
-  fSDRadLen = fDetMat->GetRadlen();
+  // Get Rad Len and R moliere from parameterisation
+  fSDRadLen = fParameterisation->GetX0();
+  fSDRm = fParameterisation->GetRm();
+  if (fVerbose > 2) {
+    G4cout << "Info " << __func__ << "Total Calorimeter size" << G4endl;
+    auto calo_xyside = fCrystalWidth * fNbOfCrystals;
+    G4cout << "Info Z " << __func__ << " " << fCrystalLength / cm << " cm "
+           << fCrystalLength / fSDRadLen << " RadLen " << G4endl;
+    G4cout << "Info XY " << __func__ << " " << calo_xyside / cm << " cm " << calo_xyside / fSDRm
+           << " Rm " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -266,12 +289,6 @@ void ExGflashDetectorConstruction::SetMaterial(G4String mat)
     fDetMat = pttoMaterial;
     if (fCrystal_log != nullptr) {
       fCrystal_log->SetMaterial(fDetMat);
-    }
-    if (fParameterisation != nullptr) {
-      fParameterisation->SetMaterial(fDetMat);
-      fParameterisation->PrintMaterial(fDetMat);
-      // Get Rad Len and R molere ?
-      fSDRadLen = fDetMat->GetRadlen();
     }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }

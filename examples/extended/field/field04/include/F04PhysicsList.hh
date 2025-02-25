@@ -42,11 +42,11 @@ class F04StepMax;
 class F04PhysicsList : public G4VModularPhysicsList
 {
   public:
-    F04PhysicsList(G4String);
+    F04PhysicsList(const G4String&);
     ~F04PhysicsList() override;
 
     void SetStepMax(G4double);
-    F04StepMax* GetStepMaxProcess();
+    F04StepMax* GetStepMaxProcess() const;
     void AddStepMax();
     /*
         /// Remove specific physics from physics list.

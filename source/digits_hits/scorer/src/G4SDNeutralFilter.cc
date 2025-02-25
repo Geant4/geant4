@@ -42,7 +42,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4SDNeutralFilter::G4SDNeutralFilter(G4String name)
+G4SDNeutralFilter::G4SDNeutralFilter(const G4String& name)
   : G4VSDFilter(name)
 {}
 

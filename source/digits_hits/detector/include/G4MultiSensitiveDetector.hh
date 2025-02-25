@@ -23,20 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiSensitiveDetector
 //
-#ifndef G4MULTISENSITIVEDETECTOR_H
-#define G4MULTISENSITIVEDETECTOR_H
-
-#include "G4VSensitiveDetector.hh"
-
-#include <vector>
-
-// class description:
+// Class description:
+//
 // This class allows to assign multiple sensitive detectors to a single
 // logical-volume.
 // SDs are added to this proxy and an instance of the proxy is assigned
 // to the logical volume. Calls to SD methods are forwarded to ALL
 // user-defined SD that are added.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
+#ifndef G4MULTISENSITIVEDETECTOR_H
+#define G4MULTISENSITIVEDETECTOR_H 1
+
+#include "G4VSensitiveDetector.hh"
+
+#include <vector>
 
 class G4MultiSensitiveDetector : public G4VSensitiveDetector
 {

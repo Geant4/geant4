@@ -151,7 +151,7 @@ G4bool G4XmlFileManager::CreateNtupleFile(
     ntupleFile = CreateTFile(ntupleFileName);
   }
 
-  ntupleDescription->SetFile(ntupleFile);
+  ntupleDescription->SetFile(std::move(ntupleFile));
 
   return (ntupleDescription->GetFile() != nullptr);
 }

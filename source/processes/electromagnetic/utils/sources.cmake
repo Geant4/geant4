@@ -17,6 +17,7 @@ geant4_add_module(G4emutils
     G4EmDataHandler.hh
     G4EmDataRegistry.hh
     G4EmElementSelector.hh
+    G4EmElementXS.hh
     G4EmExtraParameters.hh
     G4EmExtraParametersMessenger.hh
     G4EmFluoDirectory.hh
@@ -64,6 +65,7 @@ geant4_add_module(G4emutils
     G4EmDataHandler.cc
     G4EmDataRegistry.cc
     G4EmElementSelector.cc
+    G4EmElementXS.cc
     G4EmExtraParameters.cc
     G4EmExtraParametersMessenger.cc
     G4EmLowEParameters.cc

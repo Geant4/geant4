@@ -69,16 +69,16 @@ G4String G4FieldParameters::EquationTypeName(G4EquationType equation)
   // Return the equation type as a string
 
   switch (equation) {
-    case kMagUsualEqRhs:
-      return G4String("MagUsualEqRhs");
-    case kMagSpinEqRhs:
-      return G4String("MagSpinEqRhs");
-    case kEqMagElectric:
-      return G4String("EqMagElectric");
-    case kEqEMFieldWithSpin:
-      return G4String("EqEMFieldWithSpin");
-    case kEqEMFieldWithEDM:
-      return G4String("EqEMFieldWithEDM");
+    case kEqMagnetic:
+      return G4String("EqMagnetic");
+    case kEqMagneticWithSpin:
+      return G4String("EqMagneticWithSpin");
+    case kEqElectroMagnetic:
+      return G4String("EqElectroMagnetic");
+    case kEqEMfieldWithSpin:
+      return G4String("EqEMfieldWithSpin");
+    case kEqEMfieldWithEDM:
+      return G4String("EqEMfieldWithEDM");
     case kUserEquation:
       return G4String("UserDefinedEq");
   }
@@ -173,17 +173,17 @@ G4EquationType G4FieldParameters::GetEquationType(const G4String& name)
 {
   // Return the equation type for given equation type name
 
-  if (name == EquationTypeName(kMagUsualEqRhs)) return kMagUsualEqRhs;
-  if (name == EquationTypeName(kMagSpinEqRhs)) return kMagSpinEqRhs;
-  if (name == EquationTypeName(kEqMagElectric)) return kEqMagElectric;
-  if (name == EquationTypeName(kEqEMFieldWithSpin)) return kEqEMFieldWithSpin;
-  if (name == EquationTypeName(kEqEMFieldWithEDM)) return kEqEMFieldWithEDM;
+  if (name == EquationTypeName(kEqMagnetic)) return kEqMagnetic;
+  if (name == EquationTypeName(kEqMagneticWithSpin)) return kEqMagneticWithSpin;
+  if (name == EquationTypeName(kEqElectroMagnetic)) return kEqElectroMagnetic;
+  if (name == EquationTypeName(kEqEMfieldWithSpin)) return kEqEMfieldWithSpin;
+  if (name == EquationTypeName(kEqEMfieldWithEDM)) return kEqEMfieldWithEDM;
   if (name == EquationTypeName(kUserEquation)) return kUserEquation;
 
   G4Exception(
     "G4FieldParameters::GetEquationType:", "GeomFieldParameters0001",
     FatalErrorInArgument, "Unknown equation name.");
-  return kMagUsualEqRhs;
+  return kEqMagnetic;
 }
 
 //_____________________________________________________________________________

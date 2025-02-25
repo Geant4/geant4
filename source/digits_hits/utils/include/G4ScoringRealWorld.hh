@@ -23,37 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoringRealWorld
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4ScoringRealWorld_h
 #define G4ScoringRealWorld_h 1
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
+
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
 class G4ScoringRealWorld : public G4VScoringMesh
 {
  public:
-  G4ScoringRealWorld(G4String lvName);
+
+  G4ScoringRealWorld(const G4String& lvName);
   ~G4ScoringRealWorld() override = default;
 
- public:
   void List() const override;
 
   //++++++++++ visualization method not yet implemented
   void Draw(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
-                    G4int /*axflg=111*/) override
-  {}
-
+            G4int /*axflg=111*/) override {}
   void DrawColumn(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
-                          G4int /*idxProj*/, G4int /*idxColumn*/) override
-  {}
+                  G4int /*idxProj*/, G4int /*idxColumn*/) override {}
 
  protected:
+
   // construct this mesh
   void SetupGeometry(G4VPhysicalVolume*) override;
 
  protected:
+
   G4String logVolName;
 };
 

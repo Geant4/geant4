@@ -127,7 +127,7 @@ void TrackingManagerHelper::TrackParticle(
     G4double physicalStep = physics.GetPhysicalInteractionLength(*aTrack);
     G4double geometryStep = navigation.MakeStep(*aTrack, step, physicalStep);
 
-    bool geometryLimitedStep = geometryStep < physicalStep;
+    G4bool geometryLimitedStep = geometryStep < physicalStep;
     G4double finalStep = geometryLimitedStep ? geometryStep : physicalStep;
 
     step.SetStepLength(finalStep);
@@ -248,10 +248,10 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack, PhysicsImpl& p
       G4ThreeVector dir = track.GetMomentumDirection();
       G4StepPoint& postStepPoint = *step.GetPostStepPoint();
 
-      bool fieldExertsForce = false;
+      G4bool fieldExertsForce = false;
       if (auto* fieldMgr = fFieldPropagator->FindAndSetFieldManager(track.GetVolume())) {
         fieldMgr->ConfigureForTrack(&track);
-        if (const G4Field* ptrField = fieldMgr->GetDetectorField()) {
+        if (fieldMgr->GetDetectorField() != nullptr) {
           fieldExertsForce = true;
         }
       }
@@ -334,8 +334,8 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack, PhysicsImpl& p
       }
 
       // Update global, local, and proper time.
-      double velocity = track.GetVelocity();
-      double deltaTime = 0;
+      G4double velocity = track.GetVelocity();
+      G4double deltaTime = 0;
       if (velocity > 0) {
         deltaTime = physicalStep / velocity;
       }
@@ -343,8 +343,8 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack, PhysicsImpl& p
       postStepPoint.AddGlobalTime(deltaTime);
       postStepPoint.AddLocalTime(deltaTime);
 
-      double restMass = track.GetDynamicParticle()->GetMass();
-      double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
+      G4double restMass = track.GetDynamicParticle()->GetMass();
+      G4double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
       postStepPoint.AddProperTime(deltaProperTime);
 
       // Compute safety, including the call to safetyHelper, but don't set the
@@ -457,16 +457,16 @@ void TrackingManagerHelper::TrackNeutralParticle(G4Track* aTrack, PhysicsImpl& p
       postStepPoint.SetPosition(pos);
 
       // Update global, local, and proper time.
-      double velocity = track.GetVelocity();
-      double deltaTime = 0;
+      G4double velocity = track.GetVelocity();
+      G4double deltaTime = 0;
       if (velocity > 0) {
         deltaTime = physicalStep / velocity;
       }
       postStepPoint.AddGlobalTime(deltaTime);
       postStepPoint.AddLocalTime(deltaTime);
 
-      double restMass = track.GetDynamicParticle()->GetMass();
-      double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
+      G4double restMass = track.GetDynamicParticle()->GetMass();
+      G4double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
       postStepPoint.AddProperTime(deltaProperTime);
 
       // Compute safety, but don't set the safety in the post-step point to

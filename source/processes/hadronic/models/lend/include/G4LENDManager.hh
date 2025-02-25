@@ -80,7 +80,7 @@ class G4LENDManager
          return lend_manager;
       };
 
-      G4GIDI_target* GetLENDTarget( G4ParticleDefinition* , G4String , G4int iZ , G4int iA , G4int iM = 0 );
+      G4GIDI_target* GetLENDTarget( G4ParticleDefinition* , const G4String& , G4int iZ , G4int iA , G4int iM = 0 );
       std::vector< G4String > IsLENDTargetAvailable( G4ParticleDefinition* , G4int iZ , G4int iA , G4int iM = 0 );
       G4int GetNucleusEncoding ( G4int iZ , G4int iA , G4int iM );
 

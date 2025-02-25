@@ -15,6 +15,8 @@ geant4_add_module(G4muons
     G4MuPairProductionModel.hh
     G4MuonToMuonPairProduction.hh
     G4MuonToMuonPairProductionModel.hh
+    G4RiGeAngularGenerator.hh
+    G4RiGeMuPairProductionModel.hh
     G4TablesForExtrapolator.hh
     G4ePairProduction.hh
   SOURCES
@@ -30,6 +32,8 @@ geant4_add_module(G4muons
     G4MuPairProductionModel.cc
     G4MuonToMuonPairProduction.cc
     G4MuonToMuonPairProductionModel.cc
+    G4RiGeAngularGenerator.cc
+    G4RiGeMuPairProductionModel.cc
     G4TablesForExtrapolator.cc
     G4ePairProduction.cc)
 
@@ -37,6 +41,7 @@ geant4_module_link_libraries(G4muons
   PUBLIC
     G4emutils
     G4globman
+    G4hepgeometry
     G4materials
     G4procman
   PRIVATE

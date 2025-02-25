@@ -48,7 +48,7 @@ class G4LENDUsedTarget
 
    public:
 
-      G4LENDUsedTarget( G4ParticleDefinition* pd , G4String Evaluation , G4int iZ , G4int iA , G4int iM = 0 )
+      G4LENDUsedTarget( G4ParticleDefinition* pd , const G4String& Evaluation , G4int iZ , G4int iA , G4int iM = 0 )
       : allow_nat ( false ) 
       , allow_anything ( false ) 
       , min_Z ( 0 )
@@ -74,32 +74,32 @@ class G4LENDUsedTarget
          searchTarget();
       }
 
-      ~G4LENDUsedTarget(){;};
+      ~G4LENDUsedTarget(){;}
 
       void AllowNat()
       {
          allow_nat = true;
          searchTarget();
-      }; 
+      }
 
       void AllowAny()
       {
          allow_anything = true;
          searchTarget();
-      }; 
+      }
 
-      G4int GetWantedZ(){ return wanted_Z; };
-      G4int GetWantedA(){ return wanted_A; };
-      G4int GetWantedM(){ return wanted_M; };
+      G4int GetWantedZ() const { return wanted_Z; }
+      G4int GetWantedA() const { return wanted_A; }
+      G4int GetWantedM() const { return wanted_M; }
 
-      G4int GetActualZ(){ return actual_Z; };
-      G4int GetActualA(){ return actual_A; };
-      G4int GetActualM(){ return actual_M; };
+      G4int GetActualZ() const { return actual_Z; }
+      G4int GetActualA() const { return actual_A; }
+      G4int GetActualM() const { return actual_M; }
 
-      G4String GetWantedEvaluation(){ return wanted_Evaluation; };
-      G4String GetActualEvaluation(){ return actual_Evaluation; };
+      const G4String& GetWantedEvaluation() const { return wanted_Evaluation; }
+      const G4String& GetActualEvaluation() const { return actual_Evaluation; }
 
-      G4GIDI_target* GetTarget(){ return target; };
+      G4GIDI_target* GetTarget() const { return target; }
 
    private:
 

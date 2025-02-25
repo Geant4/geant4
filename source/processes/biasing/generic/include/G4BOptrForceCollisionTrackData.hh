@@ -23,58 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file 
+// G4BOptrForceCollisionTrackData
 //
 // Class Description:
-//    Extends G4Track properties with information needed for the
-//    force collision biasing operator.
-//    The G4BOptrForceCollision class is made friend of this one in
-//    order to keep unexposed to public most of the data members, as
-//    they are used to control the logic.
 //
-// ------------------ G4BOptrForceCollisionTrackData ------------------
+// Extends G4Track properties with information needed for the
+// force collision biasing operator.
+// The G4BOptrForceCollision class is made friend of this one in
+// order to keep unexposed to public most of the data members, as
+// they are used to control the logic.
 //
-// Author: M.Verderi (LLR), October 2015
-//
+// Author: M.Verderi (LLR), October 2015.
 // --------------------------------------------------------------------
-
 #ifndef G4BOptrForceCollisionTrackData_hh
-#define G4BOptrForceCollisionTrackData_hh
+#define G4BOptrForceCollisionTrackData_hh 1
+
+#include "G4VAuxiliaryTrackInformation.hh"
 
 class G4BOptrForceCollision;
-#include "G4VAuxiliaryTrackInformation.hh"
 
 enum class ForceCollisionState { free, toBeCloned, toBeForced, toBeFreeFlight };
 
-class G4BOptrForceCollisionTrackData : public G4VAuxiliaryTrackInformation {
+class G4BOptrForceCollisionTrackData : public G4VAuxiliaryTrackInformation
+{
+  friend class G4BOptrForceCollision;
+  
+  public:
 
-friend class G4BOptrForceCollision;
+    G4BOptrForceCollisionTrackData( const G4BOptrForceCollision* );
+    ~G4BOptrForceCollisionTrackData();
   
-public:
-  G4BOptrForceCollisionTrackData( const G4BOptrForceCollision* );
-  ~G4BOptrForceCollisionTrackData();
-  
-  // -- from base class:
-  void Print() const;
+    // -- from base class:
+    void Print() const;
 
-  // -- Get methods:
-  G4bool                             IsFreeFromBiasing() const
-  { return ( fForceCollisionState == ForceCollisionState::free);}
-  // -- no set methods are provided : sets are made under exclusive control of G4BOptrForceCollision objects through friendness.
-  
-private:
-  const G4BOptrForceCollision* fForceCollisionOperator;
-  ForceCollisionState             fForceCollisionState;
+    // -- Get methods:
+    G4bool IsFreeFromBiasing() const
+    {
+      return ( fForceCollisionState == ForceCollisionState::free);
+    }
 
-  void Reset()
-  {
-    fForceCollisionOperator = nullptr;
-    fForceCollisionState    = ForceCollisionState::free;
-  }
+    // -- no set methods are provided : sets are made under exclusive
+    //    control of G4BOptrForceCollision objects through friendness.
   
+  private:
+
+    void Reset()
+    {
+      fForceCollisionOperator = nullptr;
+      fForceCollisionState = ForceCollisionState::free;
+    }
+
+  private:
+
+    const G4BOptrForceCollision* fForceCollisionOperator = nullptr;
+    ForceCollisionState fForceCollisionState;
 };
 
 #endif

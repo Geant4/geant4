@@ -43,7 +43,7 @@ class G4BaseFileManager
     G4BaseFileManager() = delete;
     virtual ~G4BaseFileManager() = default;
 
-    void SetCompressionLevel(G4int level);
+    virtual void SetCompressionLevel(G4int level);
       // Set the compression level
     virtual G4bool SetFileName(const G4String& fileName);
       // Set the base file name (without extension)

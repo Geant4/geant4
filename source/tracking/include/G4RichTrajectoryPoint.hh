@@ -54,7 +54,11 @@
 #include "G4StepStatus.hh"
 #include "G4ThreeVector.hh"
 #include "G4TouchableHandle.hh"
-#include "G4TrajectoryPoint.hh"
+#include "G4VTrajectoryPoint.hh"
+#include "globals.hh"  // Include from 'global'
+
+#include "trkgdefs.hh"
+class G4ClonedRichTrajectoryPoint;
 
 #include "trkgdefs.hh"
 
@@ -64,8 +68,11 @@ class G4Track;
 class G4Step;
 class G4VProcess;
 
-class G4RichTrajectoryPoint : public G4TrajectoryPoint
+class G4RichTrajectoryPoint : public G4VTrajectoryPoint
 {
+
+  friend class G4ClonedRichTrajectoryPoint;
+
  public:  // without description
   // Constructors/Destructor
   //
@@ -84,11 +91,16 @@ class G4RichTrajectoryPoint : public G4TrajectoryPoint
 
   // Get/Set functions
   //
+
+  inline const G4ThreeVector GetPosition() const override { return fPosition; }
+
   inline const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const override;
   const std::map<G4String, G4AttDef>* GetAttDefs() const override;
   std::vector<G4AttValue>* CreateAttValues() const override;
 
  private:
+  G4ThreeVector fPosition{0., 0., 0.};
+
   // Extended member data
   //
   std::vector<G4ThreeVector>* fpAuxiliaryPointVector = nullptr;

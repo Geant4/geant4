@@ -45,9 +45,11 @@
 #  include "types.h"
 
 // FLUKA DEPENDENCIES
+// clang-format off
 #  include "FLUKAParticleTable.hh"
+#  include "fluka_dependencies.hh" // Do not re-order
 #  include "cmcyl.hh"
-#  include "fluka_dependencies.hh"
+// clang-format on
 
 // G4
 #  include "G4DynamicParticle.hh"
@@ -369,9 +371,17 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
   const G4int targetZ = targetNucleus.GetZ_asInt();
 
   const auto& projectileDirection = projectile.GetMomentumDirection();
-  G4double txx = projectileDirection.x();
+  /*G4double txx = projectileDirection.x();
   G4double tyy = projectileDirection.y();
-  G4double tzz = projectileDirection.z();
+  G4double tzz = projectileDirection.z();*/
+  // Should NOT propagate the track/projectile's direction (dir) from Geant4:
+  // the FLUKA event generator should work in a local frame 
+  // whose localZ is the projectile direction.
+  // Geant4 is in charge of transforming the final state 
+  // from that local frame back to the lab (rotateUz), using the cached projectile direction.
+  G4double txx = 0.;
+  G4double tyy = 0.;
+  G4double tzz = 1.;
 
   // RENAME INTO FLUKA-WORLD VARIABLES
   G4int kproj = projectileFLUKAId;

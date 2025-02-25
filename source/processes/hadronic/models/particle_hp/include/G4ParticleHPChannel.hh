@@ -55,28 +55,29 @@ class G4ParticleDefinition;
 
 class G4ParticleHPChannel
 {
-public:
+ public:
+
   G4ParticleHPChannel(G4ParticleDefinition* projectile = nullptr);
 
   ~G4ParticleHPChannel();
 
-  G4double GetXsec(G4double energy);
+  G4double GetXsec(G4double energy) const;
 
-  G4double GetWeightedXsec(G4double energy, G4int isoNumber);
+  G4double GetWeightedXsec(G4double energy, G4int isoNumber) const;
 
-  G4double GetFSCrossSection(G4double energy, G4int isoNumber);
+  G4double GetFSCrossSection(G4double energy, G4int isoNumber) const;
 
   G4bool IsActive(G4int isoNumber) const
   {
     return active[isoNumber];
   }
 
-  G4bool HasFSData(G4int isoNumber)
+  G4bool HasFSData(G4int isoNumber) const
   { 
     return theFinalStates[isoNumber]->HasFSData();
   }
 
-  G4bool HasAnyData(G4int isoNumber)
+  G4bool HasAnyData(G4int isoNumber) const
   {
     return theFinalStates[isoNumber]->HasAnyData();
   }
@@ -109,7 +110,7 @@ public:
   G4double GetZ(G4int i) const { return theFinalStates[i]->GetZ(); }
   G4double GetM(G4int i) const { return theFinalStates[i]->GetM(); }
 
-  G4bool HasDataInAnyFinalState()
+  G4bool HasDataInAnyFinalState() const
   {
     G4bool result = false;
     for (G4int i = 0; i < niso; ++i) {
@@ -121,23 +122,24 @@ public:
     return result;
   }
 
-  void DumpInfo();
+  void DumpInfo() const;
 
-  G4String& GetFSType() { return theFSType; }
+  const G4String& GetFSType() { return theFSType; }
 
   G4ParticleHPFinalState** GetFinalStates() const { return theFinalStates; }
 
   // method added by M.Zmeskal 02/2024 - to be used in G4ParticleHPFissionURR
-  G4WendtFissionFragmentGenerator* GetWendtFissionGenerator();
+  G4WendtFissionFragmentGenerator* GetWendtFissionGenerator() const;
 
   G4ParticleHPChannel(G4ParticleHPChannel &) = delete;
-  G4ParticleHPChannel & operator=
-  (const G4ParticleHPChannel &right) = delete;
+  G4ParticleHPChannel & operator=(const G4ParticleHPChannel &right) = delete;
 
-protected:
+ protected:
+
   G4ParticleHPManager* fManager;
 
-private:
+ private:
+
   G4ParticleDefinition* theProjectile;
 
   G4ParticleHPVector* theChannelData;

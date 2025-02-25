@@ -184,8 +184,7 @@ void G4ParticleHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& pr
 
   // make a PhysicsVector for each element
 
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
   for (std::size_t i = 0; i < numberOfElements; ++i) {
     G4PhysicsVector* physVec = theHPData->MakePhysicsVector((*theElementTable)[i], this);
     theCrossSections->push_back(physVec);
@@ -193,12 +192,8 @@ void G4ParticleHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& pr
   G4ParticleHPManager::GetInstance()->RegisterInelasticCrossSections(&projectile, theCrossSections);
 }
 
-void G4ParticleHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& projectile)
+void G4ParticleHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition&)
 {
-  if (&projectile != theProjectile)
-    throw G4HadronicException(__FILE__, __LINE__,
-                              "Attempt to use ParticleHP data for a wrong projectile!!!");
-
 #ifdef G4VERBOSE
   if (G4HadronicParameters::Instance()->GetVerboseLevel() == 0) return;
 
@@ -217,8 +212,7 @@ void G4ParticleHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& pro
   G4cout << G4endl;
 
   std::size_t numberOfElements = G4Element::GetNumberOfElements();
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
 
   for (std::size_t i = 0; i < numberOfElements; ++i) {
     G4cout << (*theElementTable)[i]->GetName() << G4endl;

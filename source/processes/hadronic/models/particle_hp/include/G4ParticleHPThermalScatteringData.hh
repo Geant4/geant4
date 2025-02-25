@@ -24,15 +24,10 @@
 // ********************************************************************
 //
 //
-// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// G4ParticleHPThermalScatteringData
 //
-#ifndef G4ParticleHPThermalScatteringData_h
-#define G4ParticleHPThermalScatteringData_h 1
-
-// Thermal Neutron Scattering
-// Koi, Tatsumi (SCCS/SLAC)
+// Class Description:
 //
-// Class Description
 // Cross Sections for a high precision (based on evaluated data
 // libraries) description of themal neutron scattering below 4 eV;
 // Based on Thermal neutron scattering files
@@ -40,11 +35,12 @@
 // To be used in your physics list in case you need this physics.
 // In this case you want to register an object of this class with
 // the corresponding process.
-// Class Description - End
-
-// 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
-// 070625 create clearCurrentXSData to fix memory leaking by T. Koi
-// 080417 Add IsZAApplicable method (return false) by T. Koi
+//
+// Author: T. Koi (SLAC/SCCS), November-2006 - First implementation.
+//         P. Arce (CIEMAT), June-2014 - Conversion neutron_hp to particle_hp
+// ---------------------------------------------------------------------
+#ifndef G4ParticleHPThermalScatteringData_h
+#define G4ParticleHPThermalScatteringData_h 1
 
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
@@ -53,7 +49,6 @@
 #include "G4ParticleHPThermalScatteringNames.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VCrossSectionDataSet.hh"
-// #include "G4PhysicsTable.hh"
 
 #include <map>
 #include <vector>
@@ -61,6 +56,7 @@
 class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
 {
   public:
+
     G4ParticleHPThermalScatteringData();
 
     ~G4ParticleHPThermalScatteringData() override;
@@ -90,28 +86,31 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
 
     // For user prepared thermal files
     // Name of G4Element , Name of NDL file
-    void AddUserThermalScatteringFile(G4String, G4String);
+    void AddUserThermalScatteringFile(const G4String&, const G4String&);
 
     void CrossSectionDescription(std::ostream&) const override;
 
   private:
+
     G4double GetX(const G4DynamicParticle*, G4double aT, std::map<G4double, G4ParticleHPVector*>*);
 
-    G4double emax;
-
     void clearCurrentXSData();
+
+    std::map<G4double, G4ParticleHPVector*>* readData(const G4String&);
+
+    G4int getTS_ID(const G4Material*, const G4Element*);
+
+  private:
+
+    G4double emax;
 
     //              element            temp       x section from E
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>* coherent{nullptr};
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>* incoherent{nullptr};
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>* inelastic{nullptr};
 
-    std::map<G4double, G4ParticleHPVector*>* readData(G4String);
-
     std::vector<G4int> indexOfThermalElement;
     G4ParticleHPThermalScatteringNames* names;
-    //              G4Element  NDL name
-    //      std::map< G4String , G4String > names;
 
     G4double ke_cache;
     G4double xs_cache;
@@ -119,7 +118,6 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
     const G4Material* material_cache;
 
     std::map<std::pair<const G4Material*, const G4Element*>, G4int> dic;
-    G4int getTS_ID(const G4Material*, const G4Element*);
 };
 
 #endif

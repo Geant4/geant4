@@ -16,7 +16,7 @@
       - choosing the type of Runge Kutta stepper used for integration of the
         motion of charged particles in the magnetic field,
       - controlling the thresholds that determine which looping particles are
-        killed by G4Transporation.
+        killed by G4Transportation.
 
       Some of these capabilities are available via interactive commands,
       implemented in F01FieldMessenger.

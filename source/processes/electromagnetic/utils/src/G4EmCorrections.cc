@@ -260,21 +260,23 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 
   G4double sum = 0.0;
 
-  if(nullptr != ionHEModel) {
+  if (nullptr != ionHEModel) {
     G4int Z = G4lrint(p->GetPDGCharge()*inveplus);
     Z = std::max(std::min(Z, 99), 1);
 
     const G4double ethscaled = eth*p->GetPDGMass()/CLHEP::proton_mass_c2;
     const G4int ionPDG = p->GetPDGEncoding();
-    if(thcorr.find(ionPDG)==thcorr.end()) {  // Not found: fill the map
+    auto iter = thcorr.find(ionPDG);
+    if (iter == thcorr.end()) {  // Not found: fill the map
       std::vector<G4double> v;
       for(std::size_t i=0; i<ncouples; ++i){
         v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
       }
       thcorr.insert(std::pair< G4int, std::vector<G4double> >(ionPDG,v)); 
     }
-
-    const G4double rest = (thcorr.find(ionPDG)->second)[couple->GetIndex()];
+    G4double rest = 0.0;
+    iter = thcorr.find(ionPDG);
+    if (iter != thcorr.end()) { rest = (iter->second)[couple->GetIndex()]; }
 
     sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
@@ -556,7 +558,8 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
         //       << "  resL= " << res0 << G4endl;
       }
       if(ntot > nmax) {
-        eshell /= norm;
+	if (norm > 0.0) { norm = 1.0/norm; }
+        eshell *= norm;
 
 	static const G4double HM[53] = {
 	  12.0, 12.0, 12.0, 12.0, 11.9, 11.7, 11.5, 11.2, 10.8, 10.4,

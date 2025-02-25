@@ -49,6 +49,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
@@ -71,16 +72,16 @@ G4ParticleHPProbabilityTablesStore::G4ParticleHPProbabilityTablesStore() :
     G4Exception( "G4ParticleHPProbabilityTablesStore::G4ParticleHPProbabilityTablesStore()", "hadhp01",
   		 FatalException, "Please setenv G4URRPTDATA, it is not defined." );
   }
-  if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "njoy" ) {
-    dirName += "/ProbabilityTables/njoy/";
+  if ( G4HadronicParameters::Instance()->GetTypeTablePT() == "njoy" ) {
+    dirName += "/njoy/";
     usedNjoy = true;
-  } else if ( G4ParticleHPManager::GetInstance()->GetUsedPTformat() == "calendf" ) {
-    dirName += "/ProbabilityTables/calendf/";
+  } else if ( G4HadronicParameters::Instance()->GetTypeTablePT() == "calendf" ) {
+    dirName += "/calendf/";
     usedCalendf = true;
   } else {
     G4Exception( "G4ParticleHPProbabilityTablesStore::G4ParticleHPProbabilityTablesStore()", "hadhp01",
   		 FatalException, "The format of probability tables is not set properly, "
-  		 "please check variable USE_PROBABILITY_TABLE_FROM in G4ParticleHPManager." );
+  		 "please set it with G4HadronicParameters::Instance()->SetTypeTablePT() before initialization in your main." );
   }
   numIso = (G4int)G4Isotope::GetNumberOfIsotopes();
   // find all possible temperatures for all isotopes.
@@ -91,9 +92,9 @@ G4ParticleHPProbabilityTablesStore::G4ParticleHPProbabilityTablesStore() :
     std::vector< G4int > isotemperatures;
     std::map< std::thread::id, G4double > simpleMapE;
     std::map< std::thread::id, G4double > simpleMapRN;
-    Temperatures->push_back( isotemperatures );
-    energy_cache.push_back( simpleMapE );
-    random_number_cache.push_back( simpleMapRN );
+    Temperatures->push_back( std::move(isotemperatures) );
+    energy_cache.push_back( std::move(simpleMapE) );
+    random_number_cache.push_back( std::move(simpleMapRN) );
   }
   for ( std::size_t im = 0; im < G4Material::GetNumberOfMaterials(); ++im ) {
     std::vector< G4bool > isoinmat( numIso, false );
@@ -172,7 +173,7 @@ void G4ParticleHPProbabilityTablesStore::Init() {
       }
       tempPTmap[T]->Init( Z, A, meso, T, dirName );
     }
-    ProbabilityTables->push_back( tempPTmap );
+    ProbabilityTables->push_back( std::move(tempPTmap) );
   }
 }
 
@@ -198,7 +199,7 @@ void G4ParticleHPProbabilityTablesStore::InitURRlimits() {
       G4bool hasalreadyPT = false;
       G4bool doesnothavePTyet = false;
       for ( G4int T : (*Temperatures)[indexI] ) {
-        G4String fullPathFileName = dirName + filename + "." + std::to_string(T) + ".pt.z"; 
+        G4String fullPathFileName = dirName + filename + "." + std::to_string(T) + ".pt"; 
         std::istringstream theData( std::ios::in );
         G4ParticleHPManager::GetInstance()->GetDataStream( fullPathFileName, theData );
         if ( theData.good() &&  hasalreadyPT ) {

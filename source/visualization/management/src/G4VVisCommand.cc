@@ -293,10 +293,10 @@ void G4VVisCommand::RefreshIfRequired(G4VViewer* viewer) {
 
 void G4VVisCommand::InterpolateViews
 (G4VViewer* currentViewer,
- std::vector<G4ViewParameters> viewVector,
+ const std::vector<G4ViewParameters>& viewVector,
  const G4int nInterpolationPoints,
  const G4int waitTimePerPointmilliseconds,
- const G4String exportString)
+ const G4String& exportString)
 {
   const G4int safety = (G4int)viewVector.size()*nInterpolationPoints;
   G4int safetyCount = 0;
@@ -322,7 +322,7 @@ void G4VVisCommand::InterpolateToNewView
  const G4ViewParameters& newVP,
  const G4int nInterpolationPoints,
  const G4int waitTimePerPointmilliseconds,
- const G4String exportString)
+ const G4String& exportString)
 {
   std::vector<G4ViewParameters> viewVector;
   viewVector.push_back(oldVP);

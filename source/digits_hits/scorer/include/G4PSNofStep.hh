@@ -46,7 +46,7 @@
 class G4PSNofStep : public G4VPrimitivePlotter
 {
  public:
-  G4PSNofStep(G4String name, G4int depth = 0);
+  G4PSNofStep(const G4String& name, G4int depth = 0);
   ~G4PSNofStep() override = default;
 
   void Initialize(G4HCofThisEvent*) override;

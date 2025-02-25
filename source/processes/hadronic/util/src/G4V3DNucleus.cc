@@ -44,7 +44,7 @@ G4V3DNucleus::~G4V3DNucleus()
 
 const G4V3DNucleus & G4V3DNucleus::operator=(const G4V3DNucleus &)
 {
-  G4String text = "G4V3DNucleus::operator= meant to not be accessible";
+  const G4String& text = "G4V3DNucleus::operator= meant to not be accessible";
   throw G4HadronicException(__FILE__, __LINE__, text); 
   return *this;
 }

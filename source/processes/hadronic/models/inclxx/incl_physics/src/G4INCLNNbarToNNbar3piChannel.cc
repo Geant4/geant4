@@ -149,9 +149,9 @@ namespace G4INCL {
 						antinucleon->setType(Proton);
 					}
 				} 
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM161, plab)
-				+KinematicsUtils::compute_xs(BFMM169, plab)
-				+KinematicsUtils::compute_xs(BFMM201, plab)){ //n pbar 2pi+ pi- case
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM161), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM169), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM201), plab)){ //n pbar 2pi+ pi- case
 					Pion1 = PiPlus;
 					Pion2 = PiPlus;
 					Pion3 = PiMinus;
@@ -206,8 +206,8 @@ namespace G4INCL {
 						antinucleon->setType(Neutron);
 					}
 				} 
-				else if(rdm*totalppbar < 2*KinematicsUtils::compute_xs(BFMM169, plab)
-				+KinematicsUtils::compute_xs(BFMM197, plab)){ // n nbar 2pi+ pi- case
+				else if(rdm*totalppbar < 2*KinematicsUtils::compute_xs(std::move(BFMM169), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM197), plab)){ // n nbar 2pi+ pi- case
 					Pion1 = PiPlus;
 					Pion2 = PiPlus;
 					Pion3 = PiMinus;
@@ -264,8 +264,8 @@ namespace G4INCL {
 						antinucleon->setType(Proton);
 					}
 				} 
-				else if(rdm*totalppbar < 2*KinematicsUtils::compute_xs(BFMM169, plab)
-				+KinematicsUtils::compute_xs(BFMM197, plab)){ // n nbar 2pi- pi+ case
+				else if(rdm*totalppbar < 2*KinematicsUtils::compute_xs(std::move(BFMM169), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM197), plab)){ // n nbar 2pi- pi+ case
 					Pion1 = PiPlus;
 					Pion2 = PiMinus;
 					Pion3 = PiMinus;
@@ -320,9 +320,9 @@ namespace G4INCL {
 						antinucleon->setType(Proton);
 					}
 				} 
-				else if(rdm*totalppbar < KinematicsUtils::compute_xs(BFMM161, plab)
-				+KinematicsUtils::compute_xs(BFMM169, plab)
-				+KinematicsUtils::compute_xs(BFMM201, plab)){ //n pbar 2pi+ pi- case
+				else if(rdm*totalppbar < KinematicsUtils::compute_xs(std::move(BFMM161), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM169), plab)
+				+KinematicsUtils::compute_xs(std::move(BFMM201), plab)){ //n pbar 2pi+ pi- case
 					Pion1 = PiPlus;
 					Pion2 = PiPlus;
 					Pion3 = PiMinus;

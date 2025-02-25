@@ -57,7 +57,7 @@ G4FieldSetupMessenger::G4FieldSetupMessenger(G4FieldSetup* fieldSetup)
     directoryName.append("/");
   }
 
-  G4String commandName = directoryName;
+  G4String commandName = std::move(directoryName);
   commandName.append("update");
   fUpdateCmd = new G4UIcmdWithoutParameter(commandName, this);
   fUpdateCmd->SetGuidance("Update field setup.");

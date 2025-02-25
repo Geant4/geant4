@@ -32,7 +32,6 @@
 
 #include "PTL/TaskRunManager.hh"
 #include "PTL/ThreadData.hh"
-#include "PTL/ThreadPool.hh"
 
 //======================================================================================//
 

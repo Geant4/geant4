@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-10-17 Makoto Asai (xraytel-V11-02-00)
+- Unnecessary use of G4VisManager and some UI commands are removed for more stability.
+
 ## 2023-11-15 I. Hrivnacova (xraytel-V11-01-00)
 - Updated vis.mac:
   - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices

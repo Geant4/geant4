@@ -131,7 +131,7 @@ void G4MoleculeTableMessenger::SetNewValue(G4UIcommand* command,
           molConf->SetDiffusionCoefficient(diffusion_coefficient * (m2 / s));
         }
 
-        auto usedName = molConf->GetUserID();
+        const auto& usedName = molConf->GetUserID();
         if(!usedName.empty())
         {
           molConf->PrintState();

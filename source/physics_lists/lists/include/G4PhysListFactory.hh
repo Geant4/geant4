@@ -72,8 +72,8 @@ private:
   G4String defName;  
   std::vector<G4String> listnames_hadr;
   std::vector<G4String> listnames_em;
-  size_t nlists_hadr;
-  size_t nlists_em;
+  std::size_t nlists_hadr;
+  std::size_t nlists_em;
   G4int verbose;
   G4UImessenger* theMessenger;
 };

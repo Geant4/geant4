@@ -845,7 +845,7 @@ protected:
 	float b = first_overlap-a*first_scale;
       //float wanted_scale = -b/a; //zero overlap.
         float wanted_gap = width.value()*labels_gap.value();
-        float wanted_scale = (-wanted_gap-b)/a;
+        float wanted_scale = (a==0.0f) ? 1 : (-wanted_gap-b)/a; //a==0.0f should not happen.
         if(wanted_scale<=0) wanted_scale = 1; // this if() should not happen.
         wanted_scale /= second_scale;
        {tools_vforcit(matrix*,m_labels_mtxs,it) {

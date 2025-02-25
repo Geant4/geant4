@@ -45,11 +45,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
+G4PSPassageTrackLength::G4PSPassageTrackLength(const G4String& name, G4int depth)
   : G4PSPassageTrackLength(name, "mm", depth)
 {}
 
-G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name,
+G4PSPassageTrackLength::G4PSPassageTrackLength(const G4String& name,
                                                const G4String& unit,
                                                G4int depth)
   : G4VPrimitivePlotter(name, depth)

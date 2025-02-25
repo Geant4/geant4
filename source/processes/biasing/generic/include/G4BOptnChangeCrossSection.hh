@@ -23,73 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//---------------------------------------------------------------
-//
 // G4BOptnChangeCrossSection
 //
 // Class Description:
-//    A G4VBiasingOperation to change a process cross-section.
-//    
 //
-//---------------------------------------------------------------
-//   Initial version                         Nov. 2013 M. Verderi
-
-
+// A G4VBiasingOperation to change a process cross-section.
+//    
+// Author: Marc Verderi, November 2013
+// --------------------------------------------------------------------
 #ifndef G4BOptnChangeCrossSection_hh
 #define G4BOptnChangeCrossSection_hh 1
 
 #include "G4VBiasingOperation.hh"
+
 class G4InteractionLawPhysical;
 
-class G4BOptnChangeCrossSection : public G4VBiasingOperation {
-public:
-  // -- Constructor :
-  G4BOptnChangeCrossSection(G4String name);
-  // -- destructor:
-  virtual ~G4BOptnChangeCrossSection();
-  
-public:
-  // -- Methods from G4VBiasingOperation interface:
-  // ----------------------------------------------
-  // -- Used:
-  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*,
-										 G4ForceCondition& proposeForceCondition );
-  
-  // -- Unused:
-  virtual G4VParticleChange*   ApplyFinalStateBiasing( const G4BiasingProcessInterface*,
-						       const G4Track*,
-						       const G4Step*,
-						       G4bool&          )  {return 0;}
-  virtual G4double           DistanceToApplyOperation( const G4Track*,
-						       G4double,
-						       G4ForceCondition*)  {return DBL_MAX;}
-  virtual G4VParticleChange* GenerateBiasingFinalState( const G4Track*,
-						        const G4Step*   )  {return 0;}
-  
-public:
-  // -- Additional methods, specific to this class:
-  // ----------------------------------------------
-  // -- return concrete type of interaction law:
-  G4InteractionLawPhysical* GetBiasedExponentialLaw() {return fBiasedExponentialLaw;}
-  // -- set biased cross-section:
-  void     SetBiasedCrossSection(G4double xst, bool updateInteractionLength = false);
-  G4double GetBiasedCrossSection() const;
-  // -- Sample underneath distribution:
-  void Sample();
-  // -- Update for a made step, without resampling:
-  void UpdateForStep( G4double stepLength );
-  // -- set/get if interaction occured. 
-  // -- Interaction flag turned off in "Sample()" method.
-  G4bool GetInteractionOccured() const { return fInteractionOccured; }
-  void   SetInteractionOccured() { fInteractionOccured = true; }
-  
+class G4BOptnChangeCrossSection : public G4VBiasingOperation
+{
+  public:
 
+    // -- Constructor :
+    G4BOptnChangeCrossSection(const G4String& name);
+    // -- destructor:
+    virtual ~G4BOptnChangeCrossSection();
+  
+    // -- Methods from G4VBiasingOperation interface:
+    // ----------------------------------------------
+    // -- Used:
+    virtual const G4VBiasingInteractionLaw*
+    ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*,
+                    G4ForceCondition& proposeForceCondition );
+  
+    // -- Unused:
+    virtual G4VParticleChange*
+    ApplyFinalStateBiasing( const G4BiasingProcessInterface*,
+                    const G4Track*, const G4Step*, G4bool& ) { return nullptr; }
+    virtual G4double DistanceToApplyOperation( const G4Track*,
+                    G4double, G4ForceCondition* ) { return DBL_MAX; }
+    virtual G4VParticleChange* GenerateBiasingFinalState( const G4Track*,
+                    const G4Step* ) { return nullptr; }
+  
+    // -- Additional methods, specific to this class:
+    // ----------------------------------------------
+    // -- return concrete type of interaction law:
+    G4InteractionLawPhysical* GetBiasedExponentialLaw() { return fBiasedExponentialLaw; }
+    // -- set biased cross-section:
+    void SetBiasedCrossSection(G4double xst, G4bool updateInteractionLength=false);
+    G4double GetBiasedCrossSection() const;
+    // -- Sample underneath distribution:
+    void Sample();
+    // -- Update for a made step, without resampling:
+    void UpdateForStep( G4double stepLength );
+    // -- set/get if interaction occured. 
+    // -- Interaction flag turned off in "Sample()" method.
+    G4bool GetInteractionOccured() const { return fInteractionOccured; }
+    void SetInteractionOccured() { fInteractionOccured = true; }
 
-private:
-  G4InteractionLawPhysical* fBiasedExponentialLaw;
-  G4bool                      fInteractionOccured;
+  private:
+
+    G4InteractionLawPhysical* fBiasedExponentialLaw = nullptr;
+    G4bool fInteractionOccured = false;
 };
 
 #endif

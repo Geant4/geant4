@@ -40,7 +40,7 @@ target_link_libraries(UHDR ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(UHDR_SCRIPTS
-    beam.in UHDR.in plotG_time.C pulseShape.dat
+    beam.in UHDR.in plotG_time.C pulseShape.dat vis.mac
   )
 
 foreach(_script ${UHDR_SCRIPTS})

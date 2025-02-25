@@ -39,6 +39,8 @@
 #include "../sys/atime"
 #endif
 
+#include <utility>
+
 namespace tools {
 namespace sg {
 
@@ -5348,7 +5350,7 @@ protected: //vis bins
 	  _ws.push_back(value);
 	}
       }
-      ws = _ws;
+      ws = std::move(_ws);
       linen = ws.size()/2;
     }
 
@@ -7181,7 +7183,7 @@ protected: //rep
             yy = verify_log(yy,ymin,dy,ylog);
             v.push_back(vec3f(xx,yy,a_zz+zz));
           }
-          contourVector.push_back(v);
+          contourVector.push_back(std::move(v));
         }
       }
 

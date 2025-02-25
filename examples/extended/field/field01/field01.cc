@@ -27,9 +27,6 @@
 /// \file field/field01/field01.cc
 /// \brief Main program of the field/field01 example
 //
-//
-//
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,7 +39,6 @@
 #include "G4Types.hh"
 #include "G4UImanager.hh"
 
-// To control verbosity
 #include "FTFP_BERT.hh"
 
 #include "G4EmParameters.hh"
@@ -64,19 +60,18 @@
 int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  //
   G4UIExecutive* ui = nullptr;
   if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
+  // Setting the application-specific SteppingVerbose
   //
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  auto verbosity = new F01SteppingVerbose;
 
-  G4VSteppingVerbose::SetInstance(new F01SteppingVerbose);
-
-  // Construct the sequential (or default) run manager
-  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+  // Construct the default run manager
+  auto runManager = G4RunManagerFactory::CreateRunManager();
 
   // G4TransportationWithMscType: fDisabled, fEnabled, fMultipleSteps
   // G4EmParameters::Instance()->SetTransportationWithMsc(G4TransportationWithMscType::fEnabled);
@@ -185,6 +180,7 @@ int main(int argc, char** argv)
   //  printed in the RunAction's EndOfEvent action.
   // ( Eventually a summary could be provided here instead or as well. )
 
+  delete verbosity;
   delete visManager;
   delete runManager;
 

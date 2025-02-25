@@ -1,0 +1,122 @@
+================================
+Geant4 - cellularPhantom example
+================================
+
+                                README file
+                          ----------------------
+
+                         Authors and contributors:
+
+P. Barberet, S. Incerti, N. H. Tran, L. Morelli
+LP2i, IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France
+E-mail: barberet@lp2ib.in2p3.fr or incerti@lp2ib.in2p3.fr
+
+If you use this code, please cite the following publication:
+Monte-Carlo dosimetry on a realistic cell monolayer geometry exposed to alpha-particle,
+P. Barberet, F. Vianna, M. Karamitros, T. Brun, N. Gordillo, P. Moretto, S. Incerti, H. Seznec,
+Phys. Med. Biol. 57 (2012) 2189-2207
+https://doi.org/10.1088/0031-9155/57/8/2189
+
+---->0. INTRODUCTION
+
+The cellularPhantom example shows how to simulate the irradiation of a 3D voxel
+phantom containing biological cells, created from a confocal microscopy 24-bit RGB image.
+
+The original image was created thanks to:
+- H. De Oliveira, T. Désigaux, N. Dusserre, ART BioPrint, France
+- F. Paris, C. Niaudet, Inserm, France
+
+These developments were carried out as part of the "Flash'Atlantic" project
+(2023-2024) funded by CNRS-MITI, France, and Inserm, France.
+
+Two phantom files phantom.dat (low resolution) and phantomHR.dat (high resolution)
+are provided in the phantoms directory.
+
+They were created using the ImageJ phantom.ijm macro located in the ImageJ directory.
+See the phantoms/Documentation.pdf file for more information
+
+The low resolution file is used for visualization in the macro vis.mac.
+It contains the following lines:
+
+54300   20230   17320   16750
+=> total number of voxels, number of red, green and blue voxels
+
+734.0507        734.0507        90.6372 microns
+=> whole X, Y and Z size of the phantom, with unit
+
+2.8674  2.8674  2.0142  microns
+=> size of a single voxel, with unit
+
+And the list of individual voxels, with the format: X, Y and Z positions, type
+(type is 1 for R, 2 for G, 3 for B):
+232.2582        31.5412         0.0000          2
+235.1256        31.5412         0.0000          2
+...
+
+The low resolution and high resolution files can be used by the run.mac macro.
+
+---->1. GEOMETRY SET-UP
+
+The geometry is a 1-mm side cube ("World") made of air, with a thickness of 100 um,
+containing a liquid water medium ("Medium") of side 900 um and thickness 95 um,
+containing itself the phantom ("Phantom").
+
+The World and Medium dimensions can be changed by UI command.
+
+---->2. SET-UP
+
+Make sure $G4LEDATA points to the low energy electromagnetic data files.
+
+---->3. HOW TO RUN THE EXAMPLE
+
+In interactive mode, run:
+./cellularPhantom
+this will show the phantom in 3D (requires memory).
+
+In batch, the macro run.mac can be used:
+./cellularPhantom run.mac
+
+In this macro, the user can select:
+- the number of threads (MT mode)
+- the phantom file name
+- the World and Medium dimensions
+- the Medium material
+- the phantom voxel density
+- the position (shift in X or Y or Z) of the phantom in the Medium
+- the production cuts outside and inside in the phantom
+- the incident particles (using GPS)
+
+---->4. PHYSICS
+
+The PhysicsList class uses Geant4 option4 electromagnetic physics.
+
+It also contains other physics lists including Geant4-DNA option2,
+which is commented by default.
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS
+
+The output results consists in a phantom.root file, containing three ntuples,
+corresponding to the 3 types of voxels (red, green and blue) of the original image.
+
+The ROOT macro plot.C can be run to extract and display:
+- the cellular phantom
+- the absorbed energy distribution in the 3 types of voxels
+- the absorbed energy 2D map for the 3 types of voxels
+- the absorbed dose 2D map for the 3 types of voxels
+
+Simply do, after the simulation:
+root plot.C
+
+In addition, the following quantities are displayed:
+- total number of voxels in phantom
+- total number of RED voxels in phantom
+- total number of GREEN voxels in phantom
+- total number of BLUE voxels in phantom
+- total absorbed energy in RED voxels (MeV)
+- total absorbed energy in GREEN voxels (MeV)
+- total absorbed energy in BLUE voxels (MeV)
+- total absorbed dose in RED voxels (Gy)
+- total absorbed dose in GREEN voxels (Gy)
+- total absorbed dose in BLUE voxels (Gy)
+
+Results are stored in the results.root file.

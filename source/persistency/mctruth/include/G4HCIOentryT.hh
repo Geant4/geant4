@@ -34,7 +34,6 @@
 #ifndef G4HCIOENTRYT_HH
 #define G4HCIOENTRYT_HH 1
 
-#include <string>
 #include "G4Types.hh"
 #include "G4VPHitsCollectionIO.hh"
 

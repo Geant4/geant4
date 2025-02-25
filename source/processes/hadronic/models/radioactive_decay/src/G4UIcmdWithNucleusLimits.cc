@@ -29,8 +29,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4UIcmdWithNucleusLimits::G4UIcmdWithNucleusLimits
-(const char * theCommandPath,G4UImessenger * theMessenger)
-:G4UIcommand(theCommandPath,theMessenger)
+(const char * theCommandPath, G4UImessenger * theMessenger)
+: G4UIcommand(theCommandPath, theMessenger)
 {
   G4UIparameter * intParamAMin = new G4UIparameter('i');
   SetParameter(intParamAMin);
@@ -51,7 +51,7 @@ G4UIcmdWithNucleusLimits::~G4UIcmdWithNucleusLimits()
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4NucleusLimits G4UIcmdWithNucleusLimits::
-  GetNewNucleusLimitsValue(G4String paramString)
+  GetNewNucleusLimitsValue(const G4String& paramString)
 {
   G4int aMin;
   G4int aMax;
@@ -108,9 +108,3 @@ void G4UIcmdWithNucleusLimits::SetDefaultValue(G4NucleusLimits defLimits)
   G4UIparameter * theParamZMax = GetParameter(3);
   theParamZMax->SetDefaultValue(defLimits.GetZMax());
 }
-
-
-
-
-
-

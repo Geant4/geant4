@@ -15,15 +15,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 ## 2021-12-10 Ben Morgan (phys-ctor-V11-00-00)
 - Change to new Markdown History format
 
----
-
-# History entries prior to 11.0
-
-15-01-2013, Gunter Folger
-
-      -------- Please tag at subdirectory level----------------
-
-15-01-2013, Gunter Folger               (phys-ctor-V09-06-00)
+## 2013-01-15 Gunter Folger (phys-ctor-V09-06-00)
 - Collect constructors subdirectories tags, and CMakeLists.txt & GNUmakefile 
   to allow testing to check out a complete set. Without this tag, CMakeLists.txt
   will not be checked out, as constructors directory is not part of any tag yet.  

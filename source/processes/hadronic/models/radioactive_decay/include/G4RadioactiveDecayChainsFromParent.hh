@@ -65,6 +65,7 @@ typedef std::vector<G4RadioactiveDecayRatesToDaughter> G4RadioactiveDecayRates;
 class G4RadioactiveDecayChainsFromParent
 {
   public:
+
     G4RadioactiveDecayChainsFromParent();
     virtual ~G4RadioactiveDecayChainsFromParent();
   
@@ -72,27 +73,24 @@ class G4RadioactiveDecayChainsFromParent
     G4RadioactiveDecayChainsFromParent& operator=(const G4RadioactiveDecayChainsFromParent&);
   
     // equality operators
-    G4bool operator==(const G4RadioactiveDecayChainsFromParent& right) const
-      {return (this == &right);}
-    G4bool operator!=(const G4RadioactiveDecayChainsFromParent& right) const
-      {return (this != &right);}
+    G4bool operator==(const G4RadioactiveDecayChainsFromParent& right) const {return (this == &right);}
+    G4bool operator!=(const G4RadioactiveDecayChainsFromParent& right) const {return (this != &right);}
   
-  public:
-
-    inline G4String  GetIonName() const {return ionName;}
-    inline void SetIonName(G4String name) {ionName = name;}
+    inline const G4String& GetIonName() const {return ionName;}
+    inline void SetIonName(const G4String& name) {ionName = name;}
 
     // Retrieve the coefficients and decays of all descendants along the
     // decay chains
-    inline G4RadioactiveDecayRates GetItsRates() const {return itsRates;}
+    inline const G4RadioactiveDecayRates& GetItsRates() const {return itsRates;}
 
     // Fill in the coefficients and decay times in the chains
-    inline void SetItsRates(G4RadioactiveDecayRates arate) {itsRates = arate;}
+    inline void SetItsRates(const G4RadioactiveDecayRates& arate) {itsRates = arate;}
 
-protected:
+  protected:
+
     G4String ionName;
     G4RadioactiveDecayRates itsRates;
-
 };
+
 #endif
 

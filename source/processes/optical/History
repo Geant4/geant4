@@ -5,6 +5,8 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2024-07-18 Hans Wenzel (op-V11-02-01)
+- G4OpWLS2.cc: change SetProcessSubType from fOpWLS to fOpWLS2 
 
 ## 2024-05-24 Daren Sawkey (op-V11-02-00)
 - G4OpBoundaryProcess: Calculate Fresnel reflection/refraction correctly when

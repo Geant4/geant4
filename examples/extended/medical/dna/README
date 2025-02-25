@@ -85,9 +85,6 @@ This directory contains a set of Geant4-DNA examples.
    - neuron 
        Irradiation of a realistic neuron cell.
 
-   - moleculardna
-       Damage simulation on DNA geometries.
-
    - jetcounter
       A setup for simulation of a typical experiment with the Jet Counter nanodosemeter
 

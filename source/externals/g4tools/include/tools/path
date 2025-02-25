@@ -5,6 +5,7 @@
 #define tools_path
 
 #include <string>
+#include <utility>
 
 namespace tools {
 
@@ -28,7 +29,7 @@ inline void nosuffix(const std::string& a_string,std::string& a_value,bool a_bac
   std::string _s = a_string.substr(pos,a_string.size()-pos);
   std::string::size_type dot_pos = a_back?_s.rfind('.'):_s.find('.');
   if(dot_pos==std::string::npos) {
-    a_value = _s;
+    a_value = std::move(_s);
   } else {
     a_value = _s.substr(0,dot_pos);
   }

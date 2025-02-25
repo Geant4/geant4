@@ -32,7 +32,6 @@
 
 #include <iostream>
 #include <vector>
-#include <string>
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"

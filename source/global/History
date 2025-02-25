@@ -6,6 +6,57 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-11-22 Gabriele Cosmo (global-V11-02-26)
+- Updated tag IDs for geant4-11-03-ref-00.
+
+## 2024-11-15 Gabriele Cosmo (global-V11-02-25)
+- Updated tag IDs for geant4-11-03-cand-01.
+
+## 2024-11-08 Gabriele Cosmo (global-V11-02-24)
+- Updated tag IDs for geant4-11-03-cand-00.
+
+## 2024-11-07 Ben Morgan (global-V11-02-23)
+- Address Coverity reports:
+  - 104990: Use of std:move to avoid copy
+  - 105615: Refactor expression to avoid divide-by-zero (possible false positive)
+  - 105642: Refactor expression to avoid divide-by-zero (possible false positive)
+
+## 2024-11-04 Philippe Canal (global-V11-02-22)
+- Improve stability of static initialization: ensure unique initialization
+  and finalization of G4ios.
+
+## 2024-10-30 Gabriele Cosmo (global-V11-02-21)
+- Updated tag IDs for geant4-11-02-ref-09.
+
+## 2024-10-28 Makoto Asai (global-V11-02-20)
+- Added G4AllocatorList::Report() for monitoring G4Allocator objects.
+
+## 2024-09-26 Ben Morgan (global-V11-02-19)
+- Move flushing of G4cout etc to G4iosFinalization, attempting to resolve
+  possible static destruction issue reported by ATLAS.
+  - https://its.cern.ch/jira/browse/SIM-839
+
+## 2024-09-25 Gabriele Cosmo (global-V11-02-18)
+- Added protection in G4ConvergenceTester::calStat() in case of zero histories.
+- Updated tag IDs for geant4-11-02-ref-08.
+
+## 2024-08-28 Gabriele Cosmo (global-V11-02-17)
+- Updated tag IDs for geant4-11-02-ref-07.
+
+## 2024-07-19 Ben Morgan (global-V11-02-16)
+- Fix remaining Coverity defects missed in -15.
+  - Move std::move
+  - Restructure division-by-zero in G4SimplexDownhill
+
+## 2024-07-15 Ben Morgan (global-V11-02-15)
+- Address Coverity issues from latest monthly run.
+  - Use of std:move to avoid copies
+  - Avoid potential division-by-zero in G4SimplexDownhill
+- Fixup new clang-tidy warnings.
+
+## 2024-06-28 Ben Morgan (global-V11-02-14)
+- Update G4TBBTaskGroup for changes to underlying PTL API
+
 ## 2024-06-28 Gabriele Cosmo (global-V11-02-13)
 - Updated tag IDs for geant4-11-02-ref-06.
 

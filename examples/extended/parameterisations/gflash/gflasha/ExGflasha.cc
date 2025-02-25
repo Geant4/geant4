@@ -27,7 +27,6 @@
 /// \file ExGflasha.cc
 /// \brief Main program of the parameterisations/gflash/gflasha example
 //
-// Created by Joanna Weng 26.11.2004
 
 // G4 includes
 #include "G4PhysListFactory.hh"
@@ -110,9 +109,6 @@ int main(int argc, char** argv)
   visManager->Initialize();
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand("/run/verbose 0");
-  runManager->Initialize();
-  UImanager->ApplyCommand("/Step/Verbose 0");
 
   if (ui != nullptr)  // Define UI terminal for interactive mode
   {

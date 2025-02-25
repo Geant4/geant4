@@ -105,11 +105,7 @@ public:
 
 private: 
 
-  void Initialise(G4int Z, G4int idx);
-
-  void InitialiseOnFly(G4int Z);
-
-  void FindDirectoryPath();
+  void Initialise(G4int Z);
 
   inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
@@ -122,20 +118,19 @@ private:
   G4double elimit;
 
   G4int index{0};
-  G4bool isInitializer{false};
 
   static const G4int MAXZINELP = 93;
   static G4ElementData* data[5];
   static G4double coeff[MAXZINELP][5];
-  static G4String gDataDirectory[5];
+  static G4String gDataDirectory;
 };
 
 inline
 const G4PhysicsVector* G4ParticleInelasticXS::GetPhysicsVector(G4int Z)
 {
   const G4PhysicsVector* pv = data[index]->GetElementData(Z);
-  if (pv == nullptr) { 
-    InitialiseOnFly(Z);
+  if (pv == nullptr) {
+    Initialise(Z);
     pv = data[index]->GetElementData(Z);
   }
   return pv;

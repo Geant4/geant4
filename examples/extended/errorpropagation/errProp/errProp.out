@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,7 +18,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x1000a80
+ creating G4RunManagerKernel 0xa834c0
  G4ChordFinder: stepperDriverId: 2
 
 The materials defined are : 
@@ -94,15 +94,15 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x12a8a50G4ErrorPhysicsList:: particle process manager e+ = 0x12ad3a0
-0x12a88b0G4ErrorPhysicsList:: particle process manager e- = 0x12adf10
-0x12a8710G4ErrorPhysicsList:: particle process manager gamma = 0x12ae080
-0x12a9dd0G4ErrorPhysicsList:: particle process manager geantino = 0x12b14c0
-0x12a8c30G4ErrorPhysicsList:: particle process manager mu+ = 0x12b1710
-0x12a8f80G4ErrorPhysicsList:: particle process manager mu- = 0x12b1960
-0x12a9360G4ErrorPhysicsList:: particle process manager pi+ = 0x12b1bb0
-0x12a9780G4ErrorPhysicsList:: particle process manager pi- = 0x12b1e00
-0x12a9ba0G4ErrorPhysicsList:: particle process manager proton = 0x12b2050
+0xd3ad20G4ErrorPhysicsList:: particle process manager e+ = 0xd3f670
+0xd3ab80G4ErrorPhysicsList:: particle process manager e- = 0xd40150
+0xd3a9e0G4ErrorPhysicsList:: particle process manager gamma = 0xd402c0
+0xd3c0a0G4ErrorPhysicsList:: particle process manager geantino = 0xd436f0
+0xd3af00G4ErrorPhysicsList:: particle process manager mu+ = 0xd43940
+0xd3b250G4ErrorPhysicsList:: particle process manager mu- = 0xd43b90
+0xd3b630G4ErrorPhysicsList:: particle process manager pi+ = 0xd43de0
+0xd3ba50G4ErrorPhysicsList:: particle process manager pi- = 0xd3f190
+0xd3be70G4ErrorPhysicsList:: particle process manager proton = 0xd43ff0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
  G4ChordFinder: stepperDriverId: 2
@@ -127,10 +127,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -239,6 +242,7 @@ Index : 3     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
@@ -257,6 +261,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
       44.50          0k         3        8         18         0.00    World
       37.80          0k         1       10         10         0.00    HCAL
       17.70          0k         1        4          4         0.00    ECAL
+--------------------------------------------------------------------------------
+
 /tracking/verbose 1
 /geant4e/limits/stepLength 100 mm
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName

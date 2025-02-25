@@ -46,8 +46,6 @@ set(USERVISACTION_SCRIPTS
   userVisAction.in
   userVisAction.out
   init_vis.mac
-  run1.mac
-  run2.mac
   vis.mac
   )
 

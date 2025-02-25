@@ -391,6 +391,18 @@ G4bool G4GenericFileManager::SetNtupleDirectoryName(const G4String& dirName)
 }
 
 //_____________________________________________________________________________
+void G4GenericFileManager::SetCompressionLevel(G4int level)
+{
+  G4BaseFileManager::SetCompressionLevel(level);
+
+  for (auto& fileManager : fFileManagers ) {
+    if ( fileManager != nullptr ) {
+      fileManager->SetCompressionLevel(level);
+    }
+  }
+}
+
+//_____________________________________________________________________________
 void G4GenericFileManager::SetDefaultFileType(const G4String& value)
 {
   // Check if value correspond to a valid file type

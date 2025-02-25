@@ -223,8 +223,9 @@ void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
     curChargeSq += (Z*Z)*w;
     norm += w;
   }
-  curRatio *= (CLHEP::proton_mass_c2/norm);
-  curChargeSq /= norm;
+  if ( norm > 0.0) { norm = 1.0/norm; }
+  curRatio *= (CLHEP::proton_mass_c2*norm);
+  curChargeSq *= norm;
 
   // store results
   std::size_t idx = mat->GetIndex();

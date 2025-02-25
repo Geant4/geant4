@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,7 +33,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -118,8 +117,8 @@ G4ScoringBox : boxMesh_1 --- Shape: Box mesh
    1  nOfStepGamma     with  gammaFilter
    2  nOfStepEMinus     with  eMinusFilter
    3  nOfStepEPlus     with  ePlusFilter
-/run/verbose 1
-/gun/particle e-
+/run/verbose 2
+/gun/particle mu-
 /run/beamOn 2000
 /run/geometryModified
 =======================================================================
@@ -143,10 +142,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -317,7 +319,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -799,7 +801,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -824,10 +826,23 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR G4_WATER 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : boxMesh_1 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
 ========= Table of registered couples ============================
 
@@ -847,27 +862,83 @@ Index : 1     used in the geometry : Yes
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
+Start closing geometry.
+--------------------------------------------------------------------------------
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   5 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            2k boxMesh_1_0
+       0.00         0.00         0.00            2k boxMesh_1_1
+       0.00         0.00         0.00            2k boxMesh_1_2
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      33.33          1k         1       30         30         0.00    boxMesh_1_0
+      33.33          1k         1       30         30         0.00    boxMesh_1_1
+      33.33          1k         1       30         30         0.00    boxMesh_1_2
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=44.460000s Real=46.031008s Sys=0.020000s
+  User=5.480000s Real=5.759561s Sys=0.010000s
+/control/doifInteractive /vis/enable
 #
 ########################################
 #
 # Dump scorers to a file
 #
-/score/dumpQuantityToFile boxMesh_1 eDep eDep.txt
 /score/dumpQuantityToFile boxMesh_1 nOfStepGamma nOfStepGamma.txt
-/score/dumpQuantityToFile boxMesh_1 nOfStepEMinus nOfStepEMinus.txt
-/score/dumpQuantityToFile boxMesh_1 nOfStepEPlus nOfStepEPlus.txt
+#
+#
+########################################
+#
+# drawing projection
+#
+/control/ifInteractive draw.mac
 #
 #
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Deleting G4Run (id:0) 
+UserDetectorConstruction deleted 0xa4aaf0
+UserPhysicsList deleted 0xa46e40
+UserActionInitialization deleted 0xc05bd0
+UserWorkerInitialization deleted 0
+UserWorkerThreadInitialization deleted 0
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+TransportationManager deleted.
+Total navigation history collections cleaned: 49
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.17 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0779 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.0211 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '15G4HCofThisEvent', size : 0.000961 MB
+Pool ID '7G4Track', size : 0.0413 MB
+Pool ID '18G4TouchableHistory', size : 0.00577 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.15 MB
 ============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

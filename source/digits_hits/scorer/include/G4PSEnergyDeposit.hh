@@ -47,8 +47,8 @@
 class G4PSEnergyDeposit : public G4VPrimitivePlotter
 {
  public:
-  G4PSEnergyDeposit(G4String name, G4int depth = 0);  // default unit
-  G4PSEnergyDeposit(G4String name, const G4String& unit, G4int depth = 0);
+  G4PSEnergyDeposit(const G4String& name, G4int depth = 0);  // default unit
+  G4PSEnergyDeposit(const G4String& name, const G4String& unit, G4int depth = 0);
   ~G4PSEnergyDeposit() override = default;
 
  public:

@@ -54,7 +54,6 @@ Ultra High Dose Rate
    - \link Examplednadamage1 dnadamage1  \endlink Damage simulation on a chromatin fiber.
    - \link Examplednadamage2 dnadamage2  \endlink Scoring of plasmid DNA strand breaks using the IRT method.
    - \link Exampleneuron  neuron \endlink  Irradiation of a realistic neuron cell.
-   - \link Examplesmoleculardna  moleculardna \endlink  Damage simulation on DNA geometries.
 
 See the README page inside each example for more detail.
 */

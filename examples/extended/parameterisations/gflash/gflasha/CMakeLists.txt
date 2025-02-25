@@ -40,7 +40,8 @@ target_link_libraries(ExGflasha ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(gflash_SCRIPTS
-    test.mac test0.mac test1.mac vis.mac csi1.mac run01.mac cmpL.C cmpR.C cmpE.C
+    test.mac testLong.mac vis.mac csi.mac csiLong.mac
+    cmpL.C cmpR.C cmpE.C
   )
 
 foreach(_script ${gflash_SCRIPTS})

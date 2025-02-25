@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-
 // G4VHitsCollection
+// --------------------------------------------------------------------
 
 #include "G4VHitsCollection.hh"
 
-G4VHitsCollection::G4VHitsCollection(G4String detName, G4String colNam)
+G4VHitsCollection::G4VHitsCollection(const G4String& detName, const G4String& colNam)
   : collectionName(colNam), SDname(detName), colID(-1)
 {}
 

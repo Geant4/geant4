@@ -25,7 +25,7 @@ G. Milluzzo- INFN-Sezione di Catania, Catania, Italy
 ----> Introduction.                                                     
                                                                        
 The exp_microdosimetry example models different detectors for microdosimetry in space applications. The example lets the user
-choose between the models of a simplified diamond (1), a micro-diamond (2), a simplified silicon (3), a silicon microdosimeter (4), and a two-stage diamond detector (5):
+choose between the models of a simplified diamond (1), a micro-diamond (2), a simplified silicon (3), a silicon microdosimeter (4), a two-stage diamond detector (5) and a SiC microdosimeter (6):
 
 1) A semplified diamond microdosimeter is based on the detector developed by Prof. Anatoly Rosenfeld and his team at the Centre For Medical Radiation Physics, CMRP, University of Wollongong, NSW, Australia. The design of the device is documented in J. Davis, et al., "Characterisation of a novel diamond-based microdosimeter prototype 
 for radioprotection applications in space environments",IEEE Transactions on Nuclear Science, 
@@ -36,6 +36,7 @@ Vol. 59, pp. 3110-3116, 2012.
 3-4) Both silicon microdosimeters are based on the "Bridge" microdosimeter, developed by the Centre For Medical Radiation physics, University of Wollongong, documented in chapter 7 of the PhD Thesis of D. Bolst “Silicon microdosimetry in hadron therapy using Geant4”, https://ro.uow.edu.au/theses1/619/ . (3) contains a simplified geometry with only four sensitive volumes, while (4) includes the complete design.
 
 5) The diamond telescope is based on the detector developed by University of Rome "Tor Vergata". Its design and characterisation are documented in Cesaroni et al., "", Nucl. Instrum. Methods. Phys. Res. A, vol.947, 2019, DOI:https://doi.org/10.1016/j.nima.2019.162744 , and in C. Verona et al., "Characterisation of a monolithic ΔE-E diamond telescope detector using low energy ion microbeams", Radiation Measurements, vol. 159, 2022, DOI:https://doi.org/10.1016/j.radmeas.2022.106875 .
+6) A sempliefied version of a Silicon Carbide (SiC) based microdosimeter developed at INFN-CT, including the 370 um thick substrate. The default size are the following: 100x100x22 um. 
 
 The type of detectors, its shape, and its position can be set via the included "geometry.mac" macro.
 This macro is called in both the vis.mac and run.mac macro files, and include the following options:

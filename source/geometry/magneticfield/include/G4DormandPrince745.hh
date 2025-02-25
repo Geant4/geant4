@@ -75,8 +75,8 @@ class G4DormandPrince745 : public G4MagIntegratorStepper
 
     G4int IntegratorOrder() const override { return 4; }
 
-    const G4String& StepperType() const        { return gStepperType; }
-    const G4String& StepperDescription() const { return gStepperDescription; }
+    const G4String& StepperType() const;
+    const G4String& StepperDescription() const;
    
     const field_utils::State& GetYOut() const { return fyOut; }
 
@@ -88,11 +88,6 @@ class G4DormandPrince745 : public G4MagIntegratorStepper
     G4EquationOfMotion* GetSpecificEquation() { return GetEquationOfMotion(); }
 
   private:
-
-    static const G4String gStepperType;
-    static const G4String gStepperDescription;
-      // Name and description of this steppers
-      // plus details of its implementation
 
     field_utils::State ak2, ak3, ak4, ak5, ak6, ak7, ak8, ak9;
     field_utils::State fyIn, fyOut, fdydxIn;

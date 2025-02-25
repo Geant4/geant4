@@ -49,7 +49,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSFlatSurfaceFlux3D::G4PSFlatSurfaceFlux3D(G4String name, G4int direction,
+G4PSFlatSurfaceFlux3D::G4PSFlatSurfaceFlux3D(const G4String& name, G4int direction,
                                              G4int ni, G4int nj, G4int nk,
                                              G4int di, G4int dj, G4int dk)
   : G4PSFlatSurfaceFlux(name, direction)
@@ -60,7 +60,7 @@ G4PSFlatSurfaceFlux3D::G4PSFlatSurfaceFlux3D(G4String name, G4int direction,
   SetNijk(ni, nj, nk);
 }
 
-G4PSFlatSurfaceFlux3D::G4PSFlatSurfaceFlux3D(G4String name, G4int direction,
+G4PSFlatSurfaceFlux3D::G4PSFlatSurfaceFlux3D(const G4String& name, G4int direction,
                                              const G4String& unit, G4int ni,
                                              G4int nj, G4int nk, G4int di,
                                              G4int dj, G4int dk)

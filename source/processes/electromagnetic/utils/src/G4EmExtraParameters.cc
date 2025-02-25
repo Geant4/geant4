@@ -242,7 +242,7 @@ void G4EmExtraParameters::AddPAIModel(const G4String& particle,
   }
   // new regions and/or particles
   m_particlesPAI.push_back(particle);
-  m_regnamesPAI.push_back(r);
+  m_regnamesPAI.push_back(std::move(r));
   m_typesPAI.push_back(type);
 }
 
@@ -269,7 +269,7 @@ void G4EmExtraParameters::AddPhysics(const G4String& region,
   for(std::size_t i=0; i<nreg; ++i) {
     if(r == m_regnamesPhys[i]) { return; }
   }
-  m_regnamesPhys.push_back(r);
+  m_regnamesPhys.push_back(std::move(r));
   m_typesPhys.push_back(type);
 }
 

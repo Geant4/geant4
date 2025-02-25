@@ -52,26 +52,24 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithADouble;
 
-class GFlashShowerModelMessenger: public G4UImessenger
+class GFlashShowerModelMessenger : public G4UImessenger
 {
   public:
-
-    GFlashShowerModelMessenger(GFlashShowerModel * myModel);
+    GFlashShowerModelMessenger(GFlashShowerModel* myModel);
     ~GFlashShowerModelMessenger();
-  
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
-  
-  private:
 
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
+
+  private:
     GFlashShowerModel* myModel;
-    G4UIdirectory*   myParaDir;
-    G4UIcmdWithAnInteger*  FlagCmd;
-    G4UIcmdWithAnInteger*  ContCmd; // Containment Check
-    G4UIcmdWithADouble*   StepInX0Cmd;
-    G4UIcmdWithADoubleAndUnit*   EmaxCmd;
-    G4UIcmdWithADoubleAndUnit*   EminCmd;
-    G4UIcmdWithADoubleAndUnit*   EkillCmd;
+    G4UIdirectory* myParaDir;
+    G4UIcmdWithAnInteger* FlagCmd;
+    G4UIcmdWithAnInteger* ContCmd;  // Containment Check
+    G4UIcmdWithADouble* StepInX0Cmd;
+    G4UIcmdWithADoubleAndUnit* EmaxCmd;
+    G4UIcmdWithADoubleAndUnit* EminCmd;
+    G4UIcmdWithADoubleAndUnit* EkillCmd;
 };
 
 #endif

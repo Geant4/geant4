@@ -31,7 +31,7 @@
 
 using namespace std;
 
-G4double G4LegendrePolynomial::GetCoefficient(size_t i, size_t order)
+G4double G4LegendrePolynomial::GetCoefficient(std::size_t i, std::size_t order)
 {
   if(order >= fCoefficients.size()) BuildUpToOrder(order);
   if(order >= fCoefficients.size() ||
@@ -46,81 +46,98 @@ G4double G4LegendrePolynomial::EvalLegendrePoly(G4int order, G4double x)
   return (EvalAssocLegendrePoly(order,0,x));
 }
 
-G4double G4LegendrePolynomial::EvalAssocLegendrePoly(G4int l, G4int m, G4double x, 
-                                                     map<G4int, map<G4int, G4double> >* cache)
+G4double G4LegendrePolynomial::EvalAssocLegendrePoly(G4int l, G4int m, G4double x)
 {
-  // Calculate P_l^m(x).
-  // If cache ptr is non-null, use cache[l][m] if it exists, otherwise compute
-  // P_l^m(x) and cache it in that position. The cache speeds up calculations
-  // where many P_l^m computations are need at the same value of x.
+  // Invalid calls --> 0. (Keeping for backward compatibility; should we throw instead?)
+  if (l<0 || m<-l || m>l) return 0.0;
 
-  if(l<0 || m<-l || m>l) return 0;
-  G4Pow* g4pow =  G4Pow::GetInstance();
+  // New check: g4pow doesn't handle integer arguments over 512.
+  // For us that means:
+  if ((l+m) > 512 || (l-m) > 512 || (2*m) > 512) return 0.0; 
 
-  // Use non-log factorial for low l, m: it is more efficient until 
-  // l and m get above 10 or so.
-  // FIXME: G4Pow doesn't check whether the argument gets too large, 
-  // which is unsafe! Max is 512; VI: It is assume that Geant4 does not
-  // need higher order
-  if(m<0) {
-    G4double value = (m%2 ? -1. : 1.) * EvalAssocLegendrePoly(l, -m, x);
-    if(l < 10) return value * g4pow->factorial(l+m)/g4pow->factorial(l-m);
-    else { return value * G4Exp(g4pow->logfactorial(l+m) - g4pow->logfactorial(l-m));
-    }
-  }
+  G4Pow* g4pow = G4Pow::GetInstance();
+  G4double x2 = x*x;
 
   // hard-code the first few orders for speed
-  if(l==0)   return 1;
-  if(l==1) {
-    if(m==0){return x;}
-    /*m==1*/ return -sqrt(1.-x*x);
-  }
-  if(l<5) {
-    G4double x2 = x*x;
-    if(l==2) {
-      if(m==0){return 0.5*(3.*x2 - 1.);}
-      if(m==1){return -3.*x*sqrt(1.-x2);}
-      /*m==2*/ return 3.*(1.-x2);
-    }
-    if(l==3) {
-      if(m==0){return 0.5*(5.*x*x2 - 3.*x);}
-      if(m==1){return -1.5*(5.*x2-1.)*sqrt(1.-x2);}
-      if(m==2){return 15.*x*(1.-x2);}
-      /*m==3*/ return -15.*(1.-x2)*sqrt(1.-x2);
-    }
-    if(l==4) {
-      if(m==0){return 0.125*(35.*x2*x2 - 30.*x2 + 3.);}
-      if(m==1){return -2.5*(7.*x*x2-3.*x)*sqrt(1.-x2);}
-      if(m==2){return 7.5*(7.*x2-1.)*(1.-x2);}
-      if(m==3){return -105.*x*(1.-x2)*sqrt(1.-x2);}
-      /*m==4*/ return 105.*(1. - 2.*x2 + x2*x2);
-    }
-  }
+  switch (l) {
+    case 0 : 
+      return 1;
+    case 1 : 
+      switch (m) {
+        case -1 : return 0.5 * sqrt(1.-x2); 
+        case 0 : return x;
+        case 1 : return -sqrt(1.-x2);
+      }; 
+      break;
+    case 2 :
+      switch (m) {
+        case -2 : return 0.125 * (1.0 - x2);
+        case -1 : return 0.5 * x * sqrt(1.0 - x2);
+        case 0 : return 0.5*(3.*x2 - 1.);
+        case 1 : return -3.*x*sqrt(1.-x2); 
+        case 2 : return 3.*(1.-x2);
+      };
+      break;
+    case 3 : 
+      switch (m) {
+        case -3 : return (1.0/48.0) * (1.0 - x2) * sqrt(1.0 - x2);
+        case -2 : return 0.125 * x * (1.0 - x2);
+        case -1 : return 0.125 * (5.0 * x2 - 1.0) * sqrt(1.0 - x2);
+        case 0 : return 0.5*(5.*x*x2 - 3.*x);
+        case 1 : return -1.5*(5.*x2-1.)*sqrt(1.-x2);
+        case 2 : return 15.*x*(1.-x2);
+        case 3 : return -15.*(1.-x2)*sqrt(1.-x2);
+      };
+      break;
+    case 4 :
+      switch (m) {
+        case -4 : return (105.0/40320.0)*(1. - 2.*x2 + x2*x2);
+        case -3 : return (105.0/5040.0)*x*(1.-x2)*sqrt(1.-x2);
+        case -2 : return (15.0/720.0)*(7.*x2-1.)*(1.-x2);
+        case -1 : return 0.125*(7.*x*x2-3.*x)*sqrt(1.-x2);
+        case 0 : return 0.125*(35.*x2*x2 - 30.*x2 + 3.);
+        case 1 : return -2.5*(7.*x*x2-3.*x)*sqrt(1.-x2);
+        case 2 : return 7.5*(7.*x2-1.)*(1.-x2);
+        case 3 : return -105.*x*(1.-x2)*sqrt(1.-x2);
+        case 4 : return 105.*(1. - 2.*x2 + x2*x2);
+      };
+      break;
+  };
 
-  // Easy special cases
-  // FIXME: G4Pow doesn't check whether the argument gets too large, which is unsafe! Max is 512. 
-  if(m==l) return (l%2 ? -1. : 1.) * 
-	     G4Exp(g4pow->logfactorial(2*l) - g4pow->logfactorial(l)) * 
-	     G4Exp(G4Log((1.-x*x)*0.25)*0.5*G4double(l));
-  if(m==l-1) return x*(2.*G4double(m)+1.)*EvalAssocLegendrePoly(m,m,x);
+  // if m<0, compute P[l,-m,x] and correct
+  if (m < 0)
+  {
+    G4double complementary_value = EvalAssocLegendrePoly(l, -m, x);
+    return complementary_value * (m%2==0 ? 1.0 : -1.0) * g4pow->factorial(l+m)/g4pow->factorial(l-m);
+  } 
 
-  // See if we have this value cached.
-  if(cache != NULL && cache->count(l) > 0 && (*cache)[l].count(m) > 0) {
-    return (*cache)[l][m];
+  // Iteratively walk up from P[m,m,x] to P[l,m,x]
+
+  // prime the pump: P[l<m,m,x] = 0
+  G4double previous = 0.0;
+
+  // prime the pump: P[m,m,x]
+  G4double current; 
+  if (m == 0) current = 1.0;
+  else if (m == 1) current = -sqrt((1.0 - (x2)));
+  else {
+    current = (m%2==0 ? 1.0 : -1.0) * 
+	     G4Exp(g4pow->logfactorial(2*m) - g4pow->logfactorial(m)) * 
+	     G4Exp(G4Log((1.0-(x2))*0.25)*0.5*G4double(m));
   }
-
-  // Otherwise calculate recursively
-  G4double value = (x*G4double(2*l-1)*EvalAssocLegendrePoly(l-1,m,x) - 
-	           (G4double(l+m-1))*EvalAssocLegendrePoly(l-2,m,x))/G4double(l-m);
-
-  // If we are working with a cache, cache this value.
-  if(cache != NULL) {
-    (*cache)[l][m] = value;
+  
+  // Work up to P[l,m,x] 
+  for(G4int i=m+1; i<=l; i++)
+  {
+    G4double next = (-(G4double(i+m-1))*previous + x*G4double(2*i-1)*current )/G4double(i-m);
+    previous = current;
+    current = next;
   }
-  return value;
+  
+  return current;
 }
 
-void G4LegendrePolynomial::BuildUpToOrder(size_t orderMax)
+void G4LegendrePolynomial::BuildUpToOrder(std::size_t orderMax)
 {
   if(orderMax > 30) {
     G4cout << "G4LegendrePolynomial::GetCoefficient(): "
@@ -129,11 +146,11 @@ void G4LegendrePolynomial::BuildUpToOrder(size_t orderMax)
     return;
   }
   while(fCoefficients.size() < orderMax+1) {  /* Loop checking, 30-Oct-2015, G.Folger */
-    size_t order = fCoefficients.size();
+    std::size_t order = fCoefficients.size();
     fCoefficients.resize(order+1);
     if(order <= 1) fCoefficients[order].push_back(1.);
     else {
-      for(size_t iCoeff = 0; iCoeff < order+1; ++iCoeff) {
+      for(std::size_t iCoeff = 0; iCoeff < order+1; ++iCoeff) {
         if((order % 2) == (iCoeff % 2)) {
           G4double coeff = 0;
           if(iCoeff <= order-2) coeff -= fCoefficients[order-2][iCoeff/2]*G4double(order-1);

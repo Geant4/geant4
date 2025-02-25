@@ -23,35 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPrimitiveScorer
 //
+// Class description:
 //
-
+// This is the base class of the sensitive detector which owns
+// only one hits collection.
+// A concrete class object derived from this base class can be
+// used either as a sensitive detector or to be registered to
+// G4MultiFunctionalDetector to define multiple functionalities.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VPrimitiveScorer_h
 #define G4VPrimitiveScorer_h 1
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VSDFilter.hh"
 #include "globals.hh"
 
-// class description:
-//
-//  This is the base class of the sensitive detector which owns
-// only one hits collection.
-//  A concrete class object derived from this base class can be
-// used either as a sensitive detector or to be registered to
-// G4MultiFunctionalDetector to define multiple functionalities.
-//
-//
+class G4Step;
+class G4HCofThisEvent;
+class G4TouchableHistory;
 
 class G4VPrimitiveScorer
 {
   friend class G4MultiFunctionalDetector;
 
  public:
-  G4VPrimitiveScorer(G4String name, G4int depth = 0);
+  G4VPrimitiveScorer(const G4String& name, G4int depth = 0);
   virtual ~G4VPrimitiveScorer() = default;
 
   // This method returns the ID of its hitsCollection. This mehod
@@ -74,7 +74,7 @@ class G4VPrimitiveScorer
   // Set/Get methods
   inline void SetMultiFunctionalDetector(G4MultiFunctionalDetector* d) { detector = d; }
   inline G4MultiFunctionalDetector* GetMultiFunctionalDetector() const { return detector; }
-  inline G4String GetName() const { return primitiveName; }
+  inline const G4String& GetName() const { return primitiveName; }
   inline void SetFilter(G4VSDFilter* f) { filter = f; }
   inline G4VSDFilter* GetFilter() const { return filter; }
   inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }

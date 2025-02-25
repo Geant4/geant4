@@ -40,6 +40,7 @@
 #include "G4Gamma.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4UnknownParticle.hh"
+#include "G4ChargedUnknownParticle.hh"
 
 // Leptons
 #include "G4MuonPlus.hh"

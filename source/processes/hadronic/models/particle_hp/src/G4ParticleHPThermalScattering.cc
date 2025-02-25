@@ -125,7 +125,7 @@ void G4ParticleHPThermalScattering::BuildPhysicsTable(const G4ParticleDefinition
 }
 
 std::map<G4double, std::vector<std::pair<G4double, G4double>*>*>*
-G4ParticleHPThermalScattering::readACoherentFSDATA(G4String name)
+G4ParticleHPThermalScattering::readACoherentFSDATA(const G4String& name)
 {
   auto aCoherentFSDATA = new std::map<G4double, std::vector<std::pair<G4double, G4double>*>*>;
 
@@ -164,7 +164,7 @@ G4ParticleHPThermalScattering::readACoherentFSDATA(G4String name)
 }
 
 std::map<G4double, std::vector<E_P_E_isoAng*>*>*
-G4ParticleHPThermalScattering::readAnInelasticFSDATA(G4String name)
+G4ParticleHPThermalScattering::readAnInelasticFSDATA(const G4String& name)
 {
   auto anT_E_P_E_isoAng = new std::map<G4double, std::vector<E_P_E_isoAng*>*>;
 
@@ -250,7 +250,7 @@ G4ParticleHPThermalScattering::readAnE_P_E_isoAng(std::istream* file)  // for in
 }
 
 std::map<G4double, std::vector<E_isoAng*>*>*
-G4ParticleHPThermalScattering::readAnIncoherentFSDATA(G4String name)
+G4ParticleHPThermalScattering::readAnIncoherentFSDATA(const G4String& name)
 {
   auto T_E = new std::map<G4double, std::vector<E_isoAng*>*>;
 
@@ -563,9 +563,9 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
       E_isoAng anEPM_T_E_sampled;
       G4double rand_temp = G4UniformRand();
       if (rand_temp < (aTemp - tempLH.first) / (tempLH.second - tempLH.first))
-        anEPM_T_E_sampled = anEPM_TH_E;
+        anEPM_T_E_sampled = std::move(anEPM_TH_E);
       else
-        anEPM_T_E_sampled = anEPM_TL_E;
+        anEPM_T_E_sampled = std::move(anEPM_TL_E);
 
       mu = getMu(&anEPM_T_E_sampled);
 
@@ -1061,8 +1061,7 @@ void G4ParticleHPThermalScattering::buildPhysicsTable()
   }
 
   // Searching TS Elements
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
   std::size_t numberOfElements = G4Element::GetNumberOfElements();
   for (std::size_t i = 0; i < numberOfElements; ++i) {
     const G4Element* element = (*theElementTable)[i];
@@ -1172,8 +1171,8 @@ const std::pair<G4double, G4double> G4ParticleHPThermalScattering::GetFatalEnerg
   return std::pair<G4double, G4double>(10.0 * perCent, 350.0 * CLHEP::GeV);
 }
 
-void G4ParticleHPThermalScattering::AddUserThermalScatteringFile(G4String nameG4Element,
-                                                                 G4String filename)
+void G4ParticleHPThermalScattering::AddUserThermalScatteringFile(const G4String& nameG4Element,
+                                                                 const G4String& filename)
 {
   names.AddThermalElement(nameG4Element, filename);
   theXSection->AddUserThermalScatteringFile(nameG4Element, filename);

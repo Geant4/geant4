@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class description:
+// G4TScoreHistFiller inline definitions
 //
-// This class implements filling histogram
-// In order to avoid introducing dependency on the analysis category,
-// the analysis manager type is defined via template.
-//
-// Created : M. Asai (Sept. 2020)
-//
-//
+// Author: Makoto Asai, September 2020
+//---------------------------------------------------------------------
 
 template <typename T>
 void G4TScoreHistFiller<T>::CreateAnalysisManager()

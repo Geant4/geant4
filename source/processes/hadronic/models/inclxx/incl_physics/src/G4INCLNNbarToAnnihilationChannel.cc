@@ -69,7 +69,7 @@ G4double NNbarToAnnihilationChannel::read_file(std::string filename, std::vector
           while (iss >> type) {
               types.push_back(type);
           }
-          particle_types.push_back(types);
+          particle_types.push_back(std::move(types));
       }
   }
   else std::cout << "ERROR no fread_file " << filename << std::endl;

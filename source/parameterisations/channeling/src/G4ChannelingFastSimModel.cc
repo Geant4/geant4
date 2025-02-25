@@ -23,7 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file B107FastSim/src/G4ChannelingFastSimModel.cc
+// Author:      Alexei Sytov
+// Co-author:   Gianfranco Paternò (modifications & testing)
+// On the base of the CRYSTALRAD realization of channeling model:
+// A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
+
+/// \file G4ChannelingFastSimModel.cc
 /// \brief Implementation of the G4ChannelingFastSimModel class
 //
 //
@@ -101,12 +106,15 @@ G4bool G4ChannelingFastSimModel::ModelTrigger(const G4FastTrack& fastTrack)
       //particle mass
       G4double mass = fastTrack.GetPrimaryTrack()->GetParticleDefinition()->GetPDGMass();
       //particle total energy
-      G4double etotal = fastTrack.GetPrimaryTrack()->GetTotalEnergy();
+      G4double etotal = mass + ekinetic;
+      //particle charge
+      G4double charge = fastTrack.GetPrimaryTrack()->
+                        GetParticleDefinition()->GetPDGCharge();
 
       //Particle position
       G4ThreeVector xyz0 = fastTrack.GetPrimaryTrackLocalPosition();
       //Step estimate
-      G4double dz0 = fCrystalData->GetMaxSimulationStep(etotal,mass);
+      G4double dz0 = fCrystalData->GetMaxSimulationStep(etotal,mass,charge);
       xyz0 += 2*dz0*momentumDirection;//overestimated particle shift on the next step
                                       //in channeling
 
@@ -117,8 +125,12 @@ G4bool G4ChannelingFastSimModel::ModelTrigger(const G4FastTrack& fastTrack)
                       Inside(xyz0)==kInside) &&
                       momentumDirection.z()>0. &&
                       std::abs(angle) <
-                      GetLindhardAngleNumberHighLimit(particleDefinitionID) *
-                      fCrystalData->GetLindhardAngle(etotal,mass);
+                      std::max(
+                          GetLindhardAngleNumberHighLimit(particleDefinitionID) *
+                          fCrystalData->GetLindhardAngle(etotal,
+                                                         mass,
+                                                         charge),
+                          GetHighAngleLimit(particleDefinitionID));
   }
 
   return modelTrigger;
@@ -132,7 +144,10 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
   G4double etotal;//particle total energy
   G4double etotalPreStep;//etotal at the previous step
   G4double etotalToSetParticleProperties;//etotal value at which
-                                         //SetParticleProperties is called
+                                         //SetParticleProperties is calculated
+  G4double ekinetic = 0;//kinetic energy
+  G4double eDeposited = 0.;//deposited energy along the trajectory
+  G4double elossAccum = 0;// accumulate local energy loss (not radiation)
   G4double mass;  //particle mass
   G4double charge;//particle charge
   G4double tGlobal; //global time
@@ -151,6 +166,7 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
   G4ThreeVector scatteringAnglesAndEnergyLoss;//output of scattering functions
   G4double lindhardAngleNumberHighLimit0; //current high limit of the angle expressed in
                                           //[Lindhard angle] units
+  G4double highAngleLimit0; //current absolute high limit of the angle expressed
 
   //coordinates in Runge-Kutta calculations
   G4double x1=0.,x2=0.,x3=0.,x4=0.,y1=0.,y2=0.,y3=0.,y4=0.;
@@ -179,20 +195,21 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
       fBaierKatkov->ResetRadIntegral();//to avoid any memory from the previous trajectory
   }
 
-  etotal = fastTrack.GetPrimaryTrack()->GetTotalEnergy();
   mass = fastTrack.GetPrimaryTrack()->GetParticleDefinition()->GetPDGMass();
+  etotal = mass + fastTrack.GetPrimaryTrack()->GetKineticEnergy();
   charge = fastTrack.GetPrimaryTrack()->GetParticleDefinition()->GetPDGCharge();
 
-  // we need to distunguish only charge particles, either leptons or hadrons
-  G4bool hadron =
-          fastTrack.GetPrimaryTrack()->GetParticleDefinition()->GetLeptonNumber()==0;
+  G4String particleName =
+      fastTrack.GetPrimaryTrack()->GetParticleDefinition()->GetParticleName();
 
   lindhardAngleNumberHighLimit0 =
       GetLindhardAngleNumberHighLimit(fastTrack.GetPrimaryTrack()->
                                       GetParticleDefinition()->GetParticleDefinitionID());
+  highAngleLimit0 = GetHighAngleLimit(fastTrack.GetPrimaryTrack()->
+                                      GetParticleDefinition()->GetParticleDefinitionID());
 
   //set fCrystalData parameters depending on the particle parameters
-  fCrystalData->SetParticleProperties(etotal, mass, charge, hadron);
+  fCrystalData->SetParticleProperties(etotal, mass, charge, particleName);
 
   //global time
   tGlobal = fastTrack.GetPrimaryTrack()->GetGlobalTime();
@@ -324,7 +341,7 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
                          CoulombAtomicScattering(effectiveStep,momentumDirectionStep,i);
 
           //Amorphous part of ionization energy losses
-          etotal-=fCrystalData->IonizationLosses(momentumDirectionStep, i);
+          elossAccum += fCrystalData->IonizationLosses(momentumDirectionStep, i);
       }
       //electron scattering and coherent part of ionization energy losses
       scatteringAnglesAndEnergyLoss += fCrystalData->CoulombElectronScattering(
@@ -333,13 +350,13 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
                                                    momentumDirectionStep);
       tx += scatteringAnglesAndEnergyLoss.x();
       ty += scatteringAnglesAndEnergyLoss.y();
-      etotal -= scatteringAnglesAndEnergyLoss.z();
+      elossAccum += scatteringAnglesAndEnergyLoss.z();
 
       // recalculate the energy depended parameters
       //(only if the energy decreased enough, not at each step)
       if (etotalToSetParticleProperties>etotal)
       {
-          fCrystalData->SetParticleProperties(etotal, mass, charge, hadron);
+          fCrystalData->SetParticleProperties(etotal, mass, charge, particleName);
           etotalToSetParticleProperties = etotal*0.999;
       }
 
@@ -359,14 +376,18 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
          {
              //if the angle w.r.t. the planes is too high
              if (std::abs(tx) >=
-                     lindhardAngleNumberHighLimit0*fCrystalData->GetLindhardAngle())
+                 std::max(lindhardAngleNumberHighLimit0*
+                              fCrystalData->GetLindhardAngle(),
+                          highAngleLimit0))
                 {inCrystal = false;}//escape the cycle
          }
          else if (fCrystalData->GetModel()==2) //2D model, field of axes
          {
              //if the angle w.r.t. the axes is too high
-             if (std::sqrt(tx*tx+ty*ty) >= lindhardAngleNumberHighLimit0*
-                                           fCrystalData->GetLindhardAngle())
+             if (std::sqrt(tx*tx+ty*ty) >=
+                 std::max(lindhardAngleNumberHighLimit0*
+                              fCrystalData->GetLindhardAngle(),
+                          highAngleLimit0))
                 {inCrystal = false;}//escape the cycle
          }
 
@@ -403,7 +424,7 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
                    fBaierKatkov->GeneratePhoton(fastStep);
 
                    //particle energy was changed
-                   fCrystalData->SetParticleProperties(etotal, mass, charge, hadron);
+                   fCrystalData->SetParticleProperties(etotal, mass, charge, particleName);
 
                    //coordinates in the co-rotating reference system within a channel
                    xyz = fCrystalData->CoordinatesFromBoxToLattice(xyz0);
@@ -414,6 +435,25 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
                    //angles in the co-rotating reference system within a channel
                    tx = fCrystalData->AngleXFromBoxToLattice(tx0,z);
                    ty = ty0;
+               }
+           }
+           else
+           {
+               //we calculate deposited energy and energy losses ONLY in absence
+               //of radiation otherwise we do it only at the end of model
+               etotal -= elossAccum;
+               eDeposited += elossAccum;
+               elossAccum=0;
+               ekinetic = etotal-mass;
+               if(ekinetic<1*keV)
+               {
+                   G4cout << "Warning in G4ChannelingFastSimModel: " <<
+                   ekinetic << "<" << 1*keV << " !" << G4endl;
+                   eDeposited-=(1*keV-ekinetic);
+                   ekinetic = 1*keV;
+                   G4cout << "Setting deposited energy=" <<
+                   eDeposited << " & ekinetic=" << ekinetic << G4endl;
+                   etotal = mass+ekinetic;
                }
            }
 
@@ -458,10 +498,25 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
   fastStep.ProposePrimaryTrackFinalTime(tGlobal);
   //set final position
   fastStep.ProposePrimaryTrackFinalPosition(xyz0);
+
+  //set deposited energy (due to ionization)
+  etotal -= elossAccum;
+  eDeposited += elossAccum;
+  ekinetic = etotal-mass;
+  if(ekinetic<1*keV)
+  {
+      G4cout << "Warning in G4ChannelingFastSimModel: " <<
+      ekinetic << "<" << 1*keV << " !" << G4endl;
+      eDeposited-=(1*keV-ekinetic);
+      ekinetic = 1*keV;
+      G4cout << "Setting deposited energy=" <<
+      eDeposited << " & ekinetic=" << ekinetic << G4endl;
+  }
+  fastStep.ProposeTotalEnergyDeposited(eDeposited);
   //set final kinetic energy
-  fastStep.ProposePrimaryTrackFinalKineticEnergy(etotal-
-                         fastTrack.GetPrimaryTrack()->
-                                   GetParticleDefinition()->GetPDGMass());
+  fastStep.ProposePrimaryTrackFinalKineticEnergy(ekinetic);
+
+
   //set final momentum direction
   G4double momentumDirectionZ =
           1./std::sqrt(1.+std::pow(std::tan(tx0),2)+std::pow(std::tan(ty0),2));
@@ -473,14 +528,16 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4ChannelingFastSimModel::Input(const G4Material *crystal, const G4String &lattice)
+void G4ChannelingFastSimModel::Input(const G4Material *crystal,
+                                     const G4String &lattice,
+                                     const G4String &filePath)
 {
    //initializing the class with containing all
    //the crystal material and crystal lattice data and
    //Channeling scattering and ionization processes
    fCrystalData = new G4ChannelingFastSimCrystalData();
    //setting all the crystal material and lattice data
-   fCrystalData->SetMaterialProperties(crystal,lattice);
+   fCrystalData->SetMaterialProperties(crystal,lattice,filePath);
 
    //setting default low energy cuts for kinetic energy
    SetLowKineticEnergyLimit(1*GeV,"proton");

@@ -75,7 +75,7 @@ void G4SolidStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::IsGeometryClosed())
+  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the solid store"
            << " while geometry closed !" << G4endl;

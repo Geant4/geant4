@@ -55,11 +55,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
+G4PSPassageCellFlux::G4PSPassageCellFlux(const G4String& name, G4int depth)
   : G4PSPassageCellFlux(name, "percm2", depth)
 {}
 
-G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
+G4PSPassageCellFlux::G4PSPassageCellFlux(const G4String& name, const G4String& unit,
                                          G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)

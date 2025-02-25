@@ -285,7 +285,7 @@ void G4AtomicTransitionManager::Initialise()
 
   // Selection of fluorescence files
   
-  G4String defaultDirectory = "/fluor";
+  const G4String& defaultDirectory = "/fluor";
   G4String fluoDirectory = defaultDirectory;
   G4String bindingDirectory = defaultDirectory;
   G4EmFluoDirectory fdir = G4EmParameters::Instance()->FluoDirectory();
@@ -325,12 +325,12 @@ void G4AtomicTransitionManager::Initialise()
 	  G4AtomicShell * shell = new G4AtomicShell(shellId,bindingEnergy);
 	  vectorOfShells.push_back(shell);
 	}
-      shellTable[Z] = vectorOfShells;
+      shellTable[Z] = std::move(vectorOfShells);
     }
   
   // Fills transitionTable with the data on identities, transition 
   // energies and transition probabilities
-  G4String dir = fluoDirectory;
+  G4String dir = std::move(fluoDirectory);
   for (G4int Znum= infTableLimit; Znum<=supTableLimit; ++Znum)
     {  
       if (Znum == zLim) { dir = defaultDirectory; }
@@ -368,7 +368,7 @@ void G4AtomicTransitionManager::Initialise()
 				  vectorOfEnergies,vectorOfProbabilities);
 	  vectorOfTransitions.push_back(transition); 
 	}
-      transitionTable[Znum] = vectorOfTransitions;
+      transitionTable[Znum] = std::move(vectorOfTransitions);
       delete fluoManager;
     }
   delete shellManager;

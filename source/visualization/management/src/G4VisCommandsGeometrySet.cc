@@ -39,7 +39,7 @@
 #define G4warn G4cout
 
 void G4VVisCommandGeometrySet::Set
-(G4String requestedName,
+(const G4String& requestedName,
  const G4VVisCommandGeometrySetFunction& setFunction,
  G4int requestedDepth)
 {

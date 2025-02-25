@@ -23,20 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
 // G4ILawTruncatedExp
 //
 // Class Description:
-//     A G4VBiasingInteractionLaw representing a truncated exponential
-//  law : an exponential law acting on [0,L] segment. The law is
-//  driven by a cross-section.
 //
-// ---------------------------------------------------------------
-//   Initial version                         Nov. 2013 M. Verderi
-
+// A G4VBiasingInteractionLaw representing a truncated exponential
+// law : an exponential law acting on [0,L] segment. The law is
+// driven by a cross-section.
+//
+// Author: Marc Verderi, November 2013.
+// --------------------------------------------------------------------
 #ifndef G4ILawTruncatedExp_hh
 #define G4ILawTruncatedExp_hh 1
 
@@ -44,34 +40,32 @@
 
 class G4ILawTruncatedExp : public G4VBiasingInteractionLaw
 {
-public:
-  G4ILawTruncatedExp(G4String name = "expForceInteractionLaw");
-  virtual ~G4ILawTruncatedExp();
+  public:
+
+    G4ILawTruncatedExp(const G4String& name = "expForceInteractionLaw");
+    virtual ~G4ILawTruncatedExp();
   
-public:
-  virtual G4double     ComputeEffectiveCrossSectionAt(G4double               length) const;
-  virtual G4double ComputeNonInteractionProbabilityAt(G4double               length) const;
-  // -- sample the distribution
-  virtual  G4double           SampleInteractionLength();
-  // -- move by true path length, this position becomes the new initial point
-  virtual G4double     UpdateInteractionLengthForStep(G4double       truePathLength);
-  virtual G4bool IsSingular() const {return fIsSingular;}
+    virtual G4double ComputeEffectiveCrossSectionAt(G4double length) const;
+    virtual G4double ComputeNonInteractionProbabilityAt(G4double length) const;
+    // -- sample the distribution
+    virtual G4double SampleInteractionLength();
+    // -- move by true path length, this position becomes the new initial point
+    virtual G4double UpdateInteractionLengthForStep(G4double truePathLength);
+    virtual G4bool IsSingular() const { return fIsSingular; }
 
-public:
-  void SetForceCrossSection(G4double xs);
+    void SetForceCrossSection(G4double xs);
 
-public:
-  void         SetMaximumDistance(G4double d) { fMaximumDistance = d;}
-  G4double     GetMaximumDistance() const     { return fMaximumDistance;}
-  G4double GetInteractionDistance() const     { return fInteractionDistance; }
+    void SetMaximumDistance(G4double d) { fMaximumDistance = d; }
+    G4double GetMaximumDistance() const { return fMaximumDistance; }
+    G4double GetInteractionDistance() const { return fInteractionDistance; }
 
-private:
-  G4double     fMaximumDistance;
-  G4double        fCrossSection;
-  G4double fCrossSectionDefined;
-  G4bool            fIsSingular;
-  G4double fInteractionDistance;
+  private:
 
+    G4double fMaximumDistance = 0.0;
+    G4double fCrossSection = 0.0;
+    G4bool fCrossSectionDefined = false;
+    G4bool fIsSingular = false;
+    G4double fInteractionDistance = 0.0;
 };
 
 #endif

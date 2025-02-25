@@ -29,89 +29,91 @@
 //
 //
 
-#include "FTFP_BERT.hh"
-#include "RE03ActionInitialization.hh"
-#include "RE03DetectorConstruction.hh"
+#include "G4Types.hh"
 
 #include "G4RunManagerFactory.hh"
-#include "G4ScoringManager.hh"
-#include "G4Types.hh"
-#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
+#include "G4ScoringManager.hh"
+
+#include "RE03DetectorConstruction.hh"
+#include "FTFP_BERT.hh" 
+#include "RE03ActionInitialization.hh"
+
 #include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
 
 //====================================================================
 // Un-comment this line for user defined score writer
 //    #include "RE03UserScoreWriter.hh"
 //====================================================================
 
-int main(int argc, char** argv)
+int main(int argc,char** argv)
 {
-  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
-  G4UIExecutive* ui = nullptr;
-  if (argc == 1) {
-    ui = new G4UIExecutive(argc, argv);
-  }
+ // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+ G4UIExecutive* ui = nullptr;
+ if ( argc == 1 ) {
+   ui = new G4UIExecutive(argc, argv);
+ }
 
-  // Construct the run manager
-  //
-  auto* runManager = G4RunManagerFactory::CreateRunManager();
-  runManager->SetNumberOfThreads(4);
+ // Construct the run manager
+ //
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
+ runManager->SetNumberOfThreads(4);
 
-  // Activate UI-command base scorer
-  G4ScoringManager* scManager = G4ScoringManager::GetScoringManager();
-  scManager->SetVerboseLevel(1);
+ // Activate UI-command base scorer
+ G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
+ scManager->SetVerboseLevel(1);
 
-  //====================================================================
-  // Un-comment this line for user defined score writer
-  //    scManager->SetScoreWriter(new RE03UserScoreWriter());
-  //====================================================================
+//====================================================================
+// Un-comment this line for user defined score writer
+//    scManager->SetScoreWriter(new RE03UserScoreWriter());
+//====================================================================
 
-  // Set mandatory initialization classes
-  //
-  G4VUserDetectorConstruction* detector = new RE03DetectorConstruction;
-  runManager->SetUserInitialization(detector);
-  //
-  G4VUserPhysicsList* physics = new FTFP_BERT;
-  runManager->SetUserInitialization(physics);
+ // Set mandatory initialization classes
+ //
+ G4VUserDetectorConstruction* detector = new RE03DetectorConstruction;
+ runManager->SetUserInitialization(detector);
+ //
+ G4VUserPhysicsList* physics = new FTFP_BERT;
+ runManager->SetUserInitialization(physics);
+    
+ // Set user action classes through Worker Initialization
+ //
+ RE03ActionInitialization* actions = new RE03ActionInitialization;
+ runManager->SetUserInitialization(actions);
+  
+ // Visualization manager
+ G4VisManager* visManager = new G4VisExecutive;
+ visManager->Initialize();
 
-  // Set user action classes through Worker Initialization
-  //
-  RE03ActionInitialization* actions = new RE03ActionInitialization;
-  runManager->SetUserInitialization(actions);
+ // Initialize G4 kernel
+ //
+ runManager->Initialize();
+  
+ // Get the pointer to the User Interface manager
+ //
+ G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  // Visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
-
-  // Get the pointer to the User Interface manager
-  //
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  if (ui)  // Define UI session for interactive mode
-  {
-    UImanager->ApplyCommand("/control/execute vis.mac");
-    ui->SessionStart();
-    delete ui;
-  }
-  else  // Batch mode
-  {
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command + fileName);
-  }
+ if (ui)   // Define UI session for interactive mode
+ {
+   UImanager->ApplyCommand("/control/execute vis.mac");
+   ui->SessionStart();
+   delete ui;
+ }
+ else           // Batch mode
+ { 
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+ }
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-  delete visManager;
-  delete runManager;
+ delete visManager;
+ delete runManager;
 
-  return 0;
+ return 0;
 }

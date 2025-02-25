@@ -119,7 +119,7 @@ G4bool G4UIcommand::operator!=(const G4UIcommand& right) const
 }
 
 // --------------------------------------------------------------------
-G4int G4UIcommand::DoIt(G4String parameterList)
+G4int G4UIcommand::DoIt(const G4String& parameterList)
 {
   G4String correctParameters;
   std::size_t n_parameterEntry = parameter.size();
@@ -220,7 +220,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
     return 0;
   }
 
-  messenger->SetNewValue(this, correctParameters);
+  messenger->SetNewValue(this, std::move(correctParameters));
   return 0;
 }
 

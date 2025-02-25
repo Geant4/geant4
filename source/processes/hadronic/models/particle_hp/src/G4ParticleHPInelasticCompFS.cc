@@ -126,17 +126,17 @@ void G4ParticleHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
   theGammas.Init(theGammaData);
 }
 
-void G4ParticleHPInelasticCompFS::Init(G4double A, G4double Z, G4int M, G4String& dirName,
-                                       G4String& aFSType, G4ParticleDefinition*)
+void G4ParticleHPInelasticCompFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                                       const G4String& aFSType, G4ParticleDefinition*)
 {
   gammaPath = fManager->GetNeutronHPPath() + "/Inelastic/Gammas/";
-  G4String tString = dirName;
+  const G4String& tString = dirName;
   SetA_Z(A, Z, M);
   G4bool dbool;
-  G4ParticleHPDataUsed aFile =
+  const G4ParticleHPDataUsed& aFile =
     theNames.GetName(theBaseA, theBaseZ, M, tString, aFSType, dbool);
   SetAZMs(aFile);
-  G4String filename = aFile.GetName();
+  const G4String& filename = aFile.GetName();
 #ifdef G4VERBOSE
   if (fManager->GetDEBUG())
     G4cout << " G4ParticleHPInelasticCompFS::Init FILE " << filename << G4endl;

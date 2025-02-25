@@ -798,7 +798,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     if (iface < 0)
     {
       *validNorm = true;
-      n->set(0., 0., G4double(iface + 3)); // little trick: (-4+3)=-1, (-2+3)=+1
+      n->set(0, 0, iface + 3); // little trick: (-4+3)=-1, (-2+3)=+1
     }
     else
     {

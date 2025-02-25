@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -39,19 +39,19 @@ H3O^1 + e_aq^-1 -> OH^-1 + H_2^0                            2.5e+10
 --------------------------------------------------------------------------------------------
 H3O^1 + e_aq^-1 -> OH^-1 + H_2^0                            2.5e+10                       
 --------------------------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                                     2.95e+10                      
+°OH^0 + e_aq^-1 -> OH^-1                                   2.95e+10                      
 --------------------------------------------------------------------------------------------
-OH^0 + H^0 -> No product                                    1.55e+10                      
+°OH^0 + H^0 -> No product                                  1.55e+10                      
 --------------------------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                                       5.5e+09                       
+°OH^0 + °OH^0 -> H2O2^0                                   5.5e+09                       
 --------------------------------------------------------------------------------------------
-OH^0 + DMSO^0^0 -> No product                               3.55                          
+°OH^0 + DMSO^0^0 -> No product                             3.55                          
 --------------------------------------------------------------------------------------------
-OH^0 + DNA_Deoxyribose^0 -> DNA_DamagedDeoxyriboseOH^0      1.04747e+09                   
+°OH^0 + DNA_Deoxyribose^0 -> DNA_DamagedDeoxyriboseOH^0    1.04747e+09                   
 --------------------------------------------------------------------------------------------
-OH^0 + HO_2^0 -> O_2^0                                      7.9e+09                       
+°OH^0 + HO_2°^0 -> O_2^0                                  7.9e+09                       
 --------------------------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0                            1.1e+10                       
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0                          1.1e+10                       
 --------------------------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> OH^-1 + OH^-1 + H_2^0                  6.36e+09                      
 --------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ e_aq^-1 + Oxygen(B)^0 -> O_2^-1                             5.13
 --------------------------------------------------------------------------------------------
 e_aq^-1 + O_2^0 -> O_2^-1                                   1.9e+10                       
 --------------------------------------------------------------------------------------------
-H^0 + H2O2^0 -> OH^0                                        9e+07                         
+H^0 + H2O2^0 -> °OH^0                                      9e+07                         
 --------------------------------------------------------------------------------------------
 H^0 + H^0 -> H_2^0                                          5.03e+09                      
 --------------------------------------------------------------------------------------------
@@ -71,9 +71,9 @@ H^0 + DMSO^0^0 -> No product                                0.0135
 --------------------------------------------------------------------------------------------
 H^0 + DNA_Deoxyribose^0 -> DNA_DamagedDeoxyriboseH^0        3e+07                         
 --------------------------------------------------------------------------------------------
-H^0 + Oxygen(B)^0 -> HO_2^0                                 5.67                          
+H^0 + Oxygen(B)^0 -> HO_2°^0                               5.67                          
 --------------------------------------------------------------------------------------------
-H^0 + O_2^0 -> HO_2^0                                       2.1e+10                       
+H^0 + O_2^0 -> HO_2°^0                                     2.1e+10                       
 --------------------------------------------------------------------------------------------
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
@@ -96,10 +96,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -535,8 +538,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 --> Event 0 starts.
 DNAMolecularIRTModel will be used
@@ -544,7 +545,7 @@ DNAMolecularIRTModel will be used
 --------------------End of Global Run-----------------------
   The run has 10 events 
 Number of events recorded by the species scorer = 10
- Total energy deposited in the world volume : 1.4726e+05 eV
+ Total energy deposited in the world volume : 1.4932e+05 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

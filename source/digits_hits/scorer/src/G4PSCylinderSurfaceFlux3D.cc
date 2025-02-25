@@ -47,7 +47,7 @@
 // 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCylinderSurfaceFlux3D::G4PSCylinderSurfaceFlux3D(G4String name,
+G4PSCylinderSurfaceFlux3D::G4PSCylinderSurfaceFlux3D(const G4String& name,
                                                      G4int direction, G4int ni,
                                                      G4int nj, G4int nk,
                                                      G4int di, G4int dj,
@@ -61,8 +61,8 @@ G4PSCylinderSurfaceFlux3D::G4PSCylinderSurfaceFlux3D(G4String name,
 }
 
 G4PSCylinderSurfaceFlux3D::G4PSCylinderSurfaceFlux3D(
-  G4String name, G4int direction, const G4String& unit, G4int ni, G4int nj,
-  G4int nk, G4int di, G4int dj, G4int dk)
+  const G4String& name, G4int direction, const G4String& unit, G4int ni,
+  G4int nj, G4int nk, G4int di, G4int dj, G4int dk)
   : G4PSCylinderSurfaceFlux3D(name, direction, ni, nj, nk, di, dj, dk) 
 {
   SetUnit(unit);

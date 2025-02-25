@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-10-30 A. Sytov (exExoticPhysics-V11-02-00)
+-Updated README related to channeling (added information about
+ channeling examples instead of old channeling exampled which
+ was moved in channeling/ch0 folder)
 
 ## 2023-11-15 I. Hrivnacova (exExoticPhysics-V11-01-01)
 - Updated vis.mac macros:

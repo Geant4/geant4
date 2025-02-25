@@ -72,6 +72,8 @@
 
  and then the AnaEx03.in macro is called.
 
+ The plotter.mac macro can be used in the interactive mode to plot histograms. It should be executed after the first /run/beamOn call and before the first /analysis/reset call.
+ (See also a commented line with this macro call in AnaEx03.in.)
 
  How to run
  --------------

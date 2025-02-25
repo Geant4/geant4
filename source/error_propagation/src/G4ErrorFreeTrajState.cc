@@ -757,7 +757,7 @@ G4int G4ErrorFreeTrajState::PropagateError(const G4Track* aTrack)
   theTransfMat << G4endl;
   }
   */
-  theTransfMat = transf;
+  theTransfMat = std::move(transf);
 #ifdef G4EVERBOSE
   if(iverbose >= 1)
     G4cout << "G4EP: error matrix before transformation " << fError << G4endl;

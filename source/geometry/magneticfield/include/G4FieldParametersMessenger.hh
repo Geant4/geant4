@@ -55,8 +55,8 @@ class G4UIcmdWithABool;
 /// - /field/fieldType fieldType     \n
 ///       fieldType = Magnetic | ElectroMagnetic | Gravity
 /// - /field/equationType eqType     \n
-///       eqType = MagUsualEqRhs | MagSpinEqRhs | EqMagElectric |
-///                EMFieldWithSpin | EqEMFieldWithEDM
+///       eqType = EqMagnetic | EqMagneticWithSpin | EqElectroMagnetic |
+///                EqEMfieldWithSpin | EqEMfieldWithEDM
 /// - /field/stepperType stepperType \n
 ///       stepperType = CashKarpRKF45 | ClassicalRK4 | ExplicitEuler | ImplicitEuler |
 ///                     SimpleHeum | SimpleRunge | ConstRK4 | ExactHelixStepper

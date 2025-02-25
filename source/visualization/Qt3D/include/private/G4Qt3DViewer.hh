@@ -53,6 +53,7 @@ public:
   void SwitchToMasterThread();
 
 protected:
+  virtual void resizeEvent(QResizeEvent*);
 
   void KernelVisitDecision ();
   G4bool CompareForKernelVisit(G4ViewParameters&);

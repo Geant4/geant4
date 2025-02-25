@@ -23,29 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VSDFilter
 //
+// Class description:
 //
-
+// This is the abstract base class of a filter to be associated with a
+// sensitive detector or a primitive scorer.
+//
+// Author Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VSDFilter_h
 #define G4VSDFilter_h 1
 
-class G4Step;
 #include "globals.hh"
 
-// class description:
-//
-//  This is the abstract base class of a filter to be associated with a
-// sensitive detector or a primitive scorer.
+class G4Step;
 
 class G4VSDFilter
 {
  public:
-  G4VSDFilter(G4String name);
+  G4VSDFilter(const G4String& name);
   virtual ~G4VSDFilter();
 
   virtual G4bool Accept(const G4Step*) const = 0;
 
-  inline G4String GetName() const { return filterName; }
+  inline const G4String& GetName() const { return filterName; }
 
  protected:
   G4String filterName;

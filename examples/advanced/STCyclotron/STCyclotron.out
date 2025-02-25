@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -134,6 +134,7 @@ Index : 6     used in the geometry : Yes
 ==================================================================
 
 Start closing geometry.
+--------------------------------------------------------------------------------
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
@@ -148,6 +149,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          1k         5       13         86         0.00    World
+--------------------------------------------------------------------------------
+
 ### Run 0 starts.
 ... set ntuple merging row mode : row-wise - done
 ... create file : SolidTargetCyclotron.root - done
@@ -156,14 +159,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=20.980000s Real=22.158684s Sys=0.000000s
+  User=20.670000s Real=21.343105s Sys=0.010000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x17fd590
-UserPhysicsList deleted 0x1804ab0
-UserActionInitialization deleted 0x198d500
+UserDetectorConstruction deleted 0x13e1c90
+UserPhysicsList deleted 0x13e91f0
+UserActionInitialization deleted 0x156fb60
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

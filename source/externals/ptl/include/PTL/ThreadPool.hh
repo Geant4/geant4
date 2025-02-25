@@ -138,16 +138,11 @@ public:
 
     struct Config
     {
-        PTL_DEFAULT_OBJECT(Config)
-
-        Config(bool, bool, bool, int, int, size_type, VUserTaskQueue*, affinity_func_t,
-               initialize_func_t, finalize_func_t);
-
         bool              init         = true;
-        bool              use_tbb      = f_use_tbb();
-        bool              use_affinity = f_use_cpu_affinity();
-        int               verbose      = f_verbose();
-        int               priority     = f_thread_priority();
+        bool              use_tbb      = false;
+        bool              use_affinity = false;
+        int               verbose      = 0;
+        int               priority     = 0;
         size_type         pool_size    = f_default_pool_size();
         VUserTaskQueue*   task_queue   = nullptr;
         affinity_func_t   set_affinity = affinity_functor();
@@ -158,16 +153,7 @@ public:
 public:
     // Constructor and Destructors
     explicit ThreadPool(const Config&);
-    ThreadPool(const size_type& pool_size, VUserTaskQueue* task_queue = nullptr,
-               bool _use_affinity = f_use_cpu_affinity(),
-               affinity_func_t    = affinity_functor(),
-               initialize_func_t  = initialization_functor(),
-               finalize_func_t    = finalization_functor());
-    ThreadPool(const size_type& pool_size, initialize_func_t, finalize_func_t,
-               bool             _use_affinity = f_use_cpu_affinity(),
-               affinity_func_t                = affinity_functor(),
-               VUserTaskQueue* task_queue     = nullptr);
-    virtual ~ThreadPool();
+    ~ThreadPool();
     ThreadPool(const ThreadPool&) = delete;
     ThreadPool(ThreadPool&&)      = default;
     ThreadPool& operator=(const ThreadPool&) = delete;
@@ -192,30 +178,9 @@ public:
     bool is_tbb_threadpool() const { return m_tbb_tp; }
 
 public:
-    // Public functions related to TBB
-    static bool using_tbb();
-    // enable using TBB if available - semi-deprecated
-    static void set_use_tbb(bool _v);
-
-    /// set the default use of tbb
-    static void set_default_use_tbb(bool _v) { set_use_tbb(_v); }
-    /// set the default use of cpu affinity
-    static void set_default_use_cpu_affinity(bool _v);
-    /// set the default scheduling priority of threads in thread-pool
-    static void set_default_scheduling_priority(int _v) { f_thread_priority() = _v; }
-    /// set the default verbosity
-    static void set_default_verbose(int _v) { f_verbose() = _v; }
     /// set the default pool size
     static void set_default_size(size_type _v) { f_default_pool_size() = _v; }
 
-    /// get the default use of tbb
-    static bool get_default_use_tbb() { return f_use_tbb(); }
-    /// get the default use of cpu affinity
-    static bool get_default_use_cpu_affinity() { return f_use_cpu_affinity(); }
-    /// get the default scheduling priority of threads in thread-pool
-    static int get_default_scheduling_priority() { return f_thread_priority(); }
-    /// get the default verbosity
-    static int get_default_verbose() { return f_verbose(); }
     /// get the default pool size
     static size_type get_default_size() { return f_default_pool_size(); }
 
@@ -278,12 +243,12 @@ public:
     static uintmax_t              get_this_thread_id();
     static uintmax_t              add_thread_id(ThreadId = ThisThread::get_id());
 
-protected:
+private:
     void execute_thread(VUserTaskQueue*);  // function thread sits in
     int  insert(task_pointer&&, int = -1);
     int  run_on_this(task_pointer&&);
 
-protected:
+private:
     // called in THREAD INIT
     static void start_thread(ThreadPool*, thread_data_t*, intmax_t = -1);
 
@@ -296,8 +261,8 @@ private:
     bool             m_use_affinity      = false;
     bool             m_tbb_tp            = false;
     bool             m_delete_task_queue = false;
-    int              m_verbose           = f_verbose();
-    int              m_priority          = f_thread_priority();
+    int              m_verbose           = 0;
+    int              m_priority          = 0;
     size_type        m_pool_size         = 0;
     ThreadId         m_main_tid          = ThisThread::get_id();
     atomic_bool_type m_alive_flag        = std::make_shared<std::atomic_bool>(false);
@@ -329,10 +294,6 @@ private:
     affinity_func_t   m_affinity_func = affinity_functor();
 
 private:
-    static bool&            f_use_tbb();
-    static bool&            f_use_cpu_affinity();
-    static int&             f_thread_priority();
-    static int&             f_verbose();
     static size_type&       f_default_pool_size();
     static thread_id_map_t& f_thread_ids();
 };
@@ -531,7 +492,7 @@ ThreadPool::execute_on_all_threads(FuncT&& _func)
         // size of the thread-pool
         size_t _sz = size();
         // number of cores
-        size_t _ncore = Threading::GetNumberOfCores();
+        size_t _ncore = GetNumberOfCores();
         // maximum depth for recursion
         size_t _dmax = std::max<size_t>(_ncore, 8);
         // how many threads we need to initialize
@@ -643,7 +604,7 @@ ThreadPool::execute_on_specific_threads(const std::set<std::thread::id>& _tids,
         // executed the _exec function above
         std::atomic<size_t> _total_exec{ 0 };
         // number of cores
-        size_t _ncore = Threading::GetNumberOfCores();
+        size_t _ncore = GetNumberOfCores();
         // maximum depth for recursion
         size_t _dmax = std::max<size_t>(_ncore, 8);
         // how many threads we need to initialize

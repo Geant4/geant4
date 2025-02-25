@@ -41,6 +41,7 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWith3Vector;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,8 +62,9 @@ class ExGflashMessenger : public G4UImessenger
     G4UIcmdWithAString* fMaterCmd;
     G4UIcmdWith3Vector* fLBinCmd;
     G4UIcmdWith3Vector* fRBinCmd;
+    G4UIcmdWithAnInteger* fNbCrysCmd;
+    G4UIcmdWithADoubleAndUnit* fWCrysCmd;
+    G4UIcmdWithADoubleAndUnit* fLCrysCmd;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

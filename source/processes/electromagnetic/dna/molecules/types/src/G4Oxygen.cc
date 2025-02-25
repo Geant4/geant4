@@ -44,7 +44,7 @@ G4Oxygen* G4Oxygen::theInstance = nullptr;
 G4Oxygen* G4Oxygen::Definition()
 {
   if (theInstance != nullptr) return theInstance;
-  const G4String name = "O";
+  const G4String name = "°O";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);

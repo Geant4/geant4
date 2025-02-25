@@ -22,10 +22,9 @@
 
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/VUserTaskQueue.hh"
 
-using namespace PTL;
-
+namespace PTL
+{
 //======================================================================================//
 
 ThreadData*&
@@ -56,3 +55,5 @@ ThreadData::update()
 }
 
 //======================================================================================//
+
+}  // namespace PTL

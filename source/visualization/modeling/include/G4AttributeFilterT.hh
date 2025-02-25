@@ -37,7 +37,9 @@
 #include "G4AttValue.hh"
 #include "G4SmartFilter.hh"
 #include "G4VAttValueFilter.hh"
+
 #include <vector>
+#include <utility>
 
 template <typename T>
 class G4AttributeFilterT : public G4SmartFilter<T> {
@@ -208,7 +210,7 @@ G4AttributeFilterT<T>::AddInterval(const G4String& interval)
     return;
   }
 
-  fConfigVect.push_back(myPair);
+  fConfigVect.push_back(std::move(myPair));
 }
 
 template <typename T>
@@ -226,7 +228,7 @@ G4AttributeFilterT<T>::AddValue(const G4String& value)
       ("G4AttributeFilterT::AddValue", "modeling0105", JustWarning, ed);
     return;
   }
-  fConfigVect.push_back(myPair);
+  fConfigVect.push_back(std::move(myPair));
 }
 
 #endif

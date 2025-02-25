@@ -52,10 +52,11 @@ class G4ParticleDefinition;
 class G4SDParticleFilter : public G4VSDFilter
 {
  public:
-  G4SDParticleFilter(G4String name);
-  G4SDParticleFilter(G4String name, const G4String& particleName);
-  G4SDParticleFilter(G4String name, const std::vector<G4String>& particleNames);
-  G4SDParticleFilter(G4String name,
+  G4SDParticleFilter(const G4String& name);
+  G4SDParticleFilter(const G4String& name, const G4String& particleName);
+  G4SDParticleFilter(const G4String& name,
+                     const std::vector<G4String>& particleNames);
+  G4SDParticleFilter(const G4String& name,
                      const std::vector<G4ParticleDefinition*>& particleDef);
   // Constructors. Filter name and particle's name.
   //

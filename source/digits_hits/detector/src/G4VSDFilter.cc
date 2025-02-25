@@ -30,7 +30,7 @@
 
 #include "G4SDManager.hh"
 
-G4VSDFilter::G4VSDFilter(G4String name) : filterName(name)
+G4VSDFilter::G4VSDFilter(const G4String& name) : filterName(name)
 {
   G4SDManager::GetSDMpointer()->RegisterSDFilter(this);
 }

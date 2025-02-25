@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-10-05 Sebastien Incerti (svalue-V11-02-01)
+- Updated README
+- added auto to plot.C
+
 ## 2024-03-10 Sebastien Incerti (svalue-V11-02-00)
 - Cleaned example
 

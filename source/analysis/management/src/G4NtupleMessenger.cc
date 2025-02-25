@@ -98,7 +98,7 @@ void G4NtupleMessenger::CreateColumnCmds()
     G4String guidance = "Create  ntuple column";
     name.insert(6, 1, colType);
     guidance.insert(7, 1, colType);
-    auto cmd = CreateCommand<G4UIcmdWithAString>(name, guidance);
+    auto cmd = CreateCommand<G4UIcmdWithAString>(std::move(name), std::move(guidance));
     fCreateColumnCmds[colType] = std::move(cmd);
   }
 }
@@ -221,15 +221,15 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   // commands without Id parameter
 
   if ( command == fCreateCmd.get() ) {
-    auto name = parameters[counter++];
-    auto title = parameters[counter++];
+    const auto& name = parameters[counter++];
+    const auto& title = parameters[counter++];
     fTmpNtupleId = fManager->CreateNtuple(name, title);
     return;
   }
 
   for (const auto& [colType, checkCommand] : fCreateColumnCmds) {
     if ( command == checkCommand.get() ) {
-      auto name = parameters[counter++];
+      const auto& name = parameters[counter++];
       switch (colType) {
         case 'I':
           fManager->CreateNtupleIColumn(fTmpNtupleId, name);
@@ -260,7 +260,7 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
 
   if ( command == fDeleteCmd.get() ) {
-    auto keepSetting = G4UIcommand::ConvertToBool(parameters[counter++]);
+    const auto& keepSetting = G4UIcommand::ConvertToBool(parameters[counter++]);
     fManager->DeleteNtuple(id, keepSetting);
     return;
   }
@@ -276,7 +276,7 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   }
 
   if ( command == fListCmd.get() ) {
-    auto onlyIfActive = G4UIcommand::ConvertToBool(parameters[0]);
+    const auto& onlyIfActive = G4UIcommand::ConvertToBool(parameters[0]);
     fManager->ListNtuple(onlyIfActive);
     return;
   }

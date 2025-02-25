@@ -50,7 +50,7 @@
 class G4SDKineticEnergyFilter : public G4VSDFilter
 {
  public:
-  G4SDKineticEnergyFilter(G4String name, G4double elow = 0.0,
+  G4SDKineticEnergyFilter(const G4String& name, G4double elow = 0.0,
                           G4double ehigh = DBL_MAX);
   // Constructor. Filter name and kinetic energy range( elow, ehigh).
 

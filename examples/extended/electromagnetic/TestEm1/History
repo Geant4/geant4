@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-10-23 Michel Maire (testem1-V11-02-01)
+- Run, EventAction, TrackingAction, HistoManager: compute and plot energy leakage
+
 ## 2024-01-30 Vladimir Ivanchenko (testem1-V11-02-00)
 - PrimaryGeneratorAction - added tiny shift of position of the
     particle gun from the world volume boundary. This fix removes

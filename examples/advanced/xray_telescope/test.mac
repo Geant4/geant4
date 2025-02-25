@@ -1,5 +1,5 @@
 /run/verbose 1
-/tracking/storeTrajectory 1
+/control/doifInteractive /tracking/storeTrajectory 1
 /gps/particle proton
 /gps/pos/type Plane
 /gps/pos/shape Annulus

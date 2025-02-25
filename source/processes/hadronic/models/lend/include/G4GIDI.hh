@@ -49,35 +49,35 @@ class G4GIDI {
         G4int init( G4int ip );
 
     public:
-        G4GIDI( G4int ip, std::string &dataDirectory );
+        G4GIDI( G4int ip, const std::string &dataDirectory );
         G4GIDI( G4int ip, std::list<std::string> &dataDirectory );
         ~G4GIDI( );
 
         G4int numberOfDataDirectories( void );
-        G4int addDataDirectory( std::string &dataDirectory );
-        G4int removeDataDirectory( std::string &dataDirectory );
+        G4int addDataDirectory( const std::string &dataDirectory );
+        G4int removeDataDirectory( const std::string &dataDirectory );
         std::string getDataDirectoryAtIndex( G4int index );
         std::vector<std::string> *getDataDirectories( void );
 
-        G4bool isThisDataAvailable( std::string &lib_name, G4int iZ, G4int iA, G4int iM = 0 );
-        G4bool isThisDataAvailable( std::string &lib_name, std::string &targetName );
+        G4bool isThisDataAvailable( const std::string &lib_name, G4int iZ, G4int iA, G4int iM = 0 );
+        G4bool isThisDataAvailable( const std::string &lib_name, const std::string &targetName );
 
-        char *dataFilename( std::string &lib_name, G4int iZ, G4int iA, G4int iM = 0 );
-        char *dataFilename( std::string &lib_name, std::string &targetName );
+        char *dataFilename( const std::string &lib_name, G4int iZ, G4int iA, G4int iM = 0 );
+        char *dataFilename( const std::string &lib_name, const std::string &targetName );
 
         std::vector<std::string> *getNamesOfAvailableLibraries( G4int iZ, G4int iA, G4int iM = 0 );
-        std::vector<std::string> *getNamesOfAvailableLibraries( std::string &targetName );
+        std::vector<std::string> *getNamesOfAvailableLibraries( const std::string &targetName );
 
         std::vector<std::string> *getNamesOfAvailableTargets( void );
 
-        G4GIDI_target *readTarget( std::string &lib_name, G4int iZ, G4int iA, G4int iM = 0, G4bool bind = true );
-        G4GIDI_target *readTarget( std::string &lib_name, std::string &targetName, G4bool bind = true );
+        G4GIDI_target *readTarget( const std::string &lib_name, G4int iZ, G4int iA, G4int iM = 0, G4bool bind = true );
+        G4GIDI_target *readTarget( const std::string &lib_name, const std::string &targetName, G4bool bind = true );
 
         G4GIDI_target *getAlreadyReadTarget( G4int iZ, G4int iA, G4int iM = 0 );
-        G4GIDI_target *getAlreadyReadTarget( std::string &targetName );
+        G4GIDI_target *getAlreadyReadTarget( const std::string &targetName );
 
         G4int freeTarget( G4int iZ, G4int iA, G4int iM = 0 );
-        G4int freeTarget( std::string &targetSymbol );
+        G4int freeTarget( const std::string &targetSymbol );
         G4int freeTarget( G4GIDI_target *target );
 
         std::vector<std::string> *getListOfReadTargetsNames( void );

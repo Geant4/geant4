@@ -46,8 +46,8 @@ G4ParticleHPNInelasticFS::G4ParticleHPNInelasticFS()
   secID = G4PhysicsModelCatalog::GetModelID("model_G4ParticleHPNInelasticFS_F01");
 }
 
-void G4ParticleHPNInelasticFS::Init(G4double A, G4double Z, G4int M, G4String& dirName,
-                                    G4String& aFSType, G4ParticleDefinition* projectile)
+void G4ParticleHPNInelasticFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                                    const G4String& aFSType, G4ParticleDefinition* projectile)
 {
   // G4cout << "Getting initialized for: "<<A<<" "<< Z<<G4endl;
   G4ParticleHPInelasticCompFS::Init(A, Z, M, dirName, aFSType, projectile);

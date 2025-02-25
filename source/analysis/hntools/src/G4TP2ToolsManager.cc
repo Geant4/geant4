@@ -117,9 +117,9 @@ G4bool G4THnToolsManager<kDim3, tools::histo::p2d>::FillHT(
   tools::histo::p2d* ht, const G4HnInformation& hnInformation, 
   std::array<G4double, kDim3>& value, G4double weight)
 {
-  auto xInfo = hnInformation.GetHnDimensionInformation(kX);
-  auto yInfo = hnInformation.GetHnDimensionInformation(kY);
-  auto zInfo = hnInformation.GetHnDimensionInformation(kZ);
+  const auto& xInfo = hnInformation.GetHnDimensionInformation(kX);
+  const auto& yInfo = hnInformation.GetHnDimensionInformation(kY);
+  const auto& zInfo = hnInformation.GetHnDimensionInformation(kZ);
 
   // Apply hn information to value
   Update(value[kX], xInfo);

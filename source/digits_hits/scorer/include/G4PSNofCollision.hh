@@ -44,7 +44,7 @@
 class G4PSNofCollision : public G4VPrimitiveScorer
 {
  public:
-  G4PSNofCollision(G4String name, G4int depth = 0);
+  G4PSNofCollision(const G4String& name, G4int depth = 0);
   ~G4PSNofCollision() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

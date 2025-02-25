@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VScoreNtupleWriter
 //
-// Author: Ivana Hrivnacova, 11/09/2018  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 11/09/2018
 // ---------------------------------------------------------------------
 
 #include "G4VScoreNtupleWriter.hh"

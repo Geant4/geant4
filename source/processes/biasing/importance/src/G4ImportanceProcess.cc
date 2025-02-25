@@ -48,9 +48,9 @@
 
 G4ImportanceProcess::
 G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
-                        const G4VIStore &aIstore,
-                        const G4VTrackTerminator *TrackTerminator,
-                        const G4String &aName, G4bool para)
+                    const G4VIStore &aIstore,
+                    const G4VTrackTerminator *TrackTerminator,
+                    const G4String &aName, G4bool para)
  : G4VProcess(aName, fParallel),
    fParticleChange(new G4ParticleChange),
    fImportanceAlgorithm(aImportanceAlgorithm),
@@ -93,24 +93,16 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 
 G4ImportanceProcess::~G4ImportanceProcess()
 {
-
   delete fPostStepAction;
   delete fParticleChange;
-  // delete fGhostStep;
-  // delete fGhostWorld;
-  // delete fGhostNavigator;
-
 }
-
-
 
 //------------------------------------------------------
 //
 // SetParallelWorld 
 //
 //------------------------------------------------------
-void G4ImportanceProcess::
-SetParallelWorld(const G4String &parallelWorldName)
+void G4ImportanceProcess::SetParallelWorld(const G4String& parallelWorldName)
 {
   G4cout << G4endl << G4endl << G4endl;
   G4cout << "G4ImportanceProcess:: SetParallelWorld name = " << parallelWorldName << G4endl;
@@ -123,22 +115,6 @@ SetParallelWorld(const G4String &parallelWorldName)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
-// void G4ImportanceProcess::
-// SetParallelWorld(const G4VPhysicalVolume* parallelWorld)
-// {
-// //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// // Get pointer of navigator
-// //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//   // G4cout << " G4ImportanceProcess:: Got here 1 " << G4endl;
-//   // fGhostWorldName = parallelWorld->GetName();
-//   // G4cout << " G4ImportanceProcess:: Got here 2 ghostName:" << fGhostWorldName << G4endl;
-//   fGhostWorld = parallelWorld;
-//   G4cout << " G4ImportanceProcess:: Got here 3 " << G4endl;
-//   fGhostNavigator = fTransportationManager->GetNavigator(parallelWorld);
-//   G4cout << " G4ImportanceProcess:: Got here 4 " << G4endl;
-// //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// }
-
 //------------------------------------------------------
 //
 // StartTracking
@@ -149,25 +125,24 @@ void G4ImportanceProcess::StartTracking(G4Track* trk)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Activate navigator and get the navigator ID
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
 
-  if(fParaflag) {
+  if(fParaflag)
+  {
     if(fGhostNavigator != nullptr)
-      { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
+    {
+      fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator);
+    }
     else
-      {
-	G4Exception("G4ImportanceProcess::StartTracking",
-		    "ProcParaWorld000",FatalException,
-		    "G4ImportanceProcess is used for tracking without having a parallel world assigned");
-      }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    {
+      G4Exception("G4ImportanceProcess::StartTracking",
+                  "ProcParaWorld000",FatalException,
+                  "G4ImportanceProcess is used for tracking without having a parallel world assigned");
+    }
 
-// G4cout << "G4ParallelWorldScoringProcess::StartTracking <<<<<<<<<<<<<<<<<< " << G4endl;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Let PathFinder initialize
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     fPathFinder->PrepareNewTrack(trk->GetPosition(),trk->GetMomentumDirection());
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Setup initial touchables for the first step
@@ -181,19 +156,12 @@ void G4ImportanceProcess::StartTracking(G4Track* trk)
     fGhostSafety = -1.;
     fOnBoundary = false;
   }
-
 }
 
-
 G4double G4ImportanceProcess::
-PostStepGetPhysicalInteractionLength(const G4Track& ,
-                                     G4double   ,
+PostStepGetPhysicalInteractionLength(const G4Track&, G4double,
                                      G4ForceCondition* condition)
 {
-//   *condition = Forced;
-//   return kInfinity;
-
-//  *condition = StronglyForced;
   *condition = Forced;
   return DBL_MAX;
 }
@@ -204,136 +172,82 @@ G4ImportanceProcess::PostStepDoIt(const G4Track &aTrack,
 {
   fParticleChange->Initialize(aTrack);
 
-  if(aTrack.GetNextVolume() == nullptr) {
+  if(aTrack.GetNextVolume() == nullptr)
+  {
     return fParticleChange;
   }
   
-  if(fParaflag) {
+  if(fParaflag)
+  {
     fOldGhostTouchable = fGhostPostStepPoint->GetTouchableHandle();
     //xbug?    fOnBoundary = false;
     CopyStep(aStep);
     
     if(fOnBoundary)
-      {
+    {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Locate the point and get new touchable
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //??  fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
   //??                      step.GetPostStepPoint()->GetMomentumDirection());
 	fNewGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
-	//AH	G4cout << " on boundary " << G4endl;
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      }
+    }
     else
-      {
-	// Do I need this ??????????????????????????????????????????????????????????
-	// fGhostNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
-	// ?????????????????????????????????????????????????????????????????????????
-	
-	// fPathFinder->ReLocate(track.GetPosition());
-	
-	// reuse the touchable
-	fNewGhostTouchable = fOldGhostTouchable;
-	//AH	G4cout << " NOT on boundary " << G4endl;
-      }
+    {
+      // reuse the touchable
+      fNewGhostTouchable = fOldGhostTouchable;
+    }
     
     fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
     fGhostPostStepPoint->SetTouchableHandle(fNewGhostTouchable);
     
-//   if ( (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
-//     && (aStep.GetStepLength() > kCarTolerance) )
-//   {
-//     if (aTrack.GetTrackStatus()==fStopAndKill)
-//     {
-//       G4cout << "WARNING - G4ImportanceProcess::PostStepDoIt()"
-//              << "          StopAndKill track." << G4endl;
-//     }
-
-//     G4StepPoint *prepoint  = aStep.GetPreStepPoint();
-//     G4StepPoint *postpoint = aStep.GetPostStepPoint();
-//     G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
-//                          prepoint->GetTouchable()->GetReplicaNumber());
-//     G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
-//                           postpoint->GetTouchable()->GetReplicaNumber());
-
-
     if ( (fGhostPostStepPoint->GetStepStatus() == fGeomBoundary)
 	 && (aStep.GetStepLength() > kCarTolerance) )
+    {
+      if (aTrack.GetTrackStatus()==fStopAndKill)
       {
-	if (aTrack.GetTrackStatus()==fStopAndKill)
-	  {
-	    G4cout << "WARNING - G4ImportanceProcess::PostStepDoIt()"
-		   << "          StopAndKill track. on boundary" << G4endl;
-	  }
-	
-	G4GeometryCell prekey(*(fGhostPreStepPoint->GetPhysicalVolume()), 
-			      fGhostPreStepPoint->GetTouchable()->GetReplicaNumber());
-	G4GeometryCell postkey(*(fGhostPostStepPoint->GetPhysicalVolume()), 
-			       fGhostPostStepPoint->GetTouchable()->GetReplicaNumber());
-	
-	//AH
-	/*
-	G4cout << G4endl;
-	G4cout << G4endl;
-	G4cout << " inside parallel importance process " << aTrack.GetCurrentStepNumber() << G4endl;
-	G4cout << G4endl;
-	G4cout << G4endl;
-	G4cout << " prekey: " << fGhostPreStepPoint->GetPhysicalVolume()->GetName() << " replica:" 
-	       << fGhostPreStepPoint->GetTouchable()->GetReplicaNumber() << G4endl;
-	G4cout << " prekey ISTORE: " << fIStore.GetImportance(prekey) << G4endl;
-	G4cout << " postkey: " << G4endl;
-	G4cout << " postkey ISTORE: " << fIStore.GetImportance(postkey) << G4endl;
-	*/
-	//AH
-	G4Nsplit_Weight nw = fImportanceAlgorithm.
-	  Calculate(fIStore.GetImportance(prekey),
-		    fIStore.GetImportance(postkey), 
-		    aTrack.GetWeight());
-	//AH
-	/*
-	G4cout << " prekey weight: " << fIStore.GetImportance(prekey) 
-	       << " postkey weight: " << fIStore.GetImportance(postkey) 
-	       << " split weight: " << nw << G4endl;
-	G4cout << " before poststepaction " << G4endl;
-	*/
-	//AH
-	fPostStepAction->DoIt(aTrack, fParticleChange, nw);
-	//AH	G4cout << " after post step do it " << G4endl;
+        G4cout << "WARNING - G4ImportanceProcess::PostStepDoIt()"
+               << "          StopAndKill track. on boundary" << G4endl;
       }
-  } else {
+
+      G4GeometryCell prekey(*(fGhostPreStepPoint->GetPhysicalVolume()), 
+                            fGhostPreStepPoint->GetTouchable()->GetReplicaNumber());
+      G4GeometryCell postkey(*(fGhostPostStepPoint->GetPhysicalVolume()), 
+                             fGhostPostStepPoint->GetTouchable()->GetReplicaNumber());
+
+      G4Nsplit_Weight nw = 
+          fImportanceAlgorithm.Calculate(fIStore.GetImportance(prekey),
+		                         fIStore.GetImportance(postkey), 
+		                         aTrack.GetWeight());
+      fPostStepAction->DoIt(aTrack, fParticleChange, nw);
+    }
+  }
+  else
+  {
     if ( (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
-	 && (aStep.GetStepLength() > kCarTolerance) )
+         && (aStep.GetStepLength() > kCarTolerance) )
+    {
+      if (aTrack.GetTrackStatus()==fStopAndKill)
       {
-	//AH	G4cout << " inside non-parallel importance process " << G4endl;
-	if (aTrack.GetTrackStatus()==fStopAndKill)
-	  {
-	    G4cout << "WARNING - G4ImportanceProcess::PostStepDoIt()"
-		   << "          StopAndKill track. on boundary non-parallel" << G4endl;
-	  }
-	
-	G4StepPoint *prepoint  = aStep.GetPreStepPoint();
-	G4StepPoint *postpoint = aStep.GetPostStepPoint();
-	
-	G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
-			      prepoint->GetTouchable()->GetReplicaNumber());
-	G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
-			       postpoint->GetTouchable()->GetReplicaNumber());
-	
-	G4Nsplit_Weight nw = fImportanceAlgorithm.
-	  Calculate(fIStore.GetImportance(prekey),
-		    fIStore.GetImportance(postkey), 
-		    aTrack.GetWeight());
-	//AH
-	/*
-	G4cout << " prekey weight: " << fIStore.GetImportance(prekey) 
-	       << " postkey weight: " << fIStore.GetImportance(postkey) 
-	       << " split weight: " << nw << G4endl;
-	G4cout << " before poststepaction 2 " << G4endl;
-	*/
-	//AH
-	fPostStepAction->DoIt(aTrack, fParticleChange, nw);
-	//AH	G4cout << " after poststepaction 2 " << G4endl;
+        G4cout << "WARNING - G4ImportanceProcess::PostStepDoIt()"
+               << "          StopAndKill track. on boundary non-parallel"
+               << G4endl;
       }
+	
+      G4StepPoint *prepoint  = aStep.GetPreStepPoint();
+      G4StepPoint *postpoint = aStep.GetPostStepPoint();
+
+      G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
+                            prepoint->GetTouchable()->GetReplicaNumber());
+      G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
+                             postpoint->GetTouchable()->GetReplicaNumber());
+
+      G4Nsplit_Weight nw =
+          fImportanceAlgorithm.Calculate(fIStore.GetImportance(prekey),
+                                         fIStore.GetImportance(postkey), 
+                                         aTrack.GetWeight());
+	fPostStepAction->DoIt(aTrack, fParticleChange, nw);
+    }
   }
   return fParticleChange;
 }
@@ -343,17 +257,19 @@ void G4ImportanceProcess::KillTrack() const
   fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
-const G4String &G4ImportanceProcess::GetName() const
+const G4String& G4ImportanceProcess::GetName() const
 {
   return theProcessName;
 }
 
 G4double G4ImportanceProcess::
 AlongStepGetPhysicalInteractionLength(
-            const G4Track& track, G4double  previousStepSize, G4double  currentMinimumStep,
-            G4double& proposedSafety, G4GPILSelection* selection)
+                    const G4Track& track, G4double previousStepSize,
+                    G4double currentMinimumStep,
+                    G4double& proposedSafety, G4GPILSelection* selection)
 {
-  if(fParaflag) {    
+  if(fParaflag)
+  {    
     *selection = NotCandidateForSelection;
     G4double returnedStep = DBL_MAX;
     
@@ -361,67 +277,63 @@ AlongStepGetPhysicalInteractionLength(
       { fGhostSafety -= previousStepSize; }
     //  else
     //  { fGhostSafety = -1.; }
-    if (fGhostSafety < 0.) fGhostSafety = 0.0;
+    if (fGhostSafety < 0.) { fGhostSafety = 0.0; }
     
     // ------------------------------------------
     // Determination of the proposed STEP LENGTH:
     // ------------------------------------------
     if (currentMinimumStep <= fGhostSafety && currentMinimumStep > 0.)
-      {
-	// I have no chance to limit
-	returnedStep = currentMinimumStep;
-	fOnBoundary = false;
-	proposedSafety = fGhostSafety - currentMinimumStep;
-	//AH	G4cout << " step not limited, why? " << G4endl;
-      }
+    {
+      // I have no chance to limit
+      returnedStep = currentMinimumStep;
+      fOnBoundary = false;
+      proposedSafety = fGhostSafety - currentMinimumStep;
+    }
     else // (currentMinimumStep > fGhostSafety: I may limit the Step)
-      {
-	G4FieldTrackUpdator::Update(&fFieldTrack,&track);
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// ComputeStep
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	returnedStep
+    {
+      G4FieldTrackUpdator::Update(&fFieldTrack,&track);
+      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      // ComputeStep
+      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      returnedStep
 	  = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
-				     track.GetCurrentStepNumber(),fGhostSafety,feLimited,
-				     fEndTrack,track.GetVolume());
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if(feLimited == kDoNot)
-	  {
-	    //AH	    G4cout << " computestep came back with not-boundary " << G4endl;
-	    // Track is not on the boundary
-	    fOnBoundary = false;
-	    fGhostSafety = fGhostNavigator->ComputeSafety(fEndTrack.GetPosition());
-	  }
-	else
-	  {
-	    // Track is on the boundary
-	    //AH	    G4cout << " FOUND A BOUNDARY ! " << track.GetCurrentStepNumber() << G4endl;
-	    fOnBoundary = true;
-	    // proposedSafety = fGhostSafety;
-	  }
-	proposedSafety = fGhostSafety;
-	if(feLimited == kUnique || feLimited == kSharedOther) {
-	  *selection = CandidateForSelection;
-	}else if (feLimited == kSharedTransport) { 
-	  returnedStep *= (1.0 + 1.0e-9);  
-	  // Expand to disable its selection in Step Manager comparison
-	}
-	
+                                     track.GetCurrentStepNumber(),fGhostSafety,feLimited,
+                                     fEndTrack,track.GetVolume());
+      //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      if(feLimited == kDoNot)
+      {
+        // Track is not on the boundary
+        fOnBoundary = false;
+        fGhostSafety = fGhostNavigator->ComputeSafety(fEndTrack.GetPosition());
       }
+      else
+      {
+        // Track is on the boundary
+        fOnBoundary = true;
+      }
+      proposedSafety = fGhostSafety;
+      if(feLimited == kUnique || feLimited == kSharedOther)
+      {
+        *selection = CandidateForSelection;
+      }
+      else if (feLimited == kSharedTransport)
+      { 
+        returnedStep *= (1.0 + 1.0e-9);  
+        // Expand to disable its selection in Step Manager comparison
+      }
+    }
 
-  // ----------------------------------------------
-  // Returns the fGhostSafety as the proposedSafety
-  // The SteppingManager will take care of keeping
-  // the smallest one.
-  // ----------------------------------------------
+    // ----------------------------------------------
+    // Returns the fGhostSafety as the proposedSafety
+    // The SteppingManager will take care of keeping
+    // the smallest one.
+    // ----------------------------------------------
     return returnedStep;
-
-  } else {
-
-    return DBL_MAX;
-
   }
-
+  else
+  {
+    return DBL_MAX;
+  }
 }
 
 G4double G4ImportanceProcess::
@@ -442,12 +354,11 @@ AlongStepDoIt(const G4Track& aTrack, const G4Step& )
 {
   // Dummy ParticleChange ie: does nothing
   // Expecting G4Transportation to move the track
-  //AH  G4cout << " along step do it " << G4endl;
   pParticleChange->Initialize(aTrack);
   return pParticleChange; 
 }
 
-void G4ImportanceProcess::CopyStep(const G4Step & step)
+void G4ImportanceProcess::CopyStep(const G4Step& step)
 {
   fGhostStep->SetTrack(step.GetTrack());
   fGhostStep->SetStepLength(step.GetStepLength());

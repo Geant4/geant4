@@ -23,9 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VScoringMesh
 //
+// Class description:
 //
-
+// This class represents a multi-functional detector to be used by
+// command-based scorer for parallel world scorer, this class creates a
+// parallel world mesh geometry
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VScoringMesh_h
 #define G4VScoringMesh_h 1
 
@@ -34,6 +41,8 @@
 #include "G4RotationMatrix.hh"
 #include "G4StatDouble.hh"
 
+#include <map>
+
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4MultiFunctionalDetector;
@@ -41,15 +50,6 @@ class G4VPrimitiveScorer;
 class G4VSDFilter;
 class G4VScoreColorMap;
 class G4ParallelWorldProcess;
-
-#include <map>
-
-// class description:
-//
-//  This class represents a multi-functional detector to be used by
-//  command-based scorer For parallel world scorer, this class creates a
-//  parallel world mesh geometry
-//
 
 class G4VScoringMesh
 {
@@ -68,10 +68,10 @@ class G4VScoringMesh
   using MeshScoreMap = std::map<G4String, RunScore*>;
 
  public:
+
   G4VScoringMesh(const G4String& wName);
   virtual ~G4VScoringMesh() = default;
 
- public:  // with description
   virtual void Construct(G4VPhysicalVolume* fWorldPhys);
   virtual void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
 
@@ -132,7 +132,7 @@ class G4VScoringMesh
   // set a rotation angle around the z axis
   void RotateZ(G4double delta);
   // get a rotation matrix
-  G4RotationMatrix GetRotationMatrix() const
+  inline G4RotationMatrix GetRotationMatrix() const
   {
     if(fRotationMatrix != nullptr)
       return *fRotationMatrix;
@@ -154,7 +154,7 @@ class G4VScoringMesh
   // find registered primitive scorer by the name
   G4bool FindPrimitiveScorer(const G4String& psname);
   // get whether current primitive scorer is set or not
-  G4bool IsCurrentPrimitiveScorerNull()
+  inline G4bool IsCurrentPrimitiveScorerNull()
   {
     return fCurrentPS == nullptr;
   }
@@ -167,7 +167,7 @@ class G4VScoringMesh
   // get unit value of primitive scorer by the name
   G4double GetPSUnitValue(const G4String& psname);
   // set PS name to be drawn
-  void SetDrawPSName(const G4String& psname) { fDrawPSName = psname; }
+  inline void SetDrawPSName(const G4String& psname) { fDrawPSName = psname; }
 
   // get axis names of the hierarchical division in the divided order
   void GetDivisionAxisNames(G4String divisionAxisNames[3]);
@@ -213,13 +213,15 @@ class G4VScoringMesh
   inline void SetCopyNumberLevel(G4int val) { copyNumberLevel = val; }
   inline G4int GetCopyNumberLevel() const { return copyNumberLevel; }
 
-  G4bool LayeredMassFlg() { return layeredMassFlg; }
+  inline G4bool LayeredMassFlg() { return layeredMassFlg; }
 
  protected:
+
   // a pure virtual function to construct this mesh geometry
   virtual void SetupGeometry(G4VPhysicalVolume* fWorldPhys) = 0;
 
  protected:
+
   G4String fWorldName;
   G4VPrimitiveScorer* fCurrentPS;
   G4bool fConstructed;

@@ -63,7 +63,7 @@ public:    // with description
 
   explicit G4MuMultipleScattering(const G4String& processName="muMsc");
 
-  ~G4MuMultipleScattering() = default;
+  ~G4MuMultipleScattering() override = default;
 
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p) override;

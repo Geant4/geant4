@@ -165,7 +165,7 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     type = -1;
     if (newValue == "all")
     {
-      currentProcessTypeName = newValue;
+      currentProcessTypeName = std::move(newValue);
     }
     else
     {
@@ -176,7 +176,7 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       }
       else
       {
-        currentProcessTypeName = newValue;
+        currentProcessTypeName = std::move(newValue);
       }
     }    
     G4int counter = 0;

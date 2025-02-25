@@ -87,6 +87,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	else if( detectorType == "Silicon" ) ConstructSiliconDetector();
 	else if( detectorType == "SiliconBridge" ) ConstructSiliconBridgeDetector();
 	else if( detectorType == "DiamondTelescope" ) ConstructDiamondTelescope();
+	else if( detectorType ==  "SiCDetector") ConstructSiC();
 	else
 	{
 		G4cout << "ERROR: " << detectorType << " is not an allowed detector type. ";
@@ -1059,6 +1060,61 @@ void DetectorConstruction::ConstructSiliconBridgeDetector()
 //----------------------------------------
 	new G4PVPlacement(0, G4ThreeVector(0,0,0), logicalAlContact, "physAlContact", logicalSiObotLayer, false, 0, 1);
 }
+
+
+void DetectorConstruction::ConstructSiC()
+{
+
+//Define SiC
+ G4double A = 12.01 * g/mole;
+ G4double Z = 6;
+G4double A_Si=28.086*g/mole;
+ G4double Z_Si=14;
+G4double density_SiC=3.22*g/cm3;
+G4Element *Si=new G4Element("Silicum","Si",Z_Si,A_Si);
+G4Element *C=new G4Element("Carbon","C",Z,A);
+G4Material *SiC=new G4Material("SiC", density_SiC,2);
+SiC->AddElement(Si,1);
+SiC->AddElement(C,1);
+
+/*G4Material *airNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+  G4Material *Silicon = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si", isotopes);*/
+
+	
+detectorSizeWidth=0.1*mm;
+ detectorSizeThickness=22*um;//10*um;
+
+ G4double substrate_thickness=370*um;
+ 
+ G4double SV_x = detectorSizeWidth/2;
+ G4double SV_y = detectorSizeWidth/2;
+ G4double SV_z = detectorSizeThickness/2; 
+
+ G4Box* SV_box = new G4Box("SV_box",SV_x,SV_y,SV_z);
+
+ G4LogicalVolume* logical_SV = new G4LogicalVolume(SV_box, SiC, "SV_log", 0,0,0);
+
+ new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,-SV_z), logical_SV,"SV_phys1",
+		    logical_motherVolumeForDetector,false, 0, true);
+
+
+ G4Box* Substrate_box = new G4Box("Substrate_box",SV_x,SV_y,substrate_thickness/2); 
+
+ 
+  G4LogicalVolume* logical_substrate = new G4LogicalVolume(Substrate_box, SiC, "substrate_log", 0,0,0);
+
+  new G4PVPlacement(0, G4ThreeVector(0,0,-2*SV_z-substrate_thickness/2), logical_substrate,"substrate_phys",
+			  logical_motherVolumeForDetector, 
+			  false, 0, true);
+   
+ 
+// Visualisation attributes
+
+	G4VisAttributes vis_SV(G4Colour(198, 226, 255));
+	vis_SV.SetForceSolid(true);
+	logical_SV -> SetVisAttributes(vis_SV);
+}
+
 
 
 void DetectorConstruction::ConstructSDandField()

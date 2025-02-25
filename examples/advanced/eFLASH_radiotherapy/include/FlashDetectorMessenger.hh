@@ -37,7 +37,8 @@ class G4UIdirectory;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter; 
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;        
+class G4UIcmdWithADoubleAndUnit;    
+class G4UIcmdWithABool;    
 
 class FlashDetectorMessenger: public G4UImessenger
 {
@@ -56,8 +57,7 @@ private:
 
   G4UIcmdWithoutParameter   *fUpdateCmd, *fUpdateCmd_d;
   G4UIcmdWithAString        *fChangeThePhantomMaterialCmd, *fChangeTheDetectorMaterialCmd; 
-
- 
+  G4UIcmdWithABool          *fActivateDetArrayCmd;
     
 };
 #endif

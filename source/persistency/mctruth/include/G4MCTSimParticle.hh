@@ -31,7 +31,6 @@
 #define G4MCTSIMPARTICLE_HH 1
 
 #include <vector>
-#include <string>
 #include <iostream>
 
 #include "G4String.hh"
@@ -63,7 +62,7 @@ class G4MCTSimParticle
     inline void SetParentParticle(const G4MCTSimParticle* p);
     inline G4MCTSimParticle* GetParentParticle() const;
 
-    inline void SetParticleName(std::string aname);
+    inline void SetParticleName(const G4String& aname);
     inline const G4String& GetParticleName() const;
 
     inline void SetPdgID(G4int id);
@@ -147,7 +146,7 @@ inline G4MCTSimParticle* G4MCTSimParticle::GetParentParticle() const
   return parentParticle;
 }
 
-inline void G4MCTSimParticle::SetParticleName(std::string aname)
+inline void G4MCTSimParticle::SetParticleName(const G4String& aname)
 {
   name = aname;
 }

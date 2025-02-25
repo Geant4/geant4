@@ -286,7 +286,7 @@ void  G4NtupleBookingManager::SetFileName(
   // Save the fileName in booking
   // If extension is still missing (possible with generic manager),
   // it will be completed with the default one at OpenFile
-  ntupleBooking->fFileName = ntupleFileName;
+  ntupleBooking->fFileName = std::move(ntupleFileName);
 }
 
 //_____________________________________________________________________________
@@ -426,7 +426,7 @@ void G4NtupleBookingManager::SetFileType(const G4String& fileType)
     }
 
     // Save the info in ntuple description
-    ntupleBooking->fFileName = ntupleFileName;
+    ntupleBooking->fFileName = std::move(ntupleFileName);
   }
 }
 

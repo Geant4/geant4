@@ -138,20 +138,20 @@ class G4VEmAdjointModel
   };
 
   inline G4ParticleDefinition*
-  GetAdjointEquivalentOfDirectPrimaryParticleDefinition()
+  GetAdjointEquivalentOfDirectPrimaryParticleDefinition() const
   {
     return fAdjEquivDirectPrimPart;
   }
 
   inline G4ParticleDefinition*
-  GetAdjointEquivalentOfDirectSecondaryParticleDefinition()
+  GetAdjointEquivalentOfDirectSecondaryParticleDefinition() const
   {
     return fAdjEquivDirectSecondPart;
   }
 
-  inline G4double GetHighEnergyLimit() { return fHighEnergyLimit; }
+  inline G4double GetHighEnergyLimit() const { return fHighEnergyLimit; }
 
-  inline G4double GetLowEnergyLimit() { return fLowEnergyLimit; }
+  inline G4double GetLowEnergyLimit() const { return fLowEnergyLimit; }
 
   void SetHighEnergyLimit(G4double aVal);
 
@@ -173,7 +173,7 @@ class G4VEmAdjointModel
     fSecondPartSameType = aBool;
   }
 
-  inline G4bool GetSecondPartOfSameType() { return fSecondPartSameType; }
+  inline G4bool GetSecondPartOfSameType() const { return fSecondPartSameType; }
 
   inline void SetUseMatrix(G4bool aBool) { fUseMatrix = aBool; }
 
@@ -189,18 +189,18 @@ class G4VEmAdjointModel
 
   inline void SetApplyCutInRange(G4bool aBool) { fApplyCutInRange = aBool; }
 
-  inline G4bool GetUseMatrix() { return fUseMatrix; }
+  inline G4bool GetUseMatrix() const { return fUseMatrix; }
 
-  inline G4bool GetUseMatrixPerElement() { return fUseMatrixPerElement; }
+  inline G4bool GetUseMatrixPerElement() const { return fUseMatrixPerElement; }
 
-  inline G4bool GetUseOnlyOneMatrixForAllElements()
+  inline G4bool GetUseOnlyOneMatrixForAllElements() const
   {
     return fOneMatrixForAllElements;
   }
 
-  inline G4bool GetApplyCutInRange() { return fApplyCutInRange; }
+  inline G4bool GetApplyCutInRange() const { return fApplyCutInRange; }
 
-  inline G4String GetName() { return fName; }
+  inline const G4String& GetName() const { return fName; }
 
   inline virtual void SetCSBiasingFactor(G4double aVal)
   {

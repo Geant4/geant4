@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,7 +31,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -136,10 +135,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -575,8 +577,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 
  ======================= run summary ====================
 
@@ -585,13 +585,6 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 29.220 nm  +- 18.567 nm 
  Projected range               = 4.101 Ang +- 2.834 nm 
  Penetration                   = 4.215 nm  +- 2.500 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -600,13 +593,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 22.553 nm  +- 24.131 nm 
  Projected range               = 4.200 Ang +- 2.376 nm 
  Penetration                   = 3.362 nm  +- 2.542 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -615,13 +601,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 11.417 nm  +- 14.117 nm 
  Projected range               = 4.492 Ang +- 1.770 nm 
  Penetration                   = 2.472 nm  +- 1.892 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -630,13 +609,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 7.196 nm  +- 8.459 nm 
  Projected range               = 3.957 Ang +- 1.515 nm 
  Penetration                   = 1.968 nm  +- 1.567 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -645,13 +617,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 6.014 nm  +- 7.027 nm 
  Projected range               = 5.169 Ang +- 1.290 nm 
  Penetration                   = 1.850 nm  +- 1.409 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -660,13 +625,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 14.440 nm  +- 18.297 nm 
  Projected range               = 6.272 Ang +- 2.032 nm 
  Penetration                   = 2.690 nm  +- 2.195 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -675,13 +633,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 16.707 nm  +- 17.975 nm 
  Projected range               = 6.884 Ang +- 2.208 nm 
  Penetration                   = 3.161 nm  +- 2.191 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -690,13 +641,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 15.503 nm  +- 16.550 nm 
  Projected range               = 6.016 Ang +- 2.309 nm 
  Penetration                   = 3.173 nm  +- 2.126 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -705,13 +649,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 13.227 nm  +- 15.333 nm 
  Projected range               = 6.003 Ang +- 2.042 nm 
  Penetration                   = 2.898 nm  +- 2.040 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -720,13 +657,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 14.013 nm  +- 14.612 nm 
  Projected range               = 7.569 Ang +- 2.181 nm 
  Penetration                   = 3.040 nm  +- 2.015 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -735,13 +665,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 15.268 nm  +- 17.518 nm 
  Projected range               = 8.265 Ang +- 2.299 nm 
  Penetration                   = 3.169 nm  +- 2.193 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -750,13 +673,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 16.527 nm  +- 17.191 nm 
  Projected range               = 9.162 Ang +- 2.433 nm 
  Penetration                   = 3.432 nm  +- 2.187 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -765,13 +681,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 17.653 nm  +- 16.979 nm 
  Projected range               = 1.144 nm  +- 2.497 nm 
  Penetration                   = 3.702 nm  +- 2.281 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -780,13 +689,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 17.993 nm  +- 16.915 nm 
  Projected range               = 1.165 nm  +- 2.739 nm 
  Penetration                   = 3.813 nm  +- 2.241 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -795,13 +697,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 16.702 nm  +- 16.373 nm 
  Projected range               = 1.355 nm  +- 2.676 nm 
  Penetration                   = 3.772 nm  +- 2.208 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -810,13 +705,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 17.453 nm  +- 16.545 nm 
  Projected range               = 1.511 nm  +- 2.707 nm 
  Penetration                   = 4.044 nm  +- 2.132 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -825,13 +713,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 19.605 nm  +- 16.475 nm 
  Projected range               = 2.164 nm  +- 3.201 nm 
  Penetration                   = 4.813 nm  +- 2.502 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -840,13 +721,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 22.630 nm  +- 16.625 nm 
  Projected range               = 2.822 nm  +- 3.733 nm 
  Penetration                   = 5.925 nm  +- 2.869 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -855,13 +729,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 25.082 nm  +- 17.121 nm 
  Projected range               = 3.773 nm  +- 4.494 nm 
  Penetration                   = 7.244 nm  +- 3.416 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -870,13 +737,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 27.752 nm  +- 16.770 nm 
  Projected range               = 4.637 nm  +- 5.224 nm 
  Penetration                   = 8.612 nm  +- 3.925 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -885,13 +745,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 30.516 nm  +- 17.459 nm 
  Projected range               = 6.037 nm  +- 5.863 nm 
  Penetration                   = 10.188 nm  +- 4.646 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -900,13 +753,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 34.265 nm  +- 18.493 nm 
  Projected range               = 7.162 nm  +- 6.559 nm 
  Penetration                   = 11.698 nm  +- 5.098 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -915,13 +761,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 36.157 nm  +- 18.228 nm 
  Projected range               = 7.812 nm  +- 7.537 nm 
  Penetration                   = 13.304 nm  +- 5.721 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -930,13 +769,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 39.556 nm  +- 18.568 nm 
  Projected range               = 9.559 nm  +- 8.433 nm 
  Penetration                   = 15.353 nm  +- 6.765 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -945,13 +777,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 46.545 nm  +- 19.241 nm 
  Projected range               = 12.824 nm  +- 10.422 nm 
  Penetration                   = 19.786 nm  +- 8.492 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -960,13 +785,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 54.090 nm  +- 20.563 nm 
  Projected range               = 15.139 nm  +- 12.679 nm 
  Penetration                   = 23.953 nm  +- 9.802 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -975,13 +793,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 62.025 nm  +- 21.311 nm 
  Projected range               = 19.664 nm  +- 15.093 nm 
  Penetration                   = 29.401 nm  +- 11.693 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -990,13 +801,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 71.510 nm  +- 23.999 nm 
  Projected range               = 22.081 nm  +- 18.155 nm 
  Penetration                   = 34.768 nm  +- 13.662 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -1005,13 +809,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 80.466 nm  +- 25.373 nm 
  Projected range               = 26.586 nm  +- 19.453 nm 
  Penetration                   = 39.855 nm  +- 15.824 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -1020,13 +817,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 205.214 nm  +- 51.952 nm 
  Projected range               = 81.173 nm  +- 56.027 nm 
  Penetration                   = 121.022 nm  +- 41.077 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -1035,13 +825,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 383.593 nm  +- 90.412 nm 
  Projected range               = 172.109 nm  +- 107.237 nm 
  Penetration                   = 244.500 nm  +- 76.611 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -1050,13 +833,6 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 611.317 nm  +- 141.441 nm 
  Projected range               = 274.104 nm  +- 167.158 nm 
  Penetration                   = 392.311 nm  +- 124.119 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================= run summary ====================
 
@@ -1065,12 +841,5 @@ There are histograms that can be viewed with visualization:
  Track length of primary track = 862.229 nm  +- 194.765 nm 
  Projected range               = 406.769 nm  +- 234.365 nm 
  Penetration                   = 565.711 nm  +- 174.613 nm 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...

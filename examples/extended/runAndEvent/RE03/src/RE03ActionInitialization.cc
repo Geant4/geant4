@@ -30,7 +30,9 @@
 //
 
 #include "RE03ActionInitialization.hh"
-
+#include "G4RunManager.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ClassificationOfNewTrack.hh"
 #include "RE03PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +48,34 @@ RE03ActionInitialization::~RE03ActionInitialization()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE03ActionInitialization::BuildForMaster() const
+{
+  auto* runManager = G4RunManager::GetRunManager();
+
+  // check if in sub-event parallel mode
+  if(runManager->GetRunManagerType()==G4RunManager::subEventMasterRM)
+  {
+    // defining size of sub-event
+    runManager->RegisterSubEventType(0,100);
+    // sending electron, positron and gamma to worker thread
+    runManager->SetDefaultClassification(G4Electron::Definition(),fSubEvent_0);
+    runManager->SetDefaultClassification(G4Positron::Definition(),fSubEvent_0);
+    runManager->SetDefaultClassification(G4Gamma::Definition(),fSubEvent_0);
+
+    // primary generator action is defined to the master thread 
+    SetUserAction(new RE03PrimaryGeneratorAction);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03ActionInitialization::Build() const
 {
-  SetUserAction(new RE03PrimaryGeneratorAction);
+  auto* runManager = G4RunManager::GetRunManager();
+
+  // check if NOT in the sub-event parallel mode
+  if(runManager->GetRunManagerType()!=G4RunManager::subEventWorkerRM)
+  {
+    // primary generator action is defined to the worker thread
+    SetUserAction(new RE03PrimaryGeneratorAction);
+  }
 }

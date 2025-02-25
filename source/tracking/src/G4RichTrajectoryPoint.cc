@@ -43,6 +43,7 @@
 #include "G4AttValue.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
+#include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VProcess.hh"
 
@@ -62,7 +63,7 @@ G4Allocator<G4RichTrajectoryPoint>*& aRichTrajectoryPointAllocator()
 G4RichTrajectoryPoint::G4RichTrajectoryPoint() = default;
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack)
-  : G4TrajectoryPoint(aTrack->GetPosition()),
+  : fPosition(aTrack->GetPosition()),
     fPreStepPointGlobalTime(aTrack->GetGlobalTime()),
     fPostStepPointGlobalTime(aTrack->GetGlobalTime()),
     fpPreStepPointVolume(aTrack->GetTouchableHandle()),
@@ -72,7 +73,7 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack)
 {}
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep)
-  : G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition()),
+  : fPosition(aStep->GetPostStepPoint()->GetPosition()),
     fpAuxiliaryPointVector(aStep->GetPointerToVectorOfAuxiliaryPoints()),
     fTotEDep(aStep->GetTotalEnergyDeposit())
 {
@@ -108,11 +109,10 @@ const std::map<G4String, G4AttDef>* G4RichTrajectoryPoint::GetAttDefs() const
   G4bool isNew;
   std::map<G4String, G4AttDef>* store = G4AttDefStore::GetInstance("G4RichTrajectoryPoint", isNew);
   if (isNew) {
-    // Copy base class att defs...
-    *store = *(G4TrajectoryPoint::GetAttDefs());
-
     G4String ID;
 
+    ID = "Pos";
+    (*store)[ID] = G4AttDef(ID, "Position", "Physics", "G4BestUnit", "G4ThreeVector");
     ID = "Aux";
     (*store)[ID] =
       G4AttDef(ID, "Auxiliary Point Position", "Physics", "G4BestUnit", "G4ThreeVector");
@@ -194,7 +194,12 @@ std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
 {
   // Create base class att values...
 
-  std::vector<G4AttValue>* values = G4TrajectoryPoint::CreateAttValues();
+  auto values = new std::vector<G4AttValue>;
+  values->push_back(G4AttValue("Pos", G4BestUnit(fPosition, "Length"), ""));
+
+#ifdef G4ATTDEBUG
+  G4cout << G4AttCheck(values, GetAttDefs());
+#endif
 
   if (fpAuxiliaryPointVector != nullptr) {
     for (const auto& iAux : *fpAuxiliaryPointVector) {

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -81,7 +81,7 @@ Threshold for very long decay time at rest        1 y
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
- Use probability tables from     njoy
+ Use probability tables from     
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -106,7 +106,7 @@ Threshold for very long decay time at rest        1 y
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+     Cr_sctns:             He3ParticleXS: 0 eV  ---> 25.6 PeV
 -----------------------------------------------------------------------
                            Hadronic Processes for alpha
   Process: hadElastic
@@ -115,7 +115,7 @@ Threshold for very long decay time at rest        1 y
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+     Cr_sctns:           alphaParticleXS: 0 eV  ---> 25.6 PeV
 -----------------------------------------------------------------------
                            Hadronic Processes for anti_He3
   Process: hadElastic
@@ -197,7 +197,7 @@ Threshold for very long decay time at rest        1 y
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:        deuteronParticleXS: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for gamma
   Process: photonNuclear
@@ -312,11 +312,11 @@ Threshold for very long decay time at rest        1 y
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+     Cr_sctns:          tritonParticleXS: 0 eV  ---> 25.6 PeV
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -383,7 +383,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.090000s Real=8.995737s Sys=0.000000s
+  User=8.020000s Real=8.689216s Sys=0.000000s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 

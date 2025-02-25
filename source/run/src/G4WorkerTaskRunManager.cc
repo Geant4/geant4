@@ -409,7 +409,7 @@ void G4WorkerTaskRunManager::ProcessUI()
   if (!matching) {
     for (const auto& itr : command_stack)
       G4UImanager::GetUIpointer()->ApplyCommand(itr);
-    processedCommandStack = command_stack;
+    processedCommandStack = std::move(command_stack);
   }
 }
 
@@ -442,7 +442,7 @@ void G4WorkerTaskRunManager::DoWork()
   }
 
   // Start this run
-  G4int nevts = mrm->GetNumberOfEventsToBeProcessed();
+  G4int nevts = mrm->GetNumberOfEventsPerTask();
   G4int numSelect = mrm->GetNumberOfSelectEvents();
   G4String macroFile = mrm->GetSelectMacro();
   G4bool empty_macro = (macroFile.empty() || macroFile == " ");

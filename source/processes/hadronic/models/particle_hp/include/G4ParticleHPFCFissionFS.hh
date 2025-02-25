@@ -37,10 +37,12 @@
 class G4ParticleHPFCFissionFS : public G4ParticleHPFissionBaseFS
 {
   public:
+
     G4ParticleHPFCFissionFS() { hasXsec = false; }
     ~G4ParticleHPFCFissionFS() override = default;
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
-              G4ParticleDefinition* projectile) override;
+
+    void Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+              const G4String& aFSType, G4ParticleDefinition* projectile) override;
     G4DynamicParticleVector* ApplyYourself(G4int nNeutrons);
     G4ParticleHPFinalState* New() override
     {
@@ -49,6 +51,7 @@ class G4ParticleHPFCFissionFS : public G4ParticleHPFissionBaseFS
     }
 
   private:
+
     G4HadFinalState* ApplyYourself(const G4HadProjectile&) override { return nullptr; }
 };
 #endif

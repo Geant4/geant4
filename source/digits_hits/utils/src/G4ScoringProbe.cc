@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4ScoringProbe
+// --------------------------------------------------------------------
+
 #include "G4ScoringProbe.hh"
 
 #include "G4Box.hh"
@@ -46,7 +48,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 
-G4ScoringProbe::G4ScoringProbe(G4String lvName, G4double half_size,
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex logvolmutex = G4MUTEX_INITIALIZER;
+}
+
+G4ScoringProbe::G4ScoringProbe(const G4String& lvName, G4double half_size,
                                G4bool checkOverlap)
   : G4VScoringMesh(lvName)
   , chkOverlap(checkOverlap)
@@ -76,12 +85,6 @@ void G4ScoringProbe::List() const
     G4cout << " >> probe #" << i << " at " << posVec[i] << G4endl;
   }
   G4VScoringMesh::List();
-}
-
-#include "G4AutoLock.hh"
-namespace
-{
-  G4Mutex logvolmutex = G4MUTEX_INITIALIZER;
 }
 
 void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys)

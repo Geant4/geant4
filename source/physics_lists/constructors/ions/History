@@ -4,8 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
-## 2023-11-09 Yoshihide Sato (phys-ctor-ions-V11-11-01)
-- Add a physics constructor, G4LightIonQMDPhsysics for light ion qmd.
+## 2024-11-08 Alberto Ribon (phys-ctor-ions-V11-02-00)
+- G4LightIonQMDPhysics, README : updated information, no changes to the code.
+
+## 2023-11-09 Yoshihide Sato (phys-ctor-ions-V11-01-00)
+- Add a physics constructor, G4LightIonQMDPhysics for light ion QMD.
 
 ## 2021-12-10 Ben Morgan (phys-ctor-ions-V11-00-00)
 - Change to new Markdown History format

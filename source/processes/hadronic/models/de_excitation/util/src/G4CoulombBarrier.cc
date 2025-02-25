@@ -39,7 +39,7 @@ G4CoulombBarrier::G4CoulombBarrier(G4int A, G4int Z)
   : G4VCoulombBarrier(A, Z)
 {
   factor = CLHEP::elm_coupling*Z;
-  SetParameters(0.6*G4NuclearRadii::RadiusCB(Z, A), 1.5*CLHEP::fermi);
+  SetParameters(0.4*G4NuclearRadii::RadiusCB(Z, A), 1.5*CLHEP::fermi);
 }
 
 G4double G4CoulombBarrier::GetCoulombBarrier(

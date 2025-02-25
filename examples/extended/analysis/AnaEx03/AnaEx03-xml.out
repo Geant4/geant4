@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -22,7 +22,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 ***** Table : Nb of materials = 3 *****
 
- Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -67,7 +67,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -162,10 +161,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -336,7 +338,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -818,7 +820,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -843,19 +845,13 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 
 ---> Begin of event: 0
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
 ... write file : e-.xml - done
 ... write file : e-_nt_Ntuple1.xml - done
 ... write file : e-_nt_Ntuple2.xml - done
@@ -869,10 +865,6 @@ LGap: mean = 2.3872 cm  rms = 9.61394 mm
 ### Run 1 start.
 
 ---> Begin of event: 0
-There are histograms that can be viewed with visualization:
-  2 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
 ... write file : e-.xml - done
 ... write file : e-_nt_Ntuple1.xml - done
 ... write file : e-_nt_Ntuple2.xml - done
@@ -884,10 +876,6 @@ LAbs: mean = 13.1175 cm  rms = 4.04973 mm
 ### Run 2 start.
 
 ---> Begin of event: 0
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
 ... write file : e-.xml - done
 ... write file : e-_nt_Ntuple1.xml - done
 ... write file : e-_nt_Ntuple2.xml - done
@@ -908,37 +896,29 @@ LGap2: mean = 6.91332 cm  rms = 3.1357 cm
 ### Run 3 start.
 
 ---> Begin of event: 0
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
 ... write file : proton.xml - done
 ... write file : proton_nt_Ntuple1.xml - done
 ... write file : proton_nt_Ntuple2.xml - done
 
  ----> print histograms statistic 
 
-EAbs: mean = 220.52 MeV rms = 42.6585 MeV
-EGap2: mean = 21.0932 MeV rms = 14.424 MeV
-LAbs: mean = 8.44493 cm  rms = 2.11558 cm 
-LGap2: mean = 4.29837 cm  rms = 1.2912 cm 
+EAbs: mean = 219.88 MeV rms = 43.1697 MeV
+EGap2: mean = 20.0259 MeV rms = 9.07144 MeV
+LAbs: mean = 8.97192 cm  rms = 1.91523 cm 
+LGap2: mean = 4.65684 cm  rms = 1.29345 cm 
 ### Run 4 start.
 
 ---> Begin of event: 0
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
 ... write file : proton.xml - done
 ... write file : proton_nt_Ntuple1.xml - done
 ... write file : proton_nt_Ntuple2.xml - done
 
  ----> print histograms statistic 
 
-EAbs: mean = 183.744 MeV rms = 43.5113 MeV
-EGap2: mean = 15.4705 MeV rms = 6.10516 MeV
-LAbs: mean = 9.21143 cm  rms = 2.16642 cm 
-LGap2: mean = 4.86717 cm  rms = 1.60599 cm 
+EAbs: mean = 202.531 MeV rms = 61.5619 MeV
+EGap2: mean = 17.1471 MeV rms = 7.9748 MeV
+LAbs: mean = 9.63554 cm  rms = 1.93891 cm 
+LGap2: mean = 4.84455 cm  rms = 1.12888 cm 
 ... close file : proton.xml - done
 ... close file : proton_nt_Ntuple1.xml - done
 ... close file : proton_nt_Ntuple2.xml - done

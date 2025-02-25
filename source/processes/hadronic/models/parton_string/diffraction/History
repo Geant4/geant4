@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-07-18 Alberto Ribon (hadr-string-diff-V11-02-00)
+- G4FTFParameters : renamed method SetElastis as SetElastic.
+  This does not have any effect - the random sequence stays the same.
+  This typo in the name of a method is present in Geant4 since many years.
+  Thanks to Marc Verderi for spotting it.
+
 ## 2023-10-26 Alberto Ribon (hadr-string-diff-V11-01-00)
 - G4FTFTunings : introduced a new FTF tune meant to overcome the problem of
   too optimistic (i.e. narrow) pion shower energy resolutions in ATLAS

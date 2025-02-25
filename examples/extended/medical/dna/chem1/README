@@ -43,10 +43,21 @@ How to activate chemistry code.
   The chemistry module is triggered in the StackingAction class when all 
   physical tracks have been processed. 
 
- 4 - OUTPUT 	
+ 4 - OUTPUT
 
   Physics initialization and the defined reaction table are printed.
   G4ITStepManager processes the chemical stage time step after time step.
   Chemical reactions are printed.
 
+ 5 - HOW TO START ?
 
+  To run the example in batch mode:
+  ./chem1 -mac beam.in
+  or
+  ./chem1
+  then the macro beam.in is processed by default
+
+  In interactive mode, run:
+  ./chem1 -gui
+  or
+  ./chem1 -gui gui.mac

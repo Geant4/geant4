@@ -42,7 +42,7 @@
 class G4PSStepChecker3D : public G4PSStepChecker
 {
  public:
-  G4PSStepChecker3D(G4String name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
+  G4PSStepChecker3D(const G4String& name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
                     G4int depi = 2, G4int depj = 1, G4int depk = 0);
   ~G4PSStepChecker3D() override = default;
 

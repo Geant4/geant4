@@ -53,6 +53,7 @@ enum G4ClassificationOfNewTrack
   //----------------------------------------------------------------
   // following ENUM are available only for the sub-event parallelism
   //----------------------------------------------------------------
+  fSubEvent_0=100,
   fSubEvent_1=101, fSubEvent_2=102, fSubEvent_3=103, fSubEvent_4=104,
   fSubEvent_5=105, fSubEvent_6=106, fSubEvent_7=107, fSubEvent_8=108,
   fSubEvent_9=109, fSubEvent_A=110, fSubEvent_B=111, fSubEvent_C=112,

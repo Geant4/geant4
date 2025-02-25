@@ -8,7 +8,7 @@
   gStyle->SetPalette(1);
   gROOT->SetStyle("Plain");
 
-  c1 = new TCanvas ("c1","",20,20,800,800);
+  auto c1 = new TCanvas ("c1","",20,20,800,800);
   c1->Divide(1,1);
 
   TFile f("slowing.root");

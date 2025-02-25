@@ -49,6 +49,9 @@
 #include "G4PhysListUtil.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4PhysicsConstructorFactory.hh"
+G4_DECLARE_PHYSCONSTR_FACTORY(G4ThermalNeutrons);
+
 G4ThermalNeutrons::G4ThermalNeutrons(G4int ver) :
   G4VHadronPhysics("ThermalNeutrons", ver) {
   // because it is an addition, the type of this constructor is 0

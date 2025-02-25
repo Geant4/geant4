@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,7 +33,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -112,10 +111,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -551,8 +553,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 End of tracking primary particle, its final energy is :25 meV
 Physics stage ends
 Number of chemical species involved in reactions = 6
@@ -562,64 +562,372 @@ H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      0.2005
 ------------------------------------------------------------------------------------------------------------------------------
 H3O^1 + OH^-1 -> No product                 1.43e+11                      1.34973
 ------------------------------------------------------------------------------------------------------------------------------
-OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      0.506256
+°OH^0 + e_aq^-1 -> OH^-1                   2.95e+10                      0.506256
 ------------------------------------------------------------------------------------------------------------------------------
-OH^0 + OH^0 -> H2O2^0                       4.4e+09                       0.207651
+°OH^0 + °OH^0 -> H2O2^0                   4.4e+09                       0.207651
 ------------------------------------------------------------------------------------------------------------------------------
-OH^0 + H^0 -> No product                    1.44e+10                      0.194167
+°OH^0 + H^0 -> No product                  1.44e+10                      0.194167
 ------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + e_aq^-1 -> OH^-1 + OH^-1 + H_2^0  5e+09                         0.134838
 ------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + H^0 -> OH^-1 + H_2^0              2.65e+10                      0.294265
 ------------------------------------------------------------------------------------------------------------------------------
-e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.41e+10                      0.295745
+e_aq^-1 + H2O2^0 -> OH^-1 + °OH^0          1.41e+10                      0.295745
 ------------------------------------------------------------------------------------------------------------------------------
 H^0 + H^0 -> H_2^0                          1.2e+10                       0.226528
 ------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 *** G4Scheduler starts processing 
+
+At : 0.10709 (ns) reactantA = e_aq^-1 (ID number = -58) at position : (-19.692,27.001,36.979) reacts with reactantB = H3O^1 (ID number = -125) at position : (-19.692,27.001,36.979)
+      creating product 1 =H^0 position : (-1.9614e-05,2.7336e-05,3.7014e-05)
+
 At time :  107.09 ps  Reaction : e_aq^-1 (-58) + H3O^1 (-125) -> H^0 (-206)
-At time :  150.64 ps  Reaction : e_aq^-1 (-99) + OH^0 (-138) -> OH^-1 (-207)
+
+At : 0.15064 (ns) reactantA = e_aq^-1 (ID number = -99) at position : (-5.2724,-2.8401,11.685) reacts with reactantB = °OH^0 (ID number = -138) at position : (-5.2724,-2.8401,11.685)
+      creating product 1 =OH^-1 position : (-5.1974e-06,-2.6453e-06,1.1711e-05)
+
+At time :  150.64 ps  Reaction : e_aq^-1 (-99) + °OH^0 (-138) -> OH^-1 (-207)
+
+At : 0.15064 (ns) reactantA = OH^-1 (ID number = -207) at position : (-5.1974,-2.6453,11.711) reacts with reactantB = H3O^1 (ID number = -137) at position : (-5.1974,-2.6453,11.711)
+
 At time :  150.64 ps  Reaction : OH^-1 (-207) + H3O^1 (-137) -> No product
-At time :  166.83 ps  Reaction : OH^0 (-122) + OH^0 (-158) -> H2O2^0 (-208)
-At time :  169.83 ps  Reaction : OH^0 (-189) + H^0 (-190) -> No product
-At time :  220.56 ps  Reaction : OH^0 (-171) + OH^0 (-174) -> H2O2^0 (-209)
-At time :  276.49 ps  Reaction : e_aq^-1 (-100) + OH^0 (-166) -> OH^-1 (-210)
-At time :   363.1 ps  Reaction : H^0 (-192) + OH^0 (-150) -> No product
-At time :  694.12 ps  Reaction : OH^0 (-134) + OH^0 (-144) -> H2O2^0 (-211)
-At time :  1.1551 ns  Reaction : OH^0 (-191) + OH^0 (-146) -> H2O2^0 (-212)
+
+At : 0.16683 (ns) reactantA = °OH^0 (ID number = -122) at position : (-27.605,25.465,37.501) reacts with reactantB = °OH^0 (ID number = -158) at position : (-27.605,25.465,37.501)
+      creating product 1 =H2O2^0 position : (-2.7751e-05,2.5308e-05,3.7471e-05)
+
+At time :  166.83 ps  Reaction : °OH^0 (-122) + °OH^0 (-158) -> H2O2^0 (-208)
+
+At : 0.16983 (ns) reactantA = °OH^0 (ID number = -189) at position : (-23.157,26.106,32.912) reacts with reactantB = H^0 (ID number = -190) at position : (-23.157,26.106,32.912)
+
+At time :  169.83 ps  Reaction : °OH^0 (-189) + H^0 (-190) -> No product
+
+At : 0.22056 (ns) reactantA = °OH^0 (ID number = -171) at position : (-27.27,24.081,34.863) reacts with reactantB = °OH^0 (ID number = -174) at position : (-27.27,24.081,34.863)
+      creating product 1 =H2O2^0 position : (-2.7282e-05,2.4041e-05,3.4921e-05)
+
+At time :  220.56 ps  Reaction : °OH^0 (-171) + °OH^0 (-174) -> H2O2^0 (-209)
+
+At : 0.27649 (ns) reactantA = e_aq^-1 (ID number = -100) at position : (-3.3286,-1.0514,13.009) reacts with reactantB = °OH^0 (ID number = -166) at position : (-3.3286,-1.0514,13.009)
+      creating product 1 =OH^-1 position : (-3.1107e-06,-8.9987e-07,1.2897e-05)
+
+At time :  276.49 ps  Reaction : e_aq^-1 (-100) + °OH^0 (-166) -> OH^-1 (-210)
+
+At : 0.3631 (ns) reactantA = H^0 (ID number = -192) at position : (-10.81,25.516,35.311) reacts with reactantB = °OH^0 (ID number = -150) at position : (-10.81,25.516,35.311)
+
+At time :   363.1 ps  Reaction : H^0 (-192) + °OH^0 (-150) -> No product
+
+At : 0.69412 (ns) reactantA = °OH^0 (ID number = -134) at position : (-9.5396,7.4761,26.644) reacts with reactantB = °OH^0 (ID number = -144) at position : (-9.5396,7.4761,26.644)
+      creating product 1 =H2O2^0 position : (-9.4912e-06,7.5485e-06,2.6605e-05)
+
+At time :  694.12 ps  Reaction : °OH^0 (-134) + °OH^0 (-144) -> H2O2^0 (-211)
+
+At : 1.1551 (ns) reactantA = °OH^0 (ID number = -191) at position : (-11.276,22.722,38.419) reacts with reactantB = °OH^0 (ID number = -146) at position : (-11.276,22.722,38.419)
+      creating product 1 =H2O2^0 position : (-1.1568e-05,2.283e-05,3.8582e-05)
+
+At time :  1.1551 ns  Reaction : °OH^0 (-191) + °OH^0 (-146) -> H2O2^0 (-212)
+
+At : 1.2972 (ns) reactantA = e_aq^-1 (ID number = -94) at position : (-4.6372,-3.2349,21.723) reacts with reactantB = H3O^1 (ID number = -165) at position : (-4.6372,-3.2349,21.723)
+      creating product 1 =H^0 position : (-4.7158e-06,-3.2781e-06,2.1733e-05)
+
 At time :  1.2972 ns  Reaction : e_aq^-1 (-94) + H3O^1 (-165) -> H^0 (-213)
-At time :  2.5359 ns  Reaction : e_aq^-1 (-93) + OH^0 (-168) -> OH^-1 (-214)
-At time :  2.8494 ns  Reaction : e_aq^-1 (-64) + OH^0 (-164) -> OH^-1 (-215)
+
+At : 2.5359 (ns) reactantA = e_aq^-1 (ID number = -93) at position : (2.542,-1.6142,11.016) reacts with reactantB = °OH^0 (ID number = -168) at position : (2.542,-1.6142,11.016)
+      creating product 1 =OH^-1 position : (2.4913e-06,-1.3351e-06,1.1413e-05)
+
+At time :  2.5359 ns  Reaction : e_aq^-1 (-93) + °OH^0 (-168) -> OH^-1 (-214)
+
+At : 2.8494 (ns) reactantA = e_aq^-1 (ID number = -64) at position : (-18.73,27.13,35.682) reacts with reactantB = °OH^0 (ID number = -164) at position : (-18.73,27.13,35.682)
+      creating product 1 =OH^-1 position : (-1.882e-05,2.6892e-05,3.5584e-05)
+
+At time :  2.8494 ns  Reaction : e_aq^-1 (-64) + °OH^0 (-164) -> OH^-1 (-215)
+
+At : 2.9715 (ns) reactantA = H3O^1 (ID number = -151) at position : (-17.185,25.407,35.873) reacts with reactantB = OH^-1 (ID number = -215) at position : (-17.185,25.407,35.873)
+
 At time :  2.9715 ns  Reaction : H3O^1 (-151) + OH^-1 (-215) -> No product
-At time :  3.2824 ns  Reaction : e_aq^-1 (-73) + OH^0 (-156) -> OH^-1 (-216)
-At time :  3.3431 ns  Reaction : e_aq^-1 (-63) + OH^0 (-148) -> OH^-1 (-217)
+
+At : 3.2824 (ns) reactantA = e_aq^-1 (ID number = -73) at position : (-18.767,28.144,41.894) reacts with reactantB = °OH^0 (ID number = -156) at position : (-18.767,28.144,41.894)
+      creating product 1 =OH^-1 position : (-1.8746e-05,2.804e-05,4.2073e-05)
+
+At time :  3.2824 ns  Reaction : e_aq^-1 (-73) + °OH^0 (-156) -> OH^-1 (-216)
+
+At : 3.3431 (ns) reactantA = e_aq^-1 (ID number = -63) at position : (-11.176,28.438,37.513) reacts with reactantB = °OH^0 (ID number = -148) at position : (-11.176,28.438,37.513)
+      creating product 1 =OH^-1 position : (-1.1237e-05,2.8396e-05,3.7578e-05)
+
+At time :  3.3431 ns  Reaction : e_aq^-1 (-63) + °OH^0 (-148) -> OH^-1 (-217)
+
+At : 4.4592 (ns) reactantA = e_aq^-1 (ID number = -34) at position : (-34.792,17.025,40.469) reacts with reactantB = H3O^1 (ID number = -159) at position : (-34.792,17.025,40.469)
+      creating product 1 =H^0 position : (-3.4822e-05,1.7108e-05,4.0285e-05)
+
 At time :  4.4592 ns  Reaction : e_aq^-1 (-34) + H3O^1 (-159) -> H^0 (-218)
+
+At : 4.5396 (ns) reactantA = e_aq^-1 (ID number = -54) at position : (-17.98,17.959,33.614) reacts with reactantB = H^0 (ID number = -206) at position : (-17.98,17.959,33.614)
+      creating product 1 =OH^-1 position : (-1.7957e-05,1.7837e-05,3.3613e-05)
+      creating product 2 =H_2^0 position : (-1.7957e-05,1.7837e-05,3.3613e-05)
+
 At time :  4.5396 ns  Reaction : e_aq^-1 (-54) + H^0 (-206) -> OH^-1 (-219) + H_2^0 (-220)
-At time :  5.1257 ns  Reaction : OH^0 (-196) + e_aq^-1 (-80) -> OH^-1 (-221)
+
+At : 5.1257 (ns) reactantA = °OH^0 (ID number = -196) at position : (1.8951,7.6115,32.968) reacts with reactantB = e_aq^-1 (ID number = -80) at position : (1.8951,7.6115,32.968)
+      creating product 1 =OH^-1 position : (2.0393e-06,7.8392e-06,3.2867e-05)
+
+At time :  5.1257 ns  Reaction : °OH^0 (-196) + e_aq^-1 (-80) -> OH^-1 (-221)
+
+At : 6.0779 (ns) reactantA = H3O^1 (ID number = -123) at position : (-28.636,20.888,35.612) reacts with reactantB = OH^-1 (ID number = -219) at position : (-28.636,20.888,35.612)
+
 At time :  6.0779 ns  Reaction : H3O^1 (-123) + OH^-1 (-219) -> No product
-At time :  6.5751 ns  Reaction : e_aq^-1 (-33) + OH^0 (-202) -> OH^-1 (-222)
+
+At : 6.5751 (ns) reactantA = e_aq^-1 (ID number = -33) at position : (-36.276,21.816,40.148) reacts with reactantB = °OH^0 (ID number = -202) at position : (-36.276,21.816,40.148)
+      creating product 1 =OH^-1 position : (-3.6451e-05,2.2187e-05,3.9986e-05)
+
+At time :  6.5751 ns  Reaction : e_aq^-1 (-33) + °OH^0 (-202) -> OH^-1 (-222)
+
+At : 6.7448 (ns) reactantA = e_aq^-1 (ID number = -53) at position : (-30.07,24.402,35.927) reacts with reactantB = H3O^1 (ID number = -149) at position : (-30.07,24.402,35.927)
+      creating product 1 =H^0 position : (-3.0008e-05,2.4319e-05,3.6005e-05)
+
 At time :  6.7448 ns  Reaction : e_aq^-1 (-53) + H3O^1 (-149) -> H^0 (-223)
-At time :  6.9656 ns  Reaction : e_aq^-1 (-60) + OH^0 (-126) -> OH^-1 (-224)
+
+At : 6.9656 (ns) reactantA = e_aq^-1 (ID number = -60) at position : (-29.066,19.421,39.241) reacts with reactantB = °OH^0 (ID number = -126) at position : (-29.066,19.421,39.241)
+      creating product 1 =OH^-1 position : (-2.9001e-05,1.9518e-05,3.91e-05)
+
+At time :  6.9656 ns  Reaction : e_aq^-1 (-60) + °OH^0 (-126) -> OH^-1 (-224)
+
+At : 9.4507 (ns) reactantA = H3O^1 (ID number = -141) at position : (3.6376,19.161,35.154) reacts with reactantB = OH^-1 (ID number = -217) at position : (3.6376,19.161,35.154)
+
 At time :  9.4507 ns  Reaction : H3O^1 (-141) + OH^-1 (-217) -> No product
-At time :  9.6517 ns  Reaction : e_aq^-1 (-95) + OH^0 (-130) -> OH^-1 (-225)
-At time :  9.7091 ns  Reaction : e_aq^-1 (-68) + OH^0 (-187) -> OH^-1 (-226)
-At time :  10.107 ns  Reaction : e_aq^-1 (-81) + OH^0 (-116) -> OH^-1 (-227)
-At time :  11.407 ns  Reaction : e_aq^-1 (-39) + OH^0 (-154) -> OH^-1 (-228)
-At time :  11.407 ns  Reaction : e_aq^-1 (-91) + OH^0 (-112) -> OH^-1 (-229)
-At time :  19.107 ns  Reaction : OH^0 (-181) + OH^0 (-200) -> H2O2^0 (-230)
+
+At : 9.6517 (ns) reactantA = e_aq^-1 (ID number = -95) at position : (-13.675,14.368,32.856) reacts with reactantB = °OH^0 (ID number = -130) at position : (-13.675,14.368,32.856)
+      creating product 1 =OH^-1 position : (-1.3449e-05,1.4472e-05,3.2784e-05)
+
+At time :  9.6517 ns  Reaction : e_aq^-1 (-95) + °OH^0 (-130) -> OH^-1 (-225)
+
+At : 9.7091 (ns) reactantA = e_aq^-1 (ID number = -68) at position : (-12.88,19.368,44.944) reacts with reactantB = °OH^0 (ID number = -187) at position : (-12.88,19.368,44.944)
+      creating product 1 =OH^-1 position : (-1.2814e-05,1.9341e-05,4.5152e-05)
+
+At time :  9.7091 ns  Reaction : e_aq^-1 (-68) + °OH^0 (-187) -> OH^-1 (-226)
+
+At : 10.107 (ns) reactantA = e_aq^-1 (ID number = -81) at position : (-22.681,23.653,30.471) reacts with reactantB = °OH^0 (ID number = -116) at position : (-22.681,23.653,30.471)
+      creating product 1 =OH^-1 position : (-2.261e-05,2.4063e-05,3.0348e-05)
+
+At time :  10.107 ns  Reaction : e_aq^-1 (-81) + °OH^0 (-116) -> OH^-1 (-227)
+
+At : 11.407 (ns) reactantA = e_aq^-1 (ID number = -39) at position : (-38.405,24.529,22.365) reacts with reactantB = °OH^0 (ID number = -154) at position : (-38.405,24.529,22.365)
+      creating product 1 =OH^-1 position : (-3.7517e-05,2.5321e-05,2.3016e-05)
+
+At time :  11.407 ns  Reaction : e_aq^-1 (-39) + °OH^0 (-154) -> OH^-1 (-228)
+
+At : 11.407 (ns) reactantA = e_aq^-1 (ID number = -91) at position : (4.8142,11.36,23.898) reacts with reactantB = °OH^0 (ID number = -112) at position : (4.8142,11.36,23.898)
+      creating product 1 =OH^-1 position : (4.9785e-06,1.1625e-05,2.3943e-05)
+
+At time :  11.407 ns  Reaction : e_aq^-1 (-91) + °OH^0 (-112) -> OH^-1 (-229)
+
+At : 19.107 (ns) reactantA = °OH^0 (ID number = -181) at position : (-4.5737,1.8776,21.152) reacts with reactantB = °OH^0 (ID number = -200) at position : (-4.5737,1.8776,21.152)
+      creating product 1 =H2O2^0 position : (-4.361e-06,2.3836e-06,2.1502e-05)
+
+At time :  19.107 ns  Reaction : °OH^0 (-181) + °OH^0 (-200) -> H2O2^0 (-230)
+
+At : 19.207 (ns) reactantA = OH^-1 (ID number = -222) at position : (-40.678,41.252,27.384) reacts with reactantB = H3O^1 (ID number = -172) at position : (-40.678,41.252,27.384)
+
 At time :  19.207 ns  Reaction : OH^-1 (-222) + H3O^1 (-172) -> No product
-At time :  19.507 ns  Reaction : OH^0 (-203) + e_aq^-1 (-55) -> OH^-1 (-231)
+
+At : 19.507 (ns) reactantA = °OH^0 (ID number = -203) at position : (-35.366,25.276,28.446) reacts with reactantB = e_aq^-1 (ID number = -55) at position : (-35.366,25.276,28.446)
+      creating product 1 =OH^-1 position : (-3.5219e-05,2.4715e-05,2.865e-05)
+
+At time :  19.507 ns  Reaction : °OH^0 (-203) + e_aq^-1 (-55) -> OH^-1 (-231)
+
+At : 21.207 (ns) reactantA = e_aq^-1 (ID number = -75) at position : (6.6715,6.932,68.184) reacts with reactantB = H3O^1 (ID number = -193) at position : (6.6715,6.932,68.184)
+      creating product 1 =H^0 position : (6.8947e-06,7.2927e-06,6.7402e-05)
+
 At time :  21.207 ns  Reaction : e_aq^-1 (-75) + H3O^1 (-193) -> H^0 (-232)
+
+At : 26.258 (ns) reactantA = OH^-1 (ID number = -221) at position : (-7.452,9.9496,35.56) reacts with reactantB = H3O^1 (ID number = -131) at position : (-7.452,9.9496,35.56)
+
 At time :  26.258 ns  Reaction : OH^-1 (-221) + H3O^1 (-131) -> No product
-At time :  30.425 ns  Reaction : OH^0 (-124) + H^0 (-223) -> No product
-At time :  32.989 ns  Reaction : e_aq^-1 (-90) + OH^0 (-118) -> OH^-1 (-233)
+
+At : 30.425 (ns) reactantA = °OH^0 (ID number = -124) at position : (-23.823,6.5068,33.199) reacts with reactantB = H^0 (ID number = -223) at position : (-23.823,6.5068,33.199)
+
+At time :  30.425 ns  Reaction : °OH^0 (-124) + H^0 (-223) -> No product
+
+At : 32.989 (ns) reactantA = e_aq^-1 (ID number = -90) at position : (-6.5876,-5.8828,34.344) reacts with reactantB = °OH^0 (ID number = -118) at position : (-6.5876,-5.8828,34.344)
+      creating product 1 =OH^-1 position : (-6.6118e-06,-5.8157e-06,3.482e-05)
+
+At time :  32.989 ns  Reaction : e_aq^-1 (-90) + °OH^0 (-118) -> OH^-1 (-233)
+
+At : 35.665 (ns) reactantA = e_aq^-1 (ID number = -86) at position : (-36.876,-10.575,12.079) reacts with reactantB = H3O^1 (ID number = -167) at position : (-36.876,-10.575,12.079)
+      creating product 1 =H^0 position : (-3.7485e-05,-1.0438e-05,1.1823e-05)
+
 At time :  35.665 ns  Reaction : e_aq^-1 (-86) + H3O^1 (-167) -> H^0 (-234)
+
+At : 40.406 (ns) reactantA = OH^-1 (ID number = -229) at position : (-16.872,11.685,44.454) reacts with reactantB = H3O^1 (ID number = -119) at position : (-16.872,11.685,44.454)
+
 At time :  40.406 ns  Reaction : OH^-1 (-229) + H3O^1 (-119) -> No product
-At time :  60.646 ns  Reaction : e_aq^-1 (-37) + OH^0 (-128) -> OH^-1 (-235)
+
+At : 60.646 (ns) reactantA = e_aq^-1 (ID number = -37) at position : (-34.653,48.261,51.444) reacts with reactantB = °OH^0 (ID number = -128) at position : (-34.653,48.261,51.444)
+      creating product 1 =OH^-1 position : (-3.4539e-05,4.7893e-05,5.1967e-05)
+
+At time :  60.646 ns  Reaction : e_aq^-1 (-37) + °OH^0 (-128) -> OH^-1 (-235)
+
+At : 68.603 (ns) reactantA = OH^-1 (ID number = -227) at position : (-39.94,12.555,54.974) reacts with reactantB = H3O^1 (ID number = -147) at position : (-39.94,12.555,54.974)
+
 At time :  68.603 ns  Reaction : OH^-1 (-227) + H3O^1 (-147) -> No product
-At time :  80.029 ns  Reaction : H^0 (-188) + OH^0 (-136) -> No product
-At time :  88.824 ns  Reaction : H^0 (-198) + OH^0 (-110) -> No product
+
+At : 80.029 (ns) reactantA = H^0 (ID number = -188) at position : (-16.616,-2.4932,10.042) reacts with reactantB = °OH^0 (ID number = -136) at position : (-16.616,-2.4932,10.042)
+
+At time :  80.029 ns  Reaction : H^0 (-188) + °OH^0 (-136) -> No product
+
+At : 88.824 (ns) reactantA = H^0 (ID number = -198) at position : (-25.8,8.3975,36.233) reacts with reactantB = °OH^0 (ID number = -110) at position : (-25.8,8.3975,36.233)
+
+At time :  88.824 ns  Reaction : H^0 (-198) + °OH^0 (-110) -> No product
+_________________
+At : 99.098 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (8.2401,32.767,26.129)
+TrackID: -120  position : (-37.17,37.376,-3.2372)
+TrackID: -132  position : (-58.458,37.759,18.488)
+TrackID: -140  position : (-37.513,4.1717,49.707)
+TrackID: -142  position : (-16.563,-13.493,22.254)
+TrackID: -152  position : (-14.697,45.966,-24.878)
+TrackID: -160  position : (-35.179,36.106,26.732)
+TrackID: -162  position : (-17.681,22.077,47.087)
+TrackID: -170  position : (-15.632,-24.883,23.99)
+TrackID: -177  position : (-29.192,-33.657,-18.1)
+TrackID: -180  position : (-7.4378,12.404,55.156)
+TrackID: -183  position : (-23.736,41.669,12.76)
+TrackID: -185  position : (9.5791,28.535,-10.284)
+TrackID: -194  position : (-7.4744,-29.799,-5.4243)
+TrackID: -197  position : (-10.802,-11.333,29.09)
+TrackID: -205  position : (-47.435,83.224,70.906)
+_________________
+At : 99.232 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (8.0138,31.256,25.295)
+TrackID: -120  position : (-36.513,37.849,-3.9055)
+TrackID: -132  position : (-58.234,37.389,18.562)
+TrackID: -140  position : (-36.623,3.8264,50.556)
+TrackID: -142  position : (-17.858,-13.938,19.447)
+TrackID: -152  position : (-15.027,47.551,-24.981)
+TrackID: -160  position : (-34.447,36.154,26.603)
+TrackID: -162  position : (-17.118,22.62,46.539)
+TrackID: -170  position : (-15.728,-25.182,23.748)
+TrackID: -177  position : (-29.184,-33.813,-17.475)
+TrackID: -180  position : (-7.7806,13.663,56.82)
+TrackID: -183  position : (-23.543,41.239,12.702)
+TrackID: -185  position : (8.7952,29.125,-9.9998)
+TrackID: -194  position : (-7.6739,-29.47,-4.4929)
+TrackID: -197  position : (-10.099,-10.895,28.449)
+TrackID: -205  position : (-47.384,84.032,70.135)
+_________________
+At : 99.332 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (7.6772,31.479,25.44)
+TrackID: -120  position : (-36.331,35.908,-3.4018)
+TrackID: -132  position : (-56.776,37.259,18.886)
+TrackID: -140  position : (-36.153,3.6522,51.36)
+TrackID: -142  position : (-17.372,-14.044,20.05)
+TrackID: -152  position : (-14.514,47.184,-23.942)
+TrackID: -160  position : (-33.936,36.447,25.446)
+TrackID: -162  position : (-17.446,22.137,46.81)
+TrackID: -170  position : (-14.854,-25.146,23.649)
+TrackID: -177  position : (-29.674,-33.483,-18.558)
+TrackID: -180  position : (-7.8888,13.062,55.368)
+TrackID: -183  position : (-24.086,40.448,13.154)
+TrackID: -185  position : (10.047,28.088,-11.018)
+TrackID: -194  position : (-7.4919,-29.267,-3.7219)
+TrackID: -197  position : (-10.318,-10.879,29.799)
+TrackID: -205  position : (-46.727,84.115,69.93)
+_________________
+At : 99.432 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (7.6501,32.352,25.496)
+TrackID: -120  position : (-37.282,37.34,-3.4732)
+TrackID: -132  position : (-56.763,36.942,18.464)
+TrackID: -140  position : (-35.001,4.3516,49.593)
+TrackID: -142  position : (-16.92,-14.118,19.499)
+TrackID: -152  position : (-13.686,47.598,-24.391)
+TrackID: -160  position : (-33.448,36.204,26.153)
+TrackID: -162  position : (-16.903,22.04,45.966)
+TrackID: -170  position : (-14.159,-23.833,22.889)
+TrackID: -177  position : (-28.713,-32.744,-17.68)
+TrackID: -180  position : (-7.8387,13.177,56.02)
+TrackID: -183  position : (-22.492,40.216,12.639)
+TrackID: -185  position : (10.877,27.835,-10.994)
+TrackID: -194  position : (-6.7979,-29.126,-2.5406)
+TrackID: -197  position : (-9.4778,-10.78,30.548)
+TrackID: -205  position : (-46.41,84.308,69.432)
+_________________
+At : 99.551 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (7.4485,32.167,25.595)
+TrackID: -120  position : (-36.398,37.318,-3.4246)
+TrackID: -132  position : (-57.286,36.681,18.115)
+TrackID: -140  position : (-36.029,5.035,48.927)
+TrackID: -142  position : (-18.454,-13.444,18.587)
+TrackID: -152  position : (-15.015,47.871,-24.206)
+TrackID: -160  position : (-33.898,36.695,25.032)
+TrackID: -162  position : (-15.788,23.923,45.345)
+TrackID: -170  position : (-15.306,-24.595,23.657)
+TrackID: -177  position : (-28.776,-31.801,-16.665)
+TrackID: -180  position : (-6.6722,12.141,53.332)
+TrackID: -183  position : (-22.728,40.031,13.671)
+TrackID: -185  position : (11.081,28.506,-10.009)
+TrackID: -194  position : (-6.155,-30.054,-1.6838)
+TrackID: -197  position : (-10.905,-11.202,31.042)
+TrackID: -205  position : (-45.954,83.756,70.541)
+_________________
+At : 99.713 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (6.5067,32.356,25.912)
+TrackID: -120  position : (-36.501,35.916,-3.5632)
+TrackID: -132  position : (-58.473,37.035,18.156)
+TrackID: -140  position : (-36.978,7.6792,48.954)
+TrackID: -142  position : (-16.525,-12.444,20.047)
+TrackID: -152  position : (-15.814,47.084,-26.161)
+TrackID: -160  position : (-34.258,36.416,23.814)
+TrackID: -162  position : (-15.514,23.507,45.353)
+TrackID: -170  position : (-15.34,-23.214,22.86)
+TrackID: -177  position : (-28.005,-33.215,-16.374)
+TrackID: -180  position : (-5.905,12.481,52.933)
+TrackID: -183  position : (-22.736,42.136,12.729)
+TrackID: -185  position : (8.5683,28.79,-10.35)
+TrackID: -194  position : (-6.6499,-31.338,-0.60731)
+TrackID: -197  position : (-11.851,-9.5882,31.044)
+TrackID: -205  position : (-46.927,86.763,72.822)
+_________________
+At : 99.983 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (6.0029,32.119,25.348)
+TrackID: -120  position : (-38.429,35.118,-3.9804)
+TrackID: -132  position : (-57.487,36.103,21.235)
+TrackID: -140  position : (-35.618,7.5111,47.933)
+TrackID: -142  position : (-16.696,-13.99,20.88)
+TrackID: -152  position : (-15.553,46.38,-25.072)
+TrackID: -160  position : (-33.017,34.566,23.108)
+TrackID: -162  position : (-14.146,23.345,47.16)
+TrackID: -170  position : (-17.004,-21.768,22.122)
+TrackID: -177  position : (-27.925,-34.164,-15.142)
+TrackID: -180  position : (-4.7151,13.274,53.507)
+TrackID: -183  position : (-21.726,39.699,12.565)
+TrackID: -185  position : (8.4076,28.242,-10.526)
+TrackID: -194  position : (-6.4167,-30.993,-0.52983)
+TrackID: -197  position : (-12.096,-9.505,32.97)
+TrackID: -205  position : (-44.689,87.286,73.465)
+_________________
+At : 100 ns 
+Get inf of : OH^{0}
+TrackID: -114  position : (5.4749,32.01,25.669)
+TrackID: -120  position : (-38.146,35.173,-3.8335)
+TrackID: -132  position : (-57.245,35.723,21.474)
+TrackID: -140  position : (-35.378,7.7738,47.69)
+TrackID: -142  position : (-17.09,-13.967,21.179)
+TrackID: -152  position : (-16.196,46.392,-24.974)
+TrackID: -160  position : (-32.427,34.443,23.208)
+TrackID: -162  position : (-14.719,23.536,47.117)
+TrackID: -170  position : (-17.865,-21.937,22.281)
+TrackID: -177  position : (-27.858,-34.183,-14.633)
+TrackID: -180  position : (-4.6158,13.183,53.128)
+TrackID: -183  position : (-21.952,39.542,12.668)
+TrackID: -185  position : (8.9786,28.635,-10.531)
+TrackID: -194  position : (-6.0704,-30.602,-0.19554)
+TrackID: -197  position : (-12.475,-9.2337,32.786)
+TrackID: -205  position : (-44.98,87.096,73.764)
 *** G4Scheduler ends at time : 100 ns 
 ___________________________________
 Seed used :1

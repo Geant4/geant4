@@ -61,24 +61,17 @@ void ExGflashHistoManager::Book()
   //
   // Creating histograms
   //
-  // const G4int kMaxHisto = 9;
-  // const G4int kMaxProf = 2;
   G4int nLbin = fDet->GetnLtot();
   G4int nRbin = fDet->GetnRtot();
   G4double dLradl = fDet->GetdLradl();
   G4double dRradl = fDet->GetdRradl();
+  fVerbose = fDet->GetVerbose();
 
-  fAnalysisManager->CreateH1("h0", "total energy deposit(percent of Einc)", 100, 95., 105.);
+  fAnalysisManager->CreateH1("h0", "total energy deposit(percent of Einc)", 100, 85., 105.);
 
   fAnalysisManager->CreateH1("h1", "The number of Hits per event", 200, 0., 4.0e5);
 
   fAnalysisManager->CreateH1("h2", "The energy of Hit (in MeV)", 200, 0., 10.);
-
-  // fAnalysisManager->CreateH1( "h3","longit energy profile (% of E inc)",
-  //                                   nLbin,0.,nLbin*dLradl);
-
-  // fAnalysisManager->CreateH1( "h4","radial energy profile (% of E inc)",
-  //                                 nRbin,0.,nRbin*dRradl);
 
   fAnalysisManager->CreateP1("p0", "longit energy profile (% of E inc)", nLbin, 0., nLbin * dLradl,
                              0., 2000.);
@@ -92,12 +85,24 @@ void ExGflashHistoManager::Book()
   fAnalysisManager->CreateP1("p3", "Cuml radial energy profile (% of E inc)", nRbin, 0.,
                              nRbin * dRradl, 0., 20000.);
 
-  // Create all histograms as inactivated
-  // for (G4int k=0; k<kMaxHisto; k++) {
-  //   fAnalysisManager->SetH1Activation(k, false);
-  // }
-  // for (G4int k=0; k<kMaxProf; k++) {
-  //   fAnalysisManager->SetP1Activation(k, false);
-  // }
-  G4cout << "\n----> Histogram file " << fFileName << G4endl;
+  if (fVerbose > 1) G4cout << "\n----> Histogram file " << fFileName << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExGflashHistoManager::SetBinning()
+{
+  G4int nLbin = fDet->GetnLtot();
+  G4int nRbin = fDet->GetnRtot();
+  G4double dLradl = fDet->GetdLradl();
+  G4double dRradl = fDet->GetdRradl();
+
+  // Get analysis manager
+  auto analysisManager = G4AnalysisManager::Instance();
+
+  // Redifine profiles
+  analysisManager->SetP1(0, nLbin, 0., nLbin * dLradl, 0., 2000.);
+  analysisManager->SetP1(1, nRbin, 0., nRbin * dRradl, 0., 2000.);
+  analysisManager->SetP1(2, nLbin, 0., nLbin * dLradl, 0., 2000.);
+  analysisManager->SetP1(3, nRbin, 0., nRbin * dRradl, 0., 2000.);
 }

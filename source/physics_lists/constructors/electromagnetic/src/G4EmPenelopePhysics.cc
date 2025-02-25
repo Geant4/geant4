@@ -131,8 +131,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmPenelopePhysics::~G4EmPenelopePhysics()
-{}
+G4EmPenelopePhysics::~G4EmPenelopePhysics() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -271,10 +270,10 @@ void G4EmPenelopePhysics::ConstructProcess()
   theBremPenelope = new G4PenelopeBremsstrahlungModel();
   theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
   brem->SetEmModel(theBremPenelope);
-      
+  
   //Annihilation
-  G4eplusAnnihilation* anni = new G4eplusAnnihilation();
-  G4PenelopeAnnihilationModel* theAnnPenelope = new G4PenelopeAnnihilationModel();
+  auto anni = new G4eplusAnnihilation();
+  auto theAnnPenelope = new G4PenelopeAnnihilationModel();
   theAnnPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
   anni->AddEmModel(0, theAnnPenelope);
 

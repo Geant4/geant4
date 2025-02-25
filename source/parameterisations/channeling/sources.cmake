@@ -8,12 +8,14 @@ geant4_add_module(G4channeling
      G4ChannelingFastSimInterpolation.hh
      G4ChannelingFastSimModel.hh
      G4VChannelingFastSimCrystalData.hh
+     G4CoherentPairProduction.hh
    SOURCES
      G4BaierKatkov.cc
      G4ChannelingFastSimCrystalData.cc
      G4ChannelingFastSimInterpolation.cc
      G4ChannelingFastSimModel.cc
-     G4VChannelingFastSimCrystalData.cc)
+     G4VChannelingFastSimCrystalData.cc
+     G4CoherentPairProduction.cc)
 
  geant4_module_link_libraries(G4channeling
    PUBLIC
@@ -24,6 +26,9 @@ geant4_add_module(G4channeling
      G4parameterisation
      G4track
      G4partman
+     G4procman
    PRIVATE
      G4bosons
-     G4navigation)
+     G4navigation
+     G4leptons
+     G4emutils)

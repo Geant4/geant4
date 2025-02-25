@@ -32,8 +32,8 @@
 #include "G4TrajectoryEncounteredVolumeFilter.hh"
 #include "G4TransportationManager.hh"
 #include "G4VTrajectoryPoint.hh"
+#include "G4AttDef.hh"
 #include "G4AttValue.hh"
-#include "G4RichTrajectory.hh"
 
 G4TrajectoryEncounteredVolumeFilter::G4TrajectoryEncounteredVolumeFilter(const G4String& name)
   :G4SmartFilter<G4VTrajectory>(name)
@@ -44,10 +44,13 @@ G4TrajectoryEncounteredVolumeFilter::~G4TrajectoryEncounteredVolumeFilter() {}
 bool
 G4TrajectoryEncounteredVolumeFilter::Evaluate(const G4VTrajectory& traj) const
 {
-  try
-  {
-    const G4RichTrajectory& richTrajectory = dynamic_cast<const G4RichTrajectory&>(traj);
-
+  // Check the required G4Att exists
+  const auto& aPointAttDefs = traj.GetPoint(0)->GetAttDefs();
+  if (aPointAttDefs->find("PostVPath") != aPointAttDefs->end()) {
+    
+    // Must be a rich trajectory
+    const auto& richTrajectory = traj;
+    
     for (const auto& pvname: fVolumes) {
       for (G4int iPoint = 0; iPoint < richTrajectory.GetPointEntries(); iPoint++) {
         G4VTrajectoryPoint* point = richTrajectory.GetPoint(iPoint);
@@ -64,10 +67,9 @@ G4TrajectoryEncounteredVolumeFilter::Evaluate(const G4VTrajectory& traj) const
       }
     }
     return false;
-  }
-
-  catch (const std::bad_cast&)
-  {
+    
+  } else {
+    
     G4ExceptionDescription ed;
     ed << "Requires G4RichTrajectory - \"/vis/scene/add/trajectories rich\"";
     G4Exception
@@ -75,6 +77,7 @@ G4TrajectoryEncounteredVolumeFilter::Evaluate(const G4VTrajectory& traj) const
      "modeling0126",
      JustWarning, ed);
     return false;
+    
   }
 }
 

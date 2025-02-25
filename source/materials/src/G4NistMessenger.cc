@@ -36,12 +36,17 @@
 
 #include "G4NistMessenger.hh"
 
+#include "G4ApplicationState.hh"
 #include "G4DensityEffectData.hh"
 #include "G4IonisParamMat.hh"
 #include "G4NistManager.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
+
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,6 +57,8 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man) : manager(man)
 
   verCmd = new G4UIcmdWithAnInteger("/material/verbose", this);
   verCmd->SetGuidance("Set verbose level.");
+  verCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  verCmd->SetToBeBroadcasted(false);
 
   nistDir = new G4UIdirectory("/material/nist/");
   nistDir->SetGuidance("Commands for the nist dataBase");
@@ -62,6 +69,8 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man) : manager(man)
   prtElmCmd->SetGuidance("all    = all elements.");
   prtElmCmd->SetParameterName("symbol", true);
   prtElmCmd->SetDefaultValue("all");
+  prtElmCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  prtElmCmd->SetToBeBroadcasted(false);
 
   przElmCmd = new G4UIcmdWithAnInteger("/material/nist/printElementZ", this);
   przElmCmd->SetGuidance("print element Z in dataBase.");
@@ -69,6 +78,8 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man) : manager(man)
   przElmCmd->SetParameterName("Z", true);
   przElmCmd->SetDefaultValue(0);
   przElmCmd->SetRange("0<=Z && Z<108");
+  przElmCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  przElmCmd->SetToBeBroadcasted(false);
 
   lisMatCmd = new G4UIcmdWithAString("/material/nist/listMaterials", this);
   lisMatCmd->SetGuidance("Materials in Geant4 dataBase.");
@@ -80,6 +91,8 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man) : manager(man)
   lisMatCmd->SetParameterName("matlist", true);
   // lisMatCmd->SetCandidates("simple compound hep bio all");
   lisMatCmd->SetDefaultValue("all");
+  lisMatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  lisMatCmd->SetToBeBroadcasted(false);
 
   g4Dir = new G4UIdirectory("/material/g4/");
   g4Dir->SetGuidance("Commands for G4MaterialTable");
@@ -95,24 +108,45 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man) : manager(man)
   g4MatCmd->SetGuidance("all - all materials");
   g4MatCmd->SetParameterName("pmat", true);
   g4MatCmd->SetDefaultValue("all");
+  g4MatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  g4MatCmd->SetToBeBroadcasted(false);
 
   g4DensCmd = new G4UIcmdWithAString("/material/g4/printDensityEffParam", this);
   g4DensCmd->SetGuidance("print Material from G4DensityEffectData.");
   g4DensCmd->SetGuidance("all - all materials");
   g4DensCmd->SetParameterName("dmat", true);
   g4DensCmd->SetDefaultValue("all");
+  g4DensCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  g4DensCmd->SetToBeBroadcasted(false);
 
   densCmd = new G4UIcmdWithAString("/material/g4/enableDensityEffOnFly", this);
   densCmd->SetGuidance("enable accurate computation of density effect.");
   densCmd->SetGuidance("all - all materials.");
   densCmd->SetParameterName("dens", true);
   densCmd->SetDefaultValue("all");
+  densCmd->AvailableForStates(G4State_PreInit);
+  lisMatCmd->SetToBeBroadcasted(false);
 
   adensCmd = new G4UIcmdWithAString("/material/g4/disableDensityEffOnFly", this);
   adensCmd->SetGuidance("disable accurate computation of density effect.");
   adensCmd->SetGuidance("all - all materials.");
   adensCmd->SetParameterName("dens", true);
   adensCmd->SetDefaultValue("all");
+  adensCmd->AvailableForStates(G4State_PreInit);
+  adensCmd->SetToBeBroadcasted(false);
+
+  fPosiCmd = new G4UIcommand("/material/g4/ortoPositroniumFraction", this);
+  fPosiCmd->SetGuidance("defined orto-positronium fraction for positron annihilation AtRest.");
+  fPosiCmd->SetGuidance("via material name, all - all materials.");
+  fPosiCmd->AvailableForStates(G4State_PreInit);
+  fPosiCmd->SetToBeBroadcasted(false);
+
+  auto p1 = new G4UIparameter("matname",'s', false);
+  fPosiCmd->SetParameter(p1);
+
+  auto p2 = new G4UIparameter("fraction", 'd', false);
+  p2->SetParameterRange("fraction>=0. && fraction <=1.");
+  fPosiCmd->SetParameter(p2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -130,6 +164,8 @@ G4NistMessenger::~G4NistMessenger()
   delete g4DensCmd;
   delete densCmd;
   delete adensCmd;
+  delete fPosiCmd;
+  
   delete g4Dir;
   delete matDir;
 }
@@ -168,5 +204,25 @@ void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if (command == adensCmd) {
     manager->SetDensityEffectCalculatorFlag(newValue, false);
+  }
+  else if (command == fPosiCmd) {
+    G4String mnam{""};
+    G4double f{0.0};
+    std::istringstream ss(newValue);
+    ss >> mnam >> f;
+    // set fraction for all materials 
+    if (mnam == "all" || mnam == "none") {
+      if (mnam == "none" || f < 0.0) { f = 0.0; }
+      auto mtable = G4Material::GetMaterialTable();
+      for ( auto const & mat : *mtable ) {
+	mat->GetIonisation()->SetOrtoPositroniumFraction(f);
+      }
+    } else {
+      // set fraction for one material 
+      auto mat = manager->FindOrBuildMaterial(mnam, true);
+      if (nullptr != mat) { 
+	mat->GetIonisation()->SetOrtoPositroniumFraction(f);
+      }
+    }
   }
 }

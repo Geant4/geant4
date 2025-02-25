@@ -90,6 +90,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+#include <utility>
+
 //----- constants
 const char  GDD_FILE_HEADER      [] = "g4_";
 const char  DEFAULT_GDD_FILE_NAME[] = "g4_00.gdd";
@@ -1713,7 +1715,7 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 	    } else {
 	      std::map<Index3D, G4double> hits;
 	      hits.insert(std::map<Index3D, G4double>::value_type(id, value));
-	      kNestedHitsList[hitNames[i]] = hits;
+	      kNestedHitsList[hitNames[i]] = std::move(hits);
 	    }
 
 	    
@@ -1775,7 +1777,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
 	} else {
 	  std::map<Index3D, G4double> hit;
 	  hit.insert(std::map<Index3D, G4double>::value_type(id, *(itr->second)));
-	  kNestedHitsList[scorername] = hit;
+	  kNestedHitsList[scorername] = std::move(hit);
 	}
       }
  
@@ -1847,7 +1849,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4StatDouble> & hit
 	} else {
 	  std::map<Index3D, G4double> hit;
 	  hit.insert(std::map<Index3D, G4double>::value_type(id, itr->second->sum_wx()));
-	  kNestedHitsList[scorername] = hit;
+	  kNestedHitsList[scorername] = std::move(hit);
 	}
       }
  

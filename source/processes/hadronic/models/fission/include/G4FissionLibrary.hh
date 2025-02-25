@@ -80,21 +80,19 @@ class G4FissionLibrary : public G4ParticleHPFinalState
   G4FissionLibrary();
   ~G4FissionLibrary();
 
-  //void Init (G4double A, G4double Z, G4String & dirName, G4String &);
-  //void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &);
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &, G4ParticleDefinition* );
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
-  G4ParticleHPFinalState * New() ;
+  void Init (G4double A, G4double Z, G4int M, const G4String& dirName, const G4String&, G4ParticleDefinition* );
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack);
+  G4ParticleHPFinalState* New() ;
 
   private:
+
+  void SampleMult(const G4HadProjectile& theTrack, G4int* nPrompt,
+                  G4int* gPrompt, G4double eKinetic);
+  inline G4ParticleHPFissionERelease * GetEnergyRelease() { return &theEnergyRelease; }
+
   G4fissionEvent* fe;
   G4int theIsotope; // used to call G4fissionEvent
   G4double targetMass;
-  void SampleMult(const G4HadProjectile & theTrack, G4int* nPrompt,
-                                   G4int* gPrompt, G4double eKinetic);
-  inline G4ParticleHPFissionERelease * GetEnergyRelease() {
-    return &theEnergyRelease;
-  }
   G4ParticleHPParticleYield theFinalStateNeutrons;
   G4ParticleHPEnergyDistribution thePromptNeutronEnDis;
   G4ParticleHPEnergyDistribution theDelayedNeutronEnDis;

@@ -77,6 +77,7 @@ G4NeutronElasticXS::G4NeutronElasticXS()
   if (ggXsection == nullptr)
     ggXsection = new G4ComponentGGHadronNucleusXsc();
   SetForAllAtomsAndEnergies(true);
+  FindDirectoryPath();
 }
 
 G4NeutronElasticXS::~G4NeutronElasticXS()

@@ -23,42 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4LEPTSElossDistr_h
-#define G4LEPTSElossDistr_h 1
+// G4LEPTSElossDistr
+//
+// Author: Pedro Arce (CIEMAT), 2014
+// --------------------------------------------------------------------
+#ifndef G4LEPTSElossDistr_hh
+#define G4LEPTSElossDistr_hh 1
 
 #include "globals.hh"
 #include "Randomize.hh"
-#include <string.h>
-#include <stdio.h>
-#include <string>
-#include <iostream>
+
 #include <map> 
 
 class G4LEPTSDistribution;
-using mddist = std::map<G4double, G4LEPTSDistribution *>;
-using mdmddist = std::map<G4double, mddist>;
 
+class G4LEPTSElossDistr
+{
+ public:
 
-class G4LEPTSElossDistr {
+  G4LEPTSElossDistr(const G4String&);
 
-public:
+  void ReadFile();
+  G4double Sample( G4double, G4double );
+  G4bool IsFileFound() const { return bFileFound; }
 
-  G4LEPTSElossDistr(std::string);    // Constructor
-  void ReadFile();          // Read file
-  G4double Sample( G4double, G4double);
+ private:
 
-  G4bool IsFileFound() const {
-    return bFileFound;
-  }
+  std::map<G4double, std::map<G4double, G4LEPTSDistribution *> > theDistributions;
+    // Energy , angle , distribution
 
-private:
-  mdmddist theDistributions; // Energy , angle , distribution
   G4int theNDistributions;
-  std::string fileName;
-  int    NoBins;
-#define NMAX 20000
+  G4String fileName;
+  G4int NoBins;
   G4bool bFileFound;
 };
-
 
 #endif

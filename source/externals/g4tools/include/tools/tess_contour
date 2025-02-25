@@ -27,7 +27,7 @@ protected:
   tess_contour(const tess_contour& a_from):m_out(a_from.m_out),m_triangles(a_from.m_triangles){}
   tess_contour& operator=(const tess_contour&){return *this;}
 public:
-  void getFilledArea(const std::vector<std::vector<vec3f> > aContour) {
+  void getFilledArea(const std::vector<std::vector<vec3f> >& aContour) {
     m_triangles.clear();
     m_combine_tmps.clear();
     m_error = false;

@@ -23,29 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VHitsCollection
 //
+// Class description:
 //
-
+// This is the base class of hits collection. The user is advised to
+// use G4THitsCollection template class in case his/her collection is
+// transient. While, in case the collection is persistent,
+// the concrete collection class can be directly derived from this
+// class. Geant4 kernel will use this class methods.
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VHitsCollection_h
 #define G4VHitsCollection_h 1
 
-class G4VHit;
 #include "globals.hh"
 
-// class description:
-//
-//  This is the base class of hits collection. The user is advised to
-// use G4THitsCollection template class in case his/her collection is
-// transient. While, in case the collection is persistent with ODBMS,
-// the concrete collection class can be directly derived from this
-// class.
-//  Geant4 kernel will use this class methods.
+class G4VHit;
 
 class G4VHitsCollection
 {
  public:
+
   G4VHitsCollection() = default;
-  G4VHitsCollection(G4String detName, G4String colNam);
+  G4VHitsCollection(const G4String& detName, const G4String& colNam);
   virtual ~G4VHitsCollection() = default;
   G4bool operator==(const G4VHitsCollection& right) const;
 
@@ -60,10 +62,11 @@ class G4VHitsCollection
   // GetHit and GetSize are given a default implementation here so
   // that the template G4THitsCollection can be used, but they
   // are re-implemented G4THitsCollection.
-  virtual G4VHit* GetHit(size_t) const { return nullptr; }
-  virtual size_t GetSize() const { return 0; };
+  virtual G4VHit* GetHit(std::size_t) const { return nullptr; }
+  virtual std::size_t GetSize() const { return 0; };
 
  protected:
+
   // Collection name
   G4String collectionName = "Unknown";
   G4String SDname = "Unknown";

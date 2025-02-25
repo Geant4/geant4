@@ -53,8 +53,8 @@
 class G4PSPassageCellFlux : public G4VPrimitivePlotter
 {
  public:
-  G4PSPassageCellFlux(G4String name, G4int depth = 0);
-  G4PSPassageCellFlux(G4String name, const G4String& unit, G4int depth = 0);
+  G4PSPassageCellFlux(const G4String& name, G4int depth = 0);
+  G4PSPassageCellFlux(const G4String& name, const G4String& unit, G4int depth = 0);
   ~G4PSPassageCellFlux() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }

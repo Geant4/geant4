@@ -89,8 +89,8 @@ auto main(int argumentCount, char** argumentVector) -> int
     // owned and deleted by the run manager,
     // so they should not be deleted in the main() program!
 
-    delete runManager;
     delete verbosity;
+    delete runManager;
 
     return 0;
 }

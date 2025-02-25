@@ -124,28 +124,9 @@ G4MultiUnion& G4MultiUnion::operator = (const G4MultiUnion& rhs)
 //______________________________________________________________________________
 G4double G4MultiUnion::GetCubicVolume()
 {
-  // Computes the cubic volume of the "G4MultiUnion" structure using
-  // random points
-
   if (fCubicVolume == 0.0)
   {
-    G4ThreeVector extentMin, extentMax, d, p, point;
-    G4int inside = 0, generated;
-    BoundingLimits(extentMin, extentMax);
-    d = (extentMax - extentMin) / 2.;
-    p = (extentMax + extentMin) / 2.;
-    G4ThreeVector left = p - d;
-    G4ThreeVector length = d * 2;
-    for (generated = 0; generated < 10000; ++generated)
-    {
-      G4ThreeVector rvec(G4UniformRand(), G4UniformRand(), G4UniformRand());
-      point = left + G4ThreeVector(length.x()*rvec.x(),
-                                   length.y()*rvec.y(),
-                                   length.z()*rvec.z());
-      if (Inside(point) != EInside::kOutside) ++inside;
-    }
-    G4double vbox = (2 * d.x()) * (2 * d.y()) * (2 * d.z());
-    fCubicVolume = inside * vbox / generated;
+    fCubicVolume = EstimateCubicVolume(1000000, 0.001);
   }
   return fCubicVolume;
 }

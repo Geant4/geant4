@@ -26,10 +26,15 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4LightIonQMDPhysics
-//   Created from G4IonBinaryCascadePhysics
+// ClassName:    G4LightIonQMDPhysics
+// 
+// Author:       Yoshihide Sato - November 2023
 //
-// Author:      G.Folger
+// Description:  Variant of G4IonQMDPhysics in which G4LightIonQMDReaction
+//               is used in the interval [30 MeV, 510 MeV]/nucleon
+//               (G4BinaryLightIonReaction is used below 40 MeV/nucleon,
+//                and G4QMDReaction is used in the interval
+//                [500 MeV, 6 GeV]/nucleon).
 //
 // Modified:
 //

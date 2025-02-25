@@ -47,7 +47,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
+G4PSPassageCellCurrent::G4PSPassageCellCurrent(const G4String& name, G4int depth)
   : G4VPrimitivePlotter(name, depth)
 {
   SetUnit("");

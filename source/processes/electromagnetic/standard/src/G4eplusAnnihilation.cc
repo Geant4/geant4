@@ -61,6 +61,8 @@
 #include "G4eplusAnnihilationEntanglementClipBoard.hh"
 #include "G4SimplePositronAtRestModel.hh"
 #include "G4AllisonPositronAtRestModel.hh"
+#include "G4OrePowellAtRestModel.hh"
+#include "G4PolarizedOrePowellAtRestModel.hh"
 #include "G4EmParameters.hh"
 #include "G4PhysicsModelCatalog.hh"
 
@@ -83,7 +85,8 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
 
 G4eplusAnnihilation::~G4eplusAnnihilation()
 {
-  delete fAtRestModel;
+  delete f2GammaAtRestModel;
+  delete f3GammaAtRestModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -115,13 +118,19 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
   }
   auto param = G4EmParameters::Instance();
 
-  // AtRest model should be chosen only once
-  if (nullptr == fAtRestModel) {
+  // AtRest models should be chosen only once
+  if (nullptr == f2GammaAtRestModel) {
     auto type = param->PositronAtRestModelType();
     if (type == fAllisonPositronium) {
-      fAtRestModel = new G4AllisonPositronAtRestModel();
+      f2GammaAtRestModel = new G4AllisonPositronAtRestModel();
+    } else if (type == fOrePowell) {
+      f2GammaAtRestModel = new G4AllisonPositronAtRestModel();
+      f3GammaAtRestModel = new G4OrePowellAtRestModel();
+    } else if (type == fOrePowellPolar) {
+      f2GammaAtRestModel = new G4AllisonPositronAtRestModel();
+      f3GammaAtRestModel = new G4PolarizedOrePowellAtRestModel();
     } else {
-      fAtRestModel = new G4SimplePositronAtRestModel();
+      f2GammaAtRestModel = new G4SimplePositronAtRestModel();
     }
   }
   // Check that entanglement is switched on
@@ -158,20 +167,24 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
 
   // sample secondaries
   secParticles.clear();
-
   G4double edep = 0.0;
-  fAtRestModel->SampleSecondaries(secParticles, edep, couple->GetMaterial()); 
+  if (nullptr != f3GammaAtRestModel &&
+      G4UniformRand() < currentMaterial->GetIonisation()->GetOrtoPositroniumFraction()) {
+    f3GammaAtRestModel->SampleSecondaries(secParticles, edep, couple->GetMaterial());
+  } else {
+    f2GammaAtRestModel->SampleSecondaries(secParticles, edep, couple->GetMaterial());
+  }
 
   // define new weight for primary and secondaries
   G4double weight = fParticleChange.GetParentWeight();				  
   std::size_t num0 = secParticles.size();
   
-  // splitting or Russian roulette
+  // Russian roulette
   if (nullptr != biasManager) {
     G4int idx = couple->GetIndex();
     if (biasManager->SecondaryBiasingRegion(idx) &&
 	!biasManager->GetDirectionalSplitting()) {
-      G4VEmModel* mod = nullptr;
+      G4VEmModel* mod = EmModel(0);
       G4double eloss = 0.0;
       weight *= biasManager->ApplySecondaryBiasing(secParticles, track, mod,
 						   &fParticleChange, eloss, 
@@ -204,10 +217,12 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
       if (fEntangled && i < 2) {
 	// entangledgammagamma is only true when there are only two gammas
 	// (See code above where entangledgammagamma is calculated.)
-	if (i == 0) { // First gamma
-	  clipBoard->SetTrackA(t);
-	} else if (i == 1) {  // Second gamma
-	  clipBoard->SetTrackB(t);
+	if (nullptr != clipBoard) { 
+	  if (i == 0) { // First gamma
+	    clipBoard->SetTrackA(t);
+	  } else if (i == 1) {  // Second gamma
+	    clipBoard->SetTrackB(t);
+	  }
 	}
 	t->SetAuxiliaryTrackInformation
 	  (fEntanglementModelID, new G4EntanglementAuxInfo(clipBoard));

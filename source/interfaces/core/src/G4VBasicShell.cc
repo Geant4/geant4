@@ -43,9 +43,9 @@ G4VBasicShell::~G4VBasicShell() = default;
 
 G4String G4VBasicShell::ModifyToFullPathCommand(const char* aCommandLine) const
 {
-  G4String rawCommandLine = aCommandLine;
+  const G4String& rawCommandLine = aCommandLine;
   if (rawCommandLine.empty() || rawCommandLine[0] == '\0') return rawCommandLine;
-  G4String commandLine = G4StrUtil::strip_copy(rawCommandLine);
+  const G4String& commandLine = G4StrUtil::strip_copy(rawCommandLine);
   G4String commandString;
   G4String parameterString;
   size_t i = commandLine.find(' ');
@@ -66,7 +66,7 @@ G4String G4VBasicShell::GetCurrentWorkingDirectory() const { return currentDirec
 
 G4bool G4VBasicShell::ChangeDirectory(const char* newDir)
 {
-  G4String newPrefix = G4StrUtil::strip_copy(newDir);
+  const G4String& newPrefix = G4StrUtil::strip_copy(newDir);
 
   G4String newDirectory = ModifyPath(newPrefix);
   if (newDirectory.back() != '/') {
@@ -75,7 +75,7 @@ G4bool G4VBasicShell::ChangeDirectory(const char* newDir)
   if (FindDirectory(newDirectory.c_str()) == nullptr) {
     return false;
   }
-  currentDirectory = newDirectory;
+  currentDirectory = std::move(newDirectory);
   return true;
 }
 
@@ -105,10 +105,10 @@ G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName) const
 
 G4UIcommand* G4VBasicShell::FindCommand(const char* commandName) const
 {
-  G4String commandLine = G4StrUtil::strip_copy(commandName);
+  const G4String& commandLine = G4StrUtil::strip_copy(commandName);
 
   G4String commandString;
-  size_t i = commandLine.find(' ');
+  std::size_t i = commandLine.find(' ');
   if (i != std::string::npos) {
     commandString = commandLine.substr(0, i);
   }
@@ -116,7 +116,7 @@ G4UIcommand* G4VBasicShell::FindCommand(const char* commandName) const
     commandString = commandLine;
   }
 
-  G4String targetCom = ModifyPath(commandString);
+  const G4String& targetCom = ModifyPath(commandString);
   return G4UImanager::GetUIpointer()->GetTree()->FindPath(targetCom);
 }
 
@@ -181,10 +181,10 @@ G4String G4VBasicShell::ModifyPath(const G4String& tempPath) const
 ////////////////////////////////////////////
 G4String G4VBasicShell::Complete(const G4String& commandName)
 {
-  G4String rawCommandLine = commandName;
-  G4String commandLine = G4StrUtil::strip_copy(rawCommandLine);
+  const G4String& rawCommandLine = commandName;
+  const G4String& commandLine = G4StrUtil::strip_copy(rawCommandLine);
 
-  size_t i = commandLine.find(' ');
+  std::size_t i = commandLine.find(' ');
   if (i != std::string::npos)
     return rawCommandLine;  // Already entering parameters,
                             // assume command path is correct.
@@ -322,7 +322,7 @@ void G4VBasicShell::ChangeDirectoryCommand(const G4String& newCommand)
     prefix = "/";
   }
   else {
-    G4String aNewPrefix = newCommand.substr(3, newCommand.length() - 3);
+    const G4String& aNewPrefix = newCommand.substr(3, newCommand.length() - 3);
     prefix = G4StrUtil::strip_copy(aNewPrefix);
   }
   if (! ChangeDirectory(prefix)) {
@@ -337,7 +337,7 @@ void G4VBasicShell::ListDirectory(const G4String& newCommand) const
     targetDir = GetCurrentWorkingDirectory();
   }
   else {
-    G4String newPrefix = newCommand.substr(3, newCommand.length() - 3);
+    const G4String& newPrefix = newCommand.substr(3, newCommand.length() - 3);
     targetDir = G4StrUtil::strip_copy(newPrefix);
   }
   G4UIcommandTree* commandTree = FindDirectory(targetDir);

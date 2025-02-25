@@ -50,7 +50,7 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
                                            G4double radius,
                                            G4int atomsNumber,
                                            G4double lifetime,
-                                           G4String aType,
+                                           const G4String& aType,
                                            G4FakeParticleID ID) :
     G4ParticleDefinition(name, mass, 0., charge, 0, 0, 0, 0, 0, 0, "Molecule",
                          0, 0, ID, false, lifetime, nullptr, false, aType, 0, 0.0),
@@ -119,7 +119,7 @@ void G4MoleculeDefinition::Serialize(std::ostream& out)
   }
   else
   {
-    WRITE(out,(int) 0);
+    WRITE(out,(G4int) 0);
   }
   WRITE(out,fVanDerVaalsRadius);
   WRITE(out,fAtomsNb);
@@ -169,9 +169,9 @@ G4MolecularConfiguration*
 G4MoleculeDefinition::
   NewConfigurationWithElectronOccupancy(const G4String& exStId,
                                         const G4ElectronOccupancy& elecConf,
-                                        double decayTime)
+                                        G4double decayTime)
 {
-  bool alreadyExist(false);
+  G4bool alreadyExist(false);
   G4MolecularConfiguration* conf =
       G4MolecularConfiguration::CreateMolecularConfiguration(GetName()+"_"+
                                                              exStId,

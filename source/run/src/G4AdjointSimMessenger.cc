@@ -60,6 +60,7 @@ G4AdjointSimMessenger::G4AdjointSimMessenger(G4AdjointSimManager* pAdjointRunMan
   // Start and adjoint Run
   //---------------------
 
+
   beamOnCmd = new G4UIcommand("/adjoint/start_run", this);
   beamOnCmd->SetGuidance("Start an adjoint Run.");
   beamOnCmd->SetGuidance("Default number of events to be processed is 1.");
@@ -220,8 +221,7 @@ void G4AdjointSimMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     const auto nv = (const char*)newValue;
     std::istringstream is(nv);
     is >> nev;
-    if (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM)
-      theAdjointRunManager->RunAdjointSimulation(nev);
+    theAdjointRunManager->RunAdjointSimulation(nev);
   }
   else if (command == ConsiderParticleAsPrimaryCmd) {
     theAdjointRunManager->ConsiderParticleAsPrimary(newValue);

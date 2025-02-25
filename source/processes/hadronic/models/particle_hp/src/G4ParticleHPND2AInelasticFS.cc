@@ -58,8 +58,8 @@ G4HadFinalState* G4ParticleHPND2AInelasticFS::ApplyYourself(const G4HadProjectil
   return theResult.Get();
 }
 
-void G4ParticleHPND2AInelasticFS::Init(G4double A, G4double Z, G4int M, G4String& dirName,
-                                       G4String& aFSType, G4ParticleDefinition* projectile)
+void G4ParticleHPND2AInelasticFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                                       const G4String& aFSType, G4ParticleDefinition* projectile)
 {
   G4ParticleHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType, projectile);
   G4double ResidualA = 0;

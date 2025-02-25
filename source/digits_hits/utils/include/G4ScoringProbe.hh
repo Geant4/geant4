@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoringProbe
 //
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4ScoringProbe_h
 #define G4ScoringProbe_h 1
 
@@ -39,11 +41,11 @@ class G4Material;
 class G4ScoringProbe : public G4VScoringMesh
 {
  public:
-  G4ScoringProbe(G4String lvName, G4double half_size,
+
+  G4ScoringProbe(const G4String& lvName, G4double half_size,
                  G4bool checkOverlap = false);
   ~G4ScoringProbe() override = default;
 
- public:
   void LocateProbe(G4ThreeVector pos)
   {
     posVec.push_back(pos);
@@ -59,17 +61,17 @@ class G4ScoringProbe : public G4VScoringMesh
 
   //++++++++++ visualization method not yet implemented
   void Draw(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
-                    G4int /*axflg=111*/) override
-  {}
+            G4int /*axflg=111*/) override {}
   void DrawColumn(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
-                          G4int /*idxProj*/, G4int /*idxColumn*/) override
-  {}
+                  G4int /*idxProj*/, G4int /*idxColumn*/) override {}
 
  protected:
+
   // construct scoring volume
   void SetupGeometry(G4VPhysicalVolume*) override;
 
  protected:
+
   G4String logVolName;
   std::vector<G4ThreeVector> posVec;
   G4double probeSize;

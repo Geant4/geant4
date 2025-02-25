@@ -56,21 +56,6 @@ public:
   static const std::vector<G4int>& GetHeavyChargedParticles();
   static const std::vector<G4int>& GetBCChargedHadrons();
   static const std::vector<G4int>& GetChargedHyperNuclei();
-
-private:
-
-  static const std::vector<G4int> sLightHadrons;
-  static const std::vector<G4int> sHyperons;
-  static const std::vector<G4int> sAntiHyperons;
-  static const std::vector<G4int> sKaons;
-  static const std::vector<G4int> sBCHadrons;
-  static const std::vector<G4int> sLightIons;
-  static const std::vector<G4int> sLightAntiIons;
-  static const std::vector<G4int> sHyperNuclei;
-  static const std::vector<G4int> sHyperAntiNuclei;
-  static const std::vector<G4int> sHeavyChargedPart;
-  static const std::vector<G4int> sBCChargedHadrons;
-  static const std::vector<G4int> sChargedHyperNuclei;
 };
 
 #endif

@@ -80,13 +80,11 @@ class G4EMDissociationCrossSection : public G4VCrossSectionDataSet
 {
   public:
     G4EMDissociationCrossSection ();
-    ~G4EMDissociationCrossSection ();
+    ~G4EMDissociationCrossSection () override;
 
-    virtual G4bool IsElementApplicable (const G4DynamicParticle*, G4int Z,
-					const G4Material*);
+    G4bool IsElementApplicable (const G4DynamicParticle*, G4int Z, const G4Material*) override;
  
-    virtual G4double GetElementCrossSection (const G4DynamicParticle *,
-					     G4int Z, const G4Material *);
+    G4double GetElementCrossSection (const G4DynamicParticle*, G4int Z, const G4Material*) override;
       
     G4PhysicsFreeVector * GetCrossSectionForProjectile
       (G4double, G4double, G4double, G4double, G4double, G4double);

@@ -50,7 +50,7 @@ class ProcessesCount : public G4VAccumulable
     G4int GetCounter(const G4String& procName) { return fProcCounter[procName]; };
     void Count(const G4String& procName);
 
-    void Print();
+    void Print(G4PrintOptions options = G4PrintOptions()) const override;
 
     void Merge(const G4VAccumulable&) override;
     void Reset() override { fProcCounter.clear(); }

@@ -6,9 +6,29 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-10-31 Hoang Tran (emdna-V11-02-17)
+- missing value in DNA PTB Ionization Structure;
+- missing GetMaterial() in DNA PTB Excitation and Elastic models (PR#78,by mjpietrzak)
+
+## 2024-10-02 Hoang Tran (emdna-V11-02-16)
+- Modified the molecule names of OH, HO2, O in MoleculeDefinition.
+  Each molecule configuration has a molecule definition.
+
+## 2024-08-27 Gabriele Cosmo (emdna-V11-02-15)
+- Fixed reported Coverity defects for use of std::move(), const auto&
+  and const iterators.
+
+## 2024-08-20 Hoang Tran (emdna-V11-02-14)
+- debug invalid a root node of KDTree
+
+## 2024-08-08 Gabriele Cosmo (emdna-V11-02-13)
+- Fixed reported Coverity defects in G4LEPTSElossDistr and G4LEPTSDistribution
+  for explicit null dereferenced pointer and out-of-bounds reads; minor code
+  cleanup.
+
 ## 2024-05-23 Hoang Tran (emdna-V11-02-12)
 - Delete enum unused due to te use of EmParameters
-to control chemistry models in G4EmDNAChemistry_option3.
+  to control chemistry models in G4EmDNAChemistry_option3.
 
 ## 2024-05-11 Gabriele Cosmo (emdna-V11-02-11)
 - Fixed compilation error on macOS/clang with C++23 enabled, for the use

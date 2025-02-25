@@ -338,21 +338,27 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
   //Retrieve the effective Z
   G4double Zmat = 0;
 
-  if (!fEffectiveZSq)
+  //The model might be initialized incorrectly, if the angular generator is not used with the 
+  //G4PenelopeBremsstrahungModel: make sure it works also with other models.
+  if (!fEffectiveZSq)    
     {
       G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
-		  "em2040",FatalException,"EffectiveZ table not available");
-      return fLocalDirection;
-    }
+		  "em2040",JustWarning,"EffectiveZSq table does not exist: create it");
+      PrepareTables(material,false);
+      //return fLocalDirection;
+    }  
 
   //found in the table: return it
   if (fEffectiveZSq->count(material))
     Zmat = fEffectiveZSq->find(material)->second;
-  else
-    {
+  else //this can happen in unit tests or when the AngModel is coupled with bremsstrahlunh 
+    //models other than G4PenelopeBremsstrahungModel
+    { 
       G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
-		  "em2040",FatalException,"Material not found in the effectiveZ table");
-      return fLocalDirection;
+		  "em2040",JustWarning,"Material not found in the effectiveZ table");
+      PrepareTables(material,false);
+      Zmat = fEffectiveZSq->find(material)->second;
+      //      return fLocalDirection;
     }
 
   if (fVerbosityLevel > 0)

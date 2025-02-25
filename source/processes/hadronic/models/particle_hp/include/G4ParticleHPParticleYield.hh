@@ -39,6 +39,7 @@
 class G4ParticleHPParticleYield
 {
   public:
+
     G4ParticleHPParticleYield()
     {
       simpleMean = true;
@@ -51,11 +52,12 @@ class G4ParticleHPParticleYield
       spontDelayed = true;
       theSpontDelayed = 0.0;
     }
+
     ~G4ParticleHPParticleYield() = default;
 
-    G4double GetTargetMass() { return targetMass; }
+    inline G4double GetTargetMass() const { return targetMass; }
 
-    void InitMean(std::istream& aDataFile)
+    inline void InitMean(std::istream& aDataFile)
     {
       G4int iflag;
       aDataFile >> targetMass >> iflag;
@@ -68,7 +70,7 @@ class G4ParticleHPParticleYield
       }
     }
 
-    void InitPrompt(std::istream& aDataFile)
+    inline void InitPrompt(std::istream& aDataFile)
     {
       hasPromptData = true;
       G4int iflag;
@@ -82,7 +84,7 @@ class G4ParticleHPParticleYield
       }
     }
 
-    void InitDelayed(std::istream& aDataFile)
+    inline void InitDelayed(std::istream& aDataFile)
     {
       hasDelayedData = true;
       G4int iflag;
@@ -97,7 +99,7 @@ class G4ParticleHPParticleYield
       }
     }
 
-    G4double GetMean(G4double anEnergy)
+    inline G4double GetMean(G4double anEnergy) const
     {
       if (simpleMean) {
         return theSimpleMean.GetY(anEnergy);
@@ -105,7 +107,7 @@ class G4ParticleHPParticleYield
       return theMean.GetValue(anEnergy);
     }
 
-    G4double GetPrompt(G4double anEnergy)
+    inline G4double GetPrompt(G4double anEnergy) const
     {
       if (!hasPromptData) return 0;
       if (spontPrompt) {
@@ -114,7 +116,7 @@ class G4ParticleHPParticleYield
       return thePrompt.GetY(anEnergy);
     }
 
-    G4double GetDelayed(G4double anEnergy)
+    inline G4double GetDelayed(G4double anEnergy) const
     {
       if (!hasDelayedData) return 0;
       if (spontDelayed) {
@@ -123,9 +125,13 @@ class G4ParticleHPParticleYield
       return theDelayed.GetY(anEnergy);
     }
 
-    inline G4double GetDecayConstant(G4int i) { return thePrecursorDecayConstants.GetValue(i); }
+    inline G4double GetDecayConstant(G4int i) const
+    {
+      return thePrecursorDecayConstants.GetValue(i);
+    }
 
   private:
+
     G4double targetMass;
     // total mean
     G4bool simpleMean;
@@ -145,4 +151,5 @@ class G4ParticleHPParticleYield
     G4ParticleHPVector theDelayed;
     G4double theSpontDelayed;
 };
+
 #endif

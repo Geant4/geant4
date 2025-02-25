@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VScoreColorMap
 //
-//
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VScoreColorMap_h
 #define G4VScoreColorMap_h 1
 
@@ -36,14 +37,13 @@ class G4VVisManager;
 class G4VScoreColorMap
 {
  public:
-  G4VScoreColorMap(G4String mName);
+
+  G4VScoreColorMap(const G4String& mName);
   virtual ~G4VScoreColorMap() = default;
 
- public:
   virtual void GetMapColor(G4double val, G4double color[4]) = 0;
 
- public:
-  inline G4String GetName() const { return fName; }
+  inline const G4String& GetName() const { return fName; }
   inline void SetFloatingMinMax(G4bool vl = true) { ifFloat = vl; }
   inline G4bool IfFloatMinMax() const { return ifFloat; }
   inline void SetMinMax(G4double minVal, G4double maxVal)
@@ -72,10 +72,11 @@ class G4VScoreColorMap
 
   virtual void DrawColorChartText(G4int nPoint);
 
-  void SetPSUnit(G4String& unit) { fPSUnit = unit; }
-  void SetPSName(G4String& psName) { fPSName = psName; }
+  void SetPSUnit(const G4String& unit) { fPSUnit = unit; }
+  void SetPSName(const G4String& psName) { fPSName = psName; }
 
  protected:
+
   G4String fName;
   G4bool ifFloat = true;
   G4double fMinVal = 0.0;

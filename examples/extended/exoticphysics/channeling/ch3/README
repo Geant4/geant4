@@ -1,0 +1,59 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Example ch3
+                            -----------
+                             A. Sytov
+            INFN Ferrara Division, sytov@fe.infn.it
+
+INTRODUCTION
+Example ch3 demonstrates the minimum requirements necessary to integrate the
+G4CoherentPairProduction process into a project, along with the G4ChannelingFastSimModel
+and G4BaierKatkov models, to simulate the physics of electromagnetic showers in
+an oriented crystal.
+
+The key concept is the acceleration of electromagnetic processes (both radiation and
+pair production) in an oriented crystal, which can significantly reduce the effective
+radiation length [1,2]. Potential applications include electron/positron sources for
+accelerator experiments, as well as crystalline oriented calorimeters for collider and
+space applications [1,2].
+
+This example serves as a guideline for users on how to add this physics 
+to their existing Geant4 projects. It includes the minimum necessary options 
+to incorporate this physics. Specifically, it requires registering 
+G4FastSimulationPhysics and G4CoherentPairProductionPhysics in the main routine and
+adding a few lines of code in DetectorConstruction.
+
+All of this physics does not depend on the physics list. In particular, the
+process G4CoherentPairProduction simulates only coherent part of pair production in
+the crystal volume, while the incoherent one should be simulated with
+standard Geant4 processes.
+
+DESCRIPTION
+
+The example simulates high energy photon interaction (typically above 10 GeV) with
+an oriented W crystal with <111> crystal axes aligned along the photon beam direction.
+
+The structure of this example is very similar to the example ch1.
+ch3 includes a straight W crystal and a detector positioned behind it.
+The incoming photon beam is set up in macro run.mac.
+
+One can also use the Geant4 GUI by launching the code without specifying a macro file. 
+In this case, the visualization setup is automatically loaded through the vis.mac and 
+init_vis.mac macro files. The initial beam distribution in this setup will be identical 
+to that in run.mac.
+
+The example does not include any input of the model or geometry parameters 
+from the macro to keep it as straightforward as possible. The output is recorded
+into the file results.root. It consists of the spectrums of e-, e+
+and gamma arriving to the detector. To build these plots, one has to
+open this file in root and use Spectrum_electrons->Draw(), Spectrum_positrons->Draw()
+and Spectrum_gamma->Draw() for e-, e+ and gamma, respectively.
+
+REFERENCES
+[1] V. N. Baier, V. M. Katkov, V. M. Strakhovenko, Electromagnetic Processes
+at High Energies in Oriented Single Crystals (World Scientific, Singapore, 1998).
+[2] L. Bandiera, V.V. Tikhomirov et al. Phys. Rev. Lett. 121, 021603 (2018).

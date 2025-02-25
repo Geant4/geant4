@@ -76,8 +76,7 @@ G4GenericBiasingPhysics::~G4GenericBiasingPhysics()
 void G4GenericBiasingPhysics::PhysicsBias(const G4String& particleName)
 {
   fBiasedParticles.push_back(particleName);
-  std::vector< G4String > dummy;
-  fBiasedProcesses.push_back(dummy);
+  fBiasedProcesses.emplace_back();
   fBiasAllProcesses.push_back(true);
 }
 

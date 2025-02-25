@@ -60,7 +60,7 @@ public:
 
   explicit G4MuonToMuonPairProduction(const G4String& processName = "muToMuonPairProd");
 
-  ~G4MuonToMuonPairProduction() = default;
+  ~G4MuonToMuonPairProduction() override = default;
 
   G4MuonToMuonPairProduction & operator=
   (const G4MuonToMuonPairProduction &right) = delete;

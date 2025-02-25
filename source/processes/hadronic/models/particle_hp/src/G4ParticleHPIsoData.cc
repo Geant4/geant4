@@ -56,8 +56,8 @@ void G4ParticleHPIsoData::FillChannelData(G4ParticleHPVector* aBuffer)
   theChannelData->Hash();
 }
 
-G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4String dirName,
-                                 G4String aFSType)
+G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, const G4String& dirName,
+                                 const G4String& aFSType)
 {
   theChannelData = nullptr;
   G4double abundance = abun / 100.;
@@ -134,7 +134,7 @@ void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun,
   theChannelData = nullptr;
 }
 
-G4String G4ParticleHPIsoData::GetName(G4int A, G4int Z, G4String base, G4String rest)
+G4String G4ParticleHPIsoData::GetName(G4int A, G4int Z, const G4String& base, const G4String& rest)
 {
   G4bool dbool;
   return (theNames.GetName(A, Z, base, rest, dbool)).GetName();

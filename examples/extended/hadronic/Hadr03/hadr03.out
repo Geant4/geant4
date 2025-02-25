@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -63,7 +63,7 @@ Command is ignored.
  PHP check                       1
  CHECK HP NAMES                  0
  Enable DEBUG                    0
- Use probability tables from     njoy
+ Use probability tables from     
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
@@ -87,7 +87,7 @@ Command is ignored.
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+     Cr_sctns:             He3ParticleXS: 0 eV  ---> 25.6 PeV
 -----------------------------------------------------------------------
                            Hadronic Processes for alpha
   Process: hadElastic
@@ -96,7 +96,7 @@ Command is ignored.
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+     Cr_sctns:           alphaParticleXS: 0 eV  ---> 25.6 PeV
 -----------------------------------------------------------------------
                            Hadronic Processes for anti_He3
   Process: hadElastic
@@ -168,7 +168,7 @@ Command is ignored.
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:        deuteronParticleXS: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for gamma
   Process: photonNuclear
@@ -275,11 +275,11 @@ Command is ignored.
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+     Cr_sctns:          tritonParticleXS: 0 eV  ---> 25.6 PeV
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -304,7 +304,7 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
@@ -340,17 +340,17 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.167064s Sys=0.000000s
+  User=0.110000s Real=0.120532s Sys=0.000000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 8103	protonInelastic= 1897
+	hadElastic= 8167	protonInelastic= 1833
 
 
- MeanFreePath:	5.0235 cm  +- 5.045 cm 	massic: 51.642 g/cm2 
- CrossSection:	0.19906 cm^-1 		massic: 1.9364 mm2/g 
- crossSection per atom:	3.1482 barn  
+ MeanFreePath:	4.8661 cm  +- 4.755 cm 	massic: 50.024 g/cm2 
+ CrossSection:	0.2055 cm^-1 		massic: 1.999 mm2/g 
+ crossSection per atom:	3.25 barn  
 
  Verification: crossSections from G4HadronicProcessStore
 
@@ -360,52 +360,48 @@ Run Summary
 
  List of nuclear reactions: 
 
-                        proton + Mo98 --> N gamma or e- + Tc99:       1   Q =  6.4945 MeV
-               proton + Mo98 --> N gamma or e- + Tc99[142.683]:       1   Q =  6.3518 MeV
-                proton + Mo98 --> N gamma or e- + alpha + Nb95:       1   Q =  3.5405 MeV
-       proton + Mo98 --> N gamma or e- + alpha + Nb95[235.690]:       2   Q =  3.3048 MeV
-              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1647   Q = -2.4725 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.550]:      26   Q =  -2.611 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[152.090]:      16   Q = -2.6246 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[190.210]:      27   Q = -2.6627 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[203.670]:      27   Q = -2.6762 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[21.800]:      53   Q = -2.4943 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[65.430]:      65   Q = -2.5379 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[81.680]:      10   Q = -2.5542 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:      16   Q = -0.010617 meV
-      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       5   Q = -734.75 keV
-                               proton + Mo98 --> proton + Mo98:    8103   Q = -0.0057073 meV
+                        proton + Mo98 --> N gamma or e- + Tc99:       2   Q =   6.493 MeV
+       proton + Mo98 --> N gamma or e- + alpha + Nb95[235.690]:       1   Q =  3.3048 MeV
+              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1584   Q =  -2.475 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.590]:      31   Q = -2.6125 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[152.070]:      15   Q = -2.6246 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[190.280]:      35   Q = -2.6628 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[203.740]:      28   Q = -2.6763 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[21.800]:      48   Q = -2.4947 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[65.410]:      61   Q = -2.5389 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[81.680]:       8   Q = -2.5542 MeV
+               proton + Mo98 --> N gamma or e- + proton + Mo98:      16   Q = -0.0071522 meV
+      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       4   Q = -734.75 keV
+                               proton + Mo98 --> proton + Mo98:    8167   Q = -0.0056965 meV
 
-                          number of gamma or e- (ic): N = 1 --> 10
+                          number of gamma or e- (ic): N = 1 --> 11
 
  List of generated particles:
-           Mo98:    8119  Emean =  31.942 keV	( 1.3422 eV  --> 403.57 keV)
-  Mo98[734.750]:       5  Emean =  178.18 keV	( 44.551 keV --> 336.75 keV)
-           Nb95:       1  Emean =  695.25 keV	( 695.25 keV --> 695.25 keV)
-  Nb95[235.690]:       2  Emean =  569.65 keV	( 441.58 keV --> 697.73 keV)
-           Tc98:    1647  Emean =  116.12 keV	( 14.993 keV --> 294.6 keV)
-  Tc98[138.550]:      26  Emean =  130.33 keV	( 39.422 keV --> 263.66 keV)
-  Tc98[152.090]:      16  Emean =  103.58 keV	( 18.676 keV --> 195.05 keV)
-  Tc98[190.210]:      27  Emean =  121.73 keV	( 34.747 keV --> 244.87 keV)
-  Tc98[203.670]:      27  Emean =  131.14 keV	( 15.331 keV --> 295.51 keV)
-   Tc98[21.800]:      53  Emean =  120.43 keV	( 14.302 keV --> 242.76 keV)
-   Tc98[65.430]:      65  Emean =  123.06 keV	( 8.8893 keV --> 266.06 keV)
-   Tc98[81.680]:      10  Emean =  135.89 keV	( 43.026 keV --> 194.43 keV)
-           Tc99:       1  Emean =  119.33 keV	( 119.33 keV --> 119.33 keV)
-  Tc99[142.683]:       1  Emean =  98.365 keV	( 98.365 keV --> 98.365 keV)
-          alpha:       3  Emean =  9.9208 MeV	( 9.6654 MeV --> 10.242 MeV)
-             e-:     462  Emean =  141.23 keV	( 72.706 keV --> 993.75 keV)
-          gamma:   11091  Emean =  965.72 keV	( 7.8469 keV --> 12.219 MeV)
-        neutron:    1871  Emean =  1.6922 MeV	( 104.04 keV --> 6.9129 MeV)
-         proton:      21  Emean =  6.8567 MeV	( 4.2018 MeV --> 9.4924 MeV)
+           Mo98:    8183  Emean =  33.801 keV	( 3.7052 eV  --> 405.33 keV)
+  Mo98[734.750]:       4  Emean =  203.66 keV	( 54.058 keV --> 327.55 keV)
+  Nb95[235.690]:       1  Emean =  864.87 keV	( 864.87 keV --> 864.87 keV)
+           Tc98:    1584  Emean =   117.5 keV	( 19.622 keV --> 271.19 keV)
+  Tc98[138.590]:      31  Emean =  133.98 keV	( 15.405 keV --> 273.75 keV)
+  Tc98[152.070]:      15  Emean =   113.9 keV	( 18.676 keV --> 243.56 keV)
+  Tc98[190.280]:      35  Emean =  139.33 keV	( 19.064 keV --> 272.12 keV)
+  Tc98[203.740]:      28  Emean =  130.29 keV	( 21.342 keV --> 256.1 keV)
+   Tc98[21.800]:      48  Emean =  126.18 keV	( 46.78 keV --> 265.56 keV)
+   Tc98[65.410]:      61  Emean =  125.07 keV	( 37.358 keV --> 242.57 keV)
+   Tc98[81.680]:       8  Emean =  126.86 keV	( 18.832 keV --> 176.4 keV)
+           Tc99:       2  Emean =  101.82 keV	( 88.639 keV --> 115.01 keV)
+          alpha:       1  Emean =  9.9144 MeV	( 9.9144 MeV --> 9.9144 MeV)
+             e-:     224  Emean =   148.3 keV	( 51.433 keV --> 931.05 keV)
+          gamma:   11052  Emean =  936.06 keV	( 7.9408 keV --> 10.402 MeV)
+        neutron:    1810  Emean =  1.7105 MeV	( 74.136 keV --> 6.8535 MeV)
+         proton:      20  Emean =  6.8021 MeV	( 3.6248 MeV --> 9.2601 MeV)
 
-   Momentum balance: Pmean =  36.189 eV 	( 0.00071906 meV --> 2.4398 keV) 
+   Momentum balance: Pmean =  17.553 eV 	( 0.002584 meV --> 2.0557 keV) 
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={215777633650529703, 1434163777672415998, 972678355049174479, 353189911098519134, 1327239674961381633, 1583735542945193405, 882212591285906120, 2296967497179244957, 605720837195306643, 677880508452805353, 221190765530727373, 1773389971985750954, 1462597689217449695, 390063013494275709, 971757184890504590, 1757644652783323372, 1209290032755218863} counter= 14sumtot= 1994598575651870324
+N=17 V[N]={1994598575651870324, 1122919344110592371, 1104766496842117116, 768025006113805472, 927298869904912240, 223886217020891621, 2026757029665229325, 1484136765671027344, 1532206877216969743, 42783628457378475, 1646069336354853536, 1628223667750430824, 1286659260389597536, 312820934769968519, 1861077382950424187, 2091117686476693959, 1818111272117309100} counter= 8sumtot= 1118871268540826133
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

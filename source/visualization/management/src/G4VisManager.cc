@@ -80,19 +80,34 @@
 #include <vector>
 #include <sstream>
 
-#ifdef G4MULTITHREADED
-#  include "G4Threading.hh"
-#  include "G4AutoLock.hh"
-#  include "G4GeometryWorkspace.hh" // no_geant4_module_check(!G4MULTITHREADED)
-#  include "G4SolidsWorkspace.hh"
-#  include <deque>
-#  include <typeinfo>
-#  include <chrono>
-#  include <thread>
-#endif
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+#include "G4GeometryWorkspace.hh" // no_geant4_module_check(!G4MULTITHREADED)
+#include "G4SolidsWorkspace.hh"
+#include <deque>
+#include <typeinfo>
+#include <chrono>
+#include <thread>
+#include <utility>
 
 #define G4warn G4cout
 
+// Local threading related variables
+namespace {
+  G4bool mtRunInProgress = false;
+  std::deque<const G4Event*> mtVisEventQueue;
+  G4Thread* mtVisSubThread = 0;
+  [[maybe_unused]] G4Mutex mtVisSubThreadMutex = G4MUTEX_INITIALIZER;
+  //  G4Mutex visBeginOfRunMutex = G4MUTEX_INITIALIZER;
+  //  G4Mutex visBeginOfEventMutex = G4MUTEX_INITIALIZER;
+  G4Mutex visEndOfEventMutex = G4MUTEX_INITIALIZER;
+  //  G4Mutex visEndOfRunMutex = G4MUTEX_INITIALIZER;
+  G4bool isSubEventRunManagerType = false;
+  G4bool isValidViewForRun = false;
+  G4bool isFakeRun = false;
+}
+
+// Class statics
 G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
@@ -125,10 +140,8 @@ G4VisManager::G4VisManager (const G4String& verbosityString)
 , fIsDrawGroup              (false)
 , fDrawGroupNestingDepth    (0)
 , fIgnoreStateChanges       (false)
-#ifdef G4MULTITHREADED
 , fMaxEventQueueSize        (100)
 , fWaitOnEventQueueFull     (true)
-#endif
 // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -494,13 +507,11 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
   RegisterMessenger(new G4VisCommandGeometrySetVisibility);
   
-#ifdef G4MULTITHREADED
   directory = new G4UIdirectory ("/vis/multithreading/");
   directory -> SetGuidance("Commands unique to multithreading mode.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandMultithreadingActionOnEventQueueFull);
   RegisterMessenger(new G4VisCommandMultithreadingMaxEventQueueSize);
-#endif
 
   directory = new G4UIdirectory ("/vis/set/");
   directory -> SetGuidance
@@ -745,7 +756,7 @@ void G4VisManager::Enable() {
     if (fVerbosity >= warnings) {
       std::size_t nKeptEvents = 0;
       const G4Run* run = G4RunManager::GetRunManager()->GetCurrentRun();
-      if (run) nKeptEvents = run->GetEventVector()->size();
+      if (run) nKeptEvents = run->GetNumberOfKeptEvents();
       G4String isare("are"),plural("s");
       if (nKeptEvents == 1) {isare = "is"; plural = "";}
       G4cout <<
@@ -913,9 +924,8 @@ void G4VisManager::SelectTrajectoryModel(const G4String& model)
 
 void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
 {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
@@ -934,9 +944,8 @@ void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
 
 void G4VisManager::EndDraw ()
 {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   fDrawGroupNestingDepth--;
   if (fDrawGroupNestingDepth != 0) {
     if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
@@ -950,9 +959,8 @@ void G4VisManager::EndDraw ()
 
 void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
 {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
@@ -971,9 +979,8 @@ void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
 
 void G4VisManager::EndDraw2D ()
 {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   fDrawGroupNestingDepth--;
   if (fDrawGroupNestingDepth != 0) {
     if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
@@ -987,9 +994,8 @@ void G4VisManager::EndDraw2D ()
 
 template <class T> void G4VisManager::DrawT
 (const T& graphics_primitive, const G4Transform3D& objectTransform) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   if (fIsDrawGroup) {
     if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
       G4Exception
@@ -1010,9 +1016,8 @@ template <class T> void G4VisManager::DrawT
 
 template <class T> void G4VisManager::DrawT2D
 (const T& graphics_primitive, const G4Transform3D& objectTransform) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   if (fIsDrawGroup) {
     if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
       G4Exception
@@ -1104,9 +1109,8 @@ void G4VisManager::Draw2D (const G4Text& text,
 }
 
 void G4VisManager::Draw (const G4VHit& hit) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (hit);
   } else {
@@ -1118,9 +1122,8 @@ void G4VisManager::Draw (const G4VHit& hit) {
 }
 
 void G4VisManager::Draw (const G4VDigi& digi) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (digi);
   } else {
@@ -1132,9 +1135,8 @@ void G4VisManager::Draw (const G4VDigi& digi) {
 }
 
 void G4VisManager::Draw (const G4VTrajectory& traj) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   // A trajectory needs a trajectories model to provide G4Atts, etc.
   static G4TrajectoriesModel trajectoriesModel;
   trajectoriesModel.SetCurrentTrajectory(&traj);
@@ -1165,9 +1167,8 @@ void G4VisManager::Draw (const G4VTrajectory& traj) {
 void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   // Find corresponding solid.
   G4VSolid* pSol = logicalVol.GetSolid ();
   Draw (*pSol, attribs, objectTransform);
@@ -1176,9 +1177,8 @@ void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
 void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   if (fIsDrawGroup) {
     fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
@@ -1196,9 +1196,8 @@ void G4VisManager::Draw (const G4VSolid& solid,
 void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
+  
   // Note: It is tempting to use a temporary model here, as for
   // trajectories, in order to get at the G4Atts of the physical
   // volume.  I tried it (JA).  But it's not easy to pass the
@@ -1867,13 +1866,15 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
 
 void G4VisManager::PrintAvailableColours (Verbosity) const {
   G4cout <<
-    "Some /vis commands (optionally) take a string to specify colour."
-    "\nAvailable colours:\n  ";
-  const std::map<G4String, G4Colour>& map = G4Colour::GetMap();
-  for (std::map<G4String, G4Colour>::const_iterator i = map.begin();
-       i != map.end();) {
-    G4cout << i->first;
-    if (++i != map.end()) G4cout << ", ";
+  "Some /vis commands (optionally) take a string to specify colour."
+  "\nThey are also available in your C++ code, e.g:"
+  "\n  G4Colour niceColour;  // Default - white"
+  "\n  G4Colour::GetColour(\"pink\", niceColour);"
+  "\n  logical->SetVisAttributes(niceColour);"
+  "\nSee G4Colour.hh."
+  "\nAvailable colours";
+  for (const auto& i: G4Colour::GetMap()) {
+    G4cout << ", " << i.first;
   }
   G4cout << G4endl;
 }
@@ -1903,17 +1904,10 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
-#ifdef G4MULTITHREADED
-
-namespace {
-  G4bool mtRunInProgress = false;
-  std::deque<const G4Event*> mtVisEventQueue;
-  G4Thread* mtVisSubThread = 0;
-  G4Mutex mtVisSubThreadMutex = G4MUTEX_INITIALIZER;
-}
 
 G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 {
+#ifdef G4MULTITHREADED
   G4VisManager* pVisManager = (G4VisManager*)p;
   G4VSceneHandler* pSceneHandler = pVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) return 0;
@@ -1923,9 +1917,6 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
   if (!pViewer) return 0;
 
   G4UImanager::GetUIpointer()->SetUpForSpecialThread("G4VIS");
-
-  //  G4cout << "G4VisManager::G4VisSubThread: thread: "
-  //  << G4Threading::G4GetThreadId() << std::endl;
 
   // Set up geometry and navigation for a thread
   G4GeometryWorkspace::GetPool()->CreateAndUseWorkspace();
@@ -1949,11 +1940,6 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
       G4MUTEXLOCK(&mtVisSubThreadMutex);
       const G4Event* event = mtVisEventQueue.front();
       G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-      // G4int eventID = event->GetEventID();
-      // G4cout
-      //  << "G4VisManager::G4VisSubThread: Vis sub-thread: Dealing with event:
-      //  "
-      //  << eventID << G4endl;
 
       // Here comes the event drawing
       pVisManager->SetTransientsDrawnThisEvent(false);
@@ -1973,26 +1959,12 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
       pSceneHandler->DrawEvent(event);
       ++pVisManager->fNoOfEventsDrawnThisRun;
 
-      if (pScene->GetRefreshAtEndOfEvent()) {
-
-        // ShowView guarantees the view is flushed to the screen.  It also
-        // triggers other features such picking (if enabled) and allows
-        // file-writing viewers to close the file.
-        pViewer->ShowView();
-        pSceneHandler->SetMarkForClearingTransientStore(true);
-
-      }
-
-      // Testing.
-      // std::this_thread::sleep_for(std::chrono::seconds(5));
-
       // Then pop and release event
       G4MUTEXLOCK(&mtVisSubThreadMutex);
       mtVisEventQueue.pop_front();
-      pVisManager->EndOfEventCleanup(event, event->GetEventID());
+      pVisManager->EndOfEventCleanup(event);
       eventQueueSize = mtVisEventQueue.size();
       G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-      // G4cout << "Event queue size (B): " << eventQueueSize << G4endl;
     }
 
     G4MUTEXLOCK(&mtVisSubThreadMutex);
@@ -2011,45 +1983,34 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
   // Inform viewer that we have finished all sub-thread drawing
   pViewer->DoneWithVisSubThread();
   pViewer->MovingToMasterThread();
-  // G4cout << "G4VisManager::G4VisSubThread: Vis sub-thread: ending" << G4endl;
-  return nullptr;
-}
-
-namespace {
-  //  G4Mutex visBeginOfRunMutex = G4MUTEX_INITIALIZER;
-  //  G4Mutex visBeginOfEventMutex = G4MUTEX_INITIALIZER;
-  G4Mutex visEndOfEventMutex = G4MUTEX_INITIALIZER;
-  //  G4Mutex visEndOfRunMutex = G4MUTEX_INITIALIZER;
-}
-
+#else
+  G4ConsumeParameters(p);
 #endif
-
-namespace {
-  G4bool isSubEventRunManagerType = false;
+  return nullptr;
 }
 
 void G4VisManager::BeginOfRun ()
 {
   if (fIgnoreStateChanges) return;
-
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
-  //  G4cout << "G4VisManager::BeginOfRun: thread: "
-  //  << G4Threading::G4GetThreadId() << G4endl;
+  if (!GetConcreteInstance()) return;
 
+  // Check if view is valid
+  // Protect IsValidView() with fpSceneHandler to prevent warning messages in batch
+  isValidViewForRun = fpSceneHandler && IsValidView();
+  if (!isValidViewForRun) return;
+
+  // For a fake run...
   G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+  G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
+  isFakeRun = (nEventsToBeProcessed == 0);
+  if (isFakeRun) return;
+
+  // Is the run manager a sub-event type?
   G4RunManager::RMType rmType = runManager->GetRunManagerType();
   isSubEventRunManagerType =
   (rmType == G4RunManager::subEventMasterRM) ||
   (rmType == G4RunManager::subEventWorkerRM);
-
-  // If sub-event active, ignore if invoked from worker thread
-  if(isSubEventRunManagerType && G4Threading::IsWorkerThread()) return;
-
-  // For a fake run...
-  G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
-  if (nEventsToBeProcessed == 0) return;
 
   fNKeepForPostProcessingRequests = 0;
   fNKeepTheEventRequests = 0;
@@ -2064,19 +2025,13 @@ void G4VisManager::BeginOfRun ()
   // The function is called again later when needed.
   CurrentTrajDrawModel();
 
-#ifdef G4MULTITHREADED
-//   There is a static method G4Threading::IsMultithreadedApplication()
-//   that returns true only if G4MTRunManager is instantiated with MT
-//   installation. Thus method returns false if G4RunManager base class is
-//   instantiated even with the MT installation, or of course with sequential
-//   installation.
+  // Actions only in MT mode
   if (G4Threading::IsMultithreadedApplication()) {
 
     // Inform viewer that we have finished all master thread drawing for now...
     if (fpViewer) fpViewer->DoneWithMasterThread();
 
     // Start vis sub-thread
-//    G4cout << "G4VisManager::BeginOfRun: Starting vis sub-thread" << G4endl;
     G4MUTEXLOCK(&mtVisSubThreadMutex);
     mtRunInProgress = true;
     G4MUTEXUNLOCK(&mtVisSubThreadMutex);
@@ -2091,21 +2046,17 @@ void G4VisManager::BeginOfRun ()
     // - Go ahead
     if (fpViewer) fpViewer->MovingToVisSubThread();
   }
-#endif
 }
 
 void G4VisManager::BeginOfEvent ()
 {
   if (fIgnoreStateChanges) return;
-
   if (!GetConcreteInstance()) return;
-
-  if (isSubEventRunManagerType) return;
-
-//  G4cout << "G4VisManager::BeginOfEvent: thread: "
-//  << G4Threading::G4GetThreadId() << G4endl;
+  if (!isValidViewForRun) return;
+  if (isFakeRun) return;
 
   // Some instructions that should NOT be in multithreaded version.
+  // TODO: protect with G4Threading::IsMultithreadedApplication() instead?
 #ifndef G4MULTITHREADED
   // These instructions are in G4VisSubThread for multithreading.
   fTransientsDrawnThisEvent = false;
@@ -2113,52 +2064,51 @@ void G4VisManager::BeginOfEvent ()
 #endif
 }
 
-#ifdef G4MULTITHREADED
-void G4VisManager::EventReadyForVis(const G4Event* event)
-// This is invoked by G4SubEvtRunManager.
-// The event is passed to EndOfEventKernel.
-{
-  if (fIgnoreStateChanges) return;
-
-  if (!GetConcreteInstance()) return;
-
-  G4bool valid = fpSceneHandler && IsValidView();
-  if (!valid) return;
-
-  G4AutoLock al(&visEndOfEventMutex);
-  EndOfEventKernel(event);
-}
-#endif
+// Here begins a sequence of functions that deal with end-of-event.
+// Sequential/Serial mode:
+//   EndOfEvent is invoked by a state change on the master thread:
+//     EndOfEvent pulls the event from the Event Manager and calls EndOfEventKernel.
+//     EndOfEventKernel draws the event and calls EndOfEventCleanup.
+//     (Unless the user him/herself has requested keeping, EndOfEventKernel
+//      also sets KeepTheEvent for a certain number (adjustable, default 100)
+//      of events. The run manager keeps these events until the beginning of the next
+//      run, so, for example, the vis manager can redraw/rebuild if required.)
+// Multithreading/Tasking:
+//   EndOfEvent is invoked by a state change on each worker thread:
+//     EndOfEvent pulls the event from the (worker) Event Manager and calls EndOfEventKernel.
+//     EndOfEventKernel pushes it to the vis queue, and returns. The events
+//       are marked KeepForPostProcessing so that the worker does not delete them until
+//       PostProcessingFinished in EndOfEventCleanup.
+//     EndOfEventKernel also sets KeepTheEvent as above.
+//     The vis sub thread pulls events from the vis queue, draws them and
+//       calls EndOfEventCleanup, which calls PostProcessingFinished.
+// Sub-event parallelism:
+//   EndOfEvent is invoked by a state change on each worker thread, as for
+//     multithreading, but actually, the event is not complete. Workers are
+//     employed on sub-events, so we ignore such state changes. Only
+//     G4SubEvtRunManager knows when the event is complete.
+//   Events are pushed to the Vis Manager by G4SubEvtRunManager via EventReadyForVis
+//      when the event is ready. EventReadyForVis calls EndOfEventKernel and
+//      processsing continues as for Multithreading.
 
 void G4VisManager::EndOfEvent ()
 {
   if (fIgnoreStateChanges) return;
-
   if (!GetConcreteInstance()) return;
+  if (!isValidViewForRun) return;
+  if (isFakeRun) return;
 
+  // For sub-event parallelism, this is not the true end of event
   if (isSubEventRunManagerType) return;
 
-  //  G4cout << "G4VisManager::EndOfEvent: thread: "
-  //  << G4Threading::G4GetThreadId() << G4endl;
-
-#ifdef G4MULTITHREADED
   G4AutoLock al(&visEndOfEventMutex);
-  // Testing.
-  //  std::this_thread::sleep_for(std::chrono::seconds(5));
-#endif
-
-  // Don't call IsValidView unless there is a scene handler.  This
-  // avoids WARNING message at end of event and run when the user has
-  // not instantiated a scene handler, e.g., in batch mode.
-  G4bool valid = fpSceneHandler && IsValidView();
-  if (!valid) return;
 
   G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
 
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (!currentRun) return;
 
-  // This gets the thread-local event manager
+  // This gets the appropriate event manager
   G4EventManager* eventManager = G4EventManager::GetEventManager();
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
@@ -2167,72 +2117,22 @@ void G4VisManager::EndOfEvent ()
   EndOfEventKernel(currentEvent);
 }
 
-G4bool G4VisManager::Relinquishable (G4int eventID, G4int nKeptEvents, G4int nRequests)
-// Figures out if event is relinquishable, i.e., the run manager(s) may delete.
-// If _not_ relinquishable, KeepCurrentEvent is called as soon as event is recieved.
-// If relinquishable, PostProcesssingFinshed is called when drawing finished.
-// nKeptEvents is number of events currently kept by the run manager.
-// nRequests is the number of requests for keeping made by the vis maanager.
+void G4VisManager::EventReadyForVis(const G4Event* event)
+// This is invoked by G4SubEvtRunManager.
+// The event is passed to EndOfEventKernel.
 {
-  G4bool relinquishable = false;
+  if (fIgnoreStateChanges) return;
+  if (!GetConcreteInstance()) return;
+  if (!isValidViewForRun) return;
+  if (isFakeRun) return;
 
-  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
-  G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
-
-  if (fpScene->GetRefreshAtEndOfEvent()) {
-
-    // Unless last event (in which case wait end of run)...
-    if (eventID < nEventsToBeProcessed - 1) {
-      relinquishable = true;
-    } else {  // Last event - relinquish too if user has kept some
-      if (nKeptEvents > 0) {
-        relinquishable = true;
-      }
-    }
-    fpSceneHandler->SetMarkForClearingTransientStore(true);
-
-  } else {  //  Accumulating events...
-
-    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
-
-    if (maxNumberOfKeptEvents >= 0 &&
-        nRequests >= maxNumberOfKeptEvents) {
-
-      fEventKeepingSuspended = true;
-      static G4bool warned = false;
-      if (!warned) {
-        if (fVerbosity >= warnings) {
-          G4warn <<
-          "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
-          << G4endl;
-          if (maxNumberOfKeptEvents > 0) {
-            G4warn <<
-            "\n  The number of events exceeds the maximum, "
-            << maxNumberOfKeptEvents <<
-            ", that may be kept by\n  the vis manager."
-            << G4endl;
-          }
-        }
-        warned = true;
-      }
-      relinquishable = true;
-
-    } else if (maxNumberOfKeptEvents != 0) {  // i.e., indefinite keeping
-
-      // Relinquish anyway if disabled or suspended
-      if (!GetConcreteInstance() || fEventKeepingSuspended) {
-        relinquishable = true;
-      }
-    }
-  }
-  return relinquishable;
+  G4AutoLock al(&visEndOfEventMutex);
+  EndOfEventKernel(event);
 }
 
 void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
 {
-  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
-  const G4Run* currentRun = runManager->GetCurrentRun();
-  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  // Note: we are still subject to the mutex lock with visEndOfEventMutex
 
   // Discard event if fDrawEventOnlyIfToBeKept flag is set unless the
   // user has requested the event to be kept.
@@ -2242,19 +2142,16 @@ void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
 
   if (G4Threading::IsMultithreadedApplication()) {
 
-#ifdef G4MULTITHREADED
-
     // Wait if too many events in the queue.
     G4MUTEXLOCK(&mtVisSubThreadMutex);
     std::size_t eventQueueSize = mtVisEventQueue.size();
     G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-    //    G4cout << "Event queue size (1): " << eventQueueSize << G4endl;
 
     G4bool eventQueueFull = false;
     while (fMaxEventQueueSize > 0 && (G4int)eventQueueSize >= fMaxEventQueueSize) {
 
-      //      G4cout << "Event queue size (2): " << eventQueueSize << G4endl;
       if (fWaitOnEventQueueFull) {
+
         static G4bool warned = false;
         if (!warned) {
           G4warn <<
@@ -2274,11 +2171,12 @@ void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
           << G4endl;
           warned = true;
         }
-        //      G4cout << "Event queue size (3): " << eventQueueSize << G4endl;
+
         // Wait a while to give event drawing time to reduce the queue...
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        //      G4cout << "Event queue size (4): " << eventQueueSize << G4endl;
+
       } else {
+
         static G4bool warned = false;
         if (!warned) {
           G4warn <<
@@ -2292,6 +2190,7 @@ void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
           << G4endl;
           warned = true;
         }
+
         eventQueueFull = true;  // Causes event to be discarded for drawing.
         break;
       }
@@ -2302,36 +2201,28 @@ void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
     }
 
     if (!eventQueueFull) {
+
+      if (RequiredToBeKeptForVis(currentEvent->GetEventID())) {
+        currentEvent->KeepTheEvent();
+        fNKeepTheEventRequests++;  // Counts number of calls to KeepTheEvent
+      }
+
+      G4MUTEXLOCK(&mtVisSubThreadMutex);
+
+      // Keep while post processing (i.e., drawing), relinquished in EndOfEventCleanup
       // Make sure the event is not deleted by the run manager while in the vis queue
       currentEvent->KeepForPostProcessing();
       fNKeepForPostProcessingRequests++;
-      if (!Relinquishable(currentEvent->GetEventID(),
-                          (G4int)currentRun->GetEventVector()->size(),
-                          fNKeepTheEventRequests)) {
-        eventManager->KeepTheCurrentEvent();
-        fNKeepTheEventRequests++;  // Counts number of calls to KeepTheCurrentEvent
-      }
-      G4MUTEXLOCK(&mtVisSubThreadMutex);
+
       // Put event on vis queue
       mtVisEventQueue.push_back(currentEvent);
+
       G4MUTEXUNLOCK(&mtVisSubThreadMutex);
     }
-
-    //    G4MUTEXLOCK(&mtVisSubThreadMutex);
-    //    G4int eQS = mtVisEventQueue.size();
-    //    G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-    //    G4cout << "Event queue size (5): " << eQS << G4endl;
-
-#endif
 
   } else {
 
     // Sequential mode
-
-    G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
-    if (currentRun) {
-      eventID = currentEvent->GetEventID();
-    }
 
     // We are about to draw the event (trajectories, etc.), but first we
     // have to clear the previous event(s) if necessary.  If this event
@@ -2343,59 +2234,103 @@ void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
     // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
     ClearTransientStoreIfMarked();
 
-    // Keep - but relinquish (PostProcessingFinished) later if not needed
+    // Keep while post processing (i.e., drawing), relinquished in EndOfEventCleanup
     currentEvent->KeepForPostProcessing();
-    if (!Relinquishable(currentEvent->GetEventID(),
-                        (G4int)currentRun->GetEventVector()->size(),
-                        fNKeepTheEventRequests)) {
-      eventManager->KeepTheCurrentEvent();
-      fNKeepTheEventRequests++;  // Counts number of calls to KeepTheCurrentEvent
+    fNKeepForPostProcessingRequests++;
+
+    if (RequiredToBeKeptForVis(currentEvent->GetEventID())) {
+      currentEvent->KeepTheEvent();
+      fNKeepTheEventRequests++;  // Counts number of calls to KeepTheEvent
     }
 
     // Now draw the event...
     fpSceneHandler->DrawEvent(currentEvent);
     ++fNoOfEventsDrawnThisRun;
 
-    EndOfEventCleanup(currentEvent,eventID);
+    EndOfEventCleanup(currentEvent);
   }
 }
 
-void G4VisManager::EndOfEventCleanup
- (const G4Event* currentEvent,
-  G4int eventID)  // See EndOfEventKernel: can be == -2?
+void G4VisManager::EndOfEventCleanup(const G4Event* currentEvent)
 {
-  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
-  G4int nKeptEvents = 0;
-  const G4Run* currentRun = runManager->GetCurrentRun();
-  if (currentRun) {
-    const std::vector<const G4Event*>* events = currentRun->GetEventVector();
-    if (events) nKeptEvents = (G4int)events->size();
+  if (fpScene->GetRefreshAtEndOfEvent()) {
+
+    fpSceneHandler->SetMarkForClearingTransientStore(true);
+
+    // ShowView guarantees the view is flushed to the screen.  It also
+    // triggers other features such as picking (if enabled) and allows
+    // file-writing viewers to close the file.
+    fpViewer->ShowView();
   }
 
-  // Seems to relinquish every event - probably becuase it doesn't get here soon enough.
-  // In fact, it makes sense to do this - immediate post processing is finished,
-  // and a user-requested number of events have been kept. So great!
-  if (Relinquishable(eventID, nKeptEvents, fNKeepForPostProcessingRequests)) {
-    currentEvent->PostProcessingFinished();
-    if (fpScene->GetRefreshAtEndOfEvent()) {  // && eventID == -2?
-      // ShowView guarantees the view is flushed to the screen.  It also
-      // triggers other features such picking (if enabled) and allows
-      // file-writing viewers to close the file.
-      fpViewer->ShowView();
+  currentEvent->PostProcessingFinished();
+}
+
+G4bool G4VisManager::RequiredToBeKeptForVis (G4int eventID)
+// i.e., kept by the run manager at least to the beginning of the next run.
+{
+  G4bool requiredToBeKept = false;
+
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+  G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
+
+  if (fpScene->GetRefreshAtEndOfEvent()) {  // Refreshing every event
+
+    // Keep last event only
+    if (eventID == nEventsToBeProcessed - 1) {
+      requiredToBeKept = true;
+    }
+
+  } else {  //  Accumulating events
+
+    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
+
+    if (maxNumberOfKeptEvents >= 0) {  // Event keeping requested
+
+      if (fNKeepTheEventRequests < maxNumberOfKeptEvents) {
+
+        // Not yet reached the limit
+        requiredToBeKept = true;
+
+      } else {
+
+        // We have already reached the limit
+        fEventKeepingSuspended = true;
+        static G4bool warned = false;
+        if (!warned) {
+          if (fVerbosity >= warnings) {
+            G4warn <<
+            "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
+            << G4endl;
+            if (maxNumberOfKeptEvents > 0) {
+              G4warn <<
+              "\n  The number of events exceeds the maximum, "
+              << maxNumberOfKeptEvents <<
+              ", that may be kept by\n  the vis manager."
+              << G4endl;
+            }
+          }
+          warned = true;
+        }
+      }
+
+    } else {  // Indefinite event keeping (maxNumberOfKeptEvents < 0)
+
+      requiredToBeKept = true;
+
     }
   }
+
+  return requiredToBeKept;
 }
 
 void G4VisManager::EndOfRun ()
 {
   if (fIgnoreStateChanges) return;
-
-#ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
-#endif
-
-  //  G4cout << "G4VisManager::EndOfRun: thread: "
-  //  << G4Threading::G4GetThreadId() << G4endl;
+  if (!GetConcreteInstance()) return;
+  if (!isValidViewForRun) return;
+  if (isFakeRun) return;
 
   G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
 
@@ -2406,7 +2341,6 @@ void G4VisManager::EndOfRun ()
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (!currentRun) return;
 
-#ifdef G4MULTITHREADED
   //  G4AutoLock al(&visEndOfRunMutex);  ???
   if (G4Threading::IsMultithreadedApplication()) {
     // Reset flag so that sub-thread exits when it has finished processing.
@@ -2416,16 +2350,10 @@ void G4VisManager::EndOfRun ()
     // Wait for sub-thread to finish.
     G4THREADJOIN(*mtVisSubThread);
     delete mtVisSubThread;
-    if (fpViewer) fpViewer->SwitchToMasterThread();
+    fpViewer->SwitchToMasterThread();
   }
-#endif
 
-#ifdef G4MULTITHREADED
-  // Print warning about discarded events, if any.
-  // Don't call IsValidView unless there is a scene handler.  This
-  // avoids WARNING message from IsValidView() when the user has
-  // not instantiated a scene handler, e.g., in batch mode.
-  if (fpSceneHandler && IsValidView()) {  // Events should have been drawn
+  if (G4Threading::IsMultithreadedApplication()) {
     G4int noOfEventsRequested = runManager->GetNumberOfEventsToBeProcessed();
     if (fNoOfEventsDrawnThisRun != noOfEventsRequested) {
       if (!fWaitOnEventQueueFull && fVerbosity >= warnings) {
@@ -2438,18 +2366,14 @@ void G4VisManager::EndOfRun ()
       }
     }
   }
-#endif
 
-  G4int nKeptEvents = 0;
-  const std::vector<const G4Event*>* events = currentRun->GetEventVector();
-  if (events) nKeptEvents = (G4int)events->size();
+  G4int nKeptEvents = currentRun->GetNumberOfKeptEvents();
   if (fVerbosity >= warnings && nKeptEvents > 0) {
     G4warn << nKeptEvents;
     if (nKeptEvents == 1) G4warn << " event has";
     else G4warn << " events have";
     G4warn << " been kept for refreshing and/or reviewing." << G4endl;
     if (nKeptEvents != fNKeepTheEventRequests) {
-      G4warn << "  (Note: ";
       if (fNKeepTheEventRequests == 0) {
         G4warn << "No keep requests were";
       } else if (fNKeepTheEventRequests == 1) {
@@ -2460,10 +2384,12 @@ void G4VisManager::EndOfRun ()
       G4warn << " made by the vis manager.";
       if (fNKeepTheEventRequests == 0) {
         G4warn <<
-        "\n  The kept events are those you have asked to be kept in your user action(s).)";
+        "\n  The kept events are those you have asked to be kept in your user action(s).";
       } else {
         G4warn <<
-        "\n  The same or further events may have been kept by you in your user action(s).)";
+        "\n  The same or further events may have been kept by you in your user action(s)."
+        "\n  To turn off event keeping by the vis manager: /vis/drawOnlyToBeKeptEvents"
+        "\n  or use /vis/scene/endOfEventAction <refresh|accumulate> 0";
       }
       G4warn << G4endl;
     }
@@ -2491,39 +2417,32 @@ void G4VisManager::EndOfRun ()
     }
   }
 
-  // Don't call IsValidView unless there is a scene handler.  This
-  // avoids WARNING message at end of event and run when the user has
-  // not instantiated a scene handler, e.g., in batch mode.
-  G4bool valid = fpSceneHandler && IsValidView();
-  if (GetConcreteInstance() && valid) {
-//    // ???? I can't remember why
 //    // if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
 //    // is here.  It prevents ShowView at end of run, which seems to be OK
 //    // for sequential mode, but MT mode seems to need it (I have not
 //    // figured out why). ???? JA ????
 //    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
-      if (fpScene->GetRefreshAtEndOfRun()) {
-	fpSceneHandler->DrawEndOfRunModels();
-        // An extra refresh for auto-refresh viewers.
-        // ???? I DON'T WHY THIS IS NECESSARY ???? JA ????
-        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
-          fpViewer->RefreshView();
-        }
-        // ShowView guarantees the view is flushed to the screen.  It also
-        // triggers other features such picking (if enabled) and allows
-        // file-writing viewers to close the file.
-        fpViewer->ShowView();
-	fpSceneHandler->SetMarkForClearingTransientStore(true);
-      } else {
-        if (fpGraphicsSystem->GetFunctionality() ==
-            G4VGraphicsSystem::fileWriter) {
-          if (fVerbosity >= warnings) {
-            G4warn << "\"/vis/viewer/update\" to close file." << G4endl;
-          }
-        }
+  if (fpScene->GetRefreshAtEndOfRun()) {
+    fpSceneHandler->DrawEndOfRunModels();
+    // An extra refresh for auto-refresh viewers.
+    // ???? I DON'T WHY THIS IS NECESSARY ???? JA ????
+    if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+      fpViewer->RefreshView();
+    }
+    // ShowView guarantees the view is flushed to the screen.  It also
+    // triggers other features such picking (if enabled) and allows
+    // file-writing viewers to close the file.
+    fpViewer->ShowView();
+    fpSceneHandler->SetMarkForClearingTransientStore(true);
+  } else {
+    if (fpGraphicsSystem->GetFunctionality() ==
+        G4VGraphicsSystem::fileWriter) {
+      if (fVerbosity >= warnings) {
+        G4warn << "\"/vis/viewer/update\" to close file." << G4endl;
       }
-//    }
+    }
   }
+//}
   fEventRefreshing = false;
 }
 
@@ -2554,7 +2473,7 @@ void G4VisManager::ResetTransientsDrawnFlags()
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
-  G4String viewerShortName = viewerName.substr(0, viewerName.find (' '));
+  const G4String& viewerShortName = viewerName.substr(0, viewerName.find (' '));
   return G4StrUtil::strip_copy(viewerShortName);
 }
 
@@ -2596,9 +2515,19 @@ G4String G4VisManager::VerbosityString(Verbosity verbosity) {
   return rs;
 }
 
+void G4VisManager::PrintAvailableVerbosity(std::ostream& os)
+{
+  os << "Available verbosity options:";
+  for (std::size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
+    os << '\n' << VerbosityGuidanceStrings[i];
+  }
+  os << "\nCurrent verbosity: " << G4VisManager::VerbosityString(fVerbosity);
+  os << std::endl;
+}
+
 G4VisManager::Verbosity
 G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
-  G4String ss = G4StrUtil::to_lower_copy(verbosityString); 
+  G4String ss = G4StrUtil::to_lower_copy(verbosityString);
   Verbosity verbosity;
   if      (ss[0] == 'q') verbosity = quiet;
   else if (ss[0] == 's') verbosity = startup;
@@ -2608,18 +2537,16 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
   else if (ss[0] == 'p') verbosity = parameters;
   else if (ss[0] == 'a') verbosity = all;
   else {
+    // Could be an integer
     G4int intVerbosity;
     std::istringstream is(ss);
     is >> intVerbosity;
     if (!is) {
       G4warn << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
-	     << verbosityString << "\"";
-      for (std::size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
-	G4warn << '\n' << VerbosityGuidanceStrings[i];
-      }
-      verbosity = warnings;
-      G4warn << "\n  Returning " << VerbosityString(verbosity)
-	     << G4endl;
+	     << verbosityString << "\"\n";
+      PrintAvailableVerbosity(G4warn);
+      // Return existing verbosity
+      return fVerbosity;
     }
     else {
       verbosity = GetVerbosityValue(intVerbosity);
@@ -2767,12 +2694,13 @@ G4VisManager::RegisterModelFactories()
   }
 }
 
-#ifdef G4MULTITHREADED
 void G4VisManager::SetUpForAThread()
 {
+  // TODO: protect with G4Threading::IsMultithreadedApplication() instead?
+#ifdef G4MULTITHREADED
   new G4VisStateDependent(this); 
-}
 #endif
+}
 
 void G4VisManager::IgnoreStateChanges(G4bool val)
 {

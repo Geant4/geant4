@@ -37,6 +37,8 @@
 #include "G4UIcommand.hh"
 #include "G4Tokenizer.hh"
 
+#include <utility>
+
 G4GMocrenMessenger::G4GMocrenMessenger()
   : suffix (""), geometry(true), pointAttributes(false), solids(true), invisibles(true),
     kgMocrenVolumeName("gMocrenVolume"),
@@ -198,7 +200,7 @@ G4String G4GMocrenMessenger::GetCurrentValue(G4UIcommand * command) {
 
 void G4GMocrenMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
   if (command==setEventNumberSuffixCommand) {
-    suffix = newValue;
+    suffix = std::move(newValue);
   } else if (command==appendGeometryCommand) {
     geometry = appendGeometryCommand->GetNewBoolValue(newValue);
   } else if (command==addPointAttributesCommand) {
@@ -208,15 +210,15 @@ void G4GMocrenMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
     //    } else if (command==writeInvisiblesCommand) {
     //        invisibles = writeInvisiblesCommand->GetNewBoolValue(newValue);
   } else if (command == kSetgMocrenVolumeNameCommand) {
-    kgMocrenVolumeName = newValue;
+    kgMocrenVolumeName = std::move(newValue);
   } else if (command == kAddgMocrenHitNameCommand) {
-    kgMocrenHitNames.push_back(newValue);
+    kgMocrenHitNames.push_back(std::move(newValue));
   } else if (command == kResetgMocrenHitNameCommand) {
     kgMocrenHitNames.clear();
   } else if (command == kSetgMocrenScoringMeshNameCommand) {
-    kgMocrenScoringMeshName = newValue;
+    kgMocrenScoringMeshName = std::move(newValue);
   } else if (command == kAddgMocrenHitScorerNameCommand) {
-    kgMocrenHitScorerNames.push_back(newValue);
+    kgMocrenHitScorerNames.push_back(std::move(newValue));
   } else if (command == kResetgMocrenHitScorerNameCommand) {
     kgMocrenHitScorerNames.clear();
   } else if (command == kListgMocrenCommand) {

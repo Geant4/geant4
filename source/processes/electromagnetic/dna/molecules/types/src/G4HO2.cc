@@ -45,7 +45,7 @@ G4HO2* G4HO2::theInstance = nullptr;
 G4HO2* G4HO2::Definition()
 {
   if (theInstance != nullptr) return theInstance;
-  const G4String name = "HO_2";
+  const G4String name = "HO_2°";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);

@@ -1205,19 +1205,18 @@ G4double G4VXTRenergyLoss::GetPlateCompton(G4double omega)
 // Computes Compton cross section for gas material in 1/mm
 G4double G4VXTRenergyLoss::GetGasCompton(G4double omega)
 {
-  G4int i, numberOfElements;
-  G4double xSection = 0., nowZ, sumZ = 0.;
+  G4double xSection = 0., sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (G4int)(*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
+  G4int numberOfElements = (G4int)(*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
 
-  for(i = 0; i < numberOfElements; ++i)
+  for (G4int i = 0; i < numberOfElements; ++i)
   {
-    nowZ = (*theMaterialTable)[fMatIndex2]->GetElement(i)->GetZ();
+    G4double nowZ = (*theMaterialTable)[fMatIndex2]->GetElement(i)->GetZ();
     sumZ += nowZ;
     xSection += GetComptonPerAtom(omega, nowZ);
   }
-  xSection /= sumZ;
+  if (sumZ > 0.0) { xSection /= sumZ; }
   xSection *= (*theMaterialTable)[fMatIndex2]->GetElectronDensity();
   return xSection;
 }

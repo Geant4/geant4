@@ -1,0 +1,16 @@
+    =========================================================
+                    Geant4 - dna examples
+    =========================================================
+                        README file
+                   ----------------------
+
+This directory contains a set of Geant4-DNA advanced examples.
+
+ - DNA damage simulation using DNA-scale geometries:
+   - moleculardna
+   - dsbandrepair
+
+ - Cellular phantom:
+   - cellularPhantom
+
+See the README page inside each example for more detail.

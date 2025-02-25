@@ -52,6 +52,7 @@ G4DNAPTBIonisationStructure::G4DNAPTBIonisationStructure()
     energyConstant[index].push_back(17.07 * eV);
     energyConstant[index].push_back(21.00 * eV);
     energyConstant[index].push_back(41.72 * eV);
+    energyConstant[index].push_back(409.9*eV);
   }
 
   // MPietrzak

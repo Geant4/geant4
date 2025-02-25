@@ -53,8 +53,11 @@
 #include "G4Threading.hh"
 
 
-G4ParticleHPElasticURR::G4ParticleHPElasticURR() : G4HadronicInteraction( "NeutronHPElasticURR" ) {
-  SetMinEnergy(  0.0 * CLHEP::eV );
+G4ParticleHPElasticURR::G4ParticleHPElasticURR( G4bool isThermalScatteringOn ) :
+  G4HadronicInteraction( "NeutronHPElasticURR" ) {
+  G4double minEnergy = 0.0;
+  if ( isThermalScatteringOn ) minEnergy = 4.0 * CLHEP::eV;
+  SetMinEnergy(  minEnergy );
   SetMaxEnergy( 20.0 * CLHEP::MeV );
   particleHPelastic = new G4ParticleHPElastic;
 }

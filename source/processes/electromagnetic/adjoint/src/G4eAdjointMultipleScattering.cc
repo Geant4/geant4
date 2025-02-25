@@ -48,9 +48,6 @@ G4eAdjointMultipleScattering::G4eAdjointMultipleScattering(
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4eAdjointMultipleScattering::~G4eAdjointMultipleScattering() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4eAdjointMultipleScattering::ProcessDescription(std::ostream& out) const
 {
   out << "Inverse multiple scattering for e-.\n";

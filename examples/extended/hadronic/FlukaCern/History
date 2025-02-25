@@ -5,5 +5,14 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-11-15 Gabrielle Hugo (FlukaCern-V11-02-01)
+- Should NOT propagate the track/projectile's direction (dir) from Geant4 to the FLUKA event generator, 
+  as the transformation (from dir to the lab) of the final state is already performed in Geant4. 
+  The FLUKA event generator shall hence work in Geant4 local frame, 
+  while Geant4 is in charge of transforming the final state back to the lab.
+
+## 2024-10-31 Gabrielle Hugo (FlukaCern-V11-02-00)
+- Fix headers re-rodering by clang-format (cannot be placed in alphabetical order due to global constants).
+
 ## 2023-10-23 Ben Morgan (FlukaCern-V11-01-00)
 - Rename FlukaInterface's `Makefile` to `GNUmakefile` to avoid file being ignored in export.

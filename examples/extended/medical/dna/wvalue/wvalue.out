@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,7 +30,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -135,10 +134,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                AllisonPositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -564,8 +566,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  600 MeV  deltaVI
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 
  ======================== run summary =====================
 
@@ -583,13 +583,6 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 59.27 +- 58.02
 
  Step size                     = 1.729 Ang +- 40929.590 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -607,13 +600,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 41.03 +- 40.14
 
  Step size                     = 1.853 Ang +- 51429.894 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -631,13 +617,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 58.24 +- 69.76
 
  Step size                     = 1.952 Ang +- 56075.900 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -655,13 +634,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 62.26 +- 60.54
 
  Step size                     = 2.111 Ang +- 47960.160 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -679,13 +651,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 55.07 +- 52.36
 
  Step size                     = 2.194 Ang +- 53495.796 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -703,13 +668,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 61.37 +- 58.52
 
  Step size                     = 2.242 Ang +- 51529.098 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -727,13 +685,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 62.53 +- 54.16
 
  Step size                     = 2.321 Ang +- 52751.180 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -751,13 +702,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 60.98 +- 52.92
 
  Step size                     = 2.409 Ang +- 61551.167 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -775,13 +719,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 63.96 +- 56.19
 
  Step size                     = 2.457 Ang +- 59473.101 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -799,13 +736,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 66.82 +- 55.90
 
  Step size                     = 2.477 Ang +- 57626.025 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -823,13 +753,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 65.38 +- 52.74
 
  Step size                     = 2.538 Ang +- 61960.977 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -847,13 +770,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 75.42 +- 55.47
 
  Step size                     = 3.054 Ang +- 82427.417 fm 
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -871,13 +787,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 79.81 +- 58.04
 
  Step size                     = 3.683 Ang +- 1.115 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -895,13 +804,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 86.01 +- 55.95
 
  Step size                     = 4.230 Ang +- 1.308 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -919,13 +821,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 95.08 +- 60.04
 
  Step size                     = 4.685 Ang +- 1.506 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -943,13 +838,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 96.33 +- 59.10
 
  Step size                     = 5.339 Ang +- 1.775 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -967,13 +855,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 100.74 +- 62.18
 
  Step size                     = 5.958 Ang +- 1.852 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -991,13 +872,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 103.84 +- 59.16
 
  Step size                     = 6.693 Ang +- 2.154 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -1015,13 +889,6 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 108.84 +- 57.48
 
  Step size                     = 7.175 Ang +- 2.317 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 
  ======================== run summary =====================
 
@@ -1039,12 +906,5 @@ There are histograms that can be viewed with visualization:
  Nb of steps of primary track  = 113.64 +- 59.81
 
  Step size                     = 7.830 Ang +- 2.561 Ang
-There are histograms that can be viewed with visualization:
-  8 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -61,6 +61,8 @@ class F01SteppingVerbose : public G4SteppingVerbose
     F01SteppingVerbose() = default;
     ~F01SteppingVerbose() override = default;
 
+    G4VSteppingVerbose* Clone() override { return new F01SteppingVerbose; }
+
     void StepInfo() override;
     void TrackingStarted() override;
 };

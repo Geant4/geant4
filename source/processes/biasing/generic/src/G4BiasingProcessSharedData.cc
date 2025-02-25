@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BiasingProcessSharedData
+// --------------------------------------------------------------------
+
 #include "G4BiasingProcessSharedData.hh"
 
 G4MapCache< const G4ProcessManager*, G4BiasingProcessSharedData* > G4BiasingProcessSharedData::fSharedDataMap;

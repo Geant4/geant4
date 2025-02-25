@@ -51,7 +51,7 @@ public:
 
   virtual ~G4VEmissionProbability() = default;
 
-  void Initialise();
+  virtual void Initialise();
 
   virtual G4double EmissionProbability(const G4Fragment & fragment, 
   				       G4double anEnergy);

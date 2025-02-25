@@ -100,7 +100,8 @@ protected:
 
 private:
 
-  G4VPositronAtRestModel* fAtRestModel{nullptr};
+  G4VPositronAtRestModel* f2GammaAtRestModel{nullptr};
+  G4VPositronAtRestModel* f3GammaAtRestModel{nullptr};
   G4int fEntanglementModelID;
   G4bool isInitialised{false};
   G4bool fEntangled{false};

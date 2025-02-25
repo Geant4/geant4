@@ -183,7 +183,7 @@ void G4TaskRunManagerKernel::InitializeWorker()
     if (sv != nullptr) G4VSteppingVerbose::SetInstance(sv);
   }
   // Now initialize worker part of shared objects (geometry/physics)
-  context()->BuildGeometryAndPhysicsVector();
+  G4WorkerThread::BuildGeometryAndPhysicsVector();
   workerRM().reset(static_cast<G4WorkerTaskRunManager*>(
     mrm->GetUserWorkerThreadInitialization()->CreateWorkerRunManager()));
   auto& wrm = workerRM();
@@ -265,9 +265,19 @@ void G4TaskRunManagerKernel::TerminateWorkerRunEventLoop()
 
 void G4TaskRunManagerKernel::TerminateWorker()
 {
-  if (workerRM()) TerminateWorker(workerRM().get());
+  //===============================
+  // Step-6: Terminate worker thread
+  //===============================
+  G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
+  if ((mrm != nullptr) && (mrm->GetUserWorkerInitialization() != nullptr))
+    mrm->GetUserWorkerInitialization()->WorkerStop();
+
   workerRM().reset();
   context().reset();
+
+  G4WorkerThread::DestroyGeometryAndPhysicsVector();
+
+  G4Threading::WorkerThreadLeavesPool();
 }
 
 //============================================================================//
@@ -278,25 +288,6 @@ void G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(G4WorkerTaskRunManager*
 
   wrm->TerminateEventLoop();
   wrm->RunTermination();
-}
-
-//============================================================================//
-
-void G4TaskRunManagerKernel::TerminateWorker(G4WorkerTaskRunManager* wrm)
-{
-  if (wrm == nullptr) return;
-
-  //===============================
-  // Step-6: Terminate worker thread
-  //===============================
-  G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
-  if ((mrm != nullptr) && (mrm->GetUserWorkerInitialization() != nullptr))
-    mrm->GetUserWorkerInitialization()->WorkerStop();
-
-  G4WorkerThread* _context = wrm->GetWorkerThread();
-  _context->DestroyGeometryAndPhysicsVector();
-
-  G4Threading::WorkerThreadLeavesPool();
 }
 
 //============================================================================//

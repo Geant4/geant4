@@ -145,7 +145,10 @@ Idle> exit
       - 3 : step size of primary particle
       - 4 : total energy deposit
       - 5 : energy of charged secondaries at creation
-      - 6 : energy of neutral secondaries at creation      
+      - 6 : energy of neutral secondaries at creation
+      - 7 : NIEL energy
+      - 8 : energy leakage
+      - 9 : energy deposit + leakage
       
    The histograms are managed by G4AnalysisManager class and its Messenger. 
    The histos can be individually activated with the command :

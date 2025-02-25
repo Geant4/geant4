@@ -61,7 +61,7 @@ class G4VInteractiveSession
   virtual void ClearMenu();
   virtual void UpdateSceneTree(const G4SceneTreeItem&);
   void AddInteractor(G4String, G4Interactor);
-  G4Interactor GetInteractor(G4String);
+  G4Interactor GetInteractor(const G4String&);
   const std::map<G4String, OutputStyle>& GetOutputStyles() const;
 
  protected:

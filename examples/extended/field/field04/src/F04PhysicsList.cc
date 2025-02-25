@@ -39,12 +39,10 @@
 #include "G4ProcessManager.hh"
 #include "G4StepLimiterPhysics.hh"
 
-// #include "G4PhysListFactory.hh"
 #include "F04StepMax.hh"
 #include "FTFP_BERT.hh"
 #include "QGSP_BERT.hh"
 
-#include "G4AutoDelete.hh"
 #include "G4DecayTable.hh"
 #include "G4DecayWithSpin.hh"
 #include "G4Electron.hh"
@@ -62,7 +60,7 @@ G4ThreadLocal F04StepMax* F04PhysicsList::fStepMaxProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
+F04PhysicsList::F04PhysicsList(const G4String& physName) : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
 
@@ -107,8 +105,6 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
 F04PhysicsList::~F04PhysicsList()
 {
   delete fMessenger;
-
-  // delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -137,7 +133,6 @@ void F04PhysicsList::ConstructProcess()
   G4VModularPhysicsList::ConstructProcess();
 
   fStepMaxProcess = new F04StepMax();
-  G4AutoDelete::Register(fStepMaxProcess);
 
   auto decayWithSpin = new G4DecayWithSpin();
 
@@ -250,7 +245,7 @@ void F04PhysicsList::SetStepMax(G4double step)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04StepMax* F04PhysicsList::GetStepMaxProcess()
+F04StepMax* F04PhysicsList::GetStepMaxProcess() const
 {
   return fStepMaxProcess;
 }

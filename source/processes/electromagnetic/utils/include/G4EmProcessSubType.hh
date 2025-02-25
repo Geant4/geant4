@@ -62,6 +62,7 @@ enum G4EmProcessSubType
   fGammaGeneralProcess = 16,
   fPositronGeneralProcess = 17,
   fAnnihilationToTauTau = 18,
+  fCoherentPairProduction = 19,
  
   fCerenkov = 21,
   fScintillation = 22,
@@ -70,6 +71,10 @@ enum G4EmProcessSubType
   fGammaReflection = 26,
 
   fSurfaceReflection = 25,
+
+  fDynamicIonisation = 30,
+  fDynamicMultipleScattering = 31,
+  
   fDarkBremsstrahlung = 40,
   fMuonPairProdByCharged = 49
 };

@@ -150,6 +150,9 @@ class G4RunManagerKernel
         geometryNeedsToBeClosed = true;
       }
     }
+  
+    inline void ResetNavigatorAtInitialization(G4bool val=true)
+    { resetNavigatorAtInitialization = val; }
 
     inline G4int GetNumberOfParallelWorld() const { return numberOfParallelWorld; }
     inline void SetNumberOfParallelWorld(G4int i) { numberOfParallelWorld = i; }
@@ -213,6 +216,8 @@ class G4RunManagerKernel
     static G4ThreadLocal G4RunManagerKernel* fRunManagerKernel;
 
     G4int numberOfStaticAllocators = 0;
+
+    G4bool resetNavigatorAtInitialization = false;
 };
 
 #endif

@@ -36,13 +36,14 @@
 #include "G4UserTrackingAction.hh"
 
 class PrimaryGeneratorAction;
+class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction
 {
   public:
-    TrackingAction(PrimaryGeneratorAction*);
+    TrackingAction(PrimaryGeneratorAction*, EventAction*);
     ~TrackingAction() override = default;
 
     void PreUserTrackingAction(const G4Track*) override;
@@ -50,6 +51,7 @@ class TrackingAction : public G4UserTrackingAction
 
   private:
     PrimaryGeneratorAction* fPrimary = nullptr;
+    EventAction*        fEventAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

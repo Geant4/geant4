@@ -754,38 +754,38 @@ void G4VSceneHandler::ProcessScene()
       }
     }
 
-    // Some printing
-    if(verbosity >= G4VisManager::confirmations) {
-      for (const auto& model: runDurationModelList) {
-        if (model.fActive) {
-          auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(model.fpModel);
-          if (pvModel) {
-            G4int nTouchables = 0;
-            G4cout << "Numbers of touchables by depth in model \""
-            << pvModel->GetGlobalDescription() << "\":";
-            for (const auto& dn : pvModel->GetNumberOfTouchables()) {
-              G4cout << "\n  Depth " << dn.first << ": " << dn.second;
-              nTouchables += dn.second;
-            }
-            G4cout << "\n  Total number of touchables: " << nTouchables << G4endl;
-          }
-        }
-      }
-
-      if (fProblematicVolumes.size() > 0) {
-        G4cout << "Problematic volumes:";
-        for (const auto& prob: fProblematicVolumes) {
-          G4cout << "\n  " << prob.first->GetName() << " (" << prob.second << ')';
-        }
-        G4cout << G4endl;
-      }
-    }
-
     fpModel = 0;
     delete pMP;
 
     EndModeling();
+  }
+
+  // Some printing
+  if(verbosity >= G4VisManager::confirmations) {
+    for (const auto& model: runDurationModelList) {
+      if (model.fActive) {
+        auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(model.fpModel);
+        if (pvModel) {
+          G4int nTouchables = 0;
+          G4cout << "Numbers of touchables by depth in model \""
+          << pvModel->GetGlobalDescription() << "\":";
+          for (const auto& dn : pvModel->GetNumberOfTouchables()) {
+            G4cout << "\n  Depth " << dn.first << ": " << dn.second;
+            nTouchables += dn.second;
+          }
+          G4cout << "\n  Total number of touchables: " << nTouchables << G4endl;
+        }
+      }
     }
+
+    if (fProblematicVolumes.size() > 0) {
+      G4cout << "Problematic volumes:";
+      for (const auto& prob: fProblematicVolumes) {
+        G4cout << "\n  " << prob.first->GetName() << " (" << prob.second << ')';
+      }
+      G4cout << G4endl;
+    }
+  }
 
   fReadyForTransients = true;
 
@@ -869,6 +869,7 @@ void G4VSceneHandler::ProcessScene()
 
 void G4VSceneHandler::DrawEvent(const G4Event* event)
 {
+  if(!fpViewer->ReadyToDraw()) return;
   const std::vector<G4Scene::Model>& EOEModelList =
     fpScene -> GetEndOfEventModelList ();
   std::size_t nModels = EOEModelList.size();
@@ -887,7 +888,7 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
         fpViewer->InsertModelInSceneTree(fpModel);
 
         // Reset modeling parameters pointer
-	fpModel -> SetModelingParameters(0);
+        fpModel -> SetModelingParameters(0);
       }
     }
     fpModel = 0;
@@ -897,6 +898,7 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
 
 void G4VSceneHandler::DrawEndOfRunModels()
 {
+  if(!fpViewer->ReadyToDraw()) return;
   const std::vector<G4Scene::Model>& EORModelList =
     fpScene -> GetEndOfRunModelList ();
   std::size_t nModels = EORModelList.size();
@@ -909,7 +911,7 @@ void G4VSceneHandler::DrawEndOfRunModels()
         fpModel -> SetModelingParameters(pMP);
 
         // Describe to the current scene handler
-	fpModel -> DescribeYourselfTo (*this);
+        fpModel -> DescribeYourselfTo (*this);
 
         // Enter models in the scene tree
         fpViewer->InsertModelInSceneTree(fpModel);

@@ -635,7 +635,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
   BuildPhysicsTables(fakeRun);
 
   if (geometryNeedsToBeClosed) {
-    ResetNavigator();
+    if(!fakeRun || resetNavigatorAtInitialization) ResetNavigator();
     // CheckRegularGeometry();
     // Notify the VisManager as well
     if (G4Threading::IsMasterThread()) {
@@ -674,19 +674,20 @@ void G4RunManagerKernel::PropagateGenericIonID()
 void G4RunManagerKernel::RunTermination()
 {
   if (runManagerKernelType != workerRMK)
-    G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  { G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated(); } 
   G4StateManager::GetStateManager()->SetNewState(G4State_Idle);
 }
 
 // --------------------------------------------------------------------
 void G4RunManagerKernel::ResetNavigator()
 {
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
   if (runManagerKernelType == workerRMK) {
     // To ensure that it is called when using G4TaskRunManagerKernel
-    if( G4GeometryManager::IsParallelOptimisationConfigured() &&
-       !G4GeometryManager::IsParallelOptimisationFinished() )
+    if( geomManager->IsParallelOptimisationConfigured() &&
+       !geomManager->IsParallelOptimisationFinished() )
     {
-      G4GeometryManager::GetInstance()->UndertakeOptimisation();
+      geomManager->UndertakeOptimisation();
     }
     geometryNeedsToBeClosed = false;
     return;
@@ -697,7 +698,6 @@ void G4RunManagerKernel::ResetNavigator()
   // state is reset properly. It is required the geometry to be closed
   // and previous optimisations to be cleared.
 
-  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
   if (verboseLevel > 1) G4cout << "Start closing geometry." << G4endl;
 
   geomManager->OpenGeometry();

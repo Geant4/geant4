@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-06    (28-June-2024)
+ Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -22,7 +22,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 ***** Table : Nb of materials = 3 *****
 
- Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 3240.779 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -55,6 +55,14 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 <<< Geant4 Physics List simulation engine: FTFP_BERT
 
+Accumulable registered as "accumulable_0"
+Accumulable registered as "accumulable_1"
+Accumulable registered as "accumulable_2"
+Accumulable registered as "accumulable_3"
+Accumulable registered as "accumulable_4"
+Accumulable registered as "accumulable_5"
+Accumulable registered as "accumulable_6"
+Accumulable registered as "accumulable_7"
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -67,7 +75,6 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
@@ -175,10 +182,13 @@ Bremsstrahlung energy threshold above which
   primary e+- is added to the list of secondary    100 TeV
 Bremsstrahlung energy threshold above which primary
   muon/hadron is added to the list of secondary    100 TeV
+Positron annihilation at rest model                SimplePositronium
+Enable 3 gamma annihilation on fly                 0
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Use Ricardo-Gerardo pair production model          0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -349,7 +359,7 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
@@ -831,7 +841,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
-Type of pre-compound inverse x-section              3
+Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
@@ -856,12 +866,10 @@ Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
-Store e- internal conversion data                   0
+Store e- internal conversion data                   1
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 ... open analysis file : AnaEx01.csv - done
 ... create file : ./ntuple/AnaEx01_nt_Ntuple1.csv - done
@@ -906,13 +914,6 @@ LGap: mean = 32.6255 cm  rms = 0 fm
 
 ----> Histograms and ntuples are saved
 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 # e- 500MeV
 /gun/particle e-
 /gun/energy 500 MeV
@@ -946,20 +947,20 @@ There are histograms that can be viewed with visualization:
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 186.264 MeV +- 50.8208 MeV
- mean Energy in Gap      : 45.8735 MeV +- 13.843 MeV
+ mean Energy in Absorber : 189.29 MeV +- 49.6309 MeV
+ mean Energy in Gap      : 46.2433 MeV +- 13.396 MeV
 
- mean trackLength in Absorber : 46.0323 cm  +- 12.6521 cm 
- mean trackLength in Gap      : 23.2729 cm  +- 7.04724 cm 
+ mean trackLength in Absorber : 46.7296 cm  +- 12.3868 cm 
+ mean trackLength in Gap      : 23.4367 cm  +- 6.8607 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 186.264 MeV rms = 50.8208 MeV
-EGap: mean = 45.8735 MeV rms = 13.843 MeV
-LAbs: mean = 46.0323 cm  rms = 12.6521 cm 
-LGap: mean = 23.246 cm  rms = 6.99942 cm 
+EAbs: mean = 189.29 MeV rms = 49.6309 MeV
+EGap: mean = 46.2433 MeV rms = 13.396 MeV
+LAbs: mean = 46.7296 cm  rms = 12.3868 cm 
+LGap: mean = 23.4367 cm  rms = 6.8607 cm 
 ... create file : ./histo/AnaEx01_h1_EAbs.csv - done
 ... create file : ./histo/AnaEx01_h1_EGap.csv - done
 ... create file : ./histo/AnaEx01_h1_LAbs.csv - done
@@ -979,12 +980,5 @@ LGap: mean = 23.246 cm  rms = 6.99942 cm
 
 ----> Histograms and ntuples are saved
 
-There are histograms that can be viewed with visualization:
-  4 h1 histograms(s)
-  List them with "/analysis/list".
-  View them immediately with "/vis/plot" or "/vis/reviewPlots".
-  But...there are no entries. To make your histograms available for
-  plotting in this UI session, use CloseFile(false) in your
-  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...

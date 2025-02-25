@@ -32,7 +32,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4LogicalVolume;
 
 class GB06DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -40,9 +40,11 @@ class GB06DetectorConstruction : public G4VUserDetectorConstruction
     GB06DetectorConstruction();
     ~GB06DetectorConstruction();
 
-  public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
+
+  private:
+    G4LogicalVolume* logicMeasurement = nullptr;
 };
 
 #endif

@@ -19,6 +19,8 @@
 #include "../colorf"
 #include "../S_STRING"
 
+#include <utility>
+
 namespace tools {
 namespace sg {
 
@@ -558,7 +560,7 @@ public:
       tools_vforcit(std::string,strings.values(),it) {
         std::string scut;
         m_base_text->truncate(*it,th,fw,scut);
-        labcut.push_back(scut);
+        labcut.push_back(std::move(scut));
       }
       m_base_text->strings = labcut;}
     }

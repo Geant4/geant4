@@ -48,7 +48,7 @@
 HadrontherapyRunAction::HadrontherapyRunAction()
 {
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-    accumulableManager->RegisterAccumulable(&fRBEAccumulable);
+    accumulableManager->Register(&fRBEAccumulable);
     
 }
 

@@ -142,12 +142,6 @@ G4ParticleHPMessenger::G4ParticleHPMessenger(G4ParticleHPManager* man) : manager
   MaxEnergyDBRCCmd->SetUnitCategory("Energy");
   MaxEnergyDBRCCmd->SetDefaultValue(210. * CLHEP::eV);
   MaxEnergyDBRCCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  PTformatCmd = new G4UIcmdWithAString("/process/had/particle_hp/use_probability_table_from", this);
-  PTformatCmd->SetGuidance("Choose format of the probability tables.");
-  PTformatCmd->SetParameterName("choice", false);
-  PTformatCmd->SetCandidates("njoy calendf");
-  PTformatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 G4ParticleHPMessenger::~G4ParticleHPMessenger()
@@ -166,7 +160,6 @@ G4ParticleHPMessenger::~G4ParticleHPMessenger()
   delete MinADBRCCmd;
   delete MinEnergyDBRCCmd;
   delete MaxEnergyDBRCCmd;
-  delete PTformatCmd;
 }
 
 void G4ParticleHPMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -414,21 +407,4 @@ void G4ParticleHPMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     }
   }
 
-  if (command == PTformatCmd) {
-    if (manager->GetUsedPTformat() != newValue) {
-      manager->SetUsedPTformat(newValue);
-    }
-#ifdef G4VERBOSE
-    if (G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
-      G4cout << G4endl
-             << "=== G4ParticleHPMessenger CHANGED PARAMETER UsedPTformat TO "
-             << newValue << " ===" << G4endl;
-    }
-    if (newValue == "njoy") {
-      G4cout << "    -> Probablity tables for the unresolved resonace region will be used from NJOY21." << G4endl;
-    } else if (newValue == "calendf") {
-      G4cout << "    -> Probablity tables for the unresolved resonace region will be used from CALENDF." << G4endl;
-    }
-#endif
-  }
 }

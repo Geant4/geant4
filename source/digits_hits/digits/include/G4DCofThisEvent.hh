@@ -23,9 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DCofThisEvent
 //
+// Class description:
 //
-
+// This is a class which stores digi collections generated at one event.
+// This class is exclusively constructed by G4DigiManager when the first
+// digi collection of an event is passed to the manager, and this class
+// object is deleted by G4RunManager when a G4Event class object is deleted.
+// Almost all public methods must be used by Geant4 kernel classes and
+// the user should not invoke them. The user can use two const methods,
+// GetDC() and GetNumberOfCollections() for accessing to the stored digi
+// collection(s).
+//
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4DCofThisEvent_h
 #define G4DCofThisEvent_h 1
 
@@ -35,52 +47,43 @@
 
 #include <vector>
 
-// class description:
-//
-//  This is a class which stores digi collections generated at one event.
-// This class is exclusively constructed by G4DigiManager when the first
-// digi collection of an event is passed to the manager, and this class
-// object is deleted by G4RunManager when a G4Event class object is deleted.
-//  Almost all public methods must be used by Geant4 kernel classes and
-// the user should not invoke them. The user can use two const methods,
-// GetDC() and GetNumberOfCollections() for accessing to the stored digi
-// collection(s).
-
 class G4DCofThisEvent
 {
- public:
-  G4DCofThisEvent();
-  explicit G4DCofThisEvent(G4int cap);
-  ~G4DCofThisEvent();
-  G4DCofThisEvent(const G4DCofThisEvent&);
-  G4DCofThisEvent& operator=(const G4DCofThisEvent&);
+  public:
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* anDCoTE);
+    G4DCofThisEvent();
+    explicit G4DCofThisEvent(G4int cap);
+    ~G4DCofThisEvent();
+    G4DCofThisEvent(const G4DCofThisEvent&);
+    G4DCofThisEvent& operator=(const G4DCofThisEvent&);
 
-  void AddDigiCollection(G4int DCID, G4VDigiCollection* aDC);
+    inline void* operator new(std::size_t);
+    inline void operator delete(void* anDCoTE);
 
-  //  Returns a pointer to a digi collection.
-  // Returns `nullptr` if the particular collection is not stored in the current event.
-  // The integer argument is ID number which is assigned by G4DigiManager
-  // and the number can be obtained by G4DigiManager::GetDigiCollectionID()
-  // method.
-  inline G4VDigiCollection* GetDC(G4int i) const { return (*DC)[i]; }
+    void AddDigiCollection(G4int DCID, G4VDigiCollection* aDC);
 
-  // Return number of digi collections stored
-  inline G4int GetNumberOfCollections() const
-  {
-    G4int n = 0;
-    for (const G4VDigiCollection* dc : *DC) {
-      if (dc != nullptr) n++;
+    // Returns a pointer to a digi collection.
+    // Returns `nullptr` if the particular collection is not stored in the current event.
+    // The integer argument is ID number which is assigned by G4DigiManager
+    // and the number can be obtained by G4DigiManager::GetDigiCollectionID()
+    // method.
+    inline G4VDigiCollection* GetDC(G4int i) const { return (*DC)[i]; }
+
+    // Return number of digi collections stored
+    inline G4int GetNumberOfCollections() const
+    {
+      G4int n = 0;
+      for (const G4VDigiCollection* dc : *DC) {
+        if (dc != nullptr) ++n;
+      }
+      return n;
     }
-    return n;
-  }
 
-  inline size_t GetCapacity() const { return DC->size(); }
+    inline std::size_t GetCapacity() const { return DC->size(); }
 
- private:
-  std::vector<G4VDigiCollection*>* DC;
+  private:
+
+    std::vector<G4VDigiCollection*>* DC;
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
@@ -89,7 +92,7 @@ extern G4DLLEXPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
 extern G4DLLIMPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
 #endif
 
-inline void* G4DCofThisEvent::operator new(size_t)
+inline void* G4DCofThisEvent::operator new(std::size_t)
 {
   if (anDCoTHAllocator_G4MT_TLS_() == nullptr) {
     anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;

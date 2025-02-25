@@ -30,8 +30,8 @@
 
 #pragma once
 
-#include "PTL/Globals.hh"
 #include "PTL/VTask.hh"
+#include "PTL/detail/CxxBackports.hh"
 
 #include <cstdint>
 #include <future>
@@ -113,7 +113,7 @@ public:
 
 public:
     // execution operator
-    void        operator()() final { mpl::apply(std::move(m_ptask), std::move(m_args)); }
+    void        operator()() final { PTL::apply(std::move(m_ptask), std::move(m_args)); }
     future_type get_future() final { return m_ptask.get_future(); }
     void        wait() final { return m_ptask.get_future().wait(); }
     RetT        get() final { return m_ptask.get_future().get(); }
@@ -165,7 +165,7 @@ public:
     void operator()() final
     {
         if(m_ptask.valid())
-            mpl::apply(std::move(m_ptask), std::move(m_args));
+            PTL::apply(std::move(m_ptask), std::move(m_args));
     }
     future_type get_future() final { return m_ptask.get_future(); }
     void        wait() final { return m_ptask.get_future().wait(); }

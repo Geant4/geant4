@@ -82,6 +82,7 @@ void Run::Merge(const G4Run* run)
   fNbOfSteps0 += localRun->fNbOfSteps0;
   fNbOfSteps1 += localRun->fNbOfSteps1;
   fEdep += localRun->fEdep;
+  fEleak += localRun->fEleak;
   fNIEL += localRun->fNIEL;
   fTrueRange += localRun->fTrueRange;
   fTrueRange2 += localRun->fTrueRange2;
@@ -131,8 +132,14 @@ void Run::EndOfRun()
   }
 
   G4double dNbOfEvents = (G4double)numberOfEvent;
-  G4cout << "\n Total energy deposit:   " << G4BestUnit(fEdep / dNbOfEvents, "Energy") << G4endl;
-  G4cout << " NIEL energy calculated: " << G4BestUnit(fNIEL / dNbOfEvents, "Energy") << G4endl;
+  G4cout << "\n Energy deposit:   " 
+         << G4BestUnit(fEdep/dNbOfEvents,  "Energy") << G4endl;
+  G4cout << " Energy leakage:   " 
+         << G4BestUnit(fEleak/dNbOfEvents, "Energy") << G4endl;
+  G4cout << " Edep + Eleak:     " 
+         << G4BestUnit((fEdep+fEleak)/dNbOfEvents, "Energy") << G4endl;
+  G4cout << " \n NIEL energy calculated: " 
+         << G4BestUnit(fNIEL/dNbOfEvents,  "Energy") << G4endl;
 
   // nb of tracks and steps per event
   //

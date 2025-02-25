@@ -107,7 +107,7 @@ private:
 
   void LoadMCDataElement(const G4Element*);
 
-  void ReadCompressedFile(std::string fname, std::istringstream &iss);
+  void ReadCompressedFile(const std::string& fname, std::istringstream &iss);
 
   void InitMCDataMaterial(const G4Material*);
   //

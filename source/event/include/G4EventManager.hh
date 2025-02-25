@@ -68,10 +68,6 @@ class G4EventManager
     void ProcessOneEvent(G4Event* anEvent);
       // This method is the main entry to this class for simulating an event.
 
-    void ProcessOneEventForSERM(G4Event* anEvent);
-      // This method must be invoked by G4SubEventRunManager for processing
-      // an event in the master thread, with Mutex lock
-
     void ProcessOneEvent(G4TrackVector* trackVector, G4Event* anEvent= nullptr);
       // This is an alternative entry for HEP experiments which create G4Track
       // objects by themselves directly without using G4VPrimaryGenerator or a
@@ -160,6 +156,7 @@ class G4EventManager
         subEventPara = true; 
         subEventParaWorker = worker;
       }
+
     G4SubEvent* PopSubEvent(G4int ty);
       // If this method is invoked by the G4RunManager while an event is still 
       // in process. Null is returned if the sub-event does not have enough tracks.
@@ -170,6 +167,11 @@ class G4EventManager
       // The ownership of "evt" remains to the worker thread and it will be
       // deleted after this method. All necessary information in "evt" must
       // be copied into the corresponding master G4Event object.
+
+    G4int StoreSubEvent(G4Event*, G4int&, G4SubEvent*);
+      // This method is exclusively used by G4SubEventTrackStack class to 
+      // store a new G4SubEevnt into the current G4Event, with Mutex lock
+      // shared with above two methods.
 
   private:
 

@@ -68,9 +68,8 @@
 
 #include "G4ApplicationState.hh"
 #include "G4AtomicShells.hh"
-#include "G4Exp.hh"
 #include "G4ExtendedMaterial.hh"
-#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4NistManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4StateManager.hh"
@@ -78,8 +77,6 @@
 #include "G4UnitsTable.hh"
 
 #include <iomanip>
-
-G4MaterialTable G4Material::theMaterialTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -231,9 +228,9 @@ G4Material::~G4Material()
   delete fIonisation;
   delete[] fVecNbOfAtomsPerVolume;
 
-  // Remove this material from theMaterialTable.
+  // Remove this material from the MaterialTable.
   //
-  theMaterialTable[fIndexInTable] = nullptr;
+  (*GetMaterialTable())[fIndexInTable] = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -261,14 +258,14 @@ void G4Material::InitializePointers()
   fChemicalFormula = "";
 
   // Store in the static Table of Materials
-  fIndexInTable = theMaterialTable.size();
+  fIndexInTable = GetMaterialTable()->size();
   for (std::size_t i = 0; i < fIndexInTable; ++i) {
-    if (theMaterialTable[i]->GetName() == fName) {
+    if ((*GetMaterialTable())[i]->GetName() == fName) {
       G4cout << "G4Material WARNING: duplicate name of material " << fName << G4endl;
       break;
     }
   }
-  theMaterialTable.push_back(this);
+  GetMaterialTable()->push_back(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -593,8 +590,7 @@ void G4Material::ComputeRadiationLength()
 
 void G4Material::ComputeNuclearInterLength()
 {
-  const G4double lambda0 = 35 * CLHEP::g / CLHEP::cm2;
-  const G4double twothird = 2.0 / 3.0;
+  const G4double lambda1 = CLHEP::amu*CLHEP::cm2 / (35.0 * CLHEP::g);
   G4double NILinv = 0.0;
   for (G4int i = 0; i < fNumberOfElements; ++i) {
     G4int Z = (*theElementVector)[i]->GetZasInt();
@@ -603,11 +599,14 @@ void G4Material::ComputeNuclearInterLength()
       NILinv += fVecNbOfAtomsPerVolume[i] * A;
     }
     else {
-      NILinv += fVecNbOfAtomsPerVolume[i] * G4Exp(twothird * G4Log(A));
+      NILinv += fVecNbOfAtomsPerVolume[i] * G4Pow::GetInstance()->A23(A);
     }
   }
-  NILinv *= amu / lambda0;
-  fNuclInterLen = (NILinv <= 0.0 ? DBL_MAX : 1. / NILinv);
+  NILinv *= lambda1;
+  fNuclInterLen = 1.e+20*CLHEP::m;
+  if (fNuclInterLen * NILinv > 1.0) {
+    fNuclInterLen = 1.0 / NILinv;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -642,18 +641,29 @@ void G4Material::ComputeDensityEffectOnFly(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MaterialTable* G4Material::GetMaterialTable() { return &theMaterialTable; }
+G4MaterialTable* G4Material::GetMaterialTable()
+{
+  struct Holder {
+    G4MaterialTable instance;
+    ~Holder() {
+      for(auto item : instance)
+        delete item;
+    }
+  };
+  static Holder _holder;
+  return &_holder.instance;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::size_t G4Material::GetNumberOfMaterials() { return theMaterialTable.size(); }
+std::size_t G4Material::GetNumberOfMaterials() { return GetMaterialTable()->size(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warn)
 {
   // search the material by its name
-  for (auto const & j : theMaterialTable) {
+  for (auto const & j : *GetMaterialTable()) {
     if (j->GetName() == materialName) {
       return j;
     }
@@ -672,7 +682,7 @@ G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warn)
 G4Material* G4Material::GetMaterial(G4double z, G4double a, G4double dens)
 {
   // search the material by its name
-  for (auto const & mat : theMaterialTable) {
+  for (auto const & mat : *GetMaterialTable()) {
     if (1 == mat->GetNumberOfElements() && z == mat->GetZ() && a == mat->GetA() &&
         dens == mat->GetDensity())
     {
@@ -687,7 +697,7 @@ G4Material* G4Material::GetMaterial(G4double z, G4double a, G4double dens)
 G4Material* G4Material::GetMaterial(std::size_t nComp, G4double dens)
 {
   // search the material by its name
-  for (auto const & mat : theMaterialTable) {
+  for (auto const & mat : *GetMaterialTable()) {
     if (nComp == mat->GetNumberOfElements() && dens == mat->GetDensity()) {
       return mat;
     }

@@ -5,6 +5,13 @@
 #/process/dna/e-SolvationSubType Ritchie1994
 #/process/dna/e-SolvationSubType Terrisol1990
 
+# use Step-by-Step (SBS), independent reaction time (IRT)
+# or synchronized IRT (IRT_syn),
+# SBS ( is only for TDC, set 0 )
+/process/chem/TimeStepModel IRT
+#/process/chem/TimeStepModel SBS
+#/process/chem/TimeStepModel IRT_syn
+
 /run/initialize
 
 /chem/reaction/print

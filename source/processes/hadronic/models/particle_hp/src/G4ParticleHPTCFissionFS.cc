@@ -30,8 +30,8 @@
 //
 #include "G4ParticleHPTCFissionFS.hh"
 
-void G4ParticleHPTCFissionFS::Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String&,
-                                   G4ParticleDefinition* projectile)
+void G4ParticleHPTCFissionFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
+                                   const G4String&, G4ParticleDefinition* projectile)
 {
   G4String aString = "/TC/";
   G4ParticleHPFissionBaseFS::Init(A, Z, M, dirName, aString, projectile);

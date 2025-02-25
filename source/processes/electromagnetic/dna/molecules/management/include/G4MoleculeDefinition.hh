@@ -84,7 +84,7 @@ public:
                        G4double radius = -1,
                        G4int atomsNumber = -1,
                        G4double lifetime = -1,
-                       G4String aType = "",
+                       const G4String& aType = "",
                        G4FakeParticleID ID = G4FakeParticleID::Create());
 
   ~G4MoleculeDefinition() override;

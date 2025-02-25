@@ -23,8 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VTHitsMap, G4THitsMultiMap, G4THitsUnorderedMap & G4THitsUnorderedMultiMap
 //
+// Class description:
 //
+// This is a template class of hits map and parametrised by
+// The concrete class of G4VHit. This is a uniform collection for
+// a particular concrete hit class objects.
+// An intermediate layer class G4HitsMap appeared in this
+// header file is used just for G4Allocator, because G4Allocator
+// cannot be instantiated with a template class. Thus G4HitsMap
+// class MUST NOT be directly used by the user.
+//
+// Authors: Makoto Asai, Jonathan Madsen
+// --------------------------------------------------------------------
 #ifndef G4THitsMap_h
 #define G4THitsMap_h 1
 
@@ -35,20 +47,11 @@
 #include <unordered_map>
 #include <type_traits>
 
-// class description:
-//
-//  This is a template class of hits map and parametrized by
-// The concrete class of G4VHit. This is a uniform collection for
-// a particular concrete hit class objects.
-//  An intermediate layer class G4HitsMap appeared in this
-// header file is used just for G4Allocator, because G4Allocator
-// cannot be instansiated with a template class. Thus G4HitsMap
-// class MUST NOT be directly used by the user.
-
 template <typename T, typename Map_t = std::map<G4int, T*>>
 class G4VTHitsMap : public G4HitsCollection
 {
  private:
+
   using mmap_t = std::multimap<G4int, T *>;
   using pair_t = std::pair<G4int, T *>;
   using uommap_t = std::unordered_multimap<G4int, T *>;
@@ -84,11 +87,10 @@ class G4VTHitsMap : public G4HitsCollection
   using iterator = typename map_type::iterator;
   using const_iterator = typename map_type::const_iterator;
 
- public:  // with description
   // generic constructor
   G4VTHitsMap();
   // det + collection description constructor
-  G4VTHitsMap(G4String detName, G4String colNam);
+  G4VTHitsMap(const G4String& detName, const G4String& colNam);
   // destructor
   ~G4VTHitsMap() override;
   // equivalence operator
@@ -108,13 +110,11 @@ class G4VTHitsMap : public G4HitsCollection
   }
   //------------------------------------------------------------------------//
 
- public:  // with description
   void DrawAllHits() override;
   void PrintAllHits() override;
   //  These two methods invokes Draw() and Print() methods of all of
   //  hit objects stored in this map, respectively.
 
- public:
   // Generic iteration
   inline Map_t* GetContainer() const { return (Map_t*)theCollection; }
 
@@ -147,20 +147,17 @@ class G4VTHitsMap : public G4HitsCollection
   const_iterator cbegin() const { return GetContainer()->cbegin(); }
   const_iterator cend() const { return GetContainer()->cend(); }
 
- public:  // with description
   //  Returns a pointer to a concrete hit object.
   inline Map_t* GetMap() const { return (Map_t*)theCollection; }
   //  Overwrite a hit object. Total number of hit objects stored in this
   // map is returned.
-  inline size_t entries() const { return ((Map_t*)theCollection)->size(); }
+  inline std::size_t entries() const { return ((Map_t*)theCollection)->size(); }
   //  Returns the number of hit objects stored in this map
   inline void clear();
 
- public:
-  G4VHit* GetHit(size_t) const override { return nullptr; }
-  size_t GetSize() const override { return ((Map_t*)theCollection)->size(); }
+  G4VHit* GetHit(std::size_t) const override { return nullptr; }
+  std::size_t GetSize() const override { return ((Map_t*)theCollection)->size(); }
 
- public:
   //------------------------------------------------------------------------//
   //  Add/Insert a hit object. Total number of hit objects stored in this
   //  map is returned.
@@ -171,7 +168,7 @@ class G4VTHitsMap : public G4HitsCollection
   // and += adds to white (not correct)
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<is_same_t(U, T) && ! is_mmap_t(MapU_t), G4int> = 0>
-  size_t add(const G4int& key, U*& aHit) const
+  std::size_t add(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     if (theHitsMap->find(key) == theHitsMap->end())
@@ -185,7 +182,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  size_t add(const G4int& key, U*& aHit) const
+  std::size_t add(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     theHitsMap->insert(pair_t(key, aHit));
@@ -197,7 +194,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  size_t add(const G4int& key, U*& aHit) const
+  std::size_t add(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = allocate();
@@ -206,7 +203,6 @@ class G4VTHitsMap : public G4HitsCollection
     return theHitsMap->size();
   }
 
- public:
   //------------------------------------------------------------------------//
   //  Standard map overload for same type
   //      assumes type T has overload of += operator for U
@@ -215,7 +211,7 @@ class G4VTHitsMap : public G4HitsCollection
   // and += adds to white (not correct)
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
-  size_t add(const G4int& key, U& aHit) const
+  std::size_t add(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     if (theHitsMap->find(key) == theHitsMap->end())
@@ -230,7 +226,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
-  size_t add(const G4int& key, U& aHit) const
+  std::size_t add(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     if (theHitsMap->find(key) == theHitsMap->end()) theHitsMap->insert(pair_t(key, allocate()));
@@ -242,7 +238,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  size_t add(const G4int& key, U& aHit) const
+  std::size_t add(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     theHitsMap->insert(pair_t(key, new T(aHit)));
@@ -254,7 +250,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  size_t add(const G4int& key, U& aHit) const
+  std::size_t add(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = allocate();
@@ -262,9 +258,7 @@ class G4VTHitsMap : public G4HitsCollection
     theHitsMap->insert(pair_t(key, hit));
     return theHitsMap->size();
   }
-  //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   //  Set a hit object. Total number of hit objects stored in this
   //  map is returned.
@@ -273,7 +267,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U*& aHit) const
+  inline std::size_t set(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     if (theHitsMap->find(key) != theHitsMap->end()) delete theHitsMap->find(key)->second;
@@ -285,7 +279,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U*& aHit) const
+  inline std::size_t set(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     if (theHitsMap->find(key) != theHitsMap->end())
@@ -301,7 +295,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U*& aHit) const
+  inline std::size_t set(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = nullptr;
@@ -317,7 +311,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U*& aHit) const
+  inline std::size_t set(const G4int& key, U*& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = allocate();
@@ -330,9 +324,7 @@ class G4VTHitsMap : public G4HitsCollection
     }
     return theHitsMap->size();
   }
-  //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   //  Set a hit object. Total number of hit objects stored in this
   //  map is returned.
@@ -341,7 +333,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U& aHit) const
+  inline std::size_t set(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = nullptr;
@@ -357,7 +349,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U& aHit) const
+  inline std::size_t set(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     if (theHitsMap->find(key) != theHitsMap->end())
@@ -371,7 +363,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U& aHit) const
+  inline std::size_t set(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = nullptr;
@@ -387,7 +379,7 @@ class G4VTHitsMap : public G4HitsCollection
   //------------------------------------------------------------------------//
   template <typename U = T, typename MapU_t = Map_t,
     enable_if_t<(! is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
-  inline size_t set(const G4int& key, U& aHit) const
+  inline std::size_t set(const G4int& key, U& aHit) const
   {
     map_type* theHitsMap = GetMap();
     T* hit = allocate();
@@ -398,9 +390,7 @@ class G4VTHitsMap : public G4HitsCollection
       theHitsMap->insert(pair_t(key, hit));
     return theHitsMap->size();
   }
-  //------------------------------------------------------------------------//
 
- public:
   //------------------------------------------------------------------------//
   //  Enable bracket operator. Return pointer to data indexed by key or
   //      last occurring instance of pointer to data index by key in the
@@ -418,7 +408,7 @@ class G4VTHitsMap : public G4HitsCollection
   T* operator[](G4int key) const
   {
 #ifdef G4VERBOSE
-    static bool _first = true;
+    static G4bool _first = true;
     if (_first) {
       _first = false;
       G4Exception("G4THitsMap operator[]", "calling [] on multimap", JustWarning,
@@ -453,7 +443,7 @@ G4VTHitsMap<T, Map_t>::G4VTHitsMap()
 //============================================================================//
 
 template <typename T, typename Map_t>
-G4VTHitsMap<T, Map_t>::G4VTHitsMap(G4String detName, G4String colNam)
+G4VTHitsMap<T, Map_t>::G4VTHitsMap(const G4String& detName, const G4String& colNam)
   : G4HitsCollection(detName, colNam)
 {
   theCollection = (void*)new Map_t;
@@ -564,7 +554,8 @@ class G4THitsMultiMap : public G4VTHitsMap<_Tp, std::multimap<G4int, _Tp*>>
 
  public:
   G4THitsMultiMap() : parent_type() {}
-  G4THitsMultiMap(G4String detName, G4String colName) : parent_type(detName, colName) {}
+  G4THitsMultiMap(const G4String& detName, const G4String& colName)
+    : parent_type(detName, colName) {}
 
   using parent_type::operator+=;
   using parent_type::operator==;
@@ -594,7 +585,8 @@ class G4THitsUnorderedMap : public G4VTHitsMap<_Tp, std::unordered_map<G4int, _T
 
  public:
   G4THitsUnorderedMap() : parent_type() {}
-  G4THitsUnorderedMap(G4String detName, G4String colName) : parent_type(detName, colName) {}
+  G4THitsUnorderedMap(const G4String& detName, const G4String& colName)
+    : parent_type(detName, colName) {}
 
   using parent_type::operator+=;
   using parent_type::operator==;
@@ -624,7 +616,8 @@ class G4THitsUnorderedMultiMap : public G4VTHitsMap<_Tp, std::unordered_multimap
 
  public:
   G4THitsUnorderedMultiMap() : parent_type() {}
-  G4THitsUnorderedMultiMap(G4String detName, G4String colName) : parent_type(detName, colName) {}
+  G4THitsUnorderedMultiMap(const G4String& detName, const G4String& colName)
+    : parent_type(detName, colName) {}
 
   using parent_type::operator+=;
   using parent_type::operator==;

@@ -4,6 +4,19 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-11-20 Hoang Tran (chem3-V11-02-02)
+- updated TimeStepAction and
+- added function to show how to get a specific species ID,
+positions at each time step.
+
+## 2024-09-20 Ivana Hrivnacova (chem3-V11-02-01)
+- Updated the HOW TO START section in README once more:
+  commented macros vis.mac and vis_vm.mac.
+
+## 2024-09-19 Ivana Hrivnacova (chem3-V11-02-00)
+- Extended the HOW TO START section in README with
+  the beam.in, gui.mac macros usage
+
 ## 2023-10-20 John Allison (chem3-V11-01-00)
 - vis.mac and vis_vm.mac:
   - Remove defunct command /vis/ogl/set/displayListLimit.

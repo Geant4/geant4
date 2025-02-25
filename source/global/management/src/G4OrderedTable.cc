@@ -88,7 +88,7 @@ G4bool G4OrderedTable::Store(const G4String& fileName, G4bool ascii)
     return false;
   }
 
-  G4int tableSize = G4int(size());  // Number of elements
+  auto tableSize = G4int(size());  // Number of elements
   if(!ascii)
   {
     fOut.write((char*) (&tableSize), sizeof tableSize);

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ImportanceConfigurator
 //
-//
-// ----------------------------------------------------------------------
-// Class G4ImportanceConfigurator
-//
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel, CERN
 // ----------------------------------------------------------------------
 
 #include "G4ImportanceConfigurator.hh"
@@ -41,39 +38,36 @@
 #include "G4AutoLock.hh"
 
 #ifdef G4MULTITHREADED
-namespace {
- G4Mutex BiasConfigMutex = G4MUTEX_INITIALIZER;
+namespace
+{
+  G4Mutex BiasConfigMutex = G4MUTEX_INITIALIZER;
 }
 #endif
 
 G4ImportanceConfigurator::
 G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume, 
-			 const G4String &particlename,
-                          G4VIStore &istore,
-                          const G4VImportanceAlgorithm *ialg, G4bool para)
+			 const G4String& particlename,
+                               G4VIStore& istore,
+                         const G4VImportanceAlgorithm* ialg, G4bool para)
   : fWorld(worldvolume),
     fWorldName(worldvolume->GetName()),
     fPlacer(particlename),
     fIStore(istore),
     fDeleteIalg( ( ! ialg) ),
-    fIalgorithm(( (fDeleteIalg) ? 
-                  new G4ImportanceAlgorithm : ialg)),
-    fImportanceProcess(0),
+    fIalgorithm(( (fDeleteIalg == true) ? new G4ImportanceAlgorithm : ialg )),
     paraflag(para)
 {;}
 
 G4ImportanceConfigurator::
-G4ImportanceConfigurator(const G4String &worldvolumeName, 
-			 const G4String &particlename,
-                          G4VIStore &istore,
-                          const G4VImportanceAlgorithm *ialg, G4bool para)
+G4ImportanceConfigurator(const G4String& worldvolumeName, 
+			 const G4String& particlename,
+                               G4VIStore& istore,
+                         const G4VImportanceAlgorithm* ialg, G4bool para)
 : fWorldName(worldvolumeName),
   fPlacer(particlename),
   fIStore(istore),
   fDeleteIalg( ( ! ialg) ),
-  fIalgorithm(( (fDeleteIalg) ? 
-		new G4ImportanceAlgorithm : ialg)),
-  fImportanceProcess(0),
+  fIalgorithm(( (fDeleteIalg == true) ? new G4ImportanceAlgorithm : ialg )),
   paraflag(para)
 {
   fWorld = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
@@ -94,15 +88,14 @@ G4ImportanceConfigurator::~G4ImportanceConfigurator()
 }
 
 void  
-G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
+G4ImportanceConfigurator::Configure(G4VSamplerConfigurator* preConf)
 {
   G4cout << "G4ImportanceConfigurator:: entering importance configure, paraflag " << paraflag << G4endl;
   const G4VTrackTerminator *terminator = 0;
   if (preConf)
   {
     terminator = preConf->GetTrackTerminator();
-  };
-
+  }
 
 #ifdef G4MULTITHREADED
   G4AutoLock l(&BiasConfigMutex);
@@ -119,20 +112,15 @@ G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
                 "Failed allocation of G4ImportanceProcess !");
   }
   
-  // G4cout << "G4ImportanceConfigurator:: setting parallel World " << paraflag << G4endl;
   if(paraflag) fImportanceProcess->SetParallelWorld(fWorld->GetName());
 #ifdef G4MULTITHREADED
   l.unlock();
-//   G4MUTEXUNLOCK(&G4ImportanceConfigurator::BiasConfigMutex);
 #endif
-  //  if(paraflag) fImportanceProcess->SetParallelWorld(fWorldName);
-  // G4cout << "G4ImportanceConfigurator:: set " << paraflag << " name: " << fWorld->GetName() << G4endl;
-  // getchar();
   fPlacer.AddProcessAsSecondDoIt(fImportanceProcess);
 }
 
-const G4VTrackTerminator *G4ImportanceConfigurator::
-GetTrackTerminator() const
+const G4VTrackTerminator*
+G4ImportanceConfigurator::GetTrackTerminator() const
 {
   return fImportanceProcess;
 }

@@ -1500,8 +1500,8 @@ G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {
-  for (auto & ptr : GDR) { delete [] ptr; }
-  for (auto & ptr : HEN) { delete [] ptr; }
+  for (auto const & ptr : GDR) { delete [] ptr; }
+  for (auto const & ptr : HEN) { delete [] ptr; }
 
   delete [] deuteron_GDR;
   delete [] deuteron_HR;
@@ -1529,15 +1529,13 @@ G4PhotoNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle*,
                                             const G4Element*, 
                                             const G4Material*)
 {
-  // explicitly allow deuterium and tritium
-  if ((Z == 1 && A == 2) || (Z == 1 && A == 3) ||
-      (Z == 2 && A == 3) ) return true; 
-  return false;
+  // explicitly allow deuterium, tritium, and He3
+  return ((Z == 1 && A == 2) || (Z == 1 && A == 3) || (Z == 2 && A == 3)); 
 }
 
 
 G4bool
-G4PhotoNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*particle*/,
+G4PhotoNuclearCrossSection::IsElementApplicable(const G4DynamicParticle*,
                                                 G4int /*Z*/, const G4Material*)
 {
   return true;
@@ -1550,11 +1548,15 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
                                                G4int Z, G4int A,
                                                const G4Isotope*,
                                                const G4Element*,
-                                               const G4Material* mat)
+                                               const G4Material*)
 {
-  G4double Energy = aPart->GetKineticEnergy()/MeV;
-  if (Energy < THmin) return 0.;
+  return ComputeIsoXSection(aPart->GetKineticEnergy(), Z, A);
+}
 
+G4double
+G4PhotoNuclearCrossSection::ComputeIsoXSection(G4double Energy, G4int Z, G4int A)
+{
+  if (Energy <= THmin) { return 0.0; }
   G4double sigma;
   G4double lE;
   if (Z == 1 && A == 2) { 
@@ -1622,7 +1624,7 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
     }
 
   } else {
-    return GetElementCrossSection(aPart, Z, mat);
+    return ComputeElementXSection(Energy, Z);
   }
 
   if(sigma < 0.) sigma = 0.;
@@ -1634,11 +1636,17 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
 // (E in MeV, CS in mb)
 G4double
 G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPart,
-                                                   G4int ZZ, const G4Material*)
+                                                   G4int Z, const G4Material*)
 {
-    const G4double Energy = aPart->GetKineticEnergy()/MeV;
-    
-    if (Energy<THmin) return 0.;
+  return ComputeElementXSection(aPart->GetKineticEnergy(), Z);
+}
+
+G4double
+G4PhotoNuclearCrossSection::ComputeElementXSection(G4double Energy, G4int Z)
+{
+  if (Energy <= THmin) { return 0.0; }
+  G4int ZZ = std::min(Z, nL - 1);
+  
     G4double sigma=0.;
     
     if(ZZ!=lastZ)   // Otherwise the set of parameters is ready

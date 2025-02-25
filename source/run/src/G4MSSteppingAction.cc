@@ -107,6 +107,7 @@ void G4MSSteppingAction::PrintEachMaterialVerbose(std::ostream & oss)
   oss << G4endl;
 
 
+  std::ios::fmtflags os_flags (oss.flags());
   for( auto & matInfo : shape_mat_info_v)
   {
      oss << std::setw(matname_colwidth) << std::left << matInfo.GetName(matname_colwidth) << "   ";
@@ -133,6 +134,7 @@ void G4MSSteppingAction::PrintEachMaterialVerbose(std::ostream & oss)
      oss << G4endl;
      oss << G4endl;
   }
+  oss.flags(os_flags);  // Restore original stream format
 }
 
 void G4MSSteppingAction::PrintIntegratedMaterialVerbose(std::ostream& oss)
@@ -140,7 +142,7 @@ void G4MSSteppingAction::PrintIntegratedMaterialVerbose(std::ostream& oss)
   // create database (db) of material name (key) and information
   std::map<G4String, shape_mat_info_t> mat_db;
   // accumulate information for each material name into mat_db
-  for( auto & matInfo : shape_mat_info_v)
+  for(auto & matInfo : shape_mat_info_v)
   {
      G4String key = matInfo.material_name;
      if( 0 == mat_db.count( key ) )
@@ -153,11 +155,13 @@ void G4MSSteppingAction::PrintIntegratedMaterialVerbose(std::ostream& oss)
     mat_db[key].lambda += matInfo.lambda;
   }
 
+  std::ios::fmtflags os_flags (oss.flags());
   oss << std::scientific << std::setprecision(2) << '\t';
   for(auto & [key,mat] : mat_db)
     oss << '\t' << key
         << '\t'<< mat.thickness/CLHEP::mm
         << '\t'<< mat.x0
         << '\t'<< mat.lambda;
+  oss.flags(os_flags);  // Restore original stream format
   return;
 }

@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VReadOutGeometry
 //
-//
-// ------------------------------------------------------------
-
+// Author: Makoto Asai
+// --------------------------------------------------------------------
 #ifndef G4VReadOutGeometry_h
-#define G4VReadOutGeometry_h
+#define G4VReadOutGeometry_h 1
 
 #include "G4SensitiveVolumeList.hh"
 #include "G4Step.hh"
@@ -40,7 +40,7 @@ class G4VReadOutGeometry
 {
  public:
   G4VReadOutGeometry();
-  G4VReadOutGeometry(G4String);
+  G4VReadOutGeometry(const G4String&);
   virtual ~G4VReadOutGeometry();
 
   G4bool operator==(const G4VReadOutGeometry& right) const;
@@ -56,8 +56,8 @@ class G4VReadOutGeometry
   inline void SetIncludeList(G4SensitiveVolumeList* value) { fincludeList = value; }
   inline const G4SensitiveVolumeList* GetExcludeList() const { return fexcludeList; }
   inline void SetExcludeList(G4SensitiveVolumeList* value) { fexcludeList = value; }
-  inline G4String GetName() const { return name; }
-  inline void SetName(G4String value) { name = value; }
+  inline const G4String& GetName() const { return name; }
+  inline void SetName(const G4String& value) { name = value; }
   // ADDED:
   inline G4VPhysicalVolume* GetROWorld() const { return ROworld; }
 

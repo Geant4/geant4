@@ -29,10 +29,11 @@
 // ---------------------------------------------------------------
 
 #include "PTL/ThreadPool.hh"
+#include "PTL/GetEnv.hh"
+#include "PTL/ScopeDestructor.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/Threading.hh"
 #include "PTL/UserTaskQueue.hh"
-#include "PTL/Utility.hh"
 #include "PTL/VUserTaskQueue.hh"
 
 #include <cassert>
@@ -41,61 +42,25 @@
 #include <stdexcept>
 #include <thread>
 
-using namespace PTL;
-
 //======================================================================================//
 
 namespace
 {
-ThreadData*&
+PTL::ThreadData*&
 thread_data()
 {
-    return ThreadData::GetInstance();
+    return PTL::ThreadData::GetInstance();
 }
 }  // namespace
 
+namespace PTL
+{
 //======================================================================================//
 
 ThreadPool::thread_id_map_t&
 ThreadPool::f_thread_ids()
 {
     static auto _v = thread_id_map_t{};
-    return _v;
-}
-
-//======================================================================================//
-
-bool&
-ThreadPool::f_use_tbb()
-{
-    static bool _v = GetEnv<bool>("PTL_USE_TBB", false);
-    return _v;
-}
-
-//======================================================================================//
-
-bool&
-ThreadPool::f_use_cpu_affinity()
-{
-    static bool _v = GetEnv<bool>("PTL_CPU_AFFINITY", false);
-    return _v;
-}
-
-//======================================================================================//
-
-int&
-ThreadPool::f_thread_priority()
-{
-    static int _v = GetEnv<int>("PTL_THREAD_PRIORITY", 0);
-    return _v;
-}
-
-//======================================================================================//
-
-int&
-ThreadPool::f_verbose()
-{
-    static int _v = GetEnv<int>("PTL_VERBOSE", 0);
     return _v;
 }
 
@@ -129,7 +94,7 @@ ThreadPool::start_thread(ThreadPool* tp, thread_data_t* _data, intmax_t _idx)
         if(_idx < 0)
             _idx = f_thread_ids().size();
         f_thread_ids()[std::this_thread::get_id()] = _idx;
-        Threading::SetThreadId((int)_idx);
+        SetThreadId((int)_idx);
         _data->emplace_back(_thr_data);
     }
     thread_data() = _thr_data.get();
@@ -143,38 +108,6 @@ ThreadPool::start_thread(ThreadPool* tp, thread_data_t* _data, intmax_t _idx)
         std::cerr << "[PTL::ThreadPool] Thread " << _idx << " terminating..."
                   << std::endl;
     }
-}
-
-//======================================================================================//
-// static member function that checks enabling of tbb library
-bool
-ThreadPool::using_tbb()
-{
-    return f_use_tbb();
-}
-
-//======================================================================================//
-// static member function that initialized tbb library
-void
-ThreadPool::set_use_tbb(bool enable)
-{
-#if defined(PTL_USE_TBB)
-    f_use_tbb() = enable;
-#else
-    ConsumeParameters(enable);
-#endif
-}
-
-//======================================================================================//
-// static member function that initialized tbb library
-void
-ThreadPool::set_default_use_cpu_affinity(bool enable)
-{
-#if defined(PTL_USE_TBB)
-    f_use_cpu_affinity() = enable;
-#else
-    ConsumeParameters(enable);
-#endif
 }
 
 //======================================================================================//
@@ -229,28 +162,10 @@ ThreadPool::add_thread_id(ThreadId _tid)
     {
         auto _idx            = f_thread_ids().size();
         f_thread_ids()[_tid] = _idx;
-        Threading::SetThreadId((int)_idx);
+        SetThreadId((int)_idx);
     }
     return f_thread_ids().at(_tid);
 }
-
-//======================================================================================//
-
-ThreadPool::Config::Config(bool _init, bool _use_tbb, bool _use_affinity, int _verbose,
-                           int _prio, size_type _size, VUserTaskQueue* _task_queue,
-                           affinity_func_t _affinity_func, initialize_func_t _init_func,
-                           finalize_func_t _fini_func)
-: init{ _init }
-, use_tbb{ _use_tbb }
-, use_affinity{ _use_affinity }
-, verbose{ _verbose }
-, priority{ _prio }
-, pool_size{ _size }
-, task_queue{ _task_queue }
-, set_affinity{ std::move(_affinity_func) }
-, initializer{ std::move(_init_func) }
-, finalizer{ std::move(_fini_func) }
-{}
 
 //======================================================================================//
 
@@ -278,25 +193,6 @@ ThreadPool::ThreadPool(const Config& _cfg)
     if(_cfg.init)
         this->initialize_threadpool(_cfg.pool_size);
 }
-
-ThreadPool::ThreadPool(const size_type& _pool_size, VUserTaskQueue* _task_queue,
-                       bool _use_affinity, affinity_func_t _affinity_func,
-                       initialize_func_t _init_func, finalize_func_t _fini_func)
-: ThreadPool{ Config{ true, f_use_tbb(), _use_affinity, f_verbose(), f_thread_priority(),
-                      _pool_size, _task_queue, std::move(_affinity_func),
-                      std::move(_init_func), std::move(_fini_func) } }
-{}
-
-ThreadPool::ThreadPool(const size_type& pool_size, initialize_func_t _init_func,
-                       finalize_func_t _fini_func, bool _use_affinity,
-                       affinity_func_t _affinity_func, VUserTaskQueue* task_queue)
-: ThreadPool{ pool_size,
-              task_queue,
-              _use_affinity,
-              std::move(_affinity_func),
-              std::move(_init_func),
-              std::move(_fini_func) }
-{}
 
 //======================================================================================//
 
@@ -364,7 +260,7 @@ ThreadPool::set_affinity(intmax_t i, Thread& _thread) const
             std::cerr << "[PTL::ThreadPool] Setting pin affinity for thread "
                       << get_thread_id(_thread.get_id()) << " to " << _pin << std::endl;
         }
-        Threading::SetPinAffinity((int)_pin, native_thread);
+        SetPinAffinity((int)_pin, native_thread);
     } catch(std::runtime_error& e)
     {
         std::cerr << "[PTL::ThreadPool] Error setting pin affinity: " << e.what()
@@ -387,7 +283,7 @@ ThreadPool::set_priority(int _prio, Thread& _thread) const
                       << get_thread_id(_thread.get_id()) << " priority to " << _prio
                       << std::endl;
         }
-        Threading::SetThreadPriority(_prio, native_thread);
+        SetThreadPriority(_prio, native_thread);
     } catch(std::runtime_error& e)
     {
         AutoLock lock(TypeMutex<decltype(std::cerr)>());
@@ -771,9 +667,6 @@ ThreadPool::get_valid_queue(task_queue_t*& _queue) const
 void
 ThreadPool::execute_thread(VUserTaskQueue* _task_queue)
 {
-    // how long the thread waits on condition variable
-    // static int wait_time = GetEnv<int>("PTL_POOL_WAIT_TIME", 5);
-
     ++(*m_thread_awake);
 
     // initialization function
@@ -937,3 +830,5 @@ ThreadPool::execute_thread(VUserTaskQueue* _task_queue)
 }
 
 //======================================================================================//
+
+}  // namespace PTL

@@ -46,8 +46,8 @@
 class G4PSDoseDeposit : public G4VPrimitivePlotter
 {
  public:
-  G4PSDoseDeposit(G4String name, G4int depth = 0);
-  G4PSDoseDeposit(G4String name, const G4String& unit, G4int depth = 0);
+  G4PSDoseDeposit(const G4String& name, G4int depth = 0);
+  G4PSDoseDeposit(const G4String& name, const G4String& unit, G4int depth = 0);
   ~G4PSDoseDeposit() override = default;
 
   void Initialize(G4HCofThisEvent*) override;

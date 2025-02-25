@@ -211,17 +211,25 @@ G4HadronPhysicsQGSP_FTFP_BERT
  ---------------------------
  Similar to G4HadronPhysicsQGSP_BERT, but with a different treatment of
  low-energy neutrons:
- - neutron inelastic: use NeutronHP (for both cross section and final state)
-                      below 20 MeV; above G4NeutronCaptureXS cross section;
-                      final-state: BERT between 19.9 MeV and 6 GeV,
+ - neutron inelastic: for cross section, use G4NeutronHPInelasticXS
+                      below 20 MeV, and G4NeutronInelasticXS above;
+		      for final-state model, use G4NeutronHPInelasticVI
+                      below 20 MeV, BERT between 19.9 MeV and 6 GeV,
                       FTFP between 3 and 25 GeV, QGSP above 12 GeV. 
- - neutron capture: use NeutronHP (for both cross section and final state)
-                    below 20 MeV; above G4NeutronCaptureXS cross section
-                    and G4NeutronRadCapture final-state.
- - neutron fission: use NeutronHP (for both cross section and final state)
-                    below 20 MeV; above Gheisha (cross section and final state).
- Moreover, RadioactiveDecay is activated (as in all the physics lists that use HP).
-
+ - neutron capture: use G4NeutronHPCaptureXS cross section and
+                    G4NeutronRadCaptureHP final-state model
+		    (Note: if NuDEX is enabled (by default it is not),
+		           then G4NuDEXNeutronCaptureModel final-state
+			   model is used instead of G4NeutronRadCaptureHP).
+ - neutron fission: use G4NeutronHPFissionXS cross section and
+                    G4NeutronFissionVI final-state model.
+ Moreover, RadioactiveDecay is activated (as in all the physics lists that use HP)
+ Important warning: since G4 11.2, this constructor is different than all
+                    other HP-based constructors for the treatment of neutrons
+                    below 20 MeV : new "experimental" cross sections and
+		    final-state models - which are different from the HP ones -
+		    are utilised for testing, and therefore we recommend to
+		    not using them for physics studies.
 
  G4HadronPhysicsQGSP_BIC
  -----------------------
@@ -300,3 +308,17 @@ G4HadronPhysicsQGSP_FTFP_BERT
  ----------------
  Utility class which provides useful methods.
 
+
+ G4URRNeutrons
+ -------------
+ Physics list constructor that can be applied on top of any _HP or _HPT based
+ physics list, to enable the special Unresolved Resonance Region (URR) treatment
+ of low-energy neutrons based on Particle Table (PT).
+ Notes:
+ -  If this constructor is applied on top of a non-HP based physics list,
+    then nothing changes and a warning is printed out.
+ -  If this constructor is applied on top of a HP-based physics list,
+    and the thermal scattering is applied after G4URRNeutrons, then
+    there will be a problem of full overlappings between models.
+    Therefore, if you need thermal scattering, activate it (e.g. by
+    using a HPT-based physics list) before applying G4URRNeutrons.

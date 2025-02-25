@@ -23,21 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoringMessenger
 //
+// Class description:
 //
-// (HISTORY)
-//  03-Sep-2007  T.Aso Command definitions are introduced.
-//  01-Nov-2007  M.Asai Class is splitted into two.
-//  18-Feb-2008  T.Aso Command for cylindrical scorer.
-//  18-Feb-2008  T.Aso Command for color chart display.
-
+// This is a concrete class of G4UImessenger which handles the
+// commands for G4ScoringManager.
+//
+// Author: Tsukasa Aso (KEK), September 2007
+// --------------------------------------------------------------------
 #ifndef G4ScoringMessenger_h
 #define G4ScoringMessenger_h 1
 
+#include "G4String.hh"
 #include "G4UImessenger.hh"
 
 #include <vector>
-#include "G4String.hh"
 
 class G4ScoringManager;
 class G4VScoringMesh;
@@ -52,15 +53,10 @@ class G4UIcommand;
 
 using G4TokenVec = std::vector<G4String>;
 
-// class description:
-//
-//  This is a concrete class of G4UImessenger which handles the commands for
-// G4ScoringManager.
-//
-
 class G4ScoringMessenger : public G4UImessenger
 {
  public:
+
   G4ScoringMessenger(G4ScoringManager* SManager);
 
   ~G4ScoringMessenger() override;
@@ -70,11 +66,13 @@ class G4ScoringMessenger : public G4UImessenger
   G4String GetCurrentValue(G4UIcommand* command) override;
 
  protected:
-  void FillTokenVec(G4String newValues, G4TokenVec& token);
+
+  void FillTokenVec(const G4String& newValues, G4TokenVec& token);
   void MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token);
-  void Fill1D(G4UIcommand* cmd, G4String newValues);
+  void Fill1D(G4UIcommand* cmd, const G4String& newValues);
 
  private:
+
   G4ScoringManager* fSMan;
   G4UIdirectory* scoreDir;
   G4UIcmdWithoutParameter* listCmd;

@@ -33,12 +33,12 @@
 #ifndef G4UserTaskThreadInitialization_hh
 #define G4UserTaskThreadInitialization_hh
 
-class G4VUserPrimaryGeneratorAction;
-class G4UserRunAction;
-class G4UserEventAction;
-class G4UserStackingAction;
-class G4UserTrackingAction;
-class G4UserSteppingAction;
+//class G4VUserPrimaryGeneratorAction;
+//class G4UserRunAction;
+//class G4UserEventAction;
+//class G4UserStackingAction;
+//class G4UserTrackingAction;
+//class G4UserSteppingAction;
 
 class G4WorkerThread;
 class G4WorkerTaskRunManager;

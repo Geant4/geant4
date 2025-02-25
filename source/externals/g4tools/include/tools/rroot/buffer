@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#include <utility>
 
 // in TOOLS_STL, we don't have (yet) a performant map.
 
@@ -242,7 +243,7 @@ protected:
         return false;
       }
 
-      a_class = scls;
+      a_class = std::move(scls);
       a_bcnt = (first_int & ~kByteCountMask());
 
       if(m_verbose) {

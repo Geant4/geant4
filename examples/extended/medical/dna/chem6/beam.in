@@ -29,10 +29,10 @@
 /chem/reaction/add H3Op + OHm -> H2O                | Fix |  1.13e11  | 0
 
 # partially diffusion-controlled (PDC)              | Fix |  reactionRate[dm3/(mol*s)] | PDC (1)
-/chem/reaction/add OH + H -> H2O                    | Fix |  1.55e10 | 1
-/chem/reaction/add OH + OH -> H2O2                  | Fix |  0.55e10 | 1
-/chem/reaction/add e_aq + OH -> OHm                 | Fix |  2.95e10 | 1
-/chem/reaction/add e_aq + H2O2 -> OHm + OH          | Fix |  1.10e10 | 1
+/chem/reaction/add °OH + H -> H2O                   | Fix |  1.55e10 | 1
+/chem/reaction/add °OH + °OH -> H2O2                | Fix |  0.55e10 | 1
+/chem/reaction/add e_aq + °OH -> OHm                | Fix |  2.95e10 | 1
+/chem/reaction/add e_aq + H2O2 -> OHm + °OH         | Fix |  1.10e10 | 1
 /chem/reaction/add e_aq + H3Op -> H + H2O           | Fix |  2.11e10 | 1
 
 /chem/reaction/print

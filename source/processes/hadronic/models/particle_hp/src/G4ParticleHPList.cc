@@ -75,14 +75,8 @@ void G4ParticleHPList::Init(std::istream& aDataFile, G4double unit)
   }
 }
 
-G4double G4ParticleHPList::GetValue(G4int i)
+G4double G4ParticleHPList::GetValue(G4int i) const
 {
-  //    G4cout << "TestList "<<i<<" "<<nEntries<<G4endl;
-  if (nEntries < 0) {
-    //      G4cout <<nPoints<<" "<<nEntries<<" "<<theData<<G4endl;
-    //      for(G4int ii=0; ii<2; ii++) G4cout << theData[ii]<<" ";
-    //      G4cout << G4endl;
-  }
   if (i < 0) i = 0;
   if (i >= GetListLength()) i = GetListLength() - 1;
   return theData[i];
