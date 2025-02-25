@@ -50,6 +50,10 @@ class G4tgrLineProcessor
 
     virtual G4bool ProcessLine(const std::vector<G4String>& wl);
 
+    void SetCurrentFile(const G4String& file) { currentFile = file; }
+
+    const G4String& GetCurrentFile() const { return currentFile; }
+
   protected:
 
     G4tgrVolume* FindVolume(const G4String& volname);
@@ -57,6 +61,7 @@ class G4tgrLineProcessor
   private:
 
     G4tgrVolumeMgr* volmgr = nullptr;
+    G4String currentFile;
 };
 
 #endif
