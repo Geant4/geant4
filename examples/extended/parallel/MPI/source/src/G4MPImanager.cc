@@ -87,8 +87,12 @@ G4MPImanager::G4MPImanager(int nof_extra_workers)
   int provided_;
   MPI_Init_thread(nullptr, nullptr, MPI_THREAD_SERIALIZED, &provided_);
   if (provided_ < MPI_THREAD_SERIALIZED) {
-    std::cerr << "Warning: MPI does not provide the requested threading support!" << std::endl;
+    G4Exception("G4MPImanager::G4MPImanager()",
+                "G4MPImanager001",
+                FatalException,
+                "MPI Initialization failed to setup with MPI_THREAD_SERIALIZED or better");
   }
+
   Initialize();
 }
 
@@ -109,7 +113,10 @@ G4MPImanager::G4MPImanager(int argc, char** argv, int nof_extra_workers)
   int provided_;
   MPI_Init_thread(nullptr, nullptr, MPI_THREAD_SERIALIZED, &provided_);
   if (provided_ < MPI_THREAD_SERIALIZED) {
-    std::cerr << "Warning: MPI does not provide the requested threading support!" << std::endl;
+    G4Exception("G4MPImanager::G4MPImanager()",
+                "G4MPImanager001",
+                FatalException,
+                "MPI Initialization failed to setup with MPI_THREAD_SERIALIZED or better");
   }
 
   Initialize();
