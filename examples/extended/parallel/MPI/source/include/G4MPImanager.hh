@@ -157,7 +157,6 @@ class G4MPImanager
     G4bool is_slave_;
     G4bool is_extra_worker_;
     G4int rank_;
-    G4int provided_;
     G4int size_;  // processing comm size
     G4int world_size_;  // world comm size
 
