@@ -278,8 +278,6 @@ void G4MPImanager::ParseArguments(int argc, char** argv)
 
   G4int optind = -1;
 
-  static struct option long_options[] = {{"help", no_argument, NULL, 'h'}, {"verbose", no_argument, NULL, 'v'}, {"init", required_argument, NULL, 'i'}, {"ofile", optional_argument, NULL, 'o'}, {NULL, 0, NULL, 0}};
-
   for (int i = 1; i < argc; i++)
   {
     G4String arg = argv[i];
