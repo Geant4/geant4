@@ -36,6 +36,10 @@
 // Created: Josh Xie  (Google Summer of Code 2014 )
 // Adapted from G4Mag_UsualEqRhs
 // 
+
+#ifndef G4T_MAG_FIELD_EQUATION_HH
+#define G4T_MAG_FIELD_EQUATION_HH
+
 // #include "G4ChargeState.hh"
 #include "G4Mag_UsualEqRhs.hh"
 
@@ -99,3 +103,4 @@ private:
   T_Field *itsField;
 };
 
+#endif
