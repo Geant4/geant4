@@ -73,11 +73,6 @@ class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
 
     G4VSolid* Clone() const override;
 
-    G4UGenericPolycone(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UGenericPolycone( const G4UGenericPolycone& source );
     G4UGenericPolycone& operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.

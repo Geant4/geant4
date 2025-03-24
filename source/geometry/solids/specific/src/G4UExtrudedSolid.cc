@@ -97,17 +97,6 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
   delete[] sections;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UExtrudedSolid::G4UExtrudedSolid(__void__& a)
-  : Base_t(a)
-{
-}
-
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Destructor

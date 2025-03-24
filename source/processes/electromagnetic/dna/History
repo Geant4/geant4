@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-01-14 Ben Morgan (emdna-V11-02-18)
+- Remove obsolete/commented references to G4AllocatorList.
+
 ## 2024-10-31 Hoang Tran (emdna-V11-02-17)
 - missing value in DNA PTB Ionization Structure;
 - missing GetMaterial() in DNA PTB Excitation and Elastic models (PR#78,by mjpietrzak)

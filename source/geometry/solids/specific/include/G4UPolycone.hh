@@ -92,11 +92,6 @@ class G4UPolycone : public G4UAdapter<vecgeom::GenericUnplacedPolycone>
 
     inline G4GeometryType GetEntityType() const override;
 
-    G4UPolycone(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UPolycone( const G4UPolycone& source );
     G4UPolycone& operator=( const G4UPolycone& source );
       // Copy constructor and assignment operator.

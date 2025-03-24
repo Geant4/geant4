@@ -47,7 +47,7 @@ class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
   using Shape_t = vecgeom::UnplacedTorus2;
   using Base_t  = G4UAdapter<vecgeom::UnplacedTorus2>;
 
-  public:  // with description
+  public:
 
     G4UTorus(const G4String& pName,
                    G4double rmin, G4double rmax, G4double rtor,
@@ -91,13 +91,6 @@ class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
                                  G4double& pmin, G4double& pmax) const override;
 
     G4Polyhedron* CreatePolyhedron() const override;
-
-  public:  // without description
-
-    G4UTorus(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
     G4UTorus(const G4UTorus& rhs);
     G4UTorus& operator=(const G4UTorus& rhs);

@@ -92,15 +92,17 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
+  G4bool biasingFlag = ( onOffBiasing == "on");
+
   // -- Set mandatory initialization classes
-  GB05DetectorConstruction* detector = new GB05DetectorConstruction();
+  GB05DetectorConstruction* detector = new GB05DetectorConstruction(biasingFlag);
   runManager->SetUserInitialization(detector);
   // -- Select a physics list:
   FTFP_BERT* physicsList = new FTFP_BERT;
-  // -- and augment it with biasing facilities:
-  G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
-  biasingPhysics->BeVerbose();
-  if (onOffBiasing == "on") {
+  if (biasingFlag) {
+    // -- and augment it with biasing facilities:
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
+    biasingPhysics->BeVerbose();
     biasingPhysics->Bias("neutron");
     physicsList->RegisterPhysics(biasingPhysics);
     G4cout << "      ********************************************************* " << G4endl;

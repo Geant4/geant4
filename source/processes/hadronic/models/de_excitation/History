@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-12-22 Vladimir Ivanchenko (hadr-deex-V11-02-19)
+- G4ExcitationHandler, G4GammaTransition, G4PhotonEvaporation fixed problem
+  #2584 - removed production of unphysical states
+
 ## 2024-10-29 Vladimir Ivanchenko (hadr-deex-V11-02-18)
 - G4LevelReader - reduced printouts on problems in nuclear level data
 - G4PolarizationTransition - use optimized G4LegendrePolinomial from

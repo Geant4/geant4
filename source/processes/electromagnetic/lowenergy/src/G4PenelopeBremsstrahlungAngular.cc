@@ -497,7 +497,8 @@ G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* 
     }
   //Normalize
   for (G4int i=0;i<nElements;++i)
-    (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
+    if (MaxStechiometricFactor > 0.)
+      (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
 
   G4double sumz2 = 0;
   G4double sums = 0;
@@ -509,7 +510,7 @@ G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* 
     }
   delete StechiometricFactors;
 
-  G4double ZBR = std::sqrt(sumz2/sums);
+  G4double ZBR = (sums > 0.) ? std::sqrt(sumz2/sums) : 0.;
   fEffectiveZSq->insert(std::make_pair(material,ZBR));
 
   return ZBR;

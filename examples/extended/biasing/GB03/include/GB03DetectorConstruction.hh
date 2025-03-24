@@ -43,7 +43,7 @@ class GB03DetectorMessenger;
 class GB03DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    GB03DetectorConstruction();
+    GB03DetectorConstruction(G4bool bf);
     virtual ~GB03DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
@@ -97,6 +97,7 @@ class GB03DetectorConstruction : public G4VUserDetectorConstruction
     GB03DetectorMessenger* fDetectorMessenger;
 
     G4int fVerboseLevel;
+    G4bool fBiasingFlag;
 };
 
 #endif

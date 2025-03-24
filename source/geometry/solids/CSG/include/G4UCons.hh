@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Cons to make use of VecGeom Cone.
 
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UCONS_HH
 #define G4UCONS_HH
@@ -47,7 +47,7 @@ class G4UCons : public G4UAdapter<vecgeom::GenericUnplacedCone>
   using Shape_t = vecgeom::GenericUnplacedCone;
   using Base_t = G4UAdapter<vecgeom::GenericUnplacedCone>;
 
-  public:  // with description
+  public:
 
     G4UCons(const G4String& pName,
                   G4double pRmin1, G4double pRmax1,
@@ -94,13 +94,6 @@ class G4UCons : public G4UAdapter<vecgeom::GenericUnplacedCone>
                                  G4double& pMin, G4double& pMax) const override;
 
     G4Polyhedron* CreatePolyhedron() const override;
-
-  public:  // without description
-       
-    G4UCons(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
     G4UCons(const G4UCons& rhs);
     G4UCons& operator=(const G4UCons& rhs); 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -159,14 +159,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=20.670000s Real=21.343105s Sys=0.010000s
+  User=17.940000s Real=18.456672s Sys=0.010000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x13e1c90
-UserPhysicsList deleted 0x13e91f0
-UserActionInitialization deleted 0x156fb60
+UserDetectorConstruction deleted 0xf14c50
+UserPhysicsList deleted 0xf1c1b0
+UserActionInitialization deleted 0x10a2b20
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

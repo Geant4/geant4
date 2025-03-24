@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Sphere to make use of VecGeom Sphere.
 
-// 13.09.13 G.Cosmo, CERN/PH
+// 13.09.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4USPHERE_HH
 #define G4USPHERE_HH
@@ -47,7 +47,7 @@ class G4USphere : public G4UAdapter<vecgeom::UnplacedSphere>
   using Shape_t = vecgeom::UnplacedSphere;
   using Base_t  = G4UAdapter<vecgeom::UnplacedSphere>;
 
-  public:  // with description
+  public:
 
     G4USphere(const G4String& pName,
                     G4double pRmin, G4double pRmax,
@@ -96,14 +96,6 @@ class G4USphere : public G4UAdapter<vecgeom::UnplacedSphere>
                                  G4double& pMin, G4double& pMax) const override;
 
     G4Polyhedron* CreatePolyhedron() const override;
-
-  public:  // without description
-   
-    G4USphere(__void__&);
-      //
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
     G4USphere(const G4USphere& rhs);
     G4USphere& operator=(const G4USphere& rhs); 

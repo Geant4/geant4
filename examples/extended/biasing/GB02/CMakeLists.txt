@@ -5,15 +5,7 @@ project(GB02project)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
-# You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
-# to build a batch mode only executable
-#
-option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
-if(WITH_GEANT4_UIVIS)
-  find_package(Geant4 REQUIRED ui_all vis_all)
-else()
-  find_package(Geant4 REQUIRED)
-endif()
+find_package(Geant4 REQUIRED ui_all vis_all)
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
@@ -42,6 +34,7 @@ target_link_libraries(exampleGB02 ${Geant4_LIBRARIES} )
 set(GB02project_SCRIPTS
   exampleGB02.in
   exampleGB02.out
+  vis.mac
   )
 
 foreach(_script ${GB02project_SCRIPTS})

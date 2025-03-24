@@ -236,7 +236,8 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
 
   if (fVerboseLevel > 2)
     G4cout << "Compton mean free path at " << energy/keV << " keV for material " <<
-            material->GetName() << " = " << (1./csvolume)/mm << " mm" << G4endl;
+      material->GetName() << " = " <<
+      (csvolume ? (1./csvolume)/mm : DBL_MAX) << " mm" << G4endl;
   return csvolume;
 }
 

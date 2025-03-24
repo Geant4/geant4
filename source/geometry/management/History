@@ -6,6 +6,25 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-05 Gabriele Cosmo (geommng-V11-02-07)
+- Applied clang-tidy to G4GeometryManager and some code cleanup.
+  Moved additional checks/warnings under verbosity level.
+
+## 2025-03-03 Gabriele Cosmo
+- In G4VSolid::EstimateCubicVolume(..), initialise local variable to zero
+  to silence invalid false positive warnings reported in compilation of CMSSW.
+
+## 2025-02-25 John Apostolakis
+- In G4GeometryManager, fix in ConfigureParallelOptimisation() to reset
+  logical volumes iterator; in ReportWorkerIsDoneOptimising(), added checks
+  to report fatal error if incorrect number of volumes was voxelised, and warns
+  if number of workers reporting is not as expected.
+  In ConfigureParallelOptimisation(), reports on the times it was called.
+
+## 2025-02-03 Gabriele Cosmo
+- G4UAdapter: removed fake default constructor, clearing compilation warnings
+  on gcc-14.
+
 ## 2024-08-26 Gabriele Cosmo (geommng-V11-02-06)
 - G4GeometryManager: temporarily disable default parallel optimisation.
   Fixed spelling for method OptimiseInParallel(..).

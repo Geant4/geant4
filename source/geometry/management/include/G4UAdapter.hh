@@ -196,13 +196,6 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
       // Smart access function - creates on request and stores for future
       // access.  A null pointer means "not available".
 
-  public:  // without description
-
-    G4UAdapter(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UAdapter(const G4UAdapter& rhs);
     G4UAdapter& operator=(const G4UAdapter& rhs);
       // Copy constructor and assignment operator.
@@ -256,13 +249,6 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
 };
 
 // Inline implementations
-
-template <class UnplacedVolume_t>
-G4UAdapter<UnplacedVolume_t>::G4UAdapter(__void__& a)
-  : G4VSolid(a), UnplacedVolume_t(*this),
-    kHalfTolerance(0.5*kCarTolerance)
-{
-}
 
 template <class UnplacedVolume_t>
 G4UAdapter<UnplacedVolume_t>::~G4UAdapter()

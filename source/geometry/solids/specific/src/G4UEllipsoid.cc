@@ -55,15 +55,6 @@ G4UEllipsoid::G4UEllipsoid(const G4String& pName,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-
-G4UEllipsoid::G4UEllipsoid( __void__& a )
-  : Base_t(a)
-{ }
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Destructor
 
 G4UEllipsoid::~G4UEllipsoid() = default;

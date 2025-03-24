@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -924,20 +924,20 @@ LGap: mean = 32.6255 cm  rms = 0 fm
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 189.29 MeV +- 49.6309 MeV
- mean Energy in Gap      : 46.2433 MeV +- 13.396 MeV
+ mean Energy in Absorber : 188.855 MeV +- 49.5222 MeV
+ mean Energy in Gap      : 46.6085 MeV +- 13.5408 MeV
 
- mean trackLength in Absorber : 46.7296 cm  +- 12.3868 cm 
- mean trackLength in Gap      : 23.4367 cm  +- 6.8607 cm 
+ mean trackLength in Absorber : 46.6428 cm  +- 12.2754 cm 
+ mean trackLength in Gap      : 23.6669 cm  +- 6.92205 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 189.29 MeV rms = 49.6309 MeV
-EGap: mean = 46.2433 MeV rms = 13.396 MeV
-LAbs: mean = 46.7296 cm  rms = 12.3868 cm 
-LGap: mean = 23.4367 cm  rms = 6.8607 cm 
+EAbs: mean = 188.855 MeV rms = 49.5222 MeV
+EGap: mean = 46.6085 MeV rms = 13.5408 MeV
+LAbs: mean = 46.6428 cm  rms = 12.2754 cm 
+LGap: mean = 23.6669 cm  rms = 6.92205 cm 
 
 ----> Histograms and ntuples are saved
 

@@ -332,6 +332,8 @@ void G4HadronicDeveloperParameters::issue_is_already_defined( const G4String& na
    G4Exception( "G4HadronicDeveloperParameters" , "HadDevPara_004", FatalException , text );
 }
 void G4HadronicDeveloperParameters::issue_is_modified( const G4String& name ) {
+   if (nWarn > nWarnMax) { return; }
+   ++nWarn;
    G4String text("Parameter ");
    text += name;  
    text += " has changed from default value.";

@@ -34,7 +34,7 @@ inline G4bool G4RootPNtupleManager::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value)
 {
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
-    G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl;
+    // G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl;
     return false;
   }
 
@@ -92,7 +92,7 @@ G4bool G4RootPNtupleManager::FillNtupleTColumn(
   CreateNtuplesIfNeeded();
 
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
-    G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl;
+    // G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl;
     return false;
   }
 

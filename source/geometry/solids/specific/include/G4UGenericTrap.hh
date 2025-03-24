@@ -70,11 +70,6 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
 
     inline G4bool IsFaceted() const override;
 
-    G4UGenericTrap(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UGenericTrap( const G4UGenericTrap& source );
     G4UGenericTrap& operator=(const G4UGenericTrap& source);
       // Copy constructor and assignment operator.

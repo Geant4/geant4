@@ -93,14 +93,17 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
+  G4bool biasingFlag = ( onOffBiasing == "on");
+
   // -- Set mandatory initialization classes
-  GB01DetectorConstruction* detector = new GB01DetectorConstruction();
+  GB01DetectorConstruction* detector = new GB01DetectorConstruction(biasingFlag);
   runManager->SetUserInitialization(detector);
   // -- Select a physics list:
   FTFP_BERT* physicsList = new FTFP_BERT;
-  // -- and augment it with biasing facilities:
-  G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
-  if (onOffBiasing == "on") {
+
+  if (biasingFlag) {
+    // -- and augment it with biasing facilities:
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
     biasingPhysics->Bias("gamma");
     biasingPhysics->Bias("neutron");
     biasingPhysics->Bias("kaon0L");
@@ -136,7 +139,7 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand(command + macro);
   }
   else {  // interactive mode : define UI session
-    //      UImanager->ApplyCommand("/control/execute vis.mac");
+    UImanager->ApplyCommand("/control/execute vis.mac");
     //      if (ui->IsGUI())
     //        UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();

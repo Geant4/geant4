@@ -117,17 +117,6 @@ G4UPolycone::G4UPolycone(const G4String& name,
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UPolycone::G4UPolycone( __void__& a )
-  : Base_t(a)
-{
-}
-
-
-////////////////////////////////////////////////////////////////////////
-//
 // Destructor
 //
 G4UPolycone::~G4UPolycone() = default;

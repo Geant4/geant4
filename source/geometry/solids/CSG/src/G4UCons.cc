@@ -25,7 +25,7 @@
 //
 // Implementation for G4UCons wrapper class
 //
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Cons.hh"
@@ -51,16 +51,6 @@ G4UCons::G4UCons( const G4String& pName,
                         G4double pDz,
                         G4double pSPhi, G4double pDPhi)
   : Base_t(pName, pRmin1, pRmax1, pRmin2, pRmax2, pDz, pSPhi, pDPhi)
-{
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UCons::G4UCons( __void__& a )
-  : Base_t(a)
 {
 }
 

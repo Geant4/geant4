@@ -43,7 +43,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB05DetectorConstruction::GB05DetectorConstruction() : G4VUserDetectorConstruction() {}
+GB05DetectorConstruction::GB05DetectorConstruction(G4bool bf) :
+  G4VUserDetectorConstruction(),
+  fBiasingFlag(bf) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -114,26 +116,27 @@ G4VPhysicalVolume* GB05DetectorConstruction::Construct()
 
 void GB05DetectorConstruction::ConstructSDandField()
 {
-  // -- Fetch volume for biasing:
-  G4LogicalVolume* logicShield = G4LogicalVolumeStore::GetInstance()->GetVolume("shield.logical");
+  if(fBiasingFlag) {
+    // -- Fetch volume for biasing:
+    G4LogicalVolume* logicShield = G4LogicalVolumeStore::GetInstance()->GetVolume("shield.logical");
 
-  // -------------------------------------------------------------
-  // -- operator creation, configuration and attachment to volume:
-  // -------------------------------------------------------------
-  GB05BOptrSplitAndKillByCrossSection* biasingOperator =
-    new GB05BOptrSplitAndKillByCrossSection("neutron");
-  // -- Now, we declare to our biasing operator all the processes we
-  // -- their disapperance effect on neutrons to be counterbalanced
-  // -- by the splitting by cross-section :
-  biasingOperator->AddProcessToEquipoise("Decay");
-  biasingOperator->AddProcessToEquipoise("nCapture");
-  biasingOperator->AddProcessToEquipoise("neutronInelastic");
+    // -------------------------------------------------------------
+    // -- operator creation, configuration and attachment to volume:
+    // -------------------------------------------------------------
+    GB05BOptrSplitAndKillByCrossSection* biasingOperator =
+      new GB05BOptrSplitAndKillByCrossSection("neutron");
+    // -- Now, we declare to our biasing operator all the processes we
+    // -- their disapperance effect on neutrons to be counterbalanced
+    // -- by the splitting by cross-section :
+    biasingOperator->AddProcessToEquipoise("Decay");
+    biasingOperator->AddProcessToEquipoise("nCapture");
+    biasingOperator->AddProcessToEquipoise("neutronInelastic");
 
-  biasingOperator->AttachTo(logicShield);
+    biasingOperator->AttachTo(logicShield);
 
-  G4cout << " Attaching biasing operator " << biasingOperator->GetName() << " to logical volume "
-         << biasingOperator->GetName() << G4endl;
-
+    G4cout << " Attaching biasing operator " << biasingOperator->GetName() << " to logical volume "
+	   << biasingOperator->GetName() << G4endl;
+  }
   // ------------------------------------------------------------------------------------
   // -- Attach a sensitive detector to print information on particles exiting the shield:
   // ------------------------------------------------------------------------------------

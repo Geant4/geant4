@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -883,33 +883,33 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.110000s Real=0.118805s Sys=0.010000s
+  User=0.100000s Real=0.103984s Sys=0.000000s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.856   RMS(GeV) 4.073
-Average number of steps              59.57
-Average number of gamma              0.48
+Average energy deposit (GeV)         6.793   RMS(GeV) 4.358
+Average number of steps              59.14
+Average number of gamma              0.57
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           12.04
-Average number of protons            11.34
+Average number of neutrons           10.23
+Average number of protons            10.02
 Average number of antiprotons        0
-Average number of pi+ & pi-          7.3
+Average number of pi+ & pi-          6.84
 Average number of pi0                3.96
-Average number of kaons              0.11
+Average number of kaons              0.04
 Average number of muons              0
-Average number of deuterons+tritons  2.82
-Average number of He3+alpha          1.79
-Average number of ions               0.31
+Average number of deuterons+tritons  2.62
+Average number of He3+alpha          1.81
+Average number of ions               0.46
 ========================================================
 
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.085 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.09 MB
 ============================================================

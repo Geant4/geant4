@@ -78,11 +78,6 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
     G4int AllocatedMemory();
     void DisplayAllocatedMemory();
 
-    G4UTessellatedSolid(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UTessellatedSolid( const G4UTessellatedSolid& source );
     G4UTessellatedSolid& operator=(const G4UTessellatedSolid& source);
       // Copy constructor and assignment operator.

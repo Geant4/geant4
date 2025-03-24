@@ -55,7 +55,7 @@ G4ThreadLocal G4bool GB03DetectorConstruction::fConstructedSDandField = false;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB03DetectorConstruction::GB03DetectorConstruction()
+GB03DetectorConstruction::GB03DetectorConstruction(G4bool bf)
   : G4VUserDetectorConstruction(),
     fTotalThickness(2.0 * m),
     fLayerThickness(0.),
@@ -74,7 +74,8 @@ GB03DetectorConstruction::GB03DetectorConstruction()
     fLayerPhysical(0),
     fGapPhysical(0),
     fDetectorMessenger(0),
-    fVerboseLevel(1)
+    fVerboseLevel(1),
+    fBiasingFlag(bf)
 {
   fLayerThickness = fTotalThickness / fNumberOfLayers;
   fCalName = "Calor";
@@ -111,7 +112,9 @@ void GB03DetectorConstruction::ConstructSDandField()
   if (!fConstructedSDandField) {
     fConstructedSDandField = true;
     SetupDetectors();
-    SetupBiasing();
+    if(fBiasingFlag) {
+      SetupBiasing();
+    }
   }
 }
 

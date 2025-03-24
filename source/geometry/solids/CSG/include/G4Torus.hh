@@ -183,11 +183,7 @@ class G4Torus : public G4CSGSolid
 
     G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
-    // Used by distanceToOut
-    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi};
 
-    // used by normal
-    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
 
     G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances

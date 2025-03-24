@@ -146,8 +146,8 @@ void G4WorkerRunManager::InitializeGeometry()
 
   // Step 0: Contribute to the voxelisation of the geometry
   G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-  if( geomManager->IsParallelOptimisationConfigured() ) {
-    G4cout << "G4RunManager::InitializeGeometry calling GeometryManager's UndertakeOptimisation" 
+  if( geomManager->IsParallelOptimisationConfigured() && ! geomManager->IsParallelOptimisationFinished() ) {
+    G4cout << "G4RunManager::InitializeGeometry calling GeometryManager's UndertakeOptimisation"
            << G4endl;  // TODO - suppress / delete this in final version
     geomManager->UndertakeOptimisation();
   }

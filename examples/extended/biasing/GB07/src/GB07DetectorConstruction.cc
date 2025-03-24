@@ -42,7 +42,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB07DetectorConstruction::GB07DetectorConstruction() : G4VUserDetectorConstruction() {}
+GB07DetectorConstruction::GB07DetectorConstruction(G4bool bf) :
+  G4VUserDetectorConstruction(),
+  fBiasingFlag(bf) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,17 +113,18 @@ G4VPhysicalVolume* GB07DetectorConstruction::Construct()
 
 void GB07DetectorConstruction::ConstructSDandField()
 {
-  // -- Fetch volume for biasing:
-  G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
+  if(fBiasingFlag) {
+    // -- Fetch volume for biasing:
+    G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
 
-  // ----------------------------------------------
-  // -- operator creation and attachment to volume:
-  // ----------------------------------------------
-  GB07BOptrLeadingParticle* testMany = new GB07BOptrLeadingParticle();
-  testMany->AttachTo(logicTest);
-  G4cout << " Attaching biasing operator " << testMany->GetName() << " to logical volume "
-         << logicTest->GetName() << G4endl;
-
+    // ----------------------------------------------
+    // -- operator creation and attachment to volume:
+    // ----------------------------------------------
+    GB07BOptrLeadingParticle* testMany = new GB07BOptrLeadingParticle();
+    testMany->AttachTo(logicTest);
+    G4cout << " Attaching biasing operator " << testMany->GetName() << " to logical volume "
+	   << logicTest->GetName() << G4endl;
+  }
   // ---------------------------------------------------------------------------------
   // -- Attach sensitive detector to print information on particle exiting the shield:
   // ---------------------------------------------------------------------------------

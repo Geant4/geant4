@@ -323,11 +323,13 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
   {
     G4cout << "G4PenelopeIonisationModel " << G4endl;
     G4cout << "Mean free path for delta emission > " << cutEnergy/keV << " keV at " <<
-      energy/keV << " keV = " << (1./crossPerVolume)/mm << " mm" << G4endl;
+      energy/keV << " keV = " <<
+      (crossPerVolume ? (1./crossPerVolume)/mm : DBL_MAX) << " mm" << G4endl;
     if (theXS)
       totalCross = (theXS->GetTotalCrossSection(energy))*moleculeDensity;
     G4cout << "Total free path for ionisation (no threshold) at " <<
-      energy/keV << " keV = " << (1./totalCross)/mm << " mm" << G4endl;
+      energy/keV << " keV = " <<
+      (totalCross ? (1./totalCross)/mm : DBL_MAX) << " mm" << G4endl;
   }
   return crossPerVolume;
 }

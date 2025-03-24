@@ -48,6 +48,7 @@
 #include "G4BiasingProcessInterface.hh"
 #include "G4ParallelGeometriesLimiterProcess.hh"
 
+#include <algorithm>
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -128,7 +129,10 @@ void G4GenericBiasingPhysics::PhysicsBiasAddPDGRange( G4int PDGlow, G4int PDGhig
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4GenericBiasingPhysics::NonPhysicsBiasAddPDGRange( G4int PDGlow, G4int PDGhigh, G4bool includeAntiParticle )
 {
-  if ( PDGlow > PDGhigh ) G4cout << " G4GenericBiasingPhysics::NonPhysicsBiasAddPDGRange(...) :  PDGlow > PDGhigh, call ignored." << G4endl;
+  if ( PDGlow > PDGhigh ) {
+    G4cout << " G4GenericBiasingPhysics::NonPhysicsBiasAddPDGRange(...) :  PDGlow > PDGhigh, call ignored." << G4endl;
+    return;
+  }
   fNonPhysBiasByPDGRangeLow .push_back( PDGlow  );
   fNonPhysBiasByPDGRangeHigh.push_back( PDGhigh );
   if ( includeAntiParticle )
@@ -142,7 +146,10 @@ void G4GenericBiasingPhysics::NonPhysicsBiasAddPDGRange( G4int PDGlow, G4int PDG
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4GenericBiasingPhysics::BiasAddPDGRange( G4int PDGlow, G4int PDGhigh, G4bool includeAntiParticle )
 {
-  if ( PDGlow > PDGhigh ) G4cout << " G4GenericBiasingPhysics::BiasAddPDGRange(...) :  PDGlow > PDGhigh, call ignored." << G4endl;
+  if ( PDGlow > PDGhigh ) {
+    G4cout << " G4GenericBiasingPhysics::BiasAddPDGRange(...) :  PDGlow > PDGhigh, call ignored." << G4endl;
+    return;
+  }
   PhysicsBiasAddPDGRange   ( PDGlow, PDGhigh, includeAntiParticle );
   NonPhysicsBiasAddPDGRange( PDGlow, PDGhigh, includeAntiParticle );
 }
@@ -512,23 +519,16 @@ void G4GenericBiasingPhysics::AssociateParallelGeometries()
       G4String              particleName = particle->GetParticleName();
       G4ProcessManager*         pmanager = particle->GetProcessManager();
 
-      G4bool requested = false;
-      for ( G4String requestedParticles : fParticlesWithParallelGeometries )
-	{
-	  if ( requestedParticles == particleName )
-	    {
-	      requested = true;
-	      break;
-	    }
-	}
-      if ( requested )
+      if ( std::find(fParticlesWithParallelGeometries.begin(),
+		     fParticlesWithParallelGeometries.end(),
+		     particleName) != fParticlesWithParallelGeometries.end() )
 	{
 	  // -- insert biasing process for handling parallel geometries:
 	  G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
 
 	  // -- attach the requested worlds to this process:
 	  std::vector< G4String >& parallelWorlds = fParallelGeometriesForParticle[ particleName ];
-	  for ( G4String world : parallelWorlds ) limiter->AddParallelWorld( world );
+	  for ( G4String& world : parallelWorlds ) limiter->AddParallelWorld( world );
 	}
       
     }
@@ -579,28 +579,32 @@ void G4GenericBiasingPhysics::AssociateParallelGeometries()
     G4ProcessManager*        pmanager = particle->GetProcessManager();
     if(particle->GetPDGCharge() == 0.)
     {
-      // Neutral particle
-      if(particle->IsShortLived() && !islAllNeutral) continue;
-      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
-      G4int j = 0;
-      for(G4String wNameN : fParallelGeometriesForCharged)
-      {
-        if(!(particle->IsShortLived()) || fAllNeutralParallelGeometriesISL[j])
-        { limiter->AddParallelWorld(wNameN); }
-        j++;
+      if ( !fParallelGeometriesForNeutral.empty() ) {
+	// Neutral particle
+	if(particle->IsShortLived() && !islAllNeutral) continue;
+	G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+	G4int j = 0;
+	for(G4String& wNameN : fParallelGeometriesForNeutral)
+	  {
+	    if(!(particle->IsShortLived()) || fAllNeutralParallelGeometriesISL[j])
+	      { limiter->AddParallelWorld(wNameN); }
+	    j++;
+	  }
       }
     }
     else
     {
-      // charged
-      if(particle->IsShortLived() && !islAllCharged) continue;
-      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
-      G4int j = 0;
-      for(G4String wNameC : fParallelGeometriesForCharged)
-      {
-        if(!(particle->IsShortLived()) || fAllChargedParallelGeometriesISL[j])
-        { limiter->AddParallelWorld(wNameC); }
-        j++;
+      if ( !fParallelGeometriesForCharged.empty() ) {
+	// charged
+	if(particle->IsShortLived() && !islAllCharged) continue;
+	G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+	G4int j = 0;
+	for(G4String& wNameC : fParallelGeometriesForCharged)
+	  {
+	    if(!(particle->IsShortLived()) || fAllChargedParallelGeometriesISL[j])
+	      { limiter->AddParallelWorld(wNameC); }
+	    j++;
+	  }
       }
     }
   }

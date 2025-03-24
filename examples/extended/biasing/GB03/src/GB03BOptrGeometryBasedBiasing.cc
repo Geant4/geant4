@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB03BOptrGeometryBasedBiasing::GB03BOptrGeometryBasedBiasing()
-  : G4VBiasingOperator("GB03BOptrGeometryBasedBiasing"), fSplittingFactor(2), fApplyProbability(1.0)
+  : G4VBiasingOperator("GB03BOptrGeometryBasedBiasing"), fSplittingFactor(2), fApplyProbability(0.2)
 {
   fSplitAndKillOperation = new GB03BOptnSplitOrKillOnBoundary("splitAndkill");
 

@@ -62,20 +62,6 @@ inline long RandFlat::shootInt(long a1, long n) {
   return long(shoot()*double(n-a1)) + a1;
 }
 
-inline void RandFlat::shootBits() {
-  const double factor= 2.0*MSB; // this should fit into a double! 
-  staticFirstUnusedBit= MSB;
-  staticRandomInt= (unsigned long)(factor*shoot());  
-}
-
-inline int RandFlat::shootBit() {
-  if (staticFirstUnusedBit==0)
-    shootBits();
-  unsigned long temp= staticFirstUnusedBit&staticRandomInt;
-  staticFirstUnusedBit>>= 1;
-  return temp!=0;   
-}
-
 //---------------------
 
 inline double RandFlat::shoot(HepRandomEngine* anEngine) {
@@ -106,20 +92,6 @@ inline long RandFlat::shootInt(HepRandomEngine* anEngine,
 inline void RandFlat::shootArray(HepRandomEngine* anEngine,
                                  const int size, double* vect) {
   anEngine->flatArray(size,vect);
-}
-
-inline void RandFlat::shootBits(HepRandomEngine* engine) {
-  const double factor= 2.0*MSB; // this should fit into a double! 
-  staticFirstUnusedBit= MSB;
-  staticRandomInt= (unsigned long)(factor*shoot(engine));  
-}
-
-inline int RandFlat::shootBit(HepRandomEngine* engine) {
-  if (staticFirstUnusedBit==0)
-    shootBits(engine);
-  unsigned long temp= staticFirstUnusedBit&staticRandomInt;
-  staticFirstUnusedBit>>= 1;
-  return temp!=0;   
 }
 
 //---------------------

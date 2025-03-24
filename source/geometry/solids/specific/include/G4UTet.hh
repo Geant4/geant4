@@ -69,11 +69,6 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 
     inline G4bool IsFaceted() const override;
 
-    G4UTet(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UTet(const G4UTet& rhs);
     G4UTet& operator=(const G4UTet& rhs);
       // Copy constructor and assignment operator.

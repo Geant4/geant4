@@ -89,6 +89,8 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   
   // Do complete Lorentz computation 
   G4LorentzVector lv = nucleus->GetMomentum();
+
+  // final mass
   G4double mass = nucleus->GetGroundStateMass() + newExcEnergy;
 
   // select secondary
@@ -110,8 +112,11 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   G4double emass = part->GetPDGMass();
 
   // 2-body decay in rest frame
-  G4double ecm       = lv.mag();
-  G4ThreeVector bst  = lv.boostVector();
+  G4double ecm = lv.mag();
+  const G4double elim2 = 100.*CLHEP::eV*CLHEP::eV;
+  G4bool atRest = (lv.vect().mag2() < elim2);
+  G4ThreeVector bst(0.0, 0.0, 0.0);
+  if (!atRest) { bst = lv.boostVector(); } 
   if(!isGamma) { ecm += (CLHEP::electron_mass_c2 - bond_energy); }
 
   //G4cout << "Ecm= " << ecm << " mass= " << mass << " emass= " << emass << G4endl;
@@ -127,16 +132,19 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
 			  mom * fDirection.z(), energy);
   // residual
   energy = std::max(ecm - energy, mass);
+  mom = std::sqrt(energy*energy - mass*mass);
   lv.set(-mom*fDirection.x(), -mom*fDirection.y(), -mom*fDirection.z(), energy);
 
   // Lab system transform for short lived level
-  lv.boost(bst);
+  if (!atRest) {
+    lv.boost(bst);
+    res4mom.boost(bst);
+  }
 
   // modified primary fragment 
   nucleus->SetExcEnergyAndMomentum(newExcEnergy, lv);
 
   // gamma or e- are produced
-  res4mom.boost(bst); 
   result = new G4Fragment(res4mom, part);
 
   //G4cout << " DeltaE= " << e0 - lv.e() - res4mom.e() + emass

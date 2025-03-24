@@ -68,11 +68,6 @@ class G4UEllipticalCone : public G4UAdapter<vecgeom::UnplacedEllipticalCone>
 
     inline G4GeometryType GetEntityType() const override;
 
-    G4UEllipticalCone(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UEllipticalCone( const G4UEllipticalCone& source );
     G4UEllipticalCone& operator=( const G4UEllipticalCone& source );
       // Copy constructor and assignment operator.

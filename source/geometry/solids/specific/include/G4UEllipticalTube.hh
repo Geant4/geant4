@@ -66,11 +66,6 @@ class G4UEllipticalTube : public G4UAdapter<vecgeom::UnplacedEllipticalTube>
 
     inline G4GeometryType GetEntityType() const override;
 
-    G4UEllipticalTube(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UEllipticalTube( const G4UEllipticalTube& source );
     G4UEllipticalTube &operator=( const G4UEllipticalTube& source );
       // Copy constructor and assignment operator.

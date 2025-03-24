@@ -494,7 +494,7 @@ TransferStackedTracks(G4ClassificationOfNewTrack origin,
         else
         {
           G4ExceptionDescription ED;
-          ED << "Invalid origin stack ID " << origin;
+          ED << "Invalid destination stack ID " << destination;
           G4Exception("G4StackManager::TransferStackedTracks","Stack0911",
                       FatalException, ED);
         }

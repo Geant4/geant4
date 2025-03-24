@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-02-07 L. Pandola (emlowen-V11-02-08)
+- Fix residual Coverity defect on G4ShellData
+
+## 2025-01-09 L. Pandola
+- Fix Coverity warnings in Penenelope models, G4ShellData, G4FluoData and
+  G4AugerTransition
+
 ## 2024-12-02 A. Ribon (emlowen-V11-02-07)
 - G4UAtomicDeexcitation : clear vector (vacancyArray) in the method
   G4UAtomicDeexcitation::GenerateParticles, to avoid rare non-reproducibility

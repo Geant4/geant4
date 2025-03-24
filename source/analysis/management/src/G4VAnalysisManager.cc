@@ -1514,9 +1514,6 @@ void  G4VAnalysisManager::SetNtupleActivation(G4int id, G4bool activation)
 // Set activation to a given ntuple object
 
   fNtupleBookingManager->SetActivation(id, activation);
-  if ( fVNtupleManager ) {
-    fVNtupleManager->SetActivation(id, activation);
-  }
 }
 
 //_____________________________________________________________________________
@@ -1525,9 +1522,6 @@ void  G4VAnalysisManager::SetNtupleActivation(G4bool activation)
 // Set activation to all ntuple objects
 
   fNtupleBookingManager->SetActivation(activation);
-  if ( fVNtupleManager ) {
-    fVNtupleManager->SetActivation(activation);
-  }
 }
 
 //_____________________________________________________________________________

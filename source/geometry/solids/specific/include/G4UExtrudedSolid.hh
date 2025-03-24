@@ -88,11 +88,6 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 
     inline G4bool IsFaceted() const override;
 
-    G4UExtrudedSolid(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UExtrudedSolid( const G4UExtrudedSolid& source );
     G4UExtrudedSolid &operator=(const G4UExtrudedSolid& source);
       // Copy constructor and assignment operator.

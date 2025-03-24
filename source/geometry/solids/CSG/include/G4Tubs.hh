@@ -190,14 +190,6 @@ class G4Tubs : public G4CSGSolid
 
   protected:
 
-    // Used by distanceToOut
-    //
-    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
-
-    // Used by normal
-    //
-    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
-
     G4double kRadTolerance, kAngTolerance;
       //
       // Radial and angular tolerances

@@ -383,7 +383,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   }
 
   // In case A <= 1 the fragment will not perform any nucleon emission
-  if (A <= 1 || !isActive) {
+  if (A <= 1 || !isActive || theInitialStatePtr->IsLongLived()) {
     theResults.push_back( theInitialStatePtr );
 
     // check if a fragment is stable
@@ -435,7 +435,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   std::size_t kk;
   for (kk=0; kk<theEvapList.size(); ++kk) {
     G4Fragment* frag = theEvapList[kk];
-    if (fVerbose > 3) { 	
+    if (fVerbose > 3) {
       G4cout << "Next evaporate: " << G4endl;  
       G4cout << *frag << G4endl;  
     }
@@ -475,8 +475,13 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
     // apply Evaporation, residual nucleus is always added to the results
     // photon evaporation is possible 
     theEvaporation->BreakFragment(&results, frag); 
-    if (fVerbose > 3) { 
-      G4cout << "Evaporation Nsec= " << results.size() << G4endl; 
+    if (fVerbose > 3) {
+      G4cout << kk << ". Evaporation: Nsec=" << results.size()
+	     << " Z=" << frag->GetZ_asInt()
+	     << " A=" << frag->GetA_asInt()
+	     << " Eex=" << frag->GetExcitationEnergy()
+	     << " stable=" << frag->IsLongLived()
+	     << G4endl; 
     }
     if (0 == results.size()) {
       theResults.push_back(frag);

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -994,7 +994,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.110000s Real=1.457733s Sys=0.340000s
+  User=0.820000s Real=1.089794s Sys=0.260000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1002,124 +1002,124 @@ Region : Calor-A
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 2.28316 GeV      Gap 295.557 MeV
+    Absorber 2.42169 GeV      Gap 302.918 MeV
  Number of secondaries in an event :
-    gamma in Absorber 471.1    in Gap 27.2
-    e-    in Absorber 811.5    in Gap 105.2
-    e+    in Absorber 46.4    in Gap 1.5
+    gamma in Absorber 556.3    in Gap 28.3
+    e-    in Absorber 939.1    in Gap 120
+    e+    in Absorber 53.9    in Gap 1.9
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 101.895 keV    in Gap 6.20089 keV
-    e-    in Absorber 130.866 eV     in Gap 482.378 eV 
-    e+    in Absorber 64.116 keV    in Gap 627.294 keV
+    gamma in Absorber 101.833 keV    in Gap 6.20089 keV
+    e-    in Absorber 130.866 eV     in Gap 165.969 eV 
+    e+    in Absorber 11.3344 keV    in Gap 7.84123 keV
  Total track length of e+/e- in an event :
-    Absorber 66.7398 cm       Gap 48.0203 cm 
+    Absorber 76.822 cm       Gap 50.1492 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 2060.6      Gap 355.8
+    Absorber 2386.8      Gap 394.7
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    2463.11      455.7      715.4         40    1031.99     1981.1
-       1    80.2077       29.9      130.8        5.4    80.1949      287.8
-       2    21.9133          8       42.4        1.4    24.7573       92.6
-       3    8.32584        2.8       13.8        0.8     6.6636       27.6
-       4    2.91034        1.1        7.1        0.2    1.99476       13.1
-       5    1.00605        0.2        3.1          0   0.843712        6.9
-       6   0.200913        0.3        1.7        0.1   0.116787        2.4
-       7   0.564922        0.2        0.8          0     0.4229        2.5
-       8   0.115236          0        0.5          0   0.213304        0.7
-       9 0.00375073          0          0          0          0          0
-      10   0.255387        0.1        0.7          0   0.139904        1.1
-      11  0.0149544          0          0          0          0          0
-      12  0.0896667          0        0.4          0   0.262354        0.6
-      13 0.000425139          0          0          0          0          0
-      14 5.77438e-05          0          0          0          0          0
-      15 0.000417462          0          0          0          0          0
-      16 0.000202031          0          0          0          0          0
-      17 0.000438421          0          0          0          0          0
-      18          0          0          0          0          0          0
-      19          0          0          0          0          0          0
+       0    2580.27      532.4      821.9       46.3    1126.55     2253.2
+       1    91.2453       33.6      150.5        6.1    89.9529      328.4
+       2    34.4061       13.7       57.2        2.8    32.0999      130.4
+       3    11.8643        3.7       17.4        0.5    14.1903       39.8
+       4    3.38482        0.6        5.1          0    4.34337       16.5
+       5    2.03521        0.5        3.9        0.1    1.34564        6.9
+       6   0.718482          0        1.2          0   0.461247        2.7
+       7   0.100751        0.1        0.6          0   0.225343        1.7
+       8  0.0361343          0        0.1          0   0.114935        0.2
+       9   0.013764          0        0.1          0  0.0210382        0.1
+      10   0.377102          0        0.5          0   0.298689        0.8
+      11   0.116515          0        0.6          0   0.105668        0.8
+      12 0.00713993          0          0          0          0          0
+      13 0.000722828          0          0          0          0          0
+      14  0.0043876          0          0          0          0          0
+      15 0.00278669          0          0          0          0          0
+      16 0.00836591          0          0          0          0          0
+      17 0.00447624          0          0          0          0          0
+      18 0.000987112          0          0          0          0          0
+      19 0.00469177          0          0          0          0          0
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 2.8897 GeV      Gap 375.255 MeV
+    Absorber 2.95827 GeV      Gap 369.904 MeV
  Number of secondaries in an event :
-    gamma in Absorber 818.1    in Gap 51.8
-    e-    in Absorber 1366.5    in Gap 173.6
-    e+    in Absorber 83.7    in Gap 2.9
+    gamma in Absorber 854    in Gap 54.9
+    e-    in Absorber 1429.2    in Gap 187.1
+    e+    in Absorber 89.3    in Gap 2.9
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 101.806 keV    in Gap 6.40931 keV
-    e-    in Absorber 101.315 eV     in Gap 225.616 eV 
-    e+    in Absorber 1.01683 keV    in Gap 173.33 keV
+    gamma in Absorber 101.828 keV    in Gap 6.20705 keV
+    e-    in Absorber 62.827 eV     in Gap 119.169 eV 
+    e+    in Absorber 2.38156 keV    in Gap 380.659 keV
  Total track length of e+/e- in an event :
-    Absorber 1.09791 m        Gap 85.6368 cm 
+    Absorber 1.14877 m        Gap 82.3885 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 3501.6      Gap 628.2
+    Absorber 3620.3      Gap 618
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    3052.53      786.2     1181.5       72.1    1706.39     3310.7
-       1    139.666         59      222.2         10    158.592      503.1
-       2    45.9525       16.3       80.9        3.2    61.9467      198.8
-       3    16.5331        5.3       31.3        0.8    18.5655       66.3
-       4    4.90785        1.5         13        0.2    4.09499       25.3
-       5      3.165        1.2        4.4        0.2    2.43618        9.7
-       6    1.17252        0.4        2.7        0.1    1.20307        9.6
-       7   0.516554          0        1.7          0   0.606087        2.7
-       8   0.290907          0        1.3          0   0.246015        2.1
-       9  0.0307307          0        0.1          0  0.0386719        0.2
-      10  0.0312855          0        0.4          0 0.00574901        0.6
-      11  0.0682124          0        0.2          0   0.137074        0.2
-      12 0.00467156          0          0          0          0          0
-      13  0.0114212          0          0          0          0          0
-      14 0.00557925          0          0          0          0          0
-      15  0.0137281          0          0          0          0          0
-      16  0.0207416          0        0.2          0  0.0128575        0.2
-      17 0.00573811          0          0          0          0          0
-      18  0.0207392          0        0.2          0 0.00311811        0.3
-      19 2.23158e-05          0          0          0          0          0
+       0    3108.94      835.2     1227.6       79.2    1736.07     3394.8
+       1    146.017       50.6      245.4        9.1     159.13      531.2
+       2    44.8946       12.6       81.4        2.4    48.4299      177.2
+       3    16.2843        5.3       34.1        0.7    15.4472       78.2
+       4    5.30191        1.8       12.3        0.3    7.08338       23.4
+       5     2.0179        0.6        4.4        0.2    1.94811        9.9
+       6     1.3847        0.5          3          0   0.960561        7.7
+       7   0.838736        0.6        1.8        0.1    1.02795        3.5
+       8   0.422767          0        1.6          0   0.374688        2.2
+       9   0.475617        0.2        1.7          0    1.07563        3.8
+      10   0.143774          0        0.2          0   0.306198        0.9
+      11   0.550743        0.9        0.9        0.1   0.307846        1.8
+      12   0.272676        0.2        0.8        0.1   0.120862        1.5
+      13   0.289341        0.2        0.2          0   0.142694        0.7
+      14   0.036804          0          0          0          0          0
+      15  0.0180681          0          0          0          0          0
+      16  0.0568851          0        0.3          0 0.00900029        0.4
+      17  0.0423549        0.1        0.2          0  0.0396885        0.4
+      18  0.0570844          0        0.1          0  0.0172872        0.2
+      19  0.0107743          0          0          0          0          0
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 10 cm     e- 10 cm     e+ 10 cm 
  Energy deposition in an event :
-    Absorber 6.91842 GeV      Gap 681.815 MeV
+    Absorber 7.09786 GeV      Gap 687.757 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1017.4    in Gap 109.7
-    e-    in Absorber 1830.2    in Gap 201.6
-    e+    in Absorber 286.5    in Gap 11
+    gamma in Absorber 1035.3    in Gap 116.9
+    e-    in Absorber 1864    in Gap 215.5
+    e+    in Absorber 289.5    in Gap 12.6
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 109.305 keV    in Gap 57.3715 keV
-    e-    in Absorber 134.078 eV     in Gap 162.3 eV 
-    e+    in Absorber 6.78616 keV    in Gap 128.204 keV
+    gamma in Absorber 260.431 keV    in Gap 56.4763 keV
+    e-    in Absorber 143.501 eV     in Gap 144.427 eV 
+    e+    in Absorber 3.46324 keV    in Gap 56.2915 keV
  Total track length of e+/e- in an event :
-    Absorber 2.91317 m        Gap 2.00365 m  
+    Absorber 3.01904 m        Gap 2.0351 m  
  Total number of steps of e+/e- in an event :
-    Absorber 5176.9      Gap 903.1
+    Absorber 5352.7      Gap 973.4
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    7029.62     1007.8     1413.5      255.2    4321.16     4622.1
-       1    364.848       75.1      355.7       26.8    387.255      864.3
-       2    126.622       28.1      144.3       10.5    134.575      340.7
-       3    45.9875        8.8       61.7        3.2    41.3175      127.1
-       4    14.1468        2.9       25.5          1    12.5461       56.7
-       5    8.19512        1.3       12.2        0.2    10.5679       30.3
-       6    3.07313        0.8        6.6        0.3    4.25569         14
-       7    1.87021        0.2        3.9          0    0.88657        6.5
-       8    1.98989          1        2.4        0.1     1.2393        4.2
-       9     2.0608        0.6        2.5          0    1.65481        4.4
-      10   0.522808        0.2        1.1        0.1   0.378804          2
-      11   0.200732          0        0.8          0  0.0729989        1.3
-      12   0.173121          0        0.9          0  0.0845344        1.3
-      13   0.120739          0        0.1          0  0.0246892        0.2
-      14  0.0345829          0          0          0          0          0
-      15  0.0321503          0          0          0          0          0
-      16   0.533462        0.3        0.4        0.1    0.40198        3.6
-      17   0.015726          0          0          0          0          0
-      18  0.0110493          0          0          0          0          0
-      19  0.0393752          0        0.1          0  0.0393374        0.3
+       0    7170.19     1031.4     1437.2      256.2    4395.95     4748.1
+       1    405.767       83.4      383.9       31.2    436.629      965.6
+       2    131.098       23.6        150        9.3    144.113        365
+       3    50.9057          9         62        3.7    52.3869      143.5
+       4    15.0404        2.5         24          1     11.971         47
+       5    6.58612        0.9        8.8        0.3     7.7964       22.1
+       6    2.19211        0.4        4.5        0.3     1.6842       13.1
+       7    1.51931        0.3        1.9        0.1    1.45622        4.2
+       8   0.691316        0.5        1.5          0   0.537554        8.1
+       9   0.483281          0        0.9          0   0.326743        1.9
+      10   0.277488          0        1.4          0   0.109473        2.1
+      11  0.0679053          0        0.5          0  0.0221866        0.7
+      12   0.173357          0        0.7          0   0.108586        1.3
+      13   0.185184          0        0.4          0   0.683643        0.7
+      14   0.175893          0        0.7          0   0.158422        1.2
+      15  0.0706875          0        0.2          0   0.137136        0.2
+      16  0.0150955          0        0.1          0 0.000435554        0.2
+      17 0.00999203          0          0          0          0          0
+      18 0.00577292          0          0          0          0          0
+      19  0.0100291          0          0          0          0          0
 ############################################################
 /run/dumpCouples
 
@@ -1277,7 +1277,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.910000s Real=1.196703s Sys=0.270000s
+  User=1.670000s Real=2.157904s Sys=0.480000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1285,124 +1285,124 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 2.85161 GeV      Gap 351.455 MeV
+    Absorber 3.84392 GeV      Gap 465.474 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1039.8    in Gap 56.8
-    e-    in Absorber 1795.7    in Gap 246.1
-    e+    in Absorber 80.6    in Gap 3
+    gamma in Absorber 1757    in Gap 100.4
+    e-    in Absorber 2900.5    in Gap 387.5
+    e+    in Absorber 143.9    in Gap 5.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 47.4747 keV    in Gap 2.8176 keV
-    e-    in Absorber 5.71051 eV     in Gap 728.413 meV
-    e+    in Absorber 23.0921 keV    in Gap 131.67 keV
+    gamma in Absorber 47.474 keV    in Gap 2.83783 keV
+    e-    in Absorber 29.3256 eV     in Gap 28.9408 eV 
+    e+    in Absorber 4.99997 keV    in Gap 62.1039 keV
  Total track length of e+/e- in an event :
-    Absorber 1.17265 m        Gap 78.2418 cm 
+    Absorber 1.90424 m        Gap 1.3525 m  
  Total number of steps of e+/e- in an event :
-    Absorber 4407.7      Gap 687.4
+    Absorber 7221      Gap 1151.5
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    3023.67     1016.4       1702       72.2    1745.28       4324
-       1    107.697       48.3      199.7        7.1    128.309      452.1
-       2    39.4613       17.9       77.4        2.5     47.333      186.6
-       3    19.5378        9.5         35        1.4    18.2177       73.7
-       4     6.1973        2.3       12.4        0.1    6.58458       27.3
-       5    2.91811        0.8        5.7        0.2    3.44949       12.6
-       6    1.07752        0.4        2.5          0   0.704783          5
-       7   0.467688        0.1        1.9          0    1.03454        3.5
-       8   0.226352          0        1.4          0   0.264808          2
-       9   0.115922          0        0.8          0  0.0695749        1.1
-      10    0.41886        0.5        1.3        0.1    0.25845        2.5
-      11    0.26821          0        0.3          0   0.215263        0.5
-      12   0.801389        0.3        0.4          0    3.13329        2.6
-      13  0.0375502          0        0.5          0 0.00993666        0.7
-      14  0.0847381        0.1        0.4          0   0.150981        0.7
-      15  0.0844556          0        0.1          0  0.0525845        0.2
-      16          0          0          0          0          0          0
-      17          0          0          0          0          0          0
-      18          0          0          0          0          0          0
-      19          0          0          0          0          0          0
+       0    3957.85     1684.5     2635.5      129.4    2860.46     6863.7
+       1    232.728      116.9      413.3       12.9    273.439      968.4
+       2    76.7977       37.4      145.9        4.3    78.7729      328.8
+       3     23.391         10       51.8        1.3    24.8084        114
+       4    10.4567        4.9       23.9        0.6    10.8817         54
+       5     4.2205        1.5        8.3        0.2    4.54518       18.1
+       6    1.36865        0.9        3.5        0.2    1.65301       10.3
+       7    1.02498        0.7        2.1        0.1    1.12978        9.2
+       8   0.691699        0.5        1.3          0   0.505418        2.6
+       9   0.428036        0.1        0.7          0   0.266878        1.2
+      10    0.12471          0        0.5          0  0.0726948        0.7
+      11  0.0946391          0        0.6          0   0.142306        0.8
+      12  0.0526746          0        0.3          0  0.0175067        0.3
+      13   0.024331          0        0.1          0  0.0349845        0.1
+      14  0.0590595          0        0.2          0  0.0112962        0.3
+      15 0.00547128          0          0          0          0          0
+      16 0.00654085          0          0          0          0          0
+      17  0.0171805          0          0          0          0          0
+      18  0.0240157          0          0          0          0          0
+      19 0.00764502          0          0          0          0          0
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 2.93848 GeV      Gap 354.998 MeV
+    Absorber 8.08444 GeV      Gap 857.842 MeV
  Number of secondaries in an event :
-    gamma in Absorber 787.4    in Gap 48.2
-    e-    in Absorber 1314.1    in Gap 152.5
-    e+    in Absorber 85.6    in Gap 2.9
+    gamma in Absorber 3498.1    in Gap 209.7
+    e-    in Absorber 5789.1    in Gap 616.1
+    e+    in Absorber 409.2    in Gap 15.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 120.809 keV    in Gap 8.71672 keV
-    e-    in Absorber 126.058 eV     in Gap 131.863 eV 
-    e+    in Absorber 11.804 keV    in Gap 598.49 keV
+    gamma in Absorber 16.0002 keV    in Gap 8.70487 keV
+    e-    in Absorber 73.7231 eV     in Gap 114.614 eV 
+    e+    in Absorber 2.02202 keV    in Gap 12.1072 keV
  Total track length of e+/e- in an event :
-    Absorber 1.08771 m        Gap 74.7505 cm 
+    Absorber 4.69068 m        Gap 3.1447 m  
  Total number of steps of e+/e- in an event :
-    Absorber 3272.9      Gap 503.4
+    Absorber 14596.1      Gap 2093.9
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    3077.17      761.2     1096.5       75.7    1602.69     2994.5
-       1    147.176         53        241        8.6    159.731      504.1
-       2    41.5248       12.1       73.1        2.4    48.6229        160
-       3    16.7873        5.8       33.8        0.9    14.7459       71.5
-       4    6.15634        1.6       11.7        0.5    5.25476       22.6
-       5    2.63699        1.1          6        0.2    1.70523       11.3
-       6   0.513727        0.3          1        0.1   0.514402        2.1
-       7    0.46701          0        1.2          0   0.817335        1.8
-       8   0.168726          0        0.4          0    0.30037        0.6
-       9  0.0810745          0        0.5          0   0.193418        0.8
-      10   0.361767        0.3        0.5          0   0.351798        5.2
-      11   0.336581        0.2        0.6        0.1   0.231754        1.4
-      12  0.0216664          0        0.2          0  0.0373473        0.2
-      13  0.0529411          0        0.1          0  0.0246801        0.2
-      14 0.000688719          0          0          0          0          0
-      15 0.00759538          0          0          0          0          0
-      16          0          0          0          0          0          0
-      17 0.00162326          0          0          0          0          0
-      18 0.00522421          0          0          0          0          0
-      19 0.00662668          0          0          0          0          0
+       0    7905.53       3332     4707.2      357.6    6689.31    12931.3
+       1     685.59      264.1     1068.7       45.3    754.141     2380.8
+       2    218.654       67.8      368.6         13    249.095      807.1
+       3    79.6316       28.4      148.4        5.5    83.5976      321.4
+       4    27.7347        8.1       57.4        1.7    31.9434      126.8
+       5    12.3319        3.7       23.9        0.6    13.7259       59.9
+       6    4.14562        1.5        9.4        0.4    4.14978       20.6
+       7    2.25199        0.4        6.8        0.1    1.70708       10.7
+       8    1.49989        0.3        3.6        0.1    1.10868        6.3
+       9   0.875425        0.2        2.7          0    1.05476        4.4
+      10    0.67684        0.2        1.2        0.1    1.37669        2.8
+      11   0.547241          0          1          0   0.375492        2.8
+      12   0.240573        0.1        1.1          0   0.272645        4.4
+      13   0.180987          0        1.1          0   0.266268        1.4
+      14   0.399726          0        0.4          0   0.285869        0.9
+      15   0.359575        0.2        0.6          0   0.685525        1.6
+      16   0.194484          0        0.3          0   0.415834        0.7
+      17  0.0650518          0        0.2          0  0.0683946        0.3
+      18   0.337613          0        0.8          0   0.232866          1
+      19   0.175892          0        0.3          0   0.705667        0.7
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 2.43182 GeV      Gap 309.756 MeV
+    Absorber 2.54453 GeV      Gap 321.436 MeV
  Number of secondaries in an event :
-    gamma in Absorber 274.7    in Gap 21
-    e-    in Absorber 504    in Gap 58.7
-    e+    in Absorber 47.8    in Gap 1.3
+    gamma in Absorber 322.1    in Gap 24.4
+    e-    in Absorber 605.6    in Gap 75.1
+    e+    in Absorber 58    in Gap 2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 313.388 keV    in Gap 27.0448 keV
-    e-    in Absorber 133.906 eV     in Gap 261.314 eV 
-    e+    in Absorber 24.6115 keV    in Gap 111.02 keV
+    gamma in Absorber 334.804 keV    in Gap 28.2137 keV
+    e-    in Absorber 604.348 eV     in Gap 551.06 eV 
+    e+    in Absorber 37.012 keV    in Gap 367.576 keV
  Total track length of e+/e- in an event :
-    Absorber 53.6723 cm       Gap 41.6886 cm 
+    Absorber 63.0506 cm       Gap 46.087 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1281.6      Gap 231.6
+    Absorber 1522.6      Gap 281.7
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    2629.18      267.6      393.9       41.3    838.272     1125.7
-       1    69.3938       19.2      105.3        5.1    70.0764      244.4
-       2    24.5781        5.5       36.5        1.6    27.3964       81.1
-       3    10.4502        2.2       14.7        0.5    9.20674       33.4
-       4    4.04232        0.5        6.7        0.3    4.61423       14.6
-       5    2.18111        0.5        2.7        0.2    2.31942        5.5
-       6   0.604212          0        1.2          0    0.92804        3.5
-       7   0.295712          0        0.9          0   0.262081        1.7
-       8    0.40992        0.2        0.3        0.1   0.266402        0.8
-       9   0.206477          0        0.2          0   0.135368        0.3
-      10  0.0188142          0          0          0          0          0
-      11  0.0121884          0          0          0          0          0
-      12  0.0100799          0          0          0          0          0
-      13  0.0113326          0          0          0          0          0
-      14  0.0640688          0        0.1          0  0.0965196        1.9
-      15   0.072138          0        0.2          0  0.0357956        0.3
-      16  0.0170742          0          0          0          0          0
-      17 0.00805716          0          0          0          0          0
-      18 0.00942645          0          0          0          0          0
-      19 0.00265733          0          0          0          0          0
+       0    2727.64      313.7      472.9       51.3    933.386     1334.5
+       1    95.4862       25.6      130.9        6.3    115.485      308.9
+       2    24.9728        3.5       44.6        1.1    23.4405       87.1
+       3    10.2722        1.4       17.4        0.7    9.66982       38.9
+       4    5.04602        1.6        7.1        0.4    7.15918       17.1
+       5    1.47983        0.5        3.6        0.2    1.04648        6.4
+       6   0.582951        0.2        2.2          0   0.676506        5.5
+       7  0.0553151          0        0.6          0  0.0331421        0.7
+       8   0.113473          0        0.4          0   0.102399        0.6
+       9  0.0382176          0        0.5          0  0.0598195        0.8
+      10          0          0          0          0          0          0
+      11   0.144466          0        0.3          0  0.0744528        0.9
+      12          0          0          0          0          0          0
+      13  0.0119228          0          0          0          0          0
+      14 0.00635284          0          0          0          0          0
+      15          0          0          0          0          0          0
+      16 0.00274713          0          0          0          0          0
+      17 0.00380654          0          0          0          0          0
+      18 0.00598572          0          0          0          0          0
+      19  0.0277135          0        0.1          0 0.00652718        0.2
 ############################################################
 /run/dumpCouples
 
@@ -1591,7 +1591,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.210000s Real=0.290185s Sys=0.060000s
+  User=0.190000s Real=0.243882s Sys=0.050000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1599,124 +1599,124 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 620.239 MeV      Gap 272.186 MeV
+    Absorber 608.196 MeV      Gap 270.646 MeV
  Number of secondaries in an event :
-    gamma in Absorber 53.8    in Gap 15.7
-    e-    in Absorber 367.5    in Gap 188.4
-    e+    in Absorber 1.5    in Gap 0.3
+    gamma in Absorber 55.9    in Gap 14
+    e-    in Absorber 362.2    in Gap 181
+    e+    in Absorber 1.9    in Gap 0.4
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.30491 keV    in Gap 1.56232 keV
-    e-    in Absorber 114.646 eV     in Gap 112.817 eV 
-    e+    in Absorber 673.181 keV    in Gap 41.9676 keV
+    gamma in Absorber 3.35589 keV    in Gap 1.56874 keV
+    e-    in Absorber 124.26 eV     in Gap 123.6 eV 
+    e+    in Absorber 160.955 keV    in Gap 18.0452 MeV
  Total track length of e+/e- in an event :
-    Absorber 56.1952 cm       Gap 53.6266 cm 
+    Absorber 52.8075 cm       Gap 52.0575 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 750.3      Gap 399.5
+    Absorber 706.8      Gap 382.7
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    816.569       53.3      298.3        0.9    865.559      711.5
-       1    42.7747       11.4       77.3        0.4     140.61      151.2
-       2    12.4077        1.9         53        0.2     34.803         91
-       3    7.69208        1.1       39.1        0.2    23.0028       65.3
-       4    4.45691        0.6       26.8          0    11.7224       39.5
-       5    3.72542        0.9       17.4        0.1    10.5802       25.7
-       6    2.60652        0.3       14.4          0     7.2129       22.7
-       7   0.527468          0        8.1          0   0.984328       12.8
-       8   0.345813          0        6.3          0    0.41739          8
-       9  0.0951694          0        2.5          0    0.06027          4
-      10   0.516143          0        3.8          0    1.35346        6.2
-      11   0.271809          0        4.2          0   0.710813        5.5
-      12   0.275989          0        1.7          0    1.04018          3
-      13  0.0568704          0        0.5          0  0.0808415        0.6
-      14  0.0201442          0        0.6          0  0.0141045        0.7
-      15  0.0121935          0        0.6          0 0.00401965        0.7
-      16  0.0626545          0        0.9          0  0.0592426          1
-      17 0.00410543          0        0.3          0 0.000977112        0.3
-      18 0.00434676          0        0.1          0 0.00167167        0.1
+       0    818.375       56.3      299.4        1.3    864.642      683.8
+       1    36.0004        8.1         76        0.4    119.331      143.9
+       2    9.86892          2       49.4        0.2    26.9781         80
+       3    7.65975        2.7       35.4        0.4    23.1286       62.7
+       4    2.77331        0.2       25.9          0    5.67475       39.8
+       5   0.825943          0       19.5          0    1.01504         27
+       6    1.18126        0.3       13.1          0    2.05881       16.9
+       7   0.843504          0        5.9          0    2.59335       10.1
+       8   0.322087        0.2          7          0    0.44421         10
+       9  0.0676444          0        3.6          0  0.0306476        4.6
+      10   0.327275          0        1.7          0    1.57756        2.6
+      11  0.0309123          0        1.1          0  0.0193186        1.2
+      12   0.457483        0.1        0.9          0    1.09652        1.5
+      13  0.0205688          0        0.9          0 0.00661115        1.5
+      14  0.0650148          0        2.4          0  0.0439673        2.7
+      15 0.00947718          0        0.7          0   0.003327        0.8
+      16          0          0          0          0          0          0
+      17          0          0          0          0          0          0
+      18          0          0          0          0          0          0
       19          0          0          0          0          0          0
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 574.54 MeV      Gap 248.375 MeV
+    Absorber 739.893 MeV      Gap 315.147 MeV
  Number of secondaries in an event :
-    gamma in Absorber 32.7    in Gap 8.9
-    e-    in Absorber 180.3    in Gap 91.7
-    e+    in Absorber 1.5    in Gap 0.5
+    gamma in Absorber 73.8    in Gap 20.5
+    e-    in Absorber 367.7    in Gap 160.3
+    e+    in Absorber 3.9    in Gap 0.9
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 9.70779 keV    in Gap 4.03121 keV
-    e-    in Absorber 134.549 eV     in Gap 104.064 eV 
-    e+    in Absorber 666.611 keV    in Gap 132.482 keV
+    gamma in Absorber 9.5971 keV    in Gap 3.99421 keV
+    e-    in Absorber 100.083 eV     in Gap 100.26 eV 
+    e+    in Absorber 137.311 keV    in Gap 758.405 keV
  Total track length of e+/e- in an event :
-    Absorber 37.3196 cm       Gap 35.8531 cm 
+    Absorber 75.4908 cm       Gap 71.4091 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 412.4      Gap 218
+    Absorber 786.2      Gap 375.2
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    781.325       32.3       90.2        1.1    612.902      344.4
-       1    14.9728        4.4       41.3        0.3    46.1812         74
-       2    12.7732        2.8       38.1        0.2    37.6556       62.1
-       3    3.04816        0.5       26.6          0    6.75382       36.5
-       4    3.48383        0.3         20        0.1    12.3315       29.5
-       5    1.42527        0.2       16.3          0    2.87938       25.3
-       6    1.46633        0.3        8.7        0.1    3.09028       11.8
-       7    1.18518        0.3        8.7        0.1    2.41494       15.7
-       8   0.880478        0.2        9.7          0     1.7414       12.1
-       9    0.69853        0.3        4.9        0.1    1.80215        7.6
-      10   0.936566          0        3.1          0    2.51122        4.8
-      11   0.331164          0        1.4          0   0.761985        2.1
-      12  0.0444747          0        0.9          0  0.0296348        1.6
-      13  0.0611282          0        0.7          0  0.0699085        0.8
-      14   0.255696          0        0.3          0   0.592366        0.8
-      15  0.0229348          0          1          0 0.00841404        1.2
-      16 0.00438176          0        0.1          0 0.00169463        0.1
-      17          0          0          0          0          0          0
-      18          0          0          0          0          0          0
-      19          0          0          0          0          0          0
+       0    968.916       69.7      153.2        3.3    1229.15      571.6
+       1    33.7326       13.7        100        0.8    95.7972      175.8
+       2    18.8256        3.7         68        0.2    52.9851      108.1
+       3    12.6331        2.7       58.7        0.3    36.1202       88.4
+       4    10.3934        2.8       42.6        0.2    30.1007       65.4
+       5    3.19368        0.8       29.9          0     7.8269       46.2
+       6    2.35623        0.3       20.2          0    5.36009       30.2
+       7   0.871173          0       15.2          0     1.4167       18.5
+       8   0.967451        0.1       13.1          0     2.1366       18.7
+       9    1.93528        0.3          9          0    5.76937       14.6
+      10    0.19451          0        4.6          0   0.149811        6.5
+      11   0.167671          0        3.9          0   0.165557        4.6
+      12   0.234829          0        2.7          0   0.300632        3.2
+      13  0.0785538          0        1.5          0  0.0575466        1.6
+      14  0.0547539          0        2.1          0   0.030932        2.6
+      15  0.0070759          0        0.3          0 0.00224288        0.3
+      16  0.0230335          0        0.6          0   0.012212        0.6
+      17    0.28352        0.2        0.3          0    1.23291        1.4
+      18 0.00871783          0        0.7          0 0.00270047        1.1
+      19   0.160236          0        1.2          0   0.377934        1.8
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 575.812 MeV      Gap 242.941 MeV
+    Absorber 554.95 MeV      Gap 238.1 MeV
  Number of secondaries in an event :
-    gamma in Absorber 20.6    in Gap 6.2
-    e-    in Absorber 128    in Gap 48.7
-    e+    in Absorber 1.1    in Gap 0.6
+    gamma in Absorber 16.1    in Gap 4.7
+    e-    in Absorber 104.4    in Gap 44.5
+    e+    in Absorber 1    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 28.2959 keV    in Gap 10.6159 keV
-    e-    in Absorber 129.413 eV     in Gap 157.249 eV 
-    e+    in Absorber 1.64305 MeV    in Gap 1.26523 MeV
+    gamma in Absorber 29.4715 keV    in Gap 11.3115 keV
+    e-    in Absorber 113.317 eV     in Gap 213.084 eV 
+    e+    in Absorber 127.362 keV    in Gap 1.41664 MeV
  Total track length of e+/e- in an event :
-    Absorber 25.8117 cm       Gap 23.1494 cm 
+    Absorber 21.9947 cm       Gap 21.472 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 246.6      Gap 103.8
+    Absorber 216.1      Gap 99.9
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0     787.96         22       44.5        1.4    404.168      149.1
-       1    18.0656        2.7       37.6          0    53.2257       63.9
-       2    2.60547        0.6       26.1          0    4.83155       40.5
-       3    4.86389        0.6       17.4        0.2    13.8268         27
-       4     1.7745        0.4       16.5          0    4.27618       21.2
-       5    1.36841        0.5       12.8        0.1    3.22639       17.5
-       6   0.558631          0        6.5          0    1.71217        9.5
-       7   0.449997          0        5.2          0    1.58574        7.4
-       8     0.1671          0          3          0   0.208778        4.6
-       9  0.0300046          0        0.9          0  0.0184799        1.2
-      10  0.0154193          0        0.7          0  0.0100057        0.8
-      11  0.0209284          0        0.5          0  0.0139661        0.9
-      12   0.277658          0        0.6          0    1.25955          1
-      13   0.102542          0        0.4          0   0.159639        0.7
-      14  0.0384138          0        0.8          0  0.0751654        0.8
-      15  0.0733029          0        1.3          0  0.0703732        1.6
-      16  0.0314644          0        0.8          0  0.0176396        1.1
-      17 0.00593599          0        0.5          0 0.00162363        0.5
-      18  0.0859034          0        0.1          0   0.161623        0.2
-      19  0.0318558          0        0.1          0   0.091341        0.1
+       0    762.971       15.8       33.1        0.8    354.935      128.3
+       1    10.7408        2.6       26.2        0.2     28.915       50.2
+       2    5.90965        0.8       20.8        0.1    17.2398       34.2
+       3    6.14448        0.8       16.7        0.1    17.6463       27.2
+       4    4.48029        0.6       19.1        0.1    9.98982       28.2
+       5   0.823136        0.1       11.8          0    2.05909       17.4
+       6   0.348168          0          4          0   0.442899        6.6
+       7   0.301383          0        5.5          0   0.585086        7.2
+       8   0.102101          0        1.9          0   0.141412        2.6
+       9   0.798325        0.1        2.6          0    1.99961          5
+      10   0.180387          0        2.4          0   0.248122        3.1
+      11   0.182263          0        3.3          0   0.385687        4.2
+      12  0.0565773          0          1          0  0.0730827          1
+      13 2.00106e-10          0        0.1          0      2e-10        0.1
+      14 0.00409616          0        0.1          0 0.00184329        0.3
+      15          0          0          0          0          0          0
+      16          0          0          0          0          0          0
+      17          0          0          0          0          0          0
+      18 0.00862973          0        0.3          0 0.00406043        0.4
+      19          0          0          0          0          0          0
 ############################################################
 /run/dumpCouples
 
@@ -1934,7 +1934,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.430000s Real=1.905382s Sys=0.390000s
+  User=0.320000s Real=0.418699s Sys=0.090000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1942,124 +1942,124 @@ Region : Calor-A
  Production thresholds :
     gamma 10 um     e- 10 um     e+ 10 um 
  Energy deposition in an event :
-    Absorber 569.157 MeV      Gap 254.038 MeV
+    Absorber 510.625 MeV      Gap 233.201 MeV
  Number of secondaries in an event :
-    gamma in Absorber 55.3    in Gap 14.5
-    e-    in Absorber 1054.7    in Gap 1008.1
-    e+    in Absorber 3    in Gap 0.1
+    gamma in Absorber 38.8    in Gap 11.4
+    e-    in Absorber 876.1    in Gap 905.5
+    e+    in Absorber 0.7    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 1.00713 keV    in Gap 995.247 eV 
-    e-    in Absorber 38.1939 eV     in Gap 164.945 eV 
-    e+    in Absorber 241.515 keV    in Gap 10.3324 MeV
+    gamma in Absorber 1.01847 keV    in Gap 1.02631 keV
+    e-    in Absorber 11.5567 eV     in Gap 196.441 eV 
+    e+    in Absorber 372.879 keV    in Gap 1.2134 MeV
  Total track length of e+/e- in an event :
-    Absorber 46.1494 cm       Gap 45.51 cm 
+    Absorber 31.6662 cm       Gap 33.8659 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1600      Gap 1469.8
+    Absorber 1262.2      Gap 1262.2
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0     772.75       56.2     1753.2        1.7      756.1     2539.3
-       1    25.2798        7.5      112.7        0.6    85.6819      211.2
-       2    10.5757        2.7         65        0.4    34.5232        110
-       3    2.89368        0.7       34.9        0.1    7.55239       52.3
-       4    3.48943        0.7       25.8          0    9.43996       40.9
-       5    2.25181        0.4       19.6          0    7.48804       36.3
-       6     2.2418        0.8       16.4        0.1    8.11282       27.6
-       7   0.621129        0.1        7.2          0    1.14453       10.5
-       8   0.748567        0.2        8.5        0.1    1.37277       13.4
-       9   0.322788          0        5.4          0   0.434195        7.5
-      10   0.469609        0.1        2.7          0    1.01518        3.8
-      11  0.0501948          0        1.3          0   0.030726        2.1
-      12  0.0570302          0        0.6          0   0.096451        0.8
-      13  0.0156494          0        0.7          0 0.00704499        1.1
-      14   0.287358          0        2.5          0    1.04207        3.7
-      15  0.0654696          0        0.7          0  0.0655121          1
-      16          0          0          0          0          0          0
-      17 0.00781088          0        0.4          0 0.00309274        0.4
+       0    711.208       41.3     1614.1        0.3    551.683     2223.5
+       1    14.8852        3.5       58.1        0.2    49.6525      110.9
+       2    9.55605        3.1       39.4        0.2    30.7959       78.3
+       3    1.66472        0.2       20.6          0    3.66742       30.1
+       4   0.849207        0.1       13.6          0    1.38731         19
+       5   0.890677        0.1        9.2          0    3.40972       14.3
+       6   0.168755          0        3.4          0   0.179859        5.3
+       7   0.091003          0        2.6          0  0.0621448          3
+       8    2.35649        1.1        8.2        0.2    9.51429       17.3
+       9   0.487692          0        3.5          0   0.994889        5.7
+      10    1.34448        0.8        3.6          0    3.40889          9
+      11   0.119288          0        1.2          0   0.314249        1.9
+      12  0.0523241          0        0.6          0   0.100011          1
+      13  0.0912935          0        0.9          0   0.121939        1.6
+      14  0.0275297          0        1.1          0  0.0122107        1.3
+      15  0.0196972          0          1          0  0.0118705        1.2
+      16  0.0112293          0        0.3          0 0.00446319        0.8
+      17 0.00160243          0        0.2          0 0.000356861        0.2
       18          0          0          0          0          0          0
-      19  0.0235236          0        0.3          0   0.017118        0.4
+      19          0          0          0          0          0          0
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 100 um     e- 100 um     e+ 100 um 
  Energy deposition in an event :
-    Absorber 2.1359 GeV      Gap 922.021 MeV
+    Absorber 541.9 MeV      Gap 239.191 MeV
  Number of secondaries in an event :
-    gamma in Absorber 534.4    in Gap 144.7
-    e-    in Absorber 3011.1    in Gap 1402.6
-    e+    in Absorber 31    in Gap 8.3
+    gamma in Absorber 36.2    in Gap 11.2
+    e-    in Absorber 325.7    in Gap 179.5
+    e+    in Absorber 0.9    in Gap 0.6
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 2.34447 keV    in Gap 1.11091 keV
-    e-    in Absorber 101.286 eV     in Gap 103.164 eV 
-    e+    in Absorber 25.0199 keV    in Gap 158.526 keV
+    gamma in Absorber 2.40503 keV    in Gap 1.18173 keV
+    e-    in Absorber 119.16 eV     in Gap 146.118 eV 
+    e+    in Absorber 370.199 keV    in Gap 3.94281 MeV
  Total track length of e+/e- in an event :
-    Absorber 4.28165 m        Gap 4.04367 m  
+    Absorber 37.5745 cm       Gap 35.6307 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 5918.6      Gap 2903.5
+    Absorber 601.6      Gap 343.8
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    2364.02      489.5     1640.8       27.3    6235.27       4293
-       1    388.709        119      831.4        5.7    1272.34       1621
-       2    119.746       32.3        556        2.7    340.808        900
-       3    61.7691       15.2      414.9        1.3    163.614      603.1
-       4    40.8407          8      306.7        0.9    112.183      444.1
-       5    26.4829          5      199.7        0.6    62.6742      296.9
-       6     17.479        3.3      145.4        0.1    40.8224      196.6
-       7    7.65445        0.6       86.6        0.2    18.0338      117.7
-       8    6.43063          1       63.7        0.1    14.3684       91.1
-       9    4.34067        0.7       45.6          0    7.77013       68.7
-      10    3.72416        0.6       26.9          0    10.3164       43.3
-      11    7.05445        1.9       25.4        0.2    20.1237       40.1
-      12    4.63431        1.1       20.8          0    14.7473       34.5
-      13    1.97698        0.3       15.3        0.1     4.8614       20.5
-      14   0.744371          0       11.1          0    1.63314       18.9
-      15   0.613293        0.1        7.3          0    1.89015       10.8
-      16    0.52322        0.1        6.4          0    1.20882        8.9
-      17   0.241156        0.1        3.8          0   0.301946        4.3
-      18   0.122817          0        1.8          0   0.127402        2.2
-      19  0.0839394          0          2          0  0.0674686        2.5
+       0    752.112       40.9      367.1          1     649.87      728.2
+       1    18.1804        4.5         39        0.3    59.4319       76.9
+       2    4.29336        0.9       30.7        0.1    9.31145       46.1
+       3    1.23788        0.1       20.4          0    2.45292       26.4
+       4   0.793337        0.2       12.3          0    1.40886       16.9
+       5   0.727625        0.2        8.1          0    1.31132       11.3
+       6    1.44078        0.1        9.5          0    3.06443       12.6
+       7   0.410863        0.1        4.7          0   0.733444        6.8
+       8   0.587051          0          5          0    1.64125        7.1
+       9   0.129322        0.1          2          0   0.170959        2.9
+      10   0.377001        0.2        1.9          0    1.05757        3.2
+      11   0.345705        0.1        1.6        0.1   0.706984        3.2
+      12   0.362561          0        1.5          0   0.809468          2
+      13  0.0594071          0        0.8          0  0.0616228        0.8
+      14  0.0162491          0        0.3          0  0.0108237        0.6
+      15          0          0          0          0          0          0
+      16          0          0          0          0          0          0
+      17          0          0          0          0          0          0
+      18 0.00330086          0        0.1          0 0.00205198        0.1
+      19  0.0145283          0        0.2          0 0.00802342        0.3
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 549.496 MeV      Gap 239.608 MeV
+    Absorber 731.906 MeV      Gap 312.913 MeV
  Number of secondaries in an event :
-    gamma in Absorber 31.6    in Gap 8.1
-    e-    in Absorber 176.3    in Gap 88.2
-    e+    in Absorber 1    in Gap 0.1
+    gamma in Absorber 77.8    in Gap 21.2
+    e-    in Absorber 436.7    in Gap 188.1
+    e+    in Absorber 4.9    in Gap 0.8
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 6.94677 keV    in Gap 3.0538 keV
-    e-    in Absorber 101.81 eV     in Gap 109.66 eV 
-    e+    in Absorber 398.578 keV    in Gap 50.78 MeV
+    gamma in Absorber 6.92739 keV    in Gap 3.2755 keV
+    e-    in Absorber 102.336 eV     in Gap 101.698 eV 
+    e+    in Absorber 143.694 keV    in Gap 2.6419 MeV
  Total track length of e+/e- in an event :
-    Absorber 34.7434 cm       Gap 33.107 cm 
+    Absorber 77.8674 cm       Gap 71.852 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 387.4      Gap 213.4
+    Absorber 917.1      Gap 436.2
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    761.492       32.9      114.3        0.7     603.53      365.5
-       1    11.2929        3.7       38.2        0.1    34.8538       65.9
-       2    5.47024        0.9       31.7          0    14.0277       46.7
-       3    4.55458        0.6       25.7        0.1    11.8325         42
-       4    3.68505        1.1       18.6        0.1    9.91607       29.8
-       5    1.04415        0.2       12.4        0.1    1.91683       19.6
-       6   0.394367          0        6.4          0   0.497825        8.1
-       7   0.261953          0        4.8          0   0.367983        5.9
-       8   0.331849          0        1.5          0   0.729298          3
-       9   0.158494        0.2        2.4          0    0.22889        3.1
-      10  0.0597411          0          1          0   0.150441        1.4
-      11  0.0553476          0        1.1          0  0.0461717        1.5
-      12   0.131138        0.1        1.7          0   0.215998        2.8
-      13  0.0282351          0        1.1          0  0.0209539        1.2
-      14  0.0647702          0        0.9          0   0.118009        1.3
-      15  0.0386256          0        0.8          0  0.0330474          1
-      16  0.0146292          0        0.9          0 0.00754664        0.9
-      17 0.00733038          0        0.2          0 0.00380553        0.2
+       0     942.81       73.4      202.2        3.7    1201.53      654.7
+       1    63.9756       18.9      121.7        1.2    198.025      250.6
+       2    15.2508        3.3       83.4        0.4    45.2253      139.2
+       3    9.50328        1.9       69.6        0.3    26.1341      101.3
+       4    2.83396          0       43.7          0    4.13875       60.7
+       5    2.10473        0.2       28.2          0    3.56547       42.4
+       6    2.19998        0.3       25.2        0.1    3.76041       34.6
+       7    1.51154        0.2       16.1          0    3.54783       22.1
+       8    1.51961        0.3       13.7          0    3.10899       18.3
+       9    2.21893        0.4        7.8          0    6.87701       11.6
+      10   0.415969        0.1        4.9          0   0.660756        6.8
+      11  0.0997394          0        2.8          0  0.0669837        4.1
+      12   0.162904          0        1.9          0    0.23258        2.1
+      13  0.0425091          0        1.2          0  0.0237488        1.7
+      14    0.12772          0        0.8          0   0.252074        1.1
+      15 0.000444056          0        0.1          0 6.10673e-05        0.3
+      16 0.00663893          0        0.5          0 0.00198153        0.6
+      17          0          0          0          0          0          0
       18          0          0          0          0          0          0
-      19  0.0115499          0        0.5          0 0.00384614        0.6
+      19          0          0          0          0          0          0
 ############################################################
 /run/dumpCouples
 
@@ -2150,5 +2150,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.79 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.78 MB
 ============================================================

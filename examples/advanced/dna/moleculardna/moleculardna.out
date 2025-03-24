@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -630,21 +630,21 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   84655 kByte
-    Total CPU time elapsed for geometry optimisation: 51.99 seconds
+    Total CPU time elapsed for geometry optimisation: 39.94 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      50.68        26.35         0.11        42138k DNAPhysLV
-      49.16        25.56         0.11        42138k CellLogical
-       0.08         0.04         0.00          380k prism
+      50.08        20.00         0.11        42138k CellLogical
+      49.72        19.86         0.10        42138k DNAPhysLV
+       0.08         0.03         0.00          380k prism
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.78      42137k    311671   314256     703064        26.35    DNAPhysLV
-      49.78      42137k    311671   314256     703064        25.56    CellLogical
-       0.45        379k      1273     3780      14482         0.04    prism
+      49.78      42137k    311671   314256     703064        20.00    CellLogical
+      49.78      42137k    311671   314256     703064        19.86    DNAPhysLV
+       0.45        379k      1273     3780      14482         0.03    prism
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
@@ -662,14 +662,14 @@ DNAIndependentReactionTimeModel will be used ==========================
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.930000s Real=2.033323s Sys=0.010000s
+  User=1.340000s Real=1.353612s Sys=0.000000s
 ... write file : molecular-dna.root - done
 ... close file : molecular-dna.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x19ab590
-UserPhysicsList deleted 0x19ef4e0
-UserActionInitialization deleted 0x1a26ba0
+UserDetectorConstruction deleted 0x17c1550
+UserPhysicsList deleted 0x18054a0
+UserActionInitialization deleted 0x183cb60
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

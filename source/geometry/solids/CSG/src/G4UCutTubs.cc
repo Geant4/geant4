@@ -25,7 +25,7 @@
 //
 // Implementation for G4UCutTubs wrapper class
 //
-// 07.07.17 G.Cosmo, CERN/PH
+// 07.07.17 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4CutTubs.hh"
@@ -54,16 +54,6 @@ G4UCutTubs::G4UCutTubs( const G4String& pName,
   : Base_t(pName, pRMin, pRMax, pDz, pSPhi, pDPhi,
            pLowNorm.x(), pLowNorm.y(), pLowNorm.z(),
            pHighNorm.x(), pHighNorm.y(), pHighNorm.z())
-{
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UCutTubs::G4UCutTubs( __void__& a )
-  : Base_t(a)
 {
 }
 

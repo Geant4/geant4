@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-14 I. Hrivnacova (analysis-V11-02-09)
+- Removed false warnings about non-existing ntuple
+  and debug messages when filling inactivated ntuple
+
+## 2025-01-09 Ben Morgan
+- Qualify use of `G4Accumulables` namespace to avoid clashes and order
+  dependence of inclusion of headers.
+
 ## 2024-11-04 I. Hrivnacova (analysis-V11-02-08)
 - Coverity fixes:
   - Correct usage of std::move

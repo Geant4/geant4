@@ -25,7 +25,7 @@
 // 
 // Implementation for G4UPara wrapper class
 //
-// 13.09.13 G.Cosmo, CERN/PH
+// 13.09.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Para.hh"
@@ -117,18 +117,6 @@ G4UPara::G4UPara( const G4String& pName,
 
     }
   }
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency
-
-G4UPara::G4UPara( __void__& a )
-  : Base_t(a)
-{
-  SetAllParameters(1., 1., 1., 0., 0., 0.);
-  fRebuildPolyhedron = false;
 }
 
 //////////////////////////////////////////////////////////////////////////

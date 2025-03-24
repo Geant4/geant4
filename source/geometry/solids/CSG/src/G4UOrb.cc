@@ -25,7 +25,7 @@
 //
 // Implementation for G4UOrb wrapper class
 //
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Orb.hh"
@@ -50,16 +50,6 @@ using namespace CLHEP;
 
 G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
   : Base_t(pName, pRmax)
-{
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UOrb::G4UOrb( __void__& a )
-  : Base_t(a)
 {
 }
 

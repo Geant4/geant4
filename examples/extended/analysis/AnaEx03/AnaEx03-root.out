@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -867,8 +867,8 @@ LGap: mean = 2.3872 cm  rms = 9.61394 mm
 
  ----> print histograms statistic 
 
-EAbs: mean = 181.847 MeV rms = 4.68046 MeV
-LAbs: mean = 13.1175 cm  rms = 4.04973 mm 
+EAbs: mean = 183.461 MeV rms = 6.36249 MeV
+LAbs: mean = 13.2058 cm  rms = 4.88221 mm 
 ### Run 2 start.
 
 ---> Begin of event: 0
@@ -876,10 +876,10 @@ LAbs: mean = 13.1175 cm  rms = 4.04973 mm
 
  ----> print histograms statistic 
 
-EAbs: mean = 274.942 MeV rms = 8.96651 MeV
-EGap2: mean = 13.9939 MeV rms = 6.14487 MeV
-LAbs: mean = 19.7961 cm  rms = 7.49951 mm 
-LGap2: mean = 6.91332 cm  rms = 3.1357 cm 
+EAbs: mean = 275.367 MeV rms = 9.55541 MeV
+EGap2: mean = 14.2057 MeV rms = 5.79917 MeV
+LAbs: mean = 19.8712 cm  rms = 7.5499 mm 
+LGap2: mean = 7.08008 cm  rms = 2.93135 cm 
 ... close file : e-.root - done
 ... create file : proton.root - done
 ... open analysis file : proton.root - done
@@ -891,10 +891,10 @@ LGap2: mean = 6.91332 cm  rms = 3.1357 cm
 
  ----> print histograms statistic 
 
-EAbs: mean = 219.88 MeV rms = 43.1697 MeV
-EGap2: mean = 20.0259 MeV rms = 9.07144 MeV
-LAbs: mean = 8.97192 cm  rms = 1.91523 cm 
-LGap2: mean = 4.65684 cm  rms = 1.29345 cm 
+EAbs: mean = 214.274 MeV rms = 46.4144 MeV
+EGap2: mean = 19.7045 MeV rms = 9.24047 MeV
+LAbs: mean = 9.05957 cm  rms = 2.3581 cm 
+LGap2: mean = 4.54428 cm  rms = 1.38333 cm 
 ### Run 4 start.
 
 ---> Begin of event: 0
@@ -902,10 +902,10 @@ LGap2: mean = 4.65684 cm  rms = 1.29345 cm
 
  ----> print histograms statistic 
 
-EAbs: mean = 202.531 MeV rms = 61.5619 MeV
-EGap2: mean = 17.1471 MeV rms = 7.9748 MeV
-LAbs: mean = 9.63554 cm  rms = 1.93891 cm 
-LGap2: mean = 4.84455 cm  rms = 1.12888 cm 
+EAbs: mean = 187.097 MeV rms = 57.6177 MeV
+EGap2: mean = 16.7878 MeV rms = 8.81072 MeV
+LAbs: mean = 8.8331 cm  rms = 2.6403 cm 
+LGap2: mean = 4.46388 cm  rms = 1.5686 cm 
 ... close file : proton.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
