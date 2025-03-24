@@ -35,7 +35,6 @@
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeDefinition.hh"
 #include "G4UIcommand.hh"
-#include "G4AllocatorList.hh"
 #include "G4AutoLock.hh"
 #include "G4MoleculeTable.hh"
 #include "G4Serialize.hh"
@@ -147,10 +146,6 @@ G4MolecularConfiguration::GetManager()
 G4MolecularConfiguration::
 G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
 {
-//  G4cout << "Does G4AllocatorList exists= ";
-//  G4cout << (G4AllocatorList::GetAllocatorListIfExist() ? "true":"false")
-//      << G4endl;
-
   G4MolecularConfigurationManager::MolElectronConfTable::iterator it1;
   G4MolecularConfigurationManager::ElectronOccupancyTable::
     iterator it2;
@@ -507,15 +502,6 @@ G4MolecularConfiguration(const G4MoleculeDefinition* moleculeDef,
 G4MolecularConfiguration::~G4MolecularConfiguration()
 {
   if (fgManager != nullptr) fgManager->RemoveMolecularConfigurationFromTable(this);
-
-//  if (G4AllocatorList::GetAllocatorListIfExist())
-//  {
-//    if (fElectronOccupancy)
-//    {
-//      delete fElectronOccupancy;
-//      fElectronOccupancy = 0;
-//    }
-//  }
 }
 
 //______________________________________________________________________________

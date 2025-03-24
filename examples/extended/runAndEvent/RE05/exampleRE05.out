@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -818,49 +818,49 @@ Max 2J for sampling of angular correlations         10
      Total energy deposition in calorimeter : 3.5748134062361 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 1
-     18 hits are stored in RE05TrackerHitsCollection.
-     13 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.6641953911882 (GeV)
+     21 hits are stored in RE05TrackerHitsCollection.
+     8 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.6734817433016 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 2
-     24 hits are stored in RE05TrackerHitsCollection.
-     5 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.2452803187173 (GeV)
+     33 hits are stored in RE05TrackerHitsCollection.
+     6 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.7029419169493 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 3
-     19 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05TrackerHitsCollection.
      6 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.7096614567353 (GeV)
+     Total energy deposition in calorimeter : 3.1530185371827 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 4
      5 hits are stored in RE05TrackerHitsCollection.
      5 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.843162968079 (GeV)
+     Total energy deposition in calorimeter : 3.5670912102456 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 5
-     27 hits are stored in RE05TrackerHitsCollection.
+     19 hits are stored in RE05TrackerHitsCollection.
      9 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.7938453467464 (GeV)
+     Total energy deposition in calorimeter : 5.7763505803279 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 6
-     5 hits are stored in RE05TrackerHitsCollection.
-     7 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.0076359693684 (GeV)
+     46 hits are stored in RE05TrackerHitsCollection.
+     6 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.1761886223465 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 7
-     13 hits are stored in RE05TrackerHitsCollection.
-     5 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.7914347275941 (GeV)
+     5 hits are stored in RE05TrackerHitsCollection.
+     6 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.6583811393675 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 8
-     119 hits are stored in RE05TrackerHitsCollection.
-     9 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.0496944734945 (GeV)
+     5 hits are stored in RE05TrackerHitsCollection.
+     6 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.7803961237203 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 >>> Event 9
-     41 hits are stored in RE05TrackerHitsCollection.
-     4 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.2374470904725 (GeV)
+     5 hits are stored in RE05TrackerHitsCollection.
+     6 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.1710137462645 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

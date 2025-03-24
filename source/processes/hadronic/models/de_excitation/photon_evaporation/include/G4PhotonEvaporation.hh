@@ -120,7 +120,6 @@ private:
   G4int theZ{0};
   G4int theA{0};
   G4int fPoints{0};
-  G4int fCode{0};
   G4int vShellNumber{-1};
   G4int MAXDEPOINT{10};
   std::size_t fIndex{0};
@@ -132,7 +131,8 @@ private:
   G4double fProbability{0.0};
   G4double fStep{0.0};
   G4double fMaxLifeTime{DBL_MAX};
-
+  G4double fLocalTimeLimit{DBL_MAX};
+  
   G4double fTolerance;
 
   G4bool   fICM{true};
@@ -161,7 +161,7 @@ G4PhotonEvaporation::InitialiseLevelManager(G4int Z, G4int A)
     theA = A;
     fIndex = 0;
     fLevelManager = fNuclearLevelData->GetLevelManager(theZ, theA);
-    fLevelEnergyMax = fLevelManager ? fLevelManager->MaxLevelEnergy() : 0.0;
+    fLevelEnergyMax = (nullptr != fLevelManager) ? fLevelManager->MaxLevelEnergy() : 0.0;
   }
 }
 

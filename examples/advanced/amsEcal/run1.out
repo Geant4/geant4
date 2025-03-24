@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -199,7 +199,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.730000s Real=3.881180s Sys=0.000000s
+  User=2.840000s Real=2.855239s Sys=0.000000s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -326,9 +326,9 @@ N=17 V[N]={2125414173700100552, 2142585805957254368, 76522162894449253, 17841580
 ---------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xf51240
-UserPhysicsList deleted 0xf84e30
-UserActionInitialization deleted 0x110b8c0
+UserDetectorConstruction deleted 0x1edf200
+UserPhysicsList deleted 0x1f12df0
+UserActionInitialization deleted 0x2099880
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

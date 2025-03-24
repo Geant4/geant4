@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -702,12 +702,12 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=5.160000s Real=5.450592s Sys=0.080000s
+  User=4.260000s Real=4.323517s Sys=0.040000s
 Graphics systems deleted.
 Visualization Manager deleting...
-The simulation took: 8.16199 s to run (real time)
+The simulation took: 7.60809 s to run (real time)
 Dose is being written to Dose.out
 i	j	k	Dose(Gy)================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.32 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.42 MB
 ============================================================

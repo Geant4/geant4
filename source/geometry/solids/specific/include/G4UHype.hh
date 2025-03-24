@@ -77,11 +77,6 @@ class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
 
     inline G4GeometryType GetEntityType() const override;
 
-    G4UHype(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UHype( const G4UHype& source );
     G4UHype& operator=( const G4UHype& source );
       // Copy constructor and assignment operator.

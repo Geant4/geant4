@@ -142,7 +142,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
 {
   std::ifstream fIn;
   // open input file
-  if(ascii)
+  if(!ascii)
   {
     fIn.open(fileName, std::ios::in | std::ios::binary);
   }

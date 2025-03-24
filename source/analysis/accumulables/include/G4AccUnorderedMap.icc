@@ -40,7 +40,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fUMap(),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor1" << G4endl;
@@ -56,7 +56,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   const Allocator& allocator)
 : G4VAccumulable(mergeMode),
   fUMap(bucket_count, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor2" << G4endl;
@@ -73,7 +73,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   const Allocator& allocator)
 : G4VAccumulable(name, mergeMode),
   fUMap(bucket_count, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor2n" << G4endl;
@@ -89,7 +89,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(mergeMode),
   fUMap(bucket_count, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor3" << G4endl;
@@ -106,7 +106,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fUMap(bucket_count, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor3n" << G4endl;
@@ -123,7 +123,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(mergeMode),
   fUMap(bucket_count, hash, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor4" << G4endl;
@@ -141,7 +141,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fUMap(bucket_count, hash, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor4n" << G4endl;
@@ -156,7 +156,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(mergeMode),
   fUMap(allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor5" << G4endl;
@@ -172,7 +172,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fUMap(allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor5n" << G4endl;
@@ -191,7 +191,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   const Allocator& allocator)
 : G4VAccumulable(mergeMode),
   fUMap(init, bucket_count, hash, equal, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor13" << G4endl;
@@ -211,7 +211,7 @@ G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::G4AccUnorderedMap(
   const Allocator& allocator)
 : G4VAccumulable(name, mergeMode),
   fUMap(init, bucket_count, hash, equal, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccUnorderedMap ctor13n" << G4endl;
@@ -304,7 +304,7 @@ template <class Key, class T, class Hash, class KeyEqual, class Allocator>
 void G4AccUnorderedMap<Key, T, Hash, KeyEqual, Allocator>::SetMergeMode(G4MergeMode value)
 {
   G4VAccumulable::SetMergeMode(value);
-  fMergeFunction = GetMergeFunction<T>(fMergeMode);
+  fMergeFunction = G4Accumulables::GetMergeFunction<T>(fMergeMode);
 }
 
 //_____________________________________________________________________________

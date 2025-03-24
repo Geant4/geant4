@@ -94,23 +94,25 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
+  G4bool biasingFlag = ( onOffBiasing == "on");
+
   // -- Set mandatory initialization classes
 
   // -- Create geometry:
   GB06DetectorConstruction* detector = new GB06DetectorConstruction();
   // -- Create parallel world:
   GB06ParallelWorldForSlices* parallelWorld =
-    new GB06ParallelWorldForSlices("parallelWorldForSlices");
+    new GB06ParallelWorldForSlices("parallelWorldForSlices",biasingFlag);
   // -- and "augment" detector geometry with the parallelWorld one:
   detector->RegisterParallelWorld(parallelWorld);
   runManager->SetUserInitialization(detector);
 
   // -- Select a physics list:
   FTFP_BERT* physicsList = new FTFP_BERT;
-  // -- and augment it with biasing facilities:
-  G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
-  biasingPhysics->BeVerbose();
-  if (onOffBiasing == "on") {
+  if (biasingFlag) {
+    // -- and augment it with biasing facilities:
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
+    biasingPhysics->BeVerbose();
     // -- We use only the "non physics biasing" functionnality (ie, the ones which don't
     // -- alter physics processes behavior), and hence we equipe the physics list
     // -- accordingly:

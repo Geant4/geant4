@@ -97,7 +97,6 @@
 
 #include "G4AutoLock.hh"
 #include "G4Cache.hh"
-#include "G4Backtrace.hh"
 #include "G4Threading.hh"
 
 #include <list>
@@ -180,21 +179,7 @@ G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton()
 {
   G4MUTEXINIT(listm);
   G4Cache<T*>::Put(nullptr);
-  // Uncomment below to find the origin of where instantiation happened
-  /*
-  auto bt = G4Backtrace::GetDemangled<4, 1>(
-    [](const char* cstr) { return std::string{ cstr }; });
-  std::cout << "Backtrace to G4ThreadLocalSingleton<"
-            << G4Demangle<T>().c_str() << ">:\n";
-  for(auto& itr : bt)
-  {
-    if(!itr.empty())
-      std::cout << "\t" << itr << "\n";
-  }
-  */
   G4ThreadLocalSingleton<void>::Insert([&]() {
-    // printf("Deleting G4ThreadLocalSingletons for type %s ...\n",
-    //       G4Demangle<T>().c_str());
     this->Clear();
   });
 }

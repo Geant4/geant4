@@ -54,17 +54,6 @@ G4UGenericTrap::G4UGenericTrap(const G4String& name, G4double halfZ,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UGenericTrap::G4UGenericTrap(__void__& a)
-  : Base_t(a), fVisSubdivisions(0) 
-{
-}
-
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Destructor

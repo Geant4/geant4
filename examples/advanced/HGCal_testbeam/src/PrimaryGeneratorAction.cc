@@ -219,12 +219,19 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
       break;
     }
     // Particle momentum
-    if (fMomentumGaussianSpread > 0) {
-      double energy = fParticleGun->GetParticleEnergy();
-      energy += G4RandGauss::shoot(0., fMomentumGaussianSpread) * energy;
+    const G4double meanEnergy = fParticleGun->GetParticleEnergy();
+    G4bool energySpread = (fMomentumGaussianSpread > 0);
+    if (energySpread) {
+      const G4double energy = std::max(0.,
+          (1. + G4RandGauss::shoot(0., fMomentumGaussianSpread)) * meanEnergy);
       fParticleGun->SetParticleEnergy(energy);
     }
     fParticleGun->GeneratePrimaryVertex(anEvent);
+
+    // Restore the original energy if it was modified
+    if (energySpread) {
+      fParticleGun->SetParticleEnergy(meanEnergy);
+    }
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

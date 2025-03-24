@@ -320,7 +320,7 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(const G4String& fileName  // File name
 G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
 {
   std::ifstream ifilestream;
-  ifilestream.open(fileName, std::ios::in | std::ios::binary);
+  ifilestream.open(fileName, std::ios::in);
   if (! ifilestream) {
     G4ExceptionDescription ed;
     ed << "Cannot open file " << fileName;

@@ -30,8 +30,6 @@
 // public functions
 //
 
-using namespace G4Accumulables;
-
 //_____________________________________________________________________________
 template <typename T>
 G4AccValue<T>::G4AccValue(
@@ -39,7 +37,7 @@ G4AccValue<T>::G4AccValue(
  : G4VAccumulable(name, mergeMode),
    fValue(initValue),
    fInitValue(initValue),
-   fMergeFunction(GetMergeFunction<T>(mergeMode))
+   fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {}
 
 //_____________________________________________________________________________
@@ -48,7 +46,7 @@ G4AccValue<T>::G4AccValue(T initValue, G4MergeMode mergeMode)
  : G4VAccumulable(),
    fValue(initValue),
    fInitValue(initValue),
-   fMergeFunction(GetMergeFunction<T>(mergeMode))
+   fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {}
 
 //_____________________________________________________________________________
@@ -223,7 +221,7 @@ template <class T>
 void  G4AccValue<T>::SetMergeMode(G4MergeMode value)
 {
   G4VAccumulable::SetMergeMode(value);
-  fMergeFunction = GetMergeFunction<T>(fMergeMode);
+  fMergeFunction = G4Accumulables::GetMergeFunction<T>(fMergeMode);
 }
 
 //_____________________________________________________________________________

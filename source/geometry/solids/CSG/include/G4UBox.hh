@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Box to make use of VecGeom Box.
 
-// 13.09.13 G.Cosmo, CERN/PH
+// 13.09.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UBOX_HH
 #define G4UBOX_HH
@@ -47,7 +47,7 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
   using Shape_t = vecgeom::UnplacedBox;
   using Base_t = G4UAdapter<vecgeom::UnplacedBox>;
 
-  public:  // with description
+  public:
 
     G4UBox(const G4String& pName, G4double pX, G4double pY, G4double pZ);
       // Constructs a box with name, and half lengths pX,pY,pZ
@@ -80,13 +80,6 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
                            G4double& pMin, G4double& pMax) const override;
 
     G4Polyhedron* CreatePolyhedron() const override;
-
-  public:  // without description
-
-    G4UBox(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
     G4UBox(const G4UBox& rhs);
     G4UBox& operator=(const G4UBox& rhs); 

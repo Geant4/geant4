@@ -42,11 +42,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB06ParallelWorldForSlices::GB06ParallelWorldForSlices(G4String worldName)
-  : G4VUserParallelWorld(worldName)
-{
-  ;
-}
+GB06ParallelWorldForSlices::GB06ParallelWorldForSlices(G4String worldName,
+						       G4bool bf) :
+  G4VUserParallelWorld(worldName),
+  fBiasingFlag(bf) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -152,25 +151,27 @@ void GB06ParallelWorldForSlices::Construct()
 
 void GB06ParallelWorldForSlices::ConstructSD()
 {
-  // -- Create the biasing operator:
-  auto biasingOperator = new GB06BOptrSplitAndKillByImportance("neutron", "parallelOptr");
-  // -- Tell it it is active for this parallel geometry, passing the world
-  // -- volume of this geometry :
-  biasingOperator->SetParallelWorld(GetWorld());
+  if(fBiasingFlag) {
+    // -- Create the biasing operator:
+    auto biasingOperator = new GB06BOptrSplitAndKillByImportance("neutron", "parallelOptr");
+    // -- Tell it it is active for this parallel geometry, passing the world
+    // -- volume of this geometry :
+    biasingOperator->SetParallelWorld(GetWorld());
 
-  // -- Attach to the logical volume where the biasing has to be applied:
-  biasingOperator->AttachTo(sliceLogical);
+    // -- Attach to the logical volume where the biasing has to be applied:
+    biasingOperator->AttachTo(sliceLogical);
 
-  // -- Create a simple "volume importance" map, linking replica numbers to importances:
-  //    --------------------------------------------------------------------------------
-  // -- we define the map as going from an importance to 2*importance when going from
-  // -- a slice to the next one, in the Z direction.
-  // -- Get back the replica of slices:
-  G4int nReplica = slicePhysical->GetMultiplicity();
-  // -- We use and fill the map we defined in the biasing operator:
-  G4int importance = 1;
-  for (G4int iReplica = 0; iReplica < nReplica; ++iReplica) {
-    (biasingOperator->GetImportanceMap())[iReplica] = importance;
-    importance *= 2;
+    // -- Create a simple "volume importance" map, linking replica numbers to importances:
+    //    --------------------------------------------------------------------------------
+    // -- we define the map as going from an importance to 2*importance when going from
+    // -- a slice to the next one, in the Z direction.
+    // -- Get back the replica of slices:
+    G4int nReplica = slicePhysical->GetMultiplicity();
+    // -- We use and fill the map we defined in the biasing operator:
+    G4int importance = 1;
+    for (G4int iReplica = 0; iReplica < nReplica; ++iReplica) {
+      (biasingOperator->GetImportanceMap())[iReplica] = importance;
+      importance *= 2;
+    }
   }
 }

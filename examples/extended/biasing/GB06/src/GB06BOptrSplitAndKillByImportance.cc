@@ -77,6 +77,8 @@ void GB06BOptrSplitAndKillByImportance::StartRun()
   const G4ProcessManager* processManager = fParticleToBias->GetProcessManager();
   // -- ... to obtain the biasing information shared among this particle processes:
   fBiasingSharedData = G4BiasingProcessInterface::GetSharedData(processManager);
+  // if biasing off, the pointer is nullptr
+  if (fBiasingSharedData == nullptr) return;
   // -- Remember the index of the parallel world:
   fBiasingLimiterProcess = fBiasingSharedData->GetParallelGeometriesLimiterProcess();
   fParallelWorldIndex = fBiasingLimiterProcess->GetParallelWorldIndex(fParallelWorld);

@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4CutTubs to make use of VecGeom CutTube.
 
-// 07.07.17 G.Cosmo, CERN/PH
+// 07.07.17 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UCUTTUBS_HH
 #define G4UCUTTUBS_HH
@@ -47,7 +47,7 @@ class G4UCutTubs : public G4UAdapter<vecgeom::UnplacedCutTube>
   using Shape_t = vecgeom::UnplacedCutTube;
   using Base_t = G4UAdapter<vecgeom::UnplacedCutTube>;
 
-  public:  // with description
+  public:
 
     G4UCutTubs( const G4String& pName,
                       G4double pRMin,
@@ -91,13 +91,6 @@ class G4UCutTubs : public G4UAdapter<vecgeom::UnplacedCutTube>
                            G4double& pMin, G4double& pMax) const override;
 
     G4Polyhedron* CreatePolyhedron() const override;
-
-  public:  // without description
-
-    G4UCutTubs(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
     G4UCutTubs(const G4UCutTubs& rhs);
     G4UCutTubs& operator=(const G4UCutTubs& rhs); 

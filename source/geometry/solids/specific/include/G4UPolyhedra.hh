@@ -100,11 +100,6 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
 
     inline G4bool IsFaceted() const override;
 
-    G4UPolyhedra(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UPolyhedra( const G4UPolyhedra& source );
     G4UPolyhedra& operator=( const G4UPolyhedra& source );
       // Copy constructor and assignment operator.

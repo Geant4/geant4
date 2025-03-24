@@ -93,14 +93,16 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
+  G4bool biasingFlag = ( onOffBiasing == "on");
+
   // -- Set mandatory initialization classes
-  GB07DetectorConstruction* detector = new GB07DetectorConstruction();
+  GB07DetectorConstruction* detector = new GB07DetectorConstruction(biasingFlag);
   runManager->SetUserInitialization(detector);
   // -- Select a physics list
   FTFP_BERT* physicsList = new FTFP_BERT;
-  // -- And augment it with biasing facilities:
-  G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
-  if (onOffBiasing == "on") {
+  if (biasingFlag) {
+    // -- And augment it with biasing facilities:
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
     // -- Specify the processes that will be under biasing:
     // ---- Decide to apply the technique to hadronic inelastic interactions:
     std::vector<G4String> piPlusProcessesToBias, piMinusProcessesToBias, protonProcessesToBias,

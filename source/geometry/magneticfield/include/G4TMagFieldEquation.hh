@@ -27,31 +27,31 @@
 //
 // Class description:
 //
-// Templated version of equation of motion of a particle in a pure magnetic field.
+// Templated version of equation of motion of a particle in a pure
+// magnetic field.
 // Enables use of inlined code for field, equation, stepper, driver,
 // avoiding all virtual calls.
 //
-// Adapted from G4Mag_UsualEqRhs.hh
+// Adapted from G4Mag_UsualEqRhs.
+//
+// Created: Josh Xie, Google Summer of Code 2014
 // --------------------------------------------------------------------
-// Created: Josh Xie  (Google Summer of Code 2014 )
-// Adapted from G4Mag_UsualEqRhs
-// 
-// #include "G4ChargeState.hh"
+#ifndef G4TMAGFIELD_EQUATION_HH
+#define G4TMAGFIELD_EQUATION_HH
+
 #include "G4Mag_UsualEqRhs.hh"
 
-template 
-<class T_Field>
+template <class T_Field>
 class G4TMagFieldEquation : public G4Mag_UsualEqRhs
 {
   public:
 
-    G4TMagFieldEquation(T_Field* f)
-       : G4Mag_UsualEqRhs(f)
+    G4TMagFieldEquation(T_Field* f) : G4Mag_UsualEqRhs(f)
     {
-            itsField = f;
+      itsField = f;
     }
 
-    virtual ~G4TMagFieldEquation(){;}
+    virtual ~G4TMagFieldEquation() = default;
 
     inline void GetFieldValue(const G4double Point[4],
                               G4double Field[]) const
@@ -79,7 +79,7 @@ class G4TMagFieldEquation : public G4Mag_UsualEqRhs
     }
 
     __attribute__((always_inline)) 
-    void RightHandSide(const G4double y[], G4double dydx[] )
+    void RightHandSide( const G4double y[], G4double dydx[] )
     //	const
     {
       G4double Field[G4maximum_number_of_field_components]; 
@@ -92,10 +92,12 @@ class G4TMagFieldEquation : public G4Mag_UsualEqRhs
       TEvaluateRhsGivenB(y, Field, dydx);
     }
    
-private:
-  enum { G4maximum_number_of_field_components = 24 };
+  private:
 
-  // Dependent objects
-  T_Field *itsField;
+    enum { G4maximum_number_of_field_components = 24 };
+
+    // Dependent objects
+    T_Field* itsField;
 };
 
+#endif

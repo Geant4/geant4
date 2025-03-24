@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -860,9 +860,9 @@ Max 2J for sampling of angular correlations         10
 ... open analysis file : gflash01.root - done
 
 ******************************************
-Run Real Elapsed Time is: 0.574205
-Run System Elapsed Time: 0
-Run GetUserElapsed Time: 0.56
+Run Real Elapsed Time is: 0.505167
+Run System Elapsed Time: 0.01
+Run GetUserElapsed Time: 0.5
 ******************************************
 number of event = 100
 ... write file : gflash01.root - done
@@ -873,9 +873,9 @@ number of event = 100
 ... open analysis file : gflash00.root - done
 
 ******************************************
-Run Real Elapsed Time is: 35.7097
-Run System Elapsed Time: 0.03
-Run GetUserElapsed Time: 34.36
+Run Real Elapsed Time is: 25.9718
+Run System Elapsed Time: 0
+Run GetUserElapsed Time: 25.82
 ******************************************
 number of event = 100
 ... write file : gflash00.root - done
@@ -884,7 +884,7 @@ Graphics systems deleted.
 Visualization Manager deleting...
 
 ******************************************
-Total Real Elapsed Time is: 39.9502
-Total System Elapsed Time: 0.24
-Total GetUserElapsed Time: 37.73
+Total Real Elapsed Time is: 32.9833
+Total System Elapsed Time: 0.13
+Total GetUserElapsed Time: 28.64
 ******************************************

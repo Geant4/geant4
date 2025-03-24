@@ -270,6 +270,15 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
     firstUse = false;
   }
 
+  // Force update of coupleTable if userEnergyCuts vectors are set
+  G4bool isRecalcNeeded = false;
+  for (const auto* userVector : userEnergyCuts) {
+    if (userVector != nullptr) {
+      isRecalcNeeded = true;
+      break;
+    }
+  }
+
   // Update RangeEnergy cuts tables
   std::size_t idx = 0;
   G4Timer timer;
@@ -281,7 +290,7 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
   {
     G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
     const G4Material* aMat = (*cItr)->GetMaterial();
-    if((*cItr)->IsRecalcNeeded())
+    if((*cItr)->IsRecalcNeeded() || isRecalcNeeded)
     {
       for(std::size_t ptcl=0; ptcl< NumberOfG4CutIndex; ++ptcl)
       {

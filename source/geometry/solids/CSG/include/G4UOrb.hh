@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Orb to make use of VecGeom Orb.
 
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UORB_HH
 #define G4UORB_HH
@@ -47,7 +47,7 @@ class G4UOrb : public G4UAdapter<vecgeom::UnplacedOrb>
   using Shape_t = vecgeom::UnplacedOrb;
   using Base_t  = G4UAdapter<vecgeom::UnplacedOrb>;
 
-  public:  // with description
+  public:
 
     G4UOrb(const G4String& pName, G4double pRmax);
        
@@ -73,13 +73,6 @@ class G4UOrb : public G4UAdapter<vecgeom::UnplacedOrb>
                                  G4double& pmin, G4double& pmax) const override;
 
     G4Polyhedron* CreatePolyhedron() const override;
-
-  public:  // without description
-
-    G4UOrb(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
     G4UOrb(const G4UOrb& rhs);
     G4UOrb& operator=(const G4UOrb& rhs); 

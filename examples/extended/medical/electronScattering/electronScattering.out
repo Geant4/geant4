@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -740,7 +740,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.100000s Real=5.156717s Sys=0.000000s
+  User=4.350000s Real=4.361213s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -755,9 +755,9 @@ N=17 V[N]={139564191965863788, 2302776708230382971, 254581900843411369, 22213365
 ---------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x13f5960
-UserPhysicsList deleted 0x1693f20
-UserActionInitialization deleted 0x16d81b0
+UserDetectorConstruction deleted 0x186b920
+UserPhysicsList deleted 0x1b09ee0
+UserActionInitialization deleted 0x1b4e170
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

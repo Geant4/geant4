@@ -128,17 +128,6 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UPolyhedra::G4UPolyhedra( __void__& a )
-  : Base_t(a)
-{
-}
-
-
-////////////////////////////////////////////////////////////////////////
-//
 // Destructor
 //
 G4UPolyhedra::~G4UPolyhedra() = default;
@@ -593,7 +582,13 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UPolyhedra::CreatePolyhedron() const
 {
-  return new G4PolyhedronPgon(wrStart, wrDelta, wrNumSide, rzcorners);
+  // Check the validity of the delta phi
+  G4double deltaPhi = wrDelta;
+  if (deltaPhi <= 0. || deltaPhi >= twopi*(1-DBL_EPSILON))
+  {
+    deltaPhi = twopi;
+  }
+  return new G4PolyhedronPgon(wrStart, deltaPhi, wrNumSide, rzcorners);
 }
 
 #endif  // G4GEOM_USE_USOLIDS

@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-10 Igor Semeniouk (GB06-V11-02-01)
+- Remove unused WITH_GEANT4_UIVIS cmake option
+- Propagate biasing on/off to parallel world construction to initialization of biasing classes only if biasing requested.
+
+## 2025-02-04 Igor Semeniouk
+- Add check shred data was nullptr, fix crash when biasing off
+
 ## 2024-07-10 Gabriele Cosmo (GB06-V11-02-00)
 - Avoid call to static volumes store in DetectorConstruction class.
 

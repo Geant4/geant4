@@ -113,7 +113,7 @@ G4GeometryManager::~G4GeometryManager()
   fgInstance = nullptr;
   fIsClosed = false;
   
-  if( fWallClockTimer && G4Threading::IsMasterThread() )
+  if( (fWallClockTimer != nullptr) && G4Threading::IsMasterThread() )
   {
     delete fWallClockTimer;
     fWallClockTimer= nullptr;
@@ -240,11 +240,9 @@ G4bool G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
   fOptimiseInParallelConfigured = fParallelVoxelOptimisationRequested
                                && G4Threading::IsMultithreadedApplication();
 
-  static unsigned int NumCallsBuildOptimisations = 0; // WORKAROUND - TODO fix
-  if( fOptimiseInParallelConfigured && (NumCallsBuildOptimisations==0) )
+  if( fOptimiseInParallelConfigured )
   {
     PrepareParallelOptimisation(allOpts, verbose);
-    ++NumCallsBuildOptimisations;
   }
   else
   {
@@ -285,7 +283,7 @@ void G4GeometryManager::BuildOptimisationsSequential(G4bool allOpts,
   
   for (auto & n : *Store)
   {
-    if (verbose) timer.Start();
+    if (verbose) { timer.Start(); }
     volume=n;
     // For safety, check if there are any existing voxels and
     // delete before replacement
@@ -374,7 +372,7 @@ void
 G4GeometryManager::CreateListOfVolumesToOptimise(G4bool allOpts, G4bool verbose)
 {
   // Prepare the work - must be called only in one thread !!
-  
+
   G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
 
   if( !fVolumesToOptimise.empty() )
@@ -416,9 +414,11 @@ G4GeometryManager::CreateListOfVolumesToOptimise(G4bool allOpts, G4bool verbose)
   }
   
   if(verbose)
-    G4cout << "** G4GeometryManager::PrepareOptimisationWork: "
+  {
+    G4cout << "** G4GeometryManager::CreateListOfVolumesToOptimise: "
            << "  Number of volumes for voxelisation = "
            << fVolumesToOptimise.size() << G4endl;
+  }
   
   fLogVolumeIterator = fVolumesToOptimise.cbegin();
 }
@@ -482,9 +482,13 @@ void G4GeometryManager::RequestParallelOptimisation(G4bool flag, G4bool verbose)
 //
 void G4GeometryManager::ConfigureParallelOptimisation(G4bool verbose)
 {
+  static G4ThreadLocal unsigned int numCallsConfig = 0;
+  ++numCallsConfig;
+
   if(verbose)
   {
-    G4cout << "** G4GeometryManager::ConfigureParallelOptimisation() called. "
+    G4cout << "** G4GeometryManager::ConfigureParallelOptimisation() called "
+    << " for the " << numCallsConfig << " time. "
     << " LEAVING all the work (of voxel optimisation) to the threads/tasks !"
     << G4endl;
   }
@@ -501,6 +505,9 @@ void G4GeometryManager::ConfigureParallelOptimisation(G4bool verbose)
   fTotalNumberVolumesOptimised = 0;   // Number of volumes done
   
   fWallClockStarted = false;  // Will need to restart it!
+
+  fLogVolumeIterator = fVolumesToOptimise.cbegin();
+   // Reset the iterator -- else to be sure that work is done correctly
 }
 
 // ***************************************************************************
@@ -528,8 +535,8 @@ void G4GeometryManager::UndertakeOptimisation()
   G4bool verbose = fVerboseParallel;
   G4LogicalVolume* logVolume = nullptr;
 
-  fParallelVoxelOptimisationUnderway  = true;
-  
+  fParallelVoxelOptimisationUnderway = true;
+
   // Start timer - if not already done
   if( ( !fWallClockStarted ) && verbose )
   {
@@ -546,7 +553,7 @@ void G4GeometryManager::UndertakeOptimisation()
   
   while( (logVolume = ObtainVolumeToOptimise()) != nullptr )
   {
-    if (verbose) fetimer.Start();
+    if (verbose) { fetimer.Start(); }
 
     G4SmartVoxelHeader* head = logVolume->GetVoxelHeader();
     delete head;
@@ -601,7 +608,7 @@ void G4GeometryManager::UndertakeOptimisation()
              << "but found that voxels headers are missing in "
              << badVolumes << " volumes.";
       G4Exception("G4GeometryManager::UndertakeOptimisation()",
-                  "GeomMng002", FatalException, errmsg);
+                  "GeomMgt002", FatalException, errmsg);
     }
     
     // Create report
@@ -688,18 +695,80 @@ G4int G4GeometryManager::CheckOptimisation()
 // ***************************************************************************
 //
 G4int
-G4GeometryManager::ReportWorkerIsDoneOptimising(unsigned int numVolumesOptimised)
+G4GeometryManager::ReportWorkerIsDoneOptimising(unsigned int nVolOptimised)
 {
   // Check that all are done and, if so, signal that optimisation is finished
   G4int orderReporting;
   
   G4AutoLock lock(statResultsMutex);
   orderReporting = ++fNumberThreadsReporting;
-  fTotalNumberVolumesOptimised += numVolumesOptimised;
+  fTotalNumberVolumesOptimised += nVolOptimised;
   
-  if (fNumberThreadsReporting == G4Threading::GetNumberOfRunningWorkerThreads())
+  if( fVerboseParallel )
   {
-    InformOptimisationIsFinished(fVerboseParallel);
+    std::cout << "G4GeometryManager: the " << orderReporting
+              << " worker has finished.  "
+              <<  "  Total volumes voxelised = "
+              << fTotalNumberVolumesOptimised
+              <<  " out of " << fVolumesToOptimise.size() << G4endl;
+  }
+
+  if ( fNumberThreadsReporting == G4Threading::GetNumberOfRunningWorkerThreads()
+       || fTotalNumberVolumesOptimised == fVolumesToOptimise.size() )
+  {
+    const auto TotalThreads = G4Threading::GetNumberOfRunningWorkerThreads();
+    auto tid= G4Threading::G4GetThreadId();
+
+    // -- Some Checks
+    if( fTotalNumberVolumesOptimised != fVolumesToOptimise.size() )
+    {
+      G4ExceptionDescription errmsg;
+      errmsg << " [thread " << tid << " ] "
+             << " ERROR: Number of volumes 'voxelised' = "
+             << fTotalNumberVolumesOptimised
+             << " is not equal to the total number requested "
+             << fVolumesToOptimise.size() << " !! " << G4endl;
+      G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising()",
+                  "GeomMgt0003", FatalException, errmsg);
+    }
+    
+    if( fVerboseParallel )
+    {
+      if( fNumberThreadsReporting > TotalThreads )
+      {
+        G4ExceptionDescription errmsg;
+        errmsg << " [thread " << tid << " ] "
+               << " WARNING: Number of threads 'reporting' = "
+               << fNumberThreadsReporting
+               << " exceeds the total number of threads "
+               << TotalThreads << " !! " << G4endl
+               << " *Missed* calling ConfigureParallelOptimisation() to reset. ";
+        G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising()",
+                    "GeomMgt1002", JustWarning, errmsg);
+      }
+      else
+      {
+        if( fTotalNumberVolumesOptimised == fVolumesToOptimise.size()
+            && ( fNumberThreadsReporting < TotalThreads ) )
+        {
+           G4ExceptionDescription errmsg;
+           errmsg << " [thread " << tid << " ] "
+                  << " WARNING: All volumes optimised, yet only "
+                  << fNumberThreadsReporting << " threads reported out of "
+                  << TotalThreads;
+           G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising()",
+                       "GeomMgt1002", JustWarning, errmsg);
+        }
+      }
+    }
+    // -- End of Checks
+
+    // Report the end
+    if( fNumberThreadsReporting <= G4Threading::GetNumberOfRunningWorkerThreads() )
+    {
+      // Close the work, and (if verbosity is on) report statistics
+      InformOptimisationIsFinished(fVerboseParallel);
+    }
   }
   
   return orderReporting;
@@ -859,8 +928,7 @@ void G4GeometryManager::SetWorldMaximumExtent(G4double extent)
 //
 void
 G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
-                                     G4double totalCpuTime,
-                                     std::ostream &os )
+                                     G4double totalCpuTime, std::ostream &os )
 {
   os << "--------------------------------------------------------------------------------"
      << G4endl;

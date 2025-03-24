@@ -50,6 +50,15 @@
 
 using namespace CLHEP;
 
+// Private enums: Not for external use
+namespace {
+// Used by distanceToOut
+enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
+
+// Used by normal
+enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+}
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI

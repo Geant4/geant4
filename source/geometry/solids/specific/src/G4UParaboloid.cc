@@ -53,15 +53,6 @@ G4UParaboloid::G4UParaboloid(const G4String& pName,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-
-G4UParaboloid::G4UParaboloid( __void__& a )
-  : Base_t(a)
-{ }
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Destructor
 
 G4UParaboloid::~G4UParaboloid() = default;

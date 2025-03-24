@@ -232,7 +232,8 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
     }
   //Normalize
   for (std::size_t i=0;i<nElements;i++)
-    (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
+    if (MaxStechiometricFactor > 0.)
+      (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
 
   G4double sumz2 = 0;
   G4double sums = 0;
@@ -604,14 +605,14 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 							     const G4double cut) const
 {
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  if (!(fSamplingTable->count(theKey)) || !(fPBcut->count(theKey)))
+  if (!(fSamplingTable->count(theKey)) || !(fPBcut->count(theKey)) ||
+      !(fReducedXSTable->count(theKey)))
     {
       G4ExceptionDescription ed;
-      ed << "Unable to retrieve the SamplingTable: " <<
-	fSamplingTable->count(theKey) << " " <<
-	fPBcut->count(theKey) << G4endl;
+      ed << "Unable to retrieve the SamplingTable for " << mat->GetName() << G4endl;
       G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
 		  "em2014",FatalException,ed);
+      return 0.;
     }
   const G4PhysicsTable* theTableInte = fSamplingTable->find(theKey)->second;
   const G4PhysicsTable* theTableRed = fReducedXSTable->find(theKey)->second;

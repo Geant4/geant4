@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-04 Ben Morgan (geom-csg-V11-02-04)
+- Hide all ENorm/ESide enums in anonymous namespaces to prevent ODR warnings.
+  - Identified in ATLAS Athena code built against v11.3.0.
+
+## 2025-02-03 Gabriele Cosmo
+- Removed fake default constructor from G4U* wrappers, clearing compilation
+  warnings on gcc-14.
+
 ## 2024-05-29 Evgueni Tcherniaev (geom-csg-V11-02-03)
 - Added new methods GetNumOfConstituents() and IsFaceted().
 

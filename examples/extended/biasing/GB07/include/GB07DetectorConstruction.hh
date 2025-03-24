@@ -37,12 +37,15 @@
 class GB07DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    GB07DetectorConstruction();
+    GB07DetectorConstruction(G4bool bf);
     ~GB07DetectorConstruction();
 
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
+
+  private:
+    G4bool fBiasingFlag;
 };
 
 #endif

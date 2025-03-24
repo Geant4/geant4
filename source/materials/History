@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-02-11 Ben Morgan (materials-V11-02-09)
+- Make ios flags for Store/Retrieve of G4ExtDEDXTable consistent to avoid
+  issues on Windows platforms.
+
 ## 2024-11-04 Philippe Canal (materials-V11-02-08)
 - Improve stability of static initialization: simplified G4NistManager
   singleton initialization; migrated Isotopes, Materials, Elements's table

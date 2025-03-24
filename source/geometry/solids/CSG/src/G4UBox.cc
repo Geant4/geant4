@@ -25,7 +25,7 @@
 //
 // Implementation for G4UBox wrapper class
 //
-// 13.09.13 G.Cosmo, CERN/PH
+// 13.09.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Box.hh"
@@ -49,16 +49,6 @@ G4UBox::G4UBox(const G4String& pName,
                      G4double pY,
                      G4double pZ)
   : Base_t(pName, pX, pY, pZ)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-
-G4UBox::G4UBox( __void__& a )
-  : Base_t(a)
 {
 }
 

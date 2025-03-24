@@ -89,6 +89,9 @@ class G4HadronicDeveloperParameters
       void issue_non_eligible_value( const G4String& name );
       void issue_is_already_defined( const G4String& name );
       void issue_is_modified( const G4String& name );
+
+      G4int nWarn{0};
+      G4int nWarnMax{5};
 };
 
 #endif

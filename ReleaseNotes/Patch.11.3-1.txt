@@ -1,0 +1,170 @@
+
+                 Geant4 11.3 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                           21 March 2025
+
+List of fixes included in this public patch since the public release 11.3.0:
+
+  o Analysis
+    --------
+    + Fix to qualify use of G4Accumulables namespace to avoid clashes and order
+      dependence of inclusion of headers.
+    + Removed false warnings about non-existing n-tuple and removed debug messages
+      when filling inactivated n-tuple.
+
+  o Event
+    -----
+    + Fixed cut&paste error in G4StackManager::TransferStackedTracks(..),
+      reported by Coverity.
+
+  o Externals
+    ---------
+    + CLHEP:
+      o Properly export static symbols in RandFlat for DLL build support on Windows.
+
+  o Geometry
+    --------
+    + magnetic_field:
+      o Added missing guard in G4TMagFieldEquation header and minor cleanup.
+        Fixes [GitHub PR #83](https://github.com/Geant4/geant4/pull/83).
+    + management:
+      o In G4GeometryManager, fix in ConfigureParallelOptimisation() to reset
+        logical volumes iterator; in ReportWorkerIsDoneOptimising(), added checks
+        to report fatal error if incorrect number of volumes was voxelised, and warns
+        if number of workers reporting is not as expected.
+        In ConfigureParallelOptimisation(), reports on the times it was called.
+        Applied clang-tidy and some code cleanup; moved additional checks/warnings
+        under verbosity level.
+      o In G4VSolid::EstimateCubicVolume(..), initialise local variable to zero
+        to silence invalid false positive warnings reported in compilation of CMSSW.
+      o G4UAdapter: removed fake default constructor, clearing compilation warnings
+        on gcc-14.
+    + solids/CSG:
+      o Hide all ENorm/ESide enums in anonymous namespaces to prevent ODR warnings.
+        Identified in ATLAS Athena code built against v11.3.0.
+      o Removed fake default constructor from G4U* wrappers, clearing compilation
+        warnings on gcc-14.
+    + solids/specific:
+      o G4Polyhedra, G4UPolyhedra: fix to verify the validity of the delta phi to
+        restore proper visualization.
+      o Removed fake default constructor from G4U* wrappers, clearing compilation
+        warnings on gcc-14.
+
+  o Global
+    ------
+    + Corrected logic error in G4PhysicsTable when reading data in binary
+      mode on Windows platforms.
+    + In G4ThreadLocalSingleton, removed unprotected left-over debug inclusion
+      of G4BackTrace header. Addressing problem report #2649.
+    + Updated date and version for 11.3.1.
+
+  o Materials
+    ---------
+    + Made ios flags for Store/Retrieve of G4ExtDEDXTable consistent to avoid
+      issues on Windows platforms.
+
+  o Physics Lists
+    -------------
+    + constructors/limiters:
+      o G4GenericBiasingPhysics: fixed exception in adding call to
+        AddBiasingProcessLimiter() when parallel world is not defined.
+        Ignore calls to *AddPDGRange() functions if 'PDGlow' greater
+        than 'PDGhigh'.
+
+  o Processes - Cuts
+    ----------------
+    + In  G4ProductionCutsTable::UpdateCoupleTable(), make sure that the
+      couple tables are updated if 'userEnergyCuts' vectors are set.
+
+  o Processes - Electromagnetic
+    ---------------------------
+    + dna
+      o Removed obsolete/commented references to G4AllocatorList.
+    + lowenergy:
+      o Fixed reported Coverity defects in Penenelope models, G4ShellData,
+        G4FluoData and G4AugerTransition.
+    + standard:
+      o G4OrePowellAtRestModel: added missing decay plane rotation.
+
+  o Processes - Hadronic
+    --------------------
+    + de_excitation:
+      o G4ExcitationHandler, G4GammaTransition, G4PhotonEvaporation: removed
+        production of unphysical states. Addressing problem report #2584.
+        Changes in hadronic shower shapes for QGSP_BIC and QGSP_INCLXX physics
+        lists are observed, with wider lateral shower shapes and increase in
+        energy response.
+    + models/radioactive_decay:
+      o Fix in G4RadioactiveDecay to enable biasing in radioactive decay.
+        Addressing problem report #2592.
+    + util
+      o G4Fragment: added protection against precision loss in computation of
+        a boost vector at rest.
+      o G4HadronicDeveloperParameters: added limitation of warning printout on
+        change of parameters.
+
+  o processes/scoring
+    -----------------
+    + Fixes to G4EnergySplitter to ensure that each call to
+      SplitEnergyInVolumes() utilises the correct phantom parameterisation,
+      according to [GitHub PR#80](https://github.com/Geant4/geant4/pull/80)
+      Addressing problem report #2636.
+
+  o Run
+    ---
+    + Correction in G4WorkerRunManager::InitializeGeometry() when invoking
+      G4GeometryManager in undertaking parallel voxelisation.
+ 
+  o Examples
+    --------
+    + advanced/HGCal_testbeam
+      o Restore the original beam energy after it is modified.
+      o Ensure non-negative beam energy.
+    + extended/biasing/GB01
+    + extended/biasing/GB02
+      o Propagate biasing on/off to detector construction to initialisation
+        of biasing classes only if biasing requested.
+      o Added vis.mac and enabled detector visualisation on startup.
+      o Removed unused WITH_GEANT4_UIVIS cmake option.
+    + extended/biasing/GB03
+      o Added option -b (biasing on/off).
+      o Set default splitting probability to 0.2.
+      o Instantiate G4GenericBiasingPhysics only if biasing is enabled.
+        Propagate biasing on/off to detector construction to initialisation
+        of biasing classes only if biasing requested.
+      o Removed unused WITH_GEANT4_UIVIS cmake option.
+    + extended/biasing/GB04
+      o Propagate biasing on/off to detector construction to initialisation
+        of biasing classes only if biasing requested.
+      o Added vis.mac and enabled detector visualisation on startup.
+      o Removed unused WITH_GEANT4_UIVIS cmake option.
+    + extended/biasing/GB05
+      o Propagate biasing on/off to detector construction to initialisation
+        of biasing classes only if biasing requested.
+      o Removed unused WITH_GEANT4_UIVIS cmake option.
+    + extended/biasing/GB06
+      o Added check for null pointer to shared data; fixing detected crash
+        when biasing is off.
+      o Propagate biasing on/off to parallel world construction to
+        initialization of biasing classes only if biasing requested.
+      o Removed unused WITH_GEANT4_UIVIS cmake option.
+    + extended/biasing/GB07
+      o Propagate biasing on/off to detector construction to initialisation
+        of biasing classes only if biasing requested.
+      o Removed unused WITH_GEANT4_UIVIS cmake option.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.3 series.
+  o  Technical notes distributed for release 11.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.3.1 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

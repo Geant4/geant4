@@ -40,7 +40,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fVector(),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor1" << G4endl;
@@ -55,7 +55,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode)
 : G4VAccumulable(mergeMode),
   fVector(allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor2" << G4endl;
@@ -71,7 +71,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fVector(allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor2n" << G4endl;
@@ -87,7 +87,7 @@ G4AccVector<T, Allocator>::G4AccVector(
 : G4VAccumulable(mergeMode),
   fVector(count, value, allocator),
   fInitValue(value),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor3" << G4endl;
@@ -104,7 +104,7 @@ G4AccVector<T, Allocator>::G4AccVector(
 : G4VAccumulable(name, mergeMode),
   fVector(count, value, allocator),
   fInitValue(value),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor3n" << G4endl;
@@ -119,7 +119,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode, const Allocator& allocator)
 : G4VAccumulable(mergeMode),
   fVector(count, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor4" << G4endl;
@@ -135,7 +135,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode, const Allocator& allocator)
 : G4VAccumulable(name, mergeMode),
   fVector(count, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor4n" << G4endl;
@@ -150,7 +150,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode, const Allocator& allocator)
 : G4VAccumulable(mergeMode),
   fVector(init, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor10" << G4endl;
@@ -166,7 +166,7 @@ G4AccVector<T, Allocator>::G4AccVector(
   G4MergeMode mergeMode, const Allocator& allocator)
 : G4VAccumulable(name, mergeMode),
   fVector(init, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccVector ctor10n" << G4endl;
@@ -250,5 +250,5 @@ template <class T, class Allocator>
 void G4AccVector<T, Allocator>::SetMergeMode(G4MergeMode value)
 {
   G4VAccumulable::SetMergeMode(value);
-  fMergeFunction = GetMergeFunction<T>(fMergeMode);
+  fMergeFunction = G4Accumulables::GetMergeFunction<T>(fMergeMode);
 }

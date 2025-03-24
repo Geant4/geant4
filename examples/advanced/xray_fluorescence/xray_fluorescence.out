@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2960,18 +2960,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            1k World
+     100.00         0.01         0.00            1k World
        0.00         0.00         0.00            0k HPGeDetector
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      69.08          0k         3        9         24         0.00    World
+      69.08          0k         3        9         24         0.01    World
       30.92          0k         2        3         11         0.00    HPGeDetector
 --------------------------------------------------------------------------------
 
@@ -2989,7 +2989,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003039s Sys=0.000000s
+  User=0.000000s Real=0.002585s Sys=0.010000s
 Going to save histograms
 ... write file : xrayfluo.root - done
 ... close file : xrayfluo.root - done
@@ -3000,10 +3000,10 @@ Visualization Manager deleting...
 visManager deleted
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x2494c60
+UserDetectorConstruction deleted 0x19a0c20
 XrayFluoDetectorConstruction deleted
-UserPhysicsList deleted 0x2516830
-UserActionInitialization deleted 0x256c950
+UserPhysicsList deleted 0x1a227f0
+UserActionInitialization deleted 0x1a78910
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

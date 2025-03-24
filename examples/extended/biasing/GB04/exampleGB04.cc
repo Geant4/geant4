@@ -93,14 +93,16 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
+  G4bool biasingFlag = ( onOffBiasing == "on");
+
   // -- Set mandatory initialization classes
-  GB04DetectorConstruction* detector = new GB04DetectorConstruction();
+  GB04DetectorConstruction* detector = new GB04DetectorConstruction(biasingFlag);
   runManager->SetUserInitialization(detector);
   // -- Select a physics list
   FTFP_BERT* physicsList = new FTFP_BERT;
-  // -- And augment it with biasing facilities:
-  G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
-  if (onOffBiasing == "on") {
+  if (biasingFlag) {
+    // -- And augment it with biasing facilities:
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
     // -- Create list of physics processes to be biased: only brem. in this case:
     std::vector<G4String> processToBias;
     processToBias.push_back("eBrem");
@@ -139,7 +141,7 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand(command + macro);
   }
   else {  // interactive mode : define UI session
-    //      UImanager->ApplyCommand("/control/execute vis.mac");
+    UImanager->ApplyCommand("/control/execute vis.mac");
     //      if (ui->IsGUI())
     //        UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();

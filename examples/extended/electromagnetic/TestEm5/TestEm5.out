@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -518,7 +518,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.830000s Real=0.835179s Sys=0.000000s
+  User=0.830000s Real=0.897074s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -618,7 +618,7 @@ N=17 V[N]={910941890323901813, 1015746291667433571, 1849782191790666821, 2179466
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.600000s Real=0.596580s Sys=0.000000s
+  User=0.500000s Real=0.507378s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -723,7 +723,7 @@ N=17 V[N]={1900512211198940772, 1890227061717900871, 2082969366185794521, 717329
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.770000s Real=1.842544s Sys=0.000000s
+  User=1.450000s Real=1.513348s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -834,7 +834,7 @@ N=17 V[N]={721215474158146395, 563948681617651029, 983967623568370346, 107031027
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.440000s Real=0.447394s Sys=0.000000s
+  User=0.600000s Real=0.599384s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -946,7 +946,7 @@ N=17 V[N]={586188805523696918, 1131603525368056635, 2135194985283342976, 1988102
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=7.770000s Real=8.005405s Sys=0.000000s
+  User=6.610000s Real=6.859923s Sys=0.000000s
 
  ======================== run summary ======================
 

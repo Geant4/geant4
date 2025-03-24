@@ -44,7 +44,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB04DetectorConstruction::GB04DetectorConstruction() {}
+GB04DetectorConstruction::GB04DetectorConstruction(G4bool bf):fBiasingFlag(bf) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,16 +96,18 @@ G4VPhysicalVolume* GB04DetectorConstruction::Construct()
 
 void GB04DetectorConstruction::ConstructSDandField()
 {
-  // -- Fetch volume for biasing:
-  G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
+  if(fBiasingFlag) {
+    // -- Fetch volume for biasing:
+    G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
 
-  // ----------------------------------------------
-  // -- operator creation and attachment to volume:
-  // ----------------------------------------------
-  GB04BOptrBremSplitting* bremSplittingOperator = new GB04BOptrBremSplitting();
-  bremSplittingOperator->AttachTo(logicTest);
-  G4cout << " Attaching biasing operator " << bremSplittingOperator->GetName()
-         << " to logical volume " << logicTest->GetName() << G4endl;
+    // ----------------------------------------------
+    // -- operator creation and attachment to volume:
+    // ----------------------------------------------
+    GB04BOptrBremSplitting* bremSplittingOperator = new GB04BOptrBremSplitting();
+    bremSplittingOperator->AttachTo(logicTest);
+    G4cout << " Attaching biasing operator " << bremSplittingOperator->GetName()
+	   << " to logical volume " << logicTest->GetName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

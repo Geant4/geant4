@@ -6,8 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-07 Soon Yung Jun (geom-specific-V11-02-09)
+- G4Polyhedra, G4UPolyhedra: Verify the validity of the delta phi to restore
+  visualization of HepPolyhedronPgon
+
+## 2025-02-03 Gabriele Cosmo
+- Removed fake default constructor from G4U* wrappers, clearing compilation
+  warnings on gcc-14.
+
 ## 2024-10-01 Evgueni Tcherniaev (geom-specific-V11-02-08)
-- G4GenericTrap: Fixed minor defect reported by Coverity
+- G4GenericTrap: Fixed minor defect reported by Coverity.
 
 ## 2024-07-18 Alvaro Tolosa-Delgado (geom-specific-V11-02-07)
 - Remove internal state of G4TwistedTubs and G4VTwistedFaceted.

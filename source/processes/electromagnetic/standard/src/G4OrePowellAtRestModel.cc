@@ -103,6 +103,13 @@ void G4OrePowellAtRestModel::SampleSecondaries(
   G4ThreeVector PhotonMomentum2(0.,sin12,cos12);
   G4ThreeVector PhotonMomentum3(0.,sin13,cos13);
 
+  // Random x direction ( rotate decay plane along Z axis)
+
+  G4double phi = CLHEP::twopi * G4UniformRand();
+  PhotonMomentum2.rotateZ(phi);
+  PhotonMomentum3.rotateZ(phi);
+
+
   // First Gamma direction
   G4ThreeVector dir1 = G4RandomDirection();
 

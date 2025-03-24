@@ -205,7 +205,9 @@ void G4Fragment::SetExcEnergyAndMomentum(G4double eexc,
 {
   theExcitationEnergy = eexc;
   theMomentum.set(0.0, 0.0, 0.0, theGroundStateMass + eexc);
-  theMomentum.boost(v.boostVector());
+  const G4double elim2 = 100.*CLHEP::eV*CLHEP::eV;
+  if (v.vect().mag2() > elim2)
+    theMomentum.boost(v.boostVector());
 }
 
 G4double G4Fragment::GetBindingEnergy() const

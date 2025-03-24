@@ -6,6 +6,10 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-02-13 Gabriele Cosmo (event-V11-02-10)
+- Fixed cut&paste error in G4StackManager::TransferStackedTracks(..),
+  reported by Coverity.
+
 ## 2024-10-26 Makoto Asai (event-V11-02-09)
 - Fixing event-V11-02-08 for forgotten deletion of trajectories.
 

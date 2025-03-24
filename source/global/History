@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-21 Gabriele Cosmo (global-V11-02-27)
+- Updated tag IDs for geant4-11-03-patch-01.
+
+## 2025-03-20 Gabriele Cosmo
+- In G4ThreadLocalSingleton, removed unprotected left-over debug inclusion
+  of G4BackTrace header. Addressing problem report #2649.
+
+## 2025-01-31 Ben Morgan
+- Correct logic error in G4PhysicsTable when reading data in binary
+  mode on Windows platforms, identified by migrated unit tests.
+
 ## 2024-11-22 Gabriele Cosmo (global-V11-02-26)
 - Updated tag IDs for geant4-11-03-ref-00.
 

@@ -7,6 +7,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-05 Vladimir Ivanchenko (hadr-util-V11-02-06)
+- G4HadronicDeveloperParameters - added limitation of warning printout on
+    change of parameters (NA64 request).
+
+## 2025-01-09 Vladimir Ivanchenko
+- G4Fragment - added protection against precision loss in computation of a boost
+    vector at rest
+
 ## 2024-10-29 Vladimir Ivanchenko (hadr-util-V11-02-05)
 - G4LegendrePolynomial - optimized implementation by Isaac Kunen GitHub PR #70
 

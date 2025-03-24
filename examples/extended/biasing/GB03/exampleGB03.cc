@@ -35,12 +35,53 @@
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+namespace
+{
+void PrintUsage()
+{
+  G4cerr << " Usage: " << G4endl;
+  G4cerr << " ./exampleGB04 [-m macro ] "
+         << " [-b biasing {'on','off'}]"
+         << "\n or\n ./exampleGB04 [macro.mac]" << G4endl;
+}
+}  // namespace
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 int main(int argc, char** argv)
 {
+    // Evaluate arguments
+  //
+  if (argc > 5) {
+    PrintUsage();
+    return 1;
+  }
+
+  G4String macro("");
+  G4String onOffBiasing("");
+  if (argc == 2)
+    macro = argv[1];
+  else {
+    for (G4int i = 1; i < argc; i = i + 2) {
+      if (G4String(argv[i]) == "-m")
+        macro = argv[i + 1];
+      else if (G4String(argv[i]) == "-b")
+        onOffBiasing = argv[i + 1];
+      else {
+        PrintUsage();
+        return 1;
+      }
+    }
+  }
+
+  if (onOffBiasing == "") onOffBiasing = "on";
+
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) {
+  if (macro == "") {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -48,16 +89,28 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
+  G4bool biasingFlag = ( onOffBiasing == "on");
+
   // -- Set mandatory initialization classes
-  G4VUserDetectorConstruction* detector = new GB03DetectorConstruction;
+  G4VUserDetectorConstruction* detector = new GB03DetectorConstruction(biasingFlag);
   runManager->SetUserInitialization(detector);
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   // -- Setup biasing for neutron only. As will not bias any
   // -- physics process, require the G4GenericBiasingPhysics()
   // -- to modify the physics list just for "non-physics" biasing:
-  G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
-  biasingPhysics->NonPhysicsBias("neutron");
-  physicsList->RegisterPhysics(biasingPhysics);
+  if (biasingFlag) {
+    auto biasingPhysics = new G4GenericBiasingPhysics();
+    biasingPhysics->NonPhysicsBias("neutron");
+    physicsList->RegisterPhysics(biasingPhysics);
+    G4cout << "      ********************************************************* " << G4endl;
+    G4cout << "      ********** processes are wrapped for biasing ************ " << G4endl;
+    G4cout << "      ********************************************************* " << G4endl;
+  }
+  else {
+    G4cout << "      ************************************************* " << G4endl;
+    G4cout << "      ********** processes are not wrapped ************ " << G4endl;
+    G4cout << "      ************************************************* " << G4endl;
+  }
   runManager->SetUserInitialization(physicsList);
 
   // -- Set user action initialization class
@@ -86,8 +139,7 @@ int main(int argc, char** argv)
   else  // Batch mode
   {
     G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command + fileName);
+    UImanager->ApplyCommand(command + macro);
   }
 
   delete visManager;

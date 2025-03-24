@@ -201,15 +201,6 @@ class G4Sphere : public G4CSGSolid
       // specification for points not on the surface
 
   private:
-
-    // Used by distanceToOut
-    //
-    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
-
-    // used by normal
-    //
-    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
-
     G4double fRminTolerance, fRmaxTolerance, kAngTolerance,
              kRadTolerance, fEpsilon = 2.e-11;
       //

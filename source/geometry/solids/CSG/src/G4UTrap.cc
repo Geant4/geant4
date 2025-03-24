@@ -134,16 +134,6 @@ G4UTrap::G4UTrap( const G4String& pName )
 {
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UTrap::G4UTrap( __void__& a )
-  : Base_t(a)
-{
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Destructor

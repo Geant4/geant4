@@ -189,15 +189,6 @@ class G4Cons : public G4CSGSolid
       // specification for points not on the surface
 
   private:
-
-    // Used by distanceToOut
-    //
-    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
-
-    // used by normal
-    //
-    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
-
     G4double kRadTolerance, kAngTolerance;
       //
       // Radial and angular tolerances

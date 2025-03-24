@@ -40,7 +40,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fMap(),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor1" << G4endl;
@@ -56,7 +56,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   const Allocator& allocator)
 : G4VAccumulable(mergeMode),
   fMap(comp, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor2" << G4endl;
@@ -73,7 +73,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   const Allocator& allocator)
 : G4VAccumulable(name, mergeMode),
   fMap(comp, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor2n" << G4endl;
@@ -88,7 +88,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(mergeMode),
   fMap(allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor3" << G4endl;
@@ -104,7 +104,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   G4MergeMode mergeMode)
 : G4VAccumulable(name, mergeMode),
   fMap(allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor3n" << G4endl;
@@ -121,7 +121,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   const Allocator& allocator)
 : G4VAccumulable(mergeMode),
   fMap(init, comp, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor10" << G4endl;
@@ -139,7 +139,7 @@ G4AccMap<Key, T, Compare, Allocator>::G4AccMap(
   const Allocator& allocator)
 : G4VAccumulable(name, mergeMode),
   fMap(init, comp, allocator),
-  fMergeFunction(GetMergeFunction<T>(mergeMode))
+  fMergeFunction(G4Accumulables::GetMergeFunction<T>(mergeMode))
 {
   if (G4Accumulables::VerboseLevel > 1 ) {
     G4cout << "G4AccMap ctor10n" << G4endl;
@@ -232,7 +232,7 @@ template <class Key, class T, class Compare, class Allocator>
 void G4AccMap<Key, T, Compare, Allocator>::SetMergeMode(G4MergeMode value)
 {
   G4VAccumulable::SetMergeMode(value);
-  fMergeFunction = GetMergeFunction<T>(fMergeMode);
+  fMergeFunction = G4Accumulables::GetMergeFunction<T>(fMergeMode);
 }
 
 //_____________________________________________________________________________

@@ -1,4 +1,4 @@
-Seed used : 1733190372
+Seed used : 1742561450
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-00    (6-December-2024)
+ Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -665,6 +665,8 @@ H^0 + H^0 -> H_2^0                          1.2e+10                       0.2265
 ------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 Start event 1
+ * PrimaryKiller: aborts event 1, energy loss is too large. 
+ * Energy loss by primary is: 6.2815 keV. Event is aborted if the Eloss is > 2 keV
 Start event 2
 Start event 3
 Start event 4
@@ -673,11 +675,13 @@ Start event 6
 Start event 7
 Start event 8
 Start event 9
+ * PrimaryKiller: aborts event 9, energy loss is too large. 
+ * Energy loss by primary is: 4.0551 keV. Event is aborted if the Eloss is > 2 keV
 
 --------------------End of Global Run-----------------------
-  The run has 10 events 
-Number of events recorded by the species scorer = 10
- Total energy deposited in the world volume : 11757 eV
+  The run has 8 events 
+Number of events recorded by the species scorer = 8
+ Total energy deposited in the world volume : 9224.3 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

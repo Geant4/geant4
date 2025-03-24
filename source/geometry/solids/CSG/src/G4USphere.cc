@@ -25,7 +25,7 @@
 //
 // Implementation for G4USphere wrapper class
 //
-// 13.09.13 G.Cosmo, CERN/PH
+// 13.09.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Sphere.hh"
@@ -50,16 +50,6 @@ G4USphere::G4USphere( const G4String& pName,
                             G4double pSPhi, G4double pDPhi,
                             G4double pSTheta, G4double pDTheta )
   : Base_t(pName, pRmin, pRmax, pSPhi, pDPhi, pSTheta, pDTheta)
-{
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4USphere::G4USphere( __void__& a )
-  : Base_t(a)
 {
 }
 

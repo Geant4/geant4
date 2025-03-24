@@ -40,7 +40,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB02DetectorConstruction::GB02DetectorConstruction() {}
+GB02DetectorConstruction::GB02DetectorConstruction(G4bool bf):fBiasingFlag(bf) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,18 +92,20 @@ G4VPhysicalVolume* GB02DetectorConstruction::Construct()
 
 void GB02DetectorConstruction::ConstructSDandField()
 {
-  // -- Fetch volume for biasing:
-  G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
+  if(fBiasingFlag) {
+    // -- Fetch volume for biasing:
+    G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
 
-  // ----------------------------------------------
-  // -- operator creation and attachment to volume:
-  // ----------------------------------------------
-  GB02BOptrMultiParticleForceCollision* testMany = new GB02BOptrMultiParticleForceCollision();
-  testMany->AddParticle("gamma");
-  testMany->AddParticle("neutron");
-  testMany->AttachTo(logicTest);
-  G4cout << " Attaching biasing operator " << testMany->GetName() << " to logical volume "
-         << logicTest->GetName() << G4endl;
+    // ----------------------------------------------
+    // -- operator creation and attachment to volume:
+    // ----------------------------------------------
+    GB02BOptrMultiParticleForceCollision* testMany = new GB02BOptrMultiParticleForceCollision();
+    testMany->AddParticle("gamma");
+    testMany->AddParticle("neutron");
+    testMany->AttachTo(logicTest);
+    G4cout << " Attaching biasing operator " << testMany->GetName() << " to logical volume "
+	   << logicTest->GetName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -66,11 +66,6 @@ class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
 
     inline G4GeometryType GetEntityType() const override;
 
-    G4UParaboloid(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
     G4UParaboloid( const G4UParaboloid& source );
     G4UParaboloid& operator=( const G4UParaboloid& source );
       // Copy constructor and assignment operator.
