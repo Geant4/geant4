@@ -30,32 +30,22 @@
 
 #include "G4FermiParticle.hh"
 
-#include "G4FermiLogger.hh"
+#include "G4FermiDataTypes.hh"
 #include "G4FermiNucleiProperties.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 
 #include <iomanip>
 
 G4FermiParticle::G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                                 const G4FermiLorentzVector& momentum)
-  : atomicMass_(atomicMass),
-    chargeNumber_(chargeNumber),
-    momentum_(momentum),
-    groundStateMass_(G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_))
+                                 const G4LorentzVector& momentum)
+  : atomicMass_(atomicMass), chargeNumber_(chargeNumber), momentum_(momentum)
 {
-  FERMI_ASSERT_MSG(G4FermiUInt(atomicMass_) >= G4FermiUInt(chargeNumber),
+  FERMI_ASSERT_MSG(static_cast<std::uint32_t>(atomicMass_)
+                     >= static_cast<std::uint32_t>(chargeNumber),
                    "imposible particle: A = " << atomicMass_ << ", Z = " << chargeNumber);
 
-  CalculateExcitationEnergy();
-}
-
-G4FermiNucleiData G4FermiParticle::GetNucleiData() const
-{
-  return {
-    atomicMass_,
-    chargeNumber_,
-  };
+  RecalculateExcitationEnergy();
 }
 
 G4FermiAtomicMass G4FermiParticle::GetAtomicMass() const
@@ -68,33 +58,30 @@ G4FermiChargeNumber G4FermiParticle::GetChargeNumber() const
   return chargeNumber_;
 }
 
-const G4FermiLorentzVector& G4FermiParticle::GetMomentum() const
+const G4LorentzVector& G4FermiParticle::GetMomentum() const
 {
   return momentum_;
 }
 
-G4FermiFloat G4FermiParticle::GetExcitationEnergy() const
+G4double G4FermiParticle::GetExcitationEnergy() const
 {
   return excitationEnergy_;
 }
 
-G4FermiFloat G4FermiParticle::GetGroundStateMass() const
-{
-  return groundStateMass_;
-}
-
-bool G4FermiParticle::IsStable() const
+G4bool G4FermiParticle::IsStable() const
 {
   return excitationEnergy_ <= 0.;
 }
 
-void G4FermiParticle::CalculateExcitationEnergy()
+void G4FermiParticle::RecalculateExcitationEnergy()
 {
-  excitationEnergy_ = momentum_.mag() - groundStateMass_;
+  excitationEnergy_ =
+    momentum_.mag() - G4FermiNucleiProperties::GetNuclearMass(atomicMass_, chargeNumber_);
   if (excitationEnergy_ < 0.) {
-    if (excitationEnergy_ < -10 * CLHEP::eV) {
-      FERMI_LOG_WARN("Excitation Energy is too negative: " << excitationEnergy_ / CLHEP::MeV
-                                                           << " MeV");
+    if (excitationEnergy_ < -10.0 * CLHEP::eV) {
+      G4ExceptionDescription ed;
+      ed << "Excitation energy is too negative: " << excitationEnergy_ / CLHEP::MeV << " MeV";
+      G4Exception("G4FermiParticle::RecalculateExcitationEnergy()", "Fermi001", JustWarning, ed);
     }
     excitationEnergy_ = 0.;
   }

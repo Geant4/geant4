@@ -30,59 +30,58 @@
 
 #include "G4FermiIntegerPartition.hh"
 
-G4FermiIntegerPartition::G4FermiIntegerPartition(uint32_t number, uint32_t termsCount,
-                                                 uint32_t base)
+G4integerPartition::G4integerPartition(std::uint32_t number, std::uint32_t termsCount,
+                                       std::uint32_t base)
   : number_(number), termsCount_(termsCount), base_(base)
 {}
 
-G4FermiIntegerPartition::Iterator G4FermiIntegerPartition::begin() const
+G4integerPartition::Iterator G4integerPartition::begin() const
 {
   return {number_, termsCount_, base_};
 }
 
-G4FermiIntegerPartition::Iterator G4FermiIntegerPartition::end() const
+G4integerPartition::Iterator G4integerPartition::end() const
 {
   return {};
 }
 
 /////////////////////////////////// ITERATOR //////////////////////////////
 
-G4FermiIntegerPartition::Iterator::pointer G4FermiIntegerPartition::Iterator::operator->() const
+G4integerPartition::Iterator::pointer G4integerPartition::Iterator::operator->() const
 {
   return &partition_;
 }
 
-G4FermiIntegerPartition::Iterator::reference G4FermiIntegerPartition::Iterator::operator*() const
+G4integerPartition::Iterator::reference G4integerPartition::Iterator::operator*() const
 {
   return partition_;
 }
 
-G4FermiIntegerPartition::Iterator& G4FermiIntegerPartition::Iterator::operator++()
+G4integerPartition::Iterator& G4integerPartition::Iterator::operator++()
 {
   NextPartition();
   return *this;
 }
 
-G4FermiIntegerPartition::Iterator G4FermiIntegerPartition::Iterator::operator++(int)
+G4integerPartition::Iterator G4integerPartition::Iterator::operator++(int)
 {
   auto copy = *this;
   NextPartition();
   return copy;
 }
 
-bool G4FermiIntegerPartition::Iterator::operator==(
-  const G4FermiIntegerPartition::Iterator& other) const
+G4bool G4integerPartition::Iterator::operator==(const G4integerPartition::Iterator& other) const
 {
   return partition_ == other.partition_;
 }
 
-bool G4FermiIntegerPartition::Iterator::operator!=(
-  const G4FermiIntegerPartition::Iterator& other) const
+G4bool G4integerPartition::Iterator::operator!=(const G4integerPartition::Iterator& other) const
 {
   return partition_ != other.partition_;
 }
 
-G4FermiIntegerPartition::Iterator::Iterator(uint32_t number, uint32_t termsCount, uint32_t base)
+G4integerPartition::Iterator::Iterator(std::uint32_t number, std::uint32_t termsCount,
+                                       std::uint32_t base)
   : partition_(termsCount, 0)
 {
   // No possible partitions
@@ -94,9 +93,9 @@ G4FermiIntegerPartition::Iterator::Iterator(uint32_t number, uint32_t termsCount
   partition_[0] = number - base * (termsCount - 1);
 }
 
-void G4FermiIntegerPartition::Iterator::NextPartition()
+void G4integerPartition::Iterator::NextPartition()
 {
-  uint32_t accumulated = 0;
+  std::uint32_t accumulated = 0;
   for (auto partitionLast = std::next(partition_.begin()); partitionLast != partition_.end();
        ++partitionLast)
   {

@@ -32,46 +32,27 @@
 #define G4FERMIDATATYPES_HH
 
 #include <G4LorentzVector.hh>
+#include <G4PhysicalConstants.hh>
 #include <G4String.hh>
 #include <G4Vector3D.hh>
+#include <Randomize.hh>
+#include <globals.hh>
 
-#include <memory>
-#include <string>
+#include <G4qss_misc.hh>
 
-using G4FermiInt = G4int;
+static constexpr G4int MAX_Z = 9;
+static constexpr G4int MAX_A = 17;
 
-using G4FermiUInt = uint32_t;
-
-using G4FermiFloat = G4double;
-
-using G4FermiLorentzVector = G4LorentzVector;
-
-using G4FermiVector3 = G4Vector3D;
-
-using G4FermiParticleMomentum = G4FermiVector3;
-
-using G4FermiStr = G4String;
-
-static constexpr G4FermiInt MAX_Z = 9;
-static constexpr G4FermiInt MAX_A = 17;
-
-template<typename Key, typename Value>
-class G4FermiVCache
-{
-  public:
-    virtual std::shared_ptr<Value> Insert(const Key& key, Value&& value) = 0;
-    virtual std::shared_ptr<Value> Get(const Key& key) = 0;
-    virtual ~G4FermiVCache() = default;
-};
+G4Vector3D SampleIsotropicVector(G4double magnitude);
 
 class G4FermiAtomicMass
 {
   public:
-    using G4FermiValueType = G4FermiUInt;
+    using ValueType = std::uint32_t;
 
     G4FermiAtomicMass() = default;
 
-    explicit constexpr G4FermiAtomicMass(G4FermiValueType mass) : mass_(mass) {}
+    explicit constexpr G4FermiAtomicMass(ValueType mass) : mass_(mass) {}
 
     G4FermiAtomicMass(const G4FermiAtomicMass& other) = default;
 
@@ -81,36 +62,36 @@ class G4FermiAtomicMass
 
     G4FermiAtomicMass& operator=(G4FermiAtomicMass&& other) = default;
 
-    constexpr operator G4FermiUInt() const { return mass_; }
+    constexpr operator std::uint32_t() const { return mass_; }
 
-    constexpr operator G4FermiInt() const { return mass_; }
+    constexpr operator G4int() const { return mass_; }
 
-    constexpr operator G4FermiFloat() const { return mass_; }
+    constexpr operator G4double() const { return mass_; }
 
-    bool operator<(const G4FermiAtomicMass& other) const { return mass_ < other.mass_; }
+    G4bool operator<(const G4FermiAtomicMass& other) const { return mass_ < other.mass_; }
 
-    bool operator>(const G4FermiAtomicMass& other) const { return mass_ > other.mass_; }
+    G4bool operator>(const G4FermiAtomicMass& other) const { return mass_ > other.mass_; }
 
-    bool operator<=(const G4FermiAtomicMass& other) const { return mass_ <= other.mass_; }
+    G4bool operator<=(const G4FermiAtomicMass& other) const { return mass_ <= other.mass_; }
 
-    bool operator>=(const G4FermiAtomicMass& other) const { return mass_ >= other.mass_; }
+    G4bool operator>=(const G4FermiAtomicMass& other) const { return mass_ >= other.mass_; }
 
-    bool operator==(const G4FermiAtomicMass& other) const { return mass_ == other.mass_; }
+    G4bool operator==(const G4FermiAtomicMass& other) const { return mass_ == other.mass_; }
 
-    bool operator!=(const G4FermiAtomicMass& other) const { return mass_ != other.mass_; }
+    G4bool operator!=(const G4FermiAtomicMass& other) const { return mass_ != other.mass_; }
 
   private:
-    G4FermiValueType mass_;
+    ValueType mass_;
 };
 
 class G4FermiChargeNumber
 {
   public:
-    using G4FermiValueType = G4FermiUInt;
+    using ValueType = std::uint32_t;
 
     G4FermiChargeNumber() = default;
 
-    explicit constexpr G4FermiChargeNumber(G4FermiValueType charge) : charge_(charge) {}
+    explicit constexpr G4FermiChargeNumber(ValueType charge) : charge_(charge) {}
 
     G4FermiChargeNumber(const G4FermiChargeNumber& other) = default;
 
@@ -120,26 +101,26 @@ class G4FermiChargeNumber
 
     G4FermiChargeNumber& operator=(G4FermiChargeNumber&& other) = default;
 
-    constexpr operator G4FermiUInt() const { return charge_; }
+    constexpr operator std::uint32_t() const { return charge_; }
 
-    constexpr operator G4FermiInt() const { return charge_; }
+    constexpr operator G4int() const { return charge_; }
 
-    constexpr operator G4FermiFloat() const { return charge_; }
+    constexpr operator G4double() const { return charge_; }
 
-    bool operator<(const G4FermiChargeNumber& other) const { return charge_ < other.charge_; }
+    G4bool operator<(const G4FermiChargeNumber& other) const { return charge_ < other.charge_; }
 
-    bool operator>(const G4FermiChargeNumber& other) const { return charge_ > other.charge_; }
+    G4bool operator>(const G4FermiChargeNumber& other) const { return charge_ > other.charge_; }
 
-    bool operator<=(const G4FermiChargeNumber& other) const { return charge_ <= other.charge_; }
+    G4bool operator<=(const G4FermiChargeNumber& other) const { return charge_ <= other.charge_; }
 
-    bool operator>=(const G4FermiChargeNumber& other) const { return charge_ >= other.charge_; }
+    G4bool operator>=(const G4FermiChargeNumber& other) const { return charge_ >= other.charge_; }
 
-    bool operator==(const G4FermiChargeNumber& other) const { return charge_ == other.charge_; }
+    G4bool operator==(const G4FermiChargeNumber& other) const { return charge_ == other.charge_; }
 
-    bool operator!=(const G4FermiChargeNumber& other) const { return charge_ != other.charge_; }
+    G4bool operator!=(const G4FermiChargeNumber& other) const { return charge_ != other.charge_; }
 
   private:
-    G4FermiValueType charge_;
+    ValueType charge_;
 };
 
 struct G4FermiNucleiData
@@ -147,18 +128,18 @@ struct G4FermiNucleiData
     G4FermiAtomicMass atomicMass;
     G4FermiChargeNumber chargeNumber;
 
-    bool operator<(const G4FermiNucleiData& other) const
+    G4bool operator<(const G4FermiNucleiData& other) const
     {
       return atomicMass < other.atomicMass
              || (atomicMass == other.atomicMass && chargeNumber < other.chargeNumber);
     }
 
-    bool operator==(const G4FermiNucleiData& other) const
+    G4bool operator==(const G4FermiNucleiData& other) const
     {
       return atomicMass == other.atomicMass && chargeNumber == other.chargeNumber;
     }
 
-    bool operator!=(const G4FermiNucleiData& other) const
+    G4bool operator!=(const G4FermiNucleiData& other) const
     {
       return atomicMass != other.atomicMass || chargeNumber != other.chargeNumber;
     }
@@ -169,10 +150,10 @@ namespace std
 template<>
 struct hash<G4FermiNucleiData>
 {
-    size_t operator()(const G4FermiNucleiData& key) const
+    std::size_t operator()(const G4FermiNucleiData& key) const
     {
-      auto mass = G4FermiInt(key.atomicMass);
-      auto charge = G4FermiInt(key.chargeNumber);
+      auto mass = G4int(key.atomicMass);
+      auto charge = G4int(key.chargeNumber);
       return (mass * (mass + 1)) / 2 + charge;
     }
 };
@@ -196,5 +177,14 @@ constexpr G4FermiChargeNumber operator""_c(unsigned long long charge)
 {
   return G4FermiChargeNumber(charge);
 }
+
+#define FERMI_ASSERT_MSG(COND, MSG)                                                             \
+  if (unlikely(!(COND))) {                                                                      \
+    std::ostringstream sstream;                                                                 \
+    sstream << "assertion failed: \"" << #COND << '\"' << " at " << __FILE__ << ':' << __LINE__ \
+            << '\n'                                                                             \
+            << MSG;                                                                             \
+    throw std::runtime_error(sstream.str());                                                    \
+  }
 
 #endif  // G4FERMIDATATYPES_HH

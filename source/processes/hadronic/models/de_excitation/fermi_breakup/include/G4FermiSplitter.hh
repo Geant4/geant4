@@ -27,19 +27,27 @@
 // G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
-#include "G4FermiLogger.hh"
 
-namespace
+#ifndef G4FERMISPLITTER_HH
+#define G4FERMISPLITTER_HH
+
+#include "G4FermiDataTypes.hh"
+#include "G4FermiVFragment.hh"
+
+class G4FermiSplitter
 {
-static const std::string LOG_LEVEL_NAMES[static_cast<int>(G4FermiLogLevel::NONE)] = {
-  "TRACE", "DEBUG", "INFO", "WARN", "ERROR",
+  public:
+    static G4double DecayWeight(const G4FermiFragmentVector& split, G4FermiAtomicMass atomicMass,
+                                G4double totalEnergy);
+
+    static G4double SplitFactor(const G4FermiFragmentVector& split, G4FermiAtomicMass atomicMass);
+
+    static G4double KineticFactor(const G4FermiFragmentVector& split, G4double totalEnergy);
+
+    static void GenerateSplits(G4FermiNucleiData nucleiData,
+                               std::vector<G4FermiFragmentVector>& splits);
+
+    static std::vector<G4FermiFragmentVector> GenerateSplits(G4FermiNucleiData nucleiData);
 };
-}  // namespace
 
-void G4FermiStreamLogger::Log(const std::string_view fileName, const int line,
-                              const std::string_view funcName, const G4FermiLogLevel level,
-                              const std::string_view msg)
-{
-  stream_ << fileName << ':' << line << " in function \"" << funcName << "\"\n"
-          << LOG_LEVEL_NAMES[static_cast<int>(level)] << ": " << msg << std::endl;
-}
+#endif  // G4FERMISPLITTER_HH

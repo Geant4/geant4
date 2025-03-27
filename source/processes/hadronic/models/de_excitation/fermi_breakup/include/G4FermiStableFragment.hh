@@ -28,25 +28,21 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIDEFAULTPOOLSOURCE_HH
-#define G4FERMIDEFAULTPOOLSOURCE_HH
+#ifndef G4FERMISTABLEFRAGMENT_HH
+#define G4FERMISTABLEFRAGMENT_HH
 
 #include "G4FermiVFragment.hh"
 
-#include <vector>
-
-class G4FermiDefaultPoolSource : private std::vector<const G4FermiVFragment*>
+class G4FermiStableFragment : public G4FermiVFragment
 {
-  private:
-    using Container = std::vector<const G4FermiVFragment*>;
-
   public:
-    G4FermiDefaultPoolSource();
+    using G4FermiVFragment::G4FermiVFragment;
 
-    using Container::begin;
-    using Container::cbegin;
-    using Container::cend;
-    using Container::end;
+    void AppendDecayFragments(const G4LorentzVector& momentum,
+                              std::vector<G4FermiParticle>& fragments) const override;
+
+  private:
+    void DoInitialize() override;
 };
 
-#endif  // G4FERMIDEFAULTPOOLSOURCE_HH
+#endif  // G4FERMISTABLEFRAGMENT_HH

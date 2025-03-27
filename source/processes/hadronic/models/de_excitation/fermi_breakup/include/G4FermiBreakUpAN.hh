@@ -31,6 +31,7 @@
 #ifndef G4FERMIBREAKUP_HH
 #define G4FERMIBREAKUP_HH
 
+#include "G4FermiDataTypes.hh"
 #include "G4FermiParticle.hh"
 #include "G4FermiSplitter.hh"
 
@@ -40,12 +41,30 @@
 
 class G4FermiBreakUpAN : public G4VFermiBreakUp
 {
+  private:
+    class PossibleSplits
+    {
+      private:
+        using NucleiSplits = std::vector<G4FermiFragmentVector>;
+
+      public:
+        PossibleSplits() = default;
+        PossibleSplits& operator=(PossibleSplits&&) noexcept = default;
+
+        PossibleSplits(const G4FermiAtomicMass maxAtomicMass);
+
+        const NucleiSplits& GetSplits(const G4FermiAtomicMass atomicMass,
+                                      const G4FermiChargeNumber chargeNumber) const;
+
+        void InsertSplits(const G4FermiAtomicMass atomicMass,
+                          const G4FermiChargeNumber chargeNumber, NucleiSplits&& splits);
+
+      private:
+        std::vector<NucleiSplits> splits_;
+    };
+
   public:
-    using G4FermiSplitCache = G4FermiVCache<G4FermiNucleiData, G4FermiFragmentSplits>;
-
-    G4FermiBreakUpAN();
-
-    G4FermiBreakUpAN(std::unique_ptr<G4FermiSplitCache>&& cache);
+    G4FermiBreakUpAN(G4int verbosity = 0);
 
     void Initialise() override;
 
@@ -62,16 +81,15 @@ class G4FermiBreakUpAN : public G4VFermiBreakUp
     std::vector<G4FermiParticle> BreakItUp(const G4FermiParticle& nucleus) const;
 
   private:
-    std::vector<G4FermiParticle> SelectSplit(const G4FermiParticle& particle,
-                                             const G4FermiFragmentSplits& splits) const;
-
-    mutable std::unique_ptr<G4FermiSplitCache> cache_ = nullptr;
+    std::vector<G4FermiParticle> SplitToParticles(const G4FermiParticle& sourceParticle,
+                                                  const G4FermiFragmentVector& split) const;
 
     // improve performance, reusing allocated memory
-    mutable std::vector<G4FermiFloat> weights_;
-    mutable G4FermiFragmentSplits splits_;
+    mutable std::vector<G4double> weights_;
+    PossibleSplits splits_;
 
-    G4int secID;
+    G4int secID_;
+    G4int verbosity_ = 0;
 };
 
 #endif  // G4FERMIBREAKUP_HH

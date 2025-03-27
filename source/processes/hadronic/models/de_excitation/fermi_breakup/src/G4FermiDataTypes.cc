@@ -28,34 +28,51 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIRANDOMIZER_HH
-#define G4FERMIRANDOMIZER_HH
-
 #include "G4FermiDataTypes.hh"
 
-#include <random>
-#include <vector>
-
-class G4FermiRandomizer
+G4Vector3D SampleIsotropicVector(G4double magnitude)
 {
-  private:
-    using G4FermiRandomEngine = std::mt19937;
+  const auto cos = 1.0 - 2.0 * G4RandFlat::shoot();
+  const auto sin = std::sqrt(1.0 - std::pow(cos, 2));
+  const auto phi = twopi * G4RandFlat::shoot();
 
-  public:
-    static G4FermiFloat SampleUniform();
+  return {magnitude * std::cos(phi) * sin, magnitude * std::sin(phi) * sin, magnitude * cos};
+}
 
-    static G4FermiFloat SampleNormal(G4FermiFloat mean = 0, G4FermiFloat deviation = 1);
+std::string std::to_string(G4FermiAtomicMass mass)
+{
+  return std::to_string(G4FermiAtomicMass::ValueType(mass));
+}
 
-    static G4FermiParticleMomentum IsotropicVector(G4FermiFloat magnitude = 1);
+std::string std::to_string(G4FermiChargeNumber charge)
+{
+  return std::to_string(G4FermiChargeNumber::ValueType(charge));
+}
 
-    static std::vector<G4FermiFloat> ProbabilityDistribution(size_t pointCount);
+std::ostream& std::operator<<(std::ostream& out, const G4FermiAtomicMass& mass)
+{
+  out << G4FermiAtomicMass::ValueType(mass);
+  return out;
+}
 
-    static size_t SampleDistribution(const std::vector<G4FermiFloat>& weights);
+std::istream& std::operator>>(std::istream& in, G4FermiAtomicMass& mass)
+{
+  G4FermiAtomicMass::ValueType val;
+  in >> val;
+  mass = G4FermiAtomicMass(val);
+  return in;
+}
 
-    static void SetSeed(G4FermiRandomEngine::result_type seed);
+std::ostream& std::operator<<(std::ostream& out, const G4FermiChargeNumber& charge)
+{
+  out << G4FermiChargeNumber::ValueType(charge);
+  return out;
+}
 
-  private:
-    static inline G4FermiRandomEngine Engine_ = {};
-};
-
-#endif  // G4FERMIRANDOMIZER_HH
+std::istream& std::operator>>(std::istream& in, G4FermiChargeNumber& charge)
+{
+  G4FermiChargeNumber::ValueType val;
+  in >> val;
+  charge = G4FermiChargeNumber(val);
+  return in;
+}

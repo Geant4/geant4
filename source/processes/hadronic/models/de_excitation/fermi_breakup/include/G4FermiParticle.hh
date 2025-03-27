@@ -28,29 +28,48 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMISPLITTER_HH
-#define G4FERMISPLITTER_HH
+#ifndef G4FERMIPARTICLE_HH
+#define G4FERMIPARTICLE_HH
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiVFragment.hh"
 
-using G4FermiFragmentSplits = std::vector<G4FermiFragmentVector>;
-
-class G4FermiSplitter
+class G4FermiParticle
 {
   public:
-    static G4FermiFloat DecayWeight(const G4FermiFragmentVector& split,
-                                    G4FermiAtomicMass atomicMass, G4FermiFloat totalEnergy);
+    G4FermiParticle() = delete;
 
-    static G4FermiFloat SplitFactor(const G4FermiFragmentVector& split,
-                                    G4FermiAtomicMass atomicMass);
+    G4FermiParticle(const G4FermiParticle&) = default;
+    G4FermiParticle(G4FermiParticle&&) = default;
 
-    static G4FermiFloat KineticFactor(const G4FermiFragmentVector& split, G4FermiFloat totalEnergy);
+    G4FermiParticle& operator=(const G4FermiParticle&) = default;
+    G4FermiParticle& operator=(G4FermiParticle&&) = default;
 
-    static void GenerateSplits(G4FermiNucleiData nucleiData,
-                               std::vector<G4FermiFragmentVector>& splits);
+    G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                    const G4LorentzVector& momentum);
 
-    static std::vector<G4FermiFragmentVector> GenerateSplits(G4FermiNucleiData nucleiData);
+    G4FermiAtomicMass GetAtomicMass() const;
+
+    G4FermiChargeNumber GetChargeNumber() const;
+
+    const G4LorentzVector& GetMomentum() const;
+
+    G4double GetExcitationEnergy() const;
+
+    G4bool IsStable() const;
+
+  private:
+    void RecalculateExcitationEnergy();
+
+    G4FermiAtomicMass atomicMass_;
+    G4FermiChargeNumber chargeNumber_;
+    G4LorentzVector momentum_;
+
+    G4double excitationEnergy_ = 0;
 };
 
-#endif  // G4FERMISPLITTER_HH
+namespace std
+{
+ostream& operator<<(ostream&, const G4FermiParticle&);
+}  // namespace std
+
+#endif  // G4FERMIPARTICLE_HH

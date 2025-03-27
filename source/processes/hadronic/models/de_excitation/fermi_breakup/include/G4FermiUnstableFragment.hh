@@ -37,24 +37,27 @@ class G4FermiUnstableFragment : public G4FermiVFragment
 {
   public:
     G4FermiUnstableFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                            G4FermiInt polarization, G4FermiFloat excitationEnergy,
+                            G4int polarization, G4double excitationEnergy,
                             std::vector<G4FermiNucleiData>&& decayData);
 
-    void AppendDecayFragments(const G4FermiLorentzVector& momentum,
+    void AppendDecayFragments(const G4LorentzVector& momentum,
                               std::vector<G4FermiParticle>& particles) const override;
 
   private:
+    void DoInitialize() override;
+
     std::vector<G4FermiNucleiData> decayData_;
-    std::vector<G4FermiFloat> masses_;
+
+    std::vector<G4double> masses_;
 };
 
-#define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                             \
-  inline G4FermiUnstableFragment NAME(G4FermiAtomicMass atomicMass,                              \
-                                      G4FermiChargeNumber chargeNumber, G4FermiInt polarization, \
-                                      G4FermiFloat excitationEnergy)                             \
-  {                                                                                              \
-    return G4FermiUnstableFragment(atomicMass, chargeNumber, polarization, excitationEnergy,     \
-                                   FRAGMENTS);                                                   \
+#define FERMI_ADD_UNSTABLE_FRAGMENT(NAME, FRAGMENTS)                                         \
+  inline G4FermiUnstableFragment NAME(G4FermiAtomicMass atomicMass,                          \
+                                      G4FermiChargeNumber chargeNumber, G4int polarization,  \
+                                      G4double excitationEnergy)                             \
+  {                                                                                          \
+    return G4FermiUnstableFragment(atomicMass, chargeNumber, polarization, excitationEnergy, \
+                                   FRAGMENTS);                                               \
   }
 
 // He5 ----> alpha + neutron

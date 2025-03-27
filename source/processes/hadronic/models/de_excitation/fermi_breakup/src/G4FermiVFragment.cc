@@ -32,20 +32,26 @@
 
 #include "G4FermiNucleiProperties.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 
 #include <iomanip>
 
 G4FermiVFragment::G4FermiVFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                                   G4FermiInt polarization, G4FermiFloat excitationEnergy)
+                                   G4int polarization, G4double excitationEnergy)
   : atomicMass_(atomicMass),
     chargeNumber_(chargeNumber),
     polarization_(polarization),
     excitationEnergy_(excitationEnergy)
 {}
 
+void G4FermiVFragment::Initialize()
+{
+  groudStateMass_ = G4FermiNucleiProperties::GetNuclearMass(atomicMass_, chargeNumber_);
+  DoInitialize();
+}
+
 std::vector<G4FermiParticle>
-G4FermiVFragment::GetDecayFragments(const G4FermiLorentzVector& momentum) const
+G4FermiVFragment::GetDecayFragments(const G4LorentzVector& momentum) const
 {
   std::vector<G4FermiParticle> result;
   AppendDecayFragments(momentum, result);
@@ -62,22 +68,22 @@ G4FermiChargeNumber G4FermiVFragment::GetChargeNumber() const
   return chargeNumber_;
 }
 
-G4FermiInt G4FermiVFragment::GetPolarization() const
+G4int G4FermiVFragment::GetPolarization() const
 {
   return polarization_;
 }
 
-G4FermiFloat G4FermiVFragment::GetExcitationEnergy() const
+G4double G4FermiVFragment::GetExcitationEnergy() const
 {
   return excitationEnergy_;
 }
 
-G4FermiFloat G4FermiVFragment::GetMass() const
+G4double G4FermiVFragment::GetMass() const
 {
-  return G4FermiNucleiProperties()->GetNuclearMass(atomicMass_, chargeNumber_);
+  return groudStateMass_;
 }
 
-G4FermiFloat G4FermiVFragment::GetTotalEnergy() const
+G4double G4FermiVFragment::GetTotalEnergy() const
 {
   return GetMass() + GetExcitationEnergy();
 }

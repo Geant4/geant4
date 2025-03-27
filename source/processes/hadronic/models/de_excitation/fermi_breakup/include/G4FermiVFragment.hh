@@ -28,18 +28,63 @@
 // by A. Novikov (January 2025)
 //
 
-#include "G4FermiCopyMass.hh"
+#ifndef G4FERMIVFRAGMENT_HH
+#define G4FERMIVFRAGMENT_HH
 
-#include <G4NucleiProperties.hh>
+#include "G4FermiDataTypes.hh"
+#include "G4FermiParticle.hh"
 
-G4FermiCopyMass::G4FermiCopyMass()
+#include <globals.hh>
+
+class G4FermiVFragment;
+
+using G4FermiFragmentVector = std::vector<const G4FermiVFragment*>;
+
+class G4FermiVFragment
 {
-  for (auto a = 1; a < MAX_A; ++a) {
-    for (auto z = 0; z <= a; ++z) {
-      if (G4NucleiProperties::IsInStableTable(a, z)) {
-        emplace_back(std::make_pair(G4FermiNucleiData{G4FermiAtomicMass(a), G4FermiChargeNumber(z)},
-                                    G4NucleiProperties::GetNuclearMass(a, z)));
-      }
-    }
-  }
-}
+  public:
+    G4FermiVFragment(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
+                     G4int polarization, G4double excitationEnergy);
+
+    G4FermiVFragment(const G4FermiVFragment&) = delete;
+
+    G4FermiVFragment& operator=(const G4FermiVFragment&) = delete;
+
+    void Initialize();
+
+    std::vector<G4FermiParticle> GetDecayFragments(const G4LorentzVector& momentum) const;
+
+    virtual void AppendDecayFragments(const G4LorentzVector& momentum,
+                                      std::vector<G4FermiParticle>& particles) const = 0;
+
+    G4FermiAtomicMass GetAtomicMass() const;
+
+    G4FermiChargeNumber GetChargeNumber() const;
+
+    G4int GetPolarization() const;
+
+    G4double GetExcitationEnergy() const;
+
+    G4double GetMass() const;
+
+    G4double GetTotalEnergy() const;
+
+    virtual ~G4FermiVFragment() = default;
+
+  protected:
+    virtual void DoInitialize() = 0;
+
+    G4FermiAtomicMass atomicMass_;  // A
+    G4FermiChargeNumber chargeNumber_;  // Z
+    G4int polarization_;
+
+    G4double groudStateMass_;
+    G4double excitationEnergy_;
+};
+
+namespace std
+{
+ostream& operator<<(ostream&, const G4FermiVFragment&);
+}  // namespace std
+
+#endif  // G4FERMIVFRAGMENT_HH

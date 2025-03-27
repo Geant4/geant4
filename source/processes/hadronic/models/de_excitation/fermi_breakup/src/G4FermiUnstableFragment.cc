@@ -28,20 +28,39 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIVNUCLEIPROPERTIES_HH
-#define G4FERMIVNUCLEIPROPERTIES_HH
+#include "G4FermiUnstableFragment.hh"
 
-#include "G4FermiDataTypes.hh"
+#include "G4FermiNucleiProperties.hh"
+#include "G4FermiPhaseDecay.hh"
 
-class G4FermiVNucleiProperties
+G4FermiUnstableFragment::G4FermiUnstableFragment(G4FermiAtomicMass atomicMass,
+                                                 G4FermiChargeNumber chargeNumber,
+                                                 G4int polarization, G4double excitationEnergy,
+                                                 std::vector<G4FermiNucleiData>&& decayData)
+  : G4FermiVFragment(atomicMass, chargeNumber, polarization, excitationEnergy),
+    decayData_(std::move(decayData))
+{}
+
+void G4FermiUnstableFragment::AppendDecayFragments(const G4LorentzVector& momentum,
+                                                   std::vector<G4FermiParticle>& fragments) const
 {
-  public:
-    virtual G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
-                                        G4FermiChargeNumber chargeNumber) const = 0;
+  G4FermiPhaseDecay phaseDecay;
+  auto fragmentsMomentum = phaseDecay.CalculateDecay(momentum, masses_);
 
-    virtual bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const = 0;
+  const auto boostVector = momentum.boostVector();
 
-    virtual ~G4FermiVNucleiProperties() = default;
-};
+  for (std::size_t i = 0; i < decayData_.size(); ++i) {
+    fragments.emplace_back(decayData_[i].atomicMass, decayData_[i].chargeNumber,
+                           fragmentsMomentum[i].boost(boostVector));
+  }
+}
 
-#endif  // G4FERMIVNUCLEIPROPERTIES_HH
+void G4FermiUnstableFragment::DoInitialize()
+{
+  masses_.clear();
+  masses_.reserve(decayData_.size());
+  for (const auto& decayFragment : decayData_) {
+    masses_.emplace_back(G4FermiNucleiProperties::GetNuclearMass(decayFragment.atomicMass,
+                                                                 decayFragment.chargeNumber));
+  }
+}

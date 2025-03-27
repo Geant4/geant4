@@ -28,63 +28,70 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIFASTNUCLEIPROPERTIES_HH
-#define G4FERMIFASTNUCLEIPROPERTIES_HH
+#ifndef G4FERMINUCLEIPROPERTIES_HH
+#define G4FERMINUCLEIPROPERTIES_HH
 
 #include "G4FermiDataTypes.hh"
-#include "G4FermiVNucleiProperties.hh"
 
-#include <vector>
-
-class G4FermiFastNucleiProperties : public G4FermiVNucleiProperties
+// Caches values from larger G4NucleiProperties(x5-10 speed boost)
+class G4FermiNucleiProperties
 {
   public:
-    G4FermiFastNucleiProperties();
-
     template<typename DataSource>
-    G4FermiFastNucleiProperties(const DataSource& dataSource);
+    void Reset(const DataSource& dataSource)
+    {
+      Reset(dataSource.begin(), dataSource.end());
+    }
 
     template<typename Iter>
-    G4FermiFastNucleiProperties(Iter begin, Iter end);
+    void Reset(Iter begin, Iter end)
+    {
+      nucleiMasses_.clear();
+      static_assert(
+        std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4double>>,
+        "invalid iterator");
+      for (auto it = begin; it != end; ++it) {
+        InsertNuclei(it->first.atomicMass, it->first.chargeNumber, it->second);
+      }
+    }
 
-    [[nodiscard]] G4FermiFloat GetNuclearMass(G4FermiAtomicMass atomicMass,
-                                              G4FermiChargeNumber chargeNumber) const override;
+    static G4double GetNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+    {
+      return Instance().GetNuclearMassImpl(atomicMass, chargeNumber);
+    }
 
-    [[nodiscard]] bool IsStable(G4FermiAtomicMass atomicMass,
-                                G4FermiChargeNumber chargeNumber) const override;
+    static G4bool IsStable(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+    {
+      return Instance().IsStableImpl(atomicMass, chargeNumber);
+    }
 
-    void AddStableNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                         G4FermiFloat mass);
+    void InsertNuclei(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber, G4double mass,
+                      G4bool isStable = true);
 
-    void AddStableNuclei(G4FermiNucleiData nucleiData, G4FermiFloat mass);
+    static G4FermiNucleiProperties& Instance()
+    {
+      static G4FermiNucleiProperties properties;
+      return properties;
+    }
 
   private:
+    G4FermiNucleiProperties();
+
+    G4double GetNuclearMassImpl(G4FermiAtomicMass atomicMass,
+                                G4FermiChargeNumber chargeNumber) const;
+
+    G4bool IsStableImpl(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber) const;
+
     struct G4FermiMassData
     {
-        G4FermiFloat mass;
+        G4double mass;
 
-        bool isStable = false;  // value was added via AddMass, it is considered stable
+        G4bool isStable = false;  // is nuclei stable
 
-        bool isCached = false;  // value has been calculated earlier
+        G4bool isCached = false;  // value has been inserted earlier
     };
 
     mutable std::vector<G4FermiMassData> nucleiMasses_;
 };
 
-template<typename DataSource>
-G4FermiFastNucleiProperties::G4FermiFastNucleiProperties(const DataSource& dataSource)
-  : G4FermiFastNucleiProperties(dataSource.begin(), dataSource.end())
-{}
-
-template<typename Iter>
-G4FermiFastNucleiProperties::G4FermiFastNucleiProperties(Iter begin, Iter end)
-{
-  static_assert(
-    std::is_same_v<typename Iter::value_type, std::pair<const G4FermiNucleiData, G4FermiFloat>>,
-    "invalid iterator");
-  for (auto it = begin; it != end; ++it) {
-    AddStableNuclei(it->first, it->second);
-  }
-}
-
-#endif  // G4FERMIFASTNUCLEIPROPERTIES_HH
+#endif  // G4FERMINUCLEIPROPERTIES_HH

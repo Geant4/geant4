@@ -28,52 +28,12 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMISINGLETON_HH
-#define G4FERMISINGLETON_HH
+#include "G4FermiStableFragment.hh"
 
-#include "G4FermiLogger.hh"
-
-#include <memory>
-
-template<typename T>
-class G4FermiSingleton
+void G4FermiStableFragment::AppendDecayFragments(const G4LorentzVector& momentum,
+                                                 std::vector<G4FermiParticle>& fragments) const
 {
-  public:
-    G4FermiSingleton()
-    {
-      if (FERMI_UNLIKELY(instance_ == nullptr)) {
-        instance_ = std::make_unique<T>();
-      }
-    }
+  fragments.emplace_back(G4FermiParticle(GetAtomicMass(), GetChargeNumber(), momentum));
+}
 
-    template<typename... Args>
-    G4FermiSingleton(Args&&... args)
-    {
-      Reset(std::forward<Args>(args)...);
-    }
-
-    G4FermiSingleton(T* ptr) { Reset(ptr); }
-
-    template<typename... Args>
-    static void Reset(Args&&... args)
-    {
-      instance_ = std::make_unique<T>(std::forward<Args>(args)...);
-    }
-
-    static void Reset(T* ptr) { instance_.reset(ptr); }
-
-    static T& Instance() { return *G4FermiSingleton(); }
-
-    T& operator*() { return *instance_; }
-
-    const T& operator*() const { return *instance_; }
-
-    T* operator->() { return instance_.get(); }
-
-    const T& operator->() const { return *instance_; }
-
-  private:
-    static inline std::unique_ptr<T> instance_;
-};
-
-#endif  // G4FERMISINGLETON_HH
+void G4FermiStableFragment::DoInitialize() {}

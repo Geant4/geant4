@@ -27,23 +27,84 @@
 // G4FermiBreakUpAN alternative de-excitation model
 // by A. Novikov (January 2025)
 //
+//
+// Created by Artem Novikov on 30.01.2024.
+//
 
-#include "G4FermiDefaultPoolSource.hh"
+#include "G4FermiFragmentPool.hh"
 
+#include "G4FermiDataTypes.hh"
 #include "G4FermiStableFragment.hh"
 #include "G4FermiUnstableFragment.hh"
 
-#include <CLHEP/Units/PhysicalConstants.h>
+#include <G4PhysicalConstants.hh>
 
 using CLHEP::MeV;
 
-G4FermiDefaultPoolSource::G4FermiDefaultPoolSource()
+namespace
+{
+std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
+{
+  const auto mass = static_cast<std::uint32_t>(atomicMass);
+  const auto charge = static_cast<std::uint32_t>(chargeNumber);
+  return (mass * (mass + 1)) / 2 + charge;
+}
+}  // namespace
+
+G4FermiFragmentPool::G4FermiFragmentPool()
+{
+  auto pool = G4FermiFragmentPool::DefaultPoolSource();
+  pool.Initialize();
+  Initialize(pool);
+}
+
+std::size_t G4FermiFragmentPool::Count(G4FermiAtomicMass atomicMass,
+                                       G4FermiChargeNumber chargeNumber) const
+{
+  if (unlikely(static_cast<std::uint32_t>(atomicMass) < static_cast<std::uint32_t>(chargeNumber))) {
+    return 0;
+  }
+
+  const auto slot = GetSlot(atomicMass, chargeNumber);
+  if (unlikely(slot >= fragments_.size())) {
+    return 0;
+  }
+
+  return fragments_[slot].size();
+}
+
+G4FermiFragmentPool::IteratorRange
+G4FermiFragmentPool::GetFragments(G4FermiAtomicMass atomicMass,
+                                  G4FermiChargeNumber chargeNumber) const
+{
+  if (unlikely(static_cast<std::uint32_t>(atomicMass) < static_cast<std::uint32_t>(chargeNumber))) {
+    return {EmptyContainer_.begin(), EmptyContainer_.end()};
+  }
+
+  const auto slot = GetSlot(atomicMass, chargeNumber);
+  if (unlikely(slot >= fragments_.size())) {
+    return {EmptyContainer_.begin(), EmptyContainer_.end()};
+  }
+
+  return {fragments_[slot].begin(), fragments_[slot].end()};
+}
+
+void G4FermiFragmentPool::AddFragment(const G4FermiVFragment& fragment)
+{
+  const auto slot = GetSlot(fragment.GetAtomicMass(), fragment.GetChargeNumber());
+  if (slot >= fragments_.size()) {
+    fragments_.resize(slot + static_cast<std::uint32_t>(fragment.GetAtomicMass()));
+  }
+  fragments_[slot].push_back(&fragment);
+}
+
+G4FermiFragmentPool::DefaultPoolSource::DefaultPoolSource()
 {
 #define FERMI_CONCAT(x, y) x##y
 #define FERMI_INSTANTIATE_MACRO(x, y) FERMI_CONCAT(x, y)
 
 #define FERMI_ADD_FRAGMENT_IMPL(NAME, VALUE) \
-  static const auto NAME = VALUE;            \
+  static auto NAME = VALUE;                  \
   push_back(&NAME);
 
 // automatic unique names are added
@@ -164,4 +225,11 @@ G4FermiDefaultPoolSource::G4FermiDefaultPoolSource()
 #undef FERMI_ADD_FRAGMENT_IMPL
 #undef FERMI_INSTANTIATE_MACRO
 #undef FERMI_CONCAT
+}
+
+void G4FermiFragmentPool::DefaultPoolSource::Initialize()
+{
+  for (auto fragmentPtr : *this) {
+    fragmentPtr->Initialize();
+  }
 }

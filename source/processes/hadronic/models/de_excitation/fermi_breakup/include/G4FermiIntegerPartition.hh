@@ -28,53 +28,66 @@
 // by A. Novikov (January 2025)
 //
 
-#ifndef G4FERMIPARTICLE_HH
-#define G4FERMIPARTICLE_HH
+#ifndef G4intEGERPARTITION_HH
+#define G4intEGERPARTITION_HH
 
-#include "G4FermiDataTypes.hh"
+#include <globals.hh>
 
-class G4FermiParticle
+using G4FermiPartition = std::vector<std::uint32_t>;
+
+class G4integerPartition
 {
   public:
-    G4FermiParticle() = delete;
+    class Iterator;
 
-    G4FermiParticle(const G4FermiParticle&) = default;
-    G4FermiParticle(G4FermiParticle&&) = default;
+    Iterator begin() const;
 
-    G4FermiParticle& operator=(const G4FermiParticle&) = default;
-    G4FermiParticle& operator=(G4FermiParticle&&) = default;
+    Iterator end() const;
 
-    G4FermiParticle(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber,
-                    const G4FermiLorentzVector& momentum);
-
-    G4FermiNucleiData GetNucleiData() const;
-
-    G4FermiAtomicMass GetAtomicMass() const;
-
-    G4FermiChargeNumber GetChargeNumber() const;
-
-    const G4FermiLorentzVector& GetMomentum() const;
-
-    G4FermiFloat GetExcitationEnergy() const;
-
-    G4FermiFloat GetGroundStateMass() const;
-
-    bool IsStable() const;
+    G4integerPartition(std::uint32_t number, std::uint32_t termsCount, std::uint32_t base = 1);
 
   private:
-    void CalculateExcitationEnergy();
-
-    G4FermiAtomicMass atomicMass_;
-    G4FermiChargeNumber chargeNumber_;
-    G4FermiLorentzVector momentum_;
-
-    G4FermiFloat groundStateMass_ = 0;
-    G4FermiFloat excitationEnergy_ = 0;
+    std::uint32_t number_;
+    std::uint32_t termsCount_;
+    std::uint32_t base_;
 };
 
-namespace std
+class G4integerPartition::Iterator
 {
-ostream& operator<<(ostream&, const G4FermiParticle&);
-}  // namespace std
+  public:
+    friend class G4integerPartition;
 
-#endif  // G4FERMIPARTICLE_HH
+    using difference_type = std::int64_t;
+    using value_type = G4FermiPartition;
+    using reference = const G4FermiPartition&;
+    using pointer = const G4FermiPartition*;
+    using iterator_category = std::forward_iterator_tag;
+
+    Iterator(const Iterator&) = default;
+
+    Iterator& operator=(const Iterator&) = default;
+
+    pointer operator->() const;
+
+    reference operator*() const;
+
+    Iterator& operator++();
+
+    Iterator operator++(int);
+
+    G4bool operator==(const Iterator& other) const;
+
+    G4bool operator!=(const Iterator& other) const;
+
+  private:
+    // represents end partition
+    Iterator() = default;
+
+    Iterator(std::uint32_t number, std::uint32_t termsCount, std::uint32_t base);
+
+    void NextPartition();
+
+    G4FermiPartition partition_;
+};
+
+#endif  // G4intEGERPARTITION_HH

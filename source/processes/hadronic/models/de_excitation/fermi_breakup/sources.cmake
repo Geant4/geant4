@@ -11,13 +11,34 @@ geant4_add_module(G4hadronic_deex_fermi_breakup
     G4FermiPair.hh
     G4FermiPhaseSpaceDecay.hh
     G4VFermiBreakUp.hh
+    G4FermiPhaseSpaceDecay.hh
+    G4FermiDataTypes.hh
+    G4FermiIntegerPartition.hh
+    G4FermiParticle.hh
+    G4FermiNucleiProperties.hh
+    G4FermiFragmentPool.hh
+    G4FermiVFragment.hh
+    G4FermiStableFragment.hh
+    G4FermiUnstableFragment.hh
+    G4FermiSplitter.hh
+    G4FermiBreakUpAN.hh
   SOURCES
     G4FermiBreakUpUtil.cc
     G4FermiBreakUpVI.cc
     G4FermiFragment.cc
     G4FermiFragmentsPoolVI.cc
     G4FermiPair.cc
-    G4FermiPhaseSpaceDecay.cc)
+    G4FermiPhaseSpaceDecay.cc
+    G4FermiDataTypes.cc
+    G4FermiIntegerPartition.cc
+    G4FermiParticle.cc
+    G4FermiNucleiProperties.cc
+    G4FermiFragmentPool.cc
+    G4FermiVFragment.cc
+    G4FermiStableFragment.cc
+    G4FermiUnstableFragment.cc
+    G4FermiSplitter.cc
+    G4FermiBreakUpAN.cc)
 
 geant4_module_link_libraries(G4hadronic_deex_fermi_breakup
   PUBLIC
