@@ -37,14 +37,16 @@
 class G4FermiNucleiProperties
 {
   public:
+    void Initialize() { *this = G4FermiNucleiProperties(); }
+
     template<typename DataSource>
-    void Reset(const DataSource& dataSource)
+    void Initialize(const DataSource& dataSource)
     {
-      Reset(dataSource.begin(), dataSource.end());
+      Initialize(dataSource.begin(), dataSource.end());
     }
 
     template<typename Iter>
-    void Reset(Iter begin, Iter end)
+    void Initialize(Iter begin, Iter end)
     {
       nucleiMasses_.clear();
       static_assert(

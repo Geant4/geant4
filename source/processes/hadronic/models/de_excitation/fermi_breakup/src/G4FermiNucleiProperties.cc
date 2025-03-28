@@ -36,53 +36,6 @@
 
 namespace
 {
-// G4double WeitzsaeckerBindingEnergy(G4FermiAtomicMass atomicMass,
-//   G4FermiChargeNumber chargeNumber)
-// {
-//   // Weitzsaecker's Mass formula
-//   const auto nucleiParity = (G4int(atomicMass) - G4int(chargeNumber)) % 2;  // pairing
-//   const auto chargeParity = G4int(chargeNumber) % 2;
-
-//   const auto atomicMassF = G4double(atomicMass);
-//   const auto chargeNumberF = G4double(chargeNumber);
-
-//   G4double binding =
-//     -15.67 * atomicMassF  // nuclear volume
-//     + 17.23 * std::pow(atomicMassF, 2. / 3.)  // surface energy
-//     + 93.15 * std::pow(atomicMassF / 2. - chargeNumberF, 2) / atomicMassF  // asymmetry
-//     + 0.6984523 * std::pow(chargeNumberF, 2) / std::cbrt(atomicMassF);  // coulomb
-
-//   if (nucleiParity == chargeParity) {
-//     binding += 12.0 * (nucleiParity + chargeParity - 1) / std::sqrt(atomicMassF);  // pairing
-//   }
-
-//   return -binding * CLHEP::MeV;
-// }
-
-// G4double EstimateAtomicWeight(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
-// {
-//   constexpr G4double hydrogenMassExcess = 7.28897;
-//   constexpr G4double neutronMassExcess = 8.07132;
-
-//   return G4double(G4int(atomicMass) - G4int(chargeNumber)) * neutronMassExcess
-//           + G4double(chargeNumber) * hydrogenMassExcess
-//           - WeitzsaeckerBindingEnergy(atomicMass, chargeNumber)
-//           + G4double(atomicMass) * amu_c2;
-// }
-
-// G4double EstimateNuclearMass(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
-// {
-//   auto mass = EstimateAtomicWeight(atomicMass, chargeNumber);
-
-//   // atomic mass is converted to nuclear mass according formula in AME03
-//   mass -= G4double(chargeNumber) * electron_mass_c2;
-//   mass += (14.4381 * std::pow(G4double(chargeNumber), 2.39)
-//             + 1.55468e-6 * std::pow(G4double(chargeNumber), 5.35))
-//           * CLHEP::eV;
-
-//   return mass;
-// }
-
 std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumber)
 {
   const auto mass = static_cast<std::uint32_t>(atomicMass);
@@ -93,11 +46,6 @@ std::size_t GetSlot(G4FermiAtomicMass atomicMass, G4FermiChargeNumber chargeNumb
 
 G4FermiNucleiProperties::G4FermiNucleiProperties()
 {
-  if (G4NucleiProperties::GetNuclearMass(2, 0) <= 0.) {
-    G4BaryonConstructor pCBar;
-    pCBar.ConstructParticle();
-  }
-
   for (auto a = 1; a < MAX_A; ++a) {
     for (auto z = 0; z <= a; ++z) {
       const auto atomicMass = G4FermiAtomicMass(a);

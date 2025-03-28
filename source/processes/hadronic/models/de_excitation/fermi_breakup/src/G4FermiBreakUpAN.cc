@@ -215,6 +215,7 @@ void G4FermiBreakUpAN::Initialise()
     G4BaryonConstructor pCBar;
     pCBar.ConstructParticle();
   }
+  G4FermiNucleiProperties::Instance().Initialize();
 
   {
     auto pool = G4FermiFragmentPool::DefaultPoolSource();

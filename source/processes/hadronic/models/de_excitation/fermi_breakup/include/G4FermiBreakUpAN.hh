@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// G4FermiBreakUpAN alternative de-excitation model
-// by A. Novikov (January 2025)
+// G4FermiBreakUpAN is an alternative realisation of Fermi Break Up de-excitation model 
+// originally developed in J.P. Bondorf, A.S. Botvina, A.S. Iljinov, I.N. Mishustin, and K. Sneppen. Statistical multifragmentation of nuclei. Physics Reports, 257(3):133–221, Jun 1995. URL: https://doi.org/10.1016/0370-1573(94)00097-M, doi:10.1016/0370-1573(94)00097-m.
+// by A. Novikov, Yandex and MIPT (January 2025)
+// under supervision of Aleksandr Svetlichnyi, INR RAS and MIPT
 //
 
 #ifndef G4FERMIBREAKUP_HH
