@@ -43,6 +43,8 @@
 #ifndef G4EmTableType_h
 #define G4EmTableType_h 1
 
+#include "G4Types.hh"
+
 enum G4EmTableType
 {
   fTotal = 0,
