@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -994,7 +994,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.820000s Real=1.089794s Sys=0.260000s
+  User=0.540000s Real=0.995063s Sys=0.460000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1277,7 +1277,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.670000s Real=2.157904s Sys=0.480000s
+  User=1.120000s Real=2.014252s Sys=0.900000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1591,7 +1591,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.190000s Real=0.243882s Sys=0.050000s
+  User=0.120000s Real=0.224280s Sys=0.100000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1934,7 +1934,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.320000s Real=0.418699s Sys=0.090000s
+  User=0.210000s Real=0.387092s Sys=0.170000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

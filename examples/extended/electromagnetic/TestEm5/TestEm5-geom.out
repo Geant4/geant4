@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -105,7 +105,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000423s Sys=0.000000s
+  User=0.000000s Real=0.000268s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -185,7 +185,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 6
-  User=0.000000s Real=0.000057s Sys=0.000000s
+  User=0.000000s Real=0.000031s Sys=0.000000s
 
  ======================== run summary ======================
 

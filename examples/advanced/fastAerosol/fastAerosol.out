@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -875,12 +875,12 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   2 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            0k World
+       0.00         0.00         0.00            0k World
        0.00         0.00         0.00            1k detectorMesh_0
        0.00         0.00         0.00            1k detectorMesh_1
 
@@ -889,7 +889,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       46.13          1k         1       20         20         0.00    detectorMesh_0
       46.13          1k         1       20         20         0.00    detectorMesh_1
-       7.74          0k         1        2          4         0.01    World
+       7.74          0k         1        2          4         0.00    World
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
@@ -13756,7 +13756,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.100000s Real=1.136850s Sys=0.030000s
+  User=0.830000s Real=0.852458s Sys=0.020000s
 
 --------------------End of Global Run-----------------------
  The run consists of 10 proton of 50 MeV
@@ -13770,9 +13770,9 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xedaed0
-UserPhysicsList deleted 0xed7220
-UserActionInitialization deleted 0x1098ba0
+UserDetectorConstruction deleted 0x11a82b0
+UserPhysicsList deleted 0x11a4600
+UserActionInitialization deleted 0x1365f80
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

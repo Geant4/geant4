@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -839,9 +839,9 @@ Max 2J for sampling of angular correlations         10
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00917481
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0
+Internal Real Elapsed Time is: 0.00557047
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   12125 hits are stored in ExGflashHitsCollection 
@@ -854,9 +854,9 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00671907
+Internal Real Elapsed Time is: 0.00360352
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
   11954 hits are stored in ExGflashHitsCollection 
@@ -869,7 +869,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00609086
+Internal Real Elapsed Time is: 0.00347984
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -884,7 +884,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00632969
+Internal Real Elapsed Time is: 0.00352701
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -899,9 +899,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00619852
+Internal Real Elapsed Time is: 0.00362603
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
   11988 hits are stored in ExGflashHitsCollection 
@@ -914,7 +914,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00631054
+Internal Real Elapsed Time is: 0.00355562
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -929,7 +929,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00646493
+Internal Real Elapsed Time is: 0.0036316
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -944,9 +944,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0065038
+Internal Real Elapsed Time is: 0.0035182
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
   11987 hits are stored in ExGflashHitsCollection 
@@ -959,7 +959,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00643195
+Internal Real Elapsed Time is: 0.00346151
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -974,7 +974,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00628319
+Internal Real Elapsed Time is: 0.00354113
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -987,10 +987,10 @@ Internal GetUserElapsed Time: 0.01
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.00738971
+Internal Real Elapsed Time /event is: 0.00416833
 
 ******************************************
-Total Real Elapsed Time is: 2.63587
-Total System Elapsed Time: 0.14
-Total GetUserElapsed Time: 2.35
+Total Real Elapsed Time is: 1.56107
+Total System Elapsed Time: 0.1
+Total GetUserElapsed Time: 1.33
 ******************************************

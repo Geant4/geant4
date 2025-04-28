@@ -18,7 +18,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -47,14 +47,13 @@ Enabled Check mode in G4Navigator G4ChordFinder: stepperDriverId: 2
 
  *** SETTING MAGNETIC FIELD in Z direction : fieldValue = 2 tesla *** 
 
-*** Conversion of G4 -> VecGeom finished (0.010636 s) ***
-*** Closing VecGeom geometry finished (0.000672375 s) ***
-*** Setup of syncing lookup structure finished (2.4864e-05 s) ***
+*** Conversion of G4 -> VecGeom finished (0.00283541 s) ***
+*** Closing VecGeom geometry finished (0.00034433 s) ***
+*** Setup of syncing lookup structure finished (2.354e-05 s) ***
 TG4VecGeomNavigator created and registered to G4TransportationManager
 Uncontained capacity for Svt_log: 8.83002e+07 units
 Uncontained capacity for Dch_log: 8.26239e+08 units
-Uncontained capacity for Dch_log: 8.26239e+08 units
-*** Setup of VecGeom navigators finished (36.4627 s) ***
+*** Setup of VecGeom navigators finished (30.2389 s) ***
 3
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
@@ -2748,7 +2747,7 @@ Step#    X (mm)    Y (mm)    Z (mm)    Ek (MeV) dE (MeV) Step(mm)    Track(mm) S
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.014463s Sys=0.000000s
+  User=0.000000s Real=0.015555s Sys=0.000000s
 /tracking/verbose 0
 /run/beamOn 10
 
@@ -2798,7 +2797,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.060000s Real=0.054081s Sys=0.000000s
+  User=0.030000s Real=0.031718s Sys=0.000000s
 
  ================================================================= 
  Final random number = 0.56769521327478

@@ -65,11 +65,6 @@ FTFP_BERT_ATL::FTFP_BERT_ATL(G4int ver)
   defaultCutValue = 0.7*CLHEP::mm;  
   SetVerboseLevel(ver);
 
-  // Use the 4th tunes of Fritiof (FTF) string model, meant to to overcome
-  // the problem of too optimistic (i.e. narrow) pion shower energy resolutions
-  // in ATLAS calorimeters with respect to test-beam data.
-  G4FTFTunings::Instance()->SetTuneApplicabilityState( 4, 1 );
-  
   // EM Physics
   RegisterPhysics( new G4EmStandardPhysics(ver));
 

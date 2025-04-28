@@ -370,8 +370,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
   const G4int targetA = targetNucleus.GetA_asInt();
   const G4int targetZ = targetNucleus.GetZ_asInt();
 
-  const auto& projectileDirection = projectile.GetMomentumDirection();
-  /*G4double txx = projectileDirection.x();
+  /*const auto& projectileDirection = projectile.GetMomentumDirection();
+  G4double txx = projectileDirection.x();
   G4double tyy = projectileDirection.y();
   G4double tzz = projectileDirection.z();*/
   // Should NOT propagate the track/projectile's direction (dir) from Geant4:

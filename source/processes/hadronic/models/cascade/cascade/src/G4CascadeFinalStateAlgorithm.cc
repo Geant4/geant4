@@ -53,13 +53,13 @@
 #include "G4TwoBodyAngularDist.hh"
 #include "G4VMultiBodyMomDst.hh"
 #include "G4VTwoBodyAngDst.hh"
+#include "G4HadronicParameters.hh"
 #include "Randomize.hh"
 #include <vector>
 #include <numeric>
 #include <cmath>
 
 using namespace G4InuclSpecialFunctions;
-
 
 // Cut-offs and iteration limits for generation
 
@@ -420,14 +420,43 @@ GenerateCosTheta(G4int ptype, G4double pmod) const {
   }
 
   // Throw multi-body distribution
+  if ( G4HadronicParameters::Instance()->IsBertiniAngularEmissionsAs11_2() ) {
+    
+    G4double p0 = ptype<3 ? 0.36 : 0.25;  // Nucleon vs. everything else
+    G4double alf = 1.0 / p0 / (p0 - (pmod+p0)*G4Exp(-pmod / p0));
+    G4double sinth = 2.0;
+    G4int itry1 = -1;		/* Loop checking 08.06.2015 MHK */
+    while (std::fabs(sinth) > maxCosTheta && ++itry1 < itry_max) {
+      G4double s1 = pmod * G4UniformRand();
+      G4double s2 = alf * oneOverE * p0 * G4UniformRand();
+      G4double salf = s1 * alf * G4Exp(-s1 / p0);
+      if (GetVerboseLevel() > 3) {
+        G4cout << " s1 * alf * G4Exp(-s1 / p0) " << salf
+	       << " s2 " << s2 << G4endl;
+      }
+      if (salf > s2) sinth = s1 / pmod;
+    }
+    if (GetVerboseLevel() > 3) G4cout << " itry1 " << itry1 << " sinth " << sinth << G4endl;
+    if (itry1 == itry_max) {
+      if (GetVerboseLevel() > 2) G4cout << " high energy angles generation: itry1 " << itry1 << G4endl;
+      sinth = 0.5 * G4UniformRand();
+    }
+    // Convert generated sin(theta) to cos(theta) with random sign
+    G4double costh = std::sqrt(1.0 - sinth * sinth);
+    if (G4UniformRand() > 0.5) costh = -costh;
+    return costh;
+  
+  } else {
 
-  // Sample costheta directly from exp(-a*pmod*(1 - costheta) ) 
-  // Previous method sampled from a*sintheta*exp(-a*sintheta),
-  //   converted to costheta and (incorrectly) reflected around 180 degrees
-  //
-  G4double p0 = ptype < 3 ? 0.36 : 0.25;  // 0.36 for nucleon, 0.25 for all others
-  G4double alf = 3.*pmod/p0;
-  return G4Log(G4UniformRand()*(G4Exp(2.*alf) - 1.) + 1.)/alf - 1.;
+    // Sample costheta directly from exp(-a*pmod*(1 - costheta) ) 
+    // Previous method sampled from a*sintheta*exp(-a*sintheta),
+    //   converted to costheta and (incorrectly) reflected around 180 degrees
+    //
+    G4double p0 = ptype < 3 ? 0.36 : 0.25;  // 0.36 for nucleon, 0.25 for all others
+    G4double alf = 3.*pmod/p0;
+    return G4Log(G4UniformRand()*(G4Exp(2.*alf) - 1.) + 1.)/alf - 1.;
+
+  } 
 }
 
 

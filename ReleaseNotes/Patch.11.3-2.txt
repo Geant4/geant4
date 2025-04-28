@@ -1,0 +1,114 @@
+
+                 Geant4 11.3 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                           25 April 2025
+
+List of fixes included in this public patch since release 11.3.1:
+
+  o Externals
+    ---------
+    + g4tools:
+      o Fixed compilation errors on Windows in glarea header, triggered when enabling
+        GL WIN32 support, as reported in problem report #2599.
+    + zlib:
+      o Fix in zutil.h to remove redundant block on macOS and allow for porting on
+        macOS-15.4 with clang-17.0.0.
+
+  o Geometry
+    --------
+    + management:
+      o In G4GeometryManager, removed redundant declaration of not implemented method
+        ChooseSequentialOptimisation().
+
+  o Global
+    ------
+    + Added Scintillation, Cherenkov, Transition Radiation and Synchrotron Radiation
+      processes to G4PhysicsModelCatalog::Initialize().
+      Addressing problem report #2651.
+    + Updated date and version for 11.3.2.
+
+  o Parameterisations
+    -----------------
+    + channeling:
+      o In G4VChannelingFastSimCrystalData::IonizationLosses(), fixed bug in the
+        electron ionisation loss correction formula.
+
+  o Physics Lists
+    -------------
+    + lists:
+      o In FTFP_BERT_ATL, use the default FTF tuning parameters, as for all other
+        reference physics lists. In order to enable the special FTF tune for ATLAS,
+        one can either use the following C++ call in user code:
+          G4FTFTunings::Instance()->SetTuneApplicabilityState( 4, 1 );
+        or the UI command (before run-initialisation):
+          /process/had/models/ftf/selectTuneByIndex 4
+
+  o Processes - Decay
+    -----------------
+    + Removed approximation in calculation of G4Decay path length.
+      Addressing problem report #2645.
+
+  o Processes - Electromagnetic
+    ---------------------------
+    + utils:
+      o G4VAtomDeexcitation: fix to allow PIXE simulation.
+        Addressing problem report #2650.
+      o Fix in G4EmTableType header to make it self-consistent.
+        Reported in [GitHub PR#85](https://github.com/Geant4/geant4/pull/85).
+ 
+  o Processes - Hadronic
+    --------------------
+    + models/cascade:
+      o In G4CascadeFinalStateAlgorithm and G4NucleiModel, introduced the
+        possibility to enable behaviour as either in Geant4 version 11.3
+        (default) or as in 11.2, according to the value of Boolean flags
+        through the call in G4HadronicParameters:
+          SetBertiniAs11_2( true ).
+        Also possible to configure the properties of nuclei of G4NucleiModel
+        through the call in G4HadronicParameters:
+          SetBertiniNucleiModelAs11_2( true )
+        and the angular distribution of >= 4-body final-state emissions in
+        G4CascadeFinalStateAlgorithm, through the call in G4HadronicParameters:
+          SetBertiniAngularEmissionsAs11_2( true ).
+        Note that the default changes introduced in release 11.3 are to be
+        considered as a real improvement of the Bertini model, although some
+        degradation of thin-target data, in particular for the pion production
+        in HARP data, is observed. A retuning of the parameters of the model
+        will be likely necessary in the near future, based on these changes.
+    + util
+      o Added accessor and modifier in G4HadronicDeveloperParameters for
+        selecting the Bertini model mode as Geant4 version 11.3 (default)
+        or 11.2.
+
+  o Visualization
+    -------------
+    + OpenGL:
+      o Fixed compilation errors on Windows in G4OpenGLWin32Viewer, triggered
+        when enabling GL WIN32 support, as reported in problem report #2599.
+    + RayTracer:
+      o Fix in G4RayTracerXViewer for use of MT.
+ 
+  o Examples
+    --------
+    + extended/geometry/vecGeomNavigation
+      o Use G4cout for VecGeom logger output.
+    + extended/hadronic/FlukaCern
+      o Ensure compatibility with FLUKA v4-5.0: make the link time resolution
+        of COMMON blocks (declared as external structs in the C++ source)
+        compatible with the new FLUKA version.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.3 series.
+  o  Technical notes distributed for release 11.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.3.2 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

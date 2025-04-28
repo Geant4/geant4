@@ -183,6 +183,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4Proton.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicParameters.hh"
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -379,7 +380,7 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   zone_potentials.push_back(std::move(kp));
   zone_potentials.push_back(std::move(hp));
 
-  setDinucleonDensityScale();
+  if ( ! G4HadronicParameters::Instance()->IsBertiniNucleiModelAs11_2() ) setDinucleonDensityScale();
 
   nuclei_radius = zone_radii.back();
   nuclei_volume = std::accumulate(zone_volumes.begin(),zone_volumes.end(),0.);
@@ -1439,8 +1440,8 @@ void G4NucleiModel::setDinucleonDensityScale() {
 
 G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
 //  const G4double pn_spec = 1.0;		// Scale factor for pn vs. pp/nn
-  const G4double combinatoric_factor = 0.5;
-
+  const G4double combinatoric_factor =
+  ( G4HadronicParameters::Instance()->IsBertiniNucleiModelAs11_2() ? 1.0 : 0.5 );
   G4double dens = 0.;
 
   if (ip < 100) dens = getDensity(ip,izone);

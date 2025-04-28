@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -592,7 +592,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.660000s Real=4.787908s Sys=0.000000s
+  User=2.750000s Real=2.750484s Sys=0.000000s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -652,7 +652,7 @@ N=17 V[N]={1928752482960533917, 1537011110587309912, 992093420709832135, 4758505
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.320000s Real=2.342706s Sys=0.000000s
+  User=0.960000s Real=0.967156s Sys=0.000000s
 
  The run consists of 1000 C12 of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -723,7 +723,7 @@ N=17 V[N]={1914085016406179854, 1941870692113417104, 952751528242321116, 1425379
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.770000s Real=0.776794s Sys=0.000000s
+  User=0.480000s Real=0.476969s Sys=0.000000s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
@@ -788,7 +788,7 @@ N=17 V[N]={802904847557501977, 1304012642077385197, 468862643498481156, 11809500
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.000481s Sys=0.000000s
+  User=0.000000s Real=0.000201s Sys=0.000000s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 mg/cm3)
 
@@ -851,7 +851,7 @@ N=17 V[N]={1821026208194177978, 862958539362113243, 292898641549640933, 31117047
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.007957s Sys=0.000000s
+  User=0.000000s Real=0.004303s Sys=0.000000s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -923,7 +923,7 @@ N=17 V[N]={989157427584633894, 2087952271038465535, 425056854451477234, 81706072
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=5.510000s Real=5.616226s Sys=0.060000s
+  User=3.200000s Real=3.232881s Sys=0.040000s
 
  The run consists of 10 Xe131 of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
@@ -1001,7 +1001,7 @@ N=17 V[N]={1169934708488790920, 195642384756332438, 661694816270983648, 84154454
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.410000s Real=0.420263s Sys=0.000000s
+  User=0.250000s Real=0.252789s Sys=0.000000s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 

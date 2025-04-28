@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -605,7 +605,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.550000s Real=0.559666s Sys=0.000000s
+  User=0.330000s Real=0.332817s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
@@ -715,7 +715,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.860000s Real=0.874195s Sys=0.000000s
+  User=0.520000s Real=0.517086s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
@@ -838,7 +838,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.400000s Real=0.796176s Sys=0.000000s
+  User=0.220000s Real=0.225123s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
@@ -961,22 +961,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.550000s Real=1.056917s Sys=0.000000s
+  User=0.250000s Real=0.243922s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         173.1
-Average number of gamma      362.5
-Average number of e+         47.62
-Average number of steps      1992
-Edep 1x1 =                   0.8242 +- 0.004125  res=  5.004 %   100
-Edep 3x3 =                   0.9517 +- 0.003258  res=  3.423 %   100
-Edep 5x5 =                   0.9732 +- 0.003441  res=  3.536 %   100
+Average number of e-         173.2
+Average number of gamma      223.7
+Average number of e+         47.71
+Average number of steps      1844
+Edep 1x1 =                   0.8339 +- 0.003455  res=  4.144 %   100
+Edep 3x3 =                   0.9577 +- 0.00327  res=  3.414 %   100
+Edep 5x5 =                   0.9783 +- 0.00315  res=  3.22 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8661 +- 0.003144
-  E1/E25 =                   0.8471 +- 0.003224
-  E9/E25 =                   0.978 +- 0.001135
+  E1/E9  =                   0.8709 +- 0.002945
+  E1/E25 =                   0.8527 +- 0.003074
+  E9/E25 =                   0.979 +- 0.001112
 Beam Energy                  1 GeV
 ==================================================================
 

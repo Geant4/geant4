@@ -50,8 +50,8 @@ class glarea {
       wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
       wc.hbrBackground = GetSysColorBrush(COLOR_BTNFACE);
-      wc.lpszMenuName  = s_class().c_str();
-      wc.lpszClassName = s_class().c_str();
+      wc.lpszMenuName  = (PTSTR)s_class().c_str();
+      wc.lpszClassName = (PTSTR)s_class().c_str();
       ::RegisterClass(&wc);
       s_done = true;
     }
@@ -79,7 +79,7 @@ public:
     ::GetClientRect(m_parent,&rect);
     //printf("debug : glarea : ca : %d %d\n",rect.right-rect.left,rect.bottom-rect.top);
     //toolx::log_file::get().writef("debug : glarea : ca : %d %d\n",rect.right-rect.left,rect.bottom-rect.top);
-    m_hwnd = ::CreateWindow(s_class().c_str(),
+    m_hwnd = ::CreateWindow((PTSTR)s_class().c_str(),
                              NULL,
                              WS_CHILD | WS_VISIBLE,
                              0,0,
@@ -135,7 +135,7 @@ protected:
     register_class();
     RECT rect;
     ::GetClientRect(m_parent,&rect);
-    m_hwnd = ::CreateWindow(s_class().c_str(),
+    m_hwnd = ::CreateWindow((PTSTR)s_class().c_str(),
                              NULL,
                              WS_CHILD | WS_VISIBLE,
                              0,0,

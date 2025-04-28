@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -757,4 +757,4 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 ### Run 0 start.
 ev: 0
-number of event = 40 User=2.950000s Real=2.966636s Sys=0.000000s
+number of event = 40 User=1.710000s Real=1.710941s Sys=0.000000s

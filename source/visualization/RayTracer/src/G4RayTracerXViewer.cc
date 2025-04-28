@@ -29,7 +29,7 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
-#include "G4TheRayTracer.hh"
+#include "G4TheMTRayTracer.hh"
 #include "G4RTJpegMaker.hh"
 #include "G4RTXScanner.hh"
 #include "G4UImanager.hh"
@@ -40,7 +40,7 @@ G4RayTracerXViewer::G4RayTracerXViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4RayTracerViewer(sceneHandler,
 		    name,
-		    new G4TheRayTracer(new G4RTJpegMaker, new G4RTXScanner))
+		    G4TheMTRayTracer::Instance(new G4RTJpegMaker, new G4RTXScanner))
 {}
 
 G4RayTracerXViewer::~G4RayTracerXViewer() {}

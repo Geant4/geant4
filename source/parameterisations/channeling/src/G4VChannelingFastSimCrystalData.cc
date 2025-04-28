@@ -530,7 +530,7 @@ G4double G4VChannelingFastSimCrystalData::IonizationLosses(G4double dz,
     {
        loge+=(-G4Log(2.) + 1
               -(2*fGamma - 1)/fGamma/fGamma*G4Log(2.) +
-               1/8*((fGamma - 1)/fGamma)*((fGamma - 1)/fGamma));
+               1./8.*((fGamma - 1)/fGamma)*((fGamma - 1)/fGamma));
     }
     else if(fParticleName=="e+")
     {
