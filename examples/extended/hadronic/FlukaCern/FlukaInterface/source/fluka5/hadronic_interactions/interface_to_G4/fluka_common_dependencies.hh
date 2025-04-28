@@ -69,7 +69,6 @@
 #    include "sgtbcm.h"
 #    include "sumcou.h"
 #    include "thrscm.h"
-#    include "usryld.h"
 // clang-format on
 
 #  endif

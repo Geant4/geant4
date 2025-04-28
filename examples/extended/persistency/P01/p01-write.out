@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2282,7 +2282,7 @@ writing Event_1
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.440000s Real=223.033250s Sys=0.240000s
+  User=0.150000s Real=4.466915s Sys=0.190000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -2688,13 +2688,13 @@ writing Event_4
  Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.010000s Real=0.010236s Sys=0.000000s
+  User=0.010000s Real=0.003265s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0x116b740
-UserPhysicsList deleted 0x116c870
+UserDetectorConstruction deleted 0x1cb6b30
+UserPhysicsList deleted 0x1cb7c60
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

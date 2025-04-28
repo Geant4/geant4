@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-04 G.Cosmo (emutils-V11-02-21)
+- Fix in G4EmTableType header to make self-consistent.
+  Reported in [GitHub PR#85](https://github.com/Geant4/geant4/pull/85).
+
+## 2025-03-27 V.Ivanchenko
+- G4VAtomDeexcitation - fixed problem #2650 - allowed to simulate PIXE
+
 ## 2024-10-31 V.Ivanchenko (emutils-V11-02-20)
 - G4EmCalculator - fixed Coverity warning
 

@@ -196,15 +196,6 @@ G4GeometryManager* G4GeometryManager::GetInstanceIfExist()
 }
 
 // ***************************************************************************
-// Simplest user method to request parallel optimisation.
-// ***************************************************************************
-//
-void G4GeometryManager::OptimiseInParallel( G4bool val )
-{
-  RequestParallelOptimisation(val);
-}
-
-// ***************************************************************************
 // Report about Voxel(isation) of a logical volume.
 // ***************************************************************************
 //
@@ -474,6 +465,15 @@ void G4GeometryManager::RequestParallelOptimisation(G4bool flag, G4bool verbose)
   {
     ConfigureParallelOptimisation(verbose);
   }
+}
+
+// ***************************************************************************
+// Simplest user method to request parallel optimisation.
+// ***************************************************************************
+//
+void G4GeometryManager::OptimiseInParallel( G4bool val )
+{
+  RequestParallelOptimisation(val);
 }
 
 // ***************************************************************************

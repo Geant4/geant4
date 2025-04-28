@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -932,13 +932,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.2 seconds
+    Total CPU time elapsed for geometry optimisation: 0.11 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      55.00         0.11         0.00          152k EmModuleLogical
-      45.00         0.09         0.00          238k HadModuleLogical
+      54.55         0.06         0.00          152k EmModuleLogical
+      45.45         0.05         0.00          238k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -949,8 +949,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.17        238k      1385     2370       3792         0.09    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.11    EmModuleLogical
+      60.17        238k      1385     2370       3792         0.05    HadModuleLogical
+      38.50        152k      1129     1152       2426         0.06    EmModuleLogical
        0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
@@ -1313,14 +1313,14 @@ Edep in FCAL1 FCAl2 : 15685.5 0.881462
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=5.900000s Real=6.011224s Sys=0.000000s
+  User=3.670000s Real=3.796691s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x224a070
-UserPhysicsList deleted 0x224b280
-UserActionInitialization deleted 0x2406950
+UserDetectorConstruction deleted 0x1232440
+UserPhysicsList deleted 0x1233650
+UserActionInitialization deleted 0x13eed20
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

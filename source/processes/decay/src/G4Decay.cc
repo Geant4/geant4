@@ -62,7 +62,6 @@
 G4Decay::G4Decay(const G4String& processName)
                                :G4VRestDiscreteProcess(processName, fDecay),
 				verboseLevel(1),
-                                HighestValue(20.0),
 				fRemainderLifeTime(-1.0),
                                 pExtDecayer(nullptr)
 {
@@ -151,10 +150,7 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
     //calculate the mean free path 
     // by using normalized kinetic energy (= Ekin/mass)
      G4double   rKineticEnergy = aParticle->GetKineticEnergy()/aMass; 
-     if ( rKineticEnergy > HighestValue) {
-       // gamma >>  1
-       pathlength = ( rKineticEnergy + 1.0)* aCtau;
-     } else if ( rKineticEnergy < DBL_MIN ) {
+     if ( rKineticEnergy < DBL_MIN ) {
        // too slow particle
 #ifdef G4VERBOSE
        if (GetVerboseLevel()>1) {

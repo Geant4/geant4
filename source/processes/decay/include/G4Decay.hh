@@ -166,8 +166,6 @@ class G4Decay : public G4VRestDiscreteProcess
      //  2: More
 
   protected:
-    // HighestValue.
-    const G4double HighestValue;
  
     // Remainder of life time at rest
     G4double                 fRemainderLifeTime;

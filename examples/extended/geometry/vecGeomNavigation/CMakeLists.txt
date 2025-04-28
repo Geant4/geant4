@@ -5,7 +5,7 @@ option(WITH_ROOT "WITH ROOT SUPPORT" OFF)
 option(BUILTIN_G4VECGEOMNAV "Build G4VecGeomNav from source (requires VecGeom)" ON)
 
 find_package(Geant4 REQUIRED gdml)
-find_package(VecGeom REQUIRED)
+find_package(VecGeom 1.2.4 REQUIRED)
 if(WITH_ROOT)
   find_package(ROOT REQUIRED)
   find_package(TGeo2VecGeom REQUIRED)
@@ -28,7 +28,7 @@ if(BUILTIN_G4VECGEOMNAV)
 
   FetchContent_GetProperties(g4vecgeomnav)
 
-  # G4VecGeomNav builds a shared lib by default. As this links to Geant4 libs, if Geant4 is 
+  # G4VecGeomNav builds a shared lib by default. As this links to Geant4 libs, if Geant4 is
   # static-only, then we should also build G4VecGeomNav statically because:
   # - Geant4 static libs are not guaranteed to be PIC
   # - Geant4 symbols will be duplicated in g4vecgeomnav and the exampleVecGeomNac program

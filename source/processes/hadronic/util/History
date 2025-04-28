@@ -7,6 +7,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-22 Alberto Ribon (hadr-util-V11-02-07)
+- G4HadronicDeveloperParameters : introduced Getter/Setter for selecting the
+  Bertini model behavior as Geant4 version 11.3 (default) or 11.2.
+
 ## 2025-03-05 Vladimir Ivanchenko (hadr-util-V11-02-06)
 - G4HadronicDeveloperParameters - added limitation of warning printout on
     change of parameters (NA64 request).

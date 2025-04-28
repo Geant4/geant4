@@ -262,9 +262,9 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
                                            G4double& eLossMax,
                                            G4int coupleIndex)
 {
+  if (!activePIXEMedia[coupleIndex] || eLossMax <= 0.0) { return; }
   G4double truelength = step.GetStepLength();
-  if(!flagPIXE && !activePIXEMedia[coupleIndex]) { return; }
-  if(eLossMax <= 0.0 || truelength <= 0.0)       { return; }
+  if (truelength <= 0.0) { return; }
 
   // step parameters
   const G4StepPoint* preStep = step.GetPreStepPoint();

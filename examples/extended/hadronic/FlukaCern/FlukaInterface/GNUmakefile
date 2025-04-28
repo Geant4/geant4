@@ -27,32 +27,6 @@
 
 
 ########################################
-########## COMPILER & FLAGS
-########################################
-
-######### C++ compiler and flags
-CXX_COMP := g++
-CXX_FLAGS := -std=c++17 -O2 -g -Wall -pedantic -malign-double
-
-
-######### Fortran compiler and flags
-F_COMP := gfortran
-F_FLAGS := -g -Wall -pedantic
-
-
-######### Linker flag
-LD_FLAGS := -lgfortran
-
-
-######### Check compilers collection version
-IS_CXX_COMP_GT_7 := $(shell expr `gcc -dumpversion | cut -f1 -d.` \>= 7)
-ifneq "$(IS_CXX_COMP_GT_7)" "1"
-$(error "gcc suite version = $(shell gcc -dumpversion). Only versions >= 7 are supported!")
-endif
-
-
-
-########################################
 ########## EXTERNAL DEPENDENCIES
 ########################################
 
@@ -89,6 +63,32 @@ G4_LIBRARIES := $(shell geant4-config --libs)
 
 
 ########################################
+########## COMPILER & FLAGS
+########################################
+
+######### C++ compiler and flags
+CXX_COMP := g++
+CXX_FLAGS := $(shell fluka-config --cppflags)
+
+
+######### Fortran compiler and flags
+F_COMP := gfortran
+F_FLAGS := $(shell fluka-config --fflags)
+
+
+######### Linker flag
+LD_FLAGS := -lgfortran
+
+
+######### Check compilers collection version
+IS_CXX_COMP_GT_7 := $(shell expr `gcc -dumpversion | cut -f1 -d.` \>= 7)
+ifneq "$(IS_CXX_COMP_GT_7)" "1"
+$(error "gcc suite version = $(shell gcc -dumpversion). Only versions >= 7 are supported!")
+endif
+
+
+
+########################################
 ########## PROJECT DIRECTORIES
 ########################################
 
@@ -117,7 +117,8 @@ CLEAN_DIR := $(OBJ_DIR) $(BIN_DIR)
 ######### FORTRAN SOURCE
 F_SRC_DIR := $(SRC_DIR)/fluka4_wrapper/fortran/procedures \
 	$(SRC_DIR)/cpp_fortran_bridges/fortran
-	
+
+F_INCLUDE := -I$(FLUKA_INCLUDE_DIR) -J$(FLUKA_INCLUDE_DIR)
 F_SRC := $(foreach src_dir, $(F_SRC_DIR), $(wildcard $(src_dir)/*.f))
 F_OBJ := $(addprefix $(OBJ_DIR)/, $(notdir $(F_SRC:.f=.o)))
 
@@ -297,7 +298,7 @@ $(OBJ_DIR)/%.o: $(1)/%.f
 	@echo
 	@echo "Building $$(notdir $$@) for core FLUKA5 FORTRAN source:"
 	@[ -d $$(@D) ] || mkdir -p $$(@D)
-	$(F_COMP) -DG4_USE_FLUKA $(F_FLAGS) -c $$< -o $$@
+	$(F_COMP) -DG4_USE_FLUKA $(F_FLAGS) $(F_INCLUDE) -c $$< -o $$@
 	@echo "Built $$(notdir $$@) successfully."
 endef
 $(foreach src_dir, $(F_SRC_DIR), $(eval $(call F_BUILD_template, $(src_dir))))

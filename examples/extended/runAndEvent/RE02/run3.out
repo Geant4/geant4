@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1053,7 +1053,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.990000s Real=8.128986s Sys=0.040000s
+  User=5.180000s Real=5.213054s Sys=0.030000s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 50804
  PrimitiveScorer RUN PhantomSD,protonEDep
@@ -1284,9 +1284,9 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x1165c50
-UserPhysicsList deleted 0x1165cc0
-UserActionInitialization deleted 0x1376d70
+UserDetectorConstruction deleted 0x2706020
+UserPhysicsList deleted 0x2706090
+UserActionInitialization deleted 0x2916d70
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

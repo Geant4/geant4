@@ -602,6 +602,14 @@ void G4PhysicsModelCatalog::Initialize() {
     // Class: G4NuDEXNeutronCapture
     InsertModel( 25300, "model_nuDEX_neutronCapture" );
 
+    // Optical processes
+    InsertModel( 12020, "model_Cerenkov" );
+    InsertModel( 12030, "model_Scintillation" );
+    InsertModel( 12040, "model_SynRad" );
+    InsertModel( 12050, "model_SynchrotronRadiation" );
+    InsertModel( 12060, "model_XTRenergyLoss" );
+    InsertModel( 12070, "model_XrayTR" );
+
     // ...
     
     SanityCheck();

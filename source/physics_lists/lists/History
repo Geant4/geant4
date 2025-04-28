@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-23 Alberto Ribon (phys-list-V11-02-04)
+- FTFP_BERT_ATL : removed the special FTF tune for ATLAS (introduced in
+  phys-lists-V11-01-05 to overcome the problem of too optimistic (i.e. narrow)
+  pion shower energy resolution).
+  In this way, FTFP_BERT_ATL will use the default FTF parameters, as all other
+  reference physics lists.
+  In order to enable the special FTF tune for ATLAS, one can either use the
+  following C++ call in user code:
+    G4FTFTunings::Instance()->SetTuneApplicabilityState( 4, 1 );
+  or the UI command (before run-initialization):
+    /process/had/models/ftf/selectTuneByIndex 4
+
 ## 2024-11-04 Vladimir Ivantchenko (phys-list-V11-02-03)
 - G4PhysListFactory - use std::size_t
 

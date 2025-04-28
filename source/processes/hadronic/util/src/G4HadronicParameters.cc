@@ -46,10 +46,10 @@
 
 G4HadronicParameters* G4HadronicParameters::sInstance = nullptr;
 
-namespace
-{
+namespace {
   G4Mutex paramMutex = G4MUTEX_INITIALIZER;
 }
+
 
 G4HadronicParameters* G4HadronicParameters::Instance() {
   if ( sInstance == nullptr ) {
@@ -140,11 +140,13 @@ void G4HadronicParameters::SetMinEnergyTransitionQGS_FTF( const G4double val ) {
   }
 }
 
+
 void G4HadronicParameters::SetMaxEnergyTransitionQGS_FTF( const G4double val ) {
   if ( ! IsLocked()  &&  val > fMinEnergyTransitionQGS_FTF ) { 
     fMaxEnergyTransitionQGS_FTF = val;
   }
 }
+
 
 void G4HadronicParameters::SetMinEnergyINCLXX_Pbar( const G4double val ) {
   if ( ! IsLocked()  &&  val >= 0.0 ) { 
@@ -158,6 +160,7 @@ void G4HadronicParameters::SetMaxEnergyINCLXX_Pbar( const G4double val ) {
     fMaxEnergyINCLXX_Pbar = val;
   }
 }
+
 
 void G4HadronicParameters::SetEnableBCParticles( G4bool val ) {
   if ( ! IsLocked() ) fEnableBC = val;
@@ -290,4 +293,22 @@ void G4HadronicParameters::SetTypeTablePT( const G4String& typeTablePT ) {
 
 void G4HadronicParameters::SetEnableCoherentChargeExchange( G4bool val ) {
   if ( ! IsLocked() )  fChargeExchange = val;
+}
+
+
+void G4HadronicParameters::SetBertiniAs11_2( G4bool val ) {
+  if ( ! IsLocked() ) {
+    fBertiniAngularEmissionsAs11_2 = val;
+    fBertiniNucleiModelAs11_2 = val;
+  }
+}
+
+
+void G4HadronicParameters::SetBertiniAngularEmissionsAs11_2( G4bool val ) {
+  if ( ! IsLocked() ) fBertiniAngularEmissionsAs11_2 = val;
+}
+
+
+void G4HadronicParameters::SetBertiniNucleiModelAs11_2( G4bool val ) {
+  if ( ! IsLocked() ) fBertiniNucleiModelAs11_2 = val;
 }

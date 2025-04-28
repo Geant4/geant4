@@ -108,8 +108,8 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
     wc.hIcon = LoadIcon  (NULL, IDI_APPLICATION);
     wc.hCursor = LoadCursor(NULL,IDC_CROSS);
     wc.hbrBackground = NULL;
-    wc.lpszMenuName = className;
-    wc.lpszClassName = className;
+    wc.lpszMenuName = (PTSTR)className;
+    wc.lpszClassName = (PTSTR)className;
     ::RegisterClass(&wc);
     done = true;
   }  
@@ -120,7 +120,7 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
   G4int y_res=GetSystemMetrics(SM_CYSCREEN);
   
   //FIXME : NOT tested !
-  fWindow = ::CreateWindowEx(0, className,fName.c_str(),
+  fWindow = ::CreateWindowEx(0, (PTSTR)className, (PTSTR)fName.c_str(),
 			   WS_OVERLAPPEDWINDOW,
 			   //WS_CHILD | WS_VISIBLE,
                            //			   0,0,

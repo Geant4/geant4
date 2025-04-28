@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-06 Dmitri Konstantinov (fastsimchanneling-V11-02-05)
+- In G4VChannelingFastSimCrystalData::IonizationLosses(), fixed bug
+  in the electron ionization loss correction formula.
+  Issue was spotted by PVS-Studio static analysis.
+
 ## 2024-11-11 Gabriele Cosmo (fastsimchanneling-V11-02-04)
 - Fixed compilation warnings on macOS/XCode for implicit type conversions
   in G4CoherentPairProduction.

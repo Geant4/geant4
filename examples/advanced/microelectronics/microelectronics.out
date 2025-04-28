@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-01    (21-March-2025)
+ Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -353,7 +353,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
-##### Create analysis manager   0xce4250
+##### Create analysis manager   0x189c620
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -375,7 +375,7 @@ Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.6.1/mic
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.310000s Real=1.643581s Sys=0.010000s
+  User=0.150000s Real=0.152436s Sys=0.000000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done
@@ -388,9 +388,9 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xc94c50
-UserPhysicsList deleted 0xcaab60
-UserActionInitialization deleted 0xcdd770
+UserDetectorConstruction deleted 0x184d020
+UserPhysicsList deleted 0x1862f30
+UserActionInitialization deleted 0x1895b40
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

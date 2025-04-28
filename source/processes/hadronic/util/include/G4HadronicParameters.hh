@@ -181,6 +181,29 @@ class G4HadronicParameters {
     // Getter/Setter for the time threshold of radioactive decays
     // (i.e. radioactive decays that happen later than this value are ignored).
 
+    inline G4bool IsBertiniAs11_2() const;
+    void SetBertiniAs11_2( G4bool val );
+    inline G4bool IsBertiniAngularEmissionsAs11_2() const;
+    void SetBertiniAngularEmissionsAs11_2( G4bool val );
+    inline G4bool IsBertiniNucleiModelAs11_2() const;
+    void SetBertiniNucleiModelAs11_2( G4bool val );
+    // Getter/Setter for the Bertini model behavior with respect to the
+    // Geant4 version 11.2.
+    // The first two methods "*BertiniAs11_2" refer to the overall behavior
+    // of the Bertini model - the one which should matter the most for the
+    // majority of applications.
+    // The methods "*BertiniAngularEmissionsAs11_2" refer to the angular
+    // distributions of the >= 4-body final state emissions.
+    // The last two methods "*BertiniNucleiModelAs11_2" refer to the
+    // modelling of nuclei.
+    // The overall behavior of Bertini with respect to the version Geant4
+    // version 11.2 depends on both the angular distributios of the
+    // >= 4-body final state emissions, and the modelling of nuclei.
+    // "True" in these methods means that the corresponding behavior of
+    // the Geant4 version 11.2 is retrieved;
+    // "False" means that the corresponding behavior of the Geant4 version
+    // 11.3 is retrieved.
+  
   private:
 
     G4HadronicParameters();
@@ -226,6 +249,8 @@ class G4HadronicParameters {
     G4bool fNeutronGeneral = false;
     G4bool fChargeExchange = false;
     G4bool fBinaryDebug = false;
+    G4bool fBertiniAngularEmissionsAs11_2 = false;  // Keep the new G4 11.3 behavior
+    G4bool fBertiniNucleiModelAs11_2 = false;       // Keep the new G4 11.3 behavior
 
     G4String fTypeTablePT = "";
     G4String fDirPARTICLEXS = "";
@@ -258,7 +283,6 @@ inline G4double G4HadronicParameters::GetMinEnergyINCLXX_Pbar() const {
 inline G4double G4HadronicParameters::GetMaxEnergyINCLXX_Pbar() const { 
   return fMaxEnergyINCLXX_Pbar;
 } 
-  
 
 inline G4double G4HadronicParameters::EnergyThresholdForHeavyHadrons() const {
   return fEnergyThresholdForHeavyHadrons;
@@ -360,13 +384,11 @@ inline const G4String& G4HadronicParameters::GetDirPARTICLEXS() const {
   return fDirPARTICLEXS;
 }
 
-inline const G4String& G4HadronicParameters::GetPhysListDocDir() const
-{
+inline const G4String& G4HadronicParameters::GetPhysListDocDir() const {
   return fPhysListDocDir;
 }
 
-inline const G4String& G4HadronicParameters::GetPhysListName() const
-{
+inline const G4String& G4HadronicParameters::GetPhysListName() const {
   return fPhysListName;
 }
 
@@ -376,6 +398,18 @@ inline G4double G4HadronicParameters::GetNeutronKineticEnergyThresholdForSVT() c
 
 inline G4double G4HadronicParameters::GetTimeThresholdForRadioactiveDecay() const { 
   return fTimeThresholdForRadioactiveDecays;
+}
+
+inline G4bool G4HadronicParameters::IsBertiniAs11_2() const {
+  return ( fBertiniAngularEmissionsAs11_2 && fBertiniNucleiModelAs11_2 );
+}  
+
+inline G4bool G4HadronicParameters::IsBertiniAngularEmissionsAs11_2() const {
+  return fBertiniAngularEmissionsAs11_2;
+}
+  
+inline G4bool G4HadronicParameters::IsBertiniNucleiModelAs11_2() const {
+  return fBertiniNucleiModelAs11_2;
 }
 
 #endif

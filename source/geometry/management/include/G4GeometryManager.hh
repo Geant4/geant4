@@ -94,9 +94,6 @@ class G4GeometryManager
       // Detailed method for user to request parallel Optimisation
       // (if verbosity is required). Calling this is enough to ask for it.
       // It will be used if Geant4 is built with MT/tasks.
-
-    void ChooseSequentialOptimisation(G4bool verbose = false);
-      // Simple way to avoid parallel optimisation.
   
     G4bool IsParallelOptimisationConfigured();
       // Check whether parallel optimisation was requested.

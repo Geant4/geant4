@@ -1,4 +1,4 @@
-%global geant4_version 11.3.1
+%global geant4_version 11.3.2
 
 %global NEUTRONHPDATA G4NDL.4.7.1
 %global LEDATA G4EMLOW.8.6.1
@@ -264,6 +264,9 @@ tar xzf %{SOURCE15} -C %{buildroot}/%{_datadir}/%{name}/data
 %endif
 
 %changelog
+* Fri Apr 25 2025 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.3.2
+- Update to version 11.3.2
+
 * Fri Mar 21 2025 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.3.1
 - Update to version 11.3.1
 

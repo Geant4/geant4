@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-29 Gabriele Cosmo (geommng-V11-02-08)
+- In G4GeometryManager, removed redundant declaration of method
+  ChooseSequentialOptimisation().
+
 ## 2025-03-05 Gabriele Cosmo (geommng-V11-02-07)
 - Applied clang-tidy to G4GeometryManager and some code cleanup.
   Moved additional checks/warnings under verbosity level.

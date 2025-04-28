@@ -6,6 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-22 Alberto Ribon (hadr-casc-V11-02-05)
+- G4CascadeFinalStateAlgorithm, G4NucleiModel : introduced the possibility to
+  retrieve either the behavior of these classes as in Geant4 version 11.3
+  (default) or as in 11.2 according to the value of boolean flags in
+  G4HadronicParameters.
+  In the case that the behavior of the class G4CascadeFinalStateAlgorithm
+  is chosen as in Geant4 version 11.2, the change introduced in
+  hadr-casc-V11-02-02 is skipped; similarly, but independently, if the
+  behavior of the class G4NucleiModel is chosen as in Geant4 version 11.2,
+  the change introduced in hadr-casc-V11-02-00 is skipped.
+  ( Note that the changes introduced in the two above classes in
+    hadr-casc-V11-02-02 and hadr-casc-V11-02-00 can be considered as real
+    improvements of the Bertini model, some degradation of thin-target data -
+    in particular for the pion production in HARP data - are observed.
+    This is likely due to the fact that a complete retuning of the parameters
+    of the Bertini model would have been necessary after these changes. )
+
 ## 2024-08-21 Gabriele Cosmo (hadr-casc-V11-02-04)
 - Fixed reported Coverity defect in G4NucleiModel for use of std::move().
 
