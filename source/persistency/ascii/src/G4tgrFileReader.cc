@@ -107,6 +107,8 @@ G4bool G4tgrFileReader::ReadFiles()
       {
         break;
       }
+      if(fin.IgnoreLine())
+        continue;
       // Check if it is continuation line or first line
       if(wlnew[0].c_str()[0] != ':')
       {
@@ -137,6 +139,7 @@ G4bool G4tgrFileReader::ReadFiles()
         }
         wl = wlnew;
       }
+      theLineProcessor->SetCurrentFile(fin.GetCurrentName());
     }
 
     if(wl.size() != 0)

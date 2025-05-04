@@ -35,6 +35,7 @@
 #define G4tgrFileIn_hh 1
 
 #include <vector>
+#include <map>
 
 #include "globals.hh"
 
@@ -60,8 +61,10 @@ class G4tgrFileIn
     // Access data members
 
     G4int Nline() { return theLineNo[theCurrentFile]; }
+    G4bool IgnoreLine() const;
 
     const G4String& GetName() { return theName; }
+    const G4String& GetCurrentName() { return theNames[theCurrentFile]; }
 
     void OpenNewFile(const char* filename);
     G4bool EndOfFile();
@@ -80,6 +83,10 @@ class G4tgrFileIn
       // Number of line being read
 
     std::vector<G4String> theNames;
+
+    std::map<G4String, G4String> theMacros;
+
+    std::vector<std::vector<G4bool>> ignoreLines;
 
     G4int theCurrentFile = -1;
       // Index of file being read in theFiles
