@@ -470,6 +470,10 @@ endif()
 #
 #   - Build static libraries (`.a` on Unices, `.lib` on Windows)
 #
+# - ``GEANT4_SHARED_LIB_SOVERSION`` (Default: ``OFF``)
+#
+#   - Add version and soversion to shared libraries
+#
 # Both options are adavanced and may be selected together to build
 # both types. If neither is selected, an error is emitted.
 #
@@ -482,6 +486,9 @@ mark_as_advanced(BUILD_SHARED_LIBS BUILD_STATIC_LIBS)
 if(NOT BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
   message(FATAL_ERROR "Neither static nor shared libraries will be built")
 endif()
+
+option(GEANT4_SHARED_LIB_SOVERSION "Add version and soversion to shared libs" OFF)
+mark_as_advanced(GEANT4_SHARED_LIB_SOVERSION)
 
 # Always build global libraries - always FATAL_ERROR if old
 # granular library switch is set, e.g. from command line

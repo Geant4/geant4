@@ -1309,6 +1309,15 @@ function(__geant4_add_library _name _type)
     target_compile_definitions(${_target_name} PUBLIC G4LIB_BUILD_DLL)
     set_target_properties(${_target_name} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+    # Unix
+    # Add version and soversion to shared libraries
+    if (UNIX AND GEANT4_SHARED_LIB_SOVERSION)
+      set_target_properties(${_target_name} PROPERTIES
+        VERSION ${${PROJECT_NAME}_VERSION}
+        SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
+      )
+    endif()
+
     # MacOS
     # Use '@rpath' in install names of libraries on macOS to provide relocatibility
     # Add '@loader_path' to INSTALL_RPATH on macOS so that Geant4
