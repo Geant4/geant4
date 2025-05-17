@@ -26,8 +26,8 @@
 //
 // According to pythia6_common_address.c provided in Root
 // Pythia6 distribution:
-// http://root.cern.ch/
-// see http://root.cern.ch/root/License.html
+// http://root.cern/
+// see http://root.cern/root/License.html
 // ----------------------------------------------------------------------------
 
 #include <string.h>
