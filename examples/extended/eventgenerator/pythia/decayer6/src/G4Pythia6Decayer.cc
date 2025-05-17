@@ -29,8 +29,8 @@
 
 // ----------------------------------------------------------------------------
 // According to TPythia6Decayer class in Root:
-// http://root.cern.ch/
-// see http://root.cern.ch/root/License.html
+// http://root.cern/
+// see http://root.cern/root/License.html
 // ----------------------------------------------------------------------------
 
 #include "G4Pythia6Decayer.hh"

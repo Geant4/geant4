@@ -26,7 +26,7 @@ for (int i=0;i<nbValues;i++)
 {
 // 2) SELECT distribution
 //    here Gaussian with mean, sigma
-//    see https://root.cern.ch/doc/master/classTRandom.html
+//    see https://root.cern/doc/master/classTRandom.html
   value = r.Gaus(1.,0.1);
 //
   ntuple->Fill(value);

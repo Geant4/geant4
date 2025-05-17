@@ -33,8 +33,8 @@
 /// Enum of decay mode types
 ///
 /// According to EDecayType enum in TPythia6Decayer class in Root:
-/// http://root.cern.ch/
-/// see http://root.cern.ch/root/License.html
+/// http://root.cern/
+/// see http://root.cern/root/License.html
 /// ----------------------------------------------------------------------------
 
 enum EDecayType

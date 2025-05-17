@@ -679,7 +679,7 @@ May 4, 2016 I. Hrivnacova (analysis-V10-02-02)
 April 18, 2016 I. Hrivnacova (analysis-V10-02-01)
 - Updated to g4tools 1.27.0 (Guy Barrand):
   Fixed incompatibility with ROOT 5.x and 6.x formats reported in ROOT forum:
-  https://root.cern.ch/phpBB3/viewtopic.php?t=21315
+  https://root.cern/phpBB3/viewtopic.php?t=21315
 
 December 8, 2015 I. Hrivnacova (analysis-V10-02-00)
 - Fixed definition of /analysis/ntuple command directory

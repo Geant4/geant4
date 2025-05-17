@@ -46,8 +46,8 @@ class G4DecayProducts;
 ///
 /// Implements the G4VExtDecayer abstract class using the Pythia6 interface.
 /// According to TPythia6Decayer class in Root:
-/// http://root.cern.ch/
-/// see http://root.cern.ch/root/License.html
+/// http://root.cern/
+/// see http://root.cern/root/License.html
 
 class G4Pythia6Decayer : public G4VExtDecayer
 {

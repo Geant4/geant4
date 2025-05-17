@@ -245,7 +245,7 @@ namespace G4INCL {
        * historical GENBOD routine [CERN report 68-15 (1968)]. The ROOT
        * implementation is documented at the following URL:
        *
-       * http://root.cern.ch/root/html/TGenPhaseSpace.html#TGenPhaseSpace
+       * http://root.cern/root/html/TGenPhaseSpace.html#TGenPhaseSpace
        */
       void phaseSpaceDecayLegacy(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
         const G4int theA = c->getA();

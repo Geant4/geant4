@@ -31,8 +31,8 @@
 // According to TPythia6 class from Root:
 // (The TPythia6 class is an interface class to F77 routines in Pythia6                //
 // CERNLIB event generators, written by T.Sjostrand.)
-// http://root.cern.ch/
-// see http://root.cern.ch/root/License.html
+// http://root.cern/
+// see http://root.cern/root/License.html
 //
 // The complete Pythia6 documentation can be found at:
 // http://home.thep.lu.se/~torbjorn/pythiaaux/recent.html

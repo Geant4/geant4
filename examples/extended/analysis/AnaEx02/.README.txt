@@ -13,7 +13,7 @@
 
  This example shows the usage of histogram and tuple manipulations using
  ROOT system. Please install ROOT before building this example:
- http://root.cern.ch
+ http://root.cern
 
  The example is an adaptation of examples/novice/N03. It describes a simple
  sampling calorimeter setup.

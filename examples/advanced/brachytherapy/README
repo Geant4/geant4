@@ -134,7 +134,7 @@ When running in interactive mode there is no scoring mesh.The user has to add it
 G4Analysis is used to create and fill histograms in ROOT output files.
                                                        
 The installation of ROOT is required to plot the results of the simulation contained
-in primary.root and brachytherapy.root(http://root.cern.ch/drupal/).
+in primary.root and brachytherapy.root(http://root.cern/drupal/).
 
 ------------------------------------------------------------------------
 ----> 7. Simulation output                                               
