@@ -138,6 +138,11 @@
 #include "G4VtkQt.hh" // no_geant4_module_check
 #endif
 
+#ifdef G4VIS_USE_XR
+#include "G4Xr.hh"
+// #include "G4XrQt.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4UIsession.hh"
 #include "G4UIbatch.hh"
@@ -543,6 +548,15 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 #elif defined(G4VIS_USE_VTK)
   vtkN->AddNickname("Vtk");
   vtkN->AddNickname("VTK");
+#endif
+
+#ifdef G4VIS_USE_XR
+  G4Xr *xr = new G4Xr();
+  // G4XrQt* xrQt = new G4XrQt();
+  RegisterGraphicsSystem(xr);
+  xr->AddNickname("XR");
+  //RegisterGraphicsSystem(xrQt);
+  //xrQt->AddNickname("XRQt");
 #endif
 }
 

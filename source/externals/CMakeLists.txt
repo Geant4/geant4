@@ -61,3 +61,8 @@ if(NOT GEANT4_USE_SYSTEM_PTL)
 
   geant4_add_external_category(G4ptl)
 endif()
+
+if(GEANT4_USE_XR)
+  add_subdirectory(tinygltf)
+  add_subdirectory(cpp-httplib)
+endif()

@@ -28,3 +28,8 @@ endif()
 if(GEANT4_USE_VTK)
   add_subdirectory(Vtk)
 endif()
+
+# XR web server is optional depending on user selection
+if(GEANT4_USE_XR)
+  add_subdirectory(Xr)
+endif()

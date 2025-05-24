@@ -1,0 +1,12 @@
+HTTP based XR visualisation driver
+
+Dependencies are header only and in externals/(tinygltf/cpp-httplib)
+
+Tinygltf for constructing glTF file
+https://github.com/syoyo/tinygltf
+
+Tinygltf internally
+https://github.com/nlohmann/json
+
+Setting up the web server
+https://github.com/yhirose/cpp-httplib

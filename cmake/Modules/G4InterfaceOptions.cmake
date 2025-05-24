@@ -87,6 +87,19 @@ if(GEANT4_USE_VTK)
 endif()
 geant4_add_feature(GEANT4_USE_VTK "Using VTK for visualisation")
 
+option(GEANT4_USE_XR "Build Geant4 with XR (web) visualisation" OFF)
+geant4_add_feature(GEANT4_USE_XR "Using XR for visualisation")
+
+if(GEANT4_USE_XR)
+  set(TINYGLTF_FOUND TRUE)
+  set(GEANT4_USE_BUILTIN_TINYGLTF TRUE)
+  set(G4TINYGLTF_LIBRARIES G4tinygltf)
+
+  set(CPP-HTTPLIB_FOUND TRUE)
+  set(GEANT4_USE_BUILTIN_CPP-HTTPLIB TRUE)
+  set(G4CPP-HTTPLIB_LIBRARIES G4cpp-httplib)
+endif()
+
 # - Unix only
 if(UNIX)
   # - Motif UI/Vis

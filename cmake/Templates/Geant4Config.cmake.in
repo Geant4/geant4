@@ -471,6 +471,9 @@ if(Geant4_vis_Vtk_FOUND)
   set(_geant4_use_vtk_library ON)
 endif()
 
+set(Geant4_vis_Xr_FOUND @GEANT4_USE_XR@)
+set(_geant4_use_xr_library ON)
+
 #-----------------------------------------------------------------------
 # Include the files listing all the imported targets and configuring
 # Intel/MSVC Compile Features
@@ -536,6 +539,10 @@ endif()
 
 if(_geant4_use_vtk_library)
   list(APPEND _geant4_internal_libraries Geant4::G4visVtk${_geant4_lib_use_suffix})
+endif()
+
+if(_geant4_use_xr_library)
+  list(APPEND _geant4_internal_libraries Geant4::G4visXr${_geant4_lib_use_suffix})
 endif()
 
 # - GDML always added for now as old G4persistency lib always added if present
