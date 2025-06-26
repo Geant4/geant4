@@ -60,6 +60,8 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(
   if (OPTxs == 1) {
     fXSection = new G4InterfaceToXS(particle, index);
   }
+  InitialiseIntegrator(0.005, 0.25, 1.05, CLHEP::MeV,
+		       0.2*CLHEP::MeV, 5*CLHEP::MeV);
 }
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
@@ -99,6 +101,7 @@ G4VPreCompoundFragment::Initialize(const G4Fragment& aFragment)
       || ((theResA > 1) && (theResA == theResZ || theResZ == 0))) {
     return false;
   }
+  pFragment = &aFragment;
   theResMass = G4NucleiProperties::GetNuclearMass(theResA, theResZ);
   G4double Ecm = aFragment.GetMomentum().m();
   if (Ecm <= theResMass + theMass) { return 0.0; }
@@ -129,4 +132,26 @@ G4VPreCompoundFragment::Initialize(const G4Fragment& aFragment)
   // needed to separate a fragment from the nucleus
   theBindingEnergy = theResMass + theMass - aFragment.GetGroundStateMass();
   return true;
+}
+
+G4double G4VPreCompoundFragment::CalcEmissionProbability(const G4Fragment& fr)
+{
+  G4bool ok = Initialize(fr);
+  theEmissionProbability = 0.0;
+  if (ok) {
+    theEmissionProbability = ComputeIntegral(theMinKinEnergy, theMaxKinEnergy);
+  }
+  return theEmissionProbability;
+}
+
+G4double G4VPreCompoundFragment::SampleKineticEnergy(const G4Fragment&)
+{
+  G4double ekin = SampleValue();
+  return ekin;
+}
+
+G4double G4VPreCompoundFragment::ProbabilityDensityFunction(G4double ekin)
+{
+  G4double e = std::max(ekin, 0.02);
+  return ProbabilityDistributionFunction(e, *pFragment);
 }

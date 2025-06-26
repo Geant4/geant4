@@ -96,21 +96,7 @@ which is commented by default.
 
 \section cellularPhantom_s6 SIMULATION OUTPUT AND RESULT ANALYSIS
 
-The output results consists in a phantom.root file, containing three ntuples,
-corresponding to the 3 types of voxels (red, green and blue) of the original image.
-
-The ROOT macro plot.C can be run to extract and display:
-- the cellular phantom
-- the absorbed energy distribution in the 3 types of voxels
-- the absorbed energy 2D map for the 3 types of voxels
-- the absorbed dose 2D map for the 3 types of voxels
-
-Simply do, after the simulation:
-\verbatim
-root plot.C
-\endverbatim
-
-In addition, the following quantities are displayed:
+The following results are displayed at the end of the simulation:
 - total number of voxels in phantom
 - total number of RED voxels in phantom
 - total number of GREEN voxels in phantom
@@ -122,6 +108,23 @@ In addition, the following quantities are displayed:
 - total absorbed dose in GREEN voxels (Gy)
 - total absorbed dose in BLUE voxels (Gy)
 
-Results are stored in the results.root file.
+A phantom.root result file contain three ntuples,
+corresponding to the 3 types of voxels (red, green and blue) of the original image.
+The following voxel information is available in these ntuples:
+- x, y, z position
+- energy deposition
+- absorbed dose
+- voxel number (ID)
+
+The ROOT macro plot.C can be run to display:
+- the cellular phantom
+- the absorbed energy distribution in the 3 types of voxels
+- the absorbed energy 2D map for the 3 types of voxels
+- the absorbed dose 2D map for the 3 types of voxels
+
+Simply do, after the simulation:
+\verbatim
+root plot.C
+\endverbatim
 
 */

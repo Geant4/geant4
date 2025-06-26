@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,23 +30,24 @@ Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
+  RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLStoredQt (OGLSQt, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
   OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
+  RayTracerX (RTX)
+  RayTracerQt (RTQt)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
-  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
@@ -194,7 +195,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -847,6 +848,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
+Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
@@ -863,6 +865,7 @@ Use HETC submodel for pre-compound model            0
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
+Type of Fermi BreakUp model                         ModelVI
 Min excitation energy                               10 eV 
 Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
@@ -1071,9 +1074,9 @@ Max 2J for sampling of angular correlations         10
 >>> Event: 95
     0 hits stored in this event
 >>> Event: 96
-    0 hits stored in this event
+    109 hits stored in this event
 >>> Event: 97
-    55 hits stored in this event
+    0 hits stored in this event
 >>> Event: 98
     0 hits stored in this event
 >>> Event: 99
@@ -1081,205 +1084,205 @@ Max 2J for sampling of angular correlations         10
 ### Run 1 starts.
 --> Event 0 starts.
 >>> Event: 0
-    221 hits stored in this event
+    78 hits stored in this event
 >>> Event: 1
-    207 hits stored in this event
->>> Event: 2
-    140 hits stored in this event
->>> Event: 3
-    144 hits stored in this event
->>> Event: 4
-    148 hits stored in this event
->>> Event: 5
-    57 hits stored in this event
->>> Event: 6
-    1763 hits stored in this event
->>> Event: 7
-    57 hits stored in this event
->>> Event: 8
-    69 hits stored in this event
->>> Event: 9
-    1213 hits stored in this event
->>> Event: 10
-    830 hits stored in this event
->>> Event: 11
-    63 hits stored in this event
->>> Event: 12
-    63 hits stored in this event
->>> Event: 13
-    181 hits stored in this event
->>> Event: 14
-    56 hits stored in this event
->>> Event: 15
-    135 hits stored in this event
->>> Event: 16
-    97 hits stored in this event
->>> Event: 17
-    82 hits stored in this event
->>> Event: 18
-    105 hits stored in this event
->>> Event: 19
-    77 hits stored in this event
->>> Event: 20
-    154 hits stored in this event
->>> Event: 21
-    1245 hits stored in this event
->>> Event: 22
-    72 hits stored in this event
->>> Event: 23
-    72 hits stored in this event
->>> Event: 24
-    141 hits stored in this event
->>> Event: 25
-    106 hits stored in this event
->>> Event: 26
-    89 hits stored in this event
->>> Event: 27
-    609 hits stored in this event
->>> Event: 28
-    87 hits stored in this event
->>> Event: 29
-    221 hits stored in this event
->>> Event: 30
-    1192 hits stored in this event
->>> Event: 31
-    66 hits stored in this event
->>> Event: 32
-    460 hits stored in this event
->>> Event: 33
-    46 hits stored in this event
->>> Event: 34
-    61 hits stored in this event
->>> Event: 35
-    63 hits stored in this event
->>> Event: 36
-    261 hits stored in this event
->>> Event: 37
-    201 hits stored in this event
->>> Event: 38
-    252 hits stored in this event
->>> Event: 39
-    209 hits stored in this event
->>> Event: 40
-    767 hits stored in this event
->>> Event: 41
-    51 hits stored in this event
->>> Event: 42
-    50 hits stored in this event
->>> Event: 43
-    90 hits stored in this event
->>> Event: 44
-    67 hits stored in this event
->>> Event: 45
-    124 hits stored in this event
->>> Event: 46
-    120 hits stored in this event
->>> Event: 47
     84 hits stored in this event
->>> Event: 48
-    83 hits stored in this event
->>> Event: 49
-    105 hits stored in this event
->>> Event: 50
-    102 hits stored in this event
->>> Event: 51
-    47 hits stored in this event
->>> Event: 52
-    67 hits stored in this event
->>> Event: 53
-    110 hits stored in this event
->>> Event: 54
-    85 hits stored in this event
->>> Event: 55
-    70 hits stored in this event
->>> Event: 56
-    168 hits stored in this event
->>> Event: 57
-    299 hits stored in this event
->>> Event: 58
-    419 hits stored in this event
->>> Event: 59
-    81 hits stored in this event
->>> Event: 60
-    405 hits stored in this event
->>> Event: 61
-    81 hits stored in this event
->>> Event: 62
-    115 hits stored in this event
->>> Event: 63
-    71 hits stored in this event
->>> Event: 64
-    163 hits stored in this event
->>> Event: 65
-    81 hits stored in this event
->>> Event: 66
-    252 hits stored in this event
->>> Event: 67
-    77 hits stored in this event
->>> Event: 68
-    110 hits stored in this event
->>> Event: 69
-    178 hits stored in this event
->>> Event: 70
-    102 hits stored in this event
->>> Event: 71
-    133 hits stored in this event
->>> Event: 72
-    45 hits stored in this event
->>> Event: 73
-    125 hits stored in this event
->>> Event: 74
-    176 hits stored in this event
->>> Event: 75
-    149 hits stored in this event
->>> Event: 76
-    432 hits stored in this event
->>> Event: 77
-    109 hits stored in this event
->>> Event: 78
-    265 hits stored in this event
->>> Event: 79
-    90 hits stored in this event
->>> Event: 80
+>>> Event: 2
     95 hits stored in this event
->>> Event: 81
-    105 hits stored in this event
->>> Event: 82
-    102 hits stored in this event
->>> Event: 83
+>>> Event: 3
+    78 hits stored in this event
+>>> Event: 4
+    132 hits stored in this event
+>>> Event: 5
+    84 hits stored in this event
+>>> Event: 6
+    141 hits stored in this event
+>>> Event: 7
+    138 hits stored in this event
+>>> Event: 8
     67 hits stored in this event
->>> Event: 84
-    137 hits stored in this event
->>> Event: 85
-    106 hits stored in this event
->>> Event: 86
-    133 hits stored in this event
->>> Event: 87
-    87 hits stored in this event
->>> Event: 88
-    124 hits stored in this event
->>> Event: 89
-    174 hits stored in this event
->>> Event: 90
-    66 hits stored in this event
->>> Event: 91
-    334 hits stored in this event
->>> Event: 92
-    148 hits stored in this event
->>> Event: 93
-    622 hits stored in this event
->>> Event: 94
-    91 hits stored in this event
->>> Event: 95
-    75 hits stored in this event
->>> Event: 96
-    75 hits stored in this event
->>> Event: 97
-    83 hits stored in this event
->>> Event: 98
+>>> Event: 9
+    68 hits stored in this event
+>>> Event: 10
+    138 hits stored in this event
+>>> Event: 11
+    99 hits stored in this event
+>>> Event: 12
+    45986 hits stored in this event
+>>> Event: 13
+    358 hits stored in this event
+>>> Event: 14
+    55 hits stored in this event
+>>> Event: 15
+    508 hits stored in this event
+>>> Event: 16
+    95 hits stored in this event
+>>> Event: 17
+    149 hits stored in this event
+>>> Event: 18
     98 hits stored in this event
->>> Event: 99
+>>> Event: 19
+    93 hits stored in this event
+>>> Event: 20
+    109 hits stored in this event
+>>> Event: 21
+    250 hits stored in this event
+>>> Event: 22
+    95 hits stored in this event
+>>> Event: 23
+    156 hits stored in this event
+>>> Event: 24
+    107 hits stored in this event
+>>> Event: 25
+    66 hits stored in this event
+>>> Event: 26
+    50 hits stored in this event
+>>> Event: 27
+    75 hits stored in this event
+>>> Event: 28
+    79 hits stored in this event
+>>> Event: 29
+    85 hits stored in this event
+>>> Event: 30
+    72 hits stored in this event
+>>> Event: 31
+    402 hits stored in this event
+>>> Event: 32
+    1250 hits stored in this event
+>>> Event: 33
+    1640 hits stored in this event
+>>> Event: 34
+    183 hits stored in this event
+>>> Event: 35
+    243 hits stored in this event
+>>> Event: 36
+    56 hits stored in this event
+>>> Event: 37
+    184 hits stored in this event
+>>> Event: 38
+    75 hits stored in this event
+>>> Event: 39
+    63 hits stored in this event
+>>> Event: 40
+    83 hits stored in this event
+>>> Event: 41
+    759 hits stored in this event
+>>> Event: 42
+    105 hits stored in this event
+>>> Event: 43
+    72 hits stored in this event
+>>> Event: 44
+    185 hits stored in this event
+>>> Event: 45
+    109 hits stored in this event
+>>> Event: 46
+    67 hits stored in this event
+>>> Event: 47
+    103 hits stored in this event
+>>> Event: 48
+    88 hits stored in this event
+>>> Event: 49
+    82 hits stored in this event
+>>> Event: 50
+    75 hits stored in this event
+>>> Event: 51
+    113 hits stored in this event
+>>> Event: 52
+    831 hits stored in this event
+>>> Event: 53
+    149 hits stored in this event
+>>> Event: 54
+    113 hits stored in this event
+>>> Event: 55
+    143 hits stored in this event
+>>> Event: 56
+    113 hits stored in this event
+>>> Event: 57
+    1327 hits stored in this event
+>>> Event: 58
+    69 hits stored in this event
+>>> Event: 59
+    124 hits stored in this event
+>>> Event: 60
+    82 hits stored in this event
+>>> Event: 61
     57 hits stored in this event
+>>> Event: 62
+    74 hits stored in this event
+>>> Event: 63
+    961 hits stored in this event
+>>> Event: 64
+    128 hits stored in this event
+>>> Event: 65
+    139 hits stored in this event
+>>> Event: 66
+    126 hits stored in this event
+>>> Event: 67
+    421 hits stored in this event
+>>> Event: 68
+    357 hits stored in this event
+>>> Event: 69
+    290 hits stored in this event
+>>> Event: 70
+    123 hits stored in this event
+>>> Event: 71
+    63 hits stored in this event
+>>> Event: 72
+    133 hits stored in this event
+>>> Event: 73
+    1185 hits stored in this event
+>>> Event: 74
+    70 hits stored in this event
+>>> Event: 75
+    86 hits stored in this event
+>>> Event: 76
+    55 hits stored in this event
+>>> Event: 77
+    399 hits stored in this event
+>>> Event: 78
+    240 hits stored in this event
+>>> Event: 79
+    81 hits stored in this event
+>>> Event: 80
+    187 hits stored in this event
+>>> Event: 81
+    113 hits stored in this event
+>>> Event: 82
+    66 hits stored in this event
+>>> Event: 83
+    69 hits stored in this event
+>>> Event: 84
+    90 hits stored in this event
+>>> Event: 85
+    82 hits stored in this event
+>>> Event: 86
+    93 hits stored in this event
+>>> Event: 87
+    542 hits stored in this event
+>>> Event: 88
+    93 hits stored in this event
+>>> Event: 89
+    78 hits stored in this event
+>>> Event: 90
+    123 hits stored in this event
+>>> Event: 91
+    80 hits stored in this event
+>>> Event: 92
+    1012 hits stored in this event
+>>> Event: 93
+    61 hits stored in this event
+>>> Event: 94
+    138 hits stored in this event
+>>> Event: 95
+    87 hits stored in this event
+>>> Event: 96
+    182 hits stored in this event
+>>> Event: 97
+    97 hits stored in this event
+>>> Event: 98
+    74 hits stored in this event
+>>> Event: 99
+    182 hits stored in this event
 ### Run 2 starts.
 --> Event 0 starts.
 

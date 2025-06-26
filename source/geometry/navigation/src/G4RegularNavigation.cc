@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4RegularNavigation implementation
+// Class G4RegularNavigation implementation
 //
-// Author: Pedro Arce, May 2007
-//
+// Author: Pedro Arce (CIEMAT), May 2007
 // --------------------------------------------------------------------
 
 #include "G4RegularNavigation.hh"
@@ -422,4 +421,11 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
                            pPhysical, &parentTouchable) );
   return true;
+}
+
+//------------------------------------------------------------------
+void
+G4RegularNavigation::SetNormalNavigation( G4NormalNavigation* fnormnav )
+{
+  fnormalNav = fnormnav;
 }

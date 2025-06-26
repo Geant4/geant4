@@ -6,6 +6,46 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-03 H. Tran (molecularDNA-V11-03-09)
+- fixed updated reaction list for each DNA reactions.
+
+## 2025-05-05 H. Tran (molecularDNA-V11-03-08)
+- fixed compilation warnings on cxx23
+
+## 2025-04-01 H. Tran (molecularDNA-V11-03-07)
+- updated the new implementation of IRT-syn model.
+- Deleted the Max Time Step parameter.
+
+## 2025-02-17 S. Incerti, K. Chatzipapas, H. Tran (molecularDNA-V11-03-06)
+- Added moleculardna macro, ROOT macro and geomety files for the simulation of phages
+- Updated direct damage range for plasmid.mac and cylinders.mac
+- Added fiber.mac
+- Increased max number of arguments in main
+
+## 2025-02-11 S. Incerti, K. Chatzipapas (molecularDNA-V11-03-05)
+- Added protection to all ROOT macros to avoid nan in error calculation
+
+## 2025-02-11 K. Chatzipapas, S. Incerti (molecularDNA-V11-03-04)
+- Added message in README related to ROOT import from python
+
+## 2025-01-30 S. Incerti (molecularDNA-V11-03-03)
+- Added possibility to activate parallel word using dedicated flag from executable
+
+## 2025-01-23 S. Incerti (molecularDNA-V11-03-02)
+- Increased default statistics in ecoli.mac
+
+## 2025-01-03 S. Incerti (molecularDNA-V11-03-01)
+- Added auto to cylinders.C
+
+## 2024-12-13 K. Chatzipapas (molecularDNA-V11-03-00)
+- Correct segmentation error of the root macrofile
+  "human_cell.C", "ecoli.C", "human_cell_alphas.C",
+  "human_cell_chromosome.C" and "plasmid.C". This error
+  was caused when low damage had been produced.
+- Define the definition of one missing variable in the
+  "human_cell.C", "ecoli.C", "human_cell_alphas.C",
+  "human_cell_chromosome.C" and "plasmid.C".
+
 ## 2024-11-05 H. Tran (molecularDNA-V11-02-13)
 - added missing plasmid analysis root macro file
 

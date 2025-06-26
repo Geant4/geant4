@@ -164,6 +164,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
   G4double E         = theTrack.GetKineticEnergy()/AP;
   G4double MP        = theTrack.GetTotalEnergy() - E*AP;
   G4double b         = pP.beta();
+  if (b <= DBL_MIN) { return &theParticleChange; } 
   G4double AT        = theTarget.GetA_asInt();
   G4double ZT        = theTarget.GetZ_asInt();
   G4double MT        = G4NucleiProperties::GetNuclearMass(AT,ZT);
@@ -188,8 +189,8 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
   // Initialise the variables which will be used with the phase-space decay and
   // to boost the secondaries from the interaction.
   
-  G4ParticleDefinition *typeNucleon  = NULL;
-  G4ParticleDefinition *typeDaughter = NULL;
+  G4ParticleDefinition *typeNucleon  = nullptr;
+  G4ParticleDefinition *typeDaughter = nullptr;
   G4double Eg                        = 0.0;
   G4double mass                      = 0.0;
   G4ThreeVector boost = G4ThreeVector(0.0, 0.0, 0.0);
@@ -212,8 +213,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
   // or the target.
   
   G4int secID = -1;  // Creator model ID for the secondaries
-  if (G4UniformRand() <
-    totCrossSectionP / (totCrossSectionP + totCrossSectionT)) {
+  if (G4UniformRand() * (totCrossSectionP + totCrossSectionT) < totCrossSectionP) {
 
     // It was the projectile which underwent EM dissociation.  Define the Lorentz
     // boost to be applied to the secondaries, and sample whether a proton or a
@@ -345,7 +345,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
     pp = std::sqrt(pp);
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
-  G4double phi      = 2.0*pi*G4UniformRand()*rad;
+  G4double phi      = 2.0*pi*G4UniformRand();
   G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
   G4DynamicParticle *dynamicNucleon =
     new G4DynamicParticle(typeNucleon, direction*pp);

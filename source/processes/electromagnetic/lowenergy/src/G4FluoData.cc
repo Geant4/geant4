@@ -160,7 +160,7 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
       if (pos != energyMap.end())
 	{
 	  G4DataVector dataSet = *((*pos).second);
-
+	  
 	  G4int nData = (G4int)dataSet.size();
 	  if (initIndex >= 0 && initIndex < nData)
 	    {
@@ -189,7 +189,7 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
       if (pos != probabilityMap.end())
 	{
 	  G4DataVector dataSet = *((*pos).second);
-
+	  
 	  G4int nData = (G4int)dataSet.size();
 	  if (initIndex >= 0 && initIndex < nData)
 	    {

@@ -46,6 +46,7 @@ class G4VFSALIntegrationStepper;
 class G4MagneticField;
 class G4CachedMagneticField;
 class G4HelixHeum;
+class G4QSStepper;
 
 class G4ChordFinder
 {
@@ -151,7 +152,7 @@ class G4ChordFinder
       G4MagIntegratorStepper*    fNewFSALStepperOwned = nullptr;
       std::unique_ptr<G4HelixHeum> fLongStepper;
       G4CachedMagneticField*     fCachedField = nullptr;
-   // G4VFSALIntegrationStepper* fOldFSALStepperOwned = nullptr;
+      G4QSStepper*               fQssStepperOwned = nullptr;
       G4EquationOfMotion*        fEquation = nullptr;  
 };
 

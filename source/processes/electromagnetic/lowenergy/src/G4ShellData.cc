@@ -108,7 +108,7 @@ const std::vector<G4double>& G4ShellData::ShellVector(G4int Z) const
 {
   if (Z < zMin || Z > zMax) 
     G4Exception("G4ShellData::ShellVector()","de0001",JustWarning,"Z outside boundaries");
-  auto pos = occupancyPdfMap.find(Z);
+  auto pos = occupancyPdfMap.find(Z);  
   std::vector<G4double>* dataSet = (*pos).second;
   return *dataSet;
 }
@@ -200,12 +200,12 @@ void G4ShellData::PrintData() const
 	      G4int id = (G4int) (*ids)[i];
 	      G4double e = (*energies)[i] / keV;
 	      G4cout << i << ") ";
-
-	      if (occupancyData)
+	      
+	      if (occupancyData) 
 		{
 		  G4cout << " Occupancy: ";
 		}
-	      else
+	      else 
 		{
 		  G4cout << " Shell id: ";
 		}
@@ -213,7 +213,7 @@ void G4ShellData::PrintData() const
 		     << e << " keV ";
 	      if (occupancyData)
 		{
-		  auto posOcc = occupancyPdfMap.find(Z);
+		  auto posOcc = occupancyPdfMap.find(Z);		  
 		  G4double prob = 0.;
 		  if (posOcc != occupancyPdfMap.end())
 		    {

@@ -5,7 +5,7 @@
 // To execute this macro under ROOT,
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
-// Written by S. Incerti, 10/09/2024
+// Written by S. Incerti, 25/01/2025
 // *********************************************************************
 {
 gROOT->Reset();
@@ -124,10 +124,6 @@ htempTer->SetTitle("RGB phantom XZ view");
 // Read ROOT file
 //------------------
 
-// IF no merging active in simulation
-//system ("rm -rf phantom.root");
-//system ("hadd -O phantom.root phantom_t*.root");
-
 TFile *f = new TFile ("phantom.root");
 
 TNtuple* ntuple1;
@@ -138,66 +134,8 @@ ntuple1 = (TNtuple*)f->Get("ntuple1");
 ntuple2 = (TNtuple*)f->Get("ntuple2");
 ntuple3 = (TNtuple*)f->Get("ntuple3");
 
-//----------------------
-// Sum of ntuples
-//----------------------
-
-Double_t * tabVoxelXRed = new Double_t [numberVoxTot];
-Double_t * tabVoxelXGreen = new Double_t [numberVoxTot];
-Double_t * tabVoxelXBlue = new Double_t [numberVoxTot];
-
-Double_t * tabVoxelYRed = new Double_t [numberVoxTot];
-Double_t * tabVoxelYGreen = new Double_t [numberVoxTot];
-Double_t * tabVoxelYBlue = new Double_t [numberVoxTot];
-
-Double_t * tabVoxelZRed = new Double_t [numberVoxTot];
-Double_t * tabVoxelZGreen = new Double_t [numberVoxTot];
-Double_t * tabVoxelZBlue = new Double_t [numberVoxTot];
-
-Double_t * tabVoxelEnergyRed = new Double_t [numberVoxTot];
-Double_t * tabVoxelEnergyGreen = new Double_t [numberVoxTot];
-Double_t * tabVoxelEnergyBlue = new Double_t [numberVoxTot];
-
-Double_t * tabVoxelDoseRed = new Double_t [numberVoxTot];
-Double_t * tabVoxelDoseGreen = new Double_t [numberVoxTot];
-Double_t * tabVoxelDoseBlue = new Double_t [numberVoxTot];
-
-// Initialisation of the arrays
-for (Int_t i = 0; i < numberVoxRed; i++)
-{
-  tabVoxelXRed[i] = 0;
-  tabVoxelYRed[i] = 0;
-  tabVoxelZRed[i] = 0;
-  tabVoxelEnergyRed[i] = 0;
-  tabVoxelDoseRed[i] = 0;
-}
-for (Int_t i = 0; i < numberVoxGreen; i++)
-{
-  tabVoxelXGreen[i] = 0;
-  tabVoxelYGreen[i] = 0;
-  tabVoxelZGreen[i] = 0;
-  tabVoxelEnergyGreen[i] = 0;
-  tabVoxelDoseGreen[i] = 0;
-}
-for (Int_t i = 0; i < numberVoxBlue; i++)
-{
-  tabVoxelXBlue[i] = 0;
-  tabVoxelYBlue[i] = 0;
-  tabVoxelZBlue[i] = 0;
-  tabVoxelEnergyBlue[i] = 0;
-  tabVoxelDoseBlue[i] = 0;
-}
-
 Double_t x, y, z, energy, dose;
 Int_t voxelID;
-Double_t nrjRed=0.;
-Double_t nrjGreen=0.;
-Double_t nrjBlue=0.;
-Double_t doseRed=0.;
-Double_t doseGreen=0.;
-Double_t doseBlue=0.;
-
-//
 
 ntuple1->SetBranchAddress("x",&x);
 ntuple1->SetBranchAddress("y",&y);
@@ -206,66 +144,12 @@ ntuple1->SetBranchAddress("energy",&energy);
 ntuple1->SetBranchAddress("dose",&dose);
 ntuple1->SetBranchAddress("voxelID",&voxelID);
 
-// RED
-
-Long_t nentriesRed = (Long_t)ntuple1->GetEntries();
-for (Long_t i=0;i<nentriesRed;i++)
-{
-      x=0;
-      y=0;
-      z=0;
-      energy=0;
-      dose=0;
-      voxelID=0;
-
-      ntuple1->GetEntry(i);
-      if (energy > 0)
-      {
-        nrjRed=nrjRed+energy;
-        doseRed=doseRed+dose;
-
-        tabVoxelXRed[voxelID] = x;
-        tabVoxelYRed[voxelID] = y;
-        tabVoxelZRed[voxelID] = z;
-        tabVoxelEnergyRed[voxelID] = tabVoxelEnergyRed[voxelID] + energy;
-        tabVoxelDoseRed[voxelID] = tabVoxelDoseRed[voxelID] + dose;
-      }
-}
-
 ntuple2->SetBranchAddress("x",&x);
 ntuple2->SetBranchAddress("y",&y);
 ntuple2->SetBranchAddress("z",&z);
 ntuple2->SetBranchAddress("energy",&energy);
 ntuple2->SetBranchAddress("dose",&dose);
 ntuple2->SetBranchAddress("voxelID",&voxelID);
-
-// GREEN
-
-Long_t nentriesGreen = (Long_t)ntuple2->GetEntries();
-for (Long_t i=0;i<nentriesGreen;i++)
-{
-      x=0;
-      y=0;
-      z=0;
-      energy=0;
-      dose=0;
-      voxelID=0;
-
-      ntuple2->GetEntry(i);
-      if (energy > 0)
-      {
-        nrjGreen=nrjGreen+energy;
-        doseGreen=doseGreen+dose;
-
-        tabVoxelXGreen[voxelID] = x;
-        tabVoxelYGreen[voxelID] = y;
-        tabVoxelZGreen[voxelID] = z;
-        tabVoxelEnergyGreen[voxelID] = tabVoxelEnergyGreen[voxelID] + energy;
-        tabVoxelDoseGreen[voxelID] = tabVoxelDoseGreen[voxelID] + dose;
-      }
-}
-
-// BLUE
 
 ntuple3->SetBranchAddress("x",&x);
 ntuple3->SetBranchAddress("y",&y);
@@ -274,60 +158,13 @@ ntuple3->SetBranchAddress("energy",&energy);
 ntuple3->SetBranchAddress("dose",&dose);
 ntuple3->SetBranchAddress("voxelID",&voxelID);
 
-Long_t nentriesBlue = (Long_t)ntuple3->GetEntries();
-for (Long_t i=0;i<nentriesBlue;i++)
-{
-      x=0;
-      y=0;
-      z=0;
-      energy=0;
-      dose=0;
-      voxelID=0;
-
-      ntuple3->GetEntry(i);
-      if (energy > 0)
-      {
-        nrjBlue=nrjBlue+energy;
-        doseBlue=doseBlue+dose;
-        tabVoxelXBlue[voxelID] = x;
-        tabVoxelYBlue[voxelID] = y;
-        tabVoxelZBlue[voxelID] = z;
-        tabVoxelEnergyBlue[voxelID] = tabVoxelEnergyBlue[voxelID] + energy;
-        tabVoxelDoseBlue[voxelID] = tabVoxelDoseBlue[voxelID] + dose;
-      }
-}
-
-// To liberate memory
-f->Close();
-
-TFile *f2 = new TFile ("results.root","RECREATE");
-//
-
-TNtuple *ntupleRED = new TNtuple ("RED","RED","x:y:z:energy:dose");
-TNtuple *ntupleGREEN = new TNtuple ("GREEN","GREEN","x:y:z:energy:dose");
-TNtuple *ntupleBLUE = new TNtuple ("BLUE","BLUE","x:y:z:energy:dose");
-
-// Global sums
-for (Int_t i = 0; i < numberVoxTot; i++)
-{
-  ntupleRED->Fill(tabVoxelXRed[i],tabVoxelYRed[i],tabVoxelZRed[i],tabVoxelEnergyRed[i],tabVoxelDoseRed[i]);
-}
-for (Int_t i = 0; i < numberVoxTot; i++)
-{
-  ntupleGREEN->Fill(tabVoxelXGreen[i],tabVoxelYGreen[i],tabVoxelZGreen[i],tabVoxelEnergyGreen[i],tabVoxelDoseGreen[i]);
-}
-for (Int_t i = 0; i < numberVoxTot; i++)
-{
-  ntupleBLUE->Fill(tabVoxelXBlue[i],tabVoxelYBlue[i],tabVoxelZBlue[i],tabVoxelEnergyBlue[i],tabVoxelDoseBlue[i]);
-}
-
 //---------------------------------
 // Absorbed energy distributions
 //---------------------------------
 
 c1->cd(2);
 gPad->SetLogy();
-ntupleRED->Draw("energy","energy>0");
+ntuple1->Draw("energy","energy>0");
 TH1F *htemp2 = (TH1F*)gPad->GetPrimitive("htemp");
 htemp2->GetXaxis()->SetTitle("Energy (keV)");
 htemp2->GetXaxis()->SetLabelSize(0.025);
@@ -339,7 +176,7 @@ htemp2->SetFillColor(2);
 
 c1->cd(6);
 gPad->SetLogy();
-ntupleGREEN->Draw("energy","energy>0");
+ntuple2->Draw("energy","energy>0");
 TH1F *htemp3 = (TH1F*)gPad->GetPrimitive("htemp");
 htemp3->GetXaxis()->SetTitle("Energy (keV)");
 htemp3->GetXaxis()->SetLabelSize(0.025);
@@ -351,7 +188,7 @@ htemp3->SetFillColor(3);
 
 c1->cd(10);
 gPad->SetLogy();
-ntupleBLUE->Draw("energy","energy>0");
+ntuple3->Draw("energy","energy>0");
 TH1F *htemp4 = (TH1F*)gPad->GetPrimitive("htemp");
 htemp4->GetXaxis()->SetTitle("Energy (keV)");
 htemp4->GetXaxis()->SetLabelSize(0.025);
@@ -367,7 +204,7 @@ htemp4->SetFillColor(4);
 
 c1->cd(3);
 TH2F *histNrjRed = new TH2F("histNrjRed","histNrjRed",100,0,800,100,0,800);
-ntupleRED->Draw("y:x>>histNrjRed","energy","contz");
+ntuple1->Draw("y:x>>histNrjRed","energy","contz");
 gPad->SetLogz();
 histNrjRed->Draw("contz");
 histNrjRed->GetXaxis()->SetTitle("X (microns)");
@@ -386,7 +223,7 @@ histNrjRed->SetTitle("Energy map for RED voxels");
 
 c1->cd(7);
 TH2F *histNrjGreen = new TH2F("histNrjGreen","histNrjGreen",100,0,800,100,0,800);
-ntupleGREEN->Draw("y:x>>histNrjGreen","energy","contz");
+ntuple2->Draw("y:x>>histNrjGreen","energy","contz");
 gPad->SetLogz();
 histNrjGreen->Draw("contz");
 histNrjGreen->GetXaxis()->SetTitle("X (microns)");
@@ -405,7 +242,7 @@ histNrjGreen->SetTitle("Energy map for GREEN voxels");
 
 c1->cd(11);
 TH2F *histNrjBlue = new TH2F("histNrjBlue","histNrjBlue",100,0,800,100,0,800);
-ntupleBLUE->Draw("y:x>>histNrjBlue","energy","contz");
+ntuple3->Draw("y:x>>histNrjBlue","energy","contz");
 gPad->SetLogz();
 histNrjBlue->Draw("contz");
 histNrjBlue->GetXaxis()->SetTitle("X (microns)");
@@ -429,7 +266,7 @@ histNrjBlue->SetTitle("Energy map for BLUE voxels");
 c1->cd(4);
 TH2F *histDoseRed = new TH2F("histDoseRed","histDoseRed",100,0,800,100,0,800);
 // WARNING : dose scaling to mGy
-ntupleRED->Draw("y:x>>histDoseRed","dose/1000","contz");
+ntuple1->Draw("y:x>>histDoseRed","dose/1000","contz");
 //gPad->SetLogz();
 histDoseRed->Draw("contz");
 histDoseRed->GetXaxis()->SetTitle("X (microns)");
@@ -449,7 +286,7 @@ histDoseRed->SetTitle("Dose map for RED voxels");
 c1->cd(8);
 TH2F *histDoseGreen = new TH2F("histDoseGreen","histDoseGreen",100,0,800,100,0,800);
 // WARNING : dose scaling to mGy
-ntupleGREEN->Draw("y:x>>histDoseGreen","dose/1000","contz");
+ntuple2->Draw("y:x>>histDoseGreen","dose/1000","contz");
 //gPad->SetLogz();
 histDoseGreen->Draw("contz");
 histDoseGreen->GetXaxis()->SetTitle("X (microns)");
@@ -469,7 +306,7 @@ histDoseGreen->SetTitle("Dose map for GREEN voxels");
 c1->cd(12);
 TH2F *histDoseBlue = new TH2F("histDoseBlue","histDoseBlue",100,0,800,100,0,800);
 // WARNING : dose scaling to mGy
-ntupleBLUE->Draw("y:x>>histDoseBlue","dose/1000","contz");
+ntuple3->Draw("y:x>>histDoseBlue","dose/1000","contz");
 //gPad->SetLogz();
 histDoseBlue->Draw("contz");
 histDoseBlue->GetXaxis()->SetTitle("X (microns)");
@@ -485,30 +322,5 @@ histDoseBlue->GetXaxis()->SetTitleOffset(1.4);
 histDoseBlue->GetYaxis()->SetTitleOffset(1.4);
 histDoseBlue->GetZaxis()->SetTitleOffset(.6);
 histDoseBlue->SetTitle("Dose map for BLUE voxels");
-
-//----------------------------
-// SUMMARY
-//----------------------------
-
-cout << endl;
-cout << "- Summary --------------------------------------------------" << endl;
-cout << endl;
-cout << "  Total number of voxels in phantom           = " << numberVoxTot << endl;
-cout << "  Total number of RED voxels in phantom       = " << numberVoxRed << endl;
-cout << "  Total number of GREEN voxels in phantom     = " << numberVoxGreen << endl;
-cout << "  Total number of BLUE voxels in phantom      = " << numberVoxBlue << endl;
-cout << endl;
-cout << "  Total absorbed energy in RED   voxels (MeV) = "  << nrjRed/1E3 << endl;
-cout << "  Total absorbed energy in GREEN voxels (MeV) = "  << nrjGreen/1E3 << endl;
-cout << "  Total absorbed energy in BLUE  voxels (MeV) = "  << nrjBlue/1E3 << endl;
-cout << endl;
-cout << "  Total absorbed dose   in RED   voxels (Gy)  = "  << doseRed << endl;
-cout << "  Total absorbed dose   in GREEN voxels (Gy)  = "  << doseGreen << endl;
-cout << "  Total absorbed dose   in BLUE  voxels (Gy)  = "  << doseBlue << endl;
-cout << endl;
-cout << "------------------------------------------------------------" << endl;
-
-// End
-f2->Write();
 
 }

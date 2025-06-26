@@ -87,9 +87,14 @@ void ChemistryWorld::SetNewValue(G4UIcommand* command, G4String newValue)
       G4double ConcentrationInM = concentraion / (mole * liter * 1e6);
       fpChemicalComponent[scavengerConf] = ConcentrationInM;
     }
-    else if (unit == "%")  // only for O2
+    else if (unit == "%")  // only for O2 and CO2
     {
-      G4double ConcentrationInM = (concentraion / 100) * 0.0013 / (mole * liter);
+      G4double kH = 0.;
+      if (species == "O2")
+        kH = 0.0013;
+      else if (species == "CO2")
+        kH = 0.034;
+      G4double ConcentrationInM = (concentraion / 100) * kH / (mole * liter);
       fpChemicalComponent[scavengerConf] = ConcentrationInM;
     }
     else {
@@ -108,6 +113,7 @@ void ChemistryWorld::SetNewValue(G4UIcommand* command, G4String newValue)
 void ChemistryWorld::ConstructChemistryComponents()
 {
   auto O2 = G4MoleculeTable::Instance()->GetConfiguration("O2");
+  auto CO2 = G4MoleculeTable::Instance()->GetConfiguration("CO2");
   auto H2O = G4MoleculeTable::Instance()->GetConfiguration("H2O");
   auto H3Op = G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
   auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
@@ -132,5 +138,9 @@ void ChemistryWorld::ConstructChemistryComponents()
   // oxygen
   G4double O2Molarity = (0. / 100) * 0.0013 / (mole * liter);
   fpChemicalComponent[O2] = O2Molarity;
+
+  // CO2 At 25°C,  kH  is approximately  3.3×10  −2   mol/(L·atm).
+  G4double CO2Molarity = (0. / 100) * 0.034 / (mole * liter);
+  fpChemicalComponent[CO2] = CO2Molarity;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

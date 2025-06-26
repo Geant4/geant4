@@ -48,9 +48,7 @@
 
 #include "G4VPVParameterisation.hh"
 
-#include "meshdefs.hh"
-
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -1593,43 +1591,37 @@ std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 
 G4ThreeVector G4Torus::GetPointOnSurface() const
 {
-  G4double cosu, sinu,cosv, sinv, aOut, aIn, aSide, chose, phi, theta, rRand;
+  G4double rrmin = fRmin*fRmin;
+  G4double rrmax = fRmax*fRmax;
+  G4double smax = twopi*fRtor*fDPhi*fRmax;
+  G4double smin = twopi*fRtor*fDPhi*fRmin;
+  G4double sphi = (fDPhi >= twopi) ? 0. : pi*(rrmax - rrmin);
 
-  phi   = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
-  theta = G4RandFlat::shoot(0.,twopi);
-
-  cosu   = std::cos(phi);    sinu = std::sin(phi);
-  cosv   = std::cos(theta);  sinv = std::sin(theta); 
-
-  // compute the areas
-
-  aOut   = (fDPhi)*twopi*fRtor*fRmax;
-  aIn    = (fDPhi)*twopi*fRtor*fRmin;
-  aSide  = pi*(fRmax*fRmax-fRmin*fRmin);
-
-  if ((fSPhi == 0) && (fDPhi == twopi)){ aSide = 0; }
-  chose = G4RandFlat::shoot(0.,aOut + aIn + 2.*aSide);
-
-  if(chose < aOut)
+  G4double u = G4QuickRand();
+  G4double v = twopi*G4QuickRand();;
+  G4double select = (smax + smin + 2.*sphi)*G4QuickRand();
+  G4double phi, r, ds;
+  if (select < 2.*sphi)
   {
-    return { (fRtor+fRmax*cosv)*cosu, (fRtor+fRmax*cosv)*sinu, fRmax*sinv };
-  }
-  else if( (chose >= aOut) && (chose < aOut + aIn) )
-  {
-    return { (fRtor+fRmin*cosv)*cosu, (fRtor+fRmin*cosv)*sinu, fRmin*sinv };
-  }
-  else if( (chose >= aOut + aIn) && (chose < aOut + aIn + aSide) )
-  {
-    rRand = GetRadiusInRing(fRmin,fRmax);
-    return { (fRtor+rRand*cosv)*std::cos(fSPhi),
-             (fRtor+rRand*cosv)*std::sin(fSPhi), rRand*sinv };
+    // phi cut
+    phi = fSPhi + fDPhi*(G4double)(select < sphi);
+    r = std::sqrt(rrmin + (rrmax - rrmin)*u);
+    ds = fRtor + r*std::cos(v);
   }
   else
-  {   
-    rRand = GetRadiusInRing(fRmin,fRmax);
-    return { (fRtor+rRand*cosv)*std::cos(fSPhi+fDPhi),
-             (fRtor+rRand*cosv)*std::sin(fSPhi+fDPhi), rRand*sinv };
+  {
+    // toroidal surface (rejection sampling)
+    phi = fSPhi + fDPhi*u;
+    r = (select < 2.*sphi + smax) ? fRmax : fRmin;
+    ds = fRtor + r*std::cos(v);
+    for (auto i = 0; i < 10; ++i)
+    {
+      if ((fRtor + r)*G4QuickRand() < ds) break;
+      v = twopi*G4QuickRand();
+      ds = fRtor + r*std::cos(v);
+    }
   }
+  return { ds*std::cos(phi), ds*std::sin(phi), r*std::sin(v) };
 }
 
 ///////////////////////////////////////////////////////////////////////

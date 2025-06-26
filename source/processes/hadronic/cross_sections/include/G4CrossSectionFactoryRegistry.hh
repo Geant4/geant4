@@ -47,19 +47,27 @@ class G4VBaseXSFactory;
 
 class G4CrossSectionFactoryRegistry
 {
-    friend std::ostream& operator<<(std::ostream&, const G4CrossSectionFactoryRegistry&);
-private:
-    std::map<G4String, G4VBaseXSFactory*> factories;
-    static G4CrossSectionFactoryRegistry* instance; //Note this is shared among threads
-    G4CrossSectionFactoryRegistry();
-    G4CrossSectionFactoryRegistry(const G4CrossSectionFactoryRegistry& );
-    G4CrossSectionFactoryRegistry& operator=(const G4CrossSectionFactoryRegistry&);
-    //Disable copy-ctr and assignement operator
+  friend std::ostream& operator<<(std::ostream&, const G4CrossSectionFactoryRegistry&);
 public:
-    static G4CrossSectionFactoryRegistry* Instance();
-    G4VBaseXSFactory* GetFactory( const G4String& name , G4bool abortIfNotFound = true) const;
-    //Search a cross-section factory by name, by default rise an exception if factory is not found 
-    void Register( const G4String& name , G4VBaseXSFactory* factory );
+  static G4CrossSectionFactoryRegistry* Instance();
+  ~G4CrossSectionFactoryRegistry() = default;
+
+  G4VBaseXSFactory* GetFactory( const G4String& name, G4bool abortIfNotFound = true) const;
+
+  //Search a cross-section factory by name, by default rise an exception if factory is not found 
+  void Register( const G4String& name, G4VBaseXSFactory* factory );
+
+  void DeRegister( G4VBaseXSFactory* factory );
+
+  G4CrossSectionFactoryRegistry(const G4CrossSectionFactoryRegistry&) = delete;
+  G4CrossSectionFactoryRegistry& operator=(const G4CrossSectionFactoryRegistry&) = delete;
+
+private:
+
+  G4CrossSectionFactoryRegistry();
+  
+  std::map<G4String, G4VBaseXSFactory*> factories;
+  static G4CrossSectionFactoryRegistry* instance; //Note this is shared among threads
 };
 
 std::ostream&  operator<<(std::ostream& msg, const G4CrossSectionFactoryRegistry& rhs);

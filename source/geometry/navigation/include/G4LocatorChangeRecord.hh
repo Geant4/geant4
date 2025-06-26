@@ -30,13 +30,18 @@
 // Record the changes in an endpoint of a locator.
 // Its key use is in playing these back in case of a problem.
 
-// Author: John Apostolakis, 27.08.19 - First version
+// Author: John Apostolakis (CERN), 27 August 2019
 // --------------------------------------------------------------------
 #ifndef G4LOCATOR_CHANGE_RECORD_HH
-#define G4LOCATOR_CHANGE_RECORD_HH
+#define G4LOCATOR_CHANGE_RECORD_HH 1
 
 #include <vector>
 #include "G4FieldTrack.hh"
+
+/**
+ * @brief G4LocatorChangeRecord records the changes in an endpoint of a locator.
+ * Its key use is in playing these back in case of a problem.
+ */
 
 class G4LocatorChangeRecord
 {
@@ -48,36 +53,41 @@ class G4LocatorChangeRecord
                            kInsertingMidPoint,  kRecalculatedBagn,        // 2
                            kLevelPop };  
  
-    static const char* fNameChangeLocation[];
-    static const char* GetNameChangeLocation( EChangeLocation );
-   
+    /**
+     * Constructor.
+     */
     G4LocatorChangeRecord( EChangeLocation codeLocation,
                            G4int iter,
                            unsigned int count,
-                           const G4FieldTrack& fieldTrack )
-        : fCodeLocation( codeLocation), fIteration(iter), fEventCount(count),
-          fFieldTrack( fieldTrack ) {}
+                           const G4FieldTrack& fieldTrack );
+
+    /**
+     * Default copy and move constructors.
+     */
     G4LocatorChangeRecord( const G4LocatorChangeRecord &  ) = default;
     G4LocatorChangeRecord(       G4LocatorChangeRecord && ) = default;
 
     // No set methods -> create a new record for each entry (more reliable)
-    // void SetLocation( EChangeLocation loc ) { fCodeLocation= loc; }
-    // void SetLength( double len ) { fLength= len; }
-    // void SetCount( int cnt ) {  fEventCount= cnt; }
-    // void SetIteration( int iter ) {  fIteration= iter; }
 
+    /**
+     * Accessors.
+     */
     inline EChangeLocation GetLocation() const { return fCodeLocation; }
     inline unsigned int   GetCount()     const { return fEventCount; }
     inline G4int          GetIteration() const { return fIteration; }
     inline G4double GetLength() const { return fFieldTrack.GetCurveLength(); }
    
+    /**
+     * Streaming operators, using StreamInfo().
+     */
     friend std::ostream& operator<< ( std::ostream& os,
                          const G4LocatorChangeRecord& r );
-      // Streaming operator, using StreamInfo().
-
     friend std::ostream& operator<< ( std::ostream& os,
                          const std::vector<G4LocatorChangeRecord> & vecR );
-   
+
+    /**
+     * Streams object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const;
 
     static std::ostream& ReportVector ( std::ostream& os,
@@ -88,8 +98,11 @@ class G4LocatorChangeRecord
                          const std::vector<G4LocatorChangeRecord> & startA,
                          const std::vector<G4LocatorChangeRecord> & endB );
    
+    static const char* GetNameChangeLocation( EChangeLocation );
+   
   private:
 
+    static const char* fNameChangeLocation[];
     EChangeLocation fCodeLocation = kInvalidCL;
     G4int        fIteration  = -1;
     unsigned int fEventCount = 0;

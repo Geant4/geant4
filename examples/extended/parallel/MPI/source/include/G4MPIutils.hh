@@ -72,7 +72,7 @@ commMap_t buildCommunicationMap(std::vector<rank_t>& input);
 // Performs merging to rank 0 using the provided sender, receiver and barrier functions.
 // CommSize is the size of the communicator and myrank is the rank of the caller
 // For example: assume a class UserMerger has two members Send(uint) and
-//                       Receive(uint) and we are using a MPI::Intracomm object as
+//                       Receive(uint) and we are using a MPI_Comm object as
 //                       communicator, then to use this function the ranks can:
 //                             using std::placeholers::_1;
 //                             std::function<void(unsigned int)> sender =
@@ -80,7 +80,7 @@ commMap_t buildCommunicationMap(std::vector<rank_t>& input);
 //                             std::function<void(unsigned int)> receiver =
 //                                             std::bind(&Merger::Receiver,&mergerInst,_1);
 //                             std::function<void(void)> barrier =
-//                                             std::bind(&MPI::Intracomm::Barrier,&commInst);
+//                             [&commInst](){MPI_Barrier(commInst);};
 //                             G4mpi::Merge(sender,receiver,barrier,commSize,myrank);
 void Merge(std::function<void(unsigned int)> senderF, std::function<void(unsigned int)> receiverF,
            std::function<void(void)> barrierF, unsigned int commSize, unsigned int myrank);

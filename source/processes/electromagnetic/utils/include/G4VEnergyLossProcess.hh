@@ -284,8 +284,10 @@ public:
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
                                 G4double energyLimit);
 
-  inline void SetLossFluctuations(G4bool val);
+  // obsolete method will be removed in the next major release
+  void SetLossFluctuations(G4bool);
 
+  // interpolation of cross section
   inline void SetSpline(G4bool val);
   inline void SetCrossSectionType(G4CrossSectionType val);
   inline G4CrossSectionType CrossSectionType() const;
@@ -294,7 +296,7 @@ public:
   void SetIonisation(G4bool val);
   inline G4bool IsIonisationProcess() const;
 
-  // Redefine parameteters for stepping control
+  // Redefine parameteters of stepping control
   void SetLinearLossLimit(G4double val);
   void SetStepFunction(G4double v1, G4double v2);
   void SetLowestEnergyLimit(G4double);
@@ -311,6 +313,7 @@ public:
   void SetInverseRangeTable(G4PhysicsTable* p);
   void SetLambdaTable(G4PhysicsTable* p);
 
+  // set properties of cross section shape
   void SetTwoPeaksXS(std::vector<G4TwoPeaksXS*>*);
   void SetEnergyOfCrossSectionMax(std::vector<G4double>*);
 
@@ -446,6 +449,7 @@ private:
   const std::vector<G4int>*     theDensityIdx = nullptr;
   const std::vector<G4double>*  theDensityFactor = nullptr;
   const G4DataVector*           theCuts = nullptr;
+  const std::vector<G4bool>*    theFluctuationFlags = nullptr;
 
   std::vector<G4double>* theEnergyOfCrossSectionMax = nullptr;
   std::vector<G4TwoPeaksXS*>* fXSpeaks = nullptr;
@@ -517,8 +521,9 @@ private:
   G4bool weightFlag = false;
   G4bool isMaster = false;
   G4bool baseMat = false;
+  
+  // flags allowing define table parameters individual for the process
   G4bool actLinLossLimit = false;
-  G4bool actLossFluc = false;
   G4bool actBinning = false;
   G4bool actMinKinEnergy = false;
   G4bool actMaxKinEnergy = false;
@@ -855,14 +860,6 @@ inline const G4ParticleDefinition*
 G4VEnergyLossProcess::SecondaryParticle() const
 {
   return secondaryParticle;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
-{
-  lossFluctuationFlag = val;
-  actLossFluc = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

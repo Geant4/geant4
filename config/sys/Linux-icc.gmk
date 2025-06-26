@@ -84,7 +84,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
   endif
 
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
 
   ifndef QTFLAGS

@@ -105,27 +105,6 @@ public:
     fSGViewer->enable_keyboard_focus();
   }
   
-  virtual void SetView() {
-#ifdef __APPLE__
-    if(fSGQWidget && fSGViewer) {
-      if( (2*fSGQWidget->width() == int(fSGViewer->width()))   &&
-          (2*fSGQWidget->height() == int(fSGViewer->height())) ){
-        //  With Qt/Cocoa, the received size in
-        // tools::sg::glarea::resizeGL is twice the QWidget::[width(),height()]!
-        //  In general it does not pose problem, except when rendering 2D texts.
-        // In order to have similar sizes than other platforms, we have to double
-        // their pixel heights.
-        fVP.SetGlobalMarkerScale(2);
-      }
-    }
-#endif
-    parent::SetView();
-  }
-
-  virtual void UpdateGUISceneTree() {
-    if (fUIQt) fUIQt->UpdateSceneTree(fSceneTree);
-  }
-
 protected:
   G4UIQt* fUIQt = nullptr;
   QWidget* fSGQWidget;

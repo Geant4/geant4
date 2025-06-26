@@ -54,6 +54,7 @@
 #include "G4KaonZeroLong.hh"
 #include "G4HadronicParameters.hh"
 #include "G4HadronInelasticProcess.hh"
+#include "G4ChargeExchangeMessenger.hh"
 #include "G4SystemOfUnits.hh"
 
 // factory
@@ -67,10 +68,16 @@ G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver)
 {
   // because it is an addition, the type of this constructor is 0
   G4HadronicParameters::Instance()->SetVerboseLevel(ver);
+  theMessenger = new G4ChargeExchangeMessenger(this);
   if (ver > 1) {
     G4cout << "### ChargeExchangePhysics above " 
 	   << fLowEnergyLimit/CLHEP::GeV << " GeV." << G4endl;
   }
+}
+
+G4ChargeExchangePhysics::~G4ChargeExchangePhysics()
+{
+  delete theMessenger;
 }
 
 void G4ChargeExchangePhysics::ConstructParticle()

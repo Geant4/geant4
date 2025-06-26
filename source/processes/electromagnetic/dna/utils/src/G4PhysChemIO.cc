@@ -33,7 +33,6 @@
 #include "G4PhysChemIO.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
-#include "G4VAnalysisManager.hh"
 
 using namespace std;
 
@@ -42,7 +41,6 @@ using namespace std;
 namespace G4PhysChemIO{
   
 FormattedText::FormattedText(){
-  fRunID = -1;
   fEventID = -1;
   fFileInitialized = false;
 }
@@ -154,155 +152,4 @@ void FormattedText::CreateSolvatedElectron(const G4Track* theIncomingTrack,
   fOfstream << G4endl;
 }
 
-//------------------------------------------------------------------------------
-//
-// Using G4analysis
-//
-
-G4Analysis::G4Analysis(G4VAnalysisManager* analysisManager):
-fpAnalysisManager(analysisManager)
-{
-  fFileInitialized = false;
-  fNtupleID = -1;
-}
-
-//------------------------------------------------------------------------------
-
-G4Analysis::~G4Analysis()
-{
-  fpAnalysisManager = nullptr;
-}
-
-//------------------------------------------------------------------------------
-
-void G4Analysis::InitializeFile()
-{
-  if (fFileInitialized) return;
-  
-  fNtupleID = fpAnalysisManager->CreateNtuple("PhysChem","PhysChem");
-  fpAnalysisManager->CreateNtupleIColumn(fNtupleID, "ParentID");
-  fpAnalysisManager->CreateNtupleSColumn(fNtupleID, "Molecule");
-  
-  //----------------------------------------------------------------------------
-  // valid for H2O only
-  fpAnalysisManager->CreateNtupleIColumn(fNtupleID, "ElectronicModif");
-  // ionization = 0 / excitation = 1 / diss att = 2
-  fpAnalysisManager->CreateNtupleIColumn(fNtupleID, "level");
-  // valid for ion and exc only
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "Energy_eV");
-  // valid for ion and exc only
-  
-  //----------------------------------------------------------------------------
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "x_parent_nm");
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "y_parent_nm");
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "z_parent_nm");
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "x_nm");
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "y_nm");
-  fpAnalysisManager->CreateNtupleDColumn(fNtupleID, "z_nm");
-  fpAnalysisManager->FinishNtuple(fNtupleID);
-  
-  fFileInitialized = true;
-}
-
-//------------------------------------------------------------------------------
-
-void G4Analysis::WriteInto(const G4String& output,
-                           ios_base::openmode)
-{
-  fpAnalysisManager->OpenFile(output);
-  fFileInitialized = false;
-}
-
-//------------------------------------------------------------------------------
-
-void G4Analysis::CloseFile()
-{
-//  fpAnalysisManager->Write();
-//  fpAnalysisManager->CloseFile();
-}
-
-//------------------------------------------------------------------------------
-
-void G4Analysis::CreateWaterMolecule(G4int modification,
-                                     G4int electronicLevel,
-                                     G4double energy,
-                                     const G4Track* theIncomingTrack)
-{
-  if(!fFileInitialized) InitializeFile();
-  
-  // parent ID
-  fpAnalysisManager->FillNtupleIColumn(fNtupleID, 0,
-                                       theIncomingTrack->GetTrackID());
-  
-  // molecule type
-  fpAnalysisManager->FillNtupleSColumn(fNtupleID, 1, "H2O");
-  
-  //----------------------------------------------------------------------------
-  // valid for H2O only
-  
-  // electronic modif
-  fpAnalysisManager->FillNtupleIColumn(fNtupleID, 2, modification);
-  // ionization = 0 / excitation = 1 / diss att = 2
-  fpAnalysisManager->FillNtupleIColumn(fNtupleID, 3, electronicLevel);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID, 4, energy / eV);
-  
-  //----------------------------------------------------------------------------
-  const G4ThreeVector& parentPos = theIncomingTrack->GetPosition();
-  
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,5,(parentPos.x())/nanometer);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,6,(parentPos.y())/nanometer);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,7,(parentPos.z())/nanometer);
-  
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,8,(parentPos.x())/nanometer);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,9,(parentPos.y())/nanometer);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,10,(parentPos.z())/nanometer);
-  fpAnalysisManager->AddNtupleRow(fNtupleID);
-}
-
-//------------------------------------------------------------------------------
-
-void G4Analysis::CreateSolvatedElectron(const G4Track* electronTrack,
-                                        G4ThreeVector* finalPosition)
-{
-  if(!fFileInitialized) InitializeFile();
-  
-  // parent ID
-  fpAnalysisManager->FillNtupleIColumn(fNtupleID, 0,
-                                       electronTrack->GetTrackID());
-  
-  // molecule type
-  fpAnalysisManager->FillNtupleSColumn(fNtupleID, 1, "e_aq");
-  
-  //----------------------------------------------------------------------------
-  // valid for H2O only
-  
-  // electronic modif
-  fpAnalysisManager->FillNtupleIColumn(fNtupleID, 2, -1); // electronic modif
-  fpAnalysisManager->FillNtupleIColumn(fNtupleID, 3, -1); // electronic level
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID, 4,
-                                       electronTrack->GetKineticEnergy() / eV);
-  
-  //----------------------------------------------------------------------------
-  const G4ThreeVector& parentPos = electronTrack->GetPosition();
-  const double i_nm = 1./nanometer;
-  
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,5, parentPos.x() *i_nm);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,6, parentPos.y() *i_nm);
-  fpAnalysisManager->FillNtupleDColumn(fNtupleID,7, parentPos.z() *i_nm);
-  
-  if (finalPosition != nullptr)
-  {
-    fpAnalysisManager->FillNtupleDColumn(fNtupleID,8, finalPosition->x()*i_nm);
-    fpAnalysisManager->FillNtupleDColumn(fNtupleID,9, finalPosition->y()*i_nm);
-    fpAnalysisManager->FillNtupleDColumn(fNtupleID,10, finalPosition->z()*i_nm);
-  }
-  else
-  {
-    fpAnalysisManager->FillNtupleDColumn(fNtupleID,8, parentPos.x() *i_nm);
-    fpAnalysisManager->FillNtupleDColumn(fNtupleID,9, parentPos.y() *i_nm);
-    fpAnalysisManager->FillNtupleDColumn(fNtupleID,10, parentPos.z() *i_nm);
-  }
-  
-  fpAnalysisManager->AddNtupleRow(fNtupleID);
-}
 }

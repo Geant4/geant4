@@ -1,6 +1,6 @@
 #/control/verbose 2
 #
-#/run/numberOfThreads 10
+/run/numberOfThreads 10
 #
 /process/dna/e-SolvationSubType Ritchie1994
 #/process/dna/e-SolvationSubType Meesungnoen2002

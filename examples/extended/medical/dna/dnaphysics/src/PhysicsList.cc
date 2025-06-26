@@ -58,6 +58,7 @@
 #include "G4GenericIon.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4NuclideTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,6 +75,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetMinEnergy(100 * eV);
   param->SetMaxEnergy(1 * GeV);
+
+  // Limits in G4NuclideTable
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1 * picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0 * eV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

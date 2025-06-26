@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4RegularNavigationHelper implementation
+// Class G4RegularNavigationHelper implementation
 //
-// Author: Pedro Arce, November 2008
+// Author: Pedro Arce (CIEMAT), November 2008
 // --------------------------------------------------------------------
 
 #include "G4RegularNavigationHelper.hh"
@@ -35,14 +35,6 @@ G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
   static G4ThreadLocalSingleton<G4RegularNavigationHelper> theInstance;
   return theInstance.Instance();
 }
-
-// --------------------------------------------------------------------
-//
-G4RegularNavigationHelper::G4RegularNavigationHelper() = default;
-
-// --------------------------------------------------------------------
-//
-G4RegularNavigationHelper::~G4RegularNavigationHelper() = default;
 
 // --------------------------------------------------------------------
 //

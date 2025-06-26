@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4PhantomParameterisation implementation
+// Class G4PhantomParameterisation implementation
 //
-// May 2007 Pedro Arce, first version
-//
+// Author: Pedro Arce (CIEMAT), May 2007
 // --------------------------------------------------------------------
 
 #include "G4PhantomParameterisation.hh"

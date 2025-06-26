@@ -64,7 +64,7 @@
 #else
 
 #  include "G4Types.hh"
-
+#  include "G4IEEE754.hh"
 #  include <cstdint>
 #  include <limits>
 
@@ -98,54 +98,6 @@ namespace G4ExpConsts
   const G4float LOG2EF = 1.44269504088896341f;
 
   //----------------------------------------------------------------------------
-  // Used to switch between different type of interpretations of the data
-  // (64 bits)
-  //
-  union ieee754
-  {
-    ieee754()= default;
-    ieee754(G4double thed) { d = thed; };
-    ieee754(uint64_t thell) { ll = thell; };
-    ieee754(G4float thef) { f[0] = thef; };
-    ieee754(uint32_t thei) { i[0] = thei; };
-    G4double d;
-    G4float f[2];
-    uint32_t i[2];
-    uint64_t ll;
-    uint16_t s[4];
-  };
-
-  //----------------------------------------------------------------------------
-  // Converts an unsigned long long to a double
-  //
-  inline G4double uint642dp(uint64_t ll)
-  {
-    ieee754 tmp;
-    tmp.ll = ll;
-    return tmp.d;
-  }
-
-  //----------------------------------------------------------------------------
-  // Converts an int to a float
-  //
-  inline G4float uint322sp(G4int x)
-  {
-    ieee754 tmp;
-    tmp.i[0] = x;
-    return tmp.f[0];
-  }
-
-  //----------------------------------------------------------------------------
-  // Converts a float to an int
-  //
-  inline uint32_t sp2uint32(G4float x)
-  {
-    ieee754 tmp;
-    tmp.f[0] = x;
-    return tmp.i[0];
-  }
-
-  //----------------------------------------------------------------------------
   /**
    * A vectorisable floor implementation, not only triggered by fast-math.
    * These functions do not distinguish between -0.0 and 0.0, so are not IEC6509
@@ -156,7 +108,7 @@ namespace G4ExpConsts
     // no problem since exp is defined between -708 and 708. Int is enough for
     // it!
     int32_t ret = int32_t(x);
-    ret -= (sp2uint32(x) >> 31);
+    ret -= (G4IEEE754::sp2uint32(x) >> 31);
     return ret;
   }
 
@@ -169,7 +121,7 @@ namespace G4ExpConsts
   inline G4float fpfloor(const G4float x)
   {
     int32_t ret = int32_t(x);
-    ret -= (sp2uint32(x) >> 31);
+    ret -= (G4IEEE754::sp2uint32(x) >> 31);
     return ret;
   }
 }  // namespace G4ExpConsts
@@ -211,7 +163,7 @@ inline G4double G4Exp(G4double initial_x)
   x = 1.0 + 2.0 * x;
 
   // Build 2^n in double.
-  x *= G4ExpConsts::uint642dp((((uint64_t) n) + 1023) << 52);
+  x *= G4IEEE754::uint642dp((((uint64_t) n) + 1023) << 52);
 
   if(initial_x > G4ExpConsts::EXP_LIMIT)
     x = std::numeric_limits<G4double>::infinity();
@@ -252,7 +204,7 @@ inline G4float G4Expf(G4float initial_x)
   z += x + 1.0f;
 
   /* multiply by power of 2 */
-  z *= G4ExpConsts::uint322sp((n + 0x7f) << 23);
+  z *= G4IEEE754::uint322sp((n + 0x7f) << 23);
 
   if(initial_x > G4ExpConsts::MAXLOGF)
     z = std::numeric_limits<G4float>::infinity();
@@ -261,17 +213,6 @@ inline G4float G4Expf(G4float initial_x)
 
   return z;
 }
-
-//------------------------------------------------------------------------------
-
-void expv(const uint32_t size, G4double const* __restrict__ iarray,
-          G4double* __restrict__ oarray);
-void G4Expv(const uint32_t size, G4double const* __restrict__ iarray,
-            G4double* __restrict__ oarray);
-void expfv(const uint32_t size, G4float const* __restrict__ iarray,
-           G4float* __restrict__ oarray);
-void G4Expfv(const uint32_t size, G4float const* __restrict__ iarray,
-             G4float* __restrict__ oarray);
 
 #endif /* WIN32 */
 

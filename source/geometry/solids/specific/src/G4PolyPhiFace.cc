@@ -36,7 +36,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4GeometryTolerance.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 #include "G4TwoVector.hh"
 
 // Constructor
@@ -884,8 +884,8 @@ G4double G4PolyPhiFace::SurfaceTriangle( const G4ThreeVector& p1,
   
   v = p3 - p1;
   w = p1 - p2;
-  G4double lambda1 = G4UniformRand();
-  G4double lambda2 = lambda1*G4UniformRand();
+  G4double lambda1 = G4QuickRand();
+  G4double lambda2 = lambda1*G4QuickRand();
  
   *p4=p2 + lambda1*w + lambda2*v;
   return 0.5*(v.cross(w)).mag();
@@ -1220,7 +1220,7 @@ void G4PolyPhiFace::Triangulate()
   
   // Second Step: choose randomly one surface
   //
-  G4double chose = area*G4UniformRand();
+  G4double chose = area*G4QuickRand();
    
   // Third Step: Get a point on choosen surface
   //

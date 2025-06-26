@@ -95,10 +95,10 @@ G4VBiasingOperation* GB04BOptrBremSplitting::ProposeFinalStateBiasingOperation(
 {
   // -- Check if biasing of primary particle only is requested. If so, and
   // -- if particle is not a primary one, don't ask for biasing:
-  if (fBiasPrimaryOnly && (track->GetParentID() != 0)) return 0;
+  if (fBiasPrimaryOnly && (track->GetParentID() != 0)) return nullptr;
   // -- Check if brem. splitting should be applied only once to the track,
   // -- and if so, and if brem. splitting already occured, don't ask for biasing:
-  if (fBiasOnlyOnce && (fNInteractions > 0)) return 0;
+  if (fBiasOnlyOnce && (fNInteractions > 0)) return nullptr;
 
   // -- Count the number of times the brem. splitting is applied:
   fNInteractions++;

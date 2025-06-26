@@ -46,7 +46,7 @@ void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
   const G4ParticleDefinition* particle =
     G4ParticleTable::GetParticleTable()->FindParticle(particleName);
 
-  if (particle == 0) {
+  if (particle == nullptr) {
     G4ExceptionDescription ed;
     ed << "Particle `" << particleName << "' not found !" << G4endl;
     G4Exception("GB02BOptrMultiParticleForceCollision::AddParticle(...)", "exGB02.01", JustWarning,
@@ -54,8 +54,7 @@ void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
     return;
   }
 
-  G4BOptrForceCollision* optr =
-    new G4BOptrForceCollision(particleName, "ForceCollisionFor" + particleName);
+  auto optr = new G4BOptrForceCollision(particleName, "ForceCollisionFor" + particleName);
   fParticlesToBias.push_back(particle);
   fBOptrForParticle[particle] = optr;
 }
@@ -68,7 +67,7 @@ G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeOccurenceBiasi
   if (fCurrentOperator)
     return fCurrentOperator->GetProposedOccurenceBiasingOperation(track, callingProcess);
   else
-    return 0;
+    return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +78,7 @@ G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeNonPhysicsBias
   if (fCurrentOperator)
     return fCurrentOperator->GetProposedNonPhysicsBiasingOperation(track, callingProcess);
   else
-    return 0;
+    return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,7 +89,7 @@ G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeFinalStateBias
   if (fCurrentOperator)
     return fCurrentOperator->GetProposedFinalStateBiasingOperation(track, callingProcess);
   else
-    return 0;
+    return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,9 +97,8 @@ G4VBiasingOperation* GB02BOptrMultiParticleForceCollision::ProposeFinalStateBias
 void GB02BOptrMultiParticleForceCollision::StartTracking(const G4Track* track)
 {
   const G4ParticleDefinition* definition = track->GetParticleDefinition();
-  std::map<const G4ParticleDefinition*, G4BOptrForceCollision*>::iterator it =
-    fBOptrForParticle.find(definition);
-  fCurrentOperator = 0;
+  auto it = fBOptrForParticle.find(definition);
+  fCurrentOperator = nullptr;
   if (it != fBOptrForParticle.end()) fCurrentOperator = (*it).second;
 }
 

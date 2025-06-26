@@ -195,14 +195,11 @@ G4bool G4SmartVoxelHeader::operator == (const G4SmartVoxelHeader& pHead) const
         {
           return false;
         }
-        else
+        leftHeader  = leftProxy->GetHeader();
+        rightHeader = rightProxy->GetHeader();
+        if (!(*leftHeader == *rightHeader))
         {
-          leftHeader  = leftProxy->GetHeader();
-          rightHeader = rightProxy->GetHeader();
-          if (!(*leftHeader == *rightHeader))
-          {
-            return false;
-          }
+          return false;
         }
       }
       else
@@ -211,23 +208,18 @@ G4bool G4SmartVoxelHeader::operator == (const G4SmartVoxelHeader& pHead) const
         {
           return false;
         }
-        else
+        leftNode  = leftProxy->GetNode();
+        rightNode = rightProxy->GetNode();
+        if (!(*leftNode == *rightNode))
         {
-          leftNode  = leftProxy->GetNode();
-          rightNode = rightProxy->GetNode();
-          if (!(*leftNode == *rightNode))
-          {
-            return false;
-          }
+          return false;
         }
       }
     }
     return true;
   }
-  else
-  {
-    return false;
-  }
+
+  return false;
 }
 
 // ***************************************************************************

@@ -48,7 +48,7 @@ void GB01BOptrMultiParticleChangeCrossSection::AddParticle(G4String particleName
   const G4ParticleDefinition* particle =
     G4ParticleTable::GetParticleTable()->FindParticle(particleName);
 
-  if (particle == 0) {
+  if (particle == nullptr) {
     G4ExceptionDescription ed;
     ed << "Particle `" << particleName << "' not found !" << G4endl;
     G4Exception("GB01BOptrMultiParticleChangeCrossSection::AddParticle(...)", "exGB01.02",
@@ -56,7 +56,7 @@ void GB01BOptrMultiParticleChangeCrossSection::AddParticle(G4String particleName
     return;
   }
 
-  GB01BOptrChangeCrossSection* optr = new GB01BOptrChangeCrossSection(particleName);
+  auto optr = new GB01BOptrChangeCrossSection(particleName);
   fParticlesToBias.push_back(particle);
   fBOptrForParticle[particle] = optr;
 }
@@ -68,16 +68,16 @@ G4VBiasingOperation* GB01BOptrMultiParticleChangeCrossSection::ProposeOccurenceB
 {
   // -- examples of limitations imposed to apply the biasing:
   // -- limit application of biasing to primary particles only:
-  if (track->GetParentID() != 0) return 0;
+  if (track->GetParentID() != 0) return nullptr;
   // -- limit to at most 5 biased interactions:
-  if (fnInteractions > 4) return 0;
+  if (fnInteractions > 4) return nullptr;
   // -- and limit to a weight of at least 0.05:
-  if (track->GetWeight() < 0.05) return 0;
+  if (track->GetWeight() < 0.05) return nullptr;
 
   if (fCurrentOperator)
     return fCurrentOperator->GetProposedOccurenceBiasingOperation(track, callingProcess);
   else
-    return 0;
+    return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,9 +86,8 @@ void GB01BOptrMultiParticleChangeCrossSection::StartTracking(const G4Track* trac
 {
   // -- fetch the underneath biasing operator, if any, for the current particle type:
   const G4ParticleDefinition* definition = track->GetParticleDefinition();
-  std::map<const G4ParticleDefinition*, GB01BOptrChangeCrossSection*>::iterator it =
-    fBOptrForParticle.find(definition);
-  fCurrentOperator = 0;
+  auto it = fBOptrForParticle.find(definition);
+  fCurrentOperator = nullptr;
   if (it != fBOptrForParticle.end()) fCurrentOperator = (*it).second;
 
   // -- reset count for number of biased interactions:

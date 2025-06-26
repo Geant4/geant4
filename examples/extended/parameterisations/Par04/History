@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-05-27 Anna Zaborowska, Piyush Raikwar (expar04-V11-03-00)
+- Update of VAE training with the new translation script and condor scripts
+- Introduction of the CaloDiT pre-trained model which offers far greater accuracy
 
 ## 2024-10-22 Ben Morgan (expar04-V11-02-03)
 - Bump tensorflow version from [GitHub Dependabot PR](https://github.com/Geant4/geant4/pull/75)

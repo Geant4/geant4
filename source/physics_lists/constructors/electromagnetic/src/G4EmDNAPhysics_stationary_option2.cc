@@ -39,9 +39,11 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option2);
 G4EmDNAPhysics_stationary_option2::G4EmDNAPhysics_stationary_option2(G4int ver, const G4String& nam)
   : G4EmDNAPhysics_option2(ver, nam)
 {
+  G4cout << "!!! G4EmDNAPhysics_stationary_option2 physics constructor is instantiated." << G4endl; 
+  G4cout << "    This constructor is obsolete and will be removed in the next major Geant4 release."
+	 << G4endl; 
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDNAStationary(true);
-  param->SetDNAFast(true);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

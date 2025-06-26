@@ -39,7 +39,7 @@ class GB02BOptrMultiParticleForceCollision : public G4VBiasingOperator
 {
   public:
     GB02BOptrMultiParticleForceCollision();
-    virtual ~GB02BOptrMultiParticleForceCollision() {}
+    ~GB02BOptrMultiParticleForceCollision() override = default;
 
     // --------------------------
     // -- Specific to this class:
@@ -51,13 +51,13 @@ class GB02BOptrMultiParticleForceCollision : public G4VBiasingOperator
     // -----------------------------
     // -- Mandatory from base class:
     // -----------------------------
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeNonPhysicsBiasingOperation(const G4Track* track,
                                       const G4BiasingProcessInterface* callingProcess) final;
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeOccurenceBiasingOperation(const G4Track* track,
                                      const G4BiasingProcessInterface* callingProcess) final;
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeFinalStateBiasingOperation(const G4Track* track,
                                       const G4BiasingProcessInterface* callingProcess) final;
 
@@ -80,7 +80,7 @@ class GB02BOptrMultiParticleForceCollision : public G4VBiasingOperator
     void ExitBiasing(const G4Track*, const G4BiasingProcessInterface*) final;
 
   public:
-    virtual void StartTracking(const G4Track* track) final;
+    void StartTracking(const G4Track* track) final;
 
   private:
     std::map<const G4ParticleDefinition*, G4BOptrForceCollision*> fBOptrForParticle;

@@ -6,13 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-07 Soon Yung Jun (geom-specific-V11-02-09)
+## 2025-03-13 Evgueni Tcherniaev (geom-specific-V11-03-06)
+- G4PolyPhiFace.cc, G4PolyconeSide.cc, G4PolyhedraSide.cc, G4TwistedTubs.cc,
+  G4VCSGfaceted.cc, G4VTwistedFaceted.cc: used G4QuickRand()
+- G4EllipticalCone.cc, G4EllipticalTube.cc, G4Voxelizer.cc:
+  removed unnecessary headers
+
+## 2025-03-07 Soon Yung Jun (geom-specific-V11-03-05)
 - G4Polyhedra, G4UPolyhedra: Verify the validity of the delta phi to restore
   visualization of HepPolyhedronPgon
 
-## 2025-02-03 Gabriele Cosmo
+## 2025-02-23 Evgueni Tcherniaev (geom-specific-V11-03-04)
+- G4Ellipsoid, G4EllipticalTibe: Code optimization in GetPointOnSurface().
+- G4TessellatedSolid, G4TriangularFacet, G4QuadrangularFacet:
+  use G4QuickRand().
+
+## 2025-02-19 Evgueni Tcherniaev (geom-specific-V11-03-03)
+- G4EllipticalCone: Code optimization in GetPointOnSurface();
+  SetSemiAxis(), SetZCut() moved to *.cc
+- G4Hype: Code optimization in GetPointOnSurface().
+
+## 2025-02-16 Evgueni Tcherniaev (geom-specific-V11-03-02)
+- G4Paraboloid: Implemented uniform sampling of random points.
+
+## 2025-02-03 Gabriele Cosmo (geom-specific-V11-03-01)
 - Removed fake default constructor from G4U* wrappers, clearing compilation
   warnings on gcc-14.
+
+## 2025-01-25 Evgueni Tcherniaev (geom-specific-V11-03-00)
+- G4Hype: Revised surface area calculation and random point sampling.
 
 ## 2024-10-01 Evgueni Tcherniaev (geom-specific-V11-02-08)
 - G4GenericTrap: Fixed minor defect reported by Coverity.

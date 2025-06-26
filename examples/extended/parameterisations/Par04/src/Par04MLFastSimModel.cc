@@ -90,18 +90,19 @@ void Par04MLFastSimModel::DoIt(const G4FastTrack& aFastTrack, G4FastStep& aFastS
 {
   // remove particle from further processing by G4
   aFastStep.KillPrimaryTrack();
-  aFastStep.SetPrimaryTrackPathLength(0.0);
+  aFastStep.ProposePrimaryTrackPathLength(0.);
   G4double energy = aFastTrack.GetPrimaryTrack()->GetKineticEnergy();
-  aFastStep.SetTotalEnergyDeposited(energy);
+  aFastStep.ProposeTotalEnergyDeposited(energy);
   G4ThreeVector position = aFastTrack.GetPrimaryTrack()->GetPosition();
   G4ThreeVector direction = aFastTrack.GetPrimaryTrack()->GetMomentumDirection();
 
-  // calculate the incident angle
-  G4float angle = direction.theta();
+  // calculate the incident angles
+  G4float theta = direction.theta();
+  G4float phi = direction.phi();
 
   // calculate how to deposit energy within the detector
   // get it from inference model
-  fInference->GetEnergies(fEnergies, energy, angle);
+  fInference->GetEnergies(fEnergies, energy, theta, phi);
   fInference->GetPositions(fPositions, position, direction);
 
   // deposit energy in the detector using calculated values of energy deposits

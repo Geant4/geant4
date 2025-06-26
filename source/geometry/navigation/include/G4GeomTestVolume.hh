@@ -23,57 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GeomTestVolume
+// G4GeomTestVolume
 //
 // Class description:
 //
 // Checks for inconsistencies in the geometric boundaries of a physical
 // volume and the boundaries of all its immediate daughters.
 
-// Author: G.Cosmo, CERN
+// Author: Gabriele Cosmo (CERN), 22 August 2013
 // --------------------------------------------------------------------
 #ifndef G4GeomTestVolume_hh
-#define G4GeomTestVolume_hh
+#define G4GeomTestVolume_hh 1
 
 #include "G4ThreeVector.hh"
 
 class G4VPhysicalVolume;
 class G4GeomTestLogger;
 
+/**
+ * @brief G4GeomTestVolume allows to check for inconsistencies in the
+ * geometric boundaries of a physical volume and the boundaries of all
+ * its immediate daughters.
+ */
+
 class G4GeomTestVolume
 {
-  public:  // with description
+  public:
 
+    /**
+     * Constructor and Destructor.
+     */
     G4GeomTestVolume( G4VPhysicalVolume *theTarget,
                       G4double theTolerance = 0.0,    // mm
                       G4int numberOfPoints = 10000,
                       G4bool theVerbosity = true);
     ~G4GeomTestVolume();
-      // Constructor and destructor
 
+    /**
+     * Gets/Sets error tolerance (default set to 0*mm).
+     */
     G4double GetTolerance() const;
     void SetTolerance(G4double tolerance);
-      // Get/Set error tolerance (default set to 0*mm)
+
+    /**
+     * Gets/Sets number of points to check (default set to 10000).
+     */
     G4int GetResolution() const;
     void SetResolution(G4int points);
-      // Get/Set number of points to check (default set to 10000)
+
+    /**
+     * Gets/Sets verbosity mode (default set to true).
+     */
     G4bool GetVerbosity() const;
     void SetVerbosity(G4bool verbosity);
-      // Get/Set verbosity mode (default set to true)
+
+    /**
+     * Get/Set maximum number of errors to report (default set to 1).
+     */
     G4int GetErrorsThreshold() const;
     void SetErrorsThreshold(G4int max);
-      // Get/Set maximum number of errors to report (default set to 1)
 
+    /**
+     * Checks for overlaps in the volume tree without duplication in
+     * identical logical volumes.
+     */
     void TestOverlapInTree() const;
-      // Check overlaps in the volume tree without
-      // dublication in identical logical volumes
 
+    /**
+     * Activates overlaps check, propagating recursively to the daughters,
+     * with possibility of specifying the initial level in the volume tree
+     * and the depth (default is the whole tree).
+     *  @note Depending on the complexity of the geometry, this may require
+     *  long computational time.
+     */
     void TestRecursiveOverlap( G4int sLevel=0, G4int depth=-1 );
-      // Activate overlaps check, propagating recursively to the daughters,
-      // with possibility of specifying the initial level in the volume tree
-      // and the depth (default is the whole tree).
-      // Be careful: depending on the complexity of the geometry, this
-      // could require long computational time
 
   private:
 

@@ -44,18 +44,18 @@ public:
   G4VFermiBreakUp() {};
   virtual ~G4VFermiBreakUp() = default;
 
-  virtual void Initialise() = 0;
+  virtual void Initialise() {};
 
   // check if the Fermi Break Up model can be used 
-  // mass is an effective mass of a fragment
-  virtual G4bool IsApplicable(G4int Z, G4int A, G4double eexc) const = 0;
+  virtual G4bool IsApplicable(G4int /*Z*/, G4int /*A*/, G4double /*Eexc*/) const
+  { return false; };
 
   // vector of products is added to the provided vector
   // if no decay channel is found out for the primary fragment 
   // then it is added to the results vector
   // if primary decays then it is deleted 
-  virtual void BreakFragment(G4FragmentVector* results, 
-			     G4Fragment* theNucleus) = 0;
+  virtual void BreakFragment(G4FragmentVector* /*results*/,
+			     G4Fragment* /*theNucleus*/) {};
 
   G4VFermiBreakUp(const G4VFermiBreakUp &right) = delete;
   const G4VFermiBreakUp & operator=(const G4VFermiBreakUp &right) = delete;

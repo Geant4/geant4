@@ -42,6 +42,7 @@
 #include "G4PreCompoundDeuteron.hh"
 #include "G4CoulombBarrier.hh"
 #include "G4Deuteron.hh"
+#include "G4DeexPrecoUtility.hh"
 
 G4PreCompoundDeuteron::G4PreCompoundDeuteron()
   : G4PreCompoundIon(G4Deuteron::Deuteron(), new G4CoulombBarrier(2, 1))
@@ -69,15 +70,5 @@ G4double G4PreCompoundDeuteron::GetRj(G4int nParticles, G4int nCharged) const
 
 G4double G4PreCompoundDeuteron::GetAlpha() const
 {
-  G4double C = 0.0;
-  if (theFragZ >= 70) 
-    {
-      C = 0.10;
-    } 
-  else 
-    {
-      C = ((((0.15417e-06*theFragZ) - 0.29875e-04)*theFragZ 
-	    + 0.21071e-02)*theFragZ - 0.66612e-01)*theFragZ + 0.98375; 
-    }
-  return 1.0 + 0.5*C;
+  return 1.0 + G4DeexPrecoUtility::ProtonCValue(theResZ)*0.5;
 }

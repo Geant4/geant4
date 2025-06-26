@@ -48,15 +48,15 @@ class DetectorConstruction;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction();
+    RunAction() = default;
     // TIPs: please avoid constructors with arguments
     // all data can be retrieved from G4RunManager
     // or others: G4SDManager::FindSensitiveDetector
-    virtual ~RunAction();
+    ~RunAction() override = default;
 
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

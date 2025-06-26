@@ -45,6 +45,7 @@
 #include "G4ITReaction.hh"
 
 #include "G4ITTrackHolder.hh"
+#include "G4MoleculeCounterManager.hh"
 
 G4DNAMolecularReaction::G4DNAMolecularReaction()
     : 
@@ -91,7 +92,10 @@ std::unique_ptr<G4ITReactionChange> G4DNAMolecularReaction::MakeReaction(const G
     const auto pMoleculeB = GetMolecule(trackB)->GetMolecularConfiguration();
 
     const auto pReactionData = fMolReactionTable->GetReactionData(pMoleculeA, pMoleculeB);
-
+    // Notify molecule (reaction) counter
+    if (G4MoleculeCounterManager::Instance()->GetIsActive()) {
+      G4MoleculeCounterManager::Instance()->RecordReaction(pReactionData, trackA.GetGlobalTime());
+    }
     const G4int nbProducts = pReactionData->GetNbProducts();
 
     if (nbProducts != 0)

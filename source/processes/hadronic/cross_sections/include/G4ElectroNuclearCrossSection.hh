@@ -60,22 +60,26 @@ class G4ElectroNuclearCrossSection : public G4VCrossSectionDataSet
 public:
 
   G4ElectroNuclearCrossSection();
-  virtual ~G4ElectroNuclearCrossSection();
+  ~G4ElectroNuclearCrossSection() override;
     
   static const char* Default_Name() {return "ElectroNuclearXS";}
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void CrossSectionDescription(std::ostream&) const override;
 
-  virtual G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
-                                     const G4Material*);
-  virtual G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
-                                    const G4Material* mat);
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+                             const G4Material*) override;
+  G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+                                  const G4Material* mat) override;
 
   G4double GetEquivalentPhotonEnergy();
 
   G4double GetVirtualFactor(G4double nu, G4double Q2);
 
   G4double GetEquivalentPhotonQ2(G4double nu);
+
+  G4ElectroNuclearCrossSection& operator=
+  (const G4ElectroNuclearCrossSection &right) = delete;
+  G4ElectroNuclearCrossSection(const G4ElectroNuclearCrossSection&) = delete;
 
 private:
   G4int    GetFunctions(G4double a, G4double* x, G4double* y, G4double* z);

@@ -58,13 +58,13 @@
 #include <stack>
 
 #include "geomdefs.hh"
-#include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
@@ -2159,7 +2159,7 @@ G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
 {
   // Select randomly a facet and return a random point on it
 
-  auto i = (G4int) G4RandFlat::shoot(0., fFacets.size());
+  auto i = (G4int)(fFacets.size()*G4QuickRand());
   return fFacets[i]->GetPointOnFace();
 }
 

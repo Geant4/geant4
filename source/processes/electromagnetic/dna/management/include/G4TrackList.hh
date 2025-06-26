@@ -48,6 +48,7 @@
 
 #include "G4FastList.hh"
 #include "G4ManyFastLists.hh"
+#include "G4AllocatorList.hh"
 #include "G4Track.hh"
 #include "G4IT.hh"
 

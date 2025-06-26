@@ -241,7 +241,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   } else {
 
     // v1 is ion velocity in vF unit
-    G4double v1{0.0}, v2{0.0};
+    G4double v1{0.01}, v2{0.0};
     if (vF > 0.0) {
       v1 = std::sqrt( reducedEnergy / (25.0 * keV) )/ vF;
       v2 = 1.0/ (vF*vF);

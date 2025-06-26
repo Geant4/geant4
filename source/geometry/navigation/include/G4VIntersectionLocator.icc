@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class G4VIntersectionLocator inline methods
+// Class G4VIntersectionLocator inline methods implementation
 //
-// 27.10.07 - John Apostolakis, Tatiana Nikitina
-// ---------------------------------------------------------------------------
+// Authors: John Apostolakis, Tatiana Nikitina (CERN), 27 October 2008
+// --------------------------------------------------------------------
 
 inline G4double G4VIntersectionLocator::GetDeltaIntersectionFor()
 {

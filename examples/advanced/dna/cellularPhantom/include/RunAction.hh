@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //       MONTE CARLO SIMULATION OF REALISTIC GEOMETRY FROM MICROSCOPES IMAGES
 //
 // Authors and contributors:
-// P. Barberet, S. Incerti, N. H. Tran, L. Morelli
+// P. Barberet (a), S. Incerti (a), N. H. Tran (a), L. Morelli (a,b)
 //
-// University of Bordeaux, CNRS, LP2i, UMR5797, Gradignan, France
+// a) University of Bordeaux, CNRS, LP2i, UMR5797, Gradignan, France
+// b) Politecnico di Milano, Italy
 //
 // If you use this code, please cite the following publication:
 // P. Barberet et al.,
@@ -37,12 +38,12 @@
 // geometry exposed to alpha particles."
 // Ph. Barberet et al 2012 Phys. Med. Biol. 57 2189
 // doi: 110.1088/0031-9155/57/8/2189
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "DetectorConstruction.hh"
+#include "Run.hh"
 
 #include "G4UserRunAction.hh"
 #include "G4AnalysisManager.hh"
@@ -59,14 +60,12 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*) override;
     void EndOfRunAction(const G4Run*) override;
 
-    void AddDoseBox(G4int i, G4double x) {fVoxelEnergy[i] +=x;}
-    G4double GetDoseBox(G4int i) {return fVoxelEnergy[i];}
+    G4Run* GenerateRun() override;
 
   private:
 
     const CellParameterisation * fMyPhantomParam = nullptr;
-    G4double * fVoxelEnergy = nullptr;
-    G4int fNbVoxels = 0;
+    Run* fRun;
 };
 
 #endif

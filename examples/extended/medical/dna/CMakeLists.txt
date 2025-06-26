@@ -1,4 +1,4 @@
-#---Adding all dna examples subdirectories explicitly 
+#---Adding all dna examples subdirectories explicitly
 
 cmake_minimum_required(VERSION 3.16...3.27)
 
@@ -27,8 +27,10 @@ add_subdirectory(mfp)
 add_subdirectory(microdosimetry)
 add_subdirectory(microprox)
 add_subdirectory(microyz)
+add_subdirectory(molcounters)
 add_subdirectory(neuron)
 add_subdirectory(pdb4dna)
+add_subdirectory(radial)
 add_subdirectory(range)
 add_subdirectory(scavenger)
 add_subdirectory(slowing)
@@ -39,4 +41,3 @@ add_subdirectory(wholeNuclearDNA)
 add_subdirectory(wvalue)
 add_subdirectory(AuNP)
 add_subdirectory(UHDR)
-

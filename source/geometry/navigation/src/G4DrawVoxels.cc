@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4DrawVoxels implementation
+// Class G4DrawVoxels implementation
 //
-// Define G4DrawVoxelsDebug for debugging information on G4cout
-//
-// 29/07/1999 first comitted version L.G.
+// Original author: L.G., 29 July 1999
 // --------------------------------------------------------------------
 
 #include "G4DrawVoxels.hh"
@@ -42,7 +40,8 @@
 
 #define voxel_width 0
 
-// Private Constructor
+// --------------------------------------------------------------------
+// Constructor
 //
 G4DrawVoxels::G4DrawVoxels()
 {
@@ -52,6 +51,7 @@ G4DrawVoxels::G4DrawVoxels()
   fBoundingBoxVisAttributes.SetColour(G4Colour(.3,0.,.2));
 }
 
+// --------------------------------------------------------------------
 // Methods that allow changing colors of the drawing
 //
 void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,

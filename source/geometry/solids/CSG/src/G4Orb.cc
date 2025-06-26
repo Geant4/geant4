@@ -35,13 +35,10 @@
 #include "G4TwoVector.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
-#include "G4GeometryTolerance.hh"
 #include "G4BoundingEnvelope.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VPVParameterisation.hh"
-
-#include "G4RandomDirection.hh"
-#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
@@ -216,7 +213,7 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
     sinCurPhi = sinCurPhi*cosStepPhi + cosCurPhi*sinStepPhi;
     cosCurPhi = cosCurPhi*cosStepPhi - sinTmpPhi*sinStepPhi;
   }
-  
+
   // set bounding circles
   G4ThreeVectorList circles[NTHETA];
   for (auto & circle : circles) { circle.resize(NPHI); }
@@ -298,7 +295,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   // Avoid rounding errors due to precision issues seen on 64 bits systems.
   // Split long distances and recompute
   //
-  G4double Dmax = 32*fRmax; 
+  G4double Dmax = 32*fRmax;
   if (dist > Dmax)
   {
     dist  = dist - 1.e-8*dist - fRmax; // to stay outside after the move
@@ -431,11 +428,19 @@ std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// GetPointOnSurface
+// Pick random point on the surface
 
 G4ThreeVector G4Orb::GetPointOnSurface() const
 {
-  return fRmax * G4RandomDirection();
+  G4double u, v, b;
+  do
+  {
+    u = 2.*G4QuickRand() - 1.;
+    v = 2.*G4QuickRand() - 1.;
+    b = sqr(u) + sqr(v);
+  } while(b > 1.);
+  G4double a = 2.*std::sqrt(1. - b);
+  return { fRmax*a*u, fRmax*a*v, fRmax*(2.*b - 1.) };
 }
 
 //////////////////////////////////////////////////////////////////////////

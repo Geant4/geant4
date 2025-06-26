@@ -136,6 +136,9 @@ G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
   stream << name;
   if(addPointerToName)
   {
+#ifdef WIN32
+    stream << "0x";
+#endif
     stream << ptr;
   };
 

@@ -54,6 +54,7 @@ geant4_add_module(G4globman
     G4GeometryTolerance.hh
     G4GlobalConfig.hh.in
     G4ios.hh
+    G4IEEE754.hh
     G4LockcoutDestination.hh
     G4Log.hh
     G4MasterForwardcoutDestination.hh

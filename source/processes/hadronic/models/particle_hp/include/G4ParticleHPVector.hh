@@ -413,12 +413,12 @@ class G4ParticleHPVector
           }
           else if (aScheme == LINLOG || aScheme == CLINLOG || aScheme == ULINLOG) {
             G4double a = y1;
-            G4double b = (y2 - y1) / (G4Log(x2) - G4Log(x1));
+            G4double b = (y2 - y1) / (G4Log(x2/x1));
             sum += (a - b) * (x2 - x1) + b * (x2 * G4Log(x2) - x1 * G4Log(x1));
           }
           else if (aScheme == LOGLIN || aScheme == CLOGLIN || aScheme == ULOGLIN) {
             G4double a = G4Log(y1);
-            G4double b = (G4Log(y2) - G4Log(y1)) / (x2 - x1);
+            G4double b = (G4Log(y2/y1)) / (x2 - x1);
             sum += (G4Exp(a) / b) * (G4Exp(b * x2) - G4Exp(b * x1));
           }
           else if (aScheme == HISTO || aScheme == CHISTO || aScheme == UHISTO) {
@@ -426,7 +426,7 @@ class G4ParticleHPVector
           }
           else if (aScheme == LOGLOG || aScheme == CLOGLOG || aScheme == ULOGLOG) {
             G4double a = G4Log(y1);
-            G4double b = (G4Log(y2) - G4Log(y1)) / (G4Log(x2) - G4Log(x1));
+            G4double b = (G4Log(y2/y1)) / (G4Log(x2/x1));
             sum +=
               (G4Exp(a) / (b + 1))
               * (G4Pow::GetInstance()->powA(x2, b + 1) - G4Pow::GetInstance()->powA(x1, b + 1));
@@ -464,9 +464,8 @@ class G4ParticleHPVector
 
     G4double GetMeanX()
     {
-      G4double result;
-      G4double running = 0;
-      G4double weighted = 0;
+      G4double running = 0.0;
+      G4double weighted = 0.0;
       for (G4int i = 1; i < nEntries; i++) {
         running +=
           theInt.GetBinIntegral(theManager.GetScheme(i - 1), theData[i - 1].GetX(),
@@ -475,30 +474,14 @@ class G4ParticleHPVector
                                                   theData[i - 1].GetX(), theData[i].GetX(),
                                                   theData[i - 1].GetY(), theData[i].GetY());
       }
-      result = weighted / running;
-      return result;
+      return (running > 0.0) ? weighted / running : 0.0;
     }
 
     // Finds maximum cross section between two values of kinetic energy
     G4double GetMaxY(G4double emin, G4double emax);
 
-    /*
-      void Block(G4double aX)
-      {
-        theBlocked.push_back(aX);
-      }
-
-      void Buffer(G4double aX)
-      {
-        theBuffered.push_back(aX);
-      }
-    */
-
     std::vector<G4double> GetBlocked() { return theBlocked; }
     std::vector<G4double> GetBuffered() { return theBuffered; }
-
-    //  void SetBlocked(const std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
-    //  void SetBuffered(const std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
 
     G4double Get15percentBorder();
     G4double Get50percentBorder();

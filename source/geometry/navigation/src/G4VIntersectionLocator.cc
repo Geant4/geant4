@@ -25,7 +25,7 @@
 //
 // Class G4VIntersectionLocator implementation
 //
-// 27.10.08 - John Apostolakis, Tatiana Nikitina.
+// Authors: John Apostolakis, Tatiana Nikitina (CERN), 27 October 2008
 // ---------------------------------------------------------------------------
  
 #include <iomanip>

@@ -724,79 +724,58 @@ std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
 
 G4ThreeVector G4Trd::GetPointOnSurface() const
 {
-  // Set areas
-  //
-  G4double sxz = (fDx1 + fDx2)*fHx;
-  G4double syz = (fDy1 + fDy2)*fHy;
-  G4double ssurf[6] = { 4.*fDx1*fDy1, sxz, sxz, syz, syz, 4.*fDx2*fDy2 };
-  ssurf[1] += ssurf[0];
-  ssurf[2] += ssurf[1];
-  ssurf[3] += ssurf[2];
-  ssurf[4] += ssurf[3];
-  ssurf[5] += ssurf[4];
+  G4double sbot = 4.*fDx1*fDy1;  // area of bottom base
+  G4double stop = 4.*fDx2*fDy2;  // area of top base
+  G4double sbase = sbot + stop;
+  G4double sxz = (fDx1 + fDx2)*fHx; // area of Y face
+  G4double syz = (fDy1 + fDy2)*fHy; // area of X face
+  G4double stotal = sbase + 2.*(sxz + syz);
+  G4double select = stotal*G4QuickRand();
 
-  // Select face
-  //
-  G4double select = ssurf[5]*G4QuickRand();
-  G4int k = 5;
-  k -= (G4int)(select <= ssurf[4]);
-  k -= (G4int)(select <= ssurf[3]);
-  k -= (G4int)(select <= ssurf[2]);
-  k -= (G4int)(select <= ssurf[1]);
-  k -= (G4int)(select <= ssurf[0]);
-
-  // Generate point on selected surface
-  //
+  G4ThreeVector p;
   G4double u = G4QuickRand();
   G4double v = G4QuickRand();
-  switch(k)
+  if (select < sbase)
   {
-    case 0: // base at -Z
-    {
-      return { (2.*u - 1.)*fDx1, (2.*v - 1.)*fDy1, -fDz };
-    }
-    case 1: // X face at -Y
-    {
-      if (u + v > 1.) { u = 1. - u; v = 1. - v; }
-      G4ThreeVector p0(-fDx1,-fDy1,-fDz);
-      G4ThreeVector p1( fDx2,-fDy2, fDz);
-      return (select <= ssurf[0] + fDx1*fHx) ?
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector( fDx1,-fDy1,-fDz) :
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector(-fDx2,-fDy2, fDz);
-    }
-    case 2: // X face at +Y
-    {
-      if (u + v > 1.) { u = 1. - u; v = 1. - v; }
-      G4ThreeVector p0( fDx1, fDy1,-fDz);
-      G4ThreeVector p1(-fDx2, fDy2, fDz);
-      return (select <= ssurf[1] + fDx1*fHx) ?
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector(-fDx1, fDy1,-fDz) :
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector( fDx2, fDy2, fDz);
-    }
-    case 3: // Y face at -X
-    {
-      if (u + v > 1.) { u = 1. - u; v = 1. - v; }
-      G4ThreeVector p0(-fDx1, fDy1,-fDz);
-      G4ThreeVector p1(-fDx2,-fDy2, fDz);
-      return (select <= ssurf[2] + fDy1*fHy) ?
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector(-fDx1,-fDy1,-fDz) :
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector(-fDx2, fDy2, fDz);
-    }
-    case 4: // Y face at +X
-    {
-      if (u + v > 1.) { u = 1. - u; v = 1. - v; }
-      G4ThreeVector p0( fDx1,-fDy1,-fDz);
-      G4ThreeVector p1( fDx2, fDy2, fDz);
-      return (select <= ssurf[3] + fDy1*fHy) ?
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector( fDx1, fDy1,-fDz) :
-        (1. - u - v)*p0 + u*p1 + v*G4ThreeVector( fDx2,-fDy2, fDz);
-    }
-    case 5: // base at +Z
-    {
-      return { (2.*u - 1.)*fDx2, (2.*v - 1.)*fDy2, fDz };
-    }
+    G4bool ifbottom = (select < sbot);
+    G4double x = (ifbottom) ? fDx1 : fDx2;
+    G4double y = (ifbottom) ? fDy1 : fDy2;
+    G4double z = (ifbottom) ? -fDz : fDz;
+    p.set((2.*u - 1.)*x, (2.*v - 1.)*y, z);
   }
-  return {0., 0., 0.};
+  else if (select < sbase + 2.*sxz)
+  {
+    G4double ysign = (select < sbase + sxz) ? 1. : -1.;
+    if (ysign < 0.) select -= sxz;
+    if (u + v > 1.)
+    {
+      u = 1. - u;
+      v = 1. - v;
+    }
+    G4ThreeVector p0(-fDx1,-fDy1,-fDz);
+    G4ThreeVector p1( fDx2,-fDy2, fDz);
+    G4ThreeVector p2 = (select < sbase + fDx1*fHx) ?
+      G4ThreeVector( fDx1,-fDy1,-fDz) : G4ThreeVector(-fDx2,-fDy2, fDz);
+    p = p0*(1. - u - v) + p1*u + p2*v;
+    p.setY(ysign*p.y());
+  }
+  else
+  {
+    G4double xsign = (select < sbase + 2.*sxz + syz) ? 1. : -1.;
+    if (xsign < 0.) select -= syz;
+    if (u + v > 1.)
+    {
+      u = 1. - u;
+      v = 1. - v;
+    }
+    G4ThreeVector p0(-fDx1, fDy1,-fDz);
+    G4ThreeVector p1(-fDx2,-fDy2, fDz);
+    G4ThreeVector p2 = (select < sbase + 2.*sxz + fDy1*fHy) ?
+      G4ThreeVector(-fDx1,-fDy1,-fDz) : G4ThreeVector(-fDx2, fDy2, fDz);
+    p = p0*(1. - u - v) + p1*u + p2*v;
+    p.setX(xsign*p.x());
+  }
+  return p;
 }
 
 //////////////////////////////////////////////////////////////////////////

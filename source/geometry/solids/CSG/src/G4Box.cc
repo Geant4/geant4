@@ -255,15 +255,13 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
 //
 // Detect the side(s) and return corresponding normal
 
-G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
+G4ThreeVector G4Box::SurfaceNormal(const G4ThreeVector& p) const
 {
-  G4ThreeVector norm(0,0,0);
-  G4double px = p.x();
-  if (std::abs(std::abs(px) - fDx) <= delta) norm.setX(px < 0 ? -1. : 1.);
-  G4double py = p.y();
-  if (std::abs(std::abs(py) - fDy) <= delta) norm.setY(py < 0 ? -1. : 1.);
-  G4double pz = p.z();
-  if (std::abs(std::abs(pz) - fDz) <= delta) norm.setZ(pz < 0 ? -1. : 1.);
+  G4double px = p.x(), py = p.y(), pz = p.z();
+  G4ThreeVector norm(0.,0.,0.);
+  if (std::abs(std::abs(px) - fDx) <= delta) norm.setX(std::copysign(1.,px));
+  if (std::abs(std::abs(py) - fDy) <= delta) norm.setY(std::copysign(1.,py));
+  if (std::abs(std::abs(pz) - fDz) <= delta) norm.setZ(std::copysign(1.,pz));
 
   G4double nside = norm.mag2(); // number of sides = magnitude squared
   if (nside == 1)
@@ -369,63 +367,56 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 // find normal at exit point, if required
 // - when leaving the surface, return 0
 
-G4double G4Box::DistanceToOut( const G4ThreeVector& p,
-                               const G4ThreeVector& v,
-                               const G4bool calcNorm,
-                               G4bool* validNorm, G4ThreeVector* n) const
+G4double G4Box::DistanceToOut(const G4ThreeVector& p,
+                              const G4ThreeVector& v,
+                              const G4bool calcNorm,
+                              G4bool* validNorm, G4ThreeVector* n) const
 {
+  G4double px = p.x(), vx = v.x();
+  G4double py = p.y(), vy = v.y();
+  G4double pz = p.z(), vz = v.z();
+
+  if (!calcNorm) // calculation of normal is not needed
+  {
+    if ((std::abs(px) - fDx) >= -delta && px*vx > 0) return 0.;
+    if ((std::abs(py) - fDy) >= -delta && py*vy > 0) return 0.;
+    if ((std::abs(pz) - fDz) >= -delta && pz*vz > 0) return 0.;
+    G4double tx = (vx == 0) ? DBL_MAX : (std::copysign(fDx,vx) - px)/vx;
+    G4double ty = (vy == 0) ? DBL_MAX : (std::copysign(fDy,vy) - py)/vy;
+    G4double tz = (vz == 0) ? DBL_MAX : (std::copysign(fDz,vz) - pz)/vz;
+    G4double tmax = std::min(std::min(tx,ty),tz);
+    return tmax;
+  }
+
+  *validNorm = true;
   // Check if point is on the surface and traveling away
-  //
-  if ((std::abs(p.x()) - fDx) >= -delta && p.x()*v.x() > 0)
+  if ((std::abs(px) - fDx) >= -delta && px*vx > 0)
   {
-    if (calcNorm)
-    {
-      *validNorm = true;
-      n->set((p.x() < 0) ? -1. : 1., 0., 0.);
-    }
+    n->set(std::copysign(1.,px), 0., 0.);
     return 0.;
   }
-  if ((std::abs(p.y()) - fDy) >= -delta && p.y()*v.y() > 0)
+  if ((std::abs(py) - fDy) >= -delta && py*vy > 0)
   {
-    if (calcNorm)
-    {
-      *validNorm = true;
-      n->set(0., (p.y() < 0) ? -1. : 1., 0.);
-    }
+    n->set(0., std::copysign(1.,py), 0.);
     return 0.;
   }
-  if ((std::abs(p.z()) - fDz) >= -delta && p.z()*v.z() > 0)
+  if ((std::abs(pz) - fDz) >= -delta && pz*vz > 0)
   {
-    if (calcNorm)
-    {
-      *validNorm = true;
-      n->set(0., 0., (p.z() < 0) ? -1. : 1.);
-    }
+    n->set(0., 0., std::copysign(1.,pz));
     return 0.;
   }
 
   // Find intersection
-  //
-  G4double vx = v.x();
-  G4double tx = (vx == 0) ? DBL_MAX : (std::copysign(fDx,vx) - p.x())/vx;
+  G4double tx = (vx == 0) ? DBL_MAX : (std::copysign(fDx,vx) - px)/vx;
+  G4double ty = (vy == 0) ? DBL_MAX : (std::copysign(fDy,vy) - py)/vy;
+  G4double tz = (vz == 0) ? DBL_MAX : (std::copysign(fDz,vz) - pz)/vz;
+  G4double tmax = std::min(std::min(tx, ty), tz);
 
-  G4double vy = v.y();
-  G4double ty = (vy == 0) ? tx : (std::copysign(fDy,vy) - p.y())/vy;
-  G4double txy = std::min(tx,ty);
-
-  G4double vz = v.z();
-  G4double tz = (vz == 0) ? txy : (std::copysign(fDz,vz) - p.z())/vz;
-  G4double tmax = std::min(txy,tz);
-
-  // Set normal, if required, and return distance
-  //
-  if (calcNorm)
-  {
-    *validNorm = true;
-    if (tmax == tx)      n->set((v.x() < 0) ? -1. : 1., 0., 0.);
-    else if (tmax == ty) n->set(0., (v.y() < 0) ? -1. : 1., 0.);
-    else                 n->set(0., 0., (v.z() < 0) ? -1. : 1.);
-  }
+  // Find normal
+  G4double nx = std::copysign((G4double)(tmax == tx), vx);
+  G4double ny = std::copysign((G4double)(tmax == ty && nx == 0), vy);
+  G4double nz = std::copysign((G4double)(tmax == tz && nx == 0 && ny == 0), vz);
+  n->set(nx, ny, nz);
   return tmax;
 }
 
@@ -508,12 +499,26 @@ G4ThreeVector G4Box::GetPointOnSurface() const
   G4double u = 2.*G4QuickRand() - 1.;
   G4double v = 2.*G4QuickRand() - 1.;
 
+  G4double x, y, z;
   if (select < sxy)
-    return { u*fDx, v*fDy, ((select < 0.5*sxy) ? -fDz : fDz) };
+  {
+    x = u*fDx;
+    y = v*fDy;
+    z = (select < 0.5*sxy) ? -fDz : fDz;
+  }
   else if (select < sxy + sxz)
-    return { u*fDx, ((select < sxy + 0.5*sxz) ? -fDy : fDy), v*fDz };
+  {
+    x = u*fDx;
+    y = (select < sxy + 0.5*sxz) ? -fDy : fDy;
+    z = v*fDz;
+  }
   else
-    return { ((select < sxy + sxz + 0.5*syz) ? -fDx : fDx), u*fDy, v*fDz };
+  {
+    x = (select < sxy + sxz + 0.5*syz) ? -fDx : fDx;
+    y = u*fDy;
+    z = v*fDz;
+  }
+  return { x, y, z };
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -121,7 +121,7 @@ void G4hImpactIonisation::InitializeMe()
   eMinPixe = 1.* keV;
   eMaxPixe = 200. * MeV;
   
-  G4String defaultPixeModel("ecpssr"); 
+  const G4String& defaultPixeModel("ecpssr"); 
   modelK = defaultPixeModel;
   modelL = defaultPixeModel;
   modelM = defaultPixeModel;

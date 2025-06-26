@@ -42,13 +42,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB07DetectorConstruction::GB07DetectorConstruction(G4bool bf) :
-  G4VUserDetectorConstruction(),
-  fBiasingFlag(bf) {}
+GB07DetectorConstruction::GB07DetectorConstruction(G4bool bf) : fBiasingFlag(bf) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB07DetectorConstruction::~GB07DetectorConstruction() {}
+GB07DetectorConstruction::~GB07DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,17 +57,17 @@ G4VPhysicalVolume* GB07DetectorConstruction::Construct()
 
   G4VSolid* solidWorld = new G4Box("World", 10 * m, 10 * m, 10 * m);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,  // its solid
-                                                    worldMaterial,  // its material
-                                                    "World");  // its name
+  auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+                                        worldMaterial,  // its material
+                                        "World");  // its name
 
-  G4PVPlacement* physiWorld = new G4PVPlacement(0,  // no rotation
-                                                G4ThreeVector(),  // at (0,0,0)
-                                                logicWorld,  // its logical volume
-                                                "World",  // its name
-                                                0,  // its mother  volume
-                                                false,  // no boolean operation
-                                                0);  // copy number
+  auto physiWorld = new G4PVPlacement(nullptr,  // no rotation
+                                      G4ThreeVector(),  // at (0,0,0)
+                                      logicWorld,  // its logical volume
+                                      "World",  // its name
+                                      nullptr,  // its mother  volume
+                                      false,  // no boolean operation
+                                      0);  // copy number
 
   // -----------------------------------
   // -- volume where biasing is applied:
@@ -77,11 +75,11 @@ G4VPhysicalVolume* GB07DetectorConstruction::Construct()
   G4double halfZ = 1 * m;
   G4VSolid* solidTest = new G4Box("test.solid", 1 * m, 1 * m, halfZ);
 
-  G4LogicalVolume* logicTest = new G4LogicalVolume(solidTest,  // its solid
-                                                   defaultMaterial,  // its material
-                                                   "test.logical");  // its name
+  auto logicTest = new G4LogicalVolume(solidTest,  // its solid
+                                       defaultMaterial,  // its material
+                                       "test.logical");  // its name
 
-  new G4PVPlacement(0,  // no rotation
+  new G4PVPlacement(nullptr,  // no rotation
                     G4ThreeVector(0, 0, halfZ),  // put entrance at (0,0,0)
                     logicTest,  // its logical volume
                     "test.physical",  // its name
@@ -94,11 +92,11 @@ G4VPhysicalVolume* GB07DetectorConstruction::Construct()
   // ------------------------------------------------------------
   G4double halfZtally = 0.5 * mm;
   G4VSolid* solidTally = new G4Box("tally.solid", 1 * m, 1 * m, halfZtally);
-  G4LogicalVolume* logicTally = new G4LogicalVolume(solidTally,  // its solid
-                                                    worldMaterial,  // its material
-                                                    "tally.logical");  // its name
+  auto logicTally = new G4LogicalVolume(solidTally,  // its solid
+                                        worldMaterial,  // its material
+                                        "tally.logical");  // its name
 
-  new G4PVPlacement(0,  // no rotation
+  new G4PVPlacement(nullptr,  // no rotation
                     G4ThreeVector(0, 0, 2 * halfZ + halfZtally),  // put next to test.phys
                     logicTally,  // its logical volume
                     "tally.physical",  // its name
@@ -113,17 +111,17 @@ G4VPhysicalVolume* GB07DetectorConstruction::Construct()
 
 void GB07DetectorConstruction::ConstructSDandField()
 {
-  if(fBiasingFlag) {
+  if (fBiasingFlag) {
     // -- Fetch volume for biasing:
     G4LogicalVolume* logicTest = G4LogicalVolumeStore::GetInstance()->GetVolume("test.logical");
 
     // ----------------------------------------------
     // -- operator creation and attachment to volume:
     // ----------------------------------------------
-    GB07BOptrLeadingParticle* testMany = new GB07BOptrLeadingParticle();
+    auto testMany = new GB07BOptrLeadingParticle();
     testMany->AttachTo(logicTest);
     G4cout << " Attaching biasing operator " << testMany->GetName() << " to logical volume "
-	   << logicTest->GetName() << G4endl;
+           << logicTest->GetName() << G4endl;
   }
   // ---------------------------------------------------------------------------------
   // -- Attach sensitive detector to print information on particle exiting the shield:

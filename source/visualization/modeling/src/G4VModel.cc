@@ -34,14 +34,21 @@
 #include "G4RotationMatrix.hh"
 #include "G4ModelingParameters.hh"
 
+const G4ModelingParameters* G4VModel::fpCurrentMP = nullptr;
+
 G4VModel::G4VModel (const G4ModelingParameters* pMP):
   fType ("Other"),
   fGlobalTag ("Empty"),
-  fGlobalDescription ("Empty"),
-  fpMP (pMP)
-{}
+  fGlobalDescription ("Empty")
+{
+  fpMP = pMP;
+}
 
 G4VModel::~G4VModel () {}
+
+const G4ModelingParameters* G4VModel::GetCurrentModelingParameters () {
+  return fpCurrentMP;
+}
 
 G4String G4VModel::GetCurrentTag () const {
   // Override in concrete class if concept of "current" is meaningful.
@@ -51,6 +58,10 @@ G4String G4VModel::GetCurrentTag () const {
 G4String G4VModel::GetCurrentDescription () const {
   // Override in concrete class if concept of "current" is meaningful.
   return fGlobalDescription;
+}
+
+void G4VModel::SetCurrentModelingParameters (const G4ModelingParameters* pMP) {
+  fpCurrentMP = pMP;
 }
 
 G4bool G4VModel::Validate (G4bool) {

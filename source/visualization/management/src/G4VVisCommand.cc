@@ -35,6 +35,7 @@
 #include "G4UnitsTable.hh"
 #include <sstream>
 #include <cctype>
+#include <chrono>
 
 #include "G4PhysicalVolumeModel.hh"
 #include "G4LogicalVolume.hh"
@@ -301,6 +302,8 @@ void G4VVisCommand::InterpolateViews
   const G4int safety = (G4int)viewVector.size()*nInterpolationPoints;
   G4int safetyCount = 0;
   do {
+    // Interpret wait time as a minimum time per interation, i.e., a steady frame rate.
+    auto a = std::chrono::steady_clock::now();
     G4ViewParameters* vp =
     G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
     if (!vp) break;  // Finished.
@@ -311,8 +314,14 @@ void G4VVisCommand::InterpolateViews
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/ogl/export");
     }
     currentViewer->ShowView();
-    if (waitTimePerPointmilliseconds > 0)
-      std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
+    if (waitTimePerPointmilliseconds > 0) {
+      auto b = std::chrono::steady_clock::now();
+      auto timeTaken = b - a;
+      auto timeLeft = std::chrono::milliseconds(waitTimePerPointmilliseconds) - timeTaken;
+      if (timeLeft > std::chrono::duration<double>::zero()) {
+        std::this_thread::sleep_for(timeLeft);
+      }
+    }
   } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
 }
 

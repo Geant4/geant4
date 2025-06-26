@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------         Intel OneAPI DPC++ 2022.x and higher
+# ------ GNU/LINUX ------         Intel OneAPI DPC++ 2025.x and higher
 #
 ifeq ($(G4SYSTEM),Linux-icx)
   CXX       := icpx
@@ -85,7 +85,7 @@ ifeq ($(G4SYSTEM),Linux-icx)
   endif
 
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
 
   ifndef QTFLAGS

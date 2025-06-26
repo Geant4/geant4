@@ -394,7 +394,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, std::ifstream& infile)
 		 << " isOK=" << isTransOK
 	         << G4endl;
         }
-	if (0.0f < fNorm1) { fNorm1 = 1.0f/fNorm1; } 
+	fNorm1 = (FLT_MIN < fNorm1) ? 1.0f/fNorm1 : 0.0f; 
 	for (k=0; k<nt; ++k) {
 	  vGammaCumProbability[k] *= fNorm1;
 #ifdef G4VERBOSE

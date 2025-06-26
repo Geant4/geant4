@@ -1,5 +1,9 @@
 /*
 # <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
 # <<END-copyright>>
 */
 
@@ -11,16 +15,16 @@
 
 #if defined __cplusplus
     extern "C" {
-    namespace GIDI {
 #endif
 
 #define nf_Legendre_minMaxOrder 4
-#define nf_Legendre_maxMaxOrder 64
+#define nf_Legendre_maxMaxOrder 128
 #define nf_Legendre_sizeIncrement 8
 
 typedef struct nf_Legendre_s nf_Legendre;
 
 struct nf_Legendre_s {
+    nfu_status status;
     int maxOrder;
     int allocated;          /* Will never be less than nf_Legendre_minMaxOrder. */
     double *Cls;
@@ -31,21 +35,22 @@ typedef nfu_status (*nf_Legendre_GaussianQuadrature_callback)( double x, double 
 /*
 * Methods in nf_Legendre.c
 */
-nf_Legendre *nf_Legendre_new( int initialSize, int maxOrder, double *Cls, nfu_status *status );
-nfu_status nf_Legendre_setup( nf_Legendre *nfL, int initialSize, int maxOrder );
-nfu_status nf_Legendre_release( nf_Legendre *nfL );
+nf_Legendre *nf_Legendre_new( statusMessageReporting *smr, int initialSize, int maxOrder, double *Cls );
+nfu_status nf_Legendre_initialize( statusMessageReporting *smr, nf_Legendre *nfL, int initialSize, int maxOrder );
+nfu_status nf_Legendre_release( statusMessageReporting *smr, nf_Legendre *nfL );
 nf_Legendre *nf_Legendre_free( nf_Legendre *nfL );
-nf_Legendre *nf_Legendre_clone( nf_Legendre *nfL, nfu_status *status );
-nfu_status nf_Legendre_reallocateCls( nf_Legendre *Legendre, int size, int forceSmallerResize );
-int nf_Legendre_maxOrder( nf_Legendre *Legendre );
-int nf_Legendre_allocated( nf_Legendre *Legendre );
-double nf_Legendre_getCl( nf_Legendre *Legendre, int l, nfu_status *status );
-nfu_status nf_Legendre_setCl( nf_Legendre *Legendre, int l, double Cl );
-nfu_status nf_Legendre_normalize( nf_Legendre *Legendre );
-double nf_Legendre_evauluateAtMu( nf_Legendre *nfL, double mu, nfu_status *status );
+nf_Legendre *nf_Legendre_clone( statusMessageReporting *smr, nf_Legendre *nfL );
+nfu_status nf_Legendre_reallocateCls( statusMessageReporting *smr, nf_Legendre *Legendre, int size, int forceSmallerResize );
+nfu_status nf_Legendre_maxOrder( statusMessageReporting *smr, nf_Legendre *Legendre, int *maxOrder );
+nfu_status nf_Legendre_allocated( statusMessageReporting *smr, nf_Legendre *Legendre, int *allocated );
+nfu_status nf_Legendre_getCl( statusMessageReporting *smr, nf_Legendre *Legendre, int l, double *Cl );
+nfu_status nf_Legendre_setCl( statusMessageReporting *smr, nf_Legendre *Legendre, int l, double Cl );
+nfu_status nf_Legendre_normalize( statusMessageReporting *smr, nf_Legendre *Legendre );
+nfu_status nf_Legendre_evauluateAtMu( statusMessageReporting *smr, nf_Legendre *nfL, double mu, double *P );
 double nf_Legendre_PofL_atMu( int l, double mu );
-ptwXYPoints *nf_Legendre_to_ptwXY( nf_Legendre *nfL, double accuracy, int biSectionMax, int checkForRoots, nfu_status *status );
-nf_Legendre *nf_Legendre_from_ptwXY( ptwXYPoints *ptwXY, int maxOrder, nfu_status *status );
+ptwXYPoints *nf_Legendre_to_ptwXY( statusMessageReporting *smr, nf_Legendre *nfL, double accuracy, int biSectionMax, 
+        int checkForRoots );
+nf_Legendre *nf_Legendre_from_ptwXY( statusMessageReporting *smr, ptwXYPoints *ptwXY, int maxOrder );
 
 /*
 * Methods in nf_Legendre_GaussianQuadrature.c
@@ -53,7 +58,6 @@ nf_Legendre *nf_Legendre_from_ptwXY( ptwXYPoints *ptwXY, int maxOrder, nfu_statu
 nfu_status nf_Legendre_GaussianQuadrature( int degree, double x1, double x2, nf_Legendre_GaussianQuadrature_callback func, void *argList, double *integral );
 
 #if defined __cplusplus
-    }
     }
 #endif
 

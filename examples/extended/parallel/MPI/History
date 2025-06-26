@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-03-28 Ben Morgan (MPI-V11-03-01)
+- Modernize and simplify library and example build scripts to build G4mpi library
+  and examples of its use in one project.
+
+## 2025-02-18 Chris Brady, Filippo Falezza, Ben Morgan (MPI-V11-03-00)
+- Move MPI from deprecated C++ interface to C interface (MPI 3+)
+  - Changes from privately supplied patch, and through [GitHub PR #81](https://github.com/Geant4/geant4/pull/81/) 
+
 ## 2023-03-11 Ben Morgan (MPI-V11-02-00)
 - Move CTests definitions to tests/ctests_examples
 

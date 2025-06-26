@@ -102,28 +102,16 @@ G4EMDissociationCrossSection::~G4EMDissociationCrossSection()
 /////////////////////////////////////////////////////////////////////////////
 //
 G4bool
-G4EMDissociationCrossSection::IsElementApplicable(const G4DynamicParticle* part,
+G4EMDissociationCrossSection::IsElementApplicable(const G4DynamicParticle*,
 						  G4int /*ZZ*/, const G4Material*)
 {
-//
-// The condition for the applicability of this class is that the projectile
-// must be an ion and the target must have more than one nucleon.  In reality
-// the value of A for either the projectile or target could be much higher,
-// since for cases where both he projectile and target are medium to small
-// Z, the probability of the EMD process is, I think, VERY small.
-//
-  if (G4ParticleTable::GetParticleTable()->GetIonTable()->IsIon(part->GetDefinition())) {
-    return true;
-  } else {
-    return false;
-  }
+  return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 //
 G4double G4EMDissociationCrossSection::GetElementCrossSection
-  (const G4DynamicParticle* theDynamicParticle, G4int Z,
-   const G4Material*)
+  (const G4DynamicParticle* theDynamicParticle, G4int Z, const G4Material*)
 {
   // VI protection for Hydrogen
   if(1 >= Z) { return 0.0; }

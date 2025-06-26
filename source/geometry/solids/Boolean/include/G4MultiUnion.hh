@@ -224,7 +224,13 @@ G4ThreeVector G4MultiUnion::GetLocalPoint(const G4Transform3D& trans,
   // by the transformation. This is defined by multiplying the inverse
   // transformation with the global vector.
 
-  return trans.inverse()*G4Point3D(global);
+  G4double px = global.x() - trans.dx();
+  G4double py = global.y() - trans.dy();
+  G4double pz = global.z() - trans.dz();
+  G4double x = trans.xx()*px + trans.yx()*py + trans.zx()*pz;
+  G4double y = trans.xy()*px + trans.yy()*py + trans.zy()*pz;
+  G4double z = trans.xz()*px + trans.yz()*py + trans.zz()*pz;
+  return { x, y, z };
 }
 
 //______________________________________________________________________________
@@ -236,12 +242,13 @@ G4ThreeVector G4MultiUnion::GetLocalVector(const G4Transform3D& trans,
   // by the transformation. This is defined by multiplying the inverse
   // transformation with the global vector.
 
-  G4Rotate3D rot;
-  G4Translate3D transl ;
-  G4Scale3D scale;
-
-  trans.getDecomposition(scale,rot,transl);
-  return rot.inverse()*G4Vector3D(global);
+  G4double vx = global.x();
+  G4double vy = global.y();
+  G4double vz = global.z();
+  G4double x = trans.xx()*vx + trans.yx()*vy + trans.zx()*vz;
+  G4double y = trans.xy()*vx + trans.yy()*vy + trans.zy()*vz;
+  G4double z = trans.xz()*vx + trans.yz()*vy + trans.zz()*vz;
+  return { x, y, z };
 }
 
 //______________________________________________________________________________
@@ -253,7 +260,13 @@ G4ThreeVector G4MultiUnion::GetGlobalPoint(const G4Transform3D& trans,
   // by the transformation. This is defined by multiplying this transformation
   // with the local vector.
 
-  return trans*G4Point3D(local);
+  G4double px = local.x();
+  G4double py = local.y();
+  G4double pz = local.z();
+  G4double x = trans.xx()*px + trans.xy()*py + trans.xz()*pz + trans.dx();
+  G4double y = trans.yx()*px + trans.yy()*py + trans.yz()*pz + trans.dy();
+  G4double z = trans.zx()*px + trans.zy()*py + trans.zz()*pz + trans.dz();
+  return { x, y, z };
 }
 
 //______________________________________________________________________________
@@ -265,12 +278,13 @@ G4ThreeVector G4MultiUnion::GetGlobalVector(const G4Transform3D& trans,
   // transformation to the global one. This is defined by multiplying this
   // transformation with the local vector while ignoring the translation.
 
-  G4Rotate3D rot;
-  G4Translate3D transl ;
-  G4Scale3D scale;
-
-  trans.getDecomposition(scale,rot,transl);
-  return rot*G4Vector3D(local);
+  G4double vx = local.x();
+  G4double vy = local.y();
+  G4double vz = local.z();
+  G4double x = trans.xx()*vx + trans.xy()*vy + trans.xz()*vz;
+  G4double y = trans.yx()*vx + trans.yy()*vy + trans.yz()*vz;
+  G4double z = trans.zx()*vx + trans.zy()*vy + trans.zz()*vz;
+  return { x, y, z };
 }
 
 #endif

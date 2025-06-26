@@ -57,9 +57,6 @@ class G4QSSDriver : public G4InterpolationDriver<T, true>
     void OnComputeStep(const G4FieldTrack* track) override
     {
       Base::OnComputeStep(track);
-#ifdef GEANT4_DUMP_STEPPER_STATS
-      this->GetStepper()->stats.steps++;
-#endif
     }
 
     void SetPrecision(G4double dq_rel, G4double dq_min);

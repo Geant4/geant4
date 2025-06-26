@@ -64,7 +64,7 @@
 #else
 
 #  include "G4Types.hh"
-
+#  include "G4IEEE754.hh"
 #  include <cstdint>
 #  include <limits>
 
@@ -77,24 +77,6 @@ namespace G4LogConsts
 
   const G4double SQRTH  = 0.70710678118654752440;
   const G4float MAXNUMF = 3.4028234663852885981170418348451692544e38f;
-
-  //----------------------------------------------------------------------------
-  // Used to switch between different type of interpretations of the data
-  // (64 bits)
-  //
-  union ieee754
-  {
-    ieee754()= default;
-    ieee754(G4double thed) { d = thed; };
-    ieee754(uint64_t thell) { ll = thell; };
-    ieee754(G4float thef) { f[0] = thef; };
-    ieee754(uint32_t thei) { i[0] = thei; };
-    G4double d;
-    G4float f[2];
-    uint32_t i[2];
-    uint64_t ll;
-    uint16_t s[4];
-  };
 
   inline G4double get_log_px(const G4double x)
   {
@@ -141,50 +123,10 @@ namespace G4LogConsts
   }
 
   //----------------------------------------------------------------------------
-  // Converts a double to an unsigned long long
-  //
-  inline uint64_t dp2uint64(G4double x)
-  {
-    ieee754 tmp;
-    tmp.d = x;
-    return tmp.ll;
-  }
-
-  //----------------------------------------------------------------------------
-  // Converts an unsigned long long to a double
-  //
-  inline G4double uint642dp(uint64_t ll)
-  {
-    ieee754 tmp;
-    tmp.ll = ll;
-    return tmp.d;
-  }
-
-  //----------------------------------------------------------------------------
-  // Converts an int to a float
-  //
-  inline G4float uint322sp(G4int x)
-  {
-    ieee754 tmp;
-    tmp.i[0] = x;
-    return tmp.f[0];
-  }
-
-  //----------------------------------------------------------------------------
-  // Converts a float to an int
-  //
-  inline uint32_t sp2uint32(G4float x)
-  {
-    ieee754 tmp;
-    tmp.f[0] = x;
-    return tmp.i[0];
-  }
-
-  //----------------------------------------------------------------------------
   /// Like frexp but vectorising and the exponent is a double.
   inline G4double getMantExponent(const G4double x, G4double& fe)
   {
-    uint64_t n = dp2uint64(x);
+    uint64_t n = G4IEEE754::dp2uint64(x);
 
     // Shift to the right up to the beginning of the exponent.
     // Then with a mask, cut off the sign bit
@@ -202,14 +144,14 @@ namespace G4LogConsts
     const uint64_t p05 = 0x3FE0000000000000ULL;  // dp2uint64(0.5);
     n |= p05;
 
-    return uint642dp(n);
+    return G4IEEE754::uint642dp(n);
   }
 
   //----------------------------------------------------------------------------
   /// Like frexp but vectorising and the exponent is a float.
   inline G4float getMantExponentf(const G4float x, G4float& fe)
   {
-    uint32_t n = sp2uint32(x);
+    uint32_t n = G4IEEE754::sp2uint32(x);
     int32_t e  = (n >> 23) - 127;
     fe         = e;
 
@@ -218,7 +160,7 @@ namespace G4LogConsts
     n &= 0x807fffff;                   // ~0x7f800000;
     n |= p05f;
 
-    return uint322sp(n);
+    return G4IEEE754::uint322sp(n);
   }
 }  // namespace G4LogConsts
 
@@ -334,17 +276,6 @@ inline G4float G4Logf(G4float x)
 
   return res;
 }
-
-//------------------------------------------------------------------------------
-
-void logv(const uint32_t size, G4double const* __restrict__ iarray,
-          G4double* __restrict__ oarray);
-void G4Logv(const uint32_t size, G4double const* __restrict__ iarray,
-            G4double* __restrict__ oarray);
-void logfv(const uint32_t size, G4float const* __restrict__ iarray,
-           G4float* __restrict__ oarray);
-void G4Logfv(const uint32_t size, G4float const* __restrict__ iarray,
-             G4float* __restrict__ oarray);
 
 #endif /* WIN32 */
 

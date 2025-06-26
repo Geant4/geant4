@@ -108,6 +108,17 @@ public:
     if(m_glarea) OpenGLArea::paint(m_glarea);
   }
 
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    if(!m_glarea) {a_w = 0;a_h = 0;return false;}
+    a_w = (unsigned int)m_glarea->core.width;
+    a_h = (unsigned int)m_glarea->core.height;
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
+  }
+
 public:
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;} //we do not have ownership.
 protected:
@@ -138,23 +149,29 @@ protected:
       _this->m_interactor->key_release(event);
     }return;
     case ButtonPress:{
+      bool shift_modifier = xevent->xkey.state & ShiftMask;
+      bool control_modifier = xevent->xkey.state & ControlMask;
       if(xevent->xbutton.button==Button4) {  //4=wheel down, or move down double touch on trackpad = zoom in.
-        tools::sg::wheel_rotate_event event(8);  //8=cooking.
+        tools::sg::wheel_rotate_event event(8,xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);  //8=cooking.
         _this->m_interactor->wheel_rotate(event);
       } else if(xevent->xbutton.button==Button5) {  //5=wheel up, or move up double touch on trackpad = zoom out.
-        tools::sg::wheel_rotate_event event(-8);  //8=cooking.
+        tools::sg::wheel_rotate_event event(-8,xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);  //8=cooking.
         _this->m_interactor->wheel_rotate(event);
       } else {
-        tools::sg::mouse_down_event event(xevent->xbutton.x,xevent->xbutton.y);
+        tools::sg::mouse_down_event event(xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);
         _this->m_interactor->mouse_press(event);
       }
     }return;
     case ButtonRelease:{
-      tools::sg::mouse_up_event event(xevent->xbutton.x,xevent->xbutton.y);
+      bool shift_modifier = xevent->xkey.state & ShiftMask;
+      bool control_modifier = xevent->xkey.state & ControlMask;
+      tools::sg::mouse_up_event event(xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);
       _this->m_interactor->mouse_release(event);
     }return;
     case MotionNotify:{
-      tools::sg::mouse_move_event event(xevent->xmotion.x,xevent->xmotion.y,0,0,false);
+      bool shift_modifier = xevent->xkey.state & ShiftMask;
+      bool control_modifier = xevent->xkey.state & ControlMask;
+      tools::sg::mouse_move_event event(xevent->xmotion.x,xevent->xmotion.y,shift_modifier,control_modifier,0,0,false);
       _this->m_interactor->mouse_move(event);
     }return;
     default:return;}

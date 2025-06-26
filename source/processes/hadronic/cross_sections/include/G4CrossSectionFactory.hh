@@ -34,13 +34,20 @@
 
 class G4VBaseXSFactory
 {
-
 public:
+
+  G4VBaseXSFactory()
+  {
+    fRegistry = G4CrossSectionFactoryRegistry::Instance();
+  }
+   
+  virtual ~G4VBaseXSFactory() = default;
 
   virtual G4VCrossSectionDataSet* Instantiate() = 0;
 
+protected:
+  G4CrossSectionFactoryRegistry* fRegistry;
 };
-
 
 //Generic template XS-factory
 template <typename T, int mode> class G4CrossSectionFactory : public G4VBaseXSFactory
@@ -48,10 +55,10 @@ template <typename T, int mode> class G4CrossSectionFactory : public G4VBaseXSFa
 public:
   G4CrossSectionFactory(const G4String& name)
   {
-      G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
+    fRegistry->Register(name, this);
   }
-  
-  virtual G4VCrossSectionDataSet* Instantiate() 
+
+  G4VCrossSectionDataSet* Instantiate() override
   {
       G4ExceptionDescription msg;
       msg<<"Factory mode: "<<mode<<" not supported!";
@@ -66,15 +73,15 @@ template <typename T> class G4CrossSectionFactory<T,0> : public G4VBaseXSFactory
 {
 public:
     
-    G4CrossSectionFactory(const G4String& name)
-    {
-        G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
-    }
-    
-    virtual G4VCrossSectionDataSet* Instantiate()
-    {
-        return new T();
-    }
+  G4CrossSectionFactory(const G4String& name)
+  {
+    fRegistry->Register(name, this);
+  }
+
+  G4VCrossSectionDataSet* Instantiate() override
+  {
+    return new T();
+  }
 };
 
 //Partial specialized template for singleton, shared factory
@@ -82,32 +89,32 @@ public:
 template <typename T> class G4CrossSectionFactory<T,1> : public G4VBaseXSFactory
 {
 public:
-    G4CrossSectionFactory(const G4String& name)
-    {
-        G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
-    }
-    
-    virtual G4VCrossSectionDataSet* Instantiate()
-    {
-        static T* shared = new T();
-        return shared;
-    }
+  G4CrossSectionFactory(const G4String& name)
+  {
+    fRegistry->Register(name,this);
+  }
+
+  G4VCrossSectionDataSet* Instantiate() override
+  {
+    static T* shared = new T();
+    return shared;
+  }
 };
 
 //Partial specialized template for singleton, shared factory
 // each call to Instantiate returns pointer to static thread-local object
 template <typename T> class G4CrossSectionFactory<T,2> : public G4VBaseXSFactory
 {
-    G4CrossSectionFactory(const G4String& name)
-    {
-        G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
-    }
-    
-    virtual G4VCrossSectionDataSet* Instantiate()
-    {
-        static G4ThreadLocal T* shared = new T();
-        return shared;
-    }
+  G4CrossSectionFactory(const G4String& name)
+  {
+    fRegistry->Register(name,this);
+  }
+
+  G4VCrossSectionDataSet* Instantiate() override
+  {
+    static G4ThreadLocal T* shared = new T();
+    return shared;
+  }
 };
 
 

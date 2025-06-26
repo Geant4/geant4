@@ -79,16 +79,16 @@ void RunAction::EndOfRunAction(const G4Run* run)
   if (nofEvents == 0) {
     return;
   }
-  auto chem6Run = dynamic_cast<const Run*>(run);
-  G4double sumDose = chem6Run->GetSumDose();
+  auto pRun = dynamic_cast<const Run*>(run);
+  G4double sumDose = pRun->GetSumDose();
 
   if (G4Threading::IsMultithreadedApplication() && IsMaster()) {
     G4cout << G4endl << "--------------------------End of Global Run------------------------------"
            << G4endl << "The run has " << nofEvents << " events " << G4endl;
 
-    auto masterGvaluesScorer = dynamic_cast<Scorer<Gvalues>*>(chem6Run->GetGvaluesScorer());
+    auto masterGvaluesScorer = dynamic_cast<Scorer<Gvalues>*>(pRun->GetGvaluesScorer());
 
-    auto masterDoseLimite = dynamic_cast<Scorer<Dose>*>(chem6Run->GetSumDoseLimit());
+    auto masterDoseLimite = dynamic_cast<Scorer<Dose>*>(pRun->GetSumDoseLimit());
 
     G4cout << "Number of events recorded by the species scorer : "
            << masterGvaluesScorer->GetpScorer()->GetNumberOfRecordedEvents() << " events "

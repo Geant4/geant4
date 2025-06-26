@@ -50,6 +50,10 @@ class G4HadronicParameters {
     static G4HadronicParameters* Instance();
     ~G4HadronicParameters();
 
+    // printing
+    void StreamInfo(std::ostream& os) const;
+    void Dump() const;
+
     inline G4double GetMaxEnergy() const;
     void SetMaxEnergy( const G4double val );
     // Getter/Setter for the upper limit for Geant4 hadronic physics, for any application.
@@ -410,6 +414,12 @@ inline G4bool G4HadronicParameters::IsBertiniAngularEmissionsAs11_2() const {
   
 inline G4bool G4HadronicParameters::IsBertiniNucleiModelAs11_2() const {
   return fBertiniNucleiModelAs11_2;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const G4HadronicParameters& p)
+{
+  p.StreamInfo(os);
+  return os;
 }
 
 #endif

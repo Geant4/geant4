@@ -65,7 +65,6 @@ const G4RegionManager& G4Region::GetSubInstanceManager()
 G4Region::G4Region(const G4String& pName)
   : fName(pName)
 {
-
   instanceID = subInstanceManager.CreateSubInstance();
   G4MT_fsmanager = nullptr;
   G4MT_rsaction = nullptr;
@@ -205,7 +204,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
 
   // Stop recursion here if no further daughters are involved
   //
-  if(noDaughters==0) return;
+  if(noDaughters==0) { return; }
 
   G4VPhysicalVolume* daughterPVol = lv->GetDaughter(0);
   if (daughterPVol->IsParameterised())
@@ -397,9 +396,9 @@ void G4Region::UpdateMaterialList()
   // Loop over the root logical volumes and rebuild the list
   // of materials from scratch
   //
-  for (auto pLV=fRootVolumes.cbegin(); pLV!=fRootVolumes.cend(); ++pLV)
+  for (const auto & rootVolume : fRootVolumes)
   {
-    ScanVolumeTree(*pLV, true);
+    ScanVolumeTree(rootVolume, true);
   }
 }
 
@@ -412,9 +411,13 @@ void G4Region::UpdateMaterialList()
 void G4Region::SetWorld(G4VPhysicalVolume* wp)
 {
   if(wp == nullptr)
-  { fWorldPhys = nullptr; }
+  {
+    fWorldPhys = nullptr;
+  }
   else
-  { if(BelongsTo(wp)) fWorldPhys = wp; }
+  {
+    if(BelongsTo(wp)) { fWorldPhys = wp; }
+  }
 
   return;
 }
@@ -487,16 +490,16 @@ G4Region* G4Region::GetParentRegion(G4bool& unique) const
 
   // Loop over all logical volumes in the store
   //
-  for(auto lvItr=lvStore->cbegin(); lvItr!=lvStore->cend(); ++lvItr)
+  for(const auto & lvol : *lvStore)
   {
-    std::size_t nD = (*lvItr)->GetNoDaughters();
-    G4Region* aR = (*lvItr)->GetRegion();
+    std::size_t nD = lvol->GetNoDaughters();
+    G4Region* aR = lvol->GetRegion();
 
     // Loop over all daughters of each logical volume
     //
     for(std::size_t iD=0; iD<nD; ++iD)
     {
-      if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
+      if(lvol->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
       { 
         if(parent != nullptr)
         {

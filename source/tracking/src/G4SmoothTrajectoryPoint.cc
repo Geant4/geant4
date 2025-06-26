@@ -58,7 +58,8 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(
 {}
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint& right)
-  : fPosition(right.fPosition), fAuxiliaryPointVector(right.fAuxiliaryPointVector)
+  : G4VTrajectoryPoint(),
+    fPosition(right.fPosition), fAuxiliaryPointVector(right.fAuxiliaryPointVector)
 {}
 
 G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint() { delete fAuxiliaryPointVector; }

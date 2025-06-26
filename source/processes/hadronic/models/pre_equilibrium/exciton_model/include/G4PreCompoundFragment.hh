@@ -49,18 +49,10 @@ public:
   
   ~G4PreCompoundFragment() override = default;
 
-  // ================================================
-  // Methods for calculating the emission probability
-  // ================================================
-  
-  // Calculates the total (integrated over kinetic energy) emission
-  // probability of a fragment
-  G4double CalcEmissionProbability(const G4Fragment& aFragment) override;
-  
-  G4double SampleKineticEnergy(const G4Fragment& aFragment) override;
-
+  // inverse cross section for a channel
   G4double CrossSection(G4double ekin);
 
+  // the value of the recent inverse cross section for a channel
   G4double RecentXS() const { return recentXS; };
 
   G4PreCompoundFragment(const G4PreCompoundFragment &right) = delete;
@@ -69,25 +61,12 @@ public:
   G4bool operator==(const G4PreCompoundFragment &right) const = delete;
   G4bool operator!=(const G4PreCompoundFragment &right) const = delete;
 
-protected:
-
-  virtual G4double 
-  ProbabilityDistributionFunction(G4double ekin, 
-				  const G4Fragment & aFragment) = 0; 
-
 private:	
-
-  // This method performs integration for probability function over 
-  // fragment kinetic energy
-  G4double IntegrateEmissionProbability(G4double low, G4double up, 
-					const G4Fragment & aFragment);	
 
   G4double GetOpt0(G4double ekin) const;
   
   G4int lastA{0};
-
   G4double muu{0.0};
-  G4double probmax{0.0};
   G4double recentXS{0.0};
 };
 

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -151,7 +151,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -613,7 +613,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=0.310000s Real=0.367647s Sys=0.010000s
+Initialisation time:  User=0.310000s Real=0.514446s Sys=0.000000s
 EventAction: Event #0 started
 EventAction: Event #10 started
 EventAction: Event #20 started
@@ -627,8 +627,8 @@ EventAction: Event #90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.030000s Real=0.021907s Sys=0.000000s
-RunAction::EndOfRunAction:  User=0.030000s Real=0.021949s Sys=0.000000s
+  User=0.020000s Real=0.026883s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.020000s Real=0.026933s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -660,8 +660,8 @@ Average number of pion leak          0
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x1a38ef0
-UserPhysicsList deleted 0x1a5c158
+UserDetectorConstruction deleted 0x8c95a0
+UserPhysicsList deleted 0x8ec808
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

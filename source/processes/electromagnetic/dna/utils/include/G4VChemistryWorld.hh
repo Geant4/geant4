@@ -30,6 +30,7 @@
 
 #include <memory>
 #include <map>
+#include "globals.hh"
 class G4DNABoundingBox;
 class G4Material;
 class G4MolecularConfiguration;
@@ -72,9 +73,14 @@ class G4VChemistryWorld
     {
         return fpChemistryBoundary.get();
     }
+
+    std::map<MolType,G4double> GetChemicalComponent() const
+    {
+      return fpChemicalComponent;
+    }
    protected:
     std::unique_ptr<G4DNABoundingBox> fpChemistryBoundary;
-    std::map<MolType,double> fpChemicalComponent;
+    std::map<MolType,G4double> fpChemicalComponent;
 };
 
 #endif

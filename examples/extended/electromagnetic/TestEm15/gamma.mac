@@ -7,16 +7,19 @@
 #
 /testem/det/setMat Aluminium
 #
-/testem/phys/addPhysics emstandard5D
+/testem/phys/addPhysics emstandard_opt4
+/process/em/UseGeneralProcess false
 #
 /run/initialize
 #
 /run/setCut 1 mm
 #
+/process/list
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate Rayl
-/process/inactivate GammaToMuPair
+#
+/process/dump Electromagnetic gamma
 #
 # direction 1 0 0
 /gun/particle gamma

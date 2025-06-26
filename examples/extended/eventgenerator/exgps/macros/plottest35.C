@@ -23,22 +23,22 @@
   input_file_1->ls();
   // get the tuple t1
   double energy, weight;
-  TTree *t1 = (TTree *) input_file_1->Get("MyTuple");
-  t1->SetBranchAddress("Energy", &energy);
-  t1->SetBranchAddress("Weight", &weight);
+  TTree *t1 = (TTree *) input_file_1->Get("ntuple/101");
+  t1->SetBranchAddress("Ekin", &energy);
+  t1->SetBranchAddress("weight", &weight);
   cout <<t1->GetEntries() << endl;
   for (int i = 0; i < t1->GetEntries(); i++) {
-    t1.GetEntry(i);
+    t1->GetEntry(i);
     //    cout << energy << " " << weight << endl;
     h_1->Fill(energy,weight);
   }
   input_file_2->cd();
-  TTree *t2 = (TTree *) input_file_2->Get("MyTuple");
-  t2->SetBranchAddress("Energy", &energy);
-  t2->SetBranchAddress("Weight", &weight);
+  TTree *t2 = (TTree *) input_file_2->Get("ntuple/101");
+  t2->SetBranchAddress("Ekin", &energy);
+  t2->SetBranchAddress("weight", &weight);
   cout <<t2->GetEntries() << endl;
   for (int i = 0; i < t1->GetEntries(); i++) {
-    t2.GetEntry(i);
+    t2->GetEntry(i);
     h_2->Fill(energy,weight);
   }
   //  h_2->SetFillColor(kRed);
@@ -47,7 +47,7 @@
   h_2->Draw();
   h_1->Draw("same") ;
   c1->Update();
-  c1->Print("./test35.png");
+  c1->Print("test35.png");
   
   input_file_1->Close();
   input_file_2->Close();

@@ -50,6 +50,7 @@
 #include "G4EmExtraParameters.hh"
 #include "G4EmLowEParameters.hh"
 #include "G4EmParametersMessenger.hh"
+#include "G4EmUtility.hh"
 #include "G4NistManager.hh"
 #include "G4RegionStore.hh"
 #include "G4Region.hh"
@@ -719,7 +720,7 @@ G4double G4EmParameters::MaxEnergyFor5DMuPair() const
 void G4EmParameters::SetLinearLossLimit(G4double val)
 {
   if(IsLocked()) { return; }
-  if(val > 0.0 && val < 0.5) {
+  if(val > 0.0 && val < 1.0) {
     linLossLimit = val;
   } else {
     G4ExceptionDescription ed;
@@ -1365,6 +1366,22 @@ const G4String& G4EmParameters::GetDirLEDATA() const
   return fDirLEDATA;
 }
 
+void G4EmParameters::SetFluctuationsForRegion(const G4String& nam, G4bool flag)
+{
+  if (IsLocked()) { return; }
+  G4String ss = fBParameters->CheckRegion(nam);
+  if (!fluctRegions.empty()) {
+    for (auto const& p : fluctRegions) { if (p.first == ss) { return; } }
+  }
+  fluctRegions.push_back(std::make_pair(ss, flag));
+}
+
+void G4EmParameters::DefineFluctuationFlags(std::vector<G4bool>* theFlags)
+{
+  if (fluctRegions.empty()) { return; }
+  G4EmUtility::FillFluctFlags(fluctRegions, theFlags);
+}
+
 void G4EmParameters::StreamInfo(std::ostream& os) const
 {
   G4long prec = os.precision(5);
@@ -1417,7 +1434,7 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "5D gamma conversion limit for muon pair            " 
      << max5DEnergyForMuPair/CLHEP::GeV << " GeV\n";
   }
-  os << "Use Ricardo-Gerardo pair production model          "
+  os << "Use RiGe 5D e+e- pair production model by muons    "
      << fUseRiGePairProductionModel << "\n";
   os << "Livermore data directory                           " 
      << fCParameters->LivermoreDataDir() << "\n";
@@ -1442,11 +1459,29 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Lowest muon/hadron kinetic energy                  " 
      <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
   os << "Use ICRU90 data                                    " << fICRU90 << "\n";
-  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  os << "Fluctuations of dE/dx are enabled                  " << lossFluctuation << "\n";
   G4String namef = "Universal";
   if(fFluct == fUrbanFluctuation) { namef = "Urban"; }
   else if(fFluct == fDummyFluctuation) { namef = "Dummy"; }
   os << "Type of fluctuation model for leptons and hadrons  " << namef << "\n";
+  if (!fluctRegions.empty()) {
+    if (lossFluctuation) {
+      os << "Fluctuations of dE/dx are disabled in G4Regions:   ";
+    } else {
+      os << "Fluctuations of dE/dx are enabled in G4Regions:    ";
+    }
+    G4int n = 0;
+    for (auto const& p : fluctRegions) {
+      if (p.second != lossFluctuation) {
+        os << p.first << " ";
+	if (n > 0 && (n/2)*2 == n) {
+	  os << "\n" << "                                                   ";
+	}
+	++n;
+      }
+    }
+    os << "\n";
+  }
   os << "Use built-in Birks satuaration                     " << birks << "\n";
   os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";

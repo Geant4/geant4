@@ -23,52 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4AuxiliaryNavServices
+// G4AuxiliaryNavServices
 //
 // Class description:
 //
 // Utility class for navigation.
 
-// History:
-// - Created: Paul Kent, Aug 96
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 #ifndef G4AuxiliaryNavServices_hh
-#define G4AuxiliaryNavServices_hh
+#define G4AuxiliaryNavServices_hh 1
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4VSolid.hh"
 #include "G4AffineTransform.hh"
 
+/**
+ * @brief G4AuxiliaryNavServices a utility class for navigation.
+ */
+
 class G4AuxiliaryNavServices
 {
+  public:
 
- public:  // with description
+    /**
+     * Is the track (point, direction) inside the solid 'sampleSolid' ? 
+     *  @param[in] sampleSolid Pointer to the shape to check.
+     *  @param[in,out] localPoint Point in local coordinates system.
+     *  @param[in,out] globalDirection Pointer to global direction or null.
+     *  @param[in] sampleTransform Affine transformation in space.
+     *  @param[in] pLocatedOnEdge Flag specifying if point is located on edge.
+     * @returns True if we are going to enter the volume, which is the case
+     *          if the point is inside, or the point is on the surface and
+     *          the direction points inside or along it. Else returns false.
+     */
+    static G4bool CheckPointOnSurface( const G4VSolid* sampleSolid, 
+                                       const G4ThreeVector& localPoint, 
+                                       const G4ThreeVector* globalDirection, 
+                                       const G4AffineTransform& sampleTransform,
+                                       const G4bool locatedOnEdge);
 
-   static G4bool CheckPointOnSurface( const G4VSolid* sampleSolid, 
-                                      const G4ThreeVector& localPoint, 
-                                      const G4ThreeVector* globalDirection, 
-                                      const G4AffineTransform& sampleTransform,
-                                      const G4bool locatedOnEdge);
-     //
-     // Is the track (point, direction) inside the solid 'sampleSolid' ? 
-     // Returns true if we are going to enter the volume,
-     // which is the case if:
-     //   - the point is inside
-     //   - the point is on the surface and the direction points inside
-     //     or along it.
-     // Else returns false.
+    /**
+     * Is the track (point, direction) exiting the solid 'sampleSolid' ? 
+     *  @returns True if we are going to exit the volume.
+     *  @param[in] sampleSolid Pointer to the shape to check.
+     *  @param[in,out] localPoint Point in local coordinates system.
+     *  @param[in,out] globalDirection Pointer to global direction or null.
+     *  @param[in] sampleTransform Affine transformation in space.
+     */
+    static G4bool CheckPointExiting( const G4VSolid* sampleSolid, 
+                                     const G4ThreeVector& localPoint, 
+                                     const G4ThreeVector* globalDirection, 
+                                     const G4AffineTransform& sampleTransform );
 
-   static G4bool CheckPointExiting( const G4VSolid* sampleSolid, 
-                                    const G4ThreeVector& localPoint, 
-                                    const G4ThreeVector* globalDirection, 
-                                    const G4AffineTransform& sampleTransform );
-     //
-     // Is the track (point, direction) exiting the solid 'sampleSolid' ? 
-     // Returns true if we are going to exit the volume.
-
-   static void ReportTolerances();
-     // Print global values of Cartesian, Radial and Angle Tolerances
+    /**
+     * Prints global values of Cartesian, Radial and Angle Tolerances.
+     */
+    static void ReportTolerances();
 };
 
 #include "G4AuxiliaryNavServices.icc"

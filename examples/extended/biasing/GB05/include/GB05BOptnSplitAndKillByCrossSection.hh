@@ -40,22 +40,22 @@ class GB05BOptnSplitAndKillByCrossSection : public G4VBiasingOperation
     // -- Constructor :
     GB05BOptnSplitAndKillByCrossSection(G4String name);
     // -- destructor:
-    virtual ~GB05BOptnSplitAndKillByCrossSection();
+    ~GB05BOptnSplitAndKillByCrossSection() override;
 
   public:
     // ----------------------------------------------
     // -- Methods from G4VBiasingOperation interface:
     // ----------------------------------------------
     // -- Unused:
-    virtual const G4VBiasingInteractionLaw*
+    const G4VBiasingInteractionLaw*
     ProvideOccurenceBiasingInteractionLaw(const G4BiasingProcessInterface*, G4ForceCondition&) final
     {
-      return 0;
+      return nullptr;
     }
-    virtual G4VParticleChange* ApplyFinalStateBiasing(const G4BiasingProcessInterface*,
-                                                      const G4Track*, const G4Step*, G4bool&) final
+    G4VParticleChange* ApplyFinalStateBiasing(const G4BiasingProcessInterface*, const G4Track*,
+                                              const G4Step*, G4bool&) final
     {
-      return 0;
+      return nullptr;
     }
 
     // -- Used methods ("non-physics biasing methods"):
@@ -65,11 +65,10 @@ class GB05BOptnSplitAndKillByCrossSection : public G4VBiasingOperation
     // -- Here this distance will be sampled according the exponential
     // -- interaction law, using the interaction length passed to the
     // -- method SetInteractionLength(G4double)  below.
-    virtual G4double DistanceToApplyOperation(const G4Track*, G4double,
-                                              G4ForceCondition* condition) final;
+    G4double DistanceToApplyOperation(const G4Track*, G4double, G4ForceCondition* condition) final;
     // -- Method the generate the final state, which is made of the primary
     // -- with half of its original weight, and a clone of it.
-    virtual G4VParticleChange* GenerateBiasingFinalState(const G4Track*, const G4Step*) final;
+    G4VParticleChange* GenerateBiasingFinalState(const G4Track*, const G4Step*) final;
 
     // -- Specific to this example:
     // ----------------------------

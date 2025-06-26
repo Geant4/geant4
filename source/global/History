@@ -6,23 +6,68 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-09 Gabriele Cosmo (global-V11-02-28)
-- Updated tag IDs for geant4-11-03-patch-02.
+## 2025-06-26 Gabriele Cosmo (global-V11-03-16)
+- Updated tag IDs for geant4-11-03-ref-06.
 
-## 2025-04-06 Alvaro Tolosa-Delgado
+## 2025-06-10 Vladimir Ivantchenko (global-V11-03-15)
+- G4VSIntegration - for 11.4beta verbose level set to zero.
+
+## 2025-05-28 Gabriele Cosmo (global-V11-03-14)
+- Updated tag IDs for geant4-11-03-ref-05.
+
+## 2025-05-19 Vladimir Ivantchenko (global-V11-03-13)
+- G4VSIntegration - improved warning printout by addition of model name,
+  added extra protections for the case, when probability density function
+  has several peaks, change upper limit on number of warnings in each instance
+  of the class from 10 to 4, fixed a bug in sampling of tail of the distribution.
+
+## 2025-05-15 Vladimir Ivantchenko (global-V11-03-12)
+- G4VSIntegration - improved warning printout and add a limit on
+  number of warnings
+
+## 2025-03-28 Gabriele Cosmo (global-V11-03-11)
+- Updated tag IDs for geant4-11-03-ref-04.
+
+## 2025-04-06 Alvaro Tolosa-Delgado (global-V11-03-10)
 - Add Scintillation, Cherenkov, Transition Radiation and Synchrotron Radiation
   processes to G4PhysicsModelCatalog::Initialize()
 
-## 2025-03-21 Gabriele Cosmo (global-V11-02-27)
-- Updated tag IDs for geant4-11-03-patch-01.
+## 2025-03-31 Vladimir Ivantchenko (global-V11-03-09)
+- G4VSIntegration - fixed Coverity report (cosmetics)
 
-## 2025-03-20 Gabriele Cosmo
+## 2025-03-28 Gabriele Cosmo (global-V11-03-08)
+- Updated tag IDs for geant4-11-03-ref-03.
+
+## 2025-03-25 Vladimir Ivantchenko (global-V11-03-07)
+- G4VSIntegration - fixed minor inaccuracy in binning
+
+## 2025-03-24 Evgueni Tcherniaev (global-V11-03-06)
+- G4QuickRand: Added a possibility to set a seed.
+
+## 2025-03-20 Gabriele Cosmo (global-V11-03-05)
 - In G4ThreadLocalSingleton, removed unprotected left-over debug inclusion
   of G4BackTrace header. Addressing problem report #2649.
 
-## 2025-01-31 Ben Morgan
+## 2025-03-03 Vladimir Ivantchenko (global-V11-03-04)
+- G4VSIntegration - added new utility class for integration of probability
+  density function and sampling of final state dynamically. This is useful
+  for the case, when sampling tables  cannot be prepared and stored, instead
+  computations are performed for each case again and again. 
+
+## 2025-02-28 Gabriele Cosmo (global-V11-03-03)
+- Updated tag IDs for geant4-11-03-ref-02.
+
+## 2025-01-31 Ben Morgan (global-V11-03-02)
+- Migrate `tests/` to `tests/ctests_source` for use in CI and Nightly. 
 - Correct logic error in G4PhysicsTable when reading data in binary
   mode on Windows platforms, identified by migrated unit tests.
+
+## 2025-01-29 Gabriele Cosmo (global-V11-03-01)
+- Updated tag IDs for geant4-11-03-ref-01.
+
+## 2025-01-10 Ben Morgan (global-V11-03-00)
+- Factor common ieee754 union and helper functions out of G4Log and G4Exp to 
+  remove duplication.
 
 ## 2024-11-22 Gabriele Cosmo (global-V11-02-26)
 - Updated tag IDs for geant4-11-03-ref-00.

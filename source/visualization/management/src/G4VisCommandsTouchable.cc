@@ -314,13 +314,15 @@ void G4VisCommandsTouchable::SetNewValue
       const G4Point3D& standardTargetPoint = currentScene->GetStandardTargetPoint();
       newVP.SetCurrentTargetPoint(newTargetPoint - standardTargetPoint);
 
-      // Interpolate
-      auto keepVisVerbose = fpVisManager->GetVerbosity();
-      fpVisManager->SetVerboseLevel(G4VisManager::errors);
-      if (newVP != saveVP) InterpolateToNewView(currentViewer, saveVP, newVP);
-      // ...and twinkle
-      Twinkle(currentViewer,newVP,touchables);
-      fpVisManager->SetVerboseLevel(keepVisVerbose);
+      if (currentViewer->GetKernelVisitElapsedTimeSeconds() < 0.1) {
+        // Interpolate
+        auto keepVisVerbose = fpVisManager->GetVerbosity();
+        fpVisManager->SetVerboseLevel(G4VisManager::errors);
+        if (newVP != saveVP) InterpolateToNewView(currentViewer, saveVP, newVP);
+        // ...and twinkle
+        Twinkle(currentViewer,newVP,touchables);
+        fpVisManager->SetVerboseLevel(keepVisVerbose);
+      }
 
       if (verbosity >= G4VisManager::confirmations) {
         G4cout
@@ -446,19 +448,23 @@ void G4VisCommandsTouchable::SetNewValue
 
   } else if (command == fpCommandTwinkle) {
 
-    G4PhysicalVolumeModel::TouchableProperties properties =
-    G4TouchableUtils::FindTouchableProperties(fCurrentTouchableProperties.fTouchablePath);
-    if (properties.fpTouchablePV) {
-      std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>> touchables;
-      touchables.push_back(properties.fTouchableFullPVPath);
-      auto keepVisVerbose = fpVisManager->GetVerbosity();
-      fpVisManager->SetVerboseLevel(G4VisManager::errors);
-      auto keepVP = currentViewer->GetViewParameters();
-      Twinkle(currentViewer,currentViewer->GetViewParameters(),touchables);
-      SetViewParameters(currentViewer, keepVP);
-      fpVisManager->SetVerboseLevel(keepVisVerbose);
+    if (currentViewer->GetKernelVisitElapsedTimeSeconds() < 0.1) {
+      G4PhysicalVolumeModel::TouchableProperties properties =
+      G4TouchableUtils::FindTouchableProperties(fCurrentTouchableProperties.fTouchablePath);
+      if (properties.fpTouchablePV) {
+        std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>> touchables;
+        touchables.push_back(properties.fTouchableFullPVPath);
+        auto keepVisVerbose = fpVisManager->GetVerbosity();
+        fpVisManager->SetVerboseLevel(G4VisManager::errors);
+        auto keepVP = currentViewer->GetViewParameters();
+        Twinkle(currentViewer,currentViewer->GetViewParameters(),touchables);
+        SetViewParameters(currentViewer, keepVP);
+        fpVisManager->SetVerboseLevel(keepVisVerbose);
+      } else {
+        G4warn << "Touchable not found." << G4endl;
+      }
     } else {
-      G4warn << "Touchable not found." << G4endl;
+      G4warn << "Twinkling not available - image construction time too long." << G4endl;
     }
     return;
 

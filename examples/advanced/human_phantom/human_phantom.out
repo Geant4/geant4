@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -28,23 +28,24 @@ Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
+  RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLStoredQt (OGLSQt, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
   OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
+  RayTracerX (RTX)
+  RayTracerQt (RTQt)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
-  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
@@ -120,10 +121,10 @@ sensitivity : 0
 Construct Skull with mother volume physicalHead
 Checking overlaps for volume physicalSkull:0 (G4SubtractionSolid) ... OK! 
 Skull created !!!!!!
-Volume of Skull = 846.921 cm^3
+Volume of Skull = 847.724 cm^3
 Material of Skull = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of Skull = 1258.69 g
+Mass of Skull = 1259.89 g
 Construct Brain with mother physicalHead
 Checking overlaps for volume physicalBrain:0 (G4Ellipsoid) ... OK! 
 Volume of Brain = 1470.27 cm^3
@@ -198,28 +199,28 @@ sensitivity : 0
 Construct UpperSpine with mother volume physicalHead
 Checking overlaps for volume physicalUpperSpine:0 (G4SubtractionSolid) ... OK! 
 UpperSpine created !!!!!!
-Volume of UpperSpine = 126.45 cm^3
+Volume of UpperSpine = 126.465 cm^3
 Material of UpperSpine = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of UpperSpine = 187.93 g
+Mass of UpperSpine = 187.952 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct LeftScapula with mother volume physicalTrunk
 Checking overlaps for volume physicalLeftScapula:0 (G4SubtractionSolid) ... OK! 
 LeftScapula created !!!!!!
-Volume of LeftScapula = 91.848 cm^3
+Volume of LeftScapula = 104.415 cm^3
 Material of LeftScapula = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of LeftScapula = 136.505 g
+Mass of LeftScapula = 155.181 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct RightScapula with mother volume physicalTrunk
 Checking overlaps for volume physicalRightScapula:0 (G4SubtractionSolid) ... OK! 
 RightScapula created !!!!!!
-Volume of RightScapula = 106.747 cm^3
+Volume of RightScapula = 106.924 cm^3
 Material of RightScapula = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RightScapula = 158.647 g
+Mass of RightScapula = 158.91 g
 Construct LeftAdrenal with mother physicalTrunk
 Checking overlaps for volume physicalLeftAdrenal:0 (G4Ellipsoid) ... OK! 
 Left LeftAdrenal created !!!!!!
@@ -262,10 +263,10 @@ Mass of RightClavicle = 20.3099 g
 Construct SmallIntestine with mother volume physicalTrunk
 Checking overlaps for volume physicalSmallIntestine:0 (G4SubtractionSolid) ... OK! 
 SmallIntestine created !!!!!!
-Volume of SmallIntestine = 1020.2 cm^3
+Volume of SmallIntestine = 1019.24 cm^3
 Material of SmallIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of SmallIntestine = 1006.83 g
+Mass of SmallIntestine = 1005.89 g
 Construct RibCage with mother volume physicalTrunk
 Checking overlaps for volume physicalRibCage:0 (G4SubtractionSolid) ... OK! 
 Checking overlaps for volume physicalRib:0 (G4SubtractionSolid) ... OK! 
@@ -281,10 +282,10 @@ Checking overlaps for volume physicalRib:0 (G4SubtractionSolid) ... OK!
 Checking overlaps for volume physicalRib:0 (G4SubtractionSolid) ... OK! 
 Checking overlaps for volume physicalRib:0 (G4SubtractionSolid) ... OK! 
 RibCage created !!!!!!
-Volume of RibCage = 692.88 cm^3
+Volume of RibCage = 697.036 cm^3
 Material of RibCage = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RibCage = 1029.76 g
+Mass of RibCage = 1035.94 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct MiddleLowerSpine with mother volume physicalTrunk
@@ -297,10 +298,10 @@ Mass of MiddleLowerSpine = 1120.57 g
 Construct Pelvis with mother volume physicalTrunk
 Checking overlaps for volume physicalPelvis:0 (G4SubtractionSolid) ... OK! 
 Pelvis created !!!!!!
-Volume of Pelvis = 606.07 cm^3
+Volume of Pelvis = 610.442 cm^3
 Material of Pelvis = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of Pelvis = 900.741 g
+Mass of Pelvis = 907.239 g
 Construct Stomach with mother volume physicalTrunk
 Checking overlaps for volume physicalStomach:0 (G4Ellipsoid) ... OK! 
 Stomach created !!!!!!
@@ -332,40 +333,40 @@ Mass of Spleen = 173.625 g
 Construct Pancreas with mother volume physicalTrunk
 Checking overlaps for volume physicalPancreas:0 (G4SubtractionSolid) ... OK! 
 Pancreas created !!!!!!
-Volume of Pancreas = 61.101 cm^3
+Volume of Pancreas = 61.0986 cm^3
 Material of Pancreas = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of Pancreas = 60.3006 g
+Mass of Pancreas = 60.2982 g
 Construct LeftKidney with mother volume physicalTrunk
 Checking overlaps for volume physicalLeftKidney:0 (G4SubtractionSolid) ... OK! 
 Left LeftKidney created !!!!!!
-Volume of LeftKidney = 144.001 cm^3
+Volume of LeftKidney = 143.998 cm^3
 Material of LeftKidney = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of LeftKidney = 142.115 g
+Mass of LeftKidney = 142.112 g
 Construct RightKidney with mother volume physicalTrunk
 Checking overlaps for volume physicalRightKidney:0 (G4SubtractionSolid) ... OK! 
 RightKidney created !!!!!!
-Volume of RightKidney = 143.986 cm^3
+Volume of RightKidney = 143.996 cm^3
 Material of RightKidney = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of RightKidney = 142.1 g
+Mass of RightKidney = 142.109 g
 Construct UrinaryBladder with mother volume physicalTrunk
 Checking overlaps for volume physicalUrinaryBladder:0 (G4SubtractionSolid) ... OK! 
 UrinaryBladder created !!!!!!
-Volume of UrinaryBladder = 45.7615 cm^3
+Volume of UrinaryBladder = 45.8796 cm^3
 Material of UrinaryBladder = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of UrinaryBladder = 45.1621 g
+Mass of UrinaryBladder = 45.2785 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct MaleGenitalia with mother volume physicalWorld
 Checking overlaps for volume physicalMaleGenitalia:0 (G4SubtractionSolid) ... OK! 
 MaleGenitalia created !!!!!!
-Volume of MaleGenitalia = 229.106 cm^3
+Volume of MaleGenitalia = 228.823 cm^3
 Material of MaleGenitalia = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of MaleGenitalia = 226.105 g
+Mass of MaleGenitalia = 225.826 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct LeftTeste with mother volume physicalMaleGenitalia
@@ -437,7 +438,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -936,17 +937,18 @@ Index : 2     used in the geometry : Yes
 ... create ntuple T column : edep ntupleId 1 - done
 Number of events = 100
 Energy Total in Run:logicalBrain, ID: 0, Energy Deposition (MeV): 0
-Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 4.63096
-Analysis: organ 1 edep: 4.63096
+Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 2.0354
+Analysis: organ 1 edep: 2.0354
 Energy Total in Run:logicalHeart, ID: 2, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftAdrenal, ID: 3, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftBreast, ID: 5, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftClavicle, ID: 6, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftKidney, ID: 7, Energy Deposition (MeV): 0
-Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 14.3441
-Analysis: organ 8 edep: 14.3441
-Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 15.7197
+Analysis: organ 8 edep: 15.7197
+Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0.084326
+Analysis: organ 9 edep: 0.084326
 Energy Total in Run:logicalLeftLung, ID: 10, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftOvary, ID: 11, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftScapula, ID: 12, Energy Deposition (MeV): 0
@@ -956,15 +958,15 @@ Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 0
 Energy Total in Run:logicalMiddleLowerSpine, ID: 16, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPancreas, ID: 17, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPelvis, ID: 18, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0.659836
-Analysis: organ 19 edep: 0.659836
+Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0.379226
+Analysis: organ 19 edep: 0.379226
 Energy Total in Run:logicalRightAdrenal, ID: 20, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightArmBone, ID: 21, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightBreast, ID: 22, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightClavicle, ID: 23, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightKidney, ID: 24, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 10.6217
-Analysis: organ 25 edep: 10.6217
+Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 8.60947
+Analysis: organ 25 edep: 8.60947
 Energy Total in Run:logicalRightLegBone, ID: 26, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightLung, ID: 27, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightOvary, ID: 28, Energy Deposition (MeV): 0
@@ -976,13 +978,13 @@ Energy Total in Run:logicalSpleen, ID: 33, Energy Deposition (MeV): 0
 Energy Total in Run:logicalStomach, ID: 34, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThymus, ID: 35, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThyroid, ID: 36, Energy Deposition (MeV): 0
-Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 23.6957
-Analysis: organ 37 edep: 23.6957
+Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 25.3855
+Analysis: organ 37 edep: 25.3855
 Energy Total in Run:logicalUpperLargeIntestine, ID: 38, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUpperSpine, ID: 39, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUrinaryBladder, ID: 40, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUterus, ID: 41, Energy Deposition (MeV): 0
-Total Energy deposit in the body is: 53.9523 MeV
+Total Energy deposit in the body is: 52.2136 MeV
 ... write file : human_phantom.root - done
 ... close file : human_phantom.root - done
 ... clear files - done

@@ -90,6 +90,8 @@ void G4DeexPrecoParameters::Initialise()
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
 
   fDeexChannelType = fCombined;
+  fPreCompoundType = eDefault;
+  fFermiBreakUpType = bModelVI;
   fDeexType = 3;
   fTwoJMAX = 10;
 
@@ -299,16 +301,31 @@ void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
   fDeexChannelType = val;
 }
 
+void G4DeexPrecoParameters::SetPreCompoundType(G4PreCompoundType val)
+{
+  if(IsLocked()) { return; }
+  fPreCompoundType = val;
+}
+
+void G4DeexPrecoParameters::SetFermiBreakUpType(G4FermiBreakUpType val)
+{
+  if(IsLocked()) { return; }
+  fFermiBreakUpType = val;
+}
+
 std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 {
   static const G4String namm[5] = {"Evaporation","GEM","Evaporation+GEM","GEMVI","Dummy"};
-  static const G4int nmm[5] = {8, 68, 68, 31, 0};
+  static const G4int nmm[5] = {8, 68, 68, 83, 0};
+  static const G4String nfbu[3] = {"ModelVI", "ModelAN", "Dummy"};
   G4int idx = fDeexChannelType;
+  G4int jdx = fFermiBreakUpType;
 
   G4long prec = os.precision(5);
   os << "=======================================================================" << "\n";
   os << "======       Geant4 Native Pre-compound Model Parameters       ========" << "\n";
   os << "=======================================================================" << "\n";
+  os << "Type of pre-compound model                          " << fPreCompoundType << "\n";
   os << "Type of pre-compound inverse x-section              " << fPrecoType << "\n";
   os << "Pre-compound model active                           " << (!fPrecoDummy) << "\n";
   os << "Pre-compound excitation low energy                  " 
@@ -327,6 +344,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "Type of de-excitation inverse x-section             " << fDeexType << "\n";
   os << "Type of de-excitation factory                       " << namm[idx] << "\n";
   os << "Number of de-excitation channels                    " << nmm[idx] << "\n";
+  os << "Type of Fermi BreakUp model                         " << nfbu[jdx] << "\n";
   os << "Min excitation energy                               " 
      << G4BestUnit(fMinExcitation, "Energy") << "\n";
   os << "Min energy per nucleon for multifragmentation       " 

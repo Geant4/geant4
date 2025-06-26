@@ -56,7 +56,8 @@ G4EmDataHandler::G4EmDataHandler(std::size_t n, const G4String& nam)
   data.resize(n, nullptr);
   fMaxXS = new std::vector<G4double>;
   fXSpeaks = new std::vector<G4TwoPeaksXS*>;
-  G4EmDataRegistry::Instance()->Register(this);
+  fRegistry = G4EmDataRegistry::Instance();
+  fRegistry->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,7 +78,7 @@ G4EmDataHandler::~G4EmDataHandler()
       }
     }
   }
-  
+  fRegistry->DeRegister(this);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,7 +99,9 @@ void G4EmDataHandler::UpdateTable(G4PhysicsTable* ptr, std::size_t idx)
 {
   // update table pointer but not delete previous
   if (idx < tLength) { 
-    if (ptr != data[idx]) { data[idx] = ptr; }
+    if (ptr != data[idx]) {
+      data[idx] = ptr;
+    }
     data[idx] = G4PhysicsTableHelper::PreparePhysicsTable(data[idx]);
   } else {
     G4cout << "### G4EmDataHandler::UpdateTable fail for idx=" << idx 

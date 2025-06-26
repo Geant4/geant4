@@ -92,7 +92,7 @@ inline
 G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const 
 {
   G4FastSimulationManager* fFSM = nullptr;
-  if(fRegion != nullptr) fFSM = fRegion->GetFastSimulationManager();
+  if(fRegion != nullptr) { fFSM = fRegion->GetFastSimulationManager(); }
   return fFSM;
 }
 
@@ -105,7 +105,7 @@ G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
 {
   for (const auto & daughter : fDaughters)
   {
-    if (*daughter==*p) return true;
+    if (*daughter==*p) { return true; }
   }
   return false;
 }
@@ -165,8 +165,9 @@ G4VSensitiveDetector* G4LogicalVolume::GetMasterSensitiveDetector() const
 inline
 G4UserLimits* G4LogicalVolume::GetUserLimits() const
 {
-  if(fUserLimits != nullptr) return fUserLimits;
-  if(fRegion != nullptr) return fRegion->GetUserLimits();
+  if(fUserLimits != nullptr) { return fUserLimits;
+}
+  if(fRegion != nullptr) { return fRegion->GetUserLimits(); }
   return nullptr;
 }
 
@@ -268,7 +269,7 @@ inline
 G4bool G4LogicalVolume::IsRegion() const
 {
   G4bool reg = false;
-  if (fRegion != nullptr) reg = true;
+  if (fRegion != nullptr) { reg = true; }
   return reg;
 }
 

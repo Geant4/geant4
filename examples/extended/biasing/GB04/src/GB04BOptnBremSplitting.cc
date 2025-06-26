@@ -40,7 +40,7 @@ GB04BOptnBremSplitting::GB04BOptnBremSplitting(G4String name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB04BOptnBremSplitting::~GB04BOptnBremSplitting() {}
+GB04BOptnBremSplitting::~GB04BOptnBremSplitting() = default;
 
 G4VParticleChange*
 GB04BOptnBremSplitting::ApplyFinalStateBiasing(const G4BiasingProcessInterface* callingProcess,
@@ -73,7 +73,7 @@ GB04BOptnBremSplitting::ApplyFinalStateBiasing(const G4BiasingProcessInterface* 
   // -- We called the brem. process above. Its concrete particle change is indeed
   // -- a "G4ParticleChangeForLoss" object. We cast this particle change to access
   // -- methods of the concrete G4ParticleChangeForLoss type:
-  G4ParticleChangeForLoss* actualParticleChange = (G4ParticleChangeForLoss*)processFinalState;
+  auto actualParticleChange = (G4ParticleChangeForLoss*)processFinalState;
 
   fParticleChange.Initialize(*track);
 

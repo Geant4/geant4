@@ -1,0 +1,469 @@
+# Example DICOM History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-04-24 Ben Morgan (DICOM-V11-03-00)
+- Refactor DICOM examples into single project. Retain this History file for
+  legacy reasons. 
+  
+  **All new entries must go in the main `History`file in the top level DICOM
+  directory.**
+
+## 2024-06-05 L. T. Anh (DICOM-V11-02-00)
+- Correct symbols for Chlorine and Potassium elements in function 
+  InitialisationOfMaterials().
+
+## 2023-12-03 A. Howard (DICOM-V11-01-02)
+- Modified DicomDetectorConstruction: added correct replica depths for x,y,z
+  of G4PSDoseDeposit3D for nested parameterisation and corrected voxel ordering
+  according to the fixed formula within G4PSDoseDeposit3D; added environment
+  variable to switch to standard G4PSDoseDeposit in the case of regular
+  navigation (default).
+- Updated README and .README to be more correct and include description of
+  G4PSDoseDeposit3D and its usage for nested parameterisation.
+  
+## 2023-11-25 C. Mancini (DICOM-V11-01-01)
+- Modified DicomNestedPhantomParameterisation: removed the "static" descriptor
+  from the  "G4Material* mate" instantiation.
+  
+## 2023-09-02 Gabriele Cosmo (DICOM-V11-01-00)
+- Removed forward declaration for G4VTouchable.
+
+## 2022-10-04 John Allison (DICOM-V11-00-04)
+- Introduce special mesh rendering of DICOM image.
+
+## 2022-10-24 I. Hrivnacova  (DICOM-V11-00-03)
+- Coding guidelines: start data member with 'f'; use G4int, G4double
+  (skipped dicomReader classes).
+
+## 2022-10-04 Ben Morgan (DICOM-V11-00-02)
+- Replace sprintf with direct G4String use to remove deprecation warnings on
+  macOS-13.
+
+## 2022-10-04 Gabriele Cosmo (DICOM-V11-00-01)
+- Fixed compilation warning on Intel-icx compiler for set but unused variable
+  in DicomHandler::ReadData().
+
+## 2021-12-10 Ben Morgan (DICOM-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
+
+27.09.2021  Pedro Arce (DICOM-V10-07-01)
+- Use updated interface from geomnav to use G4PhantomParameterisation::GetNoVoxels instead of GetNoVoxel
+
+31.12.2020 - John Allison (DICOM-V10-07-00)
+             vis.mac: "Change /vis/ogl/set/eventsDrawInterval" to
+             "/vis/ogl/flushAt NthPrimitive".
+
+10.11.2020 - Ben Morgan (DICOM-V10-06-01)
+             Migration to G4RunManagerFactory.
+
+21.10.2020 - Ben Morgan (DICOM-V10-06-00)
+             Distinguish output names of archive lib from DLL and application to
+             fix Windows LNK1149 errors for static libs.
+             Modernize cmake version detection and policy setting to follow main
+             Geant4 usage.
+
+19.11.2019 - Gabriele Cosmo (DICOM-V10-05-03)
+             Fixed more cases of implicit type conversions.
+             Some minor code cleanup.
+
+15.11.2019 - Gabriele Cosmo (DICOM-V10-05-02)
+             Fixed cases of implicit type conversions from size_t to G4int.
+
+12.11.2019 - Gunter Folger (DICOM-V10-05-01)
+             Correct DicomHandler singleton for use on Windows.
+	     DICOM2 was crashing
+
+08.06.2019 - Gabriele Cosmo (DICOM-V10-05-00)
+             Defaulted copy-ctr in DicomPhantomZSliceHeader, to fix deprecation
+             compilation warnings on gcc-9.1.
+
+13.11.2018 - Jonathan Madsen (DICOM-V10-04-11)
+             Bugfix (2102) to DicomHandler reading fPixelSpacingY
+
+13.11.2018 - Jonathan Madsen (DICOM-V10-04-10)
+             Bugfix (2101) to DicomHandler skipping 2 bytes in implicit VR
+
+12.11.2018 - Jonathan Madsen (DICOM-V10-04-09)
+             Updated DICOMUtilities.cmake to handle Windows builds
+             Using modern CMake DICOM::target library alias
+
+12.11.2018 - Gabriele Cosmo (DICOM-V10-04-08)
+             DicomDetectorConstruction: removed useless static Instance()
+             method.
+
+12.11.2018 - Gabriele Cosmo (DICOM-V10-04-07)
+             DicomPartialDetectorConstruction: fixed shadowing of base class
+             data for 'fMateIDs'. Fixed type conversion unsigned_int -> int.
+
+12.11.2018 - Gabriele Cosmo (DICOM-V10-04-06)
+             DicomNestedPhantomParameterisation: removed useless statement
+             causing compilation error on Linux.
+
+10.11.2018 - Jonathan Madsen (DICOM-V10-04-05)
+             DICOMConfig.cmake.in handles DICOM_USE_HEAD being set
+             DownloadDICOMData.cmake does installation
+             CMakeLists.txt creates build-tree export
+             DicomDetectorConstruction is globally accessible
+             DicomHandler implements GetDicomData{Path,File}
+               which provides a fallback path to data libraries
+               directory for DICOM2 and handles DICOM_USE_HEAD situation
+             Phantom parameterization classes take an argument
+               specifying color file
+             fDcmrun is protected instead of private (for DICOM2)
+             DicomEventAction doesn't print every event
+             Removed DicomRun::RecordEvent incrementing numberOfEvent
+               (done by G4Run::RecordEvent)
+             Cleaned up output (when provided along with DICOM2 output
+               it was too excessive) now just a summary is provided
+               and per-voxel is output to file only
+             Moved Data.dat to Data.dat.old and CMake copies correct
+               Data.dat.{old,new} to Data.dat in binary directory based
+               on DICOM_USE_DCMTK setting
+             Updated README
+
+09.11.2018 - Gabriele Cosmo (DICOM-V10-04-04)
+             Use canonical definition for DICOMRunAction; removed wrong
+             singleton specification (in any case not necessary).
+
+22.06.2018 - Jonathan Madsen (DICOM-V10-04-03)
+             Added dicomReader/cmake/DICOMUtilities.cmake that defines
+             a DICOM_BUILD_LIBRARY macro which handles how to build
+             DICOM-library (and dicomReader library if USE_DICOM_DCMTK=ON)
+             based on the Geant4 installation (e.g. build shared, static, or
+             both) + updates to DICOMConfig.cmake.in and
+             dicomReaderConfig.cmake.in to handle which library type to
+             use link to
+
+20.05.2018 - John Allison (DICOM-V10-04-02)
+             Remove G4UI_USE and G4VIS_USE.
+             Move instantiation of G4UIExecutive to start of main.
+
+09.05.2018 - Ben Morgan (DICOM-V10-04-01)
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+20.03.2018 - Jonathan Madsen (DICOM-V10-04-00)
+             Enabled CMake package configuration
+             Added DICOM_USE_DCMTK and DICOM_USE_HEAD CMake
+              options back-compat with environment variables
+             Updated README and .README.txt
+
+11.11.2017 - Marc Verderi (DICOM-V10-03-12)
+             Retag as DICOM-V10-03-11 too quickly rejected
+
+09.11.2017 - Ivana Hrivnacova (DICOM-V10-03-11)
+             Updated DICOM data version to 1.1
+
+09.11.2017 - S. Guatelli (DICOM-V10-03-10)
+             Updated README and .README.txt
+
+09.11.2017 - S. Guatelli (DICOM-V10-03-09)
+             .g4dmc created in the user directory and not in the DICOM library,
+             together with the .g4dcmb files.
+
+09.11.2017 - S. Guatelli (DICOM-V10-03-08)
+             DICOM_PATH changed
+             no writing .g4dcmb in the library DICOM
+
+08.11.2017 - Ivana Hrivnacova (DICOM-V10-03-07)
+             Added downloading DICOM data in CMake build
+             (used only with DICOM_USE_HEAD option)
+
+07.11.2017 - S. Guatelli (DICOM-V10-03-06).
+             Warning deleted, updated README and .README.txt
+
+01.11.2017 - S. Guatelli (DICOM-V10-03-05).
+             DICOM_HEAD library can be used as input to the DICOM
+             DICOM_v1 does not need to be copied in the directory where the simulation is executed
+
+01.11.2017 - S. Guatelli (DICOM-V10-03-04). DICOM_HEAD library can be used as input to the DICOM
+
+28.09.2017 - S. Guatelli (DICOM-V10-03-03). DICOM_HEAD Directory deleted
+
+16.09.2017 - S. Guatelli (DICOM-V10-03-02)
+           - New DICOM Digital Head included by S. Guatelli
+           - Updated README, .README.txt
+
+19.11.2016 - Andrea Dotti     (DICOM-V10-02-04)
+           - explicit set of SD to manager
+
+11.11.2016 - Ivana Hrivnacova (DICOM-V10-02-03)
+           - Removed extra compiler flags in GNUmakefile, CMakeLists.txt
+             (not needed)
+           - Renamed G4_USE_DCMTK in DICOM_USE_DCMTK
+           - Updated README, .README.txt
+
+11.11.2016 - Pedro Arce (DICOM-V10-02-02)
+           - Complying with Geant4 guidelines in data variables
+
+04.11.2016 - Pedro Arce (DICOM-V10-02-01)
+           - New DICOM reader based on DCMTK
+
+20.07.2016 - Ivana Hrivnacova (DICOM-V10-02-00)
+           - Fixed coding guidelines
+             (redundant empty lines, class data member names)
+
+17.09.2015 - Pedro Arce (DICOM-V10-01-01)
+           - Fixed coding guidelines (long lines)
+
+21.10.2014 - Pedro Arce (DICOM-V10-00-04)
+           - Fixed coding guidelines (long lines)
+
+16.10.2014 - Ivana Hrivnacova (DICOM-V10-00-03)
+           - Fixed coding guidelines (long lines) in
+             DicomPartialDetectorConstruction.hh, DicomPhantomZSliceHeader.hh
+
+29.07.2014 - Pedro Arce (DICOM-V10-00-02)
+           - Remove DicomPhysicsList
+
+25.07.2014 - Pedro Arce (DICOM-V10-00-01)
+           - Using G4GenericPhysicsList
+     	   - no std::cout
+	   - no exit()
+
+03.12.2013 - Gabriele Cosmo (DICOM-V10-00-00)
+           - Attempt to fix Valgrind run-time error from printout in
+             DicomHandler::CheckFileFormat().
+
+03.12.2013 - Ivana Hrivnacova (DICOM-V09-06-09)
+           - Updated README and .README to match (Pedro Arce)
+
+18.11.2014 - Ivana Hrivnacova (DICOM-V09-06-08)
+           - Fixed DicomPhantomZSliceMerged.hh file description
+             (for Doxygen)
+
+13.11.2014 - Jonathan Mdsen (DICOM-V09-06-07)
+           - Updated README and .README
+           - Fixed some comments
+
+04.11.2013 - Dennis Wright  (DICOM-V09-06-06)
+           - replaced LEP model for alphas by extending Binary cascade to
+             zero energy
+           - updated sample output files to reflect this
+
+23.10.2013 - Gabriele Cosmo (DICOM-V09-06-05)
+	   - Fixed compilation warnings.
+
+15.10.2013 - Jonathan Madsen (DICOM-V09-06-04)
+	   - Modified DICOM to enable multithreading
+	     - Adapted scorers
+	     - Added ActionInitialization class
+	     - Modified RunAction to handle master and daughter threads
+
+09.10.2013 - Ivana Hrivnacova (DICOM-V09-06-03)
+           Fixed file description (DicomPhantomZSliceMerged.hh)
+
+28.08.2013 - Gabriele Cosmo (DICOM-V09-06-02)
+           Added G4Ellipsoid to solids enabled for parameterisation in
+           DicomNestedPhantomParameterisation.
+
+29.07.2013 - Peter Gumplinger (DICOM-V09-06-01)
+           Fixed MAC/clang32 compilation warnings in DicomRunAction and
+           DiconIntersectVolume classes
+
+18.07.2013 - Jonathan Madsen
+           Missing documentation update from 18.12.2012:
+             Improvements and bug-fixes ->
+             DicomHandler had some bugs when using DCM files
+               other than examples provided
+             Added DicomPhantomZSliceMerged class to handle
+               inconsistencies in DCM file meta-data
+             DicomPhantomZSliceHeader class is extended to hold density
+               and material ID data and the printing of data
+               to files instead of DicomHandler
+           Removed additions on 16.07.2013 pending further discussion
+           Reverted DICOM example to 18.12.2012 update with some very
+             minor tweaks
+           Kept share folder with additional anonymous DCM files
+             and additional data files (SixSlice.dat, AltData.dat). Rename
+             these files with Data.dat to use
+           Kept CMakeLists.txt to copy over extra data file and anonymous
+             DCM files
+
+16.07.2013 - Jonathan Madsen
+           Many modifications to the DICOM example.
+           Added more anonymous DICOM files.
+           Added more script configurations.
+           Added DicomCommandLineOptions, DicomHelpers, DicomTypeConversion,
+             DicomOption as part of a command line processing package.
+           Modified CMakeLists.txt to configure extra files.
+           Added capability to use different data files for DICOM set,
+             CT2Density file, ColourMap file.
+           Added Statistical Analysis and Statistical Manager classes
+           Miscellaneous improvements.
+           DICOM.cc now has a large list of runtime configuration options
+             via command line.
+           Options set at command line are set to override environment
+             variables.
+
+15.02.2013 - Ivana Hrivnacova (DICOM-V09-06-00)
+           Applied coding guidelines (virtual keyword, data members
+           names and initialization)
+
+07.11.2012 - Gabriele Cosmo (DICOM-V09-05-10)
+           Fixed compilation warnings for shadowing of variables and unused
+           return flag from system calls.
+
+18.10.2012 - Ivana Hrivnacova (DICOM-V09-05-09)
+	   Updated CMakeLists.txt: added copying data files to the build
+           area as they are needed to run the tests.
+
+13.10.2012 - Andrea Dotti (DICOM-V09-05-08)
+	   Removing previous tag modification (not needed)
+
+13.10.2012 - Andrea Dotti (DICOM-V09-05-07)
+	     Adding explicit use of system of units
+
+05.09.2012 - Ivana Hrivnacova (DICOM-V09-05-06)
+             Fixed compiler warning
+
+04.09.2012 - Pedro Arce    (DICOM-V09-05-05)
+             Remove old renamed files
+             Updated CMakeLists.txt (By I.Hrivnacova)
+             Adding visualization, copying macros, install target and
+             comment lines
+
+17.07.2012 - Ivana Hrivnacova (DICOM-V09-05-04)
+             Improved README files
+
+06.07.2012 - Pedro Arce    (DICOM-V09-05-03)
+             Reviewed examples according to coding guidelines
+
+13.06.2012 - Gabriele Cosmo   (DICOM-V09-05-02)
+             Assign return value for fread() and fscanf() calls in
+             DicomHandler. Fixes compilation warnings on Ubuntu.
+
+28.03.2012 - Pedro Arce   (DICOM-V09-05-01)
+             Corrections in materials Z/A. Addressing problem report #1287.
+
+13.11.2011 - Pedro Arce   (DICOM-V09-04-03)
+             Migration to new G4Exception scheme.
+
+03.10.2011 - G.Folger   (DICOM-V09-04-02)
+             Fix gcc46 compilation warning in DicomHandler.cc
+             and DicomPhantomParameterisationColour.cc
+
+05.06.2011 - Pedro Arce (DICOM-V09-04-01)
+             Corrected name for sensitive detector to be consistently
+             named as "phantomSD" in DicomRunAction. Addressing problem
+             report #1210.
+             Corrected axis slicing hint in nested-parameterisation.
+
+23.12.2010 - Stephane Chauvie
+             Corrected 2 bugs in DicomHandler
+
+30.11.2010 - John Allison
+             dicom.cc: Removed redundant headers:
+             "G4UIterminal.hh" and "G4UItcsh.hh".
+
+30.11.2010 - Ivana Hrivnacova (DICOM-V09-03-09)
+             Moved inclusion of vis headers as last in main().
+
+26.11.2010 - Pedro Arce (DICOM-V09-03-08)
+	     Correction of warnings
+
+24.11.2010 - Pedro Arce (DICOM-V09-03-07)
+	     Introduced partial phantom example
+	     Delete G4PSDoseDeposit_RegNav and use G4ScoreSplittingProcess instead
+
+11.11.2010 - Gabriele Cosmo (DICOM-V09-03-06)
+             Corrected vis.mac macro and set OGL as default viewer.
+             Corrected some printouts in code...
+
+09.11.2010 - Gabriele Cosmo (DICOM-V09-03-05)
+             Fixed compilation warning on virtual methods hiding
+             Fixed compilation warnings in DicomPhantomParameterisationColour
+             and DicomHandler.
+
+02.11.2010 - John Allison (DICOM-V09-03-04)
+             Introduced G4UIExecutive.
+
+06.06.2010 - Joseph Perl (DICOM-V09-03-03)
+	     Remove unused variable in EventAction
+
+03.06.2010 - Joseph Perl (DICOM-V09-03-02)
+	     Updated vis usage
+
+19.11.2009 - StÈphane Chauvie (DICOM-V09-03-00)
+01.06.2010 - Stephane Chauvie - Andrea Armando
+	     Added function to read nested items (defined and undefined)
+	     Removed dependencies on CONQUEST
+	     DICOM handler could now read whichever DICOM file
+             (PT,CT,DR,CR,US,MR... )
+
+19.11.2009 - Stephanee Chauvie (DICOM-V09-02-03)
+	     Changed DICOM Handler to read CT files coming from CONQUEST
+             DICOM server
+
+05.02.2009 - Pedro Arce (DICOM-V09-02-01)
+             Added report on dose per voxel.
+             Added warning for erroneous inclusion of development code in
+             release 9.2 (to be removed when fix will be included in patch).
+
+27.01.2009 - Gabriele Cosmo (DICOM-V09-02-00)
+             Use new class G4RegularNavigationHistory for counting of step
+             lengths in voxels of the regular structure.
+
+27.11.2008 - Pedro Arce (DICOM-V09-01-02)
+             Included G4PSDoseDeposit_RegNav to distribute dose along voxels,
+	     including msc and energy loss corrections, for the case of
+	     skipping voxel with equal materials when using regular
+	     navigation
+
+21.07.2008 - Pedro Arce (DICOM-V09-01-01)
+             Bug fix in DicomNestedPhantomParameterisation in calculating the
+             'copyNo', so that material assignment was wrong
+             Set default cut to 1 mm (with previous 1.E-3 mm too much time is
+             spent on physics and no improvement is seen with different
+             navigation options).
+             Corrected direction and position of primary particles so that
+             they traverse the DICOM voxels.
+
+22.01.2008 - Pedro Arce (DICOM-V09-01-00)
+             Do not use 'rindex' in DicomHandler class to avoid problems
+             on Windows.
+
+06.12.2007 - Pedro Arce
+             Added voxel colouring by material. Added possibility to use nested parameterisation
+
+05.12.2007 - Pedro Arce
+             Deep review on the input files and the way how the geometry is built.
+             Use of G4PhantomParameterisation and G4RegularNavigation.
+
+06.12.2005 - Gabriele Cosmo
+             Trivial changes for support of CLHEP-2.0.X series.
+
+29.11.2005 - Susanna Guatelli (DICOM-V07-01-00)
+             Documentation update
+
+12.06.2005 - Stephane Chauvie (DICOM-V07-00-01)
+             Added improvement by Akinori Kimura.
+
+03.05.2005 - John Allison
+             Replaced vis manager with G4VisExecutive.
+
+10.12.2004 - Maria Grazia Pia (DICOM-V06-02-02)
+             Update README to announce further improvements and fixes
+             by Akinori Kimura.
+
+3.12.2004 - Gabriele Cosmo (DICOM-V06-02-01)
+            Implemented migration to <cmath>.
+
+13.5.2004 - Susanna Guatelli
+            updated compiler: gcc3.2.3
+
+11.3.2003 - Susanna Guatelli
+            README changed
+
+6.2003 - Susanna Guatelli
+         First public release of the example

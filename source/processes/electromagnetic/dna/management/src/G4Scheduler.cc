@@ -155,6 +155,7 @@ void G4Scheduler::Create()
   fDefinedMinTimeStep = -1.;
   fReachedUserTimeLimit = false;
   fStopTime = -1.;
+  fTmpGlobalTime = -1.;
   fpMessenger = new G4SchedulerMessenger(this);
   fReactionSet = G4ITReactionSet::Instance();
   fMaxTimeStep = DBL_MAX;
@@ -378,6 +379,7 @@ G4double G4Scheduler::GetNextWatchedTime() const
 
 void G4Scheduler::SynchronizeTracks()
 {
+  fTmpGlobalTime = fGlobalTime;
   fGlobalTime = fTrackContainer.GetNextTime();
   G4double tmpGlobalTime = fGlobalTime;
   G4double nextWatchedTime = -1;
@@ -499,7 +501,7 @@ void G4Scheduler::Stepping()
   fTSTimeStep = DBL_MAX;
   fILTimeStep = DBL_MAX;
 
-  fInteractionStep = false;
+  //fInteractionStep = false;
   fReachedUserTimeLimit = false;
 
   fITStepStatus = eUndefined;
@@ -612,7 +614,7 @@ void G4Scheduler::Stepping()
   // Give the priority to the IL
   {
     fInteractionStep = true;
-    fReactionSet->CleanAllReaction();
+    //fReactionSet->CleanAllReaction();
     fTimeStep = fILTimeStep;
     fITStepStatus = eInteractionWithMedium;
     fpStepProcessor->PrepareLeadingTracks();

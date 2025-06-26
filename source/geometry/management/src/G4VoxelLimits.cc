@@ -43,20 +43,20 @@ void G4VoxelLimits::AddLimit( const EAxis pAxis,
 {
   if ( pAxis == kXAxis )
   {
-    if ( pMin > fxAxisMin ) fxAxisMin = pMin ;    
-    if ( pMax < fxAxisMax ) fxAxisMax = pMax ;    
+    if ( pMin > fxAxisMin ) { fxAxisMin = pMin ; }
+    if ( pMax < fxAxisMax ) { fxAxisMax = pMax ; }
   }
   else if ( pAxis == kYAxis )
   {
-    if ( pMin > fyAxisMin ) fyAxisMin = pMin ;    
-    if ( pMax < fyAxisMax ) fyAxisMax = pMax ;
+    if ( pMin > fyAxisMin ) { fyAxisMin = pMin ; }
+    if ( pMax < fyAxisMax ) { fyAxisMax = pMax ; }
   }
   else
   { 
     assert( pAxis == kZAxis ) ;
 
-    if ( pMin > fzAxisMin ) fzAxisMin = pMin ;
-    if ( pMax < fzAxisMax ) fzAxisMax = pMax ;
+    if ( pMin > fzAxisMin ) { fzAxisMin = pMin ; }
+    if ( pMax < fzAxisMax ) { fzAxisMax = pMax ; }
   }
 }
 
@@ -223,18 +223,18 @@ G4int G4VoxelLimits::OutCode( const G4ThreeVector& pVec ) const
 
   if ( IsXLimited() )
   {
-    if ( pVec.x() < fxAxisMin ) code |= 0x01 ;
-    if ( pVec.x() > fxAxisMax ) code |= 0x02 ;
+    if ( pVec.x() < fxAxisMin ) { code |= 0x01 ; }
+    if ( pVec.x() > fxAxisMax ) { code |= 0x02 ; }
   }
   if ( IsYLimited() )
   {
-    if ( pVec.y() < fyAxisMin ) code |= 0x04 ;
-    if ( pVec.y() > fyAxisMax ) code |= 0x08 ;
+    if ( pVec.y() < fyAxisMin ) { code |= 0x04 ; }
+    if ( pVec.y() > fyAxisMax ) { code |= 0x08 ; }
   }
   if (IsZLimited())
   {
-    if ( pVec.z() < fzAxisMin ) code |= 0x10 ;
-    if ( pVec.z() > fzAxisMax ) code |= 0x20 ;
+    if ( pVec.z() < fzAxisMin ) { code |= 0x10 ; }
+    if ( pVec.z() > fzAxisMax ) { code |= 0x20 ; }
   }
   return code;
 }

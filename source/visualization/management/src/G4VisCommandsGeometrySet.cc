@@ -46,8 +46,7 @@ void G4VVisCommandGeometrySet::Set
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4LogicalVolumeStore* pLVStore = G4LogicalVolumeStore::GetInstance();
   G4bool found = false;
-  for (std::size_t iLV = 0; iLV < pLVStore->size(); ++iLV ) {
-    G4LogicalVolume* pLV = (*pLVStore)[iLV];
+  for (auto* pLV : *pLVStore) {
     const G4String& logVolName = pLV->GetName();
     if (logVolName == requestedName) found = true;
     if (requestedName == "all" || logVolName == requestedName) {

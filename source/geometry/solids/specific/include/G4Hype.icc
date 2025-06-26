@@ -28,102 +28,48 @@
 
 inline
 G4double G4Hype::GetInnerRadius () const
-  {
-    return innerRadius;
-  }
+{
+  return innerRadius;
+}
 
 inline
-G4double G4Hype::GetOuterRadius () const
-  {
-    return outerRadius;
-  }
+G4double G4Hype::GetOuterRadius() const
+{
+  return outerRadius;
+}
 
 inline
-G4double G4Hype::GetZHalfLength () const
-  {
-    return halfLenZ;
-  }
+G4double G4Hype::GetZHalfLength() const
+{
+  return halfLenZ;
+}
 
 inline
-G4double G4Hype::GetInnerStereo () const
-  {
-    return innerStereo;
-  }
+G4double G4Hype::GetInnerStereo() const
+{
+  return innerStereo;
+}
 
 inline
-G4double G4Hype::GetOuterStereo () const
-  {
-    return outerStereo;
-  }
-
-inline
-void G4Hype::SetInnerRadius (G4double newIRad) 
-  { 
-    innerRadius = newIRad;
-    innerRadius2 = newIRad*newIRad;
-    endInnerRadius2 = HypeInnerRadius2(halfLenZ);
-    endInnerRadius = std::sqrt(endInnerRadius2);
-    fCubicVolume = 0.;
-    fRebuildPolyhedron = true;
-  }
-
-inline
-void G4Hype::SetOuterRadius (G4double newORad) 
-  { 
-    outerRadius = newORad;
-    outerRadius2 = newORad*newORad;
-    endOuterRadius2 = HypeOuterRadius2(halfLenZ);
-    endOuterRadius = std::sqrt(endOuterRadius2);
-    fCubicVolume = 0.;
-    fRebuildPolyhedron = true;
-  } 
-
-inline
-void G4Hype::SetZHalfLength (G4double newHLZ)
-  {
-    halfLenZ = newHLZ ;
-    fCubicVolume = 0.;
-    fRebuildPolyhedron = true;
-  }
-
-inline
-void G4Hype::SetInnerStereo (G4double newISte) 
-  { 
-    innerStereo = std::fabs(newISte);
-    tanInnerStereo = std::tan(innerStereo);
-    tanInnerStereo2 = tanInnerStereo*tanInnerStereo;
-    endInnerRadius2 = HypeInnerRadius2(halfLenZ);
-    endInnerRadius = std::sqrt(endInnerRadius2);
-    fCubicVolume = 0.;
-    fRebuildPolyhedron = true;
-  }
-
-inline
-void G4Hype::SetOuterStereo (G4double newOSte)
-  { 
-    outerStereo = std::fabs(newOSte);
-    tanOuterStereo = std::tan(outerStereo);
-    tanOuterStereo2 = tanOuterStereo*tanOuterStereo;
-    endOuterRadius2 = HypeOuterRadius2(halfLenZ);
-    endOuterRadius = std::sqrt(endOuterRadius2);
-    fCubicVolume = 0.;
-    fRebuildPolyhedron = true;
-  }
+G4double G4Hype::GetOuterStereo() const
+{
+  return outerStereo;
+}
 
 inline
 G4bool G4Hype::InnerSurfaceExists() const
-  {
-    return (innerRadius > DBL_MIN) || (innerStereo != 0);
-  }
+{
+  return (endInnerRadius2 > 0.);
+}
 
 inline
 G4double G4Hype::HypeInnerRadius2(G4double zVal) const
-  {
-    return (tanInnerStereo2*zVal*zVal+innerRadius2);
-  }
+{
+  return (tanInnerStereo2*zVal*zVal + innerRadius2);
+}
 
 inline
 G4double G4Hype::HypeOuterRadius2(G4double zVal) const
-  {
-    return (tanOuterStereo2*zVal*zVal+outerRadius2);
-  }
+{
+  return (tanOuterStereo2*zVal*zVal + outerRadius2);
+}

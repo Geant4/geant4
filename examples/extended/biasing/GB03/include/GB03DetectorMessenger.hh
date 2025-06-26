@@ -42,10 +42,10 @@ class GB03DetectorMessenger : public G4UImessenger
 {
   public:
     GB03DetectorMessenger(GB03DetectorConstruction*);
-    virtual ~GB03DetectorMessenger();
+    ~GB03DetectorMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    virtual G4String GetCurrentValue(G4UIcommand* command);
+    void SetNewValue(G4UIcommand*, G4String) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
     GB03DetectorConstruction* fDetector;

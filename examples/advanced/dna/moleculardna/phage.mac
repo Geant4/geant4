@@ -1,0 +1,105 @@
+### Phage default geometry
+
+#
+# See more details on moleculardna specific UI commands:
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/configuration
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
+# - the README file
+# - the messenger classes of the moleculardna example
+#
+
+# Physics: choice of thermalization model
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+# Verbosity: settings
+/run/verbose 1
+/tracking/verbose 0
+/control/verbose 1
+#/dnageom/verbose 3
+
+# Chemistry: selection of IRT_syn
+/process/chem/TimeStepModel IRT_syn
+
+# Chemistry: activation
+/chem/activate true
+
+# Chemistry: verbosity
+/scheduler/verbose 0
+
+# Chemistry: end time of chemistry stage
+/scheduler/endTime 5 ns
+
+# Geometry: size of World volume
+/world/worldSize 9 um
+
+# Geometry: size of cell volume
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/parameter-study
+/cell/radiusSize 4 4 4 um
+
+# Geometry: optimisation of voxelisation
+#/dnageom/setSmartVoxels 100
+
+# Geometry: creation
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/parameter-study
+#  - Side length for each placement
+/dnageom/placementSize 50 50 50 nm
+#  - Scaling of XYZ in fractal definition file
+/dnageom/fractalScaling 50 50 50 nm
+#  - Path to file that defines placement locations
+/dnageom/definitionFile geometries/phage.txt
+#  - Set placement volumes
+/dnageom/placementVolume turn geometries/1strand_50nm_turn.txt
+/dnageom/placementVolume turntwist geometries/1strand_50nm_turn.txt true
+/dnageom/placementVolume straight geometries/1strand_50nm_straight.txt
+
+# Geometry: draw cell/chromosome volumes rather than DNA
+#/dnageom/drawCellVolumes false
+
+# Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
+/dnageom/interactionDirectRange 4.0 angstrom
+
+# Geometry: distance from base pairs at which radicals are killed
+/dnageom/radicalKillDistance 4 nm
+
+# Damage: model settings
+/dnadamage/directDamageLower 5 eV
+/dnadamage/directDamageUpper 37.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.405
+/dnadamage/inductionOHChance 0.00
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.0
+/dnadamage/inductionHChance 0.00
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.0
+/dnadamage/inductionEaqChance 0.00
+
+# Analysis: add cylindrical chromosomal region of interest, with the name "phage"
+/chromosome/add phage cyl 3500 7000 0 0 0 nm 0 0 0
+
+# Run: initialization
+/run/initialize
+
+# Run: progress display
+/run/printProgress 10
+
+# Source geometry
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 0 7000 0 nm
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 1 0 0
+/gps/pos/radius 3500 nm
+
+# Source particle, energy and angular distribution
+/gps/particle  proton
+/gps/energy 2.5 MeV
+/gps/direction 0 -1 0
+
+# Beam on
+/run/beamOn 10000

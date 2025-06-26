@@ -28,14 +28,15 @@
 #ifndef PULSE_PULSEACTION_HH
 #define PULSE_PULSEACTION_HH 1
 
-#include "G4MoleculeCounter.hh"
+#include "CLHEP/Random/RandGeneral.h"
+
+#include "G4AutoLock.hh"
 #include "G4UserTrackingAction.hh"
 #include "G4VUserPulseInfo.hh"
 #include "G4VUserTrackInformation.hh"
 
-#include <memory>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+#include <map>
+#include <vector>
 
 class G4ParticleDefinition;
 
@@ -59,7 +60,7 @@ class PulseAction : public G4UserTrackingAction
   public:
     using PulseMap = std::map<G4double, G4double>;
 
-    PulseAction();
+    PulseAction(const G4String& pulse, G4bool useHisto = false);
 
     ~PulseAction() override;
 
@@ -75,25 +76,34 @@ class PulseAction : public G4UserTrackingAction
 
     G4double GetLonggestDelayedTime() const;
 
-    inline void SetPulse(const G4bool& pulse)
-    {
-      fActivePulse = pulse;
-      if (fActivePulse) {
-        G4MoleculeCounter::Instance()->Use(false);
-      }
-    }
+    inline void SetPulse(const G4bool& pulse) { fActivePulse = pulse; }
 
     inline G4bool IsActivedPulse() const { return fActivePulse; }
+    // L.T. Anh added getter/setter for interpulse class:
+    void SetLonggestDelayedTime(G4double lt) { fLonggestDelayedTime = lt; }
+    const G4String GetPulseFileName() { return fFileName; }
+    G4int GetVerbose() { return fVerbose; }
+    G4double GetPulseLarger() const;
 
-  private:
-    std::unique_ptr<PulseInfo> fpPulseInfo;
-    G4double fPulseLarger = 74.16666667;
+  protected:
+    G4int fVerbose = 1;
     G4double fDelayedTime = 0;
+
+private:
+    void InitializeForHistoInput();
+    std::unique_ptr<PulseInfo> fpPulseInfo;
+    G4double fPulseLarger = 0;
     PulseMap fPulseData;
     std::vector<G4double> fPulseVector;
     G4double fLonggestDelayedTime = 0;
     std::unique_ptr<PulseActionMessenger> fpMessenger;
     G4bool fActivePulse = false;
+    G4String fFileName = "";
+    std::unique_ptr<CLHEP::RandGeneral> fRandGeneral{
+      nullptr};  // L. T. Anh: pointer to radomize histogram from CLHEP
+    G4bool fUseHistoInput{false};  // L. T. Anh: flag to use histo Input
+    G4double fTmin{0.}, fTmax{0.};
+    static G4Mutex gUHDRMutex;  // Le Tuan Anh: protect reading input files in MT mode
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

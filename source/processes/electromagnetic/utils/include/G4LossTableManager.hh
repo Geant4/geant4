@@ -73,6 +73,7 @@ class G4EmCorrections;
 class G4LossTableBuilder;
 class G4VAtomDeexcitation;
 class G4VSubCutProducer;
+class G4VXRayModel;
 
 class G4LossTableManager
 {
@@ -171,6 +172,10 @@ public:
   void Register(G4VEmFluctuationModel* p);
 
   void DeRegister(G4VEmFluctuationModel* p);
+
+  void Register(G4VXRayModel* p);
+
+  void DeRegister(G4VXRayModel* p);
 
   void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
                              G4VEnergyLossProcess* p);
@@ -296,6 +301,7 @@ private:
   std::vector<G4VEmProcess*> emp_vector;
   std::vector<G4VEmModel*> mod_vector;
   std::vector<G4VEmFluctuationModel*> fmod_vector;
+  std::vector<G4VXRayModel*> xray_vector;
   std::vector<G4VProcess*> p_vector;
 
   std::map<PD,G4VEnergyLossProcess*,std::less<PD> > loss_map;

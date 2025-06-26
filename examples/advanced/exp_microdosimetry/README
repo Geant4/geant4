@@ -88,7 +88,7 @@ When the analysis is enables, the default output format is one compatible with R
 The user can switch to a plaintext csv by uncommenting the corresponding macro command in output.mac (/analysis/useRoot false)
           
 Two data analysis scripts are provided for use with each output format:
-- for ROOT output (exp_microdosimetry.root), plot.C is provided. If the user intends to use this macro, ROOT must be installed (http://root.cern.ch/drupal/)
+- for ROOT output (exp_microdosimetry.root), plot.C is provided. If the user intends to use this macro, ROOT must be installed (http://root.cern/drupal/)
 - for csv output (exp_microdosimetry_*.csv), 1_plot_distributions.py and 2_calculate_means_rbe.py (in this order). If the user intends to use these macros, Python 3 must be installed (https://www.python.org/)
 Both scripts plot the microdosimetric spectrum resulting from the simulation, calculate the microdosimetric means, and provide one or more RBE estimates (this is just provided as an example, and the user is encouraged to look into RBE modelling himself)
 

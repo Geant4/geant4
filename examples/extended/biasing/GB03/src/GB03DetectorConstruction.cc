@@ -60,20 +60,20 @@ GB03DetectorConstruction::GB03DetectorConstruction(G4bool bf)
     fTotalThickness(2.0 * m),
     fLayerThickness(0.),
     fConstructed(false),
-    fWorldMaterial(0),
-    fAbsorberMaterial(0),
-    fGapMaterial(0),
-    fLayerSolid(0),
-    fGapSolid(0),
-    fWorldLogical(0),
-    fCalorLogical(0),
-    fLayerLogical(0),
-    fGapLogical(0),
-    fWorldPhysical(0),
-    fCalorPhysical(0),
-    fLayerPhysical(0),
-    fGapPhysical(0),
-    fDetectorMessenger(0),
+    fWorldMaterial(nullptr),
+    fAbsorberMaterial(nullptr),
+    fGapMaterial(nullptr),
+    fLayerSolid(nullptr),
+    fGapSolid(nullptr),
+    fWorldLogical(nullptr),
+    fCalorLogical(nullptr),
+    fLayerLogical(nullptr),
+    fGapLogical(nullptr),
+    fWorldPhysical(nullptr),
+    fCalorPhysical(nullptr),
+    fLayerPhysical(nullptr),
+    fGapPhysical(nullptr),
+    fDetectorMessenger(nullptr),
     fVerboseLevel(1),
     fBiasingFlag(bf)
 {
@@ -112,7 +112,7 @@ void GB03DetectorConstruction::ConstructSDandField()
   if (!fConstructedSDandField) {
     fConstructedSDandField = true;
     SetupDetectors();
-    if(fBiasingFlag) {
+    if (fBiasingFlag) {
       SetupBiasing();
     }
   }
@@ -136,25 +136,25 @@ void GB03DetectorConstruction::DefineMaterials()
   //
 
   a = 1.01 * g / mole;
-  G4Element* H = new G4Element(name = "Hydrogen", symbol = "H", z = 1., a);
+  auto H = new G4Element(name = "Hydrogen", symbol = "H", z = 1., a);
 
   a = 12.01 * g / mole;
-  G4Element* C = new G4Element(name = "Carbon", symbol = "C", z = 6., a);
+  auto C = new G4Element(name = "Carbon", symbol = "C", z = 6., a);
 
   a = 14.01 * g / mole;
-  G4Element* N = new G4Element(name = "Nitrogen", symbol = "N", z = 7., a);
+  auto N = new G4Element(name = "Nitrogen", symbol = "N", z = 7., a);
 
   a = 16.00 * g / mole;
-  G4Element* O = new G4Element(name = "Oxygen", symbol = "O", z = 8., a);
+  auto O = new G4Element(name = "Oxygen", symbol = "O", z = 8., a);
 
   //
   // define an Element from isotopes, by relative abundance
   //
 
-  G4Isotope* U5 = new G4Isotope(name = "U235", iz = 92, n = 235, a = 235.01 * g / mole);
-  G4Isotope* U8 = new G4Isotope(name = "U238", iz = 92, n = 238, a = 238.03 * g / mole);
+  auto U5 = new G4Isotope(name = "U235", iz = 92, n = 235, a = 235.01 * g / mole);
+  auto U8 = new G4Isotope(name = "U238", iz = 92, n = 238, a = 238.03 * g / mole);
 
-  G4Element* U = new G4Element(name = "enriched Uranium", symbol = "U", ncomponents = 2);
+  auto U = new G4Element(name = "enriched Uranium", symbol = "U", ncomponents = 2);
   U->AddIsotope(U5, abundance = 90. * perCent);
   U->AddIsotope(U8, abundance = 10. * perCent);
 
@@ -174,19 +174,19 @@ void GB03DetectorConstruction::DefineMaterials()
 
   density = 11.35 * g / cm3;
   a = 207.19 * g / mole;
-  G4Material* Pb = new G4Material(name = "Lead", z = 82., a, density);
+  auto Pb = new G4Material(name = "Lead", z = 82., a, density);
 
   //
   // define a material from elements.   case 1: chemical molecule
   //
 
   density = 1.000 * g / cm3;
-  G4Material* H2O = new G4Material(name = "Water", density, ncomponents = 2);
+  auto H2O = new G4Material(name = "Water", density, ncomponents = 2);
   H2O->AddElement(H, natoms = 2);
   H2O->AddElement(O, natoms = 1);
 
   density = 1.032 * g / cm3;
-  G4Material* Sci = new G4Material(name = "Scintillator", density, ncomponents = 2);
+  auto Sci = new G4Material(name = "Scintillator", density, ncomponents = 2);
   Sci->AddElement(C, natoms = 9);
   Sci->AddElement(H, natoms = 10);
 
@@ -195,7 +195,7 @@ void GB03DetectorConstruction::DefineMaterials()
   //
 
   density = 1.290 * mg / cm3;
-  G4Material* Air = new G4Material(name = "Air", density, ncomponents = 2);
+  auto Air = new G4Material(name = "Air", density, ncomponents = 2);
   Air->AddElement(N, fractionmass = 0.7);
   Air->AddElement(O, fractionmass = 0.3);
 
@@ -206,8 +206,8 @@ void GB03DetectorConstruction::DefineMaterials()
   density = universe_mean_density;
   pressure = 3.e-18 * pascal;
   temperature = 2.73 * kelvin;
-  G4Material* Vacuum = new G4Material(name = "Galactic", z = 1., a = 1.01 * g / mole, density,
-                                      kStateGas, temperature, pressure);
+  auto Vacuum = new G4Material(name = "Galactic", z = 1., a = 1.01 * g / mole, density, kStateGas,
+                               temperature, pressure);
 
   if (GetVerboseLevel() > 1) {
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -228,14 +228,15 @@ void GB03DetectorConstruction::SetupGeometry()
   //
   G4VSolid* worldSolid = new G4Box("World", 2. * m, 2. * m, fTotalThickness * 2.);
   fWorldLogical = new G4LogicalVolume(worldSolid, fWorldMaterial, "World");
-  fWorldPhysical = new G4PVPlacement(0, G4ThreeVector(), fWorldLogical, "World", 0, false, 0);
+  fWorldPhysical =
+    new G4PVPlacement(nullptr, G4ThreeVector(), fWorldLogical, "World", nullptr, false, 0);
 
   //
   // Calorimeter
   //
   G4VSolid* calorSolid = new G4Box("Calor", 0.5 * m, 0.5 * m, fTotalThickness / 2.);
   fCalorLogical = new G4LogicalVolume(calorSolid, fAbsorberMaterial, fCalName);
-  fCalorPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), fCalorLogical, fCalName,
+  fCalorPhysical = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fCalorLogical, fCalName,
                                      fWorldLogical, false, 0);
 
   //
@@ -251,14 +252,14 @@ void GB03DetectorConstruction::SetupGeometry()
   //
   fGapSolid = new G4Box("Gap", 0.5 * m, 0.5 * m, fLayerThickness / 4.);
   fGapLogical = new G4LogicalVolume(fGapSolid, fGapMaterial, fCalName + "_Gap");
-  fGapPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., fLayerThickness / 4.), fGapLogical,
-                                   fCalName + "_gap", fLayerLogical, false, 0);
+  fGapPhysical = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fLayerThickness / 4.),
+                                   fGapLogical, fCalName + "_gap", fLayerLogical, false, 0);
 
   //
   // Visualization attributes
   //
   fWorldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
-  G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+  auto simpleBoxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   simpleBoxVisAtt->SetVisibility(true);
   fCalorLogical->SetVisAttributes(simpleBoxVisAtt);
   fLayerLogical->SetVisAttributes(simpleBoxVisAtt);
@@ -272,8 +273,8 @@ void GB03DetectorConstruction::SetupDetectors()
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
   G4String filterName;
 
-  G4SDNeutralFilter* neutralFilter = new G4SDNeutralFilter(filterName = "neutralFilter");
-  G4SDChargedFilter* chargedFilter = new G4SDChargedFilter(filterName = "chargedFilter");
+  auto neutralFilter = new G4SDNeutralFilter(filterName = "neutralFilter");
+  auto chargedFilter = new G4SDChargedFilter(filterName = "chargedFilter");
 
   for (G4int j = 0; j < 2; j++) {
     // Loop counter j = 0 : absorber
@@ -285,7 +286,7 @@ void GB03DetectorConstruction::SetupDetectors()
     else {
       detName += "_gap";
     }
-    G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
+    auto det = new G4MultiFunctionalDetector(detName);
     G4SDManager::GetSDMpointer()->AddNewDetector(det);
     // The second argument in each primitive means the "level" of geometrical
     // hierarchy, the copy number of that level is used as the key of the
@@ -318,7 +319,7 @@ void GB03DetectorConstruction::SetupDetectors()
 
 void GB03DetectorConstruction::SetupBiasing()
 {
-  GB03BOptrGeometryBasedBiasing* biasingOperator = new GB03BOptrGeometryBasedBiasing();
+  auto biasingOperator = new GB03BOptrGeometryBasedBiasing();
   biasingOperator->AttachTo(fLayerLogical);
 }
 

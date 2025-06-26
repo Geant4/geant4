@@ -258,7 +258,22 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
     SetHighEnergyLimit(highEnergyLimit[alphaPlusPlus]);
   }
 
-  if( verboseLevel>0 )
+  if (isInitialised) { return; }
+  
+  // defined stationary mode
+  statCode = G4EmParameters::Instance()->DNAStationary();
+
+  // Initialize water density pointer
+  fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+
+  // atomic de-excitation
+  if (!statCode)
+    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
+
+  if (verboseLevel > 0)
   {
     G4cout << "Rudd ionisation model is initialized " << G4endl
     << "Energy range: "
@@ -267,19 +282,6 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
     << particle->GetParticleName()
     << G4endl;
   }
-
-  // Initialize water density pointer
-  fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
-
-  //
-
-  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-
-  if (isInitialised)
-  { return;}
-  fParticleChangeForGamma = GetParticleChangeForGamma();
-  isInitialised = true;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

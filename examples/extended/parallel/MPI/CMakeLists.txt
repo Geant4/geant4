@@ -1,22 +1,19 @@
 # - CmakeLists.txt for MPI examples
-# This file should be used when configuring Geant4 with GEANT4_BUILD_EXAMPLES=ON
-# Do not use in other cases
-# To compile G4mpi as a standalone package, first compile the source subdir
-# and then examples, see included README files
+cmake_minimum_required(VERSION 3.16...3.27)
 project(G4mpi)
 
-cmake_minimum_required(VERSION 3.16...3.27)
+# - Require both MPI and Geant4.
+# Only MPI component required is CXX (ability to use C++ with C API).
+find_package(MPI REQUIRED CXX)
+find_package(Geant4 REQUIRED ui_all vis_all)
 
+# - The G4mpi library used by all the examples
 add_subdirectory(source)
-set(G4mpi_DIR "${PROJECT_BINARY_DIR}/source")
-add_subdirectory(examples)
-add_dependencies(exMPI01 G4mpi)
-if(TARGET exMPI02) #If ROOT not found, this does not exists
-   add_dependencies(exMPI02 G4mpi)
-endif()
-add_dependencies(exMPI03 G4mpi)
 
-
-add_custom_target(MPI DEPENDS G4mpi exMPI01 exMPI02 exMPI03)
+# - The example applications themselves
+add_subdirectory(exMPI01)
+add_subdirectory(exMPI02)
+add_subdirectory(exMPI03)
+add_subdirectory(exMPI04)
 
 

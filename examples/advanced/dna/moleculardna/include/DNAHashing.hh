@@ -285,7 +285,7 @@ std::size_t constexpr Hash<const char*>(const char*&& str)
 
 inline namespace literals
 {
-std::size_t constexpr operator"" _hash(const char* s, size_t)
+std::size_t constexpr operator""_hash(const char* s, size_t)
 {
   return hasher<std::string>()(s);
 }

@@ -32,7 +32,6 @@
 #include <memory>
 
 class G4UIcmdWithAString;
-class G4DNAMolecularReactionTable;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger;

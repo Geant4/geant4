@@ -37,6 +37,8 @@
 #include "G4DNAIndependentReactionTimeStepper.hh"
 #include "G4Scheduler.hh"
 #include "G4UnitsTable.hh"
+#include "G4DNAScavengerMaterial.hh"
+#include "G4MoleculeCounterManager.hh"
 
 G4DNAMakeReaction::G4DNAMakeReaction()
     : 
@@ -45,6 +47,8 @@ G4DNAMakeReaction::G4DNAMakeReaction()
     , fpTimeStepper(nullptr)
     , fTimeStep(0)
 {
+  fpScavengerMaterial = dynamic_cast<G4DNAScavengerMaterial*>(
+    G4Scheduler::Instance()->GetScavengerMaterial());
 }
 
 G4DNAMakeReaction::G4DNAMakeReaction(G4VDNAReactionModel* pReactionModel)
@@ -83,6 +87,10 @@ G4DNAMakeReaction::MakeReaction(const G4Track &trackA,
 
     const auto pReactionData = fMolReactionTable->GetReactionData(pMoleculeA, pMoleculeB);
     const G4int nbProducts = pReactionData->GetNbProducts();
+    // Notify molecule (reaction) counter
+    if (G4MoleculeCounterManager::Instance()->GetIsActive()) {
+      G4MoleculeCounterManager::Instance()->RecordReaction(pReactionData, trackA.GetGlobalTime());
+    }
     if (nbProducts != 0)
     {
         const G4double D1 = pMoleculeA->GetDiffusionCoefficient();
@@ -98,7 +106,18 @@ G4DNAMakeReaction::MakeReaction(const G4Track &trackA,
 
         for (G4int j = 0; j < nbProducts; ++j)
         {
-            auto pProduct = new G4Molecule(pReactionData->GetProduct(j));
+            auto product = pReactionData->GetProduct(j);
+
+            if(fpScavengerMaterial != nullptr) {
+              auto isScavenger = fpScavengerMaterial->find(product);
+              if (isScavenger) {
+                fpScavengerMaterial->AddNumberMoleculePerVolumeUnitForMaterialConf(
+                  product, trackA.GetGlobalTime());
+                continue;
+              }
+            }
+
+            auto pProduct = new G4Molecule(product);
             auto pProductTrack = pProduct->BuildTrack(trackA.GetGlobalTime(), (reactionSite + randP)/2);
             pProductTrack->SetTrackStatus(fAlive);
             G4ITTrackHolder::Instance()->Push(pProductTrack);
@@ -181,27 +200,30 @@ void G4DNAMakeReaction::UpdatePositionForReaction(G4Track& trackA,
     }
 }
 
+
 std::vector<std::unique_ptr<G4ITReactionChange>>
 G4DNAMakeReaction::FindReaction(G4ITReactionSet* pReactionSet,
                                 const G4double currentStepTime,
-                                const G4double /*globalTime*/,
+                                const G4double globalTime,
                                 const G4bool /*reachedUserStepTimeLimit*/)
 {
-    std::vector<std::unique_ptr<G4ITReactionChange>> ReactionInfo;
-    ReactionInfo.clear();
-    auto stepper = dynamic_cast<G4DNAIndependentReactionTimeStepper*>(fpTimeStepper);
-    if(stepper == nullptr){
-        return ReactionInfo;
-    }else
-    {
-        do{
-            auto pReactionChange = stepper->
-                                   FindReaction(pReactionSet,currentStepTime);
-            if (pReactionChange != nullptr)
-            {
-              ReactionInfo.push_back(std::move(pReactionChange));
-            }
-        }while (!pReactionSet->GetReactionsPerTime().empty());
-    }
+  std::vector<std::unique_ptr<G4ITReactionChange>> ReactionInfo;
+  auto stepper = dynamic_cast<G4DNAIndependentReactionTimeStepper*>(fpTimeStepper);
+  if (stepper == nullptr) {
+    return ReactionInfo;
+  }else {
+    G4double StepTime = 0;
+    do {
+      auto pReactionChange = stepper->FindReaction(pReactionSet, StepTime, globalTime);
+      if (pReactionChange != nullptr) {
+//        G4cout<<" time : "<<globalTime<<"  "<<pReactionChange->GetTrackA()->GetTrackID()
+//               <<" + "<<pReactionChange->GetTrackB()->GetTrackID()<<G4endl;
+        ReactionInfo.push_back(std::move(pReactionChange));
+      }
+      else{
+        break;
+      }
+    }while(StepTime == currentStepTime);
+}
     return ReactionInfo;
 }

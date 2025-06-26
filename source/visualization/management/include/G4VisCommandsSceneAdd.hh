@@ -128,6 +128,23 @@ private:
   G4UIcmdWithoutParameter* fpCommand;
 };
 
+class G4VisCommandSceneAddEndOfRunMacro: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddEndOfRunMacro ();
+  virtual ~G4VisCommandSceneAddEndOfRunMacro ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddEndOfRunMacro (const G4VisCommandSceneAddEndOfRunMacro&);
+  G4VisCommandSceneAddEndOfRunMacro& operator = (const G4VisCommandSceneAddEndOfRunMacro&);
+  struct EndOfRunMacro {
+    EndOfRunMacro(const G4String& macro): fMacro(macro){};
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
+    G4String fMacro;
+  };
+  G4UIcmdWithAString* fpCommand;
+};
+
 class G4VisCommandSceneAddEventID: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddEventID ();

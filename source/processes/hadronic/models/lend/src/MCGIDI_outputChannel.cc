@@ -1,364 +1,462 @@
 /*
 # <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
 # <<END-copyright>>
 */
-#include <string.h>
-#define _USE_MATH_DEFINES
-#include <cmath>
 
-#include "MCGIDI.h"
-#include "MCGIDI_misc.h"
+#include "MCGIDI.hpp"
 
-#if defined __cplusplus
-#include "G4Log.hh"
-namespace GIDI {
-using namespace GIDI;
-#endif
+namespace MCGIDI {
 
-/*
-************************************************************
-*/
-MCGIDI_outputChannel *MCGIDI_outputChannel_new( statusMessageReporting *smr ) {
+/*! \class Product
+ * This class represents a **GNDS** <**outputChannel**> node with only data needed for Monte Carlo transport.
+ */
 
-    MCGIDI_outputChannel *outputChannel;
 
-    if( ( outputChannel = (MCGIDI_outputChannel *) smr_malloc2( smr, sizeof( MCGIDI_outputChannel ), 0, "outputChannel" ) ) == NULL ) return( NULL );
-    if( MCGIDI_outputChannel_initialize( smr, outputChannel ) ) outputChannel = MCGIDI_outputChannel_free( smr, outputChannel );
-    return( outputChannel );
+/* *********************************************************************************************************//**
+ * Default constructor used when broadcasting a Protare as needed by MPI or GPUs.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE OutputChannel::OutputChannel( ) :
+        m_channelType( ChannelType::none ),
+        m_neutronIndex( -1 ),
+        m_isFission( false ),
+        m_hasFinalStatePhotons( false ),
+        m_Q( nullptr ),
+        m_products( ),
+        m_totalDelayedNeutronMultiplicity( nullptr ) {
+
 }
-/*
-************************************************************
-*/
-int MCGIDI_outputChannel_initialize( statusMessageReporting * /*smr*/, MCGIDI_outputChannel *outputChannel ) {
 
-    memset( outputChannel, 0, sizeof( MCGIDI_outputChannel ) );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-MCGIDI_outputChannel *MCGIDI_outputChannel_free( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel ) {
+/* *********************************************************************************************************//**
+ * @param a_outputChannel       [in]    The GIDI::OutputChannel whose data is to be used to construct *this*.
+ * @param a_setupInfo           [in]    Used internally when constructing a Protare to pass information to other constructors.
+ * @param a_settings            [in]    Used to pass user options to the *this* to instruct it which data are desired.
+ * @param a_particles           [in]    List of transporting particles and their information (e.g., multi-group boundaries and fluxes).
+ ***********************************************************************************************************/
 
-    MCGIDI_outputChannel_release( smr, outputChannel );
-    smr_freeMemory( (void **) &outputChannel );
-    return( NULL );
-}
-/*
-************************************************************
-*/
-int MCGIDI_outputChannel_release( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel ) {
+LUPI_HOST OutputChannel::OutputChannel( GIDI::OutputChannel const *a_outputChannel, SetupInfo &a_setupInfo, Transporting::MC const &a_settings, 
+                GIDI::Transporting::Particles const &a_particles ) :
+        m_channelType( ChannelType::none ),
+        m_neutronIndex( a_setupInfo.m_neutronIndex ),
+        m_isFission( false ),
+        m_hasFinalStatePhotons( false ),
+        m_Q( nullptr ),
+        m_products( ),
+        m_totalDelayedNeutronMultiplicity( nullptr ) {
 
-    int i;
+    if( a_outputChannel != nullptr ) {
+        m_channelType = a_outputChannel->twoBody( ) ? ChannelType::twoBody : ChannelType::uncorrelatedBodies;
+        m_isFission = a_outputChannel->isFission( );
 
-    for( i = 0; i < outputChannel->numberOfProducts; i++ ) MCGIDI_product_release( smr, &(outputChannel->products[i]) );
-    smr_freeMemory( (void **) &(outputChannel->products) );
-    MCGIDI_outputChannel_initialize( smr, outputChannel );
+        m_Q = Functions::parseFunction1d_d1( a_outputChannel->Q( ).get<GIDI::Functions::Function1dForm>( 0 ) );
+        if( a_setupInfo.m_isPairProduction ) {
+            double domainMin = m_Q->domainMin( ), domainMax = m_Q->domainMax( );
 
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_outputChannel_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_POPs *pops, MCGIDI_outputChannel *outputChannel,
-        MCGIDI_reaction *reaction, MCGIDI_product *parent ) {
-
-    int n{0}, delayedNeutronIndex{0};
-    char const *genre{""}, *Q{""};
-    xDataTOM_element *child{nullptr};
-
-    MCGIDI_outputChannel_initialize( smr, outputChannel );
-
-    outputChannel->reaction = reaction;
-    outputChannel->parent = parent;
-    if( ( genre = xDataTOM_getAttributesValueInElement( element, "genre" ) ) == NULL ) goto err;
-    if( ( parent != NULL ) && ( strcmp( genre, "NBody" ) ) ) {
-        smr_setReportError2( smr, smr_unknownID, 1, "decay channel's genre can only be 'uncorreclated' (a.k.a. 'NBody') and not '%s'", genre );
-        goto err;
-    }
-    if( strcmp( genre, "twoBody" ) == 0 ) {
-        outputChannel->genre = MCGIDI_channelGenre_twoBody_e; }
-    else if( strcmp( genre, "NBody" ) == 0 ) {
-        outputChannel->genre = MCGIDI_channelGenre_uncorrelated_e; }
-    else if( strcmp( genre, "sumOfRemainingOutputChannels" ) == 0 ) {
-        outputChannel->genre = MCGIDI_channelGenre_sumOfRemaining_e; }
-    else {
-        smr_setReportError2( smr, smr_unknownID, 1, "unsupported genre = '%s'", genre );
-        goto err;
-    }
-    if( ( Q = xDataTOM_getAttributesValueInElement( element, "Q" ) ) == NULL ) goto err;
-    outputChannel->QIsFloat = !MCGIDI_misc_PQUStringToDoubleInUnitOf( smr, Q, "MeV", &(outputChannel->Q) );
-
-    if( ( n = xDataTOM_numberOfElementsByName( smr, element, "product" ) ) == 0 ) {
-        smr_setReportError2p( smr, smr_unknownID, 1, "outputChannel does not have any products" );
-        goto err;
-    }
-    if( ( outputChannel->products = (MCGIDI_product *) smr_malloc2( smr, n * sizeof( MCGIDI_product ), 0, "outputChannel->products" ) ) == NULL ) goto err;
-
-    for( child = xDataTOME_getFirstElement( element ); child != NULL; child = xDataTOME_getNextElement( child ) ) {
-        if( strcmp( child->name, "product" ) == 0 ) {
-            if( MCGIDI_product_parseFromTOM( smr, child, outputChannel, pops, &(outputChannel->products[outputChannel->numberOfProducts]),
-                &delayedNeutronIndex ) ) goto err;
-            outputChannel->numberOfProducts++; }
-        else if( strcmp( child->name, "fissionEnergyReleased" ) == 0 ) {     /* ????????? Need to support. */
-            continue; }
-        else {
-            printf( "outputChannel child not currently supported = %s\n", child->name );
+            delete m_Q;
+            m_Q = new Functions::Constant1d( domainMin, domainMax, 0.0 );
         }
-    }
-    if( outputChannel->genre == MCGIDI_channelGenre_twoBody_e ) {
-        double projectileMass_MeV, targetMass_MeV, productMass_MeV, residualMass_MeV;
+        a_setupInfo.m_Q = m_Q->evaluate( 0 );                                  // Needed for NBodyPhaseSpace.
 
-        projectileMass_MeV = MCGIDI_reaction_getProjectileMass_MeV( smr, reaction );
-        targetMass_MeV = MCGIDI_reaction_getTargetMass_MeV( smr, reaction );
-        productMass_MeV = MCGIDI_product_getMass_MeV( smr, &(outputChannel->products[0]) );
-        residualMass_MeV = MCGIDI_product_getMass_MeV( smr, &(outputChannel->products[1]) );
-
-        //TK 17-11-10 for v1.3
-        //A temporary fix for emission of gamma(2.2MeV) from n captured by H
-        //                  capture                     gamma                        D 
-        if ( reaction->ENDF_MT == 102 && productMass_MeV == 0 && ( outputChannel->products[1].pop->A == 2 && outputChannel->products[1].pop->Z == 1 ) ) {
-           //include/PoPs_data.h:#define e_Mass 5.4857990943e-4 /* electron mass in AMU */
-           residualMass_MeV += 5.4857990943e-4*MCGIDI_AMU2MeV;
+        GIDI::Suite const &products = a_outputChannel->products( );
+        if( m_channelType == ChannelType::twoBody ) {
+            if( !a_setupInfo.m_protare.isTNSL_ProtareSingle( ) ) {
+                GIDI::Product const *product = products.get<GIDI::Product>( 1 );
+                a_setupInfo.m_product2Mass = product->particle( ).mass( "MeV/c**2" );         // Includes nuclear excitation energy.
+            }
         }
 
-        MCGIDI_product_setTwoBodyMasses( smr, &(outputChannel->products[0]), projectileMass_MeV, targetMass_MeV, productMass_MeV, residualMass_MeV );
+        bool electronPresent = false;
+        std::size_t size = 0;
+        std::set<std::size_t> productsToDo;
+        for( std::size_t i1 = 0; i1 < a_outputChannel->products( ).size( ); ++i1 ) {
+            GIDI::Product const *product = products.get<GIDI::Product>( i1 );
+
+            if( product->particle( ).ID( ) == PoPI::IDs::electron ) electronPresent = true;
+            if( electronPresent && !a_setupInfo.m_isPhotoAtomicIncoherentScattering ) continue;
+            if( !electronPresent && !product->isCompleteParticle( ) && ( product->outputChannel( ) == nullptr ) ) continue;
+
+            if( ( product->outputChannel( ) != nullptr ) || a_settings.sampleNonTransportingParticles( ) || a_particles.hasParticle( product->particle( ).ID( ) ) )
+                productsToDo.insert( i1 );
+        }
+        size = productsToDo.size( );
+        if( a_setupInfo.m_isPairProduction ) {
+            size += 2;
+            size = 2;                               // This is a kludge until the ENDL to GNDS translator is fixed.
+        }
+
+        bool addIncoherentPhotoAtomicScatteringElectron = false;
+        if( a_setupInfo.m_isPhotoAtomicIncoherentScattering && a_particles.hasParticle( PoPI::IDs::electron ) ) {   // May need to add electron for legacy GNDS files.
+            if( !electronPresent ) {
+// FIXME: BRB 7/Nov/2024, Why is an electron added, this is incoherent atomic scattering which does not emit an electron?
+                addIncoherentPhotoAtomicScatteringElectron = true;
+                ++size;
+            }
+        }
+        m_products.reserve( size );
+
+        if( a_setupInfo.m_isPairProduction ) {
+            std::string ID( PoPI::IDs::photon );
+            std::string label = ID;
+
+            Product *product = new Product( a_setupInfo.m_popsUser, ID, label );
+            product->setMultiplicity( new Functions::Constant1d( a_setupInfo.m_domainMin, a_setupInfo.m_domainMax, 1.0, 0.0 ) );
+            product->distribution( new Distributions::PairProductionGamma( a_setupInfo, true ) );
+            m_products.push_back( product );
+
+            label += "__a";
+            product = new Product( a_setupInfo.m_popsUser, ID, label );
+            product->setMultiplicity( new Functions::Constant1d( a_setupInfo.m_domainMin, a_setupInfo.m_domainMax, 1.0, 0.0 ) );
+            product->distribution( new Distributions::PairProductionGamma( a_setupInfo, false ) );
+            m_products.push_back( product );
+        }
+
+        for( std::size_t i1 = 0; i1 < a_outputChannel->products( ).size( ); ++i1 ) {
+            if( productsToDo.find( i1 ) == productsToDo.end( ) ) continue;
+
+            GIDI::Product const *product = products.get<GIDI::Product>( i1 );
+
+            if( a_setupInfo.m_isPairProduction ) {
+                if( !a_settings.sampleNonTransportingParticles( ) ) continue;
+                if( a_setupInfo.m_protare.targetIntid( ) != MCGIDI_popsIntid( a_setupInfo.m_pops, product->particle( ).ID( ) ) ) continue;
+            }
+            a_setupInfo.m_twoBodyOrder = TwoBodyOrder::notApplicable;
+            if( m_channelType == ChannelType::twoBody ) a_setupInfo.m_twoBodyOrder = ( ( i1 == 0 ? TwoBodyOrder::firstParticle : TwoBodyOrder::secondParticle ) );
+            m_products.push_back( new Product( product, a_setupInfo, a_settings, a_particles, m_isFission ) );
+
+            if( addIncoherentPhotoAtomicScatteringElectron && ( product->particle( ).ID( ) == PoPI::IDs::photon ) ) {
+                addIncoherentPhotoAtomicScatteringElectron = false;
+
+                Product *product2 = new Product( a_setupInfo.m_pops, PoPI::IDs::electron, PoPI::IDs::electron );
+                product2->setMultiplicity( new Functions::Constant1d( a_setupInfo.m_domainMin, a_setupInfo.m_domainMax, 1.0, 0.0 ) );
+                product2->distribution( new Distributions::IncoherentPhotoAtomicScatteringElectron( a_setupInfo ) );
+                m_products.push_back( product2 );
+            }
+        }
+
+        if( ( a_settings.delayedNeutrons( ) == GIDI::Transporting::DelayedNeutrons::on ) && a_particles.hasParticle( PoPI::IDs::neutron ) ) {
+            GIDI::FissionFragmentData const &fissionFragmentData = a_outputChannel->fissionFragmentData( );
+            GIDI::Suite const &delayedNeutrons = fissionFragmentData.delayedNeutrons( );
+
+            if( delayedNeutrons.size( ) > 0 ) {
+                bool missingData = false;
+                GIDI::Axes axes;
+                GIDI::Functions::XYs1d totalDelayedNeutronMultiplicity( axes, ptwXY_interpolationLinLin );
+
+                m_delayedNeutrons.reserve( delayedNeutrons.size( ) );
+                for( std::size_t i1 = 0; i1 < delayedNeutrons.size( ); ++i1 ) {
+                    GIDI::DelayedNeutron const *delayedNeutron = delayedNeutrons.get<GIDI::DelayedNeutron>( i1 );
+                    GIDI::Product const &product = delayedNeutron->product( );
+                    GIDI::Suite const &multiplicity = product.multiplicity( );
+
+                    GIDI::Functions::Function1dForm const *form1d = multiplicity.get<GIDI::Functions::Function1dForm>( 0 );
+
+                    if( form1d->type( ) == GIDI::FormType::unspecified1d ) {
+                        missingData = true;
+                        break;
+                    }
+
+                    if( form1d->type( ) != GIDI::FormType::XYs1d ) {
+                        std::cerr << "OutputChannel::OutputChannel: GIDI::DelayedNeutron multiplicity type != GIDI::FormType::XYs1d" << std::endl;
+                        missingData = true;
+                        break;
+                    }
+
+                    GIDI::Functions::XYs1d const *multiplicityXYs1d = static_cast<GIDI::Functions::XYs1d const *>( form1d );
+                    totalDelayedNeutronMultiplicity += *multiplicityXYs1d;
+
+                    m_delayedNeutrons.push_back( new DelayedNeutron( static_cast<int>( i1 ), delayedNeutron, a_setupInfo, a_settings, a_particles ) );
+                }
+                if( !missingData ) m_totalDelayedNeutronMultiplicity = new Functions::XYs1d( totalDelayedNeutronMultiplicity );
+            }
+        }
+
+        m_hasFinalStatePhotons = a_setupInfo.m_hasFinalStatePhotons;
     }
-
-    return( 0 );
-
-err:
-    MCGIDI_outputChannel_release( smr, outputChannel );
-    return( 1 );
 }
-/*
-************************************************************
-*/
-int MCGIDI_outputChannel_numberOfProducts( MCGIDI_outputChannel *outputChannel ) {
 
-    return( outputChannel->numberOfProducts );
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE OutputChannel::~OutputChannel( ) {
+
+    delete m_Q;
+    for( std::size_t i1 = 0; i1 < m_products.size( ); ++i1 ) delete m_products[i1];
+
+    delete m_totalDelayedNeutronMultiplicity;
+    for( std::size_t i1 = 0; i1 < m_delayedNeutrons.size( ); ++i1 ) delete m_delayedNeutrons[i1];
 }
-/*
-************************************************************
-*/
-MCGIDI_product *MCGIDI_outputChannel_getProductAtIndex( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel, int i ) {
 
-    if( ( i < 0 ) || ( i >= outputChannel->numberOfProducts ) ) {
-        smr_setReportError2( smr, smr_unknownID, 1, "bad product index = %d: outputChannel as only %d products", i, outputChannel->numberOfProducts );
-        return( NULL );
+/* *********************************************************************************************************//**
+ * This method returns the final Q for *this* by getting its final Q plus any sub-output channel's finalQ.
+ *
+ * @param a_x1                  [in]    The energy of the projectile.
+ *
+ * @return                              The Q-value at product energy *a_x1*.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double OutputChannel::finalQ( double a_x1 ) const {
+
+    double final_Q = m_Q->evaluate( a_x1 );
+
+    for( std::size_t i1 = 0; i1 < m_products.size( ); ++i1 ) final_Q += m_products[i1]->finalQ( a_x1 );
+    return( final_Q );
+}
+
+/* *********************************************************************************************************//**
+ * This method returns *true* if the output channel or any of its sub-output channels is a fission channel and *false* otherwise.
+ *
+ * @return                              *true* if *this* or any sub-output channel is a fission channel and *false* otherwise.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE bool OutputChannel::hasFission( ) const {
+
+    if( m_isFission ) return( true );
+    for( std::size_t i1 = 0; i1 < m_products.size( ); ++i1 ) {
+        if( m_products[i1]->hasFission( ) ) return( true );
     }
-    return( &(outputChannel->products[i]) );
+    return( false );
 }
-/*
-************************************************************
-*/
-int MCGIDI_outputChannel_getDomain( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel, double *EMin, double *EMax ) {
 
-    if( outputChannel->reaction != NULL ) return( MCGIDI_reaction_getDomain( smr, outputChannel->reaction, EMin, EMax ) );
-    return( MCGIDI_product_getDomain( smr, outputChannel->parent, EMin, EMax ) );
+/* *********************************************************************************************************//**
+ * Updates the m_userParticleIndex to *a_userParticleIndex* for all particles with PoPs index *a_particleIndex*.
+ *  
+ * @param a_particleIndex       [in]    The PoPs index of the particle whose user index is to be set.
+ * @param a_userParticleIndex   [in]    The particle index specified by the user.
+ ***********************************************************************************************************/
+
+LUPI_HOST void OutputChannel::setUserParticleIndex( int a_particleIndex, int a_userParticleIndex ) {
+
+    for( auto iter = m_products.begin( ); iter != m_products.end( ); ++iter ) (*iter)->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+    for( auto iter = m_delayedNeutrons.begin( ); iter != m_delayedNeutrons.end( ); ++iter ) (*iter)->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
 }
-/*
-************************************************************
-*/
-MCGIDI_target_heated *MCGIDI_outputChannel_getTargetHeated( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel ) {
 
-    if( outputChannel->reaction != NULL ) return( MCGIDI_reaction_getTargetHeated( smr, outputChannel->reaction ) );
-    return( MCGIDI_product_getTargetHeated( smr, outputChannel->parent ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_outputChannel_getProjectileMass_MeV( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel ) {
-
-    if( outputChannel->reaction != NULL ) return( MCGIDI_reaction_getProjectileMass_MeV( smr, outputChannel->reaction ) );
-    return( MCGIDI_product_getProjectileMass_MeV( smr, outputChannel->parent ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_outputChannel_getTargetMass_MeV( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel ) {
-
-    if( outputChannel->reaction != NULL ) return( MCGIDI_reaction_getTargetMass_MeV( smr, outputChannel->reaction ) );
-    return( MCGIDI_product_getTargetMass_MeV( smr, outputChannel->parent ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_outputChannel_getQ_MeV( statusMessageReporting * /*smr*/, MCGIDI_outputChannel *outputChannel, double /*e_in*/ ) {
-
-    return( outputChannel->Q );
-}
-/*
-************************************************************
-*/
-double MCGIDI_outputChannel_getFinalQ( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel, double e_in ) {
-
-    int iProduct;
-    double Q = outputChannel->Q;
-    MCGIDI_product *product;
-
-    for( iProduct = 0; iProduct < outputChannel->numberOfProducts; iProduct++ ) {
-        product = &(outputChannel->products[iProduct]);
-        if( product->decayChannel.genre != MCGIDI_channelGenre_undefined_e ) Q += MCGIDI_outputChannel_getFinalQ( smr, &(product->decayChannel), e_in );
-        if( !smr_isOk( smr ) ) break;
-    }
-    return( Q );
-}
-/*
-************************************************************
-*/
-int MCGIDI_outputChannel_sampleProductsAtE(statusMessageReporting* smr,
-                                           MCGIDI_outputChannel* outputChannel,
-                                           MCGIDI_quantitiesLookupModes &modes,
-                                           MCGIDI_decaySamplingInfo* decaySamplingInfo,
-                                           MCGIDI_sampledProductsDatas* productDatas,
-                                           double *masses_ )
-{
-  int i1;
-  int multiplicity(0);
-  int secondTwoBody = 0, isDecayChannel = ( outputChannel->reaction == NULL );
-  double e_in = modes.getProjectileEnergy( );
-  MCGIDI_product *product;
-  double phi, p, masses[3];
-  MCGIDI_distribution *distribution;
-  MCGIDI_sampledProductsData productData[2];
-
-  if (isDecayChannel) {
-    masses[0] = masses_[0];              /* More work may be needed here. */
-    masses[1] = masses_[1];
-  } else {
-    masses[0] = MCGIDI_reaction_getProjectileMass_MeV( smr, outputChannel->reaction );
-    masses[1] = MCGIDI_reaction_getTargetMass_MeV( smr, outputChannel->reaction );
-  }
-
-  // Loop over all possible final state particles reachable from initial state
-  // List of these particles (products) was read in from GIDI
-  // Note: all particles satifying the sampling criteria are included in the 
-  // final state, regardless of charge, energy or baryon number conservation
+/* *********************************************************************************************************//**
+ * Updates the m_userParticleIndex to *a_userParticleIndex* for all particles with PoPs intid *a_particleIntid*.
+ *  
+ * @param a_particleIntid       [in]    The PoPs intid of the particle whose user index is to be set.
+ * @param a_userParticleIndex   [in]    The particle index specified by the user.
+ ***********************************************************************************************************/
  
-  for (i1 = 0; i1 < outputChannel->numberOfProducts; i1++) {
-    product = &(outputChannel->products[i1]);
-    if (product->decayChannel.genre != MCGIDI_channelGenre_undefined_e ) {
-      if( MCGIDI_outputChannel_sampleProductsAtE(smr, &(product->decayChannel),
-                                                 modes, decaySamplingInfo,
-                                                 productDatas, masses ) < 0 ) return( -1 );
-    } else {
-      distribution = &(product->distribution);
-      if( distribution->type == MCGIDI_distributionType_none_e ) continue;
+LUPI_HOST void OutputChannel::setUserParticleIndexViaIntid( int a_particleIntid, int a_userParticleIndex ) {
 
-      if (!secondTwoBody) {
-        // Sample multiplicity of final state particle at kinetic energy of projectile
-        // The multiplicity stored in GIDI is a real number whose fractional part is
-        // compared to a random number to decide what integer value is returned   
-        if ((multiplicity = product->multiplicity) == 0) multiplicity =
-                               MCGIDI_product_sampleMultiplicity(smr, product, e_in,
-                                  decaySamplingInfo->rng( decaySamplingInfo->rngState ) );
-        while (multiplicity > 0) { 
+    for( auto iter = m_products.begin( ); iter != m_products.end( ); ++iter ) (*iter)->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+    for( auto iter = m_delayedNeutrons.begin( ); iter != m_delayedNeutrons.end( ); ++iter ) (*iter)->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+} 
 
-          multiplicity--;
-          decaySamplingInfo->pop = product->pop;
-          decaySamplingInfo->mu = 0;
-          decaySamplingInfo->Ep = 0;
-          productData[0].isVelocity = decaySamplingInfo->isVelocity;
-          productData[0].pop = product->pop;
-          productData[0].delayedNeutronIndex = product->delayedNeutronIndex;
-          productData[0].delayedNeutronRate = product->delayedNeutronRate;
-          productData[0].birthTimeSec = 0;
-          if (product->delayedNeutronRate > 0) {
-            productData[0].birthTimeSec =
-                 -G4Log( decaySamplingInfo->rng( decaySamplingInfo->rngState ) ) / product->delayedNeutronRate;
-          }
+/* *********************************************************************************************************//**
+ * This method calls the **setModelDBRC_data* method on the first product of *this* with *a_modelDBRC_data*.
+ *
+ * @param a_modelDBRC_data      [in]    The instance storing data needed to treat the DRRC upscatter mode.
+ ***********************************************************************************************************/
 
-          switch( outputChannel->genre ) {
+LUPI_HOST void OutputChannel::setModelDBRC_data( Sampling::Upscatter::ModelDBRC_data *a_modelDBRC_data ) {
 
-          case MCGIDI_channelGenre_twoBody_e :
-            secondTwoBody = 1;
-            MCGIDI_angular_sampleMu( smr, distribution->angular, modes, decaySamplingInfo );
-            if (smr_isOk(smr) ) {
-              phi = 2. * M_PI * decaySamplingInfo->rng( decaySamplingInfo->rngState );
-              MCGIDI_kinetics_2BodyReaction( smr, distribution->angular, e_in, decaySamplingInfo->mu, phi, productData );
-              if (!smr_isOk(smr) ) return( -1 );
-              productData[1].pop = product[1].pop;
-              productData[1].delayedNeutronIndex = product[1].delayedNeutronIndex;
-              productData[1].delayedNeutronRate = product->delayedNeutronRate;
-              productData[1].birthTimeSec = 0;
-              MCGIDI_sampledProducts_addProduct( smr, productDatas, productData );
-              if( !smr_isOk( smr ) ) return( -1 );
-              MCGIDI_sampledProducts_addProduct( smr, productDatas, &(productData[1]) );
-              if( !smr_isOk( smr ) ) return( -1 );
-            }
-            break;
+    m_products[0]->setModelDBRC_data( a_modelDBRC_data );
+}
 
-          case MCGIDI_channelGenre_uncorrelated_e :
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops id *a_id*. The returned value may not
+ * be an integer. Energy dependent multiplicity mainly occurs for photons and fission neutrons.
+ *
+ * @param a_products                            [in]    The std::vector instance to add products to.
+ * @param a_totalDelayedNeutronMultiplicity     [in]    The std::vector instance to add delayed neutron multiplicities to.
+ * @param a_delayedNeutrons                     [in]    The std::vector instance to add delayed neutrons to.
+ * @param a_Qs                                  [in]    The std::vector instance to add Q functions to.
+ ***********************************************************************************************************/
 
-          case MCGIDI_channelGenre_sumOfRemaining_e :
-            // Get mass of final state particle, then get its distribution
-            // masses[0] and masses[1] are incident and target masses
-            masses[2] = MCGIDI_product_getMass_MeV( smr, product );
-            switch( distribution->type ) {
-            case MCGIDI_distributionType_uncorrelated_e :
-              MCGIDI_uncorrelated_sampleDistribution( smr, distribution, modes, decaySamplingInfo );
-              break;
-            case MCGIDI_distributionType_energyAngular_e :
-              MCGIDI_energyAngular_sampleDistribution( smr, distribution, modes, decaySamplingInfo );
-              break;
-            case MCGIDI_distributionType_KalbachMann_e :
-              MCGIDI_KalbachMann_sampleEp( smr, distribution->KalbachMann, modes, decaySamplingInfo );
-              break;
-            case MCGIDI_distributionType_angularEnergy_e :
-              MCGIDI_angularEnergy_sampleDistribution( smr, distribution->angularEnergy, modes, decaySamplingInfo );
-              break;
-            default :
-              printf( "Unknown spectral data form product name = %s, channel genre = %d\n", product->pop->name, outputChannel->genre );
-              break;
-            }
-            break;
+LUPI_HOST void OutputChannel::moveProductsEtAlToReaction( std::vector<Product *> &a_products, Functions::Function1d **a_totalDelayedNeutronMultiplicity, 
+                std::vector<DelayedNeutron *> &a_delayedNeutrons, std::vector<Functions::Function1d_d1 *> &a_Qs  ) {
 
-          case MCGIDI_channelGenre_undefined_e :
-            printf( "Channel is undefined\n" );
-            break;
+    if( a_totalDelayedNeutronMultiplicity != nullptr ) {    /* This will not work if fission is a nested channel. Ergo "n + (R -> fission)". */
+        *a_totalDelayedNeutronMultiplicity = m_totalDelayedNeutronMultiplicity;
+        m_totalDelayedNeutronMultiplicity = nullptr;
+        for( std::size_t index = 0; index < m_delayedNeutrons.size( ); ++index ) {
+            a_delayedNeutrons.push_back( m_delayedNeutrons[index] );
+            m_delayedNeutrons[index] = nullptr;
+        }
+    }
 
-          case MCGIDI_channelGenre_twoBodyDecay_e :
-            printf( "Channel is twoBodyDecay\n" );
-            break;
+    a_Qs.push_back( m_Q );
+    m_Q = nullptr;
+    for( std::size_t productIndex = 0; productIndex < m_products.size( ); ++productIndex ) {
+        Product *product = m_products[productIndex];
 
-          case MCGIDI_channelGenre_uncorrelatedDecay_e :
-            printf( "Channel is uncorrelatedDecay\n" );
-            break;
+        if( product->outputChannel( ) != nullptr ) {
+            product->outputChannel( )->moveProductsEtAlToReaction( a_products, nullptr, a_delayedNeutrons, a_Qs );
+            delete product; }
+        else {
+            a_products.push_back( product );
+        }
+        m_products[productIndex] = nullptr;
+    }
+}
 
-          default :
-            printf( "Unsupported channel genre = %d\n", outputChannel->genre );
-            break;
-          }
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+/* *********************************************************************************************************//**
+ * Adds the associated orphan products of an orphan product to *a_products*.
+ *
+ * @param a_products                [in]    The std::vector instance to add products to.
+ *
+ * @return                                  This does not seem to be working. Needs work.
+ ***********************************************************************************************************/
 
-          if (!smr_isOk(smr) ) return( -1 );
-          if (!secondTwoBody) {
-            if (decaySamplingInfo->frame == xDataTOM_frame_centerOfMass) {
-              if (MCGIDI_kinetics_COM2Lab( smr, modes, decaySamplingInfo, masses) != 0 ) return( -1 );
-            }
+LUPI_HOST void OutputChannel::addOrphanProductToProductList( std::vector<Product *> &a_products ) const {
 
-            // Assign kinematics to final state product
-            productData[0].kineticEnergy = decaySamplingInfo->Ep;
-            p = std::sqrt( decaySamplingInfo->Ep * ( decaySamplingInfo->Ep + 2. * product->pop->mass_MeV ) );
-            if (productData[0].isVelocity) p *= MCGIDI_speedOfLight_cm_sec / std::sqrt( p * p + product->pop->mass_MeV * product->pop->mass_MeV );
-            productData[0].pz_vz = p * decaySamplingInfo->mu;
-            p = std::sqrt( 1. - decaySamplingInfo->mu * decaySamplingInfo->mu ) * p;
-            phi = 2. * M_PI * decaySamplingInfo->rng( decaySamplingInfo->rngState );
-            productData[0].px_vx = p * std::sin( phi );
-            productData[0].py_vy = p * std::cos( phi );
-            MCGIDI_sampledProducts_addProduct( smr, productDatas, productData );
-            if (!smr_isOk(smr) ) return( -1 );
-          }
-        } // while multiplicity
+    for( int productIndex = 0; productIndex < m_products.size( ); ++productIndex ) {
+        Product *product = m_products[productIndex];
 
-      }  // if !secondTwoBody
-    }  // if decay channel genre
-
-  }  // loop over possible final state products
-  return( productDatas->numberOfProducts );
+        if( product->outputChannel( ) != nullptr ) {
+            product->outputChannel( )->addOrphanProductToProductList( a_products ); }
+        else {
+            a_products.push_back( product );
+        }
+    }
 
 }
 
-#if defined __cplusplus
+/* *********************************************************************************************************//**
+ * Adds the associated orphan products of an orphan product to *a_products*.
+ *
+ * @param a_products                [in]    The std::vector instance to add products to.
+ *
+ * @return                                  This does not seem to be working. Needs work.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void OutputChannel::addOrphanProductToProductList( Vector<Product *> &a_products ) const {
+
+    for( int productIndex = 0; productIndex < m_products.size( ); ++productIndex ) {
+        Product *product = m_products[productIndex];
+
+        if( product->outputChannel( ) != nullptr ) {
+            product->outputChannel( )->addOrphanProductToProductList( a_products ); }
+        else {
+            a_products.push_back( product );
+        }
+    }
+
+}
+
+/* *********************************************************************************************************//**
+ * Adds the associated orphan products of an orphan product to *a_products*.
+ *
+ * @param a_products                [in]    The std::vector instance to add products to.
+ *
+ * @return                                  This does not seem to be working. Needs work.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void OutputChannel::addOrphanProductToProductList( Vector<Product *> &a_products ) const {
+
+    for( int productIndex = 0; productIndex < m_products.size( ); ++productIndex ) {
+        Product *product = m_products[productIndex];
+
+        if( product->outputChannel( ) != nullptr ) {
+            product->outputChannel( )->addOrphanProductToProductList( a_products ); }
+        else {
+            a_products.push_back( product );
+        }
+    }
+
 }
 #endif
 
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops index *a_index*. The returned value may not
+ * be an integer. Energy dependent multiplicity mainly occurs for photons and fission neutrons.
+ *
+ * @param a_index                   [in]    The index of the requested particle.
+ * @param a_projectileEnergy        [in]    The energy of the projectile.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double OutputChannel::productAverageMultiplicity( int a_index, double a_projectileEnergy ) const {
+
+    double multiplicity = 0.0;
+
+    for( Vector<Product *>::const_iterator iter = m_products.begin( ); iter != m_products.end( ); ++iter ) {
+        multiplicity += (*iter)->productAverageMultiplicity( a_index, a_projectileEnergy );
+    }
+
+    if( m_totalDelayedNeutronMultiplicity != nullptr ) {
+        if( a_index == m_neutronIndex ) multiplicity += m_totalDelayedNeutronMultiplicity->evaluate( a_projectileEnergy );
+    }
+
+    return( multiplicity );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops intid *a_intid*. The returned value may not
+ * be an integer. Energy dependent multiplicity mainly occurs for photons and fission neutrons.
+ *
+ * @param a_intid                   [in]    The intid of the requested particle.
+ * @param a_projectileEnergy        [in]    The energy of the projectile.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double OutputChannel::productAverageMultiplicityViaIntid( int a_intid, double a_projectileEnergy ) const {
+
+    double multiplicity = 0.0;
+
+    for( Vector<Product *>::const_iterator iter = m_products.begin( ); iter != m_products.end( ); ++iter ) {
+        multiplicity += (*iter)->productAverageMultiplicityViaIntid( a_intid, a_projectileEnergy );
+    }
+
+    if( m_totalDelayedNeutronMultiplicity != nullptr ) {
+        if( a_intid == PoPI::Intids::neutron ) multiplicity += m_totalDelayedNeutronMultiplicity->evaluate( a_projectileEnergy );
+    }
+
+    return( multiplicity );
+}
+
+/* *********************************************************************************************************//**
+ * This method serializes *this* for broadcasting as needed for MPI and GPUs. The method can count the number of required
+ * bytes, pack *this* or unpack *this* depending on *a_mode*.
+ *
+ * @param a_buffer              [in]    The buffer to read or write data to depending on *a_mode*.
+ * @param a_mode                [in]    Specifies the action of this method.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void OutputChannel::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
+
+    int channelType = 0;
+    switch( m_channelType ) {
+    case ChannelType::none :
+        break;
+    case ChannelType::twoBody :
+        channelType = 1;
+        break;
+    case ChannelType::uncorrelatedBodies :
+        channelType = 2;
+        break;
+    }
+    DATA_MEMBER_INT( channelType, a_buffer, a_mode );
+    if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+        switch( channelType ) {
+        case 0 :
+            m_channelType = ChannelType::none;
+            break;
+        case 1 :
+            m_channelType = ChannelType::twoBody;
+            break;
+        case 2 :
+            m_channelType = ChannelType::uncorrelatedBodies;
+            break;
+        }
+    }
+
+    DATA_MEMBER_INT( m_neutronIndex, a_buffer, a_mode );
+    DATA_MEMBER_CAST( m_isFission, a_buffer, a_mode, bool );
+    DATA_MEMBER_CAST( m_hasFinalStatePhotons, a_buffer, a_mode, bool );
+
+    m_Q = serializeFunction1d_d1( a_buffer, a_mode, m_Q );
+    serializeProducts( a_buffer, a_mode, m_products );
+    m_totalDelayedNeutronMultiplicity = serializeFunction1d( a_buffer, a_mode, m_totalDelayedNeutronMultiplicity );
+    serializeDelayedNeutrons( a_buffer, a_mode, m_delayedNeutrons );
+}
+
+}

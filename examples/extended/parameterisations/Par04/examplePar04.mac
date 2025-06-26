@@ -1,6 +1,13 @@
 #  examplePar04.mac
 #
-/control/execute common_settings.mac
+/control/execute common_settings_lowgran.mac
+
+# Overwrite the sensitivity of the absorber to account for the passive material
+/Par04/detector/setAbsorber 0 G4_W 1.4 mm false
+# Initialize
+/run/initialize
+
+/control/execute common_settings_postInit.mac
 
 # Full Simulation
 /analysis/setFileName 10GeV_100events_fullsim.root

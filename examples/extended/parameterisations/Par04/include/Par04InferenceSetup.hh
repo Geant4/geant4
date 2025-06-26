@@ -93,6 +93,10 @@ class Par04InferenceSetup
     inline void SetModelPathName(G4String aName) { fModelPathName = aName; };
     /// Get path and name of the model
     inline G4String GetModelPathName() const { return fModelPathName; };
+    /// Set model type
+    inline void SetModelType(G4String aName) { fModelType = aName; };
+    /// Get model type
+    inline G4String GetModelType() const { return fModelType; };
     /// Set profiling flag
     inline void SetProfileFlag(G4int aNumber) { fProfileFlag = aNumber; };
     /// Get profiling flag
@@ -161,7 +165,7 @@ class Par04InferenceSetup
     /// detector
     /// @param[in] aParticleEnergy Energy of initial particle
     void GetEnergies(std::vector<G4double>& aEnergies, G4double aParticleEnergy,
-                     G4float aInitialAngle);
+                   G4float aTheta, G4float aPhi);
 
     /// Calculate positions
     /// @param[out] aDepositsPositions Vector of positions corresponding to
@@ -200,6 +204,8 @@ class Par04InferenceSetup
     G4int fSizeConditionVector = 4;
     /// Name of the inference library
     G4String fModelPathName = "MLModels/Generator.onnx";
+    /// Model type
+    G4String fModelType = "VAE";
     /// ONNX specific
     /// Profiling flag
     G4bool fProfileFlag = false;

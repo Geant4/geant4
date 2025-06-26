@@ -6,7 +6,78 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-12-22 Vladimir Ivanchenko (hadr-deex-V11-02-19)
+## 2025-06-18 Vladimir Ivanchenko (hadr-deex-V11-03-14)
+- G4ExcitationHandler - fix initialisation of the new Fermi-BreakUp model
+- G4FermiBreakUpAN - delete primary fragment, if decay is sucsessful - fixed
+    infinite loop in the new Fermi-BreakUp model
+
+## 2025-06-04 Vladimir Ivanchenko (hadr-deex-V11-03-13)
+- G4PhotonEvaporation, G4VEmissionProbability - check life time of final excitation
+  level, special treatment ground and the next level, attempt to fix #2660
+
+## 2025-06-04 Vladimir Ivanchenko (hadr-deex-V11-03-12)
+- G4FermiBreakUpAN - A.Novikov propose minor fix for final state generation
+- G4DeexPrecoParameters - use the same set of parameters as in 11.3.2
+- G4EvaporationProbability - fixed computation of inverse x-section
+
+## 2025-05-22 Vladimir Ivanchenko (hadr-deex-V11-03-11)
+- G4DeexPrecoUtility - a new class, which provide the same computation to avoid
+    code duplication
+- G4DeexPrecoParameters - use conservative set of parameters
+- G4VEmissionProbability - update parameters of integration of the probability
+    density function
+- G4CoulombBarrier - code clean-up
+- G4EvaporationProbability, G4ProtonEvaporationProbability,
+  G4DeuteronEvaporationProbability, G4TritonEvaporationProbability,
+  G4He3EvaporationProbability, G4AlphaEvaporationProbability
+    used G4DeexPrecoUtility
+
+## 2025-05-01 Vladimir Ivanchenko (hadr-deex-V11-03-10)
+- G4DeexPrecoParameters - added forgotten method 
+- G4VFermiFragmentAN, G4FermiBreakUpAN - fix Coverity warnings
+
+## 2025-04-25 Vladimir Ivanchenko (hadr-deex-V11-03-09)
+- G4FermiDataTypes - A. Novikov fixed compilation warnings at MAC
+
+## 2025-04-04 Vladimir Ivanchenko (hadr-deex-V11-03-08)
+- G4FermiBreakUpAN - new alternative FermiBreakUp model and supported classes
+  provided in github PR #84 by A. Novikov, Yandex and MIPT (January 2025) under
+  supervision of A. Svetlichnyi, INR RAS and MIPT. The model is based on 
+  J.P. Bondorf et al., Physics Reports, 257(3):133–221.
+- G4ExcitationHandler, G4DeexPrecoParameters - updated initialisation
+  to switch between different FermiBreakUp models
+
+## 2025-03-31 Vladimir Ivanchenko (hadr-deex-V11-03-07)
+- G4LevelReader - attempt to fix Coverity warning.
+
+## 2025-03-18 Vladimir Ivanchenko (hadr-deex-V11-03-06)
+- G4GEMChannelVI, G4EvaporationGEMFactoryVI, G4DeexPrecoParameters - new GEM
+  de-excitation model with 83 decay channels (in the default 68 channels).
+- G4Evaporation - improved debug printout.
+
+## 2025-03-17 Vladimir Ivanchenko (hadr-deex-V11-03-05)
+- G4StatMFMicroPartition - code cleanup, removed non-informative printout,
+  which may be repeated many times, instead stop MF model and return to
+  de-excitation handler.
+
+## 2025-03-05 Vladimir Ivanchenko (hadr-deex-V11-03-04)
+- G4VEmissionProbability - use the new utility class G4VSIntegration, which
+  allows to simplify code, results are practically not affected.
+
+## 2025-02-15 Vladimir Ivanchenko (hadr-deex-V11-03-03)
+- G4VEmissionProbability, G4EvaporationProbability, G4GEMProbabilityVI - updated
+  algorithms of integration of probabilities and sampling of kinetic energy of
+  emitted fragment (expected more accurate spectra).
+
+## 2025-01-26 Vladimir Ivanchenko (hadr-deex-V11-03-02)
+- G4DeexPrecoParameters - added extra enumerator to choose variant of the
+  pre-compound model.
+  
+## 2025-01-14 Vladimir Ivanchenko (hadr-deex-V11-03-01)
+- G4NucLevel, G4PhotonEvaporation - use explicit type conversion from double
+    to float; use const arguments where possible.
+
+## 2024-12-22 Vladimir Ivanchenko (hadr-deex-V11-03-00)
 - G4ExcitationHandler, G4GammaTransition, G4PhotonEvaporation fixed problem
   #2584 - removed production of unphysical states
 

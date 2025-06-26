@@ -71,8 +71,6 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy) override;
 
-  void SelectStationary(G4bool val) { statCode = val; }; 
-
   // method for unit tests
   G4double ComputeProbabilityFunction(const G4ParticleDefinition*, G4double kine,
                                       G4double deltae, G4int shell);

@@ -42,7 +42,6 @@
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4BoundingEnvelope.hh"
-#include "G4RandomTools.hh"
 #include "G4QuickRand.hh"
 
 #include "G4VPVParameterisation.hh"
@@ -822,8 +821,9 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   G4double Ztop = GetZTopCut();
 
   // Calculate cut areas
-  G4double Hbot = 1. + Zbot / C;
-  G4double Htop = 1. - Ztop / C;
+  G4double invC = 1. / C;
+  G4double Hbot = 1. + Zbot * invC;
+  G4double Htop = 1. - Ztop * invC;
   G4double piAB = CLHEP::pi * A * B;
   G4double Sbot = piAB * Hbot * (2. - Hbot);
   G4double Stop = piAB * Htop * (2. - Htop);
@@ -840,47 +840,46 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   // Select surface (0 - bottom cut, 1 - lateral surface, 2 - top cut)
   G4double select = (Sbot + Slat + Stop) * G4QuickRand();
   G4int k = 0;
-  if (select > Sbot) k = 1;
-  if (select > Sbot + Slat) k = 2;
+  k += (G4int)(select > Sbot);
+  k += (G4int)(select > Sbot + Slat);
 
-  // Pick random point on selected surface (rejection sampling)
+  // Pick random point on selected surface
+  G4double phi = CLHEP::twopi * G4QuickRand();
+  G4double cosphi = std::cos(phi);
+  G4double sinphi = std::sin(phi);
   G4ThreeVector p;
   switch (k)
   {
-    case 0: // bootom z-cut
+    case 0: // bootom z-cut, ellipse
     {
       G4double scale = std::sqrt(Hbot * (2. - Hbot));
-      G4TwoVector rho = G4RandomPointInEllipse(A * scale, B * scale);
-      p.set(rho.x(), rho.y(), Zbot);
+      G4double rho = scale*std::sqrt(G4QuickRand());
+      p.set(A * rho * cosphi, B * rho * sinphi, Zbot);
       break;
     }
-    case 1: // lateral surface
+    case 1: // lateral surface (rejection sampling)
     {
       G4double x, y, z;
-      G4double mu_max = std::max(std::max(A * B, A * C), B * C);
-      for (G4int i = 0; i < 1000; ++i)
+      G4double s_max = std::max(std::max(A * B, A * C), B * C);
+      for (G4int i = 0; i < 10000; ++i)
       {
         // generate random point on unit sphere
-        z = (Zbot + (Ztop - Zbot) * G4QuickRand()) / C;
+        z = (Zbot + (Ztop - Zbot) * G4QuickRand()) * invC;
         G4double rho = std::sqrt((1. + z) * (1. - z));
-        G4double phi = CLHEP::twopi * G4QuickRand();
-        x = rho * std::cos(phi);
-        y = rho * std::sin(phi);
+        x = rho * cosphi;
+        y = rho * sinphi;
         // check  acceptance
-        G4double xbc = x * B * C;
-        G4double yac = y * A * C;
-        G4double zab = z * A * B;
-        G4double mu  = std::sqrt(xbc * xbc + yac * yac + zab * zab);
-        if (mu_max * G4QuickRand() <= mu) break;
+        G4double ss  = sqr(B * C * x) + sqr(A * C * y) + sqr(A * B * z);
+        if (sqr(s_max * G4QuickRand()) <= ss) break;
       }
       p.set(A * x, B * y, C * z);
       break;
     }
-    case 2: // top z-cut
+    case 2: // top z-cut, ellipse
     {
       G4double scale  = std::sqrt(Htop * (2. - Htop));
-      G4TwoVector rho = G4RandomPointInEllipse(A * scale, B * scale);
-      p.set(rho.x(), rho.y(), Ztop);
+      G4double rho = scale*std::sqrt(G4QuickRand());
+      p.set(A * rho * cosphi, B * rho * sinphi, Ztop);
       break;
     }
   }

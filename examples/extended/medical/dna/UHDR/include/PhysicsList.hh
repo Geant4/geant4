@@ -49,12 +49,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4VPhysicsConstructor;
-class DetectorConstruction;
 class PeriodicBoundaryPhysics;
 class PhysicsList : public G4VModularPhysicsList
 {
   public:
-    explicit PhysicsList(DetectorConstruction* det);
+    explicit PhysicsList();
     ~PhysicsList() override = default;
 
     void ConstructParticle() final;

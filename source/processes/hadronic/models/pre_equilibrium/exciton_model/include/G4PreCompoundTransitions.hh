@@ -72,6 +72,7 @@ private:
 
   G4double FermiEnergy;
   G4double r0;  // Nuclear radius
+  G4int fVerbose{1};
 };
 
 #endif

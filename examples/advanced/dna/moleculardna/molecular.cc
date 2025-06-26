@@ -47,7 +47,7 @@ namespace
 void PrintUsage()
 {
   G4cout << " Usage: " << G4endl;
-  G4cout << " molecular [-m macro ] [-t nThreads] [-p PhysicsList]" << G4endl;
+  G4cout << " molecular [-m macro ] [-t nThreads] [-p PhysicsList] [-v vis]" << G4endl;
   G4cout << "   -p is the G4DNA Physics List option. Default (0) is"
          << " G4EmDNAPhysics" << G4endl;
   G4cout << "   note: -t option is available only for multi-threaded mode." << G4endl;
@@ -56,13 +56,14 @@ void PrintUsage()
 
 int main(int argc, char** argv)
 {
-  if (argc > 7) {
+  if (argc > 10) {
     PrintUsage();
     return 1;
   }
 
   G4String macro;
   G4int phys_option = 2;
+  G4int vis_option = 0;
 
   G4int nThreads = 2;
   for (G4int ii = 1; ii < argc; ii = ii + 2) {
@@ -74,6 +75,9 @@ int main(int argc, char** argv)
     }
     else if (G4String(argv[ii]) == "-t") {
       nThreads = G4UIcommand::ConvertToInt(argv[ii + 1]);
+    }
+    else if (G4String(argv[ii]) == "-v") {
+      vis_option = G4UIcommand::ConvertToInt(argv[ii + 1]);
     }
     else {
       PrintUsage();
@@ -98,8 +102,8 @@ int main(int argc, char** argv)
     runManager->SetNumberOfThreads(nThreads);
   }
 
-  runManager->SetUserInitialization(new DetectorConstruction());
-  G4VModularPhysicsList* physicsList = new PhysicsList(phys_option);
+  runManager->SetUserInitialization(new DetectorConstruction(vis_option));
+  G4VModularPhysicsList* physicsList = new PhysicsList(phys_option, vis_option);
   runManager->SetUserInitialization(physicsList);
   runManager->SetUserInitialization(new ActionInitialization());
   G4DNAChemistryManager::Instance()->Initialize();

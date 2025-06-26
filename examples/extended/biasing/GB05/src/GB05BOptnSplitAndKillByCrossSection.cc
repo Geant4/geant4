@@ -39,7 +39,7 @@ GB05BOptnSplitAndKillByCrossSection::GB05BOptnSplitAndKillByCrossSection(G4Strin
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB05BOptnSplitAndKillByCrossSection::~GB05BOptnSplitAndKillByCrossSection() {}
+GB05BOptnSplitAndKillByCrossSection::~GB05BOptnSplitAndKillByCrossSection() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,7 +87,7 @@ GB05BOptnSplitAndKillByCrossSection::GenerateBiasingFinalState(const G4Track* tr
     // Now make clones of this track (this is the actual splitting):
     // we will then have the primary and clone of it, hence the
     // splitting by a factor 2:
-    G4Track* clone = new G4Track(*track);
+    auto clone = new G4Track(*track);
     clone->SetWeight(weightOfTrack);
     fParticleChange.AddSecondary(clone);
     // -- Below's call added for safety & illustration : inform particle change to not

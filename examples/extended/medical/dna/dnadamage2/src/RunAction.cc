@@ -47,11 +47,11 @@
 
 #include "Run.hh"
 
+#include "G4DNAChemistryManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 RunAction::RunAction() : G4UserRunAction() {}
@@ -66,8 +66,12 @@ G4Run* RunAction::GenerateRun()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void RunAction::BeginOfRunAction(const G4Run*)
+void RunAction::BeginOfRunAction(const G4Run* run)
 {
+  // ensure that the chemistry is notified!
+  if (G4DNAChemistryManager::GetInstanceIfExists() != nullptr)
+    G4DNAChemistryManager::GetInstanceIfExists()->BeginOfRunAction(run);
+
   // informs the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
@@ -76,6 +80,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run* run)
 {
+  // ensure that the chemistry is notified!
+  if (G4DNAChemistryManager::GetInstanceIfExists() != nullptr)
+    G4DNAChemistryManager::GetInstanceIfExists()->EndOfRunAction(run);
+
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
 
@@ -101,18 +109,35 @@ void RunAction::EndOfRunAction(const G4Run* run)
     // LET
     Run* aRun = (Run*)run;
     G4THitsMap<G4double>* totLET = aRun->GetLET();
+    if (!totLET) {
+      G4cout << "No LET data available." << G4endl;
+      return;
+    }
     G4int nOfEvent = totLET->entries();
     G4double LET_mean = 0;
     G4double LET_square = 0;
-    for (G4int i = 0; i < nOfEvent; i++) {
-      G4double* LET = (*totLET)[i];
-      if (!LET) continue;
-      LET_mean += *LET;
-      LET_square += (*LET) * (*LET);
-    }
-    LET_mean /= nOfEvent;
-    LET_square = std::sqrt(LET_square / nOfEvent - std::pow(LET_mean, 2));
 
+    if (nOfEvent > 0) {
+      for (G4int i = 0; i < nOfEvent; i++) {
+        G4double* LET = (*totLET)[i];
+        if (!LET) continue;
+        LET_mean += *LET;
+        LET_square += (*LET) * (*LET);
+      }
+      LET_mean /= nOfEvent;
+      G4double variance = LET_square / nOfEvent - std::pow(LET_mean, 2);
+      if (variance >= 0) {
+        LET_square = std::sqrt(variance);
+      }
+      else {
+        G4cerr << "Warning: Negative variance encountered. Setting LET_square to 0." << G4endl;
+        LET_square = 0;
+      }
+    }
+    else {
+      LET_mean = 0;
+      LET_square = 0;
+    }
     masterScorer->OutputAndClear();
     masterSBScorer->OutputAndClear(LET_mean, LET_square);
   }

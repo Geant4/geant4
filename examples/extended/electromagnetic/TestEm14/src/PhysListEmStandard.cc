@@ -84,7 +84,7 @@ void PhysListEmStandard::ConstructProcess()
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {
-      ////pmanager->AddDiscreteProcess(new G4RayleighScattering);
+      pmanager->AddDiscreteProcess(new G4RayleighScattering);
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       G4ComptonScattering* compt = new G4ComptonScattering;
       compt->SetEmModel(new G4KleinNishinaModel());

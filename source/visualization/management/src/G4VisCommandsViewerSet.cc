@@ -428,6 +428,25 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   fpCommandTargetPoint->SetParameterName("x", "y", "z", omitable = false);
   fpCommandTargetPoint->SetUnitCategory("Length");
 
+  fpCommandTransparencyByDepth = new G4UIcommand
+  ("/vis/viewer/set/transparencyByDepth", this);
+  fpCommandTransparencyByDepth -> SetGuidance
+  ("Set overall transparency by depth in geometry tree.");
+  fpCommandTransparencyByDepth -> SetGuidance
+  ("For a volume at depth D, the opacity (alpha) is:"
+   "\nOption 1: Unwrap: 0 if D <= d (sudden invisibility);"
+   "\nOption 2: Fade: D - d (fade progresssively layer by layer);"
+   "\nOption 3: X-ray: as (2), but fade over whole range of depth."
+   "\nThe opacity calculated here is truncated [0,1] and then"
+   " multiplies any existing opacity."
+   "\nSee G4PhysicalVolumeModel.cc:644(approx) for details.");
+  parameter = new G4UIparameter("d", 'd', omitable = false);
+  fpCommandTransparencyByDepth -> SetParameter (parameter);
+  parameter = new G4UIparameter("option", 'i', omitable = true);
+  parameter -> SetGuidance("1: Unwrap; 2: Fade; 3: X-ray");
+  parameter -> SetDefaultValue (1);
+  fpCommandTransparencyByDepth -> SetParameter (parameter);
+
   fpCommandUpThetaPhi = new G4UIcommand
   ("/vis/viewer/set/upThetaPhi", this);
   fpCommandUpThetaPhi -> SetGuidance ("Set up vector.");
@@ -520,27 +539,27 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   parameter = new G4UIparameter ("screenX", 'd', omitable = true);
   parameter->SetGuidance("-1 < screenX < 1");
   parameter->SetParameterRange("screenX >= -1. && screenX <= 1.");
-  parameter->SetDefaultValue(-0.9);
+  parameter->SetCurrentAsDefault(true);
   fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
   parameter = new G4UIparameter ("screenY", 'd', omitable = true);
   parameter->SetGuidance("-1 < screenY < 1");
   parameter->SetParameterRange("screenY >= -1. && screenY <= 1.");
-  parameter->SetDefaultValue(-0.9);
+  parameter->SetCurrentAsDefault(true);
   fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
   parameter = new G4UIparameter ("screenSize", 'd', omitable = true);
-  parameter->SetDefaultValue(24.);
+  parameter->SetCurrentAsDefault(true);
   fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
   parameter = new G4UIparameter ("red", 'd', omitable = true);
   parameter->SetParameterRange("red >= 0. && red <= 1.");
-  parameter->SetDefaultValue(0.);
+  parameter->SetCurrentAsDefault(true);
   fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
   parameter = new G4UIparameter ("green", 'd', omitable = true);
   parameter->SetParameterRange("green >= 0. && green <= 1.");
-  parameter->SetDefaultValue(1.);
+  parameter->SetCurrentAsDefault(true);
   fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
   parameter = new G4UIparameter ("blue", 'd', omitable = true);
   parameter->SetParameterRange("blue >= 0. && blue <= 1.");
-  parameter->SetDefaultValue(1.);
+  parameter->SetCurrentAsDefault(true);
   fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
 
   fpCommandTimeWindowDisplayLightFront =
@@ -646,6 +665,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandViewpointThetaPhi;
   delete fpCommandUpVector;
   delete fpCommandUpThetaPhi;
+  delete fpCommandTransparencyByDepth;
   delete fpCommandTargetPoint;
   delete fpCommandStyle;
   delete fpCommandSpecialMeshVolumes;
@@ -677,8 +697,25 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandAll;
 }
 
-G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand*) {
-  return "";
+G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  const auto& vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandTimeWindowDisplayHeadTime) {
+    const auto& tp = vp.GetTimeParameters();
+    return command->ConvertToString(tp.fDisplayHeadTime)
+    + ' ' + command->ConvertToString(tp.fDisplayHeadTimeX)
+    + ' ' + command->ConvertToString(tp.fDisplayHeadTimeY)
+    + ' ' + command->ConvertToString(tp.fDisplayHeadTimeSize)
+    + ' ' + command->ConvertToString(tp.fDisplayHeadTimeRed)
+    + ' ' + command->ConvertToString(tp.fDisplayHeadTimeGreen)
+    + ' ' + command->ConvertToString(tp.fDisplayHeadTimeBlue);
+  }
+
+  else {
+    return "";
+  }
 }
 
 void G4VisCommandsViewerSet::SetNewValue
@@ -1110,7 +1147,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandLineSegments) {
     G4int nSides = G4UIcommand::ConvertToInt(newValue);
-    nSides = vp.SetNoOfSides(nSides);
+    vp.SetNoOfSides(nSides);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout <<
       "Number of line segments per circle in polygon approximation is "
@@ -1120,7 +1157,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandNumberOfCloudPoints) {
     G4int nPoints = G4UIcommand::ConvertToInt(newValue);
-    nPoints = vp.SetNumberOfCloudPoints(nPoints);
+    vp.SetNumberOfCloudPoints(nPoints);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout <<
       "Number of points to be used in cloud representation of volumes is "
@@ -1441,6 +1478,19 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
+  else if (command == fpCommandTransparencyByDepth) {
+    G4double transparencyByDepth;
+    G4int option;
+    std::istringstream is (newValue);
+    is >> transparencyByDepth >> option;
+    vp.SetTransparencyByDepth(transparencyByDepth);
+    vp.SetTransparencyByDepthOption(option);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Transparency by depth set to " << transparencyByDepth
+      << " with option " << option << G4endl;
+    }
+  }
+
   else if (command == fpCommandUpThetaPhi) {
     G4double theta, phi;
     if (ConvertToDoublePair(newValue, theta, phi)) {
@@ -1509,13 +1559,15 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> display >> screenX >> screenY
     >> screenSize >> red >> green >> blue;
-    vp.SetDisplayHeadTime(command->ConvertToBool(display));
-    vp.SetDisplayHeadTimeX(screenX);
-    vp.SetDisplayHeadTimeY(screenY);
-    vp.SetDisplayHeadTimeSize(screenSize);
-    vp.SetDisplayHeadTimeRed(red);
-    vp.SetDisplayHeadTimeGreen(green);
-    vp.SetDisplayHeadTimeBlue(blue);
+    auto timeParameters = vp.GetTimeParameters();
+    timeParameters.fDisplayHeadTime = command->ConvertToBool(display);
+    timeParameters.fDisplayHeadTimeX = screenX;
+    timeParameters.fDisplayHeadTimeY = screenY;
+    timeParameters.fDisplayHeadTimeSize = screenSize;
+    timeParameters.fDisplayHeadTimeRed = red;
+    timeParameters.fDisplayHeadTimeGreen = green;
+    timeParameters.fDisplayHeadTimeBlue = blue;
+    vp.SetTimeParameters(timeParameters);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Display head time flag set: "
       << vp
@@ -1532,18 +1584,20 @@ void G4VisCommandsViewerSet::SetNewValue
     >> originX >> originY >> originZ >> unitS
     >> originT >> unitT
     >> red >> green >> blue;
-    vp.SetDisplayLightFront(command->ConvertToBool(display));
-    vp.SetDisplayLightFrontX
-    (command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS)));
-    vp.SetDisplayLightFrontY
-    (command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS)));
-    vp.SetDisplayLightFrontZ
-    (command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS)));
-    vp.SetDisplayLightFrontT
-    (command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT)));
-    vp.SetDisplayLightFrontRed(red);
-    vp.SetDisplayLightFrontGreen(green);
-    vp.SetDisplayLightFrontBlue(blue);
+    auto timeParameters = vp.GetTimeParameters();
+    timeParameters.fDisplayLightFront = command->ConvertToBool(display);
+    timeParameters.fDisplayLightFrontX
+     = command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS));
+    timeParameters.fDisplayLightFrontY
+     = command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS));
+    timeParameters.fDisplayLightFrontZ
+     = command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS));
+    timeParameters.fDisplayLightFrontT
+     = command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT));
+    timeParameters.fDisplayLightFrontRed = red;
+    timeParameters.fDisplayLightFrontGreen = green;
+    timeParameters.fDisplayLightFrontBlue = blue;
+    vp.SetTimeParameters(timeParameters);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Display light front flag set: "
       << vp
@@ -1553,24 +1607,23 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandTimeWindowEndTime)
   {
-    G4String end_time_string, end_time_unit,
-    time_range_string, time_range_unit;
-    std::istringstream iss(newValue);
-    iss >> end_time_string >> end_time_unit
-    >> time_range_string >> time_range_unit;
-    vp.SetEndTime
-    (command->ConvertToDimensionedDouble
-     (G4String(end_time_string + ' ' + end_time_unit)));
-    G4double timeRange = command->ConvertToDimensionedDouble
-    (G4String(time_range_string + ' ' + time_range_unit));
-    if (timeRange > 0.) {
-      vp.SetStartTime
-      (vp.GetEndTime() - timeRange);
-    }
+  G4String end_time_string, end_time_unit, time_range_string, time_range_unit;
+  std::istringstream iss(newValue);
+  iss >> end_time_string >> end_time_unit >> time_range_string >> time_range_unit;
+  auto endTime = command->ConvertToDimensionedDouble
+  (G4String(end_time_string + ' ' + end_time_unit));
+  auto timeRange = command->ConvertToDimensionedDouble
+  (G4String(time_range_string + ' ' + time_range_unit));
+  auto timeParameters = vp.GetTimeParameters();
+  timeParameters.fEndTime = endTime;
+  if (timeRange > 0.) {
+    timeParameters.fStartTime = endTime - timeRange;
+  }
+  vp.SetTimeParameters(timeParameters);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout
-      << "Time window start time: " << vp.GetStartTime()/ns << " ns"
-      << ", time window end time: " << vp.GetEndTime()/ns << " ns";
+      << "Time window start time: " << vp.GetTimeParameters().fStartTime/ns << " ns"
+      << ", time window end time: " << vp.GetTimeParameters().fEndTime/ns << " ns";
       if (timeRange > 0.) {
         G4cout << "\n  (time range: " << timeRange/ns << " ns)";
       }
@@ -1579,33 +1632,34 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandTimeWindowFadeFactor) {
-    vp.SetFadeFactor(command->ConvertToDouble(newValue));
+    auto timeParameters = vp.GetTimeParameters();
+    timeParameters.fFadeFactor = command->ConvertToDouble(newValue);
+    vp.SetTimeParameters(timeParameters);
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Time window fade factor changed to " << vp.GetFadeFactor()
+      G4cout << "Time window fade factor changed to " << vp.GetTimeParameters().fFadeFactor
       << G4endl;
     }
   }
 
   else if (command == fpCommandTimeWindowStartTime)
   {
-    G4String start_time_string, start_time_unit,
-    time_range_string, time_range_unit;
+    G4String start_time_string, start_time_unit, time_range_string, time_range_unit;
     std::istringstream iss(newValue);
-    iss >> start_time_string >> start_time_unit
-    >> time_range_string >> time_range_unit;
-    vp.SetStartTime
-    (command->ConvertToDimensionedDouble
-     (G4String(start_time_string + ' ' + start_time_unit)));
-    G4double timeRange = command->ConvertToDimensionedDouble
+    iss >> start_time_string >> start_time_unit >> time_range_string >> time_range_unit;
+    auto startTime = command->ConvertToDimensionedDouble
+    (G4String(start_time_string + ' ' + start_time_unit));
+    auto timeRange = command->ConvertToDimensionedDouble
     (G4String(time_range_string + ' ' + time_range_unit));
+    auto timeParameters = vp.GetTimeParameters();
+    timeParameters.fStartTime = startTime;
     if (timeRange > 0.) {
-      vp.SetEndTime
-      (vp.GetStartTime() + timeRange);
+      timeParameters.fEndTime = startTime + timeRange;
     }
+    vp.SetTimeParameters(timeParameters);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout
-      << "Time window start time: " << vp.GetStartTime()/ns << " ns"
-      << ", time window end time: " << vp.GetEndTime()/ns << " ns";
+      << "Time window start time: " << vp.GetTimeParameters().fStartTime/ns << " ns"
+      << ", time window end time: " << vp.GetTimeParameters().fEndTime/ns << " ns";
       if (timeRange > 0.) {
         G4cout << "\n  (time range: " << timeRange/ns << " ns)";
       }

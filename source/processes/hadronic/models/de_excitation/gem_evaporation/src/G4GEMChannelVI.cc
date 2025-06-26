@@ -32,6 +32,7 @@
 #include "G4GEMProbabilityVI.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4CoulombBarrier.hh"
+#include "G4DeexPrecoUtility.hh"
 #include "G4PairingCorrection.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4LevelManager.hh"
@@ -39,121 +40,216 @@
 #include "G4RandomDirection.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "Randomize.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+
+#include "G4Neutron.hh"
+#include "G4Proton.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
+#include "G4InterfaceToXS.hh"
+#include "G4IsotopeList.hh"
+#include "G4HadronNucleonXsc.hh"
+#include "G4NuclearRadii.hh"
 
 namespace
 {
   const G4double minExc = 1.0*CLHEP::MeV;
   const G4int nProbMax = 10;
+  G4double prob[nProbMax] = {0.0};  
 }
 
 G4GEMChannelVI::G4GEMChannelVI(G4int theA, G4int theZ)
-  : A(theA), Z(theZ)
+  : evapA(theA), evapZ(theZ)
 {
-  G4NuclearLevelData* nData = G4NuclearLevelData::GetInstance();
+  nData = G4NuclearLevelData::GetInstance();
   pairingCorrection = nData->GetPairingCorrection();
-  const G4LevelManager* lManager = nullptr;
-  if (A > 4) { lManager = nData->GetLevelManager(Z, A); }
-  fEvapMass = G4NucleiProperties::GetNuclearMass(A, Z);
+  if (evapZ > 2) { lManagerEvap = nData->GetLevelManager(evapZ, evapA); }
+  fEvapMass = G4NucleiProperties::GetNuclearMass(evapA, evapZ);
   fEvapMass2 = fEvapMass*fEvapMass;
 
-  cBarrier = new G4CoulombBarrier(A, Z);
-  fProbability = new G4GEMProbabilityVI(A, Z, lManager);
+  cBarrier = new G4CoulombBarrier(evapA, evapZ);
 
-  fCoeff = CLHEP::millibarn/((CLHEP::pi*CLHEP::hbarc)*(CLHEP::pi*CLHEP::hbarc)); 
+  fTolerance = 50*CLHEP::keV;
+  fCoeff = fEvapMass*CLHEP::millibarn
+    /((CLHEP::pi*CLHEP::hbarc)*(CLHEP::pi*CLHEP::hbarc));
+
+  std::ostringstream ss;
+  ss << "GEMVI_" << "Z" << evapZ << "_A" << evapA;
+  fModelName = ss.str();
+  
+  fNeutron = G4Neutron::Neutron();
+  fProton = G4Proton::Proton();
 
   secID = G4PhysicsModelCatalog::GetModelID("model_G4GEMChannelVI");
-  if (Z == 0 && A == 1) {
+  const G4ParticleDefinition* part = nullptr;
+  if (evapZ == 0 && evapA == 1) {
     indexC = 0;
     fCoeff *= 2.0;
-  } else if (Z == 1 && A == 1) {
+    part = fNeutron;
+  } else if (evapZ == 1 && evapA == 1) {
     indexC = 1;
     fCoeff *= 2.0;
-  } else if (Z == 1 && A == 2) {
+    part = fProton;
+  } else if (evapZ == 1 && evapA == 2) {
     indexC = 2;
     fCoeff *= 3.0;
-  } else if (Z == 1 && A == 3) {
+    part = G4Deuteron::Deuteron();
+  } else if (evapZ == 1 && evapA == 3) {
     indexC = 3;
     fCoeff *= 2.0;
-  } else if (Z == 2 && A == 3) {
+    part = G4Triton::Triton();
+  } else if (evapZ == 2 && evapA == 3) {
     indexC = 4;
     fCoeff *= 2.0;
-  } else if (Z == 2 && A == 4) {
+    part = G4He3::He3();
+  } else if (evapZ == 2 && evapA == 4) {
     indexC = 5;
-  } else {
-    indexC = 6;
+    part = G4Alpha::Alpha();
   }
+  g4pow = G4Pow::GetInstance();
+  
+  //G4double de = (0 == indexC) ? 0.15*CLHEP::MeV : 0.25*CLHEP::MeV;
+  G4double de = 0.125*CLHEP::MeV;
+  InitialiseIntegrator(0.01, 0.25, 1.1, de, 0.1*CLHEP::MeV, 2*CLHEP::MeV);
+
+  if (indexC <= 6) { fXSection = new G4InterfaceToXS(part, indexC); }
+  else { fHNXsc = new G4HadronNucleonXsc(); }
 }
 
 G4GEMChannelVI::~G4GEMChannelVI()
 {
   delete cBarrier;
-  delete fProbability;
+  delete fHNXsc;
+  delete fXSection;
 }
 
 void G4GEMChannelVI::Initialise()
 {
-  fProbability->Initialise();
   G4VEvaporationChannel::Initialise(); 
 }
 
 G4double G4GEMChannelVI::GetEmissionProbability(G4Fragment* fragment)
 {
-  fProbability->ResetProbability();
   fragZ = fragment->GetZ_asInt();
   fragA = fragment->GetA_asInt();
-  resZ = fragZ - Z;
-  resA = fragA - A;
-  if(resA < A || resA < resZ || resZ < 0 || (resA == A && resZ < Z)) { 
-    return 0.0; 
-  }
+  resZ = fragZ - evapZ;
+  resA = fragA - evapA;
+  // to avoid double counting
+  if (resA < evapA || resA < resZ || resZ < 1 ||
+      (resA == evapA && resZ < evapZ)) { return 0.0; }
 
-  fExc = fragment->GetExcitationEnergy();
-  fMass = fragment->GetGroundStateMass() + fExc;
+  fFragExc = fragment->GetExcitationEnergy();
+  fMass = fragment->GetGroundStateMass() + fFragExc;
   fResMass = G4NucleiProperties::GetNuclearMass(resA, resZ);
+  fResA13 = g4pow->Z13(resA);
 
   // limit for the case when both evaporation and residual 
   // fragments are in ground states
   if (fMass <= fEvapMass + fResMass) { return 0.0; } 
 
-  if (Z > 0) {
+  a0 = nData->GetLevelDensity(fragZ, fragA, fFragExc);
+  delta0 = nData->GetPairingCorrection(fragZ, fragA);
+  delta1 = nData->GetPairingCorrection(resZ, resA);
+  fE0 = std::max(fFragExc - delta0, 0.0);
+  
+  if (indexC > 0) {
     bCoulomb = cBarrier->GetCoulombBarrier(resA, resZ, 0.0);
-  }
-  G4double de = fMass - fEvapMass - fResMass - bCoulomb;
-  nProb = (G4int)(de/minExc);
-  if (nProb <= 1 || indexC < 6 || resA <= 4) {
-    nProb = 1;
+    fLimEXS = 2*bCoulomb;
   } else {
-    nProb = std::min(nProb, nProbMax);
+    fLimEXS = lowEnergyLimitMeV[resZ];
+    if (0.0 == fLimEXS) { fLimEXS = CLHEP::MeV; }    
   }
+  G4double de = fMass - fEvapMass - fResMass - 0.5*bCoulomb;
+  if (de <= 0.0) { return 0.0; }
+  nProbEvap = 1;
+  fDeltaEvap = de;
+  if (7 == indexC) {
+    G4int n = (G4int)(de/minExc) + 1;
+    nProbEvap = std::min(n, nProbMax);
+    if (nProbEvap > 1) { fDeltaEvap /= (G4double)(nProbEvap - 1); }
+  }
+
   if (2 < fVerbose) {
     G4cout << "## G4GEMChannelVI::GetEmissionProbability fragZ="
-	   << fragZ << " fragA=" << fragA << " Z=" << Z << " A=" << A
-	   << " Eex(MeV)=" << fExc << " nProb=" << nProb 
-	   << G4endl;
+	   << fragZ << " fragA=" << fragA << " Z=" << evapZ << " A=" << evapA
+	   << " Eex(MeV)=" << fFragExc << " nProbEvap=" << nProbEvap
+	   << " nProbRes=" << nProbRes << " CB=" << bCoulomb
+	   << " Elim=" << fEnergyLimitXS << G4endl;
   }
-  fProbability->SetDecayKinematics(resZ, resA, fResMass, fMass);
-  G4double sump = 0.0; 
-  for (G4int i=0; i<nProb; ++i) {
-    G4double exc = std::min(minExc*i, de);
-    G4double m1 = fEvapMass + exc;
-    G4double e2 = 0.5*((fMass-fResMass)*(fMass+fResMass) + m1*m1)/fMass - m1;
-    G4double m2 = fMass - m1 - 0.5*bCoulomb;
-    if (m2 < fResMass) {
-      nProb = i;
-      break;
-    }
-    G4double e1 = std::max(0.5*((fMass-m2)*(fMass+m2) + m1*m1)/fMass - m1, 0.0);
-    if (e1 >= e2) {
-      nProb = i;
-      break;
-    }
-    sump += fProbability->TotalProbability(*fragment, e1, e2, bCoulomb, fExc, exc);
-    fEData[i].exc = exc;
-    fEData[i].ekin1 = e1;
-    fEData[i].ekin2 = e2;
-    fEData[i].prob = sump;
+
+  // m1 is the mass of emitted excited fragment
+  // e2 - free energy in the 2-body decay
+  G4double sump = 0.0;
+  for (G4int i=0; i<nProbEvap; ++i) {
+    fEvapExc = fDeltaEvap*i;
+    G4double m1 = fEvapMass + fEvapExc;
+    G4double e2 = fMass - m1 - fResMass;
+    e2 = std::max(e2, 0.0);
+    G4double p = (e2 > 0.5*bCoulomb) ? ComputeIntegral(0.5*bCoulomb, e2) : 0.0;
+    sump += p;
+    prob[i] = sump;
   }
+  sump /= (G4double)nProbEvap;
   return sump;
+}
+
+G4double G4GEMChannelVI::ProbabilityDensityFunction(G4double e)
+{
+  // e is free energy 
+  G4double m1 = fEvapMass + fEvapExc;
+  fResExc = fMass - m1 - fResMass - e;
+  if (fResExc <= 0.0 || 0.0 == e) { return 0.0; }
+  fE1 = std::max(fResExc - delta1, 0.0);
+  a1 = nData->GetLevelDensity(resZ, resA, fResExc);
+  G4double m2 = fResMass + fResExc;
+  G4double elab = 0.5*(fMass + m1 + m2)*(fMass - m1 - m2)/m2;
+  G4double xs = CrossSection(elab);
+  G4double res =
+    fCoeff*G4Exp(2.0*(std::sqrt(a1*fE1) - std::sqrt(a0*fE0)))*elab*xs;
+
+  //G4cout << "e=" << e << " elab=" << elab << " xs=" << xs << " sig=" << res << G4endl;
+  return res;
+}
+
+G4double G4GEMChannelVI::CrossSection(G4double e)
+{
+  if (indexC <= 5) {
+    G4int Z = std::min(resZ, ZMAXNUCLEARDATA);
+    G4double e1 = std::max(e, fLimEXS);
+    recentXS = fXSection->GetElementCrossSection(e1, Z)/CLHEP::millibarn;
+    if (e1 > e) {
+      recentXS *= (e1/e) *
+	G4DeexPrecoUtility::CorrectionFactor(indexC, Z, fResA13, bCoulomb, e, e1);
+    }
+  } else {
+    const G4double cInel = 2.4;
+    const G4double cTotal = 2.0;
+
+    if (e <= 0.5*bCoulomb) { return 0.0; }
+
+    G4double pTkin = e/(G4double)evapA;
+
+    G4int evapN = evapA - evapZ;
+    G4int resN = resA - resZ;
+
+    G4double tR = G4NuclearRadii::Radius(resZ, resA);  
+    G4double pR = G4NuclearRadii::Radius(evapZ, evapA);
+
+    fHNXsc->HadronNucleonXscNS(fProton, fProton, pTkin);
+    G4double xs1 = fHNXsc->GetInelasticHadronNucleonXsc();
+    fHNXsc->HadronNucleonXscNS(fNeutron, fProton, pTkin);
+    G4double xs2 = fHNXsc->GetInelasticHadronNucleonXsc();
+    // nn x-section assumed to be the same as pp
+    G4double xs = (evapZ*resZ + evapN*resN)*xs1 + (evapZ*resN + evapN*resZ)*xs2;
+
+    G4double R2 = cTotal*CLHEP::pi*( pR*pR + tR*tR ); // basically 2piRR
+    recentXS = R2*G4Log(1.0 + cInel*xs/R2)*(1. - 0.5*bCoulomb/e)/cInel;
+  }
+  return recentXS;
 }
 
 G4Fragment* G4GEMChannelVI::EmittedFragment(G4Fragment* theNucleus)
@@ -161,43 +257,93 @@ G4Fragment* G4GEMChannelVI::EmittedFragment(G4Fragment* theNucleus)
   // assumed, that TotalProbability(...) was already called
   // if value iz zero no possiblity to sample final state
   G4Fragment* evFragment = nullptr;
-  G4LorentzVector lv0 = theNucleus->GetMomentum();
-  G4double ekin;
-  G4double exc = 0.0;
-  G4double probMax = std::max(fEData[nProb - 1].prob, 0.0); 
-  if (0.0 >= probMax) {
-    ekin = std::max(0.5*(fMass*fMass - fResMass*fResMass + fEvapMass2)
-		    /fMass - fEvapMass, 0.0);
-  } else if (1 == nProb) {
-    ekin = fProbability->SampleEnergy(fEData[0].ekin1, fEData[0].ekin2,
-				      bCoulomb, fExc, 0.0);
-  } else {
-    G4double p = G4UniformRand()*probMax;
-    G4int i{1};
-    for (; i<nProb; ++i) {
-      if (p <= fEData[i].prob) { break; }
+  lManagerRes = nData->GetLevelManager(resZ, resA);
+  G4double e2 = fMass - fEvapMass - fResMass;
+  fEvapExc = 0.0;
+
+  // sample excitation of the evaporation fragment
+  if (nProbEvap > 1) {
+    G4double q = prob[nProbEvap - 1];
+    if (q > 0.0) {
+      q *= G4UniformRand();
+      for (G4int i=0; i < nProbEvap; ++i) {
+	if (q <= prob[i]) {
+	  G4double e1 = (0 == i) ? 0.0 :
+	    fDeltaEvap*((i - 1) + (q - prob[i - 1])/(prob[i] - prob[i - 1]));
+	  fEvapExc = CorrectExcitation(e1, lManagerEvap);
+	  e2 -= fEvapExc;
+	  e2 = std::max(e2, 0.0);
+	}
+      }
     }
-    G4double e1 = fEData[i - 1].exc;
-    G4double e2 = fEData[i].exc;
-    G4double p1 = fEData[i - 1].prob;
-    G4double p2 = fEData[i].prob;
-    exc = e1 + (e2 - e1)*(p - p1)/(p2 - p1);
-    ekin = fProbability->SampleEnergy(fEData[i].ekin1, fEData[i].ekin2,
-                                      bCoulomb, fExc, exc);
   }
-  G4double m1 = fEvapMass + exc;
+  if (ComputeIntegral(bCoulomb, e2) <= 0.0) { return evFragment; }
+
+  // sample free energy
+  G4double e = SampleValue();
+  // compute excitation of the residual fragment
+  fResExc = CorrectExcitation(e2 - e, lManagerRes);
+
+  // final kinematics
+  G4double m1 = fEvapMass + fEvapExc;
+  G4double m2 = fResMass + fResExc;
+
+  G4double ekin = 0.5*e*(e + 2*m2)/(e + m1 + m2);
   G4LorentzVector lv(std::sqrt(ekin*(ekin + 2.0*m1))
 		     *G4RandomDirection(), ekin + m1);
+  G4LorentzVector lv0 = theNucleus->GetMomentum();
   lv.boost(lv0.boostVector());
-  evFragment = new G4Fragment(A, Z, lv);
-  lv0 -= lv;
+  evFragment = new G4Fragment(evapA, evapZ, lv);
   evFragment->SetCreatorModelID(secID);
+
+  // residual
+  lv0 -= lv;
   theNucleus->SetZandA_asInt(resZ, resA);
   theNucleus->SetMomentum(lv0);
   theNucleus->SetCreatorModelID(secID);
   
   return evFragment;  
-} 
+}
+
+G4double
+G4GEMChannelVI::CorrectExcitation(G4double exc, const G4LevelManager* man)
+{
+  if (exc <= 0.0 || nullptr == man) { return 0.0; }
+  std::size_t idx = man->NearestLevelIndex(exc);
+
+  // choose ground state
+  if (0 == idx) { return 0.0; }
+
+  // possible discrete level 
+  G4double elevel = man->LevelEnergy(idx);
+  std::size_t ntrans{0};
+  if (std::abs(elevel - exc) < fTolerance) {
+    auto level = man->GetLevel(idx);
+    if (nullptr != level) { 
+      ntrans = level->NumberOfTransitions();
+      G4int idxfl = man->FloatingLevel(idx); 
+      // for floating level check levels with the same energy
+      if (idxfl > 0) {
+	auto newlevel = man->GetLevel(idx - 1);
+	G4double newenergy = man->LevelEnergy(idx - 1);
+	if (nullptr != newlevel && std::abs(elevel - newenergy) < fTolerance) {
+	  std::size_t newntrans = newlevel->NumberOfTransitions();
+	  if (newntrans > 0) {
+	    elevel = newenergy;
+	    ntrans = newntrans;
+          }
+        }
+      }
+      if (0 < ntrans) { return elevel; }
+    }
+  }
+  return exc;
+}
+
+const G4String& G4GEMChannelVI::ModelName() const
+{
+  return fModelName;
+}
 
 void G4GEMChannelVI::Dump() const
 {}

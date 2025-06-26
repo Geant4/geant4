@@ -62,7 +62,7 @@
 /dnageom/radicalKillDistance 9 nm
 
 # Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
-/dnageom/interactionDirectRange 7 angstrom
+/dnageom/interactionDirectRange 5.5 angstrom
 
 # Geometry: activate Histone scavenging function
 /dnageom/activateHistoneScavenging true

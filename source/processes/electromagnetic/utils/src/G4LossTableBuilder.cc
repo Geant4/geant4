@@ -68,8 +68,9 @@
 
 G4bool G4LossTableBuilder::baseMatFlag = false;
 std::vector<G4double>* G4LossTableBuilder::theDensityFactor = nullptr;
-std::vector<G4int>*    G4LossTableBuilder::theDensityIdx = nullptr;
-std::vector<G4bool>*   G4LossTableBuilder::theFlag = nullptr;
+std::vector<G4int>* G4LossTableBuilder::theDensityIdx = nullptr;
+std::vector<G4bool>* G4LossTableBuilder::theFlag = nullptr;
+std::vector<G4bool>* G4LossTableBuilder::theFluct = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -81,6 +82,7 @@ G4LossTableBuilder::G4LossTableBuilder(G4bool master)
     theDensityFactor = new std::vector<G4double>;
     theDensityIdx = new std::vector<G4int>;
     theFlag = new std::vector<G4bool>;
+    theFluct = new std::vector<G4bool>;
   }
 }
 
@@ -92,9 +94,11 @@ G4LossTableBuilder::~G4LossTableBuilder()
     delete theDensityFactor;
     delete theDensityIdx;
     delete theFlag;
+    delete theFluct;
     theDensityFactor = nullptr;
     theDensityIdx = nullptr;
     theFlag = nullptr;
+    theFluct = nullptr;
   }
 }
 
@@ -110,6 +114,13 @@ const std::vector<G4int>* G4LossTableBuilder::GetCoupleIndexes()
 const std::vector<G4double>* G4LossTableBuilder::GetDensityFactors()
 {
   return theDensityFactor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const std::vector<G4bool>* G4LossTableBuilder::GetFluctuationFlags()
+{
+  return theFluct;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -304,8 +315,11 @@ void G4LossTableBuilder::InitialiseBaseMaterials(const G4PhysicsTable* table)
   if(nFlags != nCouples) { isInitialized = false; }
   if(isInitialized) { return; }
 
-  // reserve memory
+  // reserve and fill memory
   theFlag->resize(nCouples, true);
+  theFluct->resize(nCouples, theParameters->LossFluctuation());
+  theParameters->DefineFluctuationFlags(theFluct);
+
   theDensityFactor->resize(nCouples,1.0);
   theDensityIdx->resize(nCouples, 0);
 

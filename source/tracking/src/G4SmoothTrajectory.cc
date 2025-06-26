@@ -82,6 +82,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
 }
 
 G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory& right)
+: G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;

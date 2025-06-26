@@ -4,6 +4,27 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
+## 2025-05-15 Hoang Tran (UHDR-V11-03-04)
+- corrected reading file
+- updated macro files
+
+## 2025-05-15 Hoang Tran (UHDR-V11-03-03)
+- added pulse structure and interpulse feature
+- fixed partially diffused-control reactions
+
+## 2025-05-14 Le Tuan Anh (UHDR-V11-03-02)
+- Fix crash due to typo in UHDR.in
+- Avoid dependence of PrimaryGeneratorAction/Physlist/ChemList/ActionIni 
+  classes on DetectorConstruction class
+
+## 2025-04-23 Hoang Tran (UHDR-V11-03-01)
+- used new G4MoleculeCounterManager to manage the G4MoleculeCounter
+
+## 2025-04-04 Hoang Tran (UHDR-V11-03-00)
+- updated pulseAction for larger pulse size
+- temporarily used molecule counter form EventScheduler
+- updated reaction table for scavengers
+
 ## 2024-10-22 Hoang Tran (UHDR-V11-02-04)
 - updated visu mode for physical stage and corrected README files
 

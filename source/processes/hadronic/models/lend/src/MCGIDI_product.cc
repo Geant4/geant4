@@ -1,427 +1,349 @@
 /*
 # <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
 # <<END-copyright>>
 */
-#include <string.h>
-#include <cmath>
 
-#include "MCGIDI.h"
-#include "MCGIDI_misc.h"
-#include "MCGIDI_fromTOM.h"
+#include "MCGIDI.hpp"
 
-#if defined __cplusplus
-namespace GIDI {
-using namespace GIDI;
+namespace MCGIDI {
+
+/*! \class Product
+ * This class represents a **GNDS** <**product**> node with only data needed for Monte Carlo transport.
+ */
+
+/* *********************************************************************************************************//**
+ * Default constructor used when broadcasting a Protare as needed by MPI or GPUs.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE Product::Product( ) :
+        m_ID( ),
+        m_intid( -1 ),
+        m_index( -1 ),
+        m_userParticleIndex( -1 ),
+        m_mass( 0.0 ),
+        m_excitationEnergy( 0.0 ),
+        m_twoBodyOrder( TwoBodyOrder::notApplicable ),
+        m_initialStateIndex( -1 ),
+        m_multiplicity( nullptr ),
+        m_distribution( nullptr ),
+        m_outputChannel( nullptr ) {
+
+}
+
+/* *********************************************************************************************************//**
+ * @param a_product             [in]    The GIDI::Product whose data is to be used to construct *this*.
+ * @param a_setupInfo           [in]    Used internally when constructing a Protare to pass information to other constructors.
+ * @param a_settings            [in]    Used to pass user options to the *this* to instruct it which data are desired.
+ * @param a_particles           [in]    List of transporting particles and their information (e.g., multi-group boundaries and fluxes).
+ * @param a_isFission           [in]    *true* if parent channel is a fission channel and *false* otherwise.
+ ***********************************************************************************************************/
+
+LUPI_HOST Product::Product( GIDI::Product const *a_product, SetupInfo &a_setupInfo, Transporting::MC const &a_settings, 
+                GIDI::Transporting::Particles const &a_particles, bool a_isFission ) :
+        m_ID( a_product->particle( ).ID( ).c_str( ) ),
+        m_intid( MCGIDI_popsIntid( a_setupInfo.m_pops, a_product->particle( ).ID( ) ) ),
+        m_index( MCGIDI_popsIndex( a_setupInfo.m_popsUser, a_product->particle( ).ID( ) ) ),
+        m_userParticleIndex( -1 ),
+        m_label( a_product->label( ).c_str( ) ),
+        m_isCompleteParticle( a_product->isCompleteParticle( ) ),
+        m_mass( a_product->particle( ).mass( "MeV/c**2" ) ),         // Includes nuclear excitation energy.
+        m_excitationEnergy( a_product->particle( ).excitationEnergy( ).value( ) ),
+        m_twoBodyOrder( a_setupInfo.m_twoBodyOrder ),
+        m_initialStateIndex( -1 ),
+        m_multiplicity( Functions::parseMultiplicityFunction1d( a_setupInfo, a_settings, a_product->multiplicity( ) ) ),
+        m_distribution( nullptr ),
+        m_outputChannel( nullptr ) {
+
+    a_setupInfo.m_product1Mass = mass( );                           // Includes nuclear excitation energy.
+    a_setupInfo.m_initialStateIndex = -1;
+    m_distribution = Distributions::parseGIDI( a_product->distribution( ), a_setupInfo, a_settings );
+    m_initialStateIndex = a_setupInfo.m_initialStateIndex;
+
+    GIDI::OutputChannel const *output_channel = a_product->outputChannel( );
+    if( output_channel != nullptr ) m_outputChannel = new OutputChannel( output_channel, a_setupInfo, a_settings, a_particles );
+
+    if( a_isFission && ( m_intid == PoPI::Intids::neutron ) && a_settings.wantTerrellPromptNeutronDistribution( ) ) {
+        Functions::Function1d_d1 *multiplicity1 = static_cast<Functions::Function1d_d1 *>( m_multiplicity );
+
+        m_multiplicity = new Functions::TerrellFissionNeutronMultiplicityModel( -1.0, multiplicity1 );
+    }
+}
+
+/* *********************************************************************************************************//**
+ * @param a_pops                [in]    A PoPs Database instance used to get particle intids and possibly other particle information.
+ * @param a_ID                  [in]    The PoPs id for the product.
+ * @param a_label               [in]    The **GNDS** label for the product.
+ ***********************************************************************************************************/
+
+LUPI_HOST Product::Product( PoPI::Database const &a_pops, std::string const &a_ID, std::string const &a_label ) :
+        m_ID( a_ID.c_str( ) ),
+        m_intid( MCGIDI_popsIntid( a_pops, a_ID ) ),
+        m_index( MCGIDI_popsIndex( a_pops, a_ID ) ),
+        m_userParticleIndex( -1 ),
+        m_label( a_label.c_str( ) ),
+        m_mass( 0.0 ),                                  // FIXME, good for photon but nothing else. Still need to implement.
+        m_excitationEnergy( 0.0 ),
+        m_twoBodyOrder( TwoBodyOrder::notApplicable ),
+        m_initialStateIndex( -1 ),
+        m_multiplicity( nullptr ),
+        m_distribution( nullptr ),
+        m_outputChannel( nullptr ) {
+
+}
+
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE Product::~Product( ) {
+
+    delete m_multiplicity;
+
+    Distributions::Type type = Distributions::Type::none;
+    if( m_distribution != nullptr ) type = m_distribution->type( );
+    switch( type ) {
+    case Distributions::Type::none:
+        break;
+    case Distributions::Type::unspecified:
+        delete static_cast<Distributions::Unspecified *>( m_distribution );
+        break;
+    case Distributions::Type::angularTwoBody:
+        delete static_cast<Distributions::AngularTwoBody *>( m_distribution );
+        break;
+    case Distributions::Type::KalbachMann:
+        delete static_cast<Distributions::KalbachMann *>( m_distribution );
+        break;
+    case Distributions::Type::uncorrelated:
+        delete static_cast<Distributions::Uncorrelated *>( m_distribution );
+        break;
+    case Distributions::Type::branching3d:
+        delete static_cast<Distributions::Branching3d *>( m_distribution );
+        break;
+    case Distributions::Type::energyAngularMC:
+        delete static_cast<Distributions::EnergyAngularMC *>( m_distribution );
+        break;
+    case Distributions::Type::angularEnergyMC:
+        delete static_cast<Distributions::AngularEnergyMC *>( m_distribution );
+        break;
+    case Distributions::Type::coherentPhotoAtomicScattering:
+        delete static_cast<Distributions::CoherentPhotoAtomicScattering *>( m_distribution );
+        break;
+    case Distributions::Type::incoherentPhotoAtomicScattering:
+        delete static_cast<Distributions::IncoherentPhotoAtomicScattering *>( m_distribution );
+        break;
+    case Distributions::Type::incoherentBoundToFreePhotoAtomicScattering:
+        delete static_cast<Distributions::IncoherentBoundToFreePhotoAtomicScattering *>( m_distribution );
+        break;
+    case Distributions::Type::incoherentPhotoAtomicScatteringElectron:
+        delete static_cast<Distributions::IncoherentPhotoAtomicScatteringElectron *>( m_distribution );
+        break;
+    case Distributions::Type::pairProductionGamma:
+        delete static_cast<Distributions::PairProductionGamma *>( m_distribution );
+        break;
+    case Distributions::Type::coherentElasticTNSL:
+        delete static_cast<Distributions::CoherentElasticTNSL *>( m_distribution );
+        break;
+    case Distributions::Type::incoherentElasticTNSL:
+        delete static_cast<Distributions::IncoherentElasticTNSL *>( m_distribution );
+        break;
+    }
+
+    delete m_outputChannel;
+}
+
+/* *********************************************************************************************************//**
+ * Updates the m_userParticleIndex to *a_userParticleIndex* for all particles with PoPs index *a_particleIndex*.
+ *  
+ * @param a_particleIndex       [in]    The PoPs index of the particle whose user index is to be set.
+ * @param a_userParticleIndex   [in]    The particle index specified by the user.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Product::setUserParticleIndex( int a_particleIndex, int a_userParticleIndex ) {
+
+    if( m_index == a_particleIndex ) m_userParticleIndex = a_userParticleIndex;
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    if( m_outputChannel != nullptr ) m_outputChannel->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+#endif
+}
+
+/* *********************************************************************************************************//**
+ * Updates the m_userParticleIndex to *a_userParticleIndex* for all particles with PoPs intid *a_particleIntid*.
+ *
+ * @param a_particleIntid       [in]    The PoPs intid of the particle whose user index is to be set.
+ * @param a_userParticleIndex   [in]    The particle index specified by the user.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Product::setUserParticleIndexViaIntid( int a_particleIntid, int a_userParticleIndex ) {
+
+    if( m_intid == a_particleIntid ) m_userParticleIndex = a_userParticleIndex;
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    if( m_outputChannel != nullptr ) m_outputChannel->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+#endif
+}
+
+/* *********************************************************************************************************//**
+ * This method calls the **setModelDBRC_data* method on the distribution of *this* with *a_modelDBRC_data*.
+ *
+ * @param a_modelDBRC_data      [in]    The instance storing data needed to treat the DRRC upscatter mode.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Product::setModelDBRC_data( Sampling::Upscatter::ModelDBRC_data *a_modelDBRC_data ) {
+
+    m_distribution->setModelDBRC_data( a_modelDBRC_data );
+}
+
+/* *********************************************************************************************************//**
+ * This method returns the final Q for *this* by getting its output channel's finalQ.
+ *
+ * @param a_x1                  [in]    The energy of the projectile.
+ *
+ * @return                              The Q-value at product energy *a_x1*.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Product::finalQ( LUPI_maybeUnused double a_x1 ) const {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    if( m_outputChannel != nullptr ) return( m_outputChannel->finalQ( a_x1 ) );
+#endif
+    return( m_excitationEnergy );
+}
+
+/* *********************************************************************************************************//**
+ * This method returns *true* if the output channel or any of its sub-output channels is a fission channel and *false* otherwise.
+ *
+ * @return                              *true* if any sub-output channel is a fission channel and *false* otherwise.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE bool Product::hasFission( ) const {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    if( m_outputChannel != nullptr ) return( m_outputChannel->hasFission( ) );
+#endif
+    return( false );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops index *a_index*. The returned value may not
+ * be an integer. Energy dependent multiplicities mainly occurs for photons and fission neutrons.
+ *
+ * @param a_index                   [in]    The PoPs index of the requested particle.
+ * @param a_projectileEnergy        [in]    The energy of the projectile.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Product::productAverageMultiplicity( int a_index, double a_projectileEnergy ) const {
+
+    double multiplicity1 = 0.0;
+
+    if( a_index == m_index ) {
+        if( ( m_multiplicity->domainMin( ) <= a_projectileEnergy ) && ( m_multiplicity->domainMax( ) >= a_projectileEnergy ) )
+            multiplicity1 += m_multiplicity->evaluate( a_projectileEnergy );
+    }
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    if( m_outputChannel != nullptr ) multiplicity1 += m_outputChannel->productAverageMultiplicity( a_index, a_projectileEnergy );
 #endif
 
-typedef struct polynomialCallbackArgs_s {
-    int length;
-    double energyFactor;
-    double *coefficients;
-} polynomialCallbackArgs;
-
-static int MCGIDI_product_parsePiecewiseMultiplicity( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product *product );
-static ptwXYPoints *MCGIDI_product_parsePolynomialMultiplicity( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product *product );
-static int MCGIDI_product_parseWeightedReferenceMultiplicityFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product *product, 
-    ptwXYPoints **multiplicityVsEnergy, ptwXYPoints **norms );
-static double MCGIDI_product_evaluatePolynomial( double x, polynomialCallbackArgs *args );
-/*
-************************************************************
-*/
-MCGIDI_product *MCGIDI_product_new( statusMessageReporting *smr ) {
-
-    MCGIDI_product *product;
-
-    if( ( product = (MCGIDI_product *) smr_malloc2( smr, sizeof( MCGIDI_product ), 0, "product" ) ) == NULL ) return( NULL );
-    if( MCGIDI_product_initialize( smr, product ) ) product = MCGIDI_product_free( smr, product );
-    return( product );
+    return( multiplicity1 );
 }
-/*
-************************************************************
-*/
-int MCGIDI_product_initialize( statusMessageReporting * /*smr*/, MCGIDI_product *product ) {
 
-    memset( product, 0, sizeof( MCGIDI_product ) );
-    product->delayedNeutronIndex = -1;
-    return( 0 );
-}
-/*
-************************************************************
-*/
-MCGIDI_product *MCGIDI_product_free( statusMessageReporting *smr, MCGIDI_product *product ) {
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops intid *a_intid*. The returned value may not
+ * be an integer. Energy dependent multiplicities mainly occurs for photons and fission neutrons.
+ *
+ * @param a_intid                   [in]    The PoPs intid of the requested particle.
+ * @param a_projectileEnergy        [in]    The energy of the projectile.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
 
-    MCGIDI_product_release( smr, product );
-    smr_freeMemory( (void **) &product );
-    return( NULL );
-}
-/*
-************************************************************
-*/
-int MCGIDI_product_release( statusMessageReporting *smr, MCGIDI_product *product ) {
+LUPI_HOST_DEVICE double Product::productAverageMultiplicityViaIntid( int a_intid, double a_projectileEnergy ) const {
 
-    int i;
+    double multiplicity1 = 0.0;
 
-    if( product->label != NULL ) smr_freeMemory( (void **) &(product->label) );
-
-    if( product->multiplicityVsEnergy != NULL ) ptwXY_free( product->multiplicityVsEnergy );
-    if( product->piecewiseMultiplicities != NULL ) {
-        for( i = 0; i < product->numberOfPiecewiseMultiplicities; i++ ) ptwXY_free( product->piecewiseMultiplicities[i] );
-        smr_freeMemory( (void **) &(product->piecewiseMultiplicities) );
+    if( a_intid == m_intid ) {
+        if( ( m_multiplicity->domainMin( ) <= a_projectileEnergy ) && ( m_multiplicity->domainMax( ) >= a_projectileEnergy ) )
+            multiplicity1 += m_multiplicity->evaluate( a_projectileEnergy );
     }
-    if( product->norms != NULL ) ptwXY_free( product->norms );
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    if( m_outputChannel != nullptr ) multiplicity1 += m_outputChannel->productAverageMultiplicityViaIntid( a_intid, a_projectileEnergy );
+#endif
 
-    MCGIDI_distribution_release( smr, &(product->distribution) );
-    MCGIDI_outputChannel_release( smr, &(product->decayChannel) );
-
-    MCGIDI_product_initialize( smr, product );
-    return( 0 );
+    return( multiplicity1 );
 }
-/*
-************************************************************
-*/
-int MCGIDI_product_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_outputChannel *outputChannel,
-        MCGIDI_POPs *pops, MCGIDI_product *product, int *delayedNeutronIndex ) {
 
-    char const *name{""}, *label{""}, *delayedNeutron{""}, *multiplicityStr{""}, *multiplicityUnits[2] = { "MeV", "" };
-    xDataTOM_element *multiplicity{nullptr}, *multiplicityTOM{nullptr}, *decayChannelElement{nullptr};
-    nfu_status status{nfu_Okay};
-    ptwXYPoints *multiplicityVsEnergy = NULL, *norms1 = NULL, *norms2 = NULL;
+/* *********************************************************************************************************//**
+ * This method serializes *this* for broadcasting as needed for MPI and GPUs. The method can count the number of required
+ * bytes, pack *this* or unpack *this* depending on *a_mode*.
+ *
+ * @param a_buffer              [in]    The buffer to read or write data to depending on *a_mode*.
+ * @param a_mode                [in]    Specifies the action of this method.
+ ***********************************************************************************************************/
 
-    MCGIDI_product_initialize( smr, product );
+LUPI_HOST_DEVICE void Product::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
 
-    product->outputChannel = outputChannel;
-    if( ( name = xDataTOM_getAttributesValueInElement( element, "name" ) ) == NULL ) goto err;
-    if( ( product->pop = MCGIDI_POPs_findParticle( pops, name ) ) == NULL ) {
-        smr_setReportError2( smr, smr_unknownID, 1, "product '%s' not found in pops", name );
-        goto err;
+    DATA_MEMBER_STRING( m_ID, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_intid, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_index, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_userParticleIndex, a_buffer, a_mode );
+    DATA_MEMBER_STRING( m_label, a_buffer, a_mode );
+    DATA_MEMBER_CAST( m_isCompleteParticle, a_buffer, a_mode, bool );
+    DATA_MEMBER_DOUBLE( m_mass, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_excitationEnergy, a_buffer, a_mode );
+
+    int twoBodyOrder = 0;
+    switch( m_twoBodyOrder ) {
+    case TwoBodyOrder::notApplicable :
+        break;
+    case TwoBodyOrder::firstParticle :
+        twoBodyOrder = 1;
+        break;
+    case TwoBodyOrder::secondParticle :
+        twoBodyOrder = 2;
+        break;
     }
-    if( ( label = xDataTOM_getAttributesValueInElement( element, "label" ) ) != NULL ) {
-        if( ( product->label = smr_allocateCopyString2( smr, label, "product->label" ) ) == NULL ) goto err;
+    DATA_MEMBER_INT( twoBodyOrder , a_buffer, a_mode );
+    if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+        switch( twoBodyOrder ) {
+        case 0 :
+            m_twoBodyOrder = TwoBodyOrder::notApplicable;
+            break;
+        case 1 :
+            m_twoBodyOrder = TwoBodyOrder::firstParticle;
+            break;
+        case 2 :
+            m_twoBodyOrder = TwoBodyOrder::secondParticle;
+            break;
+        }
     }
 
-    if( ( delayedNeutron = xDataTOM_getAttributesValueInElement( element, "emissionMode" ) ) != NULL ) {
-        if( strcmp( delayedNeutron, "delayed" ) == 0 ) {
-            if( ( delayedNeutron = xDataTOM_getAttributesValueInElement( element, "decayRate" ) ) == NULL ) {
-                goto err;
+    DATA_MEMBER_INT( m_initialStateIndex, a_buffer, a_mode );
+
+    m_multiplicity = serializeFunction1d( a_buffer, a_mode, m_multiplicity );
+    m_distribution = serializeDistribution( a_buffer, a_mode, m_distribution );
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    bool haveChannel = m_outputChannel != nullptr;
+    DATA_MEMBER_CAST( haveChannel, a_buffer, a_mode, bool );
+    if( haveChannel ) {
+        if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+            if (a_buffer.m_placement != nullptr) {
+                m_outputChannel = new(a_buffer.m_placement) OutputChannel();
+                a_buffer.incrementPlacement( sizeof(OutputChannel));
             }
-            if( MCGIDI_misc_PQUStringToDoubleInUnitOf( smr, delayedNeutron, "1/s", &(product->delayedNeutronRate) ) != 0 ) goto err;
-            product->delayedNeutronIndex = *delayedNeutronIndex;
-            (*delayedNeutronIndex)++;
+            else {
+                m_outputChannel = new OutputChannel();
+            }
         }
-    }
-
-    if( ( multiplicityStr = xDataTOM_getAttributesValueInElement( element, "multiplicity" ) ) == NULL ) goto err;
-    if( xDataTOME_convertAttributeToInteger( NULL, element, "multiplicity", &(product->multiplicity) ) ) {
-        if( strcmp( multiplicityStr, "energyDependent" ) ) {
-            smr_setReportError2( smr, smr_unknownID, 1, "invalid multiplicity '%s' for product '%s'", multiplicityStr, name );
-            goto err;
+        if( a_mode == LUPI::DataBuffer::Mode::Memory ) {
+            a_buffer.incrementPlacement( sizeof(OutputChannel));
         }
-        if( ( multiplicity = xDataTOME_getOneElementByName( smr, element, "multiplicity", 1 ) ) == NULL ) goto err;
-        if( ( multiplicityTOM = xDataTOME_getOneElementByName( NULL, multiplicity, "weightedReference", 0 ) ) != NULL ) {
-            if( MCGIDI_product_parseWeightedReferenceMultiplicityFromTOM( smr, multiplicityTOM, product, &multiplicityVsEnergy, &norms1 ) ) goto err; }
-        else if( ( multiplicityTOM = xDataTOME_getOneElementByName( NULL, multiplicity, "piecewise", 0 ) ) != NULL ) {
-            if( MCGIDI_product_parsePiecewiseMultiplicity( smr, multiplicityTOM, product ) ) goto err; }
-        else if( ( multiplicityTOM = xDataTOME_getOneElementByName( NULL, multiplicity, "polynomial", 0 ) ) != NULL ) {
-            if( ( multiplicityVsEnergy = MCGIDI_product_parsePolynomialMultiplicity( smr, multiplicityTOM, product ) ) == NULL ) goto err; }
-        else {
-/* ??????? Need to check interpolation. */
-            if( ( multiplicityTOM = xDataTOME_getOneElementByName( smr, multiplicity, "pointwise", 1 ) ) == NULL ) goto err;
-            if( ( multiplicityVsEnergy = MCGIDI_misc_dataFromElement2ptwXYPointsInUnitsOf( smr, multiplicityTOM, multiplicityUnits ) ) == NULL ) goto err;
-        }
+        m_outputChannel->serialize( a_buffer, a_mode );
     }
-
-    if( strcmp( product->pop->name, "gamma" ) == 0 ) {
-        if( ( norms2 = ptwXY_new( ptwXY_interpolationLinLin, NULL, 2., 1e-3, 200, 10, &status, 0 ) ) == NULL ) {
-            smr_setReportError2( smr, smr_unknownID, 1, "ptwXY_new err = %d: %s\n", status, nfu_statusMessage( status ) );
-            goto err;
-        }
-    }
-    if( MCGIDI_distribution_parseFromTOM( smr, element, product, pops, norms2 ) ) goto err;
-    if( norms2 != NULL ) {
-        if( ptwXY_length( norms2 ) < 2 ) {
-            norms2 = ptwXY_free( norms2 ); }
-        else {
-            if( ptwXY_simpleCoalescePoints( norms2 ) != nfu_Okay ) goto err;
-            if( ( ptwXY_getYMin( norms2 ) > 0.99 ) && ( ptwXY_getYMax( norms2 ) < 1.01 ) ) norms2 = ptwXY_free( norms2 );
-        }
-    }
-    if( ( norms1 != NULL ) && ( norms2 != NULL ) ) {
-        smr_setReportError2p( smr, smr_unknownID, 1, "norm1 and norm2 are both not NULL" );
-        goto err;
-    }
-
-    product->multiplicityVsEnergy = multiplicityVsEnergy;
-    product->norms = norms1;
-    if( norms2 != NULL ) product->norms = norms2;
-
-    if( ( decayChannelElement = xDataTOME_getOneElementByName( NULL, element, "decayChannel", 0 ) ) != NULL ) {
-        if( MCGIDI_outputChannel_parseFromTOM( smr, decayChannelElement, pops, &(product->decayChannel), NULL, product ) ) goto err;
-    }
-
-    return( 0 );
-
-err:
-    if( multiplicityVsEnergy != NULL ) ptwXY_free( multiplicityVsEnergy );
-    if( norms1 != NULL ) ptwXY_free( norms1 );
-    if( norms2 != NULL ) ptwXY_free( norms2 );
-    MCGIDI_product_release( smr, product );
-    return( 1 );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_product_parsePiecewiseMultiplicity( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product *product ) {
-
-    int i;
-    xDataTOM_XYs *XYs;
-    xDataTOM_regionsXYs *regionsXYs = (xDataTOM_regionsXYs *) element->xDataInfo.data;
-    ptwXYPoints *multiplicityVsEnergy;
-    char const *multiplicityUnits[2] = { "MeV", "" };
-
-    if( ( product->piecewiseMultiplicities = (ptwXYPoints **) smr_malloc2( smr, regionsXYs->length * sizeof( ptwXYPoints * ), 1, "piecewiseMultiplicities" ) ) == NULL ) return( 1 );
-
-    for( i = 0; i < regionsXYs->length; i++ ) {
-/* ??????? Need to check interpolation. */
-        XYs = &(regionsXYs->XYs[i]);
-        if( ( multiplicityVsEnergy = MCGIDI_misc_dataFromXYs2ptwXYPointsInUnitsOf( smr, XYs, ptwXY_interpolationLinLin, multiplicityUnits ) 
-            ) == NULL ) return( 1 );
-        product->piecewiseMultiplicities[i] = multiplicityVsEnergy;
-        product->numberOfPiecewiseMultiplicities++;
-    }
-
-    return( 0 );
-}
-/*
-************************************************************
-*/
-static ptwXYPoints *MCGIDI_product_parsePolynomialMultiplicity( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product *product ) {
-
-    int length;
-    double *coefficients;
-    char const *energyUnit;
-    ptwXYPoints *ptwXY = NULL;
-    nfu_status status;
-    double EMin, EMax;
-    polynomialCallbackArgs args;
-
-    if( MCGIDI_product_getDomain( smr, product, &EMin, &EMax ) ) goto err;
-
-    length = xDataTOM_polynomial_getDataFromXDataInfo( (xDataTOM_xDataInfo *) &(element->xDataInfo), &coefficients );
-    if( ( ptwXY = ptwXY_new( ptwXY_interpolationLinLin, NULL, 2., 1e-3, length, 10, &status, 0 ) ) == NULL ) {
-        smr_setReportError2( smr, smr_unknownID, 1, "ptwXY_new err = %d: %s\n", status, nfu_statusMessage( status ) );
-        goto err;
-    }
-
-    if( ( energyUnit = xDataTOM_axes_getUnit( smr, &(element->xDataInfo.axes), 0 ) ) == NULL ) goto err;
-    args.energyFactor = MCGIDI_misc_getUnitConversionFactor( smr, energyUnit, "MeV" );
-    if( !smr_isOk( smr ) ) goto err;
-
-    args.length = length;
-    args.coefficients = coefficients;
-    ptwXY_setValueAtX( ptwXY, EMin, MCGIDI_product_evaluatePolynomial( EMin, &args ) );
-    ptwXY_setValueAtX( ptwXY, EMax, MCGIDI_product_evaluatePolynomial( EMax, &args ) );
-    if( length > 2 ) {          /* ?????????????? This needs work. */
-        int i, n = 4 * length;
-        double E = EMin, dE = ( EMax - EMin ) / n;
-
-        for( i = 1; i < n; i++ ) {
-            E += dE;
-            ptwXY_setValueAtX( ptwXY, E, MCGIDI_product_evaluatePolynomial( E, &args ) );
-        }
-    }
-    return( ptwXY );
-
-err:
-    if( ptwXY != NULL ) ptwXY_free( ptwXY );
-    return( NULL );
-}
-/*
-************************************************************
-*/
-static double MCGIDI_product_evaluatePolynomial( double x, polynomialCallbackArgs *args ) {
-
-    int i;
-    double value = 0.;
-
-    x /= args->energyFactor;
-    for( i = args->length; i > 0; i-- ) value = value * x + args->coefficients[i-1];
-
-    return( value );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_product_parseWeightedReferenceMultiplicityFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product * /*product*/, 
-        ptwXYPoints **multiplicityVsEnergy, ptwXYPoints **norms ) {
-
-    char const *link, *energyInMWUnits[2] = { "MeV", "" };
-    xDataTOM_element *reference, *productTOM, *multiplicity, *weights, *pointwise;
-
-    if( ( reference = xDataTOME_getOneElementByName( smr, element, "reference", 1 ) ) == NULL ) goto err;
-    if( ( link = xDataTOM_getAttributesValueInElement( reference, "xlink:href" ) ) == NULL ) goto err;
-    if( ( productTOM = xDataTOM_getLinksElement( smr, reference, link ) ) == NULL ) goto err;
-    if( ( multiplicity = xDataTOME_getOneElementByName( smr, productTOM, "multiplicity", 1 ) ) == NULL ) goto err;
-                        /* Currently, only pointwise supported. */
-    if( ( pointwise = xDataTOME_getOneElementByName( smr, multiplicity, "pointwise", 1 ) ) == NULL ) goto err;
-    if( ( *multiplicityVsEnergy = MCGIDI_misc_dataFromElement2ptwXYPointsInUnitsOf( smr, pointwise, energyInMWUnits ) ) == NULL ) goto err;
-
-    if( ( weights = xDataTOME_getOneElementByName( smr, element, "weights", 1 ) ) == NULL ) goto err;
-    if( ( pointwise = xDataTOME_getOneElementByName( smr, weights, "pointwise", 1 ) ) == NULL ) goto err;
-    if( ( *norms = MCGIDI_misc_dataFromElement2ptwXYPointsInUnitsOf( smr, pointwise, energyInMWUnits ) ) == NULL ) goto err;
-
-    return( 0 );
-
-err:
-    if( *multiplicityVsEnergy != NULL ) *multiplicityVsEnergy = ptwXY_free( *multiplicityVsEnergy );
-    if( *norms != NULL ) *norms = ptwXY_free( *norms );
-    return( 1 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_product_getDomain( statusMessageReporting *smr, MCGIDI_product *product, double *EMin, double *EMax ) {
-
-    return( MCGIDI_outputChannel_getDomain( smr, product->outputChannel, EMin, EMax ) );
-}
-/*
-************************************************************
-*/
-int MCGIDI_product_setTwoBodyMasses( statusMessageReporting *smr, MCGIDI_product *product, double projectileMass_MeV, double targetMass_MeV,
-    double productMass_MeV, double residualMass_MeV ) {
-
-    return( MCGIDI_angular_setTwoBodyMasses( smr, product->distribution.angular, projectileMass_MeV, targetMass_MeV, productMass_MeV, residualMass_MeV ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_product_getMass_MeV( statusMessageReporting * /*smr*/, MCGIDI_product *product ) {
-
-    return( MCGIDI_POP_getMass_MeV( product->pop ) );
-}
-/*
-************************************************************
-*/
-MCGIDI_target_heated *MCGIDI_product_getTargetHeated( statusMessageReporting *smr, MCGIDI_product *product ) {
-
-    return( MCGIDI_outputChannel_getTargetHeated( smr, product->outputChannel ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_product_getProjectileMass_MeV( statusMessageReporting *smr, MCGIDI_product *product ) {
-
-    return( MCGIDI_outputChannel_getProjectileMass_MeV( smr, product->outputChannel ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_product_getTargetMass_MeV( statusMessageReporting *smr, MCGIDI_product *product ) {
-
-    return( MCGIDI_outputChannel_getTargetMass_MeV( smr, product->outputChannel ) );
-}
-/*
-************************************************************
-*/
-int MCGIDI_product_sampleMultiplicity( statusMessageReporting * /*smr*/, MCGIDI_product *product, double e_in, double r ) {
-
-    int i, multiplicity;
-    double y, norm = 1.0;
-    ptwXYPoints *ptwXY = product->multiplicityVsEnergy;
-
-    if( product->piecewiseMultiplicities != NULL ) {
-        for( i = 0; i < product->numberOfPiecewiseMultiplicities - 1; i++ ) {
-            if( e_in < ptwXY_getXMax( product->piecewiseMultiplicities[i] ) ) break;
-        }
-        ptwXY = product->piecewiseMultiplicities[i];
-    }
-    y = MCGIDI_sampling_ptwXY_getValueAtX( ptwXY, e_in );
-    if( product->norms != NULL ) norm = MCGIDI_sampling_ptwXY_getValueAtX( product->norms, e_in );
-    y *= norm;
-    multiplicity = (int) y;
-    if( r < ( y - multiplicity ) ) multiplicity++;
-
-    return( multiplicity );
-}
-/*
-************************************************************
-*/
-int MCGIDI_product_sampleMu( statusMessageReporting *smr, MCGIDI_product *product, MCGIDI_quantitiesLookupModes &modes, 
-        MCGIDI_decaySamplingInfo *decaySamplingInfo ) {
-
-    if( product->distribution.type != MCGIDI_distributionType_angular_e ) {
-        smr_setReportError2( smr, smr_unknownID, 1, "product distribution is not angular: type = %d", product->distribution.type );
-        return( 1 );
-    }
-    return( MCGIDI_angular_sampleMu( smr, product->distribution.angular, modes, decaySamplingInfo ) );
-}
-
-
-/*
-************************************************************
-*/
-int MCGIDI_sampledProducts_initialize( statusMessageReporting *smr, MCGIDI_sampledProductsDatas *sampledProductsDatas, int incrementSize ) {
-
-    if( incrementSize < 10 ) incrementSize = 10;
-    sampledProductsDatas->numberOfProducts = 0;
-    sampledProductsDatas->numberAllocated = 0;
-    sampledProductsDatas->incrementSize = incrementSize;
-    sampledProductsDatas->products = NULL;
-    return( MCGIDI_sampledProducts_remalloc( smr, sampledProductsDatas ) );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampledProducts_release( statusMessageReporting * /*smr*/, MCGIDI_sampledProductsDatas *sampledProductsDatas ) {
-
-    smr_freeMemory( (void **) &(sampledProductsDatas->products) );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampledProducts_remalloc( statusMessageReporting *smr, MCGIDI_sampledProductsDatas *sampledProductsDatas ) {
-
-    int size = sampledProductsDatas->numberAllocated + sampledProductsDatas->incrementSize;
-
-    if( ( sampledProductsDatas->products = (MCGIDI_sampledProductsData *) smr_realloc2( smr, sampledProductsDatas->products, 
-        size * sizeof( MCGIDI_sampledProductsData ), "products" ) ) != NULL ) {
-        sampledProductsDatas->numberAllocated = size;
-        return( 0 );
-    }
-    sampledProductsDatas->numberOfProducts = 0;
-    sampledProductsDatas->numberAllocated = 0;
-    return( 1 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampledProducts_addProduct( statusMessageReporting *smr, MCGIDI_sampledProductsDatas *sampledProductsDatas, MCGIDI_sampledProductsData *sampledProductsData ) {
-
-    if( sampledProductsDatas->numberOfProducts == sampledProductsDatas->numberAllocated ) {
-        if( ( MCGIDI_sampledProducts_remalloc( smr, sampledProductsDatas ) ) != 0 ) return( 1 );
-    }
-    sampledProductsDatas->products[sampledProductsDatas->numberOfProducts] = *sampledProductsData;
-    sampledProductsDatas->numberOfProducts++;
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampledProducts_number( MCGIDI_sampledProductsDatas *sampledProductsDatas ) {
-
-    return( sampledProductsDatas->numberOfProducts );
-}
-/*
-************************************************************
-*/
-MCGIDI_sampledProductsData *MCGIDI_sampledProducts_getProductAtIndex( MCGIDI_sampledProductsDatas *sampledProductsDatas, int index ) {
-
-    if( index < 0 ) return( NULL );
-    if( index >= sampledProductsDatas->numberOfProducts ) return( NULL );
-    return( &(sampledProductsDatas->products[index]) );
-}
-
-#if defined __cplusplus
-}
 #endif
+}
 
+}

@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-03-04 Michel Maire (testem18-V11-03-00)
+- PhysListEmStandard::ContructProcess() : add G4RayleighScattering
+
 ## 2023-05-17 Michel Maire (testem18-V11-01-00)
 - revision of all headers
 - ~StakingAction() : delete StackingMessenger*

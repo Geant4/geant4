@@ -39,10 +39,10 @@ class GB05ActionInitialization : public G4VUserActionInitialization
 {
   public:
     GB05ActionInitialization();
-    virtual ~GB05ActionInitialization();
+    ~GB05ActionInitialization() override;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 };
 
 #endif

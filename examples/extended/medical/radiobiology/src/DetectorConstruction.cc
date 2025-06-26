@@ -41,6 +41,7 @@
 #include "G4SolidStore.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
+#include "G4VisAttributes.hh"
 
 #include "DetectorMessenger.hh"
 #include "VoxelizedSensitiveDetector.hh"
@@ -95,23 +96,32 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  G4Box* sBox = new G4Box("Container",  // its name
-                          fBoxSizeX / 2, fBoxSizeY / 2, fBoxSizeZ / 2);  // its dimensions
+  // Materials
+  G4bool isotopes = false;
+  G4Material* airNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
 
-  fLBox = new G4LogicalVolume(sBox,  // its shape
-                              fMaterial,  // its material
-                              fMaterial->GetName());  // its name
+  // Simulation world
+  const G4double worldX = 400.0 * cm;
+  const G4double worldY = 400.0 * cm;
+  const G4double worldZ = 400.0 * cm;
 
-  fPBox = new G4PVPlacement(0,  // no rotation
-                            G4ThreeVector(),  // at (0,0,0)
-                            fLBox,  // its logical volume
-                            fMaterial->GetName(),  // its name
-                            0,  // its mother  volume
-                            false,  // no boolean operation
-                            0);  // copy number
+  G4Box* sWorld = new G4Box("TreatmentRoom", worldX, worldY, worldZ);
 
-  // Parameters for the world volume can be printed
-  // PrintParameters();
+  G4LogicalVolume* lWorld = new G4LogicalVolume(sWorld, airNist, "logicWorld", 0, 0, 0);
+
+  pWorld = new G4PVPlacement(0, G4ThreeVector(), "physicsWorld", lWorld, 0, false, 0);
+
+  // Create a visual attribute for the world
+  G4VisAttributes* worldVisAttributes = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));  // Blue color
+  worldVisAttributes->SetVisibility(true);  // Ensure visibility
+  worldVisAttributes->SetForceWireframe(true);  // Optional: make it wireframe for clarity
+  lWorld->SetVisAttributes(worldVisAttributes);
+
+  G4Box* sBox = new G4Box("Container", fBoxSizeX / 2, fBoxSizeY / 2, fBoxSizeZ / 2);
+
+  fLBox = new G4LogicalVolume(sBox, fMaterial, fMaterial->GetName());
+
+  fPBox = new G4PVPlacement(0, G4ThreeVector(), fLBox, fMaterial->GetName(), lWorld, false, 0);
 
   // Initialize pointer to world for voxelization
   VoxelizedSensitiveDetector::GetInstance()->InitializeWorldPtr(fPBox);
@@ -120,15 +130,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   VoxelizedSensitiveDetector::GetInstance()->Construct();
 
   // Always return the root volume
-  return fPBox;
+  return pWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n The Box dimensions are: " << G4endl << "x: " << G4BestUnit(fBoxSizeX, "Length")
-         << G4endl << "y: " << G4BestUnit(fBoxSizeY, "Length") << G4endl
+  G4cout << "\n The Box dimensions are: " << G4endl
+         << "x: " << G4BestUnit(fBoxSizeX, "Length") << G4endl
+         << "y: " << G4BestUnit(fBoxSizeY, "Length") << G4endl
          << "z: " << G4BestUnit(fBoxSizeZ, "Length") << G4endl;
 
   G4cout << "And its volume therefore is: "
@@ -139,7 +150,6 @@ void DetectorConstruction::PrintParameters()
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // Search the material by its name
   G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
   if (pttoMaterial) {
@@ -150,9 +160,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
       }
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     }
-  }
-  else {
-    // Warning the user this material does not exist
+  } else {
     std::stringstream sstr;
     sstr << "material " << +materialChoice << " does not exist, keeping material "
          << fMaterial->GetName();

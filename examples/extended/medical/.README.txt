@@ -7,7 +7,7 @@
  Specific examples for medical physics applications are demonstarted 
  in this directory. 
 
-\link ExampleDICOM DICOM \endlink
+\link ExamplesDICOM DICOM \endlink
 
 This example serves first to convert a DICOM file to a simple ASCII 
 file, where the Hounsfield numbers are converted to materials and 
@@ -15,7 +15,7 @@ densities so that it can be used by GEANT4. It serves also to create
 a GEANT4 geometry based on the DICOM file information using the 
 G4PhantomParameterisation. 
 
-\link ExampleDICOM2 DICOM2 \endlink
+\link ExampleDICOM_2 DICOM2 \endlink
 
 This example demonstrates how to reuse the DICOM example library 
 for another application.

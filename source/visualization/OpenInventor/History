@@ -6,6 +6,29 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-03-06 John Allison (openinventor-V11-03-02)
+- G4OpenInventorViewer:
+  - Implement CompareForTransientsRedraw().
+  - Take advantage of ProcessTransients(), which reconstructs that part of
+    the graphical database for transient objects, e.g., trajectories,
+    without reconstructing the "permanent" (run-duration) objects, e.g.,
+    the detector. In other words, something short of a complete "kernel
+    visit". For example, if the time window changes.
+  - Maximises the efficiency of the recently implemented "generic" time
+    windowing.
+
+## 2025-02-13 John Allison (openinventor-V11-03-01)
+- G4OpenInventorViewer.cc: CompareForKernelVisit:
+  - Cause kernel visit if viewer start/end time changes.
+    - This is to take advantage of the new generic time window - modeling-V11-03-04.
+
+## 2025-01-06 John Allison (openinventor-V11-03-00)
+- Co-works: visman-V11-03-00, interfaces-V11-03-00, modeling-V11-03-00,
+  opengl-V11-03-00, visQt3D-V11-03-00, vis_toolssg-V11-03-00, greps-V11-03-00.
+- Re-instate the transparency slider (see lengthy explanation in management/History).
+- G4OpenInventorViewer.cc:
+  - Initiate kernel visit if TransparencyByDepth or its options change.
+
 ## 2024-06-06 Guy Barrand (openinventor-V11-02-01)
 - G4OpenInventorQtViewer: Qt6: reparent the G4OpenInventorQtExaminerViewer
   in its own QWidget (and not in the global SoQt::getTopLevelWidget()).

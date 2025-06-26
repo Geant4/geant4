@@ -6,7 +6,11 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-10 Igor Semeniouk (GB05-V11-02-00)
+## 2025-03-14 Igor Semeniouk (GB05-V11-03-01)
+- The  explicit call of base class constructor
+in GB05DetectorConstruction removed
+
+## 2025-03-10 Igor Semeniouk (GB05-V11-03-00)
 - Remove unused WITH_GEANT4_UIVIS cmake option
 - Propagate biasing on/off to detector construction to initialization of biasing classes only if biasing requested.
 

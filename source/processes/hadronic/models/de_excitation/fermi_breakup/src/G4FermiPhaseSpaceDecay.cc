@@ -36,12 +36,12 @@
 
 #include "G4FermiPhaseSpaceDecay.hh"
 
+#include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4Pow.hh"
 
-#include <CLHEP/Units/SystemOfUnits.h>
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <CLHEP/Random/RandomEngine.h>
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 {

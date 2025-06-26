@@ -39,17 +39,20 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
+#include "G4VSIntegration.hh"
 
 class G4NuclearLevelData;
 class G4Pow;
 
-class G4VEmissionProbability 
+class G4VEmissionProbability : G4VSIntegration
 {
 public:
 
   explicit G4VEmissionProbability(G4int Z, G4int A);
 
-  virtual ~G4VEmissionProbability() = default;
+  ~G4VEmissionProbability() override = default;
+
+  G4double ProbabilityDensityFunction(G4double energy) override;
 
   virtual void Initialise();
 
@@ -93,7 +96,7 @@ public:
 
 protected:
 
-  void ResetIntegrator(size_t nbin, G4double de, G4double eps);
+  void ResetIntegrator(G4double de, G4double eps);
 
   G4double IntegrateProbability(G4double elow, G4double ehigh, G4double CB);
 
@@ -120,18 +123,8 @@ private:
 
   G4double fExc = 0.0;
   G4double fExcRes = 0.0;
-
-  G4double fE1 = 0.0;
-  G4double fE2 = 0.0; 
-  G4double fP2 = 0.0; 
-
-  G4double emin = 0.0;
-  G4double emax = 0.0;
   G4double eCoulomb = 0.0;
-  G4double accuracy = 0.005;
-  G4double probmax = 0.0;
-  G4double elimit;
-
+  G4double fMaxLifeTime = 1.0; 
   G4bool fFD = false;
 };
 

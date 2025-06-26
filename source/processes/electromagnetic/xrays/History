@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+##2025-05-07 Soon Yung Jun (xrays-V11-03-00)
+- 1) G4Scintillation: Build the scintillation integral tables for materials
+  that have non-empty material property tables and add BuildInverseCdfTable.
+  2) G4Cerenkov: Build the Cerenkov integral only for materials that have
+  non-empty material property tables
+
 ##2024-09-03 Dmitri Konstantinov (xrays-V11-02-04)
 - G4VTRModel: Added empty implementation {} to GenerateSecondaries method 
   to resolve linker error encountered when compiling against Geant4 with clang

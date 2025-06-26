@@ -10,7 +10,3 @@ different techniques for achieving event parallelism with Geant4.
   Using this interface, users applications can be parllelized with 
   different MPI compliant libraries, such as LAM/MPI, MPICH2, OpenMPI,
   and so on.
-
-- Example TBB is derived from original basic/B2 demonstrating how to
-  interface a simple application with the Intel Threading Building Blocks
-  library (TBB), and organise MT event-level parallelism as TBB tasks.

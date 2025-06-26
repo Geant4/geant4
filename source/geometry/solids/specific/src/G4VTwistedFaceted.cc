@@ -39,13 +39,12 @@
 #include "G4ClippablePolygon.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4GeometryTolerance.hh"
-#include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4AutoLock.hh"
 
@@ -1055,7 +1054,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 {
 
-  G4double phi = G4RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
+  G4double phi = fPhiTwist*(G4QuickRand() - 0.5);
   G4double u , umin, umax ;  //  variable for twisted surfaces
   G4double y  ;              //  variable for flat surface (top and bottom)
 
@@ -1080,59 +1079,51 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   G4cout << "Surface Upper   = " << a6 << G4endl ;
 #endif 
 
-  G4double chose = G4RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+  G4double chose = (a1 + a2 + a3 + a4 + a5 + a6)*G4QuickRand() ;
 
   if(chose < a1)
   {
     umin = fSide0->GetBoundaryMin(phi) ;
     umax = fSide0->GetBoundaryMax(phi) ;
-    u = G4RandFlat::shoot(umin,umax) ;
-
-    return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0deg surface
+    u = umin + (umax - umin)*G4QuickRand();
+    return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0 deg surface
   }
-
   else if( (chose >= a1) && (chose < a1 + a2 ) )
   {
     umin = fSide90->GetBoundaryMin(phi) ;
     umax = fSide90->GetBoundaryMax(phi) ;
-    
-    u = G4RandFlat::shoot(umin,umax) ;
-
-    return fSide90->SurfacePoint(phi, u, true);   // point on 90deg surface
+    u = umin + (umax - umin)*G4QuickRand();
+    return fSide90->SurfacePoint(phi, u, true);   // point on 90 deg surface
   }
   else if( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) )
   {
     umin = fSide180->GetBoundaryMin(phi) ;
     umax = fSide180->GetBoundaryMax(phi) ;
-    u = G4RandFlat::shoot(umin,umax) ;
-
+    u = umin + (umax - umin)*G4QuickRand();
     return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
   }
   else if( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
   {
     umin = fSide270->GetBoundaryMin(phi) ;
     umax = fSide270->GetBoundaryMax(phi) ;
-    u = G4RandFlat::shoot(umin,umax) ;
+    u = umin + (umax - umin)*G4QuickRand();
     return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
   }
   else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
   {
-    y = G4RandFlat::shoot(-fDy1,fDy1) ;
+    y = fDy1*(2.*G4QuickRand() - 1.);
     umin = fLowerEndcap->GetBoundaryMin(y) ;
     umax = fLowerEndcap->GetBoundaryMax(y) ;
-    u = G4RandFlat::shoot(umin,umax) ;
-
+    u = umin + (umax - umin)*G4QuickRand();
     return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
   }
   else
   {
-    y = G4RandFlat::shoot(-fDy2,fDy2) ;
+    y = fDy2*(2.*G4QuickRand() - 1.);
     umin = fUpperEndcap->GetBoundaryMin(y) ;
     umax = fUpperEndcap->GetBoundaryMax(y) ;
-    u = G4RandFlat::shoot(umin,umax) ;
-
-    return fUpperEndcap->SurfacePoint(u,y,true) ; // point on upper endcap
-
+    u = umin + (umax - umin)*G4QuickRand();
+    return fUpperEndcap->SurfacePoint(u,y,true); // point on upper endcap
   }
 }
 

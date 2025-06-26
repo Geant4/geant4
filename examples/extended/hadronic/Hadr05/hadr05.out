@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -118,35 +118,35 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=37.160000s Real=41.384977s Sys=0.000000s
+  User=40.020000s Real=44.532008s Sys=0.040000s
 
  ---> The run is 1000 proton of 5 GeV through calorimeter
 
  Process calls frequency :
-                  Decay=      4702            He3Inelastic=         2               NoProcess=   4161571
-       RadioactiveDecay=     60695                    Rayl=    216312          Transportation=   3587283
-         alphaInelastic=         2                 annihil=     59239                   compt=   2606906
-                   conv=     55764              dInelastic=       111                   eBrem=    388259
-                  eIoni=   6107634   hBertiniCaptureAtRest=       701                   hIoni=   1444229
-             hadElastic=   4613038                 ionIoni=   4236995          kaon+Inelastic=        17
-         kaon-Inelastic=         1         kaon0LInelastic=         8         kaon0SInelastic=         2
-        lambdaInelastic=         6                     msc=    260164                 muBrems=         1
-                 muIoni=     11338    muMinusCaptureAtRest=         7                nCapture=     52681
-       neutronInelastic=     91801                    phot=    840688           photonNuclear=       205
-           pi+Inelastic=      1127            pi-Inelastic=       906         protonInelastic=      4160
-             tInelastic=         6 
+                  Decay=      4475            He3Inelastic=         1               NoProcess=   4159176
+       RadioactiveDecay=     60253                    Rayl=    215626          Transportation=   3580315
+         alphaInelastic=         1                 annihil=     59207                   compt=   2601735
+                   conv=     55807              dInelastic=       110                   eBrem=    389491
+                  eIoni=   6104021   hBertiniCaptureAtRest=       667                   hIoni=   1438682
+             hadElastic=   4612176              ionElastic=         1                 ionIoni=   4233993
+         kaon+Inelastic=         7         kaon0LInelastic=         7         kaon0SInelastic=         2
+        lambdaInelastic=         7                     msc=    258734                  muIoni=     10330
+   muMinusCaptureAtRest=         8                nCapture=     52491        neutronInelastic=     91547
+                   phot=    840648           photonNuclear=       205            pi+Inelastic=      1125
+           pi-Inelastic=       961         protonInelastic=      4244         sigma-Inelastic=         1
+             tInelastic=        10 
 
 ------------------------------------------------------------
         material      Edep        rmsE        sqrt(E0(GeV))*rmsE/Edep     total tracklen 
  
- 1          Iron    4.0209 GeV   268.5 MeV     14.93 +- 0.472 %       2.165 m   +-  42.1 cm 
- 2  Scintillator    113.89 MeV   34.28 MeV     67.31 +-  2.13 %       22.62 cm  +-  6.38 cm 
+ 1          Iron    4.0362 GeV   276.7 MeV     15.33 +- 0.485 %        2.18 m   +-  45.1 cm 
+ 2  Scintillator    113.91 MeV   32.66 MeV      64.1 +-  2.03 %        22.9 cm  +-  6.94 cm 
 
- Total energy deposited = 4.135 GeV +- 271.8 MeV
- Leakage :  primary = 0 eV    secondaries = 203.9 MeV  ---> total = 203.9 MeV +- 159.7 MeV
- Total energy released :  Edep + Eleak = 4.339 GeV +- 179.7 MeV
+ Total energy deposited = 4.15 GeV +- 278.3 MeV
+ Leakage :  primary = 0 eV    secondaries = 192.3 MeV  ---> total = 192.3 MeV +- 160.9 MeV
+ Total energy released :  Edep + Eleak = 4.342 GeV +- 186.1 MeV
 ------------------------------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.29 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.31 MB
 ============================================================

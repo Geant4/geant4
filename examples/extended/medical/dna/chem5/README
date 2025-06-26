@@ -161,7 +161,7 @@ G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1
     from the literature is available in data subdirectory, the references are provided
     in the header of each file. Further information is available in Phys. Med. Biol. 63(10) (2018) 105014-12pp.
 
-    A gnuplot script (plot.gp) file is provided to display the output data with the experimental data
+    A gnuplot script (plot.gp) or python script (plot.py) files are provided to display the output data with the experimental data
 
  11 - HOW TO START ?
 

@@ -24,341 +24,466 @@
 // ********************************************************************
 //
 
-#include <iostream>
+#include <G4GIDI.hh>
 
-#include "G4GIDI.hh"
+PoPI::Database G4GIDI_pops;
+static bool G4GIDI_pops_initialized = false;
 
-using namespace std;
-using namespace GIDI;
+/* *********************************************************************************************************//**
+ * Returns the familiar name for the projectile for *a_ip*.
+ *
+ * @param a_ip              [in]    One of the following ids for the projectile (0:photon, 1:neutron, 2:proton, 3:deutron, 4:triton, 5:helion or 6:alpha).
+ ***********************************************************************************************************/
 
-/*
-***************************************************************
-*/
-G4GIDI::G4GIDI( G4int ip, const string &dataDirectory ) {
+static std::string projectileStringFromID( int a_ip ) {
 
-    init( ip );
-    addDataDirectory( dataDirectory );
-}
-/*
-***************************************************************
-*/
-G4GIDI::G4GIDI( G4int ip, list<string> &dataDirectoryList ) {
-
-    init( ip );
-    for( auto iter = dataDirectoryList.begin( ); iter != dataDirectoryList.end( ); ++iter )
-      addDataDirectory( *iter );
-}
-/*
-***************************************************************
-*/
-G4GIDI::~G4GIDI( void ) {
-
-    G4GIDI_target *target;
-    auto iter = dataDirectories.cbegin();
-
-    while( targets.size( ) > 0 ) {
-        target = targets.back( );
-        targets.pop_back( );
-        delete target;
-    } // Loop checking, 11.06.2015, T. Koi
-
-    while( iter != dataDirectories.cend() ) {
-        delete *iter;
-        dataDirectories.pop_front( );
-    }// Loop checking, 11.06.2015, T. Koi
-}
-/*
-***************************************************************
-*/
-G4int G4GIDI::init( G4int ip ) {
-
-    projectileID = ip;
-    if( ip == 0 ) {
-        projectile = string( "g" ); }
-    else if( ip == 1 ) {
-        projectile = string( "n" ); }
-    else if( ip == 2 ) {
-        projectile = string( "p" ); }
-    else if( ip == 3 ) {
-        projectile = string( "d" ); }
-    else if( ip == 4 ) {
-        projectile = string( "t" ); }
-    else if( ip == 5 ) {
-        projectile = string( "h" ); }
-    else if( ip == 6 ) {
-        projectile = string( "a" ); }
-    else {
-        printf( "Invalid projectile ID = %d\n", ip );
-        throw 1;
-    }
-    return( 0 );
-}
-/*
-***************************************************************
-*/
-G4int G4GIDI::numberOfDataDirectories( void ) {
-
-    return (G4int)dataDirectories.size( );
-}
-/*
-***************************************************************
-*/
-G4int G4GIDI::addDataDirectory( const string &dataDirectory ) {
-
-    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
-        if( (*iter)->path( ) == dataDirectory ) return( 0 );
-    }
-
-    G4GIDI_map *map = new G4GIDI_map( dataDirectory );
-    dataDirectories.push_back( map );
-
-    return( 0 );
-}
-/*
-***************************************************************
-*/
-G4int G4GIDI::removeDataDirectory( const string &dataDirectory ) {
-
-    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
-        if( dataDirectory == (*iter)->path( ) ) {
-            
-        }
-    }
-    return( 0 );
-}
-/*
-***************************************************************
-*/
-string G4GIDI::getDataDirectoryAtIndex( G4int index ) {
-
-    unsigned i = (unsigned) index;
-
-    if( index >= 0 ) {
-        if( i >= dataDirectories.size( ) ) return( "" );
-        for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter, --index )
-          if( index == 0 ) return( (*iter)->fileName( ) );
+    switch( a_ip ) {
+    case 0:
+        return( PoPI::IDs::photon );
+    case 1:
+        return( PoPI::IDs::neutron );
+    case 2:
+        return( PoPI::IDs::proton );
+    case 3:
+        return( PoPI::IDs::familiarDeuteron );
+    case 4:
+        return( PoPI::IDs::familiarTriton );
+    case 5:
+        return( PoPI::IDs::familiarHelion );
+    case 6:
+        return( PoPI::IDs::familiarAlpha );
+    default:
+        throw LUPI::Exception( "Invalid projectile id " + std::to_string( a_ip ) );
     }
 
     return( "" );
 }
-/*
-***************************************************************
-*/
-vector<string> *G4GIDI::getDataDirectories( void ) {
 
-    std::size_t i = 0;
-    vector<string> *v = new vector<string>( numberOfDataDirectories( ) );
+/* *********************************************************************************************************//**
+ * Initialize the G4GIDI stuff.
+ ***********************************************************************************************************/
 
-    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter, ++i )
-      (*v)[i] = string( (*iter)->fileName( ) );
-    return( v );
+void G4GIDI_initialize( std::string const &a_dataPath ) {
+
+    if( G4GIDI_pops_initialized ) return;
+
+    G4GIDI_pops_initialized = true;
+    G4GIDI_pops.addFile( a_dataPath + "/" + "pops.xml", false );
+    G4GIDI_pops.addFile( a_dataPath + "/" + "metastables_alias.xml", false );
 }
-/*
-***************************************************************
-*/
-G4bool G4GIDI::isThisDataAvailable( const string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 
-    G4bool b;
-    char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
+/*! \class G4GIDI
+ * A class to store map files for a particular projectile.
+ */
 
-    if( targetName == nullptr ) return( false );
-    string targetSymbol( targetName );
-    b = isThisDataAvailable( lib_name, targetSymbol );
-    smr_freeMemory( (void **) &targetName );
-    return( b );
+/* *********************************************************************************************************//**
+ * @param a_ip              [in]    One of the following ids for the projectile (0:photon, 1:neutron, 2:proton, 3:deutron, 4:triton, 5:helion or 6:alpha).
+ * @param a_dataDirectory   [in]    A path to a map file to load.
+ ***********************************************************************************************************/
+
+G4GIDI::G4GIDI( int a_ip, std::string const &a_dataDirectory ) :
+        m_projectileIP( a_ip ),
+        m_projectile( projectileStringFromID( a_ip ) ) {
+
+    addDataDirectory( a_dataDirectory );
 }
-/*
-***************************************************************
-*/
-G4bool G4GIDI::isThisDataAvailable( const string &lib_name, const string &targetName ) {
 
-    char *path = dataFilename( lib_name, targetName );
+/* *********************************************************************************************************//**
+ *
+ * @param a_id              [in]    This argument is ignored but needed for backwards compatibility.
+ * @param a_dataDirectories [in]    A list of paths to a map files to load.
+ ***********************************************************************************************************/
 
-    if( path != nullptr ) {
-        smr_freeMemory( (void **) &path );
-        return( true );
+G4GIDI::G4GIDI( int a_ip, std::list<std::string> const &a_dataDirectories ) :
+        m_projectileIP( a_ip ),
+        m_projectile( projectileStringFromID( a_ip ) ) {
+
+    for( auto mapIter = a_dataDirectories.begin( ); mapIter != a_dataDirectories.end( ); ++mapIter ) {
+        addDataDirectory( *mapIter );
     }
+}
+
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+G4GIDI::~G4GIDI( ) {
+
+    for( auto mapIter = m_maps.begin( ); mapIter != m_maps.end( ); ++mapIter ) delete *mapIter;
+    for( auto protareIter = m_protares.begin( ); protareIter != m_protares.end( ); ++protareIter ) delete *protareIter;
+}
+
+/* *********************************************************************************************************//**
+ * Adds the map file *a_dataDirectory* to *this*.
+ *
+ * @param a_dataDirectory   [in]    A path to a map file to load.
+ ***********************************************************************************************************/
+
+int G4GIDI::addDataDirectory( std::string const &a_dataDirectory ) {
+
+    for( auto mapIter = m_maps.begin( ); mapIter != m_maps.end( ); ++mapIter ) {
+        if( (*mapIter)->fileName( ) == a_dataDirectory ) return( 0 );
+    }
+
+    m_maps.push_back( new GIDI::Map::Map( a_dataDirectory, G4GIDI_pops ) );
+
+    return( 0 );
+}
+
+/* *********************************************************************************************************//**
+ * Removes the map file with path *a_dataDirectory* from *this*.
+ *
+ * @param a_dataDirectory   [in]    A path to a map file to unload.
+ ***********************************************************************************************************/
+
+int G4GIDI::removeDataDirectory( std::string const &a_dataDirectory ) {
+
+    std::size_t index = 0;
+
+    for( auto mapIter = m_maps.begin( ); mapIter!= m_maps.end( ); ++mapIter, ++index ) {
+        if( a_dataDirectory == (*mapIter)->fileName( ) ) {
+            delete *mapIter;
+   
+            ++index;         
+            for( ; index < m_maps.size( ); ++index )  m_maps[index-1] = m_maps[index];
+            m_maps[index-1] = nullptr;
+            m_maps.resize( m_maps.size( ) - 1 );
+        }
+    }
+
+    return( 0 );
+}
+
+/* *********************************************************************************************************//**
+ * Removes the map file with path *a_dataDirectory* from *this*.
+ *
+ * @param a_dataDirectory   [in]    A path to a map file to unload.
+ ***********************************************************************************************************/
+
+std::string const G4GIDI::getDataDirectoryAtIndex( int a_index ) const {
+
+    std::string nullString;
+
+    if( ( a_index < 0 ) || ( a_index >= static_cast<int>( m_maps.size( ) ) ) ) return( nullString );
+
+    return( m_maps[a_index]->fileName( ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns a list of paths to all loaded map files.
+ *
+ * @return          Returns a pointer that the user owns (i.e., the user is responsible for free-ing).
+ ***********************************************************************************************************/
+
+std::vector<std::string> *G4GIDI::getDataDirectories( ) const {
+
+    std::vector<std::string> *list = new std::vector<std::string>( );
+
+    for( auto mapIter = m_maps.begin( ); mapIter!= m_maps.end( ); ++mapIter ) {
+        list->push_back( (*mapIter)->fileName( ) );
+    }
+
+    return( list );
+}
+
+/* *********************************************************************************************************//**
+ * Returns **true** if the specified target exists in a map file and **false** otherwise.
+ *
+ * @param a_lib_name            [in]    The evaluation. Call be an empty string.
+ * @param a_Z                   [in]    The atomic number of the target.
+ * @param a_A                   [in]    The mass number of the taret.
+ * @param a_M                   [in]    The meta-stable index of the target.
+ *
+ * @return                              Boolean value.
+ ***********************************************************************************************************/
+
+bool G4GIDI::isThisDataAvailable( std::string const &a_lib_name, int a_Z, int a_A, int a_M ) const {
+
+    return( isThisDataAvailable( a_lib_name, G4GIDI_Misc_Z_A_m_ToName( a_Z, a_A, a_M ) ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns **true** if the specified target exists in a map file and **false** otherwise.
+ *
+ * @param a_lib_name            [in]    The evaluation. Call be an empty string.
+ * @param a_targetName          [in]    The target PoPs id.
+ *
+ * @return                              Boolean value.
+ ***********************************************************************************************************/
+
+bool G4GIDI::isThisDataAvailable( std::string const &a_lib_name, std::string const &a_targetName ) const {
+
+    for( auto mapIter = m_maps.begin( ); mapIter!= m_maps.end( ); ++mapIter ) {
+        if( (*mapIter)->isProtareAvailable( m_projectile, a_targetName, "", a_lib_name ) ) return( true );
+    }
+
     return( false );
 }
-/*
-***************************************************************
-*/
-char *G4GIDI::dataFilename( const string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 
-    char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM ), *fileName;
+/* *********************************************************************************************************//**
+ * Returns the file path to the specified target or **nullptr** if the target does not exists.
+ *
+ * @param a_lib_name            [in]    The evaluation. Call be an empty string.
+ * @param a_Z                   [in]    The atomic number of the target.
+ * @param a_A                   [in]    The mass number of the taret.
+ * @param a_M                   [in]    The meta-stable index of the target.
+ *
+ * @return                              A std::string of the protare's path.
+ ***********************************************************************************************************/
 
-    if( targetName == nullptr ) return( nullptr );
-    string targetSymbol( targetName );
-    fileName = dataFilename( lib_name, targetSymbol );
-    smr_freeMemory( (void **) &targetName );
-    return( fileName );
+std::string G4GIDI::dataFilename( std::string const &a_lib_name, int a_Z, int a_A, int a_M ) const {
+
+    return( dataFilename( a_lib_name, G4GIDI_Misc_Z_A_m_ToName( a_Z, a_A, a_M ) ) );
 }
-/*
-***************************************************************
-*/
-char *G4GIDI::dataFilename( const string &lib_name, const string &targetSymbol ) {
 
-   char *path;
+/* *********************************************************************************************************//**
+ * Returns the file path to the specified target or **nullptr** if the target does not exists.
+ *
+ * @param a_lib_name            [in]    The evaluation. Call be an empty string.
+ * @param a_targetName          [in]    The target PoPs id.
+ *
+ * @return                              Boolean value.
+ ***********************************************************************************************************/
 
-   for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter )
-      if( ( path = MCGIDI_map_findTarget( nullptr, (*iter)->map, lib_name.c_str(), projectile.c_str( ), targetSymbol.c_str( ) ) ) != nullptr )
-         return( path );
+std::string G4GIDI::dataFilename( std::string const &a_lib_name, std::string const &a_targetName ) const {
 
-   return( nullptr );
-}
-/*
-***************************************************************
-*/
-vector<string> *G4GIDI::getNamesOfAvailableLibraries( G4int iZ, G4int iA, G4int iM ) {
-
-    char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
-    vector<string> *listOfLibraries;
-
-    if( targetName == nullptr ) return( new vector<string>( ) );
-    string targetSymbol( targetName );
-    listOfLibraries = getNamesOfAvailableLibraries( targetSymbol );
-    smr_freeMemory( (void **) &targetName );
-    return( listOfLibraries );
-}
-/*
-***************************************************************
-*/
-vector<string> *G4GIDI::getNamesOfAvailableLibraries( const string &targetName ) {
-
-    vector<string> *listOfLibraries = new vector<string>( );
-
-    MCGIDI_map *map;
-    MCGIDI_mapEntry *entry;
-
-    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
-        map = MCGIDI_map_findAllOfTarget( &((*iter)->smr), (*iter)->map, projectile.c_str( ), targetName.c_str( ) );
-        for( entry = MCGIDI_map_getFirstEntry( map ); entry != nullptr; entry = MCGIDI_map_getNextEntry( entry ) ) {
-            listOfLibraries->push_back( entry->evaluation );
-        }
-        MCGIDI_map_free( nullptr, map );
+    for( auto mapIter = m_maps.begin( ); mapIter!= m_maps.end( ); ++mapIter ) {
+        std::string path = (*mapIter)->protareFilename( m_projectile, a_targetName, "", a_lib_name );
+        if( path != "" ) return( path );
     }
-    return( listOfLibraries );
+
+    return( "" );
 }
-/*
-***************************************************************
-*/
-vector<string> *G4GIDI::getNamesOfAvailableTargets( void ) {
 
-    vector<string> *listOfTargets;
+/* *********************************************************************************************************//**
+ * Determines target name from *a_Z*, *a_A* and *a_M* and calls **getNamesOfAvailableLibraries** with target's name, and returns
+ * its return value.
+ *
+ * @param a_Z                   [in]    The atomic number of the target.
+ * @param a_A                   [in]    The mass number of the taret.
+ * @param a_M                   [in]    The meta-stable index of the target.
+ *
+ * @return                              Pointer to vector<string>.
+ ***********************************************************************************************************/
 
-    listOfTargets = new vector<string>( );
-    if( listOfTargets == nullptr ) return( nullptr );
-    for( auto iter_map = dataDirectories.cbegin( ); iter_map != dataDirectories.cend( ); ++iter_map ) {
-        if( MCGIDI_map_walkTree( nullptr, (*iter_map)->map, getNamesOfAvailableTargets_walker, (void *) listOfTargets ) != 0 ) {
-            delete listOfTargets;
-            return( nullptr );
+std::vector<std::string> *G4GIDI::getNamesOfAvailableLibraries( G4int a_Z, G4int a_A, G4int a_M ) const {
+
+    return( getNamesOfAvailableLibraries( G4GIDI_Misc_Z_A_m_ToName( a_Z, a_A, a_M ) ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the list of all evaluations that have a target named *a_targetName*. User is responsible for freeing the returned list.
+ *
+ * @return                              Pointer to vector<string>.
+ ***********************************************************************************************************/
+
+std::vector<std::string> *G4GIDI::getNamesOfAvailableLibraries( std::string const &a_targetName ) const {
+
+    std::vector<std::string> *listOfLibraries = new std::vector<std::string>( );
+
+    for( auto mapIter = m_maps.cbegin( ); mapIter != m_maps.cend( ); ++mapIter ) {
+        std::vector<GIDI::Map::ProtareBase const *> entries;
+        (*mapIter)->findProtareEntries( entries, std::regex( m_projectile ), std::regex( a_targetName ) );
+        for( auto entryIter = entries.begin( ); entryIter != entries.end( ); ++entryIter ) {
+            listOfLibraries->push_back( (*entryIter)->evaluation( ) );
         }
     }
-    return( listOfTargets );
+
+    return( listOfLibraries );
 }
-/*
-***************************************************************
-*/
-G4GIDI_target *G4GIDI::readTarget( const string &lib_name, G4int iZ, G4int iA, G4int iM, G4bool bind ) {
 
-    char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
-    G4GIDI_target *target;
+/* *********************************************************************************************************//**
+ * Returns the list of available targets for *this*.
+ *
+ * @return          Returns a pointer that the user owns (i.e., the user is responsible for free-ing).
+ ***********************************************************************************************************/
 
-    if( targetName == nullptr ) return( nullptr );
-    string targetSymbol( targetName );
-    target = readTarget( lib_name, targetSymbol, bind );
-    smr_freeMemory( (void **) &targetName );
-    return( target );
-}
-/*
-***************************************************************
-*/
-G4GIDI_target *G4GIDI::readTarget( const string &lib_name, const string &targetName, G4bool bind ) {
+std::vector<std::string> *G4GIDI::getNamesOfAvailableTargets( ) const {
 
-    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
-        if( (*iter_targets)->name == targetName ) return( nullptr );
+    std::vector<std::string> *list = new std::vector<std::string>( );
+    std::set<std::string> targetIDs;
+
+    for( auto mapIter = m_maps.begin( ); mapIter!= m_maps.end( ); ++mapIter ) {
+        auto protareBases = (*mapIter)->directory( m_projectile );
+
+        for( auto protareBaseIter = protareBases.begin( ); protareBaseIter != protareBases.end( ); ++protareBaseIter ) {
+            targetIDs.insert( (*protareBaseIter)->targetID( ) );
+        }
     }
-    char *path = dataFilename( lib_name, targetName );
-    if( path == nullptr ) return( nullptr );
 
-    G4GIDI_target *target = new G4GIDI_target( path );
-    if( bind ) targets.push_back( target );
-    smr_freeMemory( (void **) &path );
-    return( target );
-}
-/*
-***************************************************************
-*/
-G4GIDI_target *G4GIDI::getAlreadyReadTarget( G4int iZ, G4int iA, G4int iM ) {
-
-    char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
-    G4GIDI_target *target;
-
-    if( targetName == nullptr ) return( nullptr );
-    string targetSymbol( targetName );
-    target = getAlreadyReadTarget( targetSymbol );
-    smr_freeMemory( (void **) &targetName );
-    return( target );
-}
-/*
-***************************************************************
-*/
-G4GIDI_target *G4GIDI::getAlreadyReadTarget( const string &targetSymbol ) {
-
-    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
-        if( ( (*iter_targets)->name == targetSymbol ) ) return( *iter_targets );
+    for( auto targetIter = targetIDs.begin( ); targetIter != targetIDs.end( ); ++targetIter ) {
+        (*list).push_back( (*targetIter) );
     }
+
+    return( list );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the specified target or **nullptr** if the target does not exists.
+ *
+ * @param a_lib_name            [in]    The evaluation. Call be an empty string.
+ * @param a_Z                   [in]    The atomic number of the target.
+ * @param a_A                   [in]    The mass number of the taret.
+ * @param a_M                   [in]    The meta-stable index of the target.
+ *
+ * @return                              Boolean value.
+ ***********************************************************************************************************/
+
+G4GIDI_target *G4GIDI::readTarget( std::string const &a_lib_name, int a_Z, int a_A, int a_M, bool bind ) {
+
+    return( readTarget( a_lib_name, G4GIDI_Misc_Z_A_m_ToName( a_Z, a_A, a_M ), bind ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the protare specified by *a_targetName* and the projectile for *this*.
+ *
+ * @param a_lib_name            [in]    The evaluation. Call be an empty std::string.
+ * @param a_targetName          [in]    The target PoPs id.
+ * @param a_bind                [in]    If *true*, read target is added to member *m_protares*.
+ *
+ * @return                              Boolean value.
+ ***********************************************************************************************************/
+
+G4GIDI_target *G4GIDI::readTarget( std::string const &a_lib_name, std::string const &a_targetName, bool a_bind ) {
+
+    for( auto iter_protare = m_protares.cbegin( ); iter_protare != m_protares.cend( ); ++iter_protare ) {
+        if( *(*iter_protare)->getName( ) == a_targetName ) return( nullptr );
+    }
+
+    GIDI::Construction::Settings construction( GIDI::Construction::ParseMode::all, GIDI::Construction::PhotoMode::nuclearOnly );
+    construction.setGRIN_continuumGammas( true );
+
+    for( auto mapIter = m_maps.begin( ); mapIter!= m_maps.end( ); ++mapIter ) {
+        GIDI::Protare *GIDI_protare = (*mapIter)->protare( construction, G4GIDI_pops, m_projectile, a_targetName, "", a_lib_name );
+        if( GIDI_protare != nullptr ) {
+            LUPI::StatusMessageReporting smr;
+            GIDI::Styles::TemperatureInfos temperatures = GIDI_protare->temperatures( );
+            std::string label( temperatures[0].griddedCrossSection( ) );
+            MCGIDI::Transporting::MC MC( G4GIDI_pops, m_projectile, &GIDI_protare->styles( ), label, GIDI::Transporting::DelayedNeutrons::off, 20 ); // FIXME: 20
+            MC.setThrowOnError( false );
+            MC.setSampleNonTransportingParticles( true );
+            MCGIDI::DomainHash domainHash( 4000, 1e-8, 10 );
+            std::set<int> reactionsToExclude;
+
+            GIDI::Transporting::Particles particles;
+            GIDI::Transporting::Particle neutron( PoPI::IDs::neutron );
+            particles.add( neutron );
+
+            GIDI::Styles::TemperatureInfos temperatures1;
+            temperatures1.push_back( temperatures[0] );
+            MCGIDI::Protare *MCGIDI_protare = MCGIDI::protareFromGIDIProtare( smr, *GIDI_protare, G4GIDI_pops, MC, particles, domainHash, 
+                    temperatures1, reactionsToExclude );
+            if( !smr.isOk( ) ) throw LUPI::Exception( smr.constructFullMessage( "G4GIDI::readTarget:" ) );
+
+            G4GIDI_target *protare = new G4GIDI_target( G4GIDI_pops, domainHash, *GIDI_protare, MCGIDI_protare );
+            delete GIDI_protare;
+            if( a_bind ) m_protares.push_back( protare );
+            return( protare );
+        }
+    }
+
     return( nullptr );
 }
-/*
-***************************************************************
-*/
-G4int G4GIDI::freeTarget( G4GIDI_target *target ) {
 
-    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
-        if( *iter_targets == target ) {
-            targets.erase( iter_targets );
-            delete target;
+/* *********************************************************************************************************//**
+ * Determines target name from *a_Z*, *a_A* and *a_M* and calls **getAlreadyReadTarget** with target's name, and returns
+ * its return value.
+ *
+ * @param a_Z                   [in]    The atomic number of the target.
+ * @param a_A                   [in]    The mass number of the taret.
+ * @param a_M                   [in]    The meta-stable index of the target.
+ *
+ * @return                              Pointer to an **G4GIDI_target** instance of **nullptr**.
+ ***********************************************************************************************************/
+
+G4GIDI_target *G4GIDI::getAlreadyReadTarget( G4int a_Z, G4int a_A, G4int a_M ) {
+
+    return( getAlreadyReadTarget( G4GIDI_Misc_Z_A_m_ToName( a_Z, a_A, a_M ) ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the pointer to the **G4GIDI_target** with name *a_targetName* in member *m_protares* or **nullptr** if one
+ * does not exists in *m_protares*.
+ *
+ * @param a_targetName          [in]    The name of the target.
+ *
+ * @return                              Pointer to an **G4GIDI_target** instance of **nullptr**.
+ ***********************************************************************************************************/
+
+G4GIDI_target *G4GIDI::getAlreadyReadTarget( std::string const &a_targetName ) {
+
+    for( auto iter_protare = m_protares.cbegin( ); iter_protare != m_protares.cend( ); ++iter_protare ) {
+        if( *(*iter_protare)->getName( ) == a_targetName ) return( *iter_protare );
+    }
+
+    return( nullptr );
+}
+
+/* *********************************************************************************************************//**
+ * If *a_target* is in member *m_protares*, removed it from *m_protares*, delete it and return 0. Otherwise,
+ * do nothing and return 1.
+ *
+ * @param a_target              [in]    The evaluation. Call be an empty std::string.
+ *
+ * @return                              Integer value.
+ ***********************************************************************************************************/
+
+G4int G4GIDI::freeTarget( G4GIDI_target *a_target ) {
+
+    for( auto iter_protare = m_protares.cbegin( ); iter_protare != m_protares.cend( ); ++iter_protare ) {
+        if( *iter_protare == a_target ) {
+            m_protares.erase( iter_protare );
+            delete a_target;
             return( 0 );
         }
     }
     return( 1 );
 }
-/*
-***************************************************************
-*/
-G4int G4GIDI::freeTarget( G4int iZ, G4int iA, G4int iM ) {
 
-    G4int status;
-    char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
+/* *********************************************************************************************************//**
+ * Determines target name from *a_Z*, *a_A* and *a_M* and calls **freeTarget** with target's name, and returns
+ * its return value.
+ *
+ * @param a_Z                   [in]    The atomic number of the target.
+ * @param a_A                   [in]    The mass number of the taret.
+ * @param a_M                   [in]    The meta-stable index of the target.
+ *
+ * @return                              Integer value.
+ ***********************************************************************************************************/
 
-    if( targetName == nullptr ) return( 1 );
-    string targetSymbol( targetName );
-    status = freeTarget( targetSymbol );
-    smr_freeMemory( (void **) &targetName );
-    return( status );
+G4int G4GIDI::freeTarget( G4int a_Z, G4int a_A, G4int a_M ) {
+
+    return( freeTarget( G4GIDI_Misc_Z_A_m_ToName( a_Z, a_A, a_M ) ) );
 }
-/*
-***************************************************************
-*/
-G4int G4GIDI::freeTarget( const string &targetSymbol ) {
 
-    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
-        if( (*iter_targets)->name == targetSymbol ) return( freeTarget( *iter_targets ) );
+/* *********************************************************************************************************//**
+ * If target with name *targetSymbol* is in member *m_protares*, call **freeTarget** with target's pointer and return **freeTarget**'s return value.
+ * Otherwise, return 1.
+ *
+ * @return                              Integer value.
+ ***********************************************************************************************************/
+
+G4int G4GIDI::freeTarget( std::string const &targetSymbol ) {
+
+    for( auto iter_protare = m_protares.cbegin( ); iter_protare != m_protares.cend( ); ++iter_protare ) {
+        if( *(*iter_protare)->getName( ) == targetSymbol ) return( freeTarget( *iter_protare ) );
     }
     return( 1 );
 }
-/*
-***************************************************************
-*/
-vector<string> *G4GIDI::getListOfReadTargetsNames( void ) {
 
-    vector<string> *listOfTargets;
+/* *********************************************************************************************************//**
+ * If target with name *targetSymbol* is in member *m_protares*, call **freeTarget** with target's pointer and return **freeTarget**'s return value.
+ * Otherwise, return 1.
+ *
+ * @return                              Integer value.
+ ***********************************************************************************************************/
 
-    listOfTargets = new vector<string>( );
-    if( listOfTargets == nullptr ) return( nullptr );
-    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
-        listOfTargets->push_back( *(*iter_targets)->getName( ) );
+std::vector<std::string> *G4GIDI::getListOfReadTargetsNames( void ) {
+
+    std::vector<std::string> *listOfTargets = new std::vector<std::string>( );
+
+    for( auto iter_protare = m_protares.cbegin( ); iter_protare != m_protares.cend( ); ++iter_protare ) {
+        listOfTargets->push_back( *(*iter_protare)->getName( ) );
     }
+
     return( listOfTargets );
 }

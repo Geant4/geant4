@@ -1,0 +1,25 @@
+/run/numberOfThreads 10
+
+# initialize geo and phys
+/control/execute initialize.in
+
+# time structure
+/UHDR/pulse/pulseOn true
+# push structure file
+/UHDR/pulse/pulseFile 1.4us
+
+# pulse structure
+/UHDR/pulse/multiPulse true
+/UHDR/pulse/pulsePeriod 100 ms
+/UHDR/pulse/numberOfPulse 80
+#/UHDR/pulse/pulseInHisto pulseHisto.txt
+
+/run/initialize
+
+# medium is configured in this file (scavengers.in)
+/control/execute scavengers.in
+
+/scorer/Dose/cutoff 1 Gy
+/UHDR/source/particle e-
+/UHDR/source/energy 0.999 MeV
+/run/beamOn 10

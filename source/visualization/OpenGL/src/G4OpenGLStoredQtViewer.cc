@@ -154,7 +154,9 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
       (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()) ||
-      (lastVP.GetSpecialMeshRenderingOption() != fVP.GetSpecialMeshRenderingOption()))
+      (lastVP.GetSpecialMeshRenderingOption() != fVP.GetSpecialMeshRenderingOption()) ||
+      (lastVP.GetTransparencyByDepth() != fVP.GetTransparencyByDepth())
+      )
     return true;
 
   // Don't check VisAttributesModifiers if this comparison has been
@@ -203,6 +205,10 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 
   if (lastVP.IsSpecialMeshRendering() &&
       (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
+    return true;
+
+  if (lastVP.GetTransparencyByDepth() > 0. &&
+      lastVP.GetTransparencyByDepthOption() != fVP.GetTransparencyByDepthOption())
     return true;
 
   return false;

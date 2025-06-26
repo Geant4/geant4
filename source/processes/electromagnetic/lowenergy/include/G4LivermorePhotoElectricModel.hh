@@ -67,8 +67,6 @@ public:
 			 const G4MaterialCutsCouple*, const G4DynamicParticle*,
 			 G4double tmin, G4double maxEnergy) override;
 
-  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
-
   [[maybe_unused]] inline void SetLimitNumberOfShells(G4int n) { nShellLimit = n; };
   G4double GetBindingEnergy(G4int Z, G4int shell);
 
@@ -82,7 +80,7 @@ protected:
 private:
   void ReadData(const G4int Z);
 
-  const G4String& FindDirectoryPath();
+  void FindDirectoryPath();
 
   void InitialiseOnFly(G4int Z);
 

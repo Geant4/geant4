@@ -15,9 +15,4 @@ different techniques for achieving event parallelism with Geant4.
   and so on. 
   <br><br>
 
-- \link Examples_tbb Examples TBB \endlink demonstrate how to
-  interface a simple application with the Intel Threading Building Blocks
-  library (TBB), and organise MT event-level parallelism as TBB tasks.
-  <br><br>
-
 */

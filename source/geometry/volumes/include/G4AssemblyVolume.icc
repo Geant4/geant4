@@ -25,6 +25,7 @@
 // 
 // Class G4AssemblyVolume - inline implementation
 //
+// Authors: R.Chytracek, J.Apostolakis, G.Cosmo (CERN), November 2000
 // ----------------------------------------------------------------------
 
 inline 

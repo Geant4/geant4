@@ -1,0 +1,81 @@
+# Verbosity
+/tracking/verbose 0
+/run/verbose 2
+/control/verbose 2
+#
+# MT
+/run/numberOfThreads 5
+#
+# Material
+/dna/test/setMat G4_WATER
+# or alternatively
+#/dna/test/setMatDens G4_WATER_MODIFIED 1.200 g/cm3
+#
+# Size of World volume
+/dna/test/setSize 100 um
+#
+# Atomic deexcitation
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# Physics
+# - To use Geant4-DNA constructor X, X=0, 2, 4, or 6 (recommended)
+#/dna/test/addPhysics DNA_Opt0
+/dna/test/addPhysics DNA_Opt2
+#/dna/test/addPhysics DNA_Opt4
+#/dna/test/addPhysics DNA_Opt6
+#
+# - To add radioactive radioactive decay
+/dna/test/addPhysics raddecay
+#
+# Heavy ions tracking cut
+#/dna/test/addIonsTrackingCut false
+#
+# Run initialization
+/run/initialize
+#
+# Visualization
+#/control/execute vis.mac
+#
+# Incident particle type
+/gun/particle ion
+#
+# Some iodine nuclei
+#/gun/ion 53 123
+#/gun/ion 53 124
+#/gun/ion 53 125
+#/gun/ion 53 131
+#
+# Some beta- emitters: 67Cu, 90Y, 177Lu
+/gun/ion 29 67
+#/gun/ion 39 90
+#/gun/ion 71 177
+#
+# Some Auger emitters: 64Cu, 111In, 201Tl
+#/gun/ion 29 64
+#/gun/ion 49 111
+#/gun/ion 81 201
+#
+# Some beta+ emitters: 18F, 68Ga
+#/gun/ion 9 18
+#/gun/ion 31 68
+#
+# Some alpha emitters: 149Tb, 211At, 212Pb, 213Bi, 223Ra, 225Ac, 227Th
+#/gun/ion 65 149
+#/gun/ion 85 211
+#/gun/ion 82 212
+#/gun/ion 83 213
+#/gun/ion 88 223
+#/gun/ion 89 225
+#/gun/ion 90 227
+#
+# Nucleus kinetic energy is set to zero
+/gun/energy 0 eV
+#
+# Decay time threshold (if needed)
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
+# Beam on
+/run/beamOn 5

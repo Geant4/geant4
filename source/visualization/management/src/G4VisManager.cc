@@ -114,7 +114,7 @@ G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 
 G4VisManager::G4VisManager (const G4String& verbosityString)
 : fVerbose         (1)
-, fDefaultGraphicsSystemName("OGL")          // Override in G4VisExecutive
+, fDefaultGraphicsSystemName("TSG")          // Override in G4VisExecutive
 , fDefaultXGeometryString   ("600x600-0+0")  // Override in G4VisExecutive
 , fDefaultGraphicsSystemBasis ("G4VisManager initialisation")
 , fDefaultXGeometryStringBasis("G4VisManager initialisation")
@@ -548,6 +548,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddAxes);
   RegisterMessenger(new G4VisCommandSceneAddDate);
   RegisterMessenger(new G4VisCommandSceneAddDigis);
+  RegisterMessenger(new G4VisCommandSceneAddEndOfRunMacro);
   RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddExtent);
   RegisterMessenger(new G4VisCommandSceneAddElectricField);
@@ -1347,8 +1348,8 @@ void G4VisManager::GeometryHasChanged () {
 
   // Change the world...
   G4VPhysicalVolume* pWorld =
-    G4TransportationManager::GetTransportationManager ()
-    -> GetNavigatorForTracking () -> GetWorldVolume ();
+  G4TransportationManager::GetTransportationManager ()
+  -> GetNavigatorForTracking () -> GetWorldVolume ();
   if (!pWorld) {
     if (fVerbosity >= warnings) {
       G4warn << "WARNING: There is no world volume!" << G4endl;
@@ -1364,35 +1365,35 @@ void G4VisManager::GeometryHasChanged () {
     if (modelList.size ()) {
       G4bool modelInvalid;
       do {  // Remove, if required, one at a time.
-	modelInvalid = false;
-	std::vector<G4Scene::Model>::iterator iterModel;
-	for (iterModel = modelList.begin();
-	     iterModel != modelList.end();
-	     ++iterModel) {
-	  modelInvalid = !(iterModel->fpModel->Validate(fVerbosity>=warnings));
-	  if (modelInvalid) {
-	    // Model invalid - remove and break.
-	    if (fVerbosity >= warnings) {
-	      G4warn << "WARNING: Model \""
-		     << iterModel->fpModel->GetGlobalDescription ()
-		     <<
-		"\" is no longer valid - being removed\n  from scene \""
-		     << pScene -> GetName () << "\""
-		     << G4endl;
-	    }
-	    modelList.erase (iterModel);
-	    break;
-	  }
-	}
+        modelInvalid = false;
+        std::vector<G4Scene::Model>::iterator iterModel;
+        for (iterModel = modelList.begin();
+             iterModel != modelList.end();
+             ++iterModel) {
+          modelInvalid = !(iterModel->fpModel->Validate(fVerbosity>=warnings));
+          if (modelInvalid) {
+            // Model invalid - remove and break.
+            if (fVerbosity >= warnings) {
+              G4warn << "WARNING: Model \""
+              << iterModel->fpModel->GetGlobalDescription ()
+              << "\" is no longer valid - being removed\n  from scene \""
+              << pScene -> GetName ()
+              << "\". You may have to re-establish the scene."
+              << G4endl;
+            }
+            modelList.erase (iterModel);
+            break;
+          }
+        }
       } while (modelInvalid);
 
       if (modelList.size () == 0) {
-	if (fVerbosity >= warnings) {
-	  G4warn << "WARNING: No run-duration models left in this scene \""
-		 << pScene -> GetName ()
-		 << "\"."
-		 << G4endl;
-	}
+        if (fVerbosity >= warnings) {
+          G4warn << "WARNING: No run-duration models left in this scene \""
+          << pScene -> GetName ()
+          << "\"."
+          << G4endl;
+        }
         if (pWorld) {
           if (fVerbosity >= warnings) {
             G4warn << "  Adding current world to \""
@@ -1407,9 +1408,9 @@ void G4VisManager::GeometryHasChanged () {
         }
       }
       else {
-	pScene->CalculateExtent();  // Recalculate extent
-	G4UImanager::GetUIpointer () ->
-	  ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
+        pScene->CalculateExtent();  // Recalculate extent
+        G4UImanager::GetUIpointer () ->
+        ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
       }
     }
   }
@@ -1418,10 +1419,10 @@ void G4VisManager::GeometryHasChanged () {
   if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
     if (fVerbosity >= warnings) {
       G4warn << "WARNING: The current scene \""
-	     << fpScene -> GetName ()
-	     << "\" has no run duration models."
-             << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
-	     << G4endl;
+      << fpScene -> GetName ()
+      << "\" has no run duration models."
+      << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
+      << G4endl;
     }
     // Clean up
     if (fpSceneHandler) {
@@ -1837,8 +1838,8 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
   if (fRunDurationUserVisActions.empty()) G4cout << " none" << G4endl;
   else {
     G4cout << G4endl;
-    for (std::size_t i = 0; i < fRunDurationUserVisActions.size(); ++i) {
-      const G4String& name = fRunDurationUserVisActions[i].fName;
+    for (const auto& fRunDurationUserVisAction : fRunDurationUserVisActions) {
+      const G4String& name = fRunDurationUserVisAction.fName;
       G4cout << "  " << name << G4endl;
     }
   }
@@ -1847,8 +1848,8 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
   if (fEndOfEventUserVisActions.empty()) G4cout << " none" << G4endl;
   else {
     G4cout << G4endl;
-    for (std::size_t i = 0; i < fEndOfEventUserVisActions.size(); ++i) {
-      const G4String& name = fEndOfEventUserVisActions[i].fName;
+    for (const auto& fEndOfEventUserVisAction : fEndOfEventUserVisActions) {
+      const G4String& name = fEndOfEventUserVisAction.fName;
       G4cout << "  " << name << G4endl;
     }
   }
@@ -1857,8 +1858,8 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
   if (fEndOfRunUserVisActions.empty()) G4cout << " none" << G4endl;
   else {
     G4cout << G4endl;
-    for (std::size_t i = 0; i < fEndOfRunUserVisActions.size(); ++i) {
-      const G4String& name = fEndOfRunUserVisActions[i].fName;
+    for (const auto& fEndOfRunUserVisAction : fEndOfRunUserVisActions) {
+      const G4String& name = fEndOfRunUserVisAction.fName;
       G4cout << "  " << name << G4endl;
     }
   }
@@ -2328,16 +2329,12 @@ void G4VisManager::EndOfRun ()
 {
   if (fIgnoreStateChanges) return;
   if (G4Threading::IsWorkerThread()) return;
-  if (!GetConcreteInstance()) return;
   if (!isValidViewForRun) return;
   if (isFakeRun) return;
+  if (fVerbosity >= warnings) PrintListOfPlots();  // Print even if disabled
+  if (!GetConcreteInstance()) return;
 
   G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
-
-  // For a fake run...
-  G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
-  if (nEventsToBeProcessed == 0) return;
-
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (!currentRun) return;
 
@@ -2398,8 +2395,6 @@ void G4VisManager::EndOfRun ()
   "\n  To see accumulated, \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\"."
     << G4endl;
   }
-
-  if (fVerbosity >= warnings) PrintListOfPlots();
 
   if (fEventKeepingSuspended && fVerbosity >= warnings) {
     G4warn <<
@@ -2518,8 +2513,8 @@ G4String G4VisManager::VerbosityString(Verbosity verbosity) {
 void G4VisManager::PrintAvailableVerbosity(std::ostream& os)
 {
   os << "Available verbosity options:";
-  for (std::size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
-    os << '\n' << VerbosityGuidanceStrings[i];
+  for (const auto& VerbosityGuidanceString : VerbosityGuidanceStrings) {
+    os << '\n' << VerbosityGuidanceString;
   }
   os << "\nCurrent verbosity: " << G4VisManager::VerbosityString(fVerbosity);
   os << std::endl;

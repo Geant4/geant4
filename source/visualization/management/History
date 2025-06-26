@@ -6,6 +6,154 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-08 John Allison (visman-V11-03-12)
+- G4ViewParameters.cc:
+  - Fix for bug report 2460.
+    - Fix typo whereby "/vis/viewer/set/lightsMove cam" behaves incorrectly for
+      "/vis/viewer/set/lightsVector 0 0 1".
+
+## 2025-06-01 John Allison (visman-V11-03-11)
+- Make TSG the "flagship" vis driver.
+- G4VisExecutive.icc:
+  - Make nickname/alias OGL synonymous with TSG.
+  - Make TSG default for selection by build flags.
+- G4VisManager.cc:
+  - Initialise fDefaultGraphicsSystemName to TSG.
+    - This is just for consistency, since it is overridden in
+      G4VisExecutive.icc anyway.
+
+## 2025-05-27 John Allison (visman-V11-03-10)
+- G4VViewer.cc:
+  - Initialise fTransientsNeedRedrawing(false).
+    - Previously, this was initialised "true", but it is up to the viewer
+      to decide if transients (trajectories) need redrawing.
+    - Testing with OGL, TSG and VTK actually shows no change of behaviour,
+      but some future developments are affected, so this MR corrects.
+
+## 2025-05-24 John Allison (visman-V11-03-09)
+- Minor improvement to listing of histograms (if any)
+- G4VisManager::EndOfRun:
+  - Print list of histograms even if vis is disabled.
+
+## 2025-04-06 John Allison (visman-V11-03-08)
+- G4VisCommandsSceneAdd:
+  - Add /vis/scene/add/endOfRunMacro.
+  - The macro is executed at end of run and when rebuild required.
+  - WARNING: some vis commands in the macro cause recursion. Stick to simple
+    commmands, e.g., which invoke vis manager Draw() methods.
+
+## 2025-04-02 John Allison (visman-V11-03-07)
+- Co-works: raytracer-V11-03-00, cmake-V11-03-02.
+- G4VisExecutive.icc: Add RayTracerQt.
+- G4VisCommandsViewer.cc: /vis/viewer/select:
+  - Remove subsequent refresh, even for auto-refresh drivers.
+  - Refresh not required after a select - window systems keep the image.
+
+## 2025-04-01 John Allison (visman-V11-03-06)
+- G4VisCommandsTouchable.cc:
+  - Disable /vis/touchable/centre... and /twinkle in the case of large process times.
+    - This was an omission. It is already done for /vis/viewer/interpolate, etc.
+    - If the time taken to (re-)build is greater than (currently) 0.1 s, fancy
+      features like zooming in on and twinkling that rely on rebuilds are disabled.
+
+## 2025-03-21 Ben Morgan (visman-V11-03-05)
+- Modernize g4tools macro-based loops with range-based for.
+- Update raw for loops with range-for where possible.
+
+## 2025-02-24 John Allison (visman-V11-03-04)
+- Split scene processing into its "permanent" (run-duration models) and "transient"
+  (end-of-event and end-of-run models) parts.
+  - This allows us to update just the
+    transient part, e.g., trajectories, which we might want to display in a
+    different way, leaving the permanent part (e.g., detector) unchanged, i.e.,
+    leaving the permanent part of the graphical database unchanged, avoiding
+    unnecessary re-processing. This is exactly the situation for time windowing -
+    the detector does not change, the trajectories also actually do not change,
+    just the way they are drawn changes.
+  - The idea is that the concrete viewer makes the decision in its DrawView().
+    Typically, a viewer has CompareForKernelVisit(), to be used when a *complete*
+    reprocessing is required, and CompareForTransientsRedraw() (say) if only
+    transient models need reprocessing.
+- G4VSceneHandler:
+  - Introduce virtual void ProcessTransients().
+  - Move pertinent code from ProcessScene() to ProcessTransients().
+    - ProcessScene() calls ProcessTransients(), i.e., the existing "kernel
+      visit" processes both permanent and transient models as before.
+  - Also some re-indentation within ProcessTransients().
+- G4VViewer:
+  - Introduce void ProcessTransients() and fTransientsNeedRedrawing flag.
+
+## 2025-02-20 John Allison (visman-V11-03-03)
+- G4VVisCommand.cc:
+  - InterpolateViews():
+    - Implement desired time per time step (or desired fps). Computation time
+      per step may cause this to increase (i.e., fps to fall below this).
+- G4VisCommandsViewer.cc:
+  - /vis/viewer/interpolate:
+    - Small improvement to guidance consequent on the above.
+- G4VisCommandsViewer.cc:
+  - /vis/viewer/set/timeWindow/displayHeadTime:
+    - Implement "current as default". This is more rational; prevents surprises.
+      There might be some minor change of behaviour.
+
+## 2025-02-01 John Allison (visman-V11-03-02)
+- Simplify G4ViewParameters.
+- Co-works: opengl-V11-03-01.
+- G4ViewParameters.hh/cc:
+  - Use single G4ModelingParameters::TimeParameters to replace 18 time window
+    parameters.
+- G4VSceneHandler.cc:
+  - Copy time parameters into modeling parameters.
+- G4VisCommandsViewerSet.cc:
+  - /vis/viewer/set/timeWindow commands:
+    - Follow changes in G4ViewParameters.
+
+## 2025-01-13 John Allison (visman-V11-03-01)
+- G4VisCommandsViewerSet:
+  - /vis/viewer/set/transparencyByDepth: improve guidance.
+
+## 2025-01-06 John Allison (visman-V11-03-00)
+- Co-works: modeling-V11-03-00, interfaces-V11-03-00, opengl-V11-03-00,
+  visQt3D-V11-03-00, vis_toolssg-V11-03-00, openinventor-V11-03-00,
+  greps-V11-03-00.
+- Re-instate the transparency slider.
+- The transparency slider, whereby the user could see into the geometry
+  progressively, was a powerful feature of the OpenGL Qt viewer, but it
+  suffered a demise when we moved to a generic (new) scene tree. In this
+  MR we re-implement it in a generic way, i.e., for all drivers. It is moved
+  from the OpenGL Qt viewer to the Qt GUI (G4UIQt) and uses a new command,
+  "/vis/viewer/set/transparencyByDepth <d> [option]". G4UIQt issues this
+  command on signals from the slider. The user may, of course, use this
+  command directly.
+- The command initiates a "kernel visit", which causes a rebuild of the
+  graphical database. This may sound very heavy, but it is remarkably quick
+  for reasonable geometries on modern CPUs. (It is envisaged that this
+  feature is most useful when a detector - or a sub-detector - is being
+  developed.)
+- The design is based on the original design by Laurent Garnier in OpenGL Qt.
+  Laurent's ideas have been borrowed - thanks, Laurent. It was prompted in
+  particular by a user, Andrea Barresi, who missed its presence in G4 11.2,
+  and made some concrete proposals for its reintroduction using existing
+  commands. In the end I felt it deserved a new command to maximise
+  efficiency, but I have really appreciated his engagement in the process
+  of developing this new feature, and one of the algorithms is his
+  (option 3, "X-ray"). Thank you, Andrea. Unfortunately, it didn't make 11.3.
+- G4VisManager:
+  - Tidy - mainly improved indentation.
+- G4VSceneHandler:
+  - Calculate and maintain fMaxGeometryDepth (new base class data member).
+    (The base class is G4VGraphicsScene in graphics_reps category. Placing
+    the data member there makes is accessible to G4PhysicalVolumeModel.)
+  - Improve some diagnostic printing.
+- G4VViewer:
+  - Follow changes in G4PhysicalVolumeModel
+  - Use pvModel->GetTotalAllTouchables()
+  - Tidy
+- G4ViewParameters:
+  - Add TransparencyByDepth and TransparencyByDepthOption.
+- G4VisCommandsViewerSet:
+  - Add /vis/viewer/set/transparencyByDepth.
+
 ## 2024-10-27 John Allison (visman-V11-02-28)
 - G4VisExecutive.icc:
   - Remove #include <QtGlobal> - no longer needed.

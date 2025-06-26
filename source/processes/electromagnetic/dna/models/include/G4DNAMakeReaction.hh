@@ -33,6 +33,7 @@ class G4DNAMolecularReactionTable;
 class G4VDNAReactionModel;
 class G4ITReactionSet;
 class G4VITTimeStepComputer;
+class G4DNAScavengerMaterial;
 
 class G4DNAMakeReaction : public G4VITReactionProcess
 {
@@ -59,5 +60,7 @@ protected:
     G4VDNAReactionModel* fpReactionModel;
     G4VITTimeStepComputer* fpTimeStepper;
     G4double fTimeStep;
+    G4DNAScavengerMaterial* fpScavengerMaterial{nullptr};
+
 };
 #endif

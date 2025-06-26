@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-01-24 Igor Semeniouk (phys-ctor-limiters-V11-02-01)
+## 2025-01-24 Igor Semeniouk (phys-ctor-limiters-V11-03-00)
 - Fix adding AddBiasingProcessLimiter when parallel word for all not use
 - Ignore G4GenericBiasingPhysics::XXXAddPDGRange if PDGlow > PDGhigh.
 

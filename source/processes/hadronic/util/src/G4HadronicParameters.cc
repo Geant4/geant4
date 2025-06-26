@@ -43,6 +43,7 @@
 #include "G4HadronicParametersMessenger.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
+#include "G4UnitsTable.hh"
 
 G4HadronicParameters* G4HadronicParameters::sInstance = nullptr;
 
@@ -110,6 +111,113 @@ G4HadronicParameters::G4HadronicParameters() {
 G4bool G4HadronicParameters::IsLocked() const {
   return ( ! G4Threading::IsMasterThread() ||
            G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit );
+}
+
+
+void G4HadronicParameters::StreamInfo( std::ostream& os ) const {
+  G4long prec = os.precision(5);
+
+  // Lambda function to convert boolean to "true"/"false" string
+  auto boolToString = [](G4bool value) -> const char* {
+    return value ? "true" : "false";
+  };
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Hadronic Physics Parameters             ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Maximum energy for hadronic physics                 "
+     << G4BestUnit(fMaxEnergy, "Energy") << "\n";
+  os << "Energy threshold for heavy hadrons                  "
+     << G4BestUnit(fEnergyThresholdForHeavyHadrons, "Energy") << "\n";
+  os << "Neutron kinetic energy threshold for SVT algorithm  ";
+  if (fNeutronEkinThresholdForSVT < 0.0) {
+    os <<"not set" << "\n";
+  } else {
+    os << G4BestUnit(fNeutronEkinThresholdForSVT, "Energy") << "\n";
+  }
+  os << "Time threshold for radioactive decays               ";
+  if (fTimeThresholdForRadioactiveDecays < 0.0) {
+    os << "not set" << "\n";
+  } else {
+    os << G4BestUnit(fTimeThresholdForRadioactiveDecays, "Time") << "\n";
+  }
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Model Transition Regions                ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "FTF to Cascade transition region                    "
+     << G4BestUnit(fMinEnergyTransitionFTF_Cascade, "Energy") << " - "
+     << G4BestUnit(fMaxEnergyTransitionFTF_Cascade, "Energy") << "\n";
+  os << "QGS to FTF transition region                        "
+     << G4BestUnit(fMinEnergyTransitionQGS_FTF, "Energy") << " - "
+     << G4BestUnit(fMaxEnergyTransitionQGS_FTF, "Energy") << "\n";
+  os << "INCLXX antiproton model energy range                "
+     << G4BestUnit(fMinEnergyINCLXX_Pbar, "Energy") << " - "
+     << G4BestUnit(fMaxEnergyINCLXX_Pbar, "Energy") << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Cross Section Factors                   ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Apply cross section factors                         " << boolToString(fApplyFactorXS) << "\n";
+  os << "Nucleon inelastic cross section factor              " << fXSFactorNucleonInelastic << "\n";
+  os << "Nucleon elastic cross section factor                " << fXSFactorNucleonElastic << "\n";
+  os << "Pion inelastic cross section factor                 " << fXSFactorPionInelastic << "\n";
+  os << "Pion elastic cross section factor                   " << fXSFactorPionElastic << "\n";
+  os << "Hadron inelastic cross section factor               " << fXSFactorHadronInelastic << "\n";
+  os << "Hadron elastic cross section factor                 " << fXSFactorHadronElastic << "\n";
+  os << "EM cross section factor                             " << fXSFactorEM << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Process Control Parameters              ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Enable integral method for inelastic cross sections " << boolToString(fEnableIntegralInelasticXS) << "\n";
+  os << "Enable integral method for elastic cross sections   " << boolToString(fEnableIntegralElasticXS) << "\n";
+  os << "Enable diffraction dissociation for B > 10          " << boolToString(fEnableDiffDissociationForBGreater10) << "\n";
+  os << "Enable neutron general process                      " << boolToString(fNeutronGeneral) << "\n";
+  os << "Enable NUDEX gamma de-excitation                    " << boolToString(fEnableNUDEX) << "\n";
+  os << "Enable coherent charge exchange                     " << boolToString(fChargeExchange) << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Particle Production Control             ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Enable B/C particles                                " << boolToString(fEnableBC) << "\n";
+  os << "Enable hyper-nuclei                                 " << boolToString(fEnableHyperNuclei) << "\n";
+  os << "Enable cosmic ray coalescence                       " << boolToString(fEnableCRCoalescence) << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Model Control Parameters                ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "PT table type for URR neutrons                      ";
+  // A ternary operation can't be used here as it leads to a C2445 error on Windows with C++20 and newer
+  if (fTypeTablePT.empty()) {
+    os << "not set" << "\n";
+  } else {
+    os << fTypeTablePT << "\n";
+  }
+  os << "Bertini angular emissions as in G4 11.2             " << boolToString(fBertiniAngularEmissionsAs11_2) << "\n";
+  os << "Bertini nuclei model as in G4 11.2                  " << boolToString(fBertiniNucleiModelAs11_2) << "\n";
+  os << "Bertini overall behavior as in G4 11.2              " << boolToString(IsBertiniAs11_2()) << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Debugging Options                       ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Verbose level                                       " << fVerboseLevel << "\n";
+  os << "Binary cascade debug                                " << boolToString(fBinaryDebug) << "\n";
+  os << "Environment reporting level                         " << fReportLevel << "\n";
+  if (fRelativeDiff < DBL_MAX) {
+    os << "Environment relative difference level                " << fRelativeDiff << "\n";
+  }
+  if (fAbsoluteDiff < DBL_MAX) {
+    os << "Environment absolute difference level                " << fAbsoluteDiff << "\n";
+  }
+
+  os << "=======================================================================" << G4endl;
+  os.precision(prec);
+}
+
+
+void G4HadronicParameters::Dump() const {
+  StreamInfo(G4cout);
 }
 
 

@@ -26,6 +26,7 @@ geant4_add_module(G4emdna-processes
     G4DNADoubleIonisation.hh
     G4DNATripleIonisation.hh
     G4DNAQuadrupleIonisation.hh
+    G4ChemReboundTransportation.hh
   SOURCES
     G4DNAAttachment.cc
     G4DNABrownianTransportation.cc
@@ -48,7 +49,8 @@ geant4_add_module(G4emdna-processes
     G4DNAPolyNucleotideReactionProcess.cc
     G4DNADoubleIonisation.cc
     G4DNATripleIonisation.cc
-    G4DNAQuadrupleIonisation.cc)
+    G4DNAQuadrupleIonisation.cc
+    G4ChemReboundTransportation.cc)
 
 geant4_module_link_libraries(G4emdna-processes
   PUBLIC

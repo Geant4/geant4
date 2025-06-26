@@ -705,8 +705,10 @@ public:
    {tools_vforcit(column_binding,a_bd.columns(),it) {
       if(!find_named<read::icol>(m_cols,(*it).name())) {
         a_out << "tools::rroot::ntuple::initialize :"
-              << " warning : for column binding with name " << sout((*it).name()) << ", no ntuple column found."
+              << " error : for column binding with name " << sout((*it).name()) << ", no ntuple column found."
               << std::endl;
+        safe_clear<read::icol>(m_cols);
+        return false;
       }
     }}
 

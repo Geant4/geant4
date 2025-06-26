@@ -63,12 +63,13 @@ class G4DNAEventScheduler : public IEventScheduler
   G4DNAEventScheduler& operator=(const G4DNAEventScheduler& right) = delete;
   void Initialize(const G4DNABoundingBox& boundingBox, G4int pixel);
   void InitializeInMesh();
-  void Voxelizing();
+  void Voxelizing(const G4DNABoundingBox& boundingBox);
   void ReVoxelizing(G4int);
   void SetEndTime(const G4double&);
   G4double GetStartTime() const;
   G4double GetEndTime() const;
   G4double GetTimeStep() const;
+  G4double GetGlobalTime() const;
   void SetStartTime(G4double time);
 
   inline void SetVerbose(G4int verbose) { fVerbose = verbose; }
@@ -93,7 +94,8 @@ class G4DNAEventScheduler : public IEventScheduler
   G4int GetPixels() const;
   void SetUserMeshAction(std::unique_ptr<G4UserMeshAction>);
   static G4bool CheckingReactionRadius(G4double resolution);
-
+  void ParticleBasedCounter();
+  void ResetCounter();
  private:
   G4int fVerbose = 0;
   G4bool fInitialized = false;

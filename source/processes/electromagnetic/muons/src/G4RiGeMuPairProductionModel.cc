@@ -534,6 +534,7 @@ void G4RiGeMuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticl
   
   // Energy and momentum of the pramary particle
   G4double kinEnergy = aDynamicParticle->GetKineticEnergy();
+  G4double totEnergy = aDynamicParticle->GetTotalEnergy();
   G4double particleMomentum = aDynamicParticle->GetTotalMomentum();
   G4ThreeVector particleMomentumVector = aDynamicParticle->GetMomentum();
   G4ThreeVector partDirection = aDynamicParticle->GetMomentumDirection();
@@ -660,7 +661,7 @@ void G4RiGeMuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticl
 
     G4ThreeVector dirGamma;
     dirGamma.set(sintg*cospg, sintg*sinpg, costg);
-    G4LorentzVector gFourMomentum(gEnergy, dirGamma*gMomentum);
+    G4LorentzVector gFourMomentum(dirGamma*gMomentum, gEnergy);
 
     G4double Ap = particleMomentum*particleMomentum +
       particleFinalMomentum*particleFinalMomentum + gMomentum*gMomentum;
@@ -723,7 +724,7 @@ void G4RiGeMuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticl
     
     G4ThreeVector dirGamma;
     dirGamma.set(sint*cosp, sint*sinp, cost);
-    G4LorentzVector gFourMomentum(gEnergy, dirGamma*gMomentum);
+    G4LorentzVector gFourMomentum(dirGamma*gMomentum, gEnergy);
 
     // Ingoing parent particle change
     G4double Phi = CLHEP::twopi*randNumbs[3];
@@ -779,8 +780,8 @@ void G4RiGeMuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticl
     G4ThreeVector muFinalMomentumVector;
     muFinalMomentumVector.set(particleFinalMomentum*sint3, 0., particleFinalMomentum*cost3);
 
-    G4LorentzVector muFourMomentum(particleMomentum, particleMomentumVector);
-    G4LorentzVector muFinalFourMomentum(particleFinalEnergy, muFinalMomentumVector);
+    G4LorentzVector muFourMomentum(particleMomentumVector, totEnergy);
+    G4LorentzVector muFinalFourMomentum(muFinalMomentumVector, particleFinalEnergy);
     G4LorentzVector auxVec1 = muFourMomentum - muFinalFourMomentum;
     G4double A5 = auxVec1.mag2() - 2.*eEnergy*(kinEnergy - particleFinalEnergy) +
       2.*particleMomentumVector[2]*eMomentum - 2.*particleFinalMomentum*eMomentum*cost3;
@@ -893,13 +894,14 @@ void G4RiGeMuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticl
 
     eDirection.set(sint5*cosp5, sint5*sinp5, cost5);
   }
-
+  // these lines are closed temporary, will be enabled or removed after testing
+  /*
   fAngularGenerator->Sample5DPairDirections(aDynamicParticle, eDirection, pDirection,
 					    gEnergy, Q2, gMomentum,
 					    particleFinalMomentum,
 					    particleFinalEnergy,
 					    randNumbs, W);
-  
+  */
   // create G4DynamicParticle object for e+e-
   auto aParticle1 = new G4DynamicParticle(theElectron, eDirection, eEnergy);
   auto aParticle2 = new G4DynamicParticle(thePositron, pDirection, pEnergy);

@@ -292,15 +292,20 @@ void G4DNAMolecularReactionData::SetReactionType(G4int type)
             fDiffusionRate = 4 * pi * sumDiffCoeff * fReactionRadius * Avogadro;
             if (fpReactant1 == fpReactant2) fDiffusionRate/=2;
             fActivationRate = fDiffusionRate * fObservedReactionRate / (fDiffusionRate - fObservedReactionRate);
-            fProbability =  Rs / (Rs + (fDiffusionRate / fActivationRate) * (fReactionRadius + Rs));
-
+            if(fActivationRate > 0) {
+              fProbability =
+                Rs / (Rs + (fDiffusionRate / fActivationRate) * (fReactionRadius + Rs));
+            }
         }else{ // Type IV
             fEffectiveReactionRadius = -fOnsagerRadius/(1-exp(fOnsagerRadius/fReactionRadius));
             fDiffusionRate = 4 * pi * sumDiffCoeff * fEffectiveReactionRadius * Avogadro;
             if (fpReactant1 == fpReactant2) fDiffusionRate/=2;
 
             fActivationRate = fDiffusionRate * fObservedReactionRate / (fDiffusionRate - fObservedReactionRate);
-            fProbability = Rs / (Rs + (fDiffusionRate / fActivationRate) * (fEffectiveReactionRadius + Rs));
+            if(fActivationRate > 0) {
+              fProbability =
+                Rs / (Rs + (fDiffusionRate / fActivationRate) * (fEffectiveReactionRadius + Rs));
+            }
         }
     }
 

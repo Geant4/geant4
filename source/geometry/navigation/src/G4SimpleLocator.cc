@@ -25,8 +25,7 @@
 //
 // Class G4SimpleLocator implementation
 //
-// 27.10.08 - Tatiana Nikitina, extracted from G4PropagatorInField class
-// 04.10.11 - John Apostolakis, revised convergence to use Surface Normal
+// Author: Tatiana Nikitina (CERN), 27 October 20008.
 // ---------------------------------------------------------------------------
 
 #include <iomanip>

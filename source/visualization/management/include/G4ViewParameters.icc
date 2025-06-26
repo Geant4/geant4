@@ -227,77 +227,9 @@ G4ViewParameters::GetVisAttributesModifiers() const {
   return fVisAttributesModifiers;
 }
 
-inline G4double G4ViewParameters::GetStartTime () const {
-  return fStartTime;
-}
-
-inline G4double G4ViewParameters::GetEndTime () const {
-  return fEndTime;
-}
-
-inline G4double G4ViewParameters::GetFadeFactor () const {
-  return fFadeFactor;
-}
-
-inline G4bool G4ViewParameters::IsDisplayHeadTime () const {
-  return fDisplayHeadTime;
-}
-
-inline G4double G4ViewParameters::GetDisplayHeadTimeX () const {
-  return fDisplayHeadTimeX;
-}
-
-inline G4double G4ViewParameters::GetDisplayHeadTimeY () const {
-  return fDisplayHeadTimeY;
-}
-
-inline G4double G4ViewParameters::GetDisplayHeadTimeSize () const {
-  return fDisplayHeadTimeSize;
-}
-
-inline G4double G4ViewParameters::GetDisplayHeadTimeRed () const {
-  return fDisplayHeadTimeRed;
-}
-
-inline G4double G4ViewParameters::GetDisplayHeadTimeGreen () const {
-  return fDisplayHeadTimeGreen;
-}
-
-inline G4double G4ViewParameters::GetDisplayHeadTimeBlue () const {
-  return fDisplayHeadTimeBlue;
-}
-
-inline G4bool G4ViewParameters::IsDisplayLightFront () const {
-  return fDisplayLightFront;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontX () const {
-  return fDisplayLightFrontX;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontY () const {
-  return fDisplayLightFrontY;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontZ () const {
-  return fDisplayLightFrontZ;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontT () const {
-  return fDisplayLightFrontT;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontRed () const {
-  return fDisplayLightFrontRed;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontGreen () const {
-  return fDisplayLightFrontGreen;
-}
-
-inline G4double G4ViewParameters::GetDisplayLightFrontBlue () const {
-  return fDisplayLightFrontBlue;
-}
+inline const G4ModelingParameters::TimeParameters&
+G4ViewParameters::GetTimeParameters () const
+{return fTimeParameters;}
 
 inline G4int G4ViewParameters::GetNumberOfCloudPoints () const {
   return fNumberOfCloudPoints;
@@ -312,6 +244,14 @@ inline G4ViewParameters::SMROption G4ViewParameters::GetSpecialMeshRenderingOpti
 inline const std::vector<G4ModelingParameters::PVNameCopyNo>&
 G4ViewParameters::GetSpecialMeshVolumes() const
 {return fSpecialMeshVolumes;}
+
+inline G4double G4ViewParameters::GetTransparencyByDepth () const {
+  return fTransparencyByDepth;
+}
+
+inline G4int G4ViewParameters::GetTransparencyByDepthOption () const {
+  return fTransparencyByDepthOption;
+}
 
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
@@ -500,76 +440,9 @@ inline void G4ViewParameters::ClearVisAttributesModifiers () {
   fVisAttributesModifiers.clear ();
 }
 
-inline void G4ViewParameters::SetStartTime (G4double startTime) {
-  fStartTime = startTime;
-}
-
-inline void G4ViewParameters::SetEndTime (G4double endTime) {
-  fEndTime = endTime;
-}
-
-inline void G4ViewParameters::SetFadeFactor (G4double fadeFactor) {
-  fFadeFactor = fadeFactor;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTime (G4bool displayHeadTime) {
-  fDisplayHeadTime = displayHeadTime;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTimeX (G4double displayHeadTimeX) {
-  fDisplayHeadTimeX = displayHeadTimeX;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTimeY (G4double displayHeadTimeY) {
-  fDisplayHeadTimeY = displayHeadTimeY;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTimeSize (G4double displayHeadTimeSize) {
-  fDisplayHeadTimeSize = displayHeadTimeSize;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTimeRed (G4double displayHeadTimeRed) {
-  fDisplayHeadTimeRed = displayHeadTimeRed;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTimeGreen (G4double displayHeadTimeGreen) {
-  fDisplayHeadTimeGreen = displayHeadTimeGreen;
-}
-
-inline void G4ViewParameters::SetDisplayHeadTimeBlue (G4double displayHeadTimeBlue) {
-  fDisplayHeadTimeBlue = displayHeadTimeBlue;
-}
-
-inline void G4ViewParameters::SetDisplayLightFront (G4bool displayLightFront) {
-  fDisplayLightFront = displayLightFront;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontX (G4double displayLightFrontX) {
-  fDisplayLightFrontX = displayLightFrontX;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontY (G4double displayLightFrontY) {
-  fDisplayLightFrontY = displayLightFrontY;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontZ (G4double displayLightFrontZ) {
-  fDisplayLightFrontZ = displayLightFrontZ;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontT (G4double displayLightFrontT) {
-  fDisplayLightFrontT = displayLightFrontT;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontRed (G4double displayLightFrontRed) {
-  fDisplayLightFrontRed = displayLightFrontRed;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontGreen (G4double displayLightFrontGreen) {
-  fDisplayLightFrontGreen = displayLightFrontGreen;
-}
-
-inline void G4ViewParameters::SetDisplayLightFrontBlue (G4double displayLightFrontBlue) {
-  fDisplayLightFrontBlue = displayLightFrontBlue;
+inline void G4ViewParameters::SetTimeParameters
+(const G4ModelingParameters::TimeParameters& timeParameters) {
+  fTimeParameters = timeParameters;
 }
 
 inline void G4ViewParameters::SetSpecialMeshRendering (G4bool smr)
@@ -581,3 +454,11 @@ inline void G4ViewParameters::SetSpecialMeshRenderingOption (G4ViewParameters::S
 inline void G4ViewParameters::SetSpecialMeshVolumes
 (const std::vector<G4ModelingParameters::PVNameCopyNo>& smvs)
 {fSpecialMeshVolumes = smvs;}
+
+inline void G4ViewParameters::SetTransparencyByDepth (G4double transparencyByDepth) {
+  fTransparencyByDepth = transparencyByDepth;
+}
+
+inline void G4ViewParameters::SetTransparencyByDepthOption (G4int transparencyByDepthOption) {
+  fTransparencyByDepthOption = transparencyByDepthOption;
+}

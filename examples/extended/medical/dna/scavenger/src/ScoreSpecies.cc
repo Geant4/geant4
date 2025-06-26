@@ -55,7 +55,6 @@ ScoreSpecies::ScoreSpecies(const G4String& name, const G4int& depth)
 {
   fpSpeciesdir->SetGuidance("ScoreSpecies commands");
   fpSetResultsFileNameCmd->SetGuidance("Set the root file name");
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -106,7 +105,6 @@ void ScoreSpecies::Initialize(G4HCofThisEvent* HCE)
     fHCID = GetCollectionID(0);
   }
   HCE->AddHitsCollection(fHCID, (G4VHitsCollection*)fEvtMap);
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -115,27 +113,32 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
 {
   if (G4EventManager::GetEventManager()->GetConstCurrentEvent()->IsAborted()) {
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
 
-  auto species = G4MoleculeCounter::Instance()->GetRecordedMolecules();
+  // get the first, and in this case only, counter
+  auto counter = G4MoleculeCounterManager::Instance()->GetMoleculeCounter<G4MoleculeCounter>(0);
+  if (counter == nullptr) {
+    G4Exception("ScoreSpecies::EndOfEvent", "BAD_REFERENCE", FatalException,
+                "The molecule counter could not be received!");
+  }
 
-  if (species == nullptr || species->empty()) {
+  auto indices = counter->GetMapIndices();
+
+  if (indices.empty()) {
     G4cout << "No molecule recorded, energy deposited= " << G4BestUnit(fEdep, "Energy") << G4endl;
     ++fNEvent;
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
-  for (auto molecule : *species) {
+  for (auto idx : indices) {
     for (auto time_mol : fTimeToRecord) {
-      G4double n_mol = G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule, time_mol);
+      double n_mol = counter->GetNbMoleculesAtTime(idx, time_mol);
       if (n_mol < 0) {
         G4cerr << "N molecules not valid < 0 " << G4endl;
         G4Exception("", "N<0", FatalException, "");
       }
-      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][molecule];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][idx.Molecule];
       molInfo.fNumber += n_mol;
       G4double gValue = (n_mol / (fEdep / eV)) * 100.;
       molInfo.fG += gValue;
@@ -144,7 +147,6 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
   }
   ++fNEvent;
   fEdep = 0.;
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

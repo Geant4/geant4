@@ -23,6 +23,7 @@ geant4_add_module(G4hepnumerics
     G4StatAnalysis.hh
     G4StatAnalysis.icc
     G4VGaussianQuadrature.hh
+    G4VSIntegration.hh
   SOURCES
     G4AnalyticalPolSolver.cc
     G4ChebyshevApproximation.cc
@@ -36,6 +37,11 @@ geant4_add_module(G4hepnumerics
     G4JTPolynomialSolver.cc
     G4SimpleIntegration.cc
     G4StatDouble.cc
-    G4VGaussianQuadrature.cc)
+    G4VGaussianQuadrature.cc
+    G4VSIntegration.cc)
 
-geant4_module_link_libraries(G4hepnumerics PUBLIC G4globman)
+geant4_module_link_libraries(G4hepnumerics
+  PUBLIC
+    G4globman
+  PRIVATE
+    G4heprandom)

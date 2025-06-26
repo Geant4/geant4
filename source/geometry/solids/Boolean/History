@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
+## 2025-03-20 Evgueni Tcherniaev (geom-bool-V11-03-01)
+- G4MultiUnion: some optimisation
+  o GetSurfaceArea(): used G4QuickRand()
+  o GetLocalPoint(), GetLocalVector(), GetGlobalPoint(), GetGlobalVector():
+    direct usage of the transformation matrix elements
+
+## 2025-03-13 Evgueni Tcherniaev (geom-bool-V11-03-00)
+- G4MultiUnion: fixed GetSurfaceArea()
+
 ## 2024-07-26 Evgueni Tcherniaev (geom-bool-V11-02-03)
 - G4MultiUnion::GetCubicVolume(): used EstimateCubicVolume().
 - G4BooleanSolid::SetCubVolStatistics(), G4BooleanSolid::SetCubVolEpsilon():

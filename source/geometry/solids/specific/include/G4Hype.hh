@@ -95,11 +95,11 @@ class G4Hype : public G4VSolid
     inline G4double GetInnerStereo () const;
     inline G4double GetOuterStereo () const;
 
-    inline void SetInnerRadius (G4double newIRad);
-    inline void SetOuterRadius (G4double newORad);
-    inline void SetZHalfLength (G4double newHLZ);
-    inline void SetInnerStereo (G4double newISte);
-    inline void SetOuterStereo (G4double newOSte);
+    void SetInnerRadius (G4double newIRad);
+    void SetOuterRadius (G4double newORad);
+    void SetZHalfLength (G4double newHLZ);
+    void SetInnerStereo (G4double newISte);
+    void SetOuterStereo (G4double newOSte);
 
     EInside Inside(const G4ThreeVector& p) const override;
 
@@ -158,10 +158,6 @@ class G4Hype : public G4VSolid
                                 G4double r2, G4double tan2Phi, G4double s[2] );
       // intersection with hyperbolic surface
 
-   private:
-
-    G4double asinh(G4double arg);
-
   protected:
 
     G4double innerRadius;
@@ -172,25 +168,27 @@ class G4Hype : public G4VSolid
 
     // precalculated parameters, squared quantities
 
-    G4double tanInnerStereo;
-    G4double tanOuterStereo;
+    G4double tanInnerStereo;  // tan of Inner Stereo angle
+    G4double tanOuterStereo;  // tan of Outer Stereo angle
     G4double tanInnerStereo2; // squared tan of Inner Stereo angle
     G4double tanOuterStereo2; // squared tan of Outer Stereo angle
     G4double innerRadius2;    // squared Inner Radius
     G4double outerRadius2;    // squared Outer Radius
     G4double endInnerRadius2; // squared endcap Inner Radius
     G4double endOuterRadius2; // squared endcap Outer Radius
-    G4double endInnerRadius; // endcap Inner Radius
-    G4double endOuterRadius; // endcap Outer Radius
+    G4double endInnerRadius;  // endcap Inner Radius
+    G4double endOuterRadius;  // endcap Outer Radius
 
     // Used by distanceToOut
 
-    enum ESide {outerFace,innerFace,leftCap, rightCap};
+    enum ESide { outerFace, innerFace, leftCap, rightCap };
 
   private:
 
     G4double fCubicVolume = 0.0;
     G4double fSurfaceArea = 0.0;
+    G4double fInnerSurfaceArea = 0.0;
+    G4double fOuterSurfaceArea = 0.0;
 
     G4double fHalfTol;
 

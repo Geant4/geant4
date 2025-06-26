@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4LogicalSkinSurface Implementation
+// Class G4LogicalSkinSurface Implementation
 //
-// A Logical Surface class for the surface surrounding a single
-// logical volume.
-//
-// Author: John Apostolakis, CERN - 26-06-1997
+// Author: John Apostolakis (CERN), 16 June 1997
 // --------------------------------------------------------------------
 
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
+#include "G4GeometryManager.hh"
 
 G4LogicalSkinSurfaceTable *G4LogicalSkinSurface::theSkinSurfaceTable = nullptr;
 
@@ -100,7 +98,7 @@ G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
   if (theSkinSurfaceTable != nullptr)
   {
     auto pos = theSkinSurfaceTable->find(vol);
-    if(pos != theSkinSurfaceTable->cend()) return pos->second;
+    if(pos != theSkinSurfaceTable->cend()) { return pos->second; }
   }
   return nullptr;
 }
@@ -130,13 +128,19 @@ void G4LogicalSkinSurface::DumpInfo()
 // --------------------------------------------------------------------
 void G4LogicalSkinSurface::CleanSurfaceTable()
 {
-  if (theSkinSurfaceTable != nullptr)
+  if (theSkinSurfaceTable == nullptr) { return; }
+
+  // Do nothing if geometry is closed
+  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
   {
-    for(const auto & pos : *theSkinSurfaceTable)
-    {
-      delete pos.second;
-    }
-    theSkinSurfaceTable->clear();
+    G4cout << "WARNING - Attempt to clear the skin surface store"
+           << " while geometry closed !" << G4endl;
+    return;
   }
-  return;
+
+  for (const auto& pos : *theSkinSurfaceTable)
+  {
+    delete pos.second;
+  }
+  theSkinSurfaceTable->clear();
 }

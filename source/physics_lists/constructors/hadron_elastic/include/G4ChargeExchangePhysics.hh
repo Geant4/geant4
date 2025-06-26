@@ -41,11 +41,13 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
+class G4ChargeExchangeMessenger;
+
 class G4ChargeExchangePhysics : public G4VPhysicsConstructor
 {
 public: 
   explicit G4ChargeExchangePhysics(G4int ver = 1);
-  ~G4ChargeExchangePhysics() override = default;
+  ~G4ChargeExchangePhysics() override;
 
   void ConstructParticle() override;
  
@@ -61,6 +63,8 @@ public:
 
 private:
 
+  G4ChargeExchangeMessenger* theMessenger;
+  
   G4double fLowEnergyLimit;
   G4double fXSFactor{1.0};
 };

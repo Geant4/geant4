@@ -1,5 +1,4 @@
-#
-/run/numberOfThreads 2
+#/run/numberOfThreads 2
 /process/dna/e-SolvationSubType Meesungnoen2002
 #/process/dna/e-SolvationSubType Ritchie1994
 #/process/dna/e-SolvationSubType Terrisol1990

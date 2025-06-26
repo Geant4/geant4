@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-05-21 Sebastien Incerti (range-V11-03-00)
+- Added beta option8 physics list
+
 ## 2024-04-15 Sebastien Incerti (range-V11-02-01)
 - Updated README
 - Added auto to plot.C

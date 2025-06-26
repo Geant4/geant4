@@ -477,6 +477,7 @@ public:
         }
       }
     }
+
     size_t num = m_cols.size();
     if(!num) {
       a_out << "tools::rcsv::ntuple::initialize :"
@@ -664,8 +665,26 @@ public:
       a_out << "tools::rcsv::ntuple::initialize(booking) :"
             << " zero columns."
             << std::endl;
+      m_sep = 0;
+      m_sz = 0;
+      m_rows = -1;
+      m_hippo = false;
       return false;
     }
+
+   {tools_vforcit(column_binding,a_bd.columns(),it) {
+      if(!find_named<read::icol>(m_cols,(*it).name())) {
+        a_out << "tools::rcsv::ntuple::initialize :"
+              << " error : for column binding with name " << sout((*it).name()) << ", no ntuple column found."
+              << std::endl;
+        safe_clear<read::icol>(m_cols);
+        m_sep = 0;
+        m_sz = 0;
+        m_rows = -1;
+        m_hippo = false;
+        return false;
+      }
+    }}
 
     //a_out << "tools::rroot::ntuple::initialize :"
     //      << " number of columns " << num << "."

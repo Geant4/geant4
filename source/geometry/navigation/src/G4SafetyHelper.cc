@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4SafetyHelper Implementation
+// Class G4SafetyHelper Implementation
 //
-// Original author: John Apostolakis, 2006
+// Author: John Apostolakis (CERN), 5 July 2006
 // --------------------------------------------------------------------
 
 #include "G4SafetyHelper.hh"
@@ -71,8 +71,7 @@ void G4SafetyHelper::InitialiseHelper()
   fFirstCall = false;
 }
 
-G4SafetyHelper::~G4SafetyHelper() = default;
-
+// --------------------------------------------------------------------
 G4double   
 G4SafetyHelper::CheckNextStep(const G4ThreeVector& position, 
                               const G4ThreeVector& direction,

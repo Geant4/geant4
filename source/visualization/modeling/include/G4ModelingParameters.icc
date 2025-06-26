@@ -108,12 +108,24 @@ G4ModelingParameters::GetVisAttributesModifiers() const {
   return fVisAttributesModifiers;
 }
 
+inline const G4ModelingParameters::TimeParameters&
+G4ModelingParameters::GetTimeParameters () const
+{return fTimeParameters;}
+
 inline G4bool G4ModelingParameters::IsSpecialMeshRendering () const
 {return fSpecialMeshRendering;}
 
 inline const std::vector<G4ModelingParameters::PVNameCopyNo>&
 G4ModelingParameters::GetSpecialMeshVolumes() const
 {return fSpecialMeshVolumes;}
+
+inline G4double G4ModelingParameters::GetTransparencyByDepth () const {
+  return fTransparencyByDepth;
+}
+
+inline G4int G4ModelingParameters::GetTransparencyByDepthOption () const {
+  return fTransparencyByDepthOption;
+}
 
 inline void G4ModelingParameters::SetWarning (G4bool value) {
   fWarning = value;
@@ -181,9 +193,22 @@ inline void G4ModelingParameters::SetVisAttributesModifiers
   fVisAttributesModifiers = vams;
 }
 
+inline void G4ModelingParameters::SetTimeParameters
+(const G4ModelingParameters::TimeParameters& timeParameters) {
+  fTimeParameters = timeParameters;
+}
+
 inline void G4ModelingParameters::SetSpecialMeshRendering (G4bool smr)
 {fSpecialMeshRendering = smr;}
 
 inline void G4ModelingParameters::SetSpecialMeshVolumes
 (const std::vector<G4ModelingParameters::PVNameCopyNo>& smvs)
 {fSpecialMeshVolumes = smvs;}
+
+inline void G4ModelingParameters::SetTransparencyByDepth (G4double transparencyByDepth) {
+  fTransparencyByDepth = transparencyByDepth;
+}
+
+inline void G4ModelingParameters::SetTransparencyByDepthOption (G4int option) {
+  fTransparencyByDepthOption = option;
+}

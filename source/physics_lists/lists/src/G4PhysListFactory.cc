@@ -206,11 +206,13 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "ShieldingM_HPT")     {p = new Shielding(verbose,"HP","M");
                                              p->RegisterPhysics(new G4ThermalNeutrons);}
   else {
-    p = new FTFP_BERT(verbose);
     G4ExceptionDescription ed;
-    ed << "PhysicsList " << had_name << " is not known;"
-       << " the default FTFP_BERT is created";
-    G4Exception("G4PhysListFactory: ","pl0003",JustWarning,ed,"");
+    ed << "ERROR: The requested physics list " << had_name
+       << " is NOT available in the Physics List Factory.\n"
+       << "Please choose a valid physics list.\n";
+
+    G4Exception("G4PhysListFactory", "pl0003", FatalException, ed);
+    return nullptr;
   }
   if(nullptr != p) {
     if(0 < em_opt && had_name != "LBE") {

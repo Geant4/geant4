@@ -34,13 +34,10 @@
 #if !(defined(G4GEOM_USE_UELLIPTICALTUBE) && defined(G4GEOM_USE_SYS_USOLIDS))
 
 #include "G4GeomTools.hh"
-#include "G4RandomTools.hh"
-#include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 #include "G4BoundingEnvelope.hh"
-
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
@@ -65,6 +62,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
   : G4VSolid(name), fDx(Dx), fDy(Dy), fDz(Dz)
 {
   CheckParameters();
+  fSurfaceArea = GetCachedSurfaceArea();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -106,7 +104,7 @@ G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
 //
 // Assignment operator
 
-G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs) 
+G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
 {
    // Check assignment to self
    //
@@ -701,44 +699,37 @@ std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Pick up a random point on the surface 
+// Pick up a random point on the surface
 
 G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
 {
-  // Select surface (0 - base at -Z, 1 - base at +Z, 2 - lateral surface)
+  // Pick random point on selected surface
   //
-  G4double sbase = pi * fDx * fDy;
-  G4double ssurf = GetCachedSurfaceArea();
-  G4double select = ssurf * G4UniformRand();
-
-  G4int k = 0;
-  if (select > sbase) k = 1;
-  if (select > 2. * sbase) k = 2;
-
-  // Pick random point on selected surface (rejection sampling)
-  //
-  G4ThreeVector p;
-  switch (k) {
-    case 0: // base at -Z
-    {
-      G4TwoVector rho = G4RandomPointInEllipse(fDx, fDy);
-      p.set(rho.x(), rho.y(), -fDz);
-      break;
-    }
-    case 1: // base at +Z
-    {
-      G4TwoVector rho = G4RandomPointInEllipse(fDx, fDy);
-      p.set(rho.x(), rho.y(), fDz);
-      break;
-    }
-    case 2: // lateral surface
-    {
-      G4TwoVector rho = G4RandomPointOnEllipse(fDx, fDy);
-      p.set(rho.x(), rho.y(), (2. * G4UniformRand() - 1.) * fDz);
-      break;
-    }
+  G4double sbase = pi * fDx * fDy; // base area
+  G4double select = fSurfaceArea * G4QuickRand();
+  G4double x, y, z;
+  if (select < 2. * sbase)
+  { // base (ellipse)
+    G4double phi = CLHEP::twopi * G4QuickRand();
+    G4double rho = std::sqrt(G4QuickRand());
+    x = rho * std::cos(phi);
+    y = rho * std::sin(phi);
+    z = (select < sbase) ? fDz : -fDz;
   }
-  return p;
+  else
+  { // lateral surface (rejection sampling)
+    G4double s_max = std::max(fDx, fDy);
+    for (auto i = 0; i < 10000; ++i)
+    {
+      G4double phi = CLHEP::twopi * G4QuickRand();
+      x = std::cos(phi);
+      y = std::sin(phi);
+      G4double ss = sqr(fDy * x) + sqr(fDx * y);
+      if (sqr(s_max*G4QuickRand()) <= ss) break;
+    }
+    z = (2. * G4QuickRand() - 1.) * fDz;
+  }
+  return { fDx * x, fDy * y, z };
 }
 
 

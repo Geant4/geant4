@@ -14,10 +14,11 @@
 /spower/det/setRadius 1 m
 #
 # Set physics constructor
-#/spower/phys/addPhysics  dna_stat
-/spower/phys/addPhysics  dna_stat_opt2
-#/spower/phys/addPhysics  dna_stat_opt4
-#/spower/phys/addPhysics  dna_stat_opt6
+#/spower/phys/addPhysics  dna_opt0
+/spower/phys/addPhysics  dna_opt2
+#/spower/phys/addPhysics  dna_opt4
+#/spower/phys/addPhysics  dna_opt6
+#/spower/phys/addPhysics  dna_opt8
 #
 # Run initialization
 /run/initialize

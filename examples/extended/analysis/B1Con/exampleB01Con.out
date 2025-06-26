@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -32,23 +32,24 @@ Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
+  RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLStoredQt (OGLSQt, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
   OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
+  RayTracerX (RTX)
+  RayTracerQt (RTQt)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
-  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
@@ -99,6 +100,7 @@ Checking overlaps for volume Shape2:0 (G4Trd) ... OK!
     Emin(FTFP)= 3 GeV Emax(FTFP)= 100000 GeV
     Emin(BERT)= 1 GeV Emax(BERT)= 6 GeV Emax(BERTpions)= 12 GeV
     Emin(BIC) = 0 GeV Emax(BIC)= 1.5 GeV.
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -126,7 +128,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -540,6 +542,20 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 -----------------------------------------------------------------------
+                           Hadronic Processes for neutron
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+  Process: nKiller
+-----------------------------------------------------------------------
                            Hadronic Processes for B-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
@@ -689,6 +705,9 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+  Process: kaon+ChargeEx
+        Model:            ChargeExchange: 0 eV  ---> 100 TeV
+     Cr_sctns:                          : 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for kaon-
   Process: hadElastic
@@ -698,6 +717,9 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+  Process: kaon-ChargeEx
+        Model:            ChargeExchange: 0 eV  ---> 100 TeV
+     Cr_sctns:                          : 0 eV  ---> 100 TeV
   Process: hBertiniCaptureAtRest
 -----------------------------------------------------------------------
                            Hadronic Processes for lambda
@@ -720,19 +742,6 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
   Process: muMinusCaptureAtRest
 -----------------------------------------------------------------------
-                           Hadronic Processes for neutron
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-  Process: neutronInelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 6 GeV
-        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-  Process: nCapture
-        Model:               nRadCapture: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
------------------------------------------------------------------------
                            Hadronic Processes for pi+
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
@@ -742,6 +751,9 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:            BertiniCascade: 1 GeV ---> 12 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+  Process: pi+ChargeEx
+        Model:            ChargeExchange: 0 eV  ---> 100 TeV
+     Cr_sctns:                          : 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for pi-
   Process: hadElastic
@@ -752,6 +764,9 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:            BertiniCascade: 1 GeV ---> 12 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+  Process: pi-ChargeEx
+        Model:            ChargeExchange: 0 eV  ---> 100 TeV
+     Cr_sctns:                          : 0 eV  ---> 100 TeV
   Process: hBertiniCaptureAtRest
 -----------------------------------------------------------------------
                            Hadronic Processes for proton
@@ -785,6 +800,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
+Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
@@ -801,6 +817,7 @@ Use HETC submodel for pre-compound model            0
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
+Type of Fermi BreakUp model                         ModelVI
 Min excitation energy                               10 eV 
 Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
@@ -823,13 +840,13 @@ G4ConvergenceTester Output Result of DOSE_TALLY
                 R =     0.0862315
             SHIFT =   1.72861e-13
               VOV =    0.00854466
-              FOM =       13448.3
+              FOM =       6724.16
 THE LARGEST SCORE =   5.54337e-13 and it happened at 366th event
     Affected Mean =   4.60558e-14 and its ratio to original is 1.01116
      Affected VAR =   1.56695e-26 and its ratio to original is 1.01576
        Affected R =     0.0859065 and its ratio to original is 0.99623
    Affected SHIFT =   1.73445e-13 and its ratio to original is 1.00338
-     Affected FOM =       13448.3 and its ratio to original is 1
+     Affected FOM =       6724.16 and its ratio to original is 1
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
@@ -843,22 +860,22 @@ This result passes 5 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  3.17379e-14  1.29473e-26  1.13786e-13     0.451691     0.226367      490.137   2.0412e-13     0.142857    0.0952381     0.105548
-   2   124  3.30804e-14  1.06384e-26  1.03143e-13     0.278877     0.105732       1285.8  1.73258e-13        0.168     0.039619    0.0375311
-   3   187  3.94836e-14  1.26526e-26  1.12484e-13     0.207776    0.0559014      2316.38  1.69917e-13     0.191489    0.0224586    0.0204825
-   4   249  3.97276e-14  1.30204e-26  1.14107e-13     0.181656    0.0405982      3030.41  1.71002e-13        0.184    0.0177391    0.0151277
-   5   312  3.82407e-14  1.22829e-26  1.10828e-13     0.163814    0.0339478      3726.46  1.69776e-13     0.185304    0.0140465    0.0127029
-   6   374  3.89136e-14   1.2719e-26  1.12778e-13     0.149661    0.0287795      4464.59    1.742e-13        0.184    0.0118261    0.0105126
-   7   437  3.80559e-14  1.25301e-26  1.11938e-13     0.140546    0.0252541      5062.49  1.75552e-13     0.191781   0.00962166    0.0100864
-   8   499  4.16767e-14  1.38768e-26    1.178e-13     0.126406     0.019678      6258.43  1.74791e-13        0.202   0.00790099   0.00804549
-   9   562  4.17944e-14   1.4095e-26  1.18722e-13     0.119718    0.0172617      6977.18  1.75728e-13     0.198934   0.00715237   0.00715461
-  10   624  4.33469e-14  1.47176e-26  1.21316e-13     0.111949    0.0146904      7979.21  1.74757e-13       0.1968   0.00653008   0.00598243
-  11   687  4.40834e-14  1.50155e-26  1.22538e-13     0.105974    0.0130273      8904.31  1.74616e-13     0.196221   0.00595392   0.00526027
-  12   749  4.57566e-14  1.56694e-26  1.25178e-13    0.0998947    0.0112546      10021.1  1.73389e-13     0.198667   0.00537808   0.00458757
-  13   812  4.50245e-14  1.54897e-26  1.24458e-13    0.0969456    0.0105987        10640  1.74374e-13     0.195572    0.0050593    0.0043276
-  14   874  4.57357e-14  1.56286e-26  1.25015e-13    0.0924063   0.00966482      11711.1   1.7349e-13          0.2   0.00457143   0.00395773
-  15   937  4.56765e-14  1.55286e-26  1.24614e-13    0.0890783    0.0090895      12602.5  1.73294e-13     0.198294   0.00431025   0.00361624
-  16   999  4.55475e-14  1.54263e-26  1.24203e-13    0.0862315   0.00854466      13448.3  1.72861e-13        0.198   0.00405051   0.00337794
+   1    62  3.17379e-14  1.29473e-26  1.13786e-13     0.451691     0.226367      245.069   2.0412e-13     0.142857    0.0952381     0.105548
+   2   124  3.30804e-14  1.06384e-26  1.03143e-13     0.278877     0.105732      642.902  1.73258e-13        0.168     0.039619    0.0375311
+   3   187  3.94836e-14  1.26526e-26  1.12484e-13     0.207776    0.0559014      1158.19  1.69917e-13     0.191489    0.0224586    0.0204825
+   4   249  3.97276e-14  1.30204e-26  1.14107e-13     0.181656    0.0405982       1515.2  1.71002e-13        0.184    0.0177391    0.0151277
+   5   312  3.82407e-14  1.22829e-26  1.10828e-13     0.163814    0.0339478      1863.23  1.69776e-13     0.185304    0.0140465    0.0127029
+   6   374  3.89136e-14   1.2719e-26  1.12778e-13     0.149661    0.0287795       2232.3    1.742e-13        0.184    0.0118261    0.0105126
+   7   437  3.80559e-14  1.25301e-26  1.11938e-13     0.140546    0.0252541      2531.24  1.75552e-13     0.191781   0.00962166    0.0100864
+   8   499  4.16767e-14  1.38768e-26    1.178e-13     0.126406     0.019678      3129.22  1.74791e-13        0.202   0.00790099   0.00804549
+   9   562  4.17944e-14   1.4095e-26  1.18722e-13     0.119718    0.0172617      3488.59  1.75728e-13     0.198934   0.00715237   0.00715461
+  10   624  4.33469e-14  1.47176e-26  1.21316e-13     0.111949    0.0146904      3989.61  1.74757e-13       0.1968   0.00653008   0.00598243
+  11   687  4.40834e-14  1.50155e-26  1.22538e-13     0.105974    0.0130273      4452.16  1.74616e-13     0.196221   0.00595392   0.00526027
+  12   749  4.57566e-14  1.56694e-26  1.25178e-13    0.0998947    0.0112546      5010.54  1.73389e-13     0.198667   0.00537808   0.00458757
+  13   812  4.50245e-14  1.54897e-26  1.24458e-13    0.0969456    0.0105987      5320.02  1.74374e-13     0.195572    0.0050593    0.0043276
+  14   874  4.57357e-14  1.56286e-26  1.25015e-13    0.0924063   0.00966482      5855.54   1.7349e-13          0.2   0.00457143   0.00395773
+  15   937  4.56765e-14  1.55286e-26  1.24614e-13    0.0890783    0.0090895      6301.24  1.73294e-13     0.198294   0.00431025   0.00361624
+  16   999  4.55475e-14  1.54263e-26  1.24203e-13    0.0862315   0.00854466      6724.16  1.72861e-13        0.198   0.00405051   0.00337794
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
@@ -867,24 +884,24 @@ i/16 till_ith      mean          var           sd            r          vov     
 
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.636
-             MEAN =   5.20411e-12
-              VAR =   2.16243e-23
-               SD =    4.6502e-12
-                R =     0.0282569
-            SHIFT =  -1.44705e-13
-              VOV =   0.000156343
-              FOM =       9634.01
-THE LARGEST SCORE =   1.07852e-11 and it happened at 845th event
-    Affected Mean =   5.20969e-12 and its ratio to original is 1.00107
-     Affected VAR =   2.16338e-23 and its ratio to original is 1.00044
-       Affected R =     0.0282188 and its ratio to original is 0.99865
-   Affected SHIFT =  -1.48838e-13 and its ratio to original is 1.02856
-     Affected FOM =       9634.01 and its ratio to original is 1
+       EFFICIENCY =          0.61
+             MEAN =   4.94438e-12
+              VAR =   2.13323e-23
+               SD =   4.61869e-12
+                R =     0.0295398
+            SHIFT =   1.06883e-13
+              VOV =   0.000169442
+              FOM =       9550.01
+THE LARGEST SCORE =   1.07261e-11 and it happened at 950th event
+    Affected Mean =   4.95015e-12 and its ratio to original is 1.00117
+     Affected VAR =   2.13444e-23 and its ratio to original is 1.00057
+       Affected R =     0.0294989 and its ratio to original is 0.998616
+   Affected SHIFT =   1.02583e-13 and its ratio to original is 0.959775
+     Affected FOM =       9550.01 and its ratio to original is 1
 MEAN distribution is  RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0282569
+r is less than 0.1. r = 0.0295398
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -894,26 +911,26 @@ This result passes 6 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  5.17001e-12  1.96868e-23  4.43698e-12     0.108125   0.00444842      657.967 -1.46017e-13     0.666667   0.00793651   0.00356894
-   2   124  5.48568e-12  2.06461e-23   4.5438e-12    0.0740856   0.00199883      1401.49 -3.91429e-13        0.672   0.00390476      0.00154
-   3   187  5.64378e-12  2.10694e-23  4.59014e-12    0.0593168   0.00121232      2186.26 -5.25797e-13      0.68617   0.00243279   0.00106697
-   4   249  5.50828e-12  2.07921e-23  4.55983e-12    0.0523555  0.000898412      2806.28 -4.24174e-13        0.672   0.00195238  0.000777756
-   5   312  5.33403e-12  2.11269e-23  4.59641e-12    0.0487069  0.000604754      3242.47  -2.7013e-13     0.648562   0.00173122  0.000633561
-   6   374  5.39783e-12  2.11503e-23  4.59894e-12     0.043997  0.000520265      3973.84 -3.16177e-13        0.656   0.00139837    0.0005322
-   7   437  5.42308e-12  2.12921e-23  4.61434e-12    0.0406562  0.000436294      4653.75 -3.29925e-13     0.657534   0.00118912  0.000460034
-   8   499  5.27489e-12  2.15175e-23   4.6387e-12    0.0393276  0.000337048      4973.49 -1.89348e-13        0.642   0.00111526  0.000428305
-   9   562  5.22693e-12  2.14879e-23   4.6355e-12    0.0373763  0.000292163      5506.35 -1.50496e-13     0.637655   0.00100932  0.000385192
-  10   624  5.17297e-12  2.15077e-23  4.63764e-12    0.0358606  0.000252154      5981.67 -1.17855e-13        0.632  0.000931646  0.000352278
-  11   687  5.18432e-12  2.15591e-23  4.64318e-12    0.0341452  0.000230119      6597.76 -1.25421e-13     0.632267  0.000845362   0.00031884
-  12   749  5.28939e-12  2.15197e-23  4.63894e-12    0.0320245  0.000220186      7500.52 -2.22956e-13        0.644   0.00073706  0.000287142
-  13   812  5.21542e-12  2.15542e-23  4.64265e-12    0.0312199  0.000197387      7892.12 -1.53479e-13     0.635916  0.000704224   0.00026926
-  14   874  5.20525e-12  2.14738e-23  4.63399e-12     0.030096  0.000187892      8492.55 -1.42837e-13     0.637714  0.000649258  0.000255479
-  15   937  5.22623e-12  2.15556e-23   4.6428e-12    0.0290062  0.000172968      9142.74 -1.63337e-13     0.637527  0.000606143  0.000234317
-  16   999  5.20411e-12  2.16243e-23   4.6502e-12    0.0282569  0.000156343      9634.01 -1.44705e-13        0.636  0.000572327  0.000225328
+   1    62  4.45233e-12  2.00136e-23  4.47366e-12     0.126592   0.00555513      520.005  6.10343e-13     0.587302     0.011154   0.00461709
+   2   124  4.70979e-12  2.14073e-23  4.62681e-12    0.0878668   0.00156391      1079.37  3.15332e-13        0.568   0.00608451    0.0015743
+   3   187  5.04552e-12  2.17319e-23  4.66174e-12    0.0673851  0.000891632      1835.23  8.74033e-15     0.590426   0.00368986  0.000826733
+   4   249   5.1147e-12  2.16033e-23  4.64794e-12    0.0574738  0.000677301      2522.78 -5.43345e-14          0.6   0.00266667  0.000623358
+   5   312  5.01691e-12  2.12158e-23  4.60607e-12    0.0518945  0.000571301      3094.39  2.63397e-14     0.603834   0.00209612  0.000588323
+   6   374   4.9734e-12  2.13808e-23  4.62394e-12    0.0480113   0.00045469       3615.2  7.68061e-14     0.605333   0.00173862  0.000560315
+   7   437  5.00036e-12  2.16669e-23  4.65477e-12    0.0444795  0.000358603       4212.1  5.50795e-14     0.605023   0.00149048  0.000483429
+   8   499  5.12317e-12  2.14861e-23  4.63531e-12    0.0404627   0.00033282       5089.9 -6.70345e-14        0.616   0.00124675  0.000387201
+   9   562  5.09662e-12  2.15978e-23  4.64735e-12    0.0384299  0.000279788      5642.62 -4.50432e-14     0.611012   0.00113078  0.000343455
+  10   624  5.04725e-12  2.15547e-23   4.6427e-12    0.0367939  0.000254099      6155.55  1.68697e-16       0.6096   0.00102467  0.000326954
+  11   687  5.03741e-12   2.1526e-23  4.63961e-12    0.0351139  0.000232749      6758.65  1.37868e-14     0.609012  0.000933146  0.000298049
+  12   749  5.01635e-12  2.13055e-23  4.61579e-12    0.0335991  0.000227201      7381.82  3.63585e-14     0.613333   0.00084058  0.000286814
+  13   812  5.02263e-12   2.1448e-23   4.6312e-12    0.0323383  0.000200505      7968.64  2.89454e-14     0.611316   0.00078206  0.000262419
+  14   874  4.95133e-12  2.14422e-23  4.63057e-12    0.0316162  0.000188358      8336.82  9.41875e-14     0.603429  0.000751082  0.000247357
+  15   937  4.93725e-12  2.14216e-23  4.62835e-12    0.0306083  0.000177676      8894.88   1.1284e-13     0.604478   0.00069757  0.000238299
+  16   999  4.94438e-12  2.13323e-23  4.61869e-12    0.0295398  0.000169442      9550.01  1.06883e-13         0.61  0.000639344  0.000232383
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Cumulated dose per run, in scoring volume : 5.20411 nanoGy  rms = 146.979 picoGy 
+ Cumulated dose per run, in scoring volume : 4.94438 nanoGy  rms = 145.983 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

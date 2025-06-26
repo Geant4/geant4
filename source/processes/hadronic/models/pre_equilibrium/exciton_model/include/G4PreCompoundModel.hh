@@ -28,8 +28,8 @@
 // Class Description
 // Model implementation for pre-equilibrium decay models in geant4. 
 // To be used in your physics list, in case you neeed this kind of physics.
-// Can be used as a stand-allone model, but also in conjunction with an intra-nuclear
-// transport, or any of the string-parton models.
+// Can be used as a stand-allone model, but also in conjunction with
+// an intra-nuclear transport, or any of the string-parton models.
 // Class Description - End
 //
 // Modified:
@@ -54,6 +54,7 @@
 #include "G4ReactionProduct.hh"
 #include "G4ExcitationHandler.hh"
 
+class G4PreCompoundInterface;
 class G4PreCompoundEmission;
 class G4VPreCompoundTransitions;
 class G4NuclearLevelData;
@@ -65,19 +66,24 @@ public:
 
   explicit G4PreCompoundModel(G4ExcitationHandler* ptr = nullptr); 
 
-  virtual ~G4PreCompoundModel();
+  ~G4PreCompoundModel() override;
 
-  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
-					  G4Nucleus & theNucleus) final;
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& thePrimary, 
+				 G4Nucleus& theNucleus) override;
 
-  virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) final;
+  G4ReactionProductVector* DeExcite(G4Fragment& aFragment) override;
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&) final;
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  virtual void InitialiseModel() final;
+  void InitialiseModel() override;
   
-  virtual void ModelDescription(std::ostream& outFile) const final;
-  virtual void DeExciteModelDescription(std::ostream& outFile) const final;
+  void ModelDescription(std::ostream& outFile) const override;
+  void DeExciteModelDescription(std::ostream& outFile) const override;
+
+  G4PreCompoundModel(const G4PreCompoundModel &) = delete;
+  const G4PreCompoundModel& operator=(const G4PreCompoundModel &right) = delete;
+  G4bool operator==(const G4PreCompoundModel &right) const = delete;
+  G4bool operator!=(const G4PreCompoundModel &right) const = delete;
 
 private:  
 
@@ -85,39 +91,37 @@ private:
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
 				  G4ReactionProductVector * result) const;
 
-  G4PreCompoundModel(const G4PreCompoundModel &) = delete;
-  const G4PreCompoundModel& operator=(const G4PreCompoundModel &right) = delete;
-  G4bool operator==(const G4PreCompoundModel &right) const = delete;
-  G4bool operator!=(const G4PreCompoundModel &right) const = delete;
-
-  G4PreCompoundEmission* theEmission = nullptr;
-  G4VPreCompoundTransitions* theTransition = nullptr;
-  G4NuclearLevelData* fNuclData = nullptr;
+  G4PreCompoundInterface* fInterface{nullptr};
+  G4PreCompoundEmission* theEmission{nullptr};
+  G4VPreCompoundTransitions* theTransition{nullptr};
+  G4NuclearLevelData* fNuclData{nullptr};
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
-  G4double fLowLimitExc = 0.0;
-  G4double fHighLimitExc = DBL_MAX;
+  G4double fLowLimitExc{0.0};
+  G4double fHighLimitExc{DBL_MAX};
+  G4double fFermiBreakUpExc{DBL_MAX};
 
-  G4bool useSCO = false;
-  G4bool isInitialised = false;
-  G4bool isActive = true;
+  G4bool useSCO{false};
+  G4bool isInitialised{false};
+  G4bool isActive{true};
+  G4bool usePrecoInterface{false};
 
-  G4int minZ = 3;
-  G4int minA = 5;
-  G4int modelID = -1;
+  G4int minZ{3};
+  G4int minA{5};
+  G4int modelID{-1};
+  G4int fVerbose{1};
 
   G4HadFinalState theResult;
 };
 
 inline void G4PreCompoundModel::PerformEquilibriumEmission(
-            const G4Fragment & aFragment,
-            G4ReactionProductVector * result) const 
+            const G4Fragment& aFragment,
+            G4ReactionProductVector* result) const 
 {
-  G4ReactionProductVector* deexResult = 
-    GetExcitationHandler()->BreakItUp(aFragment);
-  result->insert(result->end(),deexResult->begin(), deexResult->end());
+  auto deexResult = GetExcitationHandler()->BreakItUp(aFragment);
+  for (auto & frag : *deexResult) { result->push_back(std::move(frag)); }
   delete deexResult;
 }
 

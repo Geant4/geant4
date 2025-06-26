@@ -64,23 +64,23 @@ public:
 
   inline std::size_t NumberOfTransitions() const;
 
-  inline std::size_t FinalExcitationIndex(std::size_t idx) const;
+  inline std::size_t FinalExcitationIndex(const std::size_t idx) const;
 
-  inline G4int TransitionType(std::size_t idx) const;
+  inline G4int TransitionType(const std::size_t idx) const;
 
   inline G4double GetTimeGamma() const;
 
   inline G4float GammaProbability(std::size_t idx) const;
 
-  inline G4float GammaCumProbability(std::size_t idx) const;
+  inline G4float GammaCumProbability(const std::size_t idx) const;
 
-  inline G4float MultipolarityRatio(std::size_t idx) const;
+  inline G4float MultipolarityRatio(const std::size_t idx) const;
 
-  inline std::size_t SampleGammaTransition(G4double rndm) const;
+  inline std::size_t SampleGammaTransition(const G4double rndm) const;
 
-  inline G4int SampleShell(std::size_t idx, G4double rndm) const;
+  inline G4int SampleShell(const std::size_t idx, const G4double rndm) const;
 
-  inline const std::vector<G4float>* ShellProbabilty(std::size_t idx) const;
+  inline const std::vector<G4float>* ShellProbabilty(const std::size_t idx) const;
 
   void StreamInfo(std::ostream& os) const;
 
@@ -139,7 +139,8 @@ inline G4float G4NucLevel::MultipolarityRatio(const std::size_t idx) const
 
 inline std::size_t G4NucLevel::SampleGammaTransition(const G4double rndm) const
 {
-  G4float x = rndm;
+  // this method called if length > 1
+  const G4float x = (G4float)rndm;
   std::size_t idx = 0;
   for(; idx<length; ++idx) { 
     if(x <= fGammaCumProbability[idx]) { break; } 
@@ -153,15 +154,15 @@ G4NucLevel::SampleShell(const std::size_t idx, const G4double rndm) const
   const std::vector<G4float>* prob = fShellProbability[idx];
   G4int i(-1);
   if(nullptr != prob) {
-    G4int nn = (G4int)prob->size();
-    G4float x = rndm;
+    const G4int nn = (G4int)prob->size();
+    const G4float x = (G4float)rndm;
     for(i=0; i<nn; ++i) { if(x <= (*prob)[i]) { break; } }
   } 
   return i;
 }
 
 inline const std::vector<G4float>* 
-G4NucLevel::ShellProbabilty(std::size_t idx) const
+G4NucLevel::ShellProbabilty(const std::size_t idx) const
 {
   return fShellProbability[idx];
 }

@@ -1,6 +1,6 @@
 #
 # ------ macOS ------
-#                                 macOS, gcc-9.3 and higher
+#                                 macOS, gcc-11.5 and higher
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -121,7 +121,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     QTHOME := /Library/Frameworks
   endif
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
   ifeq ($(QTHOME),/Library/Frameworks)
     ifndef QTMOC

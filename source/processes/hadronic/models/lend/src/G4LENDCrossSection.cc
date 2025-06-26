@@ -122,7 +122,9 @@ G4LENDCrossSection::G4LENDCrossSection( const G4String nam )
    proj = NULL; //will be set in an inherited class
    //default_evaluation = "endl99";
    //default_evaluation = "ENDF.B-VII.0";
-   default_evaluation = "ENDF/BVII.1";
+   //default_evaluation = "ENDF/BVII.1";
+   //default_evaluation = "ENDF/B-8.0";
+   default_evaluation = "ENDF/B-7.1";
 
    allow_nat = false;
    allow_any = false;

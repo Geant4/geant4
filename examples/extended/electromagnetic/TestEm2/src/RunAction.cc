@@ -53,6 +53,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin) : f
   // The choice of analysis technology is done via selection of a namespace
   fAnalysisManager = G4AnalysisManager::Instance();
   fAnalysisManager->SetDefaultFileType("root");
+  fAnalysisManager->SetVerboseLevel(1);
 
   // Set the default file name "testem2"
   // which can be then redefine in a macro via UI command
@@ -70,12 +71,8 @@ RunAction::~RunAction()
 
 void RunAction::BookHisto()
 {
-  // Get analysis manager
-  fAnalysisManager = G4AnalysisManager::Instance();
-
   // Open an output file
   fAnalysisManager->OpenFile();
-  fAnalysisManager->SetVerboseLevel(1);
 
   // Creating histograms
   //

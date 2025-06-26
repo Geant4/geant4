@@ -50,6 +50,8 @@
 #include "G4MaterialPropertyVector.hh"
 #include "G4VProcess.hh"
 
+#include <map>
+
 class G4Material;
 class G4ParticleDefinition;
 class G4PhysicsTable;
@@ -168,6 +170,7 @@ class G4Cerenkov : public G4VProcess
 
  protected:
   G4PhysicsTable* thePhysicsTable;
+  std::map<std::size_t, std::size_t> fIndexMPT;
 
  private:
   G4double fMaxBetaChange;

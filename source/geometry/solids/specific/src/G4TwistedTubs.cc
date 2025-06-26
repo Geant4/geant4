@@ -41,13 +41,11 @@
 #include "G4BoundingEnvelope.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4VPVParameterisation.hh"
-#include "meshdefs.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
-
-#include "Randomize.hh"
 
 #include "G4AutoLock.hh"
 
@@ -1024,7 +1022,7 @@ G4double G4TwistedTubs::GetSurfaceArea()
 G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 {
 
-  G4double z = G4RandFlat::shoot(fEndZ[0],fEndZ[1]);
+  G4double z = (fEndZ[1] - fEndZ[0])*G4QuickRand() + fEndZ[0] ;
   G4double phi , phimin, phimax ;
   G4double x   , xmin,   xmax ;
   G4double r   , rmin,   rmax ;
@@ -1036,14 +1034,14 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
   G4double a5 = fLowerEndcap->GetSurfaceArea()  ;
   G4double a6 = fUpperEndcap->GetSurfaceArea() ;
 
-  G4double chose = G4RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+  G4double chose = (a1 + a2 + a3 + a4 + a5 + a6)*G4QuickRand() ;
 
   if(chose < a1)
   {
 
     phimin = fOuterHype->GetBoundaryMin(z) ;
     phimax = fOuterHype->GetBoundaryMax(z) ;
-    phi = G4RandFlat::shoot(phimin,phimax) ;
+    phi = (phimax - phimin)*G4QuickRand() + phimin ;
 
     return fOuterHype->SurfacePoint(phi,z,true) ;
 
@@ -1053,27 +1051,27 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 
     phimin = fInnerHype->GetBoundaryMin(z) ;
     phimax = fInnerHype->GetBoundaryMax(z) ;
-    phi = G4RandFlat::shoot(phimin,phimax) ;
+    phi = (phimax - phimin)*G4QuickRand() + phimin ;
 
     return fInnerHype->SurfacePoint(phi,z,true) ;
 
   }
-  else if ( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) ) 
+  else if ( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) )
   {
 
-    xmin = fLatterTwisted->GetBoundaryMin(z) ; 
+    xmin = fLatterTwisted->GetBoundaryMin(z) ;
     xmax = fLatterTwisted->GetBoundaryMax(z) ;
-    x = G4RandFlat::shoot(xmin,xmax) ;
-    
+    x = (xmax - xmin)*G4QuickRand() + xmin ;
+
     return fLatterTwisted->SurfacePoint(x,z,true) ;
 
   }
   else if ( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
   {
 
-    xmin = fFormerTwisted->GetBoundaryMin(z) ; 
+    xmin = fFormerTwisted->GetBoundaryMin(z) ;
     xmax = fFormerTwisted->GetBoundaryMax(z) ;
-    x = G4RandFlat::shoot(xmin,xmax) ;
+    x = (xmax - xmin)*G4QuickRand() + xmin ;
 
     return fFormerTwisted->SurfacePoint(x,z,true) ;
    }
@@ -1081,11 +1079,11 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
   {
     rmin = GetEndInnerRadius(0) ;
     rmax = GetEndOuterRadius(0) ;
-    r = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
+    r = std::sqrt((sqr(rmax)-sqr(rmin))*G4QuickRand() + sqr(rmin)) ;
 
-    phimin = fLowerEndcap->GetBoundaryMin(r) ; 
+    phimin = fLowerEndcap->GetBoundaryMin(r) ;
     phimax = fLowerEndcap->GetBoundaryMax(r) ;
-    phi    = G4RandFlat::shoot(phimin,phimax) ;
+    phi    = (phimax - phimin)*G4QuickRand() + phimin ;
 
     return fLowerEndcap->SurfacePoint(phi,r,true) ;
   }
@@ -1093,11 +1091,11 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
   {
     rmin = GetEndInnerRadius(1) ;
     rmax = GetEndOuterRadius(1) ;
-    r = rmin + (rmax-rmin)*std::sqrt(G4RandFlat::shoot());
+    r = rmin + (rmax-rmin)*std::sqrt(G4QuickRand()) ;
 
-    phimin = fUpperEndcap->GetBoundaryMin(r) ; 
+    phimin = fUpperEndcap->GetBoundaryMin(r) ;
     phimax = fUpperEndcap->GetBoundaryMax(r) ;
-    phi    = G4RandFlat::shoot(phimin,phimax) ;
+    phi    = (phimax - phimin)*G4QuickRand() + phimin ;
 
     return fUpperEndcap->SurfacePoint(phi,r,true) ;
   }

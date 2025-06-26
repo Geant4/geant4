@@ -25,6 +25,7 @@
 //
 // G4Navigator class Inline implementation
 //
+// Author: Paul Kent (CERN), July 1995-1996
 // --------------------------------------------------------------------
 
 // ********************************************************************
@@ -486,4 +487,14 @@ G4Navigator* G4Navigator::Clone() const
     clone_nav->SetExternalNavigation(fpExternalNav->Clone());
   }
   return clone_nav;
+}
+
+// ********************************************************************
+// GetLastStepEndPoint
+// ********************************************************************
+//
+inline
+G4ThreeVector G4Navigator::GetLastStepEndPoint() const
+{
+  return fStepEndPoint;
 }

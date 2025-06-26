@@ -37,7 +37,6 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "G4ChargedGeantino.hh"
 #include "G4Event.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -50,14 +49,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction()
 {
-  G4int n_particle = 1;
+  auto n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
 
   // default particle kinematic
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("e-");
+  auto particleTable = G4ParticleTable::GetParticleTable();
+  auto particle = particleTable->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
   fParticleGun->SetParticleEnergy(100 * keV);

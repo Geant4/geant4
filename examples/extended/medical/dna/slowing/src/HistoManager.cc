@@ -61,6 +61,7 @@ void HistoManager::Book()
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
+  analysisManager->SetNtupleMerging(true);
 
   // Define histograms start values
   const G4int kMaxHisto = 4;

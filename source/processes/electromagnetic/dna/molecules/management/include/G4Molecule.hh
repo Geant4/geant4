@@ -205,7 +205,7 @@ public:
      */
     void PrintState() const;
 
-    G4Track * BuildTrack(G4double globalTime, const G4ThreeVector& Position);
+    G4Track* BuildTrack(G4double globalTime, const G4ThreeVector &Position, const G4Track * = nullptr);
 
     G4double GetKineticEnergy() const;
 

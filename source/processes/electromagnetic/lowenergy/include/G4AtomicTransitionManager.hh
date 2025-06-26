@@ -61,19 +61,21 @@ public:
   /// function Instance() 
   static G4AtomicTransitionManager* Instance();
 
+  ~G4AtomicTransitionManager();
+ 
   /// needs to be called once from other code before start of run
   void Initialise();
  
   /// Z is the atomic number of the element, shellIndex is the 
   /// index (in EADL) of the shell
-  G4AtomicShell* Shell(G4int Z, size_t shellIndex) const;
+  G4AtomicShell* Shell(G4int Z, std::size_t shellIndex) const;
    
   /// Z is the atomic number of the element, shellIndex is the 
   /// index (in EADL) of the final shell for the transition
   /// This function gives, upon Z and the Index of the initial shell where 
   /// the vacancy is, the radiative transition that can happen (originating 
   /// shell, energy, probability)
-  const G4FluoTransition* ReachableShell(G4int Z, size_t shellIndex) const;
+  const G4FluoTransition* ReachableShell(G4int Z, std::size_t shellIndex) const;
 
   /// This function gives, upon Z and the Index of the initial shell where 
   /// the vacancy is, the NON-radiative transition that can happen with 
@@ -98,26 +100,25 @@ public:
   /// Gives the sum of the probabilities of radiative transition towards the
   /// shell whose index is shellIndex
   G4double 
-  TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex) const;
+  TotalRadiativeTransitionProbability(G4int Z, std::size_t shellIndex) const;
   
   /// Gives the sum of the probabilities of non radiative transition from the
   /// shell whose index is shellIndex
   G4double 
-  TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const; 
+  TotalNonRadiativeTransitionProbability(G4int Z, std::size_t shellIndex) const; 
 
   /// Verbosity control
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
   G4int GetVerboseLevel(){return verboseLevel;};
 
-private:
-  explicit G4AtomicTransitionManager();
-
-  ~G4AtomicTransitionManager();
-
   // Hide copy constructor and assignment operator 
-  G4AtomicTransitionManager& operator=(const G4AtomicTransitionManager& right);
-  G4AtomicTransitionManager(const G4AtomicTransitionManager&);
- 
+  G4AtomicTransitionManager& operator=
+  (const G4AtomicTransitionManager& right) = delete;
+  G4AtomicTransitionManager(const G4AtomicTransitionManager&) = delete;
+
+private:
+  G4AtomicTransitionManager();
+
   static G4AtomicTransitionManager* instance;
   // since Augereffect data r stored as a table in G4AugerData, we have 
   // here a pointer to an element of that class itself.

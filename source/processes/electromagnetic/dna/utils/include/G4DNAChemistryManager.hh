@@ -53,7 +53,10 @@
 #include "G4UImessenger.hh"
 #include "G4VStateDependent.hh"
 
+#include "G4MoleculeCounterManager.hh"
+
 class G4Track;
+class G4Run;
 class G4DNAWaterExcitationStructure;
 class G4DNAWaterIonisationStructure;
 class G4Molecule;
@@ -150,9 +153,6 @@ public:
      * in standalone.
      */
     void UseAsStandalone(G4bool flag);
-    G4bool IsCounterResetWhenRunEnds() const;
-
-    void ResetCounterWhenRunEnds(G4bool resetCounterWhenRunEnds);
 
     void ForceMasterReinitialization();
     void TagThreadForReinitialization();
@@ -199,8 +199,17 @@ public:
 
     void PushMolecule(std::unique_ptr<G4Molecule> pMolecule,
                       G4double time,
-                      const G4ThreeVector& position,
-                      G4int parentID);
+                      const G4ThreeVector &position,
+                      G4int parentID,
+                      const G4Track *parentTrack = nullptr);
+
+    //============================================================================
+    // Methods called by RunManagers to notify of Runs & Events
+    //============================================================================
+    void BeginOfEventAction(const G4Event*);
+    void BeginOfRunAction(const G4Run*);
+    void EndOfEventAction(const G4Event*);
+    void EndOfRunAction(const G4Run*);
 
 protected:
     void HandleStandaloneInitialization();
@@ -251,5 +260,4 @@ private:
     G4bool fGeometryClosed{false};
 
     G4int fVerbose{0};
-    G4bool fResetCounterWhenRunEnds{true};
 };

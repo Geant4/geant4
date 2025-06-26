@@ -1,0 +1,49 @@
+# Verbosity
+/tracking/verbose 0
+#
+# MT
+/run/numberOfThreads 10
+#
+# Material
+/dna/test/setMat G4_WATER
+#
+# Size of World volume
+/dna/test/setSize 100 nm
+#
+# Atomic deexcitation
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# Physics
+# - To use Geant4-DNA constructor X, X=0, 2, 4, or 6 (recommended)
+#/dna/test/addPhysics DNA_Opt0
+#/dna/test/addPhysics DNA_Opt2
+/dna/test/addPhysics DNA_Opt4
+#/dna/test/addPhysics DNA_Opt6
+#
+# Run initialization
+/run/initialize
+/run/printProgress 1
+#
+# Incident particle type
+/gun/particle e-
+#
+# Incident particle energy
+/gun/energy 1 keV
+#
+/process/inactivate e-_G4DNAElectronSolvation
+/process/inactivate e-_G4DNAExcitation
+/process/inactivate e-_G4DNAIonisation
+#/process/inactivate e-_G4DNAAttachment
+#/process/inactivate e-_G4DNAVibExcitation
+#
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/step/recordOnlyFirstStep 1
+#
+# Beam on
+/run/beamOn 1000000

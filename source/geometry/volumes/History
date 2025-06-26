@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-10 Seth R Johnson (geomvol-V11-03-02)
+- Only delete surfaces if the geometry is not closed
+
+## 2025-05-23 Gabriele Cosmo (geomvol-V11-03-01)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+
+## 2025-02-23 Gabriele Cosmo (geomvol-V11-03-00)
+- Applied clang-tidy fixes for readability, based on llvm version 19.1.7.
+
 ## 2024-09-10 Ivana Hrivnacova (geomvol-V11-02-04)
 - Coverity fix in G4ReflectionFactory:
   Do not pass the same G4VisAttributes object to the reflected LV

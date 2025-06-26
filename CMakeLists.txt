@@ -30,8 +30,8 @@ project(Geant4
   DESCRIPTION "C++ toolkit for simulating the passage of particles through matter"
   HOMEPAGE_URL "https://geant4.cern.ch")
 set(${PROJECT_NAME}_VERSION_MAJOR 11)
-set(${PROJECT_NAME}_VERSION_MINOR  3)
-set(${PROJECT_NAME}_VERSION_PATCH  2)
+set(${PROJECT_NAME}_VERSION_MINOR  4)
+set(${PROJECT_NAME}_VERSION_PATCH  0)
 set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
 
 # - Prepend our own CMake Modules to the search path

@@ -18,6 +18,7 @@ geant4_add_module(G4emdna-utils
     G4DNAPTBExcitationStructure.hh
     G4DNAPTBIonisationStructure.hh
     G4DNARevertProbability.hh
+    G4DNASamplingTable.hh
     G4DNAWaterExcitationStructure.hh
     G4DNAWaterIonisationStructure.hh
     G4ErrorFunction.hh
@@ -36,6 +37,9 @@ geant4_add_module(G4emdna-utils
 	G4DNAEventSet.hh
 	G4ChemicalMoleculeFinder.hh
 	G4DNAMaterialManager.hh
+	G4MoleculeReactionCounter.hh
+	G4VUserMoleculeReactionCounter.hh
+	G4ChemEquilibrium.hh
   SOURCES
     G4DNAChemistryManager.cc
     G4DNACPA100LogLogInterpolation.cc
@@ -51,6 +55,7 @@ geant4_add_module(G4emdna-utils
     G4DNAEmfietzoglouWaterIonisationStructure.cc
     G4DNAPTBExcitationStructure.cc
     G4DNAPTBIonisationStructure.cc
+    G4DNASamplingTable.cc
     G4DNAWaterExcitationStructure.cc
     G4DNAWaterIonisationStructure.cc
     G4ErrorFunction.cc
@@ -59,14 +64,15 @@ geant4_add_module(G4emdna-utils
     G4ReactionTableMessenger.cc
     G4VDNAReactionModel.cc
     G4VUserChemistryList.cc
-    # physchemIO
     G4VPhysChemIO.cc
     G4PhysChemIO.cc
 	G4IRTUtils.cc
 	G4DNAScavengerMaterial.cc
 	G4DNAMesh.cc
 	G4DNAEventSet.cc
-	G4DNAMaterialManager.cc)
+	G4DNAMaterialManager.cc
+	G4ChemEquilibrium.cc
+	G4MoleculeReactionCounter.cc)
 
 geant4_module_link_libraries(G4emdna-utils
   PUBLIC
@@ -77,8 +83,8 @@ geant4_module_link_libraries(G4emdna-utils
     G4intercoms
     G4partman
   PRIVATE
-    G4analysismng
     G4emdna-moltypes
+    G4emutils
     G4geometrymng
     G4heprandom
     G4ions

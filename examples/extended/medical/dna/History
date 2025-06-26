@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-05-05 Hoang Tran (exdna-V11-03-01)
+- added molcounter examples
+
+## 2025-03-19 Hoang Tran (exdna-V11-03-00)
+- added dna radial example
+
 ## 2024-10-22 Hoang Tran (exdna-V11-02-02)
 - clean up moleculardna (moved to advanced) in README files
 
@@ -69,7 +75,7 @@ be used as a substitute for writing good git commit messages!
 - Updated README for newly added examples (S. Incerti)
 
 05-11-2019 H. Tran (exdna-V10-05-01)
-- Added check for no products reactions and 
+- Added check for no products reactions and
   fixed sequential mode in example dnadamage1
 
 26-12-2018 H. Tran (exdna-V10-05-00)

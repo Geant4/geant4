@@ -111,8 +111,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
 G4VEmProcess::~G4VEmProcess()
 {
-  if(isTheMaster) {
-    delete theData;
+  if (isTheMaster) {
     delete theEnergyOfCrossSectionMax;
   }
   delete modelManager;
@@ -353,6 +352,10 @@ void G4VEmProcess::StartTracking(G4Track* track)
       biasManager->ResetForcedInteraction(); 
     }
   }
+  for (G4int i=0; i<numberOfModels; ++i) {
+    auto ptr = GetModelByIndex(i);
+    ptr->StartTracking(track);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -369,6 +372,9 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   preStepKinEnergy = track.GetKineticEnergy();
   const G4double scaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(scaledEnergy, currentCoupleIndex);
+
+  // In models applied to ions the dynamic charge is needed
+  if (isIon) { currentModel->ChargeSquareRatio(track); }
   /*
   G4cout << "PostStepGetPhysicalInteractionLength: idx= " << currentCoupleIndex
          << "  couple: " << currentCouple << G4endl;

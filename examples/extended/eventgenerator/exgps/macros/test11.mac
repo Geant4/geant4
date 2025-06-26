@@ -18,7 +18,7 @@
 /gps/ene/type Pow
 /gps/ene/min 2. MeV
 /gps/ene/max 10. MeV
-/gps/alpha -2.
+/gps/ene/alpha -2.
 
 # commands below are independent of gps
 #

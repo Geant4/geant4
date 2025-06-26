@@ -44,6 +44,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <time.h>
+#include <vector>
 
 G4MPImanager* G4MPImanager::g4mpi_ = NULL;
 
@@ -83,8 +84,13 @@ G4MPImanager::G4MPImanager(int nof_extra_workers)
     master_weight_(1.),
     nof_extra_workers_(nof_extra_workers)
 {
-  // MPI::Init();
-  MPI::Init_thread(MPI::THREAD_SERIALIZED);
+  int provided;
+  MPI_Init_thread(nullptr, nullptr, MPI_THREAD_SERIALIZED, &provided);
+  if (provided < MPI_THREAD_SERIALIZED) {
+    G4Exception("G4MPImanager::G4MPImanager()", "G4MPImanager001", FatalException,
+                "MPI Initialization failed to setup with MPI_THREAD_SERIALIZED or better");
+  }
+
   Initialize();
 }
 
@@ -102,8 +108,12 @@ G4MPImanager::G4MPImanager(int argc, char** argv, int nof_extra_workers)
     master_weight_(1.),
     nof_extra_workers_(nof_extra_workers)
 {
-  // MPI::Init(argc, argv);
-  MPI::Init_thread(argc, argv, MPI::THREAD_SERIALIZED);
+  int provided;
+  MPI_Init_thread(&argc, &argv, MPI_THREAD_SERIALIZED, &provided);
+  if (provided < MPI_THREAD_SERIALIZED) {
+    G4Exception("G4MPImanager::G4MPImanager()", "G4MPImanager001", FatalException,
+                "MPI Initialization failed to setup with MPI_THREAD_SERIALIZED or better");
+  }
   Initialize();
   ParseArguments(argc, argv);
 }
@@ -133,10 +143,10 @@ G4MPImanager::~G4MPImanager()
     }
   }
   else {
-    COMM_G4COMMAND_.Free();
+    MPI_Comm_free(&COMM_G4COMMAND_);
   }
 
-  MPI::Finalize();
+  MPI_Finalize();
 }
 
 // --------------------------------------------------------------------------
@@ -173,14 +183,14 @@ void G4MPImanager::Initialize()
   g4mpi_ = this;
 
   // get rank information
-  world_size_ = MPI::COMM_WORLD.Get_size();
+  MPI_Comm_size(MPI_COMM_WORLD, &world_size_);
   if (world_size_ - nof_extra_workers_ <= 0) {
     G4Exception("G4MPImanager::SetExtraWorker()", "MPI001", JustWarning,
                 "Cannot reserve extra ranks: the MPI size is not sufficient.");
     nof_extra_workers_ = 0;
   }
   size_ = world_size_ - nof_extra_workers_;
-  rank_ = MPI::COMM_WORLD.Get_rank();
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
   is_master_ = (rank_ == kRANK_MASTER);
   is_slave_ = (rank_ != kRANK_MASTER);
   is_extra_worker_ = false;
@@ -220,13 +230,12 @@ void G4MPImanager::Initialize()
     MPI_Comm_create_group(MPI_COMM_WORLD, collecting_group_, 0, &collecting_comm_);
     MPI_Comm_create_group(MPI_COMM_WORLD, all_group_, 0, &all_comm_);
 
-    // COMM_G4COMMAND_ = processing_comm_ copy
-    COMM_G4COMMAND_ = MPI::Intracomm(processing_comm_);
+    MPI_Comm_dup(processing_comm_, &COMM_G4COMMAND_);
   }
   else {
     // G4cout << "No extra workers requested" << G4endl;
     // initialize MPI communicator
-    COMM_G4COMMAND_ = MPI::COMM_WORLD.Dup();
+    MPI_Comm_dup(MPI_COMM_WORLD, &COMM_G4COMMAND_);
   }
 
   is_extra_worker_ = (collecting_comm_ != MPI_COMM_NULL);
@@ -257,50 +266,51 @@ void G4MPImanager::Initialize()
 // --------------------------------------------------------------------------
 void G4MPImanager::ParseArguments(int argc, char** argv)
 {
+  _options.clear();
   G4int qhelp = 0;
   G4String ofprefix = "mpi";
 
-  G4int c;
-  while (1) {
-    G4int option_index = 0;
-    static struct option long_options[] = {{"help", no_argument, NULL, 'h'},
-                                           {"verbose", no_argument, NULL, 'v'},
-                                           {"init", required_argument, NULL, 'i'},
-                                           {"ofile", optional_argument, NULL, 'o'},
-                                           {NULL, 0, NULL, 0}};
+  G4int option_index = -1;
 
-    opterr = 0;  // suppress message
-    c = getopt_long(argc, argv, "hvi:o", long_options, &option_index);
-    opterr = 1;
+  for (int i = 1; i < argc; i++) {
+    G4String arg = argv[i];
+    G4String sub;
+    G4String endsub = sub;
+    if (arg.length() > 5) {
+      sub = arg.substr(0, 5);
+      endsub = arg.substr(arg.length() - 4);
+    }
 
-    if (c == -1) break;
-
-    switch (c) {
-      case 'h':
-        qhelp = 1;
-        break;
-      case 'v':
-        verbose_ = 1;
-        break;
-      case 'i':
-        qinitmacro_ = true;
-        init_file_name_ = optarg;
-        break;
-      case 'o':
-        qfcout_ = true;
-        if (optarg) ofprefix = optarg;
-        break;
-      default:
-        G4cerr << "*** invalid options specified." << G4endl;
-        std::exit(EXIT_FAILURE);
-        break;
+    if (arg == "help") {
+      qhelp = 1;
+    }
+    else if (arg == "verbose") {
+      verbose_ = 1;
+    }
+    else if (arg == "init") {
+      qinitmacro_ = true;
+      init_file_name_ = optarg;
+    }
+    else if (arg == "ofile") {
+      qfcout_ = true;
+      if (optarg) ofprefix = optarg;
+    }
+    else if (sub == "macro" or endsub == ".mac") {
+      option_index = i;
+      qbatchmode_ = true;
+    }
+    // default:
+    // G4cerr << "*** invalid options specified." << G4endl;
+    // std::exit(EXIT_FAILURE);
+    else {
+      _options.push_back(arg);
     }
   }
 
   // show help
   if (qhelp) {
     if (is_master_) ShowHelp();
-    MPI::Finalize();
+    MPI_Finalize();
     std::exit(EXIT_SUCCESS);
   }
 
@@ -308,15 +318,14 @@ void G4MPImanager::ParseArguments(int argc, char** argv)
   if (is_slave_ && qfcout_) {
     G4String prefix = ofprefix + ".%03d" + ".cout";
     char str[1024];
-    sprintf(str, prefix.c_str(), rank_);
+    snprintf(str, 1024, prefix.c_str(), rank_);
     G4String fname(str);
     fscout_.open(fname.c_str(), std::ios::out);
   }
 
   // non-option ARGV-elements ...
-  if (optind < argc) {
-    qbatchmode_ = true;
-    macro_file_name_ = argv[optind];
+  if (qbatchmode_) {
+    macro_file_name_ = argv[option_index];
   }
 }
 
@@ -365,7 +374,8 @@ void G4MPImanager::ShowStatus()
 
     // receive from each slave
     for (G4int islave = 1; islave < size_; islave++) {
-      COMM_G4COMMAND_.Recv(buff, G4MPIstatus::kNSIZE, MPI::INT, islave, kTAG_G4STATUS);
+      MPI_Recv(buff, G4MPIstatus::kNSIZE, MPI_INT, islave, kTAG_G4STATUS, COMM_G4COMMAND_,
+               MPI_STATUS_IGNORE);
       status_->UnPack(buff);
       status_->Print();
 
@@ -389,7 +399,7 @@ void G4MPImanager::ShowStatus()
   }
   else {
     status_->Pack(buff);
-    COMM_G4COMMAND_.Send(buff, G4MPIstatus::kNSIZE, MPI::INT, kRANK_MASTER, kTAG_G4STATUS);
+    MPI_Send(buff, G4MPIstatus::kNSIZE, MPI_INT, kRANK_MASTER, kTAG_G4STATUS, COMM_G4COMMAND_);
   }
 }
 
@@ -413,13 +423,13 @@ void G4MPImanager::ShowSeeds()
     G4cout << "* rank= " << rank_ << " seed= " << G4Random::getTheSeed() << G4endl;
     // receive from each slave
     for (G4int islave = 1; islave < size_; islave++) {
-      COMM_G4COMMAND_.Recv(&buff, 1, MPI::LONG, islave, kTAG_G4SEED);
+      MPI_Recv(&buff, 1, MPI_LONG, islave, kTAG_G4SEED, COMM_G4COMMAND_, MPI_STATUS_IGNORE);
       G4cout << "* rank= " << islave << " seed= " << buff << G4endl;
     }
   }
   else {  // slaves
     buff = G4Random::getTheSeed();
-    COMM_G4COMMAND_.Send(&buff, 1, MPI::LONG, kRANK_MASTER, kTAG_G4SEED);
+    MPI_Send(&buff, 1, MPI_LONG, kRANK_MASTER, kTAG_G4SEED, COMM_G4COMMAND_);
   }
 }
 
@@ -441,21 +451,25 @@ G4bool G4MPImanager::CheckThreadStatus()
     qstatus = (thread_id_ != 0);
     // get slave status
     for (G4int islave = 1; islave < size_; islave++) {
-      MPI::Request request = COMM_G4COMMAND_.Irecv(&buff, 1, MPI::UNSIGNED, islave, kTAG_G4STATUS);
-      while (!request.Test()) {
+      MPI_Request request;
+      MPI_Irecv(&buff, 1, MPI_UNSIGNED, islave, kTAG_G4STATUS, COMM_G4COMMAND_, &request);
+      int flag = 0;
+      while (!flag) {
+        MPI_Test(&request, &flag, MPI_STATUS_IGNORE);
         ::Wait(1000);
       }
+
       qstatus |= buff;
     }
   }
   else {
     buff = (thread_id_ != 0);
-    COMM_G4COMMAND_.Send(&buff, 1, MPI::UNSIGNED, kRANK_MASTER, kTAG_G4STATUS);
+    MPI_Send(&buff, 1, MPI_UNSIGNED, kRANK_MASTER, kTAG_G4STATUS, COMM_G4COMMAND_);
   }
 
   // broadcast
   buff = qstatus;  // for master
-  COMM_G4COMMAND_.Bcast(&buff, 1, MPI::UNSIGNED, kRANK_MASTER);
+  MPI_Bcast(&buff, 1, MPI_UNSIGNED, kRANK_MASTER, COMM_G4COMMAND_);
   qstatus = buff;  // for slave
 
   if (qstatus != 0)
@@ -540,20 +554,21 @@ G4String G4MPImanager::BcastCommand(const G4String& command)
   // "command" is not yet fixed in slaves at this time.
 
   // waiting message exhausts CPU in LAM!
-  // COMM_G4COMMAND_.Bcast(sbuff, ssize, MPI::CHAR, RANK_MASTER);
 
   // another implementation
   if (is_master_) {
     for (G4int islave = 1; islave < size_; islave++) {
-      COMM_G4COMMAND_.Send(sbuff, kBUFF_SIZE, MPI::CHAR, islave, kTAG_G4COMMAND);
+      MPI_Send(sbuff, kBUFF_SIZE, MPI_CHAR, islave, kTAG_G4COMMAND, COMM_G4COMMAND_);
     }
   }
   else {
     // try non-blocking receive
-    MPI::Request request =
-      COMM_G4COMMAND_.Irecv(sbuff, kBUFF_SIZE, MPI::CHAR, kRANK_MASTER, kTAG_G4COMMAND);
-    // polling...
-    while (!request.Test()) {
+    MPI_Request request;
+    MPI_Irecv(sbuff, kBUFF_SIZE, MPI_CHAR, kRANK_MASTER, kTAG_G4COMMAND, COMM_G4COMMAND_, &request);
+
+    int flag = 0;
+    while (!flag) {
+      MPI_Test(&request, &flag, MPI_STATUS_IGNORE);
       ::Wait(1000);
     }
   }
@@ -654,8 +669,11 @@ void G4MPImanager::WaitBeamOn()
       // receive from each slave
       for (G4int islave = 1; islave < size_; islave++) {
         // G4cout << "calling Irecv for islave " << islave << G4endl;
-        MPI::Request request = COMM_G4COMMAND_.Irecv(&buff, 1, MPI::INT, islave, kTAG_G4STATUS);
-        while (!request.Test()) {
+        MPI_Request request;
+        MPI_Irecv(&buff, 1, MPI_INT, islave, kTAG_G4STATUS, COMM_G4COMMAND_, &request);
+        int flag = 0;
+        while (flag) {
+          MPI_Test(&request, &flag, MPI_STATUS_IGNORE);
           ::Wait(1000);
         }
       }
@@ -663,7 +681,7 @@ void G4MPImanager::WaitBeamOn()
     else {
       buff = 1;
       // G4cout << "calling send for i " << kRANK_MASTER << G4endl;
-      COMM_G4COMMAND_.Send(&buff, 1, MPI::INT, kRANK_MASTER, kTAG_G4STATUS);
+      MPI_Send(&buff, 1, MPI_INT, kRANK_MASTER, kTAG_G4STATUS, COMM_G4COMMAND_);
     }
   }
 }

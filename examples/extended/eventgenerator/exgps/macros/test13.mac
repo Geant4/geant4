@@ -27,7 +27,7 @@
 
 # commands below are independent of gps
 #
-/analysis/setFileName test10
+/analysis/setFileName test13
 /analysis/h1/set 1 100 1 15 MeV
 /analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
 #

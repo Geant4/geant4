@@ -878,7 +878,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       currentPosition = theTrack.GetPosition();
 
       fParticleChangeForRadDecay.SetSecondaryWeightByProcess(true);
-
+      
       G4IonTable* theIonTable;
       G4ParticleDefinition* parentNucleus;
 

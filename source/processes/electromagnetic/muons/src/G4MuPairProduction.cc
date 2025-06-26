@@ -73,6 +73,7 @@
 #include "G4Positron.hh"
 #include "G4VEmModel.hh"
 #include "G4MuPairProductionModel.hh"
+#include "G4RiGeMuPairProductionModel.hh"
 #include "G4ElementData.hh"
 #include "G4EmParameters.hh"
 
@@ -113,18 +114,22 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
   isInitialised = true;
 
   theParticle = part;
+  G4EmParameters* param = G4EmParameters::Instance();
 
   G4VEmModel* mod = EmModel(0);
-  if(nullptr == mod) {
+  if (nullptr == mod) {
     lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
-    auto ptr = new G4MuPairProductionModel(part);
-    ptr->SetLowestKineticEnergy(lowestKinEnergy);
-    mod = ptr; 
+    if (param->UseRiGePairProductionModel()) {
+      mod = new G4MuPairProductionModel(part);
+    } else { 
+      auto ptr = new G4MuPairProductionModel(part);
+      ptr->SetLowestKineticEnergy(lowestKinEnergy);
+      mod = ptr;
+    }
     SetEmModel(mod);
   }
 
   G4VEmFluctuationModel* fm = nullptr;
-  G4EmParameters* param = G4EmParameters::Instance();
   mod->SetLowEnergyLimit(param->MinKinEnergy());
   mod->SetHighEnergyLimit(param->MaxKinEnergy());
   mod->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());

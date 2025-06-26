@@ -6,7 +6,7 @@
 
   system ("hadd -O -f molecular-dna.root molecular-dna_t*.root");
 
-  c1 = new TCanvas("c1", "Damages", 120, 60, 1000, 1000);
+  auto c1 = new TCanvas("c1", "Damages", 120, 60, 1000, 1000);
   c1->SetBorderSize(0);
   c1->SetFillColor(0);
   c1->SetFillStyle(4000);
@@ -64,6 +64,11 @@
   TFile *f = TFile::Open("molecular-dna.root");
   TTree *tree = (TTree *) f->Get("tuples/primary_source");
   Float_t number = (Float_t) tree->GetEntries();
+
+  if (number<2) {
+    std::cout << "Not enough entries in the \"primary_source\" TTree (" << (long)number << " entries)\n";
+    gApplication->Terminate(0);
+  }
 
   tree = (TTree *) f->Get("tuples/source");
   tree->SetBranchAddress("Primary",&Primary);
@@ -142,15 +147,14 @@
   mean_DSBm = (Float_t) total_DSBm / number;
   mean_DSBh = (Float_t) total_DSBh / number;
 
-  Double_t SD_SSBd = sqrt(((total_SSBd2 / number) - pow(total_SSBd / number,2))/(number -1));
-  Double_t SD_SSBi = sqrt(((total_SSBi2 / number) - pow(total_SSBi / number,2))/(number -1));
-  Double_t SD_SSBm = sqrt(((total_SSBm2 / number) - pow(total_SSBm / number,2))/(number -1));
+  Double_t SD_SSBd = sqrt(abs(((total_SSBd2 / number) - pow(total_SSBd / number,2)))/(number -1));
+  Double_t SD_SSBi = sqrt(abs(((total_SSBi2 / number) - pow(total_SSBi / number,2)))/(number -1));
+  Double_t SD_SSBm = sqrt(abs(((total_SSBm2 / number) - pow(total_SSBm / number,2)))/(number -1));
 
-  Double_t SD_DSBd = sqrt(((total_DSBd2 / number) - pow(total_DSBd / number,2))/(number -1));
-  Double_t SD_DSBi = sqrt(((total_DSBi2 / number) - pow(total_DSBi / number,2))/(number -1));
-  Double_t SD_DSBm = sqrt(((total_DSBm2 / number) - pow(total_DSBm / number,2))/(number -1));
-  Double_t SD_DSBh = sqrt(((total_DSBh2 / number) - pow(total_DSBh / number,2))/(number -1));
-
+  Double_t SD_DSBd = sqrt(abs(((total_DSBd2 / number) - pow(total_DSBd / number,2)))/(number -1));
+  Double_t SD_DSBi = sqrt(abs(((total_DSBi2 / number) - pow(total_DSBi / number,2)))/(number -1));
+  Double_t SD_DSBm = sqrt(abs(((total_DSBm2 / number) - pow(total_DSBm / number,2)))/(number -1));
+  Double_t SD_DSBh = sqrt(abs(((total_DSBh2 / number) - pow(total_DSBh / number,2)))/(number -1));
 
   mean_SSB = (Float_t) total_SSB / number;
   mean_SSBp = (Float_t) total_SSBp / number;
@@ -160,18 +164,18 @@
   mean_DSBp = (Float_t) total_DSBp / number;
   mean_DSBpp = (Float_t) total_DSBpp / number;
 
-  Double_t SD_SSB = sqrt(((total_SSB2 / number) - pow(total_SSB / number,2))/(number -1));
-  Double_t SD_SSBp = sqrt(((total_SSBp2 / number) - pow(total_SSBp / number,2))
-                            /(number -1));
-  Double_t SD_twoSSB = sqrt(((total_twoSSB2 / number) - pow(total_twoSSB /
+  Double_t SD_SSB = sqrt(abs(((total_SSB2 / number) - pow(total_SSB / number,2))/(number -1)));
+  Double_t SD_SSBp = sqrt(abs(((total_SSBp2 / number) - pow(total_SSBp / number,2))
+                            /(number -1)));
+  Double_t SD_twoSSB = sqrt(abs(((total_twoSSB2 / number) - pow(total_twoSSB /
                                                               number,2))
-                            /(number -1));
+                            /(number -1)));
 
-  Double_t SD_DSB = sqrt(((total_DSB2 / number) - pow(total_DSB / number,2))/(number -1));
-  Double_t SD_DSBp = sqrt(((total_DSBp2 / number) - pow(total_DSBp / number,2))
-                           /(number -1));
-  Double_t SD_DSBpp = sqrt(((total_DSBpp2 / number) - pow(total_DSBpp / number,2))
-                           /(number -1));
+  Double_t SD_DSB = sqrt(abs(((total_DSB2 / number) - pow(total_DSB / number,2))/(number -1)));
+  Double_t SD_DSBp = sqrt(abs(((total_DSBp2 / number) - pow(total_DSBp / number,2))
+                           /(number -1)));
+  Double_t SD_DSBpp = sqrt(abs(((total_DSBpp2 / number) - pow(total_DSBpp / number,2))
+                           /(number -1)));
 
   cout<<"Paricle : "<<Primary<<'\t'
        <<"Energy [/MeV] : "<<Energy<<'\t'
@@ -227,7 +231,6 @@
   gr2->GetXaxis()->SetBinLabel(90,"DSBpp");
   gr2->SetFillColor(49);
 
-  //Draw
   c1->cd(1);
   gr1->Draw("ba");
 

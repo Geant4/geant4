@@ -68,9 +68,11 @@ class G4QSSMessenger : public G4UImessenger
 
   public:
 
-    G4double dQMin = 0;
-    G4double dQRel = 0;
+    G4double dQMin = 0.00001;
+    G4double dQRel = 0.001;
     G4double trialProposedStepModifier = 1.0;
+    G4int maxSubsteps = 5000;
+    G4int QssOrder = 2;
 
   private:
 
@@ -80,6 +82,7 @@ class G4QSSMessenger : public G4UImessenger
     G4UIcmdWithADouble* dQRelCmd;
     G4UIcmdWithAString* stepperSelectorCmd;
     G4UIcmdWithADouble* trialProposedStepModifierCmd;
+    G4UIcmdWithAnInteger* maxSubstepsCmd;
 };
 
 #endif  // GEANT4_G4QSSMessenger_H

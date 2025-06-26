@@ -605,7 +605,7 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 							     const G4double cut) const
 {
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  if (!(fSamplingTable->count(theKey)) || !(fPBcut->count(theKey)) ||
+  if (!(fSamplingTable->count(theKey)) || !(fPBcut->count(theKey)) || 
       !(fReducedXSTable->count(theKey)))
     {
       G4ExceptionDescription ed;

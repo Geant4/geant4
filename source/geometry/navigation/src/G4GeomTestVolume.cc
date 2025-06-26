@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GeomTestVolume implementation
+// Class G4GeomTestVolume implementation
 //
-// Author: G.Cosmo, CERN
+// Author: Gabriele Cosmo (CERN), 22 August 2013
 // --------------------------------------------------------------------
 
 #include <queue>
@@ -196,7 +196,7 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
   std::set<const G4LogicalVolume *> tested;
 
   const G4LogicalVolume *logical = target->GetLogicalVolume();
-  auto  nDaughter = (G4int)logical->GetNoDaughters();
+  auto nDaughter = (G4int)logical->GetNoDaughters();
   for( auto iDaughter=0; iDaughter<nDaughter; ++iDaughter )
   {
     G4VPhysicalVolume *daughter = logical->GetDaughter(iDaughter);

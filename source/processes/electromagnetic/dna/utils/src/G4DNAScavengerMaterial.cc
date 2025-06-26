@@ -60,6 +60,19 @@ void G4DNAScavengerMaterial::Initialize()
     G4cout << "G4DNAScavengerMaterial existed but empty" << G4endl;
   }
   Reset();
+
+  fEquilibriumProcesses.emplace(
+    std::make_pair(6, std::make_unique<G4ChemEquilibrium>(6, 10 * CLHEP::us)));//reactionType6 and 10 * us
+  fEquilibriumProcesses.emplace(
+    std::make_pair(7, std::make_unique<G4ChemEquilibrium>(7, 10 * CLHEP::us)));//reactionType6 and 10 * us
+  fEquilibriumProcesses.emplace(
+    std::make_pair(8, std::make_unique<G4ChemEquilibrium>(8, 10 * CLHEP::us)));//reactionType6 and 10 * us
+  for(auto& it : fEquilibriumProcesses)
+  {
+    it.second->Initialize();
+    it.second->SetVerbose(fVerbose);
+  }
+
   fIsInitialized = true;
 }
 
@@ -68,10 +81,7 @@ G4DNAScavengerMaterial::GetNumberMoleculePerVolumeUnitForMaterialConf(MolType ma
 {
   // no change these molecules
   if (fH2O == matConf) {
-    G4ExceptionDescription exceptionDescription;
-    exceptionDescription << "matConf : " << matConf->GetName();
-    G4Exception("G4DNAScavengerMaterial::GetNumberMoleculePerVolumeUnitForMaterialConf",
-                "G4DNAScavengerMaterial001", FatalErrorInArgument, exceptionDescription);
+    return 0;
   }
 
   auto iter = fScavengerTable.find(matConf);
@@ -118,7 +128,7 @@ void G4DNAScavengerMaterial::AddNumberMoleculePerVolumeUnitForMaterialConf(MolTy
   // no change these molecules
 
   if (fH2O == matConf || fH3Op == matConf ||  // pH has no change
-      G4MoleculeTable::Instance()->GetConfiguration("OHm(B)") == matConf)
+      fHOm == matConf)
   {
     // G4cout<<"moletype : "<<matConf->GetName()<<G4endl;
     // kobs is already counted these molecule concentrations
@@ -173,6 +183,8 @@ void G4DNAScavengerMaterial::Reset()
     return;
   }
 
+  ResetEquilibrium();
+
   fScavengerTable.clear();
   fCounterMap.clear();
   fpLastSearch.reset(nullptr);
@@ -213,12 +225,17 @@ void G4DNAScavengerMaterial::AddAMoleculeAtTime(MolType molecule, G4double time,
     auto end = counterMap_i->second.rbegin();
 
     if (end->first <= time
-        || fabs(end->first - time) <= G4::MoleculeCounter::TimePrecision::fPrecision) {
+        || fabs(end->first - time) <= G4::MoleculeCounter::FixedTimeComparer::fPrecision) {
       G4double newValue = end->second + number;
       counterMap_i->second[time] = newValue;
       if (newValue != (floor)(fScavengerTable[molecule]))  // protection
       {
-        G4String errMsg = "You are trying to add wrong molecule ";
+        G4String errMsg = "You are trying to add wrong molecule : ";
+                        G4cout<< " newValue : "<<newValue<<" " << molecule->GetName()
+                          << " at time : " << G4BestUnit(time, "Time")
+                          << " with number : " << number
+               <<" (floor)(fScavengerTable[molecule]) : "<<(floor)(fScavengerTable[molecule])
+                          << " and the final number is not valid." << G4endl;
         G4Exception("AddAMoleculeAtTime", "", FatalErrorInArgument, errMsg);
       }
     }
@@ -427,4 +444,37 @@ G4double G4DNAScavengerMaterial::GetpH()
     fScavengerTable[fHOm] = 0;
   }
   return -pH;
+}
+
+G4bool G4DNAScavengerMaterial::SetEquilibrium(const G4DNAMolecularReactionData* pReaction,
+                                              G4double time)
+{
+  for(auto& it : fEquilibriumProcesses)
+  {
+    it.second->SetGlobalTime(time);
+    it.second->SetEquilibrium(pReaction);
+    if(it.second->IsStatusChanged()) return true;
+  }
+  return false;
+}
+
+void G4DNAScavengerMaterial::ResetEquilibrium()
+{
+  for(auto& it : fEquilibriumProcesses)
+  {
+    it.second->Reset();
+  }
+}
+
+G4bool G4DNAScavengerMaterial::IsEquilibrium(const G4int& reactionType) const
+{
+  auto reaction = fEquilibriumProcesses.find(reactionType);
+  if(reaction == fEquilibriumProcesses.end())
+  {
+    return true;
+  }else
+  {
+    return (reaction->second->GetEquilibriumStatus());
+  }
+
 }

@@ -454,14 +454,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
         if ( G4UniformRand() > 0.5 ) { newPart = G4KaonZeroShort::Definition(); }
         else { newPart = G4KaonZeroLong::Definition(); }
         dynamicParticle->SetDefinition( newPart );
-	if ( nKaonWarn < 1 ) {
-	  ++nKaonWarn;
-	  G4ExceptionDescription ed;
-	  ed << " Hadronic model " << theInteraction->GetModelName() << G4endl;
-	  ed << " created " << part->GetParticleName() << G4endl;
-	  ed << " -> forced to be " << newPart->GetParticleName() << G4endl;
-	  G4Exception( "G4HadronicProcess::PostStepDoIt", "had007", JustWarning, ed );
-	}
       }
     }
   }

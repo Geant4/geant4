@@ -967,6 +967,25 @@ public:
     }
 #undef TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_COL
 #undef TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL
+
+    size_t num = m_cols.size();
+    if(!num) {
+      a_out << "toolx::hdf5::ntuple::ntuple(read with binding) :"
+            << " zero columns."
+            << std::endl;
+      return false;
+    }
+
+   {tools_vforcit(tools::column_binding,a_bd.columns(),it) {
+      if(!tools::find_named<icol>(m_cols,(*it).name())) {
+        a_out << "toolx::hdf5::ntuple::ntuple(read with binding) :"
+              << " error : for column binding with name " << tools::sout((*it).name()) << ", no ntuple column found."
+              << std::endl;
+        tools::safe_clear<icol>(m_cols);
+        return false;
+      }
+    }}
+
     return true;
   }
 

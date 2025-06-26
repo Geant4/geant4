@@ -44,6 +44,7 @@
 #include "G4PreCompoundProton.hh"
 #include "G4CoulombBarrier.hh"
 #include "G4Proton.hh"
+#include "G4DeexPrecoUtility.hh"
 
 G4PreCompoundProton::G4PreCompoundProton()
   : G4PreCompoundNucleon(G4Proton::Proton(), new G4CoulombBarrier(1, 1))
@@ -60,16 +61,6 @@ G4double G4PreCompoundProton::GetRj(G4int nParticles, G4int nCharged) const
 
 G4double G4PreCompoundProton::GetAlpha() const
 {
-  G4double C = 0.0;
-  if (theResZ >= 70) 
-    {
-      C = 0.10;
-    } 
-  else 
-    {
-      C = ((((0.15417e-06*theResZ) - 0.29875e-04)*theResZ 
-	    + 0.21071e-02)*theResZ - 0.66612e-01)*theResZ + 0.98375;
-    }
-  return 1.0 + C;
+  return 1.0 + G4DeexPrecoUtility::ProtonCValue(theResZ);
 }
   

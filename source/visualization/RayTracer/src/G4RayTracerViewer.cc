@@ -27,6 +27,8 @@
 
 #include "G4RayTracerViewer.hh"
 
+#include "G4Timer.hh"
+
 #include "G4ios.hh"
 #include <sstream>
 #include <iomanip>
@@ -53,7 +55,6 @@ G4RayTracerViewer::G4RayTracerViewer
 : G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
 , fFileCount(0)
 #ifdef G4MULTITHREADED
-#include "G4TheMTRayTracer.hh"
 , theTracer(aTracer? aTracer: G4TheMTRayTracer::Instance(new G4RTJpegMaker, new G4RTSimpleScanner))
 #else
 , theTracer(aTracer? aTracer: new G4TheRayTracer(new G4RTJpegMaker, new G4RTSimpleScanner))
@@ -103,7 +104,6 @@ void G4RayTracerViewer::SetView()
   theTracer->SetBackgroundColour(fVP.GetBackgroundColour());
 }
 
-
 void G4RayTracerViewer::ClearView() {}
 
 void G4RayTracerViewer::DrawView()
@@ -130,10 +130,16 @@ void G4RayTracerViewer::DrawView()
   else {
     ProcessView();
   }
+
+  // Normally it's ProcessView() that takes the time, but for RayTracer it's Trace()
+  G4Timer timer;
+  timer.Start();
   std::ostringstream filename;
   filename << "g4RayTracer." << fShortName << '_'
   << std::setw(4) << std::setfill('0') << fFileCount++ << ".jpeg";
   theTracer->Trace(filename.str());
+  timer.Stop();
+  fKernelVisitElapsedTimeSeconds = timer.GetRealElapsed();
 
   // Reset call flag
   called = false;

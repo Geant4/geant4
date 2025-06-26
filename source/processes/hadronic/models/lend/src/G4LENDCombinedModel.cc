@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 2012-09-17 T. Koi (SLAC/EPP): First implementation
+// 2024-07-17 D.M.Wright (LLNL): Added GetFatalEnergyCheckLevels() to call equivalent function
+//                               in the selected channel. This fixes incorrect implemenation
+//                               and prevents crash.
+
 #include "G4LENDCombinedModel.hh"
 #include "G4LENDCombinedCrossSection.hh"
 #include "G4LENDElastic.hh"
@@ -69,7 +74,19 @@ G4HadFinalState * G4LENDCombinedModel::ApplyYourself(const G4HadProjectile& aTra
    G4DynamicParticle* dp = new G4DynamicParticle( proj , G4ThreeVector(0.,0.,1.) , aTrack.GetKineticEnergy() );
    G4int ichannel = crossSection->SelectChannel( dp , iZ , iA , aTarg.GetIsotope(), NULL , aTrack.GetMaterial() );
    delete dp;
-   //ichannel=1;
    channel = channels[ichannel];
+   channel_selected = channel; // needed by std::pair() defined below
    return channel->ApplyYourself(aTrack,aTarg);
+}
+
+// must call the right CheckLevels (Fission is different from other channels)
+const std::pair<G4double, G4double> G4LENDCombinedModel::GetFatalEnergyCheckLevels() const
+{
+    /* D. M. Wright debug statement
+    std::cout << "G4LENDCombinedModel "
+    << " " << channel_selected->GetModelName()
+    << " GetFatalEnergyCheckLevels"
+        << std::endl;
+    */
+    return channel_selected->GetFatalEnergyCheckLevels();
 }

@@ -85,6 +85,10 @@
 #include "G4RayTracerX.hh" // no_geant4_module_check
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER_QT
+#include "G4RayTracerQt.hh" // no_geant4_module_check
+#endif
+
 #ifdef G4VIS_USE_QT3D
 #include "G4Qt3D.hh" // no_geant4_module_check
 #endif
@@ -309,14 +313,14 @@ inline
 void G4VisExecutive::SetDefaultsByBuildFlags()
 {
   // 5th, by cpp flags
-#if defined G4VIS_USE_OPENGLQT || G4VIS_USE_OPENGLXM ||\
+#if defined G4VIS_USE_TOOLSSG_QT_GLES || G4VIS_USE_TOOLSSG_X11_GLES ||\
+            G4VIS_USE_TOOLSSG_XT_GLES || G4VIS_USE_TOOLSSG_WINDOWS_GLES
+  fDefaultGraphicsSystemName = "TSG";
+#elif defined G4VIS_USE_OPENGLQT || G4VIS_USE_OPENGLXM ||\
             G4VIS_USE_OPENGLX  || G4VIS_USE_OPENGLWIN32
   fDefaultGraphicsSystemName = "OGL";
 #elif defined G4VIS_USE_OI || G4VIS_USE_OIX
   fDefaultGraphicsSystemName = "OI";
-#elif defined G4VIS_USE_TOOLSSG_QT_GLES || G4VIS_USE_TOOLSSG_X11_GLES ||\
-              G4VIS_USE_TOOLSSG_XT_GLES || G4VIS_USE_TOOLSSG_WINDOWS_GLES
-  fDefaultGraphicsSystemName = "TSG";
 #elif defined G4VIS_USE_VTK || G4VIS_USE_VTK_QT
   fDefaultGraphicsSystemName = "Vtk";
 #elif defined G4VIS_USE_TOOLSSG_QT_ZB || G4VIS_USE_TOOLSSG_X11_ZB ||\
@@ -356,7 +360,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem(ogliqt);
   RegisterGraphicsSystem(oglsqt);
   ogliqt->AddNickname("OGLI");
-  oglsqt->AddNickname("OGL");
   oglsqt->AddNickname("OGLS");
 #endif
 
@@ -370,7 +373,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   oglsxm->AddNickname("OGLSQt_FALLBACK");
 #  else
   oglixm->AddNickname("OGLI");
-  oglsxm->AddNickname("OGL");
   oglsxm->AddNickname("OGLS");
 #  endif
 #endif
@@ -391,7 +393,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 #  if defined(G4VIS_USE_OPENGLQT) || (G4VIS_USE_OPENGLXM)
 #  else
   oglix->AddNickname("OGLI");
-  oglsx->AddNickname("OGL");
   oglsx->AddNickname("OGLS");
 #  endif
 #endif
@@ -406,7 +407,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   oglswin32->AddNickname("OGLSQt_FALLBACK");
 #  else
   ogliwin32->AddNickname("OGLI");
-  oglswin32->AddNickname("OGL");
   oglswin32->AddNickname("OGLS");
 #  endif
 #endif
@@ -435,6 +435,10 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_RAYTRACERX
   RegisterGraphicsSystem(new G4RayTracerX);
+#endif
+
+#ifdef G4VIS_USE_RAYTRACER_QT
+  RegisterGraphicsSystem(new G4RayTracerQt);
 #endif
 
 #ifdef G4VIS_USE_QT3D
@@ -500,19 +504,26 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   tsg_qt_gles->AddNickname("TSG");
+  tsg_qt_gles->AddNickname("OGL");
 #elif defined(G4VIS_USE_TOOLSSG_XT_GLES)
   tsg_xt_gles->AddNickname("TSG");
+  tsg_xt_gles->AddNickname("OGL");
 #elif defined(G4VIS_USE_TOOLSSG_X11_GLES)
   tsg_x11_gles->AddNickname("TSG");
+  tsg_x11_gles->AddNickname("OGL");
 #elif defined(G4VIS_USE_TOOLSSG_WINDOWS_GLES)
   tsg_windows_gles->AddNickname("TSG");
+  tsg_windows_gles->AddNickname("OGL");
 #else
 #ifdef G4VIS_USE_TOOLSSG_QT_ZB
   tsg_qt_zb->AddNickname("TSG");
+  tsg_qt_zb->AddNickname("OGL");
 #elif G4VIS_USE_TOOLSSG_WINDOWS_ZB
   tsg_windows_zb->AddNickname("TSG");
+  tsg_windows_zb->AddNickname("OGL");
 #else
   tsg_offscreen->AddNickname("TSG");
+  tsg_offscreen->AddNickname("OGL");
 #endif
 #endif
 

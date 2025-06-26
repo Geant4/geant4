@@ -119,15 +119,19 @@ void Par04InferenceSetup::CheckInferenceLibrary()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par04InferenceSetup::GetEnergies(std::vector<G4double>& aEnergies, G4double aInitialEnergy,
-                                      G4float aInitialAngle)
+                                      G4float aTheta, G4float aPhi)
 {
   // First check if inference library was set correctly
   CheckInferenceLibrary();
   // size represents the size of the output vector
   int size = fMeshNumber.x() * fMeshNumber.y() * fMeshNumber.z();
+  std::vector<G4float> genVector;
+
+  if (fModelType == "VAE")
+  {
+    genVector.assign(fSizeLatentVector + fSizeConditionVector, 0);
 
   // randomly sample from a gaussian distribution in the latent space
-  std::vector<G4float> genVector(fSizeLatentVector + fSizeConditionVector, 0);
   for (int i = 0; i < fSizeLatentVector; ++i) {
     genVector[i] = CLHEP::RandGauss::shoot(0., 1.);
   }
@@ -144,18 +148,49 @@ void Par04InferenceSetup::GetEnergies(std::vector<G4double>& aEnergies, G4double
   // 1. energy
   genVector[fSizeLatentVector] = aInitialEnergy / fMaxEnergy;
   // 2. angle
-  genVector[fSizeLatentVector + 1] = (aInitialAngle / (CLHEP::deg)) / fMaxAngle;
+  genVector[fSizeLatentVector + 1] = (aTheta / (CLHEP::deg)) / fMaxAngle;
   // 3. geometry
   genVector[fSizeLatentVector + 2] = 0;
   genVector[fSizeLatentVector + 3] = 1;
+  } else if (fModelType == "CaloDiT-2")
+  {
+    // fSizeLatentVector & fSizeConditionVector are ignored for CaloDiT-2
+    // Conditions (dim) are energy (1), phi (1), theta (1) and geo (5)
+    // The energy range here is 1 GeV - 1TeV, phi goes from 0 to 2pi,
+    // and theta goes from 0.87 to 2.27.
+    // And, geo is one-hot encoding describing the 4 geometries the model
+    // is trained on.
+    // Order of the geo condition is Par04SiW (this one), Par04SciPb, ODD, FCCeeCLD
+    // As CaloDiT-2 is trained on these 4 detectors, it can be quickly adapted to
+    // any new detector (see CaloDiT-2 readme for adaptation) of your choice. Thus
+    // reusing the knowledge from these previous detectors.
+    // To use the adapted model, make the following changes for inference:
+    // genVector[3] = 0.0; (turning OFF Par04SiW)
+    // genVector[7] = 1.0; (turning ON a new detector)
+    genVector.assign(8, 0);
 
+    genVector[0] = aInitialEnergy / 1000;  // convert to GeV
+    genVector[1] = aPhi;
+    genVector[2] = aTheta;
+    genVector[3] = 1.0;  //Par04SiW
+  }
   // Run the inference
   fInferenceInterface->RunInference(genVector, aEnergies, size);
 
-  // After the inference rescale back to the initial energy (in this example the
-  // energies of cells were normalized to the energy of the particle)
+  // After the inference rescale back to the initial energy
+
+  if (fModelType == "VAE")
+  // For VAE, energies of cells were normalized to the energy of the particle
+  {
   for (int i = 0; i < size; ++i) {
     aEnergies[i] = aEnergies[i] * aInitialEnergy;
+    }
+  } else if (fModelType == "CaloDiT-2")
+  // For CaloDiT-2, energies were scaled by a factor of 1000
+  {
+    for (int i = 0; i < size; ++i){
+      aEnergies[i] = aEnergies[i] * 1000;
+    }
   }
 }
 

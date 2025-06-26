@@ -48,6 +48,7 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 
 class G4Step;
 class G4VTrajectoryPoint;
@@ -114,11 +115,31 @@ class G4VTrajectory
   // checked with G4AttCheck) and delete the list after use. See
   // G4Trajectory for an example of a concrete implementation of this
   // method and G4VTrajectory::ShowTrajectory for an example of its use.
+  // The caller is expected to take ownership of the returned pointer
+  // and delete it appropriately.
   virtual std::vector<G4AttValue>* CreateAttValues() const { return nullptr; }
+  
+  // Smart access function - creates on request and stores for future
+  // access. An invalid shared pointer means "not available". Usage:
+  //   const auto trajectoryAttValues = aTrajectory.GetAttValues();
+  //   if (trajectoryAttValues) { ...
+  // then use as a normal pointer, but do not delete - simply allow
+  // to go out of scope.
+  std::shared_ptr<std::vector<G4AttValue>> GetAttValues() const;
 
   // Methods invoked exclusively by G4TrackingManager
   virtual void AppendStep(const G4Step* aStep) = 0;
   virtual void MergeTrajectory(G4VTrajectory* secondTrajectory) = 0;
+
+protected:
+  G4VTrajectory(const G4VTrajectory& right) = default;
+  G4VTrajectory& operator=(const G4VTrajectory& right) = default;
+  G4VTrajectory(G4VTrajectory&&) = default;
+  G4VTrajectory& operator=(G4VTrajectory&&) = default;
+
+private:
+  // Cached att values
+  mutable std::shared_ptr<std::vector<G4AttValue>> fpAttValues;
 };
 
 #endif

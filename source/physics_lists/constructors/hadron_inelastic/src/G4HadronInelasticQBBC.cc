@@ -86,7 +86,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver)
   SetPhysicsType(bHadronInelastic);
   auto param = G4HadronicParameters::Instance();
   param->SetEnableBCParticles(true);
-  param->SetEnableNeutronGeneralProcess(true);
+  param->SetEnableNeutronGeneralProcess(false);
   param->SetVerboseLevel(ver);
 }
 

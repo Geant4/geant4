@@ -143,8 +143,12 @@ int main(int argc, char** argv)
   }
 
   // Initialization of default Run manager
-  auto* runManager = G4RunManagerFactory::CreateRunManager(runManagerType);
-  if (runManagerTypeInt == 1) runManager->SetNumberOfThreads(numOfThreadsOrTasks);
+  auto* runManager =
+    G4RunManagerFactory::CreateRunManager(runManagerType);
+  if(runManagerTypeInt == 1 || runManagerTypeInt == 2) {
+    runManager->SetNumberOfThreads(numOfThreadsOrTasks);
+  }
+
   // Detector geometry:
   auto detector = new Par04DetectorConstruction();
   auto parallelWorldFull = new Par04ParallelFullWorld("parallelWorldFullSim", detector);
@@ -174,15 +178,16 @@ int main(int argc, char** argv)
   // UserAction classes
   //-------------------------------
   runManager->SetUserInitialization(new Par04ActionInitialisation(detector, parallelWorldFull));
-  //----------------
-  // Visualization:
-  //----------------
-  G4cout << "Instantiating Visualization Manager......." << G4endl;
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (useInteractiveMode) {
+    //----------------
+    // Visualization:
+    //----------------
+    G4cout << "Instantiating Visualization Manager......." << G4endl;
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
+
     if (batchMacroName.empty()) {
       G4Exception("main", "Unknown macro name", FatalErrorInArgument,
                   ("No macro name passed to " + G4String(argv[0])).c_str());
@@ -190,7 +195,7 @@ int main(int argc, char** argv)
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command + batchMacroName);
     ui->SessionStart();
-    delete ui;
+    delete visManager;
   }
   else {
     G4String command = "/control/execute ";
@@ -200,8 +205,7 @@ int main(int argc, char** argv)
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-
-  delete visManager;
+  delete ui;
   delete runManager;
 
   return 0;

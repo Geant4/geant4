@@ -46,14 +46,6 @@ public: // with description
 
   // Compiler defaults for copy constructor and assignmemt.
 
-  virtual const G4String& GetGSName() const;
-  // Get name that acts as graphics system name.
-
-  virtual const G4String& GetGSNickname() const;
-  // Get name that acts as graphics system nickname.  It is this that
-  // the user specifies on the /vis/open and /vis/sceneHandler/create
-  // commands.
-
   virtual void Initialize(G4int nRow, G4int nColumn);
   // Intialises scanner for window with nRow rows and nColumn columns.
 
@@ -63,7 +55,6 @@ public: // with description
   // last valid coordinate.
 
 protected:
-  G4String theGSName, theGSNickname;
   G4int theNRow, theNColumn, theIRow, theIColumn;
 };
 

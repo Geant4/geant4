@@ -31,7 +31,7 @@
 //
 // File name:  G4RiGeAngularGenerator
 //
-// Authors:       Girardo Depaola & Ricardo Pacheco
+// Authors:       Gerardo Depaola & Ricardo Pacheco
 // 
 // Creation date: 29 October 2024
 //
@@ -59,15 +59,15 @@ public:
                                  G4double gEnergy, G4int Z,
                                  const G4Material* mat = nullptr) override;
 
-  G4LorentzVector Sample5DPairDirections(const G4DynamicParticle* dp,
-                                 G4ThreeVector& dirElectron,
-                                 G4ThreeVector& dirPositron,
-                                 const G4double gEnergy, const G4double q2,
-                                 const G4double gMomentum,
-                                 G4double muFinalMomentum,
-                                 G4double muFinalEnergy,
-                                 const G4double* randNumbs,
-                                 const G4double* W);
+  void Sample5DPairDirections(const G4DynamicParticle* dp,
+			      G4ThreeVector& dirElectron,
+			      G4ThreeVector& dirPositron,
+			      const G4double gEnergy, const G4double q2,
+			      const G4double gMomentum,
+			      G4double muFinalMomentum,
+			      G4double muFinalEnergy,
+			      const G4double* randNumbs,
+			      const G4double* W);
 
   void PhiRotation(G4ThreeVector& dir, G4double phi);
 

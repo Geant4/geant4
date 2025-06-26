@@ -33,6 +33,9 @@
 /gun/particle ion
 /gun/ion 53 131
 #
+# Decay time threshold (if needed)
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
 # Histograms
 /analysis/setFileName iodine131
 /analysis/h1/set  0 100 0 1 MeV          #e- track energy

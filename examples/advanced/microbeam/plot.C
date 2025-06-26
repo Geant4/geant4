@@ -2,7 +2,7 @@
 // -------------------------------------------------------------------
 //
 // *********************************************************************
-// To execute this macro under ROOT, 
+// To execute this macro under ROOT,
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
 // This macro needs five files : dose.txt, stoppingPower.txt, range.txt,
@@ -24,11 +24,11 @@ gROOT->SetStyle("Plain");
 Double_t scale;
 
 
-c1 = new TCanvas ("c1","",20,20,1200,900);
+auto c1 = new TCanvas ("c1","",20,20,1200,900);
 c1->Divide(4,3);
 
 //*********************
-// INTENSITY HISTOGRAMS 
+// INTENSITY HISTOGRAMS
 //*********************
 
 FILE * fp = fopen("phantom.dat","r");
@@ -51,7 +51,7 @@ TNtuple *ntupleYX = new TNtuple("CYTOPLASM","ntuple","Y:X:vox");
 Int_t nlines=0;
 Int_t ncols=0;
 
-while (1) 
+while (1)
    {
       if ( nlines == 0 ) ncols = fscanf(fp,"%f %f %f",&tmp,&tmp,&tmp);
       if ( nlines == 1 ) ncols = fscanf(fp,"%f %f %f",&voxelSizeX,&voxelSizeY,&voxelSizeZ);
@@ -62,7 +62,7 @@ while (1)
       X= X*voxelSizeX;
       Y= Y*voxelSizeY;
       Z= Z*voxelSizeZ;
-  
+
       if ( mat == 2 )  // noyau
          {
 	  if (den==1) h1->Fill( vox );
@@ -77,7 +77,7 @@ while (1)
 	  ntupleYX->Fill(Y,X,vox);
 	 }
       nlines++;
-      
+
    }
 fclose(fp);
 
@@ -92,7 +92,7 @@ c1->cd(1);
 	h1->GetXaxis()->SetTitleOffset(1.4);
 	h1->GetYaxis()->SetTitleOffset(1.4);
 	h1->GetXaxis()->SetTitle("Voxel intensity (0-255)");
-	h1->GetYaxis()->SetTitle("Number of events");  
+	h1->GetYaxis()->SetTitle("Number of events");
 	h1->SetLineColor(3);
 	h1->SetFillColor(3);   // green
 
@@ -111,16 +111,16 @@ c1->cd(5);
 	h2->GetXaxis()->SetTitleOffset(1.4);
 	h2->GetYaxis()->SetTitleOffset(1.4);
 	h2->GetXaxis()->SetTitle("Voxel intensity (0-255)");
-	h2->GetYaxis()->SetTitle("Number of events");  
+	h2->GetYaxis()->SetTitle("Number of events");
 	h2->SetLineColor(2);
 	h2->SetFillColor(2);   // red
-	
+
 	h20->SetLineColor(5);
 	h20->SetFillColor(5);  // yellow (nucleoli)
 	h20->Draw("same");
 
 //*************************
-// CUMULATED CELL INTENSITY 
+// CUMULATED CELL INTENSITY
 //*************************
 
 gStyle->SetOptStat(0000);
@@ -165,11 +165,11 @@ c1->cd(3);  // axe YX
   hist2->SetTitle("Nucleus intensity on transverse section");
 
 //
+//The two following lines are not needed when ntuple merging is active (default)
+//system ("rm -rf microbeam.root");
+//system ("hadd -O microbeam.root microbeam_*.root");
 
-system ("rm -rf microbeam.root");
-system ("hadd -O microbeam.root microbeam_*.root");
-
-TFile f("microbeam.root"); 
+TFile f("microbeam.root");
 
 TNtuple* ntuple0;
 TNtuple* ntuple1;
@@ -177,11 +177,11 @@ TNtuple* ntuple2;
 TNtuple* ntuple3;
 TNtuple* ntuple4;
 
-ntuple0 = (TNtuple*)f.Get("ntuple0"); 
-ntuple1 = (TNtuple*)f.Get("ntuple1"); 
-ntuple2 = (TNtuple*)f.Get("ntuple2"); 
-ntuple3 = (TNtuple*)f.Get("ntuple3"); 
-ntuple4 = (TNtuple*)f.Get("ntuple4"); 
+ntuple0 = (TNtuple*)f.Get("ntuple0");
+ntuple1 = (TNtuple*)f.Get("ntuple1");
+ntuple2 = (TNtuple*)f.Get("ntuple2");
+ntuple3 = (TNtuple*)f.Get("ntuple3");
+ntuple4 = (TNtuple*)f.Get("ntuple4");
 
 TH1F *h1bis  = new TH1F("h1bis","Dose distribution in Nucleus",100,0.001,1.);
 TH1F *h10 = new TH1F("h10bis","Dose distribution in Cytoplasm",100,0.001,.2);
@@ -226,7 +226,7 @@ c1->cd(6);
 //********************************
 // STOPPING POWER AT CELL ENTRANCE
 //********************************
- 
+
 gStyle->SetOptStat(0000);
 gStyle->SetOptFit();
 gStyle->SetPalette(1);
@@ -234,8 +234,8 @@ gROOT->SetStyle("Plain");
 
 Float_t d;
 
-TH1F *h2bis = new TH1F("h2bis","Beam stopping power at cell entrance",200,0,300); 
-    
+TH1F *h2bis = new TH1F("h2bis","Beam stopping power at cell entrance",200,0,300);
+
 c1->cd(9);
         ntuple0->Project("h2bis","sp");
 	scale = 1/h2bis->Integral();
@@ -263,10 +263,10 @@ c1->cd(9);
 Double_t Xc,Zc,X1,Y1,Z1,X2,Y2,Z2;
 
 // X position of target in World
-Xc = -1295.59e3 - 955e3*sin(10*TMath::Pi()/180); 
+Xc = -1295.59e3 - 955e3*sin(10*TMath::Pi()/180);
 
 // Z position of target in World
-Zc = -1327e3 + 955e3*cos(10*TMath::Pi()/180); 
+Zc = -1327e3 + 955e3*cos(10*TMath::Pi()/180);
 
 // Line alignment (cf MicrobeamEMField.cc)
 Xc = Xc + 5.24*cos(10*TMath::Pi()/180);
@@ -278,7 +278,7 @@ ntuple2->SetBranchAddress("x",&x);
 ntuple2->SetBranchAddress("y",&y);
 ntuple2->SetBranchAddress("z",&z);
 Int_t nentries = (Int_t)ntuple2->GetEntries();
-for (Int_t i=0;i<nentries;i++) 
+for (Int_t i=0;i<nentries;i++)
 {
       ntuple2->GetEntry(i);
       X1=x;
@@ -288,16 +288,16 @@ for (Int_t i=0;i<nentries;i++)
       zz = Z1-Zc;
       Z2 = zz*cos(10*TMath::Pi()/180)-xx*sin(10*TMath::Pi()/180);
       X2 = zz*sin(10*TMath::Pi()/180)+xx*cos(10*TMath::Pi()/180);
-      Y2 = Y1;    
+      Y2 = Y1;
       ntupleR->Fill(Z2,Y2,X2);
 }
-     
+
 c1->cd(10);
   ntupleR->Draw("X2:Z2","abs(X2)<50","surf3");
   gPad->SetLogz();
 
 //****************
-// ENERGY DEPOSITS 
+// ENERGY DEPOSITS
 //****************
 
 gStyle->SetOptStat(0000);
@@ -340,15 +340,15 @@ c1->cd(12);
 //*******************************
 // BEAM POSITION AT CELL ENTRANCE
 //*******************************
- 
+
 gStyle->SetOptStat(0000);
 gStyle->SetOptFit();
 gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
 
-TH1F *h77 = new TH1F("hx","h1",200,-10,10); 
-TH1F *h88 = new TH1F("hy","h1",200,-10,10); 
-   
+TH1F *h77 = new TH1F("hx","h1",200,-10,10);
+TH1F *h88 = new TH1F("hy","h1",200,-10,10);
+
 c1->cd(4);
         ntuple1->Project("hx","x");
 	scale = 1/h77->Integral();

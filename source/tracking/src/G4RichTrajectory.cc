@@ -100,7 +100,8 @@ G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack)
   fpRichPointContainer->push_back(new G4RichTrajectoryPoint(aTrack));
 }
 
-G4RichTrajectory::G4RichTrajectory(G4RichTrajectory& right) 
+G4RichTrajectory::G4RichTrajectory(G4RichTrajectory& right)
+: G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;

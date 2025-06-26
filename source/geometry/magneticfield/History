@@ -6,7 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-11 Gabriele Cosmo (field-V11-02-07)
+## 2025-06-13 Gabriele Cosmo (field-V11-03-02)
+- Fixed compilation warning in G4QSStepper and minor code formatting.
+
+## 2025-06-02 John Apostolakis & Mattias Portnoy (field-V11-03-01)
+- Changed implementation of QSS integration method to QSS v2
+  by Mattias Portnoy (Univ. of Buenos Aires)
+
+## 2025-03-11 Gabriele Cosmo (field-V11-03-00)
 - Added missing guard in G4TMagFieldEquation header and minor cleanup.
   Fixes [GitHub PR #83](https://github.com/Geant4/geant4/pull/83).
 

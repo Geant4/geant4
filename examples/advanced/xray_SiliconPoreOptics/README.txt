@@ -131,5 +131,5 @@ References
  [1] Fioretti V et al. "The Geant4 mass model of the ATHENA Silicon Pore Optics
  and its effect on soft proton scattering", Space Telescopes and Instrumentation
  2018: Ultraviolet to Gamma Ray. Vol. 10699. SPIE, 2018.
- [2] BRUN, René, et al. "The ROOT Users Guide". CERN, http://root.cern.ch, 2003.
+ [2] BRUN, René, et al. "The ROOT Users Guide". CERN, http://root.cern, 2003.
 

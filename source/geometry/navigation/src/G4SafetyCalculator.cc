@@ -25,7 +25,7 @@
 //
 // G4SafetyCalculator class Implementation
 //
-// Author: John Apostolakis, CERN - February 2023
+// Author: John Apostolakis (CERN), February 2023
 // --------------------------------------------------------------------
 
 #include "G4SafetyCalculator.hh"

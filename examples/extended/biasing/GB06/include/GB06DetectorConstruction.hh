@@ -38,10 +38,10 @@ class GB06DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     GB06DetectorConstruction();
-    ~GB06DetectorConstruction();
+    ~GB06DetectorConstruction() override;
 
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
   private:
     G4LogicalVolume* logicMeasurement = nullptr;

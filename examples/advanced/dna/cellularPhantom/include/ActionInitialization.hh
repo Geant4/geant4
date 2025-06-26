@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //       MONTE CARLO SIMULATION OF REALISTIC GEOMETRY FROM MICROSCOPES IMAGES
 //
 // Authors and contributors:
-// P. Barberet, S. Incerti, N. H. Tran, L. Morelli
+// P. Barberet (a), S. Incerti (a), N. H. Tran (a), L. Morelli (a,b)
 //
-// University of Bordeaux, CNRS, LP2i, UMR5797, Gradignan, France
+// a) University of Bordeaux, CNRS, LP2i, UMR5797, Gradignan, France
+// b) Politecnico di Milano, Italy
 //
 // If you use this code, please cite the following publication:
 // P. Barberet et al.,
@@ -37,7 +38,7 @@
 // geometry exposed to alpha particles."
 // Ph. Barberet et al 2012 Phys. Med. Biol. 57 2189
 // doi: 110.1088/0031-9155/57/8/2189
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #ifndef ActionInitialization_h
 #define ActionInitialization_h 1

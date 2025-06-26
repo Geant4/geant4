@@ -55,7 +55,7 @@
 CexmcHistoWidget::CexmcHistoWidget()
 {
     /* this is a workaround of the repaint bug in the ROOT Qt backend:
-     * see http://root.cern.ch/phpBB3/viewtopic.php?f=3&t=17081#p73055 */
+     * see http://root.cern/phpBB3/viewtopic.php?f=3&t=17081#p73055 */
     fCanvas->SetFillColor( 10 );
 }
 

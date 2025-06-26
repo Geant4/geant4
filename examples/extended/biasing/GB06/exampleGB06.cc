@@ -94,24 +94,23 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
-  G4bool biasingFlag = ( onOffBiasing == "on");
+  G4bool biasingFlag = (onOffBiasing == "on");
 
   // -- Set mandatory initialization classes
 
   // -- Create geometry:
-  GB06DetectorConstruction* detector = new GB06DetectorConstruction();
+  auto detector = new GB06DetectorConstruction();
   // -- Create parallel world:
-  GB06ParallelWorldForSlices* parallelWorld =
-    new GB06ParallelWorldForSlices("parallelWorldForSlices",biasingFlag);
+  auto parallelWorld = new GB06ParallelWorldForSlices("parallelWorldForSlices", biasingFlag);
   // -- and "augment" detector geometry with the parallelWorld one:
   detector->RegisterParallelWorld(parallelWorld);
   runManager->SetUserInitialization(detector);
 
   // -- Select a physics list:
-  FTFP_BERT* physicsList = new FTFP_BERT;
+  auto physicsList = new FTFP_BERT;
   if (biasingFlag) {
     // -- and augment it with biasing facilities:
-    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
+    auto biasingPhysics = new G4GenericBiasingPhysics();
     biasingPhysics->BeVerbose();
     // -- We use only the "non physics biasing" functionnality (ie, the ones which don't
     // -- alter physics processes behavior), and hence we equipe the physics list
@@ -138,12 +137,12 @@ int main(int argc, char** argv)
   runManager->Initialize();
 
   // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   if (macro != "")  // batch mode
   {

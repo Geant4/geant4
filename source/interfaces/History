@@ -6,6 +6,51 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-05-12 Andrea Barresi (interfaces-V11-03-05)
+- G4UIQt:
+  - Improved pick info window size
+
+## 2025-04-15 John Allison (interfaces-V11-03-04)
+- G4UIQt:
+  - Simplify and improve touchable dump.
+    - Uses QScrollArea instead of QMessage.
+
+## 2025-03-22 John Allison (interfaces-V11-03-03)
+- G4UIQt:
+  - Thanks, Igor - I now understand lambda's better.
+  - Simplify with another use of capture by value (please test on MSVC).
+  - Tidy changes in previous tag.
+
+## 2025-03-20 Igor Semeniouk (interfaces-V11-03-02)
+- G4UIQt: Fix compilation problem with Windows MSVC compiler
+ - replace explicit variables lists with default capture in lambda's
+
+## 2025-03-06 John Allison (interfaces-V11-03-01)
+- G4UIQt:
+  - Introduce Time Window tab.
+  - This exploits generic time windowing recently introduced in modeling an
+    management.
+  - Try it with example B1. Hit “Prepare”, then “Go”. It is more spectacular
+    if you prepare, say, 100 events.
+  - However, it doesn’t work with OGL in Qt6. (Try it with Qt5 if you can.)
+    TSG works fine with both Qt5 and Qt6, except line width is not implemented.
+  - I have noticed that in Qt5, mouse events seem to processed in strict order.
+    Values of boxes don’t get updated until the windowing is finished. But with
+    Qt6, events seem to be processed in parallel. Values in other boxes are
+    continuously updated during time evolution. How do they do that? Is each
+    slot executed on a different thread? This could cause the problem with OGL,
+    but I don’t have sufficient knowledge of Qt protocols.
+  - Change "bar" to "toolbar" to avoid conflict with G4PhysicalConstants.
+
+## 2025-01-06 John Allison (interfaces-V11-03-00)
+- Co-works: visman-V11-03-00, modeling-V11-03-00, opengl-V11-03-00,
+  visQt3D-V11-03-00, vis_toolssg-V11-03-00, openinventor-V11-03-00,
+  greps-V11-03-00.
+- G4UIQt:
+  - Re-instate the transparency slider (see lengthy explanation in
+    visualization/management/History).
+  - Tidy.
+
 ## 2024-10-25 John Allison (interfaces-V11-02-10)
 - G4UIQt.cc:
   - G4UIQt::FilterOutput(): Fix compilation error, see Bug Report 2633.

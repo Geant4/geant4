@@ -46,6 +46,7 @@
 #include "G4H2O.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4Molecule.hh"
+#include "G4MoleculeCounterManager.hh"
 #include "G4MoleculeFinder.hh"
 #include "G4MoleculeTable.hh"
 #include "G4PhysChemIO.hh"
@@ -186,7 +187,8 @@ void G4DNAChemistryManager::Clear()
 
     G4DNAMolecularReactionTable::DeleteInstance();
     G4MolecularConfiguration::DeleteManager();
-    G4VMoleculeCounter::DeleteInstance();
+    if (G4MoleculeCounterManager::GetInstanceIfExists() != nullptr)
+      G4MoleculeCounterManager::DeleteInstance();
 }
 
 //------------------------------------------------------------------------------
@@ -325,11 +327,9 @@ void G4DNAChemistryManager::Run()
     }
     
     G4MoleculeTable::Instance()->Finalize();
+
     G4Scheduler::Instance()->Process();
-    if (fResetCounterWhenRunEnds)
-    {
-        G4VMoleculeCounter::Instance()->ResetCounter();
-    }
+
     CloseFile();
 }
 
@@ -418,6 +418,10 @@ void G4DNAChemistryManager::InitializeMaster()
 
     G4Scheduler::Instance();
     // creates a concrete object of the scheduler
+
+    if (G4MoleculeCounterManager::GetInstanceIfExists() != nullptr)
+        G4MoleculeCounterManager::Instance()->Initialize();
+
     fMasterInitialized = true;
 }
 
@@ -484,9 +488,10 @@ void G4DNAChemistryManager::InitializeThread()
 
     G4Scheduler::Instance()->Initialize();
 
-    fpThreadData->fThreadInitialized = true;
+    if (G4MoleculeCounterManager::GetInstanceIfExists() != nullptr)
+      G4MoleculeCounterManager::Instance()->Initialize();
 
-    G4VMoleculeCounter::InitializeInstance();
+    fpThreadData->fThreadInitialized = true;
 
     InitializeFile();
 }
@@ -647,8 +652,9 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
             }
         }
 
-        G4Track* pH2OTrack = pH2OMolecule->BuildTrack(picosecond + delayedTime,
-                                                      pIncomingTrack->GetPosition());
+        G4Track *pH2OTrack = pH2OMolecule->BuildTrack(picosecond + delayedTime,
+                                                      pIncomingTrack->GetPosition(),
+                                                      pIncomingTrack);
 
         pH2OTrack->SetParentID(pIncomingTrack->GetTrackID());
         pH2OTrack->SetTrackStatus(fStopButAlive);
@@ -683,8 +689,9 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* pIncomingTrack
 
         PushMolecule(std::make_unique<G4Molecule>(G4Electron_aq::Definition()),
                      picosecond + delayedTime,
-                     pFinalPosition != nullptr ? *pFinalPosition : pIncomingTrack->GetPosition(),
-                     pIncomingTrack->GetTrackID());
+                     pFinalPosition ? *pFinalPosition : pIncomingTrack->GetPosition(),
+                     pIncomingTrack->GetTrackID(),
+                     pIncomingTrack);
     }
 }
 
@@ -692,13 +699,14 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* pIncomingTrack
 
 void G4DNAChemistryManager::PushMolecule(std::unique_ptr<G4Molecule> pMolecule,
                                          double time,
-                                         const G4ThreeVector& position,
-                                         int parentID)
+                                         const G4ThreeVector &position,
+                                         int parentID,
+                                         const G4Track *parentTrack)
 {
     assert(fActiveChemistry
            && "To inject chemical species, the chemistry must be activated. "
               "Check chemistry activation before injecting species.");
-    G4Track* pTrack = pMolecule->BuildTrack(time, position);
+    G4Track* pTrack = pMolecule->BuildTrack(time, position, parentTrack);
     pTrack->SetTrackStatus(fAlive);
     pTrack->SetParentID(parentID);
     pMolecule.release();
@@ -767,16 +775,30 @@ void G4DNAChemistryManager::SetVerbose(G4int verbose)
 
 //------------------------------------------------------------------------------
 
-G4bool G4DNAChemistryManager::IsCounterResetWhenRunEnds() const
+void G4DNAChemistryManager::BeginOfEventAction(const G4Event* pEvent)
 {
-    return fResetCounterWhenRunEnds;
+	G4MoleculeCounterManager::Instance()->BeginOfEventAction(pEvent);
 }
 
 //------------------------------------------------------------------------------
 
-void G4DNAChemistryManager::ResetCounterWhenRunEnds(G4bool resetCounterWhenRunEnds)
+void G4DNAChemistryManager::BeginOfRunAction(const G4Run* pRun)
 {
-    fResetCounterWhenRunEnds = resetCounterWhenRunEnds;
+	G4MoleculeCounterManager::Instance()->BeginOfRunAction(pRun);
+}
+
+//------------------------------------------------------------------------------
+
+void G4DNAChemistryManager::EndOfEventAction(const G4Event* pEvent)
+{
+	G4MoleculeCounterManager::Instance()->EndOfEventAction(pEvent);
+}
+
+//------------------------------------------------------------------------------
+
+void G4DNAChemistryManager::EndOfRunAction(const G4Run* pRun) // for potential future use
+{
+	G4MoleculeCounterManager::Instance()->EndOfRunAction(pRun);
 }
 
 //------------------------------------------------------------------------------

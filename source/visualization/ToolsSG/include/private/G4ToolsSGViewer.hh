@@ -54,11 +54,8 @@ class G4ToolsSGViewer : public G4VViewer, tools::sg::device_interactor {
   typedef G4VViewer parent;
   typedef tools::sg::device_interactor parent_interactor;
 public: //tools::sg::device_interactor interface.
-  virtual void key_press(const tools::sg::key_down_event& a_event) {
-    fKeyPressed = true;
-    fKeyShift = a_event.key() == tools::sg::key_shift()?true:false;
-  }
-  virtual void key_release(const tools::sg::key_up_event&) {fKeyPressed = false;}
+  virtual void key_press(const tools::sg::key_down_event&) {}
+  virtual void key_release(const tools::sg::key_up_event&) {}
   virtual void mouse_press(const tools::sg::mouse_down_event& a_event) {
     fMousePressed = true;
     fMousePressedX = a_event.x();
@@ -75,8 +72,7 @@ public: //tools::sg::device_interactor interface.
 
     if (fMousePressed) {
 
-      if (fKeyPressed && fKeyShift) {  // Translation (pan)
-
+      if (a_event.shift_modifier()) {  // Translation (pan)
         const G4double sceneRadius = fSGSceneHandler.GetScene()->GetExtent().GetExtentRadius();
         const G4double scale = 300;  // Roughly pixels per window, empirically chosen
         const G4double dxScene = dx*sceneRadius/scale;
@@ -124,8 +120,6 @@ public:
   ,fSGSession(a_session)
   ,fSGSceneHandler(a_scene_handler)
   ,fSGViewer(nullptr)
-  ,fKeyPressed(false)
-  ,fKeyShift(false)
   ,fMousePressed(false)
   ,fMousePressedX(0)
   ,fMousePressedY(0)
@@ -148,8 +142,6 @@ protected:
   ,fSGSession(a_from.fSGSession)
   ,fSGSceneHandler(a_from.fSGSceneHandler)
   ,fSGViewer(nullptr)
-  ,fKeyPressed(false)
-  ,fKeyShift(false)
   ,fMousePressed(false)
   ,fMousePressedX(0)
   ,fMousePressedY(0)
@@ -214,6 +206,22 @@ public:
       return;      
     }
     
+   {// With Qt/Cocoa/OpenGL, Qt/Windows/OpenGL, the received size in
+    // tools::sg::glarea::resizeGL is the QWidget::[width(),height()] multiplied by the "devicePixelRatio"
+    // (with a value of 2 seen on a MacBookPro and 1.5 seen on a Windows laptop).
+    //  In general it does not pose problem, except when rendering 2D texts.
+    // In order to have similar sizes than other drivers, we adapt their scale accordingly.
+    unsigned int ww,wh;
+    if(GetWindowSize(ww,wh)) {
+      unsigned int raw,rah;
+      if(GetRenderAreaSize(raw,rah)) {
+        if(ww!=0) {
+          double width_ratio = double(raw)/double(ww);
+          fSGSceneHandler.SetMarkerScale(width_ratio);
+        }
+      }
+    }}
+
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
@@ -274,15 +282,23 @@ public:
   virtual void ClearView() {}
 
   virtual void DrawView() {
+    
     if (!fNeedKernelVisit) KernelVisitDecision();
     G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
-    fLastVP = fVP;
     ProcessView();  // Clears store and processes scene only if necessary.
+
     if (kernelVisitWasNeeded) {
       // We might need to do something if the kernel was visited.
-    } else {
+    } else {  // Or even if it was not!
+      if (!fTransientsNeedRedrawing) CompareForTransientsRedraw(fLastVP);
+      if (fTransientsNeedRedrawing) {
+        ProcessTransients();
+      }
     }
+
     FinishView ();       // Flush streams and/or swap buffers.
+
+    fLastVP = fVP;
   }
 
   virtual void ShowView() {FinishView();}
@@ -296,31 +312,16 @@ public:
     }
   }
 
-  virtual void SwitchToVisSubThread() {}
-  
-  virtual void SwitchToMasterThread() {
-    if (G4Threading::IsMultithreadedApplication()) {
-      // I have not figured out how to draw during a run.
-      //
-      // Setting fNeedKernelVisit=true causes scene deletion and a complete rebuild,
-      // including trajectories, hits, etc. from kept events.
-      //
-      // Clearly this is a limitation because even if you run 1000 events you only
-      // get those kept (default 100), and even worse, if end-if-event-action is
-      // "refresh", you only get one event (the last I think).
-      //
-      // Also, strictly, there is no need to rebuid run-duration models (detector),
-      // but a complete rebuild is the easiest way (already imeplemented).
-      //
-      // Only do this if there are end-of-event models (e.g., trajectories) that
-      // may require it.
-      if (fSceneHandler.GetScene() && fSceneHandler.GetScene()->GetEndOfEventModelList().size()) {
-        fNeedKernelVisit = true;
-        DrawView();  // Draw trajectories, etc., from kept events
-      }
-    }
+public:
+  G4bool GetWindowSize(unsigned int& a_w,unsigned int& a_h) {
+    if(!fSGViewer) {a_w = 0;a_h = 0;return false;}
+    return fSGViewer->window_size(a_w,a_h);
   }
-  
+  G4bool GetRenderAreaSize(unsigned int& a_w,unsigned int& a_h) {
+    if(!fSGViewer) {a_w = 0;a_h = 0;return false;}
+    fSGViewer->render_area_size(a_w,a_h);
+    return true;
+  }
   //SG_VIEWER* sg_viewer() {return fSGViewer;}
 protected:
   void KernelVisitDecision () {
@@ -359,16 +360,14 @@ protected:
         fVP.GetDefaultTextVisAttributes()->GetColour())        ||
        (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
        (vp.IsPicking ()          != fVP.IsPicking ())          ||
-       // Scaling for Open Inventor is done by the scene handler so it
+       // Scaling for ToolsSG is done by the scene handler so it
        // needs a kernel visit.  (In this respect, it differs from the
        // OpenGL drivers, where it's done in SetView.)
        (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
-       (vp.GetVisAttributesModifiers() !=
-        fVP.GetVisAttributesModifiers())                       ||
-       (vp.IsSpecialMeshRendering() !=
-        fVP.IsSpecialMeshRendering())                          ||
-       (vp.GetSpecialMeshRenderingOption() !=
-        fVP.GetSpecialMeshRenderingOption())
+       (vp.GetVisAttributesModifiers()    != fVP.GetVisAttributesModifiers())    ||
+       (vp.IsSpecialMeshRendering()       != fVP.IsSpecialMeshRendering())       ||
+       (vp.GetSpecialMeshRenderingOption()!= fVP.GetSpecialMeshRenderingOption())||
+       (vp.GetTransparencyByDepth()       != fVP.GetTransparencyByDepth())
        )
     return true;
 
@@ -402,15 +401,19 @@ protected:
         (vp.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
       return true;
 
+    if (vp.GetTransparencyByDepth() > 0. &&
+        vp.GetTransparencyByDepthOption() != fVP.GetTransparencyByDepthOption())
+      return true;
+
     return false;
   }
-//  void keyPressEvent        (KeyEvent*);
-//  void keyReleaseEvent      (KeyEvent*);
-//  void mouseDoubleClickEvent(MouseEvent*);
-//  void mouseMoveEvent       (MouseEvent*);
-//  void mousePressEvent      (MouseEvent*);
-//  void mouseReleaseEvent    (MouseEvent*);
-//  void wheelEvent           (WheelEvent*);
+
+  G4bool CompareForTransientsRedraw(G4ViewParameters& vp) {
+    if (vp.GetTimeParameters() != fVP.GetTimeParameters()) {
+      return fTransientsNeedRedrawing = true;
+    }
+    return false;
+  }
 
 protected:
   void CreateSG(tools::sg::base_camera* a_camera,const G4Vector3D& a_light_dir) {
@@ -533,8 +536,6 @@ protected:
   SG_VIEWER* fSGViewer;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   
-  G4bool fKeyPressed;
-  G4bool fKeyShift;
   G4bool fMousePressed;
   G4double fMousePressedX, fMousePressedY;
 

@@ -64,7 +64,6 @@ G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusElasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
-G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
 
 G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::instance = nullptr;
 
@@ -164,8 +163,8 @@ G4VCrossSectionDataSet*
 G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name, 
                                                       G4bool warning)
 {
-  for (auto & xsec : xSections) {
-    if(nullptr != xsec && xsec->GetName() == name) { return xsec; }
+  for (auto const & xsec : xSections) {
+    if (nullptr != xsec && xsec->GetName() == name) { return xsec; }
   }
   // check if factory exists...
   //
@@ -174,7 +173,7 @@ G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name,
   // This throws if factory is not found, add second parameter 
   // to false to avoid this
   G4VBaseXSFactory* factory = factories->GetFactory(name, warning );
-  if ( factory ) {
+  if (nullptr != factory ) {
     return factory->Instantiate();
   } else {
     G4VCrossSectionDataSet* ptr = nullptr;

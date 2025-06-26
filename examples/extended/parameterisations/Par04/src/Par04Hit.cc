@@ -104,7 +104,7 @@ int Par04Hit::operator==(const Par04Hit& aRight) const
 void Par04Hit::Draw()
 {
   /// Arbitrary size corresponds to the example macros
-  G4ThreeVector meshSize(2.325 * mm, 2 * CLHEP::pi / 50. * CLHEP::rad, 3.4 * mm);
+  G4ThreeVector meshSize(4.65 * mm, 2 * CLHEP::pi / 18. * CLHEP::rad, 3.4 * mm);
   G4int numPhiCells = CLHEP::pi * 2. / meshSize.y();
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   // Hits can be filtered out in visualisation
@@ -166,7 +166,7 @@ std::vector<G4AttValue>* Par04Hit::CreateAttValues() const
 
 void Par04Hit::Print()
 {
-  std::cout << "\tHit " << fEdep / MeV << " MeV from " << fNdep << " deposits at " << fPos / cm
-            << " cm rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", "
-            << fZId << "), " << fTime << " ns" << std::endl;
+  G4cout << "\tHit " << fEdep / MeV << " MeV from " << fNdep << " deposits at " << fPos / cm
+	 << " cm with rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", "
+	 << fZId << "), " << fTime << " ns" << G4endl;
 }

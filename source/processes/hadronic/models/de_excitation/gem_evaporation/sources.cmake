@@ -231,7 +231,12 @@ geant4_module_link_libraries(G4hadronic_deex_gem_evaporation
     G4hadronic_deex_fission
     G4hadronic_deex_management
     G4hadronic_deex_util
+    G4hepnumerics
     G4heprandom
     G4partman
   PRIVATE
-    G4hadronic_util)
+    G4baryons
+    G4ions
+    G4hadronic_util
+    G4hadronic_xsect
+    G4ions)

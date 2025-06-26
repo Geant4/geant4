@@ -6,11 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-04 Ben Morgan (geom-csg-V11-02-04)
+## 2025-04-04 Evgueni Tcherniaev (geom-csg-V11-03-04)
+- G4Box: Code restructuring in DistanceToOut().
+
+## 2025-03-11 Evgueni Tcherniaev (geom-csg-V11-03-03)
+- G4Orb: Faster algorithm in GetPointOnSurface().
+- G4Para: Faster calculation of surface area in
+  GetSurfaceArea() and GetPointOnSurface().
+
+## 2025-03-05 Evgueni Tcherniaev (geom-csg-V11-03-02)
+- G4Box, G4Para, G4Trd: Code optimization in GetPointOnSurface().
+- G4Torus: Implemented uniform sampling of random points on surface.
+
+## 2025-03-04 Ben Morgan (geom-csg-V11-03-01)
 - Hide all ENorm/ESide enums in anonymous namespaces to prevent ODR warnings.
   - Identified in ATLAS Athena code built against v11.3.0.
 
-## 2025-02-03 Gabriele Cosmo
+## 2025-02-03 Gabriele Cosmo (geom-csg-V11-03-00)
 - Removed fake default constructor from G4U* wrappers, clearing compilation
   warnings on gcc-14.
 

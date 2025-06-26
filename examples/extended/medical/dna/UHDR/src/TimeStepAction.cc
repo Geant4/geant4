@@ -26,7 +26,7 @@
 //
 #include "TimeStepAction.hh"
 
-#include "PulseAction.hh"
+#include "InterPulseAction.hh"
 
 #include "G4DNAEventScheduler.hh"
 #include "G4DNAGillespieDirectMethod.hh"
@@ -46,11 +46,17 @@ TimeStepAction::TimeStepAction(const G4VChemistryWorld* pChemWorld, PulseAction*
 {
   fpEventScheduler = std::make_unique<G4DNAEventScheduler>();
   fScheduler = G4Scheduler::Instance();
+  if (dynamic_cast<InterPulseAction*>(fpPulse) != nullptr) {
+    fPulsePeriod = dynamic_cast<InterPulseAction*>(fpPulse)->GetPulsePeriod();
+    fNumberOfPulse = dynamic_cast<InterPulseAction*>(fpPulse)->GetNumberOfPulse();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TimeStepAction::UserPreTimeStepAction() {}
+void TimeStepAction::UserPreTimeStepAction()
+{
+  fpEventScheduler->ParticleBasedCounter();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,9 +64,11 @@ void TimeStepAction::UserPostTimeStepAction()
 {
   G4double T1 = 5 * CLHEP::ns;
   if (fpPulse != nullptr && fpPulse->IsActivedPulse()) {
-    G4MoleculeCounter::Instance()->Use(false);
-    // we don't count molecules during the pulse
-    T1 = fpPulse->GetLonggestDelayedTime() + 5 * CLHEP::ns;
+    T1 = fpPulse->GetPulseLarger() + 5 * CLHEP::ns;
+    if (fNumberOfPulse != 0) {
+      fPulseID = (floor)(fScheduler->GetGlobalTime() / fPulsePeriod);
+      T1 = fPulseID * fPulsePeriod + fpPulse->GetPulseLarger() + 5 * CLHEP::ns;
+    }
   }
   // T1: time to start mesoscopic model
   if (fScheduler->GetGlobalTime() >= T1) {
@@ -76,20 +84,19 @@ void TimeStepAction::UserReactionAction(const G4Track& /*a*/, const G4Track& /*b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TimeStepAction::EndProcessing() {}
+void TimeStepAction::EndProcessing()
+{
+  fpEventScheduler->Reset();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TimeStepAction::CompartmentBased()
 {
-  SetInitialPixel();
-  fpEventScheduler->SetVerbose(fScheduler->GetVerbose());
   fpEventScheduler->SetStartTime(fScheduler->GetGlobalTime());  // continue from globalTime
-  fpEventScheduler->SetEndTime(fScheduler->GetEndTime() - 1 * ps);
   fpEventScheduler->SetChangeMesh(true);
   fpEventScheduler->Initialize(*fpChemWorld->GetChemistryBoundary(), fPixel);
   fpEventScheduler->Run();
-  fScheduler->Stop();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,19 +112,29 @@ void TimeStepAction::SetInitialPixel()
 {
   auto pBoundingBox = fpChemWorld->GetChemistryBoundary();
   G4double Box = pBoundingBox->halfSideLengthInX();
-  if (Box == 1.6 * um) {
+  if (Box == 4 * 1.6 * um) {
+    fPixel = 4 * 512;  // for CONV
+  }
+  else if (Box == 2 * 1.6 * um) {
+    fPixel = 2 * 512;  // for CONV
+  }
+  else if (Box == 1.6 * um) {
     fPixel = 512;  // for CONV
   }
   else if (Box == 0.8 * um) {
     fPixel = 256;  // for FLASH
+  }
+  else if (Box == 0.4 * um) {
+    fPixel = 256 / 2;  // for FLASH
+  }
+  else if (Box == 0.2 * um) {
+    fPixel = 256 / 4;  // for FLASH
   }
   else {
     G4cout << "Box  : " << *pBoundingBox << "  Pixel : " << fPixel << G4endl;
     G4Exception("This chem volume is not optimized and the result may be incorrect.",
                 "TimeStepAction::TimeStepAction", FatalException, "");
   }
-  // 512 : for conventional dose rate
-  // 256 : for higher dose rate
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,6 +146,9 @@ void TimeStepAction::StartProcessing()
     G4cout << "This event is fully aborted" << G4endl;
     fScheduler->Stop();
   }
+  fpEventScheduler->SetVerbose(G4Scheduler::Instance()->GetVerbose());
+  SetInitialPixel();
+  fPulseID = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

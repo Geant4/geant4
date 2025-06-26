@@ -1,3 +1,35 @@
+6.5.1:
+- toolx/Qt/glarea: bug: Qt5: in mouseMoveEvent() for Qt5, correct a bad cut/paste when creating the
+  mouse_move_event (instead of "x,shift,control,y" have "x,y,shift,control").
+- tools/version: pass to 6.5.1
+
+6.5.0:
+- tools/sg/event: have a new position_modifiers class to handle the shift, control key modifiers and mouse position.
+  It is inherited by mouse_[down,up,move]_event and the wheel_rotate_event class.
+- toolx/Qt,Windows/glarea,pixwin, toolx/Xt/[sg,zb]_viewer, toolx/X11/zb_viewer: handle the shift and control
+  modifiers in the mouse_[down,up,move]_event and wheel_rotation_event.
+- tools/version: pass to 6.5.0
+
+6.4.1:
+- tools/rroot/ntuple: fix Geant4 bugzilla 2657: in initialize(), line 708, pass the message from
+  "warning" to "error" and "return false" if the name of a booking column is not found in the file.
+- tools/rcsv_ntuple: initialize(read with binding): check if given binding variables names are in the read from file column names.
+  If not, return an error; then have the same behaviour than for root ntuple reading with binding.
+- tools/hdf5/ntuple: initialize(read with binding): check if given binding variables names are in the read from file column names.
+  If not, return an error; then have the same behaviour than for root ntuple reading with binding.
+- tools/version: pass to 6.4.1.
+
+6.4.0:
+- toolx/Qt,Windows,Xt,X11/sg_viewer and zb_viewer: implement window_size, and render_area_size methods.
+  (These may return different sizes, for example with Qt/OpenGL on Mac and Windows).
+- tools/offscreen/sg_viewer: implement window_size, and render_area_size methods.
+- tools/sg/event: handle the mouse position in the wheel_rotate_event class.
+- toolx/Qt/glarea,pixwin: set the mouse position in the wheel_rotation_event.
+- toolx/Windows/glarea,pixwin: set the mouse position in the wheel_rotation_event.
+- toolx/Xt/sg_viewer: set the mouse position in the wheel_rotation_event.
+- toolx/X11/zb_viewer: set the mouse position in the wheel_rotation_event.
+- tools/version: pass to 6.4.0
+
 6.3.3:
 - wroot/file: in compress_buffer(): to fix bugzilla-2625: arrange to have a greater
   output buffer size when using deflate(), and check at end, that in case of some

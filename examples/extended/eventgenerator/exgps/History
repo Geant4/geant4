@@ -5,6 +5,21 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2025-06-17 I. Hrivnacova (exgps-V11-03-00)
+- HistoManager: activated set ntuple merging
+- Removed exgps_batch.in (identical with exgps.in)
+- Fixed python and ROOT test macros (tested with python 3.13.3 and root 6.36.00)
+  - plotHisto.C moved to macros
+  - removed plottest35.py and plotit.csh
+  - Excluded not working tests (needed further investigation):
+    Excluded from the run script (runall.csh):
+    - test23 - hangs
+    - test27 - exception (by G4SPSEneDistribution::LinearInterpolation)
+    Excluded from the analysis script (plotall.py):
+    - test36 - hangs
+- CMake: Added copying all macros and run script into the build area
+- Updated README
+
 ## 2023-03-11 Ben Morgan (exgps-V11-02-00)
 - Move CTests definitions to tests/ctests_examples
 

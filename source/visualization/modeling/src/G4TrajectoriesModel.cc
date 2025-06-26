@@ -43,6 +43,10 @@
 #include "G4AttCheck.hh"
 #include "G4UIcommand.hh"
 #include "G4VVisManager.hh"
+#include "G4Text.hh"
+#include "G4SystemOfUnits.hh"
+
+#include <sstream>
 
 G4TrajectoriesModel::G4TrajectoriesModel ()
 :fpCurrentTrajectory(0)
@@ -80,17 +84,15 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     return;
   }
 
+  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+  if (!pVVisManager) return;
+
   G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
   if (!TC) return;
 
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (!pVVisManager) return;
-  
-  pVVisManager->BeginDraw();
-  // The use of Begin/EndDraw (optional methods to improve drawing
-  // speed) assumes all trajectories are drawn with the same
-  // transformation.  If not, a fatal exception with be raised in
-  // G4VisManager::DrawT.
+  // Need to set the static "current" modeling parameters separately
+  G4VModel::SetCurrentModelingParameters(fpMP);
+
   for (std::size_t iT = 0; iT < TC->entries(); ++iT) {
     fpCurrentTrajectory = (*TC) [iT];
     // Debug trajectory:
@@ -100,7 +102,22 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     if (fpCurrentTrajectory)
       sceneHandler.AddCompound (*fpCurrentTrajectory);
   }
-  pVVisManager->EndDraw();
+
+  // If time windowing is active, display head time if requested
+  const auto& timeParameters = fpMP->GetTimeParameters();
+  if (timeParameters.fDisplayHeadTime && timeParameters.fStartTime >= 0.) {
+    const auto& tp = timeParameters;  // Alias
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(2) << timeParameters.fEndTime/ns << " ns";
+    G4Text headTime(oss.str());
+    headTime.SetLayout(G4Text::centre);
+    headTime.SetScreenSize(tp.fDisplayHeadTimeSize);
+    headTime.SetPosition(G4Point3D(tp.fDisplayHeadTimeX, tp.fDisplayHeadTimeY, 0.));
+    G4VisAttributes headTimeVisAtts
+    (G4Colour(tp.fDisplayHeadTimeRed, tp.fDisplayHeadTimeGreen, tp.fDisplayHeadTimeBlue));
+    headTime.SetVisAttributes(&headTimeVisAtts);
+    pVVisManager->Draw2D(headTime);
+  }
 }
 
 const std::map<G4String,G4AttDef>* G4TrajectoriesModel::GetAttDefs() const

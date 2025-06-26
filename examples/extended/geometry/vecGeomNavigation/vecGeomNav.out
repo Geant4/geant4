@@ -18,7 +18,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -47,13 +47,14 @@ Enabled Check mode in G4Navigator G4ChordFinder: stepperDriverId: 2
 
  *** SETTING MAGNETIC FIELD in Z direction : fieldValue = 2 tesla *** 
 
-*** Conversion of G4 -> VecGeom finished (0.00283541 s) ***
-*** Closing VecGeom geometry finished (0.00034433 s) ***
-*** Setup of syncing lookup structure finished (2.354e-05 s) ***
+*** Conversion of G4 -> VecGeom finished (0.0020306 s) ***
+*** Closing VecGeom geometry finished (0.000303452 s) ***
+*** Setup of syncing lookup structure finished (2.3729e-05 s) ***
 TG4VecGeomNavigator created and registered to G4TransportationManager
 Uncontained capacity for Svt_log: 8.83002e+07 units
 Uncontained capacity for Dch_log: 8.26239e+08 units
-*** Setup of VecGeom navigators finished (30.2389 s) ***
+Uncontained capacity for Dch_log: 8.26239e+08 units
+*** Setup of VecGeom navigators finished (31.7823 s) ***
 3
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
@@ -94,7 +95,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -747,6 +748,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
+Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
@@ -763,6 +765,7 @@ Use HETC submodel for pre-compound model            0
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
+Type of Fermi BreakUp model                         ModelVI
 Min excitation energy                               10 eV 
 Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
@@ -2747,7 +2750,7 @@ Step#    X (mm)    Y (mm)    Z (mm)    Ek (MeV) dE (MeV) Step(mm)    Track(mm) S
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.015555s Sys=0.000000s
+  User=0.000000s Real=0.008561s Sys=0.000000s
 /tracking/verbose 0
 /run/beamOn 10
 
@@ -2797,7 +2800,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.030000s Real=0.031718s Sys=0.000000s
+  User=0.040000s Real=0.032823s Sys=0.000000s
 
  ================================================================= 
  Final random number = 0.56769521327478

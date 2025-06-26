@@ -47,43 +47,34 @@
 #include "G4Fragment.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Pow.hh"
+#include "G4VSIntegration.hh"
 
 class G4NuclearLevelData;
 class G4DeexPrecoParameters;
 class G4VCoulombBarrier;
 class G4InterfaceToXS;
 
-class G4VPreCompoundFragment
+class G4VPreCompoundFragment : G4VSIntegration
 {
 public:  
 
   explicit G4VPreCompoundFragment(const G4ParticleDefinition*,
 				  G4VCoulombBarrier*);
   
-  virtual ~G4VPreCompoundFragment();
-  
-  friend std::ostream& 
-  operator<<(std::ostream&, const G4VPreCompoundFragment*);
-  friend std::ostream& 
-  operator<<(std::ostream&, const G4VPreCompoundFragment&);
-  
-  // =====================
-  // Pure Virtual methods
-  // =====================
-  
+  ~G4VPreCompoundFragment() override;
+    
   // Run time initialization method
   G4bool Initialize(const G4Fragment& aFragment);
     
-  // Methods for calculating the emission probability
-  // ------------------------------------------------
-  
   // Calculates the total (integrated over kinetic energy) emission
   // probability of a fragment
-  virtual G4double CalcEmissionProbability(const G4Fragment&) = 0;
+  virtual G4double CalcEmissionProbability(const G4Fragment&);
   
   // sample kinetic energy of emitted fragment
-  virtual G4double SampleKineticEnergy(const G4Fragment&) = 0;
+  virtual G4double SampleKineticEnergy(const G4Fragment&);
 
+  G4double ProbabilityDensityFunction(G4double energy) override;  
+  
   inline G4ReactionProduct* GetReactionProduct() const; 	
   
   G4int GetA() const { return theA; }
@@ -116,6 +107,11 @@ public:
   //for superimposed Coulomb Barrier for inverse cross sections
   void UseSICB(G4bool use) { useSICB = use; } 
 
+  friend std::ostream& 
+  operator<<(std::ostream&, const G4VPreCompoundFragment*);
+  friend std::ostream& 
+  operator<<(std::ostream&, const G4VPreCompoundFragment&);
+
   G4VPreCompoundFragment(const G4VPreCompoundFragment &right) = delete;
   const G4VPreCompoundFragment& 
   operator= (const G4VPreCompoundFragment &right) = delete;  
@@ -123,6 +119,10 @@ public:
   G4bool operator!=(const G4VPreCompoundFragment &right) const = delete;
 
 protected:
+
+  virtual G4double
+  ProbabilityDistributionFunction(G4double, const G4Fragment&)
+  { return 0.0; }; 
 
   virtual G4double GetAlpha() const = 0;
 
@@ -132,6 +132,7 @@ protected:
   G4DeexPrecoParameters* theParameters;
   G4Pow* g4calc;
   G4InterfaceToXS* fXSection{nullptr};
+  const G4Fragment* pFragment{nullptr};
 
   G4int theA;
   G4int theZ;

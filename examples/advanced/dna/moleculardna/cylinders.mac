@@ -63,7 +63,7 @@
 /dnageom/radicalKillDistance 9 nm
 
 # Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
-/dnageom/interactionDirectRange 7 angstrom
+/dnageom/interactionDirectRange 6 angstrom
 
 # Geometry: activate Histone scavenging function
 /dnageom/activateHistoneScavenging true
@@ -100,8 +100,12 @@
 # Run: initialization
 /run/initialize
 
-# Visualization: uncomment the next line to visualize cylinder DNA geometry
+# Visualization: to visualize cylinder DNA geometry
+# - uncomment the next line and save
 #/control/execute vis.mac
+# - comment the last line (/run/beamOn ...) and save
+# - then, run ./moleculardna -t 1 -v 1
+# - then, in the Session window of the Qt interface, do /control/execute cylinders.mac
 
 # Unit tests only
 #/dnatests/uniqueid

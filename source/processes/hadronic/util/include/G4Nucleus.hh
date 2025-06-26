@@ -59,31 +59,10 @@ class G4Nucleus
     
     ~G4Nucleus();
     
-    inline G4Nucleus( const G4Nucleus &right )
-    { *this = right; }
-    
-    inline G4Nucleus& operator = (const G4Nucleus& right)
-    {
-      if (this != &right) {
-        theA=right.theA;
-        theZ=right.theZ;
-        theL=right.theL;
-        aEff=right.aEff;
-        zEff=right.zEff;
-        fIsotope = right.fIsotope;
-        pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
-        dtaBlackTrackEnergy=right.dtaBlackTrackEnergy;
-        pnBlackTrackEnergyfromAnnihilation =
-                     right.pnBlackTrackEnergyfromAnnihilation; 
-        dtaBlackTrackEnergyfromAnnihilation =
-                     right.dtaBlackTrackEnergyfromAnnihilation; 
-        theTemp = right.theTemp;
-        excitationEnergy = right.excitationEnergy;
-        momentum = right.momentum;
-        fermiMomentum = right.fermiMomentum;
-      }
-      return *this;
-    }
+    G4Nucleus(const G4Nucleus&) = default;    
+    G4Nucleus(G4Nucleus&&) = default;    
+    G4Nucleus& operator = (const G4Nucleus&) = default;
+    G4Nucleus& operator = (G4Nucleus&&) = default;
    
     inline G4bool operator==( const G4Nucleus &right ) const
     { return ( this == (G4Nucleus *) &right ); }

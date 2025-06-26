@@ -83,9 +83,11 @@
 #include "G4SystemOfUnits.hh"
 #include "G4AutoLock.hh"
 
-G4bool G4ParticleHPInelastic::fLock[] = {true, true, true, true, true, true};
+G4bool G4ParticleHPInelastic::fLock[] = {false, false, false, false, false, false};
 std::vector<G4ParticleHPChannelList*>*
 G4ParticleHPInelastic::theInelastic[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+
+static std::once_flag applyOnce;
 
 namespace
 {
@@ -117,12 +119,14 @@ G4ParticleHPInelastic::~G4ParticleHPInelastic()
 
 void G4ParticleHPInelastic::ClearData()
 {
-  if (theInelastic[indexP] != nullptr) {
-    for (auto const& p : *(theInelastic[indexP])) {
-      delete p;
+  for (G4int i=0; i<6; ++i) {
+    if (theInelastic[i] != nullptr) {
+      for (auto const& p : *(theInelastic[i])) {
+	delete p;
+      }
+      delete theInelastic[i];
+      theInelastic[i] = nullptr;
     }
-    delete theInelastic[indexP];
-    theInelastic[indexP] = nullptr;
   }
 }
 
@@ -217,22 +221,26 @@ const std::pair<G4double, G4double> G4ParticleHPInelastic::GetFatalEnergyCheckLe
 
 void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projectile)
 {
-  if (fLock[indexP]) {
+  // only one object destroy all list of final state models
+  std::call_once(applyOnce, [this]() { isFirst = true; });
+
+  G4int nelm = (G4int)G4Element::GetNumberOfElements();
+  if (isFirst && nelm != numEle) { 
     G4AutoLock l(&theHPInelastic);
-    if (fLock[indexP]) {
-      isFirst = true;
-      fLock[indexP] = false;
+    if (nelm != numEle) {
+      for (G4int i=0; i<6; ++i) { fLock[i] = false; }
     }
     l.unlock();
   }
-
-  G4int nelm = (G4int)G4Element::GetNumberOfElements();
-  G4int n0 = numEle;
-  numEle = nelm;
-  if (!isFirst || nelm == n0) { return; }
+  if (fLock[indexP]) { return; }
 
   // extra elements should be initialized
   G4AutoLock l(&theHPInelastic);
+  if (fLock[indexP]) { return; }
+
+  fLock[indexP] = true;
+  G4int n0 = numEle;
+  numEle = nelm;
 
   if (nullptr == theInelastic[indexP]) {
     theInelastic[indexP] = new std::vector<G4ParticleHPChannelList*>;

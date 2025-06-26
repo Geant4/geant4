@@ -38,6 +38,7 @@
 #include "G4ITTrackHolder.hh"
 #include "G4ITReaction.hh"
 #include "G4ReferenceCast.hh"
+#include <unordered_map>
 
 class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
@@ -66,20 +67,19 @@ class G4DNAIndependentReactionTimeStepper : public G4VITTimeStepComputer
   G4VDNAReactionModel* GetReactionModel();
 
   std::unique_ptr<G4ITReactionChange> FindReaction(
-    G4ITReactionSet* pReactionSet, const G4double& currentStepTime = 0,
-    const G4double& previousStepTime       = 0,
-    const G4bool& reachedUserStepTimeLimit = false);
+    G4ITReactionSet* pReactionSet,
+    G4double& currentStepTime,
+    const G4double globalTime);
   void SetReactionProcess(G4VITReactionProcess* pReactionProcess);
   void SetVerbose(G4int);
 
  private:
   void InitializeForNewTrack();
   class Utils;
-  void CheckAndRecordResults(const Utils& utils);
+  void CheckAndRecordResults(G4double reactionTime, const Utils& utils);
 
   G4double GetTimeToEncounter(const G4Track& trackA, const G4Track& trackB);
 
-  G4bool fHasAlreadyReachedNullTime = false;
   const G4DNAMolecularReactionTable*& fMolecularReactionTable =
     reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable);
   G4VDNAReactionModel* fReactionModel     = nullptr;
@@ -88,18 +88,24 @@ class G4DNAIndependentReactionTimeStepper : public G4VITTimeStepComputer
   G4int fVerbose                          = 0;
   G4double fRCutOff                       = G4IRTUtils::GetRCutOff();
   G4VITReactionProcess* fpReactionProcess = nullptr;
-  std::map<G4int, G4ThreeVector> fSampledPositions;
+  std::vector<const G4Track *> fSecondaries;
+  std::unordered_map<G4int, G4ThreeVector> fSampledPositions;
   std::set<G4int> fCheckedTracks;
+  void InitializeReactions(G4double currentGlobalTime);
+  G4bool fIsInitialized = false;
+  G4double GetNextReactionTime();
+  const G4ITReaction* GetNextReaction();
 
   class Utils
   {
    public:
     Utils(const G4Track& tA, const G4Track& tB);
     ~Utils() = default;
-    const G4Track& fTrackA;
-    const G4Track& fTrackB;
-    const G4Molecule* fpMoleculeA;
-    const G4Molecule* fpMoleculeB;
+
+    G4Track* fpTrackA{nullptr};
+    G4Track* fpTrackB{nullptr};
+    const G4Molecule* fpMoleculeA{nullptr};
+    const G4Molecule* fpMoleculeB{nullptr};
   };
 };
 #endif

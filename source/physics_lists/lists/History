@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2024-04-23 Alberto Ribon (phys-list-V11-02-04)
+## 2025-04-23 Alberto Ribon (phys-lists-V11-03-03)
 - FTFP_BERT_ATL : removed the special FTF tune for ATLAS (introduced in
   phys-lists-V11-01-05 to overcome the problem of too optimistic (i.e. narrow)
   pion shower energy resolution).
@@ -17,6 +17,20 @@ It must **not** be used as a substitute for writing good git commit messages!
     G4FTFTunings::Instance()->SetTuneApplicabilityState( 4, 1 );
   or the UI command (before run-initialization):
     /process/had/models/ftf/selectTuneByIndex 4
+
+## 2025-04-15 Vladimir Ivanchenko (phys-list-V11-03-02)
+- QBBC - added G4ChargeExchangePhysics
+
+## 2025-03-03 Dmitri Konstantinov (phys-list-V11-03-01)
+- G4PhysListFactory: Prevent fallback to default physics list
+  when an invalid name is provided. Now, if a user specifies an unknown physics list,
+  Geant4 will throw a fatal error instead of silently using FTFP_BERT.
+  This ensures that users are aware of incorrect configurations and
+  helps prevent unintended simulation results.
+
+## 2024-12-10 Douglas M Wright (phys-list-V11-03-00)
+- Shielding: Simplify logic tree for inelastic models 
+  and move all LEND hadronic inelastic processes to G4HadronPhysicsLEND
 
 ## 2024-11-04 Vladimir Ivantchenko (phys-list-V11-02-03)
 - G4PhysListFactory - use std::size_t

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GlobalMagFieldMessenger
+// G4GlobalMagFieldMessenger
 //
 // Class description:
 //
@@ -38,7 +38,7 @@
 // The field value can be changed either interactively via 
 // the UI command or via SetFieldValue() function.
 
-// Author: Ivana Hrivnacova, 28/08/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova (IN2P3/IJCLab Orsay), 28 August 2013
 // --------------------------------------------------------------------
 #ifndef G4GlobalMagFieldMessenger_hh
 #define G4GlobalMagFieldMessenger_hh 1
@@ -51,19 +51,39 @@ class G4UIdirectory;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithAnInteger;
 
+/**
+ * @brief G4GlobalMagFieldMessenger, a global uniform magnetic field messenger
+ * class. It creates/deletes the global uniform magnetic field and
+ * activates/inactivates it according to the set field value.
+ * The field value can be changed either interactively via the UI command or
+ * via the SetFieldValue() function.
+ */
+
 class G4GlobalMagFieldMessenger : public G4UImessenger
 {
-  public:  // with description
+  public:
 
+    /**
+     * Constructor and Destructor.
+     */
     G4GlobalMagFieldMessenger(const G4ThreeVector& value = G4ThreeVector());
     ~G4GlobalMagFieldMessenger() override;
     
+    /**
+     * Setter for UI command.
+     */
     void SetNewValue(G4UIcommand*, G4String) override;
 
-    void  SetFieldValue(const G4ThreeVector& value);
+    /**
+     * Setter and accessor for the field value.
+     */
+    void SetFieldValue(const G4ThreeVector& value);
     G4ThreeVector GetFieldValue() const;
     
-    inline void  SetVerboseLevel(G4int verboseLevel);
+    /**
+     * Verbosity control.
+     */
+    inline void SetVerboseLevel(G4int verboseLevel);
     inline G4int GetVerboseLevel() const;
     
   private:
@@ -78,12 +98,18 @@ class G4GlobalMagFieldMessenger : public G4UImessenger
     G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;
 };
 
+// --------------------------------------------------------------------
 // inline functions
+// --------------------------------------------------------------------
 
-inline void  G4GlobalMagFieldMessenger::SetVerboseLevel(G4int verboseLevel)
-{ fVerboseLevel = verboseLevel; }
+inline void G4GlobalMagFieldMessenger::SetVerboseLevel(G4int verboseLevel)
+{
+  fVerboseLevel = verboseLevel;
+}
 
 inline G4int G4GlobalMagFieldMessenger::GetVerboseLevel() const
-{ return fVerboseLevel; }
+{
+  return fVerboseLevel;
+}
     
 #endif

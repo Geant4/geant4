@@ -89,10 +89,10 @@ void G4SolidStore::Clean()
 
   G4SolidStore* store = GetInstance();
 
-  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
+  for(const auto & pos : *store)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    delete *pos;
+    delete pos;
   }
 
   store->bmap.clear(); store->mvalid = false;
@@ -117,19 +117,19 @@ void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4SolidStore::UpdateMap()
 {
   G4AutoLock l(&mapMutex);  // to avoid thread contention at initialisation
-  if (mvalid) return;
+  if (mvalid) { return; }
   bmap.clear();
-  for(auto pos=GetInstance()->cbegin(); pos!=GetInstance()->cend(); ++pos)
+  for(const auto & pos : *GetInstance())
   {
-    const G4String& sol_name = (*pos)->GetName();
+    const G4String& sol_name = pos->GetName();
     auto it = bmap.find(sol_name);
     if (it != bmap.cend())
     {
-      it->second.push_back(*pos);
+      it->second.push_back(pos);
     }
     else
     {
-      std::vector<G4VSolid*> sol_vec { *pos };
+      std::vector<G4VSolid*> sol_vec { pos };
       bmap.insert(std::make_pair(sol_name, sol_vec));
     }
   }
@@ -227,10 +227,7 @@ G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose,
     {
       return pos->second[pos->second.size()-1];
     }
-    else
-    {
-      return pos->second[0];
-    }
+    return pos->second[0];
   }
   if (verbose)
   {

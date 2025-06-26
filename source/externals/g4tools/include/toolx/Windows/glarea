@@ -74,7 +74,6 @@ public:
   ,m_interactor(0)
   {
     register_class();
-    // The WS_BORDER is needed. Else probleme of size at startup.
     RECT rect;
     ::GetClientRect(m_parent,&rect);
     //printf("debug : glarea : ca : %d %d\n",rect.right-rect.left,rect.bottom-rect.top);
@@ -248,7 +247,9 @@ protected:
       glarea* _this = (glarea*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
       if(_this) {
         if(_this->m_interactor) {
-          tools::sg::mouse_down_event event(LOWORD(a_lparam),HIWORD(a_lparam));
+          bool shift_modifier = ::GetKeyState(VK_SHIFT)  & 0x8000;
+          bool control_modifier = ::GetKeyState(VK_CONTROL) & 0x8000;
+          tools::sg::mouse_down_event event(LOWORD(a_lparam),HIWORD(a_lparam),shift_modifier,control_modifier);
           _this->m_interactor->mouse_press(event);
         } else {
           RECT rect;
@@ -262,7 +263,9 @@ protected:
       glarea* _this = (glarea*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
       if(_this) {
         if(_this->m_interactor) {
-          tools::sg::mouse_up_event event(LOWORD(a_lparam),HIWORD(a_lparam));
+          bool shift_modifier = ::GetKeyState(VK_SHIFT)  & 0x8000;
+          bool control_modifier = ::GetKeyState(VK_CONTROL) & 0x8000;
+          tools::sg::mouse_up_event event(LOWORD(a_lparam),HIWORD(a_lparam),shift_modifier,control_modifier);
           _this->m_interactor->mouse_release(event);
         } else {
           RECT rect;
@@ -275,12 +278,16 @@ protected:
     case WM_MOUSEMOVE:{
       glarea* _this = (glarea*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
       if(_this) {
+        WPARAM state = a_wparam;
+        bool ldown = ((state & MK_LBUTTON)==MK_LBUTTON)?true:false;
         if(_this->m_interactor) {
-          tools::sg::mouse_move_event event(LOWORD(a_lparam),HIWORD(a_lparam),0,0,false);
-          _this->m_interactor->mouse_move(event);
+          if(ldown) {
+            bool shift_modifier = ::GetKeyState(VK_SHIFT)  & 0x8000;
+            bool control_modifier = ::GetKeyState(VK_CONTROL) & 0x8000;
+            tools::sg::mouse_move_event event(LOWORD(a_lparam),HIWORD(a_lparam),shift_modifier,control_modifier,0,0,false);
+            _this->m_interactor->mouse_move(event);
+          }
         } else {
-          WPARAM state = a_wparam;
-          bool ldown = ((state & MK_LBUTTON)==MK_LBUTTON)?true:false;	
           RECT rect;
           ::GetClientRect(a_hwnd,&rect);
           unsigned int h = rect.bottom-rect.top;
@@ -294,7 +301,13 @@ protected:
       glarea* _this = (glarea*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
       if(_this) {
         if(_this->m_interactor) {
-          tools::sg::wheel_rotate_event event(GET_WHEEL_DELTA_WPARAM(a_wparam));
+          bool shift_modifier = ::GetKeyState(VK_SHIFT)  & 0x8000;
+          bool control_modifier = ::GetKeyState(VK_CONTROL) & 0x8000;
+          POINT p;
+          p.x = LOWORD(a_lparam);
+          p.y = HIWORD(a_lparam);
+          if(!::ScreenToClient(a_hwnd,&p)) {}
+          tools::sg::wheel_rotate_event event(GET_WHEEL_DELTA_WPARAM(a_wparam),int(p.x),int(p.y),shift_modifier,control_modifier);
 	  _this->m_interactor->wheel_rotate(event);
         }	  
       }	

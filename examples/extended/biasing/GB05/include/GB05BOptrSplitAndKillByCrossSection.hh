@@ -61,33 +61,33 @@ class GB05BOptrSplitAndKillByCrossSection : public G4VBiasingOperator
     // ------------------------------------------------------------
     GB05BOptrSplitAndKillByCrossSection(G4String particleToBias,
                                         G4String name = "SplitAndKillByXS");
-    virtual ~GB05BOptrSplitAndKillByCrossSection();
+    ~GB05BOptrSplitAndKillByCrossSection() override;
 
     // -- method called at beginning of run:
-    virtual void StartRun();
+    void StartRun() override;
 
   private:
     // -----------------------------
     // -- Mandatory from base class:
     // -----------------------------
     // -- Not used:
-    virtual G4VBiasingOperation*
-    ProposeOccurenceBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    G4VBiasingOperation* ProposeOccurenceBiasingOperation(const G4Track*,
+                                                          const G4BiasingProcessInterface*) final
     {
-      return 0;
+      return nullptr;
     }
 
     // -- Not used:
-    virtual G4VBiasingOperation*
-    ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track*,
+                                                           const G4BiasingProcessInterface*) final
     {
-      return 0;
+      return nullptr;
     }
 
     // -- Used method : it will return the biasing operation that will split particles
     // -- with a probabilty depending on the total absorption cross-section.
-    virtual G4VBiasingOperation*
-    ProposeNonPhysicsBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final;
+    G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(const G4Track*,
+                                                           const G4BiasingProcessInterface*) final;
 
     // ---------------------------------------
     // -- Method specific to this application:

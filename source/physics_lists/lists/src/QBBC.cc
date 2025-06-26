@@ -88,6 +88,8 @@ QBBC::QBBC( G4int ver, const G4String&)
 
   RegisterPhysics( new G4HadronInelasticQBBC(ver));
 
+  RegisterPhysics( new G4ChargeExchangePhysics(ver) );
+
   // Neutron tracking cut
   RegisterPhysics( new G4NeutronTrackingCut(ver) );
 }		 

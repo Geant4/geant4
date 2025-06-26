@@ -33,12 +33,13 @@
 //
 // Modified:
 //
-// 2020.05.07 A.Ribon used the newly introduced G4HyperonBuilder
-// 2019.08.01 A.Ribon replaced explicit numbers for the energy transition
-//                    region with values taken from G4HadronicParameters
-// 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
-//            FTF transition energy region
-//
+// 2020.05.07 A.Ribon: Used the newly introduced G4HyperonBuilder
+// 2019.08.01 A.Ribon: Replaced explicit numbers for the energy transition
+//                     region with values taken from G4HadronicParameters
+// 2014.08.05 K.L.Genser: Added provisions for modifing the Bertini to
+//                        FTF transition energy region
+// 2024.11.19 D.M.Wright: Removed LEND inelastic neutron model,
+//                        is now done in G4HadronPhysicsLEND
 //----------------------------------------------------------------------------
 //
 #include <iomanip>   
@@ -82,7 +83,7 @@
 #include "G4ParticleHPBGGNucleonInelasticXS.hh"
 #include "G4ParticleHPJENDLHEInelasticData.hh"
 #include "G4ParticleHPInelasticData.hh"
-#include "G4NeutronLENDBuilder.hh"
+#include "G4HadronPhysicsLEND.hh"  // used to access const maxLEND_Energy
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
@@ -119,7 +120,7 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name)
 G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool qe)
   : G4HadronPhysicsFTFP_BERT(name, qe), useLEND_(false), evaluation_("")
 {
-  minBERT_neutron = 19.9*CLHEP::MeV;
+    minBERT_neutron = maxLEND_Energy - overlapLEND_Energy;
 }
 
 G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4int verb)
@@ -162,11 +163,7 @@ void G4HadronPhysicsShielding::Neutron()
   bertneu->SetMaxEnergy(maxBERT_neutron);
   bertneu->SetMinEnergy(minBERT_neutron);
   neu->RegisterMe(bertneu);
-  if(useLEND_) {
-    auto hpneu = new G4NeutronLENDBuilder(evaluation_);
-    AddBuilder(hpneu);
-    neu->RegisterMe(hpneu);
-  } else {
+  if( ! useLEND_) {
     auto hpneu = new G4NeutronPHPBuilder;
     AddBuilder(hpneu);
     neu->RegisterMe(hpneu);

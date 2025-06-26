@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <ostream>
 #include "G4ITTrackHolder.hh"
+#include "Randomize.hh"
 
 std::ostream& operator<<(std::ostream& stream, const G4VDNAMesh::Index& rhs)
 {
@@ -232,3 +233,32 @@ G4VDNAMesh::Index G4DNAMesh::ConvertIndex(const Index& index,
   }
   return Index{ dx, dy, dz };
 }
+
+G4VDNAMesh::Index G4DNAMesh:: GetRandomIndex(const Index& oldIndex, const G4double& OldReso) const
+{
+  G4double x_min = oldIndex.x * OldReso;
+  G4double x_max = (oldIndex.x + 1) * OldReso;
+  G4double y_min = oldIndex.y * OldReso;
+  G4double y_max = (oldIndex.y + 1) * OldReso;
+  G4double z_min = oldIndex.z * OldReso;
+  G4double z_max = (oldIndex.z + 1) * OldReso;
+
+  G4int i_max = std::floor(x_max / fResolution);
+  G4int j_max = std::floor(y_max / fResolution);
+  G4int k_max = std::floor(z_max / fResolution);
+
+  G4int i_min = std::floor(x_min / fResolution);
+  G4int j_min = std::floor(y_min / fResolution);
+  G4int k_min = std::floor(z_min / fResolution);
+
+  G4double r1 = G4UniformRand();
+  G4double r2 = G4UniformRand();
+  G4double r3 = G4UniformRand();
+
+  G4int i_n = i_min + (G4int)std::floor(r1 * (i_max - i_min + 1));
+  G4int j_n = j_min + (G4int)std::floor(r2 * (j_max - j_min + 1));
+  G4int k_n = k_min + (G4int)std::floor(r3 * (k_max - k_min + 1));
+
+  return Index{ i_n, j_n, k_n };
+}
+

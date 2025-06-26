@@ -91,7 +91,7 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 
 G4DNARuddIonisationExtendedModel::~G4DNARuddIonisationExtendedModel()
 {  
-  if(isFirst) {
+  if (isFirst) {
     for(auto & i : xsdata) { delete i; }
   }
 }
@@ -222,7 +222,8 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* p,
     statCode = G4EmParameters::Instance()->DNAStationary();
 
     // initialise atomic de-excitation
-    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+    if (!statCode)
+      fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
     if (verbose > 0) {
       G4cout << "### G4DNARuddIonisationExtendedModel::Initialise(..) " << pname 
@@ -330,17 +331,18 @@ G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticl
   }
   // check energy balance
   // remaining excitation energy of water molecule
-  G4double exc = bindingEnergy - esum;
+  G4double exc = std::max(bindingEnergy - esum, 0.0);
 
   // remaining projectile energy
   G4double scatteredEnergy = kinE - bindingEnergy - esec;
-  if(scatteredEnergy < -tolerance || exc < -tolerance) {
+  if (scatteredEnergy < -tolerance || exc < -tolerance) {
     G4cout << "G4DNARuddIonisationExtendedModel::SampleSecondaries: "
            << "negative final E(keV)=" << scatteredEnergy/CLHEP::keV << " Ein(keV)="
            << kinE/CLHEP::keV << "  " << pd->GetParticleName()
            << " Edelta(keV)=" << esec/CLHEP::keV << " MeV, Exc(keV)=" << exc/CLHEP::keV
 	   << G4endl;
   }
+  scatteredEnergy = std::max(scatteredEnergy, 0.0);
 
   // projectile
   if (!statCode) {

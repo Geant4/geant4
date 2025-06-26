@@ -57,25 +57,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ScoreSpecies::ScoreSpecies(G4String name, G4int depth)
-  : G4VPrimitiveScorer(name, depth), fEdep(0), fHCID(-1), fEvtMap(0)
+  : G4VPrimitiveScorer(name, depth)
 {
-  fNEvent = 0;
-  G4double tMin = 1.0 * CLHEP::picosecond;
-  G4double tMax = 999999 * CLHEP::picosecond;
-  G4double tLogMin = std::log10(tMin);
-  G4double tLogMax = std::log10(tMax);
-  G4int tBins = 50;
-  for (int i = 0; i <= tBins; i++)
+  auto tMin = 1.0 * CLHEP::picosecond;
+  auto tMax = 999999 * CLHEP::picosecond;
+  auto tLogMin = std::log10(tMin);
+  auto tLogMax = std::log10(tMax);
+  auto tBins = 50;
+  for (G4int i = 0; i <= tBins; i++)
     AddTimeToRecord(std::pow(10., tLogMin + i * (tLogMax - tLogMin) / tBins));
-
-  fEdep = 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ScoreSpecies::~ScoreSpecies()
-{
-  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,32 +103,37 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
 {
   if (G4EventManager::GetEventManager()->GetConstCurrentEvent()->IsAborted()) {
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
 
-  auto species = G4MoleculeCounter::Instance()->GetRecordedMolecules();
+  // get the first, and in this case only, counter
+  auto counter = G4MoleculeCounterManager::Instance()->GetMoleculeCounter<G4MoleculeCounter>(0);
+  if (counter == nullptr) {
+    G4Exception("ScoreSpecies::EndOfEvent", "BAD_REFERENCE", FatalException,
+                "The molecule counter could not be received!");
+  }
 
-  if (species.get() == 0 || species->size() == 0) {
+  auto indices = counter->GetMapIndices();
+
+  if (indices.empty()) {
     G4cout << "No molecule recorded, energy deposited= " << G4BestUnit(fEdep, "Energy") << G4endl;
     ++fNEvent;
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
 
-  for (auto molecule : *species) {
+  for (const auto& idx : indices) {
     for (auto time_mol : fTimeToRecord) {
-      double n_mol = G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule, time_mol);
+      double n_mol = counter->GetNbMoleculesAtTime(idx, time_mol);
 
       if (n_mol < 0) {
         G4cerr << "N molecules not valid < 0 " << G4endl;
         G4Exception("", "N<0", FatalException, "");
       }
 
-      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][molecule];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][idx.Molecule];
       molInfo.fNumber += n_mol;
-      double gValue = (n_mol / (fEdep / eV)) * 100.;
+      G4double gValue = (n_mol / (fEdep / eV)) * 100.;
       molInfo.fG += gValue;
       molInfo.fG2 += gValue * gValue;
     }
@@ -146,30 +141,29 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
   ++fNEvent;
 
   fEdep = 0.;
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerScorer)
 {
-  ScoreSpecies* right =
+  auto right =
     dynamic_cast<ScoreSpecies*>(dynamic_cast<G4VPrimitiveScorer*>(workerScorer));
 
-  if (right == 0) {
+  if (right == nullptr) {
     return;
   }
   if (right == this) {
     return;
   }
 
-  SpeciesMap::iterator it_map1 = right->fSpeciesInfoPerTime.begin();
-  SpeciesMap::iterator end_map1 = right->fSpeciesInfoPerTime.end();
+  auto it_map1 = right->fSpeciesInfoPerTime.begin();
+  auto end_map1 = right->fSpeciesInfoPerTime.end();
 
   for (; it_map1 != end_map1; ++it_map1) {
     InnerSpeciesMap& map2 = it_map1->second;
-    InnerSpeciesMap::iterator it_map2 = map2.begin();
-    InnerSpeciesMap::iterator end_map2 = map2.end();
+    auto it_map2 = map2.begin();
+    auto end_map2 = map2.end();
 
     for (; it_map2 != end_map2; ++it_map2) {
       SpeciesInfo& molInfo = fSpeciesInfoPerTime[it_map1->first][it_map2->first];
@@ -178,17 +172,11 @@ void ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerScore
       molInfo.fG2 += it_map2->second.fG2;
     }
   }
+  right->fSpeciesInfoPerTime.clear();
 
   fNEvent += right->fNEvent;
   right->fNEvent = 0;
   right->fEdep = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ScoreSpecies::DrawAll()
-{
-  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,10 +205,10 @@ void ScoreSpecies::ASCII()
 
   std::map<G4String, std::map<G4double, std::pair<G4double, G4double>>> mol;
 
-  for (auto it_map1 : fSpeciesInfoPerTime) {
+  for (auto& it_map1 : fSpeciesInfoPerTime) {
     InnerSpeciesMap& map2 = it_map1.second;
     G4double time = it_map1.first / ps;
-    for (auto it_map2 : map2) {
+    for (auto& it_map2 : map2) {
       G4double G = it_map2.second.fG;
       G4double G2 = it_map2.second.fG2;
       G4double N = fNEvent;
@@ -230,7 +218,7 @@ void ScoreSpecies::ASCII()
     }
   }
 
-  for (auto it1 : mol)
+  for (const auto& it1 : mol)
     for (auto it2 : it1.second)
       out << std::setw(12) << it2.first << std::setw(12) << it2.second.first << std::setw(12)
           << it2.second.second << std::setw(12) << std::setw(12) << it1.first << G4endl;

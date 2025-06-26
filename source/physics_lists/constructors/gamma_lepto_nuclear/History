@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-12-10 Douglas M Wright (phys-ctor-glnuclear-V11-03-00)
+- G4EmExtraPhysics removed LEND photonuclear, is now done in G4HadronPhysicsLEND
+
 ## 2024-10-28 Alexei Sytov (phys-ctor-glnuclear-V11-02-01)
 - Added new physics G4CoherentPairProductionPhysics related to the process
   G4CoherentPairProduction of coherent pair production by

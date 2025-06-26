@@ -45,6 +45,7 @@ public:
   virtual ~G4OpenGLWin32Viewer ();
   void SetView ();
   void ShowView ();
+  void SwitchToMasterThread();
 
 protected:
   void GetWin32Connection ();

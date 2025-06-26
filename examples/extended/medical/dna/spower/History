@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-06-15 Sebastien Incerti (spower-V11-03-02)
+- plot.C : add selection of electrons by default
+- spower.in : changed physics constructors
+
+## 2025-05-20 Vladimir Ivanchenko (spower-V11-03-01)
+- PhysicsList - add all DNA Physics Lists and add usage of G4EmParameters
+
+## 2025-03-15 Sebastien Incerti (spower-V11-03-00)
+- added scoring of secondary electrons
+
 ## 2024-04-20 Sebastien Incerti (spower-V11-02-02)
 - updated README
 

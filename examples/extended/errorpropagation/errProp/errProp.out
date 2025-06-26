@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,7 +18,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x193b450
+ creating G4RunManagerKernel 0x1670ff0
  G4ChordFinder: stepperDriverId: 2
 
 The materials defined are : 
@@ -94,15 +94,15 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1bf30b0G4ErrorPhysicsList:: particle process manager e+ = 0x1bf7a00
-0x1bf2f10G4ErrorPhysicsList:: particle process manager e- = 0x1bf84e0
-0x1bf2d70G4ErrorPhysicsList:: particle process manager gamma = 0x1bf8690
-0x1bf4430G4ErrorPhysicsList:: particle process manager geantino = 0x1bfbac0
-0x1bf3290G4ErrorPhysicsList:: particle process manager mu+ = 0x1bfbd10
-0x1bf35e0G4ErrorPhysicsList:: particle process manager mu- = 0x1bfbf60
-0x1bf39c0G4ErrorPhysicsList:: particle process manager pi+ = 0x1bf7520
-0x1bf3de0G4ErrorPhysicsList:: particle process manager pi- = 0x1bfc090
-0x1bf4200G4ErrorPhysicsList:: particle process manager proton = 0x1bfc2e0
+0x1929680G4ErrorPhysicsList:: particle process manager e+ = 0x192dfd0
+0x19294e0G4ErrorPhysicsList:: particle process manager e- = 0x192eab0
+0x1929340G4ErrorPhysicsList:: particle process manager gamma = 0x192ec60
+0x192aa00G4ErrorPhysicsList:: particle process manager geantino = 0x192daf0
+0x1929860G4ErrorPhysicsList:: particle process manager mu+ = 0x1931ff0
+0x1929bb0G4ErrorPhysicsList:: particle process manager mu- = 0x19321c0
+0x1929f90G4ErrorPhysicsList:: particle process manager pi+ = 0x1932410
+0x192a3b0G4ErrorPhysicsList:: particle process manager pi- = 0x1932660
+0x192a7d0G4ErrorPhysicsList:: particle process manager proton = 0x19328b0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
  G4ChordFinder: stepperDriverId: 2
@@ -133,7 +133,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========

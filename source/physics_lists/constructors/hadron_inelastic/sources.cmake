@@ -12,6 +12,7 @@ geant4_add_module(G4phys_ctor_hinelastic
     G4HadronPhysicsFTFP_BERT_TRV.hh
     G4HadronPhysicsFTFQGSP_BERT.hh
     G4HadronPhysicsINCLXX.hh
+    G4HadronPhysicsLEND.hh
     G4HadronPhysicsNuBeam.hh
     G4HadronPhysicsQGS_BIC.hh
     G4HadronPhysicsQGSP_BERT.hh
@@ -34,6 +35,7 @@ geant4_add_module(G4phys_ctor_hinelastic
     G4HadronPhysicsFTFP_BERT_TRV.cc
     G4HadronPhysicsFTFQGSP_BERT.cc
     G4HadronPhysicsINCLXX.cc
+    G4HadronPhysicsLEND.cc
     G4HadronPhysicsNuBeam.cc
     G4HadronPhysicsQGS_BIC.cc
     G4HadronPhysicsQGSP_BERT.cc
@@ -55,6 +57,10 @@ geant4_module_link_libraries(G4phys_ctor_hinelastic
     G4run
   PRIVATE
     G4baryons
+    G4had_gamma_nuclear
+    G4phys_ctor_em
+    G4emutils
+    G4had_lend
     G4had_fission
     G4had_par_hp
     G4had_preequ_exciton

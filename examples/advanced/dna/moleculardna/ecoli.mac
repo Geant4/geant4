@@ -104,4 +104,4 @@
 /gps/energy 9.999 keV
 
 # Beam on
-/run/beamOn 10
+/run/beamOn 500

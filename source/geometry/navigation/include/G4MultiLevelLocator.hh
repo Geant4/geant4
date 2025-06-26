@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class G4MultiLevelLocator 
+// G4MultiLevelLocator 
 //
-// class description:
+// Class description:
 // 
 // Implementing the calculation of the intersection point with a boundary when
 // PropagationInField is used. Derived from method LocateIntersectionPoint()
@@ -33,66 +33,88 @@
 // intersection point by means of a 'depth' algorithm in case of slow progress
 // (intersection is not found after 100 trials).
 
-// History:
-// -------
-// 27.10.08 - Tatiana Nikitina: Derived from LocateIntersectionPoint() from 
-//                              G4PropagatorInField class
+// Author: Tatiana Nikitina (CERN), 27 October 2008
 // ---------------------------------------------------------------------------
-
 #ifndef G4MULTILEVELLOCATOR_HH
-#define G4MULTILEVELLOCATOR_HH
+#define G4MULTILEVELLOCATOR_HH 1
 
 #include "G4VIntersectionLocator.hh"
 
+/**
+ * @brief G4MultiLevelLocator implements the calculation of the intersection
+ * point with a boundary when G4PropagationInField is used. Derived from method
+ * LocateIntersectionPoint() from G4PropagatorInField, it is based on a linear
+ * method for finding the intersection point by means of a 'depth' algorithm
+ * in case of slow progress (intersection is not found after 100 trials).
+ */
+
 class G4MultiLevelLocator : public G4VIntersectionLocator
 {
-   public:  // with description 
+  public:
  
-     G4MultiLevelLocator(G4Navigator *theNavigator);
-       // Constructor
-     ~G4MultiLevelLocator() override;
-       // Default destructor
+    /**
+     * Constructor and Destructor.
+     */
+    G4MultiLevelLocator(G4Navigator *theNavigator);
+    ~G4MultiLevelLocator() override;
      
-     G4bool EstimateIntersectionPoint( 
-         const  G4FieldTrack&       curveStartPointTangent,           // A
-         const  G4FieldTrack&       curveEndPointTangent,             // B
-         const  G4ThreeVector&      trialPoint,                       // E
-                G4FieldTrack&       intersectPointTangent,            // Output
-                G4bool&             recalculatedEndPoint,             // Out
-                G4double&           fPreviousSafety,                  // In/Out
-                G4ThreeVector&      fPreviousSftOrigin) override;     // In/Out
-      // If such an intersection exists, this function calculates the
-      // intersection point of the true path of the particle with the surface
-      // of the current volume (or of one of its daughters). 
-      // Should use lateral displacement as measure of convergence
+    /**
+     * If such an intersection exists, this method calculates the intersection
+     * point of the true path of the particle with the surface of the current
+     * volume (or of one of its daughters). 
+     * Should use lateral displacement as measure of convergence.
+     *  @param[in] curveStartPointTangent Start point tangent track.
+     *  @param[in] curveEndPointTangent End point tangent track.
+     *  @param[in] trialPoint Trial point.
+     *  @param[out] intersectPointTangent Intersection point tangent track.
+     *  @param[out] recalculatedEndPoint Flagging if end point was recomputed.
+     *  @param[in,out] fPreviousSafety Previous safety distance.
+     *  @param[in,out] fPreviousSftOrigin Previous safety point origin.
+     *  @returns Whether intersection exists or not. 
+     */
+    G4bool EstimateIntersectionPoint( 
+        const  G4FieldTrack&       curveStartPointTangent,           // A
+        const  G4FieldTrack&       curveEndPointTangent,             // B
+        const  G4ThreeVector&      trialPoint,                       // E
+               G4FieldTrack&       intersectPointTangent,            // Output
+               G4bool&             recalculatedEndPoint,             // Out
+               G4double&           fPreviousSafety,                  // In/Out
+               G4ThreeVector&      fPreviousSftOrigin) override;     // In/Out
 
-     void ReportStatistics(); 
+    /**
+     * Dumps statistics.
+     */
+    void ReportStatistics(); 
 
-     inline void SetMaxSteps(unsigned int valMax) { fMaxSteps= valMax; }
-     inline void SetWarnSteps(unsigned int valWarn) { fWarnSteps= valWarn; }
+    /**
+     * Setters.
+     */
+    inline void SetMaxSteps(unsigned int valMax) { fMaxSteps = valMax; }
+    inline void SetWarnSteps(unsigned int valWarn) { fWarnSteps = valWarn; }
 
-   private:
+  private:
 
-     void ReportFieldValue( const G4FieldTrack& locationPV,
-                            const char* nameLoc,
-                            const G4EquationOfMotion* equation );
+    void ReportFieldValue( const G4FieldTrack& locationPV,
+                           const char* nameLoc,
+                           const G4EquationOfMotion* equation );
 
-     // Invariants -- parameters
-     // ====================================   
-     static const G4int max_depth = 10;
-     unsigned int fMaxSteps = 10000; // Effort abandoned; signal is looping 
-     unsigned int fWarnSteps = 1000; // Warn about many steps (but succeeded)
+    // Invariants -- parameters
+    // ====================================   
+    static const G4int max_depth = 10;
+    unsigned int fMaxSteps = 10000; // Effort abandoned; signal is looping 
+    unsigned int fWarnSteps = 1000; // Warn about many steps (but succeeded)
 
-     // State - varies during simulation
-     // ====================================
-     G4FieldTrack* ptrInterMedFT[max_depth+1];
-       // Used to store intermediate tracks values in case of too slow progress
-
-     unsigned long int fNumCalls = 0; 
-     unsigned long int fNumAdvanceFull = 0,
-                       fNumAdvanceGood = 0,
-                       fNumAdvanceTrials = 0;
-       // Counters for statistics & debugging
+    // State - varies during simulation
+    // ====================================
+    G4FieldTrack* ptrInterMedFT[max_depth+1];  // Used to store intermediate
+                                               // tracks values in case of too
+                                               // slow progress
+    // Counters for statistics & debugging
+    // ====================================
+    unsigned long int fNumCalls = 0; 
+    unsigned long int fNumAdvanceFull = 0,
+                      fNumAdvanceGood = 0,
+                      fNumAdvanceTrials = 0;
 };
 
 #endif

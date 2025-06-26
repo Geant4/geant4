@@ -69,17 +69,17 @@ G4BoundingEnvelope(const std::vector<const G4ThreeVectorList*>& polygons)
   G4double xmax = -kInfinity, ymax = -kInfinity, zmax = -kInfinity;
   for (const auto & polygon : *fPolygons)
   {
-    for (auto ipoint = polygon->cbegin(); ipoint != polygon->cend(); ++ipoint)
+    for (const auto & ipoint : *polygon)
     {
-      G4double x = ipoint->x();
-      if (x < xmin) xmin = x;
-      if (x > xmax) xmax = x;
-      G4double y = ipoint->y();
-      if (y < ymin) ymin = y;
-      if (y > ymax) ymax = y;
-      G4double z = ipoint->z();
-      if (z < zmin) zmin = z;
-      if (z > zmax) zmax = z;
+      G4double x = ipoint.x();
+      if (x < xmin) { xmin = x; }
+      if (x > xmax) { xmax = x; }
+      G4double y = ipoint.y();
+      if (y < ymin) { ymin = y; }
+      if (y > ymax) { ymax = y; }
+      G4double z = ipoint.z();
+      if (z < zmin) { zmin = z; }
+      if (z > zmax) { zmax = z; }
     }
   }
   fMin.set(xmin,ymin,zmin);
@@ -158,9 +158,9 @@ void G4BoundingEnvelope::CheckBoundingPolygons()
   for (std::size_t k=0; k<nbases; ++k)
   {
     std::size_t np = (*fPolygons)[k]->size();
-    if (np == nsize)            continue;
-    if (np == 1 && k==0)        continue;
-    if (np == 1 && k==nbases-1) continue;
+    if (np == nsize) { continue; }
+    if (np == 1 && k==0) { continue; }
+    if (np == 1 && k==nbases-1) { continue; }
     std::ostringstream message;
     message << "Badly constructed polygons!"
             << "\nNumber of polygons: " << nbases
@@ -204,12 +204,12 @@ BoundingBoxVsVoxelLimits(const EAxis pAxis,
     G4double zmin = fMin.z() + pTransform3D.dz();
     G4double zmax = fMax.z() + pTransform3D.dz();
 
-    if (xmin-kCarTolerance > xmaxlim) return true;
-    if (xmax+kCarTolerance < xminlim) return true;
-    if (ymin-kCarTolerance > ymaxlim) return true;
-    if (ymax+kCarTolerance < yminlim) return true;
-    if (zmin-kCarTolerance > zmaxlim) return true;
-    if (zmax+kCarTolerance < zminlim) return true;
+    if (xmin-kCarTolerance > xmaxlim) { return true; }
+    if (xmax+kCarTolerance < xminlim) { return true; }
+    if (ymin-kCarTolerance > ymaxlim) { return true; }
+    if (ymax+kCarTolerance < yminlim) { return true; }
+    if (zmin-kCarTolerance > zmaxlim) { return true; }
+    if (zmax+kCarTolerance < zminlim) { return true; }
 
     if (xmin >= xminlim && xmax <= xmaxlim &&
         ymin >= yminlim && ymax <= ymaxlim &&
@@ -250,12 +250,12 @@ BoundingBoxVsVoxelLimits(const EAxis pAxis,
   // Check if the sphere surrounding the bounding box is outside
   // the voxel limits
   //
-  if (center.x()-radius > xmaxlim) return true;
-  if (center.y()-radius > ymaxlim) return true;
-  if (center.z()-radius > zmaxlim) return true;
-  if (center.x()+radius < xminlim) return true;
-  if (center.y()+radius < yminlim) return true;
-  if (center.z()+radius < zminlim) return true;
+  if (center.x()-radius > xmaxlim) { return true; }
+  if (center.y()-radius > ymaxlim) { return true; }
+  if (center.z()-radius > zmaxlim) { return true; }
+  if (center.x()+radius < xminlim) { return true; }
+  if (center.y()+radius < yminlim) { return true; }
+  if (center.z()+radius < zminlim) { return true; }
   return false;
 }
 
@@ -289,12 +289,12 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
     G4double zmin = fMin.z() + pTransform3D.dz();
     G4double zmax = fMax.z() + pTransform3D.dz();
 
-    if (xmin-kCarTolerance > xmaxlim) return false;
-    if (xmax+kCarTolerance < xminlim) return false;
-    if (ymin-kCarTolerance > ymaxlim) return false;
-    if (ymax+kCarTolerance < yminlim) return false;
-    if (zmin-kCarTolerance > zmaxlim) return false;
-    if (zmax+kCarTolerance < zminlim) return false;
+    if (xmin-kCarTolerance > xmaxlim) { return false; }
+    if (xmax+kCarTolerance < xminlim) { return false; }
+    if (ymin-kCarTolerance > ymaxlim) { return false; }
+    if (ymax+kCarTolerance < yminlim) { return false; }
+    if (zmin-kCarTolerance > zmaxlim) { return false; }
+    if (zmax+kCarTolerance < zminlim) { return false; }
 
     if (fPolygons == nullptr)
     {
@@ -368,39 +368,39 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
     {
       G4double coor;
       coor = cx*fMin.x() + cy*fMin.y() + cz*fMin.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMax.x() + cy*fMin.y() + cz*fMin.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMax.x() + cy*fMax.y() + cz*fMin.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMin.x() + cy*fMax.y() + cz*fMin.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMin.x() + cy*fMin.y() + cz*fMax.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMax.x() + cy*fMin.y() + cz*fMax.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMax.x() + cy*fMax.y() + cz*fMax.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
       coor = cx*fMin.x() + cy*fMax.y() + cz*fMax.z() + cd;
-      if (coor < emin) emin = coor;
-      if (coor > emax) emax = coor;
+      if (coor < emin) { emin = coor; }
+      if (coor > emax) { emax = coor; }
     }
     else
     {
       for (const auto & polygon : *fPolygons)
       {
-        for (auto ipoint=polygon->cbegin(); ipoint!=polygon->cend(); ++ipoint)
+        for (const auto & ipoint : *polygon)
         {
-          G4double coor = ipoint->x()*cx + ipoint->y()*cy + ipoint->z()*cz + cd;
-          if (coor < emin) emin = coor;
-          if (coor > emax) emax = coor;
+          G4double coor = ipoint.x()*cx + ipoint.y()*cy + ipoint.z()*cz + cd;
+          if (coor < emin) { emin = coor; }
+          if (coor > emax) { emax = coor; }
         }
       }
     }
@@ -412,12 +412,12 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   // Check if the sphere surrounding the bounding box is outside
   // the voxel limits
   //
-  if (center.x()-radius > xmaxlim) return false;
-  if (center.y()-radius > ymaxlim) return false;
-  if (center.z()-radius > zmaxlim) return false;
-  if (center.x()+radius < xminlim) return false;
-  if (center.y()+radius < yminlim) return false;
-  if (center.z()+radius < zminlim) return false;
+  if (center.x()-radius > xmaxlim) { return false; }
+  if (center.y()-radius > ymaxlim) { return false; }
+  if (center.z()-radius > zmaxlim) { return false; }
+  if (center.x()+radius < xminlim) { return false; }
+  if (center.y()+radius < yminlim) { return false; }
+  if (center.z()+radius < zminlim) { return false; }
 
   // Transform polygons
   //
@@ -452,11 +452,15 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   {
     baseA.resize(bases[k].second);
     for (G4int i = 0; i < bases[k].second; ++i)
+    {
       baseA[i] = vertices[bases[k].first + i];
+    }
 
     baseB.resize(bases[k+1].second);
     for (G4int i = 0; i < bases[k+1].second; ++i)
+    {
       baseB[i] = vertices[bases[k+1].first + i];
+    }
 
     // Find bounding box of current prism
     G4Segment3D  prismAABB;
@@ -471,52 +475,76 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
         prismAABB.second.z()<= limits.GetMaxZExtent())
     {
       if (extent.first.x()  > prismAABB.first.x())
+      {
         extent.first.setX( prismAABB.first.x() );
+      }
       if (extent.first.y()  > prismAABB.first.y())
+      {
         extent.first.setY( prismAABB.first.y() );
+      }
       if (extent.first.z()  > prismAABB.first.z())
+      {
         extent.first.setZ( prismAABB.first.z() );
+      }
       if (extent.second.x() < prismAABB.second.x())
+      {
         extent.second.setX(prismAABB.second.x());
+      }
       if (extent.second.y() < prismAABB.second.y())
+      {
         extent.second.setY(prismAABB.second.y());
+      }
       if (extent.second.z() < prismAABB.second.z())
+      {
         extent.second.setZ(prismAABB.second.z());
+      }
       continue;
     }
 
     // Check if prismAABB is outside the voxel limits
-    if (prismAABB.first.x()  > limits.GetMaxXExtent()) continue;
-    if (prismAABB.first.y()  > limits.GetMaxYExtent()) continue;
-    if (prismAABB.first.z()  > limits.GetMaxZExtent()) continue;
-    if (prismAABB.second.x() < limits.GetMinXExtent()) continue;
-    if (prismAABB.second.y() < limits.GetMinYExtent()) continue;
-    if (prismAABB.second.z() < limits.GetMinZExtent()) continue;
+    if (prismAABB.first.x()  > limits.GetMaxXExtent()) { continue; }
+    if (prismAABB.first.y()  > limits.GetMaxYExtent()) { continue; }
+    if (prismAABB.first.z()  > limits.GetMaxZExtent()) { continue; }
+    if (prismAABB.second.x() < limits.GetMinXExtent()) { continue; }
+    if (prismAABB.second.y() < limits.GetMinYExtent()) { continue; }
+    if (prismAABB.second.z() < limits.GetMinZExtent()) { continue; }
 
     // Clip edges of the prism by adjusted G4VoxelLimits box
     std::vector<G4Segment3D> vecEdges;
     CreateListOfEdges(baseA, baseB, vecEdges);
-    if (ClipEdgesByVoxel(vecEdges, limits, extent)) continue;
+    if (ClipEdgesByVoxel(vecEdges, limits, extent)) { continue; }
 
     // Some edges of the prism are completely outside of the voxel
     // limits, clip selected edges (see bits) of adjusted G4VoxelLimits
     // by the prism
     G4int bits = 0x000;
     if (limits.GetMinXExtent() < prismAABB.first.x())
+    {
       bits |= 0x988; // 1001 1000 1000
+    }
     if (limits.GetMaxXExtent() > prismAABB.second.x())
+    {
       bits |= 0x622; // 0110 0010 0010
+    }
 
     if (limits.GetMinYExtent() < prismAABB.first.y())
+    {
       bits |= 0x311; // 0011 0001 0001
+    }
     if (limits.GetMaxYExtent() > prismAABB.second.y())
+    {
       bits |= 0xC44; // 1100 0100 0100
+    }
 
     if (limits.GetMinZExtent() < prismAABB.first.z())
+    {
       bits |= 0x00F; // 0000 0000 1111
+    }
     if (limits.GetMaxZExtent() > prismAABB.second.z())
+    {
       bits |= 0x0F0; // 0000 1111 0000
-    if (bits == 0xFFF) continue;
+    }
+    if (bits == 0xFFF) { continue; }
 
     std::vector<G4Plane3D> vecPlanes;
     CreateListOfPlanes(baseA, baseB, vecPlanes);
@@ -530,7 +558,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   if (pAxis == kYAxis) { emin = extent.first.y(); emax = extent.second.y(); }
   if (pAxis == kZAxis) { emin = extent.first.z(); emax = extent.second.z(); }
 
-  if (emin > emax) return false;
+  if (emin > emax) { return false; }
   emin -= delta;
   emax += delta;
   G4double minlim = pVoxelLimits.GetMinExtent(pAxis);
@@ -549,7 +577,7 @@ G4BoundingEnvelope::FindScaleFactor(const G4Transform3D& pTransform3D) const
 {
   if (pTransform3D.xx() == 1. &&
       pTransform3D.yy() == 1. &&
-      pTransform3D.zz() == 1.) return 1.;
+      pTransform3D.zz() == 1.) { return 1.; }
 
   G4double xx = pTransform3D.xx();
   G4double yx = pTransform3D.yx();
@@ -613,14 +641,22 @@ TransformVertices(const G4Transform3D& pTransform3D,
   {
     G4ThreeVector offset = pTransform3D.getTranslation();
     for (auto i = ia; i != iaend; ++i)
+    {
       for (auto k = (*i)->cbegin(); k != (*i)->cend(); ++k)
+      {
         pVertices.emplace_back((*k) + offset);
+      }
+    }
   }
   else
   {
     for (auto i = ia; i != iaend; ++i)
+    {
       for (auto k = (*i)->cbegin(); k != (*i)->cend(); ++k)
+      {
         pVertices.push_back(pTransform3D*G4Point3D(*k));
+      }
+    }
   }
 }
 
@@ -641,14 +677,14 @@ G4BoundingEnvelope::GetPrismAABB(const G4Polygon3D& pBaseA,
   for (const auto & it1 : pBaseA)
   {
     G4double x = it1.x();
-    if (x < xmin) xmin = x;
-    if (x > xmax) xmax = x;
+    if (x < xmin) { xmin = x; }
+    if (x > xmax) { xmax = x; }
     G4double y = it1.y();
-    if (y < ymin) ymin = y;
-    if (y > ymax) ymax = y;
+    if (y < ymin) { ymin = y; }
+    if (y > ymax) { ymax = y; }
     G4double z = it1.z();
-    if (z < zmin) zmin = z;
-    if (z > zmax) zmax = z;
+    if (z < zmin) { zmin = z; }
+    if (z > zmax) { zmax = z; }
   }
 
   // Second base
@@ -656,14 +692,14 @@ G4BoundingEnvelope::GetPrismAABB(const G4Polygon3D& pBaseA,
   for (const auto & it2 : pBaseB)
   {
     G4double x = it2.x();
-    if (x < xmin) xmin = x;
-    if (x > xmax) xmax = x;
+    if (x < xmin) { xmin = x; }
+    if (x > xmax) { xmax = x; }
     G4double y = it2.y();
-    if (y < ymin) ymin = y;
-    if (y > ymax) ymax = y;
+    if (y < ymin) { ymin = y; }
+    if (y > ymax) { ymax = y; }
     G4double z = it2.z();
-    if (z < zmin) zmin = z;
-    if (z > zmax) zmax = z;
+    if (z < zmin) { zmin = z; }
+    if (z > zmax) { zmax = z; }
   }
 
   // Set bounding box
@@ -735,8 +771,8 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
   std::size_t nb = baseB.size();
   G4Point3D pa(0.,0.,0.), pb(0.,0.,0.), p0;
   G4Normal3D norm;
-  for (std::size_t i=0; i<na; ++i) pa += baseA[i];
-  for (std::size_t i=0; i<nb; ++i) pb += baseB[i];
+  for (std::size_t i=0; i<na; ++i) { pa += baseA[i]; }
+  for (std::size_t i=0; i<nb; ++i) { pb += baseB[i]; }
   pa /= na; pb /= nb; p0 = (pa+pb)/2.;
 
   // Create list of planes
@@ -838,7 +874,7 @@ G4BoundingEnvelope::ClipEdgesByVoxel(const std::vector<G4Segment3D>& pEdges,
     G4Point3D p2 = pEdges[k].second;
     if (std::abs(p1.x()-p2.x())+
         std::abs(p1.y()-p2.y())+
-        std::abs(p1.z()-p2.z()) < kCarTolerance) continue;
+        std::abs(p1.z()-p2.z()) < kCarTolerance) { continue; }
     G4double  d1, d2;
     // Clip current edge by X min
     d1 = pBox.GetMinXExtent() - p1.x();

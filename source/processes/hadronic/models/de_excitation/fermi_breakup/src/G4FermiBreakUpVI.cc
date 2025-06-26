@@ -71,7 +71,7 @@ void G4FermiBreakUpVI::Initialise()
   fElim = param->GetFBUEnergyLimit();
   fTimeLim = param->GetMaxLifeTime();
   if (verbose > 1) {
-    G4cout << "### G4FermiBreakUpVI::Initialise(): the pool is initilized=" 
+    G4cout << "### G4FermiBreakUpVI::Initialise(): the pool is initialized=" 
 	   << fPool->IsInitialized() << " fTolerance(eV)=" << fTolerance/CLHEP::eV
            << " Elim(MeV)=" << fElim/CLHEP::MeV << G4endl;
   }

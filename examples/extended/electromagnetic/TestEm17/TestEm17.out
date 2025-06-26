@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -171,7 +171,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -635,7 +635,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.670000s Real=0.675375s Sys=0.010000s
+  User=0.760000s Real=0.759853s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -691,7 +691,7 @@ N=17 V[N]={882454084924701664, 2270259229220857311, 818577390581940897, 14266040
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.610000s Real=0.612530s Sys=0.000000s
+  User=0.690000s Real=0.683477s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -746,7 +746,7 @@ N=17 V[N]={2103257823577124208, 469380737387581810, 386042433805554138, 18024306
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.570000s Real=0.575665s Sys=0.000000s
+  User=0.610000s Real=0.614610s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -755,8 +755,8 @@ Run Summary
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:2) 
-UserDetectorConstruction deleted 0x1a21ca0
-UserPhysicsList deleted 0x1a60b18
+UserDetectorConstruction deleted 0x23c6260
+UserPhysicsList deleted 0x2404eb8
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

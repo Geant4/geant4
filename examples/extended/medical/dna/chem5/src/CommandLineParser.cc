@@ -43,7 +43,7 @@
 using namespace std;
 using namespace G4DNAPARSER;
 
-CommandLineParser* CommandLineParser::fpInstance(0);
+CommandLineParser* CommandLineParser::fpInstance(nullptr);
 G4String Command::fNoOption = "NoOption";
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,16 +57,10 @@ inline bool MATCH(const char* a, const char* b)
 
 CommandLineParser::CommandLineParser()
 {
-  // G4cout << "############ NEW PARSE ##########" << G4endl;
   fpInstance = this;
-  fOptionsWereSetup = false;
-  fMaxMarkerLength = 0;
-  fMaxOptionNameLength = 0;
   AddCommand("--help", Command::WithoutOption, "Print this help");
   AddCommand("-h", Command::WithoutOption, "Print this help");
   AddCommand("&", Command::WithoutOption);
-
-  fVerbose = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,9 +75,9 @@ CommandLineParser* CommandLineParser::GetParser()
 
 CommandLineParser::~CommandLineParser()
 {
-  std::map<G4String, Command*>::iterator it = fCommandMap.begin();
+  auto it = fCommandMap.begin();
   for (; it != fCommandMap.end(); it++) {
-    if (it->second) delete it->second;
+    delete it->second;
   }
 }
 
@@ -93,7 +87,7 @@ void CommandLineParser::DeleteInstance()
 {
   if (fpInstance) {
     delete fpInstance;
-    fpInstance = 0;
+    fpInstance = nullptr;
   }
 }
 
@@ -119,15 +113,14 @@ CommandWithOption::CommandWithOption(Command::Type commandType, const G4String& 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int CommandLineParser::Parse(int& argc, char** argv)
+G4int CommandLineParser::Parse(int& argc, char** argv)
 {
-  //    G4cout << "Parse " << G4endl;
   static char null[1] = {""};
-  int firstArgc = argc;
+  G4int firstArgc = argc;
 
-  for (int i = 1; i < firstArgc; i++) {
-    Command* command = FindCommand(argv[i]);
-    if (command == 0) continue;
+  for (G4int i = 1; i < firstArgc; i++) {
+    auto command = FindCommand(argv[i]);
+    if (command == nullptr) continue;
 
     if (fVerbose) G4cout << "Command : " << argv[i] << G4endl;
 
@@ -143,7 +136,7 @@ int CommandLineParser::Parse(int& argc, char** argv)
     if (command->fType == Command::WithOption) {
       if (fVerbose) G4cout << "WithOption" << G4endl;
 
-      if (i + 1 > firstArgc || argv[i + 1] == 0 || argv[i + 1][0] == '-') {
+      if (i + 1 > firstArgc || argv[i + 1] == nullptr || argv[i + 1][0] == '-') {
         G4cerr << "An command line option is missing for " << marker << G4endl;
         abort();
       }
@@ -158,7 +151,7 @@ int CommandLineParser::Parse(int& argc, char** argv)
       if (i + 1 < firstArgc) {
         G4String buffer = (const char*)strdup(argv[i + 1]);
 
-        if (buffer.empty() == false) {
+        if (!buffer.empty()) {
           if (buffer.at(0) != '-' && buffer.at(0) != '&' && buffer.at(0) != '>'
               && buffer.at(0) != '|')
           {
@@ -181,7 +174,7 @@ int CommandLineParser::Parse(int& argc, char** argv)
   }
   CorrectRemainingOptions(argc, argv);
 
-  Command* commandLine(0);
+  Command* commandLine(nullptr);
   if ((commandLine = GetCommandIfActive("--help")) || (commandLine = GetCommandIfActive("-h"))) {
     G4cout << "Usage : " << argv[0] << " [OPTIONS]" << G4endl;
     PrintHelp();
@@ -197,7 +190,7 @@ void CommandLineParser::PrintHelp()
 {
   std::map<G4String, Command*>::iterator it;
 
-  int maxFieldLength = fMaxMarkerLength + fMaxOptionNameLength + 4;
+  G4int maxFieldLength = fMaxMarkerLength + fMaxOptionNameLength + 4;
 
   G4cout << "Options: " << G4endl;
 
@@ -220,9 +213,7 @@ void CommandLineParser::PrintHelp()
       if (command->GetDefaultOption() != "") {
         toPrint += " \"" + command->GetDefaultOption() + "\"";
       }
-
       G4cout << toPrint;
-
       G4cout << command->GetDescription() << G4endl;
     }
   }
@@ -233,8 +224,8 @@ void CommandLineParser::PrintHelp()
 void CommandLineParser::CorrectRemainingOptions(int& argc, char** argv)
 {
   // remove handled arguments from argument array
-  int j = 0;
-  for (int i = 0; i < argc; i++) {
+  G4int j = 0;
+  for (G4int i = 0; i < argc; i++) {
     if (strcmp(argv[i], "")) {
       argv[j] = argv[i];
       j++;
@@ -249,9 +240,7 @@ void CommandLineParser::AddCommand(const G4String& marker, Command::Type type,
                                    const G4String& description, const G4String& defaultOption,
                                    const G4String& optionName)
 {
-  // G4cout << "Add command : "<< marker << G4endl;
-
-  Command* command = 0;
+  Command* command = nullptr;
   switch (type) {
     case Command::WithoutOption:
       command = new Command(type, description);
@@ -264,46 +253,17 @@ void CommandLineParser::AddCommand(const G4String& marker, Command::Type type,
       break;
   }
 
-  if ((int)marker.length() > fMaxMarkerLength) fMaxMarkerLength = marker.length();
+  if ((G4int)marker.length() > fMaxMarkerLength) fMaxMarkerLength = marker.length();
   fCommandMap.insert(make_pair(marker, command));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/*
-// Add one command but multiple markers
-void Parser::AddCommand(vector<G4String> markers,
-                        CommandType type,
-                        const G4String& description,
-                        const G4String& optionName)
-{
-  // G4cout << "Add command : "<< marker << G4endl;
-  Command* command = new Command(type, description, optionName);
-
-  for (size_t i = 0; i < markers.size; i++)
-  {
-    G4String marker = markers[i];
-    if ((int) marker.length() > fMaxMarkerLength)
-    {
-      fMaxMarkerLength = marker.length();
-    }
-    if ((int) optionName.length() > fMaxOptionNameLength)
-    {
-      fMaxOptionNameLength = optionName.length();
-    }
-    fCommandMap.insert(make_pair(marker, command));
-  }
-}
-*/
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 Command* CommandLineParser::FindCommand(const G4String& marker)
 {
-  std::map<G4String, Command*>::iterator it = fCommandMap.find(marker);
+  auto it = fCommandMap.find(marker);
   if (it == fCommandMap.end()) {
-    // G4cerr << "command not found" << G4endl;
-    return 0;
+    return nullptr;
   }
   return it->second;
 }
@@ -314,24 +274,17 @@ Command* CommandLineParser::GetCommandIfActive(const G4String& marker)
 {
   Command* command = FindCommand(marker);
   if (command) {
-    // G4cout << "Command found : "<< marker << G4endl;
-
     if (command->fActive) {
-      // G4cout << "Command Active" << G4endl;
       return command;
     }
-    // else
-    //  G4cout <<"Command not active" << G4endl;
   }
   else {
     G4ExceptionDescription description;
     description << "You try to retrieve a command that was not registered : " << marker << G4endl;
     G4Exception("CommandLineParser::GetCommandIfActive", "COMMAND LINE NOT DEFINED", FatalException,
                 description, "");
-    // If you are using this class outside of Geant4, use exit(-1) instead
-    // exit(-1);
   }
-  return 0;
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

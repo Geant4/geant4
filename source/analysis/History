@@ -6,11 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-14 I. Hrivnacova (analysis-V11-02-09)
+## 2025-05-05 I. Hrivnacova (analysis-V11-03-03)
+- New implementation of generic 'G4Analysis::GetHnType()'' and 'IsProfile()' functions
+  which does not rely on the histogram/profile name position in the long
+  type name provided via tools 's_class()'
+
+## 2025-03-21 Ben Morgan (analysis-V11-03-02)
+- Modernize g4tools macro-based for loops with range-based for
+
+## 2025-03-14 I. Hrivnacova (analysis-V11-03-01)
 - Removed false warnings about non-existing ntuple
   and debug messages when filling inactivated ntuple
 
-## 2025-01-09 Ben Morgan
+## 2025-01-09 Ben Morgan (analysis-V11-03-00)
 - Qualify use of `G4Accumulables` namespace to avoid clashes and order
   dependence of inclusion of headers.
 
@@ -968,7 +976,7 @@ May 4, 2016 I. Hrivnacova (analysis-V10-02-02)
 April 18, 2016 I. Hrivnacova (analysis-V10-02-01)
 - Updated to g4tools 1.27.0 (Guy Barrand):
   Fixed incompatibility with ROOT 5.x and 6.x formats reported in ROOT forum:
-  https://root.cern.ch/phpBB3/viewtopic.php?t=21315
+  https://root.cern/phpBB3/viewtopic.php?t=21315
 
 December 8, 2015 I. Hrivnacova (analysis-V10-02-00)
 - Fixed definition of /analysis/ntuple command directory

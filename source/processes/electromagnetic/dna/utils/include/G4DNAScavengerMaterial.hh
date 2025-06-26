@@ -30,9 +30,10 @@
 #include "G4ios.hh"
 #include <map>
 #include <vector>
-#include "G4MoleculeCounter.hh"
+#include "G4VMoleculeCounterInternalBase.hh"
 #include "G4VScavengerMaterial.hh"
 #include "G4MoleculeTable.hh"
+#include "G4ChemEquilibrium.hh"
 
 class G4Material;
 class G4MolecularConfiguration;
@@ -42,7 +43,7 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
 {
  public:
   using NbMoleculeInTime =
-    std::map<G4double, int64_t, G4::MoleculeCounter::TimePrecision>;
+    std::map<G4double, int64_t, G4::MoleculeCounter::FixedTimeComparer>;
   using MolType            = const G4MolecularConfiguration*;
   using MaterialMap        = std::map<MolType, int64_t>;
   using ReactantList       = std::vector<MolType>;
@@ -80,9 +81,7 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
     {
       return it->second > 0;
     }
-    
     return false;
-   
   }
 
   void SetCounterAgainstTime() { fCounterAgainstTime = true; }
@@ -103,9 +102,13 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
   int64_t GetNMoleculesAtTime(MolType molecule, G4double time);
   G4bool SearchTimeMap(MolType molecule);
   int64_t SearchUpperBoundTime(G4double time, G4bool sameTypeOfMolecule);
+  void ResetEquilibrium();
+  G4bool SetEquilibrium(const G4DNAMolecularReactionData* pReaction,
+                        G4double time);
+  G4bool IsEquilibrium(const G4int& reactionType) const;
 
- private:
-  G4VChemistryWorld* fpChemistryInfo;
+private:
+  G4VChemistryWorld* fpChemistryInfo = nullptr;
   G4bool fIsInitialized;
   MaterialMap fScavengerTable;
   CounterMapType fCounterMap;
@@ -125,5 +128,6 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
   std::unique_ptr<Search> fpLastSearch;
   void WaterEquilibrium();
 
+  std::map<G4int,std::unique_ptr<G4ChemEquilibrium>> fEquilibriumProcesses;
 };
 #endif  // G4DNASCAVENGERMATERIAL_HH

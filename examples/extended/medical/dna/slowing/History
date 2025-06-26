@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-01-03 Sebastien Incerti (slowing-V11-03-00)
+- Added ntuple merging
+- Added auto to plot.C
+
 ## 2024-10-05 Sebastien Incerti (slowing-V11-02-01)
 - Added auto to plot.C
 - Updated README

@@ -6,6 +6,97 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-13 John Allison (modeling-V11-03-08)
+- G4PhysicalVolumeModel.cc:
+  - Fix typo in ModelType.
+
+## 2025-02-28 John Allison (modeling-V11-03-07)
+- G4TrajectoryDrawerUtils.cc:
+  - Trap trajectories with very long global times, e.g, products of long-lived
+    radioactive isotopes.
+    - Draw as non-time-sliced trajectories.
+
+## 2025-02-24 John Allison (modeling-V11-03-06)
+- G4ModelingParameters.hh:
+  - Implement G4ModelingParameters::TimeParameters::operaator!=.
+- G4TrajectoryDrawerUtils.cc"
+  - Fix bug in fade algorithm.
+
+## 2025-02-22 John Allison (modeling-V11-03-05)
+- G4ModelingParameters.hh:
+  - TimeParameters:
+    - Adjust defaul values:
+      - Set fade factor to 1 (maximum fading) - see G4TrajectoryDrawerUtils.cc.
+      - Set head time display 2D x-coordinate to zero (centre).
+        - 2D y-coordinate remains at -0.9 (bottom).
+- G4TrajectoriesModel.cc:
+  - DescribeYourselfTo(sceneHandler):
+    - Draw display head time if requested and if time windowing is active.
+      - This is outside the loop over trajectories - it is drawn only once per
+        processing of the scene.
+    - Remove Begin/EndDraw around the trajectories loop.
+      - It restricted what could be drawn inside the loop, for example 2D text,
+        and anyway doesn't seem to make much speed improvement.
+- G4TrajectoryDrawerUtils.cc:
+  - Add fading of trajectory slices if time windowing is active.
+    - Makes trajectory slices look like little meteors streaking across
+      the screen. 
+
+## 2025-02-10 John Allison (modeling-V11-03-04)
+- G4TrajectoryDrawerUtils.cc:
+  - First version of generic time windowing of trajectory slices.
+    - Draws only slices within the viewer time window.
+    - Takes advantage of recent ability to access modeling parameters via
+      static GetCurrentModelingParameters().
+    - Also of recently added G4RichTrajectoryPoint::GetPre/PostStepPointGlobalTime().
+    - Note: unless the viewer can handled time-sliced trajectories (only OGLS can
+      do this at present), the viewer must request a kernel visit on change of
+      viewer time window. 
+- G4TrajectoryDrawByEncounteredVolume.cc, G4TrajectoryEncounteredVolumeFilter.cc:
+  - Use G4VTrajectory::GetAttValues() instead of CreateAttValues().
+    - GetAttValues() caches the att values and so speeds repeated visits.
+
+## 2025-02-04 John Allison (modeling-V11-03-03)
+- G4VModel:
+  - Introduce static data member const G4ModelinParameters* fpCurrentMP
+    and its static accessor, GetCurrentModelingParameters().
+  - Its value is expected to be identical to fpMP set in the scene
+    handler, but to avoid linking problems, it must *not* be set on
+    the vis side; it must be set in modeling by any model that
+    requires it, G4TrajectoriesModel.
+- G4TrajectoriesModel.cc:
+  - Call SetCurrentModelingParameters.
+
+## 2025-02-01 John Allison (modeling-V11-03-02)
+- G4TrajectoryDrawerUtils.cc:
+  - Clang format (just formatting - no other changes).
+- G4ModelingParameters.cc:
+  - Coverity fix: uninitialised data member.
+
+## 2025-01-28 John Allison (modeling-V11-03-01)
+- G4ModelingParameters.hh and .icc:
+  - Add struct TimeParameters to G4ModelingParameters.
+     - This is a prerequisite for "Generic Time-Slicing" for the display of the time
+      evolution of event(s). With that feature, the display of tracks moving through
+      time will be available to all vis drivers. (Drivers will still be alllowed to
+      implement their own time evolution.)
+    - This MR simply adds the structure to modeling parameters and implements access
+      functions for the use of future MRs.
+
+## 2025-01-06 John Allison (modeling-V11-03-00)
+- Co-works: visman-V11-03-00, interfaces-V11-03-00, opengl-V11-03-00,
+  visQt3D-V11-03-00, vis_toolssg-V11-03-00, openinventor-V11-03-00,
+  greps-V11-03-00.
+- Re-instate the transparency slider (see lengthy explanation in management/History).
+- G4ModelingParameters:
+  - Add TransparencyByDepth and TransparencyByDepthOption.
+- G4PhysicalVolumeModel.cc:
+  - Rename some data members and access functions for clarity.
+  - Distinguish fTotalDrawnTouchables and fTotalAllTouchables.
+  - Add fMaxFullDepth (includes base path, i.e., from world volume).
+  - Add code for processing transparency by depth.
+  - Tidy - mainly improved indentation.
+
 ## 2024-10-22 John Allison (modeling-V11-02-05)
 - G4PhysicalVolumeModel.cc:
   - Fixed some ragged indentations.

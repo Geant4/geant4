@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4VoxelNavigation Inline implementation
+// Class G4VoxelNavigation inline methods implementation
 //
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 
 // ********************************************************************

@@ -32,10 +32,24 @@
 #include "RunAction.hh"
 #include "SteppingAction.hh"
 #include "TrackingAction.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization(DetectorConstruction* det) : fDetector(det) {}
+ActionInitialization::ActionInitialization(DetectorConstruction* det)
+  : fDetector(det)
+{
+  if (G4Threading::IsMultithreadedApplication()) {
+    fKin = new PrimaryGeneratorAction(fDetector);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{
+  delete fKin;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,7 +68,7 @@ void ActionInitialization::Build() const
 
 void ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new RunAction(fDetector, new PrimaryGeneratorAction(fDetector)));
+  SetUserAction(new RunAction(fDetector, fKin));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

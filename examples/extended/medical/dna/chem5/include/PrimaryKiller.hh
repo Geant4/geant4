@@ -51,46 +51,41 @@ class G4UIcmdWithADoubleAndUnit;
 class PrimaryKiller : public G4VPrimitiveScorer, public G4UImessenger
 {
   private:
-    double fELoss;  // cumulated energy loss by the primary
+    G4double fELoss = 0;  // cumulated energy loss by the primary
 
-    double fELossRange_Min;  // fELoss from which the primary is killed
-    double fELossRange_Max;  // fELoss from which the event is aborted
-    double fKineticE_Min;  // kinetic energy below which the primary is killed
-
-    G4UIcmdWithADoubleAndUnit* fpELossUI;
-    G4UIcmdWithADoubleAndUnit* fpAbortEventIfELossUpperThan;
-    G4UIcmdWithADoubleAndUnit* fpMinKineticE;
+    G4double fELossRange_Min = DBL_MAX;  // fELoss from which the primary is killed
+    G4double fELossRange_Max = DBL_MAX;  // fELoss from which the event is aborted
+    G4double fKineticE_Min = 0;  // kinetic energy below which the primary is killed
+    G4UIcmdWithADoubleAndUnit* fpELossUI = nullptr;
+    G4UIcmdWithADoubleAndUnit* fpAbortEventIfELossUpperThan = nullptr;
 
   public:
-    PrimaryKiller(G4String name, G4int depth = 0);
+    explicit PrimaryKiller(G4String name, G4int depth = 0);
 
-    virtual ~PrimaryKiller();
+    ~PrimaryKiller() override = default;
 
     /** Set energy under which the particle should be
      killed*/
-    inline void SetEnergyThreshold(double energy) { fKineticE_Min = energy; }
+    inline void SetEnergyThreshold(G4double energy) { fKineticE_Min = energy; }
 
     /** Set the energy loss from which the primary is
      killed*/
-    inline void SetMinLossEnergyLimit(double energy) { fELossRange_Min = energy; }
+    inline void SetMinLossEnergyLimit(G4double energy) { fELossRange_Min = energy; }
 
     /** Set the energy loss from which the event is
      aborted*/
-    inline void SetMaxLossEnergyLimit(double energy) { fELossRange_Max = energy; }
+    inline void SetMaxLossEnergyLimit(G4double energy) { fELossRange_Max = energy; }
 
     /** Method related to G4UImessenger
         used to control energy cuts through macro file
      */
-    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
+    void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
   protected:
-    virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
   public:
-    virtual void Initialize(G4HCofThisEvent*);
-    virtual void EndOfEvent(G4HCofThisEvent*);
-    virtual void Clear();
-    virtual void DrawAll();
-    virtual void PrintAll();
+    void Initialize(G4HCofThisEvent*) override;
+    inline void Clear(){ fELoss = 0;}
 };
 #endif

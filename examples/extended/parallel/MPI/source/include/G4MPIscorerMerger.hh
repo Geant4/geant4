@@ -103,7 +103,7 @@ class G4MPIscorerMerger
     G4ScoringManager* scoringManager;
     unsigned int commSize;
     unsigned int destinationRank;
-    MPI::Intracomm comm;
+    MPI_Comm comm;
     G4int verbose;
 };
 

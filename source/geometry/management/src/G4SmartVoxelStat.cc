@@ -127,7 +127,7 @@ void G4SmartVoxelStat::CountHeadsAndNodes( const G4SmartVoxelHeader* head )
   for(std::size_t i=0; i<numSlices; ++i)
   {
     const G4SmartVoxelProxy *proxy = head->GetSlice(i);
-    if (proxy == lastProxy) continue;
+    if (proxy == lastProxy) { continue; }
     
     lastProxy = proxy;
     

@@ -35,6 +35,8 @@
 #include "G4CopyRandomState.hh"
 #include "G4GeometryManager.hh"
 #include "G4HCofThisEvent.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4MTRunManagerKernel.hh"
@@ -1015,13 +1017,15 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
 {
   if (destroyFirst && G4Threading::IsMasterThread()) {
     if (verboseLevel > 0) {
-      G4cout << "#### Assemblies, Volumes and Solids Stores are wiped out." << G4endl;
+      G4cout << "#### Assembly, Volume, Solid, and Surface Stores are being cleaned." << G4endl;
     }
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4AssemblyStore::GetInstance()->Clean();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();
+    G4LogicalSkinSurface::CleanSurfaceTable();
+    G4LogicalBorderSurface::CleanSurfaceTable();
 
     // remove all logical volume pointers from regions
     // exception: world logical volume pointer must be kept

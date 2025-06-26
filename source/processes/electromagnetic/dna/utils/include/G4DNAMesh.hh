@@ -53,6 +53,7 @@ class G4DNAMesh : public G4VDNAMesh
   Voxel& GetVoxel(const Index& index);  // GetorCreateVoxel
   size_t size() { return fVoxelVector.size(); };
   Index ConvertIndex(const Index& index, const G4int&) const;
+  Index GetRandomIndex(const Index&, const G4double& resolution) const;
   std::vector<Index> FindNeighboringVoxels(const Index& index) const;
   void Reset();
   Data& GetVoxelMapList(const Index& index);

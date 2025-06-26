@@ -53,10 +53,11 @@
 #include <fstream>
 #include <sstream>
 
-G4PhysicsVector* G4NeutronElasticXS::data[] = {nullptr};
-G4double G4NeutronElasticXS::coeff[] = {0.0};
+G4ElementData* G4NeutronElasticXS::data = nullptr;
+G4double G4NeutronElasticXS::coeff[] = {1.0};
 G4String G4NeutronElasticXS::gDataDirectory = "";
-G4bool G4NeutronElasticXS::fLock = true;
+
+static std::once_flag applyOnce;
 
 namespace
 {
@@ -67,8 +68,7 @@ G4NeutronElasticXS::G4NeutronElasticXS()
  : G4VCrossSectionDataSet(Default_Name()),
    neutron(G4Neutron::Neutron())
 {
-  //  verboseLevel = 0;
-  if (verboseLevel > 0){
+  if (verboseLevel > 0) {
     G4cout  << "G4NeutronElasticXS::G4NeutronElasticXS Initialise for Z < " 
 	    << MAXZEL << G4endl;
   }
@@ -77,16 +77,10 @@ G4NeutronElasticXS::G4NeutronElasticXS()
   if (ggXsection == nullptr)
     ggXsection = new G4ComponentGGHadronNucleusXsc();
   SetForAllAtomsAndEnergies(true);
-  FindDirectoryPath();
-}
-
-G4NeutronElasticXS::~G4NeutronElasticXS()
-{
-  if (isFirst) {
-    for(G4int i=0; i<MAXZEL; ++i) {
-      delete data[i];
-      data[i] = nullptr;
-    }
+  if (nullptr == data) { 
+    data = new G4ElementData(MAXZEL);
+    data->SetName("nElastic");
+    FindDirectoryPath();
   }
 }
 
@@ -130,9 +124,10 @@ G4NeutronElasticXS::ComputeCrossSectionPerElement(G4double ekin, G4double loge,
   return ElementCrossSection(ekin, loge, elm->GetZasInt());
 }
 
-G4double G4NeutronElasticXS::ElementCrossSection(G4double ekin, G4double loge, G4int ZZ)
+G4double
+G4NeutronElasticXS::ElementCrossSection(G4double ekin, G4double loge, G4int ZZ)
 {
-  G4int Z = (ZZ >= MAXZEL) ? MAXZEL - 1 : ZZ;
+  G4int Z = std::min(ZZ, MAXZEL-1);
   auto pv = GetPhysicsVector(Z);
 
   G4double xs = (ekin <= pv->GetMaxEnergy()) ? pv->LogVectorValue(ekin, loge) 
@@ -152,19 +147,21 @@ G4double G4NeutronElasticXS::ElementCrossSection(G4double ekin, G4double loge, G
 G4double
 G4NeutronElasticXS::ComputeIsoCrossSection(G4double ekin, G4double loge,
 				           const G4ParticleDefinition*,
-				           G4int Z, G4int A,
+				           G4int ZZ, G4int A,
 				           const G4Isotope*, const G4Element*,
 				           const G4Material*)
 {
+  G4int Z = std::min(ZZ, MAXZEL-1);
   return ElementCrossSection(ekin, loge, Z)*A/aeff[Z];
 }
 
 G4double
 G4NeutronElasticXS::GetIsoCrossSection(const G4DynamicParticle* aParticle, 
-				       G4int Z, G4int A,
+				       G4int ZZ, G4int A,
 				       const G4Isotope*, const G4Element*,
 				       const G4Material*)
 {
+  G4int Z = std::min(ZZ, MAXZEL-1);
   return ElementCrossSection(aParticle->GetKineticEnergy(),
 			     aParticle->GetLogKineticEnergy(), Z)*A/aeff[Z];
 
@@ -176,7 +173,6 @@ const G4Isotope* G4NeutronElasticXS::SelectIsotope(
   G4int nIso = (G4int)anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
 
-  //G4cout << "SelectIsotope NIso= " << nIso << G4endl;
   if(1 == nIso) { return iso; }
 
   const G4double* abundVector = anElement->GetRelativeAbundanceVector();
@@ -209,19 +205,17 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
-  if (fLock || isFirst) { 
+  // initialise static tables only once
+  std::call_once(applyOnce, [this]() { isInitializer = true; });
+
+  if (isInitializer) {
     G4AutoLock l(&nElasticXSMutex);
-    if (fLock) { 
-      isFirst = true;
-      fLock = false;
-      FindDirectoryPath();
-    }
 
     // Access to elements
     const G4ElementTable* table = G4Element::GetElementTable();
-    for ( auto & elm : *table ) {
+    for ( auto const & elm : *table ) {
       G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZEL-1) );
-      if ( nullptr == data[Z] ) { Initialise(Z); }
+      if ( nullptr == data->GetElementData(Z) ) { Initialise(Z); }
     }
     l.unlock();
   }
@@ -247,40 +241,49 @@ void G4NeutronElasticXS::InitialiseOnFly(G4int Z)
 
 void G4NeutronElasticXS::Initialise(G4int Z)
 {
-  if(data[Z] != nullptr) { return; }
+  if (nullptr != data->GetElementData(Z)) { return; }
 
-  // upload data from file
-  data[Z] = new G4PhysicsLogVector();
-
+  // upload element data
   std::ostringstream ost;
-  ost << FindDirectoryPath() << Z ;
+  ost << FindDirectoryPath() << Z;
+  G4PhysicsVector* v = RetrieveVector(ost, true);
+  data->InitialiseForElement(Z, v);
+
+  // smooth transition 
+  G4double sig1 = (*v)[v->GetVectorLength()-1];
+  G4double ehigh = v->GetMaxEnergy();
+  G4double sig2 =
+    ggXsection->GetElasticElementCrossSection(neutron, ehigh, Z, aeff[Z]);
+  coeff[Z] = (sig2 > 0.) ? sig1/sig2 : 1.0;  
+}
+
+G4PhysicsVector* 
+G4NeutronElasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
+{
+  G4PhysicsLogVector* v = nullptr;
   std::ifstream filein(ost.str().c_str());
   if (!filein.is_open()) {
-    G4ExceptionDescription ed;
-    ed << "Data file <" << ost.str().c_str()
-       << "> is not opened!";
-    G4Exception("G4NeutronElasticXS::Initialise(..)","had014",
-                FatalException, ed, "Check G4PARTICLEXSDATA");
-    return;
+    if (warn) {
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+         << "> is not opened!";
+      G4Exception("G4NeutronElasticXS::RetrieveVector(..)","had014",
+                  FatalException, ed, "Check G4PARTICLEXSDATA");
+    }
+  } else {
+    if (verboseLevel > 1) {
+      G4cout << "File " << ost.str() 
+             << " is opened by G4NeutronElasticXS" << G4endl;
+    }
+    // retrieve data from DB
+    v = new G4PhysicsLogVector();
+    if (!v->Retrieve(filein, true)) {
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+         << "> is not retrieved!";
+      G4Exception("G4NeutronElasticXS::RetrieveVector(..)","had015",
+                  FatalException, ed, "Check G4PARTICLEXSDATA");
+    }
   }
-  if(verboseLevel > 1) {
-    G4cout << "file " << ost.str() 
-	   << " is opened by G4NeutronElasticXS" << G4endl;
-  }
-    
-  // retrieve data from DB
-  if(!data[Z]->Retrieve(filein, true)) {
-    G4ExceptionDescription ed;
-    ed << "Data file <" << ost.str().c_str()
-       << "> is not retrieved!";
-    G4Exception("G4NeutronElasticXS::Initialise(..)","had015",
-		FatalException, ed, "Check G4PARTICLEXSDATA");
-    return;
-  }
-  // smooth transition 
-  G4double sig1  = (*(data[Z]))[data[Z]->GetVectorLength()-1];
-  G4double ehigh = data[Z]->GetMaxEnergy();
-  G4double sig2  = ggXsection->GetElasticElementCrossSection(neutron, 
-                               ehigh, Z, aeff[Z]);
-  coeff[Z] = (sig2 > 0.) ? sig1/sig2 : 1.0;  
+  return v;
 }

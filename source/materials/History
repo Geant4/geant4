@@ -6,7 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-02-11 Ben Morgan (materials-V11-02-09)
+## 2025-02-11 Ben Morgan (materials-V11-03-00)
+- Migrate unit tests under tests/ to dedicated category under ctests_source so
+  they are run regularly and always available to developers.
+  - See materials_tests-V11-03-00
 - Make ios flags for Store/Retrieve of G4ExtDEDXTable consistent to avoid
   issues on Windows platforms.
 

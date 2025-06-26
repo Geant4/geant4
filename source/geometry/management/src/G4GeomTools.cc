@@ -53,7 +53,7 @@ G4double G4GeomTools::TriangleArea(const G4TwoVector& A,
                                    const G4TwoVector& B,
                                    const G4TwoVector& C)
 {
-  G4double Ax = A.x(), Ay = A.y(); 
+  G4double Ax = A.x(), Ay = A.y();
   return ((B.x()-Ax)*(C.y()-Ay) - (B.y()-Ay)*(C.x()-Ax))*0.5;
 }
 
@@ -76,7 +76,8 @@ G4double G4GeomTools::QuadArea(const G4TwoVector& A,
 G4double G4GeomTools::PolygonArea(const G4TwoVectorList& p)
 {
   auto  n = (G4int)p.size();
-  if (n < 3) return 0.0; // degenerate polygon
+  if (n < 3) { return 0.0; // degenerate polygon
+}
   G4double area = p[n-1].x()*p[0].y() - p[0].x()*p[n-1].y();
   for(G4int i=1; i<n; ++i)
   {
@@ -97,15 +98,15 @@ G4bool G4GeomTools::PointInTriangle(G4double Ax, G4double Ay,
 {
   if ((Bx-Ax)*(Cy-Ay) - (By-Ay)*(Cx-Ax) > 0.)
   {
-    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) < 0.) return false;
-    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) < 0.) return false;
-    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) < 0.) return false;
+    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) < 0.) { return false; }
+    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) < 0.) { return false; }
+    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) < 0.) { return false; }
   }
   else
   {
-    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) > 0.) return false;
-    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) > 0.) return false;
-    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) > 0.) return false;
+    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) > 0.) { return false; }
+    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) > 0.) { return false; }
+    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) > 0.) { return false; }
   }
   return true;
 }
@@ -125,15 +126,15 @@ G4bool G4GeomTools::PointInTriangle(const G4TwoVector& A,
   G4double Px = P.x(), Py = P.y();
   if ((Bx-Ax)*(Cy-Ay) - (By-Ay)*(Cx-Ax) > 0.)
   {
-    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) < 0.) return false;
-    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) < 0.) return false;
-    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) < 0.) return false;
+    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) < 0.) { return false; }
+    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) < 0.) { return false; }
+    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) < 0.) { return false; }
   }
   else
   {
-    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) > 0.) return false;
-    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) > 0.) return false;
-    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) > 0.) return false;
+    if ((Ax-Cx)*(Py-Cy) - (Ay-Cy)*(Px-Cx) > 0.) { return false; }
+    if ((Bx-Ax)*(Py-Ay) - (By-Ay)*(Px-Ax) > 0.) { return false; }
+    if ((Cx-Bx)*(Py-By) - (Cy-By)*(Px-Bx) > 0.) { return false; }
   }
   return true;
 }
@@ -170,7 +171,7 @@ G4bool G4GeomTools::IsConvex(const G4TwoVectorList& polygon)
   G4bool gotNegative = false;
   G4bool gotPositive = false;
   auto  n = (G4int)polygon.size();
-  if (n <= 0) return false;
+  if (n <= 0) { return false; }
   for (G4int icur=0; icur<n; ++icur)
   {
     G4int iprev = (icur ==   0) ? n-1 : icur-1;
@@ -178,10 +179,10 @@ G4bool G4GeomTools::IsConvex(const G4TwoVectorList& polygon)
     G4TwoVector e1 = polygon[icur]  - polygon[iprev];
     G4TwoVector e2 = polygon[inext] - polygon[icur];
     G4double cross = e1.x()*e2.y() - e1.y()*e2.x();
-    if (std::abs(cross) < kCarTolerance) return false;
-    if (cross <  0) gotNegative = true;
-    if (cross >  0) gotPositive = true;
-    if (gotNegative && gotPositive) return false;
+    if (std::abs(cross) < kCarTolerance) { return false; }
+    if (cross <  0) { gotNegative = true; }
+    if (cross >  0) { gotPositive = true; }
+    if (gotNegative && gotPositive) { return false; }
   }
   return true;
 }
@@ -198,7 +199,7 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
   G4bool reply = TriangulatePolygon(polygon,triangles);
 
   auto  n = (G4int)triangles.size();
-  for (G4int i=0; i<n; ++i) result.push_back(polygon[triangles[i]]);
+  for (G4int i=0; i<n; ++i) { result.push_back(polygon[triangles[i]]); }
   return reply;
 }
 
@@ -214,19 +215,20 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
   // allocate and initialize list of Vertices in polygon
   //
   auto  n = (G4int)polygon.size();
-  if (n < 3) return false;
+  if (n < 3) { return false; }
 
   // we want a counter-clockwise polygon in V
-  // 
+  //
   G4double area = G4GeomTools::PolygonArea(polygon);
   auto  V = new G4int[n];
-  if (area > 0.)
-    for (G4int i=0; i<n; ++i) V[i] = i;
-  else
-    for (G4int i=0; i<n; ++i) V[i] = (n-1)-i;
+  if (area > 0.) {
+    for (G4int i=0; i<n; ++i) { V[i] = i; }
+  } else {
+    for (G4int i=0; i<n; ++i) { V[i] = (n-1)-i; }
+}
 
   //  Triangulation: remove nv-2 Vertices, creating 1 triangle every time
-  // 
+  //
   G4int nv = n;
   G4int count = 2*nv; // error detection counter
   for(G4int b=nv-1; nv>2; )
@@ -235,8 +237,8 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
     if ((count--) <= 0)
     {
       delete [] V;
-      if (area < 0.) std::reverse(result.begin(),result.end());
-      return false; 
+      if (area < 0.) { std::reverse(result.begin(),result.end()); }
+      return false;
     }
 
     // three consecutive vertices in current polygon, <a,b,c>
@@ -253,13 +255,13 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
 
       // remove vertex b from remaining polygon
       nv--;
-      for(G4int i=b; i<nv; ++i) V[i] = V[i+1];
+      for(G4int i=b; i<nv; ++i) { V[i] = V[i+1]; }
 
       count = 2*nv; // resest error detection counter
     }
   }
   delete [] V;
-  if (area < 0.) std::reverse(result.begin(),result.end());
+  if (area < 0.) { std::reverse(result.begin(),result.end()); }
   return true;
 }
 
@@ -279,8 +281,8 @@ G4bool G4GeomTools::CheckSnip(const G4TwoVectorList& contour,
   G4double Ax = contour[V[a]].x(), Ay = contour[V[a]].y();
   G4double Bx = contour[V[b]].x(), By = contour[V[b]].y();
   G4double Cx = contour[V[c]].x(), Cy = contour[V[c]].y();
-  if ((Bx-Ax)*(Cy-Ay) - (By-Ay)*(Cx-Ax) < kCarTolerance) return false;
-  
+  if ((Bx-Ax)*(Cy-Ay) - (By-Ay)*(Cx-Ax) < kCarTolerance) { return false; }
+
   // check that there is no point inside Triangle
   G4double xmin = std::min(std::min(Ax,Bx),Cx);
   G4double xmax = std::max(std::max(Ax,Bx),Cx);
@@ -288,12 +290,12 @@ G4bool G4GeomTools::CheckSnip(const G4TwoVectorList& contour,
   G4double ymax = std::max(std::max(Ay,By),Cy);
   for (G4int i=0; i<n; ++i)
   {
-    if((i == a) || (i == b) || (i == c)) continue;
+    if((i == a) || (i == b) || (i == c)) { continue; }
     G4double Px = contour[V[i]].x();
-    if (Px < xmin || Px > xmax) continue;
+    if (Px < xmin || Px > xmax) { continue; }
     G4double Py = contour[V[i]].y();
-    if (Py < ymin || Py > ymax) continue;
-    if (PointInTriangle(Ax,Ay,Bx,By,Cx,Cy,Px,Py)) return false;
+    if (Py < ymin || Py > ymax) { continue; }
+    if (PointInTriangle(Ax,Ay,Bx,By,Cx,Cy,Px,Py)) { return false; }
   }
   return true;
 }
@@ -304,7 +306,7 @@ G4bool G4GeomTools::CheckSnip(const G4TwoVectorList& contour,
 
 void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
                                           std::vector<G4int>& iout,
-                                          G4double tolerance) 
+                                          G4double tolerance)
 {
   iout.resize(0);
   // set tolerance squared
@@ -317,7 +319,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
   // Main loop: check every three consecutive points, if the points
   // are collinear then mark middle point for removal
   //
-  G4int icur = 0, iprev = 0, inext = 0, nout = 0; 
+  G4int icur = 0, iprev = 0, inext = 0, nout = 0;
   for (G4int i=0; i<nv; ++i)
   {
     icur = i;                    // index of current point
@@ -325,18 +327,18 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
     for (G4int k=1; k<nv+1; ++k) // set index of previous point
     {
       iprev = icur - k;
-      if (iprev < 0) iprev += nv;
-      if (polygon[iprev].x() != removeIt) break;
+      if (iprev < 0) { iprev += nv; }
+      if (polygon[iprev].x() != removeIt) { break; }
     }
 
     for (G4int k=1; k<nv+1; ++k) // set index of next point
     {
       inext = icur + k;
-      if (inext >= nv) inext -= nv;
-      if (polygon[inext].x() != removeIt) break;
+      if (inext >= nv) { inext -= nv; }
+      if (polygon[inext].x() != removeIt) { break; }
     }
 
-    if (iprev == inext) break;   // degenerate polygon, stop
+    if (iprev == inext) { break; }   // degenerate polygon, stop
 
     // Calculate parameters of triangle (iprev->icur->inext),
     // if triangle is too small or too narrow then mark current
@@ -344,7 +346,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
     G4TwoVector e1 = polygon[iprev] - polygon[icur];
     G4TwoVector e2 = polygon[inext] - polygon[icur];
 
-    // Check length of edges, then check height of the triangle 
+    // Check length of edges, then check height of the triangle
     G4double leng1 = e1.mag2();
     G4double leng2 = e2.mag2();
     G4double leng3 = (e2-e1).mag2();
@@ -368,18 +370,18 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
   icur = 0;
   if (nv - nout < 3)           // degenerate polygon, remove all points
   {
-    for (G4int i=0; i<nv; ++i) iout.push_back(i);
+    for (G4int i=0; i<nv; ++i) { iout.push_back(i); }
     polygon.resize(0);
     nv = 0;
   }
   for (G4int i=0; i<nv; ++i) // move points, if required
   {
-    if (polygon[i].x() != removeIt)
+    if (polygon[i].x() != removeIt) {
       polygon[icur++] = polygon[i];
-    else
-      iout.push_back(i);
+    } else {
+      iout.push_back(i); }
   }
-  if (icur < nv) polygon.resize(icur);
+  if (icur < nv) { polygon.resize(icur); }
   return;
 }
 
@@ -398,15 +400,15 @@ G4bool G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
   //
   pmin.set(0,0);
   pmax.set(0,0);
-  if (rmin   <  0)                    return false;
-  if (rmax   <= rmin + kCarTolerance) return false;
-  if (delPhi <= 0    + kCarTolerance) return false;
+  if (rmin   <  0) { return false; }
+  if (rmax   <= rmin + kCarTolerance) { return false; }
+  if (delPhi <= 0    + kCarTolerance) { return false; }
 
   // calculate extent
   //
   pmin.set(-rmax,-rmax);
   pmax.set( rmax, rmax);
-  if (delPhi >= CLHEP::twopi) return true;
+  if (delPhi >= CLHEP::twopi) { return true; }
 
   DiskExtent(rmin,rmax,
              std::sin(startPhi),std::cos(startPhi),
@@ -433,25 +435,25 @@ void G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
   pmin.set(-rmax,-rmax);
   pmax.set( rmax, rmax);
 
-  if (std::abs(sinEnd-sinStart) < kCarTolerance && 
-      std::abs(cosEnd-cosStart) < kCarTolerance) return;
+  if (std::abs(sinEnd-sinStart) < kCarTolerance &&
+      std::abs(cosEnd-cosStart) < kCarTolerance) { return; }
 
   // get start and end quadrants
   //
   //      1 | 0
-  //     ---+--- 
+  //     ---+---
   //      3 | 2
   //
   G4int icase = (cosEnd < 0) ? 1 : 0;
-  if (sinEnd   < 0) icase += 2;
-  if (cosStart < 0) icase += 4;
-  if (sinStart < 0) icase += 8;
+  if (sinEnd   < 0) { icase += 2; }
+  if (cosStart < 0) { icase += 4; }
+  if (sinStart < 0) { icase += 8; }
 
   switch (icase)
   {
   // start quadrant 0
   case  0:                                 // start->end : 0->0
-    if (sinEnd < sinStart) break;
+    if (sinEnd < sinStart) { break; }
     pmin.set(rmin*cosEnd,rmin*sinStart);
     pmax.set(rmax*cosStart,rmax*sinEnd  );
     break;
@@ -473,7 +475,7 @@ void G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
     pmax.set(rmax,std::max(rmax*sinStart,rmax*sinEnd));
     break;
   case  5:                                 // start->end : 1->1
-    if (sinEnd > sinStart) break;
+    if (sinEnd > sinStart) { break; }
     pmin.set(rmax*cosEnd,rmin*sinEnd  );
     pmax.set(rmin*cosStart,rmax*sinStart);
     break;
@@ -495,7 +497,7 @@ void G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
     pmax.set(rmax,rmax);
     break;
   case 10:                                 // start->end : 2->2
-    if (sinEnd < sinStart) break;
+    if (sinEnd < sinStart) { break; }
     pmin.set(rmin*cosStart,rmax*sinStart);
     pmax.set(rmax*cosEnd,rmin*sinEnd  );
     break;
@@ -517,7 +519,7 @@ void G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
     pmax.set(rmax*cosEnd,std::max(rmin*sinStart,rmin*sinEnd));
     break;
   case 15:                                 // start->end : 3->3
-    if (sinEnd > sinStart) break;
+    if (sinEnd > sinStart) { break; }
     pmin.set(rmax*cosStart,rmax*sinEnd);
     pmax.set(rmin*cosEnd,rmin*sinStart);
     break;
@@ -573,8 +575,8 @@ G4double G4GeomTools::comp_ellint_2(G4double e)
 
   G4double a = 1.;
   G4double b = std::sqrt((1. - e)*(1. + e));
-  if (b == 1.) return CLHEP::halfpi;
-  if (b == 0.) return 1.;
+  if (b == 1.) { return CLHEP::halfpi; }
+  if (b == 0.) { return 1.; }
 
   G4double x = 1.;
   G4double y = b;
@@ -621,7 +623,7 @@ G4ThreeVector G4GeomTools::QuadAreaNormal(const G4ThreeVector& A,
 G4ThreeVector G4GeomTools::PolygonAreaNormal(const G4ThreeVectorList& p)
 {
   auto  n = (G4int)p.size();
-  if (n < 3) return {0,0,0}; // degerate polygon
+  if (n < 3) { return {0,0,0}; } // degerate polygon
   G4ThreeVector normal = p[n-1].cross(p[0]);
   for(G4int i=1; i<n; ++i)
   {
@@ -642,10 +644,10 @@ G4double G4GeomTools::DistancePointSegment(const G4ThreeVector& P,
   G4ThreeVector AB = B - A;
 
   G4double u = AP.dot(AB);
-  if (u <= 0) return AP.mag();       // closest point is A
+  if (u <= 0) { return AP.mag(); }       // closest point is A
 
   G4double len2 = AB.mag2();
-  if (u >= len2) return (B-P).mag(); // closest point is B
+  if (u >= len2) { return (B-P).mag(); } // closest point is B
 
   return ((u/len2)*AB - AP).mag();   // distance to line
 }
@@ -663,10 +665,10 @@ G4GeomTools::ClosestPointOnSegment(const G4ThreeVector& P,
   G4ThreeVector AB = B - A;
 
   G4double u = AP.dot(AB);
-  if (u <= 0) return A;      // closest point is A
+  if (u <= 0) { return A; }      // closest point is A
 
   G4double len2 = AB.mag2();
-  if (u >= len2) return B;   // closest point is B
+  if (u >= len2) { return B; }   // closest point is B
 
   G4double t = u/len2;
   return A + t*AB;           // closest point on segment
@@ -679,7 +681,7 @@ G4GeomTools::ClosestPointOnSegment(const G4ThreeVector& P,
 // The implementation is based on the algorithm published in
 // "Geometric Tools for Computer Graphics", Philip J Scheider and
 // David H Eberly, Elsevier Science (USA), 2003.
-// 
+//
 // The algorithm is also available at:
 // http://www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf
 
@@ -722,10 +724,11 @@ G4GeomTools::ClosestPointOnTriangle(const G4ThreeVector& P,
   */
 
   G4int region = -1;
-  if (t0+t1 <= det)
+  if (t0+t1 <= det) {
     region = (t0 < 0) ? ((t1 < 0) ? 4 : 3) : ((t1 < 0) ? 5 : 0);
-  else
+  } else {
     region = (t0 < 0) ? 2 : ((t1 < 0) ? 6 : 1);
+  }
 
   switch (region)
   {
@@ -736,8 +739,8 @@ G4GeomTools::ClosestPointOnTriangle(const G4ThreeVector& P,
     }
   case 1:  // edge BC
     {
-      G4double numer = c + e - b - d; 
-      if (numer <= 0) return C;
+      G4double numer = c + e - b - d;
+      if (numer <= 0) { return C; }
       G4double denom = a - 2*b + c;
       return (numer >= denom) ? B : C + (numer/denom)*(edge0-edge1);
     }
@@ -758,7 +761,7 @@ G4GeomTools::ClosestPointOnTriangle(const G4ThreeVector& P,
     return (e >= 0) ? A : ((-e >= c) ? C : A + (-e/c)*edge1);
 
   case 4:  // edge AB or AC
-    if (d < 0)      return (-d >= a) ? B : A + (-d/a)*edge0;
+    if (d < 0) { return (-d >= a) ? B : A + (-d/a)*edge0; }
     return (e >= 0) ? A : ((-e >= c) ? C : A + (-e/c)*edge1);
 
   case 5:  // edge AB
@@ -777,7 +780,7 @@ G4GeomTools::ClosestPointOnTriangle(const G4ThreeVector& P,
       // same:  (d >= 0) ? A : ((-d >= a) ? B : A + (-d/a)*edge0)
       return (tmp1 <= 0) ? B : (( d >= 0) ? A : A + (-d/a)*edge0);
     }
-  default: // impossible case 
+  default: // impossible case
     return {kInfinity,kInfinity,kInfinity};
   }
 }
@@ -799,22 +802,22 @@ G4GeomTools::SphereExtent(G4double rmin, G4double rmax,
   //
   pmin.set(0,0,0);
   pmax.set(0,0,0);
-  if (rmin     <  0)                    return false;
-  if (rmax     <= rmin + kCarTolerance) return false;
-  if (delTheta <= 0    + kCarTolerance) return false;
-  if (delPhi   <= 0    + kCarTolerance) return false;
+  if (rmin     <  0) { return false; }
+  if (rmax     <= rmin + kCarTolerance) { return false; }
+  if (delTheta <= 0    + kCarTolerance) { return false; }
+  if (delPhi   <= 0    + kCarTolerance) { return false; }
 
   G4double stheta = startTheta;
   G4double dtheta = delTheta;
-  if (stheta < 0 && stheta > CLHEP::pi) return false;
-  if (stheta + dtheta > CLHEP::pi)      dtheta = CLHEP::pi - stheta;
-  if (dtheta <= 0 + kCarTolerance)      return false;
+  if (stheta < 0 && stheta > CLHEP::pi) { return false; }
+  if (stheta + dtheta > CLHEP::pi) { dtheta = CLHEP::pi - stheta; }
+  if (dtheta <= 0 + kCarTolerance) { return false; }
 
   // calculate extent
   //
   pmin.set(-rmax,-rmax,-rmax);
   pmax.set( rmax, rmax, rmax);
-  if (dtheta >= CLHEP::pi && delPhi >= CLHEP::twopi) return true;
+  if (dtheta >= CLHEP::pi && delPhi >= CLHEP::twopi) { return true; }
 
   G4double etheta   = stheta + dtheta;
   G4double sinStart = std::sin(stheta);
@@ -824,8 +827,8 @@ G4GeomTools::SphereExtent(G4double rmin, G4double rmax,
 
   G4double rhomin = rmin*std::min(sinStart,sinEnd);
   G4double rhomax = rmax;
-  if (stheta > CLHEP::halfpi) rhomax = rmax*sinStart;
-  if (etheta < CLHEP::halfpi) rhomax = rmax*sinEnd;
+  if (stheta > CLHEP::halfpi) { rhomax = rmax*sinStart; }
+  if (etheta < CLHEP::halfpi) { rhomax = rmax*sinEnd; }
 
   G4TwoVector xymin,xymax;
   DiskExtent(rhomin,rhomax,
@@ -838,4 +841,96 @@ G4GeomTools::SphereExtent(G4double rmin, G4double rmax,
   pmin.set(xymin.x(),xymin.y(),zmin);
   pmax.set(xymax.x(),xymax.y(),zmax);
   return true;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Calculate hyperbolic surface stereo
+
+G4double
+G4GeomTools::HypeStereo(G4double r0, G4double r, G4double h)
+{
+  static const G4double kCarTolerance =
+         G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  if (std::abs(r - r0) < kCarTolerance) { return 0.; }
+  return std::atan(std::sqrt((r - r0)*(r + r0))/std::abs(h));
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Find XY-coordinates of the corners of the bounding generic trap
+// for the specified twisted tube
+
+void
+G4GeomTools::TwistedTubeBoundingTrap(G4double twistAng,
+                                     G4double endInnerRad,
+                                     G4double endOuterRad,
+                                     G4double dPhi,
+                                     G4TwoVectorList& vertices)
+{
+  vertices.resize(8);
+  G4double rmin = std::abs(endInnerRad);
+  G4double rmax = std::abs(endOuterRad);
+
+  // Set untwisted vertices
+  G4double phi = dPhi/2.;
+  G4double sinphi = std::sin(phi);
+  G4double cosphi = std::cos(phi);
+  G4double tanphi = std::tan(phi);
+  vertices[0].set(rmin*cosphi, rmin*sinphi);
+  vertices[1].set(rmax, rmax*tanphi);
+  vertices[2].set(rmax,-rmax*tanphi);
+  vertices[3].set(rmin*cosphi,-rmin*sinphi);
+  vertices[4] = vertices[0];
+  vertices[5] = vertices[1];
+  vertices[6] = vertices[2];
+  vertices[7] = vertices[3];
+
+  // Twist vertices
+  G4double ang = twistAng/2.;
+  for(auto i = 0; i < 4; ++i)
+  {
+    vertices[i].rotate(-ang);    // vertices at -halfz
+    vertices[i + 4].rotate(ang); // vertices at +halfz
+  }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Calculate surface area of hyperboloid between zmin and zmax
+
+G4double
+G4GeomTools::HyperboloidSurfaceArea(G4double dphi, G4double r0, G4double tanstereo,
+                                    G4double zmin, G4double zmax)
+{
+  static const G4double kCarTolerance =
+         G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+  G4double a = std::abs(r0); // radius at z = 0
+  G4double t = std::abs(tanstereo); // tan(stereo)
+  G4double phi = std::abs(dphi); // delta phi
+
+  // Check spesial cases: cylindrical and conical surfaces
+  if (t < kCarTolerance) { return a*std::abs(zmax - zmin)*phi; } // cylinder
+  G4double rmin = std::hypot(t*zmin, a); // radius at zmin
+  G4double rmax = std::hypot(t*zmax, a); // radius at zmax
+  if (a <  kCarTolerance) // cone
+  {
+    G4double smin = rmin*std::hypot(rmin, zmin);
+    G4double smax = rmax*std::hypot(rmax, zmax);
+    return (zmin*zmax < 0.) ? (smin + smax)*phi/2. : std::abs(smax - smin)*phi/2.;
+  }
+  // Find surface area
+  G4double tt = t*t;
+  G4double aa = a*a;
+  G4double cc = aa/tt;
+  G4double k = std::sqrt(aa + cc)/cc;
+
+  G4double hmin = std::abs(zmin);
+  G4double smin = a*(hmin*std::hypot(1., k*hmin) + std::asinh(k*hmin)/k);
+  if (zmax == -zmin) { return smin*phi; }
+
+  G4double hmax = std::abs(zmax);
+  G4double smax = a*(hmax*std::hypot(1., k*hmax) + std::asinh(k*hmax)/k);
+  return (zmin*zmax < 0.) ? (smin + smax)*phi/2. :std::abs(smax - smin)*phi/2.;
 }

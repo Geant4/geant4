@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-03-31 Vladimir Ivanchenko (hadr-emd-V11-03-01)
+- G4EMDissociation : next attempt to fix Coverity warnings
+
+## 2025-03-20 Vladimir Ivanchenko (hadr-emd-V11-03-00)
+- G4EMDissociation : fixed Coverity warnings
 
 ## 2022-04-04 Vladimir Ivanchenko (hadr-emd-V11-00-01)
 - G4EMDissociation : make consistent with G4Fragment modifications

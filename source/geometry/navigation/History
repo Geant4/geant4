@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-05-15 Gabriele Cosmo (geomnav-V11-03-01)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Removed declared but not implemented methods in G4VoxelNavigation,
+  G4ParameterisedNavigation, G4VoxelSafety and G4PathFinder.
+
+## 2025-05-14 A. Tolosa-Delgado (geomnav-V11-03-00)
+- Extended UI command /geometry/test/run to support optional overlap check
+  mode. Depending on the selected mode, it invokes either TestRecursiveOverlap
+  (default, as before) or TestOverlapInTree
+
 ## 2024-11-22 Gabriele Cosmo (geomnav-V11-02-03)
 - In G4MultiLevelLocator::EstimateIntersectionPoint(), moved repeated assertion
   on invalid intersection within G4DEBUG_FIELD, to avoid excess of warning

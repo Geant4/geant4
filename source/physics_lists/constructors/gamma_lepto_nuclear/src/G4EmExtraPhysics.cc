@@ -40,6 +40,10 @@
 // 29.01.2018 V.Grichine, adding neutrinos 
 // 07.05.2019 V.Grichine, adding muon neutrino nucleus interactions 
 // 03.11.2022 V. Grichne update for tau-neutrino nucleus processes
+// 19.11.2024 D.M.Wright: Removed function ConstructLENDGammaNuclear since
+//                        its functionality was moved to G4HadronPhysicsLEND
+//                        Also fiedx bug that prevented LEND photonuclear process
+//                        when G4GammaGeneralProcess was present
 //
 ///////////////////////////////////////////////////////////////
 
@@ -74,8 +78,7 @@
 #include "G4CascadeInterface.hh"
 #include "G4LowEGammaNuclearModel.hh"
 
-#include "G4LENDorBERTModel.hh"
-#include "G4LENDCombinedCrossSection.hh"
+#include "G4HadronPhysicsLEND.hh"  // used to access const maxLEND_Energy
 
 #include "G4GammaConversionToMuons.hh"
 #include "G4AnnihiToMuPair.hh"
@@ -333,13 +336,12 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
   auto gproc =
     dynamic_cast<G4GammaGeneralProcess*>(emManager->GetGammaGeneralProcess());
 
-  // LEND may be activated if the general process is not activated
   if (gproc != nullptr) {
     gproc->AddHadProcess(gnuc);
   } else {
     ph->RegisterProcess(gnuc, G4Gamma::Gamma());
-    if (gLENDActivated) { ConstructLENDGammaNuclear(cascade, gnuc); }
   }
+  if (gLENDActivated) cascade->SetMinEnergy(maxLEND_Energy - overlapLEND_Energy);
 
   if (eActivated) {
     auto enuc = new G4ElectronNuclearProcess();
@@ -351,24 +353,4 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
     ph->RegisterProcess(enuc, G4Electron::Electron());
     ph->RegisterProcess(pnuc, G4Positron::Positron());
   }
-}
-
-void G4EmExtraPhysics::ConstructLENDGammaNuclear(
-     G4CascadeInterface* cascade, G4HadronInelasticProcess* gnuc)
-{
-  if (G4FindDataDir("G4LENDDATA") == nullptr ) {
-    G4String message = "\n Skipping activation of Low Energy Nuclear Data (LEND) model for gamma nuclear interactions.\n The LEND model needs data files and they are available from ftp://gdo-nuclear.ucllnl.org/GND_after2013/GND_v1.3.tar.gz.\n Please set the environment variable G4LENDDATA to point to the directory named v1.3 extracted from the archive file.\n"; 
-    G4Exception( "G4EmExtraPhysics::ConstructLENDGammaNuclear()"
-                 , "G4LENDBertiniGammaElectroNuclearBuilder001"
-                 , JustWarning , message);
-    return;
-  }
-   
-  cascade->SetMinEnergy(19.9*MeV);
-  auto theLowE = new G4LENDorBERTModel( G4Gamma::Gamma() );
-  theLowE->DumpLENDTargetInfo(true);
-  theLowE->SetMaxEnergy(20*MeV);
-  gnuc->RegisterMe(theLowE);
-  auto theXSLowE = new G4LENDCombinedCrossSection( G4Gamma::Gamma() );
-  gnuc->AddDataSet(theXSLowE);   
 }

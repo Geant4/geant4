@@ -31,18 +31,9 @@
 
 G4RTSimpleScanner::G4RTSimpleScanner():
   G4VRTScanner(), theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
-{
-  theGSName = "RayTracer";
-  theGSNickname = "RayTracer";
-}
+{}
 
 G4RTSimpleScanner::~G4RTSimpleScanner(){}
-
-const G4String& G4RTSimpleScanner::GetGSName() const
-{return theGSName;}
-
-const G4String& G4RTSimpleScanner::GetGSNickname() const
-{return theGSNickname;}
 
 void G4RTSimpleScanner::Initialize(G4int nRow, G4int nColumn) {
   theNRow = nRow;

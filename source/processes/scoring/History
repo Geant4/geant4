@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-02-12 Ben Morgan (procscore-V11-02-01)
+## 2025-02-12 Ben Morgan (procscore-V11-03-00)
 - Apply [GitHub PR 80](https://github.com/Geant4/geant4/pull/80)
   - Changes to `G4EnergySplitter` to ensure that each call to `SplitEnergyInVolumes()` 
     utilizes the correct phantom parameterization.

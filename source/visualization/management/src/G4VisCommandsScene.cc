@@ -153,11 +153,11 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
 
   std::vector<G4Scene::Model>& runDurationModelList =
     pScene->SetRunDurationModelList();
-  for (size_t i = 0; i < runDurationModelList.size(); i++) {
-    const G4String& modelName = runDurationModelList[i].fpModel->GetGlobalDescription();
+  for (auto& i : runDurationModelList) {
+    const G4String& modelName = i.fpModel->GetGlobalDescription();
     if (searchString == "all" || modelName.find(searchString) != std::string::npos) {
       any = true;
-      runDurationModelList[i].fActive = activate;
+      i.fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
 	G4warn << "Model \"" << modelName;
 	if (activate) G4warn << "\" activated.";
@@ -169,11 +169,11 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
 
   std::vector<G4Scene::Model>& endOfEventModelList =
     pScene->SetEndOfEventModelList();
-  for (size_t i = 0; i < endOfEventModelList.size(); i++) {
-    const G4String& modelName = endOfEventModelList[i].fpModel->GetGlobalDescription();
+  for (auto& i : endOfEventModelList) {
+    const G4String& modelName = i.fpModel->GetGlobalDescription();
     if (searchString == "all" || modelName.find(searchString) != std::string::npos) {
       any = true;
-      endOfEventModelList[i].fActive = activate;
+      i.fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
 	G4warn << "Model \"" << modelName;
 	if (activate) G4warn << "\" activated.";
@@ -185,11 +185,11 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
 
   std::vector<G4Scene::Model>& endOfRunModelList =
     pScene->SetEndOfRunModelList();
-  for (size_t i = 0; i < endOfRunModelList.size(); i++) {
-    const G4String& modelName = endOfRunModelList[i].fpModel->GetGlobalDescription();
+  for (auto& i : endOfRunModelList) {
+    const G4String& modelName = i.fpModel->GetGlobalDescription();
     if (searchString == "all" || modelName.find(searchString) != std::string::npos) {
       any = true;
-      endOfRunModelList[i].fActive = activate;
+      i.fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
 	G4warn << "Model \"" << modelName;
 	if (activate) G4warn << "\" activated.";

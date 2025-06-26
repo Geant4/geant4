@@ -500,8 +500,8 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
   if (fSceneTreeWidget != NULL) {
     if (fSceneTreeWidget->layout() != NULL) {
       while ((wItem = fSceneTreeWidget->layout()->takeAt(0)) != 0) {
-	delete wItem->widget();
-	delete wItem;
+    delete wItem->widget();
+    delete wItem;
       }
     }
   }
@@ -2688,8 +2688,6 @@ void G4OpenGLQtViewer::setCheckComponent(QTreeWidgetItem* item,bool check)
     const PVPath& fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
     // If a physical volume
     if (fullPath.size() > 0) {
-      SetTouchable(fullPath);
-      TouchableSetVisibility(fullPath, check);
       fMouseOnSceneTree = true;
     }
   }
@@ -3642,7 +3640,7 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
 }
 
 
-void G4OpenGLQtViewer::changeColorAndTransparency(GLuint index, G4Color color) {
+void G4OpenGLQtViewer::changeColorAndTransparency(GLuint index, G4Color /*color*/) {
 
   // change vis attributes to set new colour
   G4int iPO = index;
@@ -3650,8 +3648,6 @@ void G4OpenGLQtViewer::changeColorAndTransparency(GLuint index, G4Color color) {
     const PVPath& fullPath = fTreeItemModels[iPO];
     // If a physical volume
     if (fullPath.size()) {
-      SetTouchable(fullPath);
-      TouchableSetColour(fullPath, color);
       fMouseOnSceneTree = true;
     }
   }
@@ -4628,9 +4624,9 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
       ed->setVisible((false));
       ed->append(newStr.join(""));
 
-      std::cout << pickCoutButton->text().toStdString() << " "<< fPickInfosWidget->layout()->count()-1<< std::endl;
       int tmp = fPickInfosWidget->layout()->count()-1;
       connect(pickCoutButton, &QPushButton::clicked , [this, tmp](){ this->toggleSceneTreeComponentPickingCout(tmp);});
+
     }
   }
 
@@ -4671,6 +4667,7 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
   }
   // set picking cout visible
   fPickInfosScrollArea->setVisible(true);
+  dial->show();
 }
 
 
@@ -4707,8 +4704,6 @@ void G4OpenGLQtViewer::toggleSceneTreeComponentPickingCout(int pickItem) {
 void G4OpenGLQtViewer::currentTabActivated(int currentTab) {
   if (fUiQt->GetViewerTabWidget()->tabText(currentTab) == GetName().data())  {
     createViewerPropertiesWidget();
-//    createPickInfosWidget();  // Causes a /vis/set/touchable command to do with...
-//    createSceneTreeWidget();  // ...this old scene tree widget (no longer used)
   }
 }
 

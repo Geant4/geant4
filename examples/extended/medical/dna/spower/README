@@ -76,3 +76,7 @@ The output results consist in a text file (spower.txt), containing :
 - energy of incident particles (in eV)
 - stopping power (in keV/um)
 - rms (i.e. standard deviation) on stopping power (in keV/um)
+
+A ROOT file, spower.root, is also provided for the scoring of secondary electrons.
+The Geant4 secondary.in example macro can be used to run the corresponding simulation.
+The plot.C ROOT macro can then be used to display their energy spectrum.

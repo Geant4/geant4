@@ -23,16 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4PropagatorInField Implementation
+// Class G4PropagatorInField Implementation
 // 
-//  This class implements an algorithm to track a particle in a
-//  non-uniform magnetic field. It utilises an ODE solver (with
-//  the Runge - Kutta method) to evolve the particle, and drives it
-//  until the particle has traveled a set distance or it enters a new 
-//  volume.
-//                                                                     
-// 14.10.96 John Apostolakis, design and implementation
-// 17.03.97 John Apostolakis, renaming new set functions being added
+// Author: John Apostolakis (CERN), 25 October 1996
 // ---------------------------------------------------------------------------
 
 #include <iomanip>

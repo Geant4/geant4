@@ -40,7 +40,7 @@ class G4VPhysicsConstructor;
 class PhysicsList : public G4VModularPhysicsList
 {
   public:
-    explicit PhysicsList(G4int list);
+    explicit PhysicsList(G4int list, G4int vis);
 
     ~PhysicsList() override = default;
 };

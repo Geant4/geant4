@@ -23,318 +23,365 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4PathFinder 
+// G4PathFinder 
 //
 // Class description:
 // 
 // This class directs the lock-stepped propagation of a track in the 
-// 'mass' and other parallel geometries.  It ensures that tracking 
+// 'mass' and other parallel geometries. It ensures that tracking 
 // in a magnetic field sees these parallel geometries at each trial step, 
 // and that the earliest boundary limits the step.
 // 
-// For the movement in field, it relies on the class G4PropagatorInField
+// In field, it relies on the class G4PropagatorInField.
 
-// History:
-// -------
-//  7.10.05 John Apostolakis,  Draft design 
-// 26.04.06 John Apostolakis,  Revised design and first implementation 
-// ---------------------------------------------------------------------------
+// Author: John Apostolakis (CERN), 7 October 2005
+// ---------------------------------------------------------------------
 #ifndef G4PATHFINDER_HH 
 #define G4PATHFINDER_HH  1
 
 #include <vector>
+
 #include "G4Types.hh"
-
 #include "G4FieldTrack.hh"
-
-class G4TransportationManager; 
-class G4Navigator;
-
 #include "G4MultiNavigator.hh"
 #include "G4TouchableHandle.hh"
 
+class G4TransportationManager; 
+class G4Navigator;
 class G4PropagatorInField;
+
+/**
+ * @brief G4PathFinder directs the lock-stepped propagation of a track in the 
+ * 'mass' and other parallel geometries. It ensures that tracking in a magnetic
+ * field sees these parallel geometries at each trial step and that the earliest
+ * boundary limits the step.
+ */
 
 class G4PathFinder
 {
+  public:
 
- public:  // with description
+    /**
+     * Retrieves singleton instance and creates it if not existing.
+     */
+    static G4PathFinder* GetInstance();
 
-   static G4PathFinder* GetInstance();
-     // Retrieve singleton instance and create it if not existing.
+    /**
+     * Retrieve singleton instance pointer.
+     */
+    static G4PathFinder* GetInstanceIfExist();
 
-   static G4PathFinder* GetInstanceIfExist();
-     // Retrieve singleton instance pointer.
+    /**
+     * Destructor, called only by G4RunManagerKernel.
+     */
+    ~G4PathFinder();
 
-   G4double ComputeStep( const G4FieldTrack& pFieldTrack,
-                         G4double  pCurrentProposedStepLength,
-                         G4int     navigatorId, // Identifies the geometry
-                         G4int     stepNo,      // See next step/check 
-                         G4double& pNewSafety,  // Only for this geometry
-                         ELimited& limitedStep,      
-                         G4FieldTrack& EndState, 
-                         G4VPhysicalVolume* currentVolume );
-     // Compute the next geometric Step -- curved or linear
-     // If it is called with a larger 'stepNo' it will execute a new step;
-     // if 'stepNo' is same as last call, then the results for 
-     // the geometry with Id. number 'navigatorId' will be returned. 
+    /**
+     * Computes the next geometric Step, curved or linear.
+     * If it is called with a larger 'stepNo' it will execute a new step;
+     * if 'stepNo' is same as last call, then the results for the geometry
+     * with Id number 'navigatorId' will be returned.
+     *  @param[in,out] pFieldTrack Field track to be filled.
+     *  @param[in] pCurrentProposedStepLength Current proposed step length.
+     *  @param[in] navigatorId Identifier of the geometry.
+     *  @param[in] stepNo Step number; see next step/check.
+     *  @param[in, out] pNewSafety New safety for this geometry.
+     *  @param[in, out] limitedStep Step characterisation to be returned.
+     *  @param[in, out] EndState Field track end state.
+     *  @param[in] currentVolume Pointer to the current volume.
+     *  @returns Step length.
+     */
+    G4double ComputeStep( const G4FieldTrack& pFieldTrack,
+                          G4double  pCurrentProposedStepLength,
+                          G4int     navigatorId, // Identifies the geometry
+                          G4int     stepNo,      // See next step/check
+                          G4double& pNewSafety,  // Only for this geometry
+                          ELimited& limitedStep,
+                          G4FieldTrack& EndState, 
+                          G4VPhysicalVolume* currentVolume );
 
-   void Locate( const G4ThreeVector& position, 
-                const G4ThreeVector& direction,
-                      G4bool relativeSearch = true); 
-     // Make primary relocation of global point in all navigators,
-     // and update them.
+    /**
+     * Makes primary relocation of the global point in all navigators,
+     * and updates them.
+     *  @param[in] position Point in global coordinates system.
+     *  @param[in] direction Global direction vector.
+     *  @param[in] relativeSearch If set to true (default), the search begins
+     *             is the geometrical hierarchy at the location of the last
+     *             located point.
+     */
+    void Locate( const G4ThreeVector& position, 
+                 const G4ThreeVector& direction,
+                       G4bool relativeSearch = true); 
 
-   void ReLocate( const G4ThreeVector& position ); 
-     // Make secondary relocation of global point (within safety only) 
-     // in all navigators, and update them.
+    /**
+     * Makes secondary relocation of the global point (within safety only) 
+     * in all navigators, and updates them.
+     *  @param[in] position Point in global coordinates system.
+     */
+    void ReLocate( const G4ThreeVector& position ); 
 
-   void PrepareNewTrack( const G4ThreeVector& position,
-                         const G4ThreeVector& direction,
-                               G4VPhysicalVolume* massStartVol = nullptr); 
-     // Check and cache set of active navigators.
+    /**
+     * Checks and caches the set of active navigators.
+     *  @param[in] position Point in global coordinates system.
+     *  @param[in] direction Global direction vector.
+     *  @param[in] massStartVol Pointer to the mass geometry world.
+     */
+    void PrepareNewTrack( const G4ThreeVector& position,
+                          const G4ThreeVector& direction,
+                                G4VPhysicalVolume* massStartVol = nullptr);
 
-   void EndTrack();
-     // Signal end of tracking of current track.  
-     //   Reset internal state
-     //   Inform TransportationManager to use 'ordinary' Navigator
+    /**
+     * Signals the end of tracking of the current track. Resets internal state
+     * and informs G4TransportationManager to use 'ordinary' Navigator.
+     */
+    void EndTrack();
 
+    /**
+     * Creates a touchable handle for the specified navigator.
+     *  @param[in] navId The navigator identifier.
+     *  @returns A touchable handle of the geometry.
+     */
     G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
+
+    /**
+     * Returns the located volume for the specified navigator.
+     *  @param[in] navId The navigator identifier.
+     *  @returns A pointer to the located volume in the geometry.
+     */
     inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const;
 
-   // -----------------------------------------------------------------
+    // -----------------------------------------------------------------
   
-   inline G4bool IsParticleLooping() const;
+    /**
+     * Returns the minimum value of safety after last ComputeStep().
+     */
+    inline G4double GetCurrentSafety() const;
 
-   inline G4double GetCurrentSafety() const;
-     // Minimum value of safety after last ComputeStep
-   inline G4double GetMinimumStep() const;      
-     // Get the minimum step size from the last ComputeStep call
-     //   - in case full step is taken, this is kInfinity
-   inline unsigned int  GetNumberGeometriesLimitingStep() const; 
+    /**
+     * Gets the minimum step size from the last ComputeStep() call.
+     *  @note In case full step is taken, this is kInfinity.
+     */
+    inline G4double GetMinimumStep() const;      
 
-   G4double ComputeSafety( const G4ThreeVector& globalPoint); 
-     // Recompute safety for the relevant point the endpoint of the last step!!
-     // Maintain vector of individual safety values (for next method)
+    /**
+     * Returns the number of all geometries limiting the step.
+     */
+    inline unsigned int GetNumberGeometriesLimitingStep() const; 
 
-   G4double ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint );
-     // Obtain safety for navigator/geometry navId for last point 'computed'
-     //   --> last point for which ComputeSafety was called
-     //   Returns the point (center) for which this safety is valid
+    /**
+     * Recomputes the safety for the relevant point, i.e. the endpoint of the
+     * last step. Maintains a vector of individual safety values (used by next
+     * method below).
+     *  @param[in] globalPoint Point in global coordinates system.
+     *  @returns The safety value for the specified point in the geometry.
+     */
+    G4double ComputeSafety( const G4ThreeVector& globalPoint); 
 
-   void EnableParallelNavigation( G4bool enableChoice = true ); 
-     // Must call it to ensure that PathFinder is prepared,  
-     // especially for curved tracks. If true it switches PropagatorInField
-     // to use MultiNavigator. Must call it with false to undo (=PiF use
-     // Navigator for tracking!)
+    /**
+     * Obtains the safety for the specified navigator/geometry for last point
+     * 'computed' (i.e., the last point for which ComputeSafety() was called).
+     *  @param[in] navId The navigator identifier.
+     *  @param[in,out] globalCenterPoint The point (center) for which this
+     *                 safety is valid.
+     *  @returns The safety value in the specified geometry.
+     */
+    inline G4double ObtainSafety(G4int navId, G4ThreeVector& globalCenterPoint);
 
-   inline G4int  SetVerboseLevel(G4int lev = -1);
+    /**
+     * To enable parallel navigation. Must call it to ensure that G4PathFinder
+     * is prepared, especially for curved tracks.
+     * If true it switches G4PropagatorInField to use G4MultiNavigator.
+     * Must call it with false to undo (i.e. G4PropagatorInField uses classic
+     * G4Navigator for tracking in such case).
+     *  @param[in] enableChoice Flag to enable/disable parallel navigation.
+     */
+    void EnableParallelNavigation( G4bool enableChoice = true ); 
 
- public:  // with description
+    /**
+     * To control the level of verbosity. Default is no verbosity.
+     */
+    inline G4int SetVerboseLevel(G4int lev = -1);
 
-   inline G4int GetMaxLoopCount() const;
-   inline void  SetMaxLoopCount( G4int new_max );
-     // A maximum for the number of steps that a (looping) particle can take
+    /**
+     * To get/set the maximum for the number of steps that a (looping)
+     * particle can take.
+     */
+    inline G4int GetMaxLoopCount() const;
+    inline void  SetMaxLoopCount( G4int new_max );
 
- public:  // without description
+    /**
+     * Signals that the point location will be moved.
+     *  @note Internal use primarily.
+     */
+    inline void MovePoint();
 
-   inline void MovePoint();
-     // Signal that location will be moved -- internal use primarily
+    // To provide best compatibility between Coupled and normal Transportation
+    // the next two methods are provided...
 
-   // To provide best compatibility between Coupled and Old Transportation
-   // the next two methods are provided:
+    /**
+     * Obtains the last safety needed in ComputeStep() for the specified
+     * geometry 'navId' (i.e. the last point at which ComputeStep() has
+     * recalculated the safety). Returns the point (center) for which this
+     * safety is valid and also the minimum safety over all navigators.
+     *  @param[in] navId The navigator identifier.
+     *  @param[in,out] globCenterPoint The point (center) for which this
+     *                 safety is valid.
+     *  @param[in,out] minSafety The minimum safety over all navigators.
+     *  @returns The safety value in the specified geometry.
+     */
+    inline G4double LastPreSafety( G4int navId, G4ThreeVector& globCenterPoint,
+                                   G4double& minSafety ); 
 
-   G4double LastPreSafety( G4int navId, G4ThreeVector& globalCenterPoint,
-                           G4double& minSafety ); 
-     // Obtain last safety needed in ComputeStep (for geometry navId)
-     // --> last point at which ComputeStep recalculated safety
-     //     Returns the point (center) for which this safety is valid
-     //     and also the minimum safety over all navigators (i.e. full)
+    /**
+     * Tells G4PathFinder to copy PostStep Safety to PreSafety
+     * for use at the next step.
+     */
+    void PushPostSafetyToPreSafety(); 
 
-   void PushPostSafetyToPreSafety(); 
-     // Tell PathFinder to copy PostStep Safety to PreSafety
-     // (for use at next step)
+    /**
+     * Utility to convert ELimited specification to a string.
+     */
+    G4String& LimitedString( ELimited lim );
 
-   G4String& LimitedString( ELimited lim );
-     // Convert ELimited to string
+  private:
 
-   ~G4PathFinder();
-     // Destructor
+    /**
+     * Private singleton constructor.
+     */
+    G4PathFinder();
 
- protected:  // without description
+    /**
+     * Returns pointer to the specified navigator.
+     */
+    inline G4Navigator* GetNavigator(G4int n) const;
 
-   G4double DoNextLinearStep( const G4FieldTrack& FieldTrack,
-                                    G4double      proposedStepLength); 
+    /**
+     * Performs a linear step.
+     *  @param[in,out] FieldTrack Field track to be filled.
+     *  @param[in] proposedStepLength Current proposed step length.
+     *  @returns The minimum linear step to undertake.
+     */
+    G4double DoNextLinearStep( const G4FieldTrack& FieldTrack,
+                                     G4double proposedStepLength); 
 
-   G4double DoNextCurvedStep( const G4FieldTrack& FieldTrack,
-                                    G4double      proposedStepLength,
-                                    G4VPhysicalVolume* pCurrentPhysVolume); 
+    /**
+     * Performs a curved step.
+     *  @param[in,out] FieldTrack Field track to be filled.
+     *  @param[in] proposedStepLength Current proposed step length.
+     *  @param[in] pCurrentPhysVolume Pointer to the current volume of interest.
+     *  @returns The minimum step to undertake.
+     */
+    G4double DoNextCurvedStep( const G4FieldTrack& FieldTrack,
+                                     G4double proposedStepLength,
+                                     G4VPhysicalVolume* pCurrentPhysVolume); 
 
-  void WhichLimited();
-  void PrintLimited();
-    // Print key details out for debugging
+    /**
+     * Prints key details out for debugging.
+     */
+    void WhichLimited();
+    void PrintLimited();
 
-  inline G4bool UseSafetyForOptimization( G4bool );
-    // Whether use safety to discard unneccesary calls to navigator
+    /**
+     * Helper method to report movement (likely of initial point).
+     */
+    void ReportMove( const G4ThreeVector& OldV,
+                     const G4ThreeVector& NewV,
+                     const G4String& Quantity ) const;
 
-  void ReportMove( const G4ThreeVector& OldV,
-                   const G4ThreeVector& NewV,
-                   const G4String& Quantity ) const;
-    // Helper method to report movement (likely of initial point)
+  private:
 
- protected:
+    // ----------------------------------------------------------------------
+    //  DATA Members
+    // ----------------------------------------------------------------------
 
-   G4PathFinder();  //  Singleton 
+    /** Object that enables G4PropagatorInField to see many geometries. */
+    G4MultiNavigator* fpMultiNavigator; 
 
-   inline G4Navigator* GetNavigator(G4int n) const;
+    G4int fNoActiveNavigators = 0; 
+    G4bool fNewTrack = false; // Flag a new track (ensure first step)
 
- private:
+    static const G4int fMaxNav = 16;
 
-   // ----------------------------------------------------------------------
-   //  DATA Members
-   // ----------------------------------------------------------------------
+    // Global state (retained during stepping for one track)
 
-   G4MultiNavigator* fpMultiNavigator; 
-     // Object that enables G4PropagatorInField to see many geometries
+    G4Navigator*  fpNavigator[fMaxNav];
 
-   G4int fNoActiveNavigators = 0; 
-   G4bool fNewTrack = false; // Flag a new track (ensure first step)
+    // ---- State changed in a step computation
+    //
+    ELimited fLimitedStep[fMaxNav];
+    G4bool fLimitTruth[fMaxNav];
+    G4double fCurrentStepSize[fMaxNav]; 
+    G4int fNoGeometriesLimiting = 0;  // How many processes contribute to limit
 
-   static const G4int fMaxNav = 16;
+    /** Last initial position for which safety evaluated. */
+    G4ThreeVector fPreSafetyLocation;
+    /* Corresponding value of full safety. */
+    G4double fPreSafetyMinValue = -1.0;
 
-   // Global state (retained during stepping for one track)
+    /** Safeties for the above point. */
+    G4double fPreSafetyValues[ fMaxNav ];
 
-   G4Navigator*  fpNavigator[fMaxNav];
+    // This part of the state can be retained for several calls --> CARE
 
-   // State changed in a step computation
+    /** Point where last ComputeStep() called. */
+    G4ThreeVector fPreStepLocation;
+    /** Corresponding value of full safety. */
+    G4double fMinSafety_PreStepPt = -1.0;
 
-   ELimited      fLimitedStep[fMaxNav];
-   G4bool        fLimitTruth[fMaxNav];
-   G4double      fCurrentStepSize[fMaxNav]; 
-   G4int fNoGeometriesLimiting = 0;  // How many processes contribute to limit
+    /** Safeties for the above point.
+      * @note This changes at each step, so it can differ when steps
+      *       inside min-safety are made. */
+    G4double fCurrentPreStepSafety[ fMaxNav ];
 
-   G4ThreeVector fPreSafetyLocation;
-     // last initial position for which safety evaluated
-   G4double      fPreSafetyMinValue = -1.0;
-     // - corresponding value of full safety
-   G4double      fPreSafetyValues[ fMaxNav ];
-     // Safeties for the above point
+    /** Whether PreSafety coincides with PreStep point. */
+    G4bool fPreStepCenterRenewed = false;
 
-   // This part of the state can be retained for several calls --> CARE
+    G4double fMinStep = -1.0;  // As reported by Navigators -- can be kInfinity
+    G4double fTrueMinStep = -1.0;  // Corrected in case >= proposed
 
-   G4ThreeVector fPreStepLocation;
-     // point where last ComputeStep called
-   G4double fMinSafety_PreStepPt = -1.0;
-     // - corresponding value of full safety
-   G4double fCurrentPreStepSafety[ fMaxNav ];
-     // Safeties for the above point.
-     // This changes at each step, so it can differ when steps
-     // inside min-safety are made
+    // ---- State after calling 'locate'
+    //
+    G4VPhysicalVolume* fLocatedVolume[fMaxNav];
+    G4ThreeVector      fLastLocatedPosition; 
 
-   G4bool fPreStepCenterRenewed = false;
-     // Whether PreSafety coincides with PreStep point 
+    // ---- State after calling 'ComputeStep'
+    //      (other member variables will be affected)
+    //
+    G4FieldTrack fEndState;  // Point, velocity, ... at proposed step end
+    G4bool fFieldExertedForce = false; // In current proposed step
 
-   G4double fMinStep = -1.0;  // As reported by Navigators -- can be kInfinity
-   G4double fTrueMinStep = -1.0;  // Corrected in case >= proposed
+    G4bool fRelocatedPoint = false; // Signals that point was or is being moved 
+                                    // from the position of the last location or
+                                    // the endpoint resulting from ComputeStep()
+                                    // -- invalidates fEndState
 
-   // State after calling 'locate'
-   //
-   G4VPhysicalVolume* fLocatedVolume[fMaxNav];
-   G4ThreeVector      fLastLocatedPosition; 
+    // ---- State for 'ComputeSafety' and related methods
+    //
+    /** Point where ComputeSafety() is called. */
+    G4ThreeVector fSafetyLocation;
+    /** Corresponding value of safety. */
+    G4double      fMinSafety_atSafLocation = -1.0;
+    /** Safeties for last ComputeSafety(). */
+    G4double      fNewSafetyComputed[ fMaxNav ];
 
-   // State after calling 'ComputeStep'
-   // (others member variables will be affected)
-   //
-   G4FieldTrack fEndState;  // Point, velocity, ... at proposed step end
-   G4bool fFieldExertedForce = false; // In current proposed step
+    // ---- State for Step numbers
+    //
+    G4int fLastStepNo = -1, fCurrentStepNo = -1; 
 
-   G4bool fRelocatedPoint = false; // Signals that point was or is being moved 
-                                   // from the position of the last location or
-                                   // the endpoint resulting from ComputeStep()
-                                   // -- invalidates fEndState
+    G4int fVerboseLevel = 0;  // For debugging purposes
 
-   // State for 'ComputeSafety' and related methods
-   //
-   G4ThreeVector fSafetyLocation;
-     // point where ComputeSafety is called
-   G4double      fMinSafety_atSafLocation = -1.0;
-     // - corresponding value of safety
-   G4double      fNewSafetyComputed[ fMaxNav ];
-     // Safeties for last ComputeSafety
+    G4TransportationManager* fpTransportManager; // Cache for frequent use
+    G4PropagatorInField* fpFieldPropagator;
 
-   // State for Step numbers
-   //
-   G4int fLastStepNo = -1, fCurrentStepNo = -1; 
+    G4double kCarTolerance;
 
-   G4int fVerboseLevel = 0;  // For debugging purposes
-
-   G4TransportationManager* fpTransportManager; // Cache for frequent use
-   G4PropagatorInField* fpFieldPropagator;
-
-   G4double kCarTolerance;
-
-   static G4ThreadLocal G4PathFinder* fpPathFinder;
+    static G4ThreadLocal G4PathFinder* fpPathFinder;
 };
 
 // ********************************************************************
 // Inline methods.
 // ********************************************************************
 
-inline G4VPhysicalVolume* G4PathFinder::GetLocatedVolume( G4int navId ) const
-{
-  G4VPhysicalVolume* vol = nullptr;  
-  if( (navId < fMaxNav) && (navId >= 0) ) { vol= fLocatedVolume[navId]; }
-  return vol; 
-}
-
-inline G4int G4PathFinder::SetVerboseLevel(G4int newLevel)
-{
-  G4int old = fVerboseLevel;
-  fVerboseLevel = newLevel;
-  return old;
-}
-
-inline G4double G4PathFinder::GetMinimumStep() const
-{ 
-  return fMinStep; 
-} 
-
-inline unsigned int G4PathFinder::GetNumberGeometriesLimitingStep() const
-{
-  unsigned int noGeometries = fNoGeometriesLimiting;
-  return noGeometries;
-}
-
-inline G4double G4PathFinder::GetCurrentSafety() const
-{
-  return fMinSafety_PreStepPt;
-}
-
-inline void G4PathFinder::MovePoint()
-{
-  fRelocatedPoint = true;
-}
-
-inline G4Navigator* G4PathFinder::GetNavigator(G4int n) const
-{ 
-  if( (n>fNoActiveNavigators) || (n<0) ) { n=0; }
-  return fpNavigator[n];
-}
-
-inline G4double
-G4PathFinder::ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint )
-{
-  globalCenterPoint = fSafetyLocation; 
-  return fNewSafetyComputed[ navId ];
-}
-
-inline G4double
-G4PathFinder::LastPreSafety( G4int navId, G4ThreeVector& globalCenterPoint, 
-                             G4double& minSafety )
-{
-  globalCenterPoint = fPreSafetyLocation;
-  minSafety =         fPreSafetyMinValue;
-  return  fPreSafetyValues[ navId ];
-}
+#include "G4PathFinder.icc"
 
 #endif 

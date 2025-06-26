@@ -98,6 +98,9 @@ class G4RichTrajectoryPoint : public G4VTrajectoryPoint
   const std::map<G4String, G4AttDef>* GetAttDefs() const override;
   std::vector<G4AttValue>* CreateAttValues() const override;
 
+  G4double GetPreStepPointGlobalTime()  const {return fPreStepPointGlobalTime;}
+  G4double GetPostStepPointGlobalTime() const {return fPostStepPointGlobalTime;}
+
  private:
   G4ThreeVector fPosition{0., 0., 0.};
 

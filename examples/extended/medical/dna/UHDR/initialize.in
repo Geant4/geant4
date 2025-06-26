@@ -1,0 +1,14 @@
+
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+/process/chem/TimeStepModel IRT_syn
+
+# Set the simulation volume (half Side Length)
+#/UHDR/env/volume 0.2 um
+#/UHDR/env/volume 0.4 um
+/UHDR/env/volume 0.8 um
+
+/UHDR/Detector/PBC true
+

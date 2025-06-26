@@ -147,7 +147,7 @@ G4double G4ParticleHPIsoProbabilityTable_CALENDF::GetCorrelatedIsoCrossSectionPT
   if ( kineticEnergy < Emin  ||  kineticEnergy > Emax ) {
     // if the kinetic energy is outside of the URR limits for the given isotope, it finds the smooth cross section
     G4int indexEl = (G4int)ele->GetIndex();
-    G4int isotopeJ = -1;  // index of isotope in the given element
+    G4int isotopeJ = 0;  // index of isotope in the given element
     G4int n_isotopes = (G4int)ele->GetNumberOfIsotopes();
     for ( G4int j = 0; j < n_isotopes; j++ ) {
       if ( A == (G4int)( ele->GetIsotope(j)->GetN() ) ) {
@@ -213,7 +213,9 @@ G4double G4ParticleHPIsoProbabilityTable_CALENDF::GetCorrelatedIsoCrossSectionPT
 
 ///--------------------------------------------------------------------------------------
 G4double G4ParticleHPIsoProbabilityTable_CALENDF::GetIsoCrossSectionPT( const G4DynamicParticle* dp, G4int MTnumber, 
-  const G4Element* ele,G4double &kineticEnergy , std::map< std::thread::id, G4double > &random_number_cache, std::thread::id &id ) {
+									const G4Element* ele,G4double &kineticEnergy,
+									std::map< std::thread::id, G4double >& random_number_cache,
+									std::thread::id &id ) {
   energy_cache[id] = kineticEnergy;
   if ( kineticEnergy < Emin  ||  kineticEnergy > Emax ) {
     // if the kinetic energy is outside of the URR limits for the given isotope, it finds the smooth cross section
@@ -226,18 +228,20 @@ G4double G4ParticleHPIsoProbabilityTable_CALENDF::GetIsoCrossSectionPT( const G4
   	break;
       }
     }
+    if (isotopeJ == -1) { return 0.0; }
     G4double frac = ele->GetRelativeAbundanceVector()[isotopeJ]; 
     G4double weightedelasticXS;
     G4double weightedcaptureXS;
     G4double weightedinelasticXS;
-    if (G4ParticleHPManager::GetInstance()->GetNeglectDoppler()) {
-      weightedelasticXS = (*G4ParticleHPManager::GetInstance()->GetElasticFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
-      weightedcaptureXS = (*G4ParticleHPManager::GetInstance()->GetCaptureFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
-      weightedinelasticXS = ((*G4ParticleHPManager::GetInstance()->GetInelasticFinalStates(dp->GetDefinition()))[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ )) * barn;
+    auto manHP = G4ParticleHPManager::GetInstance(); 
+    if (manHP->GetNeglectDoppler()) {
+      weightedelasticXS = (*manHP->GetElasticFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      weightedcaptureXS = (*manHP->GetCaptureFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      weightedinelasticXS = (*manHP->GetInelasticFinalStates(dp->GetDefinition()))[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ ) * barn;
     } else {
-      weightedelasticXS = this->GetDopplerBroadenedElasticXS( dp, indexEl, isotopeJ );
-      weightedcaptureXS = this->GetDopplerBroadenedCaptureXS( dp, indexEl, isotopeJ );
-      weightedinelasticXS = this->GetDopplerBroadenedInelasticXS( dp, indexEl, isotopeJ );
+      weightedelasticXS = GetDopplerBroadenedElasticXS( dp, indexEl, isotopeJ );
+      weightedcaptureXS = GetDopplerBroadenedCaptureXS( dp, indexEl, isotopeJ );
+      weightedinelasticXS = GetDopplerBroadenedInelasticXS( dp, indexEl, isotopeJ );
     }
     xsela_cache[id] = weightedelasticXS / frac;
     xscap_cache[id] = weightedcaptureXS / frac;
@@ -245,11 +249,11 @@ G4double G4ParticleHPIsoProbabilityTable_CALENDF::GetIsoCrossSectionPT( const G4
     if ( Z < 88 ) {
       xsfiss_cache[id] = 0.0;
     } else {
-      if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) {
-  	G4double weightedfissionXS = (*G4ParticleHPManager::GetInstance()->GetFissionFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      if ( manHP->GetNeglectDoppler() ) {
+  	G4double weightedfissionXS = (*manHP->GetFissionFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
   	xsfiss_cache[id] = weightedfissionXS / frac;
       } else {
-  	G4double weightedfissionXS = this->GetDopplerBroadenedFissionXS( dp, indexEl, isotopeJ );
+  	G4double weightedfissionXS = GetDopplerBroadenedFissionXS( dp, indexEl, isotopeJ );
   	xsfiss_cache[id] = weightedfissionXS / frac;
       }
     }
@@ -278,7 +282,7 @@ G4double G4ParticleHPIsoProbabilityTable_CALENDF::GetIsoCrossSectionPT( const G4
   } else if (MTnumber == 3) {    // inelastic cross section
     return xsinela_cache[id];
   } else {
-    G4cout << "Reaction was not found, returns 0." << G4endl;
+    //G4cout << "Reaction was not found, returns 0." << G4endl;
     return 0;
   }
 }

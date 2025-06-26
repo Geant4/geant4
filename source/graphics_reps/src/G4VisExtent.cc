@@ -101,9 +101,6 @@ G4bool G4VisExtent::operator != (const G4VisExtent& e) const {
 
 G4VisExtent& G4VisExtent::Transform (const G4Transform3D& transform)
 {
-  const auto& rotation = transform.getRotation();
-  const auto& translation = transform.getTranslation();
-
   G4ThreeVector nnn(fXmin,fYmin,fZmin);
   G4ThreeVector nnx(fXmin,fYmin,fZmax);
   G4ThreeVector nxn(fXmin,fYmax,fZmin);
@@ -113,14 +110,22 @@ G4VisExtent& G4VisExtent::Transform (const G4Transform3D& transform)
   G4ThreeVector xxn(fXmax,fYmax,fZmin);
   G4ThreeVector xxx(fXmax,fYmax,fZmax);
 
-  nnn.transform(rotation); nnn += translation;
-  nnx.transform(rotation); nnx += translation;
-  nxn.transform(rotation); nxn += translation;
-  nxx.transform(rotation); nxx += translation;
-  xnn.transform(rotation); xnn += translation;
-  xnx.transform(rotation); xnx += translation;
-  xxn.transform(rotation); xxn += translation;
-  xxx.transform(rotation); xxx += translation;
+  const auto& rotation = transform.getRotation();
+  const auto& translation = transform.getTranslation();
+
+  auto apply_transform = [&rotation, &translation](G4ThreeVector& v) {
+    v.transform(rotation);
+    v += translation;
+  };
+
+  apply_transform(nnn);
+  apply_transform(nnx);
+  apply_transform(nxn);
+  apply_transform(nxx);
+  apply_transform(xnn);
+  apply_transform(xnx);
+  apply_transform(xxn);
+  apply_transform(xxx);
 
   fXmin = DBL_MAX;
   fYmin = DBL_MAX;

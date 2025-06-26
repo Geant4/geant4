@@ -3,153 +3,221 @@
 # Define the Geant4 Module.
 geant4_add_module(G4had_lend
   PUBLIC_HEADERS
-    G4GIDI.hh
-    G4GIDI_Misc.hh
-    G4GIDI_map.hh
-    G4GIDI_mass.hh
-    G4GIDI_target.hh
-    G4LENDCapture.hh
     G4LENDCaptureCrossSection.hh
-    G4LENDCrossSection.hh
+    G4LENDCapture.hh
     G4LENDCombinedCrossSection.hh
-    G4LENDGammaCrossSection.hh
     G4LENDCombinedModel.hh
-    G4LENDGammaModel.hh
-    G4LENDElastic.hh
+    G4LENDCrossSection.hh
     G4LENDElasticCrossSection.hh
-    G4LENDFission.hh
+    G4LENDElastic.hh
     G4LENDFissionCrossSection.hh
+    G4LENDFission.hh
+    G4LENDGammaCrossSection.hh
+    G4LENDGammaModel.hh
     G4LENDHeader.hh
-    G4LENDInelastic.hh
     G4LENDInelasticCrossSection.hh
+    G4LENDInelastic.hh
     G4LENDManager.hh
     G4LENDModel.hh
     G4LENDUsedTarget.hh
-    GIDI_settings.hh
-    MCGIDI.h
-    MCGIDI_fromTOM.h
-    MCGIDI_map.h
-    MCGIDI_mass.h
-    MCGIDI_misc.h
-    MCGIDI_private.h
-    PoPs.h
-    PoPs_Bcast_private.h
-    PoPs_data.h
-    PoPs_mass.h
-    PoPs_private.h
+    g4gidi_version.hh
+    G4GIDI.hh
     nf_Legendre.h
     nf_integration.h
-    nf_specialFunctions.h
+    nf_buffer.h
     nf_utilities.h
     ptwX.h
     ptwXY.h
     statusMessageReporting.h
-    xDataTOM.h
-    xDataTOM_importXML_private.h
-    xDataTOM_private.h
+    pugiconfig.hpp
+    pugixml.hpp
+    GIDI.hpp
+    GIDI_data.hpp
+    GUPI.hpp
+    HAPI.hpp
+    LUPI.hpp
+    LUPI_declareMacro.hpp
+    LUPI_defines.hpp
+    LUPI_dataBuffer.hpp
+    MCGIDI_distributions.hpp
+    MCGIDI_string.hpp
+    MCGIDI_functions.hpp
+    MCGIDI_sampling.hpp
+    MCGIDI_vector.hpp
+    MCGIDI_headerSource.hpp
+    MCGIDI.hpp
+    PoPI.hpp
+    RISI.hpp
   SOURCES
-    G4GIDI.cc
-    G4GIDI_Misc.cc
-    G4GIDI_map.cc
-    G4GIDI_mass.cc
-    G4GIDI_target.cc
     G4LENDCapture.cc
     G4LENDCaptureCrossSection.cc
     G4LENDCombinedCrossSection.cc
-    G4LENDGammaCrossSection.cc
     G4LENDCombinedModel.cc
-    G4LENDGammaModel.cc
-    G4LENDCrossSection.cc
     G4LENDElastic.cc
     G4LENDElasticCrossSection.cc
     G4LENDFission.cc
     G4LENDFissionCrossSection.cc
+    G4LENDGammaCrossSection.cc
+    G4LENDGammaModel.cc
     G4LENDInelastic.cc
     G4LENDInelasticCrossSection.cc
+    G4LENDUsedTarget.cc
+    G4LENDCrossSection.cc
     G4LENDManager.cc
     G4LENDModel.cc
-    G4LENDUsedTarget.cc
+    nf_Legendre.c
+    nf_Legendre_GaussianQuadrature.c
+    nf_GnG_adaptiveQuadrature.c
+    nf_stringToInt32s.c
+    nf_utilities.c
+    nf_stringToDoubles.c
+    ptwX_core.c
+    ptwX_misc.c
+    ptwXY_binaryOperators.c
+    ptwXY_convenient.c
+    ptwXY_core.c
+    ptwXY_functions.c
+    ptwXY_integration.c
+    ptwXY_interpolation.c
+    ptwXY_methods.c
+    ptwXY_misc.c
+    ptwXY_unitaryOperators.c
+    statusMessageReporting.c
+    pugixml.cc
+    G4GIDI_misc.cc
+    G4GIDI_target.cc
+    G4GIDI.cc
+    GIDI_1dData.cc
+    GIDI_URR_probabilityTables.cc
+    GIDI_XYs2d.cc
+    GIDI_XYs3d.cc
+    GIDI_array3d.cc
+    GIDI_axis.cc
+    GIDI_axisDomain.cc
+    GIDI_construction.cc
+    GIDI_delayedNeutron.cc
+    GIDI_group.cc
+    GIDI_exceptions.cc
+    GIDI_flux.cc
+    GIDI_grid.cc
+    GIDI_gridded2d.cc
+    GIDI_axes.cc
+    GIDI_regions1d.cc
+    GIDI_regions2d.cc
+    GIDI_styles.cc
     GIDI_settings.cc
     GIDI_settings_flux.cc
-    GIDI_settings_group.cc
     GIDI_settings_particle.cc
-    MCGIDI_KalbachMann.cc
-    MCGIDI_LLNLAngular_angularEnergy.cc
-    MCGIDI_angular.cc
-    MCGIDI_angularEnergy.cc
-    MCGIDI_distribution.cc
-    MCGIDI_energy.cc
-    MCGIDI_energyAngular.cc
-    MCGIDI_fromTOM.cc
-    MCGIDI_kinetics.cc
-    MCGIDI_map.cc
-    MCGIDI_mass.cc
-    MCGIDI_misc.cc
-    MCGIDI_outputChannel.cc
-    MCGIDI_particle.cc
-    MCGIDI_pop.cc
+    GIDI_suite.cc
+    GIDI_transportable.cc
+    GIDI_protare.cc
+    GIDI_misc.cc
+    GIDI_gridded3d.cc
+    GIDI_Legendre1d.cc
+    GIDI_URR_probabilityTables1d.cc
+    GIDI_Ys1d.cc
+    GIDI_arrays.cc
+    GIDI_branching1d.cc
+    GIDI_collapse.cc
+    GIDI_constant1d.cc
+    GIDI_GRIN_continuumGammas.cc
+    GIDI_misc1d.cc
+    GIDI_sums.cc
+    GIDI_table.cc
+    GIDI_map.cc
+    GIDI_form.cc
+    GIDI_XYs1d.cc
+    GIDI_GNDS_fileType.cc
+    GIDI_discreteGamma2d.cc
+    GIDI_distributions.cc
+    GIDI_documentation_1_10.cc
+    GIDI_doubleDifferentialCrossSection.cc
+    GIDI_energyFunctions2d.cc
+    GIDI_externalFile.cc
+    GIDI_externalFiles.cc
+    GIDI_fissionEnergyReleased.cc
+    GIDI_fissionFragmentData.cc
+    GIDI_gridded1d.cc
+    GIDI_product.cc
+    GIDI_isotropic2d.cc
+    GIDI_outputChannel.cc
+    GIDI_parseSuites.cc
+    GIDI_polynomial1d.cc
+    GIDI_primaryGamma2d.cc
+    GIDI_protareComposite.cc
+    GIDI_protareTNSL.cc
+    GIDI_recoil2d.cc
+    GIDI_reference1d.cc
+    GIDI_resonancesWithBackground1d.cc
+    GIDI_unspecified1d.cc
+    GIDI_xs_pdf_cdf1d.cc
+    GIDI_particleInfo.cc
+    GIDI_physicalQuantity.cc
+    GIDI_reaction.cc
+    GIDI_matrix.cc
+    GIDI_vector.cc
+    GIDI_settings_group.cc
+    GUPI_documentation.cc
+    GUPI_entry.cc
+    GUPI_suite.cc
+    GUPI_text.cc
+    GUPI_ancestry.cc
+    HAPI_Data.cc
+    HAPI_Data_internal.cc
+    HAPI_File.cc
+    HAPI_HDFData.cc
+    HAPI_HDFFile.cc
+    HAPI_HDFNode.cc
+    HAPI_Node.cc
+    HAPI_Node_internal.cc
+    HAPI_PugiXMLData.cc
+    HAPI_PugiXMLFile.cc
+    HAPI_PugiXMLNode.cc
+    HAPI_Text.cc
+    HAPI_HDFDataManager.cc
+    LUPI_misc.cc
+    LUPI_formatVersion.cc
+    LUPI_argumentParser.cc
+    LUPI_statusMessageReporting.cc
+    LUPI_times.cc
+    LUPI_file.cc
+    MCGIDI_delayedNeutron.cc
+    MCGIDI_domainHash.cc
+    MCGIDI_string.cc
+    MCGIDI_functions.cc
+    MCGIDI_settings.cc
+    MCGIDI_heatedCrossSections.cc
+    MCGIDI_nuclideGammaBranching.cc
     MCGIDI_product.cc
-    MCGIDI_quantitiesLookupMode.cc
+    MCGIDI_distributions.cc
+    MCGIDI_URR.cc
+    MCGIDI_outputChannel.cc
+    MCGIDI_misc.cc
+    MCGIDI_protare.cc
+    MCGIDI_GRIN.cc
     MCGIDI_reaction.cc
+    MCGIDI_protareTNSL.cc
+    MCGIDI_protareComposite.cc
     MCGIDI_sampling.cc
-    MCGIDI_samplingSettings.cc
-    MCGIDI_target.cc
-    MCGIDI_target_heated.cc
-    MCGIDI_uncorrelated.cc
-    MCGIDI_version.cc
-    PoPs.cc
-    PoPs_Bcast.cc
-    PoPs_data.cc
-    PoPs_mass.cc
-    lPoPs.cc
-    nf_GnG_adaptiveQuadrature.cc
-    nf_Legendre.cc
-    nf_Legendre_GaussianQuadrature.cc
-    nf_angularMomentumCoupling.cc
-    nf_exponentialIntegral.cc
-    nf_gammaFunctions.cc
-    nf_incompleteGammaFunctions.cc
-    nf_polevl.cc
-    nf_stringToDoubles.cc
-    nf_stringToDoubles_main.cc
-    nf_utilities.cc
-    ptwXY_binaryOperators.cc
-    ptwXY_convenient.cc
-    ptwXY_core.cc
-    ptwXY_functions.cc
-    ptwXY_integration.cc
-    ptwXY_interpolation.cc
-    ptwXY_methods.cc
-    ptwXY_misc.cc
-    ptwXY_unitaryOperators.cc
-    ptwX_core.cc
-    ptwX_misc.cc
-    statusMessageReporting.cc
-    xDataTOM.cc
-    xDataTOM_KalbachMann.cc
-    xDataTOM_LegendreSeries.cc
-    xDataTOM_Misc.cc
-    xDataTOM_V_W_XYs.cc
-    xDataTOM_V_W_XYs_LegendreSeries.cc
-    xDataTOM_W_XYs.cc
-    xDataTOM_W_XYs_LegendreSeries.cc
-    xDataTOM_XYs.cc
-    xDataTOM_axes.cc
-    xDataTOM_importXML.cc
-    xDataTOM_importXML_KalbachMann.cc
-    xDataTOM_importXML_V_W_XYs.cc
-    xDataTOM_importXML_V_W_XYs_LegendreSeries.cc
-    xDataTOM_importXML_W_XYs.cc
-    xDataTOM_importXML_W_XYs_LegendreSeries.cc
-    xDataTOM_importXML_XYs.cc
-    xDataTOM_importXML_axes.cc
-    xDataTOM_importXML_polynomial.cc
-    xDataTOM_importXML_regionsW_XYs_LegendreSeries.cc
-    xDataTOM_importXML_regionsXYs.cc
-    xDataTOM_interpolation.cc
-    xDataTOM_polynomial.cc
-    xDataTOM_regionsW_XYs_LegendreSeries.cc
-    xDataTOM_regionsXYs.cc)
+    PoPI_alias.cc
+    PoPI_base.cc
+    PoPI_intId.cc
+    PoPI_isotope.cc
+    PoPI_misc.cc
+    PoPI_nucleus.cc
+    PoPI_nuclide.cc
+    PoPI_nuclideGammaBranching.cc
+    PoPI_pq_suite.cc
+    PoPI_decayData.cc
+    PoPI_baryon.cc
+    PoPI_chemicalElement.cc
+    PoPI_database.cc
+    PoPI_gaugeBoson.cc
+    PoPI_lepton.cc
+    PoPI_particle.cc
+    PoPI_physicalQuantity.cc
+    PoPI_unorthodox.cc
+    RISI_read.cc)
 
 geant4_module_link_libraries(G4had_lend
   PUBLIC
@@ -159,7 +227,6 @@ geant4_module_link_libraries(G4had_lend
     G4hadronic_xsect
     G4materials
     G4partman
-    ${G4EXPAT_LIBRARIES} # Almost certainly private, but needs checking
   PRIVATE
     G4baryons
     G4bosons
@@ -167,4 +234,3 @@ geant4_module_link_libraries(G4had_lend
     G4hadronic_util
     G4heprandom
     G4ions)
-

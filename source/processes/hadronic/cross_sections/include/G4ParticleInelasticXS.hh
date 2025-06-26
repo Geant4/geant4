@@ -107,6 +107,8 @@ private:
 
   void Initialise(G4int Z);
 
+  void InitialiseOnFly(G4int Z);
+
   inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
@@ -130,7 +132,7 @@ const G4PhysicsVector* G4ParticleInelasticXS::GetPhysicsVector(G4int Z)
 {
   const G4PhysicsVector* pv = data[index]->GetElementData(Z);
   if (pv == nullptr) {
-    Initialise(Z);
+    InitialiseOnFly(Z);
     pv = data[index]->GetElementData(Z);
   }
   return pv;

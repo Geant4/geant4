@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4VoxelSafety implementation
 //
-//  Author:  John Apostolakis
-//  First version:  31 May 2010
-// 
+// Author: John Apostolakis (CERN), 30 April 2010
 // --------------------------------------------------------------------
+
 #include "G4VoxelSafety.hh"
 
 #include "G4GeometryTolerance.hh"

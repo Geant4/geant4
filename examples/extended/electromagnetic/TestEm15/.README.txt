@@ -7,12 +7,13 @@
 How to compute and plot the final state of:
  - Multiple Scattering
  - Gamma Conversion
+
 considered as an isolated processes, see \link TestEm15_s4 PHYSICS \endlink .
 
 For Multiple Scattering, the method is exposed below.
 
 For Gamma Conversion, when G4BetheHeitler5DModel Model is used,
-see \link ExampleTestEm15_GC README.gamma \endlink for Histograms and UI commands description.
+see \link ExampleTestEm15_GC \endlink for Histograms and UI commands description.
 
 \section TestEm15_s1 GEOMETRY DEFINITION
 
@@ -146,7 +147,6 @@ Idle> exit
 
  The example of Gamma Conversion macro:
   - gamma.mac - gamma to e+ e-
-  - gamma2mumu.mac gamma to mu+ mu-
 
 \subpage ExampleTestEm15_GC
 
@@ -154,12 +154,11 @@ Idle> exit
 
 \section  TestEm15_gc_s0 Gamma Conversion macros:
   - gamma.mac - tests of the 5D gamma -> e+ e- conversion model G4BetheHeitler5DModel
-  - gamma2mumu.mac - tests of the 5D gamma -> mu+ mu- conversion model G4BetheHeitler5DModel
 
 All discrete processes are inactivated (see macro),
 so Gamma Conversion is 'forced'.
 
-\section TestEm15_gc_s1 HISTOGRAMS
+\section TestEm15_gc_s1 HISTOGRAMS  for gamma conversion
 
   - 10 : Open Angle (rad)* E gamma (MeV).
 
@@ -241,16 +240,5 @@ Allow simulate conversion on isolated particles without screening
 The perimeter values:
  - false - (default) atomic electron screening
  - true - conversion on isolated particles
-
-\subsection TestEm15_gc_s3 One more command for G4GammaConversionToMuons
-
-To enable gamma to mu+ mu- conversion use command:
-
-\verbatim
-/process/em/max5DMuPairEnergy emax5D units
-\endverbatim
-The conversion disabled by default, emax5D set to 0.0
-
-__The model tested for the energies about the threshold up to PeV range__.
 
 */

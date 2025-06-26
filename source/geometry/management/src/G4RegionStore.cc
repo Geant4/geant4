@@ -93,10 +93,10 @@ void G4RegionStore::Clean()
 
   G4RegionStore* store = GetInstance();
 
-  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
+  for(const auto & pos : *store)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    delete *pos;
+    delete pos;
   }
 
   store->bmap.clear(); store->mvalid = false;
@@ -121,19 +121,19 @@ void G4RegionStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4RegionStore::UpdateMap()
 {
   G4AutoLock l(&mapMutex);  // to avoid thread contention at initialisation
-  if (mvalid) return;
+  if (mvalid) { return; }
   bmap.clear();
-  for(auto pos=GetInstance()->cbegin(); pos!=GetInstance()->cend(); ++pos)
+  for(const auto & pos : *GetInstance())
   {
-    const G4String& reg_name = (*pos)->GetName();
+    const G4String& reg_name = pos->GetName();
     auto it = bmap.find(reg_name);
     if (it != bmap.cend())
     {
-      it->second.push_back(*pos);
+      it->second.push_back(pos);
     }
     else
     {
-      std::vector<G4Region*> reg_vec { *pos };
+      std::vector<G4Region*> reg_vec { pos };
       bmap.insert(std::make_pair(reg_name, reg_vec));
     }
   }
@@ -226,9 +226,9 @@ G4RegionStore* G4RegionStore::GetInstance()
 //
 G4bool G4RegionStore::IsModified() const
 {
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
+  for (const auto & i : *GetInstance())
   {
-    if ((*i)->IsModified()) { return true; }
+    if (i->IsModified()) { return true; }
   }
   return false;
 }
@@ -240,9 +240,9 @@ G4bool G4RegionStore::IsModified() const
 //
 void G4RegionStore::ResetRegionModified()
 {
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
+  for (const auto & i : *GetInstance())
   {
-    (*i)->RegionModified(false);
+    i->RegionModified(false);
   }
 }
 
@@ -252,11 +252,11 @@ void G4RegionStore::ResetRegionModified()
 //
 void G4RegionStore::UpdateMaterialList(G4VPhysicalVolume* currentWorld)
 {
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
+  for (const auto & i : *GetInstance())
   {
-    if((*i)->IsInMassGeometry() || (*i)->IsInParallelGeometry()
+    if(i->IsInMassGeometry() || i->IsInParallelGeometry()
                                 || (currentWorld != nullptr))
-    { (*i)->UpdateMaterialList(); }
+    { i->UpdateMaterialList(); }
   }
 }
 
@@ -319,8 +319,8 @@ void G4RegionStore::SetWorldVolume()
 {
   // Reset all pointers first
   //
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
-  { (*i)->SetWorld(nullptr); }
+  for (const auto & i : *GetInstance())
+  { i->SetWorld(nullptr); }
 
   // Find world volumes
   //
@@ -334,8 +334,8 @@ void G4RegionStore::SetWorldVolume()
 
     // Now 'fPhys' is a world volume, set it to regions that belong to it.
     //
-    for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
-    { (*i)->SetWorld(fPhys); }
+    for (const auto & i : *GetInstance())
+    { i->SetWorld(fPhys); }
   }
 }
 

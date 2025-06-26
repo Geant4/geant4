@@ -217,6 +217,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   f3gCmd->AvailableForStates(G4State_PreInit);
   f3gCmd->SetToBeBroadcasted(false);
 
+  fRiGeCmd = new G4UIcmdWithABool("/process/em/PairProd5D",this);
+  fRiGeCmd->SetGuidance("Enable/disable 5D model for e+e- pair production by muons");
+  fRiGeCmd->SetParameterName("ee5D",true);
+  fRiGeCmd->SetDefaultValue(false);
+  fRiGeCmd->AvailableForStates(G4State_PreInit);
+  fRiGeCmd->SetToBeBroadcasted(false);
+
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
   minEnCmd->SetParameterName("emin",true);
@@ -452,6 +459,18 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fluc1Cmd->AvailableForStates(G4State_PreInit);
   fluc1Cmd->SetToBeBroadcasted(false);
 
+  fluc2Cmd = new G4UIcmdWithAString("/process/eLoss/enableFluctForRegion",this);
+  fluc2Cmd->SetGuidance("Enable dEdx fluctuations for G4Region");
+  fluc2Cmd->SetParameterName("Fluc2",true);
+  fluc2Cmd->AvailableForStates(G4State_PreInit);
+  fluc2Cmd->SetToBeBroadcasted(false);
+
+  fluc3Cmd = new G4UIcmdWithAString("/process/eLoss/disableFluctForRegion",this);
+  fluc3Cmd->SetGuidance("Disable dEdx fluctuations for G4Region");
+  fluc3Cmd->SetParameterName("Fluc3",true);
+  fluc3Cmd->AvailableForStates(G4State_PreInit);
+  fluc3Cmd->SetToBeBroadcasted(false);
+
   posiCmd = new G4UIcmdWithAString("/process/em/setPositronAtRestModel",this);
   posiCmd->SetGuidance("Define model of positron annihilation at rest");
   posiCmd->SetParameterName("Posi",true);
@@ -510,6 +529,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete mudatCmd;
   delete peKCmd;
   delete f3gCmd;
+  delete fRiGeCmd;
   delete mscPCmd;
   delete pepicsCmd;
 
@@ -549,6 +569,8 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete nffCmd;
   delete ssCmd;
   delete fluc1Cmd;
+  delete fluc2Cmd;
+  delete fluc3Cmd;
   delete posiCmd;
 
   delete dumpCmd;
@@ -605,6 +627,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetPhotoeffectBelowKShell(peKCmd->GetNewBoolValue(newValue));
   } else if (command == f3gCmd) {
     theParameters->Set3GammaAnnihilationOnFly(f3gCmd->GetNewBoolValue(newValue));
+  } else if (command == fRiGeCmd) {
+    theParameters->SetUseRiGePairProductionModel(fRiGeCmd->GetNewBoolValue(newValue));
   } else if (command == mscPCmd) {
     theParameters->SetMscPositronCorrection(mscPCmd->GetNewBoolValue(newValue));
   } else if (command == pepicsCmd) {
@@ -743,6 +767,10 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     if(newValue == "Dummy") { x = fDummyFluctuation; }
     else if(newValue == "Urban") { x = fUrbanFluctuation; }
     theParameters->SetFluctuationType(x);
+  } else if (command == fluc2Cmd) {
+    theParameters->SetFluctuationsForRegion(newValue, true);
+  } else if (command == fluc3Cmd) {
+    theParameters->SetFluctuationsForRegion(newValue, false);
   } else if (command == posiCmd) {
     G4PositronAtRestModelType x = fSimplePositronium;
     if (newValue == "Allison") { x = fAllisonPositronium; }

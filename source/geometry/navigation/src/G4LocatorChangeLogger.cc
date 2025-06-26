@@ -25,15 +25,22 @@
 //
 // G4LocatorChangeLogger class implementation
 //
-// Author: John Apostolakis, 04.09.19 - First version
+// Author: John Apostolakis (CERN), 04 September 2019
 // --------------------------------------------------------------------
 
 #include <iostream>
 #include <iomanip>
 #include <locale>
-// #include <cassert>
 
 #include "G4LocatorChangeLogger.hh"
+
+// --------------------------------------------------------------------
+// Constructor 
+//
+G4LocatorChangeLogger::G4LocatorChangeLogger( const std::string& name )
+  : fName(name)
+{
+}
 
 // --------------------------------------------------------------------
 // Streaming operator dumping record 

@@ -6,6 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-02-04 John Allison (tracking-V11-03-01)
+- G4RichTrajectoryPoint.hh:
+  - Add accessors for Pre and PostStepPointGlobalTime.
+  - This allows fast access for time windowing feature of trajectory modeling.
+
+## 2025-01-20 John Allison (tracking-V11-03-00)
+- G4VTrajectory and G4VTrajectoryPoint:
+  - Add AttValues caching:
+    - GetAttValues returns a shared_ptr that points to the object created by
+      CreateAttValues if not already created. Thus acts as a cache.
+      - Smart access function - creates on request and stores for future
+        access. An invalid shared pointer means "not available". Usage:
+          const auto trajectoryAttValues = aTrajectory.GetAttValues();
+          if (trajectoryAttValues) { ...
+        then use as a normal pointer, but do not delete - simply allow
+        to go out of scope.
+  - Protect copy and move constructors and copy and move assignment operators.
+
 ## 2024-10-28 Makoto Asai (tracking-V11-02-05)
 - Moving check of cloned trajectory from G4Trackingmanager to G4TrackingMessenger
   to avoid unnecessary check.

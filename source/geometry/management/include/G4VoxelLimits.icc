@@ -70,15 +70,12 @@ G4double G4VoxelLimits::GetMaxExtent(const EAxis pAxis) const
   {
     return GetMaxXExtent();
   }
-  else if (pAxis==kYAxis)
+  if (pAxis==kYAxis)
   {
     return GetMaxYExtent();
   }
-  else 
-  {
-    assert(pAxis==kZAxis);
-    return GetMaxZExtent();
-  }
+  assert(pAxis==kZAxis);
+  return GetMaxZExtent();
 }
 
 inline
@@ -88,33 +85,30 @@ G4double G4VoxelLimits::GetMinExtent(const EAxis pAxis) const
   {
     return GetMinXExtent();
   }
-  else if (pAxis==kYAxis)
+  if (pAxis==kYAxis)
   {
     return GetMinYExtent();
   }
-  else 
-  {
-    assert(pAxis==kZAxis);
-    return GetMinZExtent();
-  }
+  assert(pAxis==kZAxis);
+  return GetMinZExtent();
 }
 
 inline
 G4bool G4VoxelLimits::IsXLimited() const
 {
-  return !(fxAxisMin==-kInfinity&&fxAxisMax==kInfinity);
+  return fxAxisMin!=-kInfinity||fxAxisMax!=kInfinity;
 }
 
 inline
 G4bool G4VoxelLimits::IsYLimited() const
 {
-  return !(fyAxisMin==-kInfinity&&fyAxisMax==kInfinity);
+  return fyAxisMin!=-kInfinity||fyAxisMax!=kInfinity;
 }
 
 inline
 G4bool G4VoxelLimits::IsZLimited() const
 {
-  return !(fzAxisMin==-kInfinity&&fzAxisMax==kInfinity);
+  return fzAxisMin!=-kInfinity||fzAxisMax!=kInfinity;
 }
 
 inline
@@ -130,15 +124,12 @@ G4bool G4VoxelLimits::IsLimited(const EAxis pAxis) const
   {
     return IsXLimited();
   }
-  else if (pAxis==kYAxis)
+  if (pAxis==kYAxis)
   {
     return IsYLimited();
   }
-  else 
-  {
-    assert(pAxis==kZAxis);
-    return IsZLimited();
-  }
+  assert(pAxis==kZAxis);
+  return IsZLimited();
 }
 
 inline

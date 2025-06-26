@@ -38,11 +38,11 @@ class GB01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     GB01DetectorConstruction(G4bool bf);
-    ~GB01DetectorConstruction();
+    ~GB01DetectorConstruction() override;
 
   public:
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
   private:
     G4bool fBiasingFlag;

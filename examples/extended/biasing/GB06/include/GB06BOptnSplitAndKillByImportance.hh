@@ -43,22 +43,22 @@ class GB06BOptnSplitAndKillByImportance : public G4VBiasingOperation
     // -- Constructor :
     GB06BOptnSplitAndKillByImportance(G4String name);
     // -- destructor:
-    virtual ~GB06BOptnSplitAndKillByImportance();
+    ~GB06BOptnSplitAndKillByImportance() override;
 
   public:
     // ----------------------------------------------
     // -- Methods from G4VBiasingOperation interface:
     // ----------------------------------------------
     // -- Unused:
-    virtual const G4VBiasingInteractionLaw*
+    const G4VBiasingInteractionLaw*
     ProvideOccurenceBiasingInteractionLaw(const G4BiasingProcessInterface*, G4ForceCondition&) final
     {
-      return 0;
+      return nullptr;
     }
-    virtual G4VParticleChange* ApplyFinalStateBiasing(const G4BiasingProcessInterface*,
-                                                      const G4Track*, const G4Step*, G4bool&) final
+    G4VParticleChange* ApplyFinalStateBiasing(const G4BiasingProcessInterface*, const G4Track*,
+                                              const G4Step*, G4bool&) final
     {
-      return 0;
+      return nullptr;
     }
 
     // -- Used methods ("non-physics biasing methods"):
@@ -67,13 +67,12 @@ class GB06BOptnSplitAndKillByImportance : public G4VBiasingOperation
     // -- requesting the biasing.
     // -- Here we use the condition "forced" and the distance returned
     // -- is "dummy" (DBL_MAX).
-    virtual G4double DistanceToApplyOperation(const G4Track*, G4double,
-                                              G4ForceCondition* condition) final;
+    G4double DistanceToApplyOperation(const G4Track*, G4double, G4ForceCondition* condition) final;
     // -- Method the generate the final state, which is:
     // --  - made of the primary with half of its original weight, and a clone of it in
     // --    case of splitting
     // --  - the primary with increased weight or the primary killed, in case of killing
-    virtual G4VParticleChange* GenerateBiasingFinalState(const G4Track*, const G4Step*) final;
+    G4VParticleChange* GenerateBiasingFinalState(const G4Track*, const G4Step*) final;
 
     // -- Specific to this example:
     // ----------------------------

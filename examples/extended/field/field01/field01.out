@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -207,7 +207,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001096s Sys=0.000000s
+  User=0.000000s Real=0.000765s Sys=0.000000s
 #
 /gun/energy 250.0 MeV
 /run/beamOn 1
@@ -292,7 +292,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000547s Sys=0.000000s
+  User=0.000000s Real=0.000406s Sys=0.000000s
 #
 /gun/energy 200.0 MeV
 /run/beamOn 1
@@ -377,7 +377,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000519s Sys=0.000000s
+  User=0.000000s Real=0.000417s Sys=0.000000s
 #
 /gun/energy 100.0 MeV
 /run/beamOn 1
@@ -462,7 +462,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000717s Sys=0.000000s
+  User=0.000000s Real=0.000544s Sys=0.000000s
 #
 /gun/energy 50.0 MeV
 /run/beamOn 1
@@ -547,7 +547,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000895s Sys=0.000000s
+  User=0.000000s Real=0.000700s Sys=0.000000s
 #
 # Change the value of the B-field
 #
@@ -601,7 +601,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000311s Sys=0.000000s
+  User=0.000000s Real=0.000248s Sys=0.000000s
 #
 /gun/energy 500.0 MeV
 /tracking/verbose 0
@@ -633,7 +633,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.010670s Sys=0.000000s
+  User=0.010000s Real=0.009012s Sys=0.000000s
 #
 # Test commands defined in this example
 /control/verbose 2
@@ -696,7 +696,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.002713s Sys=0.000000s
+  User=0.000000s Real=0.002792s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.27 MB

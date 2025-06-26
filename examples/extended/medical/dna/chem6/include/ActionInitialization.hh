@@ -57,6 +57,7 @@ class ActionInitialization : public G4VUserActionInitialization
   public:
     ActionInitialization();
     virtual ~ActionInitialization();
+    void BuildMoleculeCounters() const;
 
     virtual void BuildForMaster() const;
     virtual void Build() const;

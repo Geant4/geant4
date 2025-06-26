@@ -12,11 +12,11 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          Linux-g++    Linux (CentOS7), gcc-4.8.4 (default)
+#          Linux-g++    Linux (rhel9), gcc-11.5 (default)
 #
-#          Darwin-clang MacOSX 10.14, clang-7
+#          Darwin-clang macOS 15.4, clang-17
 #
-#          WIN32-VC     Windows 10 and Microsoft Visual C++ 14.11
+#          WIN32-VC     Windows 11 and Microsoft Visual C++ 17.13
 # 
 # -------------------------------------------------------------------------
 

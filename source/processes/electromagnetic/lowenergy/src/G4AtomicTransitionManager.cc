@@ -39,6 +39,7 @@
 #include "G4FluoData.hh"
 #include "G4AugerData.hh"
 #include "G4AutoLock.hh"
+
 namespace { G4Mutex AtomicTransitionManagerMutex = G4MUTEX_INITIALIZER; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,7 +49,8 @@ G4AtomicTransitionManager* G4AtomicTransitionManager::instance = nullptr;
 G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 {
   if (instance == nullptr) {
-    instance = new G4AtomicTransitionManager();
+    static G4AtomicTransitionManager man;
+    instance = &man;
   }
   return instance;
 }
@@ -65,29 +67,20 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
 { 
   delete augerData;
  
-  for (auto& pos : shellTable){
-    std::vector<G4AtomicShell*>vec = pos.second;
-    std::size_t vecSize = vec.size();   
-    for (std::size_t i=0; i< vecSize; ++i){
-      G4AtomicShell* shell = vec[i];
-      delete shell;     
-    }
+  for (auto const & pos : shellTable) {
+    std::vector<G4AtomicShell*> vec = pos.second;
+    for (auto const & p : vec) { delete p; }
   }
  
-  for (auto& ppos : transitionTable)
-    {
-      std::vector<G4FluoTransition*>vec = ppos.second;
-      std::size_t vecSize=vec.size();
-   
-      for (std::size_t i=0; i< vecSize; ++i){
-	G4FluoTransition* transition = vec[i];
-	delete transition;      
-      }
-    }   
+  for (auto const & ppos : transitionTable) {
+    std::vector<G4FluoTransition*> vec = ppos.second;
+    for (auto const & p : vec) { delete p; }
+  }   
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4AtomicShell* 
-G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
+G4AtomicTransitionManager::Shell(G4int Z, std::size_t shellIndex) const
 {   
   auto pos = shellTable.find(Z);
   
@@ -98,7 +91,7 @@ G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
 
       else 
 	{
-	  size_t lastShell = v.size();
+	  std::size_t lastShell = v.size();
 	  G4ExceptionDescription ed;
 	  ed << "No de-excitation for Z= " << Z 
 	     << "  shellIndex= " << shellIndex
@@ -118,7 +111,7 @@ G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
       G4Exception("G4AtomicTransitionManager::Shell()","de0001",
 		  FatalException,ed,"");
     } 
-  return 0;
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -127,7 +120,7 @@ G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
 // the vacancy is, the radiative transition that can happen (originating 
 // shell, energy, probability)
 const G4FluoTransition* 
-G4AtomicTransitionManager::ReachableShell(G4int Z,size_t shellIndex) const
+G4AtomicTransitionManager::ReachableShell(G4int Z, std::size_t shellIndex) const
 {
   auto pos = transitionTable.find(Z);
   if (pos!= transitionTable.end())
@@ -215,7 +208,7 @@ G4int G4AtomicTransitionManager::NumberOfReachableAugerShells(G4int Z)const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(
-         G4int Z, size_t shellIndex) const
+	 G4int Z, std::size_t shellIndex) const
 {
   auto pos = transitionTable.find(Z);
   G4double totalRadTransProb = 0.0;
@@ -229,7 +222,7 @@ G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(
 	  G4FluoTransition* transition = v[shellIndex];
 	  G4DataVector transProb = transition->TransitionProbabilities();
 	
-	  for (size_t j=0; j<transProb.size(); ++j) 
+	  for (std::size_t j=0; j<transProb.size(); ++j) 
 	    {
 	      totalRadTransProb += transProb[j];
 	    }
@@ -258,7 +251,7 @@ G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(
-                 G4int Z, size_t shellIndex) const
+	 G4int Z, std::size_t shellIndex) const
 {
   G4double prob = 1.0 - TotalRadiativeTransitionProbability(Z, shellIndex);
   if(prob > 1.0 || prob < 0.0) {

@@ -80,6 +80,17 @@ public:
     m_render_area->repaint(); //immediate.
   }
 
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    if(!m_render_area) {a_w = 0;a_h = 0;return false;}
+    a_w = (unsigned int)m_render_area->width();
+    a_h = (unsigned int)m_render_area->height();
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
+  }
+
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {  //we do not have ownership.
     if(!m_render_area) return;
     m_render_area->set_device_interactor(a_interactor);

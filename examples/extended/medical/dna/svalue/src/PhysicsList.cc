@@ -86,8 +86,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(), fEmPhysicsList(0), fMessen
   G4double highLimit = 100. * CLHEP::GeV;
 
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit, highLimit);
-  // Change time and other limits in G4NuclideTable
 
+  // Change time and other limits in G4NuclideTable
   G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1 * picosecond);
   G4NuclideTable::GetInstance()->SetLevelTolerance(1.0 * eV);
 

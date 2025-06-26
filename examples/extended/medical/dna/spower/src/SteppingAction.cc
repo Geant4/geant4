@@ -131,7 +131,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       fTotalStoppingPower = fDepositedEnergy / fLength;
       // G4cout << fTotalStoppingPower/(MeV/cm) << G4endl;
 
-      G4RunManager::GetRunManager()->AbortEvent();
+      // *** Default method to stop calculation (no secondary electrons tracked)
+      // G4RunManager::GetRunManager()->AbortEvent();
+
+      // *** Alternative method when secondary electrons are scored in TrackingAction (slower)
+      step->GetTrack()->SetTrackStatus(fStopAndKill);
+
       fSumOfStepLength = 0.;
       fDepositedEnergy = 0;
       fNumberOfSteps = 0;

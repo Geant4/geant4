@@ -5,6 +5,11 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2025-03-30 Ben Morgan (exparallel-V11-03-00)
+- Retire obsolete and untested TBB example.
+  - Functionality fully provided by tasking run manager with TBB support with no
+    user code changes required.
+
 ## 2024-05-30 Ben Morgan (exparallel-V11-02-00)
 - Remove obsolete and untested TopC example
 

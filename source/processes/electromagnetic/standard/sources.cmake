@@ -37,6 +37,8 @@ geant4_add_module(G4emstandard
     G4LindhardSorensenData.hh
     G4LindhardSorensenIonModel.hh
     G4LossFluctuationDummy.hh
+    G4LowPAIH2O.hh
+    G4LowDataH2O.hh
     G4ModifiedTsai.hh
     G4MollerBhabhaModel.hh
     G4MottData.hh
@@ -121,6 +123,7 @@ geant4_add_module(G4emstandard
     G4LindhardSorensenData.cc
     G4LindhardSorensenIonModel.cc
     G4LossFluctuationDummy.cc
+    G4LowPAIH2O.cc
     G4ModifiedTsai.cc
     G4MollerBhabhaModel.cc
     G4NuclearStopping.cc

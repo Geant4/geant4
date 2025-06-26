@@ -86,6 +86,7 @@ private:
   static void lookedAt(SoCamera*,SbVec3f & dir, SbVec3f & up);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
+  G4bool CompareForTransientsRedraw(G4ViewParameters&);
   void DrawDetector();
 private:
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.

@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-05-05 Hoang Tran (chem4-V11-03-01)
+- Replaced the shared_ptr with unique_ptr and raw for manager counters.
+
+## 2025-04-22 Hoang Tran (chem4-V11-03-00)
+- used new G4MoleculeCounterManager to manage the G4MoleculeCounter
+
 ## 2024-10-14 Hoang Tran (chem4-V11-02-01)
 - corrected molecule name in chem4 macro file
 

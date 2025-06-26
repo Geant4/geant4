@@ -28,14 +28,13 @@
 #  ifndef PAR04ONNXINFERENCE_HH
 #    define PAR04ONNXINFERENCE_HH
 #    include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
-#    include "core/session/onnxruntime_cxx_api.h"  // for Env, Session, SessionO...
+#    include "onnxruntime_c_api.h"  // for OrtMemoryInfo
+#    include "onnxruntime_cxx_api.h"  // for Env, Session, SessionO...
 
 #    include <G4String.hh>  // for G4String
 #    include <G4Types.hh>  // for G4int, G4double
 #    include <memory>  // for unique_ptr
 #    include <vector>  // for vector
-
-#    include <core/session/onnxruntime_c_api.h>  // for OrtMemoryInfo
 
 /**
  * @brief Inference using the ONNX runtime.

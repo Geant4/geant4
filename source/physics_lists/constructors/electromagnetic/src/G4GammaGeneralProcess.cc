@@ -100,12 +100,7 @@ G4GammaGeneralProcess::G4GammaGeneralProcess(const G4String& pname):
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4GammaGeneralProcess::~G4GammaGeneralProcess()
-{
-  if(isTheMaster) {
-    delete theHandler;
-    theHandler = nullptr;
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

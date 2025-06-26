@@ -32,9 +32,10 @@
 #include "G4EmDNAPhysics_option2.hh"
 #include "G4PhysicsConstructorRegistry.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction* pDetector)
+PhysicsList::PhysicsList()
   : G4VModularPhysicsList(),
     fEmDNAPhysicsList(new G4EmDNAPhysics_option2(verboseLevel)),
     fEmDNAChemistryList(new EmDNAChemistry)
@@ -42,7 +43,6 @@ PhysicsList::PhysicsList(DetectorConstruction* pDetector)
   G4double currentDefaultCut = 0.01 * mm;
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV, 1 * GeV);
   SetDefaultCutValue(currentDefaultCut);
-  fEmDNAChemistryList->SetChemistryWorld(*(pDetector->GetChemistryWorld()));
   fPBC = std::make_unique<PeriodicBoundaryPhysics>("Periodic", true, true, true);
 }
 

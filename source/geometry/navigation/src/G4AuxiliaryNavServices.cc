@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4AuxiliaryNavServices implementation
+// Class G4AuxiliaryNavServices implementation
 //
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 
 #include "G4AuxiliaryNavServices.hh"

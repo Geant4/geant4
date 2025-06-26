@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-06 Dmitri Konstantinov (fastsimchanneling-V11-02-05)
+## 2025-04-06 Dmitri Konstantinov (fastsimchanneling-V11-03-00)
 - In G4VChannelingFastSimCrystalData::IonizationLosses(), fixed bug
   in the electron ionization loss correction formula.
   Issue was spotted by PVS-Studio static analysis.

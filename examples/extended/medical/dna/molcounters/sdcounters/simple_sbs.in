@@ -1,0 +1,48 @@
+/run/numberOfThreads 2
+
+# use Step-by-Step (SBS), independent reaction time (IRT)
+# or synchronized IRT (IRT_syn),
+# SBS ( is only for TDC, set 0 )
+#/process/chem/TimeStepModel IRT
+/process/chem/TimeStepModel SBS
+#/process/chem/TimeStepModel IRT_syn
+
+
+/run/initialize
+
+/chem/PrintSpeciesTable
+
+# set all reaction rates to zero (only diffusion)
+/chem/reaction/UI
+
+# totally diffusion-controlled (TDC)                | Fix |  reactionRate[dm3/(mol*s)] | TDC (0)
+/chem/reaction/add H + H -> H2                      | Fix |  0 | 0
+/chem/reaction/add e_aq + H -> H2 + OHm             | Fix |  0 | 0
+/chem/reaction/add e_aq + e_aq -> H2 + OHm + OHm    | Fix |  0 | 0
+/chem/reaction/add H3Op + OHm -> H2O                | Fix |  0 | 0
+
+# partially diffusion-controlled (PDC)              | Fix |  reactionRate[dm3/(mol*s)] | PDC (1)
+/chem/reaction/add OH + H -> H2O                    | Fix |  0 | 1
+/chem/reaction/add OH + OH -> H2O2                  | Fix |  0 | 1
+/chem/reaction/add e_aq + OH -> OHm                 | Fix |  0 | 1
+/chem/reaction/add e_aq + H2O2 -> OHm + OH          | Fix |  0 | 1
+/chem/reaction/add e_aq + H3Op -> H + H2O           | Fix |  0 | 1
+
+/chem/reaction/print
+
+/gun/position 0 0 0
+/gun/particle e-
+
+/tracking/verbose 0
+/scheduler/verbose 0
+/scheduler/endTime 0.001 microsecond
+
+/scorer/BasicMoleculeCounts/nOfTimeBins 10
+/scorer/BasicCounter_VariablePrecision/nOfTimeBins 10
+/scorer/basicreactioncounts/nOfTimeBins 10
+
+/run/verbose 1
+/run/printProgress 1
+
+/gun/energy 1 keV
+/run/beamOn 2

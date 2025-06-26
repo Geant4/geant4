@@ -6,8 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-01 Gabriele Cosmo (zlib-V11-02-00)
-- Fix in zutil.h to remove redundant block on macOS and allow for porting
+## 2025-05-02 Ben Morgan (zlib-V11-03-01)
+- Import zlib 1.3.1 sources, retaining prior Geant4 patches.
+
+## 2025-04-01 Gabriele Cosmo (zlib-V11-03-00)
+- Fix in zutil.h to comment out redundant block on macOS and allow for porting
   on macOS-15.4 and clang-17.0.0.
 
 ## 2023-06-15 Ben Morgan (zlib-V11-01-00)

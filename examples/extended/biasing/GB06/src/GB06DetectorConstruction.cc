@@ -44,7 +44,7 @@ GB06DetectorConstruction::GB06DetectorConstruction() : G4VUserDetectorConstructi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB06DetectorConstruction::~GB06DetectorConstruction() {}
+GB06DetectorConstruction::~GB06DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,17 +55,17 @@ G4VPhysicalVolume* GB06DetectorConstruction::Construct()
 
   G4VSolid* solidWorld = new G4Box("World.solid", 10 * m, 10 * m, 10 * m);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,  // its solid
-                                                    worldMaterial,  // its material
-                                                    "World.logical");  // its name
+  auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+                                        worldMaterial,  // its material
+                                        "World.logical");  // its name
 
-  G4PVPlacement* physiWorld = new G4PVPlacement(nullptr,  // no rotation
-                                                G4ThreeVector(),  // at (0,0,0)
-                                                logicWorld,  // its logical volume
-                                                "World.physical",  // its name
-                                                nullptr,  // its mother volume
-                                                false,  // no bool. operation
-                                                0);  // copy number
+  auto physiWorld = new G4PVPlacement(nullptr,  // no rotation
+                                      G4ThreeVector(),  // at (0,0,0)
+                                      logicWorld,  // its logical volume
+                                      "World.physical",  // its name
+                                      nullptr,  // its mother volume
+                                      false,  // no bool. operation
+                                      0);  // copy number
 
   // ----------------------------------------------------
   // -- volume of shield, made of concrete, in one block:
@@ -74,9 +74,9 @@ G4VPhysicalVolume* GB06DetectorConstruction::Construct()
   G4double halfZ = 2.5 * m;
   G4VSolid* solidShield = new G4Box("shield.solid", halfXY, halfXY, halfZ);
 
-  G4LogicalVolume* logicTest = new G4LogicalVolume(solidShield,  // its solid
-                                                   concreteMaterial,  // its material
-                                                   "shield.logical");  // its name
+  auto logicTest = new G4LogicalVolume(solidShield,  // its solid
+                                       concreteMaterial,  // its material
+                                       "shield.logical");  // its name
 
   new G4PVPlacement(nullptr,  // no rotation
                     G4ThreeVector(0, 0, halfZ),  // volume entrance is set at (0,0,0)

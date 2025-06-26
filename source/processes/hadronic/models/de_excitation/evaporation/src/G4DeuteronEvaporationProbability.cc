@@ -33,6 +33,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4DeuteronEvaporationProbability.hh"
+#include "G4DeexPrecoUtility.hh"
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3.0)
@@ -40,25 +41,7 @@ G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
 
 G4double G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment& fr)
 {
-  // Data comes from 
-  // Dostrovsky, Fraenkel and Friedlander
-  // Physical Review, vol 116, num. 3 1959
-  // 
-  // const G4int size = 5;
-  // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
-  // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
-  // C for deuteron is equal to C for protons divided by 2
-
-  G4int aZ = fr.GetZ_asInt()-GetZ();
-  G4double C;
-	
-  if (aZ <= 70) {
-    C = 0.10;
-  } else {
-    C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
-	 - 0.66612e-01)*aZ + 0.98375;
-  }
-  return 1.0 + C*0.5;
+  return 1.0 + G4DeexPrecoUtility::ProtonCValue(fr.GetZ_asInt() - 1)*0.5;
 }
 
 G4double G4DeuteronEvaporationProbability::CalcBetaParam(const G4Fragment&) 

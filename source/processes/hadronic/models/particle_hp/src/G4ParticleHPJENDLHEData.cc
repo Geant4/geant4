@@ -63,11 +63,11 @@ G4ParticleHPJENDLHEData::G4ParticleHPJENDLHEData()
         G4PhysicsVector* pointerPhysicsVector = itA.second;
         if (pointerPhysicsVector != nullptr) {
           delete pointerPhysicsVector;
-          itA.second = NULL;
+          itA.second = nullptr;
         }
       }
       delete pointer_map;
-      itZ.second = NULL;
+      itZ.second = nullptr;
     }
   }
   mIsotope.clear();
@@ -215,14 +215,17 @@ G4double G4ParticleHPJENDLHEData::getXSfromThisIsotope(G4int Z, G4int A, G4doubl
   G4double aXSection = 0.0;
 
   G4PhysicsVector* aPhysVec;
-  if (mIsotope.find(Z)->second->find(A) != mIsotope.find(Z)->second->end()) {
-    aPhysVec = mIsotope.find(Z)->second->find(A)->second;
+  auto isoZ = mIsotope.find(Z);
+  if (isoZ == mIsotope.end()) { return aXSection; }
+  auto isoA = isoZ->second->find(A);
+  if (isoA != isoZ->second->end()) {
+    aPhysVec = isoA->second;
     aXSection = aPhysVec->Value(ek);
   }
   else {
     // Select closest one in the same Z
     G4int delta0 = 99;  // no mean for 99
-    for (auto it = mIsotope.find(Z)->second->cbegin(); it != mIsotope.find(Z)->second->cend(); ++it)
+    for (auto it = isoZ->second->begin(); it != isoZ->second->end(); ++it)
     {
       G4int delta = std::abs(A - it->first);
       if (delta < delta0) delta0 = delta;
@@ -231,17 +234,25 @@ G4double G4ParticleHPJENDLHEData::getXSfromThisIsotope(G4int Z, G4int A, G4doubl
     // Randomize of selection larger or smaller than A
     if (G4UniformRand() < 0.5) delta0 *= -1;
     G4int A1 = A + delta0;
-    if (mIsotope.find(Z)->second->find(A1) != mIsotope.find(Z)->second->cend()) {
-      aPhysVec = mIsotope.find(Z)->second->find(A1)->second;
+    auto isoA1 = isoZ->second->find(A1);
+    G4bool ok = false;
+    if (isoA1 != isoZ->second->end()) {
+      aPhysVec = isoA1->second;
+      ok = true;
     }
     else {
       A1 = A - delta0;
-      aPhysVec = mIsotope.find(Z)->second->find(A1)->second;
+      auto isoA2 = isoZ->second->find(A1);
+      if (isoA2 != isoZ->second->end()) {
+	aPhysVec = isoA2->second;
+	ok = true;
+      }
     }
-
-    aXSection = aPhysVec->Value(ek);
-    // X^(2/3) factor
-    aXSection *= G4Pow::GetInstance()->A23(1.0 * A / A1);
+    if (ok) {
+      aXSection = aPhysVec->Value(ek);
+      // X^(2/3) factor
+      aXSection *= G4Pow::GetInstance()->A23(1.0 * A / A1);
+    }
   }
 
   return aXSection;

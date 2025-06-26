@@ -188,7 +188,7 @@ public: // With description
   const G4SceneTreeItem& GetSceneTree() {return fSceneTree;}
   G4SceneTreeItem& AccessSceneTree() {return fSceneTree;}
   void UpdateGUISceneTree();  // A utility
-  const G4int fMaxNTouchables = 10000;  // Limits memory to about 50 MB
+  const G4int fMaxAllTouchables = 10000;  // Limits memory to about 50 MB per PV model
   G4bool fCurtailDescent = false;  // Flag to curtail descent into PV model for scene tree
 
   //////////////////////////////////////////////////////////////
@@ -227,6 +227,9 @@ public: // With description
   void ProcessView ();
   // Used by DrawView ().  Invokes SetView ().  The basic logic is here.
 
+  void ProcessTransients ();
+  // Re-draws transients only
+
 protected:
 
   //////////////////////////////////////////////////////////////
@@ -263,6 +266,7 @@ protected:
   //////////////////////////////////////////////////////////////
   // Other parameters.
   G4bool           fNeedKernelVisit;  // See DrawView() for comments.
+  G4bool           fTransientsNeedRedrawing;  // See DrawView() for comments.
 };
 
 #include "G4VViewer.icc"

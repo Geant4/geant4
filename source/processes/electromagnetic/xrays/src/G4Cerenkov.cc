@@ -149,9 +149,20 @@ void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   std::size_t numOfMaterials              = G4Material::GetNumberOfMaterials();
 
-  thePhysicsTable = new G4PhysicsTable(numOfMaterials);
+  // Find the number of materials that have non-empty material property tables
+  std::size_t numOfMaterialsWithMPT = 0;
+  for(std::size_t i = 0; i < numOfMaterials; ++i)
+  {
+    if(((*theMaterialTable)[i])->GetMaterialPropertiesTable())
+    {
+       ++numOfMaterialsWithMPT;
+    }
+  }
+
+  thePhysicsTable = new G4PhysicsTable(numOfMaterialsWithMPT);
 
   // loop over materials
+  std::size_t indexMPT = 0;
   for(std::size_t i = 0; i < numOfMaterials; ++i)
   {
     G4PhysicsFreeVector* cerenkovIntegral = nullptr;
@@ -202,12 +213,13 @@ void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
           }
         }
       }
+      // The Cerenkov integral for a given material will be inserted in
+      // thePhysicsTable according to the position of the material in
+      // the material table.
+      thePhysicsTable->insertAt(indexMPT, cerenkovIntegral);
+      fIndexMPT.insert(std::make_pair(i, indexMPT));
+      ++indexMPT;
     }
-
-    // The Cerenkov integral for a given material will be inserted in
-    // thePhysicsTable according to the position of the material in
-    // the material table.
-    thePhysicsTable->insertAt(i, cerenkovIntegral);
   }
 }
 
@@ -411,7 +423,11 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
   std::size_t materialIndex   = aMaterial->GetIndex();
 
   // If Physics Vector is not defined no Cerenkov photons
-  if(!(*thePhysicsTable)[materialIndex])
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  G4MaterialPropertiesTable* MPT =
+    ((*materialTable)[materialIndex])->GetMaterialPropertiesTable();
+  //  if(!(*thePhysicsTable)[materialIndex])
+  if(!MPT)
   {
     return StepLimit;
   }
@@ -518,7 +534,23 @@ G4double G4Cerenkov::GetAverageNumberOfPhotons(
   std::size_t materialIndex = aMaterial->GetIndex();
 
   // Retrieve the Cerenkov Angle Integrals for this material
-  G4PhysicsVector* CerenkovAngleIntegrals = ((*thePhysicsTable)(materialIndex));
+  auto it = fIndexMPT.find(materialIndex);
+
+  std::size_t indexMPT = 0;
+  if(it != fIndexMPT.end())
+  {
+    indexMPT = it->second;
+  }
+  else
+  {
+    G4ExceptionDescription ed;
+    ed << "G4MaterialPropertiesTable for " << aMaterial->GetName()
+       << " is not found!" << G4endl;
+    G4Exception("G4Cerenkov::GetAverageNumberOfPhotons", "Cerenkov01",
+                FatalException, ed);
+  }
+
+  G4PhysicsVector* CerenkovAngleIntegrals = ((*thePhysicsTable)(indexMPT));
 
   std::size_t length = CerenkovAngleIntegrals->GetVectorLength();
   if(0 == length)

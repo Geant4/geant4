@@ -25,8 +25,8 @@
 //
 // Class G4TransportationManager implementation
 //
-// Created : J.Apostolakis, 1997
-// Reviewed: G.Cosmo, 2006
+// Created: John Apostolakis (CERN), 10 March 1997
+// Reviewed: Gabriele Cosmo (CERN), 26 April 2006
 // --------------------------------------------------------------------
 
 #include "G4TransportationManager.hh"
@@ -44,8 +44,10 @@
 G4ThreadLocal G4TransportationManager*
 G4TransportationManager::fTransportationManager = nullptr;
 
-// The first registered navigator -- expect this to be the master thread's navigator
-//  If it has an external sub-navigator, it will be cloned for each worker thread.
+// The first registered navigator.
+// Expect this to be the master thread's navigator. If it has an external
+// sub-navigator, it will be cloned for each worker thread.
+//
 G4Navigator* G4TransportationManager::fFirstTrackingNavigator= nullptr;
 
 // ----------------------------------------------------------------------------

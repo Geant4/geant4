@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-02-13 Gabriele Cosmo (empii-V11-03-00)
+- Use "const G4String&" in G4hImpactIonisation::InitializeMe() to avoid
+  unnecessary copy.
+
 ## 2023-08-29 Ben Morgan (empii-V11-01-00)
 - Fix Coverity warnings
 

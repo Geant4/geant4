@@ -65,10 +65,13 @@ if(GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_QT)
   message(STATUS "Forcing GEANT4_USE_QT to ON, required by selection of GEANT4_USE_INVENTOR_QT as ON")
 endif()
 
-# TEMPORARY for 11.2 Beta Development
-# Decision still required on whether to allow selection of 5/6 in production
-cmake_dependent_option(GEANT4_USE_QT_QT6 "Require Qt6 when building Qt support" OFF "GEANT4_USE_QT" OFF)
-mark_as_advanced(GEANT4_USE_QT_QT6)
+# We default to Qt6 if available, but allow the user to select Qt5
+set(GEANT4_USE_QT_QT6 ON)
+
+cmake_dependent_option(GEANT4_USE_QT_QT5 "Require Qt5 when building Qt support" OFF "GEANT4_USE_QT" OFF)
+if(GEANT4_USE_QT_QT5)
+  set(GEANT4_USE_QT_QT6 OFF)
+endif()
 
 # - Vtk
 option(GEANT4_USE_VTK "Build Geant4 with VTK visualisation" OFF)
@@ -161,15 +164,13 @@ if(GEANT4_USE_QT)
   # 5.9 is selected as the min version to support based on the system version on CentOS7
   # Once 5.15 is the minimum version, the "Qt${QT_VERSION_MAJOR}_..." variables can be dropped
   # - https://doc.qt.io/qt-6/cmake-manual.html
-  # TEMPORARY for 11.2 beta:
-  # - Decision still required on whether to allow selection of 5/6 in production
   # TODO:
   # - Because VTK and SoQt use Qt themselves, we may want to consider checking that we
   #   have a consistent link to the same Qt version 
-  if(GEANT4_USE_QT_QT6)
-    find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
-  else()
+  if(GEANT4_USE_QT_QT5)
     find_package(QT 5.9 NAMES Qt5 COMPONENTS Core REQUIRED)
+  else()
+    find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
   endif()
   
   find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL REQUIRED)
@@ -180,6 +181,9 @@ if(GEANT4_USE_QT)
     Qt${QT_VERSION_MAJOR}Gui_DIR
     Qt${QT_VERSION_MAJOR}Widgets_DIR
     Qt${QT_VERSION_MAJOR}OpenGL_DIR)
+
+  # RayTracerQT
+  set(GEANT4_USE_RAYTRACER_QT ON)
 
   # G4OpenGL and G4ToolsSG also require OpenGLWidgets in Qt6
   if(QT_VERSION_MAJOR GREATER 5)

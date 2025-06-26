@@ -6,7 +6,56 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-01-14 Ben Morgan (emdna-V11-02-18)
+## 2025-05-28 Hoang Tran (emdna-V11-03-12)
+- Fixed COVERTY issues on new moleculecounter imple
+
+## 2025-05-20 Hoang Tran (emdna-V11-03-11)
+- Fixed FPE on G4ChemReboundTransportation::calculateNextCoordinate
+
+## 2025-05-19 Vladimir Ivanchenko (emdna-V11-03-10)
+- G4DNARuddIonisationModel, G4DNABornIonisationModel1, G4DNABornIonisationModel2
+  fixed definition of the stationary code via G4EmParameters
+
+## 2025-05-05 Hoang Tran (emdna-V11-03-09)
+- Replaced the shared_ptr with unique_ptr and raw for manager counters.
+
+## 2025-04-23 Hoang Tran (emdna-V11-03-08)
+- Replaced the G4MoleculeCounter singleton with G4MoleculeCounterManager for managing counters.
+
+## 2025-04-17 Vladimir Ivanchenko (emdna-V11-03-07)
+- G4DNARuddIonisationDynamicModel - disable atomic deexcitation in stationary
+    mode, use G4VSItegration as a base class.
+- G4DNABornIonisationModel - new implementation of the Born model using
+    G4DNASamplingTable class, use stationary and fast flags from EM parameters.
+- G4DNABornIonisationModel1 - use stationary and fast flags from EM parameters.
+- G4DNASamplingTable - new class allowing share sampling data between threads.
+
+## 2025-04-01 Hoang Tran (emdna-V11-03-06)
+- update IRT-syn model for high LET applications.
+- Correct the G4DNAScavengerProcess for IRT-syn model
+- Created G4ChemReboundTransportation to handle the rebound
+  transportation of the molecule.
+
+## 2025-03-31 Hoang Tran (emdna-V11-03-05)
+- G4PhysChemIO - removed G4Analysis class and G4analysismng module
+dependency from G4emdna-utils
+
+## 2025-03-12 Vladimir Ivanchenko (emdna-V11-03-04)
+- G4DNARuddIonisationDynamicModel - minor fix for alpha particles
+
+## 2025-02-26 Vladimir Ivanchenko (emdna-V11-03-03)
+- G4DNARuddIonisationModel - added forgotten definition of stationary mode.
+
+## 2025-02-24 Vladimir Ivanchenko (emdna-V11-03-02)
+- G4DNARuddIonisationDynamicModel - use G4Track and not G4DynamicParticle, allow
+  to store radicals if chemistry is activated, update for ions with full electron
+  shell
+
+## 2025-02-12 Vladimir Ivanchenko (emdna-V11-03-01)
+- Added new G4DNARuddIonisationDynamicModel, which use charge from G4DynamicParticle.
+  The model is applicable for all ions.
+
+## 2025-01-14 Ben Morgan (emdna-V11-03-00)
 - Remove obsolete/commented references to G4AllocatorList.
 
 ## 2024-10-31 Hoang Tran (emdna-V11-02-17)

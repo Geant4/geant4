@@ -44,6 +44,7 @@
 #include "G4ITTrackHolder.hh"
 #include "G4ITReaction.hh"
 #include "G4Scheduler.hh"
+#include "G4MoleculeCounterManager.hh"
 
 using namespace std;
 
@@ -399,7 +400,10 @@ std::unique_ptr<G4ITReactionChange> G4DNAIRT::MakeReaction(const G4Track& trackA
   const auto pMoleculeA = GetMolecule(trackA)->GetMolecularConfiguration();
   const auto pMoleculeB = GetMolecule(trackB)->GetMolecularConfiguration();
   const auto pReactionData = fMolReactionTable->GetReactionData(pMoleculeA, pMoleculeB);
-
+  // Notify molecule (reaction) counter
+  if (G4MoleculeCounterManager::Instance()->GetIsActive()) {
+    G4MoleculeCounterManager::Instance()->RecordReaction(pReactionData, trackA.GetGlobalTime());
+  }
   G4double globalTime = G4Scheduler::Instance()->GetGlobalTime();
   G4double effectiveReactionRadius = pReactionData->GetEffectiveReactionRadius();
 

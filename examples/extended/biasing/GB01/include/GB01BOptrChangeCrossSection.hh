@@ -58,29 +58,29 @@ class GB01BOptrChangeCrossSection : public G4VBiasingOperator
     // -- Constructor: takes the name of the particle type to bias:
     // ------------------------------------------------------------
     GB01BOptrChangeCrossSection(G4String particleToBias, G4String name = "ChangeXS");
-    virtual ~GB01BOptrChangeCrossSection();
+    ~GB01BOptrChangeCrossSection() override;
 
     // -- method called at beginning of run:
-    virtual void StartRun();
+    void StartRun() override;
 
   private:
     // -----------------------------
     // -- Mandatory from base class:
     // -----------------------------
     // -- This method returns the biasing operation that will bias the physics process occurence.
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeOccurenceBiasingOperation(const G4Track* track,
-                                     const G4BiasingProcessInterface* callingProcess);
+                                     const G4BiasingProcessInterface* callingProcess) override;
     // -- Methods not used:
-    virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track*,
-                                                                   const G4BiasingProcessInterface*)
+    G4VBiasingOperation*
+    ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) override
     {
-      return 0;
+      return nullptr;
     }
-    virtual G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(const G4Track*,
-                                                                   const G4BiasingProcessInterface*)
+    G4VBiasingOperation*
+    ProposeNonPhysicsBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) override
     {
-      return 0;
+      return nullptr;
     }
 
   private:
@@ -91,12 +91,12 @@ class GB01BOptrChangeCrossSection : public G4VBiasingOperator
     // -- This method is called to inform the operator that a proposed operation has been applied.
     // -- In the present case, it means that a physical interaction occured (interaction at
     // -- PostStepDoIt level):
-    virtual void OperationApplied(const G4BiasingProcessInterface* callingProcess,
-                                  G4BiasingAppliedCase biasingCase,
-                                  G4VBiasingOperation* occurenceOperationApplied,
-                                  G4double weightForOccurenceInteraction,
-                                  G4VBiasingOperation* finalStateOperationApplied,
-                                  const G4VParticleChange* particleChangeProduced);
+    void OperationApplied(const G4BiasingProcessInterface* callingProcess,
+                          G4BiasingAppliedCase biasingCase,
+                          G4VBiasingOperation* occurenceOperationApplied,
+                          G4double weightForOccurenceInteraction,
+                          G4VBiasingOperation* finalStateOperationApplied,
+                          const G4VParticleChange* particleChangeProduced) override;
 
   private:
     // -- List of associations between processes and biasing operations:

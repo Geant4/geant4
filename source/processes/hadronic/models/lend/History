@@ -6,6 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-05-14 Bret Beck, Caleb Matoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-02)
+- Fixes aimed for high impact issues identified by Coverity.
+
+## 2025-02-04 Bret Beck, Caleb Matoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-01)
+- Major update of GIDIplus interface with refactored c++ code including:
+   o uses official GNDS formatted data
+   o added feature for high-fidelity gamma cascades following reactions such as neutron capture and inelastic scattering
+
+## 2024-12-10 Douglas M Wright (hadr-lend-V11-03-00)
+- Collect all inelastic models (neutron and gamma induced) into G4HadronPhysicsLEND
+  o update and simplify Shielding and G4EmExtraPhysics accordingly
+  o fixed two bugs:
+     - G4EmExtraPhysics failed to load photonuclear from LEND if G4GammaGeneralProcess existed
+     - G4LENDCombinedModel photofission check energy function was not connected to the base class which results in a crash
+
 ## 2024-08-21 Gabriele Cosmo (hadr-lend-V11-02-05)
 - Fixed reported Coverity defects for:
   o pointless expression condition in ptwXY_div_ptwXY() operator;

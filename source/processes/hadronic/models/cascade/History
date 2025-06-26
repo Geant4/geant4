@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-22 Alberto Ribon (hadr-casc-V11-02-05)
+## 2025-04-22 Alberto Ribon (hadr-casc-V11-03-00)
 - G4CascadeFinalStateAlgorithm, G4NucleiModel : introduced the possibility to
   retrieve either the behavior of these classes as in Geant4 version 11.3
   (default) or as in 11.2 according to the value of boolean flags in

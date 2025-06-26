@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GeometryMessenger implementation
+// Class G4GeometryMessenger implementation
 //
-// Author: G.Cosmo, CERN
+// Author: Gabriele Cosmo (CERN), 24 October 2001.
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -44,6 +44,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 
 #include "G4GeomTestVolume.hh"
 
@@ -161,7 +162,7 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   parCmd->SetParameterName("check_parallel",true);
   parCmd->SetDefaultValue(true);
 
-  recCmd = new G4UIcmdWithoutParameter( "/geometry/test/run", this );
+  recCmd = new G4UIcmdWithAString( "/geometry/test/run", this );
   recCmd->SetGuidance( "Start running the recursive overlap check." );
   recCmd->SetGuidance( "Volumes are recursively asked to verify for overlaps" );
   recCmd->SetGuidance( "for points generated on the surface against their" );
@@ -170,6 +171,18 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   recCmd->SetGuidance( "daughters, etc." );
   recCmd->SetGuidance( "NOTE: it may take a very long time," );
   recCmd->SetGuidance( "      depending on the geometry complexity !");
+  recCmd->SetGuidance("Specify the overlap check mode.");
+  recCmd->SetGuidance("  placed: Check overlaps in all placed volumes (default)");
+  recCmd->SetGuidance("          This includes every instance of repeated placements");
+  recCmd->SetGuidance("  logical: Check overlaps only among daughters of each logical volume.");
+  recCmd->SetGuidance("           This avoids duplicate reports and improves performance.");
+  recCmd->SetParameterName("check_mode",true);
+
+  const std::string candidates_list = OverlapMode::placed
+                                    + " " + OverlapMode::logical;
+
+  recCmd->SetCandidates(candidates_list.c_str());
+  recCmd->SetDefaultValue(OverlapMode::placed.c_str());
   recCmd->AvailableForStates(G4State_Idle);
 }
 
@@ -183,9 +196,7 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete errCmd; delete parCmd; delete tolCmd;
   delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
-  for(auto* tvolume: tvolumes) {
-      delete tvolume;
-  }
+  for (const auto* tvolume: tvolumes) { delete tvolume; }
 }
 
 //
@@ -202,11 +213,12 @@ G4GeometryMessenger::Init()
     //
     const auto noWorlds = tmanager->GetNoWorlds();
     const auto fWorld = tmanager->GetWorldsIterator();
-    for(size_t i=0;i<noWorlds;++i)
+
+    for( std::size_t i=0; i<noWorlds; ++i)
     {
-        // Test the actual detector...
-        //
-        tvolumes.push_back(new G4GeomTestVolume(fWorld[i]));
+      // Test the actual detector...
+      //
+      tvolumes.push_back(new G4GeomTestVolume(fWorld[i]));
     }
   }
 }
@@ -271,7 +283,10 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   else if (command == recCmd) {
     Init();
     G4cout << "Running geometry overlaps check..." << G4endl;
-    RecursiveOverlapTest();
+    if( OverlapMode::placed == newValues )
+      RecursiveOverlapTest();
+    else if( OverlapMode::logical == newValues )
+      TreeOverlapTest();
     G4cout << "Geometry overlaps check completed !" << G4endl;
   }
 }
@@ -382,3 +397,29 @@ G4GeometryMessenger::RecursiveOverlapTest()
     tvolumes.front()->TestRecursiveOverlap( recLevel, recDepth );
   }
 }
+
+//
+// Tree Overlap Test
+//
+void
+G4GeometryMessenger::TreeOverlapTest()
+{
+  // Close geometry if necessary
+  //
+  CheckGeometry();
+
+  // Make test on single line supplied by user recursively
+  //
+  if (checkParallelWorlds)
+  {
+    for(const auto* tvolume: tvolumes)
+    {
+      tvolume->TestOverlapInTree();
+    }
+  }
+  else
+  {
+    tvolumes.front()->TestOverlapInTree();
+  }
+}
+

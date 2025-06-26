@@ -37,7 +37,7 @@
 
 G4RayTracerX::G4RayTracerX():
   G4VGraphicsSystem("RayTracerX",
-		    "RayTracerX",
+		    "RTX",
 		    RAYTRACER_FEATURES,
 		    G4VGraphicsSystem::threeD)
 {}

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -64,23 +64,24 @@ Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
+  RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLStoredQt (OGLSQt, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
   OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
+  RayTracerX (RTX)
+  RayTracerQt (RTQt)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
-  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
@@ -167,7 +168,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -820,6 +821,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
+Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
@@ -836,6 +838,7 @@ Use HETC submodel for pre-compound model            0
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
+Type of Fermi BreakUp model                         ModelVI
 Min excitation energy                               10 eV 
 Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
@@ -882,10 +885,10 @@ LAbs: mean = 13.2058 cm  rms = 4.88221 mm
 
  ----> print histograms statistic 
 
-EAbs: mean = 275.367 MeV rms = 9.55541 MeV
-EGap2: mean = 14.2057 MeV rms = 5.79917 MeV
-LAbs: mean = 19.8712 cm  rms = 7.5499 mm 
-LGap2: mean = 7.08008 cm  rms = 2.93135 cm 
+EAbs: mean = 273.332 MeV rms = 8.75548 MeV
+EGap2: mean = 14.9832 MeV rms = 4.18697 MeV
+LAbs: mean = 19.5974 cm  rms = 6.76993 mm 
+LGap2: mean = 7.4865 cm  rms = 2.18857 cm 
 ... close file : e-.xml - done
 ... close file : e-_nt_Ntuple1.xml - done
 ... close file : e-_nt_Ntuple2.xml - done
@@ -902,10 +905,10 @@ LGap2: mean = 7.08008 cm  rms = 2.93135 cm
 
  ----> print histograms statistic 
 
-EAbs: mean = 214.274 MeV rms = 46.4144 MeV
-EGap2: mean = 19.7045 MeV rms = 9.24047 MeV
-LAbs: mean = 9.05957 cm  rms = 2.3581 cm 
-LGap2: mean = 4.54428 cm  rms = 1.38333 cm 
+EAbs: mean = 205.168 MeV rms = 42.1014 MeV
+EGap2: mean = 18.2936 MeV rms = 7.11512 MeV
+LAbs: mean = 8.71723 cm  rms = 2.20834 cm 
+LGap2: mean = 4.43677 cm  rms = 1.44086 cm 
 ### Run 4 start.
 
 ---> Begin of event: 0
@@ -915,10 +918,10 @@ LGap2: mean = 4.54428 cm  rms = 1.38333 cm
 
  ----> print histograms statistic 
 
-EAbs: mean = 187.097 MeV rms = 57.6177 MeV
-EGap2: mean = 16.7878 MeV rms = 8.81072 MeV
-LAbs: mean = 8.8331 cm  rms = 2.6403 cm 
-LGap2: mean = 4.46388 cm  rms = 1.5686 cm 
+EAbs: mean = 194.62 MeV rms = 44.3204 MeV
+EGap2: mean = 15.8381 MeV rms = 5.63046 MeV
+LAbs: mean = 9.57909 cm  rms = 1.85301 cm 
+LGap2: mean = 4.86042 cm  rms = 1.29463 cm 
 ... close file : proton.xml - done
 ... close file : proton_nt_Ntuple1.xml - done
 ... close file : proton_nt_Ntuple2.xml - done

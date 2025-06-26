@@ -80,6 +80,7 @@
 #include "G4Evaporation.hh"
 #include "G4PhotonEvaporation.hh"
 #include "G4StatMF.hh"
+#include "G4FermiBreakUpAN.hh"
 #include "G4FermiBreakUpVI.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4PhysicsModelCatalog.hh"
@@ -93,7 +94,7 @@ G4ExcitationHandler::G4ExcitationHandler()
   nist = G4NistManager::Instance();
   
   theMultiFragmentation = new G4StatMF();
-  theFermiModel = new G4FermiBreakUpVI();
+  theFermiModel = nullptr;
   thePhotonEvaporation = new G4PhotonEvaporation();
   SetEvaporation(new G4Evaporation(thePhotonEvaporation), true);
   theResults.reserve(60);
@@ -123,6 +124,9 @@ G4ExcitationHandler::~G4ExcitationHandler()
 
 void G4ExcitationHandler::SetParameters()
 {
+  // initialisation only once
+  if (isInitialised) { return; }
+
   G4NuclearLevelData* ndata = G4NuclearLevelData::GetInstance();
   auto param = ndata->GetParameters();
   isActive = true;
@@ -143,52 +147,70 @@ void G4ExcitationHandler::SetParameters()
   // allowing local debug printout 
   fVerbose = std::max(fVerbose, param->GetVerbose());
   if (isActive) {
+    // photon evaporation initialisation
     if (nullptr == thePhotonEvaporation) { 
       SetPhotonEvaporation(new G4PhotonEvaporation());
     }
+    thePhotonEvaporation->Initialise();
+
+    // FermiBreakUp initialisation 
     if (nullptr == theFermiModel) {
-      SetFermiModel(new G4FermiBreakUpVI());
+      auto type = param->GetFermiBreakUpType();
+      if (type == bModelVI) {
+	theFermiModel = new G4FermiBreakUpVI();
+      } else if (type == bModelAN) {
+	theFermiModel = new G4FermiBreakUpAN(fVerbose);
+      } else {
+	theFermiModel = new G4VFermiBreakUp();
+      }
+      SetFermiModel(theFermiModel);
     }
+    theFermiModel->Initialise();
+
+    // multi-fragmentation initialisation
     if (nullptr == theMultiFragmentation) {
       SetMultiFragmentation(new G4StatMF());
     }
+
+    // evaporation initialisation
     if (nullptr == theEvaporation) { 
       SetEvaporation(new G4Evaporation(thePhotonEvaporation), true); 
     }
+    theEvaporation->SetPhotonEvaporation(thePhotonEvaporation);
+    theEvaporation->SetFermiBreakUp(theFermiModel);
+    SetDeexChannelsType(param->GetDeexChannelsType());
+    theEvaporation->InitialiseChannels();
   }
-  theFermiModel->SetVerbose(fVerbose);
-  if(fVerbose > 1) {
+  if (fVerbose > 1) {
     G4cout << "G4ExcitationHandler::SetParameters() done " << this << G4endl;
   }
 }
 
 void G4ExcitationHandler::Initialise()
 {
-  if(isInitialised) { return; }
-  if(fVerbose > 1) {
+  // initialisation only once
+  if (isInitialised) { return; }
+  if (fVerbose > 1) {
     G4cout << "G4ExcitationHandler::Initialise() started " << this << G4endl;
   }
   G4DeexPrecoParameters* param = 
     G4NuclearLevelData::GetInstance()->GetParameters();
-  isInitialised = true;
   SetParameters();
-  if(isActive) {
-    theFermiModel->Initialise();
-    theEvaporation->InitialiseChannels();
-  }
+
   // dump level is controlled by parameter class
   param->Dump();
+  isInitialised = true;
 }
 
 void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr, G4bool flag)
 {
-  if(nullptr != ptr && ptr != theEvaporation) {
+  if (!isInitialised && nullptr != ptr && ptr != theEvaporation) {
+    delete theEvaporation;
     theEvaporation = ptr;
-    theEvaporation->SetPhotonEvaporation(thePhotonEvaporation);
-    theEvaporation->SetFermiBreakUp(theFermiModel);
     isEvapLocal = flag;
     if(fVerbose > 1) {
-      G4cout << "G4ExcitationHandler::SetEvaporation()  " << ptr << " done for " << this << G4endl;
+      G4cout << "G4ExcitationHandler::SetEvaporation() " << ptr
+	     << " done for " << this << G4endl;
     }
   }
 }
@@ -196,7 +218,7 @@ void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr, G4bool flag)
 void 
 G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation* ptr)
 {
-  if(nullptr != ptr && ptr != theMultiFragmentation) {
+  if (!isInitialised && nullptr != ptr && ptr != theMultiFragmentation) {
     delete theMultiFragmentation;
     theMultiFragmentation = ptr;
   }
@@ -204,25 +226,19 @@ G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation* ptr)
 
 void G4ExcitationHandler::SetFermiModel(G4VFermiBreakUp* ptr)
 {
-  if(nullptr != ptr && ptr != theFermiModel) {
+  if (!isInitialised && nullptr != ptr && ptr != theFermiModel) {
     delete theFermiModel;
     theFermiModel = ptr;
-    if(nullptr != theEvaporation) {
-      theEvaporation->SetFermiBreakUp(theFermiModel);
-    }
   }
 }
 
 void 
 G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
 {
-  if(nullptr != ptr && ptr != thePhotonEvaporation) {
+  if (!isInitialised && nullptr != ptr && ptr != thePhotonEvaporation) {
     delete thePhotonEvaporation;
     thePhotonEvaporation = ptr;
-    if(nullptr != theEvaporation) {
-      theEvaporation->SetPhotonEvaporation(ptr);
-    }
-    if(fVerbose > 1) {
+    if (fVerbose > 1) {
       G4cout << "G4ExcitationHandler::SetPhotonEvaporation() " << ptr 
              << " for handler " << this << G4endl;
     }
@@ -232,7 +248,7 @@ G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
 void G4ExcitationHandler::SetDeexChannelsType(G4DeexChannelType val)
 {
   G4Evaporation* evap = static_cast<G4Evaporation*>(theEvaporation);
-  if(fVerbose > 1) {
+  if (fVerbose > 1) {
     G4cout << "G4ExcitationHandler::SetDeexChannelsType " << val 
 	   << " for " << this << G4endl;
   }

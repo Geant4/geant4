@@ -54,17 +54,17 @@ class Run : public G4Run
 {
   public:
     Run();
-    virtual ~Run();
+    ~Run() override = default;
 
-    virtual void RecordEvent(const G4Event*);
-    virtual void Merge(const G4Run*);
+    void RecordEvent(const G4Event*) override;
+    void Merge(const G4Run*) override;
 
     G4double GetSumDose() const { return fSumEne; }
     G4VPrimitiveScorer* GetPrimitiveScorer() const { return fScorerRun; }
 
   private:
-    G4double fSumEne;
-    G4VPrimitiveScorer* fScorerRun;
+    G4double fSumEne = 0;
+    G4VPrimitiveScorer* fScorerRun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

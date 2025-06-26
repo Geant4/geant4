@@ -44,6 +44,7 @@ class QLineEdit;
 class G4UIsession;
 class QListWidget;
 class QTreeWidgetItem;
+class QSlider;
 class QTextEdit;
 class QTextBrowser;
 class QLabel;
@@ -252,7 +253,7 @@ public:
   G4int ReceiveG4cerr(const G4String&) override;
   //   G4String GetCommand(Widget);
 
- private:
+private:
   void SecondaryLoop(const G4String&);  // a VIRER
   void CreateHelpWidget();
   void InitHelpTreeAndVisParametersWidget();
@@ -279,6 +280,9 @@ public:
   void SceneTreeItemDoubleClicked(QTreeWidgetItem*);
   void SceneTreeItemExpanded(QTreeWidgetItem*);
   void SceneTreeItemCollapsed(QTreeWidgetItem*);
+  void SliderValueChanged(G4int value);
+  void SliderReleased();
+  void SliderRadioButtonClicked(G4int buttonNo);
   // Class for trapping special mouse events on new scene tree
   struct NewSceneTreeItemTreeWidget: public QTreeWidget {
     void mousePressEvent(QMouseEvent*) override;
@@ -302,6 +306,7 @@ public:
 #endif
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
+  QWidget* CreateTimeWindowWidget();
   G4UIDockWidget* CreateCoutTBWidget();
   QWidget* CreateHistoryTBWidget();
   G4UIDockWidget* CreateUITabWidget();
@@ -339,12 +344,15 @@ public:
   QListWidget* fHistoryTBTableList;
   QTreeWidget* fHelpTreeWidget;
   QWidget* fHelpTBWidget;
+  QWidget* fTimeWindowWidget;
   QWidget* fHistoryTBWidget;
   G4UIDockWidget* fCoutDockWidget;
   G4UIDockWidget* fUIDockWidget;
   QWidget* fSceneTreeWidget;
   QWidget* fNewSceneTreeWidget;
   NewSceneTreeItemTreeWidget* fNewSceneTreeItemTreeWidget;
+  G4int fMaxPVDepth;
+  QSlider* fNewSceneTreeSlider;
   QWidget* fViewerPropertiesWidget;
   QWidget* fPickInfosWidget;
   QLineEdit* fHelpLine;

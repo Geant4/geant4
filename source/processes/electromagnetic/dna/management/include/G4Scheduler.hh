@@ -186,6 +186,12 @@ class G4Scheduler : public G4VScheduler, public G4VStateDependent
     {
       fpUserScavenger = std::move(scavengerMaterial);
     }
+    inline G4bool IsInteractionStep(){
+      return fInteractionStep;
+    }
+    inline void SetInteractionStep(G4bool InteractionStep){
+      fInteractionStep = InteractionStep;
+    }
 
   protected:
     void DoProcess();
@@ -220,6 +226,7 @@ class G4Scheduler : public G4VScheduler, public G4VStateDependent
     G4bool fUseDefaultTimeSteps;
     G4double fTimeTolerance;
     G4double fGlobalTime;
+    G4double fTmpGlobalTime;
     G4double fStartTime;
     G4double fStopTime;
     G4double fEndTime;

@@ -44,7 +44,7 @@
 #include "G4MoleculeFinder.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4VMoleculeCounter.hh"
+#include "G4MoleculeCounterManager.hh"
 
 #include <memory>
 
@@ -182,21 +182,17 @@ void G4DNAElectronHoleRecombination::MakeReaction(const G4Track& track)
 
     if (pSelectedReactant != nullptr)
     {
-        if (G4VMoleculeCounter::Instance()->InUse())
+        if (G4MoleculeCounterManager::Instance()->GetIsActive())
         {
-            G4VMoleculeCounter::Instance()->
-                    RemoveAMoleculeAtTime(GetMolecule(track)->GetMolecularConfiguration(),
-                                          track.GetGlobalTime(),
-                                          &(track.GetPosition()));
+			G4MoleculeCounterManager::Instance()->
+				RemoveMolecule(&track, track.GetGlobalTime());
         }
         GetMolecule(track)->ChangeConfigurationToLabel("H2Ovib");
 
-        if (G4VMoleculeCounter::Instance()->InUse())
+        if (G4MoleculeCounterManager::Instance()->GetIsActive())
         {
-            G4VMoleculeCounter::Instance()->
-                    AddAMoleculeAtTime(GetMolecule(track)->GetMolecularConfiguration(),
-                                       track.GetGlobalTime(),
-                                       &(track.GetPosition()));
+			G4MoleculeCounterManager::Instance()->
+				AddMolecule(&track, track.GetGlobalTime());
         }
 
         //  fParticleChange.ProposeTrackStatus(fStopAndKill);

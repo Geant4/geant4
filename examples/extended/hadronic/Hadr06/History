@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-05-20 Michel Maire (exhadr06-V11-03-00)
+- Hadr06.cc - SetUseNRESP71Model(true)
+
 ## 2024-03-20 Michel Maire (exhadr06-V11-02-00)
 - RadioactiveDecayPhysics.cc: add Triton
 - apply coding rules. document hadr06.in 

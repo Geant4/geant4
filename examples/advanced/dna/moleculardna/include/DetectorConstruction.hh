@@ -53,7 +53,7 @@ class G4Material;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction();
+    DetectorConstruction(G4int vis);
 
     ~DetectorConstruction() override;
 

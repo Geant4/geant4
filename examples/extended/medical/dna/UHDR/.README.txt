@@ -18,7 +18,7 @@
 \section UHDR_s0 INTRODUCTION
 
  This example shows how to activate the mesoscopic model in chemistry and
- combine with SBS model (Tran et al.,Int. J. Mol. Sci. 22 (2021) 6023).
+ combine with IRT-syn model (https://arxiv.org/abs/2409.11993).
  It allows to simulate chemical reactions longtime (beyond 1 us) of post-irradiation.
 
  To run the example:
@@ -75,6 +75,17 @@ In batch mode, the macro beam.in can be used as follows:
  This object is controlled by DetectorContruction. It defines the chemistry volume,
  scavengers and pH of water.
 
+ This fearture can be set by the following commands:
+ # pH and Scavenger
+ \verbatim
+ /UHDR/env/pH 5.5
+\endverbatim
+ # air concentration
+\verbatim
+ /UHDR/env/scavenger O2 21 %
+ /UHDR/env/scavenger CO2 0.041 %
+ /UHDR/env/scavenger HCO3m 2.4 uM
+\endverbatim
 \section UHDR_s4 AN EVENT: PRIMARY GENERATOR
 
 This example utilizes the G4SingleParticleSource.
@@ -100,17 +111,45 @@ These two macro commands can be used to control the scoring time:
    # or user can automatically select time bin logarithmically.
 \endverbatim
 
-\section UHDR_s6 PULSE ACTION
+\section UHDR_s6 PULSE ACTION and INTERPULSE ACTION
 
-This functionality is not available for this version.
+The time structure can be activated by implementing a delayed time, Δt,
+which is sampled from a beamline raw signal of a measured pulse.
+Each delayed time is associated with a primary particle and propagates to its corresponding
+primary chemical species induced by this primary particle.
+These primary chemical species remain inactive until the virtual simulation time matches
+their respective delayed time. This process creates a duration for the primary particle train
+where their primary chemical species are activated randomly through an experimental beam
+current transformation, named "pulse duration".
 
+This fearture can be set by the following commands:
+
+# time structure
+\verbatim
+/UHDR/pulse/pulseOn true // active the time structure
+\endverbatim
+# push structure file
+\verbatim
+/UHDR/pulse/pulseFile 1.4us // push structure file
+\endverbatim
+# pulse structure
+\verbatim
+/UHDR/pulse/multiPulse true // active the multi pulse
+/UHDR/pulse/pulsePeriod 10 ms // time between two pulses (DIT)
+/UHDR/pulse/numberOfPulse 2 // number of pulses
+\endverbatim
 \section UHDR_s7 OUTPUT
 
 G-value
 
 \section UHDR_s8 RELEVANT MACRO COMMANDS AND MACRO FILE
 
-The user macro files are: beam.in (conventional), UHDR.in (Ultra High Dose Rate)
+The user macro files are:
+beam.in (default),
+CONV.in (Conventional)
+UHDR.in (Ultra High Dose Rate)
+initialize.in (initialize geo and phys)
+scavengers.in (pH and scavengers are defined)
 
 \section UHDR_s9 REACTION BUILDER
 
@@ -138,10 +177,7 @@ root plot_time.C > scorer.txt
 \endverbatim
 
 The results show the molecular species (G values) as a function of
-time (ns). Please correct the dose in the
-\verbatim
-TTree *tree = (TTree *) dir->Get("0.010000");
-\endverbatim
+time (ns).
 
 \section UHDR_s11 - Periodic Boundary Condition (PBC)
 
@@ -165,7 +201,6 @@ Use the following command to activate or deactivate PBC.
 /UHDR/Detector/PBC true
 \endverbatim
 
-Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
 Contact: H. Tran (tran@lp2ib.in2p3.fr)
 CNRS, lp2i, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France
 */

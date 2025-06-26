@@ -27,82 +27,46 @@
 //  Geant4
 //
 //  Created by Mathieu Karamitros on 02/11/2016.
+//  Modified by Christian Velten on 10/27/2024.
 //
 //
 
 #include "G4VMoleculeCounter.hh"
-#include "G4MoleculeCounter.hh"
-G4ThreadLocal
-G4VMoleculeCounter* G4VMoleculeCounter::fpInstance = nullptr;
+
+#include "G4MoleculeCounterTemplates.hh"
+#include "G4ios.hh"
 
 //------------------------------------------------------------------------------
 
-void
-G4VMoleculeCounter::SetInstance(G4VMoleculeCounter* pCounterInstance)
+G4VMoleculeCounter::G4VMoleculeCounter() : G4VMoleculeCounterInternalBase() {}
+
+G4VMoleculeCounter::G4VMoleculeCounter(const G4String& name, MoleculeCounterType type)
+  : G4VMoleculeCounterInternalBase(name), fType(type)
+{}
+
+//------------------------------------------------------------------------------
+
+void G4VMoleculeCounter::SetSensitiveToStepping(G4bool flag)
 {
-    if (fpInstance != nullptr)
-    {
-        G4ExceptionDescription errMsg;
-        errMsg << "The G4MoleculeCounter was already initialized." << G4endl
-               << "The previous instance will be deleted in order to use yours." << G4endl
-               << "However this can generate conflicts. Make sure you call G4MoleculeCounter::SetInstance"
-                  "at the beginning of your application."
-               << "A good place would be ActionInitialization::Build & BuildForMaster"
-               << G4endl;
-
-        G4Exception("G4MoleculeCounter::SetInstance",
-                    "SINGLETON_ALREADY_INITIALIZED",
-                    JustWarning, errMsg);
-        delete fpInstance;
-        fpInstance = nullptr;
-    }
-
-    fpInstance = pCounterInstance;
+  if (fType == MoleculeCounterType::Basic && flag) {
+    G4ExceptionDescription errMsg;
+    errMsg << "Cannot set a molecule counter of type 'Basic' to be sensitive to stepping!"
+           << G4endl;
+    G4Exception("G4VMoleculeCounter::SetSensitiveToStepping", "NOT_ALLOWED", FatalException, errMsg);
+  }
+  fSensitiveToStepping = flag;
 }
 
 //------------------------------------------------------------------------------
 
-G4VMoleculeCounter* G4VMoleculeCounter::Instance()
+G4bool G4VMoleculeCounter::IsReactantIgnored(const G4MoleculeDefinition* molecule) const
 {
-    if (fpInstance == nullptr)
-    {
-        fpInstance = new G4MoleculeCounter();
-    }
-    return fpInstance;
+  return G4::MoleculeCounter::Contains(fIgnoredMolecules, molecule);
 }
 
 //------------------------------------------------------------------------------
 
-void G4VMoleculeCounter::DeleteInstance()
+G4bool G4VMoleculeCounter::IsReactantIgnored(const G4MolecularConfiguration* reactant) const
 {
-    if (fpInstance != nullptr)
-    {
-        delete fpInstance;
-        fpInstance = nullptr;
-    }
+  return G4::MoleculeCounter::Contains(fIgnoredReactants, reactant);
 }
-
-//------------------------------------------------------------------------------
-
-void G4VMoleculeCounter::InitializeInstance()
-{
-    if (fpInstance != nullptr)
-    {
-        fpInstance->Initialize();
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void G4VMoleculeCounter::Use(G4bool flag)
-{
-    fUse = flag;
-}
-
-//------------------------------------------------------------------------------
-
-G4bool G4VMoleculeCounter::InUse()
-{
-    return fUse;
-}
-

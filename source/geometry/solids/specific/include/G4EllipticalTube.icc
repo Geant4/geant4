@@ -50,7 +50,7 @@ void G4EllipticalTube::SetDx(G4double Dx)
   fDx = Dx;
   CheckParameters();
   fCubicVolume = 0.;
-  fSurfaceArea = 0.;
+  fSurfaceArea = GetCachedSurfaceArea();
   fRebuildPolyhedron = true;
 }
 
@@ -60,7 +60,7 @@ void G4EllipticalTube::SetDy( G4double Dy )
   fDy = Dy;
   CheckParameters();
   fCubicVolume = 0.;
-  fSurfaceArea = 0.;
+  fSurfaceArea = GetCachedSurfaceArea();
   fRebuildPolyhedron = true;
 }
 
@@ -70,6 +70,6 @@ void G4EllipticalTube::SetDz( G4double Dz )
   fDz = Dz;
   CheckParameters();
   fCubicVolume = 0.;
-  fSurfaceArea = 0.;
+  fSurfaceArea = GetCachedSurfaceArea();
   fRebuildPolyhedron = true;
 }

@@ -82,6 +82,7 @@ private:
   G4UIcommand*          fpCommandSpecialMeshVolumes;
   G4UIcmdWithAString*   fpCommandStyle;
   G4UIcmdWith3VectorAndUnit* fpCommandTargetPoint;
+  G4UIcommand*          fpCommandTransparencyByDepth;
   G4UIcommand*          fpCommandUpThetaPhi;
   G4UIcommand*          fpCommandUpVector;
   G4ThreeVector         fUpVector;

@@ -25,9 +25,8 @@
 //
 // Class G4MultiLevelLocator implementation
 //
-// 27.10.08 - Tatiana Nikitina.
-// 04.10.11 - John Apostolakis, revised convergence to use Surface Normal
-// ---------------------------------------------------------------------------
+// Author: Tatiana Nikitina (CERN), 27 October 2008
+// --------------------------------------------------------------------
 
 #include <iomanip>
 

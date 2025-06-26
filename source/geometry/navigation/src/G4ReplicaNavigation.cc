@@ -22,9 +22,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4ReplicaNavigation Implementation
+// Class G4ReplicaNavigation Implementation
 //
-// Author: P.Kent, 1996
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 
 #include "G4ReplicaNavigation.hh"

@@ -53,6 +53,7 @@ To run the example:
 # -m : macro file
 # -t : number of threads to run
 # -p : physics list option
+# -v : visualization option
 \endverbatim
 
 Macro files can control every aspect of the simulation, see this introduction:
@@ -69,6 +70,11 @@ ecoli (ecoli.mac) and human cell (human_cell*.mac) geometries.
 - cylinders.mac: to build a 3 μm sphere filled with 200,000 individual 216 bp
   long straight DNA segments in a 100×30×30 nm placement volume.
   This is a geometry used for parameter (optimization) studies.
+
+- fiber.mac: to visualize a fiber of DNA
+
+- phage.mac: to model the irradiation of a DNA phage containing 141158 bp,
+  placed in a cylinder with radius 3.5 um and height 7 um.
 
 - plasmid.mac: to model a cube of liquid water (side 4.84 um) containing around
   10 000 plasmids (pBR322, 4367 base pairs) randomly oriented in a supercoiled conformation.
@@ -147,19 +153,13 @@ Macro commands can be used to control the geometry parameters
 
 # For the visualisation of DNA geometries, the following line can be used
 /control/execute vis.mac
-# More specifically, start moleculardna using the command ./molecular, to
+# More specifically, start moleculardna using the command ./molecular -t 1 -v 1
 # to open the Qt visualiser. Then use the mac file that you want, e.g.
 # /control/execute cylinders.mac
 # For the visualization, large amount of RAM is needed. For example
 # using cylinders DNA geometries, to visualize 200 cylinders, ~2.5 GB
 # are needed. For 2000 cylinders, ~11 GB are needed.
 \endverbatim
-
-The DNA parallel world can be activated using the "useParallelPhysicsWorld" flag
-in the PhysicsList.cc and DetectorConstruction.cc files for the physics stage.
-Setting "useParallelPhysicsWorld = false" means that particles will only interact
-with the water volume. Energy deposition in water caused by direct damage is
-recorded using octree data structures associated with DNA volumes.
 
 \section MOLECULARDNA_s2 PHYSICS LIST
 
@@ -229,8 +229,11 @@ root human_cell.C
 # to plot damage and fragments distribution from human_cell* geometries.
 The human_cell_alphas.C macro can be used as shown in [1].
 
+root phage.C
+# to plot damage and fragments distribution from phage geometry
+
 root plasmid.C
-#to plot damage and fragments distribution from plasmid geometries
+# to plot damage and fragments distribution from plasmid geometries
 
 root human_cell_chromosomes.C
 # to plot damage and fragments distribution from human_cell_chromosomes geometries.
@@ -261,6 +264,11 @@ molecularDNAsurvival.py
 # The molecular-dna.root is needed to run it, as produced by
 # the human-cell.mac macro.
 \endverbatim
+
+Note on ROOT import from python:
+If python cannot import ROOT, please configure your ROOT version to include PyROOT.
+For further instruction, refer to the documentation of ROOT, paragraph 19.1.4.2:
+https://root.cern/root/htmldoc/guides/users-guide/ROOTUsersGuide.html#python-interface
 
 \section MOLECULARDNA_s6 PHASE SPACE READING
 

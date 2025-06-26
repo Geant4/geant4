@@ -85,26 +85,10 @@ G4ViewParameters::G4ViewParameters ():
   fBackgroundColour (G4Colour(0.,0.,0.)),         // Black
   fPicking (false),
   fRotationStyle (constrainUpDirection),
-  fStartTime(-G4VisAttributes::fVeryLongTime),
-  fEndTime(G4VisAttributes::fVeryLongTime),
-  fFadeFactor(0.),
-  fDisplayHeadTime(false),
-  fDisplayHeadTimeX(-0.9),
-  fDisplayHeadTimeY(-0.9),
-  fDisplayHeadTimeSize(24.),
-  fDisplayHeadTimeRed(0.),
-  fDisplayHeadTimeGreen(1.),
-  fDisplayHeadTimeBlue(1.),
-  fDisplayLightFront(false),
-  fDisplayLightFrontX(0.),
-  fDisplayLightFrontY(0.),
-  fDisplayLightFrontZ(0.),
-  fDisplayLightFrontT(0.),
-  fDisplayLightFrontRed(0.),
-  fDisplayLightFrontGreen(1.),
-  fDisplayLightFrontBlue(0.),
   fSpecialMeshRendering(false),
-  fSpecialMeshRenderingOption(meshAsDefault)
+  fSpecialMeshRenderingOption(meshAsDefault),
+  fTransparencyByDepth(0.),
+  fTransparencyByDepthOption(1)
 {
   // Pick up default no of sides from G4Polyhedron.
   // Note that this parameter is variously called:
@@ -270,7 +254,7 @@ void G4ViewParameters::SetViewAndLights
     fActualLightpointDirection =
       fRelativeLightpointDirection.x () * xprime +
       fRelativeLightpointDirection.y () * yprime +
-      fRelativeLightpointDirection.x () * zprime;     
+      fRelativeLightpointDirection.z () * zprime;
   } else {
     fActualLightpointDirection = fRelativeLightpointDirection;
   }
@@ -535,12 +519,12 @@ G4String G4ViewParameters::SceneModifyingCommands() const
   
   oss << "\n/vis/viewer/clearCutawayPlanes";
   if (fCutawayPlanes.size()) {
-    for (size_t i = 0; i < fCutawayPlanes.size(); i++) {
+    for (const auto& fCutawayPlane : fCutawayPlanes) {
       oss << "\n/vis/viewer/addCutawayPlane "
-      << G4BestUnit(fCutawayPlanes[i].point(),"Length")
-      << fCutawayPlanes[i].normal().x()
-      << ' ' << fCutawayPlanes[i].normal().y()
-      << ' ' << fCutawayPlanes[i].normal().z();
+      << G4BestUnit(fCutawayPlane.point(),"Length")
+      << fCutawayPlane.normal().x()
+      << ' ' << fCutawayPlane.normal().y()
+      << ' ' << fCutawayPlane.normal().z();
     }
   } else {
     oss << "\n# No cutaway planes defined.";
@@ -553,6 +537,9 @@ G4String G4ViewParameters::SceneModifyingCommands() const
   oss << "\n/vis/viewer/set/lineSegmentsPerCircle "
   << fNoOfSides;
   
+  oss << "\n/vis/viewer/set/transparencyByDepth "
+  << fTransparencyByDepth << ' ' << fTransparencyByDepthOption;
+
   oss << std::endl;
   
   return oss.str();
@@ -709,46 +696,46 @@ G4String G4ViewParameters::TimeWindowCommands() const
 
   oss
   << "\n/vis/viewer/set/timeWindow/startTime "
-  << fStartTime/ns << " ns ";
+  << fTimeParameters.fStartTime/ns << " ns ";
 
   oss
   << "\n/vis/viewer/set/timeWindow/endTime "
-  << fEndTime/ns << " ns ";
+  << fTimeParameters.fEndTime/ns << " ns ";
 
   oss << "\n/vis/viewer/set/timeWindow/fadeFactor "
-  << fFadeFactor;
+  << fTimeParameters.fFadeFactor;
 
   oss
   << "\n/vis/viewer/set/timeWindow/displayHeadTime ";
-  if (!fDisplayHeadTime) {
+  if (!fTimeParameters.fDisplayHeadTime) {
     oss << "false";
   } else {
     oss
     << "true"
-    << ' ' << fDisplayHeadTimeX
-    << ' ' << fDisplayHeadTimeY
-    << ' ' << fDisplayHeadTimeSize
-    << ' ' << fDisplayHeadTimeRed
-    << ' ' << fDisplayHeadTimeGreen
-    << ' ' << fDisplayHeadTimeBlue;
+    << ' ' << fTimeParameters.fDisplayHeadTimeX
+    << ' ' << fTimeParameters.fDisplayHeadTimeY
+    << ' ' << fTimeParameters.fDisplayHeadTimeSize
+    << ' ' << fTimeParameters.fDisplayHeadTimeRed
+    << ' ' << fTimeParameters.fDisplayHeadTimeGreen
+    << ' ' << fTimeParameters.fDisplayHeadTimeBlue;
   }
 
   oss
   << "\n/vis/viewer/set/timeWindow/displayLightFront ";
-  if (!fDisplayLightFront) {
+  if (!fTimeParameters.fDisplayLightFront) {
     oss << "false";
   } else {
     oss
     << "true"
-    << ' ' << fDisplayLightFrontX/mm
-    << ' ' << fDisplayLightFrontY/mm
-    << ' ' << fDisplayLightFrontZ/mm
+    << ' ' << fTimeParameters.fDisplayLightFrontX/mm
+    << ' ' << fTimeParameters.fDisplayLightFrontY/mm
+    << ' ' << fTimeParameters.fDisplayLightFrontZ/mm
     << " mm"
-    << ' ' << fDisplayLightFrontT/ns
+    << ' ' << fTimeParameters.fDisplayLightFrontT/ns
     << " ns"
-    << ' ' << fDisplayLightFrontRed
-    << ' ' << fDisplayLightFrontGreen
-    << ' ' << fDisplayLightFrontBlue;
+    << ' ' << fTimeParameters.fDisplayLightFrontRed
+    << ' ' << fTimeParameters.fDisplayLightFrontGreen
+    << ' ' << fTimeParameters.fDisplayLightFrontBlue;
   }
 
   oss << std::endl;
@@ -796,7 +783,9 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     || 
       (fPicking              != v.fPicking)              ||
-      (fRotationStyle        != v.fRotationStyle)
+      (fRotationStyle        != v.fRotationStyle)        ||
+      (fTransparencyByDepth  != v.fTransparencyByDepth)  ||
+      (fTransparencyByDepthOption != v.fTransparencyByDepthOption)
       )
     G4cout << "Difference in 1st batch." << G4endl;
 
@@ -836,38 +825,38 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
     G4cout << "Difference in vis attributes modifiers." << G4endl;
   }
 
-  if (fStartTime != v.fStartTime ||
-      fEndTime   != v.fEndTime)  {
+  if (fTimeParameters.fStartTime != v.fTimeParameters.fStartTime ||
+      fTimeParameters.fEndTime   != v.fTimeParameters.fEndTime)  {
     G4cout << "Difference in time window." << G4endl;
   }
 
-  if (fFadeFactor != v.fFadeFactor) {
+  if (fTimeParameters.fFadeFactor != v.fTimeParameters.fFadeFactor) {
     G4cout << "Difference in time window fade factor." << G4endl;
   }
 
-  if (fDisplayHeadTime != v.fDisplayHeadTime) {
+  if (fTimeParameters.fDisplayHeadTime != v.fTimeParameters.fDisplayHeadTime) {
     G4cout << "Difference in display head time flag." << G4endl;
   } else {
-    if (fDisplayHeadTimeX     != v.fDisplayHeadTimeX     ||
-        fDisplayHeadTimeY     != v.fDisplayHeadTimeY     ||
-        fDisplayHeadTimeSize  != v.fDisplayHeadTimeSize  ||
-        fDisplayHeadTimeRed   != v.fDisplayHeadTimeRed   ||
-        fDisplayHeadTimeGreen != v.fDisplayHeadTimeGreen ||
-        fDisplayHeadTimeBlue  != v.fDisplayHeadTimeBlue) {
+    if (fTimeParameters.fDisplayHeadTimeX     != v.fTimeParameters.fDisplayHeadTimeX     ||
+        fTimeParameters.fDisplayHeadTimeY     != v.fTimeParameters.fDisplayHeadTimeY     ||
+        fTimeParameters.fDisplayHeadTimeSize  != v.fTimeParameters.fDisplayHeadTimeSize  ||
+        fTimeParameters.fDisplayHeadTimeRed   != v.fTimeParameters.fDisplayHeadTimeRed   ||
+        fTimeParameters.fDisplayHeadTimeGreen != v.fTimeParameters.fDisplayHeadTimeGreen ||
+        fTimeParameters.fDisplayHeadTimeBlue  != v.fTimeParameters.fDisplayHeadTimeBlue) {
       G4cout << "Difference in display head time parameters." << G4endl;
     }
   }
 
-  if (fDisplayLightFront != v.fDisplayLightFront) {
+  if (fTimeParameters.fDisplayLightFront != v.fTimeParameters.fDisplayLightFront) {
     G4cout << "Difference in display light front flag." << G4endl;
   } else {
-    if (fDisplayLightFrontX     != v.fDisplayLightFrontX     ||
-        fDisplayLightFrontY     != v.fDisplayLightFrontY     ||
-        fDisplayLightFrontZ     != v.fDisplayLightFrontZ     ||
-        fDisplayLightFrontT     != v.fDisplayLightFrontT     ||
-        fDisplayLightFrontRed   != v.fDisplayLightFrontRed   ||
-        fDisplayLightFrontGreen != v.fDisplayLightFrontGreen ||
-        fDisplayLightFrontBlue  != v.fDisplayLightFrontBlue) {
+    if (fTimeParameters.fDisplayLightFrontX     != v.fTimeParameters.fDisplayLightFrontX     ||
+        fTimeParameters.fDisplayLightFrontY     != v.fTimeParameters.fDisplayLightFrontY     ||
+        fTimeParameters.fDisplayLightFrontZ     != v.fTimeParameters.fDisplayLightFrontZ     ||
+        fTimeParameters.fDisplayLightFrontT     != v.fTimeParameters.fDisplayLightFrontT     ||
+        fTimeParameters.fDisplayLightFrontRed   != v.fTimeParameters.fDisplayLightFrontRed   ||
+        fTimeParameters.fDisplayLightFrontGreen != v.fTimeParameters.fDisplayLightFrontGreen ||
+        fTimeParameters.fDisplayLightFrontBlue  != v.fTimeParameters.fDisplayLightFrontBlue) {
       G4cout << "Difference in display light front parameters." << G4endl;
     }
   }
@@ -952,8 +941,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
 
   if (v.IsCutaway()) {
     os << "\n  Cutaway planes: ";
-    for (size_t i = 0; i < v.fCutawayPlanes.size (); i++) {
-      os << ' ' << v.fCutawayPlanes[i];
+    for (const auto& fCutawayPlane : v.fCutawayPlanes) {
+      os << ' ' << fCutawayPlane;
     }
   }
   else {
@@ -1058,29 +1047,29 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   }
 
   os << "\nTime window parameters:"
-  << "\n  Start time:  " << v.fStartTime/ns << " ns"
-  << "\n  End time:    " << v.fEndTime/ns << " ns"
-  << "\n  Fade factor: " << v.fFadeFactor;
-  if (!v.fDisplayHeadTime) {
+  << "\n  Start time:  " << v.fTimeParameters.fStartTime/ns << " ns"
+  << "\n  End time:    " << v.fTimeParameters.fEndTime/ns << " ns"
+  << "\n  Fade factor: " << v.fTimeParameters.fFadeFactor;
+  if (!v.fTimeParameters.fDisplayHeadTime) {
     os << "\n  Head time display not requested.";
   } else {
     os
     << "\n  Head time position: "
-    << v.fDisplayHeadTimeX << ' ' << v.fDisplayHeadTimeY
-    << "\n  Head time size:     " << v.fDisplayHeadTimeSize
-    << "\n  Head time colour:   " << v.fDisplayHeadTimeRed
-    << ' ' << v.fDisplayHeadTimeGreen << ' ' << v.fDisplayHeadTimeBlue;
+    << v.fTimeParameters.fDisplayHeadTimeX << ' ' << v.fTimeParameters.fDisplayHeadTimeY
+    << "\n  Head time size:     " << v.fTimeParameters.fDisplayHeadTimeSize
+    << "\n  Head time colour:   " << v.fTimeParameters.fDisplayHeadTimeRed
+    << ' ' << v.fTimeParameters.fDisplayHeadTimeGreen << ' ' << v.fTimeParameters.fDisplayHeadTimeBlue;
   }
-  if (!v.fDisplayLightFront) {
+  if (!v.fTimeParameters.fDisplayLightFront) {
     os << "\n  Light front display not requested.";
   } else {
     os
     << "\n  Light front position: "
-    << v.fDisplayLightFrontX/mm << ' ' << v.fDisplayLightFrontY/mm
-    << ' ' << v.fDisplayLightFrontZ/mm << " mm"
-    << "\n  Light front time:     " << v.fDisplayLightFrontT/ns << " ns"
-    << "\n  Light front colour:   " << v.fDisplayLightFrontRed
-    << ' ' << v.fDisplayLightFrontGreen << ' ' << v.fDisplayLightFrontBlue;
+    << v.fTimeParameters.fDisplayLightFrontX/mm << ' ' << v.fTimeParameters.fDisplayLightFrontY/mm
+    << ' ' << v.fTimeParameters.fDisplayLightFrontZ/mm << " mm"
+    << "\n  Light front time:     " << v.fTimeParameters.fDisplayLightFrontT/ns << " ns"
+    << "\n  Light front colour:   " << v.fTimeParameters.fDisplayLightFrontRed
+    << ' ' << v.fTimeParameters.fDisplayLightFrontGreen << ' ' << v.fTimeParameters.fDisplayLightFrontBlue;
   }
 
   os << "\nSpecial Mesh Rendering";
@@ -1096,6 +1085,10 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
       }
     }
   } else os << ": off";
+
+  os << "\nTransparency by depth: " << v.fTransparencyByDepth
+  << ", option: " << v.fTransparencyByDepthOption;
+
   return os;
 }
 
@@ -1142,7 +1135,9 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fPicking              != v.fPicking)              ||
       (fRotationStyle        != v.fRotationStyle)        ||
       (fSpecialMeshRendering != v.fSpecialMeshRendering) ||
-      (fSpecialMeshRenderingOption != v.fSpecialMeshRenderingOption)
+      (fSpecialMeshRenderingOption != v.fSpecialMeshRenderingOption) ||
+      (fTransparencyByDepth  != v.fTransparencyByDepth)  ||
+      (fTransparencyByDepthOption != v.fTransparencyByDepthOption)
       )
     return true;
 
@@ -1173,31 +1168,31 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
 
   if (fVisAttributesModifiers != v.fVisAttributesModifiers) return true;
 
-  if (fStartTime  != v.fStartTime ||
-      fEndTime    != v.fEndTime   ||
-      fFadeFactor != v.fFadeFactor) return true;
+  if (fTimeParameters.fStartTime  != v.fTimeParameters.fStartTime ||
+      fTimeParameters.fEndTime    != v.fTimeParameters.fEndTime   ||
+      fTimeParameters.fFadeFactor != v.fTimeParameters.fFadeFactor) return true;
 
-  if (fDisplayHeadTime != v.fDisplayHeadTime) return true;
-  if (fDisplayHeadTime) {
-    if (fDisplayHeadTimeX     != v.fDisplayHeadTimeX     ||
-        fDisplayHeadTimeY     != v.fDisplayHeadTimeY     ||
-        fDisplayHeadTimeSize  != v.fDisplayHeadTimeSize  ||
-        fDisplayHeadTimeRed   != v.fDisplayHeadTimeRed   ||
-        fDisplayHeadTimeGreen != v.fDisplayHeadTimeGreen ||
-        fDisplayHeadTimeBlue  != v.fDisplayHeadTimeBlue) {
+  if (fTimeParameters.fDisplayHeadTime != v.fTimeParameters.fDisplayHeadTime) return true;
+  if (fTimeParameters.fDisplayHeadTime) {
+    if (fTimeParameters.fDisplayHeadTimeX     != v.fTimeParameters.fDisplayHeadTimeX     ||
+        fTimeParameters.fDisplayHeadTimeY     != v.fTimeParameters.fDisplayHeadTimeY     ||
+        fTimeParameters.fDisplayHeadTimeSize  != v.fTimeParameters.fDisplayHeadTimeSize  ||
+        fTimeParameters.fDisplayHeadTimeRed   != v.fTimeParameters.fDisplayHeadTimeRed   ||
+        fTimeParameters.fDisplayHeadTimeGreen != v.fTimeParameters.fDisplayHeadTimeGreen ||
+        fTimeParameters.fDisplayHeadTimeBlue  != v.fTimeParameters.fDisplayHeadTimeBlue) {
       return true;
     }
   }
 
-  if (fDisplayLightFront != v.fDisplayLightFront) return true;
-  if (fDisplayLightFront) {
-    if (fDisplayLightFrontX     != v.fDisplayLightFrontX     ||
-        fDisplayLightFrontY     != v.fDisplayLightFrontY     ||
-        fDisplayLightFrontZ     != v.fDisplayLightFrontZ     ||
-        fDisplayLightFrontT     != v.fDisplayLightFrontT     ||
-        fDisplayLightFrontRed   != v.fDisplayLightFrontRed   ||
-        fDisplayLightFrontGreen != v.fDisplayLightFrontGreen ||
-        fDisplayLightFrontBlue  != v.fDisplayLightFrontBlue) {
+  if (fTimeParameters.fDisplayLightFront != v.fTimeParameters.fDisplayLightFront) return true;
+  if (fTimeParameters.fDisplayLightFront) {
+    if (fTimeParameters.fDisplayLightFrontX     != v.fTimeParameters.fDisplayLightFrontX     ||
+        fTimeParameters.fDisplayLightFrontY     != v.fTimeParameters.fDisplayLightFrontY     ||
+        fTimeParameters.fDisplayLightFrontZ     != v.fTimeParameters.fDisplayLightFrontZ     ||
+        fTimeParameters.fDisplayLightFrontT     != v.fTimeParameters.fDisplayLightFrontT     ||
+        fTimeParameters.fDisplayLightFrontRed   != v.fTimeParameters.fDisplayLightFrontRed   ||
+        fTimeParameters.fDisplayLightFrontGreen != v.fTimeParameters.fDisplayLightFrontGreen ||
+        fTimeParameters.fDisplayLightFrontBlue  != v.fTimeParameters.fDisplayLightFrontBlue) {
       return true;
     }
   }
@@ -1696,10 +1691,10 @@ INTERPOLATE(plane.d()); d = real;
   // Only two parameters are interpolated. The others are usually chosen
   // once and for all by the user for a given series of views - or at least,
   // if not, they will be interpolated by the default "crude" method above.
-  INTERPOLATE(fStartTime)
-  holdingValues.fStartTime = real;
-  INTERPOLATE(fEndTime)
-  holdingValues.fEndTime = real;
+  INTERPOLATE(fTimeParameters.fStartTime)
+  holdingValues.fTimeParameters.fStartTime = real;
+  INTERPOLATE(fTimeParameters.fEndTime)
+  holdingValues.fTimeParameters.fEndTime = real;
 
   // Increment counters
   iInterpolationPoint++;

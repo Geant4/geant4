@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  G4TransportationManager inlined function members implementation
+// G4TransportationManager inlined function members implementation
 //
-// Created :  10 March 1997, J. Apostolakis
-// Reviewed:  26 April 2006, G. Cosmo
+// Created: John Apostolakis (CERN), 10 March 1997
+// Reviewed: Gabriele Cosmo (CERN), 26 April 2006
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------

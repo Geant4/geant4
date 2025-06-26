@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-13 Witek Pokorski (gdml-V11-03-00)
+- Fixing the Problem 2322 by explicitely adding '0x' string before the address
+  in case of WIN32 platform. 
+
 ## 2024-06-20 Gabriele Cosmo (gdml-V11-02-04, 03)
 - Disabled schema validation by default, as XercesC currently does
   support only 'http' (see: https://issues.apache.org/jira/browse/XERCESC-2220).

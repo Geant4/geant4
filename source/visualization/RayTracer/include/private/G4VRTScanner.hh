@@ -44,14 +44,6 @@ public: // with description
   G4VRTScanner();
   virtual ~G4VRTScanner();
   
-  virtual const G4String& GetGSName() const = 0;
-  // Get name that acts as graphics system name.
-
-  virtual const G4String& GetGSNickname() const = 0;
-  // Get name that acts as graphics system nickname.  It is this that
-  // the user specifies on the /vis/open and /vis/sceneHandler/create
-  // commands.
-
   virtual void Initialize(G4int nRow, G4int nColumn) = 0;
   // Intialises scanner for window with nRow rows and nColumn columns.
 

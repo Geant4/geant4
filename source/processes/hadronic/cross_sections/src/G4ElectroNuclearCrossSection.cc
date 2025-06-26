@@ -46,9 +46,9 @@
 #include "G4ElectroNuclearCrossSection.hh"
 
 // factory
-#include "G4CrossSectionFactory.hh"
+//#include "G4CrossSectionFactory.hh"
 //
-G4_DECLARE_XS_FACTORY(G4ElectroNuclearCrossSection);
+//G4_DECLARE_XS_FACTORY(G4ElectroNuclearCrossSection);
 
 //
 //A. Dotti 2-May-2013

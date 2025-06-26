@@ -23,15 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4PropagatorInField Inline implementation
+// Class G4PropagatorInField Inline implementation
 //
 //  To create an object of this type, must have:
 //  - an object that calculates the Curved paths 
 //  - the navigator to find (linear) intersections
 //  - and also must know the value of the maximum displacement allowed
 // 
-// 25.10.96 John Apostolakis, design and implementation 
-// 25.03.97 John Apostolakis, adaptation for G4Transportation and cleanup
+// Author: John Apostolakis (CERN), 25 October 1996
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------

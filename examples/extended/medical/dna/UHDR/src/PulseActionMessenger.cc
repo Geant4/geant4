@@ -30,6 +30,7 @@
 #include "PulseAction.hh"
 
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

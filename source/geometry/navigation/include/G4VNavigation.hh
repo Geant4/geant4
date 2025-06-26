@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4VNavigation
+// G4VNavigation
 //
 // Class description:
 //
 // Navigation interface common between all navigator types.
 
-// Author: G. Amadio - CERN, March 2022
+// Author: Guilherme Amadio (CERN), March 2022
 // --------------------------------------------------------------------
 #ifndef G4VNAVIGATION_HH
-#define G4VNAVIGATION_HH
+#define G4VNAVIGATION_HH 1
 
 #include "G4ThreeVector.hh"
 
@@ -47,105 +47,112 @@ class G4NavigationHistory;
 
 class G4VNavigation
 {
- public:
-  /** Virtual Destructor. */
-  virtual ~G4VNavigation() = default;
+  public:
 
-  /**
-   * Search positioned volumes in mother at current top level of @p history
-   * for volume containing @p globalPoint. Do not test against @p blockedVol.
-   * If a containing volume is found, push it onto navigation history state.
-   * @param[in,out] history Navigation history.
-   * @param[in,out] blockedVol Blocked volume that should be ignored in queries.
-   * @param[in,out] blockedNum Copy number for blocked replica volumes.
-   * @param[in,out] globalPoint Global point
-   * @param[in,out] globalDirection Pointer to global direction or null pointer.
-   * @param[in,out] localPoint = global point in local system on entry, point
-   *                in new system on exit.
-   * @returns Whether a containing volume has been found.
-   */
-  virtual G4bool LevelLocate(G4NavigationHistory& history,
-                             const G4VPhysicalVolume* blockedVol,
-                             const G4int blockedNum,
-                             const G4ThreeVector& globalPoint,
-                             const G4ThreeVector* globalDirection,
-                             const G4bool pLocatedOnEdge,
-                             G4ThreeVector& localPoint) = 0;
+    /**
+     * Virtual Destructor.
+     */
+    virtual ~G4VNavigation() = default;
 
-  /**
-   * Compute the length of a step to the next boundary.
-   * Do not test against @p pBlockedPhysical. Identify the next candidate volume
-   * (if a daughter of current volume), and return it in pBlockedPhysical,
-   * blockedReplicaNo.
-   * @param[in] localPoint Local point
-   * @param[in] localDirection Pointer to local direction or null pointer.
-   * @param[in] currentProposedStepLength Current proposed step length.
-   * @param[in,out] newSafety New safety.
-   * @param[in,out] history Navigation history.
-   * @param[in,out] validExitNormal Flag to indicate whether exit normal is
-   * valid or not.
-   * @param[in,out] exitNormal Exit normal.
-   * @param[in,out] entering Flag to indicate whether we are entering a volume.
-   * @param[in,out] exiting Flag to indicate whether we are exiting a volume.
-   * @param[in,out] pBlockedPhysical Blocked physical volume that should be
-   * ignored in queries.
-   * @param[in,out] blockedReplicaNo Copy number for blocked replica volumes.
-   * @returns Length from current point to next boundary surface along @p
-   * localDirection.
-   */
-  virtual G4double ComputeStep(const G4ThreeVector& localPoint,
-                               const G4ThreeVector& localDirection,
-                               const G4double currentProposedStepLength,
-                               G4double& newSafety,
-                               G4NavigationHistory& history,
-                               G4bool& validExitNormal,
-                               G4ThreeVector& exitNormal,
-                               G4bool& exiting,
-                               G4bool& entering,
-                               G4VPhysicalVolume*(*pBlockedPhysical),
-                               G4int& blockedReplicaNo) = 0;
+    /**
+     * Searches positioned volumes in mother at current top level of @p history
+     * for volume containing @p globalPoint. Do not test against @p blockedVol.
+     * If a containing volume is found, push it onto navigation history state.
+     *  @param[in,out] history Navigation history.
+     *  @param[in,out] blockedVol Blocked volume to be ignored in queries.
+     *  @param[in,out] blockedNum Copy number for blocked replica volumes.
+     *  @param[in,out] globalPoint Point in global coordinates system.
+     *  @param[in,out] globalDirection Pointer to global direction or null.
+     *  @param[in,out] localPoint Point in local coordinates system.
+     *  @returns Whether a containing volume has been found.
+     */
+    virtual G4bool LevelLocate(G4NavigationHistory& history,
+                         const G4VPhysicalVolume* blockedVol,
+                         const G4int blockedNum,
+                         const G4ThreeVector& globalPoint,
+                         const G4ThreeVector* globalDirection,
+                         const G4bool pLocatedOnEdge,
+                               G4ThreeVector& localPoint) = 0;
 
-  /**
-   * Compute the distance to the closest surface.
-   * @param[in] globalPoint Global point.
-   * @param[in] history Navigation history.
-   * @param[in] pMaxLength Maximum step length beyond which volumes need not be
-   * checked.
-   * @returns Length from current point to closest surface.
-   */
-  virtual G4double ComputeSafety(const G4ThreeVector& globalpoint,
-                                 const G4NavigationHistory& history,
-                                 const G4double pMaxLength = DBL_MAX) = 0;
+    /**
+     * Computes the length of a step to the next boundary.
+     * Do not test against @p pBlockedPhysical. Identify the next candidate
+     * volume (if a daughter of current volume), and return it in:
+     * pBlockedPhysical, blockedReplicaNo.
+     *  @param[in] localPoint Local point.
+     *  @param[in] localDirection Local vector direction.
+     *  @param[in] currentProposedStepLength Current proposed step length.
+     *  @param[in,out] newSafety New safety.
+     *  @param[in,out] history Navigation history.
+     *  @param[in,out] validExitNormal Flag to indicate whether exit normal is
+     *                 valid or not.
+     *  @param[in,out] exitNormal Exit normal.
+     *  @param[in,out] entering Flag to indicate whether entering a volume.
+     *  @param[in,out] exiting Flag to indicate whether exiting a volume.
+     *  @param[in,out] pBlockedPhysical Blocked physical volume that should be
+     *                 ignored in queries.
+     *  @param[in,out] blockedReplicaNo Copy number for blocked replica volumes.
+     *  @returns Length from current point to next boundary surface along
+     *           @p localDirection.
+     */
+    virtual G4double ComputeStep(const G4ThreeVector& localPoint,
+                                 const G4ThreeVector& localDirection,
+                                 const G4double currentProposedStepLength,
+                                       G4double& newSafety,
+                                       G4NavigationHistory& history,
+                                       G4bool& validExitNormal,
+                                       G4ThreeVector& exitNormal,
+                                       G4bool& exiting,
+                                       G4bool& entering,
+                                       G4VPhysicalVolume*(*pBlockedPhysical),
+                                       G4int& blockedReplicaNo) = 0;
 
-  /**
-   * Update internal navigation state to take into account that location
-   * has been moved, but remains within the @p motherPhysical volume.
-   *  @param[in] motherPhysical Current physical volume.
-   *  @param[in] localPoint Local point.
-   */
-  virtual void RelocateWithinVolume(G4VPhysicalVolume* /* motherPhysical */,
-                                    const G4ThreeVector& /* localPoint */)
-  {
-    /* do nothing by default */
-  }
+    /**
+     * Computes the distance to the closest surface.
+     *  @param[in] localPoint Local point.
+     *  @param[in] history Navigation history.
+     *  @param[in] pMaxLength Maximum step length beyond which volumes
+     *             need not be checked.
+     *  @returns Length from current point to closest surface.
+     */
+    virtual G4double ComputeSafety(const G4ThreeVector& localpoint,
+                                   const G4NavigationHistory& history,
+                                   const G4double pMaxLength = DBL_MAX) = 0;
 
-  /** Get current verbosity level */
-  virtual G4int GetVerboseLevel() const { return fVerbose; }
+    /**
+     * Updates internal navigation state to take into account that location
+     * has been moved, but remains within the @p motherPhysical volume.
+     *  @param[in] motherPhysical Current physical volume.
+     *  @param[in] localPoint Local point.
+     */
+    virtual void RelocateWithinVolume(G4VPhysicalVolume* /* motherPhysical */,
+                                      const G4ThreeVector& /* localPoint */)
+    {
+      /* do nothing by default */
+    }
 
-  /** Set current verbosity level */
-  virtual void SetVerboseLevel(G4int level) { fVerbose = level; }
+    /**
+     * Gets current verbosity level.
+     */
+    virtual G4int GetVerboseLevel() const { return fVerbose; }
 
-  /**
-   * Set check mode.
-   * When enabled, forces navigator to run in "check mode", hence using
-   * additional verifications and stricter condictions for ensuring correctness.
-   * Effective only when G4VERBOSE is enabled.
-   */
-  void CheckMode(G4bool mode) { fCheck = mode; }
+    /**
+     * Sets current verbosity level.
+     */
+    virtual void SetVerboseLevel(G4int level) { fVerbose = level; }
 
- protected:
-  G4int fVerbose = 0;
-  G4bool fCheck = false;
+    /**
+     * Sets check mode.
+     * When enabled, forces navigator to run in "check mode", hence using
+     * additional verifications and stricter condictions for ensuring
+     * correctness. Effective only when G4VERBOSE is enabled.
+     */
+    void CheckMode(G4bool mode) { fCheck = mode; }
+
+  protected:
+
+    G4int fVerbose = 0;
+    G4bool fCheck = false;
 };
 
 #endif

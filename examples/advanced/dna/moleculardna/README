@@ -57,6 +57,7 @@ http://geant4-dna.org
     # -m : macro file
     # -t : number of threads to run
     # -p : physics list option
+    # -v : visualization option
 
     Macro files can control every aspect of the simulation, see this introduction:
     https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
@@ -72,6 +73,11 @@ http://geant4-dna.org
     - cylinders.mac: to build a 3 μm sphere filled with 200,000 individual 216 bp
       long straight DNA segments in a 100×30×30 nm placement volume.
       This is a geometry used for parameter (optimization) studies.
+
+    - fiber.mac: to visualize a fiber of DNA
+
+    - phage.mac: to model the irradiation of a DNA phage containing 141158 bp,
+      placed in a cylinder with radius 3.5 um and height 7 um.
 
     - plasmid.mac: to model a cube of liquid water (side 4.84 um) containing around
       10 000 plasmids (pBR322, 4367 base pairs) randomly oriented in a supercoiled conformation.
@@ -149,18 +155,12 @@ http://geant4-dna.org
 
     # For the visualisation of DNA geometries, the following line can be used
     /control/execute vis.mac
-    # More specifically, start moleculardna using the command ./molecular, to
+    # More specifically, start moleculardna using the command ./molecular -t 1 -v 1
     # to open the Qt visualiser. Then use the mac file that you want, e.g.
     # /control/execute cylinders.mac
     # For the visualization, large amount of RAM is needed. For example
     # using cylinders DNA geometries, to visualize 200 cylinders, ~2.5 GB
     # are needed. For 2000 cylinders, ~11 GB are needed.
-
-    The DNA parallel world can be activated using the "useParallelPhysicsWorld" flag
-    in the PhysicsList.cc and DetectorConstruction.cc files for the physics stage.
-    Setting "useParallelPhysicsWorld = false" means that particles will only interact
-    with the water volume. Energy deposition in water caused by direct damage is
-    recorded using octree data structures associated with DNA volumes.
 
 2 - PHYSICS LIST
 
@@ -221,6 +221,7 @@ http://geant4-dna.org
     - ecoli.C: to plot damage from ecoli geometry
     - human_cell.C: to plot damage and fragments distribution from human_cell*
       geometries. The human_cell_alphas.C macro can be used as shown in [1].
+    - phage.C: to plot damage and fragments distribution from phage geometry
     - plasmid.C: to plot damage and fragments distribution from plasmid geometries
     - human_cell_chromosomes.C: to plot damage and fragments distribution
       from human_cell_chromosomes geometries.
@@ -248,6 +249,11 @@ http://geant4-dna.org
     - molecularDNAsurvival.py:  to use it, insert the command "python3 molecularDNAsurvival.py".
                                 The molecular-dna.root file is needed to run it, as produced by
                                 the human-cell.mac macro.
+
+    *** Note on ROOT import from python:
+    If python cannot import ROOT, please configure your ROOT version to include PyROOT.
+    For further instruction, refer to the documentation of ROOT, paragraph 19.1.4.2:
+    https://root.cern/root/htmldoc/guides/users-guide/ROOTUsersGuide.html#python-interface
 
 6 - PHASE SPACE READING
 

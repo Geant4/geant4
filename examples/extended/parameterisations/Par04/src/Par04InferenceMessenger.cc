@@ -78,6 +78,12 @@ Par04InferenceMessenger::Par04InferenceMessenger(Par04InferenceSetup* aInference
   fModelPathNameCmd->AvailableForStates(G4State_Idle);
   fModelPathNameCmd->SetToBeBroadcasted(true);
 
+  fModelTypeCmd = new G4UIcmdWithAString("/Par04/inference/setModelType", this);
+  fModelTypeCmd->SetGuidance("Model type");
+  fModelTypeCmd->SetParameterName("Name", false);
+  fModelTypeCmd->AvailableForStates(G4State_Idle);
+  fModelTypeCmd->SetToBeBroadcasted(true);
+
   fProfileFlagCmd = new G4UIcmdWithAnInteger("/Par04/inference/setProfileFlag", this);
   fProfileFlagCmd->SetGuidance("Flag to save a json file for model execution profiling.");
   fProfileFlagCmd->SetParameterName("ProfileFlag", false);
@@ -193,6 +199,7 @@ Par04InferenceMessenger::~Par04InferenceMessenger()
   delete fSizeLatentVectorCmd;
   delete fSizeConditionVectorCmd;
   delete fModelPathNameCmd;
+  delete fModelTypeCmd;
   delete fProfileFlagCmd;
   delete fOptimizationFlagCmd;
   delete fMeshNbRhoCellsCmd;
@@ -217,6 +224,9 @@ void Par04InferenceMessenger::SetNewValue(G4UIcommand* aCommand, G4String aNewVa
   }
   if (aCommand == fModelPathNameCmd) {
     fInference->SetModelPathName(aNewValue);
+  }
+  if (aCommand == fModelTypeCmd) {
+    fInference->SetModelType(aNewValue);
   }
   if (aCommand == fProfileFlagCmd) {
     fInference->SetProfileFlag(std::stoi(aNewValue));
@@ -283,6 +293,9 @@ G4String Par04InferenceMessenger::GetCurrentValue(G4UIcommand* aCommand)
   }
   if (aCommand == fModelPathNameCmd) {
     cv = fModelPathNameCmd->ConvertToString(fInference->GetModelPathName());
+  }
+  if (aCommand == fModelTypeCmd) {
+    cv = fModelTypeCmd->ConvertToString(fInference->GetModelType());
   }
   if (aCommand == fProfileFlagCmd) {
     cv = fSizeLatentVectorCmd->ConvertToString(fInference->GetProfileFlag());

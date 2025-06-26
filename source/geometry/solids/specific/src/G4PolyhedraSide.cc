@@ -37,7 +37,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4GeometryTolerance.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 // This new field helps to use the class G4PhSideManager.
 //
@@ -1174,8 +1174,8 @@ G4double G4PolyhedraSide::SurfaceTriangle( const G4ThreeVector& p1,
   
   v = p3 - p1;
   w = p1 - p2;
-  G4double lambda1 = G4UniformRand();
-  G4double lambda2 = lambda1*G4UniformRand();
+  G4double lambda1 = G4QuickRand();
+  G4double lambda2 = lambda1*G4QuickRand();
  
   *p4=p2 + lambda1*w + lambda2*v;
   return 0.5*(v.cross(w)).mag();
@@ -1196,7 +1196,7 @@ G4PolyhedraSide::GetPointOnPlane( const G4ThreeVector& p0, const G4ThreeVector& 
   aTwo = SurfaceTriangle(p2,p3,p0,&point2);
   *Area= aOne+aTwo;
 
-  chose = G4UniformRand()*(aOne+aTwo);
+  chose = G4QuickRand()*(aOne+aTwo);
   if( (chose>=0.) && (chose < aOne) )
   {
    return (point1);    
@@ -1269,7 +1269,7 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
 
   // Choose randomly one of the surfaces and point on it
   //
-  G4double chose = area*G4UniformRand();
+  G4double chose = area*G4QuickRand();
   G4double Achose1=0., Achose2=0.;
   G4int i=0;
   do    // Loop checking, 13.08.2015, G.Cosmo

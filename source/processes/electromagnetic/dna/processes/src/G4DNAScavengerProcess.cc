@@ -28,7 +28,6 @@
 #include <G4VScheduler.hh>
 #include <memory>
 #include "G4Molecule.hh"
-#include "G4DNAMolecularMaterial.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4UnitsTable.hh"
 #include "G4TrackingInformation.hh"
@@ -38,6 +37,7 @@
 #include "G4DNAScavengerMaterial.hh"
 #include "G4MoleculeFinder.hh"
 #include "G4Scheduler.hh"
+#include "G4ChemicalMoleculeFinder.hh"
 
 #ifndef State
 #  define State(theXInfo) (GetState<G4DNAScavengerProcessState>()->theXInfo)
@@ -124,10 +124,6 @@ G4double G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength(
 {
   G4Molecule* molecule = GetMolecule(track);
   auto molConf         = molecule->GetMolecularConfiguration();
-  // reset
-  fpMolecularConfiguration = nullptr;
-  fpMaterialConf           = nullptr;
-
   // this because process for moleculeDifinition not for configuration
   // TODO: need change this
   auto it = fConfMap.find(molConf);
@@ -135,6 +131,8 @@ G4double G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength(
   {
     return DBL_MAX;
   }
+  fpMolecularConfiguration = nullptr;
+  fpMaterialConf           = nullptr;
 
   fpMolecularConfiguration = molConf;
   auto MaterialMap         = it->second;
@@ -150,20 +148,24 @@ G4double G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength(
     G4double numMol =
       fpScavengerMaterial->GetNumberMoleculePerVolumeUnitForMaterialConf(
         matConf);
-    if(numMol == 0.0)  // ie : not found
-    {
-      continue;
-    }
-    if(verboseLevel > 1)
-    {
-      G4cout << " Material of " << matConf->GetName() << " : " << numMol
-             << G4endl;
-    }
-    // auto data = fReactionMap[mat_it];
+    if(numMol == 0 && matConf != fH2O){
+      continue;}
     auto data         = mat_it.second;
     auto reactionRate = data->GetObservedReactionRateConstant();  //_const
     G4double propensity =
       numMol * reactionRate / (fpBoundingBox->Volume() * Avogadro);
+
+    if(fH2O == matConf){
+      auto factor       = reactionRate;
+      propensity = factor;
+    }
+
+    if(verboseLevel > 1)
+    {
+      G4cout << " Material of " << matConf->GetName() << " : " << propensity
+             << G4endl;
+    }
+
     auto reactionData = std::make_pair(mat_it.first, propensity);
     if(propensity == 0)
     {
@@ -184,6 +186,13 @@ G4double G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength(
   auto rSelectedIter = ReactionDataMap.upper_bound(r1 * alpha0);
 
   fpMaterialConf = rSelectedIter->second.first;
+
+
+  auto type =   fConfMap[fpMolecularConfiguration][fpMaterialConf]->GetReactionType();
+  if(!fpScavengerMaterial->IsEquilibrium(type))
+  {
+    return DBL_MAX;
+  }
 
   State(fIsInGoodMaterial) = true;
   G4double previousTimeStep(-1.);
@@ -219,12 +228,6 @@ G4double G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength(
 #ifdef G4VERBOSE
   if(verboseLevel > 2)
   {
-    G4cout << "G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength:: "
-           << molConf->GetName() << G4endl;
-    G4cout << "theNumberOfInteractionLengthLeft : "
-           << fpState->theNumberOfInteractionLengthLeft << G4endl;
-    G4cout << "currentInteractionLength : " << fpState->currentInteractionLength
-           << G4endl;
     G4cout << "Material : " << fpMaterialConf->GetName()
            << " ID: " << track.GetTrackID()
            << " Track Time : " << track.GetGlobalTime()
@@ -249,50 +252,51 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
 {
   G4Molecule* molecule = GetMolecule(track);
   auto molConf         = molecule->GetMolecularConfiguration();
-  if(fpMolecularConfiguration != molConf)
-  {
-    fReturnedValue = DBL_MAX;
-    fParticleChange.Initialize(track);
-    State(fPreviousTimeAtPreStepPoint) = -1;
-    return &fParticleChange;
-  }
   std::vector<G4Track*> products;
 #ifdef G4VERBOSE
   if(verboseLevel > 1)
   {
-    G4cout << "___________" << G4endl;
-    G4cout << ">>> Beginning of G4DNAScavengerProcess verbose" << G4endl;
-    G4cout << ">>> Returned value : " << G4BestUnit(fReturnedValue, "Time")
-           << G4endl;
-    G4cout << ">>> Time Step : "
-           << G4BestUnit(G4VScheduler::Instance()->GetTimeStep(), "Time")
-           << G4endl;
-    G4cout << ">>> Global Time : "
-           << G4BestUnit(G4VScheduler::Instance()->GetGlobalTime(), "Time")
-           << G4endl;
-    G4cout << ">>> Global Time Track : "
-           << G4BestUnit(track.GetGlobalTime(), "Time") << G4endl;
-    G4cout << ">>> Track Position : " << track.GetPosition() << G4endl;
-    G4cout << ">>> Reaction : " << molecule->GetName() << "("
-           << track.GetTrackID() << ") + " << fpMaterialConf->GetName()
-           << G4endl;
-    G4cout << ">>> End of G4DNAScavengerProcess verbose <<<" << G4endl;
+    G4cout << ">>> Beginning of G4DNAScavengerProcess verbose>>> Returned value : " << G4BestUnit(fReturnedValue, "Time")
+           <<"molecule: "<<molConf->GetName()<<G4endl;
+    G4cout<<"   selected Mat : "<<fpMaterialConf->GetName()<< G4endl;
   }
 #endif
 
   G4double reactionTime = track.GetGlobalTime();
-  auto data = fConfMap[fpMolecularConfiguration][fpMaterialConf];
+  auto data = fConfMap[molConf][fpMaterialConf];
+
+  if(data == nullptr)
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription
+      << "No reaction data for scavenger reaction between : "<<fpMaterialConf->GetName()
+      <<" + "<<molConf->GetName()<<G4endl;
+    G4Exception("G4DNAScavengerProcess::PostStepDoIt",
+                "G4DNAScavengerProcess0001111", FatalErrorInArgument,
+                exceptionDescription);
+  }
+
+  fpScavengerMaterial->SetEquilibrium(data, track.GetGlobalTime());
 
   auto nbSecondaries = data->GetNbProducts();
 
   for(G4int j = 0; j < nbSecondaries; ++j)
   {
+    auto product = data->GetProduct(j);
+    auto isScavenger = fpScavengerMaterial->find(product);
+    if(isScavenger){
+      fpScavengerMaterial->
+        AddNumberMoleculePerVolumeUnitForMaterialConf(product,track.GetGlobalTime());
+      continue;
+    }
     auto pProduct = new G4Molecule(data->GetProduct(j));
     auto pProductTrack =
       pProduct->BuildTrack(reactionTime, track.GetPosition());
     pProductTrack->SetTrackStatus(fAlive);
     G4ITTrackHolder::Instance()->Push(pProductTrack);
-    G4MoleculeFinder::Instance()->Push(pProductTrack);
+    if(!G4ChemicalMoleculeFinder::Instance()->IsOctreeUsed()){
+      G4MoleculeFinder::Instance()->Push(pProductTrack);
+    }
     products.push_back(pProductTrack);
   }
 
@@ -318,8 +322,28 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
 
       if(verboseLevel != 0)
       {
-        G4cout << GetIT(products.at(i))->GetName() << " ("
-               << products.at(i)->GetTrackID() << ")";
+        auto product = data->GetProduct(i);
+        auto isScavenger = fpScavengerMaterial->find(product);
+        if(isScavenger)
+        {
+          G4cout<<product->GetName()<<" (B)";
+        }
+        else
+        {
+          auto trackSize = products.size();
+          if(trackSize > 0)
+          {
+            for(G4int it = 0; it < (G4int)trackSize; ++it)
+            {
+              if((verboseLevel != 0) && it != 0)
+              {
+                G4cout << " + ";
+              }
+              G4cout << GetIT(products.at(it))->GetName() << " ("
+                     << products.at(it)->GetTrackID() << ")";
+            }
+          }
+        }
       }
 #endif
     }
@@ -346,5 +370,12 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
   fpScavengerMaterial->ReduceNumberMoleculePerVolumeUnitForMaterialConf(
     fpMaterialConf, reactionTime);
   State(fPreviousTimeAtPreStepPoint) = -1;
+
+  if(fpMaterialConf == fH3Op
+      || fpMaterialConf == fH2O
+      || fpMaterialConf == fHOm) { // these scavengers are not changed
+    G4Scheduler::Instance()->SetInteractionStep(false);
+  }
+
   return &fParticleChange;
 }

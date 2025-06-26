@@ -70,6 +70,8 @@ class Par04InferenceMessenger : public G4UImessenger
     G4UIcmdWithAString* fInferenceLibraryCmd = nullptr;
     /// Command to set fModelPathNameCmd
     G4UIcmdWithAString* fModelPathNameCmd = nullptr;
+  /// Command to set fModelTypeCmd
+  G4UIcmdWithAString *fModelTypeCmd = nullptr;
     /// Command to set the fSizeLatentVectorCmd
     G4UIcmdWithAnInteger* fSizeLatentVectorCmd = nullptr;
     /// Command to set the fSizeConditionVectorCmd

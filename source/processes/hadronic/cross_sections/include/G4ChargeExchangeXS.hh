@@ -79,8 +79,13 @@ public:
   void CrossSectionDescription(std::ostream&) const final;
 
   const G4ParticleDefinition*
-  SampleSecondaryType(const G4ParticleDefinition*,
-                      const G4int Z, const G4int A);
+  SampleSecondaryType(const G4ParticleDefinition*, const G4Material*,
+		      G4int Z, G4int A, G4double etot);
+
+  G4double GetPartialPionXS(G4int idx);
+
+  G4double GetPionTFactor(G4int idx, const G4ParticleDefinition* part,
+			  G4double pEtot);
 
   void SetEnergyLimit(G4double val) { fEnergyLimit = val; };
 
@@ -92,6 +97,9 @@ public:
   G4ChargeExchangeXS(const G4ChargeExchangeXS&) = delete;
 
 private:
+
+  G4double GetCrossSection(const G4ParticleDefinition*, const G4Material*,
+			   G4int Z, G4double etot);
 
   G4double ComputeDeuteronFraction(const G4Material*);
 

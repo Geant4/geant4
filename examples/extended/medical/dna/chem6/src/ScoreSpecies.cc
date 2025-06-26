@@ -87,7 +87,6 @@ ScoreSpecies::ScoreSpecies(G4String name, G4int depth)
   fEdep = 0;
   fNEvent = 0;
   fRunID = 0;
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -147,7 +146,6 @@ void ScoreSpecies::Initialize(G4HCofThisEvent* HCE)
   }
 
   HCE->AddHitsCollection(fHCID, (G4VHitsCollection*)fEvtMap);
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -156,60 +154,51 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
 {
   if (G4EventManager::GetEventManager()->GetConstCurrentEvent()->IsAborted()) {
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
 
-  auto species = G4MoleculeCounter::Instance()->GetRecordedMolecules();
+  // get the first, and in this case only, counter
+  auto counter = G4MoleculeCounterManager::Instance()->GetMoleculeCounter<G4MoleculeCounter>(0);
+  if (counter == nullptr) {
+    G4Exception("ScoreSpecies::EndOfEvent", "BAD_REFERENCE", FatalException,
+                "The molecule counter could not be received!");
+  }
 
-  if (species.get() == 0 || species->size() == 0) {
+  auto indices = counter->GetMapIndices();
+
+  if (indices.empty()) {
     G4cout << "No molecule recorded, energy deposited= " << G4BestUnit(fEdep, "Energy") << G4endl;
     ++fNEvent;
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
-
-  //  G4cout << "ScoreSpecies::EndOfEvent"<<G4endl;
-  //  G4cout << "End of event, deposited energy: "
-  //  << G4BestUnit(fEdep, "Energy") << G4endl;
-
-  for (auto molecule : *species) {
+  for (auto idx : indices) {
     for (auto time_mol : fTimeToRecord) {
-      double n_mol = G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule, time_mol);
+      double n_mol = counter->GetNbMoleculesAtTime(idx, time_mol);
 
       if (n_mol < 0) {
         G4cerr << "N molecules not valid < 0 " << G4endl;
         G4Exception("", "N<0", FatalException, "");
       }
 
-      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][molecule];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][idx.Molecule];
       molInfo.fNumber += n_mol;
       double gValue = (n_mol / (fEdep / eV)) * 100.;
       molInfo.fG += gValue;
       molInfo.fG2 += gValue * gValue;
-
-      //      G4cout << "In Save molucule: fNumber " << molInfo.fNumber
-      //            << " fG " << molInfo.fG
-      //            << " fEdep " << fEdep/eV
-      //            << G4endl;
     }
   }
 
   ++fNEvent;
 
-  //  G4cout << "End of event " << fNEvent
-  //         << ", energy deposited=" << G4BestUnit(fEdep, "Energy") << G4endl;
-
   fEdep = 0.;
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerScorer)
 {
-  ScoreSpecies* right =
+  auto right =
     dynamic_cast<ScoreSpecies*>(dynamic_cast<G4VPrimitiveScorer*>(workerScorer));
 
   if (right == 0) {
@@ -219,26 +208,19 @@ void ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerScore
     return;
   }
 
-  // G4cout<<"ScoreSpecies::AbsorbResultsFromWorkerScorer"<<G4endl;
-  SpeciesMap::iterator it_map1 = right->fSpeciesInfoPerTime.begin();
-  SpeciesMap::iterator end_map1 = right->fSpeciesInfoPerTime.end();
+  auto it_map1 = right->fSpeciesInfoPerTime.begin();
+  auto end_map1 = right->fSpeciesInfoPerTime.end();
 
   for (; it_map1 != end_map1; ++it_map1) {
     InnerSpeciesMap& map2 = it_map1->second;
-    InnerSpeciesMap::iterator it_map2 = map2.begin();
-    InnerSpeciesMap::iterator end_map2 = map2.end();
+    auto it_map2 = map2.begin();
+    auto end_map2 = map2.end();
 
     for (; it_map2 != end_map2; ++it_map2) {
       SpeciesInfo& molInfo = fSpeciesInfoPerTime[it_map1->first][it_map2->first];
       molInfo.fNumber += it_map2->second.fNumber;
       molInfo.fG += it_map2->second.fG;
       molInfo.fG2 += it_map2->second.fG2;
-
-      //      G4cout << "In AbsorbeResultsFromWorkerScorer: fNumber "
-      //             << molInfo.fNumber
-      //             << " fG "
-      //             << molInfo.fG
-      //             << G4endl;
     }
   }
   right->fSpeciesInfoPerTime.clear();

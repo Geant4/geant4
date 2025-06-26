@@ -1,0 +1,86 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4PathFinder inlined function members implementation
+//
+// Author: John Apostolakis (CERN), 7 October 2005
+// --------------------------------------------------------------------
+
+inline G4VPhysicalVolume* G4PathFinder::GetLocatedVolume( G4int navId ) const
+{
+  G4VPhysicalVolume* vol = nullptr;  
+  if( (navId < fMaxNav) && (navId >= 0) ) { vol= fLocatedVolume[navId]; }
+  return vol; 
+}
+
+inline G4int G4PathFinder::SetVerboseLevel(G4int newLevel)
+{
+  G4int old = fVerboseLevel;
+  fVerboseLevel = newLevel;
+  return old;
+}
+
+inline G4double G4PathFinder::GetMinimumStep() const
+{ 
+  return fMinStep; 
+} 
+
+inline unsigned int G4PathFinder::GetNumberGeometriesLimitingStep() const
+{
+  unsigned int noGeometries = fNoGeometriesLimiting;
+  return noGeometries;
+}
+
+inline G4double G4PathFinder::GetCurrentSafety() const
+{
+  return fMinSafety_PreStepPt;
+}
+
+inline void G4PathFinder::MovePoint()
+{
+  fRelocatedPoint = true;
+}
+
+inline G4Navigator* G4PathFinder::GetNavigator(G4int n) const
+{ 
+  if( (n>fNoActiveNavigators) || (n<0) ) { n=0; }
+  return fpNavigator[n];
+}
+
+inline G4double
+G4PathFinder::ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint )
+{
+  globalCenterPoint = fSafetyLocation; 
+  return fNewSafetyComputed[ navId ];
+}
+
+inline G4double
+G4PathFinder::LastPreSafety( G4int navId, G4ThreeVector& globalCenterPoint, 
+                             G4double& minSafety )
+{
+  globalCenterPoint = fPreSafetyLocation;
+  minSafety =         fPreSafetyMinValue;
+  return  fPreSafetyValues[ navId ];
+}

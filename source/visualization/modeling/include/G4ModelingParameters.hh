@@ -144,6 +144,49 @@ public: // With description
     PVNameCopyNoPath fPVNameCopyNoPath;
   };
 
+  struct TimeParameters {
+    G4double fStartTime = -G4VisAttributes::fVeryLongTime;  // ) Start and end time of drawn range,
+    G4double fEndTime   =  G4VisAttributes::fVeryLongTime;  // ) e.g., for trajectory steps.
+    G4double fFadeFactor = 1.;  // 0: no fade; 1: maximum fade with time within range.
+    G4bool   fDisplayHeadTime      = false; // Display head time (fEndTime) in 2D text.
+    G4double fDisplayHeadTimeX     =  0.0;  // ) 2D screen coords of head time,
+    G4double fDisplayHeadTimeY     = -0.9;  // ) bottom-middle of view.
+    G4double fDisplayHeadTimeSize  =  24.;  // Screen size (pixels) of the head time writing.
+    G4double fDisplayHeadTimeRed   =   0.;  // )
+    G4double fDisplayHeadTimeGreen =   1.;  // ) Default colour of head time writing (cyan)
+    G4double fDisplayHeadTimeBlue  =   1.;  // )
+    G4bool   fDisplayLightFront    = false; // Display light front at head time originating at...
+    G4double fDisplayLightFrontX     = 0.;  // )
+    G4double fDisplayLightFrontY     = 0.;  // ) ...default coordinates and time of origin
+    G4double fDisplayLightFrontZ     = 0.;  // ) of light front drawing...
+    G4double fDisplayLightFrontT     = 0.;  // )
+    G4double fDisplayLightFrontRed   = 0.;  // )
+    G4double fDisplayLightFrontGreen = 1.;  // ) ...in this default colour (green)
+    G4double fDisplayLightFrontBlue  = 0.;  // )
+    G4bool operator != (const TimeParameters& rhs)  const {
+      if (fStartTime              != rhs.fStartTime              ||
+          fEndTime                != rhs.fEndTime                ||
+          fFadeFactor             != rhs.fFadeFactor             ||
+          fDisplayHeadTime        != rhs.fDisplayHeadTime        ||
+          fDisplayHeadTimeX       != rhs.fDisplayHeadTimeX       ||
+          fDisplayHeadTimeY       != rhs.fDisplayHeadTimeY       ||
+          fDisplayHeadTimeSize    != rhs.fDisplayHeadTimeSize    ||
+          fDisplayHeadTimeRed     != rhs.fDisplayHeadTimeRed     ||
+          fDisplayHeadTimeGreen   != rhs.fDisplayHeadTimeGreen   ||
+          fDisplayHeadTimeBlue    != rhs.fDisplayHeadTimeBlue    ||
+          fDisplayLightFront      != rhs.fDisplayLightFront      ||
+          fDisplayLightFrontX     != rhs.fDisplayLightFrontX     ||
+          fDisplayLightFrontY     != rhs.fDisplayLightFrontY     ||
+          fDisplayLightFrontZ     != rhs.fDisplayLightFrontZ     ||
+          fDisplayLightFrontT     != rhs.fDisplayLightFrontT     ||
+          fDisplayLightFrontRed   != rhs.fDisplayLightFrontRed   ||
+          fDisplayLightFrontGreen != rhs.fDisplayLightFrontGreen ||
+          fDisplayLightFrontBlue  != rhs.fDisplayLightFrontBlue
+          ) return true;
+      return false;
+    }
+  };
+
   G4ModelingParameters ();
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
@@ -183,8 +226,11 @@ public: // With description
   G4DisplacedSolid* GetCutawaySolid              () const;
   const G4Event*   GetEvent                      () const;
   const std::vector<VisAttributesModifier>& GetVisAttributesModifiers() const;
+  const TimeParameters& GetTimeParameters        () const;
   G4bool           IsSpecialMeshRendering        () const;
-  const std::vector<PVNameCopyNo>& GetSpecialMeshVolumes() const;
+  const std::vector<PVNameCopyNo>& GetSpecialMeshVolumes () const;
+  G4double         GetTransparencyByDepth        () const;
+  G4int            GetTransparencyByDepthOption  () const;
 
   // Set functions...
   void SetWarning              (G4bool);
@@ -206,8 +252,11 @@ public: // With description
   void SetCutawaySolid         (G4DisplacedSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
   void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>&);
+  void SetTimeParameters       (const TimeParameters&);
   void SetSpecialMeshRendering (G4bool);
   void SetSpecialMeshVolumes   (const std::vector<PVNameCopyNo>&);
+  void SetTransparencyByDepth  (G4double);
+  void SetTransparencyByDepthOption(G4int);
 
   friend std::ostream& operator <<
   (std::ostream& os, const G4ModelingParameters&);
@@ -245,8 +294,11 @@ private:
   G4DisplacedSolid* fpCutawaySolid;  // For generic cutaways.
   const G4Event* fpEvent;        // Event being processed.
   std::vector<VisAttributesModifier> fVisAttributesModifiers;
+  TimeParameters fTimeParameters;  // Time parameters (for time-slicing).
   G4bool       fSpecialMeshRendering;  // Request special rendering of parameterised volumes
   std::vector<PVNameCopyNo> fSpecialMeshVolumes;  // If empty, all meshes.
+  G4double     fTransparencyByDepth;  // Transparency ~= (geometry depth) - fTransparencyByDepth
+  G4int        fTransparencyByDepthOption;  // Its option
 };
 
 std::ostream& operator <<

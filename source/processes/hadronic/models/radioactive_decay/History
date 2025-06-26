@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-01-10 Vladimir Ivanchenko (radioactive_decay-V11-02-06)
+## 2025-01-10 Vladimir Ivanchenko (radioactive_decay-V11-03-00)
 - G4RadioactiveDecay - fixed problem 2592 - enable biasing in radioactive decay
 
 ## 2024-08-14 Gabriele Cosmo (radioactive_decay-V11-02-05)

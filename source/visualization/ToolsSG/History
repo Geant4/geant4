@@ -6,6 +6,66 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-17 Guy Barrand (vis_toolssg-V11-03-07)
+- G4ToolsSGViewer.hh: in mouse_move(), use the event.shift_modifier() method, introduced
+  in g4tools-V11-03-03, to pass in pan mode.
+  Suppress then the no more needed fKeyPressed, fKeyShift fields and the related logic.
+
+## 2025-06-02 Guy Barrand (vis_toolssg-V11-03-06)
+- G4ToolsSGViewer.hh: have the GetWindowSize, GetRenderAreaSize methods to retrieve the actual sizes of the "seen/visibl window" and
+  of the "render area" size. These may return different sizes, for example with Qt/OpenGL on Mac and Windows.
+- G4ToolsSGViewer::SetView: use the new GetWindowSize, GetRenderAreaSize methods to set the "marker scale" on G4ToolsSGSceneHandler.
+- G4ToolsSGSceneHandler.hh, .cc: handle the fMarkerScale field. Used in AddPrimitive(G4Text).
+- G4ToolsSGQtGLESViewer.hh, G4ToolsSGQtZBViewer.hh, G4ToolsSGOffscreenViewer.hh: supress the SetView method no more needed
+  because of the upper "marker scale" modifications in G4ToolsSGViewer.hh.
+
+## 2025-05-29 John Allison (vis_toolssg-V11-03-05)
+- Allow accumulation of transients (trajectories) during multithreading.
+- G4ToolsSGViewer.hh:
+  - Remove SwitchToVisSubThread and SwitchToMasterThread.
+    - No action needed on thread switching.
+- G4ToolsSGSceneHandler.cc:
+  - G4ToolsSGSceneHandler::GetOrCreateNode():
+    - Remove restriction on multithreading:
+      - Remove if (!G4Threading::IsMasterThread()) return nullptr;
+- Trajectories are stored in the database during the run, and displayed at end
+  of run. Try "/run/beamOn 1000" (exampleB1).
+  - All events are displayed at end of run.
+  - Of course, change of style, time evolution, view cloning, etc., only
+    operates on kept events, as before.
+  
+## 2025-05-25 John Allison (vis_toolssg-V11-03-04)
+- G4ToolsSGSceneHandler.cc:
+  - Respect line width in vis attributes and view parameters.
+
+## 2025-03-21 Ben Morgan (vis_toolssg-V11-03-03)
+- Modernize g4tools macro-based loops with range-based for.
+- Update raw for loops with range-for where possible.
+
+## 2025-03-06 John Allison (vis_toolssg-V11-03-02)
+- G4ToolsSGViewer.hh:
+  - Implement CompareForTransientsRedraw().
+  - Take advantage of ProcessTransients(), which reconstructs that part of
+    the graphical database for transient objects, e.g., trajectories,
+    without reconstructing the "permanent" (run-duration) objects, e.g.,
+    the detector. In other words, something short of a complete "kernel
+    visit". For example, if the time window changes.
+  - Maximises the efficiency of the recently implemented "generic" time
+    windowing.
+
+## 2025-02-13 John Allison (vis_toolssg-V11-03-01)
+- G4ToolsSGViewer.hh: CompareForKernelVisit:
+  - Cause kernel visit if viewer start/end time changes.
+    - This is to take advantage of the new generic time window - modeling-V11-03-04.
+
+## 2025-01-06 John Allison (vis_toolssg-V11-03-00)
+- Co-works: visman-V11-03-00, interfaces-V11-03-00, modeling-V11-03-00,
+  opengl-V11-03-00, visQt3D-V11-03-00, openinventor-V11-03-00,
+  greps-V11-03-00.
+- Re-instate the transparency slider (see lengthy explanation in management/History).
+- G4Qt3DViewer:
+  - Initiate kernel visit if TransparencyByDepth or its options change.
+
 ## 2024-06-21 Ben Morgan (vis_toolssg-V1-02-02)
 - Use runtime checks for MT mode.
 

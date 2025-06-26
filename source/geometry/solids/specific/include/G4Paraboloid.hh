@@ -76,23 +76,16 @@ class G4Paraboloid : public G4VSolid
     ~G4Paraboloid() override;
 
     // Access functions
-
     inline G4double GetZHalfLength() const;
     inline G4double GetRadiusMinusZ() const;
     inline G4double GetRadiusPlusZ() const;
 
-    inline G4double GetCubicVolume() override;
-    inline G4double GetSurfaceArea() override;
-    inline G4double CalculateSurfaceArea() const;
-
     // Modifiers functions
-
-    inline void SetZHalfLength(G4double dz);
-    inline void SetRadiusMinusZ(G4double R1);
-    inline void SetRadiusPlusZ(G4double R2);
+    void SetZHalfLength(G4double dz);
+    void SetRadiusMinusZ(G4double R1);
+    void SetRadiusPlusZ(G4double R2);
 
     // Solid standard methods
-
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -116,42 +109,45 @@ class G4Paraboloid : public G4VSolid
 
     std::ostream& StreamInfo(std::ostream& os) const override;
 
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
+
     G4ThreeVector GetPointOnSurface() const override;
 
     // Visualisation functions
-
     void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
     G4Polyhedron* CreatePolyhedron() const override;
     G4Polyhedron* GetPolyhedron () const override;
 
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
     G4Paraboloid(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
+    // Copy constructor and assignment operator.
     G4Paraboloid(const G4Paraboloid& rhs);
     G4Paraboloid& operator=(const G4Paraboloid& rhs);
-      // Copy constructor and assignment operator.
-
-  protected:
-
-    mutable G4bool fRebuildPolyhedron = false;
-    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
   private:
 
-    // Making this mutable to allow GetPointOnSurface to have access to
-    // area function.
-    mutable G4double fSurfaceArea = 0.0;
+    G4double CalculateSurfaceArea() const;
+
+    G4double fSurfaceArea = 0.0;
     G4double fCubicVolume = 0.0;
 
-    G4double dz, r1, r2;
-    G4double k1, k2;
-    // Defined to make some calculations easier to follow
+    // Cached values
+    G4double dz = 0.0; // half height
+    G4double r1 = 0.0; // radius at -dz
+    G4double r2 = 0.0; // radius at  dz
+    G4double k1 = 0.0; // k1 = 0.5*(r2*r2 - r1*r1)/dz
+    G4double k2 = 0.0; // k2 = 0.5*(r2*r2 + r1*r1)
+
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #include "G4Paraboloid.icc"
 
 #endif  // defined(G4GEOM_USE_UPARABOLOID) && defined(G4GEOM_USE_SYS_USOLIDS)
 
-#endif // G4Paraboloid_HH
+#endif // G4PARABOLOID_HH

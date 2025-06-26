@@ -29,6 +29,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UAtomicDeexcitation.hh"
+#include "G4EmParameters.hh"
 #include "G4LossTableManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
@@ -68,17 +69,7 @@ G4VEmModel(nam)
   // Define default angular generator
   SetAngularDistribution(new G4DNABornAngle());
 
-  // Selection of computation method
-
-  fasterCode = false;
-
-  // Selection of stationary mode
-
-  statCode = false;
-
-  // Selection of SP scaling
-
-  spScaling = true;
+  fasterCode = G4EmParameters::Instance()->DNAFast();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -123,7 +114,7 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
   G4String proton;
 
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
-
+  
   const char *path = G4FindDataDir("G4LEDATA");
 
   // *** ELECTRON
@@ -295,21 +286,32 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
     << G4endl;
   }
 
-  // Initialize water density pointer
-  
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+
+  // Initialize water density pointer  
   fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->
   GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-  // AD
+  statCode = G4EmParameters::Instance()->DNAStationary();
   
-  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  // AD
+  if (!statCode)
+    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
-  //
-
-  if (isInitialised)
-  { return;}
-  fParticleChangeForGamma = GetParticleChangeForGamma();
+  // chemistry
+  auto chem = G4DNAChemistryManager::Instance();
+  if (chem->IsChemistryActivated()) {
+    fChemistry = chem;
+  }  
   isInitialised = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4DNABornIonisationModel1::StartTracking(G4Track* track)
+{
+  fTrack = track;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -450,20 +452,19 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
 
     G4int ionizationShell = 0;
 
-    if (!fasterCode) ionizationShell = RandomSelect(k,particleName);
-
     // SI: The following protection is necessary to avoid infinite loops :
     //  sigmadiff_ionisation_e_born.dat has non zero partial xs at 18 eV for shell 3 (ionizationShell ==2)
     //  sigmadiff_cumulated_ionisation_e_born.dat has zero cumulated partial xs at 18 eV for shell 3 (ionizationShell ==2)
     //  this is due to the fact that the max allowed transfered energy is (18+10.79)/2=17.025 eV and only transfered energies
     //  strictly above this value have non zero partial xs in sigmadiff_ionisation_e_born.dat (starting at trans = 17.12 eV)
 
-    if (fasterCode)
-    do
-    {
+    if (!fasterCode) {
       ionizationShell = RandomSelect(k,particleName);
-    } while (k<19*eV && ionizationShell==2 && particle->GetDefinition()==G4Electron::ElectronDefinition());
-
+    } else {
+      do {
+	ionizationShell = RandomSelect(k,particleName);
+      } while (k<19*eV && ionizationShell==2 && particle->GetDefinition()==G4Electron::ElectronDefinition());
+    }
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
@@ -481,8 +482,6 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
     {
       secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(particle->GetDefinition(),k,ionizationShell);
     }
-    //
-
     G4int Z = 8;
     
     G4ThreeVector deltaDirection =
@@ -587,17 +586,10 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
     }
 
-    // TEST //////////////////////////
-    // if (secondaryKinetic<0) abort();
-    // if (scatteredEnergy<0) abort();
-    // if (k-scatteredEnergy-secondaryKinetic-deexSecEnergy<0) abort();
-    // if (k-scatteredEnergy<0) abort();
-    /////////////////////////////////
-    
-    const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-    G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
-        ionizationShell,
-        theIncomingTrack);
+    // create radical
+    if (nullptr != fChemistry) {
+      fChemistry->CreateWaterMolecule(eIonizedMolecule, ionizationShell, fTrack);
+    }
   }
 }
 
@@ -695,50 +687,6 @@ G4double G4DNABornIonisationModel1::RandomizeEjectedElectronEnergy(G4ParticleDef
 
   return 0;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// The following section is not used anymore but is kept for memory
-// GetAngularDistribution()->SampleDirectionForShell is used instead
-
-/*
- void G4DNABornIonisationModel1::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition,
- G4double k,
- G4double secKinetic,
- G4double & cosTheta,
- G4double & phi )
- {
- if (particleDefinition == G4Electron::ElectronDefinition())
- {
- phi = twopi * G4UniformRand();
- if (secKinetic < 50.*eV) cosTheta = (2.*G4UniformRand())-1.;
- else if (secKinetic <= 200.*eV)
- {
- if (G4UniformRand() <= 0.1) cosTheta = (2.*G4UniformRand())-1.;
- else cosTheta = G4UniformRand()*(std::sqrt(2.)/2);
- }
- else
- {
- G4double sin2O = (1.-secKinetic/k) / (1.+secKinetic/(2.*electron_mass_c2));
- cosTheta = std::sqrt(1.-sin2O);
- }
- }
-
- else if (particleDefinition == G4Proton::ProtonDefinition())
- {
- G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
- phi = twopi * G4UniformRand();
-
- // cosTheta = std::sqrt(secKinetic / maxSecKinetic);
-
- // Restriction below 100 eV from Emfietzoglou (2000)
-
- if (secKinetic>100*eV) cosTheta = std::sqrt(secKinetic / maxSecKinetic);
- else cosTheta = (2.*G4UniformRand())-1.;
-
- }
- }
- */
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double G4DNABornIonisationModel1::DifferentialCrossSection(G4ParticleDefinition * particleDefinition,

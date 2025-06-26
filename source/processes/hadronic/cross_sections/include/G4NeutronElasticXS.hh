@@ -44,8 +44,8 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include "G4ElementData.hh"
 #include "G4PhysicsVector.hh"
-#include <vector>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -58,7 +58,7 @@ public:
 
   G4NeutronElasticXS();
 
-  ~G4NeutronElasticXS() final;
+  ~G4NeutronElasticXS() override = default;
     
   static const char* Default_Name() {return "G4NeutronElasticXS";}
 
@@ -97,7 +97,7 @@ public:
 
   G4double ElementCrossSection(G4double kinEnergy, G4double loge, G4int Z);
 
-  G4NeutronElasticXS & operator=(const G4NeutronElasticXS &right) = delete;
+  G4NeutronElasticXS& operator=(const G4NeutronElasticXS &right) = delete;
   G4NeutronElasticXS(const G4NeutronElasticXS&) = delete;
   
 private: 
@@ -108,25 +108,30 @@ private:
 
   const G4String& FindDirectoryPath();
 
-  inline G4PhysicsVector* GetPhysicsVector(G4int Z);
+  inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
-  G4VComponentCrossSection* ggXsection = nullptr;
+  G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
+
+  G4VComponentCrossSection* ggXsection{nullptr};
   const G4ParticleDefinition* neutron;
 
-  G4bool isFirst = false;
+  G4bool isInitializer{false};
 
   static const G4int MAXZEL = 93;
-  static G4PhysicsVector* data[MAXZEL];
+  static G4ElementData* data;
   static G4double coeff[MAXZEL];
   static G4String gDataDirectory;
-  static G4bool fLock;
 };
 
-inline
+inline const
 G4PhysicsVector* G4NeutronElasticXS::GetPhysicsVector(G4int Z)
 {
-  if(nullptr == data[Z]) { InitialiseOnFly(Z); }
-  return data[Z];
+  const G4PhysicsVector* pv = data->GetElementData(Z);
+  if (pv == nullptr) { 
+    InitialiseOnFly(Z);
+    pv = data->GetElementData(Z);
+  }
+  return pv;
 }
 
 #endif

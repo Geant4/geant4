@@ -25,19 +25,17 @@
 //
 // class G4ParameterisedNavigation Implementation
 //
-// Initial Author: P.Kent, 1996
+// Original author: Paul Kent (CERN), August 1996
+//
 // Revisions:
-//  J. Apostolakis 24 Nov 2005, Revised/fixed treatment of nested params
-//  J. Apostolakis  4 Feb 2005, Reintroducting multi-level parameterisation
-//                              for materials only - see note 1 below
-//  G. Cosmo       11 Mar 2004, Added Check mode 
-//  G. Cosmo       15 May 2002, Extended to 3-d voxelisation, made subclass
-//  J. Apostolakis  5 Mar 1998, Enabled parameterisation of mat & solid type
+// - J. Apostolakis  5 Mar 1998, Enabled parameterisation of mat & solid type
+// - G. Cosmo       15 May 2002, Extended to 3-d voxelisation, made subclass
+// - G. Cosmo       11 Mar 2004, Added Check mode 
+// - J. Apostolakis 24 Nov 2005, Revised/fixed treatment of nested params
 // --------------------------------------------------------------------
 
-// Note 1: Design/implementation note for extensions - JAp, March 1st, 2005
-// We cannot make the solid, dimensions and transformation dependent on
-// parent because the voxelisation will not have access to this. 
+// Note: We cannot make the solid, dimensions and transformation dependent on
+//       parent because the voxelisation will not have access to this. 
 // So the following can NOT be done:
 //   sampleSolid = curParam->ComputeSolid(num, curPhysical, pParentTouch);
 //   sampleSolid->ComputeDimensions(curParam, num, curPhysical, pParentTouch);

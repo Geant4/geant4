@@ -38,6 +38,7 @@
 #include "G4ITTrackingManager.hh"
 #include "G4Molecule.hh"
 #include "G4RunManager.hh"
+#include "G4Scheduler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TimeStepAction::TimeStepAction(EventAction* event)
@@ -46,7 +47,7 @@ TimeStepAction::TimeStepAction(EventAction* event)
     fRadicalKillDistance(4.5 * nm),
     fpChemistryTrackHolder(G4ITTrackHolder::Instance())
 {
-  AddTimeStep(1 * picosecond, 0.5 * nanosecond);
+  //AddTimeStep(1 * picosecond, 0.5 * nanosecond);
   // ctor
 }
 
@@ -143,6 +144,7 @@ void TimeStepAction::RadicalKillDistance()
     ++it_begin;
     if (trackToKill != nullptr) {
       fpChemistryTrackHolder->PushToKill(trackToKill);
+      G4Scheduler::Instance()->SetInteractionStep(true);
     }
   }
 }

@@ -3,16 +3,26 @@
 #/process/dna/e-SolvationSubType Ritchie1994
 #/process/dna/e-SolvationSubType Terrisol1990
 
+/process/chem/TimeStepModel IRT_syn
+
 # Set the simulation volume (half Side Length)
 #/UHDR/env/volume 0.8 um # for UHDR
 /UHDR/env/volume 1.6 um # for CONV
 
 /UHDR/Detector/PBC true
 
-/run/initialize
+# time structure
+/UHDR/pulse/pulseOn true
+# push structure file
+/UHDR/pulse/pulseFile 1.4us
 
-# time structure (not available)
-#/UHDR/pulse/activate true
+# pulse structure
+/UHDR/pulse/multiPulse true
+/UHDR/pulse/pulsePeriod 10 ms
+/UHDR/pulse/numberOfPulse 2
+#/UHDR/pulse/pulseInHisto pulseHisto.txt
+
+/run/initialize
 
 # pH and Scavenger
 /UHDR/env/pH 5.5
@@ -24,8 +34,8 @@
 
 #/run/verbose 1
 /tracking/verbose 0
-/scheduler/verbose 0
-/scheduler/endTime 1 ms
+/scheduler/verbose 1
+/scheduler/endTime 10 s
 
 # set false if many beamOn in medium
 /scheduler/ResetScavengerForEachBeamOn true
@@ -34,9 +44,7 @@
 
 /run/printProgress 10
 
-/scorer/Dose/abortedDose 0.05 Gy
-
-/scorer/Dose/cutoff 0.01 Gy
+/scorer/Dose/cutoff 0.1 Gy
 /UHDR/source/particle e-
 /UHDR/source/energy 0.999 MeV
 /run/beamOn 2

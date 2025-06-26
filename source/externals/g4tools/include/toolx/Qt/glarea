@@ -60,34 +60,54 @@ public:
   }
   virtual void mousePressEvent(QMouseEvent* a_event) {
     if(!m_interactor) return;
+
+    bool shift_modifier = a_event->modifiers() & ::Qt::ShiftModifier;
+    bool control_modifier = a_event->modifiers() & ::Qt::ControlModifier;
+
 #if QT_VERSION < 0x060000
-    tools::sg::mouse_down_event _event(a_event->x(),a_event->y());
+    tools::sg::mouse_down_event _event(a_event->x(),a_event->y(),shift_modifier,control_modifier);
 #else
-    tools::sg::mouse_down_event _event(a_event->position().x(),a_event->position().y());
+    tools::sg::mouse_down_event _event(a_event->position().x(),a_event->position().y(),shift_modifier,control_modifier);
 #endif
     m_interactor->mouse_press(_event);
   }
   virtual void mouseReleaseEvent(QMouseEvent* a_event) {
     if(!m_interactor) return;
+
+    bool shift_modifier = a_event->modifiers() & ::Qt::ShiftModifier;
+    bool control_modifier = a_event->modifiers() & ::Qt::ControlModifier;
+
 #if QT_VERSION < 0x060000
-    tools::sg::mouse_up_event _event(a_event->x(),a_event->y());
+    tools::sg::mouse_up_event _event(a_event->x(),a_event->y(),shift_modifier,control_modifier);
 #else
-    tools::sg::mouse_up_event _event(a_event->position().x(),a_event->position().y());
+    tools::sg::mouse_up_event _event(a_event->position().x(),a_event->position().y(),shift_modifier,control_modifier);
 #endif
     m_interactor->mouse_release(_event);
   }
   virtual void mouseMoveEvent(QMouseEvent* a_event) {
     if(!m_interactor) return;
+
+    bool shift_modifier = a_event->modifiers() & ::Qt::ShiftModifier;
+    bool control_modifier = a_event->modifiers() & ::Qt::ControlModifier;
+
 #if QT_VERSION < 0x060000
-    tools::sg::mouse_move_event _event(a_event->x(),a_event->y(),0,0,false);
+    tools::sg::mouse_move_event _event(a_event->x(),a_event->y(),shift_modifier,control_modifier,0,0,false);
 #else
-    tools::sg::mouse_move_event _event(a_event->position().x(),a_event->position().y(),0,0,false);
+    tools::sg::mouse_move_event _event(a_event->position().x(),a_event->position().y(),shift_modifier,control_modifier,0,0,false);
 #endif
     m_interactor->mouse_move(_event);
   }
   virtual void wheelEvent(QWheelEvent* a_event) {
     if(!m_interactor) return;
-    tools::sg::wheel_rotate_event _event(a_event->angleDelta().y());
+
+    bool shift_modifier = a_event->modifiers() & ::Qt::ShiftModifier;
+    bool control_modifier = a_event->modifiers() & ::Qt::ControlModifier;
+
+#if QT_VERSION < 0x050f00  //5.15.00
+    tools::sg::wheel_rotate_event _event(a_event->angleDelta().y(),a_event->x(),a_event->y(),shift_modifier,control_modifier);
+#else
+    tools::sg::wheel_rotate_event _event(a_event->angleDelta().y(),a_event->position().x(),a_event->position().y(),shift_modifier,control_modifier);
+#endif
     m_interactor->wheel_rotate(_event);
   }
 

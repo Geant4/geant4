@@ -25,7 +25,7 @@
 // 
 // Class G4AssemblyVolume - implementation
 //
-// Author: Radovan Chytracek, CERN - November 2000
+// Authors: R.Chytracek, J.Apostolakis, G.Cosmo (CERN), November 2000
 // --------------------------------------------------------------------
 
 #include "G4AssemblyVolume.hh"

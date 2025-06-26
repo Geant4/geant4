@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4ParameterisedNavigation Inline implementation
+// Class G4ParameterisedNavigation Inline implementation
 //
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 
 // ********************************************************************
@@ -33,8 +34,8 @@
 //
 inline G4VSolid* G4ParameterisedNavigation::
 IdentifyAndPlaceSolid( G4int num,
-                       G4VPhysicalVolume *apparentPhys, // PhysV or PhysT
-                       G4VPVParameterisation *curParam  )
+                       G4VPhysicalVolume* apparentPhys, // PhysV or PhysT
+                       G4VPVParameterisation* curParam  )
 {
   G4VSolid *sampleSolid; 
 

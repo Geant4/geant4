@@ -32,6 +32,8 @@
 #include "G4DNAScavengerMaterial.hh"
 #include "G4Scheduler.hh"
 
+#include "G4MoleculeCounterManager.hh"
+
 G4DNAUpdateSystemModel::G4DNAUpdateSystemModel() = default;
 
 void G4DNAUpdateSystemModel::SetMesh(G4DNAMesh* pMesh) { fpMesh = pMesh; }
@@ -53,9 +55,9 @@ void G4DNAUpdateSystemModel::KillMolecule(const Index& index, MolType type)
                   FatalErrorInArgument, exceptionDescription);
     }
     iter->second--;
-    if(G4VMoleculeCounter::Instance()->InUse())
+    if (G4MoleculeCounterManager::Instance()->GetIsActive())
     {
-      G4VMoleculeCounter::Instance()->RemoveAMoleculeAtTime(type, fGlobalTime);
+		  G4MoleculeCounterManager::Instance()->RemoveMoleculeWithoutTrack(type, fGlobalTime);
     }
   }
   else
@@ -131,9 +133,9 @@ void G4DNAUpdateSystemModel::CreateMolecule(const Index& index, MolType type)
     node[type] = 1;
   }
 
-  if(G4VMoleculeCounter::Instance()->InUse())
+  if (G4MoleculeCounterManager::Instance()->GetIsActive())
   {
-    G4VMoleculeCounter::Instance()->AddAMoleculeAtTime(type, fGlobalTime);
+	  G4MoleculeCounterManager::Instance()->AddMoleculeWithoutTrack(type, fGlobalTime);
   }
 }
 

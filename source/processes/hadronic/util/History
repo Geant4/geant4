@@ -7,15 +7,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-22 Alberto Ribon (hadr-util-V11-02-07)
+## 2025-05-20 Ben Morgan (hadr-util-V11-03-04)
+- G4HadronicParameters: Implement pretty-print to ostream to allow users to check
+  values at runtime, ala G4EmParameters (request from ATLAS).
+
+## 2025-04-22 Alberto Ribon (hadr-util-V11-03-03)
 - G4HadronicDeveloperParameters : introduced Getter/Setter for selecting the
   Bertini model behavior as Geant4 version 11.3 (default) or 11.2.
 
-## 2025-03-05 Vladimir Ivanchenko (hadr-util-V11-02-06)
+## 2025-03-31 Vladimir Ivanchenko (hadr-util-V11-03-02)
+- G4Nucleus - added move operator suggested by Coverity, make copy constructor and
+    assignment operator default.
+
+## 2025-03-05 Vladimir Ivanchenko (hadr-util-V11-03-01)
 - G4HadronicDeveloperParameters - added limitation of warning printout on
     change of parameters (NA64 request).
 
-## 2025-01-09 Vladimir Ivanchenko
+## 2025-01-09 Vladimir Ivanchenko (hadr-util-V11-03-00)
 - G4Fragment - added protection against precision loss in computation of a boost
     vector at rest
 

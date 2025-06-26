@@ -40,14 +40,14 @@
 #include "G4ParticleHPInelasticData.hh"
 #include "G4ParticleHPFission.hh"
 #include "G4ParticleHPFissionData.hh"
-#include "G4ParticleHPCapture.hh"
-#include "G4ParticleHPCaptureData.hh"
+#include "G4NeutronRadCaptureHP.hh"
+#include "G4NeutronHPCaptureData.hh"
 
 class G4NeutronPHPBuilder : public G4VNeutronBuilder
 {
   public: 
     G4NeutronPHPBuilder();
-    virtual ~G4NeutronPHPBuilder() {}
+    ~G4NeutronPHPBuilder() override = default;
 
   public: 
     virtual void Build(G4HadronElasticProcess * aP) final override;
@@ -89,8 +89,8 @@ class G4NeutronPHPBuilder : public G4VNeutronBuilder
     G4ParticleHPInelasticData * theHPInelasticData;
     G4ParticleHPFission * theHPFission;
     G4ParticleHPFissionData * theHPFissionData;
-    G4ParticleHPCapture * theHPCapture;
-    G4ParticleHPCaptureData * theHPCaptureData;
+    G4NeutronRadCaptureHP* theHPCapture;
+    G4NeutronHPCaptureData* theHPCaptureData;
 
 };
 

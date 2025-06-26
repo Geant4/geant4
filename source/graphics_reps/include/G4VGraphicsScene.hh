@@ -166,6 +166,12 @@ public: // With description
   // The concrete class should overload this or a null extent will be returned.
   // See G4VScenHandler for example.
 
+  // Utilities 
+  G4int GetMaxGeometryDepth() const {return fMaxGeometryDepth;}
+  void  SetMaxGeometryDepth(G4int maxDepth) {fMaxGeometryDepth = maxDepth;}
+
+protected:
+  G4int fMaxGeometryDepth = 0;
 };
 
 #endif

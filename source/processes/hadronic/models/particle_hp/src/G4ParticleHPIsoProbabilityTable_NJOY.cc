@@ -140,6 +140,8 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetCorrelatedIsoCrossSectionPT( c
     }
   }
   energy_cache[id] = kineticEnergy;
+  auto manHP = G4ParticleHPManager::GetInstance();
+
   if ( kineticEnergy < Emin  ||  kineticEnergy > Emax ) {
     // if the kinetic energy is outside of the URR limits for the given isotope, it finds the smooth cross section
     G4int indexEl = (G4int)ele->GetIndex();
@@ -150,26 +152,27 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetCorrelatedIsoCrossSectionPT( c
         break;
       }
     }
+    if (isotopeJ == -1) { return 0.0; }
     G4double frac = ele->GetRelativeAbundanceVector()[isotopeJ];
     G4double weightedelasticXS;
     G4double weightedcaptureXS;
-    if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) {
-      weightedelasticXS = (*G4ParticleHPManager::GetInstance()->GetElasticFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
-      weightedcaptureXS = (*G4ParticleHPManager::GetInstance()->GetCaptureFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+    if ( manHP->GetNeglectDoppler() ) {
+      weightedelasticXS = (*manHP->GetElasticFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      weightedcaptureXS = (*manHP->GetCaptureFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
     } else {
-      weightedelasticXS = this->GetDopplerBroadenedElasticXS( dp, indexEl, isotopeJ );
-      weightedcaptureXS = this->GetDopplerBroadenedCaptureXS( dp, indexEl, isotopeJ );
+      weightedelasticXS = GetDopplerBroadenedElasticXS( dp, indexEl, isotopeJ );
+      weightedcaptureXS = GetDopplerBroadenedCaptureXS( dp, indexEl, isotopeJ );
     }
     xsela_cache[id] = weightedelasticXS / frac;
     xscap_cache[id] = weightedcaptureXS / frac;
     if ( Z < 88 ) {
       xsfiss_cache[id] = 0.0;
     } else {
-      if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) {
-        G4double weightedfissionXS = (*G4ParticleHPManager::GetInstance()->GetFissionFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      if ( manHP->GetNeglectDoppler() ) {
+        G4double weightedfissionXS = (*manHP->GetFissionFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
         xsfiss_cache[id] = weightedfissionXS / frac;
       } else {
-        G4double weightedfissionXS = this->GetDopplerBroadenedFissionXS( dp, indexEl, isotopeJ );
+        G4double weightedfissionXS = GetDopplerBroadenedFissionXS( dp, indexEl, isotopeJ );
         xsfiss_cache[id] = weightedfissionXS / frac;
       }
     }
@@ -224,15 +227,16 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetCorrelatedIsoCrossSectionPT( c
         break;
       }
     }
+    if (isotopeJ == -1) { return 0.0; }
     G4double frac = ele->GetRelativeAbundanceVector()[isotopeJ];
     G4double weightedelasticXS;
     G4double weightedcaptureXS;
-    if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) {
-      weightedelasticXS = (*G4ParticleHPManager::GetInstance()->GetElasticFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
-      weightedcaptureXS = (*G4ParticleHPManager::GetInstance()->GetCaptureFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+    if ( manHP->GetNeglectDoppler() ) {
+      weightedelasticXS = (*manHP->GetElasticFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      weightedcaptureXS = (*manHP->GetCaptureFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
     } else {
-      weightedelasticXS = this->GetDopplerBroadenedElasticXS( dp, indexEl, isotopeJ );
-      weightedcaptureXS = this->GetDopplerBroadenedCaptureXS( dp, indexEl, isotopeJ );
+      weightedelasticXS = GetDopplerBroadenedElasticXS( dp, indexEl, isotopeJ );
+      weightedcaptureXS = GetDopplerBroadenedCaptureXS( dp, indexEl, isotopeJ );
     }
     G4double ela1 = theElasticData->at(indexE - 1)->at(indexP1);
     G4double ela2 = theElasticData->at(indexE)->at(indexP2);
@@ -245,14 +249,14 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetCorrelatedIsoCrossSectionPT( c
     if ( Z < 88 ) {
       xsfiss_cache[id] = 0.0;
     } else {
-      if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) {
-        G4double weightedfissionXS = (*G4ParticleHPManager::GetInstance()->GetFissionFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
+      if ( manHP->GetNeglectDoppler() ) {
+        G4double weightedfissionXS = (*manHP->GetFissionFinalStates())[indexEl]->GetWeightedXsec( kineticEnergy, isotopeJ );
         G4double fissionXS = weightedfissionXS / frac;
         G4double fiss1 = theFissionData->at(indexE - 1)->at(indexP1);
         G4double fiss2 = theFissionData->at(indexE)->at(indexP2);
         xsfiss_cache[id] = theInt.Lin( kineticEnergy, ene1, ene2, fiss1, fiss2 ) * fissionXS;
       } else {
-        G4double weightedfissionXS = this->GetDopplerBroadenedFissionXS( dp, indexEl, isotopeJ );
+        G4double weightedfissionXS = GetDopplerBroadenedFissionXS( dp, indexEl, isotopeJ );
         G4double fissionXS = weightedfissionXS / frac;
         G4double fiss1 = theFissionData->at(indexE - 1)->at(indexP1);
         G4double fiss2 = theFissionData->at(indexE)->at(indexP2);
@@ -267,7 +271,7 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetCorrelatedIsoCrossSectionPT( c
   } else if ( MTnumber == 18 ) {   // fission cross section
     return xsfiss_cache[id];
   } else {
-    G4cout << "Reaction was not found, returns 0." << G4endl;
+    //G4cout << "Reaction was not found, returns 0." << G4endl;
     return 0;
   }
 }
@@ -279,7 +283,7 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetIsoCrossSectionPT( const G4Dyn
   if ( kineticEnergy < Emin  ||  kineticEnergy > Emax ) {
     // if the kinetic energy is outside of the URR limits for the given isotope, it finds the smooth cross section
     G4int indexEl = (G4int)ele->GetIndex();
-    G4int isotopeJ = -1;  // index of isotope in the given element
+    G4int isotopeJ = 0;  // index of isotope in the given element
     for ( G4int j = 0; j < (G4int)ele->GetNumberOfIsotopes(); j++ ) {
       if ( A == (G4int)ele->GetIsotope(j)->GetN() ) {
         isotopeJ = j;
@@ -355,7 +359,7 @@ G4double G4ParticleHPIsoProbabilityTable_NJOY::GetIsoCrossSectionPT( const G4Dyn
       if ( rand <= theProbability2->at(indexP2) ) break;
     }
     G4int indexEl = (G4int)ele->GetIndex();
-    G4int isotopeJ = -1;  // index of isotope in the given element
+    G4int isotopeJ = 0;  // index of isotope in the given element
     for ( G4int j = 0; j < (G4int)ele->GetNumberOfIsotopes(); j++ ) {
       if ( A == (G4int)ele->GetIsotope(j)->GetN() ) {
         isotopeJ = j;

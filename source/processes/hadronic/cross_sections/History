@@ -6,6 +6,41 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-05-24 Vladimir Ivanchenko (hadr-cross-V11-03-05)
+- G4CrossSectionFactory, G4CrossSectionFactoryRegistry, G4CrossSectionFactory,
+  G4ElectroNuclearCrossSection, G4ChipsAntiBaryonElasticXS - fixed memory leak
+    at exit; value of memory leak is limited but may shadow real problem.
+
+## 2025-05-22 Vladimir Ivanchenko (hadr-cross-V11-03-04)
+- G4ChargeExchangeXS - added extra method for sampling of scattering angle,
+    update parameterisation using new fit to data.
+
+## 2025-04-15 Vladimir Ivanchenko (hadr-cross-V11-03-03)
+- G4ChargeExchangeXS - fixed selection of reaction for compound materials,
+  for that extra public and private methods are added. 
+
+## 2025-03-31 Vladimir Ivanchenko (hadr-cross-V11-03-02)
+- G4ParticleInelasticXS - fixed trivial Coverity warning.
+- G4EMDissociationCrossSection - fixed several technical inaccuracy of the
+    code to address Coverity warning and to use G4Pow correctly.
+- G4EMDissociationSpectrum - added protection against beta=0, which should never
+    happen but needed for Coverity; use G4Pow more correctly.
+
+## 2025-03-20 Vladimir Ivanchenko (hadr-cross-V11-03-01)
+- G4NeutronInelasticXS, G4ParticleInelasticXS - enabled option for initialisation
+    for all Z values, which remove possible lazy initialisation if these cross
+    sections are used by any other model.
+- G4NeutronElasticXS, G4NeutronCaptureXS - removed option to initilise all
+    data, because these cross sections are not used by other hadronic model.
+  In summary, for simple applications initialisation CPU time is increased
+  for about 10%, for complex applications this increase will not be seen.
+  No locks will be set by these cross section classes in the run time.
+
+## 2025-02-10 Vladimir Ivanchenko (hadr-cross-V11-03-00)
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4ParticleInelasticXS - added
+    an option to download data for all elements in class constructor
+    avoiding lazy initialisation in run time
+
 ## 2024-11-15 Vladimir Ivanchenko (hadr-cross-V11-02-18)
 - G4ChargeExchangeXS - handle special case of positive meson scattering off
     Hydrogen, the cross section is propotional to the percent of deuterons

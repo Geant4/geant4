@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-15 Vladimir Ivanchenko (phys-ctor-helastic-V11-03-00)
+- G4ChargeExchangePhysics - fixed usage of the messenger
+
 ## 2024-07-03 Robert Hatcher (phys-ctor-helastic-V11-02-00)
 - Add self registration of G4ThermalNeutrons with the constructor factory
 

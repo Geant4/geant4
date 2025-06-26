@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-05-30 Julia Yarba (p8decayer-V11-03-00)
+- Test vs Pythia8.3.15 which is the latest as of May 2025
+- Update documentation README and .README.txt
+
 ## 2024-03-26 Ben Morgan (p8decayer-V11-02-01)
 - Use new FindPythia8 module and imported target
 

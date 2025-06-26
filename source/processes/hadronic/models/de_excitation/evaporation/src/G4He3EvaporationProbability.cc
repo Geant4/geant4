@@ -34,6 +34,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4He3EvaporationProbability.hh"
+#include "G4DeexPrecoUtility.hh"
 
 G4He3EvaporationProbability::G4He3EvaporationProbability() :
    G4EvaporationProbability(3,2,2.0)
@@ -41,35 +42,7 @@ G4He3EvaporationProbability::G4He3EvaporationProbability() :
 
 G4double G4He3EvaporationProbability::CalcAlphaParam(const G4Fragment& fr)
 { 
-  // Data comes from 
-  // Dostrovsky, Fraenkel and Friedlander
-  // Physical Review, vol 116, num. 3 1959
-  // 
-  // const G4int size = 5;
-  // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
-  //	G4double Calpha[5] = { 0.10, 0.10, 0.10, 0.08, 0.06};
-  // C for He3 is equal to C for alpha times 4/3
-
-  G4int aZ = fr.GetZ_asInt() - GetZ();
-  G4double C;
-	
-  if (aZ <= 30)
-    {
-      C = 0.10;
-    }
-  else if (aZ <= 50)
-    {
-      C = 0.1 - (aZ - 30)*0.001;
-    }
-  else if (aZ < 70)
-    {
-      C = 0.08 - (aZ - 50)*0.001;
-    }
-  else
-    {
-      C = 0.06;
-    }
-  return 1.0 + C*4/3.0;
+  return 1.0 + G4DeexPrecoUtility::AlphaCValue(fr.GetZ_asInt() - 2)*4.0/3.0;
 }
 	
 G4double G4He3EvaporationProbability::CalcBetaParam(const G4Fragment & )  

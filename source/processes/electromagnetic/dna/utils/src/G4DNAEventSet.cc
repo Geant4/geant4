@@ -65,6 +65,10 @@ void Event::PrintEvent() const
 G4bool comparatorEventSet::operator()(std::unique_ptr<Event> const& rhs,
                                       std::unique_ptr<Event> const& lhs) const
 {
+  if(rhs->GetTime() == lhs->GetTime())
+  {
+    return rhs->GetIndex() < lhs->GetIndex();
+  }
   return rhs->GetTime() < lhs->GetTime();
 }
 

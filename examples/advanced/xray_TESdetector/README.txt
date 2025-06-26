@@ -169,4 +169,4 @@ References
  [1] S. Lotti, S. Molendi, C. Macculi, V. Fioretti, L. Piro et al., "Review of
  the Particle Background of the Athena X-IFU Instrument", The Astrophysical
  Journal, 2021.
- [2] BRUN, René, et al. "The ROOT Users Guide". CERN, http://root.cern.ch, 2003.
+ [2] BRUN, René, et al. "The ROOT Users Guide". CERN, http://root.cern, 2003.

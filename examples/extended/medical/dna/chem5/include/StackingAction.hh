@@ -47,9 +47,9 @@
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction();
-    virtual ~StackingAction();
-    virtual void NewStage();
+    StackingAction() = default;
+    ~StackingAction() override = default;
+    void NewStage() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

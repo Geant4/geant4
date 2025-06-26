@@ -1,5 +1,5 @@
 #
-# ------ WIN32/VC ------    Visual Studio 2019 and higher
+# ------ WIN32/VC ------    Visual Studio 2022 and higher
 #
 ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL
@@ -42,7 +42,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     QTHOME   := /Qt
   endif
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
   ifndef QTFLAGS
     QTFLAGS  := -I$(QTHOME)/include

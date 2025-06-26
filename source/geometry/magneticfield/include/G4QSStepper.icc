@@ -1,0 +1,386 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4QSStepper inline methods implementation
+//
+// Authors - version 1 : Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
+//         - version 2 : Mattias Portnoy (Univ. Buenos Aires) - 2024
+// ----------------------------------------------------------------------------
+
+inline
+constexpr G4double G4QSStepper::Cubic_Function(const QSStateVector* states,
+                                               G4int index, G4double delta_t)
+{
+  return states[DERIVATIVE_0][index] + (states[DERIVATIVE_1][index] + states[DERIVATIVE_2][index] * delta_t / 2 + states[DERIVATIVE_3][index] * delta_t * delta_t / 6) * delta_t;
+}
+   
+// ----------------------------------------------------------------------------
+
+inline
+constexpr G4double G4QSStepper::Parabolic_Function(const QSStateVector* states,
+                                               G4int index, G4double delta_t)
+{
+  return states[DERIVATIVE_0][index] + (states[DERIVATIVE_1][index] + states[DERIVATIVE_2][index] * delta_t / 2) * delta_t;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+constexpr G4double G4QSStepper::Linear_Function(const QSStateVector* states,
+                                               G4int index, G4double delta_t)
+{
+  return states[DERIVATIVE_0][index] + states[DERIVATIVE_1][index] * delta_t;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+constexpr G4int G4QSStepper::INDEX_TYPE(G4int i)
+{
+  return i >> 2;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::set_qss_order(G4int order)
+{
+  qss_order=order;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::momentum_to_velocity(const G4double* momentum, G4double* out)
+{
+  out[0] = momentum[0] * fInv_mass_over_c;
+  out[1] = momentum[1] * fInv_mass_over_c;
+  out[2] = momentum[2] * fInv_mass_over_c;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::compare_time_and_update(G4int index, G4int i)
+{
+  if (current_substep.sync_t[i] < current_substep.sync_t[index]) { index = i;} 
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+G4int G4QSStepper::IntegratorOrder() const
+{
+  return qss_order;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+G4EquationOfMotion* G4QSStepper::GetSpecificEquation()
+{
+  return GetEquationOfMotion();
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+const field_utils::State& G4QSStepper::GetYOut() const
+{
+  return fYout;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+G4double G4QSStepper::DistChord() const
+{
+  return 0.;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::Stepper(const G4double yInput[],
+             const G4double dydx[], G4double hstep,
+             G4double yOutput[], G4double yError[], G4double /*dydxOutput*/ [])
+{
+  Stepper(yInput, dydx, hstep, yOutput, yError);
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::SetupInterpolation()
+{
+}
+
+inline
+void G4QSStepper::reset(const G4FieldTrack *track)
+{          
+  fTrack_changed = true; //// Cannot rely on addresses --- OLD was track != fCurrent_track;
+  fCurrent_track = track;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::SetPrecision(G4double dq_rel, G4double dq_min)
+{
+  dqmin[0] = dq_min;
+  dqmin[1] = dq_min;
+  dqrel[0] = dq_rel;
+  dqrel[1] = dq_rel;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+G4double G4QSStepper::GetLastStepLength()
+{
+  return current_substep.t * fVelocity;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::velocity_to_momentum(G4double *y)
+{
+  y[3] *= fMassOverC;
+  y[4] *= fMassOverC;
+  y[5] *= fMassOverC;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+G4int G4QSStepper::get_next_sync_index()
+{
+
+  // Goes through each index and get the one with the closest sync t.
+  // Unrolled loop for tiny speedup.
+
+  G4int index = 0;
+  compare_time_and_update(index,1);
+  compare_time_and_update(index,2);
+  compare_time_and_update(index,3);
+  compare_time_and_update(index,4);
+  compare_time_and_update(index,5);
+  return index;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::update_field() 
+{
+  G4double old_field[3] = { current_substep.b_field[0],
+                            current_substep.b_field[1],
+                            current_substep.b_field[2] };
+  GetEquationOfMotion()->GetFieldValue(current_substep.state_x[DERIVATIVE_0],
+  	                                   current_substep.b_field );
+  fField_changed = false;
+  for (G4int i = 0; i < 3 && ! fField_changed; ++i)
+  {
+    fField_changed = fField_changed || old_field[i] != current_substep.b_field[i];
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+G4double G4QSStepper::extrapolate_polynomial(QSStateVector* states,
+                                G4int index, G4double delta_t, G4int order)
+{
+  if (delta_t == 0 || order == 0) { return states[DERIVATIVE_0][index]; }
+
+  switch (order)
+  {
+    case 2:
+      return Parabolic_Function(states,index,delta_t);
+      break;
+    case 3:
+      return Cubic_Function(states,index,delta_t);
+      break;
+    case 1:
+      return Linear_Function(states,index,delta_t);
+      break;
+    default:
+      // TODO check how to raise error
+      return 146546;
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::extrapolate_all_states_to_t(Substep* substep,
+                                              G4double t, G4double* yOut)
+{
+  for (G4int j = 0; j < 6; ++j)
+  {
+    G4double t_j = substep->state_tx[j];
+    G4double delta_tj = t - t_j;
+    yOut[j] = extrapolate_polynomial(&substep->state_x[DERIVATIVE_0], j, delta_tj, substep->extrapolation_method);
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::update_x(G4int index, G4double t)
+{
+  G4double delta_t = t - current_substep.state_tx[index];
+  if (delta_t == 0) { return; }
+
+  //current_substep.state_x[DERIVATE_1][index] += current_substep.state_x[DERIVATE_2][index] * delta_t;
+  switch (qss_order)
+  {
+    case 2:
+      current_substep.state_x[DERIVATIVE_0][index] = Parabolic_Function(current_substep.state_x,index,delta_t);
+      current_substep.state_x[DERIVATIVE_1][index] = Linear_Function((&current_substep.state_x[DERIVATIVE_1]),index,delta_t);
+      break;
+    case 3:
+      current_substep.state_x[DERIVATIVE_0][index] = Cubic_Function(current_substep.state_x,index,delta_t);
+      current_substep.state_x[DERIVATIVE_1][index] = Parabolic_Function((&current_substep.state_x[DERIVATIVE_1]),index,delta_t);
+      current_substep.state_x[DERIVATIVE_2][index] = Linear_Function((&current_substep.state_x[DERIVATIVE_2]),index,delta_t);
+      break;
+    case 1:
+      current_substep.state_x[DERIVATIVE_0][index] = Linear_Function(current_substep.state_x,index,delta_t);
+      break;
+    default:
+      break;
+  }
+  current_substep.state_tx[index] = t;
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::update_q(G4int index, G4double t)
+{
+  G4double delta_t = t - current_substep.state_tq[index];
+  if (delta_t == 0) { return; }
+  switch (qss_order)
+  {
+    case 2:
+      current_substep.state_q[DERIVATIVE_0][index] = Linear_Function(current_substep.state_q,index,delta_t);
+      break;
+    case 3:
+      current_substep.state_q[DERIVATIVE_0][index] = Parabolic_Function(current_substep.state_q,index,delta_t);
+      current_substep.state_q[DERIVATIVE_1][index] = Linear_Function((&current_substep.state_q[DERIVATIVE_1]),index,delta_t);
+      break;
+    case 1:
+      break;
+  }
+  current_substep.state_tq[index] = t;
+
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::update_x_position_derivates_using_q(G4int index)
+{
+  // assumes index is position index
+
+  current_substep.state_x[DERIVATIVE_1][index] =
+      current_substep.state_q[DERIVATIVE_0][index+VELOCITY_IDX];
+  current_substep.state_x[DERIVATIVE_2][index] =
+      current_substep.state_q[DERIVATIVE_1][index+VELOCITY_IDX];
+  current_substep.state_x[DERIVATIVE_3][index] =
+      current_substep.state_q[DERIVATIVE_2][index+VELOCITY_IDX];
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::update_x_velocity_derivates_using_q(G4int index)
+{
+  // asumes index is velocity index
+
+  G4int modulo = VELOCITY_IDX;
+  G4int index_pos = (index+modulo+1)%modulo;
+  G4int index_neg = (index+modulo-1)%modulo;
+
+  G4double b1 = current_substep.b_field[index_pos];
+  G4double b2 = current_substep.b_field[index_neg];
+  for (G4int derivate_order = 0; derivate_order < qss_order; ++derivate_order)
+  {
+    current_substep.state_x[derivate_order+1][index] =
+      fCoeff* (
+      current_substep.state_q[derivate_order][index_pos+VELOCITY_IDX] * b2 -
+      current_substep.state_q[derivate_order][index_neg+VELOCITY_IDX] * b1
+      );
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::update_x_derivates_using_q(G4int index)
+{
+  // updates x using q with the Lorentz equation
+
+  if (index < VELOCITY_IDX)
+  {
+    update_x_position_derivates_using_q(index);
+  }
+  else
+  {
+    update_x_velocity_derivates_using_q(index);
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+/*  Updates when does the x,q distance goes beyond the quantum.
+    For the special case of both polynomials being equal except
+    for higher coefficient- Such as after syncing */
+inline
+void G4QSStepper::update_sync_time_one_coefficient(G4int index)
+{
+  G4double leading_poly_cofficient = current_substep.state_x[qss_order][index];
+  if (leading_poly_cofficient == 0)
+  {
+      current_substep.sync_t[index] = INFTY;
+  }
+  else
+  {
+    G4double dq_leading_ratio = dq_vector[index]/fabs(leading_poly_cofficient);
+    switch (qss_order)
+    {
+      case 2:
+        current_substep.sync_t[index] = current_substep.state_tx[index] + sqrt(dq_leading_ratio);
+        break;
+      case 3:
+        current_substep.sync_t[index] = current_substep.state_tx[index] + cbrt(dq_leading_ratio);
+        break;
+      case 1:
+        current_substep.sync_t[index] = current_substep.state_tx[index] + dq_leading_ratio;
+        break;
+    }
+  }
+}

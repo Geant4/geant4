@@ -32,73 +32,63 @@
 #include "G4AutoLock.hh"
 #include "globals.hh"
 
-//This is used to lock on shared resource
-// G4TypeMutex<G4CrossSectionFactoryRegistry>()
+namespace
+{
+  G4Mutex regMutex = G4MUTEX_INITIALIZER;
+}
 
-G4CrossSectionFactoryRegistry* G4CrossSectionFactoryRegistry::instance = 0;
 G4CrossSectionFactoryRegistry* G4CrossSectionFactoryRegistry::Instance()
 {
-	G4AutoLock l(G4TypeMutex<G4CrossSectionFactoryRegistry>());
-	if (!instance)
-		new G4CrossSectionFactoryRegistry();
-	return instance;
+  static G4CrossSectionFactoryRegistry reg;
+  return &reg;
 }
 
 G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry()
-{
-	instance = this;
-}
-
-G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry(const G4CrossSectionFactoryRegistry&)
-{
-    G4Exception("G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry",
-                "CrossSection004",FatalException,"Use of copy constructor not allowed");
-}
-G4CrossSectionFactoryRegistry& G4CrossSectionFactoryRegistry::operator=(const G4CrossSectionFactoryRegistry&)
-{
-    G4Exception("G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry",
-                "CrossSection004",FatalException,"Use of assignment operator not allowed");
-    return *this;
-}
+{}
 
 void G4CrossSectionFactoryRegistry::Register( const G4String& name, G4VBaseXSFactory* factory )
 {
-	G4AutoLock l(G4TypeMutex<G4CrossSectionFactoryRegistry>());
-    if ( factories.find(name) != factories.end() )
-    {
-        G4ExceptionDescription msg;
-        msg <<"Cross section factory with name: "<<name
-            <<" already existing, old factory has been replaced";
-        G4Exception("G4CrossSectionFactoryRegistry::Register(...)",
-                    "CrossSection002",JustWarning,msg);
+  if ( factories.find(name) == factories.end() ) {
+    G4AutoLock l(regMutex);
+    if ( factories.find(name) == factories.end() ) {
+      factories[name] = factory;
     }
-    factories[name] = factory;
+    l.unlock();
+  }
 }
 
-G4VBaseXSFactory* G4CrossSectionFactoryRegistry::GetFactory( const G4String& name, G4bool abortIfNotFound ) const
+void G4CrossSectionFactoryRegistry::DeRegister( G4VBaseXSFactory* factory )
 {
-	G4AutoLock l(G4TypeMutex<G4CrossSectionFactoryRegistry>());
-    std::map<G4String,G4VBaseXSFactory*>::const_iterator it = factories.find(name);
-    if ( it != factories.end() ) return it->second;
-    else
-    {
-        if ( abortIfNotFound )
-        {
-            G4ExceptionDescription msg;
-            msg <<"Cross section factory with name: "<<name
-                <<" not found.";
-            G4Exception("G4CrossSectionFactoryRegistry::Register(...)",
-                        "CrossSection003",FatalException,msg);
-        }
+  if ( nullptr == factory || factories.empty() ) { return; }
+  G4AutoLock l(regMutex);
+  for ( auto const & f : factories ) {
+    if ( factory == f.second ) {
+      factories[f.first] = nullptr;
     }
-    return static_cast<G4VBaseXSFactory*>(0);
+  }
+  l.unlock();
 }
 
+G4VBaseXSFactory*
+G4CrossSectionFactoryRegistry::GetFactory( const G4String& name, G4bool abortIfNotFound ) const
+{
+  G4VBaseXSFactory* ptr = nullptr;
+  auto it = factories.find(name);
+  if ( it != factories.end() ) {
+    ptr = it->second;
+  } else if ( abortIfNotFound ) {
+    G4ExceptionDescription msg;
+    msg << "Cross section factory with name: " << name << " not found.";
+    G4Exception("G4CrossSectionFactoryRegistry::GetFactory(...)",
+		"CrossSection003", FatalException, msg);
+  }
+  return ptr;
+}
 
 std::ostream&  operator<<(std::ostream& msg, const G4CrossSectionFactoryRegistry& rhs) {
-    msg<<"Factory Registry "<<&rhs<<" has factories: [";
-    for ( std::map<G4String,G4VBaseXSFactory*>::const_iterator it =rhs.factories.begin() ;
-         it != rhs.factories.end() ; ++it )
+  msg<<"Factory Registry "<<&rhs<<" has factories: [";
+  for ( std::map<G4String,G4VBaseXSFactory*>::const_iterator it =rhs.factories.begin();
+	it != rhs.factories.end() ; ++it )
     {
         msg<<(*it).first<<":"<<(*it).second<<",";
     }

@@ -444,7 +444,7 @@ namespace G4INCL {
         sum = read_file(dataPathppbark, probabilities, particle_types);
         rdm = ((1.-rdm)/kaonicFSprob)*sum;  //2670 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return theEventInfo;
         for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
           if (particle_types[n][j] == "pi0") {

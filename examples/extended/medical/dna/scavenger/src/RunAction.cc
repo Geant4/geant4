@@ -34,6 +34,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4DNAChemistryManager.hh"
 
 namespace scavenger
 {
@@ -54,6 +55,10 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run* run)
 {
+  // ensure that the chemistry is notified!
+  if (G4DNAChemistryManager::GetInstanceIfExists() != nullptr)
+    G4DNAChemistryManager::GetInstanceIfExists()->BeginOfRunAction(run);
+
   G4cout << "### Run " << run->GetRunID() << " starts." << G4endl;
 
   // informs the runManager to save random number seed
@@ -64,6 +69,10 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 
 void RunAction::EndOfRunAction(const G4Run* run)
 {
+  // ensure that the chemistry is notified!
+  if (G4DNAChemistryManager::GetInstanceIfExists() != nullptr)
+    G4DNAChemistryManager::GetInstanceIfExists()->EndOfRunAction(run);
+
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) {
     return;

@@ -55,7 +55,7 @@ G4TrajectoryEncounteredVolumeFilter::Evaluate(const G4VTrajectory& traj) const
       for (G4int iPoint = 0; iPoint < richTrajectory.GetPointEntries(); iPoint++) {
         G4VTrajectoryPoint* point = richTrajectory.GetPoint(iPoint);
         if (!point) continue;
-        std::vector<G4AttValue>* attValues = point->CreateAttValues();
+        const auto attValues = point->GetAttValues();
         std::vector<G4AttValue>::const_iterator iAtt;
         for (iAtt = attValues->begin(); iAtt != attValues->end(); ++iAtt) {
           if (iAtt->GetName() == "PostVPath" &&

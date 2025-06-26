@@ -51,6 +51,7 @@ geant4_module_link_libraries(G4phys_ctor_glnuclear
     G4phys_builders
     G4phys_ctor_em
     G4phys_ctor_factory
+    G4phys_ctor_hinelastic
     G4procman
     G4parameterisation
     G4geometrymng

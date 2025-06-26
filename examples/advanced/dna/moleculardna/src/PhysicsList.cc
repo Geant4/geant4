@@ -43,7 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(G4int phylist)
+PhysicsList::PhysicsList(G4int phylist, G4int vis)
 {
   SetDefaultCutValue(1.0 * micrometer);
   SetVerboseLevel(1);
@@ -70,8 +70,7 @@ PhysicsList::PhysicsList(G4int phylist)
   RegisterPhysics(new G4DecayPhysics());
   RegisterPhysics(new G4RadioactiveDecayPhysics());
 
-  G4bool useParallelPhysicsWorld = false;
-  if (useParallelPhysicsWorld) {
+  if (vis == 1) {
     RegisterPhysics(new ParallelWorldPhysics("DNAWorld", true));
   }
 

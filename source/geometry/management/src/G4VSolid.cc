@@ -224,22 +224,20 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
   EInside in;
 
   // values needed for CalculateExtent signature
-
-  G4VoxelLimits limit;                // Unlimited
+  G4VoxelLimits limit; // unlimited
   G4AffineTransform origin;
 
   // min max extents of pSolid along X,Y,Z
-
   CalculateExtent(kXAxis,limit,origin,minX,maxX);
   CalculateExtent(kYAxis,limit,origin,minY,maxY);
   CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   // limits
-
   if(nStat < 100) { nStat   = 100; }
   if(epsilon > 0.01) { epsilon = 0.01; }
   halfepsilon = 0.5*epsilon;
 
+  G4QuickRand(1234567890); // set seed
   for(auto i = 0; i < nStat; ++i )
   {
     px = minX-halfepsilon+(maxX-minX+epsilon)*G4QuickRand();
@@ -350,6 +348,7 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nstat, G4double ell) const
 
   // Calculate surface area
   //
+  G4QuickRand(1234567890); // set seed
   G4int icount = 0;
   for(auto i = 0; i < npoints; ++i)
   {

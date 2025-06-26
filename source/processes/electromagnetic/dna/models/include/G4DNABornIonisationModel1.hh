@@ -43,6 +43,7 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
 
+class G4DNAChemistryManager;
 
 class G4DNABornIonisationModel1 : public G4VEmModel
 {
@@ -75,11 +76,12 @@ public:
                                           G4int /*level*/,
                                           const G4ParticleDefinition*,
                                           G4double /*kineticEnergy*/) override;
-				
+  void StartTracking(G4Track*) override;
+
   G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
 
   G4double TransferedEnergy(G4ParticleDefinition * aParticleDefinition,
-                            G4double incomingParticleEnergy, G4int shell, G4double random) ;
+                            G4double incomingParticleEnergy, G4int shell, G4double random);
 
   inline void SelectFasterComputation(G4bool input); 
 
@@ -93,28 +95,27 @@ protected:
 
 private:
 
-  G4bool fasterCode;
-  G4bool statCode;
-  G4bool spScaling;
+  G4bool fasterCode{false};
+  G4bool statCode{false};
+  G4bool spScaling{true};
 
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
   // Deexcitation manager to produce fluo photons and e-
-  G4VAtomDeexcitation*      fAtomDeexcitation;
+  G4VAtomDeexcitation* fAtomDeexcitation;
+
+  const G4Track* fTrack{nullptr};
+  G4DNAChemistryManager* fChemistry{nullptr};
+  
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-
-  // TODO :
-//  std::map<const G4ParticleDefinition*,std::pair<G4double,G4double> > fEnergyLimits;
-
 
   G4bool isInitialised{false};
   G4int verboseLevel;
   
   // Cross section
-
   using MapFile = std::map<G4String, G4String, std::less<G4String>>;
   MapFile tableFile; // useful ?
 
@@ -163,29 +164,27 @@ private:
   VecMap eProbaShellMap[6]; // for cumulated dcs
   VecMap pProbaShellMap[6]; // for cumulated dcs
   
-  // Partial cross section
-  
+  // Partial cross section  
   G4int RandomSelect(G4double energy,const G4String& particle );
-
 };
 
 inline void G4DNABornIonisationModel1::SelectFasterComputation (G4bool input)
 { 
-    fasterCode = input; 
+  fasterCode = input;
 }		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4DNABornIonisationModel1::SelectStationary (G4bool input)
 { 
-    statCode = input; 
+  statCode = input;
 }		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4DNABornIonisationModel1::SelectSPScaling (G4bool input)
 { 
-    spScaling = input; 
+  spScaling = input; 
 }		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -61,7 +61,7 @@ G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4boo
       for (G4int iPoint = 0; iPoint < richTrajectory.GetPointEntries(); iPoint++) {
         G4VTrajectoryPoint* point = richTrajectory.GetPoint(iPoint);
         if (!point) continue;
-        std::vector<G4AttValue>* attValues = point->CreateAttValues();
+        const auto attValues = point->GetAttValues();
         std::vector<G4AttValue>::const_iterator iAtt;
         for (iAtt = attValues->begin(); iAtt != attValues->end(); ++iAtt) {
           if (iAtt->GetName() == "PostVPath" &&

@@ -105,7 +105,7 @@ G4HadFinalState* G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   // Charge and energy non-conservation still occur, but over a large number 
   // of events, this improves on average.
 
-  if (loop > loopMax - 1) {
+  if (products == nullptr) { // no non-null products found in previous loop
 //    G4cout << " too many loops, return initial state " << G4endl;
 
     theParticleChange.Clear();

@@ -7,37 +7,49 @@ geant4_add_module(G4emdna-molman
     G4MolecularConfiguration.hh
     G4MolecularDissociationChannel.hh
     G4MolecularDissociationTable.hh
-    G4MoleculeCounter.hh
     G4MoleculeDefinition.hh
     G4MoleculeFinder.hh
     G4MoleculeHandleManager.hh
     G4Molecule.hh
     G4MoleculeIterator.hh
     G4MoleculeTable.hh
+    G4MoleculeTableMessenger.hh
     G4Serialize.hh
     G4VMolecularDissociationDisplacer.hh
+    G4MoleculeCounterManager.hh
+    G4MoleculeCounterManagerMessenger.hh
+    G4MoleculeCounterTemplates.hh
+    G4VMoleculeCounterInternalBase.hh
     G4VMoleculeCounter.hh
-    G4MoleculeTableMessenger.hh
+    G4VMoleculeReactionCounter.hh
+    G4VUserMoleculeCounter.hh
+    G4MoleculeCounter.hh
+    G4MoleculeCounterTimeComparer.hh
   SOURCES
     G4MolecularConfiguration.cc
     G4MolecularDissociationChannel.cc
     G4MolecularDissociationTable.cc
-    G4MoleculeCounter.cc
     G4Molecule.cc
     G4MoleculeDefinition.cc
     G4MoleculeHandleManager.cc
     G4MoleculeTable.cc
+    G4MoleculeTableMessenger.cc
     G4Serialize.cc
     G4VMolecularDissociationDisplacer.cc
+    G4MoleculeCounterManager.cc
+    G4MoleculeCounterManagerMessenger.cc
+    G4VMoleculeCounterInternalBase.cc
     G4VMoleculeCounter.cc
-    G4MoleculeTableMessenger.cc)
+    G4VMoleculeReactionCounter.cc
+    G4MoleculeCounter.cc
+    G4MoleculeCounterTimeComparer.cc)
 
 geant4_module_link_libraries(G4emdna-molman
   PUBLIC
     G4emdna-man
     G4globman
     G4partman
+    G4intercoms
   PRIVATE
     G4heprandom
-    G4intercoms
     G4track)

@@ -37,38 +37,37 @@ class GB04BOptrBremSplitting : public G4VBiasingOperator
 {
   public:
     GB04BOptrBremSplitting();
-    virtual ~GB04BOptrBremSplitting() {}
+    ~GB04BOptrBremSplitting() override = default;
 
   public:
     // -------------------------
     // Optional from base class:
     // -------------------------
     // -- Call at run start:
-    virtual void StartRun();
+    void StartRun() override;
     // -- Call at each track starting:
-    virtual void StartTracking(const G4Track* track);
+    void StartTracking(const G4Track* track) override;
 
   private:
     // -----------------------------
     // -- Mandatory from base class:
     // -----------------------------
     // -- Unused:
-    virtual G4VBiasingOperation*
-    ProposeNonPhysicsBiasingOperation(const G4Track* /* track */,
-                                      const G4BiasingProcessInterface* /* callingProcess */)
+    G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(
+      const G4Track* /* track */, const G4BiasingProcessInterface* /* callingProcess */) override
     {
-      return 0;
+      return nullptr;
     }
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeOccurenceBiasingOperation(const G4Track* /* track */,
-                                     const G4BiasingProcessInterface* /* callingProcess */)
+                                     const G4BiasingProcessInterface* /* callingProcess */) override
     {
-      return 0;
+      return nullptr;
     }
     // -- Used:
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeFinalStateBiasingOperation(const G4Track* track,
-                                      const G4BiasingProcessInterface* callingProcess);
+                                      const G4BiasingProcessInterface* callingProcess) override;
 
   private:
     // -- Avoid compiler complaining for (wrong) method shadowing,

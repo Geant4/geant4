@@ -6,9 +6,32 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-02-07 Igor Semeniouk (emstand-V11-02-22)
+## 2025-04-25 V.Ivanchenko (emstand-V11-03-06)
+- G4LowPAIH2O - fixed Coverity warnings
+
+## 2025-04-23 V.Ivanchenko (emstand-V11-03-05)
+- G4UrbanMscModel - L.Urban propose a small change for Opt3 case, which may
+    improve performance. Should not affect any result.
+
+## 2025-03-12 V.Ivanchenko (emstand-V11-03-04)
+- G4LowPAIH2O - removed compilation warnings due to explicit types conversion
+    problems reported by J.Allison
+
+## 2025-03-11 V.Grichine (emstand-V11-03-03)
+- G4LowPAIH2O class with G4LowDataH2O.hh data file for dE/dx in water for p and e-. 
+
+## 2025-02-26 V.Ivanchenko (emstand-V11-03-02)
+- G4UrbanMscModel - L.Urban propose cosmetic change for Opt3 case and updated
+    comments to the code. Should not affect any result.
+
+## 2025-02-07 Igor Semeniouk (emstand-V11-03-01)
 - G4OrePowellAtRestModel - Add missing decay plane rotation
  ( random x axis phi )
+
+## 2025-01-19 V.Ivanchenko (emstand-V11-03-00)
+- G4eBremsstrahlungRelModel - This is a reversion of !4755 (merged just before the
+  release 11.3). This implementation needed for EM design toward parallel
+  initialisation of EM physics.
 
 ## 2024-11-08 V.Ivanchenko (emstand-V11-02-21)
 - G4BraggModel - fixed problem of 4.12 MeV mu+ range reported in

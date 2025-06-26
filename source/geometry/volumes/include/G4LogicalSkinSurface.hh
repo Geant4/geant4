@@ -30,7 +30,7 @@
 // A Logical Surface class for the surface surrounding a single logical
 // volume.
 
-// Author: John Apostolakis, CERN - 16-06-1997
+// Author: John Apostolakis (CERN), 16 June 1997
 // --------------------------------------------------------------------
 #ifndef G4LogicalSkinSurface_hh
 #define G4LogicalSkinSurface_hh 1
@@ -45,42 +45,57 @@ class G4LogicalSkinSurface;
 using G4LogicalSkinSurfaceTable
       = std::map<const G4LogicalVolume*, G4LogicalSkinSurface*>;
 
+/**
+ * @brief G4LogicalSkinSurface is a Logical Surface class for the surface
+ * surrounding a single logical volume.
+ */
+
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
   public:
 
+    /**
+     * Constructor and Destructor.
+     */
     G4LogicalSkinSurface( const G4String& name,
                                 G4LogicalVolume* vol,
                                 G4SurfaceProperty* surfaceProperty );
     ~G4LogicalSkinSurface() override;
-      // Constructor and destructor.
 
+    /**
+     * Copy constructor and assignment operator are not allowed.
+     */
     G4LogicalSkinSurface(const G4LogicalSkinSurface&) = delete;
     G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface&) = delete;
-      // Assignment and copying not allowed.
 
+    /**
+     * Equality operators.
+     */
     G4bool operator==(const G4LogicalSkinSurface &right) const;
     G4bool operator!=(const G4LogicalSkinSurface &right) const;
-      // Operators.
 
+    /**
+     * Generic accessors and setters.
+     */
     static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
     inline const G4LogicalVolume* GetLogicalVolume() const;
     inline void  SetLogicalVolume(G4LogicalVolume* vol);
-      // Accessors.
 
+    /**
+     * Handling of the table of surfaces.
+     */
     static void CleanSurfaceTable();
     static const G4LogicalSkinSurfaceTable* GetSurfaceTable();
     static std::size_t GetNumberOfSkinSurfaces();
-    static void DumpInfo(); // const 
-      // To handle with the table of surfaces.
+    static void DumpInfo();
 
   private:
 
+    /** Logical Volume pointer on side 1. */
     G4LogicalVolume* LogVolume;
-      // Logical Volume pointer on side 1.
 
+    /** The static Table of SkinSurfaces. */
     static G4LogicalSkinSurfaceTable *theSkinSurfaceTable;
-      // The static Table of SkinSurfaces.
 };
 
 // ********************************************************************

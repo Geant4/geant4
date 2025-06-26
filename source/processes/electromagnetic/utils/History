@@ -6,12 +6,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-04 G.Cosmo (emutils-V11-02-21)
+## 2025-06-11 V.Ivanchenko (emutils-V11-03-07)
+- G4VXRayModel - updated new base class for X-ray processes
+
+## 2025-05-25 V.Ivanchenko (emutils-V11-03-06)
+- G4EmUtility, G4EmDataHandler, G4EmDataRegistry - removed minor memory leaks
+    at exit and improved destruction at exit
+
+## 2025-05-12 V.Ivanchenko (emutils-V11-03-05)
+- G4EmParametersMessenger - added UI command to enable/disable 5D pair
+    production model by muons.
+
+## 2025-04-29 V.Ivanchenko (emutils-V11-03-04)
+- G4VXRayModel - new base class
+- G4OpticalParameters, G4OpticalParametersMessenger, G4LossTableManager
+    configure and use this new class
+
+## 2025-04-04 G.Cosmo (emutils-V11-03-03)
 - Fix in G4EmTableType header to make self-consistent.
   Reported in [GitHub PR#85](https://github.com/Geant4/geant4/pull/85).
 
-## 2025-03-27 V.Ivanchenko
+## 2025-03-27 V.Ivanchenko (emutils-V11-03-02)
 - G4VAtomDeexcitation - fixed problem #2650 - allowed to simulate PIXE
+- G4VEnergyLossProcess - cosmetic change
+
+## 2025-03-25 V.Ivanchenko (emutils-V11-03-01)
+- G4EmParameters, G4EmParametersMessenger, G4EmUtility, G4LossTableBuilder,
+  G4VEnergyLossProcess - implemented a new option to enable/disable
+  fluctuation of energy loss per G4Region
+
+## 2025-02-12 V.Ivanchenko (emutils-V11-03-00)
+- G4VEmProcess - added call StartTracking(...) for all used models, which
+    is needed for models, which needs access to G4Track pointer
 
 ## 2024-10-31 V.Ivanchenko (emutils-V11-02-20)
 - G4EmCalculator - fixed Coverity warning

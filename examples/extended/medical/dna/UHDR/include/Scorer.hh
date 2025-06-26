@@ -35,10 +35,10 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 #include "G4VPrimitiveScorer.hh"
-
+#include "G4DNAMolecularReactionTable.hh"
 #include <memory>
 #include <set>
-
+#include "G4MoleculeTable.hh"
 class G4DNAEventScheduler;
 
 class G4VAnalysisManager;
@@ -47,6 +47,7 @@ class G4MolecularConfiguration;
 
 class G4VChemistryWorld;
 
+class InterPulseAction;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 struct Dose : public G4UImessenger
@@ -60,9 +61,11 @@ struct Dose : public G4UImessenger
     std::unique_ptr<G4UIdirectory> fpDoseDir;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpAddDoseCutOff;
     std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpAddDoseToAbort;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpAddDoseCutOffPerPulse;
     G4double fDosesCutOff = 0;
     G4double fDosesToAbort = 0;
     G4double fCumulatedDose = 0;
+    G4double fPulseMax = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -83,10 +86,17 @@ struct Gvalues : public G4UImessenger
 
     G4int fNEvent = 0;
     G4double fEdep = 0;
+    G4double fTotalDose = 0;
+    G4double fTotalDose2 = 0;
+    G4double fTotalDoseRate = 0;
+    G4double fTotalDoseRate2 = 0;
+    G4double fPulseMax = 0;
 
     inline void AddTimeToRecord(double time) { fTimeToRecord.insert(time); }
 
     void WriteWithAnalysisManager(G4VAnalysisManager*, const std::string& out);
+    void WriteInfo(G4VAnalysisManager* analysisManager, const std::string& out);
+    void WriteGvalues(G4VAnalysisManager* analysisManager);
 
     struct SpeciesInfo
     {
@@ -152,19 +162,30 @@ class Scorer : public G4VPrimitiveScorer
       fpEventScheduler = pEventScheduler;
     }
 
-  private:
-    std::unique_ptr<TR> fpScorer;
-    G4int fHCID = -1;
-    G4THitsMap<G4double>* fpEvtMap = nullptr;
-    G4VChemistryWorld* fpChemistryWorld = nullptr;
-    G4DNAEventScheduler* fpEventScheduler = nullptr;
+private:
+  std::unique_ptr<TR> fpScorer;
+  G4int fHCID = -1;
+  G4THitsMap<G4double> *fpEvtMap = nullptr;
+  G4VChemistryWorld *fpChemistryWorld = nullptr;
+  G4DNAEventScheduler *fpEventScheduler = nullptr;
+  const InterPulseAction*  fPulseActionInfo = nullptr;
+  const G4MolecularConfiguration* fH3Op = nullptr;
+  const G4MolecularConfiguration* fOHm = nullptr;
+  const G4MolecularConfiguration* fH2O = nullptr;
+  const G4MolecularConfiguration* fO2 = nullptr;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 template<typename TR>
 Scorer<TR>::Scorer() : G4VPrimitiveScorer(typeid(TR).name()), fpScorer(new TR)
-{}
+{
+  fH3Op = G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
+  fOHm = G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
+  fH2O = G4MoleculeTable::Instance()->GetConfiguration("H2O");
+  fO2 =   G4MoleculeTable::Instance()->GetConfiguration("O2");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

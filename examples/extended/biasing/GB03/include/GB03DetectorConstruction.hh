@@ -44,10 +44,10 @@ class GB03DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     GB03DetectorConstruction(G4bool bf);
-    virtual ~GB03DetectorConstruction();
+    ~GB03DetectorConstruction() override;
 
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
     void PrintCalorParameters() const;
     void SetAbsorberMaterial(G4String materialChoice);

@@ -46,7 +46,7 @@
 //        = TV * R*TD*R-1 * R*x(inD)
 //        = TV * ReflTD * x(inReflD)
 //
-// Author: Ivana Hrivnacova (Ivana.Hrivnacova@cern.ch), 16.10.2001
+// Author: Ivana Hrivnacova (IN2P3/IJCLab Orsay), 16 October 2001
 // --------------------------------------------------------------------
 
 #include "G4ReflectionFactory.hh"
@@ -146,8 +146,7 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
 
   if (!IsReflection(scale))
   {
-    if (fVerboseLevel>0)
-      G4cout << "Scale positive" << G4endl;
+    if (fVerboseLevel>0) { G4cout << "Scale positive" << G4endl; }
 
     G4VPhysicalVolume* pv1
       =  new G4PVPlacement(pureTransform3D, LV, name,
@@ -171,8 +170,7 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
   //  reflection IS present in transform3D
   //
 
-  if (fVerboseLevel>0)
-    G4cout << "scale negative" << G4endl;
+  if (fVerboseLevel>0) { G4cout << "scale negative" << G4endl; }
 
   G4VPhysicalVolume* pv1
     = new G4PVPlacement(pureTransform3D, ReflectLV(LV, surfCheck), name,
@@ -403,7 +401,7 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
 
   // consistency check
   //
-  if (fReflectedLVMap.find(LV) != fReflectedLVMap.end())
+  if (fReflectedLVMap.find(LV) != fReflectedLVMap.cend())
   {
     std::ostringstream message;
     message << "Invalid reflection for volume: "
@@ -498,14 +496,12 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
 
   G4LogicalVolume* refDLV;
   
-  if (fVerboseLevel>0) 
-    G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
+  if (fVerboseLevel>0) { G4cout << "Daughter: " << dPV << "  " << dLV->GetName(); }
   
   if (!IsReflected(dLV))
   {
 
-    if (fVerboseLevel>0) 
-      G4cout << " will be reflected." << G4endl;
+    if (fVerboseLevel>0) { G4cout << " will be reflected." << G4endl; }
 
     // get reflected volume if already created
     refDLV = GetReflectedLV(dLV); 
@@ -530,8 +526,7 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
   } 
   else
   {
-    if (fVerboseLevel>0) 
-      G4cout << " will be reconstitued." << G4endl;
+    if (fVerboseLevel>0) { G4cout << " will be reconstitued." << G4endl; }
 
     refDLV = GetConstituentLV(dLV); 
 
@@ -563,13 +558,11 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
 
   G4LogicalVolume* refDLV;
   
-  if (fVerboseLevel>0) 
-    G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
+  if (fVerboseLevel>0) { G4cout << "Daughter: " << dPV << "  " << dLV->GetName(); }
   
   if (!IsReflected(dLV))
   {
-    if (fVerboseLevel>0) 
-      G4cout << " will be reflected." << G4endl;
+    if (fVerboseLevel>0) { G4cout << " will be reflected." << G4endl; }
 
     // get reflected volume if already created
     //
@@ -593,8 +586,7 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
   }
   else
   {
-    if (fVerboseLevel>0) 
-      G4cout << " will be reconstitued." << G4endl;
+    if (fVerboseLevel>0) { G4cout << " will be reconstitued." << G4endl; }
 
     refDLV = GetConstituentLV(dLV); 
 
@@ -622,13 +614,11 @@ void G4ReflectionFactory::ReflectPVDivision(G4VPhysicalVolume* dPV,
 
   G4LogicalVolume* refDLV;
   
-  if (fVerboseLevel>0) 
-    G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
+  if (fVerboseLevel>0) { G4cout << "Daughter: " << dPV << "  " << dLV->GetName(); }
   
   if (!IsReflected(dLV))
   {
-    if (fVerboseLevel>0) 
-      G4cout << " will be reflected." << G4endl;
+    if (fVerboseLevel>0) { G4cout << " will be reflected." << G4endl; }
 
     // get reflected volume if already created
     //
@@ -651,8 +641,7 @@ void G4ReflectionFactory::ReflectPVDivision(G4VPhysicalVolume* dPV,
   }
   else
   {
-    if (fVerboseLevel>0) 
-      G4cout << " will be reconstitued." << G4endl;
+    if (fVerboseLevel>0) { G4cout << " will be reconstitued." << G4endl; }
 
     refDLV = GetConstituentLV(dLV); 
 
@@ -666,7 +655,7 @@ void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV,
                                                  G4LogicalVolume*, G4bool)
 {
   // Not implemented.
-  // Should copy and transform daughter of PVReplica type of
+  // Should copy and transform daughter of G4PVParameterised type of
   // a constituent volume into a reflected volume. 
   // ---
 
@@ -688,7 +677,7 @@ G4ReflectionFactory::GetConstituentLV(G4LogicalVolume* reflLV) const
 
   auto it = fReflectedLVMap.find(reflLV);
 
-  if (it == fReflectedLVMap.end()) return nullptr;
+  if (it == fReflectedLVMap.cend()) { return nullptr; }
 
   return (*it).second;
 }        
@@ -704,7 +693,7 @@ G4ReflectionFactory::GetReflectedLV(G4LogicalVolume* lv) const
 
   auto it = fConstituentLVMap.find(lv);
 
-  if (it == fConstituentLVMap.end()) return nullptr;
+  if (it == fConstituentLVMap.cend()) { return nullptr; }
 
   return (*it).second;
 }        
@@ -717,7 +706,7 @@ G4bool G4ReflectionFactory::IsConstituent(G4LogicalVolume* lv) const
   // (is in the map of constituent volumes).
   // ---
 
-  return (fConstituentLVMap.find(lv) != fConstituentLVMap.end());
+  return (fConstituentLVMap.find(lv) != fConstituentLVMap.cend());
 }  
 
 //_____________________________________________________________________________
@@ -728,7 +717,7 @@ G4bool G4ReflectionFactory::IsReflected(G4LogicalVolume* lv) const
   // (is in the map reflected  volumes).
   // ---
 
-  return (fReflectedLVMap.find(lv) != fReflectedLVMap.end());
+  return (fReflectedLVMap.find(lv) != fReflectedLVMap.cend());
 }  
 
 //_____________________________________________________________________________
@@ -759,13 +748,12 @@ void G4ReflectionFactory::Clean()
 
 //_____________________________________________________________________________
 
-void G4ReflectionFactory::PrintConstituentLVMap()
+void G4ReflectionFactory::PrintConstituentLVMap() const
 {
   // temporary - for debugging purpose
   // ---
 
-  LogicalVolumesMapIterator it;
-  for (it = fConstituentLVMap.begin(); it != fConstituentLVMap.end(); ++it)
+  for (auto it=fConstituentLVMap.cbegin(); it!=fConstituentLVMap.cend(); ++it)
   {
     G4cout << "lv: " << (*it).first << "  lv_refl: " << (*it).second << G4endl;
   }
@@ -780,12 +768,17 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
   // if not give exception.
   // ---
 
-  if (!IsReflection(scale)) return;
+  if (!IsReflection(scale)) { return;
+}
   
   G4double diff = 0.;
   for (auto i=0; i<4; ++i)
-    for (auto j=0; j<4; ++j) 
+  {
+    for (auto j=0; j<4; ++j)
+    { 
       diff += std::abs(scale(i,j) - fScale(i,j));  
+    }
+  }
 
   if (diff > fScalePrecision)
   {

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -102,7 +102,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -276,7 +276,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000450s Sys=0.000000s
+  User=0.000000s Real=0.000560s Sys=0.000000s
 ### RunAction::EndOfRunAction
 
  Number of process calls --->	GammaToMuPair : 5
@@ -395,7 +395,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000266s Sys=0.000000s
+  User=0.000000s Real=0.000405s Sys=0.000000s
 ### RunAction::EndOfRunAction
 
  Number of process calls --->	AnnihiToMuPair : 2	ee2hadr : 3
@@ -419,8 +419,8 @@ Run Summary
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0x7e04a0
-UserPhysicsList deleted 0x819ae0
+UserDetectorConstruction deleted 0x2440b50
+UserPhysicsList deleted 0x247a190
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

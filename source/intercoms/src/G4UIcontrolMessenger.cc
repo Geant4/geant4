@@ -344,6 +344,24 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
     "Execute a UI command if program is running in interactive mode.");
   doifInteractiveCommand->SetParameterName("UIcommand", false);
   doifInteractiveCommand->SetToBeBroadcasted(false);
+
+  recordToMacroCommand = new G4UIcommand("/control/recordToMacro",this);
+  recordToMacroCommand->SetGuidance(
+    "Record the following UI command(s) into a macro file instead of executing it/them.");
+  recordToMacroCommand->SetGuidance(
+    "Recording lasts until a command \"/control/endRecord\" comes.");
+  recordToMacroCommand->SetGuidance(
+    "if <ifAppend> is set to true (default false), commands are appended to the existing file.");
+  auto* recordToMacroCommandParam = new G4UIparameter("fileName",'s',false);
+  recordToMacroCommand->SetParameter(recordToMacroCommandParam);
+  recordToMacroCommandParam = new G4UIparameter("ifAppend",'b',true);
+  recordToMacroCommandParam->SetDefaultValue(false);
+  recordToMacroCommand->SetParameter(recordToMacroCommandParam);
+  recordToMacroCommand->SetToBeBroadcasted(false);
+
+  endRecordCommand = new G4UIcmdWithoutParameter("/control/endRecord", this);
+  endRecordCommand->SetGuidance("Stop recording to a macro");
+  endRecordCommand->SetToBeBroadcasted(false);
 }
 
 // --------------------------------------------------------------------
@@ -381,6 +399,8 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete ifInteractiveCommand;
   delete doifBatchCommand;
   delete doifInteractiveCommand;
+  delete recordToMacroCommand;
+  delete endRecordCommand;
   delete controlDirectory;
 }
 
@@ -700,6 +720,15 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     if (G4UIsession::InSession() > 0) {
       UI->ApplyCommand(newValue);
     }
+  }
+  if (command == recordToMacroCommand) {
+    G4Tokenizer next(newValue);
+    const G4String& fn = next();
+    G4bool ifAppend = StoB(next());
+    UI->StartRecording(fn,ifAppend);
+  }
+  if (command == endRecordCommand) {
+    UI->ApplyCommand("/control/endRecord");
   }
 }
 

@@ -103,6 +103,7 @@ void G4PreCompoundEmission::SetHETCModel()
 G4ReactionProduct* 
 G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
+  G4ReactionProduct* res = nullptr; 
   // Choose a Fragment for emission
   G4VPreCompoundFragment * thePreFragment =
     theFragmentsVector->ChooseFragment();
@@ -113,10 +114,8 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 	     << "while trying to de-excite\n" 
 	     << aFragment << G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "");
+      return res;
     }
-
-  //G4cout << "Chosen fragment: " << G4endl;
-  //G4cout << *thePreFragment << G4endl;
 
   // Kinetic Energy of emitted fragment
   G4double kinEnergy = thePreFragment->SampleKineticEnergy(aFragment);
@@ -136,7 +135,14 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   // Now we can calculate the four momentum 
   // both options are valid and give the same result but 2nd one is faster
   G4LorentzVector Emitted4Momentum(theFinalMomentum,EmittedMass + kinEnergy);
-    
+
+  if (2 < fVerbose) {
+    G4cout << "             Emitted  Z="
+           << thePreFragment->GetZ() << " A=" << thePreFragment->GetA()
+           << " Ekin(MeV)=" << kinEnergy << " 4-mom C.M.S.: "
+           << Emitted4Momentum << G4endl;
+  }
+  
   // Perform Lorentz boost
   G4LorentzVector Rest4Momentum = aFragment.GetMomentum();
   Emitted4Momentum.boost(Rest4Momentum.boostVector());  
@@ -168,13 +174,13 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   aFragment.SetMomentum(Rest4Momentum);
 	
   // Create a G4ReactionProduct 
-  G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
+  res = thePreFragment->GetReactionProduct();
 
   // Set the creator model ID
   aFragment.SetCreatorModelID(fModelID);
-  if (MyRP != nullptr) MyRP->SetCreatorModelID(fModelID);
+  if (res != nullptr) { res->SetCreatorModelID(fModelID); }
 
-  return MyRP;
+  return res;
 }
 
 void G4PreCompoundEmission::AngularDistribution(

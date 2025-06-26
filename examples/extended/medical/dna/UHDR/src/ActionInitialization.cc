@@ -27,6 +27,7 @@
 
 #include "ChemistryWorld.hh"
 #include "DetectorConstruction.hh"
+#include "InterPulseAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "PulseAction.hh"
 #include "RunAction.hh"
@@ -38,46 +39,111 @@
 #include "G4DNAScavengerMaterial.hh"
 #include "G4H2O.hh"
 #include "G4Molecule.hh"
-#include "G4MoleculeCounter.hh"
 #include "G4MoleculeGun.hh"
 #include "G4Scheduler.hh"
+#include "G4RunManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ActionInitialization::ActionInitialization(DetectorConstruction* pDetector)
-  : G4VUserActionInitialization(), fpDetector(pDetector)
-{}
+ActionInitialization::ActionInitialization()
+  : G4VUserActionInitialization()
+{
+  DefineCommands();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ActionInitialization::BuildForMaster() const
 {
   SetUserAction(new RunAction());
-  G4DNAChemistryManager::Instance()->ResetCounterWhenRunEnds(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ActionInitialization::Build() const
 {
-  G4MoleculeCounter::Instance()->Use(true);
-  G4MoleculeCounter::Instance()->DontRegister(G4H2O::Definition());
-  G4MoleculeCounter::Instance()->SetVerbose(0);
-  G4MoleculeCounter::Instance()->CheckTimeForConsistency(false);
-  auto pPulseAction = new PulseAction();
-  SetUserAction(pPulseAction);
-  SetUserAction(new PrimaryGeneratorAction(fpDetector));
+  PulseAction* pPulseAction = nullptr;
+  if (fActivePulse) {  // Le Tuan Anh: define if fActivePulse
+    if (fUseInterPulse) {
+      pPulseAction =
+        new InterPulseAction(fPulseStructure, fUseHistoInput, fPulsePeriod, fNumberOfPulse);
+    }
+    else {
+      pPulseAction = new PulseAction(fPulseStructure, fUseHistoInput);
+    }
+
+    pPulseAction->SetPulse(fActivePulse);
+    SetUserAction(pPulseAction);
+  }
+
+  SetUserAction(new PrimaryGeneratorAction());
   auto pRunAction = new RunAction();
   SetUserAction(pRunAction);
-  SetUserAction(new StackingAction());
-  auto pChemWorld = fpDetector->GetChemistryWorld();
-  auto pScavenger = std::make_unique<G4DNAScavengerMaterial>(pChemWorld);
-  // To counter Scavenger
-  dynamic_cast<G4DNAScavengerMaterial*>(pScavenger.get())->SetCounterAgainstTime();
-  G4Scheduler::Instance()->SetScavengerMaterial(std::move(pScavenger));
-  auto timeStepAction = new TimeStepAction(pChemWorld, pPulseAction);
-  auto eventScheduler = timeStepAction->GetEventScheduler();
-  pRunAction->SetEventScheduler(eventScheduler);
-  G4Scheduler::Instance()->SetUserAction(timeStepAction);
+
+  if (G4DNAChemistryManager::IsActivated()) {
+    SetUserAction(new StackingAction());
+    const auto* fpDetector = dynamic_cast<const DetectorConstruction*>(
+    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    auto pChemWorld = fpDetector->GetChemistryWorld();
+    auto pScavenger = std::make_unique<G4DNAScavengerMaterial>(pChemWorld);
+    // To counter Scavenger
+    dynamic_cast<G4DNAScavengerMaterial*>(pScavenger.get())->SetCounterAgainstTime();
+    G4Scheduler::Instance()->SetScavengerMaterial(std::move(pScavenger));
+    auto timeStepAction = new TimeStepAction(pChemWorld, pPulseAction);
+    auto eventScheduler = timeStepAction->GetEventScheduler();
+    pRunAction->SetEventScheduler(eventScheduler);
+    G4Scheduler::Instance()->SetUserAction(timeStepAction);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void ActionInitialization::DefineCommands()
+{
+  // Le Tuan Anh: add new commands:
+  fMessenger = std::make_unique<G4GenericMessenger>(this, "/UHDR/pulse/", "Pulse control");
+  auto& filenameCmd =
+    fMessenger->DeclareMethod("pulseFile", &ActionInitialization::SetPulseStructureInput);
+  filenameCmd.SetParameterName("filenamePulse", true);
+  filenameCmd.SetDefaultValue("");
+
+  auto& activePulseCmd = fMessenger->DeclareProperty("pulseOn", fActivePulse);
+  activePulseCmd.SetParameterName("activatePulse", true);
+  activePulseCmd.SetDefaultValue("false");
+
+  auto& filenameCmdHisto =
+    fMessenger->DeclareMethod("pulseInHisto", &ActionInitialization::SetPulseStructureHistoInput);
+  filenameCmdHisto.SetParameterName("filenameInHisto", true);
+  filenameCmdHisto.SetDefaultValue("");
+
+  auto& interPulseCmd = fMessenger->DeclareProperty("multiPulse", fUseInterPulse);
+  interPulseCmd.SetParameterName("activateInterPulse", true);
+  interPulseCmd.SetDefaultValue("false");
+
+  auto& pulsePeriodCmd =
+    fMessenger->DeclareMethodWithUnit("pulsePeriod", "us", &ActionInitialization::SetPulsePeriod);
+  pulsePeriodCmd.SetParameterName("pulsePeriod", true);
+  pulsePeriodCmd.SetDefaultValue("0");
+  pulsePeriodCmd.SetRange("pulsePeriod >= 0");
+
+  auto& nPulseCmd =
+    fMessenger->DeclareMethod("numberOfPulse", &ActionInitialization::SetNumberOfPulse);
+  nPulseCmd.SetParameterName("numberOfPulse", true);
+  nPulseCmd.SetDefaultValue("1");
+  nPulseCmd.SetRange("numberOfPulse >= 1");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+void ActionInitialization::SetPulseStructureHistoInput(G4String fn)
+{
+  // L.T. Anh: set histo input file & activate fUseHistoInput
+  fPulseStructure = fn;
+  fUseHistoInput = true;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void ActionInitialization::SetPulseStructureInput(G4String fn)
+{
+  // L.T. Anh: set input file & deactivate fUseHistoInput
+  fPulseStructure = fn;
+  fUseHistoInput = false;
+}

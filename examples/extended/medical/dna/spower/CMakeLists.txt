@@ -23,7 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -40,7 +40,7 @@ target_link_libraries(spower ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(spower_SCRIPTS
-    spower.in
+    spower.in secondary.in plot.C
   )
 
 foreach(_script ${spower_SCRIPTS})
@@ -55,4 +55,3 @@ endforeach()
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS spower DESTINATION bin)
-

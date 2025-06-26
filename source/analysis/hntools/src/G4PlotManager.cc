@@ -46,8 +46,7 @@ namespace {
 void HD_style(tools::sg::plots& a_plots,float a_line_width) {
   std::vector<tools::sg::plotter*> plotters;
   a_plots.plotters(plotters);
-  tools_vforcit(tools::sg::plotter*,plotters,it) {
-    tools::sg::plotter* _plotter = *it;
+  for (auto* _plotter : plotters) {
     _plotter->bins_style(0).line_width = a_line_width;
     _plotter->inner_frame_style().line_width = a_line_width;
     _plotter->grid_style().line_width = a_line_width;
@@ -105,9 +104,7 @@ void regions_style(tools::sg::plots& a_plots,float a_plotter_scale = 1) {
 
   std::vector<tools::sg::plotter*> plotters;
   a_plots.plotters(plotters);
-  tools_vforcit(tools::sg::plotter*,plotters,it) {
-    tools::sg::plotter* _plotter = *it;
-
+  for (auto* _plotter : plotters) {
     _plotter->left_margin = _plotter->left_margin * wfac;
     _plotter->right_margin = _plotter->right_margin * wfac;
     _plotter->bottom_margin = _plotter->bottom_margin * hfac;
@@ -121,7 +118,6 @@ void regions_style(tools::sg::plots& a_plots,float a_plotter_scale = 1) {
 
     _plotter->x_axis().label_height = _plotter->x_axis().label_height * hfac * label_cooking;
     _plotter->y_axis().label_height = _plotter->y_axis().label_height * hfac * label_cooking;
-
   }
 }
 

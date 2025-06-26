@@ -6,6 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-10 Ben Morgan (cmake-V11-03-06)
+- Include external categories (G4zlib etc) in link resolution for unit test
+  executables
+
+## 2015-06-09 Ben Morgan (cmake-V11-03-05)
+- Update G4EMLOW dataset to version 8.7
+  - Requested in #251 to support microelec physics
+
+## 2025-05-01 Ben Morgan (cmake-V11-03-04)
+- Default to using Qt6 when selecting Qt support
+  - User must set `GEANT4_USE_QT_QT5` to force find/use of Qt5
+
+## 2025-04-24 Igor Semeniouk (cmake-V11-03-03)
+- G4ConfigureGNUMakeHelpers.cmake - correction for windows
+  - add bin for external dll libraries to PATH
+  - fix path to share/fonts
+
+## 2025-04-04 John Allison (cmake-V11-03-02)
+- Co-works: visman-V11-03-07, raytracer-V11-03-00.
+- Code for RayTracerQt.
+
+## 2025-04-02 Ben Morgan (cmake-V11-03-01)
+- Export CMAKE_EXPORT_COMPILE_COMMANDS setting from toolkit to the build of
+  any test done by geant4_add_test to assist use of clang-tidy and other tooling.
+
+## 2025-02-18 Ben Morgan (cmake-V11-03-00)
+- Add ENVIRONMENT to any build step of geant4_add_test for consistency and to
+  allow easier propagation of additional build settings.
+
 ## 2024-11-25 Ben Morgan (cmake-V11-02-30)
 - Bump RadioactiveDecay dataset version to 6.1.2
   - Fixes Issue #237

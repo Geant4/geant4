@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------ gcc 9.3 and higher
+# ------ GNU/LINUX ------ gcc 11.5 and higher
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
@@ -90,7 +90,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   endif
 
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
 
   ifndef QTFLAGS

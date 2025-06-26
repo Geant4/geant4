@@ -46,7 +46,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4EmParameters.hh"
-#include <thread>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -69,7 +68,8 @@ namespace
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4String& nam) : G4VEmModel(nam)
+G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4String& nam)
+  : G4VEmModel(nam)
 {
   verboseLevel = 0;
   // Verbosity scale:
@@ -95,6 +95,21 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4String& nam
 
   // For water
   fSandiaCof.resize(4, 0.0);
+
+  FindDirectoryPath();
+
+  if (fCrossSection == nullptr) {
+    fCrossSection = new G4ElementData(ZMAXPE);
+    fCrossSection->SetName("PhotoEffXS");
+    fCrossSectionLE = new G4ElementData(ZMAXPE);
+    fCrossSectionLE->SetName("PhotoEffLowXS");
+    for (G4int i = 0; i < ZMAXPE; ++i) {
+      fParamHigh[i] = nullptr;
+      fParamLow[i] = nullptr;
+      fNShells[i] = 0;
+      fNShellsUsed[i] = 0;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,14 +118,10 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {
   if (isInitializer) {
     for (G4int i = 0; i < ZMAXPE; ++i) {
-      if (fParamHigh[i]) {
-        delete fParamHigh[i];
-        fParamHigh[i] = nullptr;
-      }
-      if (fParamLow[i]) {
-        delete fParamLow[i];
-        fParamLow[i] = nullptr;
-      }
+      delete fParamHigh[i];
+      fParamHigh[i] = nullptr;
+      delete fParamLow[i];
+      fParamLow[i] = nullptr;
     }
   }
 }
@@ -129,7 +140,6 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
 
   if (isInitializer) {
     G4AutoLock l(&livPhotoeffMutex);
-    FindDirectoryPath();
     if (fWater == nullptr) {
       fWater = G4Material::GetMaterial("G4_WATER", false);
       if (fWater == nullptr) {
@@ -138,13 +148,6 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
       if (fWater != nullptr) {
         fWaterEnergyLimit = 13.6 * CLHEP::eV;
       }
-    }
-
-    if (fCrossSection == nullptr) {
-      fCrossSection = new G4ElementData(ZMAXPE);
-      fCrossSection->SetName("PhotoEffXS");
-      fCrossSectionLE = new G4ElementData(ZMAXPE);
-      fCrossSectionLE->SetName("PhotoEffLowXS");
     }
 
     const G4ElementTable* elemTable = G4Element::GetElementTable();
@@ -188,7 +191,8 @@ G4LivermorePhotoElectricModel::CrossSectionPerVolume(const G4Material* material,
 						     G4double, G4double)
 {
   fCurrSection = 0.0;
-  if (fWater && (material == fWater || material->GetBaseMaterial() == fWater)) {
+  if (nullptr != fWater &&
+      (material == fWater || material->GetBaseMaterial() == fWater)) {
     if (energy <= fWaterEnergyLimit) {
       fWater->GetSandiaTable()->GetSandiaCofWater(energy, fSandiaCof);
 
@@ -475,7 +479,7 @@ void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParti
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4String& G4LivermorePhotoElectricModel::FindDirectoryPath()
+void G4LivermorePhotoElectricModel::FindDirectoryPath()
 {
   // no check in this method - environment variable is check by utility
   if (fDataDirectory.empty()) {
@@ -489,7 +493,6 @@ const G4String& G4LivermorePhotoElectricModel::FindDirectoryPath()
     }
     fDataDirectory = ost.str();
   }
-  return fDataDirectory;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -512,13 +515,13 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
   // spline for photoeffect total x-section above K-shell when using EPDL97
   // but below the parameterized ones
 
-  G4bool spline = (G4EmParameters::Instance()->LivermoreDataDir() == "livermore");
-  G4int number = G4EmParameters::Instance()->NumberForFreeVector();
-  auto pv = new G4PhysicsFreeVector(spline);
+  auto param = G4EmParameters::Instance();
+  G4bool spline = (param->LivermoreDataDir() == "livermore");
+  G4int number = param->NumberForFreeVector();
 
   // fDataDirectory will be defined after these lines
   std::ostringstream ost;
-  ost << FindDirectoryPath() << "pe-cs-" << Z << ".dat";
+  ost << fDataDirectory << "pe-cs-" << Z << ".dat";
   std::ifstream fin(ost.str().c_str());
   if (!fin.is_open()) {
     G4ExceptionDescription ed;
@@ -532,6 +535,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
     G4cout << "File " << ost.str().c_str() << " is opened by G4LivermorePhotoElectricModel"
            << G4endl;
   }
+  auto pv = new G4PhysicsFreeVector(spline);
   pv->Retrieve(fin, true);
   pv->ScaleVector(MeV, barn);
   pv->FillSecondDerivatives();
@@ -540,7 +544,6 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
   fin.close();
 
   // read high-energy fit parameters
-  fParamHigh[Z] = new std::vector<G4double>;
   G4int n1 = 0;
   G4int n2 = 0;
   G4double x;
@@ -581,6 +584,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
   }
 
   fNShells[Z] = n1;
+  fParamHigh[Z] = new std::vector<G4double>;
   fParamHigh[Z]->reserve(7 * n1 + 1);
   fParamHigh[Z]->push_back(x * MeV);
   for (G4int i = 0; i < n1; ++i) {
@@ -598,7 +602,6 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
   fin1.close();
 
   // read low-energy fit parameters
-  fParamLow[Z] = new std::vector<G4double>;
   G4int n1_low = 0;
   G4int n2_low = 0;
   G4double x_low;
@@ -639,6 +642,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
   }
 
   fNShells[Z] = n1_low;
+  fParamLow[Z] = new std::vector<G4double>;
   fParamLow[Z]->reserve(7 * n1_low + 1);
   fParamLow[Z]->push_back(x_low * MeV);
   for (G4int i = 0; i < n1_low; ++i) {
@@ -706,6 +710,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
          << G4endl;
       G4Exception("G4LivermorePhotoElectricModel::ReadData()", "em0003", FatalException, ed,
                   "G4LEDATA version should be G4EMLOW8.0 or later.");
+      delete pv1;
       return;
     }
     if (verboseLevel > 3) {
@@ -740,20 +745,6 @@ G4double G4LivermorePhotoElectricModel::GetBindingEnergy(G4int Z, G4int shell)
   else {
     return fCrossSection->GetElementData(Z)->Energy(0);
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void
-G4LivermorePhotoElectricModel::InitialiseForElement(const G4ParticleDefinition*, G4int Z)
-{
-  if (fCrossSection == nullptr) {
-    fCrossSection = new G4ElementData(ZMAXPE);
-    fCrossSection->SetName("PhotoEffXS");
-    fCrossSectionLE = new G4ElementData(ZMAXPE);
-    fCrossSectionLE->SetName("PhotoEffLowXS");
-  }
-  ReadData(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

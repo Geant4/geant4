@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-04-11 Makoto Asai (intercoms-V11-03-00)
+- G4UImanager, G4UIcontrolMessenger
+  - Introducing "@@" keyword that can be placed in any UI command that takes
+    a macro file name. It creates a temporal macro file with following commands
+    until /control/endRecord command comes. This “@@” mechanism works recursively.
+  - If a file name is enclosed in a pair of "@", that macro file is created.
+  - This mechanism works for both interactive mode and batch mode. When used in
+    interactive mode with Qt GUI, you can use up-arrow, tab-key and clickable
+     menu in left-side bar to complement a command.
+
 ## 2024-07-29 John Allison (intercoms-V11-02-07)
 - G4UImanager::ApplyCommand:
   - Replace `isMaster` by `G4Threading::IsMasterThread()`.

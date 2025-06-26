@@ -47,7 +47,7 @@ class G4GeomTools
   public:
 
   // ==================================================================
-  //   2D Utilities 
+  //   2D Utilities
   // ------------------------------------------------------------------
 
   static G4double TriangleArea(G4double Ax, G4double Ay,
@@ -108,11 +108,11 @@ class G4GeomTools
                                       std::vector<G4int>& iout,
                                       G4double tolerance = 0.0);
     // Remove collinear and coincident points from 2D polygon.
-    // Indices of removed points are available in iout. 
+    // Indices of removed points are available in iout.
 
   static G4bool DiskExtent(G4double rmin, G4double rmax,
                            G4double startPhi, G4double delPhi,
-                           G4TwoVector& pmin, G4TwoVector& pmax); 
+                           G4TwoVector& pmin, G4TwoVector& pmax);
     // Calculate bounding rectangle of a disk sector,
     // it returns false if input parameters do not meet the following:
     //   rmin   >= 0
@@ -122,7 +122,7 @@ class G4GeomTools
   static void DiskExtent(G4double rmin, G4double rmax,
                          G4double sinPhiStart, G4double cosPhiStart,
                          G4double sinPhiEnd, G4double cosPhiEnd,
-                         G4TwoVector& pmin, G4TwoVector& pmax); 
+                         G4TwoVector& pmin, G4TwoVector& pmax);
     // Calculate bounding rectangle of a disk sector,
     // faster version without check of parameters
 
@@ -136,7 +136,7 @@ class G4GeomTools
     // Compute the lateral surface area of an elliptic cone
 
   // ==================================================================
-  //   3D Utilities 
+  //   3D Utilities
   // ------------------------------------------------------------------
 
   static G4ThreeVector TriangleAreaNormal(const G4ThreeVector& A,
@@ -187,7 +187,7 @@ class G4GeomTools
   static G4bool SphereExtent(G4double rmin, G4double rmax,
                              G4double startTheta, G4double delTheta,
                              G4double startPhi, G4double delPhi,
-                             G4ThreeVector& pmin, G4ThreeVector& pmax); 
+                             G4ThreeVector& pmin, G4ThreeVector& pmax);
     // Calculate bounding box of a spherical sector,
     // it returns false if input parameters do not meet the following:
     //   rmin       >= 0
@@ -195,6 +195,28 @@ class G4GeomTools
     //   startTheta >= 0 && <= pi;
     //   delTheta   >  0 + kCarTolerance
     //   delPhi     >  0 + kCarTolerance
+
+  static G4double HypeStereo(G4double r0, // radius at z = 0
+                             G4double r,  // radius at z = h
+                             G4double h);
+    // Calculate hyperbolic surface stereo
+    // Stereo is a half angle at the intersection point of the two
+    // lines in the tangent plane cross section
+
+  static void TwistedTubeBoundingTrap(G4double twistAng,    // twist angle
+                                      G4double endInnerRad, // inner radius at z = halfZ
+                                      G4double endOuterRad, // outer radius at z = halfZ
+                                      G4double dPhi,        // delta phi
+                                      G4TwoVectorList& vertices); // corners of generic trap
+    // Find XY-coordinates of the corners of the generic trap
+    // that bounds specified twisted tube
+
+  static G4double HyperboloidSurfaceArea(G4double dphi,      // delta phi
+                                         G4double r0,        // radius at z = 0
+                                         G4double tanstereo, // tan(stereo)
+                                         G4double zmin,
+                                         G4double zmax);
+    // Calculate surface area of the hyperboloid between zmin and zmax
 
   private:
 

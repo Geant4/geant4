@@ -1,0 +1,802 @@
+
+                  Geant4 11.4-beta-01 Release Notes
+                  ---------------------------------
+
+                                                            26 June 2025
+
+                 Migration Notes & Main New Features
+                 -----------------------------------
+
+  o New "@@" keyword to be used in UI commands taking a macro file name;
+    it allows to create a temporary macro file with the commands being
+    defined following it, until a "/control/endRecord" command is specified.
+  o New utility class G4VSIntegration, for integration of probability density
+    function and dynamically sampling of final state.
+  o Enabled voxelisation parallelism by default in G4GeometryManager, when
+    MT/tasks are enabled. Enabled also for potential 2nd (and later) calls.
+  o Code optimization in GetPointOnSurface() in specific shapes.
+    Optimised surface area and cubic volume calculation of several geometrical
+    primitives.
+  o Updated implementation of QSS integration method to QSS version-2.
+  o Extended UI command "/geometry/test/run" to support optional overlap check
+    mode to check for overlaps in the volume tree without duplication in
+    identical logical volumes.
+  o New base class G4VXRayModel for models of X-ray processes.
+  o New G4LowPAIH2O model for dE/dx in water for p and e-.
+  o In G4Scintillation and G4Cerenkov, build the integral tables only for
+    materials that have non-empty material property tables.
+  o Implemented new option to enable/disable fluctuation of energy loss per
+    G4Region.
+  o Introduced usage of the new ion ionisation model in DNA Opt8 physics
+    configuration.
+  o New class G4DNABornIonisationModel, a new implementation of the Born model
+    using a new class G4DNASamplingTable, which allows the sharing of sampling
+    data between threads.
+  o New class G4ChemReboundTransportation to handle the rebound transportation
+    of the molecule.
+  o New classes with alternative pre-compound model.
+  o In G4HadronicProcess, removed warning for the case when K0 and anti-K0
+    are transformed into K0S or K0L.
+  o Updated algorithms of integration of probabilities and sampling of kinetic
+    energy for emitted fragment in hadronic de-excitation and pre-equilibrium.
+    Expected more accurate spectra.
+  o New alternative hadronic de-excitation FermiBreakUp model, G4FermiBreakUpAN,
+    and support classes.
+  o Major update of GIDIplus interface in LEND hadronic model, with refactored
+    C++ code, including use of official GNDS formatted data. Added feature for
+    high-fidelity gamma cascades following reactions such as neutron capture
+    and inelastic scattering.
+  o Added G4HadronPhysicsLEND in physics-lists to configure neutron and photon
+    induced processes from LEND.
+  o First version of generic time windowing of trajectory slices in
+    visualisation. Introduced Time Window tab in Qt UI.
+  o Introducing RayTracerQt visualisation driver, enabled when GEANT4_USE_QT
+    configuration is enabled.
+  o Set default configuration to use Qt6 when selecting Qt support.
+    User must set GEANT4_USE_QT_QT5 to force find/use of Qt5.
+  o Make the TSG driver the "flagship" visualization driver.
+  o Re-instated transparency slider in visualization GUI.
+  o In G4OpenGLQtViewer, fixed the original pick feature, which was
+    inadvertently broken, to show pick info window.
+  o Introduced the CaloDiT pre-trained ML model for fast simulation
+    in Par04 example, offering greater accuracy.
+  o Build option with VecGeom requires VecGeom v1.2.11 or v2.0.0-rc.5.
+  o Requiring CLHEP-2.4.7.1 for external CLHEP installation.
+  o New versions of datasets: G4EMLOW-8.7.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o Tested platforms:
+    + Linux, gcc-15.2.0.
+      Tested on 64 bit architectures (Intel or AMD) with Alma Linux 9
+      (based on RedHat Linux Enterprise 9). Versions of Geant4 have also
+      been compiled successfully on other Linux distributions, Ubuntu,
+      Debian, Suse or other RedHat systems.
+    + MacOS 15.5, Apple LLVM/clang-17 (Intel or Apple Silicon), 64 bits.
+    + Windows/11 with Visual C++ 14.4 (Visual Studio 2022), 64 bits.
+
+  o More verified configurations:
+    + Linux, with gcc-11.5/12.1/13.2/14.2, clang-19/20.
+    + Linux, with Intel-icx 2024.2.
+    + MacOS 13.7/14.7, with Apple LLVM/clang-15/16.
+    + Windows/10 with Visual C++ 14.36 (Visual Studio 2022)
+
+  o External dependencies
+    + CLHEP-2.4.7.1, required for external installation of the CLHEP library.
+    + VecGeom v1.2.11 or v2.0.0-rc.5, for optional use of VecGeom primitives.
+    + PTL-3.0.1, for external installation of the PTL tasking library.
+
+  o New datasets:
+    + G4EMLOW-8.7.
+
+ Please refer to the Geant4 User Documentation:
+   https://cern.ch/geant4/support/user_documentation
+ for further information about using Geant4.
+
+ ----------------------------------------------------------------------------
+
+List of features and fixes included in this Beta release since 11.3.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Set default configuration to use Qt6 when selecting Qt support.
+        User must set GEANT4_USE_QT_QT5 to force find/use of Qt5.
+      o Include external categories (G4zlib etc) in link resolution for unit
+        test executables.
+      o Export CMAKE_EXPORT_COMPILE_COMMANDS setting from toolkit to the build
+        of any test done by geant4_add_test to assist use of clang-tidy and
+        other tooling.
+      o Add ENVIRONMENT to any build step of geant4_add_test for consistency
+        and to allow easier propagation of additional build settings.
+      o Updated to datasets: G4EMLOW-8.7.
+    + GNUmake:
+      o Updated system scripts for Qt settings: set Qt6 as default.
+      o Correction in generation of geant.[c]sh and geant4.bat on Windows.
+
+  o Analysis:
+    --------
+    + New implementation of generic 'G4Analysis::GetHnType()' and 'IsProfile()'
+      functions, which do not rely on the histogram/profile name position in
+      the long type name provided via tools 's_class()'.
+    + Modernized g4tools macro-based for loops with range-based for.
+
+  o Externals:
+    ---------
+    + g4tools:
+      o Updated to version 6.5.1.
+      o Implemented windows_size and render_area_size methods; fixed setting of
+        mouse position in the wheel_rotation_event. Handle the shift and control
+        modifiers in the mouse_[down,up,move]_event and wheel_rotation_event.
+      o In glarea, in mouseMoveEvent() for Qt5, corrected a bad cut/paste when
+        creating the mouse_move_event.
+      o In *ntuple, fix in the initialise() method, to switch from "warning" to
+        "error" and return false if the name of a booking column is not found
+        in the file. Addressing problem report #2657.
+    + zlib:
+      o Updated zlib to version 1.3.1. Prior Geant4 patches are retained.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Updated implementation of QSS integration method to QSS version-2.
+    + management:
+      o Enabled voxelisation parallelism by default in G4GeometryManager, when
+        MT/tasks are enabled. Enabled also for potential 2nd (and later) calls
+        in runs after geometry was changed.
+      o G4VSolid: set seed in EvaluateCubicVolume() and EvaluateSurfaceArea()
+        to ensure reproducibility of the resulting value.
+      o G4GeomTools: added functions HyperboloidSurfaceArea(), HypeStereo()
+        and TwistedTubeBoundingTrap().
+      o Applied clang-tidy fixes fixes (readability, modernization,
+        performance, ...) based on llvm version 19.1.17.
+    + navigation:
+      o Extended UI command "/geometry/test/run" to support optional overlap
+        check mode: depending on the selected mode, it invokes either
+        'TestRecursiveOverlap' (default and original algorithm) or
+        'TestOverlapInTree', allowing to check for overlaps in the volume tree
+        without duplication in identical logical volumes.
+      o Reorganised and enriched comments in headers to follow Doxygen style.
+      o Removed declared but not implemented methods in G4VoxelNavigation,
+        G4ParameterisedNavigation, G4VoxelSafety and G4PathFinder.
+    + solids/Boolean:
+      o G4MultiUnion: fix in GetSurfaceArea() and some optimisation to use
+        G4QuickRand(). In GetLocalPoint(), GetLocalVector(), GetGlobalPoint()
+        and GetGlobalVector(), make direct usage of the transformation matrix
+        elements.
+    + solids/CSG:
+      o G4Box: code restructuring in DistanceToOut() methods.
+      o G4Orb: provide faster algorithm in GetPointOnSurface().
+      o G4Para: speedup calculation of surface area in GetSurfaceArea() and
+        GetPointOnSurface().
+      o G4Box, G4Para, G4Trd: code optimization in GetPointOnSurface().
+      o G4Torus: implemented uniform sampling of random points on surface.
+    + solids/specific:
+      o G4Ellipsoid, G4EllipticalTube: code optimization in GetPointOnSurface().
+      o G4TessellatedSolid, G4TriangularFacet, G4QuadrangularFacet: use
+        G4QuickRand() for generating points on surface.
+      o G4EllipticalCone: code optimization in GetPointOnSurface(); moved
+        setters implementations to source.
+      o G4Paraboloid: implemented uniform sampling of random points on surface.
+      o G4Hype: revised surface area calculation and random point sampling.
+        Code optimization in GetPointOnSurface().
+      o Use G4QuickRand() in G4PolyPhiFace, G4PolyconeSide, G4PolyhedraSide,
+        G4TwistedTubs, G4VCSGfaceted and G4VTwistedFaceted for sampling points
+        on surface.
+      o G4EllipticalCone, G4EllipticalTube, G4Voxelizer: removed unnecessary
+        headers.
+    + volumes:
+      o Fix to only delete the logical skin/border surfaces if the geometry
+        is not closed.
+      o Reorganised and enriched comments in headers to follow Doxygen style.
+      o Applied clang-tidy fixes for readability, based on llvm version 19.1.7.
+
+  o Global:
+    ------
+    + Factored common ieee754 union and helper functions out of G4Log and
+      G4Exp to remove code duplication.
+    + G4VSIntegration: added new utility class for integration of probability
+      density function and dynamically sampling of final state. This is useful
+      for the case when sampling tables  cannot be prepared and stored, instead
+      computations are performed for each case again and again. 
+    + G4QuickRand: Added a possibility to set a seed.
+    + Changed date for release 11.4-beta.
+
+  o Graphics Representations:
+    ------------------------
+    + Re-instated transparency slider in GUI.
+    + G4VGraphicsScene: added 'fMaxGeometryDepth' data member and
+      corresponding access functions.
+
+  o Intercoms:
+    ---------
+    + In G4UImanager and G4UIcontrolMessenger, introducing "@@" keyword that
+      can be placed in any UI command taking a macro file name. It creates a
+      temporary macro file with defined commands until the "/control/endRecord"
+      command is specified. The "@@" mechanism works recursively.
+      If a file name is enclosed in a pair of "@", that macro file is created.
+      The mechanism works for both interactive mode and batch mode. When used
+      in interactive mode with Qt GUI, one can use up-arrow, tab-key and
+      clickable menu in left-side bar to complete a command.
+
+  o Interfaces:
+    ----------
+    + G4UIQt: re-instated transparency slider.
+      Introduced Time Window tab. This exploits generic time windowing
+      recently introduced in visualisation. Currently, it doesn't work with
+      OGL in Qt6. The TSG visualisation driver works fine with both Qt5 and
+      Qt6, except line width is not implemented.
+      Simplified and improved touchable dump, using QScrollArea instead of
+      QMessage. Improved pick info window size.
+    + General code tidy.
+
+  o Persistency:
+    -----------
+    + gdml:
+      o Fix to pre-pend '0x' string before the address when writing entities
+        on Windows platform. Addressing problem report #2322.
+
+  o Physics Lists:
+    -------------
+    + Builders:
+      o In G4HadronPHPBuilder, G4ParticleHPCapture and G4ParticleHPCaptureData
+        are replaced by G4NeutronRadCaptureHP and G4NeutronHPCaptureData,
+        respectively.
+        The first allows the use of the full list of updated PhotonEvaporation
+        data set, while for the second it is only a change of the name, the
+        data are the same. Addressing problem report #2660.
+    + Constructors:
+      o electromagnetic:
+        - G4GeneralGammaProcess: updated destructor according to modification
+          in electromagnetic/utils.
+        - G4EmDNABuilder: use G4DNABornIonisationModel1 for proton ionisation.
+          For Opt8 configuration, use the same configuration of models for e-
+          and protons as in Opt2.
+        - In all DNA constructors the upper limit for DNA models for ions is
+          set to 300 MeV instead of 400 MeV; for increase/decrease processes
+          it is set to 100 MeV; for ionisation of hydrogen it is set to 100 MeV.
+        - G4EmDNAPhysics_option6: disabled "fast" flag in order to have
+          comparisons with Opt4 in the same set of general DNA parameters.
+        - G4EmDNAPhysics_stationary_X constructors: added deprecation warning, 
+          indicating that these constructors are now obsolete.
+        - G4EmDNABuilder, G4EmDNAPhysicsActivator: introduced usage of the
+          new ion ionisation model in DNA Opt8 physics configuration.
+        - G4EmDNAPhysics, G4EmDNAPhysics_option2, G4EmDNAPhysics_option4,
+          G4EmDNAPhysics_option6, G4EmDNAPhysics_option8: updated interface to
+          G4EmDNABuilder.
+      o gamma_lepto_nuclear:
+        - G4EmExtraPhysics: removed LEND photo-nuclear; it is now selected by
+          G4HadronPhysicsLEND.
+      o hadron_elastic:
+        - In G4ChargeExchangePhysics, fixed usage of the messenger.
+      o hadron_inelastic:
+        - In G4HadrocPhysicsQBBC, disabled General Neutron Process.
+          Addressing problem reports #2558 and #2559.
+        - Added G4HadronPhysicsLEND to define neutron and photon induced
+          processes from LEND.
+        - G4HadronPhysicsShielding: removed LEND neutron process, now selected
+          by G4HadronPhysicsLEND.
+    + Lists:
+      o G4PhysListFactory: prevent fallback to default physics list when an
+        invalid name is provided. Now, if a user specifies an unknown physics
+        list, Geant4 will throw a fatal error instead of silently using
+        FTFP_BERT. This ensures that users are aware of incorrect configurations
+        and helps preventing unintended simulation results.
+      o In QBBC physics list, added G4ChargeExchangePhysics.
+      o In Shielding physics list, simplified logic tree for inelastic models
+        and moved all LEND hadronic inelastic processes to G4HadronPhysicsLEND.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + DNA:
+      o Added new G4DNARuddIonisationDynamicModel, which uses charge from
+        G4DynamicParticle. The model is applicable for all ions.
+      o G4DNABornIonisationModel: new implementation of the Born model using
+        G4DNASamplingTable class; use stationary and fast flags from EM
+        parameters.
+      o G4DNARuddIonisationModel, G4DNABornIonisationModel1 and
+        G4DNABornIonisationModel2: fixed definition of the stationary code via
+        G4EmParameters.
+      o G4DNASamplingTable, new class allowing the sharing of  sampling data
+        between threads.
+      o Updated IRT-syn model for high LET applications.
+      o Correction in the G4DNAScavengerProcess for IRT-syn model.
+      o Created G4ChemReboundTransportation to handle the rebound transportation
+        of the molecule.
+      o Replaced the G4MoleculeCounter singleton with G4MoleculeCounterManager
+        for managing counters.
+      o Replaced shared_ptr with unique_ptr and raw for manager counters.
+      o Fixed FPE on G4ChemReboundTransportation::calculateNextCoordinate().
+      o In G4PhysChemIO, removed dependency on 'analysis' module.
+    + Low Energy:
+      o G4LivermorePhotoElectricModel: reorganisation of initialisation and
+        data destruction.
+      o In G4AtomicTransitionManager, G4UAtomicDeexcitation, use std::size_t
+        and few other cosmetic changes.
+      o In G4hIonEffChargeSquare, fixed reported Coverity defect.
+    + Muons:
+      o G4RiGeMuPairProductionModel, G4RiGeAngularGenerator: fixes to the
+        angular distribution of electrons and positrons.
+      o G4MuPairProduction: enable RiGe model via G4EmParameters.
+    + Pii:
+      o Use "const G4String&" in G4hImpactIonisation::InitializeMe() to avoid
+        unnecessary copy, reported by Coverity.
+    + Standard:
+      o Added G4LowPAIH2O model for dE/dx in water for p and e-.
+      o G4UrbanMscModel: cosmetic change for Opt3 case; minor code improvement
+        and updated comments to the code. Not affecting any result.
+      o Reverted changes introduced in release 11.3 for static data
+        initialization in G4eBremsstrahlungRelModel.
+    + Utils:
+      o New base class G4VXRayModel for X-ray processes. Adapted classes
+        G4OpticalParameters, G4OpticalParametersMessenger and G4LossTableManager
+        to configure and use G4VXRayModel.
+      o G4EmParametersMessenger: added UI command to enable/disable 5D pair
+        production model by muons.
+      o G4EmUtility, G4EmDataHandler, G4EmDataRegistry: removed minor memory
+        leaks and improved destruction at exit.
+      o G4EmParameters, G4EmParametersMessenger, G4EmUtility, G4LossTableBuilder,
+        G4VEnergyLossProcess: implemented new option to enable/disable
+        fluctuation of energy loss per G4Region.
+      o G4VEmProcess: added call to StartTracking(..) for all used models,
+        which need access to G4Track pointer.
+    + Xrays:
+      o In G4Scintillation, build the scintillation integral tables for
+        materials that have non-empty material property tables and added
+        method BuildInverseCdfTable().
+      o In G4Cerenkov, build the Cerenkov integral only for materials that
+        have non-empty material property tables.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections
+      o G4NeutronInelasticXS, G4ParticleInelasticXS: added download data for
+        all elements in class constructor, avoiding lazy initialisation at
+        run-time. No locks are set any longer by these cross-section classes.
+        For simple applications, the initialisation CPU time increases by
+        roughly 10%; no effect on complex applications.
+      o G4ChargeExchangeXS: fixed selection of reaction for compound materials;
+        added extra public and private methods; added extra method for sampling
+        of scattering angle; updated parameterisation using new fit to data.
+      o Fixed minor memory leaks in classes G4CrossSectionFactory,
+        G4CrossSectionFactoryRegistry, G4CrossSectionFactory,
+        G4ElectroNuclearCrossSection and G4ChipsAntiBaryonElasticXS. 
+      o G4EMDissociationCrossSection: fixed several technical inaccuracies
+        in the code, addressing reported Coverity defects and to correctly
+        use G4Pow.
+      o G4ParticleInelasticXS: fixed reported Coverity defect.
+      o In G4EMDissociationSpectrum, added protection against beta=0, to fix
+        reported Coverity defect; correctly use G4Pow.
+    + management
+      o G4HadronicProcess: removed warning for the case when K0 and anti-K0
+        are transformed into K0S or K0L.
+    + models/coherent_elastic
+      o G4ChargeExchange: fixed problem in kinematic computations, allowed
+        recoil nucleus to be in an excited state. Fixed issue in final state
+        generation for the case of unstable meson production omega(782) and
+        f2(1270).
+      o G4ChargeExchange, G4HadronElastic: cleanup final state generation; use
+        the numerical limit for argument of the exponent to avoid precision
+        loss; in case of numerical problems force scattering angle to zero (do
+        not consider scattering backwards); use similar parameterisation and
+        code for both models. Fixed reported Coverity defect.
+    + models/de_excitation
+      o Added G4FermiBreakUpAN, new alternative FermiBreakUp model and support
+        classes, contributed by A. Novikov (Yandex and MIPT) through
+        [GitHub PR #84](https://github.com/Geant4/geant4/pull/84). The model is
+        based on: J.P. Bondorf et al., Physics Reports, 257(3):133-221.
+      o G4ExcitationHandler, G4DeexPrecoParameters: updated initialisation
+        to allow switching between different FermiBreakUp models.
+      o G4DeexPrecoUtility: new class, providing common computation, to avoid
+        code duplication. Use it in classes G4EvaporationProbability,
+        G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
+        G4TritonEvaporationProbability, G4He3EvaporationProbability and
+        G4AlphaEvaporationProbability, simplifying code.
+      o G4DeexPrecoParameters: added extra enumerator to choose variants of
+        the pre-compound model.
+      o G4NucLevel, G4PhotonEvaporation: use explicit type conversion from
+        double to float; use const arguments where possible.
+      o G4VEmissionProbability, G4EvaporationProbability, G4GEMProbabilityVI:
+        updated algorithms of integration of probabilities and sampling of
+        kinetic energy for emitted fragment. Expected more accurate spectra.
+      o G4GEMChannelVI, G4EvaporationGEMFactoryVI, G4DeexPrecoParameters: new
+        GEM de-excitation model with 83 decay channels.
+      o G4VEmissionProbability: use the new utility class G4VSIntegration,
+        to simplify code; not affecting results.
+        Updated parameters of integration of the probability density function.
+      o In G4PhotonEvaporation, G4VEmissionProbability, check life time of
+        final excitation level; special treatment for the ground state and the
+        next level. Addressing problem report #2660.
+      o In G4EvaporationProbability, fixed computation of inverse cross-section.
+      o G4StatMFMicroPartition: code cleanup, removed non-informative printout,
+        which can be repeated many times; instead stop MF model and return to
+        de-excitation handler.
+      o G4LevelReader: fix for reported Coverity defect.
+      o G4VFermiFragmentAN, G4FermiBreakUpAN: fixed reported Coverity defects.
+      o G4CoulombBarrier: some code cleanup.
+      o G4Evaporation: improved debug printout.
+    + models/em_dissociation
+      o G4EMDissociation: fixed reported Coverity defects.
+    + models/inclxx
+      o Fixed one more reported Coverity defect for use of std::move()
+        in G4INCLCascade.
+      o Fixed URL to Root in comments.
+        Fixes [GitHub PR#87](https://github.com/Geant4/geant4/pull/87).
+    + models/lend
+      o Major update of GIDIplus interface with refactored C++ code, including
+        use of official GNDS formatted data.
+      o Added feature for high-fidelity gamma cascades following reactions such
+        as neutron capture and inelastic scattering.
+      o Collect all inelastic models (neutron and gamma induced) into
+        G4HadronPhysicsLEND. Updated and simplified Shielding and
+        G4EmExtraPhysics accordingly.
+      o Fix in G4EmExtraPhysics for failing in loading photonuclear from LEND
+        if G4GammaGeneralProcess existed.
+      o Fix in G4LENDCombinedModel photofission; check energy function was not
+        connected to the base class, resulting in a crash.
+    + models/nudex
+      o Address maybe-unitialized warnings when building/linking with LTO,
+        identified by ATLAS.
+    + models/particle_hp
+      o G4ParticleHPThermalScatteringData: attempt to fix reported Coverity
+        defect on wrong handling of map iterator. Substituted several calls to
+        G4HadronicExceptions by one G4Exception inside BuildPhysicsTable(..)
+        method, which provides a fatal exception if a particle is not a neutron.
+        Simplified IsApplicable(..) methods called at each step; the directory
+        path is taken from G4ParticleHPManager to reduce number of calls to
+        getenv() function; initialisation is performed only once in one
+        instance of the class; initilised data structures are saved to
+        G4ParticleHPManager and are accessed from all threads and instances;
+        end of job destruction is also performed only once; removed commented
+        lines and extended comments to code.
+      o In G4ParticleHPInelastic, fixed AllHP physics for  initialisation of
+        neutrons and light ions. Addressing problem report #2591.
+      o G4ParticleHPThermalScattering, G4ParticleHPThermalScatteringData,
+        G4ParticleHPJENDLHEData: fixed reported Coverity defects for
+        unprotected access to maps.
+      o Fixed reported Coverity defects, mainly in handling of maps and finding
+        of isotopes.
+    + models/pre_equilibrium
+      o New classes G4PreCompoundInterface, G4PreCompoundTransitionInt and
+        G4PreCompoundEmissionInt with alternative precompound model.
+      o G4PreCompoundModel, G4PreCompoundTransition, G4PreCompoundEmission:
+        added an option to use alternative precompound models, which may be
+        done via configuration without change of interface to consumer code;
+        introduced verbose flag and extended printout needed to debug; removed
+        old commented printout lines.
+      o G4PreCompoundFragment, G4PreCompoundNucleon, G4PreCompoundIon: updated
+        computation of inverse cross-section; added factor to cross-section.
+      o G4VPreCompoundFragment, G4PreCompoundFragment, G4HETCFragment: use the
+        new utility class G4VSIntegration, to simplify code; not affecting
+        results.
+      o G4PreCompoundFragment, G4PreCompoundProton, G4PreCompoundDeuteron,
+        G4PreCompoundTriton, G4PreCompoundHe3, G4PreCompoundAlpha: use new
+        utility class G4DeexPrecoUtility.
+    + util
+      o G4HadronicParameters: implemented pretty-print to ostream to allow
+        users to check values at runtime, a-la G4EmParameters (request from
+        ATLAS).
+
+  o Run:
+    ---
+    + Fix in G4RunManager::ReinitializeGeometry(); the logical skin/border
+      surfaces (used for optical physics) contain pointers to logical/physical
+      volumes that are deleted when the geometry is reset. Resetting the
+      geometry will also clear these surface tables.
+
+  o Track & Tracking:
+    ----------------
+    + G4VTrajectory and G4VTrajectoryPoint: added caching of G4AttValues.
+      GetAttValues() returns a shared_ptr that points to the object created by
+      CreateAttValues() if not already created. Thus acts as a cache.
+      Protected copy and move constructors and copy and move assignment
+      operators.
+    + G4RichTrajectoryPoint: added accessors for Pre/PostStepPointGlobalTime.
+      This allows fast access for time windowing feature of trajectory modeling.
+
+  o Visualization:
+    -------------
+    + management:
+      o Make the TSG driver the "flagship" visualization driver.
+        In G4VisExecutive, make nickname/alias OGL synonymous with TSG and make
+        TSG the default for selection by build flags.
+      o Re-instated the transparency slider; re-implemented it in a generic way,
+        i.e., for all drivers; uses a new UI command:
+        "/vis/viewer/set/transparencyByDepth <d> [option]".
+        G4UIQt issues this command on signals from the slider. The user may,
+        of course, use this command directly.
+      o Split scene processing into its "permanent" (run-duration models) and
+        "transient" (end-of-event and end-of-run models) parts.
+        This allows to update just the transient part, e.g., trajectories,
+        which we might want to display in a different way, leaving the
+        permanent part (e.g., detector) unchanged, avoiding unnecessary
+        re-processing. This is exactly the situation for time windowing - the
+        detector does not change, the trajectories also actually do not change,
+        just the way they are drawn changes.
+      o G4VSceneHandler: introduced ProcessTransients() virtual function.
+        Moved pertinent code from ProcessScene() to ProcessTransients().
+        Copied time parameters into modeling parameters.
+        Calculate and maintain 'fMaxGeometryDepth', new base class data member.
+        Improved some diagnostic printing.
+      o G4VViewer: introduced ProcessTransients() method. Follow changes in
+        G4PhysicalVolumeModel.
+        Initialise fTransientsNeedRedrawing to "false". Previously, this was
+        initialised "true", but it is up to the viewer to decide if transients
+        (trajectories) need redrawing. Code tidy.
+      o Added RayTracerQt in G4VisExecutive.
+      o G4VVisCommand: in InterpolateViews(), implemented desired time per time
+        step. Computation time per step may cause this to increase.
+      o G4VisCommandsViewer: improved guidance of "/vis/viewer/interpolate"
+        command. In "/vis/viewer/set/timeWindow/displayHeadTime", implemented
+        "current as default". There might be some minor change of behaviour.
+        In "/vis/viewer/select", removed subsequent refresh, even for
+        auto-refresh drivers. Refresh is not required after a select, window
+        systems keep the image.
+      o In G4VisCommandsTouchable, disabled "/vis/touchable/centre..." and
+        "/twinkle" in the case of large process times.
+      o Added UI command "/vis/scene/add/endOfRunMacro".
+        The macro is executed at end of run and when rebuild required.
+        WARNING: some vis commands in the macro cause recursion. Stick to
+        simple commmands, e.g., which invoke vis manager Draw() methods.
+      o G4ViewParameters: added 'TransparencyByDepth' and
+        'TransparencyByDepthOption'. Simplified code; use single TimeParameters
+        from G4ModelingParameters, to replace 18 time window parameters.
+        Fixed typo to make "/vis/viewer/set/lightsMove cam" behaving correctly
+        for "/vis/viewer/set/lightsVector 0 0 1".
+        Addressing problem report #2460.
+      o G4VisCommandsViewerSet: updated to "/vis/viewer/set/timeWindow"
+        commands according to changes in G4ViewParameters.
+        Added UI command "/vis/viewer/set/transparencyByDepth".
+      o Minor improvement to listing of histograms (if any).
+      o In G4VisManager::EndOfRun(), print list of histograms even with vis
+        disabled.
+      o Modernised macro-based loops with range-based for.
+      o Replaced raw for loops with range-for where possible.
+    + modeling:
+      o G4TrajectoryDrawerUtils: first version of generic time windowing of
+        trajectory slices; draws only slices within the viewer time window.
+        Note: unless the viewer can handled time-sliced trajectories (only
+        OGLS can do this at present), the viewer must request a kernel visit
+        on change of viewer time window.
+        Trap trajectories with very long global times, e.g, products of
+        long-lived radioactive isotopes. Draw as non-time-sliced trajectories.
+        Added fading of trajectory slices if time windowing is active; makes
+        trajectory slices look like little meteors streaking across the screen.
+        Applied clang-format.
+      o G4ModelingParameters: implemented TimeParameters::operator!=().
+        Adjusted default values in TimeParameters: set fade factor to 1
+        (maximum fading); set head time display 2D x-coordinate to zero
+        (centre), while 2D y-coordinate remains at -0.9 (bottom).
+        Added struct 'TimeParameters', a prerequisite for "Generic Time-Slicing"
+        for the display of the time evolution of events. With that feature, the
+        display of tracks moving through time will be available to all vis
+        drivers (drivers will still be allowed to implement their own time
+        evolution).
+      o G4TrajectoriesModel: in DescribeYourselfTo(), draw display head time
+        if requested and if time windowing is active; removed Begin/EndDraw
+        around the trajectories loop.
+      o In G4TrajectoryDrawByEncounteredVolume and
+        G4TrajectoryEncounteredVolumeFilter, use G4VTrajectory::GetAttValues()
+        instead of CreateAttValues(), to speedup repeated visits.
+      o G4VModel: introduced static data member for current modeling parameters
+        and its static accessor, GetCurrentModelingParameters().
+      o In G4PhysicalVolumeModel, fixed typo in ModelType.
+      o G4TrajectoriesModel: call SetCurrentModelingParameters().
+      o G4ModelingParameters: added 'TransparencyByDepth' and
+        'TransparencyByDepthOption'.
+      o G4PhysicalVolumeModel: renamed some data members and access functions
+        for clarity; added 'fMaxFullDepth' (includes base path, i.e., from
+        world volume); added code for processing transparency by depth.
+    + OpenGL:
+      o G4OpenGLQtViewer: fixed the original pick feature to show pick info
+        window.
+      o G4OpenGLWin32Viewer: added SwitchToMasterThread() method to draw
+        trajectories at the end of run in MT mode.
+      o G4OpenGLStoredViewer, G4OpenGLStoredQtViewer: initiate kernel visit if
+        'TransparencyByDepth' or its options change.
+      o In G4OpenGLQtViewer, commented calls to TouchableSetVisibility/Colour;
+        no longer needed since the introduction of the new scene tree.
+        Commented out some debug printing to std::cout.
+      o In G4OpenGLStoredViewer, follow changes introduced in G4ViewParameters.
+    + OpenInventor:
+      o G4OpenInventorViewer: initiate kernel visit if 'TransparencyByDepth' or
+        its options change. In CompareForKernelVisit(), cause kernel visit if
+        viewer start/end time changes; this is to take advantage of the new
+        generic time window. Implemented CompareForTransientsRedraw().
+        Take advantage of ProcessTransients(), which reconstructs that part of
+        the graphical database for transient objects, e.g., trajectories,
+        without reconstructing the "permanent" (run-duration) objects, e.g.,
+        the detector. In other words, something short of a complete "kernel
+        visit". For example, if the time window changes. Maximises the
+        efficiency of the recently implemented "generic" time windowing.
+    + Qt3D
+      o G4Qt3DViewer: initiate kernel visit if 'TransparencyByDepth' or its
+        options change. In CompareForKernelVisit(), cause kernel visit if
+        viewer start/end time changes; this is to take advantage of the new
+        generic time window. Implemented CompareForTransientsRedraw().
+    + RayTracer:
+      o Introducing RayTracerQt. Uses multithreading tracer, G4TheMTRayTracer.
+        With multithreading, image construction is quite fast.
+      o Introduced nicknames (long names still work): RT (for RayTracer),
+        RTX (for RayTracerX), RTQt (for RayTracerQt).
+      o In G4RayTracerViewer, use G4Timer to estimate
+        KernelVisitElapsedTimeSeconds.
+      o In G4VRTScanner (and inherited classes), removed misleading and un-used
+        methods GetGSName() and GetGSNickName().
+    + ToolsGS:
+      o Allow accumulation of transients (trajectories) during multithreading.
+      o Trajectories are stored in the database during the run, and displayed
+        at end of run. All events are displayed at end of run.
+      o In G4ToolsSGViewer, initiate kernel visit if 'TransparencyByDepth' or
+        its options change. In CompareForKernelVisit(), cause kernel visit if
+        viewer start/end time changes; this is to take advantage of the new
+        generic time window. Implemented CompareForTransientsRedraw().
+        Removed 'SwitchToVisSubThread' and 'SwitchToMasterThread' as no action
+        is needed on thread switching.
+        In mouse_move(), use the event.shift_modifier() method, to pass in pan
+        mode. Have GetWindowSize() and GetRenderAreaSize() methods to retrieve
+        the actual sizes of the "seen/visible window" and of the "render area"
+        size; these may return different sizes, for example with Qt/OpenGL on
+        Mac and Windows. In SetView(), use the new GetWindowSize(),
+        GetRenderAreaSize() methods to set the "marker scale" on
+        G4ToolsSGSceneHandler.
+      o G4ToolsSGQtGLESViewer, G4ToolsSGQtZBViewer, G4ToolsSGOffscreenViewer:
+        suppressed SetView() method, as no more needed.
+      o In G4ToolsSGSceneHandler, respect line width in vis attributes and view
+        parameters. In GetOrCreateNode(), removed restriction on multithreading.
+        Handle the 'fMarkerScale' field.
+      o Modernised macro-based loops with range-based for statements.
+
+  o Datasets:
+    ---------
+    + G4EMLOW-8.7:
+      o Updated MicroElec data: added new files and updated format of other
+        files.
+
+  o Examples:
+    --------
+    + Updated reference outputs, macros, READMEs and scripts.
+    + advanced/dna/cellularPhantom
+      o Code reorganisation; introduced Run class.
+      o Simplified analysis of results.
+      o Updated affiliation.
+    + advanced/dna/moleculardna
+      o Updated new implementation of IRT-syn model.
+      o Deleted Max Time Step parameter.
+      o Corrected segmentation error with Root macrofiles, caused when low
+        damage had been produced.
+      o Updated reaction list for DNA reactions.
+      o Define missing variable in some macros.
+      o Increased default statistics in ecoli.mac.
+      o Added moleculardna macro, Root macro and geometry files for the
+        simulation of phages.
+      o Updated direct damage range for plasmid.mac and cylinders.mac.
+      o Added fiber.mac macro.
+      o Increased max number of arguments in main().
+      o Added protection to all analysis macros to avoid 'nan' in error
+        calculation.
+      o Added possibility to activate parallel world using dedicated flag from
+        executable.
+    + advanced/microbeam
+      o Added n-tuple merging.
+    + extended/biasing
+      o Applied basic clang-tidy fixes and clang-format to code.
+    + extended/biasing/GB03
+      o Instantiate G4GenericBiasingPhysics only if biasing is enabled.
+        Propagate biasing on/off to detector construction to initialise
+        biasing classes only if biasing is requested.
+    + extended/biasing/GB05
+    + extended/biasing/GB07
+      o Removed explicit call of base class constructor in DetectorConstruction.
+    + extended/electromagnetic/TestEm2
+      o Fixed memory leak at exit in ActionInitialisation, DetectorConstruction
+        and RunAction. Instantiate the field messenger differently.
+    + extended/electromagnetic/TestEm4
+      o Added G4RayleighScattering in PhysicsList.
+    + extended/electromagnetic/TestEm13
+    + extended/electromagnetic/TestEm14
+      o Added G4RayleighScattering in PhysicsList.
+    + extended/electromagnetic/TestEm15
+      o Updated gamma.mac input macro to use emstandard_opt4.
+      o Removed gamma2mumu.mac input macro.
+    + extended/electromagnetic/TestEm18
+      o Added G4RayleighScattering in PhysicsList.
+    + extended/eventgenerator/exgps
+      o In HistoManager, activated n-tuple merging.
+      o Fixed python and analysis macros (tested with python 3.13.3).
+      o Moved plotHisto.C to macros. Removed plottest35.py and plotit.csh.
+      o Excluded not working tests (needed further investigation).
+      o Removed exgps_batch.in (identical with exgps.in).
+      o Copy all macros and run script into the build area in CMake script.
+    + extended/eventgenerator/pythia/py8decayer
+      o Updated to Pythia-8.3.15.
+    + extended/exoticphysics/phonon
+      o Updated build script for CTests definitions.
+    + extended/hadronic/NeutronSource
+      o In main(), added SetUseNRESP71Model(true).
+    + extended/medical/DICOM
+      o Refactored DICOM examples into a single project; now build everything
+        together for ease of use and demonstration. Code/behaviour otherwise
+        is unchanged. Including two examples, DICOM1 (renamed from the original
+        DICOM) and DICOM2, with two libraries that implement capabilities
+        common to both applications: G4DicomCore, providing the core Geant4
+        application structure; G4DicomReader, optional utility library to read
+        DICOM files and RT structure in DICOM format, as well as RT plans.
+        Both applications can optionally use the DICOM Digital Head.
+    + extended/medical/dna/chem4
+      o Replaced shared_ptr with unique_ptr and raw for manager counters.
+    + extended/medical/dna/chem5
+      o Use the new G4MoleculeCounterManager to manage the G4MoleculeCounter.
+      o Replaced shared_ptr with unique_ptr and raw for manager counters.
+      o Code clean up; added plot.py script for plotting the output data.
+    + extended/medical/dna/chem6
+    + extended/medical/dna/dnadamage1
+      o Replaced shared_ptr with unique_ptr and raw for manager counters.
+    + extended/medical/dna/dnaphysics
+      o Added possibility to simulate radioactive nuclei; added radioactive.in
+        macro and plotRadioactive.C.
+      o Added elastic.in and plotElastic.C macros to show distribution of
+        scattering angles.
+      o Added UI command to record first step only; updated elastic.in macro
+        accordingly.
+      o Updated PhysicsList and SteppingAction.
+    + extended/medical/dna/mfp
+      o Added n-tuple merging.
+    + extended/medical/dna/molcounters
+      o New example showing how to use the new molecule counter manager system
+        and how to write custom molecule counters. The custom (spatially-aware)
+        molecule counter used here is further described in:
+        Radiat. Phys. Chem. 212 (2023) 111194.
+    + extended/medical/dna/radial
+      o New example showing how to simulate radial dose profiles in liquid
+        water from incident ions using the Geant4-DNA physics processes and
+        models.
+    + extended/medical/dna/range
+      o Added beta option8 physics list.
+    + extended/medical/dna/scavenger
+      o Replaced shared_ptr with unique_ptr and raw for manager counters.
+    + extended/medical/dna/slowing
+      o Added n-tuple merging.
+    + extended/medical/dna/spower
+      o Added scoring of secondary electrons.
+      o PhysicsList: added all DNA Physics Lists and usage of G4EmParameters.
+      o In lot.C, added selection of electrons by default.
+      o In spower.in, changed physics constructors.
+    + extended/medical/dna/svalue
+      o Added n-tuple merging.
+      o Added optional time threshold to iodine macros.
+    + extended/medical/dna/wvalue
+      o Added n-tuple merging.
+    + extended/medical/dna/UHDR
+      o Updated pulseAction for larger pulse size.
+      o Temporarily use molecule counter for EventScheduler.
+      o Updated reaction table for scavengers.
+      o Use the new G4MoleculeCounterManager to manage the G4MoleculeCounter.
+      o Added pulse structure and interpulse feature.
+      o Fixed partially diffused-control reactions.
+      o Fixed crash due to typo in UHDR.in
+      o Removed dependence of PrimaryGeneratorAction/Physlist/ChemList
+        and ActionIni classes on DetectorConstruction class.
+      o Updated macro files.
+    + extended/medical/radiobiology
+      o Primary beam origin can be located outside the detector water tank.
+    + extended/parallel
+      o Retired obsolete TBB example. Functionality fully provided by tasking
+        run manager with TBB support with no user code changes required.
+    + extended/parallel/MPI
+      o Modernised and simplified library and example build scripts to build
+        G4mpi library and examples of its use in one project.
+      o Moved MPI from deprecated C++ interface to C interface (MPI 3+).
+        Based on [GitHub PR#81](https://github.com/Geant4/geant4/pull/81).
+    + extended/parameterisations/Par04
+      o Introduction of the CaloDiT pre-trained model, offering greater
+        accuracy.
+      o Updated VAE training with the new translation script and Condor scripts.
+    + extended/radioactivedecay/Activation
+      o In main(), added SetUseNRESP71Model(true).
+
+ ----------------------------------------------------------------------------
+ 

@@ -1,0 +1,12 @@
+executable = run.sh
+arguments  = test par04_check 0 $(ClusterID) $(ProcId)
+output = output/test.$(ClusterID).$(ProcId).txt
+error  = error/test.$(ClusterID).$(ProcId).txt
+log    = log/test.$(ClusterID).$(ProcId).txt
+requirements = (OpSysAndVer =?= "AlmaLinux9")
++JobFlavour = "workday"
+request_gpus = 1
+request_cpus = 16
+requirements = TARGET.GPUs_DeviceName =?= "NVIDIA A100-PCIE-40GB"
+queue 1
+

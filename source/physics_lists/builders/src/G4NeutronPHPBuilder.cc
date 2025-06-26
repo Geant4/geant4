@@ -76,10 +76,10 @@ Build(G4NeutronFissionProcess * aP)
 void G4NeutronPHPBuilder::
 Build(G4NeutronCaptureProcess * aP)
 {
-  if(theHPCapture==0) theHPCapture = new G4ParticleHPCapture;
+  if (theHPCapture==nullptr) theHPCapture = new G4NeutronRadCaptureHP;
   theHPCapture->SetMinEnergy(theMin);
   theHPCapture->SetMaxEnergy(theMax);
-  if(theHPCaptureData==0) theHPCaptureData = new G4ParticleHPCaptureData;
+  if(theHPCaptureData==0) theHPCaptureData = new G4NeutronHPCaptureData;
   aP->AddDataSet(theHPCaptureData);
   aP->RegisterMe(theHPCapture);
 }

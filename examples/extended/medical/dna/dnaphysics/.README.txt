@@ -50,7 +50,10 @@ In interactive mode, run:
 In batch, the macro dnaphysics.in can be used. It shows how to shoot different
 particle types and how to use Geant4-DNA Physics constructors.
 
-The deexcitation.in macro can also be used to simulate the energy spectrum of deexcitation products.
+The deexcitation.in macro can be used to simulate the energy spectrum of
+deexcitation products.
+
+The radioactive.in macro can be used to simulate some radioactive nuclei.
 
 \section dnaphysics_s5 PHYSICS
 
@@ -111,9 +114,25 @@ file plot.C; to do so :
 * under your ROOT session, type in : .X plot.C to execute the macro file
 * alternatively you can type directly under your session : root plot.C
 
-Also, the plotDeexcitation.C ROOT macro file can be used to plot results of deexcitation.in.
+The plotDeexcitation.C ROOT macro file can be used to plot results of
+deexcitation.in.
 
-The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+The plotRadioactive.C ROOT macro file can be used to plot results of
+radioactive.in.
+
+The plotElastic.C ROOT macro file can be used to show distribution of elastic
+scattering angles of the elastic process obtained with elastic.in. This macro also
+illustrates the usage of a dedicated UI command :
+
+\verbatim
+/step/recordOnlyFirstStep value
+\endverbatim
+
+where value is 0 or 1. Setting value to 1 only records the first step and then kills 
+the track and its secondaries.
+
+The naming scheme for particles and processes on the displayed ROOT plots
+adopts a local numbering, as follows (see SteppingAction.cc):
 
 - particles: \n
 gamma: 0 \n
@@ -123,10 +142,13 @@ hydrogen: 3 \n
 alpha: 4 \n
 alpha+: 5 \n
 helium: 6 \n
+GenericIon (above helium): 7\n
 \n
 - processes: \n
 
 Capture: 1
+
+RadioactiveDecay: 2
 
 e-_G4DNAElectronSolvation: 10 \n
 e-_G4DNAElastic: 11 \n
@@ -195,10 +217,5 @@ Rayl: 84 \n
 - the track kinetic energy (in eV)
 - the track ID
 - the parent track ID
-
----------------------------------------------------------------------------
-
-Should you have any enquiry, please do not hesitate to contact:
-incerti@cenbg.in2p3.fr or tran@lp2ib.in2p3.fr
 
 */

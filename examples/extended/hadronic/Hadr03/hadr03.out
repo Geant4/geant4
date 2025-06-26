@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -57,7 +57,7 @@ Command is ignored.
  Do not adjust final state       1
  Produce fission fragments       1
  Use WendtFissionModel           0
- Use NRESP71Model                0
+ Use NRESP71Model                1
  Use DBRC                        0
  PHP use Poisson                 0
  PHP check                       1
@@ -218,7 +218,7 @@ Command is ignored.
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
   Process: nCapture
-        Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
+        Model:             nRadCaptureHP: 0 eV  ---> 20 MeV
         Model:               nRadCapture: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
@@ -279,6 +279,7 @@ Command is ignored.
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
+Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
@@ -295,6 +296,7 @@ Use HETC submodel for pre-compound model            0
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
+Type of Fermi BreakUp model                         ModelVI
 Min excitation energy                               10 eV 
 Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
@@ -340,17 +342,17 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.051463s Sys=0.000000s
+  User=0.050000s Real=0.049370s Sys=0.000000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 8135	protonInelastic= 1865
+	hadElastic= 8120	protonInelastic= 1880
 
 
- MeanFreePath:	4.9528 cm  +- 4.9326 cm 	massic: 50.915 g/cm2 
- CrossSection:	0.20191 cm^-1 		massic: 1.9641 mm2/g 
- crossSection per atom:	3.1931 barn  
+ MeanFreePath:	4.9903 cm  +- 4.9635 cm 	massic: 51.301 g/cm2 
+ CrossSection:	0.20039 cm^-1 		massic: 1.9493 mm2/g 
+ crossSection per atom:	3.1691 barn  
 
  Verification: crossSections from G4HadronicProcessStore
 
@@ -360,37 +362,37 @@ Run Summary
 
  List of nuclear reactions: 
 
-                        proton + Mo98 --> N gamma or e- + Tc99:      21   Q =  6.4903 MeV
-               proton + Mo98 --> N gamma or e- + Tc99[142.684]:       3   Q =  6.3448 MeV
-              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1695   Q = -2.4768 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.590]:     106   Q = -2.6182 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[90.770]:      15   Q = -2.5661 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:      24   Q = -7.5247 meV
-      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       1   Q = -734.75 keV
-                               proton + Mo98 --> proton + Mo98:    8135   Q = -0.0056849 meV
+                        proton + Mo98 --> N gamma or e- + Tc99:      13   Q =   6.491 MeV
+               proton + Mo98 --> N gamma or e- + Tc99[142.684]:       2   Q =  6.3518 MeV
+              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1708   Q = -2.4771 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.590]:     128   Q = -2.6179 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[90.770]:       9   Q = -2.5656 MeV
+               proton + Mo98 --> N gamma or e- + proton + Mo98:      15   Q = 0.54075 meV
+      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       5   Q = -734.75 keV
+                               proton + Mo98 --> proton + Mo98:    8120   Q = -0.0056987 meV
 
                           number of gamma or e- (ic): N = 1 --> 12
 
  List of generated particles:
-           Mo98:    8159  Emean =   32.88 keV	( 518.57 meV --> 403.53 keV)
-  Mo98[734.750]:       1  Emean =  213.75 keV	( 213.75 keV --> 213.75 keV)
-           Tc98:    1695  Emean =  119.51 keV	( 14.009 keV --> 303.68 keV)
-  Tc98[138.590]:     106  Emean =  124.94 keV	( 10.339 keV --> 298.32 keV)
-   Tc98[90.770]:      15  Emean =  136.39 keV	( 39.975 keV --> 236.45 keV)
-           Tc99:      21  Emean =  103.33 keV	( 89.385 keV --> 118.5 keV)
-  Tc99[142.684]:       3  Emean =  98.445 keV	( 96.511 keV --> 99.576 keV)
-             e-:     618  Emean =   58.96 keV	( 18.479 keV --> 1.0243 MeV)
-          gamma:   10203  Emean =  1.0555 MeV	( 1.9795 keV --> 12.578 MeV)
-        neutron:    1816  Emean =  1.7069 MeV	( 20.947 keV --> 7.1849 MeV)
-         proton:      25  Emean =  6.4261 MeV	( 3.8223 MeV --> 8.9363 MeV)
+           Mo98:    8135  Emean =  33.123 keV	( 1.527 eV  --> 397.27 keV)
+  Mo98[734.750]:       5  Emean =  114.87 keV	( 21.433 keV --> 215.66 keV)
+           Tc98:    1708  Emean =  118.22 keV	( 17.125 keV --> 276.68 keV)
+  Tc98[138.590]:     128  Emean =  126.96 keV	( 23.481 keV --> 259.65 keV)
+   Tc98[90.770]:       9  Emean =  104.35 keV	( 31.97 keV --> 188.37 keV)
+           Tc99:      13  Emean =  107.39 keV	( 92.122 keV --> 118.5 keV)
+  Tc99[142.684]:       2  Emean =  103.36 keV	( 97.242 keV --> 109.48 keV)
+             e-:     682  Emean =  62.704 keV	( 18.487 keV --> 1.0243 MeV)
+          gamma:   10055  Emean =  1.0656 MeV	( 3.4119 keV --> 10.787 MeV)
+        neutron:    1845  Emean =  1.7232 MeV	( 19.298 keV --> 7.1051 MeV)
+         proton:      20  Emean =  7.1773 MeV	( 4.3642 MeV --> 9.0435 MeV)
 
-   Momentum balance: Pmean =  50.271 eV 	( 0.00080125 meV --> 3.9649 keV) 
+   Momentum balance: Pmean =  54.244 eV 	( 0.002461 meV --> 3.2747 keV) 
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1093877387788901833, 371147560395594651, 2010310641773795863, 707006126048023309, 1283752845460136263, 2136901667507396667, 1732726348304668616, 162871380996529247, 1617401799312215591, 701469719018658424, 1409313085569743966, 2272540614347028566, 2055787017028499992, 370409348396242833, 1696783569287438066, 1282169188348987666, 1030594570725304792} counter= 13sumtot= 1182475787385920786
+N=17 V[N]={908227007396948181, 1720771358049332421, 2227873285104074339, 345701894591028024, 866093422604108136, 567583627094808421, 961947697454908808, 750023208248768897, 1459128747913359293, 412733079020239577, 185706477041526521, 639736288902292327, 879790779891937794, 2202234093630983411, 1055450509529291002, 290007266799256309, 2123872506005804216} counter= 5sumtot= 1455980184782810020
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

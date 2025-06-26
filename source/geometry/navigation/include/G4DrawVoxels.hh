@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4DrawVoxels
+// G4DrawVoxels
 //
 // Class description:
 //
 // Utility class for the visualization of voxels in the detector geometry.
-// Define G4DrawVoxelsDebug in the environment at compilation for debugging
-// information printed to G4cout.
 
-// 29/07/1999 First comitted version - L.G.
+// Original author: L.G., 29 July 1999
 // --------------------------------------------------------------------
 #ifndef G4DrawVoxels_HH
-#define G4DrawVoxels_HH
+#define G4DrawVoxels_HH 1
 
 #include "G4VisAttributes.hh"
 #include "G4VoxelLimits.hh"
@@ -43,23 +41,44 @@
 class G4SmartVoxelHeader;
 class G4LogicalVolume;
 
-// ***********************************************************************
+/**
+ * @brief G4DrawVoxels is a utility class for the visualization of voxels
+ * in the detector geometry.
+ */
 
 class G4DrawVoxels
 {
-  public: // with description
+  public:
 
+    /**
+     * Constructor. It initialises the members data to default colors.
+     */
     G4DrawVoxels();
-      // Constructor. It initialises the members data to default colors
-      // Copy constructor and assignment operator not supported (array
-      // fvoxelcolours ...).
 
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4DrawVoxels(const G4DrawVoxels&) = delete;	
+    G4DrawVoxels operator=(const G4DrawVoxels&) = delete;	
+
+    /**
+     * Default Destructor.
+     */
     ~G4DrawVoxels() = default;
-      // Destructor NOT virtual. Not a base class.
     
+    /**
+     * Draws voxels for the specified logical volume.
+     */
     void DrawVoxels(const G4LogicalVolume* lv) const;
+
+    /**
+     * Creates polyhedra for the specified logical volume.
+     */
     G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*) const;
 
+    /**
+     * Visualisation attributes control. Allow changing colors of the drawing.
+     */
     void SetVoxelsVisAttributes(G4VisAttributes&,
                                 G4VisAttributes&,
                                 G4VisAttributes&);
@@ -72,14 +91,8 @@ class G4DrawVoxels
                                      G4VoxelLimits&,
                                      G4PlacedPolyhedronList*) const;
     
-    G4DrawVoxels(const G4DrawVoxels&) = delete;	
-    G4DrawVoxels operator=(const G4DrawVoxels&) = delete;	
-      // Copy constructor and assignment operator not allowed
-
   private:
   
-    // Member data
-    //
     G4VisAttributes fVoxelsVisAttributes[3];
     G4VisAttributes fBoundingBoxVisAttributes;
 };

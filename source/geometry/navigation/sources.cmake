@@ -24,6 +24,7 @@ geant4_add_module(G4navigation
     G4ParameterisedNavigation.icc
     G4PartialPhantomParameterisation.hh
     G4PathFinder.hh
+    G4PathFinder.icc
     G4PhantomParameterisation.hh
     G4PhantomParameterisation.icc
     G4PropagatorInField.hh
@@ -33,7 +34,9 @@ geant4_add_module(G4navigation
     G4ReplicaNavigation.hh
     G4ReplicaNavigation.icc
     G4SafetyCalculator.hh
+    G4SafetyCalculator.icc
     G4SafetyHelper.hh
+    G4SafetyHelper.icc
     G4SimpleLocator.hh
     G4TransportationManager.hh
     G4TransportationManager.icc

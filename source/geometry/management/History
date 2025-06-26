@@ -6,28 +6,45 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-29 Gabriele Cosmo (geommng-V11-02-08)
+## 2025-03-29 Gabriele Cosmo (geommng-V11-03-08)
 - In G4GeometryManager, removed redundant declaration of method
   ChooseSequentialOptimisation().
 
-## 2025-03-05 Gabriele Cosmo (geommng-V11-02-07)
+## 2025-03-24 Evgueni Tcherniaev (geommng-V11-03-07)
+- G4VSolid: Set seed in EvaluateCubicVolume() and EvaluateSurfaceArea() to
+  ensure reproducibility of the resulting value.
+
+## 2025-03-05 Gabriele Cosmo (geommng-V11-03-06)
 - Applied clang-tidy to G4GeometryManager and some code cleanup.
   Moved additional checks/warnings under verbosity level.
+- Additional readability clang-tidy fixes to code.
 
-## 2025-03-03 Gabriele Cosmo
+## 2025-03-03 Gabriele Cosmo (geommng-V11-03-05)
 - In G4VSolid::EstimateCubicVolume(..), initialise local variable to zero
   to silence invalid false positive warnings reported in compilation of CMSSW.
 
-## 2025-02-25 John Apostolakis
+## 2025-02-25 John Apostolakis (geommng-V11-03-04)
+- Enabled voxelisation parallelism by default in G4GeometryManager, when
+  MT/tasks are enabled. Enabled also for potential 2nd (and later) calls.
 - In G4GeometryManager, fix in ConfigureParallelOptimisation() to reset
   logical volumes iterator; in ReportWorkerIsDoneOptimising(), added checks
   to report fatal error if incorrect number of volumes was voxelised, and warns
   if number of workers reporting is not as expected.
   In ConfigureParallelOptimisation(), reports on the times it was called.
 
-## 2025-02-03 Gabriele Cosmo
+## 2025-02-20 Gabriele Cosmo (geommng-V11-03-03)
+- Applied clang-tidy fixes fixes (readability, modernization, performance, ...)
+  based on llvm version 19.1.17.
+
+## 2025-02-03 Gabriele Cosmo (geommng-V11-03-02)
 - G4UAdapter: removed fake default constructor, clearing compilation warnings
   on gcc-14.
+
+## 2025-01-24 Evgueni Tcherniaev (geommng-V11-03-01)
+- G4GeomTools: added HyperboloidSurfaceArea()
+
+## 2025-01-05 Evgueni Tcherniaev (geommng-V11-03-00)
+- G4GeomTools: added HypeStereo() and TwistedTubeBoundingTrap()
 
 ## 2024-08-26 Gabriele Cosmo (geommng-V11-02-06)
 - G4GeometryManager: temporarily disable default parallel optimisation.

@@ -68,6 +68,8 @@ public:
   
   void TouchPlotters(tools::sg::node&);
 
+  void SetMarkerScale(double);
+
 protected:  
   G4ToolsSGSceneHandler(const G4ToolsSGSceneHandler&);
   G4ToolsSGSceneHandler& operator=(const G4ToolsSGSceneHandler&){return *this;}
@@ -90,7 +92,8 @@ protected:
   std::vector<G4ToolsSGNode*> fpPhysicalVolumeObjects;  // Multiple worlds
 
   tools::sg::base_freetype* fFreetypeNode;
-  
+  double fMarkerScale;
+
   using Region_h1 = std::pair<unsigned int,int>;
   using Region_h2 = std::pair<unsigned int,int>;
   std::vector<Region_h1> fRegionH1s;

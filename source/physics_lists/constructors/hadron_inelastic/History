@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-06-13 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-01)
+- G4HadrocPhysicsQBBC - disable General Neutron Process, which address problem reports
+  #2558 and #2559
+
+## 2024-12-10 Douglas M Wright(phys-ctor-hinelastic-V11-03-00)
+- Add G4HadronPhysicsLEND to define neutron and photon induced processes from LEND
+- G4HadronPhysicsShielding remove LEND neutron process, now down in class above
+
 ## 2024-11-08 Alberto Ribon (phys-ctor-hinelastic-V11-02-02)
 - README : updated information for the coming release 11.3.
 

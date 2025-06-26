@@ -55,6 +55,8 @@
 #include "G4OpticalPhoton.hh"
 #include "G4VRestDiscreteProcess.hh"
 
+#include <map>
+
 class G4PhysicsTable;
 class G4Step;
 class G4Track;
@@ -186,10 +188,17 @@ class G4Scintillation : public G4VRestDiscreteProcess
   // sets verbosity
 
  private:
+  void BuildInverseCdfTable(const G4MaterialPropertyVector* MPV,
+                            G4PhysicsFreeVector* vec) const;
+  // Build the inverse cumulative distribution function (C.D.F.) table
+  // for the scintillation photon energy spectrum
+
+ private:
 
   G4PhysicsTable* fIntegralTable1;
   G4PhysicsTable* fIntegralTable2;
   G4PhysicsTable* fIntegralTable3;
+  std::map<std::size_t, std::size_t> fIndexMPT;
 
   G4EmSaturation* fEmSaturation;
   const G4ParticleDefinition* opticalphoton =

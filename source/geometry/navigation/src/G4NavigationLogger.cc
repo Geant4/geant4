@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4NavigationLogger Implementation
+// Class G4NavigationLogger Implementation
 //
-// Author: G.Cosmo, 2010
+// Author: Gabriele Cosmo (CERN), November 2010
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -35,6 +35,11 @@
 #include "G4GeometryTolerance.hh"
 
 using CLHEP::millimeter;
+
+namespace G4NavigationLogger_Namespace
+{
+  const G4String EInsideNames[3] = { "kOutside", "kSurface", "kInside" }; 
+}
 
 G4NavigationLogger::G4NavigationLogger(const G4String& id)
   : fId(id)
@@ -710,13 +715,6 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
 
   // 2. Inconsistency - Too many distances are zero (or will be rounded to zero)
 
-//  if( std::fabs(distToOut) < kCarTolerance
-//   && std::fabs(distToInPos) < kCarTolerance ) 
-//  {
-     // If both distanceToIn and distanceToOut (p,v) are zero for
-     // one direction, the particle could get stuck!
-//  }
-
   G4ExceptionDescription msg;
   msg.precision(10);
   
@@ -770,11 +768,10 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
   G4Exception( fMethod, "GeomNav0003", exceptionType, msg);
 }
 
-namespace  G4NavigationLogger_Namespace
-{
-  const G4String EInsideNames[3] = { "kOutside", "kSurface", "kInside" }; 
-}
-
+// ********************************************************************
+// ReportVolumeAndIntersection
+// ********************************************************************
+//
 void G4NavigationLogger::
 ReportVolumeAndIntersection( std::ostream& os,
                              const G4ThreeVector&     localPoint,

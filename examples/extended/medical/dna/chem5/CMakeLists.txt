@@ -10,11 +10,11 @@ project(chem5)
 # to build a batch mode only executable
 #
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
-if(WITH_GEANT4_UIVIS)
-  find_package(Geant4 REQUIRED ui_all vis_all)
-else()
-  find_package(Geant4 REQUIRED)
-endif()
+if (WITH_GEANT4_UIVIS)
+    find_package(Geant4 REQUIRED ui_all vis_all)
+else ()
+    find_package(Geant4 REQUIRED)
+endif ()
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
@@ -42,21 +42,24 @@ target_link_libraries(chem5 ${Geant4_LIBRARIES})
 # it relies on these scripts being in the current working directory.
 #
 file(GLOB CHEM5_SCRIPTS
-  ${PROJECT_SOURCE_DIR}/*.in
-  ${PROJECT_SOURCE_DIR}/*.mac)
+        ${PROJECT_SOURCE_DIR}/*.in
+        ${PROJECT_SOURCE_DIR}/*.mac
+        ${PROJECT_SOURCE_DIR}/plot.py
+        ${PROJECT_SOURCE_DIR}/plot.gp
+        ${PROJECT_SOURCE_DIR}/data/*.txt)
 
-foreach(_script ${CHEM5_SCRIPTS})
-  configure_file(
-    ${_script}
-    ${PROJECT_BINARY_DIR}/.
-    COPYONLY
+foreach (_script ${CHEM5_SCRIPTS})
+    configure_file(
+            ${_script}
+            ${PROJECT_BINARY_DIR}/.
+            COPYONLY
     )
-endforeach()
+endforeach ()
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS chem5 DESTINATION bin )
+install(TARGETS chem5 DESTINATION bin)
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this

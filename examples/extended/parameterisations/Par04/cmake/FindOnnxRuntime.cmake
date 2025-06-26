@@ -11,8 +11,8 @@ find_library(
 
 find_path(
   OnnxRuntime_INCLUDE_DIR
-  NAMES core/session/onnxruntime_cxx_api.h
-  PATH_SUFFIXES include include/onnxruntime
+  NAMES onnxruntime_cxx_api.h
+  PATH_SUFFIXES include include/onnxruntime include/core/session
   DOC "The ONNXRuntime include directory")
 
 include(FindPackageHandleStandardArgs)

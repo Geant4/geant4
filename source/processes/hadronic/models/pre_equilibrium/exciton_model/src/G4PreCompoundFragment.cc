@@ -40,64 +40,15 @@
 #include "G4InterfaceToXS.hh"
 #include "G4IsotopeList.hh"
 #include "Randomize.hh"
+#include "G4VSIntegration.hh"
 
 G4PreCompoundFragment::G4PreCompoundFragment(const G4ParticleDefinition* p,
 					     G4VCoulombBarrier* aCoulBarrier)
   : G4VPreCompoundFragment(p, aCoulBarrier)
 {}
 
-G4double G4PreCompoundFragment::CalcEmissionProbability(const G4Fragment& fr)
-{
-  theEmissionProbability = (Initialize(fr)) ?
-    IntegrateEmissionProbability(theMinKinEnergy, theMaxKinEnergy, fr) : 0.0;
-  /*  
-  G4cout << "## G4PreCompoundFragment::CalcEmisProb "
-         << "Zf= " << fr.GetZ_asInt()
-	 << " Af= " << fr.GetA_asInt()
-	 << " Elow= " << theMinKinEnergy
-	 << " Eup= " << theMaxKinEnergy
-	 << " prob= " << theEmissionProbability
-	 << " index=" << index << " Z=" << theZ << " A=" << theA
-	 << G4endl;
-  */
-  return theEmissionProbability;
-}
-
-G4double 
-G4PreCompoundFragment::IntegrateEmissionProbability(G4double low, G4double up,
-                                                    const G4Fragment& fr)
-{  
-  static const G4double den = 1.0/CLHEP::MeV;
-  G4double del = (up - low);
-  G4int nbins = del*den;
-  nbins = std::max(nbins, 4);
-  del /= static_cast<G4double>(nbins);
-  G4double e = low + 0.5*del;
-  probmax = ProbabilityDistributionFunction(e, fr);
-  //G4cout << "    0. e= " << e << "  y= " << probmax << G4endl;
-
-  G4double sum = probmax;
-  for (G4int i=1; i<nbins; ++i) {
-    e += del;
-
-    G4double y = ProbabilityDistributionFunction(e, fr); 
-    probmax = std::max(probmax, y);
-    sum += y;
-    if(y < sum*0.01) { break; }
-    //G4cout <<"   "<<i<<". e= "<<e<<"  y= "<<y<<" sum= "<<sum<< G4endl;
-  }
-  sum *= del;
-  //G4cout << "Evap prob: " << sum << " probmax= " << probmax << G4endl;
-  return sum;
-}
-
 G4double G4PreCompoundFragment::CrossSection(G4double ekin)
 {
-  /*
-  G4cout << "G4PreCompoundFragment::CrossSection OPTxs=" << OPTxs << " E=" << ekin
-	 << " resZ=" << theResZ << " resA=" << theResA << " index=" << index
-	 << " fXSection:" << fXSection << G4endl;
-  */
   // compute power once
   if (OPTxs > 1 && 0 < index && theResA != lastA) {
     lastA = theResA;
@@ -107,8 +58,14 @@ G4double G4PreCompoundFragment::CrossSection(G4double ekin)
     recentXS = GetOpt0(ekin);
   } else if (OPTxs == 1) {
     G4int Z = std::min(theResZ, ZMAXNUCLEARDATA);
-    //G4double e = std::max(ekin, lowEnergyLimitMeV[Z]);
-    recentXS = fXSection->GetElementCrossSection(ekin, Z)/CLHEP::millibarn;
+    const G4double lim = 2*CLHEP::MeV;
+    const G4double Kmin = 20*CLHEP::keV;
+    G4double e = lowEnergyLimitMeV[Z];
+    if (e == 0.0) { e = lim; }
+    G4double K = std::max(ekin, Kmin);
+    e = std::max(e, K);
+    recentXS = fXSection->GetElementCrossSection(e, Z)/CLHEP::millibarn;
+    recentXS *= GetAlpha()*(1.0 + GetBeta()/K);
 
   } else if (OPTxs == 2) { 
     recentXS = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, 
@@ -132,39 +89,3 @@ G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
   // with the rest of the options
   return 1.e+25*CLHEP::pi*r0*r0*theResA13*GetAlpha()*(1.0 + GetBeta()/ekin);
 }
-
-G4double G4PreCompoundFragment::SampleKineticEnergy(const G4Fragment& fragment) 
-{
-  G4double delta = theMaxKinEnergy - theMinKinEnergy;
-  static const G4double toler = 1.25;
-  probmax *= toler;
-  G4double prob, T(0.0);
-  CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
-  G4int i;
-  for(i=0; i<100; ++i) {
-    T = theMinKinEnergy + delta*rndm->flat();
-    prob = ProbabilityDistributionFunction(T, fragment);
-    /*
-    if(prob > probmax) { 
-      G4cout << "G4PreCompoundFragment WARNING: prob= " << prob 
-	     << " probmax= " << probmax << G4endl;
-      G4cout << "i= " << i << " Z= " << theZ << " A= " << theA 
-	     << " resZ= " << theResZ << " resA= " << theResA << "\n"
-	     << " T= " << T << " Tmax= " << theMaxKinEnergy 
-	     << " Tmin= " << limit
-	     << G4endl;
-      for(G4int i=0; i<N; ++i) { G4cout << " " << probability[i]; }
-      G4cout << G4endl; 
-    }
-    */
-    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-    if(probmax*rndm->flat() <= prob) { break; }
-  }
-  /*
-  G4cout << "G4PreCompoundFragment: i= " << i << " Z= " << theZ 
-         << " A= " << theA <<"  T(MeV)= " << T << " Emin(MeV)= " 
-         << theMinKinEnergy << " Emax= " << theMaxKinEnergy << G4endl;
-  */
-  return T;
-}
-

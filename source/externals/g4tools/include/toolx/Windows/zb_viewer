@@ -78,6 +78,20 @@ public:
   }
 
   void win_render() {parent_render_area::wm_paint();}
+
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    if(!parent_render_area::m_hwnd) {a_w = 0;a_h = 0;return false;}
+    RECT wrect;
+    ::GetWindowRect(parent_render_area::m_hwnd,&wrect);
+    a_w = wrect.right-wrect.left;
+    a_h = wrect.bottom-wrect.top;
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent_viewer::width();
+    a_h = parent_viewer::height();
+  }
+
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {  //we do not have ownership.
     parent_render_area::set_device_interactor(a_interactor);
   }

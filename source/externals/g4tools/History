@@ -6,7 +6,39 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-07 Gabriele Cosmo (g4tools-V11-02-06)
+## 2025-06-17 Guy Barrand (g4tools-V11-03-04)
+- toolx/Qt/glarea: bug: Qt5: in mouseMoveEvent() for Qt5, correct a bad cut/paste when creating the
+  mouse_move_event (instead of "x,shift,control,y" have "x,y,shift,control").
+- tools/version: pass to 6.5.1
+
+## 2025-06-16 Guy Barrand (g4tools-V11-03-03)
+- tools/sg/event: have a new position_modifiers class to handle the shift, control key modifiers and mouse position.
+  It is inherited by mouse_[down,up,move]_event and the wheel_rotate_event class.
+- toolx/Qt,Windows/glarea,pixwin, toolx/Xt/[sg,zb]_viewer, toolx/X11/zb_viewer: handle the shift and control
+  modifiers in the mouse_[down,up,move]_event and wheel_rotation_event.
+- tools/version: pass to 6.5.0
+
+## 2025-06-06 Guy Barrand (g4tools-V11-03-02)
+- tools/rroot/ntuple: fix bugzilla 2657: in initialize(), line 708, pass the message from
+  "warning" to "error" and "return false" if the name of a booking column is not found in the file.
+- tools/rcsv_ntuple: initialize(read with binding): check if given binding variables names are in the read from file column names.
+  If not, return an error; then have the same behaviour than for root ntuple reading with binding.
+- tools/hdf5/ntuple: initialize(read with binding): check if given binding variables names are in the read from file column names.
+  If not, return an error; then have the same behaviour than for root ntuple reading with binding.
+- tools/version: pass to 6.4.1.
+
+## 2025-06-02 Guy Barrand (g4tools-V11-03-01)
+- toolx/Qt,Windows,Xt,X11/sg_viewer and zb_viewer: implement window_size, and render_area_size methods.
+  (These may return different sizes, for example with Qt/OpenGL on Mac and Windows).
+- tools/offscreen/sg_viewer: implement window_size, and render_area_size methods.
+- tools/sg/event: handle the mouse position in the wheel_rotate_event class.
+- toolx/Qt/glarea,pixwin: set the mouse position in the wheel_rotation_event.
+- toolx/Windows/glarea,pixwin: set the mouse position in the wheel_rotation_event.
+- toolx/Xt/sg_viewer: set the mouse position in the wheel_rotation_event.
+- toolx/X11/zb_viewer: set the mouse position in the wheel_rotation_event.
+- tools/version: pass to 6.4.0
+
+## 2025-04-07 Gabriele Cosmo (g4tools-V11-03-00)
 - Fixed compilation errors on Windows in glarea header, triggered when enabling
   GL WIN32 support, as reported in problem report #2599.
 

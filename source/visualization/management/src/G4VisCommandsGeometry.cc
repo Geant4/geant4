@@ -71,8 +71,7 @@ void G4VisCommandGeometryList::SetNewValue(G4UIcommand*, G4String newValue)
 {
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   G4bool found = false;
-  for (size_t iLV = 0; iLV < pLVStore->size(); iLV++ ) {
-    G4LogicalVolume*pLV = (*pLVStore)[iLV];
+  for (const auto* pLV : *pLVStore) {
     const G4String& logVolName = pLV->GetName();
     if (newValue == "all" || logVolName == newValue) {
       const G4VisAttributes* visAtts = pLV->GetVisAttributes();

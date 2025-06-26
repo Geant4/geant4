@@ -6,6 +6,49 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-26 Gabriele Cosmo (examples-V11-03-06)
+- Updated reference outputs according to reference tag geant4-11-03-ref-06.
+- Included tags: molecularDNA-V11-03-09, testem2-V11-03-00, exgps-V11-03-00,
+                 p8decayer-V11-03-00, molcounter-basic-V11-03-02,
+                 spower-V11-03-02, expar04-V11-03-00.
+
+## 2025-05-31 Gabriele Cosmo (examples-V11-03-05)
+- Updated reference outputs according to reference tag geant4-11-03-ref-05.
+- Included tags: doxygen-V11-03-01, exadvanced-V11-03-00, exhadr03-V11-03-00,
+                 molecularDNA-V11-03-08, exextended-V11-03-00, exdna-V11-03-01,
+                 exhadr04-V11-03-00, exhadr05-V11-03-00, exhadr06-V11-03-00,
+                 exhadr07-V11-03-00, NeutronSource-V11-03-00, DICOM-V11-03-00
+                 chem4-V11-03-01, chem5-V11-03-02, chem6-V11-03-01,
+                 dnadamage2-V11-03-01, dnaphysics-V11-03-03, range-V11-03-00,
+                 molcounters-V11-03-00, scavenger-V11-03-01, spower-V11-03-01,
+                 UHDR-V11-03-04, activation-V11-03-00.
+
+## 2025-04-30 Gabriele Cosmo (examples-V11-03-04)
+- Updated reference outputs according to reference tag geant4-11-03-ref-04.
+- Included tags: molecularDNA-V11-03-07, testem15-V11-03-00, chem5-V11-03-00,
+                 UHDR-V11-03-00, exparallel-V11-03-00, MPI-V11-03-01.
+
+## 2025-03-31 Gabriele Cosmo (examples-V11-03-03)
+- Updated reference outputs according to reference tag geant4-11-03-ref-03.
+- Included tags: exbiasing-V11-03-00, GB01-V11-03-00, GB02-V11-03-00,
+                 GB03-V11-03-01, GB04-V11-03-00, GB05-V11-03-01, GB06-V11-03-01,
+                 GB07-V11-03-01, testem4-V11-03-00, testem13-V11-03-00,
+                 testem14-V11-03-00, testem18-V11-03-00, FlukaCern-V11-03-02,
+                 VecGeomNavigation-V11-03-01, exdna-V11-03-00, radial-V11-03-00,
+                 dnaphysics-V11-03-02, spower-V11-03-00, MPI-V11-03-00.
+
+## 2025-02-28 Gabriele Cosmo (examples-V11-03-02)
+- Updated reference outputs according to reference tag geant4-11-03-ref-02.
+- Included tags: molecularDNA-V11-03-06, exhgcaltb-V11-03-00, GB03-V11-03-00,
+                 GB06-V11-03-00.
+
+## 2025-01-31 Gabriele Cosmo (examples-V11-03-01)
+- Updated reference outputs according to reference tag geant4-11-03-ref-01.
+- Included tags: doxygen-V11-03-00, cellularPhantom-V11-03-01, mfp-V11-03-00,
+                 molecularDNA-V11-03-02, microbeam-V11-03-00, svalue-V11-03-01,
+                 dnaphysics-V11-03-01, slowing-V11-03-00, wvalue-V11-03-00,
+                 radiobiology-V11-03-00.
+
 ## 2024-12-06 Gabriele Cosmo (examples-V11-03-00)
 - Updated reference outputs according to reference tag geant4-11-03-ref-00.
 - Included tags: doxygen-V11-02-01, dsbandrepair-V11-02-03, ch3-V11-02-00,

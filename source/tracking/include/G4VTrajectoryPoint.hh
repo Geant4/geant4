@@ -43,6 +43,7 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 
 class G4AttDef;
 class G4AttValue;
@@ -83,7 +84,27 @@ class G4VTrajectoryPoint
   // checked with G4AttCheck) and delete the list after use. See
   // G4Trajectory for an example of a concrete implementation of this
   // method and G4VTrajectory::ShowTrajectory() for an example of its use.
+  // The caller is expected to take ownership of the returned pointer
+  // and delete it appropriately.
   virtual std::vector<G4AttValue>* CreateAttValues() const { return nullptr; }
+
+  // Smart access function - creates on request and stores for future
+  // access. An invalid shared pointer means "not available". Usage:
+  //   const auto trajectoryPointAttValues = aTrajectoryPoint->GetAttValues();
+  //   if (trajectoryPointAttValues) { ...
+  // then use as a normal pointer, but do not delete - simply allow
+  // to go out of scope.
+  std::shared_ptr<std::vector<G4AttValue>> GetAttValues() const;
+
+protected:
+  G4VTrajectoryPoint(const G4VTrajectoryPoint& right) = default;
+  G4VTrajectoryPoint& operator=(const G4VTrajectoryPoint& right) = default;
+  G4VTrajectoryPoint(G4VTrajectoryPoint&&) = default;
+  G4VTrajectoryPoint& operator=(G4VTrajectoryPoint&&) = default;
+
+private:
+  // Cached att values
+  mutable std::shared_ptr<std::vector<G4AttValue>> fpAttValues;
 };
 
 #endif

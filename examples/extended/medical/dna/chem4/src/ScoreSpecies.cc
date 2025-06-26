@@ -115,17 +115,22 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
 {
   if (G4EventManager::GetEventManager()->GetConstCurrentEvent()->IsAborted()) {
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
 
-  auto species = G4MoleculeCounter::Instance()->GetRecordedMolecules();
+  // get the first, and in this case only, counter
+  auto counter = G4MoleculeCounterManager::Instance()->GetMoleculeCounter<G4MoleculeCounter>(0);
+  if (counter == nullptr) {
+    G4Exception("ScoreSpecies::EndOfEvent", "BAD_REFERENCE", FatalException,
+                "The molecule counter could not be received!");
+  }
 
-  if (species.get() == 0 || species->size() == 0) {
+  auto indices = counter->GetMapIndices();
+
+  if (indices.empty()) {
     G4cout << "No molecule recorded, energy deposited= " << G4BestUnit(fEdep, "Energy") << G4endl;
     ++fNEvent;
     fEdep = 0.;
-    G4MoleculeCounter::Instance()->ResetCounter();
     return;
   }
 
@@ -137,16 +142,16 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
   int eventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
 #endif
 
-  for (auto molecule : *species) {
+  for (auto idx : indices) {
     for (auto time_mol : fTimeToRecord) {
-      double n_mol = G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule, time_mol);
+      double n_mol = counter->GetNbMoleculesAtTime(idx, time_mol);
 
       if (n_mol < 0) {
         G4cerr << "N molecules not valid < 0 " << G4endl;
         G4Exception("", "N<0", FatalException, "");
       }
 
-      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][molecule];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][idx.Molecule];
       molInfo.fNumber += n_mol;
       double gValue = (n_mol / (fEdep / eV)) * 100.;
       molInfo.fG += gValue;
@@ -172,7 +177,6 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
   //         << ", energy deposited=" << G4BestUnit(fEdep, "Energy") << G4endl;
 
   fEdep = 0.;
-  G4MoleculeCounter::Instance()->ResetCounter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -49,6 +49,7 @@
 
 #include "G4VMultipleScattering.hh"
 #include "G4VEmProcess.hh"
+#include "G4VXRayModel.hh"
 
 #include "G4EmParameters.hh"
 #include "G4EmSaturation.hh"
@@ -59,6 +60,7 @@
 #include "G4LossTableBuilder.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4VSubCutProducer.hh"
+#include "G4VXRayModel.hh"
 
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -102,6 +104,7 @@ G4LossTableManager::~G4LossTableManager()
   for (auto const & p : msc_vector) { delete p; }
   for (auto const & p : emp_vector) { delete p; }
   for (auto const & p : p_vector) { delete p; }
+  for (auto const & p : xray_vector) { delete p; }
 
   std::size_t mod = mod_vector.size();
   std::size_t fmod = fmod_vector.size();
@@ -342,6 +345,9 @@ void G4LossTableManager::DeRegister(G4VProcess* p)
 
 void G4LossTableManager::Register(G4VEmModel* p)
 {
+  if (nullptr == p) { return; }
+  std::size_t n = mod_vector.size();
+  for (std::size_t i=0; i<n; ++i) { if (mod_vector[i] == p) { return; } }
   mod_vector.push_back(p);
   if(verbose > 1) {
     G4cout << "G4LossTableManager::Register G4VEmModel : " 
@@ -353,7 +359,6 @@ void G4LossTableManager::Register(G4VEmModel* p)
 
 void G4LossTableManager::DeRegister(G4VEmModel* p)
 {
-  //G4cout << "G4LossTableManager::DeRegister G4VEmModel : " << p << G4endl;
   std::size_t n = mod_vector.size();
   for (std::size_t i=0; i<n; ++i) {
     if(mod_vector[i] == p) { 
@@ -367,6 +372,9 @@ void G4LossTableManager::DeRegister(G4VEmModel* p)
 
 void G4LossTableManager::Register(G4VEmFluctuationModel* p)
 {
+  if (nullptr == p) { return; }
+  std::size_t n = fmod_vector.size();
+  for (std::size_t i=0; i<n; ++i) { if (fmod_vector[i] == p) { return; } }
   fmod_vector.push_back(p);
   if(verbose > 1) {
     G4cout << "G4LossTableManager::Register G4VEmFluctuationModel : " 
@@ -380,7 +388,37 @@ void G4LossTableManager::DeRegister(G4VEmFluctuationModel* p)
 {
   std::size_t n = fmod_vector.size();
   for (std::size_t i=0; i<n; ++i) {
-    if(fmod_vector[i] == p) { fmod_vector[i] = nullptr; }
+    if(fmod_vector[i] == p) {
+      fmod_vector[i] = nullptr;
+      break;
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::Register(G4VXRayModel* p)
+{
+  if (nullptr == p) { return; }
+  std::size_t n = xray_vector.size();
+  for (std::size_t i=0; i<n; ++i) { if (xray_vector[i] == p) { return; } }
+  xray_vector.push_back(p);
+  if (verbose > 1) {
+    G4cout << "G4LossTableManager::Register G4VXRayModel : " 
+           << p->GetName() << "  " << xray_vector.size() << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::DeRegister(G4VXRayModel* p)
+{
+  std::size_t n = xray_vector.size();
+  for (std::size_t i=0; i<n; ++i) {
+    if (xray_vector[i] == p) {
+      xray_vector[i] = nullptr;
+      break;
+    }
   }
 }
 
@@ -447,8 +485,10 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   }
 
   // start initialisation for the first run
-  if( -1 == run ) {
-    if (nullptr != emConfigurator) { emConfigurator->PrepareModels(particle, p); }
+  if ( -1 == run ) {
+    if (nullptr != emConfigurator) {
+      emConfigurator->PrepareModels(particle, p);
+    }
 
     // initialise particles for given process
     for (G4int j=0; j<n_loss; ++j) {
@@ -501,7 +541,9 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 
   // start initialisation for the first run
   if ( -1 == run ) {
-    if (nullptr != emConfigurator) { emConfigurator->PrepareModels(particle, p); }
+    if (nullptr != emConfigurator) {
+      emConfigurator->PrepareModels(particle, p);
+    }
   } 
   
   ResetParameters();

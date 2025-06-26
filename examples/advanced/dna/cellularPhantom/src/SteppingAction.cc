@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //       MONTE CARLO SIMULATION OF REALISTIC GEOMETRY FROM MICROSCOPES IMAGES
 //
 // Authors and contributors:
-// P. Barberet, S. Incerti, N. H. Tran, L. Morelli
+// P. Barberet (a), S. Incerti (a), N. H. Tran (a), L. Morelli (a,b)
 //
-// University of Bordeaux, CNRS, LP2i, UMR5797, Gradignan, France
+// a) University of Bordeaux, CNRS, LP2i, UMR5797, Gradignan, France
+// b) Politecnico di Milano, Italy
 //
 // If you use this code, please cite the following publication:
 // P. Barberet et al.,
@@ -37,18 +38,18 @@
 // geometry exposed to alpha particles."
 // Ph. Barberet et al 2012 Phys. Med. Biol. 57 2189
 // doi: 110.1088/0031-9155/57/8/2189
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "SteppingAction.hh"
+#include "Run.hh"
 
-#include "G4SteppingManager.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* runAction)
-:G4UserSteppingAction(), fRunAction(runAction)
+SteppingAction::SteppingAction()
+:G4UserSteppingAction()
 {}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,22 +64,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4int preReplicaNumber = preStep->GetTouchableHandle()->GetReplicaNumber();
   G4int voxelMaterial =  fMyPhantomParam->GetMaterial(preReplicaNumber);
 
-  // The absorbed energy is added to the "voxel energy" array in RunAction
   // Added protection to make sure Replica Number has been identified
 
+  Run* run
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   if (aStep->GetTotalEnergyDeposit()>0. && preReplicaNumber>0)
-  {
-    if (voxelMaterial == 1)
-    {
-      fRunAction->AddDoseBox(preReplicaNumber, aStep->GetTotalEnergyDeposit());
-    }
-    else if (voxelMaterial == 2)
-    {
-      fRunAction->AddDoseBox(preReplicaNumber, aStep->GetTotalEnergyDeposit());
-    }
-    else if (voxelMaterial == 3)
-    {
-      fRunAction->AddDoseBox(preReplicaNumber, aStep->GetTotalEnergyDeposit());
-    }
-  }
+    if (voxelMaterial == 1 || voxelMaterial == 2 || voxelMaterial == 3)
+       run->AddVoxelEdeposit(preReplicaNumber, aStep->GetTotalEnergyDeposit());
 }

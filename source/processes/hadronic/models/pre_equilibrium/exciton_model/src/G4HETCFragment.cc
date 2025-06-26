@@ -48,7 +48,8 @@ G4double G4HETCFragment::CalcEmissionProbability(const G4Fragment& fp)
   if (GetEnergyThreshold() <= 0.0) {
     theEmissionProbability = 0.0;
     return 0.0;
-  }    
+  }
+  pFragment = &fp;
   // Coulomb barrier is the lower limit 
   // of integration over kinetic energy
   theEmissionProbability =

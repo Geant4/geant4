@@ -75,6 +75,7 @@ geant4_module_link_libraries(G4RayTracer
 
 # X11 RayTracer only if selected
 if(GEANT4_USE_RAYTRACER_X11)
+
   geant4_module_sources(G4RayTracer
     PUBLIC_HEADERS
       G4RayTracerX.hh
@@ -89,4 +90,27 @@ if(GEANT4_USE_RAYTRACER_X11)
   geant4_module_compile_definitions(G4RayTracer PUBLIC G4VIS_USE_RAYTRACERX)
 
   geant4_module_link_libraries(G4RayTracer PRIVATE X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
+
+endif()
+
+# Qt RayTracer only if selected
+if(GEANT4_USE_RAYTRACER_QT)
+
+  geant4_module_sources(G4RayTracer
+    PUBLIC_HEADERS
+      G4RayTracerQt.hh
+    PRIVATE_HEADERS
+      G4RayTracerQtViewer.hh
+      G4RTQtScanner.hh
+    SOURCES
+      G4RayTracerQt.cc
+      G4RayTracerQtViewer.cc
+      G4RTQtScanner.cc)
+
+  geant4_module_compile_definitions(G4RayTracer PUBLIC G4VIS_USE_RAYTRACER_QT)
+
+  geant4_module_link_libraries(G4RayTracer PRIVATE G4UIimplementation
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets)
+
 endif()

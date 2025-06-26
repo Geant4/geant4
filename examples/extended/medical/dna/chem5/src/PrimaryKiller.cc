@@ -37,7 +37,6 @@
 #include <G4Event.hh>
 #include <G4EventManager.hh>
 #include <G4RunManager.hh>
-#include <G4SystemOfUnits.hh>
 #include <G4UIcmdWithADoubleAndUnit.hh>
 #include <G4UnitsTable.hh>
 #include <globals.hh>
@@ -55,24 +54,9 @@
 PrimaryKiller::PrimaryKiller(G4String name, G4int depth)
   : G4VPrimitiveScorer(name, depth), G4UImessenger()
 {
-  fELoss = 0.;  // cumulated energy for current event
-
-  fELossRange_Min = DBL_MAX;  // fELoss from which the primary is killed
-  fELossRange_Max = DBL_MAX;  // fELoss from which the event is aborted
-  fKineticE_Min = 0;  // kinetic energy below which the primary is killed
-
   fpELossUI = new G4UIcmdWithADoubleAndUnit("/primaryKiller/eLossMin", this);
   fpAbortEventIfELossUpperThan = new G4UIcmdWithADoubleAndUnit("/primaryKiller/eLossMax", this);
-  fpMinKineticE = new G4UIcmdWithADoubleAndUnit("/primaryKiller/minKineticE", this);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PrimaryKiller::~PrimaryKiller()
-{
-  ;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryKiller::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -95,14 +79,13 @@ G4bool PrimaryKiller::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   //-------------------
 
-  double kineticE = aStep->GetPostStepPoint()->GetKineticEnergy();
+  auto kineticE = aStep->GetPostStepPoint()->GetKineticEnergy();
 
-  G4double eLoss = aStep->GetPreStepPoint()->GetKineticEnergy() - kineticE;
+  auto eLoss = aStep->GetPreStepPoint()->GetKineticEnergy() - kineticE;
 
   if (eLoss == 0.) return FALSE;
 
   //-------------------
-
   fELoss += eLoss;
 
   if (fELoss > fELossRange_Max) {
@@ -122,8 +105,6 @@ G4bool PrimaryKiller::ProcessHits(G4Step* aStep, G4TouchableHistory*)
            << ", Energy loss by primary is: " << G4BestUnit(fELoss, "Energy")
            << ", primary is terminated as Eloss is >: " << G4BestUnit(fELossRange_Min, "Energy")
            << G4endl;  //", EThreshold is: "
-    //           << G4BestUnit(fEThreshold, "Energy")
-    //          << G4endl;
   }
 
   return true;
@@ -135,27 +116,5 @@ void PrimaryKiller::Initialize(G4HCofThisEvent* /*HCE*/)
 {
   Clear();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PrimaryKiller::EndOfEvent(G4HCofThisEvent*) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PrimaryKiller::Clear()
-{
-  fELoss = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PrimaryKiller::DrawAll()
-{
-  ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PrimaryKiller::PrintAll() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

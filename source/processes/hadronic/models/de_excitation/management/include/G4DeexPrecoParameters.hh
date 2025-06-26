@@ -55,6 +55,20 @@ enum G4DeexChannelType
   fDummy
 };
 
+enum G4PreCompoundType
+{
+  eDefault = 0,
+  eDeexcitation,
+  ePrecoInterface
+};
+
+enum G4FermiBreakUpType
+{
+  bModelVI = 0,
+  bModelAN,
+  bDummy
+};
+
 class G4StateManager;
 class G4DeexParametersMessenger;
 
@@ -105,8 +119,10 @@ public:
 
   inline G4int GetMinAForPreco() const;
 
+  // should be renamed 
   inline G4int GetPrecoModelType() const;
 
+  // should be renamed 
   inline G4int GetDeexModelType() const;
 
   inline G4int GetTwoJMAX() const;
@@ -141,8 +157,11 @@ public:
 
   inline G4DeexChannelType GetDeexChannelsType() const;
 
-  // Set methods 
+  inline G4PreCompoundType GetPreCompoundType() const;
 
+  inline G4FermiBreakUpType GetFermiBreakUpType() const;
+
+  // Set methods 
   void SetLevelDensity(G4double);
 
   void SetR0(G4double);
@@ -173,8 +192,10 @@ public:
 
   void SetMinAForPreco(G4int);
 
+  // should be renamed
   void SetPrecoModelType(G4int);
 
+  // should be renamed
   void SetDeexModelType(G4int);
 
   void SetTwoJMAX(G4int);
@@ -199,7 +220,7 @@ public:
 
   void SetStoreICLevelData(G4bool);
 
-  // obsolete method (use previous)
+  // obsolete method (use SetStoreICLevelData)
   void SetStoreAllLevels(G4bool);
 
   void SetInternalConversionFlag(G4bool);
@@ -211,6 +232,10 @@ public:
   void SetIsomerProduction(G4bool);
 
   void SetDeexChannelsType(G4DeexChannelType);
+
+  void SetPreCompoundType(G4PreCompoundType);
+
+  void SetFermiBreakUpType(G4FermiBreakUpType);
 
   G4DeexPrecoParameters(const G4DeexPrecoParameters & right) = delete;  
   const G4DeexPrecoParameters& operator=
@@ -289,6 +314,8 @@ private:
 
   // type of a set of de-exitation channels
   G4DeexChannelType fDeexChannelType;
+  G4PreCompoundType fPreCompoundType;
+  G4FermiBreakUpType fFermiBreakUpType;
 };
 
 inline G4double G4DeexPrecoParameters::GetLevelDensity() const
@@ -446,4 +473,14 @@ inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const
   return fDeexChannelType;
 }
 
+inline G4PreCompoundType G4DeexPrecoParameters::GetPreCompoundType() const
+{
+  return fPreCompoundType;
+}
+
+inline G4FermiBreakUpType G4DeexPrecoParameters::GetFermiBreakUpType() const
+{
+  return fFermiBreakUpType;
+}
+  
 #endif

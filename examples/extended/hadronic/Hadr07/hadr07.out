@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -89,7 +89,7 @@ NeutronHP: /Elastic file for Z = 18, A = 38 is not found and NeutronHP will use 
  Do not adjust final state       1
  Produce fission fragments       0
  Use WendtFissionModel           0
- Use NRESP71Model                0
+ Use NRESP71Model                1
  Use DBRC                        0
  PHP use Poisson                 0
  PHP check                       1
@@ -99,8 +99,6 @@ NeutronHP: /Elastic file for Z = 18, A = 38 is not found and NeutronHP will use 
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
-NeutronHP: /Capture file for Z = 18, A = 36 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Capture/CrossSection/18_37_Argon
-NeutronHP: /Capture file for Z = 18, A = 38 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Capture/CrossSection/18_39_Argon
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -255,7 +253,7 @@ NeutronHP: /Capture file for Z = 18, A = 38 is not found and NeutronHP will use 
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
   Process: nCapture
-        Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
+        Model:             nRadCaptureHP: 0 eV  ---> 20 MeV
         Model:               nRadCapture: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
@@ -316,6 +314,7 @@ NeutronHP: /Capture file for Z = 18, A = 38 is not found and NeutronHP will use 
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
+Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
@@ -332,6 +331,7 @@ Use HETC submodel for pre-compound model            0
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
+Type of Fermi BreakUp model                         ModelVI
 Min excitation energy                               10 eV 
 Min energy per nucleon for multifragmentation       200 GeV
 Limit excitation energy for Fermi BreakUp           20 MeV
@@ -383,7 +383,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.490000s Real=3.345023s Sys=0.000000s
+  User=2.580000s Real=2.919731s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -391,45 +391,45 @@ Run Summary
     1        30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-                Decay=      1             NoProcess=  99748      RadioactiveDecay=    144
-                 Rayl=   1520        Transportation=  58744               annihil=    136
-                compt=  52720                  conv=    139                 eBrem=    732
-                eIoni= 108133                 hIoni=    144            hadElastic=  86318
-              ionIoni= 172207                   msc=     60              nCapture=      1
-     neutronInelastic=  14276                  phot=    807         photonNuclear=      1
+                Decay=      1             NoProcess=  99649      RadioactiveDecay=    141
+                 Rayl=   1503        Transportation=  58680               annihil=    133
+                compt=  52172                  conv=    136                 eBrem=    728
+                eIoni= 107286                 hIoni=    141            hadElastic=  86227
+              ionIoni= 171906                   msc=     58              nCapture=      1
+     neutronInelastic=  14258                  phot=    806         photonNuclear=      1
 
 
- Edep in absorber 1 = 6.92 MeV	(2.36 keV-->14.1 MeV)
- Energy leakage     = 4.69 MeV	(367 eV -->16.1 MeV)
+ Edep in absorber 1 = 6.9 MeV	(2.36 keV-->15.5 MeV)
+ Energy leakage     = 4.69 MeV	(367 eV -->14.6 MeV)
  Energy total       = 11.6 MeV	(793 keV-->30.1 MeV)
 
  List of created particles in absorber 1:
-  Be8[3030.000]:       1  Emean =     5.8 keV	( 5.8 keV --> 5.8 keV)	mean life = 0 ps 
-            He6:     142  Emean =    1.28 MeV	( 939 keV --> 1.34 MeV)	mean life = 1.16 s  
-            Li6:     142  Emean =     834 eV 	( 13 eV  --> 1.4 keV)	stable
-            Li7:   99606  Emean =     561 keV	( 294 meV --> 6.21 MeV)	stable
-            Li8:       1  Emean =    7.66 keV	( 7.66 keV --> 7.66 keV)	mean life = 1.21 s  
-          alpha:     269  Emean =    1.25 MeV	( 40.6 keV --> 4.21 MeV)	stable
-      anti_nu_e:     143  Emean =    1.99 MeV	( 400 keV --> 9.54 MeV)	stable
-       deuteron:     142  Emean =     428 keV	( 314 keV --> 447 keV)	stable
-             e+:     139  Emean =    1.87 MeV	( 35 keV --> 3.54 MeV)	stable
-             e-:   53407  Emean =     247 keV	( 100 eV  --> 4.39 MeV)	stable
-          gamma:   14272  Emean =    2.52 MeV	( 1.52 keV --> 4.63 MeV)	stable
-        neutron:   14980  Emean =     3.7 MeV	( 3.26 keV --> 13.6 MeV)	mean life = 14.7 min
+  Be8[3030.000]:       1  Emean =    7.08 keV	( 7.08 keV --> 7.08 keV)	mean life = 0 ps 
+            He6:     139  Emean =    1.28 MeV	( 939 keV --> 1.34 MeV)	mean life = 1.16 s  
+            Li6:     139  Emean =     830 eV 	( 13 eV  --> 1.4 keV)	stable
+            Li7:   99510  Emean =     561 keV	( 294 meV --> 6.21 MeV)	stable
+            Li8:       1  Emean =    8.55 keV	( 8.55 keV --> 8.55 keV)	mean life = 1.21 s  
+          alpha:     264  Emean =    1.27 MeV	( 40.6 keV --> 4.21 MeV)	stable
+      anti_nu_e:     140  Emean =    1.99 MeV	( 400 keV --> 7.89 MeV)	stable
+       deuteron:     139  Emean =     427 keV	( 314 keV --> 447 keV)	stable
+             e+:     136  Emean =    1.86 MeV	( 60 keV --> 3.54 MeV)	stable
+             e-:   52879  Emean =     248 keV	( 100 eV  --> 5.08 MeV)	stable
+          gamma:   14254  Emean =    2.52 MeV	( 1.52 keV --> 4.63 MeV)	stable
+        neutron:   14955  Emean =    3.69 MeV	( 3.26 keV --> 13.6 MeV)	mean life = 14.7 min
          triton:       1  Emean =    1.23 MeV	( 1.23 MeV --> 1.23 MeV)	mean life = 17.8 y  
 
  List of particles emerging from absorbers :
-      anti_nu_e:     143  Emean =    1.99 MeV	( 400 keV --> 9.54 MeV)
+      anti_nu_e:     140  Emean =    1.99 MeV	( 400 keV --> 7.89 MeV)
              e+:       3  Emean =    2.03 MeV	( 881 keV --> 2.85 MeV)
-             e-:     195  Emean =     1.7 MeV	( 49.9 keV --> 4.24 MeV)
-          gamma:   13325  Emean =    1.71 MeV	( 4.43 keV --> 4.63 MeV)
-        neutron:   10703  Emean =    2.19 MeV	( 2.87 eV  --> 14.1 MeV)
+             e-:     187  Emean =    1.71 MeV	( 49.9 keV --> 4.24 MeV)
+          gamma:   13311  Emean =    1.72 MeV	( 4.43 keV --> 4.63 MeV)
+        neutron:   10696  Emean =    2.19 MeV	( 2.87 eV  --> 14.1 MeV)
 
- Nb of events with primary absorbed = 88 %,   transmit = 6.2 %,   reflected = 6.2 %
+ Nb of events with primary absorbed = 87 %,   transmit = 6.2 %,   reflected = 6.3 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1978923364, 1390006364
+ Current couple of seeds = 640386647, 929293907
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

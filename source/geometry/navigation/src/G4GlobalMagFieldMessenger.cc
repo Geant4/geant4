@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GlobalMagFieldMessenger
+// Class G4GlobalMagFieldMessenger implementation
 //
-// Implementation of the G4GlobalMagFieldMessenger class
-//
-// Author: Ivana Hrivnacova, 28/08/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova (IN2P3/IJCLab Orsay), 28 August 2013
 // --------------------------------------------------------------------
 
 #include "G4GlobalMagFieldMessenger.hh"

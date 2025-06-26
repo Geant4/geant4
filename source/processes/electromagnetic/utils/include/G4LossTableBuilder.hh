@@ -92,6 +92,8 @@ public:
 
   static const std::vector<G4double>* GetDensityFactors();
 
+  static const std::vector<G4bool>* GetFluctuationFlags();
+
   static G4bool GetFlag(std::size_t idx);
 
   static G4bool GetBaseMaterialFlag();
@@ -116,6 +118,7 @@ private:
   static std::vector<G4double>* theDensityFactor;
   static std::vector<G4int>*    theDensityIdx;
   static std::vector<G4bool>*   theFlag;
+  static std::vector<G4bool>*   theFluct;
 };
 
 inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)

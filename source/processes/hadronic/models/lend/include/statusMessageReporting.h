@@ -1,16 +1,24 @@
+/*
+# <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
+# <<END-copyright>>
+*/
+
 #ifndef statusMessageReporting_h_included
 #define statusMessageReporting_h_included
 
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define __func__ __FUNCTION__
 #endif
 
 #if defined __cplusplus
     extern "C" {
-    namespace GIDI {
 #endif
 
 #define smr_unknownID 0
@@ -22,8 +30,7 @@
 #define smr_maximumNumberOfRegisteredLibraries 128
 #define smr_maximumFileNameSize 1024
 #define smr_codeNULL 0
-#define smr_codeFileIO -1
-#define smr_codeMemoryAllocating -2
+#define smr_codeMemoryAllocating 1
 enum smr_status { smr_status_Ok = 0, smr_status_Info, smr_status_Warning, smr_status_Error };
 typedef char *(*smr_userInterface)( void *userData );
 
@@ -40,7 +47,6 @@ typedef struct statusMessageReport {
 
 typedef struct statusMessageReporting {
     enum smr_status verbosity;
-    int append;                                         /* If 0, only one report allowed, else add to next list. */
     statusMessageReport report;
 } statusMessageReporting;
 
@@ -49,13 +55,13 @@ int smr_cleanup( void );
 
 int smr_registerLibrary( char const *libraryName );
 int smr_numberOfRegisteredLibraries( void );
-char const *smr_getRegisteredLibrariesName( int ID );
+char const *smr_getRegisteredLibrarysName( int ID );
 
-statusMessageReporting *smr_new( statusMessageReporting *smr, enum smr_status verbosity, int append );
-int smr_initialize( statusMessageReporting *smr, enum smr_status verbosity, int append );
+statusMessageReporting *smr_new( statusMessageReporting *smr, enum smr_status verbosity );
+int smr_initialize( statusMessageReporting *smr, enum smr_status verbosity );
+statusMessageReporting *smr_clone( statusMessageReporting const *smr );
 void smr_release( statusMessageReporting *smr );
 void *smr_free( statusMessageReporting **smr );
-statusMessageReporting *smr_clone( statusMessageReporting *smr );
 
 int smr_setReportInfo(  statusMessageReporting *smr, void *userInterface, char const *file, int line, char const *function, int libraryID, int code, char const *fmt, ... );
 int smr_vsetReportInfo( statusMessageReporting *smr, void *userInterface, char const *file, int line, char const *function, int libraryID, int code, char const *fmt, va_list *args );
@@ -64,38 +70,37 @@ int smr_vsetReportWarning( statusMessageReporting *smr, void *userInterface, cha
 int smr_setReportError(  statusMessageReporting *smr, void *userInterface, char const *file, int line, char const *function, int libraryID, int code, char const *fmt, ... );
 int smr_vsetReportError( statusMessageReporting *smr, void *userInterface, char const *file, int line, char const *function, int libraryID, int code, char const *fmt, va_list *args );
 
-enum smr_status smr_highestStatus( statusMessageReporting *smr );
-int smr_isOk( statusMessageReporting *smr );
-int smr_isInfo( statusMessageReporting *smr );
-int smr_isWarning( statusMessageReporting *smr );
-int smr_isError( statusMessageReporting *smr );
-int smr_isWarningOrError( statusMessageReporting *smr );
+enum smr_status smr_highestStatus( statusMessageReporting const *smr );
+int smr_isOk( statusMessageReporting const *smr );
+int smr_isInfo( statusMessageReporting const *smr );
+int smr_isWarning( statusMessageReporting const *smr );
+int smr_isError( statusMessageReporting const *smr );
+int smr_isWarningOrError( statusMessageReporting const *smr );
 
-int smr_isReportOk( statusMessageReport *report );
-int smr_isReportInfo( statusMessageReport *report );
-int smr_isReportWarning( statusMessageReport *report );
-int smr_isReportError( statusMessageReport *report );
-int smr_isReportWarningOrError( statusMessageReport *report );
+int smr_isReportOk( statusMessageReport const *report );
+int smr_isReportInfo( statusMessageReport const *report );
+int smr_isReportWarning( statusMessageReport const *report );
+int smr_isReportError( statusMessageReport const *report );
+int smr_isReportWarningOrError( statusMessageReport const *report );
 
-int smr_numberOfReports( statusMessageReporting *smr );
-statusMessageReport *smr_firstReport( statusMessageReporting *smr );
-statusMessageReport *smr_nextReport( statusMessageReport *report );
+int smr_numberOfReports( statusMessageReporting const *smr );
+statusMessageReport const *smr_firstReport( statusMessageReporting const *smr );
+statusMessageReport const *smr_nextReport( statusMessageReport const *report );
 
-enum smr_status smr_getVerbosity( statusMessageReporting *smr );
-int smr_getAppend( statusMessageReporting *smr );
+enum smr_status smr_getVerbosity( statusMessageReporting const *smr );
 
-int smr_getLibraryID( statusMessageReport *report );
-int smr_getCode( statusMessageReport *report );
-int smr_getLine( statusMessageReport *report );
-char const *smr_getFile( statusMessageReport *report );
-char const *smr_getFunction( statusMessageReport *report );
-char const *smr_getMessage( statusMessageReport *report );
-char *smr_copyMessage( statusMessageReport *report );
-char *smr_copyFullMessage( statusMessageReport *report );
+int smr_getLibraryID( statusMessageReport const *report );
+int smr_getCode( statusMessageReport const *report );
+int smr_getLine( statusMessageReport const *report );
+char const *smr_getFile( statusMessageReport const *report );
+char const *smr_getFunction( statusMessageReport const *report );
+char const *smr_getMessage( statusMessageReport const *report );
+char *smr_copyMessage( statusMessageReport const *report );
+char *smr_copyFullMessage( statusMessageReport const *report );
 void smr_print( statusMessageReporting *smr, int clear );
 void smr_write( statusMessageReporting *smr, FILE *f, int clear );
-void smr_reportPrint( statusMessageReport *report );
-void smr_reportWrite( statusMessageReport *report, FILE *f );
+void smr_reportPrint( statusMessageReport const *report );
+void smr_reportWrite( statusMessageReport const *report, FILE *f );
 
 char const *smr_statusToString( enum smr_status status );
 
@@ -110,6 +115,7 @@ char *smr_allocateCopyStringN( statusMessageReporting *smr, char const *s, size_
 
 #define smr_malloc2( smr, size, zero, forItem ) smr_malloc( smr, size, zero, forItem, __FILE__, __LINE__, __func__ )
 #define smr_realloc2( smr, old, size, forItem ) smr_realloc( smr, old, size, forItem, __FILE__, __LINE__, __func__ )
+#define smr_freeMemory2( p ) smr_freeMemory( (void **) &p )
 #define smr_allocateCopyString2( smr, s, forItem ) smr_allocateCopyString( smr, s, forItem, __FILE__, __LINE__, __func__ )
 #define smr_allocateCopyStringN2( smr, s, n, forItem ) smr_allocateCopyStringN( smr, s, n, forItem, __FILE__, __LINE__, __func__ )
 
@@ -134,7 +140,6 @@ char *smr_allocateCopyStringN( statusMessageReporting *smr, char const *s, size_
 #define smr_vsetReportError3( smr, userInterface, libraryID, code, fmt, args ) smr_vsetReportError( smr, userInterface, __FILE__, __LINE__, __func__, libraryID, code, fmt, args )
 
 #if defined __cplusplus
-    }
     }
 #endif
 

@@ -126,6 +126,8 @@ public:
 				G4double factor,
 				G4double energyLimit);
 
+  G4String CheckRegion(const G4String&) const;
+
   // initialisation methods
   void DefineRegParamForLoss(G4VEnergyLossProcess*) const;
   void DefineRegParamForEM(G4VEmProcess*) const;
@@ -135,8 +137,6 @@ public:
   (const G4EmExtraParameters &right) = delete;  
 
 private:
-
-  G4String CheckRegion(const G4String&) const;
 
   void PrintWarning(G4ExceptionDescription& ed) const;
 

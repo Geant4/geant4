@@ -6,6 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-12 Vladimir Ivanchenko (hadr-hpp-V11-03-03)
+- G4ParticleHPInelastic - fixed AllHP physics - proper initialisation of neutrons
+  and light ions (problem report #2591 and some other problems).
+
+## 2025-04-02 Vladimir Ivanchenko (hadr-hpp-V11-03-02)
+- G4ParticleHPThermalScattering, G4ParticleHPThermalScatteringData,
+  G4ParticleHPJENDLHEData - fixed Coverity warnings for unprotected access to maps
+
+## 2025-03-20 Vladimir Ivanchenko (hadr-hpp-V11-03-01)
+- G4ParticleHPThermalScatteringNames, G4ParticleHPVector, G4ParticleHPCaptureURR,
+  G4ParticleHPElasticURR, G4ParticleHPFissionURR, G4ParticleHPInelasticURR,
+  G4ParticleHPIsoProbabilityTable_CALENDF, G4ParticleHPIsoProbabilityTable_NJOY,
+  G4ParticleHPThermalScattering, G4ParticleHPThermalScatteringData,
+  G4ParticleHPThermalScatteringNames - fixed Coverity warnings, which are mainly
+    real problems of handling of maps and finding of isotopes.
+
+## 2024-12-07 Vladimir Ivanchenko (hadr-hpp-V11-03-00)
+- G4ParticleHPThermalScatteringData - attempt to fix Coverity warning on
+    wrong handling of map iterator; several calls to G4HadronicExceptions
+    are substituted by one G4Exception inside BuildPhysicsTable(..) method,
+    which provides FatalException if a particle is not the neutron; simplified
+    IsApplicable(... ) methods called at each step; directory path is taken
+    from G4ParticleHPManager to reduce number of calls to getenv function;
+    initialisation is performed only once in one instance of the class,
+    initilized data structures are saved to G4ParticleHPManager and are
+    accessed from all threads and instances; end of job destruction is
+    performed also only once; commented lines are removed; comments to code
+    are extended.
+
 ## 2024-10-28 Vladimir Ivanchenko (hadr-hpp-V11-02-16)
 - G4ParticleHPElasticData, G4ParticleHPInelasticData, G4ParticleHPCaptureData,
   G4ParticleHPFissionData, G4ParticleHPThermalScatteringData,

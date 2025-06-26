@@ -246,7 +246,6 @@ private:
 
   // counters
   G4int nMatWarn = 0;
-  G4int nKaonWarn = 0;
   G4int nICelectrons = 0;
   G4int matIdx = 0;
 

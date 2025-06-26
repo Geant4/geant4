@@ -38,8 +38,7 @@
 // --------------------------------------------------------------------
 
 #include "G4QuadrangularFacet.hh"
-#include "geomdefs.hh"
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
  
 using namespace std;
 
@@ -321,7 +320,7 @@ G4ThreeVector G4QuadrangularFacet::GetPointOnFace() const
 {
   G4double s1 = fFacet1.GetArea();
   G4double s2 = fFacet2.GetArea();
-  return ((s1+s2)*G4UniformRand() < s1) ?
+  return ((s1 + s2)*G4QuickRand() < s1) ?
     fFacet1.GetPointOnFace() : fFacet2.GetPointOnFace();
 }
 

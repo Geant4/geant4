@@ -1,0 +1,29 @@
+
+# pH and Scavenger
+/UHDR/env/pH 5.5
+
+# air concentration
+/UHDR/env/scavenger O2 21 %
+/UHDR/env/scavenger CO2 0.041 %
+/UHDR/env/scavenger HCO3m 2.4 uM
+# NO3-/NO2- concentration
+#/UHDR/env/scavenger NO3m 1 mM
+#/UHDR/env/scavenger NO2m 10 uM
+#/UHDR/env/scavenger N2O 0.1 mM
+#/UHDR/env/scavenger CH3OH 10 mM
+
+
+/chem/reaction/print
+
+#/run/verbose 1
+/tracking/verbose 0
+/scheduler/verbose 0
+/scheduler/endTime 1000 s
+
+# set false if many beamOn in medium
+/scheduler/ResetScavengerForEachBeamOn true
+
+/scorer/Gvalues/nOfTimeBins 80
+
+/run/printProgress 10
+

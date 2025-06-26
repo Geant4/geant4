@@ -34,7 +34,7 @@
 
 G4RayTracer::G4RayTracer():
   G4VGraphicsSystem("RayTracer",
-		     "RayTracer",
+		     "RT",
 		     RAYTRACER_FEATURES,
 		     G4VGraphicsSystem::threeD)
 , theRayTracer(nullptr)

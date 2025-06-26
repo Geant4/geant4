@@ -52,6 +52,9 @@ class G4EmDataRegistry
   // register a new handler
   void Register(G4EmDataHandler*);
 
+  // register a new handler
+  void DeRegister(G4EmDataHandler*);
+  
   // hide assignment operator 
   G4EmDataRegistry& operator=(const G4EmDataRegistry &right) = delete;
   G4EmDataRegistry(const G4EmDataRegistry&) = delete;

@@ -62,6 +62,8 @@
 //   /control/ifInteractive
 //   /control/doifBatch
 //   /control/doifInteractive
+//   /control/recordToMacro
+//   /control/endRecord
 
 // Author: Makoto Asai, SLAC - 2001
 // --------------------------------------------------------------------
@@ -119,6 +121,8 @@ class G4UIcontrolMessenger : public G4UImessenger
     G4UIcmdWithAString* ifInteractiveCommand = nullptr;
     G4UIcmdWithAString* doifBatchCommand = nullptr;
     G4UIcmdWithAString* doifInteractiveCommand = nullptr;
+    G4UIcommand* recordToMacroCommand = nullptr;
+    G4UIcmdWithoutParameter* endRecordCommand = nullptr;
 };
 
 #endif

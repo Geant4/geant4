@@ -33,11 +33,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB03ActionInitialization::GB03ActionInitialization() {}
+GB03ActionInitialization::GB03ActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB03ActionInitialization::~GB03ActionInitialization() {}
+GB03ActionInitialization::~GB03ActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-05-29 John Allison (greps-V11-03-01)
+- Use "// clang-format off/on" on the following carefully crafted files:
+  - G4Colour.hh/cc, G4VisAttributes.hh/cc, G4VisExtent.cc.
+
+## 2025-01-06 John Allison (greps-V11-03-00)
+- Co-works: visman-V11-03-00, modeling-V11-03-00, interfaces-V11-03-00,
+  opengl-V11-03-00, visQt3D-V11-03-00, vis_toolssg-V11-03-00,
+  openinventor-V11-03-00.
+- Re-instate the transparency slider (see lengthy explanation in
+    visualization/management/History).
+- G4VGraphicsScene.hh:
+  - Add fMaxGeometryDepth and access functions.
+
 ## 2024-09-13 John Allison (greps-V11-02-06)
 - G4AttDef.hh: Deprecate output operator<< that uses pointer.
 - G4VMarker.cc: Minor improvements to messages in output operator<<.

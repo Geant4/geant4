@@ -47,6 +47,9 @@ class ActionInitialization : public G4VUserActionInitialization
     void BuildForMaster() const override;
 
     void Build() const override;
+
+  private:
+    void BuildMoleculeCounter() const;
 };
 
 }  // namespace scavenger

@@ -78,15 +78,17 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
             << MAXZINEL << G4endl;
   }
   loglowElimit = G4Log(lowElimit);
+  ggXsection =
+    G4CrossSectionDataSetRegistry::Instance()->GetComponentCrossSection("Glauber-Gribov");
+  if (ggXsection == nullptr)
+    ggXsection = new G4ComponentGGHadronNucleusXsc();
+
   if (nullptr == data) { 
     data = new G4ElementData(MAXZINEL);
     data->SetName("nInelastic");
     FindDirectoryPath();
+    for (G4int Z=1; Z<MAXZINEL; ++Z) { Initialise(Z); }
   }
-  ggXsection =
-    G4CrossSectionDataSetRegistry::Instance()->GetComponentCrossSection("Glauber-Gribov");
-  if(ggXsection == nullptr)
-    ggXsection = new G4ComponentGGHadronNucleusXsc();
 
   SetForAllAtomsAndEnergies(true);
 }
@@ -199,19 +201,28 @@ G4NeutronInelasticXS::IsoCrossSection(G4double eKin, G4double logE,
   G4double ekin = eKin;
   G4double loge = logE;
 
-  /*  
-  G4cout << "G4NeutronInelasticXS::IsoCrossSection  Z= " 
-         << Z << "  A= " << A << G4endl;
-  G4cout << "  Amin= " << amin[Z] << " Amax= " << amax[Z]
-         << " E(MeV)= " << ekin << " Ncomp="
-         << data->GetNumberOfComponents(Z) << G4endl;
-  */
+  // Check initialisation
   GetPhysicsVector(Z);
+
+#ifdef G4VERBOSE
+  if (verboseLevel > 2) {
+    G4cout << "G4NeutronInelasticXS::IsoCrossSection  Z= " 
+	   << Z << "  A= " << A << G4endl;
+    G4cout << "  Amin= " << amin[Z] << " Amax= " << amax[Z]
+	   << " E(MeV)= " << ekin << " Ncomp="
+	   << data->GetNumberOfComponents(Z) << G4endl;
+  }
+#endif
 
   // use isotope cross section if applicable
   if (ekin <= elimit && data->GetNumberOfComponents(Z) > 0) {
     auto pviso = data->GetComponentDataByID(Z, A);
     if (nullptr != pviso) { 
+      // very low energy limit
+      if (ekin < lowElimit) { 
+	ekin = lowElimit; 
+	loge = loglowElimit; 
+      }
       const G4double e0 = pviso->Energy(0);
       if (ekin > e0) {
         xs = pviso->LogVectorValue(ekin, loge);
@@ -277,8 +288,6 @@ const G4Isotope* G4NeutronInelasticXS::SelectIsotope(
   if(nn < nIso) { temp.resize(nIso, 0.); }
 
   for (j=0; j<nIso; ++j) {
-    // G4cout << j << "-th isotope " << anElement->GetIsotope(j)->GetN()
-    //       <<  " abund= " << abundVector[j] << G4endl;
     sum += abundVector[j]*IsoCrossSection(kinEnergy, logE, Z, 
                                           anElement->GetIsotope((G4int)j)->GetN());
     temp[j] = sum;

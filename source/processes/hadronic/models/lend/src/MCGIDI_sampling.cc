@@ -1,229 +1,270 @@
 /*
 # <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
 # <<END-copyright>>
 */
-#include <stdlib.h>
-#include <cmath>
 
-#include "MCGIDI.h"
+#include "MCGIDI.hpp"
 
-#if defined __cplusplus
-#include "G4Log.hh"
-#include "G4Pow.hh"
-namespace GIDI {
-using namespace GIDI;
+#ifndef MCGIDI_CrossSectionLinearSubSearch
+    #ifndef MCGIDI_CrossSectionBinarySubSearch
+        #define MCGIDI_CrossSectionBinarySubSearch
+    #endif
 #endif
 
-/*
-************************************************************
-*/
-int MCGIDI_sampling_pdfsOfXGivenW_initialize( statusMessageReporting * /*smr*/, MCGIDI_pdfsOfXGivenW *dists ) {
+namespace MCGIDI {
 
-    memset( dists, 0, sizeof( MCGIDI_pdfsOfXGivenW ) );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampling_pdfsOfXGivenW_release( statusMessageReporting *smr, MCGIDI_pdfsOfXGivenW *dists ) {
+namespace Sampling {
 
-    int i;
+/* *********************************************************************************************************//**
+ * This function returns the index in *a_energies* where *a_energy* lies between the returned index and the next index.
+ * The returned index must lie between a_hashIndices[a_hashIndex] and a_hashIndices[a_hashIndex+1].
+ * If *a_energy* is below the domain of *a_energies*, 0 is returned. If *a_energy* is above the domain of *a_energies*, 
+ * the size of *a_energies* minus 2 is returned.
+ * The argument *a_energyFraction* the weight for the energy at the returned index with the next index getting weighting 1 minus
+ * *a_energyFraction*.
+ *
+ * @param a_hashIndex           [in]    The index in *a_hashIndices* where the index in *a_energy* must be bound by it and the next index in *a_hashIndex*.
+ * @param a_hashIndices         [in]    The list of hash indices.
+ * @param a_energies            [in]    The list of energies.
+ * @param a_energy              [in]    The energy whose index is requested.
+ * @param a_energyFraction      [in]    This represents the weighting to apply to the two bounding energies.
+ *
+ * @return                              The index bounding *a_energy* in the member *a_energies*.
+ ***********************************************************************************************************/
 
-    for( i = 0; i < dists->numberOfWs; i++ ) MCGIDI_sampling_pdfsOfX_release( smr, &(dists->dist[i]) );
-    smr_freeMemory( (void **) &(dists->Ws) );
-    smr_freeMemory( (void **) &(dists->dist) );
-    MCGIDI_sampling_pdfsOfXGivenW_initialize( smr, dists );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampling_pdfsOfX_release( statusMessageReporting * /*smr*/, MCGIDI_pdfOfX *dist ) {
+LUPI_HOST_DEVICE int evaluationForHashIndex( int a_hashIndex, Vector<int> const &a_hashIndices, double a_energy, 
+                Vector<double> const &a_energies, double *a_energyFraction ) {
 
-    smr_freeMemory( (void **) &(dist->Xs) );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampling_sampleX_from_pdfsOfXGivenW( MCGIDI_pdfsOfXGivenW *dists, MCGIDI_pdfsOfXGivenW_sampled *sampled, double rngValue ) {
+    *a_energyFraction = 1.0;
 
-    int iW, iX1;
+    if( a_energy <= a_energies[0] ) return( 0 );
+    if( a_energy >= a_energies.back( ) ) {
+        *a_energyFraction = 0.0;
+        return( (int) ( a_energies.size( ) - 2 ) );
+    }
 
-    sampled->interpolationWY = dists->interpolationWY;
-    sampled->interpolationXY = dists->interpolationXY;
-    iW = sampled->iW = MCGIDI_misc_binarySearch( dists->numberOfWs, dists->Ws, sampled->w );
-    sampled->frac = 1;
+    int index1 = a_hashIndices[a_hashIndex];
 
-    if( iW == -2 ) {            /* w < first value of Ws. */
-        return( MCGIDI_sampling_sampleX_from_pdfOfX( dists->dist, sampled, rngValue ) ); }
-    else if( iW == -1 ) {       /* w > last value of Ws. */
-        return( MCGIDI_sampling_sampleX_from_pdfOfX( &(dists->dist[dists->numberOfWs-1]), sampled, rngValue ) ); }
-    else {
-        if( MCGIDI_sampling_sampleX_from_pdfOfX( &(dists->dist[iW]), sampled, rngValue ) ) return( 1 );
-        if( dists->interpolationWY != ptwXY_interpolationFlat ) {    // ptwXY_interpolationOther was not allowed at startup.
-            double xSampled = sampled->x, frac = 1.;
+#ifdef MCGIDI_CrossSectionLinearSubSearch
+    while( a_energies[index1] > a_energy ) --index1;            // Make sure the calls gave the correct *a_hashIndex*.
+    while( a_energies[index1] < a_energy ) ++index1;
+    --index1;
+#endif
 
-            iX1 = sampled->iX1;
-            if( MCGIDI_sampling_sampleX_from_pdfOfX( &(dists->dist[iW+1]), sampled, rngValue ) ) return( 1 );
+#ifdef MCGIDI_CrossSectionBinarySubSearch
+    int index2 = a_hashIndices[a_hashIndex];
+    int index3 = (int) a_energies.size( ) - 1;
+    if( ( a_hashIndex + 1 ) < (int) a_hashIndices.size( ) ) index3 = a_hashIndices[a_hashIndex+1] + 1;
+    if( index3 == (int) a_energies.size( ) ) --index3;
+    if( index2 != index3 ) index2 = binarySearchVectorBounded( a_energy, a_energies, index2, index3, false );
+#endif
 
-            if( dists->interpolationWY == ptwXY_interpolationLinLin ) {
-                frac = ( dists->Ws[iW+1] - sampled->w ) / ( dists->Ws[iW+1] - dists->Ws[iW] );
-                sampled->x = frac * xSampled + ( 1 - frac ) * sampled->x; }
-            else if( dists->interpolationWY == ptwXY_interpolationLogLin ) {
-                frac = G4Log( dists->Ws[iW+1] / sampled->w ) / G4Log( dists->Ws[iW+1] / dists->Ws[iW] );
-                sampled->x = frac * xSampled + ( 1 - frac ) * sampled->x; }
-            else if( dists->interpolationWY == ptwXY_interpolationLinLog ) {
-                frac = ( dists->Ws[iW+1] - sampled->w ) / ( dists->Ws[iW+1] - dists->Ws[iW] );
-                sampled->x = xSampled * G4Pow::GetInstance()->powA( sampled->x / xSampled, frac ); }
-            else if( dists->interpolationWY == ptwXY_interpolationLogLog ) {
-                frac = G4Log( dists->Ws[iW+1] / sampled->w ) / G4Log( dists->Ws[iW+1] / dists->Ws[iW] );
-                sampled->x = xSampled * G4Pow::GetInstance()->powA( sampled->x / xSampled, frac ); }
-            else {  // This should never happen.
-                smr_setReportError2( sampled->smr, smr_unknownID, 1, "bad interpolation = %d\n", dists->interpolationWY );
-                return( 1 );
-            }
-
-            sampled->iX2 = sampled->iX1;
-            sampled->iX1 = iX1;
-            sampled->frac = frac;
+#ifdef MCGIDI_CrossSectionBinarySubSearch
+    #ifdef MCGIDI_CrossSectionLinearSubSearch
+        if( index1 != index2 ) {
+            std::cerr << "Help " << index1 << "  " << index2 << std::endl;
         }
-    }
+    #endif
+    index1 = index2;
+#endif
 
-    return( 0 );
+    *a_energyFraction = ( a_energies[index1+1] - a_energy ) / ( a_energies[index1+1] - a_energies[index1] );
+
+    return( index1 );
 }
-/*
-************************************************************
-*/
-int MCGIDI_sampling_sampleX_from_pdfOfX( MCGIDI_pdfOfX *dist, MCGIDI_pdfsOfXGivenW_sampled *sampled, double rngValue ) {
 
-    int iX;
-    double d1, d2, frac;
+namespace Upscatter {
 
-    iX = sampled->iX1 = MCGIDI_misc_binarySearch( dist->numberOfXs, dist->cdf, rngValue );
+/*! \class ModelDBRC_data
+ * This class is used to store the cross section for the elastic scattering upscatter model B with Doppler Broadening
+ * Rejection Correction (DBRC) with enum MCGIDI::Sampling::Upscatter::DBRC.
+ */
 
-    if( iX < 0 ) {                 /* This should never happen. */
-        smr_setReportError2( sampled->smr, smr_unknownID, 1, "bad iX = %d\n", iX );
-        sampled->x = dist->Xs[0];
-        return( 1 );
+/* *********************************************************************************************************//**
+ *
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE ModelDBRC_data::ModelDBRC_data( ) :
+        m_neutronMass( 0.0 ),
+        m_targetMass( ),
+        m_energies( ),
+        m_crossSections( ),
+        m_hashIndices( ) {
+
+}
+
+/* *********************************************************************************************************//**
+ *
+ ***********************************************************************************************************/
+
+LUPI_HOST ModelDBRC_data::ModelDBRC_data( double a_neutronMass, double a_targetMass, Vector<double> const  &a_energies, Vector<double> const &a_crossSections,
+                DomainHash const &a_domainHash ) :
+        m_neutronMass( a_neutronMass ),
+        m_targetMass( a_targetMass ),
+        m_energies( a_energies ),
+        m_crossSections( a_crossSections ),
+        m_hashIndices( a_domainHash.map( a_energies ) ),
+        m_domainHash( 4000, 1e-8, 10 ) {
+
+}
+
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE ModelDBRC_data::~ModelDBRC_data( ) {
+
+}
+
+/* *********************************************************************************************************//**
+ * This method returns the cross section evaluate at the projectile speed *a_speed*.
+ *
+ * @param a_temperature         [in]    The temperature of the target.
+ *
+ * @return                              The thermal speed of the target.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double ModelDBRC_data::evaluate( double a_energy ) {
+
+    double energyFraction;
+    int hashIndex = m_domainHash.index( a_energy );
+    int index = evaluationForHashIndex( hashIndex, m_hashIndices, a_energy, m_energies, &energyFraction );
+
+    return( energyFraction * m_crossSections[index] + ( 1.0 - energyFraction ) * m_crossSections[index+1] );
+}
+
+/* *********************************************************************************************************//**
+ * This method returns the thermal speed of the target with temperature *a_temperature*.
+ *
+ * @param a_temperature         [in]    The temperature of the target.
+ *
+ * @return                              The thermal speed of the target.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double ModelDBRC_data::targetThermalSpeed( double a_temperature ) {
+
+    return( sqrt( 2.0 * a_temperature / m_targetMass ) );
+}
+
+/* *********************************************************************************************************//**
+ * This method sets *a_crossSectionMin* and *a_crossSectionMax* to the minimum and maximum cross section values
+ * for the cross section in the window (*a_speed* - 4 * *a_targetThermalSpeed*) < speed < (*a_speed* + 4 * *a_targetThermalSpeed*).
+ * If (a_speed - 4 * a_targetThermalSpeed) is less than the lowest speed in the data, then it is replaced with the
+ * lowest speed.
+ *
+ * @param a_energy              [in]    The energy of the projectile (i.e., incident neutron).
+ * @param a_targetThermalSpeed  [in]    The thermal speed of the target.
+ *
+ * @return                              The maximum cross section in the search window.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double ModelDBRC_data::crossSectionMax( double a_energy, double a_targetThermalSpeed ) {
+
+    double crossSectionMax2 = 0.0;
+    double energyFraction;
+    double a_speed = MCGIDI_particleBeta( m_neutronMass, a_energy );
+
+    double speedMin = a_speed - 4 * a_targetThermalSpeed;
+    if( speedMin < 0.0 ) speedMin = 0.0;
+    double energyMin = 0.5 * m_neutronMass * speedMin * speedMin;
+    int hashIndex = m_domainHash.index( energyMin );
+    int indexMin = evaluationForHashIndex( hashIndex, m_hashIndices, energyMin, m_energies, &energyFraction );
+
+    double speedMax = a_speed + 4 * a_targetThermalSpeed;
+    double energyMax = 0.5 * m_neutronMass * speedMax * speedMax;
+    hashIndex = m_domainHash.index( energyMax );
+    int indexMax = evaluationForHashIndex( hashIndex, m_hashIndices, energyMax, m_energies, &energyFraction );
+    if( indexMax < static_cast<int>( m_energies.size( ) ) ) ++indexMax;
+
+    for( int index = indexMin; index < indexMax; ++index ) {
+        if( crossSectionMax2 < m_crossSections[index] ) crossSectionMax2 = m_crossSections[index];
     }
-    if( sampled->interpolationXY == ptwXY_interpolationFlat ) {
-        frac = ( dist->cdf[iX+1] - rngValue ) / ( dist->cdf[iX+1] - dist->cdf[iX] );
-        sampled->x = frac * dist->Xs[iX] + ( 1 - frac ) * dist->Xs[iX+1]; }
-    else {
-        double s1 = dist->pdf[iX+1] - dist->pdf[iX];
 
-        if( s1 == 0. ) {
-            if( dist->pdf[iX] == 0 ) {
-                sampled->x = dist->Xs[iX];
-                if( iX == 0 ) sampled->x = dist->Xs[1]; }
+    return( crossSectionMax2 );
+}
+
+/* *********************************************************************************************************//**
+ * This method serializes *this* for broadcasting as needed for MPI and GPUs. The method can count the number of required
+ * bytes, pack *this* or unpack *this* depending on *a_mode*.
+ *
+ * @param a_buffer              [in]    The buffer to read or write data to depending on *a_mode*.
+ * @param a_mode                [in]    Specifies the action of this method.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void ModelDBRC_data::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
+
+    DATA_MEMBER_DOUBLE( m_neutronMass, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_targetMass, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_DOUBLE( m_energies, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_DOUBLE( m_crossSections, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_hashIndices, a_buffer, a_mode );
+    m_domainHash.serialize( a_buffer, a_mode );
+}
+
+/* *********************************************************************************************************//**
+ * This method serializes data for a *ModelDBRC_data* instance.
+ *
+ * @param a_modelDBRC_data      [in/out]    A pointer to the **ModelDBRC_data** instance to serialize.
+ * @param a_buffer              [in]        The buffer to read or write data to depending on *a_mode*.
+ * @param a_mode                [in]        Specifies the action of this method.
+ *
+ * @returns                                 A pointer the serialized **ModelDBRC_data** instance.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE ModelDBRC_data *serializeModelDBRC_data( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode, ModelDBRC_data *a_modelDBRC_data ) {
+
+    bool haveDBRC = a_modelDBRC_data != nullptr;
+    DATA_MEMBER_CAST( haveDBRC, a_buffer, a_mode, bool );
+
+    if( haveDBRC ) {
+        if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+            if (a_buffer.m_placement != nullptr) {
+                a_modelDBRC_data = new(a_buffer.m_placement) ModelDBRC_data;
+                a_buffer.incrementPlacement( sizeof( ModelDBRC_data ) ); }
             else {
-                frac = ( dist->cdf[iX+1] - rngValue ) / ( dist->cdf[iX+1] - dist->cdf[iX] );
-                sampled->x = frac * dist->Xs[iX] + ( 1 - frac ) * dist->Xs[iX+1];
-            } }
-        else {
-            s1 = s1 / ( dist->Xs[iX+1] - dist->Xs[iX] );
-            d1 = rngValue - dist->cdf[iX];
-            d2 = dist->cdf[iX+1] - rngValue;
-            if( d2 > d1 ) {     /* Closer to iX. */
-                sampled->x = dist->Xs[iX] + ( std::sqrt( dist->pdf[iX] * dist->pdf[iX] + 2. * s1 * d1 ) - dist->pdf[iX] ) / s1; }
-            else {              /* Closer to iX + 1. */
-                sampled->x = dist->Xs[iX+1] - ( dist->pdf[iX+1] - std::sqrt( dist->pdf[iX+1] * dist->pdf[iX+1] - 2. * s1 * d2 ) ) / s1;
+                a_modelDBRC_data = new ModelDBRC_data;
             }
         }
-    }
 
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_sampling_doubleDistribution( statusMessageReporting *smr, MCGIDI_pdfsOfXGivenW *pdfOfWGivenV, MCGIDI_pdfsOfXGivenW *pdfOfXGivenVAndW,  
-        MCGIDI_quantitiesLookupModes &modes, MCGIDI_decaySamplingInfo *decaySamplingInfo ) {
-
-    int iV;
-    double e_in = modes.getProjectileEnergy( );
-    double randomW = decaySamplingInfo->rng( decaySamplingInfo->rngState ), randomX = decaySamplingInfo->rng( decaySamplingInfo->rngState );
-    MCGIDI_pdfsOfXGivenW_sampled sampledX, sampledW;
-    ptwXY_interpolation interpolationWY = pdfOfWGivenV->interpolationWY; 
-
-    sampledX.smr = smr;
-    sampledW.smr = smr;
-    sampledW.interpolationXY = pdfOfWGivenV->interpolationXY;
-    iV = MCGIDI_misc_binarySearch( pdfOfWGivenV->numberOfWs, pdfOfWGivenV->Ws, e_in );
-    if( iV < 0 ) {
-        interpolationWY = ptwXY_interpolationFlat;
-        if( iV == -2 ) {
-            iV = 0; }
-        else {
-            iV = pdfOfWGivenV->numberOfWs - 1;
+        if( a_mode == LUPI::DataBuffer::Mode::Memory ) {
+            a_buffer.incrementPlacement( sizeof( ModelDBRC_data ) );
         }
-        e_in = pdfOfWGivenV->Ws[iV];
+
+        a_modelDBRC_data->serialize( a_buffer, a_mode );
     }
-        
-    MCGIDI_sampling_sampleX_from_pdfOfX( &(pdfOfWGivenV->dist[iV]), &sampledW, randomW );
-    sampledX.w = sampledW.x;
-    MCGIDI_sampling_sampleX_from_pdfsOfXGivenW( &(pdfOfXGivenVAndW[iV]), &sampledX, randomX );
 
-    if( interpolationWY != ptwXY_interpolationFlat ) {
-        double x = sampledX.x, w = sampledW.x, Vs[3] = { e_in, pdfOfWGivenV->Ws[iV], pdfOfWGivenV->Ws[iV+1] };
-
-        MCGIDI_sampling_sampleX_from_pdfOfX( &(pdfOfWGivenV->dist[iV+1]), &sampledW, randomW );
-        sampledX.w = sampledW.x;
-        MCGIDI_sampling_sampleX_from_pdfsOfXGivenW( &(pdfOfXGivenVAndW[iV+1]), &sampledX, randomX );
-
-        MCGIDI_sampling_interpolationValues( smr, interpolationWY, Vs, w, sampledW.x, &sampledW.x );
-        MCGIDI_sampling_interpolationValues( smr, interpolationWY, Vs, x, sampledX.x, &sampledX.x );
-    }
-    
-    decaySamplingInfo->mu = sampledW.x;
-    decaySamplingInfo->Ep = sampledX.x;
-
-    return( 0 );
+    return( a_modelDBRC_data );
 }
+
+}
+
 /*
-************************************************************
+=========================================================
 */
-int MCGIDI_sampling_interpolationValues( statusMessageReporting *smr, ptwXY_interpolation interpolation, double *ws, double y1, double y2, double *y ) {
-
-    double frac;
-
-    if( interpolation == ptwXY_interpolationLinLin ) {
-        frac = ( ws[2] - ws[0] ) / ( ws[2] - ws[1] );
-        *y = frac * y1 + ( 1 - frac ) * y2; }
-    else if( interpolation == ptwXY_interpolationLogLin ) {
-        frac = G4Log( ws[2] / ws[0] ) / G4Log( ws[2] / ws[1] );
-        *y = frac * y1 + ( 1 - frac ) * y2; }
-    else if( interpolation == ptwXY_interpolationLinLog ) {
-        frac = ( ws[2] - ws[0] ) / ( ws[2] - ws[1] );
-        *y = y1 * G4Pow::GetInstance()->powA( y2 / y1, frac ); }
-    else if( interpolation == ptwXY_interpolationLogLog ) {
-        frac = G4Log( ws[2] / ws[0] ) / G4Log( ws[2] / ws[1] );
-        *y = y2 * G4Pow::GetInstance()->powA( y2 / y1, frac ); }
-    else {  // This should never happen.
-        smr_setReportError2( smr, smr_unknownID, 1, "bad interpolation = %d\n", interpolation );
-        return( 1 );
-    }
-    return( 0 );
+LUPI_HOST_DEVICE ClientRandomNumberGenerator::ClientRandomNumberGenerator( double (*a_generator)( void * ), void *a_state ) :
+        m_generator( a_generator ),
+        m_state( a_state ) {
 }
+
 /*
-************************************************************
+=========================================================
 */
-double MCGIDI_sampling_ptwXY_getValueAtX( ptwXYPoints *ptwXY, double x1 ) {
-
-    double y1;
-
-    if( ptwXY_getValueAtX( ptwXY, x1, &y1 ) == nfu_XOutsideDomain ) {
-        if( x1 < ptwXY_getXMin( ptwXY ) ) {
-            ptwXY_getValueAtX( ptwXY, ptwXY_getXMin( ptwXY ), &y1 ); }
-        else {
-            ptwXY_getValueAtX( ptwXY, ptwXY_getXMax( ptwXY ), &y1 );
-        }
-    }
-    return( y1 );
+LUPI_HOST_DEVICE ClientCodeRNGData::ClientCodeRNGData( double (*a_generator)( void * ), void *a_state ) :
+        ClientRandomNumberGenerator( a_generator, a_state ) {
 }
 
-#if defined __cplusplus
-}
-#endif
+/*
+=========================================================
+*/
+LUPI_HOST_DEVICE Input::Input( bool a_wantVelocity, Upscatter::Model a_upscatterModel ) :
+        m_wantVelocity( a_wantVelocity ),
+        m_upscatterModel( a_upscatterModel ) {
 
+}
+
+}           // End of namespace Sampling.
+
+}           // End of namespace MCGIDI.

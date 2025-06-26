@@ -80,7 +80,7 @@ int main(int argc, char** argv)
   G4ParticleHPManager::GetInstance()->SetNeglectDoppler(false);
   G4ParticleHPManager::GetInstance()->SetProduceFissionFragments(false);
   G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel(false);
-  G4ParticleHPManager::GetInstance()->SetUseNRESP71Model(false);
+  G4ParticleHPManager::GetInstance()->SetUseNRESP71Model(true);
 
   // initialize visualization
   G4VisManager* visManager = nullptr;

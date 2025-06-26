@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -58,7 +58,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -542,7 +542,7 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=9.250000s Real=9.293958s Sys=0.030000s
+  User=9.500000s Real=9.555803s Sys=0.040000s
 
 --------------------End of Global Run-----------------------
  The run had 1000000 events... write file : output.root - done
@@ -552,4 +552,4 @@ Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.023 MB
 ============================================================
 Execution completed
-User=10.120000s Real=10.552401s Sys=0.070000s
+User=10.420000s Real=10.803021s Sys=0.110000s

@@ -111,6 +111,18 @@ G4OpticalParametersMessenger::G4OpticalParametersMessenger(
 
   fDumpCmd = new G4UIcommand("/process/optical/printParameters", this);
   fDumpCmd->SetGuidance("Print all optical parameters.");
+  fDumpCmd->SetToBeBroadcasted(false);
+
+  fXRayCmd = new G4UIcommand("/process/optical/XRayModel", this);
+  fXRayCmd->SetGuidance("Add XRay model per G4LogicalVolume.");
+  fXRayCmd->SetGuidance("  lvName   : G4LogicalVolume name");
+  fXRayCmd->SetGuidance("  xrayType : X-Ray model type");
+  fXRayCmd->AvailableForStates(G4State_PreInit);
+  fXRayCmd->SetToBeBroadcasted(false);
+  auto lvName = new G4UIparameter("lvName",'s',false);
+  fXRayCmd->SetParameter(lvName);
+  auto xrayT = new G4UIparameter("xrayT",'s',false);
+  fXRayCmd->SetParameter(xrayT);
 
   // Cerenkov ////////////////////
   fCerenkovMaxPhotonsCmd =
@@ -291,6 +303,7 @@ G4OpticalParametersMessenger::~G4OpticalParametersMessenger()
   delete fActivateProcessCmd;
   delete fVerboseCmd;
   delete fDumpCmd;
+  delete fXRayCmd;
   delete fCerenkovMaxPhotonsCmd;
   delete fCerenkovMaxBetaChangeCmd;
   delete fCerenkovStackPhotonsCmd;
@@ -328,6 +341,31 @@ void G4OpticalParametersMessenger::SetNewValue(G4UIcommand* command,
     is >> pn >> flag;
     G4bool value = G4UIcommand::ConvertToBool(flag);
     params->SetProcessActivation(pn, value);
+  }
+  else if(command == fXRayCmd)
+  {
+    std::istringstream is(newValue.data());
+    G4String lv;
+    G4String sss;
+    is >> lv >> sss;
+    G4XRayModelType type;
+    if (sss == "CerenkovDefault")
+    {
+      type = kCerenkovDefault;
+    }
+    else if (sss == "ScintillationDefault")
+    {
+      type = kScintillationDefault;
+    }
+    else
+    {
+      G4cout << "G4OpticalParametersMessenger::SetNewValue: "
+	     << " fail for /process/optical/XRayModel \n"
+	     << "  type " << sss << " is unknown, no model assigned."
+	     << G4endl;
+      return;
+    }
+    params->SetActiveVolume(lv, type);
   }
   else if(command == fVerboseCmd)
   {

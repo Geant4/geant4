@@ -6,11 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-02-07 L. Pandola (emlowen-V11-02-08)
-- Fix residual Coverity defect on G4ShellData
+## 2025-05-25 V. Ivanchenko (emlowen-V11-03-03)
+- G4LivermorePhotoElectricModel - reorganisation of initialisation and data
+    destruction.
+- G4AtomicTransitionManager, G4UAtomicDeexcitation - use std::size_t and few
+    other cosmetic changes.
 
-## 2025-01-09 L. Pandola
-- Fix Coverity warnings in Penenelope models, G4ShellData, G4FluoData and
+## 2025-04-01 V. Ivanchenko (emlowen-V11-03-02)
+- G4hIonEffChargeSquare - fixed Coverity warning.
+
+## 2025-02-07 L. Pandola (emlowen-V11-03-01)
+- Fix residual Coverity defect on G4ShellData.
+
+## 2025-01-09 L. Pandola (emlowen-V11-03-00)
+- Fix Coverity warnings in Penenelope models, G4ShellData, G4FluoData and 
   G4AugerTransition
 
 ## 2024-12-02 A. Ribon (emlowen-V11-02-07)

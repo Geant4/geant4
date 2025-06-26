@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4LogicalSkinSurface inline implementation
+// Class G4LogicalSkinSurface inline implementation
 //
+// Author: John Apostolakis (CERN), 16 June 1997
 // ----------------------------------------------------------------------
 
 inline

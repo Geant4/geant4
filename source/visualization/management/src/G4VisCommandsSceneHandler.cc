@@ -224,8 +224,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
       break;  // Match found
     } else {
       const auto& nicknames = gs->GetNicknames();
-      for (std::size_t i = 0; i < nicknames.size(); ++i) {
-        const auto& nickname = nicknames[i];
+      for (const auto& nickname : nicknames) {
         if (G4StrUtil::icompare(graphicsSystem, nickname) == 0) {
           found = true;
           break;  // Match found
@@ -277,8 +276,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     G4String fallbackNickname = gsl[iGS]->GetNickname() + "_FALLBACK";
     for (iGS = 0; iGS < nSystems; iGS++) {
       const auto& nicknames = gsl[iGS]->GetNicknames();
-      for (std::size_t i = 0; i < nicknames.size(); ++i) {
-        const auto& nickname = nicknames[i];
+      for (const auto& nickname : nicknames) {
         if (G4StrUtil::icompare(fallbackNickname, nickname) == 0) {
           fallback = true;
           break;  // Match found
@@ -425,8 +423,8 @@ void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
 
   const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
   G4bool found = false;
-  for (std::size_t iSH = 0; iSH < list.size (); ++iSH) {
-    const G4String& iName = list [iSH] -> GetName ();
+  for (const auto* iSH : list) {
+    const G4String& iName = iSH -> GetName ();
     if (name != "all") {
       if (name != iName) continue;
     }
@@ -437,10 +435,10 @@ void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
     else {
       G4cout << "           ";
     }
-    G4cout << " scene handler \"" << list [iSH] -> GetName () << "\""
-	   << " (" << list [iSH] -> GetGraphicsSystem () -> GetName () << ")";
+    G4cout << " scene handler \"" << iSH -> GetName () << "\""
+	   << " (" << iSH -> GetGraphicsSystem () -> GetName () << ")";
     if (verbosity >= G4VisManager::parameters) {
-      G4cout << "\n  " << *(list [iSH]);
+      G4cout << "\n  " << *iSH;
     }
     G4cout << G4endl;
   }

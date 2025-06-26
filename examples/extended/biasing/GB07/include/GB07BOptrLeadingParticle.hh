@@ -39,27 +39,27 @@ class GB07BOptrLeadingParticle : public G4VBiasingOperator
 {
   public:
     GB07BOptrLeadingParticle(G4String operatorName = "LeadingParticleBiasingOperator");
-    virtual ~GB07BOptrLeadingParticle();
+    ~GB07BOptrLeadingParticle() override;
 
   private:
     // -----------------------------
     // -- Mandatory from base class:
     // -----------------------------
     // -- Unsused:
-    virtual G4VBiasingOperation*
-    ProposeNonPhysicsBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(const G4Track*,
+                                                           const G4BiasingProcessInterface*) final
     {
       return nullptr;
     }
     // -- Unused:
-    virtual G4VBiasingOperation*
-    ProposeOccurenceBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) final
+    G4VBiasingOperation* ProposeOccurenceBiasingOperation(const G4Track*,
+                                                          const G4BiasingProcessInterface*) final
     {
       return nullptr;
     }
     // -- Used:
     // -- Will return the biasing operation at the final state generation stage
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeFinalStateBiasingOperation(const G4Track* track,
                                       const G4BiasingProcessInterface* callingProcess) final;
 
@@ -67,8 +67,8 @@ class GB07BOptrLeadingParticle : public G4VBiasingOperator
     // ------------------------------------
     // -- Optional methods from base class:
     // ------------------------------------
-    virtual void StartRun() final;
-    virtual void StartTracking(const G4Track* track) final;
+    void StartRun() final;
+    void StartTracking(const G4Track* track) final;
 
   private:
     // -- The leading particle biasing operation that will actually

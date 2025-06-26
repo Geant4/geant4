@@ -39,7 +39,7 @@
 #include "G4Exp.hh"
 
 G4VEmissionProbability::G4VEmissionProbability(G4int Z, G4int A)
-  : pVerbose(1), theZ(Z), theA(A), elimit(CLHEP::MeV)
+  : pVerbose(1), theZ(Z), theA(A)
 {
   pNuclearLevelData = G4NuclearLevelData::GetInstance(); 
   pG4pow = G4Pow::GetInstance();
@@ -53,14 +53,14 @@ void G4VEmissionProbability::Initialise()
   G4DeexPrecoParameters* param = pNuclearLevelData->GetParameters();
   pVerbose = param->GetVerbose();
   fFD = param->GetDiscreteExcitationFlag();
+  fMaxLifeTime = param->GetMaxLifeTime();
   pTolerance = param->GetMinExcitation();
   pWidth = param->GetNuclearLevelWidth();
 }
 
-void G4VEmissionProbability::ResetIntegrator(size_t, G4double de, G4double eps)
+void G4VEmissionProbability::ResetIntegrator(G4double de, G4double eps)
 {
-  if(de > 0.0)  { elimit = de; }
-  if(eps > 0.0) { accuracy = eps; }
+  InitialiseIntegrator(eps, 0.25, 1.10, de, 0.1*CLHEP::MeV, 2*CLHEP::MeV);
 }
 
 G4double G4VEmissionProbability::EmissionProbability(const G4Fragment&, G4double)
@@ -78,156 +78,32 @@ G4double G4VEmissionProbability::IntegrateProbability(G4double elow,
                                                       G4double cb)
 {
   pProbability = 0.0;
-  if(elow >= ehigh) { return pProbability; }
+  if (elow >= ehigh) { return pProbability; }
 
-  emin = elow;
-  emax = ehigh;
   eCoulomb = cb;
+  pProbability = ComputeIntegral(elow, ehigh);
 
-  const G4double edeltamin = 0.1*CLHEP::MeV;
-  const G4double edeltamax = 2*CLHEP::MeV;
-  G4double edelta = std::min(std::min(elimit, edeltamax), edeltamin);
-  G4double xbin = (emax - emin)/edelta + 1.0;
-  G4int ibin = std::max((G4int)xbin, 4);
-
-  // providing smart binning 
-  G4int nbin = ibin*5;
-  edelta = (emax - emin)/ibin;
-
-  G4double x(emin), y(0.0);
-  G4double edelmicro = edelta*0.02;
-  probmax = ComputeProbability(x + edelmicro, eCoulomb);
-  G4double problast = probmax;
-  if(pVerbose > 1) {
-    G4cout << "### G4VEmissionProbability::IntegrateProbability: "
-	   << "probmax=" << probmax << " Emin=" << emin
-	   << " Emax=" << emax << " QB=" << cb << " nbin=" << nbin 
-	   << G4endl;
-  }
-  fE1 = fE2 = fP2 = 0.0;
-  G4double emax0 = emax - edelmicro; 
-  G4bool endpoint = false;
-  for(G4int i=0; i<nbin; ++i) {
-    x += edelta;
-    if(x >= emax0) { 
-      x = emax0;
-      endpoint = true;
-    }
-    y = ComputeProbability(x, eCoulomb);
-    if(pVerbose > 2) { 
-      G4cout << "    " << i << ".  E= " << x << "  prob= " << y
-	     << " Edel= " << edelta << G4endl;
-    } 
-    if(y >= probmax) {
-      probmax = y;
-    } else if(0.0 == fE1 && 2*y < probmax) {
-      fE1 = x;
-    }
-    
-    G4double del = (y + problast)*edelta*0.5;
-    pProbability += del;
-    // end of the loop
-    if(del < accuracy*pProbability || endpoint) { break; }
-    problast = y;
-
-    // smart step definition
-    if(del != pProbability && del > 0.8*pProbability && 
-       0.7*edelta > edeltamin) { 
-      edelta *= 0.7;
-    } else if(del < 0.1*pProbability && 1.5*edelta < edeltamax) { 
-      edelta *= 1.5;
-    }
-  }
-  if(fE1 > emin && fE1 < emax) {
-    fE2 = std::max(0.5*(fE1 + emax), emax - edelta);
-    fP2 = 2*ComputeProbability(fE2, eCoulomb);
-  }
-
-  if(pVerbose > 1) { 
-    G4cout << " Probability= " << pProbability << " probmax= " 
-           << probmax << " emin=" << emin << " emax=" << emax 
-	   << " E1=" << fE1 << " E2=" << fE2 << G4endl; 
+  if (pVerbose > 1) { 
+    G4cout << "G4VEmissionProbability::IntegrateProbability Probability="
+	   << pProbability << " Z=" << theZ << " A=" << theA << G4endl; 
   }
   return pProbability;
 }
 
 G4double G4VEmissionProbability::SampleEnergy()
 {
-  static const G4double fact = 1.05;
-  static const G4double alim = 0.05;
-  static const G4double blim = 20.;
-  probmax *= fact;
-
-  // two regions with flat and exponential majorant 
-  G4double del = emax - emin;
-  G4double p1 = 1.0;
-  G4double p2 = 0.0;
-  G4double a0 = 0.0;
-  G4double a1 = 1.0;
-  G4double x;
-  if(fE1 > 0.0 && fP2 > 0.0 && fP2 < 0.5*probmax) {
-    a0 = G4Log(probmax/fP2)/(fE2 - fE1);
-    del= fE1 - emin;
-    p1 = del;
-    x = a0*(emax - fE1);
-    if(x < blim) {
-      a1 = (x > alim) ? 1.0 - G4Exp(-x) : x*(1.0 - 0.5*x);
-    }
-    p2 = a1/a0;
-    p1 /= (p1 + p2);
-    p2 = 1.0 - p1;
-  }  
-
-  if(pVerbose > 1) {
-    G4cout << "### G4VEmissionProbability::SampleEnergy: " 
-	   << " Emin= " << emin << " Emax= " << emax 
-           << "/n    E1=" << fE1 << " p1=" << p1 
-	   << " probmax=" << probmax << " P2=" << fP2 << G4endl;
-  }
-
-  CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
-  const G4int nmax = 1000;
-  G4double ekin, gg, gmax;
-  G4int n = 0;
-  do {
-    ++n;
-    G4double q = rndm->flat();
-    if (p2 == 0.0) {
-      gmax = probmax;
-      ekin = del*q + emin;
-    } else if (q <= p1) {
-      gmax = probmax;
-      ekin = del*q/p1 + emin;
-    } else {
-      ekin = fE1 - G4Log(1.0 - (q - p1)*a1/p2)/a0;
-      x = a0*(ekin - fE1);
-      gmax = fP2;
-      if(x < blim) {
-	gmax = probmax*((x > alim) ? G4Exp(-x) : 1.0 - x*(1.0 - 0.5*x));
-      }
-    }
-    gg = ComputeProbability(ekin, eCoulomb);
-    if(pVerbose > 2) {
-      G4cout << "    " << n
-	     << ". prob= " << gg << " probmax= " << probmax
-	     << " Ekin= " << ekin << G4endl;
-    }
-    if((gg > gmax || n > nmax) && pVerbose > 1) {
-      G4cout << "### G4VEmissionProbability::SampleEnergy for Z= " << theZ 
-             << " A= " << theA << " Eex(MeV)=" << fExc << " p1=" << p1
-             << "\n    Warning n= " << n
-	     << " prob/gmax=" << gg/gmax 
-	     << " prob=" << gg << " gmax=" << gmax << " probmax=" << probmax 
-	     << "\n    Ekin= " << ekin << " Emin= " << emin
-	     << " Emax= " << emax << G4endl;
-    }
-  } while(gmax*rndm->flat() > gg && n < nmax);
+  G4double ekin = SampleValue();
   G4double enew = FindRecoilExcitation(ekin);
-  if(pVerbose > 1) {
-    G4cout << "### SampleEnergy: Efinal= " 
+  if (pVerbose > 1) {
+    G4cout << "### G4VEmissionProbability::SampleEnergy: Efin(MeV)= " 
 	   << enew << " E=" << ekin << "  Eexc=" << fExcRes << G4endl;
   }
   return enew;
+}
+
+G4double G4VEmissionProbability::ProbabilityDensityFunction(G4double e)
+{
+  return ComputeProbability(e, eCoulomb);
 }
 
 G4double G4VEmissionProbability::FindRecoilExcitation(const G4double e)
@@ -241,7 +117,7 @@ G4double G4VEmissionProbability::FindRecoilExcitation(const G4double e)
 
   fExcRes = mres - pResMass;
 
-  if(pVerbose > 1) {
+  if (pVerbose > 1) {
     G4cout << "### FindRecoilExcitation for resZ= " 
            << resZ << " resA= " << resA 
            << " evaporated Z= " << theZ << " A= " << theA
@@ -253,7 +129,7 @@ G4double G4VEmissionProbability::FindRecoilExcitation(const G4double e)
     fExcRes = 0.0;
     return std::max(0.5*(m02 + m12 - m22)/pMass - mass, 0.0);
   }
-  if(!fFD) { return e; }
+  if (!fFD) { return e; }
  
   // select final state excitation
   auto lManager = pNuclearLevelData->GetLevelManager(resZ, resA);
@@ -264,20 +140,19 @@ G4double G4VEmissionProbability::FindRecoilExcitation(const G4double e)
 
   // find level
   std::size_t idx = lManager->NearestLevelIndex(fExcRes);
-  auto level = lManager->GetLevel(idx); 
+  auto level = lManager->GetLevel(idx);
+  G4double ltime = level->GetTimeGamma();
+  G4double elevel = lManager->LevelEnergy(idx);
 
-  // unstable level
-  if (level->GetTimeGamma() == 0.0) { return e; }
+  G4double efinal = e;
 
   // is possible to use level energy?
-  G4double elevel = lManager->LevelEnergy(idx);
-  if (std::abs(elevel - fExcRes) > pWidth || pMass < mass + pResMass + elevel) { 
-    return e;
+  if ((idx <= 1 || std::abs(elevel - fExcRes) <= pWidth || ltime >= fMaxLifeTime) &&
+      (pMass >= mass + pResMass + elevel)) { 
+    G4double massR = pResMass + elevel;
+    G4double mr2 = massR*massR;
+    fExcRes = elevel;
+    efinal = std::max(0.5*(m02 + m12 - mr2)/pMass - mass, 0.0);
   }
-
-  // long-lived level
-  G4double massR = pResMass + elevel;
-  G4double mr2 = massR*massR;
-  fExcRes = elevel;
-  return std::max(0.5*(m02 + m12 - mr2)/pMass - mass, 0.0);
+  return efinal;
 }

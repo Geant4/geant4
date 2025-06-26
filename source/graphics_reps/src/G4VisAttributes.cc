@@ -274,6 +274,7 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a)
 
 G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
 
+  // clang-format off
   if (
       (fVisible            != a.fVisible)            ||
       (fDaughtersInvisible != a.fDaughtersInvisible) ||
@@ -289,6 +290,7 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fAttDefs            != a.fAttDefs)
       )
     return true;
+  // clang-format on
 
   if (fForceDrawingStyle) {
     if (fForcedStyle != a.fForcedStyle) return true;

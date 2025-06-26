@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -34,23 +34,24 @@ Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
+  RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLStoredQt (OGLSQt, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
   OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
+  RayTracerX (RTX)
+  RayTracerQt (RTQt)
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
-  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
@@ -121,7 +122,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -353,7 +354,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
-##### Create analysis manager   0x189c620
+##### Create analysis manager   0x1318cd0
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -365,32 +366,31 @@ Si
 Reading TCS file
 Elastic Total Cross file : Elastic/elsepa_elastic_cross_e_Si
 loaddata : Elastic/elsepa_elastic_cross_e_Si
-Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.6.1/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
+Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.7/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
 MicroElasticModel, Material 2 / 2 : G4_Si
 Si
 Reading TCS file
 Elastic Total Cross file : Elastic/elsepa_elastic_cross_e_Si
 loaddata : Elastic/elsepa_elastic_cross_e_Si
-Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.6.1/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
+Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.7/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.150000s Real=0.152436s Sys=0.000000s
+  User=0.260000s Real=0.277049s Sys=0.010000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done
 Number and type of particles created outside region "Target" :
-N e- : 3
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 3739
+N e- : 1710
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x184d020
-UserPhysicsList deleted 0x1862f30
-UserActionInitialization deleted 0x1895b40
+UserDetectorConstruction deleted 0x12c96d0
+UserPhysicsList deleted 0x12dfa00
+UserActionInitialization deleted 0x13121f0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -408,12 +408,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.024 MB
-Pool ID '7G4Track', size : 0.0481 MB
+Pool ID '17G4DynamicParticle', size : 0.0154 MB
+Pool ID '7G4Track', size : 0.0308 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.086 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.06 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

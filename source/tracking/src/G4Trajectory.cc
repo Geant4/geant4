@@ -76,6 +76,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
 }
 
 G4Trajectory::G4Trajectory(G4Trajectory& right)
+: G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;

@@ -6,9 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-04-12 John Allison (raytracer-V11-02-00)
+## 2025-04-12 John Allison (raytracer-V11-03-01)
 - G4RayTracerXViewer.cc:
   - Use G4TheMTRayTracer.
+
+## 2025-04-04 John Allison (raytracer-V11-03-00)
+- Coworks: visman-V11-03-07, cmake-V11-03-02.
+- Introduce RayTracerQt.
+  - 6 new files and modification of sources.cmake.
+  - Uses multithreading tracer, G4TheMTRayTracer. 
+- Other changes (improve Ray Tracer experience):
+  - G4RayTracerViewer:
+    - Use G4Timer to estimate fKernelVisitElapsedTimeSeconds.
+      - Normally it's ProcessView() that takes the time, but for RayTracer it's Trace().
+      - Long elapsed times (currently >0.1 s) inhibit fancy options such as zoom in on
+        and twinkle that require multiple rebuilds.
+  - G4VRTScanner (and inherited classes):
+    - Remove misleading and un-used methods: GetGSName() and GetGSNickName().
+  - Introduce nicknames (long names still work):
+    - RT (for RayTracer)
+    - RTX (for RayTracerX)
+    - RTQt (for RayTracerQt)
+- With multithreading, image construction is quite fast. Maybe 1000x1000 could be
+  the default.
+  - Use /vis/open RTqt 1000x1000
+  - (Currently the default is 600x600).
+- Most vis commands work fine:
+  - /vis/viewer/set/viewpoint..., /vis/viewer/zoom, vis/viewer/centreAndZoomInOn,...
+- Even some of the scene tree actions work. E.g:
+  - Select you chosen volume, right click, and click on centreAndZoomInOn.
 
 ## 2023-03-22 Ben Morgan (raytracer-V11-01-01)
 - Export public compile definitions to indicate availablity of specific drivers. Moves to

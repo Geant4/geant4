@@ -6,7 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-02-25 John Apostolakis (run-V11-02-27)
+## 2025-06-10 Seth R Johnson (run-V11-03-01)
+- Clear surfaces in G4RunManager::ReinitializeGeometry
+
+## 2025-02-25 John Apostolakis (run-V11-03-00)
 - Correct when G4WorkerRunManager's InitializeGeometry calls G4GeometryManager's 
   UndertakeOptimisation to contribute to parallel voxelisation.
 

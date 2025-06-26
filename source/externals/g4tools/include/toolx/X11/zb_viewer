@@ -24,30 +24,32 @@ private:
   public:
     virtual bool dispatch(XEvent& a_event) {
       if(parent::dispatch(a_event)) return true;
+      bool shift_modifier = a_event.xkey.state & ShiftMask;
+      bool control_modifier = a_event.xkey.state & ControlMask;
       if(a_event.type==ButtonPress && a_event.xbutton.button==1) {
         if(!m_viewer.device_interactor()) return false;
-        tools::sg::mouse_down_event event(a_event.xbutton.x,a_event.xbutton.y);
+        tools::sg::mouse_down_event event(a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);
         m_viewer.device_interactor()->mouse_press(event);
         return true;
       } else if(a_event.type==ButtonRelease && a_event.xbutton.button==1) {
         if(!m_viewer.device_interactor()) return false;
-        tools::sg::mouse_up_event event(a_event.xbutton.x,a_event.xbutton.y);
+        tools::sg::mouse_up_event event(a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);
         m_viewer.device_interactor()->mouse_release(event);
         return true;
       } else if(a_event.type==MotionNotify) {
         if(!m_viewer.device_interactor()) return false;
         if((a_event.xmotion.state & Button1MotionMask)==Button1MotionMask) {
-          tools::sg::mouse_move_event event(a_event.xmotion.x,a_event.xmotion.y,0,0,false);
+          tools::sg::mouse_move_event event(a_event.xmotion.x,a_event.xmotion.y,shift_modifier,control_modifier,0,0,false);
           m_viewer.device_interactor()->mouse_move(event);
         }
       } else if((a_event.type==ButtonPress)&&(a_event.xbutton.button==4)) { // mouse scrollwheel down :
         if(!m_viewer.device_interactor()) return false;
-        tools::sg::wheel_rotate_event event(8);  //8=cooking.
+        tools::sg::wheel_rotate_event event(8,a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);  //8=cooking.
         m_viewer.device_interactor()->wheel_rotate(event);
         return true;
       } else if((a_event.type==ButtonPress)&&(a_event.xbutton.button==5)) { // mouse scrollwheel up :
         if(!m_viewer.device_interactor()) return false;
-        tools::sg::wheel_rotate_event event(-8);  //8=cooking.
+        tools::sg::wheel_rotate_event event(-8,a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);  //8=cooking.
         m_viewer.device_interactor()->wheel_rotate(event);
         return true;
       }
@@ -133,6 +135,19 @@ public:
     if(!render(get_rgbas,false)) return;
     put_buffer(m_win,m_ww,m_wh,tools::vec_data(m_out_buffer));
     m_out_buffer.clear();
+  }
+
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    if(!m_win) {a_w = 0;a_h = 0;return false;}
+    int width,height;
+    if(!m_session.window_size(m_win,width,height)) {a_w = 0;a_h = 0;return false;}
+    a_w = (unsigned int)width;
+    a_h = (unsigned int)height;
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
   }
 
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;}

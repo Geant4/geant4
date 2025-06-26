@@ -59,32 +59,21 @@ G4LENDManager::G4LENDManager()
 
    //printBanner();
 
-   G4String xmcf;
-   G4String xmcf_gamma;
-   G4String xmcf_p;
-   G4String xmcf_d;
-   G4String xmcf_t;
-   G4String xmcf_he3;
-   G4String xmcf_a;
-   if( G4FindDataDir("G4LENDDATA") == NULL ) {
+   const char *dataDir = G4FindDataDir("G4LENDDATA");
+   if( dataDir == NULL ) {
       throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4LENDDATA to point to the LEND files." );
-   } else {
-      xmcf = G4FindDataDir("G4LENDDATA");
-      //xmcf += "/xmcf.n_1.map";
-      xmcf += "/neutrons.map";
-      xmcf_gamma = G4FindDataDir("G4LENDDATA");
-      xmcf_gamma += "/gammas.map";
-      xmcf_p = G4FindDataDir("G4LENDDATA");
-      xmcf_p += "/protons.map";
-      xmcf_d = G4FindDataDir("G4LENDDATA");
-      xmcf_d += "/deuterons.map";
-      xmcf_t = G4FindDataDir("G4LENDDATA");
-      xmcf_t += "/tritons.map";
-      xmcf_he3 = G4FindDataDir("G4LENDDATA");
-      xmcf_he3 += "/He3s.map";
-      xmcf_a = G4FindDataDir("G4LENDDATA");
-      xmcf_a += "/alphas.map";
    }
+
+   std::string G4LENDDATA(dataDir);
+   G4GIDI_initialize(G4LENDDATA);
+
+   G4String xmcf = G4LENDDATA + "/neutrons.map";
+   G4String xmcf_gamma = G4LENDDATA + "/gammas.map";
+   G4String xmcf_p = G4LENDDATA + "/protons.map";
+   G4String xmcf_d = G4LENDDATA + "/deuterons.map";
+   G4String xmcf_t = G4LENDDATA + "/tritons.map";
+   G4String xmcf_h = G4LENDDATA + "/helions.map";
+   G4String xmcf_a = G4LENDDATA + "/alphas.map";
 
 //Example of xmcf.n_1.map
 //<map>
@@ -118,10 +107,10 @@ G4LENDManager::G4LENDManager()
    } else  {
       aFile.close(); 
    }
-   aFile.open( xmcf_he3.c_str() );
+   aFile.open( xmcf_h.c_str() );
    if ( aFile.good() ) {
       aFile.close(); 
-      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4He3::He3() , new G4GIDI( 5 , xmcf_he3 ) ) );
+      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4He3::He3() , new G4GIDI( 5 , xmcf_h ) ) );
    } else  {
       aFile.close(); 
    }

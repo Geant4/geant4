@@ -45,12 +45,12 @@ endif()
 # ONNX
 if(INFERENCE_LIB)
   find_package(OnnxRuntime QUIET)
-  find_package(CUDA QUIET)
+  find_package(CUDAToolkit QUIET)
    if(OnnxRuntime_FOUND)
        message("ONNX Runtime inference library found.")
    	   add_definitions(-DUSE_INFERENCE)
    	   add_definitions(-DUSE_INFERENCE_ONNX)
-      if(CUDA_FOUND)
+      if(CUDAToolkit_FOUND)
         message("Cuda found.")
         add_definitions(-DUSE_CUDA)
       else()
@@ -98,13 +98,12 @@ if(OnnxRuntime_FOUND)
    target_include_directories(examplePar04 PUBLIC ${OnnxRuntime_INCLUDE_DIR})
    target_link_libraries(examplePar04 ${OnnxRuntime_LIBRARY})
     # Cuda_FOUND
-    if(CUDA_FOUND)
-      target_include_directories(examplePar04 PUBLIC ${CUDA_INCLUDE_DIRS})
-      include_directories(${CUDA_INCLUDE_DIRS})
-      target_link_libraries(examplePar04 ${CUDA_LIBRARIES})     
+    if(CUDAToolkit_FOUND)
+      target_link_libraries(examplePar04 CUDA::cudart)     
     endif()
    # Depend on data for runtime
-   add_dependencies(examplePar04 examplePar04onnxdata)
+   add_dependencies(examplePar04 examplePar04onnxVAEdata)
+   add_dependencies(examplePar04 examplePar04onnxCaloDiTdata)
 endif()
 
 if(Torch_FOUND)
@@ -112,7 +111,8 @@ if(Torch_FOUND)
    target_link_libraries(examplePar04 ${TORCH_LIBRARIES})
    message(STATUS "${TORCH_LIBRARIES}")
    # Depend on data for runtime
-   add_dependencies(examplePar04 examplePar04torchdata)
+   add_dependencies(examplePar04 examplePar04torchVAEdata)
+   add_dependencies(examplePar04 examplePar04torchCaloDiTdata)
 endif()
 
 #----------------------------------------------------------------------------
@@ -121,16 +121,16 @@ endif()
 # relies on these scripts being in the current working directory.
 #
 set(Par04_SCRIPTS
-    examplePar04.mac vis.mac common_settings.mac
+    examplePar04.mac vis.mac common_settings_lowgran.mac common_settings_highgran.mac common_settings_vis.mac common_settings_postInit.mac
   )
 if(lwtnn_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn.mac vis_lwtnn.mac)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn_vae.mac vis_lwtnn_vae.mac)
 endif()
 if(OnnxRuntime_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_onnx.mac vis_onnx.mac)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_onnx_calodit.mac examplePar04_onnx_vae.mac vis_onnx_calodit.mac vis_onnx_vae.mac)
 endif()
 if(Torch_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_torch.mac vis_torch.mac)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_torch_calodit.mac examplePar04_torch_vae.mac vis_torch_calodit.mac vis_torch_vae.mac)
 endif()
 
 foreach(_script ${Par04_SCRIPTS})
@@ -158,7 +158,7 @@ if(lwtnn_FOUND)
     )
 endif()
 if(OnnxRuntime_FOUND)
-  ExternalProject_Add(examplePar04onnxdata
+  ExternalProject_Add(examplePar04onnxVAEdata
     DOWNLOAD_DIR ${PROJECT_BINARY_DIR}/MLModels
     URL https://cern.ch/geant4-data/datasets/examples/extended/parameterisations/Par04/Generator.onnx
     URL_MD5 cacd07c24b704decca28de990850287e
@@ -167,12 +167,30 @@ if(OnnxRuntime_FOUND)
     INSTALL_COMMAND ""
     DOWNLOAD_NO_EXTRACT true
     )
+  ExternalProject_Add(examplePar04onnxCaloDiTdata
+    DOWNLOAD_DIR ${PROJECT_BINARY_DIR}/MLModels
+    URL https://cern.ch/geant4-data/datasets/examples/extended/parameterisations/Par04/cd.onnx
+    URL_MD5 eb0fa86fc53d9baf72414410a4a9e3c9
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    DOWNLOAD_NO_EXTRACT true
+    )
 endif()
 if(Torch_FOUND)
-  ExternalProject_Add(examplePar04torchdata
+  ExternalProject_Add(examplePar04torchVAEdata
     DOWNLOAD_DIR ${PROJECT_BINARY_DIR}/MLModels
     URL https://cern.ch/geant4-data/datasets/examples/extended/parameterisations/Par04/Generator.pt
     URL_MD5 a43337f7f976e976f1127015f2ba61db
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    DOWNLOAD_NO_EXTRACT true
+    )
+  ExternalProject_Add(examplePar04torchCaloDiTdata
+    DOWNLOAD_DIR ${PROJECT_BINARY_DIR}/MLModels
+    URL https://cern.ch/geant4-data/datasets/examples/extended/parameterisations/Par04/cd_cpu.pt
+    URL_MD5 c812651390bfc2a4f4a88b3c7f945c56
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""

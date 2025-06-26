@@ -47,11 +47,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::DetectorConstruction()
+DetectorConstruction::DetectorConstruction(G4int vis)
   : fpDNAGeometry(new DNAGeometry()), fpDetectorMessenger(new DetectorMessenger(this))
 {
-  G4bool useParallelPhysicsWorld = false;
-  if (useParallelPhysicsWorld) {
+  if (vis == 1) {
     RegisterParallelWorld(fpDNAGeometry->GetDNAWorld());
   }
 }

@@ -33,9 +33,9 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "G4AnalysisManager.hh"
-#include "G4ThreeVector.hh"
 #include "G4UserRunAction.hh"
+#include "G4ThreeVector.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

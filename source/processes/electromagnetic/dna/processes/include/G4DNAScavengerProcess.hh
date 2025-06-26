@@ -28,6 +28,8 @@
 #define G4DNASCAVENGERPROCESS_HH
 
 #include "G4VITProcess.hh"
+#include "G4MoleculeTable.hh"
+
 class G4DNAMolecularReactionData;
 class G4MolecularConfiguration;
 class G4DNABoundingBox;
@@ -100,5 +102,8 @@ class G4DNAScavengerProcess : public G4VITProcess
   MolType fpMaterialConf;
   const G4DNABoundingBox* fpBoundingBox;
   G4DNAScavengerMaterial* fpScavengerMaterial{nullptr};
+  MolType fH3Op = G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
+  MolType fH2O = G4MoleculeTable::Instance()->GetConfiguration("H2O");
+  MolType fHOm = G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
 };
 #endif  // FLASH1_G4DNASCAVENGERPROCESS_HH

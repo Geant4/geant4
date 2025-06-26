@@ -170,7 +170,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
     DeactivateHadronProcesses(prot, emaxIonDNA, emax, reg);
     G4EmDNABuilder::ConstructDNAProtonPhysics(eminBorn, emaxIonDNA, opt, fast, st, reg);
     DeactivateIonProcesses(gion, emaxIonDNA, emax, reg);
-    G4EmDNABuilder::ConstructDNAIonPhysics(emaxIonDNA, st, reg);
+    G4EmDNABuilder::ConstructDNAIonPhysics(emaxIonDNA, opt, reg);
     DeactivateIonProcesses(alpha2, emaxLightIonDNA, emax, reg);
     G4EmDNABuilder::ConstructDNALightIonPhysics(alpha2, 2, opt, emaxLightIonDNA, fast, st, reg);
     DeactivateHadronProcesses(alpha1, emaxLightIonDNA, emax, reg);

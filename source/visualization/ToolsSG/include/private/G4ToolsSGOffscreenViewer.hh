@@ -75,11 +75,6 @@ public:
     fSGViewer->set_do_transparency(true);
     fSGViewer->set_top_to_bottom(false); //if using tools::fpng, tools::toojpeg.
   }    
-  virtual void SetView() {
-    //::printf("debug : G4ToolsSGOffscreenViewer::SetView\n");
-    fVP.SetGlobalMarkerScale(1);  //WARNING: for __APPLE__, the G4ToolsSGQtViewer set it to 2.
-    parent::SetView();
-  }
 
   virtual void DrawView() {
     if (!fNeedKernelVisit) KernelVisitDecision();

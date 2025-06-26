@@ -1,0 +1,55 @@
+# MT mode
+/run/numberOfThreads 8
+#
+# Verbosity
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+# Set material
+/spower/det/setMat G4_WATER
+#
+# Set sphere radius
+/spower/det/setRadius 1 m
+#
+# Set physics constructor
+#/spower/phys/addPhysics  dna_stat
+/spower/phys/addPhysics  dna_stat_opt2
+#/spower/phys/addPhysics  dna_stat_opt4
+#/spower/phys/addPhysics  dna_stat_opt6
+#
+# Run initialization
+/run/initialize
+#
+####################################################
+# ACTIVATE ROOT OUTPUT FILE CREATION FOR NTUPLE id=0
+/analysis/ntuple/setActivation 0 true
+####################################################
+#
+# Incident particle type
+/gun/particle proton
+#### Example of ion
+#/gun/particle ion
+#/gun/ion 3 7
+#
+############################################
+# PROTON CASE: ACTIVATION OF IONISATION ONLY
+#
+/process/inactivate proton_G4DNAElastic
+/process/inactivate proton_G4DNAExcitation
+/process/inactivate proton_G4DNAChargeDecrease
+#
+/process/inactivate e-_G4DNAElectronSolvation
+/process/inactivate e-_G4DNAElastic
+/process/inactivate e-_G4DNAExcitation
+/process/inactivate e-_G4DNAIonisation
+/process/inactivate e-_G4DNAAttachment
+/process/inactivate e-_G4DNAVibExcitation
+############################################
+#
+# Incident particle energy
+/gun/energy 100 keV
+#
+# Beam on
+/run/beamOn 100

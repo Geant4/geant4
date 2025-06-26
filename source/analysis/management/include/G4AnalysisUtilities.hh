@@ -93,7 +93,16 @@ G4String GetHnType()
   G4String hnTypeLong = HT::s_class();
 
   // tools::histo::h1d -> h1 etc.
-  return hnTypeLong.substr(14, 2);
+  std::size_t lastColon = hnTypeLong.rfind(":");
+  if (lastColon != G4String::npos && lastColon + 1 < hnTypeLong.length()) {
+    G4String potentialType = hnTypeLong.substr(lastColon + 1);
+    if (potentialType.length() >= 2 &&
+        (potentialType.substr(0, 1) == "h" || potentialType.substr(0, 1) == "p")) {
+      return potentialType.substr(0, 2);
+    }
+  }
+  G4cerr << "Warning: Could not extract short hnType for " << hnTypeLong << G4endl;
+  return "";
 }
 
 template <typename HT>
@@ -101,9 +110,9 @@ G4bool IsProfile()
 {
   // tools::histo::h1d etc.
   G4String hnTypeLong = HT::s_class();
-
-  // tools::histo::h1d -> h1 etc.
-  return hnTypeLong[14] == 'p';
+  std::size_t length = hnTypeLong.length();
+  return (length >= 3 && hnTypeLong.substr(length - 3) == "p1d") ||
+         (length >= 3 && hnTypeLong.substr(length - 3) == "p2d");
 }
 
 // String conversion

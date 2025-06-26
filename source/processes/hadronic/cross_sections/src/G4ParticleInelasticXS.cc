@@ -71,6 +71,7 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
     particle(part),
     elimit(20*CLHEP::MeV)
 {
+  auto xsr = G4CrossSectionDataSetRegistry::Instance();
   if (nullptr == part) {
     G4Exception("G4ParticleInelasticXS::G4ParticleInelasticXS(..)","had015",
 		FatalException, "NO particle definition in constructor");
@@ -81,7 +82,6 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
       G4cout << "G4ParticleInelasticXS::G4ParticleInelasticXS for " 
 	     << particleName << " on atoms with Z < " << MAXZINELP << G4endl;
     }
-    auto xsr = G4CrossSectionDataSetRegistry::Instance();
     if (particleName == "proton") {
       highEnergyXsection = xsr->GetComponentCrossSection("Glauber-Gribov");
       if(highEnergyXsection == nullptr) {
@@ -100,6 +100,10 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
       if (1 < index) { SetMaxKinEnergy(25.6*CLHEP::PeV); }
     }
   }
+  // this should never happens but ...
+  if (nullptr == highEnergyXsection) {
+    highEnergyXsection = xsr->GetComponentCrossSection("Glauber-Gribov");
+  }
   SetForAllAtomsAndEnergies(true);
   if (gDataDirectory.empty()) {
     gDataDirectory = G4HadronicParameters::Instance()->GetDirPARTICLEXS();
@@ -109,6 +113,7 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
   if (data[index] == nullptr) {
     data[index] = new G4ElementData(MAXZINELP);
     data[index]->SetName(pname[index] + "PartInel");
+    for (G4int Z=1; Z<MAXZINELP; ++Z) { Initialise(Z); }
   }
 }
 
@@ -320,53 +325,55 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     if (n > nIso) { nIso = n; }
     G4int Z = std::min( elm->GetZasInt(), MAXZINELP-1);
     if ( nullptr == (data[index])->GetElementData(Z) ) {
-      Initialise(Z);
+      InitialiseOnFly(Z);
     }
   }
   temp.resize(nIso, 0.0);
+}
+
+void G4ParticleInelasticXS::InitialiseOnFly(G4int Z)
+{
+  G4AutoLock l(&pInelasticXSMutex);
+  Initialise(Z);
+  l.unlock();
 }
 
 void G4ParticleInelasticXS::Initialise(G4int Z)
 {
   if ( nullptr != (data[index])->GetElementData(Z) ) { return; }
 
-  G4AutoLock l(&pInelasticXSMutex);
-  if ( nullptr == (data[index])->GetElementData(Z) ) {
-    // upload element data 
-    std::ostringstream ost;
-    ost << gDataDirectory << "/" << pname[index] << "/inel" << Z;
-    G4PhysicsVector* v = RetrieveVector(ost, true);
-    data[index]->InitialiseForElement(Z, v);
+  // upload element data 
+  std::ostringstream ost;
+  ost << gDataDirectory << "/" << pname[index] << "/inel" << Z;
+  G4PhysicsVector* v = RetrieveVector(ost, true);
+  data[index]->InitialiseForElement(Z, v);
 
-    // upload isotope data
-    G4bool noComp = true;
-    if (amin[Z] < amax[Z]) {
-
-      for (G4int A=amin[Z]; A<=amax[Z]; ++A) {
-	std::ostringstream ost1;
-	ost1 << gDataDirectory << "/" << pname[index] << "/inel" << Z << "_" << A;
-	G4PhysicsVector* v1 = RetrieveVector(ost1, false);
-	if (nullptr != v1) {
-	  if (noComp) {
-	    G4int nmax = amax[Z] - A + 1;
-	    data[index]->InitialiseForComponent(Z, nmax);
-	    noComp = false;
-	  }
-	  data[index]->AddComponent(Z, A, v1);
+  // upload isotope data
+  G4bool noComp = true;
+  if (amin[Z] < amax[Z]) {
+    for (G4int A=amin[Z]; A<=amax[Z]; ++A) {
+      std::ostringstream ost1;
+      ost1 << gDataDirectory << "/" << pname[index] << "/inel" << Z << "_" << A;
+      G4PhysicsVector* v1 = RetrieveVector(ost1, false);
+      if (nullptr != v1) {
+	if (noComp) {
+	  G4int nmax = amax[Z] - A + 1;
+	  data[index]->InitialiseForComponent(Z, nmax);
+	  noComp = false;
 	}
+	data[index]->AddComponent(Z, A, v1);
       }
     }
-    // no components case
-    if (noComp) { data[index]->InitialiseForComponent(Z, 0); }
-
-    // smooth transition 
-    G4double sig1  = (*v)[v->GetVectorLength()-1];
-    G4double ehigh = v->GetMaxEnergy();
-    G4double sig2 = highEnergyXsection->GetInelasticElementCrossSection(
-	     particle, ehigh, Z, aeff[Z]);
-    coeff[Z][index] = (sig2 > 0.) ? sig1/sig2 : 1.0;
   }
-  l.unlock();
+  // no components case
+  if (noComp) { data[index]->InitialiseForComponent(Z, 0); }
+
+  // smooth transition 
+  G4double sig1  = (*v)[v->GetVectorLength()-1];
+  G4double ehigh = v->GetMaxEnergy();
+  G4double sig2 = highEnergyXsection->GetInelasticElementCrossSection(
+	     particle, ehigh, Z, aeff[Z]);
+  coeff[Z][index] = (sig2 > 0.) ? sig1/sig2 : 1.0;
 }
 
 G4PhysicsVector* 

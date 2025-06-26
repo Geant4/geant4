@@ -175,7 +175,11 @@ function(geant4_add_test test)
           -DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}
           -DCMAKE_STATIC_LINKER_FLAGS=${CMAKE_STATIC_LINKER_FLAGS}
           -DCMAKE_DISABLE_FIND_PACKAGE_ROOT=$<BOOL:${CMAKE_DISABLE_FIND_PACKAGE_ROOT}>
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=$<BOOL:${CMAKE_EXPORT_COMPILE_COMMANDS}>
     )
+    if(ARG_ENVIRONMENT)
+      set_property(TEST ${__build_test_name} PROPERTY ENVIRONMENT ${ARG_ENVIRONMENT})
+    endif()
 
     # Build part of the test should have additional regex, and *must* have same labels
     if(ARG_FAILREGEX)

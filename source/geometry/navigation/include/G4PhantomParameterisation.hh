@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4PhantomParameterisation
+// G4PhantomParameterisation
 //
 // Class description:
 // 
@@ -32,11 +32,10 @@
 // class must be placed inside a volume that is completely filled by these
 // boxes.
 
-// History:
-// - Created: P.Arce, May 2007
+// Author: Pedro Arce (CIEMAT), May 2007
 //---------------------------------------------------------------------
 #ifndef G4PhantomParameterisation_HH
-#define G4PhantomParameterisation_HH
+#define G4PhantomParameterisation_HH 1
 
 #include <vector>
 
@@ -65,10 +64,20 @@ class G4Hype;
 class G4Polycone;
 class G4Polyhedra;
 
+/**
+ * @brief G4PhantomParameterisation describes regular parameterisations: a set
+ * of boxes of equal dimension in the x, y and z dimensions.
+ * The G4PVParameterised volume using this class must be placed inside a volume
+ * that is completely filled by these boxes.
+ */
+
 class G4PhantomParameterisation : public G4VPVParameterisation
 {
   public:
 
+    /**
+     * Constructor and Destructor.
+     */
     G4PhantomParameterisation();
    ~G4PhantomParameterisation() override;
 
@@ -79,8 +88,9 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     G4Material* ComputeMaterial(const G4int repNo, 
                                              G4VPhysicalVolume* currentVol,
                                        const G4VTouchable* parentTouch=nullptr) override;
-  // Dummy declarations ...
-
+    /**
+     * Dummy declarations ...
+     */
     void ComputeDimensions (G4Box &, const G4int,
                             const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Tubs&, const G4int,
@@ -108,17 +118,22 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Polyhedra&, const G4int,
                             const G4VPhysicalVolume*) const override {}
   
+    /**
+     * Saves as container solid the parent of the voxels.
+     * Checks that the voxels fill it completely.
+     */
     void BuildContainerSolid( G4VPhysicalVolume* pPhysicalVol );
     void BuildContainerSolid( G4VSolid* pMotherSolid );
-      // Save as container solid the parent of the voxels. Check that the
-      // voxels fill it completely.
 
+  
+    /**
+     * Gets the voxel number corresponding to the point in the container
+     * frame. Uses 'localDir' to avoid precision problems at the surfaces.
+     */
     virtual G4int GetReplicaNo( const G4ThreeVector& localPoint,
                                 const G4ThreeVector& localDir );
-      // Get the voxel number corresponding to the point in the container
-      // frame. Use 'localDir' to avoid precision problems at the surfaces.
 
-    // Set and Get methods
+    /** Set and Get methods */
 
     inline void SetMaterials(std::vector<G4Material*>& mates );
 
@@ -150,47 +165,56 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     G4Material* GetMaterial( std::size_t nx, std::size_t ny, std::size_t nz) const;
     G4Material* GetMaterial( std::size_t copyNo ) const;
 
+    /**
+     * Checks that the voxels fill it completely.
+     */
     void CheckVoxelsFillContainer( G4double contX, G4double contY,
                                    G4double contZ ) const;
-      // Check that the voxels fill it completely.
 
   private:
 
+    /**
+     * Converts the copyNo to voxel numbers in x, y and z.
+     */
     void ComputeVoxelIndices(const G4int copyNo, std::size_t& nx,
                                    std::size_t& ny, std::size_t& nz ) const;
-      // Convert the copyNo to voxel numbers in x, y and z.
 
+    /**
+     * Checks that the copy number is within limits.
+     */
     void CheckCopyNo( const G4long copyNo ) const;
-      // Check that the copy number is within limits.
 
   protected:
 
+    /** Half dimension of voxels (assume they are boxes). */
     G4double fVoxelHalfX = 0.0, fVoxelHalfY = 0.0, fVoxelHalfZ = 0.0;
-      // Half dimension of voxels (assume they are boxes).
+
+    /** Number of voxel in x, y and z dimensions. */
     std::size_t fNoVoxelsX = 0, fNoVoxelsY = 0, fNoVoxelsZ = 0;
-      // Number of voxel in x, y and z dimensions.
+
+    /** Number of voxels in x times number of voxels in y (for speed-up). */
     std::size_t fNoVoxelsXY = 0;
-      // Number of voxels in x times number of voxels in y (for speed-up).
+
+    /** Total number of voxels (for speed-up). */
     std::size_t fNoVoxels = 0;
-      // Total number of voxels (for speed-up).
 
+    /** List of materials of the voxels. */
     std::vector<G4Material*> fMaterials;
-      // List of materials of the voxels.
+
+    /** Index in fMaterials that correspond to each voxel. */
     std::size_t* fMaterialIndices = nullptr;
-      // Index in fMaterials that correspond to each voxel.
 
+    /** Saves as container solid the parent of the voxels. */
     G4VSolid* fContainerSolid = nullptr;
-      // Save as container solid the parent of the voxels.
-      // Check that the voxels fill it completely.
 
+    /** Save position of container wall for speed-up. */
     G4double fContainerWallX=0.0, fContainerWallY=0.0, fContainerWallZ=0.0;
-      // Save position of container wall for speed-up.
 
+    /** Relative surface tolerance. */
     G4double kCarTolerance;
-      // Relative surface tolerance.
 
+    /** Flag to skip surface when two voxel have same material or not. */
     G4bool bSkipEqualMaterials = true;
-      // Flag to skip surface when two voxel have same material or not
 };
 
 #include "G4PhantomParameterisation.icc"

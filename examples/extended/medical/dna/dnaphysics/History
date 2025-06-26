@@ -4,6 +4,20 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-05-06 Sebastien Incerti (dnaphysics-V11-03-03)
+- Added UI command to record first step only; elastic.in updated accordingly
+
+## 2025-03-21 Sebastien Incerti (dnaphysics-V11-03-02)
+- Added elastic.in and plotElastic.C macros to show distribution of scattering angles
+
+## 2025-01-24 Sebastien Incerti (dnaphysics-V11-03-01)
+- Updated SteppingAction.cc with more comments & process identification
+
+## 2025-01-22 Sebastien Incerti (dnaphysics-V11-03-00)
+- Added possibility to simulate radioactive nuclei
+-- added radioactive.in and plotRadioactive.C
+-- modified PhysicsList.cc and SteppingAction.cc
+
 ## 2024-10-29 Sebastien Incerti, Hoang Tran (dnaphysics-V11-02-04)
 - Fixed issue with visualization by setting default World size and material
 in DetectorConstruction.cc

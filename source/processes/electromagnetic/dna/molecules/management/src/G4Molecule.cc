@@ -48,12 +48,13 @@
 
 #include "G4Molecule.hh"
 #include "G4MolecularConfiguration.hh"
+#include "G4MoleculeLocator.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
-#include "G4VMoleculeCounter.hh"
-
+//#include "G4DNAChemistryManager.hh"
+#include "G4MoleculeCounterManager.hh"
 using namespace std;
 
 G4Allocator<G4Molecule>*& aMoleculeAllocator()
@@ -154,12 +155,23 @@ G4Molecule::~G4Molecule()
 {
     if (fpTrack != nullptr)
     {
-        if (G4VMoleculeCounter::Instance()->InUse())
+        if (G4MoleculeCounterManager::Instance()->GetIsActive())
         {
-            G4VMoleculeCounter::Instance()->
-                RemoveAMoleculeAtTime(fpMolecularConfiguration,
-                                      fpTrack->GetGlobalTime(),
-                                      &(fpTrack->GetPosition()));
+            switch (fpTrack->GetTrackStatus())
+            {
+            case fAlive:
+            case fPostponeToNextEvent:
+            case fStopButAlive:
+            case fSuspend:
+                // do not remove molecule count if the track is not being killed
+                break;
+            case fStopAndKill:
+            case fKillTrackAndSecondaries:
+            default:
+				G4MoleculeCounterManager::Instance()->RemoveMolecule(fpTrack,
+																	 fpTrack->GetGlobalTime());
+                break;
+            }
         }
         fpTrack = nullptr;
     }
@@ -360,8 +372,9 @@ void G4Molecule::PrintState() const
 
 //______________________________________________________________________________
 
-G4Track* G4Molecule::BuildTrack(G4double globalTime,
-                                 const G4ThreeVector& position)
+G4Track *G4Molecule::BuildTrack(G4double globalTime,
+                                const G4ThreeVector &position,
+                                const G4Track *parentTrack)
 {
     if (fpTrack != nullptr)
     {
@@ -386,17 +399,34 @@ G4Track* G4Molecule::BuildTrack(G4double globalTime,
         fpMolecularConfiguration->GetDefinition(), MomentumDirection,
         KineticEnergy);
 
-    if (G4VMoleculeCounter::Instance()->InUse())
-    {
-        G4VMoleculeCounter::Instance()->
-            AddAMoleculeAtTime(fpMolecularConfiguration,
-                               globalTime,
-                               &(fpTrack->GetPosition()));
-    }
-
-    //Set the Track
+    // Set the Track
     fpTrack = new G4Track(dynamicParticle, globalTime, position);
     fpTrack->SetUserInformation(this);
+
+    // Copy over touchable handle (see G4VEmProcess)
+    if (parentTrack == nullptr || parentTrack->GetTouchable() == nullptr ||
+        position != parentTrack->GetPosition())
+    {
+        // If (1) no track or touchable handle exists, or
+        // If (2) the new position is inconsistent with the track's position
+        // create a new touchable from the position:
+        // this way the subsequent calls *should* properly see its location (i.e. PV)
+		G4MoleculeLocator::Instance()->LocateMoleculeSetStateAndTouchable(fpTrack);
+    }
+    else
+    {
+        fpTrack->SetTouchableHandle(parentTrack->GetTouchableHandle());
+    }
+
+    if (G4MoleculeCounterManager::Instance()->GetIsActive())
+    {
+		G4MoleculeCounterManager::Instance()->AddMolecule(fpTrack,
+														  fpTrack->GetGlobalTime());
+        //        G4VMoleculeCounter::Instance()->
+        //            AddAMoleculeAtTime(fpMolecularConfiguration,
+        //                               globalTime,
+        //                               &(fpTrack->GetPosition()));
+    }
 
     return fpTrack;
 }

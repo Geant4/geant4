@@ -39,12 +39,9 @@
 #include "G4CSGSolid.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4Orb.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4SolidStore.hh"
 #include "G4Types.hh"
 #include "G4Voxelizer.hh"
-#include "Randomize.hh"
-#include "geomdefs.hh"
 
 using namespace std;
 

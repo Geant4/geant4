@@ -101,7 +101,8 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsSpecialMeshRendering() !=
        fVP.IsSpecialMeshRendering())                              ||
       (lastVP.GetSpecialMeshRenderingOption() !=
-       fVP.GetSpecialMeshRenderingOption())
+       fVP.GetSpecialMeshRenderingOption())                       ||
+      (lastVP.GetTransparencyByDepth() != fVP.GetTransparencyByDepth())
       )
   return true;
   
@@ -141,6 +142,10 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
+  if (lastVP.GetTransparencyByDepth() > 0. &&
+      lastVP.GetTransparencyByDepthOption() != fVP.GetTransparencyByDepthOption())
+    return true;
+
   // Time window parameters operate on the existing database so no need
   // to rebuild even if they change.
   
@@ -151,8 +156,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   
   // We moved these from G4OpenGLViewer to G4ViewParamaters. To avoid
   // editing many lines below we introduce these convenient aliases.
-#define CONVENIENT_DOUBLE_ALIAS(q) const G4double& f##q = fVP.Get##q();
-#define CONVENIENT_BOOL_ALIAS(q) const G4bool& f##q = fVP.Is##q();
+#define CONVENIENT_DOUBLE_ALIAS(q) const G4double& f##q = fVP.GetTimeParameters().f##q;
+#define CONVENIENT_BOOL_ALIAS(q) const G4bool& f##q = fVP.GetTimeParameters().f##q;
   CONVENIENT_DOUBLE_ALIAS(StartTime)
   CONVENIENT_DOUBLE_ALIAS(EndTime)
   CONVENIENT_DOUBLE_ALIAS(FadeFactor)

@@ -39,12 +39,13 @@
   This example implements an histo manager which creates histograms and
   ntuples using Geant4 analysis tools.
      
-  The output file contains 6 histograms and one ntuple:
+  The output file can contain the following histograms and one ntuple:
 
   histo1D 1: energy spectrum.
   histo1D 2: vertex: radial distribution dN/dv.
   histo1D 3: angular distribution: cos(theta).
-  histo1D 4: angular distribution: phi.      
+  histo1D 4: angular distribution: phi.
+
   histo2D 1: vertex position in the X-Y plane.
   histo2D 2: vertex position in the X-Z plane.
   histo2D 3: vertex position in the Y-Z plane.
@@ -54,12 +55,13 @@
   In the ntuple the following data are recorded for each incident particle:  
 
   Particle ID
+  Kinetic energy (Ekin);
   Incident Position (x,y,z);
   Incident Angle (theta,phi);
   Particle weight;
 	
   The histograms are managed by G4AnalysisManager class and its Messenger. 
-  The histos can be individually activated with the command :
+  The histos, not activated by default, can be individually activated with the command :
   /analysis/h1/set id nbBins  valMin valMax unit 
   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
@@ -74,6 +76,7 @@
  
   - execute exgps in 'batch' mode from macro files
 	% exgps   exgps.in
+  % exgps   exgps_MT.in   # larger number of events
  		
   - execute exgps in 'interactive mode' with visualization
 	% exgps
@@ -88,5 +91,11 @@
  various features of GPS. 
  Please see README file there for further informations.
 
+ All test macros can be run via the 'runall.csh' script and the resulting ROOT
+ files can be then analysed with the 'plotall.py' macro, calling internally
+ 'plotfiles.py':
 
+ % ./macros/runall.csh
+ % python3 macros/plotall.py
 
+ In addition, the examples of ROOT macros plotHisto.C and  plottest35.C are also available.

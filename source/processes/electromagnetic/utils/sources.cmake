@@ -53,6 +53,7 @@ geant4_add_module(G4emutils
     G4VMultipleScattering.hh
     G4VPositronAtRestModel.hh
     G4VSubCutProducer.hh
+    G4VXRayModel.hh
     G4ionEffectiveCharge.hh
   SOURCES
     G4AngleDirect.cc
@@ -92,6 +93,7 @@ geant4_add_module(G4emutils
     G4VEnergyLossProcess.cc
     G4VMscModel.cc
     G4VMultipleScattering.cc
+    G4VXRayModel.cc
     G4ionEffectiveCharge.cc)
 
 geant4_module_link_libraries(G4emutils

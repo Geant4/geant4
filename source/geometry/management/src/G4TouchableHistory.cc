@@ -65,12 +65,8 @@ G4TouchableHistory::GetTranslation(G4int depth) const
   {
     return ftlate;
   }
-  else
-  {
-    *ctrans =
-      fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
-    return *ctrans;
-  }
+  *ctrans = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
+  return *ctrans;
 }
 
 const G4RotationMatrix*
@@ -86,9 +82,6 @@ G4TouchableHistory::GetRotation(G4int depth) const
   {
     return &frot;
   }
-  else
-  {
-    *rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
-    return rotM;
-  }
+  *rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+  return rotM;
 }

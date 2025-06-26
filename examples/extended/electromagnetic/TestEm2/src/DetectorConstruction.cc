@@ -32,9 +32,7 @@
 #include "DetectorConstruction.hh"
 
 #include "DetectorMessenger.hh"
-
 #include "G4AutoDelete.hh"
-#include "G4GeometryManager.hh"
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -48,6 +46,9 @@
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal
+G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -116,7 +117,7 @@ void DetectorConstruction::UpdateParameters()
   fDRlength = fDRradl * Radl;
   fEcalLength = fNLtot * fDLlength;
   fEcalRadius = fNRtot * fDRlength;
-  if (fSolidEcal) {
+  if (nullptr != fSolidEcal) {
     fSolidEcal->SetOuterRadius(fEcalRadius);
     fSolidEcal->SetZHalfLength(0.5 * fEcalLength);
   }
@@ -130,7 +131,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   // Ecal
   //
-  if (!fPhysiEcal) {
+  if (nullptr == fPhysiEcal) {
     fSolidEcal = new G4Tubs("Ecal", 0., fEcalRadius, 0.5 * fEcalLength, 0., 360 * deg);
     fLogicEcal = new G4LogicalVolume(fSolidEcal, fMaterial, "Ecal", 0, 0, 0);
     fPhysiEcal = new G4PVPlacement(0, G4ThreeVector(), fLogicEcal, "Ecal", 0, false, 0);
@@ -154,7 +155,7 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 
   if (pttoMaterial && fMaterial != pttoMaterial) {
     fMaterial = pttoMaterial;
-    if (fLogicEcal) {
+    if (nullptr != fLogicEcal) {
       fLogicEcal->SetMaterial(fMaterial);
     }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
@@ -163,7 +164,7 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetLBining(G4ThreeVector Value)
+void DetectorConstruction::SetLBining(const G4ThreeVector& Value)
 {
   fNLtot = (G4int)Value(0);
   if (fNLtot > kMaxBin) {
@@ -177,7 +178,7 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetRBining(G4ThreeVector Value)
+void DetectorConstruction::SetRBining(const G4ThreeVector& Value)
 {
   fNRtot = (G4int)Value(0);
   if (fNRtot > kMaxBin) {
@@ -193,16 +194,16 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
 
 void DetectorConstruction::ConstructSDandField()
 {
-  if (fFieldMessenger.Get() == nullptr) {
-    // Create global magnetic field messenger.
-    // Uniform magnetic field is then created automatically if
-    // the field value is not zero.
-    G4ThreeVector fieldValue = G4ThreeVector();
-    G4GlobalMagFieldMessenger* msg = new G4GlobalMagFieldMessenger(fieldValue);
-    // msg->SetVerboseLevel(1);
-    G4AutoDelete::Register(msg);
-    fFieldMessenger.Put(msg);
-  }
+  // Create global magnetic field
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
+
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

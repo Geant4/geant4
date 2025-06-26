@@ -35,8 +35,9 @@
 //    Derived calculational constants
 // GIDI is developped at Lawrence Livermore National Laboratory
 // Class Description - End
-
-// 170912 First implementation done by T. Koi (SLAC/EPP)
+//
+// 2012-09-17 T. Koi (SLAC/EPP): First implementation
+// 2024-07-17 D.M.Wright (LLNL): Added GetFatalEnergyCheckLevels()
 
 #include "G4LENDModel.hh"
 
@@ -59,7 +60,10 @@ class G4LENDCombinedModel : public G4LENDModel
 
       G4bool HasData( const G4DynamicParticle* , G4int iZ , G4int iA , G4int iM, 
                       const G4Isotope* , const G4Element* , const G4Material* );
-     
+
+      G4LENDModel* channel_selected; // used in GetFatalEnergyCheckLevels()
+      virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
    private: 
       G4LENDCombinedCrossSection* crossSection;
       G4LENDElastic* elastic;

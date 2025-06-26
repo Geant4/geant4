@@ -27,7 +27,7 @@
 //
 // Implementation for singleton container
 //
-// 9.10.2018 G.Cosmo, CERN - Initial version
+// Author: Gabriele Cosmo (CERN), 9 October 2018
 // --------------------------------------------------------------------
 
 #include "G4AssemblyVolume.hh"

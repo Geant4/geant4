@@ -55,6 +55,7 @@ class G4HadronicParametersMessenger : public G4UImessenger {
     G4UIcmdWithAnInteger* theVerboseCmd;
     G4UIcmdWithADoubleAndUnit* theMaxEnergyCmd;
     G4UIcmdWithABool* theCRCoalescenceCmd;
+    G4UIcommand* theDumpCmd;
 };
 
 #endif

@@ -39,15 +39,6 @@
 
 #include "G4DNAChemistryManager.hh"
 #include "G4StackManager.hh"
-#include "G4Track.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StackingAction::StackingAction() : G4UserStackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StackingAction::~StackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

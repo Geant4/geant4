@@ -53,4 +53,4 @@ G4bool GB07SD::ProcessHits(G4Step* step, G4TouchableHistory*)
   return true;
 }
 
-GB07SD::~GB07SD() {}
+GB07SD::~GB07SD() = default;

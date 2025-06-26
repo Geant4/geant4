@@ -30,29 +30,31 @@
 
   Installation of Pythia8: 
 
-  NOTE: As of December 2023, pythia8.3.10 is the most current version, 
+  NOTE: As of May 2025, pythia8.3.15 is the most current version, 
   thus it is used in this example.
+  In general, this example is expected to work with any reasonably modern
+  pythia8.x.y revision.
   In the future, please check updates at Pythia8 site: https://pythia.org
   
   1. cd path/to/your/pythia8/area
 
   2. Download desired version of Pythia8 and un-tar it, e.g. 
-     wget https://pythia.org/download/pythia83/pythia8310.tgz
-     tar xzf pythia8310.tgz
+     wget https://pythia.org/download/pythia83/pythia8315.tgz
+     tar xzf pythia8315.tgz
 
   3. Build/install Pythia8
-     cd pythia8310
+     cd pythia8315
      export CXX=\`which g++\`
      ./configure --prefix=$PWD --cxx=$CXX
      make
-     NOTE: By default, Pythia8 (as of 8.3.10) builds with C++11 standards. 
-     If one wants to turn to e.g. C++17 standard, one needs to override flags 
-     via --cxx-common argument to configure script. 
+     NOTE: By default, Pythia8 (as of 8.3.15) builds with C++11 standards. 
+     If one wants to turn to e.g., C++17 standard (or later), one needs 
+     to override flags via --cxx-common argument to configure script. 
      Alternatively, one can setup CXX_COMMON environment variable.
-     As of pythia8310, the default flags are the following:
-     -O2 -std=c++11 -pedantic -W -Wall -Wshadow -pthread
+     As of pythia8315, the default flags are the following:
+     -O2 -std=c++11 -pedantic -W -Wall -Wshadow -fPIC -pthread
      Please note use of -pthread which was not among default flags in earlier
-     relesaes of Pythia8.
+     releases of Pythia8.
      Example of specifying C++17 standards by overriding the default flags via 
      use of --cxx_common argument to configure script:
      ./configure --prefix=$PWD --cxx=$CXX \
@@ -194,7 +196,7 @@
   It appears that Geant4 sets (at least) masses of quarks as listed in PDG.
   For details on default settings for the quark masses in Pythia8 please refer 
   to the Pythia8 manual: 
-  https://pythia.org/manuals/pythia8310/Welcome.html
+  https://pythia.org/manuals/pythia8315/Welcome.html
   See Particles and Decays section, Particle Data subsection.
 
   Beyond quarks/diquarks some differences in mass central values or width have also

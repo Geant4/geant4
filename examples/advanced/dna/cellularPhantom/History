@@ -1,5 +1,13 @@
 # Example cellularPhantom History
 
+## 2025-01-25 S. Incerti (cellularPhantom-V11-03-01)
+- Reorganized the whole code by introducing Run class
+- Simplified analysis of results (plot.C ROOT macro)
+- Updated README
+
+## 2025-01-03 S. Incerti (cellularPhantom-V11-03-00)
+- Additional affiliation in headers and README
+
 ## 2024-10-28 S. Incerti (cellularPhantom-V11-02-01)
 - Updated README
 

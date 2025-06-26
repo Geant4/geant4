@@ -257,7 +257,7 @@ G4double G4PenelopeBremsstrahlungModel::CrossSectionPerVolume(const G4Material* 
   {
     G4cout << "G4PenelopeBremsstrahlungModel " << G4endl;
     G4cout << "Mean free path for gamma emission > " << cutEnergy/keV << " keV at " <<
-      energy/keV << " keV = " <<
+      energy/keV << " keV = " << 
       (crossPerVolume? (1./crossPerVolume)/mm : DBL_MAX) << " mm" << G4endl;
   }
 

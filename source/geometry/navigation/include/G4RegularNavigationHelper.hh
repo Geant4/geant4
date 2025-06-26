@@ -23,24 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4RegularNavigationHelper
+// G4RegularNavigationHelper
 //
 // Class description:
 //
 // Utility class for navigation on regular structures, providing step
 // lengths counting for each regular voxel of the structure.
 
-// Author: Pedro Arce, November 2008
+// Author: Pedro Arce (CIEMAT), November 2008
 // --------------------------------------------------------------------
 #ifndef G4RegularNavigationHelper_HH
-#define G4RegularNavigationHelper_HH
+#define G4RegularNavigationHelper_HH 1
 
 #include <vector>
+
 #include "globals.hh"
 #include "G4ThreadLocalSingleton.hh"
 
 using G4RegularNavigationHelper_theStepLengths_t = 
       std::vector< std::pair<G4int,G4double> >;
+
+/**
+ * @brief G4RegularNavigationHelper is a singleton utility class for navigation
+ * on regular structures, providing step lengths counting for each regular voxel
+ * of the structure.
+ */
 
 class G4RegularNavigationHelper
 {
@@ -48,18 +55,44 @@ class G4RegularNavigationHelper
 
   public:
 
+    /**
+     * Singleton instance accessor.
+     */
     static G4RegularNavigationHelper* Instance();
-   ~G4RegularNavigationHelper();
-  
-    void ClearStepLengths();
-    void AddStepLength( G4int copyNo, G4double slen );
-    const std::vector< std::pair<G4int,G4double> > & GetStepLengths();
 
-    std::vector< std::pair<G4int,G4double> > theStepLengths;
+    /**
+     * Default Destructor.
+     */
+   ~G4RegularNavigationHelper() = default;
+  
+    /**
+     * Resets the state.
+     */
+    void ClearStepLengths();
+
+    /**
+     * Stores step in container, associated to given voxel.
+     *  @param[in] copyNo Voxel number.
+     *  @param[in] slen Value of step length to store.
+     */
+    void AddStepLength( G4int copyNo, G4double slen );
+
+    /**
+     * Returns the collection of stored steps per voxels.
+     */
+    const std::vector< std::pair<G4int,G4double> > & GetStepLengths();
 
   private:
 
-    G4RegularNavigationHelper();
+    /**
+     * Private default Constructor.
+     */
+    G4RegularNavigationHelper() = default;
+
+  private:
+
+    /** The collection of steps associated to voxels. */
+    std::vector< std::pair<G4int,G4double> > theStepLengths;
 };
 
 #endif

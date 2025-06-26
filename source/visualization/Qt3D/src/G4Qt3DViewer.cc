@@ -144,14 +144,19 @@ void G4Qt3DViewer::DrawView()
   // if necessary...
   if (!fNeedKernelVisit) KernelVisitDecision();
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
-  fLastVP = fVP;
 
   ProcessView ();  // Clears store and processes scene only if necessary.
 
   if (kernelVisitWasNeeded) {
     // We might need to do something if the kernel was visited.
-  } else {
+  } else {  // Or even if it was not!
+    if (!fTransientsNeedRedrawing) CompareForTransientsRedraw(fLastVP);
+    if (fTransientsNeedRedrawing) {
+      ProcessTransients();
+    }
   }
+
+  fLastVP = fVP;
 
   // ...before finally...
   FinishView ();       // Flush streams and/or swap buffers.
@@ -319,16 +324,14 @@ G4bool G4Qt3DViewer::CompareForKernelVisit(G4ViewParameters& vp)
       fVP.GetDefaultTextVisAttributes()->GetColour())        ||
      (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
      (vp.IsPicking ()          != fVP.IsPicking ())          ||
-     // Scaling for Open Inventor is done by the scene handler so it
+     // Scaling for Qt3D is done by the scene handler (is it really????) so it
      // needs a kernel visit.  (In this respect, it differs from the
      // OpenGL drivers, where it's done in SetView.)
      (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
-     (vp.GetVisAttributesModifiers() !=
-      fVP.GetVisAttributesModifiers())                       ||
-     (vp.IsSpecialMeshRendering() !=
-      fVP.IsSpecialMeshRendering())                          ||
-     (vp.GetSpecialMeshRenderingOption() !=
-      fVP.GetSpecialMeshRenderingOption())
+     (vp.GetVisAttributesModifiers()    != fVP.GetVisAttributesModifiers())    ||
+     (vp.IsSpecialMeshRendering()       != fVP.IsSpecialMeshRendering())       ||
+     (vp.GetSpecialMeshRenderingOption()!= fVP.GetSpecialMeshRenderingOption())||
+     (vp.GetTransparencyByDepth()       != fVP.GetTransparencyByDepth())
      )
   return true;
 
@@ -362,6 +365,18 @@ G4bool G4Qt3DViewer::CompareForKernelVisit(G4ViewParameters& vp)
       (vp.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
+  if (vp.GetTransparencyByDepth() > 0. &&
+      vp.GetTransparencyByDepthOption() != fVP.GetTransparencyByDepthOption())
+    return true;
+
+  return false;
+}
+
+G4bool G4Qt3DViewer::CompareForTransientsRedraw(G4ViewParameters& vp)
+{
+  if (vp.GetTimeParameters() != fVP.GetTimeParameters()) {
+    return fTransientsNeedRedrawing = true;
+  }
   return false;
 }
 

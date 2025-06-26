@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-16 Vladimir Ivanchenko (phys-builders-V11-03-00)
+- G4HadronPHPBuilder - G4ParticleHPCapture and G4ParticleHPCaptureData are
+    substituted by G4NeutronRadCaptureHP and G4NeutronHPCaptureData. The
+    first allows using full list of updated PhotonEvaporation data set, the
+    second is only change of the name, the data are the same. Fixed
+    problem report #2660.
+
 ## 2023-10-19 Jean-Christophe David (phys-builders-V11-01-03)
 - G4HadronicBuilder: added two methods - BuildINCLXX and BuildAntiLightIonsINCLXX.
 

@@ -62,7 +62,9 @@
 #include "G4HelixHeum.hh"
 #include "G4BFieldIntegrationDriver.hh"
 
-#include "G4QSSDriverCreator.hh"
+#include "G4QSStepper.hh"
+#include "G4QSSDriver.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4CachedMagneticField.hh"
 
@@ -303,27 +305,19 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   }
   else if( useG4QSSDriver )
   {
-     if( stepperDriverId == kQss2DriverType )
+     if (stepperDriverId == kQss2DriverType)
      {
-       auto qssStepper2 = G4QSSDriverCreator::CreateQss2Stepper(pEquation);
-       if( gVerboseCtor )
-       {
-         G4cout << "-- Created QSS-2 stepper" << G4endl;
-       }
-       fIntgrDriver = G4QSSDriverCreator::CreateDriver(qssStepper2);
-     }
-     else
-     {
-       auto qssStepper3 = G4QSSDriverCreator::CreateQss3Stepper(pEquation);
-       if( gVerboseCtor )
-       {
-         G4cout << "-- Created QSS-3 stepper" << G4endl;
-       }
-       fIntgrDriver = G4QSSDriverCreator::CreateDriver(qssStepper3);        
+        fQssStepperOwned= new G4QSStepper(pEquation);
+        auto qss_driver = new G4QSSDriver<G4QSStepper>(fQssStepperOwned);
+        if( gVerboseCtor )
+        {
+          G4cout << "-- Created QSS-2 stepper" << G4endl;
+        }
+        fIntgrDriver = qss_driver;
      }
      if( gVerboseCtor )
      {
-       G4cout << "-- G4ChordFinder: Using QSS Driver." << G4endl;
+        G4cout << "-- G4ChordFinder: Using QSS Driver." << G4endl;
      }
   }
   else
@@ -417,6 +411,7 @@ G4ChordFinder::~G4ChordFinder()
   delete fEquation;
   delete fRegularStepperOwned;
   delete fNewFSALStepperOwned;
+  delete fQssStepperOwned;
   delete fCachedField;
   delete fIntgrDriver;
 }

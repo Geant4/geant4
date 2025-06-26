@@ -78,7 +78,7 @@ namespace  // Data structures / mutexes for parallel optimisation
 G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = nullptr;
 
 // Static *global* class data
-G4bool G4GeometryManager::fParallelVoxelOptimisationRequested = false;
+G4bool G4GeometryManager::fParallelVoxelOptimisationRequested = true;
   // Records User choice to use parallel voxel optimisation (or not)
 
 G4bool  G4GeometryManager::fOptimiseInParallelConfigured = false;

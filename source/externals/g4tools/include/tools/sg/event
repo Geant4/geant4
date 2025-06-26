@@ -104,8 +104,44 @@ protected:
   unsigned int m_h;
 };
 
-class mouse_down_event : public event {
+class position_modifiers {
+public:
+  position_modifiers(int a_x,int a_y,bool a_shift_modifier,bool a_control_modifier)
+  :m_x(a_x)
+  ,m_y(a_y)
+  ,m_shift_modifier(a_shift_modifier)
+  ,m_control_modifier(a_control_modifier)
+  {}
+  virtual ~position_modifiers(){}
+public:
+  position_modifiers(const position_modifiers& a_from)
+  :m_x(a_from.m_x)
+  ,m_y(a_from.m_y)
+  ,m_shift_modifier(a_from.m_shift_modifier)
+  ,m_control_modifier(a_from.m_control_modifier)
+  {}
+  position_modifiers& operator=(const position_modifiers& a_from){
+    m_x = a_from.m_x;
+    m_y = a_from.m_y;
+    m_shift_modifier = a_from.m_shift_modifier;
+    m_control_modifier = a_from.m_control_modifier;
+    return *this;
+  }
+public:
+  int x() const {return m_x;}
+  int y() const {return m_y;}
+  bool shift_modifier() const {return m_shift_modifier;}
+  bool control_modifier() const {return m_control_modifier;}
+protected:
+  int m_x;
+  int m_y;
+  bool m_shift_modifier;
+  bool m_control_modifier;
+};
+
+class mouse_down_event : public event, public position_modifiers {
   typedef event parent;
+  typedef position_modifiers parent_pos_mod;
 public:
 #ifdef TOOLS_SG_EVENT_ID_CAST
   static cid id_class() {return parent::id_class()+2;}
@@ -122,33 +158,25 @@ public:
 #endif
   virtual event* copy() const {return new mouse_down_event(*this);}
 public:
-  mouse_down_event(int a_x,int a_y) //signed because of wall.
-  :m_x(a_x)
-  ,m_y(a_y)
+  mouse_down_event(int a_x,int a_y,bool a_shift_modifier,bool a_control_modifier)
+  :parent_pos_mod(a_x,a_y,a_shift_modifier,a_control_modifier)
   {}
   virtual ~mouse_down_event(){}
 public:
   mouse_down_event(const mouse_down_event& a_from)
-  :event(a_from)
-  ,m_x(a_from.m_x)
-  ,m_y(a_from.m_y)
+  :parent(a_from)
+  ,parent_pos_mod(a_from)
   {}
   mouse_down_event& operator=(const mouse_down_event& a_from){
-    event::operator=(a_from);
-    m_x = a_from.m_x;
-    m_y = a_from.m_y;
+    parent::operator=(a_from);
+    parent_pos_mod::operator=(a_from);
     return *this;
   }
-public:
-  int x() const {return m_x;}
-  int y() const {return m_y;}
-protected:
-  int m_x;
-  int m_y;
 };
 
-class mouse_up_event : public event {
+class mouse_up_event : public event, public position_modifiers {
   typedef event parent;
+  typedef position_modifiers parent_pos_mod;
 public:
 #ifdef TOOLS_SG_EVENT_ID_CAST
   static cid id_class() {return parent::id_class()+3;}
@@ -165,33 +193,25 @@ public:
 #endif
   virtual event* copy() const {return new mouse_up_event(*this);}
 public:
-  mouse_up_event(int a_x,int a_y) //signed because of wall.
-  :m_x(a_x)
-  ,m_y(a_y)
+  mouse_up_event(int a_x,int a_y,bool a_shift_modifier,bool a_control_modifier)
+  :parent_pos_mod(a_x,a_y,a_shift_modifier,a_control_modifier)
   {}
   virtual ~mouse_up_event(){}
 public:
   mouse_up_event(const mouse_up_event& a_from)
-  :event(a_from)
-  ,m_x(a_from.m_x)
-  ,m_y(a_from.m_y)
+  :parent(a_from)
+  ,parent_pos_mod(a_from)
   {}
   mouse_up_event& operator=(const mouse_up_event& a_from){
-    event::operator=(a_from);
-    m_x = a_from.m_x;
-    m_y = a_from.m_y;
+    parent::operator=(a_from);
+    parent_pos_mod::operator=(a_from);
     return *this;
   }
-public:
-  int x() const {return m_x;}
-  int y() const {return m_y;}
-protected:
-  int m_x;
-  int m_y;
 };
 
-class mouse_move_event : public event {
+class mouse_move_event : public event, public position_modifiers {
   typedef event parent;
+  typedef position_modifiers parent_pos_mod;
 public:
 #ifdef TOOLS_SG_EVENT_ID_CAST
   static cid id_class() {return parent::id_class()+4;}
@@ -208,11 +228,10 @@ public:
 #endif
   virtual event* copy() const {return new mouse_move_event(*this);}
 public:
-  mouse_move_event(int a_x,int a_y, //signed because of wall.
+  mouse_move_event(int a_x,int a_y,bool a_shift_modifier,bool a_control_modifier,
                    int a_ox,int a_oy,
                    bool a_touch) //for sliders.
-  :m_x(a_x)
-  ,m_y(a_y)
+  :parent_pos_mod(a_x,a_y,a_shift_modifier,a_control_modifier)
   ,m_ox(a_ox)
   ,m_oy(a_oy)
   ,m_touch(a_touch)
@@ -220,17 +239,15 @@ public:
   virtual ~mouse_move_event(){}
 public:
   mouse_move_event(const mouse_move_event& a_from)
-  :event(a_from)
-  ,m_x(a_from.m_x)
-  ,m_y(a_from.m_y)
+  :parent(a_from)
+  ,parent_pos_mod(a_from)
   ,m_ox(a_from.m_ox)
   ,m_oy(a_from.m_oy)
   ,m_touch(a_from.m_touch)
   {}
   mouse_move_event& operator=(const mouse_move_event& a_from){
-    event::operator=(a_from);
-    m_x = a_from.m_x;
-    m_y = a_from.m_y;
+    parent::operator=(a_from);
+    parent_pos_mod::operator=(a_from);
 
     m_ox = a_from.m_ox;
     m_oy = a_from.m_oy;
@@ -239,14 +256,10 @@ public:
     return *this;
   }
 public:
-  int x() const {return m_x;}
-  int y() const {return m_y;}
   int ox() const {return m_ox;}
   int oy() const {return m_oy;}
   bool is_touch() const {return m_touch;}
 protected:
-  int m_x;
-  int m_y;
   int m_ox;
   int m_oy;  //+ = up.
   // etc :
@@ -385,8 +398,9 @@ protected:
   key_code m_key;
 };
 
-class wheel_rotate_event : public event {
+class wheel_rotate_event : public event, public position_modifiers {
   typedef event parent;
+  typedef position_modifiers parent_pos_mod;
 public:
 #ifdef TOOLS_SG_EVENT_ID_CAST
   static cid id_class() {return parent::id_class()+8;}
@@ -403,17 +417,20 @@ public:
 #endif
   virtual event* copy() const {return new wheel_rotate_event(*this);}
 public:
-  wheel_rotate_event(int a_angle)
-  :m_angle(a_angle)
+  wheel_rotate_event(int a_angle,int a_x,int a_y,bool a_shift_modifier,bool a_control_modifier)
+  :parent_pos_mod(a_x,a_y,a_shift_modifier,a_control_modifier)
+  ,m_angle(a_angle)
   {}
   virtual ~wheel_rotate_event(){}
 public:
   wheel_rotate_event(const wheel_rotate_event& a_from)
-  :event(a_from)
+  :parent(a_from)
+  ,parent_pos_mod(a_from)
   ,m_angle(a_from.m_angle)
   {}
   wheel_rotate_event& operator=(const wheel_rotate_event& a_from){
-    event::operator=(a_from);
+    parent::operator=(a_from);
+    parent_pos_mod::operator=(a_from);
     m_angle = a_from.m_angle;
     return *this;
   }

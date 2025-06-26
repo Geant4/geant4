@@ -58,12 +58,14 @@ class G4ParticleHPThermalScatteringNames
     inline std::size_t GetSize() const { return names.size(); }
     inline const G4String& GetTS_NDL_Name(const G4String& nameG4Element) const
     {
-      return names.find(nameG4Element)->second;
+      auto p = names.find(nameG4Element);
+      return (p != names.end()) ? p->second : sss;
     }
     inline const G4String& GetTS_NDL_Name(const G4String& material,
                                           const G4String& element) const
     {
-      return nist_names.find(std::pair<G4String, G4String>(material, element))->second;
+      auto p = nist_names.find(std::pair<G4String, G4String>(material, element));
+      return (p != nist_names.end()) ? p->second : sss;
     }
 
     // For user prepared thermal files
@@ -72,6 +74,7 @@ class G4ParticleHPThermalScatteringNames
 
   private:
 
+    G4String sss{""};
     //              G4Element  NDL name
     std::map<G4String, G4String> names;
 

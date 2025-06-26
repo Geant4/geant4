@@ -60,8 +60,8 @@ class G4Material;
 class G4UAtomicDeexcitation : public G4VAtomDeexcitation
 {  
 public: 
-  explicit G4UAtomicDeexcitation();
-  virtual ~G4UAtomicDeexcitation();
+  G4UAtomicDeexcitation();
+  ~G4UAtomicDeexcitation() override;
    
   //=================================================================
   // methods that are requested to be implemented by the interface

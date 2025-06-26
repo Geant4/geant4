@@ -26,6 +26,7 @@ geant4_module_link_libraries(G4hadronic_deex_management
   PUBLIC
     G4globman
     G4hadronic_util
+    G4hepnumerics
     G4intercoms
   PRIVATE
     G4hadronic_deex_util

@@ -93,16 +93,16 @@ int main(int argc, char** argv)
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
 
-  G4bool biasingFlag = ( onOffBiasing == "on");
+  G4bool biasingFlag = (onOffBiasing == "on");
 
   // -- Set mandatory initialization classes
-  GB07DetectorConstruction* detector = new GB07DetectorConstruction(biasingFlag);
+  auto detector = new GB07DetectorConstruction(biasingFlag);
   runManager->SetUserInitialization(detector);
   // -- Select a physics list
-  FTFP_BERT* physicsList = new FTFP_BERT;
+  auto physicsList = new FTFP_BERT;
   if (biasingFlag) {
     // -- And augment it with biasing facilities:
-    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
+    auto biasingPhysics = new G4GenericBiasingPhysics();
     // -- Specify the processes that will be under biasing:
     // ---- Decide to apply the technique to hadronic inelastic interactions:
     std::vector<G4String> piPlusProcessesToBias, piMinusProcessesToBias, protonProcessesToBias,
@@ -154,12 +154,12 @@ int main(int argc, char** argv)
   runManager->Initialize();
 
   // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   if (macro != "")  // batch mode
   {

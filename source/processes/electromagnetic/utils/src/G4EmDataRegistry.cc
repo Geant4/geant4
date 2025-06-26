@@ -62,7 +62,11 @@ G4EmDataRegistry::G4EmDataRegistry()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDataRegistry::~G4EmDataRegistry()
-{}
+{
+  for (auto const & p : fDataHandlers) {
+    delete p;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,6 +97,20 @@ void G4EmDataRegistry::Register(G4EmDataHandler* ptr)
     if (p == ptr) { return; }
   }
   fDataHandlers.push_back(ptr);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......  
+
+void G4EmDataRegistry::DeRegister(G4EmDataHandler* ptr)
+{
+  if (nullptr == ptr) { return; }
+  std::size_t n = fDataHandlers.size();
+  for (std::size_t i = 0; i < n; ++i) {
+    if (fDataHandlers[i] == ptr) {
+      fDataHandlers[i] = nullptr;
+      return;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

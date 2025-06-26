@@ -37,10 +37,10 @@ class GB07SD : public G4VSensitiveDetector
 {
   public:
     GB07SD(G4String name);
-    virtual ~GB07SD();  //// {}
+    ~GB07SD() override;  //// {}
 
-    virtual void Initialize(G4HCofThisEvent*) {}
-    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+    void Initialize(G4HCofThisEvent*) override {}
+    G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

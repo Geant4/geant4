@@ -42,10 +42,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB06ParallelWorldForSlices::GB06ParallelWorldForSlices(G4String worldName,
-						       G4bool bf) :
-  G4VUserParallelWorld(worldName),
-  fBiasingFlag(bf) {}
+GB06ParallelWorldForSlices::GB06ParallelWorldForSlices(G4String worldName, G4bool bf)
+  : G4VUserParallelWorld(worldName), fBiasingFlag(bf)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,10 +94,9 @@ void GB06ParallelWorldForSlices::Construct()
   auto shieldSolid = (G4Box*)shieldLogical->GetSolid();
 
   // -- we now re-create a logical volume for the mother volume of the slices:
-  G4LogicalVolume* motherForSlicesLogical =
-    new G4LogicalVolume(shieldSolid,  // its solid
-                        nullptr,  // no material
-                        "motherForSlices.logical");  // its name
+  auto motherForSlicesLogical = new G4LogicalVolume(shieldSolid,  // its solid
+                                                    nullptr,  // no material
+                                                    "motherForSlices.logical");  // its name
 
   // -- 2) new logical volume of same shape than the shield and place inside the slices:
   //       -----------------------------------------------------------------------------
@@ -107,8 +105,8 @@ void GB06ParallelWorldForSlices::Construct()
   const G4int nSlices(20);
   // -- the solid for slices:
   G4double halfSliceZ = shieldSolid->GetZHalfLength() / nSlices;
-  G4Box* sliceSolid = new G4Box("slice.solid", shieldSolid->GetXHalfLength(),
-                                shieldSolid->GetYHalfLength(), halfSliceZ);
+  auto sliceSolid = new G4Box("slice.solid", shieldSolid->GetXHalfLength(),
+                              shieldSolid->GetYHalfLength(), halfSliceZ);
 
   // -- the logical volume for slices:
   sliceLogical = new G4LogicalVolume(sliceSolid,  // its solid
@@ -151,7 +149,7 @@ void GB06ParallelWorldForSlices::Construct()
 
 void GB06ParallelWorldForSlices::ConstructSD()
 {
-  if(fBiasingFlag) {
+  if (fBiasingFlag) {
     // -- Create the biasing operator:
     auto biasingOperator = new GB06BOptrSplitAndKillByImportance("neutron", "parallelOptr");
     // -- Tell it it is active for this parallel geometry, passing the world

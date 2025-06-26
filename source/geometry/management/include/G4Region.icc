@@ -216,7 +216,7 @@ G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
 {
   auto c = fMaterialCoupleMap.find(mat);
   G4MaterialCutsCouple* couple = nullptr;
-  if(c!=fMaterialCoupleMap.cend()) couple = (*c).second;
+  if(c!=fMaterialCoupleMap.cend()) { couple = (*c).second; }
   return couple;
 }
 

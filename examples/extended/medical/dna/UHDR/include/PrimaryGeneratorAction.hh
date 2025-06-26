@@ -47,12 +47,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4Event;
-class DetectorConstruction;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    explicit PrimaryGeneratorAction(DetectorConstruction* pDet);
+    explicit PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() override = default;
     void GeneratePrimaries(G4Event*) override;
 
@@ -60,7 +59,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     std::unique_ptr<G4SingleParticleSource> fParticleGun;
-    DetectorConstruction* fpDetector = nullptr;
     std::unique_ptr<PrimaryGeneratorMessenger> fpMessenger;
 };
 

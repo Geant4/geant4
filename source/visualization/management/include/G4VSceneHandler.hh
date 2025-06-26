@@ -320,6 +320,12 @@ protected:
   virtual void ProcessScene ();
 
   //////////////////////////////////////////////////////////////
+  // As above, but transients only. For example, at end of run, in "Idle"
+  // state, you might wish to re-draw the trajectories with a different
+  // time window.
+  virtual void ProcessTransients ();
+
+  //////////////////////////////////////////////////////////////
   // Default routine used by default AddSolid ().
   virtual void RequestPrimitives (const G4VSolid& solid);
 

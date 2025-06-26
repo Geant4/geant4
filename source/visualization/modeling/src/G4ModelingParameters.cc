@@ -60,7 +60,9 @@ G4ModelingParameters::G4ModelingParameters ():
   fCutawayMode           (cutawayUnion),
   fpCutawaySolid         (0),
   fpEvent                (0),
-  fSpecialMeshRendering  (false)
+  fSpecialMeshRendering  (false),
+  fTransparencyByDepth   (0.),
+  fTransparencyByDepthOption (1)
 {}
 
 G4ModelingParameters::G4ModelingParameters
@@ -89,7 +91,9 @@ G4ModelingParameters::G4ModelingParameters
   fCutawayMode    (cutawayUnion),
   fpCutawaySolid  (0),
   fpEvent         (0),
-  fSpecialMeshRendering (false)
+  fSpecialMeshRendering (false),
+  fTransparencyByDepth (0.),
+  fTransparencyByDepthOption (1)
 {}
 
 G4ModelingParameters::~G4ModelingParameters ()
@@ -255,10 +259,13 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
     } else {
       os << "selected meshes";
       for (const auto& vol: mp.fSpecialMeshVolumes) {
-	os << "\n    " << vol.GetName() << ':' << vol.GetCopyNo();
+        os << "\n    " << vol.GetName() << ':' << vol.GetCopyNo();
       }
     }
   } else os << "off";
+
+  os << "\nTransparency by depth: " << mp.fTransparencyByDepth
+  << ", option: " << mp.fTransparencyByDepthOption;
 
   return os;
 }
@@ -283,7 +290,9 @@ G4bool G4ModelingParameters::operator !=
       (fCutawayMode            != mp.fCutawayMode)            ||
       (fpCutawaySolid          != mp.fpCutawaySolid)          ||
       (fpEvent                 != mp.fpEvent)                 ||
-      (fSpecialMeshRendering   != mp.fSpecialMeshRendering)
+      (fSpecialMeshRendering   != mp.fSpecialMeshRendering)   ||
+      (fTransparencyByDepth    != mp.fTransparencyByDepth)    ||
+      (fTransparencyByDepthOption != mp.fTransparencyByDepthOption)
       )
     return true;
 

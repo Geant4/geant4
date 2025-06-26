@@ -41,6 +41,12 @@
 #include "G4UIparameter.hh"
 #include "G4SceneTreeItem.hh"
 #include "G4AttCheck.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
+
+#include <cstring>
+#include <chrono>
+#include <thread>
 
 #include <qapplication.h>
 #include <qdialog.h>
@@ -56,8 +62,6 @@
 #include <qtextbrowser.h>
 #include <qtextedit.h>
 #include <qwidget.h>
-
-#include <cstring>
 #include <qboxlayout.h>
 #include <qbuttongroup.h>
 #include <qcolordialog.h>
@@ -82,6 +86,9 @@
 #include <qtoolbox.h>
 
 #include <QInputDialog>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+#include <QScreen>
 
 #include <set>
 #include <map>
@@ -127,12 +134,15 @@ G4UIQt::G4UIQt(G4int argc, char** argv)
     fHistoryTBTableList(nullptr),
     fHelpTreeWidget(nullptr),
     fHelpTBWidget(nullptr),
+    fTimeWindowWidget(nullptr),
     fHistoryTBWidget(nullptr),
     fCoutDockWidget(nullptr),
     fUIDockWidget(nullptr),
     fSceneTreeWidget(nullptr),
     fNewSceneTreeWidget(nullptr),
     fNewSceneTreeItemTreeWidget(nullptr),
+    fMaxPVDepth(0),
+    fNewSceneTreeSlider(nullptr),
     fViewerPropertiesWidget(nullptr),
     fPickInfosWidget(nullptr),
     fHelpLine(nullptr),
@@ -228,14 +238,6 @@ G4UIQt::G4UIQt(G4int argc, char** argv)
   fMainWindow->addDockWidget(Qt::LeftDockWidgetArea, CreateUITabWidget());
   fMainWindow->addDockWidget(Qt::BottomDockWidgetArea, CreateCoutTBWidget());
 
-  // Create the new scene tree stuff
-  fNewSceneTreeWidget = new QWidget;
-  fNewSceneTreeWidget->setStyleSheet ("padding: 0px ");
-  fNewSceneTreeWidget->setLayout(new QVBoxLayout);
-  fNewSceneTreeWidget->layout()->setContentsMargins(5,5,5,5);
-  fNewSceneTreeWidget->setWindowTitle("some name"/*QString(GetName().data())*/);
-  // Add it to the "old" fSceneTreeWidget
-  fSceneTreeWidget->layout()->addWidget(fNewSceneTreeWidget);
   CreateNewSceneTreeWidget();
 
   // add defaults icons
@@ -1459,40 +1461,90 @@ void G4UIQt::CreateIcons()
 namespace {
   G4SceneTreeItem* ConvertToG4SceneTreeItem(QTreeWidgetItem* item)
   {
-    auto qVariant = item->data(0, Qt::UserRole);
-    std::istringstream iss(qVariant.toString().toStdString());
-    void* itemAddress; iss >> itemAddress;
-    return static_cast<G4SceneTreeItem*>(itemAddress);
+  auto qVariant = item->data(0, Qt::UserRole);
+  std::istringstream iss(qVariant.toString().toStdString());
+  void* itemAddress; iss >> itemAddress;
+  return static_cast<G4SceneTreeItem*>(itemAddress);
   }
 
   QColor ConvertG4ColourToQColor(const G4Colour& g4Colour)
   {
-    return QColor((int)(g4Colour.GetRed()*255),
-                  (int)(g4Colour.GetGreen()*255),
-                  (int)(g4Colour.GetBlue()*255),
-                  (int)(g4Colour.GetAlpha()*255));
+  return QColor((int)(g4Colour.GetRed()*255),
+                (int)(g4Colour.GetGreen()*255),
+                (int)(g4Colour.GetBlue()*255),
+                (int)(g4Colour.GetAlpha()*255));
   }
 
   G4Colour ConvertQColorToG4Colour(const QColor& qColor)
   {
-    return G4Color(qColor.red()/255.,
-                   qColor.green()/255.,
-                   qColor.blue()/255.,
-                   qColor.alpha()/255.);
+  return G4Color(qColor.red()/255.,
+                 qColor.green()/255.,
+                 qColor.blue()/255.,
+                 qColor.alpha()/255.);
   }
+
+  // Some file-local variables
+  G4int thisSceneTreePVDepth = -1;
+  const G4int maxInherentSliderValue = 100;
+  G4double transparencyByDepthValue = 0.;
+  G4int transparencyByDepthOption = 1;
 }
 
 void G4UIQt::CreateNewSceneTreeWidget()
 {
-  auto vLayout = fNewSceneTreeWidget->layout();
-  // reduce margins
-  vLayout->setContentsMargins(0,0,0,0);
+  fNewSceneTreeWidget = new QWidget;
+  fNewSceneTreeWidget->setStyleSheet ("padding: 0px ");
+  fNewSceneTreeWidget->setLayout(new QVBoxLayout);
+  fNewSceneTreeWidget->layout()->setContentsMargins(0,0,0,0);
+  fNewSceneTreeWidget->setWindowTitle("some name"/*QString(GetName().data())*/);
+  // Add it to the "old" fSceneTreeWidget
+  fSceneTreeWidget->layout()->addWidget(fNewSceneTreeWidget);
 
+  // Add scene tree
   fNewSceneTreeItemTreeWidget = new NewSceneTreeItemTreeWidget;
   fNewSceneTreeItemTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-  vLayout->addWidget(fNewSceneTreeItemTreeWidget);
+  fNewSceneTreeWidget->layout()->addWidget(fNewSceneTreeItemTreeWidget);
 
-  // A click on the item is handled here.
+  // Add transparency slider (design borrowed from old scene tree in G4OpenGLQtViewer)
+  // Helper widgets
+  auto helpWidget = new QWidget();
+  auto helpLayout = new QVBoxLayout();
+  auto zero = new QLabel(); zero->setText("Show\nall");
+  auto one = new QLabel(); one->setText("Hide\nall");
+  auto depthWidget = new QWidget();
+  auto showBox = new QWidget(depthWidget);
+  auto showBoxLayout = new QHBoxLayout();
+  // Slider
+  fNewSceneTreeSlider = new QSlider(Qt::Horizontal);
+  fNewSceneTreeSlider->setMaximum(maxInherentSliderValue);
+  fNewSceneTreeSlider->setMinimum(0);
+  fNewSceneTreeSlider->setTickPosition(QSlider::TicksAbove);
+  fNewSceneTreeSlider->setTickInterval(10);
+  // Slider buttons
+  auto buttonBox = new QWidget();
+  auto buttonBoxlayout = new QHBoxLayout();
+  buttonBox->setLayout(buttonBoxlayout);
+  auto unwrapButtonWidget = new QRadioButton("Unwrap");
+  unwrapButtonWidget->setChecked(true);  // Initial state
+  auto fadeButtonWidget = new QRadioButton("Fade");
+  auto xrayButtonWidget = new QRadioButton("X-ray");
+  buttonBoxlayout->addWidget(unwrapButtonWidget);
+  buttonBoxlayout->addWidget(fadeButtonWidget);
+  buttonBoxlayout->addWidget(xrayButtonWidget);
+  buttonBoxlayout->setContentsMargins(0,0,0,0);
+  buttonBox->setLayout(buttonBoxlayout);
+  // Layout
+  showBoxLayout->setContentsMargins(0,0,0,0);
+  showBoxLayout->addWidget(zero);
+  showBoxLayout->addWidget(fNewSceneTreeSlider);
+  showBoxLayout->addWidget(one);
+  showBox->setLayout(showBoxLayout);
+  helpLayout->addWidget(showBox);
+  helpWidget->setLayout(helpLayout);
+  helpLayout->setContentsMargins(0,0,0,0);
+  helpLayout->addWidget(buttonBox);
+  fNewSceneTreeWidget->layout()->addWidget(helpWidget);
+
   // A click on the check box makes the volume visible/invisible
   connect(fNewSceneTreeItemTreeWidget, &QTreeWidget::itemClicked,
           [&](QTreeWidgetItem* item){SceneTreeItemClicked(item);});
@@ -1505,8 +1557,22 @@ void G4UIQt::CreateNewSceneTreeWidget()
           [&](QTreeWidgetItem* item){SceneTreeItemExpanded(item);});
   connect(fNewSceneTreeItemTreeWidget, &QTreeWidget::itemCollapsed,
           [&](QTreeWidgetItem* item){SceneTreeItemCollapsed(item);});
+
+  // Connect the slider
+  connect(fNewSceneTreeSlider, &QSlider::valueChanged,
+          [&](int value){SliderValueChanged(value);});
+  connect(fNewSceneTreeSlider, &QSlider::sliderReleased,
+          [&]{SliderReleased();});
+
+  // Connect the slider buttons
+  connect(unwrapButtonWidget, &QRadioButton::clicked,
+          [&]{SliderRadioButtonClicked(1);});  // Unwrap
+  connect(fadeButtonWidget, &QRadioButton::clicked,
+          [&]{SliderRadioButtonClicked(2);});  // Fade
+  connect(xrayButtonWidget, &QRadioButton::clicked,
+          [&]{SliderRadioButtonClicked(3);});  // X-ray
 }
-  
+
 void G4UIQt::UpdateSceneTree(const G4SceneTreeItem& root)
 {
   //  G4debug << "\nG4UIQt::UpdateSceneTree: scene tree summary\n";
@@ -1517,6 +1583,7 @@ void G4UIQt::UpdateSceneTree(const G4SceneTreeItem& root)
   // Clear the existing GUI-side tree
   fNewSceneTreeItemTreeWidget->clear();
   // (I think this deletes everything - the top level items and their children.)
+  fMaxPVDepth = 0;
 
   // Build a new GUI-side tree
   fNewSceneTreeItemTreeWidget->setHeaderLabel (root.GetDescription().c_str());
@@ -1553,6 +1620,7 @@ void G4UIQt::UpdateSceneTree(const G4SceneTreeItem& root)
     item->setExpanded(model.IsExpanded());
 
     if (model.GetType() == G4SceneTreeItem::pvmodel) {
+      thisSceneTreePVDepth = -1;  // First item is the model - touchables hang from it
       BuildPVQTree(model,item);
     }
   }
@@ -1561,6 +1629,8 @@ void G4UIQt::UpdateSceneTree(const G4SceneTreeItem& root)
 // Build Physical Volume tree of touchables
 void G4UIQt::BuildPVQTree(const G4SceneTreeItem& g4stItem, QTreeWidgetItem* qtwItem)
 {
+  if (fMaxPVDepth < thisSceneTreePVDepth) fMaxPVDepth = thisSceneTreePVDepth;
+  thisSceneTreePVDepth++;
   const auto& g4stChildren = g4stItem.GetChildren();
   for (const auto& g4stChild: g4stChildren) {
     QStringList qStringList;
@@ -1612,6 +1682,7 @@ void G4UIQt::BuildPVQTree(const G4SceneTreeItem& g4stItem, QTreeWidgetItem* qtwI
     // Continue recursively
     BuildPVQTree(g4stChild,newQTWItem);
   }
+  thisSceneTreePVDepth--;
 }
 
 void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
@@ -1664,7 +1735,8 @@ void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
           msgBox.setText
           ("This action makes this volume and all descendants invisible."
            " To see descendants, right-click and select daughtersInvisible/false"
-           " and check visibility of descendants individually.");
+           " and check visibility of descendants individually. If this gets out"
+           " of hand, \"/vis/viewer/clearVisAttributesModifiers\" and start again.");
           msgBox.setInformativeText
           ("To suppress this message click \"Discard\" or \"Don't Save\"");
           msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Ok);
@@ -1733,6 +1805,41 @@ void G4UIQt::SceneTreeItemCollapsed(QTreeWidgetItem* item)
       sceneTreeItem->GetType() == G4SceneTreeItem::touchable) {
     sceneTreeItem->SetExpanded(false);
   }
+}
+
+void G4UIQt::SliderValueChanged(G4int value)
+{
+  transparencyByDepthValue = value;
+  std::ostringstream oss;
+  oss << fMaxPVDepth*transparencyByDepthValue/maxInherentSliderValue
+  << ' ' << transparencyByDepthOption;
+  auto uiMan = G4UImanager::GetUIpointer();
+  // Suppress command echoing during sliding
+  auto keepVerbose = uiMan->GetVerboseLevel();
+  uiMan->SetVerboseLevel(0);
+  uiMan->ApplyCommand("/vis/viewer/set/transparencyByDepth " + oss.str());
+  uiMan->SetVerboseLevel(keepVerbose);
+}
+
+void G4UIQt::SliderReleased()
+{
+  transparencyByDepthValue = fNewSceneTreeSlider->value();
+  std::ostringstream oss;
+  oss << fMaxPVDepth*transparencyByDepthValue/maxInherentSliderValue
+  << ' ' << transparencyByDepthOption;
+  auto uiMan = G4UImanager::GetUIpointer();
+  // Don't suppress command echoing in this case
+  uiMan->ApplyCommand("/vis/viewer/set/transparencyByDepth " + oss.str());
+}
+
+void G4UIQt::SliderRadioButtonClicked(G4int buttonNo) {
+  transparencyByDepthOption = buttonNo;
+  std::ostringstream oss;
+  oss << fMaxPVDepth*transparencyByDepthValue/maxInherentSliderValue
+  << ' ' << transparencyByDepthOption;
+  auto uiMan = G4UImanager::GetUIpointer();
+  // Don't suppress command echoing in this case
+  uiMan->ApplyCommand("/vis/viewer/set/transparencyByDepth " + oss.str());
 }
 
 void G4UIQt::NewSceneTreeItemTreeWidget::mousePressEvent(QMouseEvent* ev)
@@ -1871,27 +1978,29 @@ void G4UIQt::NewSceneTreeItemTreeWidget::ActWithoutParameter
 {
   // Special case: dump
   if (action == "dump") {
-    static G4bool wanted = true;
-    if (wanted) {
-      QMessageBox msgBox;
-      std::ostringstream oss;
-      oss << G4AttCheck(sceneTreeItem->GetAttValues(), sceneTreeItem->GetAttDefs());
-      // Just the first 1000 characters, otherwise it spreads off screen
-      msgBox.setText((oss.str().substr(0,1000)+"...").c_str());
-      msgBox.setInformativeText
-      ("To suppress this message click \"Discard\" or \"Don't Save\"."
-       "\nTo get a complete dump to session output click \"Ok\","
-       "\nElse click \"Close\".");
-      msgBox.setStandardButtons
-      (QMessageBox::Discard | QMessageBox::Close | QMessageBox::Ok);
-      msgBox.setDefaultButton(QMessageBox::Ok);
-      auto result = msgBox.exec();
-      if (result == QMessageBox::Discard) {
-        wanted = false;
-      } else if (result == QMessageBox::Close) {
-        return;
-      }
-    }
+
+    auto widget = new QWidget;
+    widget->setWindowTitle(sceneTreeItem->GetDescription().c_str());
+    auto layout = new QVBoxLayout;
+    widget->setLayout(layout);
+
+    auto label = new QLabel;
+    label->setAlignment(Qt::AlignHCenter);
+    std::ostringstream oss;
+    oss << "<b>" << sceneTreeItem->GetPVPath() << "<br>Full dump printed to G4cout</b>";
+    label->setText(oss.str().c_str());
+    label->setTextFormat(Qt::RichText);
+    layout->addWidget(label);
+
+    auto scrollArea = new QScrollArea;
+    auto content = new QLabel;
+    std::ostringstream oss1;
+    oss1 << G4AttCheck(sceneTreeItem->GetAttValues(), sceneTreeItem->GetAttDefs());
+    content->setText(oss1.str().c_str());
+    scrollArea->setWidget(content);
+    layout->addWidget(scrollArea);
+
+    widget->show();
   }
   auto uiMan = G4UImanager::GetUIpointer();
   uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
@@ -2023,6 +2132,579 @@ QWidget* G4UIQt::CreateHelpTBWidget()
   return fHelpTBWidget;
 }
 
+/** Create widget to set and manipulate time window and other effects
+ */
+namespace {  // For use in CreateTimeWindowWidget()
+
+  auto cm2ns = [](double scale)  // lambda function for use below (with severe rounding)
+  {return std::pow(10., std::floor(std::log10((scale*cm/c_light)/ns)));};
+
+  // Some values depend on the scale of the detector
+  double detectorScale = 100.;  // cm
+  double detectorTimescaleNano = cm2ns(detectorScale);  // ns (correponding time, rounded)
+
+  // Time slice interval
+  double timeSliceInterval = detectorTimescaleNano/100; // ns
+  double timeSliceIntervalSpinBoxSingleStep = detectorTimescaleNano/100.; // ns
+  double timeSliceIntervalSpinBoxMaximum = detectorTimescaleNano*100; // ns
+
+  // Duration of time window
+  double duration = detectorTimescaleNano/10; // ns
+  const double durationSpinBoxSingleStep = detectorTimescaleNano/10.; // ns
+  const double durationSpinBoxMaximum = detectorTimescaleNano*1000; // ns
+
+  // Parameters of time evolution feature
+  double startTime = 0.; // ns
+  double timeSliderValue   = 0.; // ns
+  double timeSliderMinimum = 0.; // ns
+  double timeSliderMaximum = detectorTimescaleNano; // ns
+  double timeSliderIncrement = detectorTimescaleNano/100; // ns
+  double timeSliderIncrementSpinBoxSingleStep = detectorTimescaleNano/100.; // ns
+  double timeSliderIncrementSpinBoxMaximum = detectorTimescaleNano; // ns
+
+  // Other spin boxes
+  const double spinBoxSingleStep = detectorTimescaleNano/10.; // ns
+  const double spinBoxMaximum = detectorTimescaleNano*1000; // ns
+}
+
+QWidget* G4UIQt::CreateTimeWindowWidget()
+{
+  // Layout
+  const int topMargins = 5;  // Margin around layouts enclosed in top widget (the panels)
+  const int panelLeftRightMargins = 5;  // Margin around layouts enclosed in the panels
+  const int panelTopBottomMargins = 0;  // Margin around layouts enclosed in the panels
+
+  // Top level widget
+  fTimeWindowWidget = new QWidget;
+  auto topLayout = new QVBoxLayout(fTimeWindowWidget);
+  topLayout->setContentsMargins(topMargins, topMargins, topMargins, topMargins);
+
+  // Some spin boxes with names in the top space, so we can change value
+  auto timeSliceIntervalSpinBox   = new QDoubleSpinBox;
+  auto durationSpinBox            = new QDoubleSpinBox;
+  auto timeSliderIncrementSpinBox = new QDoubleSpinBox;
+  auto timeSliderMinSpinBox       = new QDoubleSpinBox;
+  auto timeSliderMaxSpinBox       = new QDoubleSpinBox;
+  auto timeSliderValueSpinBox     = new QDoubleSpinBox;
+
+  { // Header
+    auto header = new QLabel;
+    header->setAlignment(Qt::AlignHCenter);
+    header->setText("Time window control");
+    topLayout->addWidget(header);
+  } // Header
+
+  // Prepare Events Panel
+  auto prepareEventsPanel = new QLabel;
+  prepareEventsPanel->setFrameStyle(QFrame::Panel);
+  auto prepareEventsLayout = new QVBoxLayout(prepareEventsPanel);
+  prepareEventsLayout->setContentsMargins
+  (panelLeftRightMargins, panelTopBottomMargins, panelLeftRightMargins, panelTopBottomMargins);
+  topLayout->addWidget(prepareEventsPanel);
+  topLayout->setStretchFactor(prepareEventsPanel, 10);
+
+  { // Place stuff in the Prepare Events Panel
+
+    static int nEvents = 1;
+
+    { // Header
+      auto prepareTitle = new QLabel;
+      prepareTitle->setFixedHeight(20);
+      prepareTitle->setAlignment(Qt::AlignHCenter);
+      prepareTitle->setText("Prepare event(s)");
+      prepareEventsLayout->addWidget(prepareTitle);
+    } // Header
+
+    { // Detector scale
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Detector scale");
+      layout->addWidget(label);
+      auto spinBox = new QDoubleSpinBox;
+      spinBox->setRange(0., detectorScale*1000);
+      spinBox->setValue(detectorScale);
+      spinBox->setSingleStep(detectorScale/10.);
+      spinBox->setSuffix(" cm");
+      spinBox->setToolTip
+      ("This is rough guidance for the default values of"
+       "\nsome of the parameters below, so that they better"
+       "\ncorrespond to the physical dimensions of the detector."
+       "\nIt sets the default values, but you can still make"
+       "\nyour own adjustments.");
+      layout->addWidget(spinBox);
+      prepareEventsLayout->addWidget(widget);
+      connect(spinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=](double scale){
+        detectorTimescaleNano = cm2ns(scale);
+
+        timeSliceInterval = detectorTimescaleNano/100;  // ns
+        timeSliceIntervalSpinBox->setRange(0., timeSliceIntervalSpinBoxMaximum);  // ns
+        timeSliceIntervalSpinBox->setSingleStep(timeSliceInterval);  // ns
+        timeSliceIntervalSpinBox->setValue(timeSliceInterval);  // ns
+
+        duration = detectorTimescaleNano/10.;
+        durationSpinBox->setRange(0., detectorTimescaleNano*100.);
+        durationSpinBox->setSingleStep(detectorTimescaleNano/100.);
+        durationSpinBox->setValue(duration);
+
+        timeSliderIncrementSpinBox->setRange(0., detectorTimescaleNano/100.);
+        timeSliderIncrementSpinBox->setValue(detectorTimescaleNano/100.);
+
+        timeSliderMaxSpinBox->setRange(0., detectorTimescaleNano);
+        timeSliderMaxSpinBox->setSingleStep(detectorTimescaleNano/10.);
+        timeSliderMaxSpinBox->setValue(detectorTimescaleNano);
+      });
+    } // Detector scale
+
+    { // Events box
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Number of events");
+      layout->addWidget(label);
+      auto spinBox = new QSpinBox;
+      spinBox->setRange(1, 9999);
+      layout->addWidget(spinBox);
+      prepareEventsLayout->addWidget(widget);
+      connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), [](int n){
+        nEvents = n;
+      });
+    } // Events box
+
+    { // Time slice interval (the trajectory slices)
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Time slice interval");
+      layout->addWidget(label);
+      timeSliceIntervalSpinBox->setRange(0., timeSliceIntervalSpinBoxMaximum);
+      timeSliceIntervalSpinBox->setValue(timeSliceInterval);
+      timeSliceIntervalSpinBox->setSingleStep(timeSliceIntervalSpinBoxSingleStep);
+      timeSliceIntervalSpinBox->setDecimals(3);
+      timeSliceIntervalSpinBox->setSuffix(" ns");
+      timeSliceIntervalSpinBox->setToolTip
+      ("This should be about 1/100 of the time taken for"
+       "\nlight to travel across the field of view.");
+      layout->addWidget(timeSliceIntervalSpinBox);
+      prepareEventsLayout->addWidget(widget);
+      connect(timeSliceIntervalSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double dt){
+        timeSliceInterval = dt;
+      });
+
+    } // Time slice interval (the trajectory slices)
+
+    { // Prepare and and display event(s)
+      auto button = new QPushButton("Prepare");
+      prepareEventsLayout->addWidget(button);
+      button->setToolTip
+      ("Or do it yourself. You will need:"
+       "\n  /vis/scene/add/trajectories rich"
+       "\nCreate a trajectories model, then"
+       "\n  /vis/modeling/trajectories/<model-name>/default/setTimeSliceInterval 0.01 ns"
+       "\nthen set colours, step points, linewidth, etc., as desired,"
+       "\nand /run/beamOn one or more events."
+       );
+      connect(button, &QPushButton::clicked, this, [](){
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/scene/add/trajectories rich");
+        static G4int modelNo = 0;  // Seems we have to create a new model every time
+        G4String modelName = "fromGUI-" + G4UIcommand::ConvertToString(modelNo++);
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/create/drawByCharge " + modelName);
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setTimeSliceInterval "
+         + G4UIcommand::ConvertToString(timeSliceInterval) + " ns ");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setLineWidth 5");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setDrawStepPts true");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setStepPtsSize 10");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setStepPtsFillStyle filled");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setDrawAuxPts true");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setAuxPtsSize 10");
+        ui->ApplyCommand
+        ("/vis/modeling/trajectories/" + modelName + "/default/setAuxPtsFillStyle filled");
+        ui->ApplyCommand
+        ("/run/beamOn " + G4UIcommand::ConvertToString(nEvents));
+      });
+    } // Prepare and and display event(s)
+
+    { // Blank widget with non-zero stretch (squashes others up)
+      auto spacer = new QWidget;
+      prepareEventsLayout->addWidget(spacer);
+      prepareEventsLayout->setStretchFactor(spacer, 1);
+    } // Blank widget with non-zero stretch (squashes others up)
+
+  } // Place stuff in the Prepare Events Panel
+
+  // Time Parameters Panel
+  auto timeParametersPanel = new QLabel;
+  timeParametersPanel->setFrameStyle(QFrame::Panel);
+  auto timeParametersLayout = new QVBoxLayout(timeParametersPanel);
+  timeParametersLayout->setContentsMargins
+  (panelLeftRightMargins, panelTopBottomMargins, panelLeftRightMargins, panelTopBottomMargins);
+  topLayout->addWidget(timeParametersPanel);
+  topLayout->setStretchFactor(timeParametersPanel, 10);
+  auto startTimeSpinBox = new QDoubleSpinBox;
+
+  { // Place stuff in the Time Parameters Panel
+
+    { // Header
+      auto header = new QLabel;
+      header->setFixedHeight(20);
+      header->setAlignment(Qt::AlignHCenter);
+      header->setText("Time parameters");
+      timeParametersLayout->addWidget(header);
+    } // Header
+
+    { // Start time
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Start time");
+      layout->addWidget(label);
+      startTimeSpinBox->setRange(0., spinBoxMaximum);
+      startTimeSpinBox->setSingleStep(spinBoxSingleStep);
+      startTimeSpinBox->setDecimals(3);
+      startTimeSpinBox->setSuffix(" ns");
+      startTimeSpinBox->setToolTip("Start of time window");
+      layout->addWidget(startTimeSpinBox);
+      timeParametersLayout->addWidget(widget);
+      connect(startTimeSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double st){
+        startTime = st;
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/startTime "
+                         + G4UIcommand::ConvertToString(startTime) + " ns "
+                         + G4UIcommand::ConvertToString(duration) + " ns");
+      });
+    } // Start time
+
+    { // Duration
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Duration");
+      layout->addWidget(label);
+      durationSpinBox->setRange(0., durationSpinBoxMaximum);
+      durationSpinBox->setValue(duration);
+      durationSpinBox->setSingleStep(durationSpinBoxSingleStep);
+      durationSpinBox->setDecimals(3);
+      durationSpinBox->setSuffix(" ns");
+      durationSpinBox->setToolTip
+      ("Duration of time window, typically"
+       "\n10x the time slice interval.");
+      layout->addWidget(durationSpinBox);
+      timeParametersLayout->addWidget(widget);
+      connect(durationSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double d){
+        duration = d;
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/startTime "
+                         + G4UIcommand::ConvertToString(startTime) + " ns "
+                         + G4UIcommand::ConvertToString(duration) + " ns");
+      });
+    } // Duration
+
+    { // Fade factor
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Fade factor");
+      layout->addWidget(label);
+      auto spinBox = new QDoubleSpinBox;
+      spinBox->setRange(0., 1.);
+      spinBox->setValue(1.);
+      spinBox->setSingleStep(spinBoxSingleStep);
+      spinBox->setToolTip
+      ("Factor by which time-sliced objects fade over"
+       "\nthe duration of the window, giving an impression"
+       "\nof direction of motion.");
+      layout->addWidget(spinBox);
+      timeParametersLayout->addWidget(widget);
+      connect(spinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [](double f){
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/fadeFactor " +
+                         G4UIcommand::ConvertToString(f));
+      });
+    } // Duration
+
+    { // Display head time
+      auto widget = new QRadioButton("Display head time");
+      widget->setChecked(false);
+      widget->setToolTip
+      ("Displays the time corresponding to end/head of"
+       "\nthe time window. The font size, position and"
+       "\ncolour can be set with /vis/viewer/set/timeWindow/");
+      timeParametersLayout->addWidget(widget);
+      connect(widget, &QRadioButton::clicked, [=](){
+        G4String checked = "false";
+        if (widget->isChecked()) checked = "true";
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/displayHeadTime " + checked);
+      });
+    } // Display head time
+
+    { // Apply
+      auto button = new QPushButton("Apply");
+      button->setToolTip("Applies the above settings");
+      timeParametersLayout->addWidget(button);
+      connect(button, &QPushButton::clicked, this, [](){
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/startTime "
+                         + G4UIcommand::ConvertToString(startTime) + " ns "
+                         + G4UIcommand::ConvertToString(duration) + " ns");
+      });
+    } // Apply
+
+    { // Blank widget with non-zero stretch (squashes others up)
+      auto spacer = new QWidget;
+      timeParametersLayout->addWidget(spacer);
+      timeParametersLayout->setStretchFactor(spacer, 1);
+    } // Blank widget with non-zero stretch (squashes others up)
+
+  } // Place stuff in the Time Parameters Panel
+
+  // Time Evolution Panel
+  auto timeEvolutionPanel = new QLabel;
+  timeEvolutionPanel->setFrameStyle(QFrame::Panel);
+  auto timeEvolutionLayout = new QVBoxLayout(timeEvolutionPanel);
+  timeEvolutionLayout->setContentsMargins
+  (panelLeftRightMargins, panelTopBottomMargins, panelLeftRightMargins, panelTopBottomMargins);
+  topLayout->addWidget(timeEvolutionPanel);
+  topLayout->setStretchFactor(timeEvolutionPanel, 15);
+
+  { // Place stuff in the Time Evolution Panel
+
+    const int sliderIntMaximum = 1000;
+    const int sliderIntTickInterval = 100;
+    static int sliderIntValue = 0;
+    static double desiredfps = 10.; // fps
+    static G4bool stopRun = false;
+    auto timeEvolutionSlider = new QSlider(Qt::Horizontal);
+
+    { // Header
+      auto header = new QLabel;
+      header->setFixedHeight(20);
+      header->setAlignment(Qt::AlignHCenter);
+      header->setText("Time evolution");
+      timeEvolutionLayout->addWidget(header);
+    } // Header
+
+    { // Time slider increment
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Increment");
+      layout->addWidget(label);
+      timeSliderIncrementSpinBox->setRange(0., timeSliderIncrementSpinBoxMaximum);
+      timeSliderIncrementSpinBox->setValue(timeSliderIncrement);
+      timeSliderIncrementSpinBox->setSingleStep(timeSliderIncrementSpinBoxSingleStep);
+      timeSliderIncrementSpinBox->setDecimals(3);
+      timeSliderIncrementSpinBox->setSuffix(" ns");
+      timeSliderIncrementSpinBox->setToolTip("Time step of the time evolution sequence");
+      layout->addWidget(timeSliderIncrementSpinBox);
+      timeEvolutionLayout->addWidget(widget);
+      connect(timeSliderIncrementSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double inc){
+        timeSliderIncrement = inc;
+      });
+    } // Slider increment
+
+    { // Slider labels
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      timeEvolutionLayout->addWidget(widget);
+      auto label1 = new QLabel("min");
+      label1->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+      layout->addWidget(label1);
+      auto label2 = new QLabel("value");
+      label2->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+      layout->addWidget(label2);
+      auto label3 = new QLabel("max");
+      label3->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+      layout->addWidget(label3);
+    } // Slider labels
+
+    { // Slider values
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      timeEvolutionLayout->addWidget(widget);
+      timeSliderMinSpinBox->setRange(0., spinBoxMaximum);
+      timeSliderMinSpinBox->setSingleStep(spinBoxSingleStep);
+      timeSliderMinSpinBox->setDecimals(3);
+      timeSliderMinSpinBox->setSuffix(" ns");
+      layout->addWidget(timeSliderMinSpinBox);
+      connect(timeSliderMinSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double smin){
+        timeSliderMinimum = smin;
+      });
+      timeSliderValueSpinBox->setRange(0., spinBoxMaximum);
+      timeSliderValueSpinBox->setSingleStep(spinBoxSingleStep);
+      timeSliderValueSpinBox->setDecimals(3);
+      timeSliderValueSpinBox->setSuffix(" ns");
+      layout->addWidget(timeSliderValueSpinBox);
+      connect(timeSliderValueSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double sv){
+        timeSliderValue = sv;
+      });
+      timeSliderMaxSpinBox->setRange(0., spinBoxMaximum);
+      timeSliderMaxSpinBox->setSingleStep(spinBoxSingleStep);
+      timeSliderMaxSpinBox->setValue(timeSliderMaximum);
+      timeSliderMaxSpinBox->setDecimals(3);
+      timeSliderMaxSpinBox->setSuffix(" ns");
+      layout->addWidget(timeSliderMaxSpinBox);
+      connect(timeSliderMaxSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double smax){
+        timeSliderMaximum = smax;
+      });
+    } // Slider values
+
+    { // Slider
+      timeEvolutionSlider->setMaximum(sliderIntMaximum);
+      timeEvolutionSlider->setMinimum(0);
+      timeEvolutionSlider->setTickPosition(QSlider::TicksAbove);
+      timeEvolutionSlider->setTickInterval(sliderIntTickInterval);
+      timeEvolutionSlider->setToolTip
+      ("Move time window. Click on a position or slide"
+       "\nwith middle button/3-finger pad gesture.");
+      timeEvolutionLayout->addWidget(timeEvolutionSlider);
+      connect(timeEvolutionSlider, &QSlider::valueChanged, [=](int value){
+        sliderIntValue = value;
+        startTime = timeSliderMinimum
+        + sliderIntValue * (timeSliderMaximum - timeSliderMinimum) / sliderIntMaximum;
+        startTimeSpinBox->setValue(startTime);
+        timeSliderValueSpinBox->setValue(startTime);
+        auto ui = G4UImanager::GetUIpointer();
+        // Suppress command echoing during sliding
+        auto keepVerbose = ui->GetVerboseLevel();
+        ui->SetVerboseLevel(0);
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/startTime "
+                         + G4UIcommand::ConvertToString(startTime) + " ns "
+                         + G4UIcommand::ConvertToString(duration) + " ns");
+        ui->SetVerboseLevel(keepVerbose);
+      });
+      connect(timeEvolutionSlider, &QSlider::sliderReleased, [=](){
+        sliderIntValue = timeEvolutionSlider->value();
+        startTime = timeSliderMinimum
+        + sliderIntValue * (timeSliderMaximum - timeSliderMinimum) / sliderIntMaximum;
+        startTimeSpinBox->setValue(startTime);
+        timeSliderValueSpinBox->setValue(startTime);
+        auto ui = G4UImanager::GetUIpointer();
+        ui->ApplyCommand("/vis/viewer/set/timeWindow/startTime "
+                         + G4UIcommand::ConvertToString(startTime) + " ns "
+                         + G4UIcommand::ConvertToString(duration) + " ns");
+      });
+      connect(timeEvolutionSlider, &QSlider::sliderPressed, [=](){
+        stopRun = true;
+        sliderIntValue = timeEvolutionSlider->value();
+        startTime = timeSliderMinimum
+        + sliderIntValue * (timeSliderMaximum - timeSliderMinimum) / sliderIntMaximum;
+        startTimeSpinBox->setValue(startTime);
+      });
+    } // Slider
+
+    { // Desired frames per second
+      auto widget = new QWidget;
+      auto layout = new QHBoxLayout(widget);
+      layout->setContentsMargins(0,0,0,0);
+      auto label = new QLabel;
+      label->setText("Desired fps");
+      layout->addWidget(label);
+      auto fpsSpinBox = new QDoubleSpinBox;
+      fpsSpinBox->setRange(1., 99.);
+      fpsSpinBox->setSingleStep(1.);
+      fpsSpinBox->setValue(10.);
+      fpsSpinBox->setSuffix(" fps");
+      fpsSpinBox->setToolTip
+      ("Desired frames per second. Since re-rendering each"
+       "\nframe is CPU-intensive, this might not be achieved.");
+      layout->addWidget(fpsSpinBox);
+      timeEvolutionLayout->addWidget(widget);
+      connect(fpsSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+              [](double fps){
+        desiredfps = fps;
+      });
+    } // Desired frames per second
+
+    { // Run
+      auto button = new QPushButton("Go");
+      button->setToolTip("Run the time evolution sequence");
+      timeEvolutionLayout->addWidget(button);
+      connect(button, &QPushButton::clicked, [=](){
+        auto ui = G4UImanager::GetUIpointer();
+        // Suppress command echoing during sliding
+        auto keepVerbose = ui->GetVerboseLevel();
+        ui->SetVerboseLevel(0);
+        for (startTime = timeSliderMinimum;
+             startTime <= timeSliderMaximum; startTime += timeSliderIncrement) {
+          if (stopRun) break;
+          auto a = std::chrono::steady_clock::now();
+          startTimeSpinBox->setValue(startTime);
+          timeSliderValueSpinBox->setValue(startTime);
+          sliderIntValue = sliderIntMaximum
+          * (startTime - timeSliderMinimum) / (timeSliderMaximum - timeSliderMinimum);
+          timeEvolutionSlider->setValue(sliderIntValue);
+          ui->ApplyCommand("/vis/viewer/set/timeWindow/startTime "
+                           + G4UIcommand::ConvertToString(startTime) + " ns "
+                           + G4UIcommand::ConvertToString(duration) + " ns");
+          auto b = std::chrono::steady_clock::now();
+          auto timeTaken = b - a;
+          auto desiredTime = std::chrono::duration<double>(1./desiredfps);
+          auto timeLeft = desiredTime - timeTaken;
+          if (timeLeft > std::chrono::duration<double>::zero()) {
+            std::this_thread::sleep_for(timeLeft);
+          }
+        }
+        stopRun = false;
+        ui->SetVerboseLevel(keepVerbose);
+      });
+    } // Run
+
+    { // Blank widget with non-zero stretch (squashes others up)
+      auto spacer = new QWidget;
+      timeEvolutionLayout->addWidget(spacer);
+      timeEvolutionLayout->setStretchFactor(spacer, 1);
+    } // Blank widget with non-zero stretch (squashes others up)
+
+  } // Place stuff in the Time Evolution Panel
+
+  { // Further information
+    auto header = new QLabel;
+    header->setAlignment(Qt::AlignHCenter);
+    header->setText
+    ("Further time window commands are"
+     "\navailable in /vis/viewer/set/timeWindow/."
+     "\n\nYou can capture views, including"
+     "\nrotation and zooming, with /vis/viewer/save,"
+     "\nand play back with /vis/viewer/interpolate."
+     "\n\nSee examples/extended/visualization/movies.");
+    topLayout->addWidget(header);
+  } // Further information
+
+  { // Blank widget (adds small space at bottom)
+    auto spacer = new QWidget;
+    topLayout->addWidget(spacer);
+    topLayout->setStretchFactor(spacer, 1);
+  } // Blank widget (adds small space at bottom)
+
+  return fTimeWindowWidget;
+}
+
 /** Create the Cout ToolBox Widget
  */
 G4UIDockWidget* G4UIQt::CreateCoutTBWidget()
@@ -2137,12 +2819,14 @@ G4UIDockWidget* G4UIQt::CreateUITabWidget()
   // the left dock
   fUITabWidget->addTab(CreateSceneTreeWidget(), "Scene tree");
   fUITabWidget->addTab(CreateHelpTBWidget(), "Help");
+  fUITabWidget->addTab(CreateTimeWindowWidget(), "Time");
   fUITabWidget->addTab(CreateHistoryTBWidget(), "History");
   fUITabWidget->setCurrentWidget(fHelpTBWidget);
 
   fUITabWidget->setTabToolTip(0, "Tree of scene items");
   fUITabWidget->setTabToolTip(1, "Help widget");
-  fUITabWidget->setTabToolTip(2, "All commands history");
+  fUITabWidget->setTabToolTip(2, "Time window widdget");
+  fUITabWidget->setTabToolTip(3, "All commands history");
   connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
   fUIDockWidget = new G4UIDockWidget("");
@@ -5033,11 +5717,14 @@ void G4UIQt::CreatePickInfosDialog()
   if (fPickInfosDialog != nullptr) {
     return;
   }
+
   fPickInfosDialog = new QDialog();
-
   fPickInfosDialog->setWindowTitle("Pick infos");
+  QSize screenSize = QGuiApplication::primaryScreen()->geometry().size();
+  fPickInfosDialog->resize(screenSize.width() * 0.3, screenSize.height() * 0.3);
   fPickInfosDialog->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
+  fPickInfosDialog->setWindowFlags(Qt::WindowStaysOnTopHint);
+  
   if (fPickInfosWidget == nullptr) {
     fPickInfosWidget = new QWidget();
     auto layoutPickInfos = new QVBoxLayout();
@@ -5051,7 +5738,6 @@ void G4UIQt::CreatePickInfosDialog()
   layoutDialog->addWidget(fPickInfosWidget);
   layoutDialog->setContentsMargins(0, 0, 0, 0);
   fPickInfosDialog->setLayout(layoutDialog);
-  fPickInfosDialog->setWindowFlags(Qt::WindowStaysOnTopHint);
 }
 
 void G4UIQt::CreateEmptyViewerPropertiesWidget()
@@ -5193,13 +5879,13 @@ void G4UIQt::SetIconPickSelected()
   fZoomInSelected = false;
   fZoomOutSelected = false;
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "pick") {
       i->setChecked(true);
@@ -5228,13 +5914,13 @@ void G4UIQt::SetIconZoomInSelected()
   fPickSelected = false;
   fZoomOutSelected = false;
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "zoom_in") {
       i->setChecked(true);
@@ -5263,13 +5949,13 @@ void G4UIQt::SetIconZoomOutSelected()
   fPickSelected = false;
   fZoomInSelected = false;
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "zoom_out") {
       i->setChecked(true);
@@ -5293,13 +5979,13 @@ void G4UIQt::SetIconSolidSelected()
 {
   // Theses actions should be in the app toolbar
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "solid") {
       i->setChecked(true);
@@ -5320,13 +6006,13 @@ void G4UIQt::SetIconWireframeSelected()
 {
   // Theses actions should be in the app toolbar
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "wireframe") {
       i->setChecked(true);
@@ -5347,13 +6033,13 @@ void G4UIQt::SetIconHLRSelected()
 {
   // Theses actions should be in the app toolbar
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "hidden_line_removal") {
       i->setChecked(true);
@@ -5374,14 +6060,14 @@ void G4UIQt::SetIconHLHSRSelected()
 {
   // Theses actions should be in the app toolbar
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
 
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "hidden_line_and_surface_removal") {
       i->setChecked(true);
@@ -5402,13 +6088,13 @@ void G4UIQt::SetIconPerspectiveSelected()
 {
   // Theses actions should be in the app toolbar
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "perspective") {
       i->setChecked(true);
@@ -5423,14 +6109,14 @@ void G4UIQt::SetIconOrthoSelected()
 {
   // Theses actions should be in the app toolbar
 
-  QToolBar* bar = fToolbarApp;
+  QToolBar* toolbar = fToolbarApp;
   if (! fDefaultIcons) {
-    bar = fToolbarUser;
+    toolbar = fToolbarUser;
   }
 
-  if (bar == nullptr) return;
+  if (toolbar == nullptr) return;
 
-  QList<QAction*> list = bar->actions();
+  QList<QAction*> list = toolbar->actions();
   for (auto i : list) {
     if (i->data().toString() == "ortho") {
       i->setChecked(true);

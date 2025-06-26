@@ -1,0 +1,73 @@
+# Verbosity
+/run/verbose 2
+/tracking/verbose 0
+/control/verbose 2
+#
+# MT
+/run/numberOfThreads 10
+#
+# Material
+/radial/setMat G4_WATER
+#
+# Sizes of World and cylinders
+#
+# -> RADIUS: from the range of secondary electrons having the maximum kinetic energy
+/radial/setWorldRadius 300 nm
+#
+# -> LENGTH: example for 1 MeV protons to get about 1000 proton steps
+/radial/setWorldLength 2.5 um
+#
+# -> THICKNESS: default set to 1 nm
+/radial/setThicknessCylinders 1 nm
+#
+# Atomic deexcitation
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# Physics
+# - To use Geant4-DNA constructor X, X=0, 2, 4, or 6 (recommended)
+#/radial/addPhysics DNA_Opt0
+/radial/addPhysics DNA_Opt2
+#/radial/addPhysics DNA_Opt4
+#/radial/addPhysics DNA_Opt6
+#
+# Heavy ions tracking cut
+#/radial/addIonsTrackingCut false
+#
+# Run initialization
+/run/initialize
+#
+# Visualization
+#/control/execute vis.mac
+#
+# Incident ion type
+#
+/gun/particle proton
+#
+##########################################################
+# PROTON IONISATION SETTINGS
+##########################################################
+/process/inactivate proton_G4DNAExcitation
+/process/inactivate proton_G4DNAElastic
+/process/inactivate proton_G4DNAChargeDecrease
+# the following lines avoid standard EM processes, if any
+/process/inactivate msc
+/process/inactivate hIoni
+/process/inactivate nuclearStopping
+##########################################################
+#
+#/gun/particle alpha
+#
+#/gun/particle ion
+#/gun/ion 14 28
+#
+# Incident particle energy
+/gun/energy 1 MeV
+#
+# Incident particle direction along cylinder Z-axis
+/gun/direction 0 0 1
+#
+# Beam on
+/run/beamOn 100

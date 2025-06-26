@@ -117,31 +117,33 @@ class G4EllipticalTube : public G4VSolid
     inline G4double GetDx() const;
     inline G4double GetDy() const;
     inline G4double GetDz() const;
-  
+
+    // Modifiers
+    //
     inline void SetDx( G4double Dx );
     inline void SetDy( G4double Dy );
     inline void SetDz( G4double Dz );
- 
-    G4EllipticalTube(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects
 
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects
+    G4EllipticalTube(__void__&);
+
+    // Copy constructor and assignment operator
     G4EllipticalTube(const G4EllipticalTube& rhs);
     G4EllipticalTube& operator=(const G4EllipticalTube& rhs);
-      // Copy constructor and assignment operator
 
   private:
 
+    // Check parameters and set pre-calculated values
     void CheckParameters();
-      // Check parameters and set pre-calculated values
 
+    // Algorithm for SurfaceNormal() following the original
+    // specification for points not on the surface
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
-      // Algorithm for SurfaceNormal() following the original
-      // specification for points not on the surface
 
+    // Calculate surface area and cache it
     G4double GetCachedSurfaceArea() const;
-      // Calculate surface area and cache it
 
   private:
 
@@ -152,7 +154,7 @@ class G4EllipticalTube : public G4VSolid
     G4double fDz; // half length in Z
 
     G4double fCubicVolume = 0.0; // volume
-    G4double fSurfaceArea = 0.0; // surface area  
+    G4double fSurfaceArea = 0.0; // surface area
 
     // Cached pre-calculated values
     G4double fRsph;    // R of bounding sphere

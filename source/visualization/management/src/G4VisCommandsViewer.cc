@@ -1062,8 +1062,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
   for (std::size_t ih = 0; ih < nHandlers; ++ih) {
     G4VSceneHandler* sh = sceneHandlerList [ih];
     const G4ViewerList& viewerList = sh -> GetViewerList ();
-    for (std::size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
-      if (viewerList [iViewer] -> GetShortName () == newShortName ) {
+    for (const auto* iViewer : viewerList) {
+      if (iViewer -> GetShortName () == newShortName ) {
 	G4ExceptionDescription ed;
 	ed <<
 	"ERROR: Viewer \"" << newShortName << "\" already exists.";
@@ -1291,7 +1291,7 @@ G4VisCommandViewerInterpolate::G4VisCommandViewerInterpolate () {
   parameter -> SetDefaultValue(50);
   fpCommand -> SetParameter(parameter);
   parameter = new G4UIparameter("wait-time", 's', omitable = true);
-  parameter -> SetGuidance("Wait time per interpolated point");
+  parameter -> SetGuidance("Minimum time per interpolated point (steady frame rate)");
   parameter -> SetDefaultValue("20.");
   fpCommand -> SetParameter(parameter);
   parameter = new G4UIparameter("time-unit", 's', omitable = true);
@@ -2174,7 +2174,7 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
   // Set pointers, call SetView and print confirmation.
   fpVisManager -> SetCurrentViewer (viewer);
 
-  RefreshIfRequired(viewer);
+  // Refresh not required after a select - window systems keep the image
 
   // Update GUI scene tree (make sure it's in sync)
   viewer->UpdateGUISceneTree();

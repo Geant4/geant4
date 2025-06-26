@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,7 +46,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -189,24 +189,24 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=1.120000s Real=1.126357s Sys=0.000000s
+  User=1.290000s Real=1.288257s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 848096	compt = 149476	phot = 2428
+ Process calls frequency --->	Rayl = 4955	Transportation = 844405	compt = 148239	phot = 2401
 
- Nb of incident particles unaltered after 1 cm  of Water : 848096 over 1000000 incident particles.  Ratio = 84.81 %
- ---> CrossSection per volume:	0.16476 cm^-1 	CrossSection per mass: 16.476 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 844405 over 1000000 incident particles.  Ratio = 84.441 %
+ ---> CrossSection per volume:	0.16912 cm^-1 	CrossSection per mass: 16.912 mm2/g 
 
  Verification from G4EmCalculator: 
-	compt= 16.23 mm2/g 	phot= 268.53 um2/mg	total= 16.499 mm2/g 
-	Expected ratio of transmitted particles= 84.791 %
+	Rayl= 534.01 um2/mg	compt= 16.23 mm2/g 	phot= 268.53 um2/mg	total= 17.033 mm2/g 
+	Expected ratio of transmitted particles= 84.339 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1086040262, 1913236415
+ Current couple of seeds = 772734458, 1459207632
 ----------------------------------------
 #
 /gun/particle e-
@@ -241,7 +241,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1086040262, 1913236415
+ Current couple of seeds = 772734458, 1459207632
 ----------------------------------------
 --> Event 0 starts.
 --> Event 100000 starts.
@@ -256,16 +256,16 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=1.210000s Real=1.207784s Sys=0.000000s
+  User=1.310000s Real=1.313090s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 538247	eBrem = 281308	eIoni = 180445
+ Process calls frequency --->	Transportation = 538457	eBrem = 281214	eIoni = 180329
 
- Nb of incident particles unaltered after 1 cm  of Water : 538247 over 1000000 incident particles.  Ratio = 53.825 %
- ---> CrossSection per volume:	0.61944 cm^-1 	CrossSection per mass: 61.944 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 538457 over 1000000 incident particles.  Ratio = 53.846 %
+ ---> CrossSection per volume:	0.61905 cm^-1 	CrossSection per mass: 61.905 mm2/g 
 
  Verification from G4EmCalculator: 
 	eBrem= 37.79 mm2/g 	eIoni= 24.204 mm2/g 	total= 61.994 mm2/g 
@@ -273,13 +273,13 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1537749914, 1160203484
+ Current couple of seeds = 1901640664, 2019519510
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0x162e660
-UserPhysicsList deleted 0x18e0f80
-UserActionInitialization deleted 0x1a61fa0
+UserDetectorConstruction deleted 0xf5ce50
+UserPhysicsList deleted 0x1210630
+UserActionInitialization deleted 0x1391ec0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4PVPlacement Implementation
+// Class G4PVPlacement Implementation
 //
-// 24.07.95 P.Kent, First non-stub version.
+// Author: Paul Kent (CERN), 24 July 1995 - first non-stub version
 // ----------------------------------------------------------------------
 
 #include "G4PVPlacement.hh"
@@ -81,8 +81,10 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D& Transform3D,
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
     if (pLogical == motherLogical)
+    {
       G4Exception("G4PVPlacement::G4PVPlacement()", "GeomVol0002",
                   FatalException, "Cannot place a volume inside itself!");
+    }
     SetMotherLogical(motherLogical);
     motherLogical->AddDaughter(this);
     if (pSurfChk) { CheckOverlaps(); }
@@ -282,8 +284,12 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
   // and find the bonding box
   //
   std::vector<G4ThreeVector> points(res);
-  G4double xmin =  kInfinity, ymin =  kInfinity, zmin =  kInfinity;
-  G4double xmax = -kInfinity, ymax = -kInfinity, zmax = -kInfinity;
+  G4double xmin =  kInfinity;
+  G4double ymin =  kInfinity;
+  G4double zmin =  kInfinity;
+  G4double xmax = -kInfinity;
+  G4double ymax = -kInfinity;
+  G4double zmax = -kInfinity;
   G4AffineTransform Tm(GetRotation(), GetTranslation());
   for (G4int i = 0; i < res; ++i)
   {
@@ -307,11 +313,11 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
   for (G4int i = 0; i < res; ++i)
   {
     G4ThreeVector mp = points[i];
-    if (motherSolid->Inside(mp) != kOutside) continue;
+    if (motherSolid->Inside(mp) != kOutside) { continue; }
     G4double distin = motherSolid->DistanceToIn(mp);
-    if (distin < tol) continue; // too small overlap
+    if (distin < tol) { continue; } // too small overlap
     ++overlapCount;
-    if (distin <= overlapSize) continue;
+    if (distin <= overlapSize) { continue; }
     overlapSize = distin;
     overlapPoint = mp;
   }
@@ -346,12 +352,13 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
   // Checking overlaps with each 'sister' volumes
   //
   G4VSolid* previous = nullptr;
-  G4ThreeVector pmin_local(0.,0.,0.), pmax_local(0.,0.,0.);
+  G4ThreeVector pmin_local(0.,0.,0.);
+  G4ThreeVector pmax_local(0.,0.,0.);
 
   for (std::size_t k = 0; k < motherLog->GetNoDaughters(); ++k)
   {
     G4VPhysicalVolume* daughter = motherLog->GetDaughter((G4int)k);
-    if (daughter == this) continue;
+    if (daughter == this) { continue; }
     G4bool check_encapsulation = true;
 
     G4AffineTransform Td(daughter->GetRotation(), daughter->GetTranslation());
@@ -367,29 +374,29 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
       G4ThreeVector offset = Td.NetTranslation();
       G4ThreeVector pmin(pmin_local + offset);
       G4ThreeVector pmax(pmax_local + offset);
-      if (pmin.x() >= xmax) continue;
-      if (pmin.y() >= ymax) continue;
-      if (pmin.z() >= zmax) continue;
-      if (pmax.x() <= xmin) continue;
-      if (pmax.y() <= ymin) continue;
-      if (pmax.z() <= zmin) continue;
+      if (pmin.x() >= xmax) { continue; }
+      if (pmin.y() >= ymax) { continue; }
+      if (pmin.z() >= zmax) { continue; }
+      if (pmax.x() <= xmin) { continue; }
+      if (pmax.y() <= ymin) { continue; }
+      if (pmax.z() <= zmin) { continue; }
       for (G4int i = 0; i < res; ++i)
       {
         G4ThreeVector p = points[i];
-        if (p.x() <= pmin.x()) continue;
-        if (p.x() >= pmax.x()) continue;
-        if (p.y() <= pmin.y()) continue;
-        if (p.y() >= pmax.y()) continue;
-        if (p.z() <= pmin.z()) continue;
-        if (p.z() >= pmax.z()) continue;
+        if (p.x() <= pmin.x()) { continue; }
+        if (p.x() >= pmax.x()) { continue; }
+        if (p.y() <= pmin.y()) { continue; }
+        if (p.y() >= pmax.y()) { continue; }
+        if (p.z() <= pmin.z()) { continue; }
+        if (p.z() >= pmax.z()) { continue; }
         G4ThreeVector md = p - offset;
         if (daughterSolid->Inside(md) == kInside)
         {
           check_encapsulation = false;
           G4double distout = daughterSolid->DistanceToOut(md);
-          if (distout < tol) continue; // too small overlap
+          if (distout < tol) { continue; } // too small overlap
           ++overlapCount;
-          if (distout <= overlapSize) continue;
+          if (distout <= overlapSize) { continue; }
           overlapSize = distout;
           overlapPoint = md;
         }
@@ -397,18 +404,20 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
     }
     else // transformation with rotation
     {
-      G4ThreeVector pmin(pmin_local), pmax(pmax_local);
+      G4ThreeVector pmin(pmin_local);
+      G4ThreeVector pmax(pmax_local);
       G4ThreeVector dcenter = Td.TransformPoint(0.5*(pmin + pmax));
       G4double dradius = 0.5*((pmax - pmin).mag());
-      if ((scenter - dcenter).mag2() >= (sradius + dradius)*(sradius + dradius)) continue;
-      if (dcenter.x() - dradius >= xmax) continue;
-      if (dcenter.y() - dradius >= ymax) continue;
-      if (dcenter.z() - dradius >= zmax) continue;
-      if (dcenter.x() + dradius <= xmin) continue;
-      if (dcenter.y() + dradius <= ymin) continue;
-      if (dcenter.z() + dradius <= zmin) continue;
+      if ((scenter - dcenter).mag2() >= (sradius + dradius)*(sradius + dradius)) { continue; }
+      if (dcenter.x() - dradius >= xmax) { continue; }
+      if (dcenter.y() - dradius >= ymax) { continue; }
+      if (dcenter.z() - dradius >= zmax) { continue; }
+      if (dcenter.x() + dradius <= xmin) { continue; }
+      if (dcenter.y() + dradius <= ymin) { continue; }
+      if (dcenter.z() + dradius <= zmin) { continue; }
 
-      G4ThreeVector pbox[8] = {
+      G4ThreeVector pbox[8] =
+      {
         G4ThreeVector(pmin.x(), pmin.y(), pmin.z()),
         G4ThreeVector(pmax.x(), pmin.y(), pmin.z()),
         G4ThreeVector(pmin.x(), pmax.y(), pmin.z()),
@@ -418,8 +427,12 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         G4ThreeVector(pmin.x(), pmax.y(), pmax.z()),
         G4ThreeVector(pmax.x(), pmax.y(), pmax.z())
       };
-      G4double dxmin =  kInfinity, dymin =  kInfinity, dzmin =  kInfinity;
-      G4double dxmax = -kInfinity, dymax = -kInfinity, dzmax = -kInfinity;
+      G4double dxmin =  kInfinity;
+      G4double dymin =  kInfinity;
+      G4double dzmin =  kInfinity;
+      G4double dxmax = -kInfinity;
+      G4double dymax = -kInfinity;
+      G4double dzmax = -kInfinity;
       for (const auto & i : pbox)
       {
         G4ThreeVector p = Td.TransformPoint(i);
@@ -430,29 +443,29 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         dymax = std::max(dymax, p.y());
         dzmax = std::max(dzmax, p.z());
       }
-      if (dxmin >= xmax) continue;
-      if (dymin >= ymax) continue;
-      if (dzmin >= zmax) continue;
-      if (dxmax <= xmin) continue;
-      if (dymax <= ymin) continue;
-      if (dzmax <= zmin) continue;
+      if (dxmin >= xmax) { continue; }
+      if (dymin >= ymax) { continue; }
+      if (dzmin >= zmax) { continue; }
+      if (dxmax <= xmin) { continue; }
+      if (dymax <= ymin) { continue; }
+      if (dzmax <= zmin) { continue; }
       for (G4int i = 0; i < res; ++i)
       {
         G4ThreeVector p = points[i];
-        if (p.x() >= dxmax) continue;
-        if (p.x() <= dxmin) continue;
-        if (p.y() >= dymax) continue;
-        if (p.y() <= dymin) continue;
-        if (p.z() >= dzmax) continue;
-        if (p.z() <= dzmin) continue;
+        if (p.x() >= dxmax) { continue; }
+        if (p.x() <= dxmin) { continue; }
+        if (p.y() >= dymax) { continue; }
+        if (p.y() <= dymin) { continue; }
+        if (p.z() >= dzmax) { continue; }
+        if (p.z() <= dzmin) { continue; }
         G4ThreeVector md = Td.InverseTransformPoint(p);
         if (daughterSolid->Inside(md) == kInside)
         {
           check_encapsulation = false;
           G4double distout = daughterSolid->DistanceToOut(md);
-          if (distout < tol) continue; // too small overlap
+          if (distout < tol) { continue; } // too small overlap
           ++overlapCount;
-          if (distout <= overlapSize) continue;
+          if (distout <= overlapSize) { continue; }
           overlapSize = distout;
           overlapPoint = md;
         }

@@ -72,13 +72,10 @@ ProbabilityDistributionFunction(G4double eKin,
 
   G4double gj = g1;
 
-  G4double A0 = (P*P+H*H+P-3*H)/(4.0*g0);
-  G4double A1 = std::max(0.0,(A0*g0 + A*(A-2*P-1)*0.25)/g1); 
-
-  G4double E0 = U - A0;
+  G4double E0 = U ;
   if (E0 <= 0.0) { return 0.0; }
 
-  G4double E1 = std::max(0.0,theMaxKinEnergy - eKin - A1); 
+  G4double E1 = std::max(0.0,theMaxKinEnergy - eKin); 
 
   G4double Aj = A*(A+1)/(4.0*gj); 
   G4double Ej = std::max(0.0,efinal - Aj); 

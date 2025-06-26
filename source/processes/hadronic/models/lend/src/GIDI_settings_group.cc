@@ -1,91 +1,128 @@
 /*
 # <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
 # <<END-copyright>>
 */
 
 #include <iostream>
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "GIDI_settings.hh"
+#include "GIDI.hpp"
 
-/*
-=========================================================
-*/
-GIDI_settings_group::GIDI_settings_group( std::string const &label, int size1 ) {
+namespace GIDI {
 
-    initialize( label, size1, size1, NULL );
-}
-/*
-=========================================================
-*/
-GIDI_settings_group::GIDI_settings_group( std::string const &label, int length, double const *boundaries ) {
+namespace Transporting {
 
-    initialize( label, length, length, boundaries );
-}
-/*
-=========================================================
-*/
-GIDI_settings_group::GIDI_settings_group( std::string const &label, std::vector<double> const &boundaries) {
+/*! \class MultiGroup
+ * Specifies the flux data for a specified Legendre order (see class Flux).
+ */
 
-    int size1 = (int) boundaries.size( );
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
 
-    initialize( label, size1, size1, &(boundaries[0]) );
-}
-/*
-=========================================================
-*/
-GIDI_settings_group::GIDI_settings_group( GIDI_settings_group const &group ) {
-
-    initialize( group.mLabel, group.size( ), group.size( ), &(group.mBoundaries[0]) );
-}
-/*
-=========================================================
-*/
-void GIDI_settings_group::initialize( std::string const &label, int size1, int length, double const *boundaries ) {
-
-    int i1;
-
-    mLabel = label;
-    if( size1 < length ) size1 = length;
-    if( size1 < 0 ) size1 = 0;
-    mBoundaries.resize( size1, 0 );
-    for( i1 = 0; i1 < length; ++i1 ) mBoundaries[i1] = boundaries[i1];
-}
-/*
-=========================================================
-*/
-GIDI_settings_group& GIDI_settings_group::operator=( const GIDI_settings_group &group ) {
-  if ( this != &group ) {
-    initialize( group.mLabel, group.size(), group.size(), &(group.mBoundaries[0]) );
-  }
-  return *this;
-}
-/*
-=========================================================
-*/
-GIDI_settings_group::~GIDI_settings_group( ) {
+MultiGroup::MultiGroup( ) {
 
 }
-/*
-=========================================================
-*/
-int GIDI_settings_group::getGroupIndexFromEnergy( double energy, bool encloseOutOfRange ) const {
 
-    int iMin = 0, iMid, iMax = (int) mBoundaries.size( ), iMaxM1 = iMax - 1;
+/* *********************************************************************************************************//**
+ * @param a_label           [in]    The label for the MultiGroup.
+ * @param a_length          [in]    The number of boundaries values.
+ * @param a_boundaries      [in]    The list of boundaries.
+ ***********************************************************************************************************/
+
+MultiGroup::MultiGroup( std::string const &a_label, int a_length, double const *a_boundaries ) :
+        m_label( a_label ) {
+
+    for( int i1 = 0; i1 < a_length; ++i1 ) m_boundaries.push_back( a_boundaries[i1] );
+}
+
+/* *********************************************************************************************************//**
+ * @param a_label           [in]    The label for the MultiGroup.
+ * @param a_boundaries      [in]    The list of boundaries.
+ ***********************************************************************************************************/
+
+MultiGroup::MultiGroup( std::string const &a_label, std::vector<double> const &a_boundaries ) :
+        m_label( a_label ),
+        m_boundaries( a_boundaries ) {
+
+}
+
+/* *********************************************************************************************************//**
+ * @param a_group           [in]    The Group used to set *this*.
+ ***********************************************************************************************************/
+
+MultiGroup::MultiGroup( Group const &a_group ) :
+        m_label( a_group.label( ) ),
+        m_boundaries( a_group.data( ) ) {
+
+}
+
+/* *********************************************************************************************************//**
+ * @param a_multiGroup      [in]    The MultiGroup instance to copy.
+ ***********************************************************************************************************/
+
+MultiGroup::MultiGroup( MultiGroup const &a_multiGroup ) :
+        m_label( a_multiGroup.label( ) ),
+        m_boundaries( a_multiGroup.boundaries( ) ) {
+
+}
+
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+MultiGroup::~MultiGroup( ) {
+
+}
+
+/* *********************************************************************************************************//**
+ * The assignment operator. This method sets the members of *this* to those of *a_rhs*.
+ *
+ * @param a_rhs                     [in]    Instance whose member are used to set the members of *this*.
+ *
+ * @return                                  A reference to the updated MultiGroup instance.
+ ***********************************************************************************************************/
+
+MultiGroup &MultiGroup::operator=( MultiGroup const &a_rhs ) {
+
+    if( this != &a_rhs ) {
+        m_label = a_rhs.label( );
+        m_boundaries = a_rhs.boundaries( );
+    }
+
+    return( *this );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the multi-group index whose boundaries enclose *a_energy*. If *a_encloseOutOfRange* is true and
+ * *a_energy* is below the lowest boundary, 0 is returned, otherwise -2 is returned. If *a_encloseOutOfRange* is true and
+ * *a_energy* is above the highest boundary, the last multi-group index is returned, otherwise -1 is returned.
+ *
+ * @param a_energy                  [in]    The energy of the whose index is to be returned.
+ * @param a_encloseOutOfRange               Determines the action if energy is below or above the domain of the boundaries.
+ * @return                                  The index whose boundaries enclose *a_energy*.
+ ***********************************************************************************************************/
+
+int MultiGroup::multiGroupIndexFromEnergy( double a_energy, bool a_encloseOutOfRange ) const {
+
+    int iMin = 0, iMid, iMax = (int) m_boundaries.size( ), iMaxM1 = iMax - 1;
 
     if( iMax == 0 ) return( -3 );
-    if( energy < mBoundaries[0] ) {
-        if( encloseOutOfRange ) return( 0 );
+    if( a_energy < m_boundaries[0] ) {
+        if( a_encloseOutOfRange ) return( 0 );
         return( -2 );
     }
-    if( energy > mBoundaries[iMaxM1] ) {
-        if( encloseOutOfRange ) return( iMax - 2 );
+    if( a_energy > m_boundaries[iMaxM1] ) {
+        if( a_encloseOutOfRange ) return( iMax - 2 );
         return( -1 );
     }
-    while( 1 ) { // Loop checking, 11.06.2015, T. Koi
+    while( 1 ) {
         iMid = ( iMin + iMax ) >> 1;
         if( iMid == iMin ) break;
-        if( energy < mBoundaries[iMid] ) {
+        if( a_energy < m_boundaries[iMid] ) {
             iMax = iMid; }
         else {
             iMin = iMid;
@@ -94,131 +131,201 @@ int GIDI_settings_group::getGroupIndexFromEnergy( double energy, bool encloseOut
     if( iMin == iMaxM1 ) iMin--;
     return( iMin );
 }
-/*
-=========================================================
-*/
-void GIDI_settings_group::print( bool outline, int valuesPerLine ) const {
+
+/* *********************************************************************************************************//**
+ * @param a_label           [in]    The label for *this*.
+ * @param a_boundaries      [in]    The boundaries to set *this* to.
+ ***********************************************************************************************************/
+
+void MultiGroup::set( std::string const &a_label, std::vector<double> const &a_boundaries ) {
+
+    m_label = a_label;
+    m_boundaries = a_boundaries;
+}
+
+/* *********************************************************************************************************//**
+ * Print the MultiGroup to std::cout. Mainly for debugging.
+ *
+ * @param a_indent                  [in]    The std::string to print at the beginning.
+ * @param a_outline                 [in]    If true, does not print the flux values.
+ * @param a_valuesPerLine           [in]    The number of points (i.e., energy, flux pairs) to print per line.
+ ***********************************************************************************************************/
+
+void MultiGroup::print( std::string const &a_indent, bool a_outline, int a_valuesPerLine ) const {
 
     int nbs = size( );
-    char buffer[128];
+    bool printIndent( true );
 
-    std::cout << "GROUP: label = '" << mLabel << "': length = " << nbs << std::endl;
-    if( outline ) return;
+    std::cout << a_indent << "GROUP: label = '" << m_label << "': length = " << nbs << std::endl;
+    if( a_outline ) return;
     for( int ib = 0; ib < nbs; ib++ ) {
-        snprintf( buffer, sizeof buffer, "%16.8e", mBoundaries[ib] );
-        std::cout << buffer;
-        if( ( ( ib + 1 ) % valuesPerLine ) == 0 ) std::cout << std::endl;
+        if( printIndent ) std::cout << a_indent;
+        printIndent = false;
+        std::cout << LUPI::Misc::argumentsToString( "%16.8e", m_boundaries[ib] );
+        if( ( ( ib + 1 ) % a_valuesPerLine ) == 0 ) {
+            std::cout << std::endl;
+            printIndent = true;
+        }
     }
-    if( nbs % valuesPerLine ) std::cout << std::endl;
+    if( nbs % a_valuesPerLine ) std::cout << std::endl;
 }
 
-#if 0
-/*  ---- GIDI_settings_groups_from_bdfls ----  */
-/*
-=========================================================
-*/
-GIDI_settings_groups_from_bdfls::GIDI_settings_groups_from_bdfls( std::string const &fileName ) {
+/*! \class Groups_from_bdfls
+ * Specifies the data for a specified Legendre order (see class Flux).
+ */
 
-    initialize( fileName.c_str( ) );
+/* *********************************************************************************************************//**
+ * Reads in multi-group data from a *bdfls* file as a list of MultiGroup instances.
+ *
+ * @param a_fileName                [in]    The *bdfls* file name.
+ ***********************************************************************************************************/
+
+Groups_from_bdfls::Groups_from_bdfls( std::string const &a_fileName ) {
+
+    initialize( a_fileName.c_str( ) );
 }
-/*
-=========================================================
-*/
-GIDI_settings_groups_from_bdfls::GIDI_settings_groups_from_bdfls( char const *fileName ) {
 
-    initialize( fileName );
+/* *********************************************************************************************************//**
+ * Reads in multi-group data from a *bdfls* file as a list of MultiGroup instances.
+ *
+ * @param a_fileName                [in]    The *bdfls* file name.
+ ***********************************************************************************************************/
+
+Groups_from_bdfls::Groups_from_bdfls( char const *a_fileName ) {
+
+    initialize( a_fileName );
 }
-/*
-=========================================================
-*/
-GIDI_settings_groups_from_bdfls::GIDI_settings_groups_from_bdfls( cbdfls_file const *bdfls ) {
 
-    initialize2( bdfls );
-}
-/*
-=========================================================
-*/
-void GIDI_settings_groups_from_bdfls::initialize( char const *fileName ) {
+/* *********************************************************************************************************//**
+ * Used by constructors to do most of the work.
+ *
+ * @param a_fileName                [in]    The *bdfls* file name.
+ ***********************************************************************************************************/
 
-    cbdfls_file *bdfls;
-    cbdflsErrors Error;
+void Groups_from_bdfls::initialize( char const *a_fileName ) {
 
-    if( ( bdfls = cbdflsOpen( fileName, &Error ) ) == NULL ) throw Error;
-    initialize2( bdfls );
-    cbdflsRelease( bdfls );
-}
-/*
-=========================================================
-*/
-void GIDI_settings_groups_from_bdfls::initialize2( cbdfls_file const *bdfls ) {
+    char buffer[132], *pEnd, cValue[16];
+    FILE *fIn = fopen( a_fileName, "r" );
+    if( fIn == nullptr ) throw Exception( "Groups_from_bdfls::initialize: Could not open bdfls file." );
 
-    int ng, ngbs, *gids;
-    double *boundaries;
-    std::string label( "" );
-    char cLabel[100];
+    while( true ) {
+        int gid( -1 );
+        if( fgets( buffer, 132, fIn ) == nullptr ) throw Exception( "Groups_from_bdfls::initialize: fgets failed for gid." );
+        if( strlen( buffer ) > 73 ) {
+            if( buffer[72] == '1' ) break;
+        }
+        gid = (int) strtol( buffer, &pEnd, 10 );
+        if( gid == -1 ) throw Exception( "Groups_from_bdfls::initialize: converting gid to long failed." );
+        std::string label( LLNL_gidToLabel( gid ) );
 
-    ng = cbdflsGIDs( (cbdfls_file *) bdfls, &gids );
-    for( int ig = 0; ig < ng; ++ig ) {
-        ngbs = cbdflsGetGroup( (cbdfls_file *) bdfls, gids[ig], &boundaries );
-        snprintf( cLabel, sizeof xLabel, "LLNL_gid_%.3d", gids[ig] );
-        label = cLabel;
-        mGroups.push_back( GIDI_settings_group( label, ngbs, boundaries ) );
+        long numberOfBoundaries( -1 );
+        if( fgets( buffer, 132, fIn ) == nullptr ) throw Exception( "Groups_from_bdfls::initialize: fgets failed for numberOfBoundaries." );
+        numberOfBoundaries = strtol( buffer, &pEnd, 10 );
+        if( numberOfBoundaries == -1 ) throw Exception( "Groups_from_bdfls::initialize: converting gid to long failed." );
+
+        long index( 0 );
+        std::vector<double> boundaries( numberOfBoundaries );
+        while( numberOfBoundaries > 0 ) {
+            long i1, n1( 6 );
+            if( numberOfBoundaries < 6 ) n1 = numberOfBoundaries;
+            if( fgets( buffer, 132, fIn ) == nullptr ) throw Exception( "Groups_from_bdfls::initialize: fgets failed for boundaries." );
+            for( i1 = 0; i1 < n1; ++i1, ++index ) {
+                strncpy( cValue, &buffer[12*i1], 12 );
+                cValue[12] = 0;
+                boundaries[index] = strtod( cValue, &pEnd );
+            }
+            numberOfBoundaries -= n1;
+        }
+        m_multiGroups.push_back( MultiGroup( label, boundaries ) );
     }
+
+    fclose( fIn );
 }
-/*
-=========================================================
-*/
-GIDI_settings_groups_from_bdfls::~GIDI_settings_groups_from_bdfls( ) {
+
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+Groups_from_bdfls::~Groups_from_bdfls( ) {
 
 }
-/*
-=========================================================
-*/
-GIDI_settings_group GIDI_settings_groups_from_bdfls::getViaGID( int gid ) const {
 
-    std::string label( "" );
-    char cLabel[100];
+/* *********************************************************************************************************//**
+ * Returns the MultiGroup whose *label* is *a_label*.
+ *
+ * @param a_label           [in]    The *label* of the MultiGroup to return.
+ * @return                          Returns the MultiGroup whose *label* is *a_label*.
+ ***********************************************************************************************************/
 
-    snprintf( cLabel, sizeof cLabel, "LLNL_gid_%.3d", gid );
-    label = cLabel;
-    for( int ig = 0; ig < (int) mGroups.size( ); ++ig ) {
-        if( mGroups[ig].isLabel( label ) ) return( mGroups[ig] );
+MultiGroup Groups_from_bdfls::viaLabel( std::string const &a_label ) const {
+
+    for( int ig = 0; ig < (int) m_multiGroups.size( ); ++ig ) {
+        if( m_multiGroups[ig].label( ) ==  a_label ) return( m_multiGroups[ig] );
     }
-    throw 1;
+    throw Exception( "Groups_from_bdfls::viaLabel: label not found." );
 }
-/*
-=========================================================
-*/
-std::vector<std::string> GIDI_settings_groups_from_bdfls::getLabels( void ) const {
 
-    int size = (int) mGroups.size( );
-    std::vector<std::string> labels( size );
+/* *********************************************************************************************************//**
+ * Returns the MultiGroup whose *gid* is *a_gid*.
+ *
+ * @param a_gid             [in]    The bdfls *gid*.
+ * @return                          Returns the MultiGroup whose *label* is *a_label*.
+ ***********************************************************************************************************/
 
-    for( int if1 = 0; if1 < size; ++if1 ) labels[if1] = mGroups[if1].getLabel( );
-    return( labels );
+MultiGroup Groups_from_bdfls::getViaGID( int a_gid ) const {
+
+    std::string label( LLNL_gidToLabel( a_gid ) );
+
+    return( viaLabel( label ) );
 }
-/*
-=========================================================
-*/
-std::vector<int> GIDI_settings_groups_from_bdfls::getGIDs( void ) const {
 
-    int size = (int) mGroups.size( );
+/* *********************************************************************************************************//**
+ * Returns a list of *label*'s for all the MultiGroup's present in *this*.
+ *
+ * @return                          Returns the MultiGroup whose *label* is *a_label*.
+ ***********************************************************************************************************/
+
+std::vector<std::string> Groups_from_bdfls::labels( ) const {
+
+    int size = (int) m_multiGroups.size( );
+    std::vector<std::string> _labels( size );
+
+    for( int if1 = 0; if1 < size; ++if1 ) _labels[if1] = m_multiGroups[if1].label( );
+    return( _labels );
+}
+
+/* *********************************************************************************************************//**
+ * Returns a list of *gid*'s for all the MultiGroup's present in *this*.
+ *
+ * @return                          The list of *gid*'s.
+ ***********************************************************************************************************/
+
+std::vector<int> Groups_from_bdfls::GIDs( ) const {
+
+    int size = (int) m_multiGroups.size( );
     std::vector<int> fids( size );
     char *e;
 
     for( int if1 = 0; if1 < size; ++if1 ) {
-        fids[if1] = (int) strtol( &(mGroups[if1].getLabel( ).c_str( )[9]), &e, 10 );
+        fids[if1] = (int) strtol( &(m_multiGroups[if1].label( ).c_str( )[9]), &e, 10 );
     }
     return( fids );
 }
-/*
-=========================================================
-*/
-void GIDI_settings_groups_from_bdfls::print( bool outline, int valuesPerLine ) const {
 
-    int ngs = (int) mGroups.size( );
+/* *********************************************************************************************************//**
+ * Print each MultiGroup to std::cout in *this*. Mainly for debugging.
+ *
+ * @param a_outline                 [in]    Passed to each MultiGroup print method.
+ * @param a_valuesPerLine           [in]    Passed to each MultiGroup print method.
+ ***********************************************************************************************************/
+
+void Groups_from_bdfls::print( bool a_outline, int a_valuesPerLine ) const {
+
+    int ngs = (int) m_multiGroups.size( );
 
     std::cout << "BDFLS GROUPs: number of groups = " << ngs << std::endl;
-    for( int if1 = 0; if1 < ngs ; ++if1 ) mGroups[if1].print( outline, valuesPerLine );
+    for( int if1 = 0; if1 < ngs ; ++if1 ) m_multiGroups[if1].print( "  ", a_outline, a_valuesPerLine );
 }
-#endif
+
+}
+
+}

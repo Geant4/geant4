@@ -25,7 +25,8 @@
 // 
 // G4LogicalBorderSurface inline implementation
 //
-// ----------------------------------------------------------------------
+// Author: John Apostolakis (CERN), 17 June 1997
+// --------------------------------------------------------------------
 
 inline
 void G4LogicalBorderSurface::SetPhysicalVolumes( G4VPhysicalVolume* vol1,

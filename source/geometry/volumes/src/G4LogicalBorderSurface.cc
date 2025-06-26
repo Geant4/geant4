@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4LogicalBorderSurface Implementation
+// Class G4LogicalBorderSurface Implementation
 //
-// A Logical Surface class for surfaces defined by the boundary
-// of two physical volumes.
-//
-// Author: John Apostolakis, CERN - 26-06-1997
+// Author: John Apostolakis (CERN), 17 June 1997
 // --------------------------------------------------------------------
 
 #include "G4LogicalBorderSurface.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4GeometryManager.hh"
 
 G4LogicalBorderSurfaceTable*
 G4LogicalBorderSurface::theBorderSurfaceTable = nullptr;
@@ -106,7 +104,7 @@ G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
   if (theBorderSurfaceTable != nullptr)
   {
     auto pos = theBorderSurfaceTable->find(std::make_pair(vol1,vol2));
-    if(pos != theBorderSurfaceTable->cend()) return pos->second;
+    if(pos != theBorderSurfaceTable->cend()) { return pos->second; }
   }
   return nullptr;
 }
@@ -136,13 +134,19 @@ void G4LogicalBorderSurface::DumpInfo()
 // --------------------------------------------------------------------
 void G4LogicalBorderSurface::CleanSurfaceTable()
 {
-  if (theBorderSurfaceTable != nullptr)
+  if (theBorderSurfaceTable == nullptr) { return; }
+
+  // Do nothing if geometry is closed
+  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
   {
-    for(const auto & pos : *theBorderSurfaceTable)
-    {
-      delete pos.second; 
-    }
-    theBorderSurfaceTable->clear();
+    G4cout << "WARNING - Attempt to clear the border surface store"
+           << " while geometry closed !" << G4endl;
+    return;
   }
-  return;
+
+  for (const auto& pos : *theBorderSurfaceTable)
+  {
+    delete pos.second;
+  }
+  theBorderSurfaceTable->clear();
 }

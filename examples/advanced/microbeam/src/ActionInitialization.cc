@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
 
@@ -48,16 +48,19 @@ ActionInitialization::~ActionInitialization()
 {}
 
 void ActionInitialization::BuildForMaster() const
-{}
+{
+  // Needed for merging of analysis ROOT files
+  SetUserAction(new RunAction(fDetectorConstruction));
+}
 
 void ActionInitialization::Build() const
 {
   SetUserAction(new PrimaryGeneratorAction());
-  
+
   RunAction* runAction = new RunAction(fDetectorConstruction);
   SetUserAction(runAction);
 
   SetUserAction(new EventAction(runAction));
-  
+
   SetUserAction(new SteppingAction(runAction,fDetectorConstruction));
 }

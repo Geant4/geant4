@@ -1,567 +1,650 @@
 /*
 # <<BEGIN-copyright>>
+# Copyright 2019, Lawrence Livermore National Security, LLC.
+# This file is part of the gidiplus package (https://github.com/LLNL/gidiplus).
+# gidiplus is licensed under the MIT license (see https://opensource.org/licenses/MIT).
+# SPDX-License-Identifier: MIT
 # <<END-copyright>>
 */
-#include <string.h>
-#include <cmath>
 
-#include <PoPs.h>
-#include "MCGIDI.h"
-#include "MCGIDI_misc.h"
-#include "MCGIDI_private.h"
+#include "MCGIDI.hpp"
 
-#if defined __cplusplus
-namespace GIDI {
-using namespace GIDI;
+namespace MCGIDI {
+
+/*! \class Reaction 
+ * Class representing a **GNDS** <**reaction**> node with only data needed for Monte Carlo transport.
+ */
+
+/* *********************************************************************************************************//**
+ * Default constructor used when broadcasting a Reaction as needed by MPI or GPUs.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE Reaction::Reaction( ) :
+        m_protareSingle( nullptr ),
+        m_reactionIndex( -1 ),
+        m_GIDI_reactionIndex( -1 ),
+        m_label( ),
+        m_ENDF_MT( 0 ),
+        m_ENDL_C( 0 ),
+        m_ENDL_S( 0 ),
+        m_initialStateIndex( -1 ),
+        m_neutronIndex( -1 ),
+        m_hasFission( false ),
+        m_projectileMass( 0.0 ),
+        m_targetMass( 0.0 ),
+        m_crossSectionThreshold( 0.0 ),
+        m_twoBodyThreshold( 0.0 ),
+        m_upscatterModelASupported( false ),
+        m_hasFinalStatePhotons( false ),
+        m_fissionResiduaIntid( -1 ),
+        m_fissionResiduaIndex( -1 ),
+        m_fissionResiduaUserIndex( -1 ),
+        m_fissionResiduals( GIDI::Construction::FissionResiduals::none ),
+        m_fissionResidualMass( 0.0 ),
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+        m_outputChannel( nullptr ),
 #endif
 
-#define nParticleChanges 6
-
-static int MCGIDI_reaction_initialize2( statusMessageReporting *smr, MCGIDI_reaction *reaction );
-static int MCGIDI_reaction_particleChanges( MCGIDI_POP *projectile, MCGIDI_POP *target, MCGIDI_productsInfo *productsInfo, int n1, int *particlesChanges );
-static int MCGIDI_reaction_ParseReactionTypeAndDetermineProducts( statusMessageReporting *smr, MCGIDI_POPs *pops, MCGIDI_reaction *reaction );
-static int MCGIDI_reaction_ParseDetermineReactionProducts( statusMessageReporting *smr, MCGIDI_POPs *pops, MCGIDI_outputChannel *outputChannel,
-    MCGIDI_productsInfo *productsInfo, MCGIDI_reaction *reaction, double *finalQ, int level );
-static int MCGIDI_reaction_addReturnProduct( statusMessageReporting *smr, MCGIDI_productsInfo *productsInfo, int ID, MCGIDI_product *product, 
-        MCGIDI_reaction *reaction, int transportable );
-static int MCGIDI_reaction_setENDL_CSNumbers( statusMessageReporting *smr, MCGIDI_reaction *reaction );
-/*
-************************************************************
-*/
-MCGIDI_reaction *MCGIDI_reaction_new( statusMessageReporting *smr ) {
-
-    MCGIDI_reaction *reaction;
-
-    if( ( reaction = (MCGIDI_reaction *) smr_malloc2( smr, sizeof( MCGIDI_reaction ), 0, "reaction" ) ) == NULL ) return( NULL );
-    if( MCGIDI_reaction_initialize( smr, reaction ) ) reaction = MCGIDI_reaction_free( smr, reaction );
-    return( reaction );
+// GRIN extras:
+        m_GRIN_specialSampleProducts( false ),
+        m_GRIN_inelasticThreshold( 0.0 ),
+        m_GRIN_maximumCaptureIncidentEnergy( 0.0 ),
+        m_GRIN_inelastic( nullptr ),
+        m_GRIN_capture( nullptr ) {
 }
-/*
-************************************************************
-*/
-int MCGIDI_reaction_initialize( statusMessageReporting *smr, MCGIDI_reaction *reaction ) {
 
-    if( MCGIDI_reaction_initialize2( smr, reaction ) != 0 ) return( 1 );
-    reaction->transportabilities = new transportabilitiesMap( );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_reaction_initialize2( statusMessageReporting *smr, MCGIDI_reaction *reaction ) {
+/* *********************************************************************************************************//**
+ * @param a_reaction            [in]    The GIDI::Reaction whose data is to be used to construct *this*.
+ * @param a_setupInfo           [in]    Used internally when constructing a Protare to pass information to other constructors.
+ * @param a_settings            [in]    Used to pass user options to the *this* to instruct it which data are desired.
+ * @param a_particles           [in]    List of transporting particles and their information (e.g., multi-group boundaries and fluxes).
+ * @param a_temperatureInfos    [in]    The list of temperature data to extract from *a_protare*.
+ ***********************************************************************************************************/
 
-    memset( reaction, 0, sizeof( MCGIDI_reaction ) );
-    xDataTOMAL_initial( smr, &(reaction->attributes) );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-MCGIDI_reaction *MCGIDI_reaction_free( statusMessageReporting *smr, MCGIDI_reaction *reaction ) {
+LUPI_HOST Reaction::Reaction( GIDI::Reaction const &a_reaction, SetupInfo &a_setupInfo, Transporting::MC const &a_settings, 
+                GIDI::Transporting::Particles const &a_particles, LUPI_maybeUnused GIDI::Styles::TemperatureInfos const &a_temperatureInfos ) :
+        m_protareSingle( nullptr ),
+        m_reactionIndex( -1 ),
+        m_GIDI_reactionIndex( a_reaction.reactionIndex( ) ),
+        m_label( a_reaction.label( ).c_str( ) ),
+        m_ENDF_MT( a_reaction.ENDF_MT( ) ),
+        m_ENDL_C( a_reaction.ENDL_C( ) ),
+        m_ENDL_S( a_reaction.ENDL_S( ) ),
+        m_initialStateIndex( -1 ),
+        m_neutronIndex( a_setupInfo.m_neutronIndex ),
+        m_hasFission( a_reaction.hasFission( ) ),
+        m_projectileMass( a_setupInfo.m_protare.projectileMass( ) ),
+        m_targetMass( a_setupInfo.m_protare.targetMass( ) ),
+        m_crossSectionThreshold( a_reaction.crossSectionThreshold( ) ),
+        m_twoBodyThreshold( a_reaction.twoBodyThreshold( ) ),
+        m_upscatterModelASupported( ( a_setupInfo.m_protare.projectileIntid( ) != PoPI::Intids::photon ) &&
+                                    ( a_setupInfo.m_protare.projectileIntid( ) != PoPI::Intids::electron ) &&
+                                    ( a_setupInfo.m_reactionType == Transporting::Reaction::Type::Reactions ) ),
+        m_fissionResiduaIntid( -1 ),
+        m_fissionResiduaIndex( -1 ),
+        m_fissionResiduaUserIndex( -1 ),
+        m_fissionResiduals( GIDI::Construction::FissionResiduals::none ),
+        m_fissionResidualMass( 0.0 ),
 
-    MCGIDI_reaction_release( smr, reaction );
-    smr_freeMemory( (void **) &reaction );
-    return( NULL );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_release( statusMessageReporting *smr, MCGIDI_reaction *reaction ) {
+// GRIN extras:
+        m_GRIN_specialSampleProducts( false ),
+        m_GRIN_inelasticThreshold( 0.0 ),
+        m_GRIN_maximumCaptureIncidentEnergy( 0.0 ),
+        m_GRIN_inelastic( nullptr ),
+        m_GRIN_capture( nullptr ) {
 
-    ptwXY_free( reaction->crossSection );
-    ptwX_free( reaction->crossSectionGrouped );
-    MCGIDI_outputChannel_release( smr, &(reaction->outputChannel) );
-    xDataTOMAL_release( &(reaction->attributes) );
-    smr_freeMemory( (void **) &(reaction->outputChannelStr) );
-    if( reaction->productsInfo.productInfo != NULL ) smr_freeMemory( (void **) &(reaction->productsInfo.productInfo) );
-    delete reaction->transportabilities;
-    MCGIDI_reaction_initialize2( smr, reaction );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_target_heated *target, 
-        MCGIDI_POPs *pops, MCGIDI_reaction *reaction ) {
+    a_setupInfo.m_hasFinalStatePhotons = false;
+#ifndef MCGIDI_USE_OUTPUT_CHANNEL
+    OutputChannel *m_outputChannel;
+#endif
+    m_outputChannel = new OutputChannel( a_reaction.outputChannel( ), a_setupInfo, a_settings, a_particles );
 
-    xDataTOM_element *child, *linear, *outputChannel;
-    enum xDataTOM_interpolationFlag independent, dependent;
-    enum xDataTOM_interpolationQualifier qualifier;
-    char const *outputChannelStr, *crossSectionUnits[2] = { "MeV", "b" };
+    std::set<std::string> product_ids;
 
-    MCGIDI_reaction_initialize( smr, reaction );
-
-    reaction->target = target;
-    reaction->reactionType = MCGIDI_reactionType_unknown_e;
-    if( xDataTOME_copyAttributionList( smr, &(reaction->attributes), element ) ) goto err;
-    if( xDataTOME_convertAttributeToInteger( smr, element, "ENDF_MT", &(reaction->ENDF_MT) ) ) goto err;
-    if( ( outputChannelStr = xDataTOM_getAttributesValueInElement( element, "outputChannel" ) ) == NULL ) goto err;
-    if( ( reaction->outputChannelStr = smr_allocateCopyString2( smr, outputChannelStr, "reaction->outputChannelStr" ) ) == NULL ) goto err;
-
-    if( ( child = xDataTOME_getOneElementByName( smr, element, "crossSection", 1 ) ) == NULL ) goto err;
-    if( ( linear = xDataTOME_getOneElementByName( smr, child, "linear", 0 ) ) == NULL ) {
-        if( ( linear = xDataTOME_getOneElementByName( smr, child, "pointwise", 1 ) ) == NULL ) goto err;
-    }
-    if( xDataTOME_getInterpolation( smr, linear, 0, &independent, &dependent, &qualifier ) ) goto err;
-    if( ( independent != xDataTOM_interpolationFlag_linear ) || ( dependent != xDataTOM_interpolationFlag_linear ) ) {
-        smr_setReportError2( smr, smr_unknownID, 1, "cross section interpolation (%d,%d) is not linear-linear", independent, dependent );
-        goto err;
-    }
-    if( ( reaction->crossSection = MCGIDI_misc_dataFromElement2ptwXYPointsInUnitsOf( smr, linear, crossSectionUnits ) ) == NULL ) goto err;
-    reaction->domainValuesPresent = 1;
-    reaction->EMin = ptwXY_getXMin( reaction->crossSection );
-    reaction->EMax = ptwXY_getXMax( reaction->crossSection );
-
-    if( ( outputChannel = xDataTOME_getOneElementByName( smr, element, "outputChannel", 1 ) ) == NULL ) goto err;
-    if( MCGIDI_outputChannel_parseFromTOM( smr, outputChannel, pops, &(reaction->outputChannel), reaction, NULL ) ) goto err;
-
-    if( MCGIDI_reaction_ParseReactionTypeAndDetermineProducts( smr, pops, reaction ) != 0 ) goto err;
-
-    return( 0 );
-
-err:
-    MCGIDI_reaction_release( smr, reaction );
-    return( 1 );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_reaction_ParseReactionTypeAndDetermineProducts( statusMessageReporting *smr, MCGIDI_POPs *pops, MCGIDI_reaction *reaction ) {
-
-    MCGIDI_outputChannel *outputChannel = &(reaction->outputChannel);
-    int MT;
-    int particlesChanges[nParticleChanges], numberOfChanges;
-    double finalQ = 0.;
-
-    if( MCGIDI_reaction_ParseDetermineReactionProducts( smr, pops, outputChannel, &(reaction->productsInfo), reaction, &finalQ, 0 ) != 0 ) return( 1 );
-    reaction->finalQ = finalQ;
-    MT = MCGIDI_reaction_getENDF_MTNumber( reaction );
-    switch( MT ) {
-    case 2 :
-        reaction->reactionType = MCGIDI_reactionType_elastic_e;
-        break;
-    case 18 : case 19 : case 20 : case 21 : case 38 :
-        reaction->reactionType = MCGIDI_reactionType_fission_e;
-        break;
-    case 102 :
-        reaction->reactionType = MCGIDI_reactionType_capture_e;
-        break;
-    case 5 :
-        reaction->reactionType = MCGIDI_reactionType_sumOfRemainingOutputChannels_e;
-        break;
-    default :
-        numberOfChanges = MCGIDI_reaction_particleChanges( reaction->target->projectilePOP, reaction->target->targetPOP, &(reaction->productsInfo), 
-            nParticleChanges, particlesChanges );
-
-        reaction->reactionType = MCGIDI_reactionType_unknown_e;
-        if( numberOfChanges == 0 ) {
-            reaction->reactionType = MCGIDI_reactionType_scattering_e; }
-        else {
-            reaction->reactionType = MCGIDI_reactionType_nuclearIsomerTransmutation_e;
-        }
-
-/*
-    Currently, these are not handled properly:
-        MCGIDI_reactionType_nuclearLevelTransition_e
-        MCGIDI_reactionType_atomic_e
-*/
-        break;
+    a_reaction.productIDs( product_ids, a_particles, false );
+    m_productIntids.reserve( product_ids.size( ) );
+    m_productIndices.reserve( product_ids.size( ) );
+    m_userProductIndices.reserve( product_ids.size( ) );
+    m_productMultiplicities.reserve( product_ids.size( ) );
+    for( std::set<std::string>::iterator iter = product_ids.begin( ); iter != product_ids.end( ); ++iter ) {
+        m_productIntids.push_back( MCGIDI_popsIntid( a_setupInfo.m_pops, *iter ) );
+        m_productIndices.push_back( a_setupInfo.m_popsUser[*iter] );
+        m_userProductIndices.push_back( -1 );
+        m_productMultiplicities.push_back( a_reaction.productMultiplicity( *iter ) );
     }
 
-    MCGIDI_reaction_setENDL_CSNumbers( smr, reaction );
-    return( 0 );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_reaction_particleChanges( MCGIDI_POP *projectile, MCGIDI_POP *target, MCGIDI_productsInfo *productsInfo, int n1, int *particlesChanges ) {
-
-    int projectileGlobalIndex = projectile->globalPoPsIndex, targetGlobalIndex = target->globalPoPsIndex, i1, i2 = 0;
-    int gammaIndex = PoPs_particleIndex( "gamma" );
-
-    if( projectileGlobalIndex != gammaIndex ) {
-        for( i1 = 0; i1 < productsInfo->numberOfProducts; i1++ ) if( projectileGlobalIndex == productsInfo->productInfo[i1].globalPoPsIndex ) break;
-        if( i1 == productsInfo->numberOfProducts ) particlesChanges[i2++] = projectileGlobalIndex;
+    product_ids.clear( );
+    a_reaction.productIDs( product_ids, a_particles, true );
+    m_productIntidsTransportable.reserve( product_ids.size( ) );
+    m_productIndicesTransportable.reserve( product_ids.size( ) );
+    m_userProductIndicesTransportable.reserve( product_ids.size( ) );
+    for( std::set<std::string>::iterator iter = product_ids.begin( ); iter != product_ids.end( ); ++iter ) {
+        m_productIntidsTransportable.push_back( MCGIDI_popsIntid( a_setupInfo.m_pops, *iter ) );
+        m_productIndicesTransportable.push_back( a_setupInfo.m_popsUser[*iter] );
+        m_userProductIndicesTransportable.push_back( -1 );
     }
 
-    for( i1 = 0; i1 < productsInfo->numberOfProducts; i1++ ) if( targetGlobalIndex == productsInfo->productInfo[i1].globalPoPsIndex ) break;
-    if( i1 == productsInfo->numberOfProducts ) particlesChanges[i2++] = targetGlobalIndex;
-
-    for( i1 = 0; i1 < productsInfo->numberOfProducts; i1++ ) {
-        if( i2 == n1 ) break;
-        if( /*(*/ projectileGlobalIndex == productsInfo->productInfo[i1].globalPoPsIndex /*)*/ ) continue;
-        if( /*(*/ targetGlobalIndex == productsInfo->productInfo[i1].globalPoPsIndex /*)*/ ) continue;
-        if( /*(*/ gammaIndex == productsInfo->productInfo[i1].globalPoPsIndex /*)*/ ) continue;
-        particlesChanges[i2++] = productsInfo->productInfo[i1].globalPoPsIndex;
+    if( m_upscatterModelASupported && ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::A ) ) {
+        GIDI::Vector const &l_upscatterModelACrossSection = a_reaction.crossSection( ).get<GIDI::Functions::Gridded1d>( a_settings.upscatterModelALabel( ) )->data( );
+        m_upscatterModelACrossSection.resize( l_upscatterModelACrossSection.size( ) );
+        for( std::size_t i1 = 0; i1 < l_upscatterModelACrossSection.size( ); ++i1 ) m_upscatterModelACrossSection[i1] = l_upscatterModelACrossSection[i1];
     }
-    return( i2 );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_reaction_ParseDetermineReactionProducts( statusMessageReporting *smr, MCGIDI_POPs *pops, MCGIDI_outputChannel *outputChannel,
-    MCGIDI_productsInfo *productsInfo, MCGIDI_reaction *reaction, double *finalQ, int level ) {
-/*
-*   This function determines all products that can be returned during sampling for this outputChannel. Note, products like 'U238_c' and
-*   'U238_e3' are not returned during sampling as both are decay to the groud state (unless a meta-stable is encountered). 
-*   Some examples for projectile 'n' and target 'U238' are:
-*       outputChannel                       products returned during sampling.
-*       'n + U238'                          n, U238
-*       'n + U238 + gamma'                  n, U238, gamma
-*       'n + U238_c'                        n, U238     (even if no gammas are give, return ground state of residual.
-*       'n + (U238_e3 -> U238 + gamma)'     n, U238, gamma
-*/
-    int iProduct, nProducts = MCGIDI_outputChannel_numberOfProducts( outputChannel ), globalPoPsIndex, productIsTrackable;
-    int twoBodyProductsWithData = 0;
-    MCGIDI_product *product;
-    MCGIDI_POP *residual;
 
-    if( ( level == 0 ) && ( outputChannel->genre == MCGIDI_channelGenre_twoBody_e ) ) {
-        for( iProduct = 0; iProduct < nProducts; iProduct++ ) {
-            product = MCGIDI_outputChannel_getProductAtIndex( smr, outputChannel, iProduct );
-            if( product->pop->globalPoPsIndex < 0 ) {
-                twoBodyProductsWithData = -1; }
-            else if( product->distribution.type == MCGIDI_distributionType_angular_e ) {
-                if( twoBodyProductsWithData >= 0 ) twoBodyProductsWithData = 1;
+    m_hasFinalStatePhotons = a_setupInfo.m_hasFinalStatePhotons;
+    m_fissionResiduals = a_reaction.outputChannel( )->fissionResiduals( );
+    if(      m_fissionResiduals == GIDI::Construction::FissionResiduals::ENDL99120 ) {
+        m_fissionResiduaIntid = PoPI::Intids::FissionProductENDL99120;
+        m_fissionResiduaIndex = MCGIDI_popsIndex( a_setupInfo.m_popsUser, PoPI::IDs::FissionProductENDL99120 ); }
+    else if( m_fissionResiduals == GIDI::Construction::FissionResiduals::ENDL99125 ) {
+        m_fissionResiduaIntid = PoPI::Intids::FissionProductENDL99125;
+        m_fissionResiduaIndex = MCGIDI_popsIndex( a_setupInfo.m_popsUser, PoPI::IDs::FissionProductENDL99125 );
+    }
+    m_fissionResidualMass = 117.5 * PoPI_AMU2MeV_c2;        // Hardwired for now as MeV. Only used if m_fissionResiduaIntid != -1.
+
+#ifndef MCGIDI_USE_OUTPUT_CHANNEL
+    std::vector<Product *> products;
+    std::vector<DelayedNeutron *> delayedNeutrons;
+    std::vector<Functions::Function1d_d1 *> Qs;
+
+    m_totalDelayedNeutronMultiplicity = nullptr;
+    m_outputChannel->moveProductsEtAlToReaction( products, &m_totalDelayedNeutronMultiplicity, delayedNeutrons, Qs );
+
+    m_products.resize( products.size( ) );
+    for( std::size_t index = 0; index < products.size( ); ++index ) m_products[index] = products[index];
+
+    m_delayedNeutrons.resize( delayedNeutrons.size( ) );
+    for( std::size_t index = 0; index < delayedNeutrons.size( ); ++index ) m_delayedNeutrons[index] = delayedNeutrons[index];
+
+    m_Qs.resize( Qs.size( ) );
+    for( std::size_t index = 0; index < Qs.size( ); ++index ) m_Qs[index] = Qs[index];
+
+    delete m_outputChannel;
+#endif
+
+    GIDI::GRIN::GRIN_continuumGammas const *GRIN_continuumGammas = a_setupInfo.m_GRIN_continuumGammas;
+    if( GRIN_continuumGammas != nullptr ) {
+        if( m_ENDF_MT == 102 ) {
+            if( GRIN_continuumGammas->captureLevelProbabilities( ).size( ) > 0 ) {
+                m_GRIN_specialSampleProducts = true;
+                m_GRIN_maximumCaptureIncidentEnergy = GRIN_continuumGammas->maximumCaptureIncidentEnergy( ).value( );
+                m_GRIN_capture = new GRIN_capture( a_setupInfo, *GRIN_continuumGammas );
+            } }
+        else if( m_ENDF_MT == 91 ) {
+            GIDI::Suite const &inelasticIncidentEnergies = GRIN_continuumGammas->inelasticIncidentEnergies( );
+            if( inelasticIncidentEnergies.size( ) > 0 ) {
+                m_GRIN_specialSampleProducts = true;
+                GIDI::GRIN::InelasticIncidentEnergy const *inelasticIncidentEnergy = inelasticIncidentEnergies.get<GIDI::GRIN::InelasticIncidentEnergy const>( 0 );
+                m_GRIN_inelasticThreshold = inelasticIncidentEnergy->energy( );
+                m_GRIN_inelastic = new GRIN_inelastic( a_setupInfo, *GRIN_continuumGammas );
             }
         }
     }
-    if( twoBodyProductsWithData < 0 ) twoBodyProductsWithData = 0;
-    *finalQ += MCGIDI_outputChannel_getQ_MeV( smr, outputChannel, 0 );
-    for( iProduct = 0; iProduct < nProducts; iProduct++ ) {
-        productIsTrackable = twoBodyProductsWithData;
-        product = MCGIDI_outputChannel_getProductAtIndex( smr, outputChannel, iProduct );
-        globalPoPsIndex = product->pop->globalPoPsIndex;
-        if( ( product->distribution.type != MCGIDI_distributionType_none_e ) && ( product->distribution.type != MCGIDI_distributionType_unknown_e ) ) {
-            productIsTrackable = 1;
-            if( globalPoPsIndex < 0 ) {
-                if( product->distribution.angular != NULL ) {
-                    if( product->distribution.angular->type == MCGIDI_angularType_recoil ) productIsTrackable = 0;
-                }
-                if( productIsTrackable ) {
-                    int len = (int) strlen( product->pop->name );
+}
 
-                    if( len > 2 ) {     /* Special case for continuum reactions with data for residual (e.g., n + U233 -> n + U233_c). */
-                        if( ( product->pop->name[len-2] == '_' ) && ( product->pop->name[len-1] == 'c' ) ) {
-                            for( residual = product->pop; residual->globalPoPsIndex < 0; residual = residual->parent ) ;
-                            productIsTrackable = 1;
-                            globalPoPsIndex = residual->globalPoPsIndex;
-                        }
-                    }
-                    if( globalPoPsIndex < 0 ) {
-                        smr_setReportError2( smr, smr_unknownID, 1, "product determination for '%s' cannot be determined", product->pop->name );
-                        return( 1 );
-                    }
-                }
-            }
+/* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE Reaction::~Reaction( ) {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    delete m_outputChannel;
+#else
+    delete m_totalDelayedNeutronMultiplicity;
+    for( auto iter = m_products.begin( ); iter != m_products.end( ); ++iter ) delete *iter;
+    for( auto iter = m_delayedNeutrons.begin( ); iter != m_delayedNeutrons.end( ); ++iter ) delete *iter;
+    for( auto iter = m_Qs.begin( ); iter != m_Qs.end( ); ++iter ) delete *iter;
+#endif
+}
+/* *********************************************************************************************************//**
+ * Returns the Q-value for projectile energy *a_energy*. 
+ *
+ * @param a_URR_protareInfos    [in]    URR information.
+ * @param a_hashIndex           [in]    Specifies the continuous energy or multi-group index.
+ * @param a_temperature         [in]    The temperature of the target.
+ * @param a_energy_in           [in]    The energy of the projectile.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Reaction::finalQ( double a_energy ) const { 
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    return( m_outputChannel->finalQ( a_energy ) );
+#else
+    double Q = 0.0;
+    for( auto Q_iter = m_Qs.begin( ); Q_iter != m_Qs.end( ); ++Q_iter ) Q += (*Q_iter)->evaluate( a_energy );
+
+    return( Q );
+#endif
+}
+
+/* *********************************************************************************************************//**
+ * Returns the reaction's cross section for target temperature *a_temperature* and projectile energy *a_energy_in*.
+ *
+ * @param a_URR_protareInfos    [in]    URR information.
+ * @param a_hashIndex           [in]    Specifies the continuous energy or multi-group index.
+ * @param a_temperature         [in]    The temperature of the target.
+ * @param a_energy_in           [in]    The energy of the projectile.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Reaction::crossSection( URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy_in ) const {
+
+    return( m_protareSingle->reactionCrossSection( m_reactionIndex, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy_in, false ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the reaction's cross section for target temperature *a_temperature* and projectile energy *a_energy_in*.
+ *
+ * @param a_URR_protareInfos    [in]    URR information.
+ * @param a_temperature         [in]    The temperature of the target.
+ * @param a_energy_in           [in]    The energy of the projectile.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Reaction::crossSection( URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy_in ) const {
+
+    return( m_protareSingle->reactionCrossSection( m_reactionIndex, a_URR_protareInfos, a_temperature, a_energy_in ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the reaction's cross section as a pointer to a GIDI::Functions::XYs1d instance.
+ *
+ * @returns                 A GIDI::Functions::XYs1d instance.
+ ***********************************************************************************************************/
+
+LUPI_HOST GIDI::Functions::XYs1d Reaction::crossSectionAsGIDI_XYs1d( double a_temperature ) const {
+
+    return( m_protareSingle->heatedCrossSections( ).reactionCrossSectionAsGIDI_XYs1d( m_reactionIndex, a_temperature ) );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the multiplicity for outgoing particle with pops index *a_index*. If the multiplicity is energy dependent,
+ * the returned value is -1. For energy dependent multiplicities it is better to use the method **productAverageMultiplicity**.
+ *
+ * @param a_index                   [in]    The PoPs index of the requested particle.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE int Reaction::productMultiplicity( int a_index ) const {
+
+    int i1 = 0;
+
+    for( Vector<int>::iterator iter = m_productIndices.begin( ); iter != m_productIndices.end( ); ++iter, ++i1 ) {
+        if( *iter == a_index ) return( m_productMultiplicities[i1] );
+    }
+
+    return( 0 );
+}
+/* *********************************************************************************************************//**
+ * Returns the multiplicity for outgoing particle with pops intid *a_intid*. If the multiplicity is energy dependent,
+ * the returned value is -1. For energy dependent multiplicities it is better to use the method **productAverageMultiplicity**.
+ *
+ * @param a_intid                   [in]    The PoPs intid of the requested particle.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE int Reaction::productMultiplicityViaIntid( int a_intid ) const {
+
+    int i1 = 0;
+
+    for( Vector<int>::iterator iter = m_productIntids.begin( ); iter != m_productIntids.end( ); ++iter, ++i1 ) {
+        if( *iter == a_intid ) return( m_productMultiplicities[i1] );
+    }
+
+    return( 0 );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops index *a_index*. The returned value may not
+ * be an integer. Energy dependent multiplicity mainly occurs for photons and fission neutrons.
+ *
+ * @param a_index                   [in]    The PoPs index of the requested particle.
+ * @param a_projectileEnergy        [in]    The energy of the projectile.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Reaction::productAverageMultiplicity( int a_index, double a_projectileEnergy ) const {
+
+    double multiplicity = 0.0;
+
+    if( m_crossSectionThreshold > a_projectileEnergy ) return( multiplicity );
+
+    int i1 = 0;
+    for( Vector<int>::iterator iter = m_productIndices.begin( ); iter != m_productIndices.end( ); ++iter, ++i1 ) {
+        if( *iter == a_index ) {
+            multiplicity = m_productMultiplicities[i1];
+            break;
         }
-        if( productIsTrackable ) {
-            if( MCGIDI_reaction_addReturnProduct( smr, productsInfo, globalPoPsIndex, product, reaction, 1 ) != 0 ) return( 1 ); }
-        else {
-            if( product->decayChannel.genre != MCGIDI_channelGenre_undefined_e ) {
-                if( MCGIDI_reaction_ParseDetermineReactionProducts( smr, pops, &(product->decayChannel), productsInfo, reaction, finalQ, level + 1 ) != 0 ) return( 1 ); }
+    }
+
+    if( multiplicity < 0 ) {
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+        multiplicity = m_outputChannel->productAverageMultiplicity( a_index, a_projectileEnergy );
+#else
+        multiplicity = 0.0;
+        for( auto productIter = m_products.begin( ); productIter != m_products.end( ); ++productIter ) {
+            multiplicity += (*productIter)->productAverageMultiplicity( a_index, a_projectileEnergy );
+        }
+
+        if( ( m_totalDelayedNeutronMultiplicity != nullptr ) && ( a_index == m_neutronIndex ) ) {
+            multiplicity += m_totalDelayedNeutronMultiplicity->evaluate( a_projectileEnergy );
+        }
+#endif
+    }
+
+    return( multiplicity );
+}
+
+/* *********************************************************************************************************//**
+ * Returns the energy dependent multiplicity for outgoing particle with pops intid *a_intid*. The returned value may not
+ * be an integer. Energy dependent multiplicity mainly occurs for photons and fission neutrons.
+ *
+ * @param a_intid                   [in]    The PoPs intid of the requested particle.
+ * @param a_projectileEnergy        [in]    The energy of the projectile.
+ *
+ * @return                                  The multiplicity value for the requested particle.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE double Reaction::productAverageMultiplicityViaIntid( int a_intid, double a_projectileEnergy ) const {
+
+    double multiplicity = 0.0;
+
+    if( m_crossSectionThreshold > a_projectileEnergy ) return( multiplicity );
+
+    int i1 = 0;
+    for( Vector<int>::iterator iter = m_productIntids.begin( ); iter != m_productIntids.end( ); ++iter, ++i1 ) {
+        if( *iter == a_intid ) {
+            multiplicity = m_productMultiplicities[i1];
+            break;
+        }
+    }
+
+    if( multiplicity < 0 ) {
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+        multiplicity = m_outputChannel->productAverageMultiplicityViaIntid( a_intid, a_projectileEnergy );
+#else
+        multiplicity = 0.0;
+        for( auto productIter = m_products.begin( ); productIter != m_products.end( ); ++productIter ) {
+            multiplicity += (*productIter)->productAverageMultiplicityViaIntid( a_intid, a_projectileEnergy );
+        }
+
+        if( ( m_totalDelayedNeutronMultiplicity != nullptr ) && ( a_intid == PoPI::Intids::neutron ) ) {
+            multiplicity += m_totalDelayedNeutronMultiplicity->evaluate( a_projectileEnergy );
+        }
+#endif
+    }
+
+    return( multiplicity );
+}
+
+/* *********************************************************************************************************//**
+ * Updates the m_userParticleIndex to *a_userParticleIndex* for all particles with PoPs index *a_particleIndex*.
+ *
+ * @param a_particleIndex       [in]    The PoPs index of the particle whose user index is to be set.
+ * @param a_userParticleIndex   [in]    The particle index specified by the user.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Reaction::setUserParticleIndex( int a_particleIndex, int a_userParticleIndex ) {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    m_outputChannel->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+#else
+    for( auto productIter = m_products.begin( ); productIter != m_products.end( ); ++productIter ) {
+        (*productIter)->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+    }
+
+    for( auto iter = m_delayedNeutrons.begin( ); iter != m_delayedNeutrons.end( ); ++iter ) 
+        (*iter)->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+#endif
+
+    for( std::size_t i1 = 0; i1 < m_productIndices.size( ); ++i1 ) {
+        if( m_productIndices[i1] == a_particleIndex ) m_userProductIndices[i1] = a_userParticleIndex;
+    }
+
+    for( std::size_t i1 = 0; i1 < m_productIndicesTransportable.size( ); ++i1 ) {
+        if( m_productIndicesTransportable[i1] == a_particleIndex ) m_userProductIndicesTransportable[i1] = a_userParticleIndex;
+    }
+
+    if( a_particleIndex == m_fissionResiduaIndex ) m_fissionResiduaUserIndex = a_userParticleIndex;
+
+    if( m_GRIN_capture != nullptr ) m_GRIN_capture->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+    if( m_GRIN_inelastic != nullptr ) m_GRIN_inelastic->setUserParticleIndex( a_particleIndex, a_userParticleIndex );
+}
+
+/* *********************************************************************************************************//**
+ * Updates the m_userParticleIndex to *a_userParticleIndex* for all particles with PoPs index *a_particleIntid*.
+ *
+ * @param a_particleIndex       [in]    The PoPs intid of the particle whose user intid is to be set.
+ * @param a_userParticleIndex   [in]    The particle index specified by the user.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Reaction::setUserParticleIndexViaIntid( int a_particleIntid, int a_userParticleIndex ) {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    m_outputChannel->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+#else
+    for( auto productIter = m_products.begin( ); productIter != m_products.end( ); ++productIter ) {
+        (*productIter)->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+    }
+
+    for( auto iter = m_delayedNeutrons.begin( ); iter != m_delayedNeutrons.end( ); ++iter )
+        (*iter)->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+#endif
+
+    for( std::size_t i1 = 0; i1 < m_productIntids.size( ); ++i1 ) {
+        if( m_productIntids[i1] == a_particleIntid ) m_userProductIndices[i1] = a_userParticleIndex;
+    }
+
+    for( std::size_t i1 = 0; i1 < m_productIntidsTransportable.size( ); ++i1 ) {
+        if( m_productIntidsTransportable[i1] == a_particleIntid ) m_userProductIndicesTransportable[i1] = a_userParticleIndex;
+    }
+
+    if( a_particleIntid == m_fissionResiduaIntid ) m_fissionResiduaUserIndex = a_userParticleIndex;
+
+    if( m_GRIN_capture != nullptr ) m_GRIN_capture->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+    if( m_GRIN_inelastic != nullptr ) m_GRIN_inelastic->setUserParticleIndexViaIntid( a_particleIntid, a_userParticleIndex );
+}
+
+/* *********************************************************************************************************//**
+ * This method calls the **setModelDBRC_data* method on the first product of *this* with *a_modelDBRC_data*.
+ *
+ * @param a_modelDBRC_data      [in]    The instance storing data needed to treat the DRRC upscatter mode.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Reaction::setModelDBRC_data( Sampling::Upscatter::ModelDBRC_data *a_modelDBRC_data ) {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    m_outputChannel->setModelDBRC_data( a_modelDBRC_data );
+#else
+    m_products[0]->setModelDBRC_data( a_modelDBRC_data );
+#endif
+}
+
+/* *********************************************************************************************************//**
+ * Adds the associated orphan products of an orphan product reaction to *a_associatedOrphanProducts*.
+ *
+ * @param a_associatedOrphanProducts    [in]    A list where the associated orphan products are added to.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Reaction::addOrphanProductToProductList( std::vector<Product *> &a_associatedOrphanProducts ) const {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    m_outputChannel->addOrphanProductToProductList( a_associatedOrphanProducts );
+#else
+    for( auto productIter = m_products.begin( ); productIter != m_products.end( ); ++productIter ) {
+        a_associatedOrphanProducts.push_back( *productIter );
+    }
+#endif
+}
+
+/* *********************************************************************************************************//**
+ * Adds the associated orphan products of an orphan product reaction to *a_associatedOrphanProducts*.
+ *
+ * @param a_associatedOrphanProducts    [in]    A list where the associated orphan products are added to.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void Reaction::addOrphanProductToProductList( Vector<Product *> &a_associatedOrphanProducts ) const {
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    m_outputChannel->addOrphanProductToProductList( a_associatedOrphanProducts );
+#else
+    for( auto productIter = m_products.begin( ); productIter != m_products.end( ); ++productIter ) {
+        a_associatedOrphanProducts.push_back( *productIter );
+    }
+#endif
+}
+
+/* *********************************************************************************************************//**
+ * Adds the associated orphan products of an orphan product to *a_associatedOrphanProducts*.
+ *
+ * @param a_associatedOrphanProducts    [in]    A list where the associated orphan products are added to.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void Reaction::addOrphanProductToProductList( Vector<Reaction *> &a_orphanProducts ) {
+
+    for( auto associatedOrphanProductIndex = m_associatedOrphanProductIndices.begin( );
+            associatedOrphanProductIndex != m_associatedOrphanProductIndices.end( ); ++associatedOrphanProductIndex ) {
+        Reaction *orphanProduct = a_orphanProducts[*associatedOrphanProductIndex];
+        orphanProduct->addOrphanProductToProductList( m_associatedOrphanProducts );
+    }
+}
+
+/* *********************************************************************************************************//**
+ * Adds the contents of **a_associatedOrphanProductIndcies** and **a_associatedOrphanProducts** to this instance.
+ *
+ * @param a_associatedOrphanProductIndcies  [in]    The list of indices of the orphanProduct reaction that make up the product in **a_associatedOrphanProducts**.
+ * @param a_associatedOrphanProducts        [in]    The list of pointers to the associated orphan products.
+ ***********************************************************************************************************/
+
+LUPI_HOST void Reaction::setOrphanProductData( std::vector<int> const &a_associatedOrphanProductIndcies,
+                std::vector<Product *> const &a_associatedOrphanProducts ) {
+
+    m_associatedOrphanProductIndices.reserve( a_associatedOrphanProductIndcies.size( ) );
+    for( auto iter = a_associatedOrphanProductIndcies.begin( ); iter != a_associatedOrphanProductIndcies.end( ); ++iter )
+        m_associatedOrphanProductIndices.push_back( *iter );
+
+    m_associatedOrphanProducts.reserve( a_associatedOrphanProducts.size( ) );
+    for( auto iter = a_associatedOrphanProducts.begin( ); iter != a_associatedOrphanProducts.end( ); ++iter )
+        m_associatedOrphanProducts.push_back( *iter );
+}
+
+/* *********************************************************************************************************//**
+ * This method serializes *this* for broadcasting as needed for MPI and GPUs. The method can count the number of required
+ * bytes, pack *this* or unpack *this* depending on *a_mode*.
+ *
+ * @param a_buffer              [in]    The buffer to read or write data to depending on *a_mode*.
+ * @param a_mode                [in]    Specifies the action of this method.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE void Reaction::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
+    
+    DATA_MEMBER_INT( m_GIDI_reactionIndex, a_buffer, a_mode );
+    DATA_MEMBER_STRING( m_label, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_ENDF_MT, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_ENDL_C, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_ENDL_S, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_initialStateIndex, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_neutronIndex, a_buffer, a_mode );
+    DATA_MEMBER_CAST( m_hasFission, a_buffer, a_mode, bool );
+    DATA_MEMBER_DOUBLE( m_projectileMass, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_targetMass, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_crossSectionThreshold, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_twoBodyThreshold, a_buffer, a_mode );
+    DATA_MEMBER_CAST( m_upscatterModelASupported, a_buffer, a_mode, bool );
+    DATA_MEMBER_CAST( m_hasFinalStatePhotons, a_buffer, a_mode, bool );
+    DATA_MEMBER_INT( m_fissionResiduaIntid, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_fissionResiduaIndex, a_buffer, a_mode );
+    DATA_MEMBER_INT( m_fissionResiduaUserIndex, a_buffer, a_mode );
+    serializeFissionResiduals( m_fissionResiduals, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_fissionResidualMass, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_DOUBLE( m_upscatterModelACrossSection, a_buffer, a_mode );
+
+    DATA_MEMBER_VECTOR_INT( m_productIntids, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_productIndices, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_userProductIndices, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_productMultiplicities, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_productIntidsTransportable, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_productIndicesTransportable, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_INT( m_userProductIndicesTransportable, a_buffer, a_mode );
+
+#ifdef MCGIDI_USE_OUTPUT_CHANNEL
+    bool haveChannel = m_outputChannel != nullptr;
+    DATA_MEMBER_CAST( haveChannel, a_buffer, a_mode, bool );
+    if( haveChannel ) {
+        if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+            if (a_buffer.m_placement != nullptr) {
+                m_outputChannel = new(a_buffer.m_placement) OutputChannel();
+                a_buffer.incrementPlacement( sizeof(OutputChannel));
+            }
             else {
-                *finalQ += product->pop->level_MeV;
-                for( residual = product->pop; residual->globalPoPsIndex < 0; residual = residual->parent ) ;
-                if( MCGIDI_reaction_addReturnProduct( smr, productsInfo, residual->globalPoPsIndex, product, reaction, 0 ) != 0 ) return( 1 );
-                if( product->pop->numberOfGammaBranchs != 0 ) {
-                    int gammaIndex = PoPs_particleIndex( "gamma" );
-                    if( MCGIDI_reaction_addReturnProduct( smr, productsInfo, gammaIndex, NULL, reaction, 1 ) != 0 ) return( 1 );
+                m_outputChannel = new OutputChannel();
+            } }
+        else if( a_mode == LUPI::DataBuffer::Mode::Memory ) {
+            a_buffer.incrementPlacement( sizeof( OutputChannel ) );
+        }
+        m_outputChannel->serialize( a_buffer, a_mode );
+    }
+#else
+    serializeQs( a_buffer, a_mode, m_Qs );
+    serializeProducts( a_buffer, a_mode, m_products );
+    m_totalDelayedNeutronMultiplicity = serializeFunction1d( a_buffer, a_mode, m_totalDelayedNeutronMultiplicity );
+    serializeDelayedNeutrons( a_buffer, a_mode, m_delayedNeutrons );
+#endif
+
+    DATA_MEMBER_VECTOR_INT( m_associatedOrphanProductIndices, a_buffer, a_mode );
+
+    std::size_t vectorSize = m_associatedOrphanProducts.size( );
+    int vectorSizeInt = (int) vectorSize;
+    DATA_MEMBER_INT( vectorSizeInt, a_buffer, a_mode );
+    vectorSize = (std::size_t) vectorSizeInt;
+    if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+        m_associatedOrphanProducts.reserve( vectorSize, &a_buffer.m_placement ); }
+    else if( a_mode == LUPI::DataBuffer::Mode::Memory ) {
+        a_buffer.m_placement += m_associatedOrphanProducts.internalSize( );
+    }
+
+    if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+        m_protareSingle = nullptr;
+        m_reactionIndex = -1;
+    }
+
+    DATA_MEMBER_CAST( m_GRIN_specialSampleProducts, a_buffer, a_mode, bool );
+    DATA_MEMBER_DOUBLE( m_GRIN_inelasticThreshold, a_buffer, a_mode );
+    DATA_MEMBER_DOUBLE( m_GRIN_maximumCaptureIncidentEnergy, a_buffer, a_mode );
+
+    if( m_GRIN_specialSampleProducts ) {
+        if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
+            if( a_buffer.m_placement != nullptr ) {
+                if( m_ENDF_MT == 91 ) {
+                    m_GRIN_inelastic = new(a_buffer.m_placement) GRIN_inelastic;
+                    a_buffer.incrementPlacement( sizeof( GRIN_inelastic ) ); }
+                else {
+                    m_GRIN_capture = new(a_buffer.m_placement) GRIN_capture;
+                    a_buffer.incrementPlacement( sizeof( GRIN_capture ) );
+                } }
+            else {
+                if( m_ENDF_MT == 91 ) {
+                    m_GRIN_inelastic = new GRIN_inelastic( ); }
+                else {
+                    m_GRIN_capture = new GRIN_capture( );
                 }
             }
         }
-    }
-    return( 0 );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_reaction_addReturnProduct( statusMessageReporting *smr, MCGIDI_productsInfo *productsInfo, int ID, MCGIDI_product *product, 
-        MCGIDI_reaction *reaction, int transportable ) {
 
-    int i1;
-    enum MCGIDI_productMultiplicityType productMultiplicityType;
-
-    MCGIDI_misc_updateTransportabilitiesMap2( reaction->transportabilities, ID, transportable );
-    for( i1 = 0; i1 < productsInfo->numberOfProducts; i1++ ) {
-        if( productsInfo->productInfo[i1].globalPoPsIndex == ID ) break;
-    }
-    if( i1 == productsInfo->numberOfProducts ) {
-        if( productsInfo->numberOfProducts == productsInfo->numberOfAllocatedProducts ) {
-            productsInfo->numberOfAllocatedProducts += 4;
-            if( ( productsInfo->productInfo = (MCGIDI_productInfo *) smr_realloc2( smr, productsInfo->productInfo, 
-                productsInfo->numberOfAllocatedProducts * sizeof( MCGIDI_productInfo ), "productsInfo->productInfo" ) ) == NULL ) return( 1 );
-        }
-        productsInfo->numberOfProducts++;
-        productsInfo->productInfo[i1].globalPoPsIndex = ID;
-        productsInfo->productInfo[i1].productMultiplicityType = MCGIDI_productMultiplicityType_unknown_e;
-        productsInfo->productInfo[i1].multiplicity = 0;
-        productsInfo->productInfo[i1].transportable = transportable;
-    }
-    if( product == NULL ) {
-        productMultiplicityType = MCGIDI_productMultiplicityType_gammaBranching_e; }
-    else {
-        if( ( product->multiplicityVsEnergy != NULL ) || ( product->piecewiseMultiplicities != NULL ) ) {
-            productMultiplicityType = MCGIDI_productMultiplicityType_energyDependent_e; }
-        else {
-            productsInfo->productInfo[i1].multiplicity += product->multiplicity;
-            productMultiplicityType = MCGIDI_productMultiplicityType_integer_e;
-        }
-    }
-    if( ( productsInfo->productInfo[i1].productMultiplicityType == MCGIDI_productMultiplicityType_unknown_e ) ||
-        ( productsInfo->productInfo[i1].productMultiplicityType == productMultiplicityType ) ) {
-        productsInfo->productInfo[i1].productMultiplicityType = productMultiplicityType; }
-    else {
-        productsInfo->productInfo[i1].productMultiplicityType = MCGIDI_productMultiplicityType_mixed_e;
-    }
-    return( 0 );
-}
-/*
-************************************************************
-*/
-enum MCGIDI_reactionType MCGIDI_reaction_getReactionType( statusMessageReporting * /*smr*/, MCGIDI_reaction *reaction ) {
-
-    return( reaction->reactionType );
-}
-/*
-************************************************************
-*/
-MCGIDI_target_heated *MCGIDI_reaction_getTargetHeated( statusMessageReporting * /*smr*/, MCGIDI_reaction *reaction ) {
-
-    return( reaction->target );
-}
-/*
-************************************************************
-*/
-double MCGIDI_reaction_getProjectileMass_MeV( statusMessageReporting *smr, MCGIDI_reaction *reaction ) {
-
-    return( MCGIDI_target_heated_getProjectileMass_MeV( smr, reaction->target ) );
-}
-/*
-************************************************************
-*/
-double MCGIDI_reaction_getTargetMass_MeV( statusMessageReporting *smr, MCGIDI_reaction *reaction ) {
-
-    return( MCGIDI_target_heated_getTargetMass_MeV( smr, reaction->target ) );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_getDomain( statusMessageReporting * /*smr*/, MCGIDI_reaction *reaction, double *EMin, double *EMax ) {
-/*
-*   Return value
-*       <  0    No cross section data.
-*       == 0    Okay and EMin and EMax set.
-*       >  0    error, EMin and EMax undefined.
-*/
-
-    if( !reaction->domainValuesPresent ) return( -1 );
-    *EMin = reaction->EMin;
-    *EMax = reaction->EMax;
-    return( 0 );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_fixDomains( statusMessageReporting * /*smr*/, MCGIDI_reaction *reaction, double EMin, double EMax, nfu_status *status ) {
-
-    double lowerEps = 1e-14, upperEps = -1e-14;
-
-    if( reaction->EMin == EMin ) lowerEps = 0.;
-    if( reaction->EMax == EMax ) upperEps = 0.;
-    if( ( lowerEps == 0. ) && ( upperEps == 0. ) ) return( 0 );
-
-    *status = ptwXY_dullEdges( reaction->crossSection, lowerEps, upperEps, 1 );
-    return( *status != nfu_Okay );
-}
-/*
-************************************************************
-*/
-double MCGIDI_reaction_getCrossSectionAtE( statusMessageReporting *smr, MCGIDI_reaction *reaction, MCGIDI_quantitiesLookupModes &modes,
-        bool sampling ) {
-
-    double e_in = modes.getProjectileEnergy( ), xsec;
-
-    if( modes.getCrossSectionMode( ) == MCGIDI_quantityLookupMode_pointwise ) {
-        if( e_in < reaction->EMin ) e_in = reaction->EMin;
-        if( e_in > reaction->EMax ) e_in = reaction->EMax;
-        ptwXY_getValueAtX( reaction->crossSection, e_in, &xsec ); }
-    else if( modes.getCrossSectionMode( ) == MCGIDI_quantityLookupMode_grouped ) {
-        int index = modes.getGroupIndex( );
-        double *xSecP = ptwX_getPointAtIndex( reaction->crossSectionGrouped, index );
-
-        if( xSecP != NULL ) {
-            xsec = *xSecP;
-            if( sampling && ( index == reaction->thresholdGroupIndex ) ) xsec += reaction->thresholdGroupedDeltaCrossSection; }
-        else {
-            xsec = 0.;
-            smr_setReportError2( smr, smr_unknownID, 1, "Invalid cross section group index %d", index );
-        } }
-    else {
-        xsec = 0.;
-    }
-    return( xsec );
-}
-/*
-************************************************************
-*/
-double MCGIDI_reaction_getFinalQ( statusMessageReporting * /*smr*/, MCGIDI_reaction *reaction, MCGIDI_quantitiesLookupModes &/*modes*/ ) {
-
-    return( reaction->finalQ );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_getENDF_MTNumber( MCGIDI_reaction *reaction ) {
-
-    return( reaction->ENDF_MT );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_getENDL_CSNumbers( MCGIDI_reaction *reaction, int *S ) {
-
-    if( S != NULL ) *S = reaction->ENDL_S;
-    return( reaction->ENDL_C );
-}
-/*
-************************************************************
-*/
-static int MCGIDI_reaction_setENDL_CSNumbers( statusMessageReporting * /*smr*/, MCGIDI_reaction *reaction ) {
-
-    int MT = MCGIDI_reaction_getENDF_MTNumber( reaction );
-    int MT1_50ToC[] = { 1,   10,  -3,   -4,   -5,    0,    0,    0,    0,  -10,
-                       32,    0,   0,    0,    0,   12,   13,   15,   15,   15,
-                       15,   26,  36,   33,  -25,    0,  -27,   20,   27,  -30,
-                        0,   22,  24,   25,  -35,  -36,   14,   15,    0,    0,
-                       29,   16,   0,   17,   34,    0,    0,    0,    0 };
-    int MT100_200ToC[] = { -101,   46,   40,   41,   42,   44,   45,   37, -109,    0,
-                             18,   48, -113, -114,   19,   39,   47,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-                              0, -152, -153, -154,   43, -156, -157,   23,   31, -160,
-                           -161, -162, -163, -164, -165, -166, -167, -168, -169, -170,
-                           -171, -172, -173, -174, -175, -176, -177, -178, -179, -180,
-                           -181, -182, -183, -184, -185, -186, -187, -188,   28, -190,
-                           -191, -192,   38, -194, -195, -196, -197, -198, -199, -200 };
-
-    reaction->ENDL_C = 0;
-    reaction->ENDL_S = 0;
-    if( MT <= 0 ) return( 1 );
-    if( MT > 891 ) return( 1 );
-    if( MT < 50 ) {
-        reaction->ENDL_C = MT1_50ToC[MT - 1]; }
-    else if( MT <= 91 ) {
-        reaction->ENDL_C = 11;
-        if( MT != 91 ) reaction->ENDL_S = 1; }
-    else if( ( MT > 100 ) && ( MT <= 200 ) ) {
-        reaction->ENDL_C = MT100_200ToC[MT - 101]; }
-    else if( ( MT == 452 ) || ( MT == 455 ) || ( MT == 456 ) || ( MT == 458 ) ) {
-        reaction->ENDL_C = 15;
-        if( MT == 455 ) reaction->ENDL_S = 7; }
-    else if( MT >= 600 ) {
-        if( MT < 650 ) {
-            reaction->ENDL_C = 40;
-            if( MT != 649 ) reaction->ENDL_S = 1; }
-        else if( MT < 700 ) {
-            reaction->ENDL_C = 41;
-            if( MT != 699 ) reaction->ENDL_S = 1; }
-        else if( MT < 750 ) {
-            reaction->ENDL_C = 42;
-            if( MT != 749 ) reaction->ENDL_S = 1; }
-        else if( MT < 800 ) {
-            reaction->ENDL_C = 44;
-            if( MT != 799 ) reaction->ENDL_S = 1; }
-        else if( MT < 850 ) {
-            reaction->ENDL_C = 45;
-            if( MT != 849 ) reaction->ENDL_S = 1; }
-        else if( ( MT >= 875 ) && ( MT <= 891 ) ) {
-            reaction->ENDL_C = 12;
-            if( MT != 891 ) reaction->ENDL_S = 1;
-        }
-    }
-    return( 0 );
-}
-/*
-************************************************************
-*/
-MCGIDI_productsInfo *MCGIDI_reaction_getProductsInfo( MCGIDI_reaction *reaction ) {
-
-    return( &(reaction->productsInfo) );
-}
-/*
-************************************************************
-*/
-int MCGIDI_reaction_recast( statusMessageReporting *smr, MCGIDI_reaction *reaction, GIDI_settings & /*settings*/, 
-        GIDI_settings_particle const *projectileSettings, double temperature_MeV, ptwXPoints *totalGroupedCrossSection ) {
-
-    if( totalGroupedCrossSection != NULL ) {
-        nfu_status status_nf;
-        GIDI_settings_group group( projectileSettings->getGroup( ) );
-
-        if( reaction->crossSectionGrouped != NULL ) reaction->crossSectionGrouped = ptwX_free( reaction->crossSectionGrouped );
-        if( ( reaction->crossSectionGrouped = projectileSettings->groupFunction( smr, reaction->crossSection, temperature_MeV, 0 ) ) == NULL ) return( 1 );
-        if( ( status_nf = ptwX_add_ptwX( totalGroupedCrossSection, reaction->crossSectionGrouped ) ) != nfu_Okay ) return( 1 );
-
-        reaction->thresholdGroupDomain = reaction->thresholdGroupedDeltaCrossSection = 0.;
-        reaction->thresholdGroupIndex = group.getGroupIndexFromEnergy( reaction->EMin, false );
-        if( reaction->thresholdGroupIndex > -1 ) {
-            reaction->thresholdGroupDomain = group[reaction->thresholdGroupIndex+1] - reaction->EMin;
-            if( reaction->thresholdGroupDomain > 0 ) {
-                                                            /* factor 2 for linear reject in bin but above threshold. */
-                reaction->thresholdGroupedDeltaCrossSection = *ptwX_getPointAtIndex( reaction->crossSectionGrouped, reaction->thresholdGroupIndex ) *
-                        ( 2 * ( group[reaction->thresholdGroupIndex+1] - group[reaction->thresholdGroupIndex] ) / reaction->thresholdGroupDomain - 1 );
+        if( a_mode == LUPI::DataBuffer::Mode::Memory ) {
+            if( m_ENDF_MT == 91 ) {
+                a_buffer.incrementPlacement( sizeof( GRIN_inelastic ) ); }
+            else {
+                a_buffer.incrementPlacement( sizeof( GRIN_capture ) );
             }
         }
+
+        if( m_ENDF_MT == 91 ) {
+            m_GRIN_inelastic->serialize( a_buffer, a_mode ); }
+        else {
+            m_GRIN_capture->serialize( a_buffer, a_mode );
+        }
     }
-    return( 0 );
 }
 
-/*
-*********************** productsInfo ***********************
-*/
-/*
-************************************************************
-*/
-int MCGIDI_productsInfo_getNumberOfUniqueProducts( MCGIDI_productsInfo *productsInfo ) {
-
-    return( productsInfo->numberOfProducts );
 }
-/*
-************************************************************
-*/
-int MCGIDI_productsInfo_getPoPsIndexAtIndex( MCGIDI_productsInfo *productsInfo, int index ) {
-
-    if( ( index < 0 ) || ( index >= productsInfo->numberOfProducts ) ) return( -1 );
-    return( productsInfo->productInfo[index].globalPoPsIndex );
-}
-/*
-************************************************************
-*/
-enum MCGIDI_productMultiplicityType MCGIDI_productsInfo_getMultiplicityTypeAtIndex( MCGIDI_productsInfo *productsInfo, int index ) {
-
-    if( ( index < 0 ) || ( index >= productsInfo->numberOfProducts ) ) return( MCGIDI_productMultiplicityType_invalid_e );
-    return( productsInfo->productInfo[index].productMultiplicityType );
-}
-/*
-************************************************************
-*/
-int MCGIDI_productsInfo_getIntegerMultiplicityAtIndex( MCGIDI_productsInfo *productsInfo, int index ) {
-
-    if( ( index < 0 ) || ( index >= productsInfo->numberOfProducts ) ) return( -1 );
-    return( productsInfo->productInfo[index].multiplicity );
-}
-/*
-************************************************************
-*/
-int MCGIDI_productsInfo_getTransportableAtIndex( MCGIDI_productsInfo *productsInfo, int index ) {
-
-    if( ( index < 0 ) || ( index >= productsInfo->numberOfProducts ) ) return( -1 );
-    return( productsInfo->productInfo[index].transportable );
-}
-
-#if defined __cplusplus
-}
-#endif
-

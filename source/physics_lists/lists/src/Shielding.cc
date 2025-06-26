@@ -42,6 +42,8 @@
 //                   fragments 
 // 06.08.2019 A.Ribon: Replacing explicit values for the energy transition
 //                     region with values from G4HadronicParameters
+// 19.11.2024 D.M.Wright: Simplify logic tree for inelastic models and
+//                        move LEND hadronic inelastic processes to G4HadronPhysicsLEND
 //
 //----------------------------------------------------------------------------
 //
@@ -59,11 +61,12 @@
 #include "G4IonElasticPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
-#include "G4HadronElasticPhysicsLEND.hh"
 #include "G4ParticleHPManager.hh"
 
+#include "G4HadronElasticPhysicsLEND.hh"
+#include "G4HadronPhysicsLEND.hh"
 #include "G4HadronPhysicsShielding.hh"
-#include "G4HadronPhysicsShieldingLEND.hh"
+
 #include "G4HadronicParameters.hh"
 #include <CLHEP/Units/SystemOfUnits.h>
 
@@ -97,12 +100,13 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   // EM Physics
   RegisterPhysics( new G4EmStandardPhysics(verbose));
 
-  // Synchroton Radiation & GN Physics
+  // Synchroton Radiation & Gamma Nuclear Physics
   G4EmExtraPhysics* emExtraPhysics = new G4EmExtraPhysics(verbose);
-  if ( LEN_model == "LEND" ) {
-     // Use LEND model for Gamma Nuclear 
+
+  // Adjust energy bounds of gamma nuclear models from G4EmExtraPhysics
+  if ( LEN_model == "LEND" )
      emExtraPhysics->LENDGammaNuclear(true);
-  }
+  
   RegisterPhysics( emExtraPhysics );
 
   // Decays 
@@ -110,16 +114,11 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
 
   // Hadron Elastic scattering
-  if ( LEN_model == "HP" ) 
-  {
+  if ( LEN_model == "HP" ) {
      RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
-  }
-  else if ( LEN_model == "LEND" ) 
-  {
+  } else if ( LEN_model == "LEND" ) {
      RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation));
-  }
-  else 
-  {
+  } else {
      if(verbose > 0) {
        G4cout << "Shielding Physics List: Warning!" <<G4endl;
        G4cout << "\"" << LEN_model 
@@ -129,46 +128,40 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
      RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   } 
 
+  // Hadron Physics = Bertini and FTF with HP or LEND
   G4VPhysicsConstructor* hpc;
-  // Hadron Physics HP or LEND 
+  G4String HadPhysName = "hInelastic Shielding";
+  if ( LEN_model == "LEND" ) HadPhysName += "LEND";
+
+  G4double HadPhysEmin, HadPhysEmax;
   if (HadrPhysVariant == "M") {
-     // The variant "M" has a special, dedicated energy transition region
-     // between the string model and cascade model, therefore the recommended
-     // values from G4HadronicParameters are intentionally not used. 
-     hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 
-                                        9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
+      // The variant "M" has a special, dedicated energy transition region
+      // between the string model and cascade model, therefore the recommended
+      // values from G4HadronicParameters are intentionally not used.
+      HadPhysEmin = 9.5*CLHEP::GeV;
+      HadPhysEmax = 9.9*CLHEP::GeV;
   } else {
-     hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose,
-                                        G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
-                                        G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
+      HadPhysEmin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+      HadPhysEmax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   }
 
-  if ( LEN_model == "LEND" ) {
-     delete hpc;
-     if (HadrPhysVariant == "M") {
-        // The variant "M" has a special, dedicated energy transition region
-        // between the string model and cascade model, therefore the recommended
-        // values from G4HadronicParameters are intentionally not used. 
-        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose,
-                                               9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
-     } else {
-        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose, 
-                                               G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
-                                               G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
-     }
-  } else {
-     //G4cout << "Shielding Physics List: Warning." <<G4endl;
-     //G4cout << "Name of Low Energy Neutron model " << LEN_model 
-     //         << " is invalid." <<G4endl;
-     //G4cout << "Will use neutron HP package." <<G4endl;
-  }
+  // N.B., G4HadronPhysicsShielding only builds neutron processes
+  hpc = new G4HadronPhysicsShielding(HadPhysName, verbose, HadPhysEmin, HadPhysEmax);
+
+  // Turn off HP low energy model defined by G4HadronPhysicsShielding
+  if ( LEN_model == "LEND" )
+      ((G4HadronPhysicsShielding*)hpc)->UseLEND();
+    
   RegisterPhysics( hpc );
 
-  if ( LEN_model == "HP" ) {
-     //Activate prodcuton of fission fragments in neutronHP
-     G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( true );
-  }
-
+  // Activate production of fission fragments in NeutronHP
+  if ( LEN_model == "HP" )
+      G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( true );
+  
+  // Add LEND processes (neutron and photon induced)
+   if ( LEN_model == "LEND" )
+       RegisterPhysics( new G4HadronPhysicsLEND(verbose, evaluation));
+        
   // Stopping Physics
   RegisterPhysics( new G4StoppingPhysics(verbose) );
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -261,7 +261,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -776,14 +776,14 @@ N=17 V[N]={87900885656017340, 2136126672992718976, 110623987125446578, 176001763
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=35.620000s Real=41.058177s Sys=0.790000s
+  User=38.600000s Real=39.588091s Sys=0.920000s
 
 ### End of Run (1000000 events)
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x203aa70
-UserPhysicsList deleted 0x2076978
-UserActionInitialization deleted 0x2204d00
+UserDetectorConstruction deleted 0xbab540
+UserPhysicsList deleted 0xbe7028
+UserActionInitialization deleted 0xd75da0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

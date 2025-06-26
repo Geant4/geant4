@@ -34,11 +34,12 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* pDet)
-  : G4VUserPrimaryGeneratorAction(), fpDetector(pDet)
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+  : G4VUserPrimaryGeneratorAction()
 {
   fpMessenger = std::make_unique<PrimaryGeneratorMessenger>(this);
   fParticleGun = std::make_unique<G4SingleParticleSource>();
@@ -49,6 +50,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* pDet)
   auto pPosDist = fParticleGun->GetPosDist();
   pPosDist->SetPosDisType("Plane");
   pPosDist->SetPosDisShape("Square");
+  const auto* fpDetector = dynamic_cast<const DetectorConstruction*>(
+  G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   auto faceSiez = fpDetector->GetChemistryWorld()->GetChemistryBoundary()->halfSideLengthInY();
   pPosDist->SetCentreCoords(G4ThreeVector(0, 0, -faceSiez));
   pPosDist->SetHalfX(faceSiez);

@@ -96,6 +96,7 @@ private:
   G4bool fUseAngularGenerator;
 
   G4int fModelID;
+  G4int fVerbose{1};
 };
 
 inline G4double 

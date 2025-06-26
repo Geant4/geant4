@@ -34,6 +34,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4TritonEvaporationProbability.hh"
+#include "G4DeexPrecoUtility.hh"
 
 G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     G4EvaporationProbability(3,1,2.0) 
@@ -41,21 +42,7 @@ G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
 
 G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment& fr)
 {
-  // Data comes from 
-  // Dostrovsky, Fraenkel and Friedlander
-  // Physical Review, vol 116, num. 3 1959
-  // 
-  // const G4int size = 5;
-  // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
-  // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
-  // C for triton is equal to C for protons divided by 3
-
-  G4int aZ = fr.GetZ_asInt()-GetZ();
-  G4double C = (aZ <= 70) ? 0.10 :
-    ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
-     - 0.66612e-01)*aZ + 0.98375;
-
-  return 1.0 + C/3.0;
+  return 1.0 + G4DeexPrecoUtility::ProtonCValue(fr.GetZ_asInt() - 1)/3.0;
 }
 	
 G4double G4TritonEvaporationProbability::CalcBetaParam(const G4Fragment& )

@@ -1,12 +1,11 @@
-//*********************************************************************************
+//-------------------------------------------------------------------------------
 // Modified by Sara Zein to calculate the damage probability per plasmid
-//_________________________________________________________________________________
-//*********************************************************************************
-
+//-------------------------------------------------------------------------------
+//
 // This macro requires the molecular-dna.root file generated from molecularDNA example
 // To run this file just insert this command to the terminal:
 // root .X plasmid.C
-
+//
 //***************************************//
 // Please define the parameters below    //
 // ifile, r3, Nbp (as shown in terminal) //
@@ -191,6 +190,11 @@
   TTree* tree = (TTree*)f->Get("tuples/primary_source");
   Float_t number = (Float_t)tree->GetEntries();
 
+  if (number<2) {
+    std::cout << "Not enough entries in the \"primary_source\" TTree (" << (long)number << " entries)\n";
+    gApplication->Terminate(0);
+  }
+  
   vector<pair<int, int64_t>> DSBBPID;
 
   // For reading species production
@@ -266,20 +270,30 @@
     h4damage->SetBinContent(i, X * 100 / totalDs);
   }
 
-  // Sort DSBs from the one with lower ID value to the one with higher ID value
-  // Then find the number of fragments that have been produced
-  sort(DSBBPID.begin(), DSBBPID.end(), smallerPair);
-  for (int ie = 0; ie < DSBBPID.size() - 1; ie++) {
-    int64_t dsbfragment = DSBBPID[ie + 1].second - DSBBPID[ie].second;
+  // Find the number of fragments that have been produced, but first test if there are enough breaks.
+  // If no more than 2 DSBs exist in the DSBBPID vector ( DSBBPID.size() is 0 or 1 ),
+  // the subtraction DSBBPID.size() - 1 makes the loop condition evaluate to ie < -1 (in unsigned terms,
+  // this becomes a large number, which is incorrect) and leads to undefined behavior (crash).
+  if (DSBBPID.size() < 2) {
+      std::cerr << "Not enough damage to calculate fragments." << std::endl;
+      //return;
+  }
+  if (DSBBPID.size() >= 2) {
+    // Sort DSBs from the one with lower ID value to the one with higher ID value
+    // Then find the number of fragments that have been produced
+    sort(DSBBPID.begin(), DSBBPID.end(), smallerPair);
+    for(int ie = 0; ie < DSBBPID.size() - 1; ie++){
+      int64_t dsbfragment = DSBBPID[ie + 1].second - DSBBPID[ie].second;
+    }
   }
 
-  // Calculate the standard deviation of species
-  SD_EB = sqrt(((total_EB2 / number) - pow(total_EB / number, 2)) / (number - 1));
-  SD_ES = sqrt(((total_ES2 / number) - pow(total_ES / number, 2)) / (number - 1));
-  SD_OHB = sqrt(((total_OHB2 / number) - pow(total_OHB / number, 2)) / (number - 1));
-  SD_OHS = sqrt(((total_OHS2 / number) - pow(total_OHS / number, 2)) / (number - 1));
-  SD_HB = sqrt(((total_HB2 / number) - pow(total_HB / number, 2)) / (number - 1));
-  SD_HS = sqrt(((total_HS2 / number) - pow(total_HS / number, 2)) / (number - 1));
+  // Calculate the SEM
+  SD_EB = sqrt(abs(((total_EB2 / number) - pow(total_EB / number, 2))) / (number - 1));
+  SD_ES = sqrt(abs(((total_ES2 / number) - pow(total_ES / number, 2))) / (number - 1));
+  SD_OHB = sqrt(abs(((total_OHB2 / number) - pow(total_OHB / number, 2))) / (number - 1));
+  SD_OHS = sqrt(abs(((total_OHS2 / number) - pow(total_OHS / number, 2))) / (number - 1));
+  SD_HB = sqrt(abs(((total_HB2 / number) - pow(total_HB / number, 2))) / (number - 1));
+  SD_HS = sqrt(abs(((total_HS2 / number) - pow(total_HS / number, 2))) / (number - 1));
 
   // Read damage classification SSB, SSB+, 2SSB, DSB, DSB+, DSB++
   // As they have been defined in: Nikjoo, H., O’Neill, O., Goodhead, T., & Terrissol, M. 1997,
@@ -314,14 +328,14 @@
     total_DSB2 += pow(DSB, 2);
   }
 
-  // Calculate the standard deviation
-  SD_SSB = sqrt(((total_SSB2 / number) - pow(total_SSB / number, 2)) / (number - 1));
-  SD_SSBp = sqrt(((total_SSBp2 / number) - pow(total_SSBp / number, 2)) / (number - 1));
-  SD_SSB2p = sqrt(((total_SSB2p2 / number) - pow(total_SSB2p / number, 2)) / (number - 1));
+  // Calculate the SEM
+  SD_SSB = sqrt(abs(((total_SSB2 / number) - pow(total_SSB / number, 2))) / (number - 1));
+  SD_SSBp = sqrt(abs(((total_SSBp2 / number) - pow(total_SSBp / number, 2))) / (number - 1));
+  SD_SSB2p = sqrt(abs(((total_SSB2p2 / number) - pow(total_SSB2p / number, 2))) / (number - 1));
 
-  SD_DSB = sqrt(((total_DSB2 / number) - pow(total_DSB / number, 2)) / (number - 1));
-  SD_DSBp = sqrt(((total_DSBp2 / number) - pow(total_DSBp / number, 2)) / (number - 1));
-  SD_DSBpp = sqrt(((total_DSBpp2 / number) - pow(total_DSBpp / number, 2)) / (number - 1));
+  SD_DSB = sqrt(abs(((total_DSB2 / number) - pow(total_DSB / number, 2))) / (number - 1));
+  SD_DSBp = sqrt(abs(((total_DSBp2 / number) - pow(total_DSBp / number, 2))) / (number - 1));
+  SD_DSBpp = sqrt(abs(((total_DSBpp2 / number) - pow(total_DSBpp / number, 2))) / (number - 1));
 
   // Read damage classification SSBd, SSBi, SSBm, DSBd, DSBi, DSBm, DSBh
   // As they have been defined in: Nikjoo, H., O’Neill, O., Goodhead, T., & Terrissol, M. 1997,
@@ -379,17 +393,17 @@
     h1damage->SetBinContent(i, Y * 100 / totalDs);
   }
 
-  // Calculate the standard deviation
-  SD_sSSB = sqrt(((total_sSSB2 / number) - pow(total_sSSB / number, 2)) / (number - 1));
-  SD_SSBd = sqrt(((total_SSBd2 / number) - pow(total_SSBd / number, 2)) / (number - 1));
-  SD_SSBi = sqrt(((total_SSBi2 / number) - pow(total_SSBi / number, 2)) / (number - 1));
-  SD_SSBm = sqrt(((total_SSBm2 / number) - pow(total_SSBm / number, 2)) / (number - 1));
+  // Calculate the SEM
+  SD_sSSB = sqrt(abs(((total_sSSB2 / number) - pow(total_sSSB / number, 2))) / (number - 1));
+  SD_SSBd = sqrt(abs(((total_SSBd2 / number) - pow(total_SSBd / number, 2))) / (number - 1));
+  SD_SSBi = sqrt(abs(((total_SSBi2 / number) - pow(total_SSBi / number, 2))) / (number - 1));
+  SD_SSBm = sqrt(abs(((total_SSBm2 / number) - pow(total_SSBm / number, 2))) / (number - 1));
 
-  SD_sDSB = sqrt(((total_sDSB2 / number) - pow(total_sDSB / number, 2)) / (number - 1));
-  SD_DSBd = sqrt(((total_DSBd2 / number) - pow(total_DSBd / number, 2)) / (number - 1));
-  SD_DSBi = sqrt(((total_DSBi2 / number) - pow(total_DSBi / number, 2)) / (number - 1));
-  SD_DSBm = sqrt(((total_DSBm2 / number) - pow(total_DSBm / number, 2)) / (number - 1));
-  SD_DSBh = sqrt(((total_DSBh2 / number) - pow(total_DSBh / number, 2)) / (number - 1));
+  SD_sDSB = sqrt(abs(((total_sDSB2 / number) - pow(total_sDSB / number, 2))) / (number - 1));
+  SD_DSBd = sqrt(abs(((total_DSBd2 / number) - pow(total_DSBd / number, 2))) / (number - 1));
+  SD_DSBi = sqrt(abs(((total_DSBi2 / number) - pow(total_DSBi / number, 2))) / (number - 1));
+  SD_DSBm = sqrt(abs(((total_DSBm2 / number) - pow(total_DSBm / number, 2))) / (number - 1));
+  SD_DSBh = sqrt(abs(((total_DSBh2 / number) - pow(total_DSBh / number, 2))) / (number - 1));
 
   // Measure the Deposited Energy in the whole volume that includes DNA chain
 
@@ -415,7 +429,7 @@
   dose = acc_edep * eVtoJ / mass;
 
   double norm = 1;
-  // Calculate the yields, together with their standard deviation
+  // Calculate the yields, together with their error
   EB_yield = (Double_t)total_EB / dose / Nbp;
   ES_yield = (Double_t)total_ES / dose / Nbp;
   OHB_yield = (Double_t)total_OHB / dose / Nbp;

@@ -38,42 +38,71 @@
 // If much additional functionality is added, should consider containment
 // instead of inheritance for std::vector<T>.
 
-// 9.10.2018 G.Cosmo - Initial version
+// Author: Gabriele Cosmo (CERN), 9 October 2018
 // --------------------------------------------------------------------
 #ifndef G4ASSEMBLYSTORE_HH
-#define G4ASSEMBLYSTORE_HH
+#define G4ASSEMBLYSTORE_HH 1
 
 #include <vector>
+
 #include "G4Types.hh"
 #include "G4String.hh"
 #include "G4VStoreNotifier.hh"
 
 class G4AssemblyVolume;
 
+/**
+ * @brief G4AssemblyStore is a container for all assemblies, with functionality
+ * derived from std::vector<T>. The class is a singleton.
+ * All assemblies are registered with G4AssemblyStore, and removed on their
+ * destruction.
+ */
+
 class G4AssemblyStore : public std::vector<G4AssemblyVolume*>
 {
   public:
 
+    /**
+       Adds the assembly to the collection.
+     */
     static void Register(G4AssemblyVolume* pAssembly);
-      // Add the assembly to the collection.
+
+    /**
+       Removes the assembly from the collection.
+     */
     static void DeRegister(G4AssemblyVolume* pAssembly);
-      // Remove the assembly from the collection.
+
+    /**
+       Gets a pointer to the unique G4AssemblyStore, creating it if necessary.
+     */
     static G4AssemblyStore* GetInstance();
-      // Get a ptr to the unique G4AssemblyStore, creating it if necessary.
+
+    /**
+       Assigns a notifier for allocation/deallocation of assemblies.
+     */
     static void SetNotifier(G4VStoreNotifier* pNotifier);
-      // Assign a notifier for allocation/deallocation of assemblies.
+
+    /**
+       Deletes all assemblies from the store.
+     */
     static void Clean();
-      // Delete all assemblies from the store.
 
+    /**
+       Returns an assembly through its Id number specification.
+     */
     G4AssemblyVolume* GetAssembly(unsigned int id, G4bool verbose=true) const;
-      // Returns an assembly through its Id number specification.
 
-  protected:
+  private:
 
+    /**
+       Private singleton constructor.
+     */
     G4AssemblyStore();
-      // Protected singleton constructor.
+
+    /**
+       Private destructor. Takes care to delete allocated assemblies.
+     */
     virtual ~G4AssemblyStore();
-      // Destructor: takes care to delete allocated assemblies.
 
   private:
 

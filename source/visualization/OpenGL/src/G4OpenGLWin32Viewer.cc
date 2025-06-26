@@ -71,6 +71,15 @@ void G4OpenGLWin32Viewer::ShowView (
   }
 }
 
+void G4OpenGLWin32Viewer::SwitchToMasterThread()
+{
+  if (G4Threading::IsMultithreadedApplication()) {
+    if (fSceneHandler.GetScene() && fSceneHandler.GetScene()->GetEndOfEventModelList().size()) {
+      fNeedKernelVisit = true;
+    }
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLWin32Viewer::GetWin32Connection (
 ) 

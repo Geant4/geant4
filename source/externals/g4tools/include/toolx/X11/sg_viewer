@@ -100,6 +100,19 @@ public:
     }
   }
 
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    if(!m_win) {a_w = 0;a_h = 0;return false;}
+    int width,height;
+    if(!m_session.window_size(m_win,width,height)) {a_w = 0;a_h = 0;return false;}
+    a_w = (unsigned int)width;
+    a_h = (unsigned int)height;
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
+  }
+
 public:
   void set_device_interactor(tools::sg::device_interactor*) {}
 protected:

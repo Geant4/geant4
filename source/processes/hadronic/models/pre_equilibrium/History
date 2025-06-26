@@ -6,6 +6,33 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-04 Vladimir Ivanchenko (hadr-pre-V11-03-04)
+- G4PreCompoundFragment, G4PreCompoundNucleon, G4PreCompoundIon - updated
+    computation of inverse x-section, added factor to x-section proposed by
+    Dostorovsy.
+
+## 2025-05-22 Vladimir Ivanchenko (hadr-pre-V11-03-03)
+- G4PreCompoundFragment, G4PreCompoundProton, G4PreCompoundDeuteron,
+  G4PreCompoundTriton, G4PreCompoundHe3, G4PreCompoundAlpha - use new
+    utility G4DeexPrecoUtility.
+
+## 2025-03-05 Vladimir Ivanchenko (hadr-pre-V11-03-02)
+- G4VPreCompoundFragment, G4PreCompoundFragment, G4HETCFragment, - use the
+  new utility class G4VSIntegration, which allows to simplify code,
+  results are practically not affected.
+
+## 2025-02-15 Vladimir Ivanchenko (hadr-pre-V11-03-01)
+- G4PreCompoundFragment - updated algorithms of integration of probabilities
+  and sampling of final state (expected more accurate spectra of particles).
+
+## 2025-01-26 Vladimir Ivanchenko (hadr-pre-V11-03-00)
+- G4PreCompoundModel, G4PreCompoundTransition, G4PreCompoundEmission - introduced
+   verbose flag and extended printout needed to debug, removed old commented
+   prinout lines; added an option to use alternative precompound models,
+   which may be done via configuration without change of interface to consumer code.
+- G4PreCompoundInterface, G4PreCompoundTransitionInt, G4PreCompoundEmissionInt -
+   new classes with alternative precompound model.
+
 ## 2024-09-09 Vladimir Ivanchenko (hadr-pre-V11-02-03)
 - G4PreCompoundFragment, G4VPreCompoundFragment - use G4InterfaceToXS class
     instead of obsolete G4XSectionXS

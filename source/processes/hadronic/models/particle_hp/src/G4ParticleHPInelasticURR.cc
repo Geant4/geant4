@@ -97,6 +97,8 @@ G4HadFinalState* G4ParticleHPInelasticURR::ApplyYourself( const G4HadProjectile&
       }
     }  // end if find element
   }  // end element loop
+  if (isotopeJ == -1) { return theFinalState; }
+  
   // Check whether the energy is out of the URR limits for the given element
   if ( kineticEnergy < (*URRlimits).at(elementI).first  ||  kineticEnergy > (*URRlimits).at(elementI).second ) { 
     // Call inelastic final state in G4ParicleHPChannel and SELECT ISOTOPE (to be improved in the future)
@@ -114,7 +116,8 @@ G4HadFinalState* G4ParticleHPInelasticURR::ApplyYourself( const G4HadProjectile&
     }
     aNucleus.SetIsotope( target_isotope );
   } else { 
-   // the energy is inside the limits of the URR and the isotope has to be found, calls the final state for the found element and isotope
+    // the energy is inside the limits of the URR and the isotope has to be found,
+    // calls the final state for the found element and isotope
    theFinalState = (*G4ParticleHPManager::GetInstance()->GetInelasticFinalStates( aTrack.GetDefinition() ))[elementI]
                    ->ApplyYourself( isotopeJ, Z, A, aTrack );
   }

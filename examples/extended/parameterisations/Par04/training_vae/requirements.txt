@@ -1,0 +1,15 @@
+tensorflow==2.12.1
+tensorflow-probability==0.17.0
+keras==2.9.0
+numpy==1.23.5
+h5py==3.7.0
+matplotlib==3.5.2
+scikit-learn==1.1.1
+scipy==1.9.0
+wandb==0.13.1
+tf2onnx==1.14.0
+onnxruntime==1.16.3
+gast==0.4.0
+lz4==3.1
+idna==2.10
+protobuf==3.19

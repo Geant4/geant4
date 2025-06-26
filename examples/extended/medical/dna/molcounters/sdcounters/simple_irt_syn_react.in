@@ -1,0 +1,41 @@
+/run/numberOfThreads 4
+
+/process/chem/TimeStepModel IRT_syn
+
+/run/initialize
+
+/chem/PrintSpeciesTable
+
+# set all reaction rates to zero (only diffusion)
+/chem/reaction/UI
+
+# totally diffusion-controlled (TDC)                | Fix |  reactionRate[dm3/(mol*s)] | TDC (0)
+/chem/reaction/add H + H -> H2                      | Fix |  0.503e10 | 0
+/chem/reaction/add e_aq + H -> H2 + OHm             | Fix |  2.50e10  | 0
+/chem/reaction/add e_aq + e_aq -> H2 + OHm + OHm    | Fix |  0.636e10 | 0
+/chem/reaction/add H3Op + OHm -> H2O                | Fix |  1.13e11  | 0
+
+# partially diffusion-controlled (PDC)              | Fix |  reactionRate[dm3/(mol*s)] | PDC (1)
+/chem/reaction/add OH + H -> H2O                    | Fix |  1.55e10 | 1
+/chem/reaction/add OH + OH -> H2O2                  | Fix |  0.55e10 | 1
+/chem/reaction/add e_aq + OH -> OHm                 | Fix |  2.95e10 | 1
+/chem/reaction/add e_aq + H2O2 -> OHm + OH          | Fix |  1.10e10 | 1
+/chem/reaction/add e_aq + H3Op -> H + H2O           | Fix |  2.11e10 | 1
+
+/chem/reaction/print
+
+/gun/position 0 0 0
+/gun/particle e-
+
+/tracking/verbose 0
+/scheduler/verbose 0
+/scheduler/endTime 1 microsecond
+
+/scorer/BasicMoleculeCounts/nOfTimeBins 50
+/scorer/BasicCounter_VariablePrecision/nOfTimeBins 50
+/scorer/basicreactioncounts/nOfTimeBins 50
+
+/run/printProgress 2
+
+/gun/energy 10 keV
+/run/beamOn 400

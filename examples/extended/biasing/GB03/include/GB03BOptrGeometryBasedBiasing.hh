@@ -41,7 +41,7 @@ class GB03BOptrGeometryBasedBiasing : public G4VBiasingOperator
 {
   public:
     GB03BOptrGeometryBasedBiasing();
-    virtual ~GB03BOptrGeometryBasedBiasing();
+    ~GB03BOptrGeometryBasedBiasing() override;
 
   public:
     // ------------------------------
@@ -55,28 +55,28 @@ class GB03BOptrGeometryBasedBiasing : public G4VBiasingOperator
     // -------------------------
     // Optional from base class:
     // -------------------------
-    void StartRun();
+    void StartRun() override;
 
   private:
     // --------------------------
     // Mandatory from base class:
     // --------------------------
     // Used for splitting/killing:
-    virtual G4VBiasingOperation*
+    G4VBiasingOperation*
     ProposeNonPhysicsBiasingOperation(const G4Track* track,
-                                      const G4BiasingProcessInterface* callingProcess);
+                                      const G4BiasingProcessInterface* callingProcess) override;
 
     // Not used here:
-    virtual G4VBiasingOperation* ProposeOccurenceBiasingOperation(const G4Track*,
-                                                                  const G4BiasingProcessInterface*)
+    G4VBiasingOperation* ProposeOccurenceBiasingOperation(const G4Track*,
+                                                          const G4BiasingProcessInterface*) override
     {
-      return 0;
+      return nullptr;
     }
     // Not used here:
-    virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track*,
-                                                                   const G4BiasingProcessInterface*)
+    G4VBiasingOperation*
+    ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) override
     {
-      return 0;
+      return nullptr;
     }
 
   private:

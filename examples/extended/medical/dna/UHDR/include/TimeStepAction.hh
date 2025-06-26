@@ -75,9 +75,12 @@ class TimeStepAction : public G4UserTimeStepAction
     void CompartmentBased();
 
     PulseAction* fpPulse = nullptr;
+    G4int fPulseID = 0;
     const G4VChemistryWorld* fpChemWorld = nullptr;
     G4int fPixel = 0;
     G4Scheduler* fScheduler = nullptr;
+    G4double fPulsePeriod = 0;
+    G4int fNumberOfPulse = 0;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

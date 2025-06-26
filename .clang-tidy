@@ -21,7 +21,6 @@ readability-duplicate-include, \
 readability-string-compare"
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
-AnalyzeTemporaryDtors: false
 FormatStyle: file
 CheckOptions:
   - key:             modernize-use-auto.RemoveStars

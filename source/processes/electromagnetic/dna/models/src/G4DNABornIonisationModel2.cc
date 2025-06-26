@@ -32,6 +32,7 @@
 #include "G4LossTableManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4EmParameters.hh"
 #include "G4DNABornAngle.hh"
 #include "G4DeltaAngle.hh"
 #include "G4Exp.hh"
@@ -91,13 +92,7 @@ G4VEmModel(nam)
 
 G4DNABornIonisationModel2::~G4DNABornIonisationModel2()
 {
-  // Cross section
-
-  
-    delete fTableData;
-
-  // Final state
-
+  delete fTableData;
   fVecm.clear();
 }
 
@@ -248,13 +243,14 @@ void G4DNABornIonisationModel2::Initialise(const G4ParticleDefinition* particle,
   fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->
   GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-  // AD
-  
-  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-
   if (isInitialised)
   { return;}
   fParticleChangeForGamma = GetParticleChangeForGamma();
+  statCode = G4EmParameters::Instance()->DNAStationary();
+
+  if (!statCode)
+    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+
   isInitialised = true;
 }
 

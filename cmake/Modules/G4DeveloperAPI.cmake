@@ -874,8 +874,10 @@ function(geant4_test_link_libraries _target)
     )
   __geant4_assert_no_unparsed_arguments(G4TESTLINKLIB geant4_test_link_libraries)
 
-  # Need defined libraries to be able to resolve between static/shared
+  # Need defined libraries and externals to be able to resolve between static/shared
   get_property(__g4definedlibraries GLOBAL PROPERTY GEANT4_DEFINED_CATEGORIES) 
+  geant4_get_external_categories(__g4externalcategories)
+  list(APPEND __g4definedlibraries ${__g4externalcategories})
 
   foreach(__prop PUBLIC PRIVATE INTERFACE)
     __geant4_resolve_link_libraries(G4TESTLINKLIB_${__prop})
@@ -894,7 +896,6 @@ function(geant4_test_link_libraries _target)
             list(APPEND _g4linklibs "${_linklib}")
           endif()
         endforeach()
-        message(STATUS "${_g4linklibs}")
         set(_linklibs ${_g4linklibs})
       else()
         set(_linklibs ${G4TESTLINKLIB_${__prop}})

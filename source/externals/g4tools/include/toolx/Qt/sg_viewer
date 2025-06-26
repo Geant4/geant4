@@ -76,6 +76,18 @@ public:
     if(!m_glarea) return;
     m_glarea->update();
   }
+
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    if(!m_glarea) {a_w = 0;a_h = 0;return false;}
+    a_w = (unsigned int)m_glarea->width();
+    a_h = (unsigned int)m_glarea->height();
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
+  }
+
 public:
   QWidget* shell() {return m_shell;}
   void set_own_shell(bool a_value) {m_own_shell = a_value;}

@@ -69,6 +69,12 @@ G4HadronicParametersMessenger::G4HadronicParametersMessenger( G4HadronicParamete
   theCRCoalescenceCmd->SetGuidance( "Enable Cosmic Ray (CR) coalescence." );
   theCRCoalescenceCmd->SetParameterName( "EnableCRCoalescence", false );
   theCRCoalescenceCmd->SetDefaultValue( false );
+
+  // This command dumps the hadronic parameters to G4cout
+  theDumpCmd = new G4UIcommand( "/process/had/printParameters", this );
+  theDumpCmd->SetGuidance( "Print all Hadronic parameters." );
+  theDumpCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
+  theDumpCmd->SetToBeBroadcasted( false );
 }
 
 
@@ -77,6 +83,7 @@ G4HadronicParametersMessenger::~G4HadronicParametersMessenger() {
   delete theVerboseCmd;
   delete theMaxEnergyCmd;
   delete theCRCoalescenceCmd;
+  delete theDumpCmd;
 }
 
 
@@ -90,5 +97,8 @@ void G4HadronicParametersMessenger::SetNewValue( G4UIcommand *command, G4String 
     theHadronicParameters->SetMaxEnergy( theMaxEnergyCmd->GetNewDoubleValue( newValues ) );
   } else if ( command == theCRCoalescenceCmd ) {
     theHadronicParameters->SetEnableCRCoalescence( theCRCoalescenceCmd->GetNewBoolValue( newValues ) );
+  }
+  else if ( command == theDumpCmd ) {
+    theHadronicParameters->Dump();
   }
 }

@@ -1,6 +1,6 @@
 #
 # ------ macOS ------
-#                                 macOS, Apple clang-12 and higher
+#                                 macOS, Apple clang-17 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -92,7 +92,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     QTHOME := /Library/Frameworks
   endif
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
   ifeq ($(QTHOME),/Library/Frameworks)
     ifndef QTMOC

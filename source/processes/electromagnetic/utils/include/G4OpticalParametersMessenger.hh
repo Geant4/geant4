@@ -149,6 +149,7 @@ class G4OpticalParametersMessenger : public G4UImessenger
   G4UIcmdWithAnInteger* fMieVerboseLevelCmd;
 
   G4UIcommand* fDumpCmd;
+  G4UIcommand* fXRayCmd;
 };
 
 #endif  // G4OpticalParametersMessenger_h

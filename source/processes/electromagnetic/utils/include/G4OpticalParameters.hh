@@ -56,6 +56,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Threading.hh"
 #include <vector>
+#include <memory>
 
 class G4OpticalParametersMessenger;
 class G4StateManager;
@@ -71,6 +72,12 @@ enum G4OpticalProcessIndex
   kWLS,            ///< Wave Length Shifting process index
   kWLS2,           ///< Second Wave Length Shifting process index
   kNoProcess       ///< Number of processes, no selected process
+};
+
+enum G4XRayModelType
+{
+  kCerenkovDefault = 0,  // default model
+  kScintillationDefault, // default model
 };
 
 /// Return the name for a given optical process index
@@ -177,6 +184,11 @@ class G4OpticalParameters
   void  SetMieVerboseLevel(G4int);
   G4int GetMieVerboseLevel() const;
 
+  // active volumes
+  const std::vector<std::pair<G4XRayModelType, const G4String> >&
+  ActiveVolumes() const;
+  void SetActiveVolume(const G4String& name, G4XRayModelType type);
+
  private:
   G4OpticalParameters();
   void Initialise();
@@ -243,6 +255,9 @@ class G4OpticalParameters
   /// G4OpBoundaryProcess to call InvokeSD method
   G4bool boundaryInvokeSD;
   G4int boundaryVerboseLevel;
+
+  //////////////// active volumes
+  std::vector<std::pair<G4XRayModelType, const G4String> > xrayVolumes;
 
 #ifdef G4MULTITHREADED
   static G4Mutex opticalParametersMutex;

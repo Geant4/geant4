@@ -470,6 +470,22 @@ G4int G4OpticalParameters::GetMieVerboseLevel() const
   return mieVerboseLevel;
 }
 
+const std::vector<std::pair<G4XRayModelType, const G4String> >&
+G4OpticalParameters::ActiveVolumes() const
+{
+  return xrayVolumes;
+}
+
+void G4OpticalParameters::SetActiveVolume(const G4String& lvname,
+					  G4XRayModelType type)
+{
+  if(IsLocked()) {
+    return;
+  }
+  xrayVolumes.push_back(std::make_pair(type, lvname));
+}
+
+
 void G4OpticalParameters::PrintWarning(G4ExceptionDescription& ed) const
 {
   G4Exception("G4EmParameters", "Optical0020", JustWarning, ed);

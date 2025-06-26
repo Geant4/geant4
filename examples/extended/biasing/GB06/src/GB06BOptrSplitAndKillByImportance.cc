@@ -50,7 +50,7 @@ GB06BOptrSplitAndKillByImportance::GB06BOptrSplitAndKillByImportance(G4String pa
 {
   fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
 
-  if (fParticleToBias == 0) {
+  if (fParticleToBias == nullptr) {
     G4ExceptionDescription ed;
     ed << "Particle `" << particleName << "' not found !" << G4endl;
     G4Exception("GB06BOptrSplitAndKillByImportance(...)", "exGB06.01", JustWarning, ed);
@@ -95,7 +95,7 @@ G4VBiasingOperation* GB06BOptrSplitAndKillByImportance::ProposeNonPhysicsBiasing
   const G4Track* track, const G4BiasingProcessInterface* /*callingProcess*/)
 {
   // -- Check if current particle type is the one to bias:
-  if (track->GetDefinition() != fParticleToBias) return 0;
+  if (track->GetDefinition() != fParticleToBias) return nullptr;
 
   // -- if so, request biasing:
   return fSplitAndKillByImportance;

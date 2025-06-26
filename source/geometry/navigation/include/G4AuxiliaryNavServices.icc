@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4AuxiliaryNavServices Inline implementation
+// Class G4AuxiliaryNavServices Inline implementation
 //
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 
 inline G4bool

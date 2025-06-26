@@ -28,8 +28,8 @@ set(GEOMETRY_FILE_NAME "geometries.tar.gz")
 set(GEOMETRY_FOlDER_NAME "geometries")
 set(GEOMETRY_LOCAL_FILENAME "${PROJECT_BINARY_DIR}/${GEOMETRY_FILE_NAME}")
 set(GEOMETRY_DATASETS_URL
-        "https://cern.ch/geant4-data/datasets/examples/advanced/dna/moleculardna/1/${GEOMETRY_FILE_NAME}")
-set(HASH_MD5 "0bb690a782ce951b1a1973c6be2b1324")
+        "https://cern.ch/geant4-data/datasets/examples/advanced/dna/moleculardna/2/${GEOMETRY_FILE_NAME}")
+set(HASH_MD5 "0bb821758b648106d752349778fc6ecb")
 
 if (EXISTS "${GEOMETRY_FOlDER_NAME}")
     set(GEOMETRY_NEEDS_DOWNLOAD FALSE)
@@ -39,8 +39,8 @@ endif ()
 if (GEOMETRY_NEEDS_DOWNLOAD)
     message(STATUS "geometries-data: attempting download: ${GEOMETRY_DATASETS_URL} ...")
     file(DOWNLOAD "${GEOMETRY_DATASETS_URL}" "${GEOMETRY_LOCAL_FILENAME}"
-            INACTIVITY_TIMEOUT 500
-            TIMEOUT 500
+            INACTIVITY_TIMEOUT 1000
+            TIMEOUT 1000
             STATUS DownloadStatus
             )
 
@@ -93,7 +93,7 @@ target_link_libraries(molecular ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build molecular_proj. This is so that we can run the executable directly because 
+# build molecular_proj. This is so that we can run the executable directly because
 # it relies on these scripts being in the current working directory.
 #
 file(GLOB molecular_SCRIPTS

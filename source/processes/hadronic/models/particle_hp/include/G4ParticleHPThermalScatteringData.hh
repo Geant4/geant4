@@ -70,9 +70,6 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
 
     G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
-    // G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
-    //{ return false;}
-
     G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, const G4Material*);
     G4double GetInelasticCrossSection(const G4DynamicParticle*, const G4Element*,
                                       const G4Material*);
@@ -94,14 +91,14 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
 
     G4double GetX(const G4DynamicParticle*, G4double aT, std::map<G4double, G4ParticleHPVector*>*);
 
-    void clearCurrentXSData();
+    void clearCurrentXSData(std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>*);
 
     std::map<G4double, G4ParticleHPVector*>* readData(const G4String&);
 
     G4int getTS_ID(const G4Material*, const G4Element*);
 
-  private:
-
+    G4bool isInitializer{false};
+    G4int verbose{1};
     G4double emax;
 
     //              element            temp       x section from E
@@ -109,15 +106,14 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>* incoherent{nullptr};
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>* inelastic{nullptr};
 
-    std::vector<G4int> indexOfThermalElement;
-    G4ParticleHPThermalScatteringNames* names;
-
     G4double ke_cache;
     G4double xs_cache;
     const G4Element* element_cache;
     const G4Material* material_cache;
 
-    std::map<std::pair<const G4Material*, const G4Element*>, G4int> dic;
+    static G4ParticleHPThermalScatteringNames* names;
+    static std::vector<G4int>* indexOfThermalElement;
+    static std::map<std::pair<const G4Material*, const G4Element*>, G4int>* dic;
 };
 
 #endif

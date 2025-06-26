@@ -25,7 +25,7 @@
 // 
 // G4PathFinder Implementation
 //
-// Original author: John Apostolakis, April 2006
+// Author: John Apostolakis (CERN), 7 October 2005
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -797,7 +797,7 @@ G4PathFinder::CreateTouchableHandle( G4int navId ) const
   }
 #endif
 
-  return {touchHist}; 
+  return touchHist; 
 }
 
 G4double

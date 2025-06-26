@@ -393,7 +393,7 @@ G4double G4AffineTransform::operator [] (const G4int n) const
 inline
 G4bool G4AffineTransform::IsRotated() const
 {
-  return !(rxx==1.0 && ryy==1.0 && rzz==1.0);
+  return rxx!=1.0 || ryy!=1.0 || rzz!=1.0;
 }
 
 inline 

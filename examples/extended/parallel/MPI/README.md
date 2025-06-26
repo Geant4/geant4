@@ -27,9 +27,9 @@ http://www.open-mpi.org/
 MPI support:
 ------------
 G4mpi has been tested with the following MPI flavors:
- *   OpenMPI 1.8.1
- *   MPICH 3.2
- *   Intel MPI 5.0.1
+ *   OpenMPI 5.0.2 and 4.1.4
+ *   ~~MPICH 3.2~~
+ *   ~~Intel MPI 5.0.1~~
  
 ### CMake
 

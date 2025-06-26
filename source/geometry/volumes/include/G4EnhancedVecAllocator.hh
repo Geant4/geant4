@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EnhancedVecAllocator
+//
 // Class Description:
 //
 // A class for fast allocation of STL vectors through a static pool.
 // It's meant to be used as alternative allocator for STL vectors.
        
-//      ---------------- G4EnhancedVecAllocator ----------------
-//
 // Original author: X.Dong (NorthEastern Univ.), November 2009
 // Reviewed implementation: G.Cosmo (CERN), December 2009
 // ------------------------------------------------------------
@@ -53,11 +53,11 @@ typedef struct
 
 class G4AllocStats
 {
-  // --------------------------------------------------------------------
-  // Utility class, placeholder for global data on allocation.
-  // Initialisation to zero of the data below *must* be added ONCE only
-  // directly in the client code, where this allocator is to be applied
-  // --------------------------------------------------------------------
+  /**
+   * @brief Utility class, placeholder for global data on allocation.
+   * Initialisation to zero of the data below *must* be added ONCE only
+   * directly in the client code, where this allocator is to be applied
+   */
 
   public:
 
@@ -65,6 +65,12 @@ class G4AllocStats
     static G4ThreadLocal G4int totSpace;
     static G4ThreadLocal G4int numCat;
 };
+
+/**
+ * @brief G4EnhancedVecAllocator is a class for fast allocation of STL vectors
+ * through a static pool. It's meant to be used as alternative allocator
+ * for STL vectors.
+ */
 
 template<typename _Tp>
 class G4EnhancedVecAllocator : public std::allocator<_Tp>

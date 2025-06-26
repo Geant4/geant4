@@ -454,16 +454,13 @@ G4ReflectedSolid::CreatePolyhedron () const
     polyhedron->Transform(*fDirectTransform3D);
     return polyhedron;
   }
-  else
-  {
-    std::ostringstream message;
-    message << "Solid - " << GetName()
-            << " - original solid has no" << G4endl
-            << "corresponding polyhedron. Returning NULL!";
-    G4Exception("G4ReflectedSolid::CreatePolyhedron()",
-                "GeomMgt1001", JustWarning, message);
-    return nullptr;
-  }
+  std::ostringstream message;
+  message << "Solid - " << GetName()
+          << " - original solid has no" << G4endl
+          << "corresponding polyhedron. Returning NULL!";
+  G4Exception("G4ReflectedSolid::CreatePolyhedron()",
+              "GeomMgt1001", JustWarning, message);
+  return nullptr;
 }
 
 /////////////////////////////////////////////////////////

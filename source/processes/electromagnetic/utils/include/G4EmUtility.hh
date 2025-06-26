@@ -78,6 +78,11 @@ public:
                                          const G4DataVector& cuts,
                                          const G4double emin,
                                          const G4double emax);
+
+  // fluctuations per G4Region
+  static void FillFluctFlags(std::vector<std::pair<G4String, G4bool> >& reg,
+			     std::vector<G4bool>* flags);
+
 };
 
 #endif

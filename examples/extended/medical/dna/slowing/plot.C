@@ -15,8 +15,8 @@
 
   TH1F* h1 ;
   h1 = (TH1F*)f.Get("1");
-  h2 = (TH1F*)f.Get("2");
-  h3 = (TH1F*)f.Get("3");
+  auto h2 = (TH1F*)f.Get("2");
+  auto h3 = (TH1F*)f.Get("3");
 
   //goto end;
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-patch-02    (25-April-2025)
+ Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,7 +46,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Use Ricardo-Gerardo pair production model          0
+Use RiGe 5D e+e- pair production model by muons    0
 Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
@@ -189,26 +189,26 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=1.780000s Real=1.794547s Sys=0.000000s
+  User=2.130000s Real=2.126872s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 983651	phot = 16349
+ Process calls frequency --->	Rayl = 31729	compt = 952523	phot = 15748
 
- MeanFreePath:	6.0662 cm  +- 6.0666 cm 	massic: 6.0662 g/cm2 
- CrossSection:	0.16485 cm^-1 			massic: 16.485 mm2/g 
+ MeanFreePath:	5.8773 cm  +- 5.8715 cm 	massic: 5.8773 g/cm2 
+ CrossSection:	0.17014 cm^-1 			massic: 17.014 mm2/g 
 
- mean energy of charged secondaries: 15.197 keV
-     ---> mass_energy_transfer coef: 2.5052 mm2/g 
+ mean energy of charged secondaries: 14.711 keV
+     ---> mass_energy_transfer coef: 2.503 mm2/g 
 
  Verification : crossSections from G4EmCalculator 
-   compt= 16.23 mm2/g    phot= 268.53 um2/mg   total= 16.499 mm2/g 
+   Rayl= 534.01 um2/mg   compt= 16.23 mm2/g    phot= 268.53 um2/mg   total= 17.033 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1063437675, 1656850928
+ Current couple of seeds = 1155111439, 149055422
 ----------------------------------------
 #
 /gun/particle e-
@@ -244,7 +244,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1063437675, 1656850928
+ Current couple of seeds = 1155111439, 149055422
 ----------------------------------------
 --> Event 0 starts.
 --> Event 100000 starts.
@@ -259,32 +259,32 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=1.640000s Real=1.634469s Sys=0.000000s
+  User=1.920000s Real=1.923403s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 609756	eIoni = 390244
+ Process calls frequency --->	eBrem = 609990	eIoni = 390010
 
- MeanFreePath:	1.6136 cm  +- 1.614 cm 	massic: 1.6136 g/cm2 
- CrossSection:	0.61974 cm^-1 			massic: 61.974 mm2/g 
+ MeanFreePath:	1.6123 cm  +- 1.6124 cm 	massic: 1.6123 g/cm2 
+ CrossSection:	0.62023 cm^-1 			massic: 62.023 mm2/g 
 
- mean energy of charged secondaries: 744.57 keV
-     ---> mass_energy_transfer coef: 461.44 um2/mg
+ mean energy of charged secondaries: 743.47 keV
+     ---> mass_energy_transfer coef: 461.13 um2/mg
 
  Verification : crossSections from G4EmCalculator 
    eBrem= 37.79 mm2/g    eIoni= 24.204 mm2/g    total= 61.994 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1492903586, 1751099484
+ Current couple of seeds = 484143605, 1973228044
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0xb2a660
-UserPhysicsList deleted 0xddf790
-UserActionInitialization deleted 0xf609d0
+UserDetectorConstruction deleted 0xd08270
+UserPhysicsList deleted 0xfbde40
+UserActionInitialization deleted 0x113f8f0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

@@ -1,0 +1,39 @@
+# Example of another format input for UHDR example. Author: Le Tuan Anh.
+# Tmin: minimal time in pulse; Tmin 0 us: Tmin = 0 us
+# Tmmax: maximal time in pulse; Tmax 3 us: Tmax = 0 us
+# us: time units. User can change to ns, ms  .. which are compatible to G4 unit
+# nbins: nummber of bins between Tmin and Tmax
+# the remaining rows are the observed events of corresponding bin (bin content)
+Tmin 0 us
+Tmax 3 us
+nbins 30
+123
+204
+341
+573
+861
+1340
+1868
+2572
+3463
+4417
+5411
+6141
+7070
+7641
+7778
+7937
+7693
+6954
+6270
+5367
+4359
+3362
+2622
+1866
+1356
+879
+593
+350
+194
+139

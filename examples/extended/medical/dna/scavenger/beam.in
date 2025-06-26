@@ -21,4 +21,4 @@
 /event/verbose 0
 /scheduler/verbose 0
 
-/run/beamOn 2
+/run/beamOn 100

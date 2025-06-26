@@ -61,6 +61,7 @@
 class G4ParticleDefinition;
 class G4VEmProcess;
 class G4VEnergyLossProcess;
+class G4EmDataRegistry;
 
 class G4EmDataHandler
 {
@@ -168,6 +169,7 @@ public:
 
 private:
 
+  G4EmDataRegistry* fRegistry;
   std::vector<G4PhysicsTable*> data;
   std::vector<G4double>* fMaxXS;
   std::vector<G4TwoPeaksXS*>* fXSpeaks;
@@ -176,8 +178,8 @@ private:
   std::size_t tLength{0};
   std::size_t eLength{0};
   G4CrossSectionType fXSType{fEmNoIntegral};
-  G4String fName;
   G4bool fUseBaseParticleTable{false};
+  G4String fName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------ clang 9.0 and higher
+# ------ GNU/LINUX ------ clang 17.0 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -93,7 +93,7 @@ ifeq ($(G4SYSTEM),Linux-clang)
   endif
 
   ifndef QT_VERSION
-    QT_VERSION := 5
+    QT_VERSION := 6
   endif
 
   ifndef QTFLAGS

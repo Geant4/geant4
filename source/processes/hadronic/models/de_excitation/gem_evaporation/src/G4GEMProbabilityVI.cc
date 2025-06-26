@@ -54,9 +54,9 @@ G4GEMProbabilityVI::G4GEMProbabilityVI(G4int anA, G4int aZ, const G4LevelManager
   A13 = pG4pow->Z13(theA);
 
   if(0 == aZ) {
-    ResetIntegrator(30, 0.25*CLHEP::MeV, 0.02);
+    ResetIntegrator(0.25*CLHEP::MeV, 0.005);
   } else {
-    ResetIntegrator(30, 0.5*CLHEP::MeV, 0.03);
+    ResetIntegrator(0.5*CLHEP::MeV, 0.005);
   }
 }
 

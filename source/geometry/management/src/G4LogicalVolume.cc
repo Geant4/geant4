@@ -512,10 +512,11 @@ G4LogicalVolume::IsAncestor(const G4VPhysicalVolume* aVolume) const
   G4bool isDaughter = IsDaughter(aVolume);
   if (!isDaughter)
   {
-    for (auto itDau = fDaughters.cbegin(); itDau != fDaughters.cend(); ++itDau)
+    for (const auto & daughter : fDaughters)
     {
-      isDaughter = (*itDau)->GetLogicalVolume()->IsAncestor(aVolume);
-      if (isDaughter)  break;
+      isDaughter = daughter->GetLogicalVolume()->IsAncestor(aVolume);
+      if (isDaughter) {  break;
+}
     }
   }
   return isDaughter;
@@ -531,9 +532,8 @@ G4LogicalVolume::IsAncestor(const G4VPhysicalVolume* aVolume) const
 G4int G4LogicalVolume::TotalVolumeEntities() const
 {
   G4int vols = 1;
-  for (auto itDau = fDaughters.cbegin(); itDau != fDaughters.cend(); ++itDau)
+  for (auto physDaughter : fDaughters)
   {
-    G4VPhysicalVolume* physDaughter = (*itDau);
     vols += physDaughter->GetMultiplicity()
            *physDaughter->GetLogicalVolume()->TotalVolumeEntities();
   }
@@ -599,9 +599,8 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
   // and if required by the propagate flag, add the real daughter's
   // one computed recursively
 
-  for (auto itDau = fDaughters.cbegin(); itDau != fDaughters.cend(); ++itDau)
+  for (const auto & physDaughter : fDaughters)
   {
-    G4VPhysicalVolume* physDaughter = (*itDau);
     G4LogicalVolume* logDaughter = physDaughter->GetLogicalVolume();
     G4double subMass = 0.0;
     G4VSolid* daughterSolid = nullptr;
@@ -679,7 +678,8 @@ G4bool G4LogicalVolume::ChangeDaughtersType(EVolume aType)
 //
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 {
-  if (G4Threading::IsWorkerThread()) return;
+  if (G4Threading::IsWorkerThread()) { return;
+}
   fVisAttributes = std::make_shared<const G4VisAttributes>(VA);
 }
 
@@ -689,6 +689,7 @@ void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 //
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 {
-  if (G4Threading::IsWorkerThread()) return;
+  if (G4Threading::IsWorkerThread()) { return;
+}
   fVisAttributes = std::shared_ptr<const G4VisAttributes>(pVA,[](const G4VisAttributes*){});
 }

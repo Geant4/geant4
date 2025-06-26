@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4ReplicaNavigation Inline implementation
+// Class G4ReplicaNavigation inline implementations
 //
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 
 // ********************************************************************

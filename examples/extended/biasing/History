@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2025-03-14 Igor Semeniouk (exbiasing-V11-03-00)
+- The clang-tidy, clang-format applied on code of all GBXX examples
 
 ## 2024-03-20 L.G. Sarmiento (exbiasing-V11-02-00)
 - Fixed broken link from "Further information:"

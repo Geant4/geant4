@@ -65,9 +65,9 @@ void G4Scene::CalculateExtent ()
 {
   G4BoundingExtentScene boundingExtentScene;
 
-  for (size_t i = 0; i < fRunDurationModelList.size(); i++) {
-    if (fRunDurationModelList[i].fActive) {
-      G4VModel* model = fRunDurationModelList[i].fpModel;
+  for (auto& i : fRunDurationModelList) {
+    if (i.fActive) {
+      G4VModel* model = i.fpModel;
       if (model -> Validate()) {
         const G4VisExtent& thisExtent = model -> GetExtent ();
         if (thisExtent != G4VisExtent::GetNullExtent()) {
@@ -79,9 +79,9 @@ void G4Scene::CalculateExtent ()
     }
   }
 
-  for (size_t i = 0; i < fEndOfEventModelList.size(); i++) {
-    if (fEndOfEventModelList[i].fActive) {
-      G4VModel* model = fEndOfEventModelList[i].fpModel;
+  for (auto & i : fEndOfEventModelList) {
+    if (i.fActive) {
+      G4VModel* model = i.fpModel;
       if (model -> Validate()) {
         const G4VisExtent& thisExtent = model -> GetExtent ();
         if (thisExtent != G4VisExtent::GetNullExtent()) {
@@ -93,9 +93,9 @@ void G4Scene::CalculateExtent ()
     }
   }
 
-  for (size_t i = 0; i < fEndOfRunModelList.size(); i++) {
-    if (fEndOfRunModelList[i].fActive) {
-      G4VModel* model = fEndOfRunModelList[i].fpModel;
+  for (auto & i : fEndOfRunModelList) {
+    if (i.fActive) {
+      G4VModel* model = i.fpModel;
       if (model -> Validate()) {
         const G4VisExtent& thisExtent = model -> GetExtent ();
         if (thisExtent != G4VisExtent::GetNullExtent()) {

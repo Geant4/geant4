@@ -143,6 +143,7 @@ public: // With description
 
 private:
 
+  // clang-format off
   G4bool      fVisible;            // Visibility flag
   G4bool      fDaughtersInvisible; // Make daughters invsibile.
   G4Colour    fColour;
@@ -160,6 +161,7 @@ private:
   G4double fStartTime, fEndTime;   // Time range.
   const std::vector<G4AttValue>*     fAttValues;  // For picking, etc.
   const std::map<G4String,G4AttDef>* fAttDefs;    // Corresponding definitions.
+  // clang-format on
 };
 
 #include "G4VisAttributes.icc"

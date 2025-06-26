@@ -39,7 +39,7 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationGEMFactoryVI::GetChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;
-  theChannel->reserve(81);
+  theChannel->reserve(83);
 
   theChannel->push_back( thePhotonEvaporation );  // Photon Channel
   theChannel->push_back( new G4CompetitiveFission() ); // Fission Channel

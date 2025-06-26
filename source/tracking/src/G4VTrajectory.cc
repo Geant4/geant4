@@ -113,3 +113,10 @@ void G4VTrajectory::DrawTrajectory() const
     pVVisManager->DispatchToModel(*this);
   }
 }
+
+std::shared_ptr<std::vector<G4AttValue>> G4VTrajectory::GetAttValues() const {
+  if (!fpAttValues) {
+    fpAttValues = std::make_shared<std::vector<G4AttValue>>(*CreateAttValues());
+  }
+  return fpAttValues;
+}

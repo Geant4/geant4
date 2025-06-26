@@ -36,7 +36,7 @@
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4Polyhedron.hh"   
 #include "G4VGraphicsScene.hh"
@@ -605,7 +605,7 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
   // Second Step: choose randomly one surface
   //
   G4VCSGface **face1 = faces;
-  G4double chose = area*G4UniformRand();
+  G4double chose = area*G4QuickRand();
   G4double Achose1, Achose2;
   Achose1=0.; Achose2=0.; 
   i=0;

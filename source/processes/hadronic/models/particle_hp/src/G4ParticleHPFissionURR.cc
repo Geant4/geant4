@@ -92,6 +92,9 @@ G4HadFinalState* G4ParticleHPFissionURR::ApplyYourself( const G4HadProjectile& a
       }
     }  // end if find element
   }  // end element loop
+  // if element or isotope are not selected no further computations
+  if (elementI == -1 || isotopeJ == -1) { return theFinalState; }
+  
   // Check whether the energy is out of the URR limits for the given element
   if ( kineticEnergy < (*URRlimits).at(elementI).first  ||  kineticEnergy > (*URRlimits).at(elementI).second ) { 
     // Call fission final state in G4ParicleHPChannel and SELECT ISOTOPE (to be improved in the future)

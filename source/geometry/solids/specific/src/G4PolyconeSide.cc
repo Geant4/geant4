@@ -38,7 +38,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4GeometryTolerance.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 // This new field helps to use the class G4PlSideManager.
 //
@@ -1171,8 +1171,8 @@ G4ThreeVector G4PolyconeSide::GetPointOnFace()
   G4double x,y,zz;
   G4double rr,phi,dz,dr;
   dr=r[1]-r[0];dz=z[1]-z[0];
-  phi=startPhi+deltaPhi*G4UniformRand();
-  rr=r[0]+dr*G4UniformRand();
+  phi=startPhi+deltaPhi*G4QuickRand();
+  rr=r[0]+dr*G4QuickRand();
  
   x=rr*std::cos(phi);
   y=rr*std::sin(phi);
@@ -1187,7 +1187,7 @@ G4ThreeVector G4PolyconeSide::GetPointOnFace()
   {
     if(dr==0.)  // PolyconeSide has a Tube Form
     {
-      zz = z[0]+dz*G4UniformRand();
+      zz = z[0]+dz*G4QuickRand();
     }
     else
     {

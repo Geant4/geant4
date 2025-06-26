@@ -77,6 +77,7 @@ G4ToolsSGSceneHandler::G4ToolsSGSceneHandler
 (G4VGraphicsSystem& system, const G4String& name)
 :parent(system, fSceneIdCount++, name)
 ,fFreetypeNode(0)
+,fMarkerScale(1)
 {
   //::printf("debug : G4ToolsSGSceneHandler : %lu, %s\n",this,name.c_str());
   EstablishBaseNodes();
@@ -121,9 +122,6 @@ void G4ToolsSGSceneHandler::EstablishBaseNodes()
 
 tools::sg::separator* G4ToolsSGSceneHandler::GetOrCreateNode()
 { // Retrieve or create a G4ToolsSGNode node suitable for next solid or primitive
-
-  // For time being, avoid errors in MT mode - see G4ToolsSGViewer::SwitchToMasterThread
-  if (!G4Threading::IsMasterThread()) return nullptr;
 
   if (fReadyForTransients) {  // All transients hang from this node
     tools::sg::separator* sep = new tools::sg::separator;
@@ -246,15 +244,16 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyline& a_polyline)
 
  {tools::sg::draw_style* ds = new tools::sg::draw_style;
   ds->style = tools::sg::draw_lines;
-  ds->line_width = 1;
+  auto visAtts = GetCurrentViewer()->GetApplicableVisAttributes(a_polyline.GetVisAttributes());
+  ds->line_width = GetLineWidth(visAtts);  // Multiplies by GetGlobalLineWidthScale
   parentNode->add(ds);}
 
   tools::sg::vertices* vtxs = new tools::sg::vertices;
   vtxs->mode = tools::gl::line_strip();  //polyline
   parentNode->add(vtxs);
   
- {for (size_t i = 0; i < a_polyline.size(); ++i) {
-    vtxs->add(float(a_polyline[i].x()),float(a_polyline[i].y()),float(a_polyline[i].z()));
+ {for (const auto& i : a_polyline) {
+    vtxs->add(float(i.x()),float(i.y()),float(i.z()));
   }}
   
 }
@@ -298,8 +297,8 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       currentNode->add(ds);
       tools::sg::vertices* vtxs = new tools::sg::vertices;
       vtxs->mode = tools::gl::points();
-     {for (size_t i = 0; i < a_polymarker.size(); ++i) {
-        vtxs->add(float(a_polymarker[i].x()),float(a_polymarker[i].y()),float(a_polymarker[i].z()));
+     {for (const auto& i : a_polymarker) {
+        vtxs->add(float(i.x()),float(i.y()),float(i.z()));
       }}
       currentNode->add(vtxs);
     }break;
@@ -313,8 +312,8 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       }
       markers->size = diameter;
       markers->style = tools::sg::marker_circle_line;
-      for (size_t i = 0; i < a_polymarker.size(); ++i) {
-        markers->add(float(a_polymarker[i].x()),float(a_polymarker[i].y()),float(a_polymarker[i].z()));
+      for (const auto& i : a_polymarker) {
+        markers->add(float(i.x()),float(i.y()),float(i.z()));
       }
       currentNode->add(markers);}
     }break;
@@ -328,13 +327,16 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       }
       markers->size = side;
       markers->style = tools::sg::marker_square_line;
-      for (size_t i = 0; i < a_polymarker.size(); ++i) {
-        markers->add(float(a_polymarker[i].x()),float(a_polymarker[i].y()),float(a_polymarker[i].z()));
+      for (const auto& i : a_polymarker) {
+        markers->add(float(i.x()),float(i.y()),float(i.z()));
       }
       currentNode->add(markers);}
   }break;
   }
 }
+
+
+void G4ToolsSGSceneHandler::SetMarkerScale(double a_scale) {fMarkerScale = a_scale;}
 
 void G4ToolsSGSceneHandler::AddPrimitive(const G4Text& a_text)
 {
@@ -371,6 +373,7 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Text& a_text)
 
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize(a_text, sizeType);
+  size *= fMarkerScale;
   
  {const auto& colour = GetTextColour(a_text);
   tools::sg::rgba* mat = new tools::sg::rgba();
@@ -566,7 +569,8 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyhedron& a_polyhedron)
 
    {tools::sg::draw_style* ds = new tools::sg::draw_style;
     ds->style = tools::sg::draw_lines;
-    ds->line_width = 1;
+    auto visAtts = GetCurrentViewer()->GetApplicableVisAttributes(a_polyhedron.GetVisAttributes());
+    ds->line_width = GetLineWidth(visAtts);  // Multiplies by GetGlobalLineWidthScale
     sep->add(ds);}
 
     tools::sg::vertices* vtxs = new tools::sg::vertices;
@@ -606,10 +610,10 @@ inline void SetRegionStyles(tools::xml::styles& a_styles,
 }
 
 inline tools::xml::styles::style_t* find_style(tools::xml::styles& a_styles,const std::string& a_name) {
-  tools_vforit(tools::xml::styles::named_style_t,a_styles.named_styles(),it){
-    if((*it).first==a_name) return &((*it).second);
+  for(auto& style : a_styles.named_styles()) {
+    if(style.first==a_name) return &(style.second);
   }
-  return 0;
+  return nullptr;
 }
 
 inline void SetPlotterStyles(tools::sg::plots& a_plots,
@@ -622,54 +626,51 @@ inline void SetPlotterStyles(tools::sg::plots& a_plots,
   _tools_styles.add_colormap("default",tools::sg::style_default_colormap());
   _tools_styles.add_colormap("ROOT",tools::sg::style_ROOT_colormap());
   
- {tools_vforcit(G4PlotterManager::NamedStyle,_styles,it) {
+  for(const auto& [name, style_items] : _styles) {
     tools::xml::styles::style_t _tools_style;
-    tools_vforcit(G4PlotterManager::StyleItem,(*it).second,its) {
-      const G4String& param = (*its).first;
+    for(const auto& [param, value] : style_items) {
       if(param.find('.')==std::string::npos) {
-        const G4String& value = (*its).second;
-        _tools_style.push_back(tools::xml::styles::style_item_t(param,value));
+        _tools_style.push_back(tools::xml::styles::style_item_t(param,value)); 
       }
     }
-    _tools_styles.add_style((*it).first,_tools_style);
-  }}
+    _tools_styles.add_style(name, _tools_style);
+  }
 
   // sub styles:
- {tools_vforcit(G4PlotterManager::NamedStyle,_styles,it) {
-    tools_vforcit(G4PlotterManager::StyleItem,(*it).second,its) {
-      const G4String& param = (*its).first;
+  for(const auto& [name, style_items] : _styles) {
+    for(const auto& [param, value] : style_items) {
       std::string::size_type pos = param.rfind('.');
       if(pos!=std::string::npos) {
-	std::string sub_style = (*it).first+"."+param.substr(0,pos);
+        std::string sub_style = name + "." + param.substr(0,pos);
         G4String parameter = param.substr(pos+1,param.size()-pos);
-        const G4String& value = (*its).second;
         tools::xml::styles::style_t* _tools_style = find_style(_tools_styles,sub_style);
-	if(_tools_style) {
+        if(_tools_style) {
           _tools_style->push_back(tools::xml::styles::style_item_t(parameter,value));
-	} else {
+        } else {
           tools::xml::styles::style_t _tools_style_2;
-          _tools_style_2.push_back(tools::xml::styles::style_item_t(parameter,value));
+          _tools_style_2.push_back(tools::xml::styles::style_item_t(parameter,value)); 
           _tools_styles.add_style(sub_style,_tools_style_2);
-	}
+        }
       }
     }
-  }}
+  }
 
- {unsigned int number = a_plots.number();
+  unsigned int number = a_plots.number();
   for(unsigned int index=0;index<number;index++) {
     tools::sg::plotter* _plotter = a_plots.find_plotter(index);
     if(_plotter) {
-      tools_vforcit(G4String,a_plotter_styles,it) {
-        SetRegionStyles(_tools_styles,a_plots,*_plotter,*it);
+      for(const auto& style : a_plotter_styles) {
+        SetRegionStyles(_tools_styles,a_plots,*_plotter,style); 
       }
     }
-  }}
- {tools_vforcit(G4Plotter::RegionStyle,a_region_styles,it) {
-    tools::sg::plotter* _plotter = a_plots.find_plotter((*it).first);
+  }
+  
+  for(const auto& [region, style] : a_region_styles) {
+    tools::sg::plotter* _plotter = a_plots.find_plotter(region);
     if(_plotter) {
-      SetRegionStyles(_tools_styles,a_plots,*_plotter,(*it).second);
+      SetRegionStyles(_tools_styles, a_plots, *_plotter, style);
     }
-  }}
+  }
 }
 
 inline void SetPlotterParameters(tools::sg::cmaps_t& a_cmaps,tools::sg::plots& a_plots,
@@ -681,11 +682,11 @@ inline void SetPlotterParameters(tools::sg::cmaps_t& a_cmaps,tools::sg::plots& a
   //   x_axis.divisions
   //   x_axis.line_style.color
   //   background_style.back_color
-  tools_vforcit(G4Plotter::RegionParameter,a_region_parameters,it) {
-    tools::sg::plotter* _plotter = a_plots.find_plotter((*it).first);
+  for(const auto& [region,param] : a_region_parameters) {
+    tools::sg::plotter* _plotter = a_plots.find_plotter(region);
     if(_plotter) {
-      const G4String& parameter = (*it).second.first;
-      const G4String& value = (*it).second.second;
+      const G4String& parameter = param.first;
+      const G4String& value = param.second;
       tools::sg::field* fd = _plotter->find_field_by_name(parameter);
       if(!fd) fd = _plotter->find_field_by_name(_plotter->s_cls()+"."+parameter);
       if(fd) {if(fd->s2value(value)) continue;}
@@ -707,15 +708,15 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
   a_plots.clear();
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
- {tools_vforcit(Region_h1,fRegionH1s,it) {
-    tools::sg::plotter* _plotter = a_plots.find_plotter((*it).first);
+
+  for(const auto& [region, hid] : fRegionH1s) {
+    tools::sg::plotter* _plotter = a_plots.find_plotter(region);
     if(_plotter) {
-      int hid = (*it).second;
       std::ostringstream os;
       os << hid;
       std::string cmd("/analysis/h1/get ");
       cmd += std::string(os.str());
-      auto keepControlVerbose = UI->GetVerboseLevel();
+      auto keepControlVerbose = UI->GetVerboseLevel(); 
       UI->SetVerboseLevel(0);
       G4int status = UI->ApplyCommand(cmd.c_str());
       UI->SetVerboseLevel(keepControlVerbose);
@@ -736,11 +737,11 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
         << G4endl;
       }
     }
-  }}
- {tools_vforcit(Region_h2,fRegionH2s,it) {
-    tools::sg::plotter* _plotter = a_plots.find_plotter((*it).first);
+  }
+
+  for(const auto& [region, hid] : fRegionH2s) {
+    tools::sg::plotter* _plotter = a_plots.find_plotter(region);
     if(_plotter) {
-      int hid = (*it).second;
       std::ostringstream os;
       os << hid;
       std::string cmd("/analysis/h2/get ");
@@ -766,7 +767,7 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
         << G4endl;
       }
     }
-  }}
+  }
 }
 
 class plots_cbk : public tools::sg::ecbk {
@@ -802,8 +803,8 @@ protected:
 void G4ToolsSGSceneHandler::TouchPlotters(tools::sg::node& a_sg) {
   tools::sg::search_action sa(G4cout);
   const tools::sg::search_action::paths_t& paths = tools::sg::find_paths<tools::sg::plots>(sa,a_sg);
-  tools_vforcit(tools::sg::path_t,paths,it) {
-    tools::sg::plots* _plots = tools::sg::tail<tools::sg::plots>(*it);    
+  for(const auto& path : paths) {
+    tools::sg::plots* _plots = tools::sg::tail<tools::sg::plots>(path);
     if(_plots) {
       SetPlotterHistograms(*_plots);
     }

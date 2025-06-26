@@ -31,7 +31,7 @@
 //
 // File name:     G4RiGeAngularGenerator
 //
-// Authors:       Girardo Depaola & Ricardo Pacheco
+// Authors:       Gerardo Depaola & Ricardo Pacheco
 // 
 // Creation date: 27 October 2024
 //
@@ -85,8 +85,7 @@ G4double G4RiGeAngularGenerator::SampleCosTheta(G4double primKinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LorentzVector
-G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
+void G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
 					       G4ThreeVector& dirElectron,
 					       G4ThreeVector& dirPositron,
 					       const G4double gEnergy, const G4double q2, 
@@ -96,10 +95,9 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
 					       const G4double* randNumbs,
 					       const G4double* W)
 {
-  G4double muEnergy = dp->GetKineticEnergy();
+  G4double muKinEnergy = dp->GetKineticEnergy();
   G4ThreeVector muMomentumVector = dp->GetMomentum();
   G4double muMomentum = muMomentumVector.mag();
-  G4LorentzVector muFinalFourMomentum(muEnergy, muMomentumVector);
   
   // Electron mass
   G4double eMass = CLHEP::electron_mass_c2;
@@ -107,6 +105,9 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
 
   // Muon mass
   G4double muMass = dp->GetDefinition()->GetPDGMass();
+  
+  G4double muEnergy = muKinEnergy + muMass;
+  G4LorentzVector muFinalFourMomentum(muMomentumVector, muEnergy);
   
   G4double mint3 = 0.;
   G4double maxt3 = CLHEP::pi;
@@ -126,20 +127,7 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
 
     G4ThreeVector dirGamma;
     dirGamma.set(sintg*cospg, sintg*sinpg, costg);
-    G4LorentzVector gFourMomentum(gEnergy, dirGamma*gMomentum);
-
-    G4double Ap = muMomentum*muMomentum + muFinalMomentum*muFinalMomentum + gMomentum*gMomentum;
-    G4double A = Ap - 2.*muMomentum*gMomentum*costg;
-    G4double B = 2.*muFinalMomentum*gMomentum*sintg*cospg;
-    G4double C = 2.*muFinalMomentum*gMomentum*costg - 2.*muMomentum*muFinalMomentum;
-    G4double absB = std::abs(B);
-    G4double t1interval = (1./(A + C + absB*mint3) - 1./(A + C + absB*maxt3))/absB;
-    G4double t1 = (-(A + C) + 1./(1./(A + C + absB*mint3) - absB*t1interval*randNumbs[0]))/absB;
-    G4double sint1 = std::sin(t1);
-    G4double cost1 = std::cos(t1);
-
-    G4ThreeVector dirMuon;
-    dirMuon.set(sint1, 0., cost1);
+    G4LorentzVector gFourMomentum(dirGamma*gMomentum, gEnergy);
 
     G4double cost5 = -1. + 2.*randNumbs[6];
     G4double phi5 = CLHEP::twopi*randNumbs[8];
@@ -187,10 +175,7 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
     
     G4ThreeVector dirGamma;
     dirGamma.set(sint*cosp, sint*sinp, cost);
-    G4LorentzVector gFourMomentum(gEnergy, dirGamma*gMomentum);
-
-    G4ThreeVector dirMuon;
-    dirMuon.set(sint3, 0., cost3);
+    G4LorentzVector gFourMomentum(dirGamma*gMomentum, gEnergy);
 
     G4double cost5 = -1. + 2.*randNumbs[6];
     G4double phi5 = CLHEP::twopi*randNumbs[8];
@@ -233,17 +218,18 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
     G4double pEnergy = muEnergy - muFEnergy - eEnergy;
     G4double pMomentum = std::sqrt(pEnergy*pEnergy - eMass*eMass);
     
-    G4double A3 = -2.*muMass*muMass + 2.*muEnergy*muFinalEnergy;
-    G4double B3 = -2.*muMomentum*muFinalMomentum;
+    G4double A3 = -2.*muMass*muMass + 2.*muEnergy*muFEnergy;
+    G4double B3 = -2.*std::sqrt(muEnergy*muEnergy - muMass*muMass)*muFMomentum;
     G4double cost3interval = G4Log((A3 + B3*Cmax)/(A3 + B3*Cmin))/B3;
+
     G4double expanCost3r6 = G4Exp(B3*cost3interval*randNumbs[5]);
     G4double cost3 = A3*(expanCost3r6 - 1.)/B3 + Cmin*expanCost3r6;
     G4double sint3 = std::sqrt((1. - cost3)*(1. + cost3));
     
     G4ThreeVector muFinalMomentumVector(muFMomentum*sint3, 0., muFMomentum*cost3);
 
-    G4LorentzVector muFourMomentum(muMomentum, muMomentumVector);
-    muFinalFourMomentum.set(muFEnergy, muFinalMomentumVector);
+    G4LorentzVector muFourMomentum(muMomentumVector, muEnergy);
+    muFinalFourMomentum.set(muFinalMomentumVector, muFEnergy);
     G4LorentzVector auxVec1 = muFourMomentum - muFinalFourMomentum;
     G4double A5 = auxVec1.mag2() - 2.*eEnergy*(muEnergy - muFEnergy) +
       2.*muMomentumVector[2]*eMomentum - 2.*muFMomentum*eMomentum*cost3;
@@ -308,9 +294,10 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
     G4double eEnergy = muEnergy - muFEnergy - pEnergy;
     G4double eMomentum = std::sqrt(eEnergy*eEnergy - eMass*eMass);
     
-    G4double A3 = -2.*muMass*muMass + 2.*muEnergy*muFinalEnergy;
-    G4double B3 = -2.*muMomentum*muFMomentum;
+    G4double A3 = -2.*muMass*muMass + 2.*muEnergy*muFEnergy;
+    G4double B3 = -2.*std::sqrt(muEnergy*muEnergy - muMass*muMass)*muFMomentum;
     G4double cost3interval = G4Log((A3 + B3*Cmax)/(A3 + B3*Cmin))/B3;
+
     G4double expanCost3r6 = G4Exp(B3*cost3interval*randNumbs[5]);
     G4double cost3 = A3*(expanCost3r6 - 1.)/B3 + Cmin*expanCost3r6;
     G4double sint3 = std::sqrt((1. - cost3)*(1. + cost3));
@@ -319,8 +306,8 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
     muFinalMomentumVector.set(muFMomentum*sint3*cosp3, muFMomentum*sint3*sinp3,
 			      muFMomentum*cost3);
 
-    G4LorentzVector muFourMomentum(muMomentum, muMomentumVector);
-    muFinalFourMomentum.set(muFEnergy, muFinalMomentumVector);
+    G4LorentzVector muFourMomentum(muMomentumVector, muEnergy);
+    muFinalFourMomentum.set(muFinalMomentumVector, muFEnergy);
     G4LorentzVector auxVec1 = muFourMomentum - muFinalFourMomentum;
     G4double A6 = auxVec1.mag2() - 2.*pEnergy*(muEnergy - muFEnergy) +
       2.*muMomentumVector[2]*pMomentum - 2.*muFMomentum*pMomentum*cost3;
@@ -360,7 +347,6 @@ G4RiGeAngularGenerator::Sample5DPairDirections(const G4DynamicParticle* dp,
     PhiRotation(dirElectron, phi3);
     PhiRotation(dirPositron, phi3);
   }
-  return muFinalFourMomentum;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -395,7 +381,8 @@ G4LorentzVector G4RiGeAngularGenerator::eDP2(G4double x1, G4double x2,
   }
 
   G4double QJM = std::sqrt(QJM2);
-  G4LorentzVector x6(std::sqrt(x2 + QJM2), QJM*sint*cosp, QJM*sint*sinp, QJM*x4);
+  
+  G4LorentzVector x6(QJM*sint*cosp, QJM*sint*sinp, QJM*x4, std::sqrt(x2 + QJM2));
 
   return x6;
 } 
@@ -404,7 +391,7 @@ G4LorentzVector G4RiGeAngularGenerator::eDP2(G4double x1, G4double x2,
 
 G4LorentzVector G4RiGeAngularGenerator::pDP2(G4double x3, const G4LorentzVector& x6)
 {
-  G4LorentzVector x7(x3 + x6.vect().dot(x6.vect()), -x6.vect());
+  G4LorentzVector x7(-x6.vect(), std::sqrt(x3 + x6.vect().dot(x6.vect())));
   return x7;
 } 
   

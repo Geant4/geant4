@@ -244,6 +244,11 @@ class G4UImanager : public G4VStateDependent
     inline bool IsLastCommandOutputTreated() { return fLastCommandOutputTreated; }
     inline void SetLastCommandOutputTreated() { fLastCommandOutputTreated = true; }
 
+    void StartRecording(G4String fn, G4bool ifAppend,
+             G4bool ifTemp=false, G4String assocCmd="**NOCMD**");
+    void RecordCommand(const G4String& aCommand);
+    G4int EndRecording();
+
   protected:
     G4UImanager();
 
@@ -293,6 +298,12 @@ class G4UImanager : public G4VStateDependent
     G4int lastRC = 0;
 
     G4bool fLastCommandOutputTreated = true;
+
+    G4int fRecordDepth = -1;
+    std::vector<std::ofstream*> fRecordFile;
+    std::vector<std::pair<G4String,G4bool>> fRecordFileName;
+    std::vector<G4String> fAccosiatedCommand;
+    
 };
 
 #endif

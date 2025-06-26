@@ -43,10 +43,12 @@
 #include "G4UIcontrolMessenger.hh"
 #include "G4UIsession.hh"
 #include "G4UnitsMessenger.hh"
+#include "G4Filesystem.hh"
 #include "G4ios.hh"
 
 #include <fstream>
 #include <sstream>
+#include <system_error>
 
 G4bool G4UImanager::doublePrecisionStr = false;
 G4int G4UImanager::igThreadID = -1;
@@ -445,9 +447,14 @@ G4int G4UImanager::ApplyCommand(const G4String& aCmd)
 // --------------------------------------------------------------------
 G4int G4UImanager::ApplyCommand(const char* aCmd)
 {
-  const G4String& aCommand = SolveAlias(aCmd);
-  if (aCommand.empty()) {
-    return fAliasNotFound;
+  G4String aCommand = aCmd;
+  if(fRecordDepth<0)
+  {
+    // while recording a command to a macro file, skip solving and record the command as-is
+    aCommand = SolveAlias(aCmd);
+    if (aCommand.empty()) {
+      return fAliasNotFound;
+    }
   }
   if (verboseLevel != 0) {
     if (G4Threading::IsMasterThread()) {
@@ -458,6 +465,36 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   G4String commandString;
   G4String commandParameter;
 
+  std::size_t iAt = aCommand.find('@');
+  if (iAt != std::string::npos) {
+    G4String commandStr1 = aCommand.substr(0,iAt);
+    G4String commandStr2 = aCommand.substr(iAt+1,aCommand.length() - (iAt + 1));
+    std::size_t iAt2 = commandStr2.find('@');
+    G4String tmpFileName;
+    G4bool tmpFile = false;
+    if (iAt2 != std::string::npos) {
+      if(iAt2 == 0) {
+        // Two '@'s are connected. temporal file will be created
+        tmpFileName = "tmptmp_";
+        tmpFileName += G4UIcommand::ConvertToString(fRecordDepth+1);
+        tmpFileName += ".tmpmac";
+        tmpFile = true;
+      } else {
+        tmpFileName = commandStr2.substr(0,iAt2);
+      }
+    } else {
+      return fAliasNotFound;
+    }
+    G4String commandStr3 = commandStr2.substr(iAt2+1,commandStr2.length()-(iAt2+1));
+    G4String revisedCommand = commandStr1;
+    revisedCommand += " ";
+    revisedCommand += tmpFileName;
+    revisedCommand += " ";
+    revisedCommand += commandStr3;
+    StartRecording(tmpFileName,false,tmpFile,revisedCommand);
+    return fCommandSucceeded;
+  }  
+    
   std::size_t i = aCommand.find(' ');
   if (i != std::string::npos) {
     commandString = aCommand.substr(0, i);
@@ -526,6 +563,16 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
     histVec.erase(histVec.begin());
   }
   histVec.push_back(aCommand);
+
+  if(fRecordDepth>=0) {
+    if(aCommand == "/control/endRecord") {
+      EndRecording();
+      return fCommandSucceeded;
+    } else if(commandString != "/control/recordToMacro") {
+      RecordCommand(aCommand);
+      return fCommandSucceeded;
+    }
+  }
 
   targetCommand->ResetFailure();
   G4int commandFailureCode = targetCommand->DoIt(commandParameter);
@@ -877,6 +924,7 @@ void G4UImanager::SetThreadIgnoreInit(G4bool flg)
   threadCout->SetIgnoreInit(flg);
 }
 
+// --------------------------------------------------------------------
 G4UIsession* G4UImanager::GetBaseSession() const
 {
   // There may be no session - pure batch mode (session == nullptr)
@@ -896,3 +944,59 @@ G4UIsession* G4UImanager::GetBaseSession() const
   }
   return baseSession;
 }
+
+// --------------------------------------------------------------------
+void G4UImanager::StartRecording(G4String fn, G4bool ifAppend, G4bool ifTemp, G4String assocCmd)
+{
+  fRecordDepth++;
+  fRecordFileName.push_back(std::pair<G4String,G4bool>(fn,ifTemp));
+  fAccosiatedCommand.push_back(assocCmd);
+  G4cout << "G4UImanager::StartRecording [" << fRecordDepth << "] " << fn << G4endl;
+  auto mode = std::ios_base::out;
+  if(ifAppend) mode = std::ios_base::app;
+  auto rf = new std::ofstream;
+  rf->open(fn,mode);
+  fRecordFile.push_back(rf);
+}
+
+// --------------------------------------------------------------------
+void G4UImanager::RecordCommand(const G4String& aCommand)
+{ 
+  *(fRecordFile[fRecordDepth]) << aCommand << G4endl;
+}
+
+// --------------------------------------------------------------------
+G4int G4UImanager::EndRecording()
+{
+  G4int retVal = fCommandSucceeded;
+  fRecordFile[fRecordDepth]->close();
+  delete fRecordFile[fRecordDepth];
+  fRecordFile.pop_back();
+  G4String assocCmd = fAccosiatedCommand[fRecordDepth];
+  fAccosiatedCommand.pop_back();
+  G4cout << "G4UImanager::EndRecording [" << fRecordDepth << "] "
+         << fRecordFileName[fRecordDepth].first << G4endl;
+  fRecordDepth--;
+  if(assocCmd!="**NOCMD**") {
+    retVal = ApplyCommand(assocCmd);
+  }
+  if(fRecordDepth<0) {
+    while(fRecordFileName.size()>0) {
+      G4String fn = fRecordFileName.back().first;
+      G4bool ifTemp = fRecordFileName.back().second;
+      fRecordFileName.pop_back();
+      if(ifTemp) {
+        std::error_code ec;
+        G4bool res = G4fs::remove(fn.c_str(), ec);
+        if(!res) {
+          G4ExceptionDescription ed;
+          ed << "Error removing temporary macro file " << fn << " : " 
+             << ec.message(); 
+          G4Exception("G4UImanager::EndRecording()", "UIMAN0801", JustWarning, ed);
+        }
+      }
+    }
+  }
+  return retVal;
+}
+

@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4PVParameterised implementation
+// Class G4PVParameterised implementation
 //
-// 29.07.95, P.Kent - first non-stub version
+// Author: Paul Kent (CERN), 29 July 1995 - first non-stub version
 // ----------------------------------------------------------------------
 
 #include "G4PVParameterised.hh"
@@ -62,7 +62,8 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
 #ifdef G4VERBOSE  
   if ((pMotherPhysical != nullptr) && (pMotherPhysical->IsParameterised()))
   {
-    std::ostringstream message, hint;
+    std::ostringstream message;
+    std::ostringstream hint;
     message << "A parameterised volume is being placed" << G4endl
             << "inside another parameterised volume !";
     hint << "To make sure that no overlaps are generated," << G4endl
@@ -176,9 +177,10 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
 
   G4int trials = 0;
   G4bool retval = false;
-  G4VSolid *solidA = nullptr, *solidB = nullptr;
+  G4VSolid* solidA = nullptr;
+  G4VSolid* solidB = nullptr;
   G4LogicalVolume* motherLog = GetMotherLogical();
-  G4VSolid *motherSolid = motherLog->GetSolid();
+  G4VSolid* motherSolid = motherLog->GetSolid();
   std::vector<G4ThreeVector> points;
 
   if (verbose)

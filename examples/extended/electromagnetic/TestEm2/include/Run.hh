@@ -34,9 +34,8 @@
 #define Run_h 1
 
 #include "DetectorConstruction.hh"
-
-#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
+#include "G4AnalysisManager.hh"
 
 #include <vector>
 typedef std::vector<G4double> MyVector;

@@ -179,8 +179,8 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
   }
   else {
     std::vector<tools::uint32> basketSizes;
-    tools_vforcit(tools::wroot::branch*, ntupleDescription->GetMainBranches(), it) {
-      basketSizes.push_back((*it)->basket_size());
+    for (const auto* branch : ntupleDescription->GetMainBranches()) {
+      basketSizes.push_back(branch->basket_size());
     }
     auto basketEntries = fMainNtupleManager->GetBasketEntries();
 

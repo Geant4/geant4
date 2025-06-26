@@ -40,6 +40,9 @@
 #define SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
+
+class SteppingMessenger;
 
 class SteppingAction : public G4UserSteppingAction
 {
@@ -48,5 +51,12 @@ class SteppingAction : public G4UserSteppingAction
     virtual ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
+
+    void SetKillStatus(G4int value) { fKill = value; };
+
+  private:
+    G4int fKill = 0;
+    SteppingMessenger* fSteppingMessenger = nullptr;
+
 };
 #endif

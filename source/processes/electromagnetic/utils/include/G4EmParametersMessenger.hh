@@ -107,6 +107,7 @@ private:
   G4UIcmdWithABool* mscPCmd;
   G4UIcmdWithABool* pepicsCmd;
   G4UIcmdWithABool* f3gCmd;
+  G4UIcmdWithABool* fRiGeCmd;
 
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
@@ -144,6 +145,8 @@ private:
   G4UIcmdWithAString*        nffCmd;
   G4UIcmdWithAString*        ssCmd;
   G4UIcmdWithAString*        fluc1Cmd;
+  G4UIcmdWithAString*        fluc2Cmd;
+  G4UIcmdWithAString*        fluc3Cmd;
   G4UIcmdWithAString*        posiCmd;
 
   G4UIcommand*               dumpCmd;

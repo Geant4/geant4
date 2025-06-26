@@ -33,11 +33,11 @@
 #include <sstream>
 
 #include "G4MultiUnion.hh"
-#include "Randomize.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4BoundingEnvelope.hh"
 #include "G4AffineTransform.hh"
 #include "G4DisplacedSolid.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -799,7 +799,7 @@ G4double G4MultiUnion::GetSurfaceArea()
 {
   if (fSurfaceArea == 0.0)
   {
-    fSurfaceArea = EstimateSurfaceArea(1000000, 0.001);
+    fSurfaceArea = EstimateSurfaceArea(1000000, -1.);
   }
   return fSurfaceArea;
 }
@@ -943,19 +943,16 @@ std::ostream& G4MultiUnion::StreamInfo(std::ostream& os) const
 G4ThreeVector G4MultiUnion::GetPointOnSurface() const
 {
   G4ThreeVector point;
-
   G4long size = fSolids.size();
-
   do
   {
-    G4long rnd = G4RandFlat::shootInt(G4long(0), size);
+    G4long rnd = (G4long)(G4QuickRand()*size);
     G4VSolid& solid = *fSolids[rnd];
-    point = solid.GetPointOnSurface();
+    G4ThreeVector p = solid.GetPointOnSurface();
     const G4Transform3D& transform = fTransformObjs[rnd];
-    point = GetGlobalPoint(transform, point);
+    point = GetGlobalPoint(transform, p);
   }
   while (Inside(point) != EInside::kSurface);
-
   return point;
 }
 

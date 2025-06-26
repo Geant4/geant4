@@ -38,7 +38,7 @@
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -68,7 +68,7 @@ G4Para::G4Para( const G4String& pName,
   : G4CSGSolid(pName), halfCarTolerance(0.5*kCarTolerance)
 {
   // Find dimensions and trigonometric values
-  // 
+  //
   fDx = (pt[3].x() - pt[2].x())*0.5;
   fDy = (pt[2].y() - pt[1].y())*0.5;
   fDz = pt[7].z();
@@ -266,7 +266,6 @@ void G4Para::MakePlanes()
 
 G4double G4Para::GetCubicVolume()
 {
-  // It is like G4Box, since para transformations keep the volume to be const
   if (fCubicVolume == 0)
   {
     fCubicVolume = 8*fDx*fDy*fDz;
@@ -282,14 +281,9 @@ G4double G4Para::GetSurfaceArea()
 {
   if(fSurfaceArea == 0)
   {
-    G4ThreeVector vx(fDx, 0, 0);
-    G4ThreeVector vy(fDy*fTalpha, fDy, 0);
-    G4ThreeVector vz(fDz*fTthetaCphi, fDz*fTthetaSphi, fDz);
-
-    G4double sxy = fDx*fDy; // (vx.cross(vy)).mag();
-    G4double sxz = (vx.cross(vz)).mag();
-    G4double syz = (vy.cross(vz)).mag();
-
+    G4double sxy = fDx*fDy;
+    G4double sxz = fDx*fDz*std::sqrt(1. + sqr(fTthetaSphi));
+    G4double syz = fDy*fDz*std::sqrt(1. + sqr(fTalpha) + sqr(fTalpha*fTthetaSphi - fTthetaCphi));
     fSurfaceArea = 8*(sxy+sxz+syz);
   }
   return fSurfaceArea;
@@ -542,7 +536,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,
   if ((std::abs(p.z()) - fDz) >= -halfCarTolerance && p.z()*v.z() >= 0)
     return kInfinity;
   G4double invz = (-v.z() == 0) ? DBL_MAX : -1./v.z();
-  G4double dz = (invz < 0) ? fDz : -fDz; 
+  G4double dz = (invz < 0) ? fDz : -fDz;
   G4double tzmin = (p.z() + dz)*invz;
   G4double tzmax = (p.z() - dz)*invz;
 
@@ -738,7 +732,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 
   // Set normal, if required, and return distance
   //
-  if (calcNorm) 
+  if (calcNorm)
   {
     *validNorm = true;
     if (iside < 0)
@@ -847,51 +841,34 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
 
 G4ThreeVector G4Para::GetPointOnSurface() const
 {
-  G4double DyTalpha = fDy*fTalpha;
-  G4double DzTthetaSphi = fDz*fTthetaSphi;
-  G4double DzTthetaCphi = fDz*fTthetaCphi;
+  G4double sxy = fDx*fDy;
+  G4double sxz = fDx*fDz*std::sqrt(1. + sqr(fTthetaSphi));
+  G4double syz = fDy*fDz*std::sqrt(1. + sqr(fTalpha) + sqr(fTalpha*fTthetaSphi - fTthetaCphi));
 
-  // Set vertices
-  //
-  G4ThreeVector pt[8];
-  pt[0].set(-DzTthetaCphi-DyTalpha-fDx, -DzTthetaSphi-fDy, -fDz);
-  pt[1].set(-DzTthetaCphi-DyTalpha+fDx, -DzTthetaSphi-fDy, -fDz);
-  pt[2].set(-DzTthetaCphi+DyTalpha-fDx, -DzTthetaSphi+fDy, -fDz);
-  pt[3].set(-DzTthetaCphi+DyTalpha+fDx, -DzTthetaSphi+fDy, -fDz);
-  pt[4].set( DzTthetaCphi-DyTalpha-fDx,  DzTthetaSphi-fDy,  fDz);
-  pt[5].set( DzTthetaCphi-DyTalpha+fDx,  DzTthetaSphi-fDy,  fDz);
-  pt[6].set( DzTthetaCphi+DyTalpha-fDx,  DzTthetaSphi+fDy,  fDz);
-  pt[7].set( DzTthetaCphi+DyTalpha+fDx,  DzTthetaSphi+fDy,  fDz);
+  G4double select = (sxy + sxz + syz)*G4QuickRand();
+  G4double u = 2.*G4QuickRand() - 1.;
+  G4double v = 2.*G4QuickRand() - 1.;
 
-  // Set areas (-Z, -Y, +Y, -X, +X, +Z)
-  //
-  G4ThreeVector vx(fDx, 0, 0);
-  G4ThreeVector vy(DyTalpha, fDy, 0);
-  G4ThreeVector vz(DzTthetaCphi, DzTthetaSphi, fDz);
-
-  G4double sxy = fDx*fDy; // (vx.cross(vy)).mag();
-  G4double sxz = (vx.cross(vz)).mag();
-  G4double syz = (vy.cross(vz)).mag();
-  
-  G4double sface[6] = { sxy, syz, syz, sxz, sxz, sxy };
-  for (G4int i=1; i<6; ++i) { sface[i] += sface[i-1]; }
-
-  // Select face
-  //
-  G4double select = sface[5]*G4UniformRand();
-  G4int k = 5;
-  if (select <= sface[4]) k = 4;
-  if (select <= sface[3]) k = 3;
-  if (select <= sface[2]) k = 2;
-  if (select <= sface[1]) k = 1;
-  if (select <= sface[0]) k = 0;
-
-  // Generate point
-  //
-  G4int ip[6][3] = {{0,1,2}, {0,4,1}, {2,3,6}, {0,2,4}, {1,5,3}, {4,6,5}};
-  G4double u = G4UniformRand();
-  G4double v = G4UniformRand();
-  return (1.-u-v)*pt[ip[k][0]] + u*pt[ip[k][1]] + v*pt[ip[k][2]];
+  G4double x, y, z;
+  if (select < sxy)
+  {
+    x = u*fDx;
+    y = v*fDy;
+    z = (select < 0.5*sxy) ? -fDz : fDz;
+  }
+  else if (select < sxy + sxz)
+  {
+    x = u*fDx;
+    y = (select < sxy + 0.5*sxz) ? -fDy : fDy;
+    z = v*fDz;
+  }
+  else
+  {
+    x = (select < sxy + sxz + 0.5*syz) ? -fDx : fDx;
+    y = u*fDy;
+    z = v*fDz;
+  }
+  return { x + y*fTalpha + z*fTthetaCphi, y + z*fTthetaSphi, z };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -909,7 +886,7 @@ G4Polyhedron* G4Para::CreatePolyhedron () const
   G4double alpha = std::atan(fTalpha);
   G4double theta = std::atan(std::sqrt(fTthetaCphi*fTthetaCphi +
                                        fTthetaSphi*fTthetaSphi));
-    
+
   return new G4PolyhedronPara(fDx, fDy, fDz, alpha, theta, phi);
 }
 #endif

@@ -50,16 +50,16 @@ class G4VUserMPIrunMerger
     virtual void Pack() = 0;
     virtual G4Run* UnPack() = 0;
 
-    void InputUserData(/*const*/ void* input_data, const MPI::Datatype& dt, int count)
+    void InputUserData(/*const*/ void* input_data, const MPI_Datatype& dt, int count)
     {
       input_userdata.push_back(const_registered_data{input_data, dt, count});
     }
-    void OutputUserData(void* input_data, const MPI::Datatype& dt, int count)
+    void OutputUserData(void* input_data, const MPI_Datatype& dt, int count)
     {
       output_userdata.push_back(registered_data{input_data, dt, count});
     }
 
-    // void GetUserData(void* output_data,const MPI::Datatype& dt, int count);
+    // void GetUserData(void* output_data,const MPI_Datatype& dt, int count);
 
     void SetupOutputBuffer(char* buff, G4int size, G4int position)
     {
@@ -88,10 +88,10 @@ class G4VUserMPIrunMerger
     G4int outputBufferSize;
     G4int outputBufferPosition;
     G4bool ownsBuffer;
-    unsigned int destinationRank;
+    G4int destinationRank;
     G4Run* run;
     unsigned int commSize;
-    MPI::Intracomm COMM_G4COMMAND_;
+    MPI_Comm COMM_G4COMMAND_;
     G4int verbose;
     long bytesSent;
 
@@ -103,7 +103,7 @@ class G4VUserMPIrunMerger
         // const_registered_data(const_registered_data&&) = default;
         // const_registered_data& operator=(const_registered_data&&) = default;
         /*const*/ void* p_data;
-        /*const*/ MPI::Datatype dt;
+        /*const*/ MPI_Datatype dt;
         /*const*/ int count;
     };
     std::vector<const_registered_data> input_userdata;
@@ -114,7 +114,7 @@ class G4VUserMPIrunMerger
         registered_data(const registered_data&) = default;
         registered_data& operator=(const registered_data&) = default;
         void* p_data;
-        /*const*/ MPI::Datatype dt;
+        /*const*/ MPI_Datatype dt;
         /*const*/ int count;
     };
     std::vector<registered_data> output_userdata;

@@ -34,8 +34,9 @@ The geometry is a 100-micron side cube (World) made of liquid water (G4_WATER
 material). Particles are shot from the center of the volume. The World size
 can be changed directly in the dnaphysics.in macro file.
 
-The variable density feature of materials is illustrated in DetectorConstruction.
-The material density can be changed directly in the dnaphysics.in macro file.
+The variable density feature of materials is illustrated in
+DetectorConstruction. The material density can be changed directly in the
+dnaphysics.in macro file.
 
 ---->2. SET-UP
 
@@ -50,7 +51,10 @@ In interactive mode, run:
 In batch, the macro dnaphysics.in can be used. It shows how to shoot different
 particle types and how to use Geant4-DNA Physics constructors.
 
-The deexcitation.in macro can also be used to simulate the energy spectrum of deexcitation products.
+The deexcitation.in macro can be used to simulate the energy spectrum of
+deexcitation products.
+
+The radioactive.in macro can be used to simulate some radioactive nuclei.
 
 ---->4. PHYSICS
 
@@ -106,9 +110,22 @@ file plot.C; to do so :
 * under your ROOT session, type in : .X plot.C to execute the macro file
 * alternatively you can type directly under your session : root plot.C
 
-Also, the plotDeexcitation.C ROOT macro file can be used to plot results of deexcitation.in.
+The plotDeexcitation.C ROOT macro file can be used to plot results of
+deexcitation.in.
 
-The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+The plotRadioactive.C ROOT macro file can be used to plot results of
+radioactive.in.
+
+The plotElastic.C ROOT macro file can be used to show distribution of elastic
+scattering angles of the elastic process obtained with elastic.in. This macro also
+illustrates the usage of a dedicated UI command :
+/step/recordOnlyFirstStep value
+where value is 0 or 1.
+Setting value to 1 only records the first step and then kills the track and its 
+secondaries.
+
+The naming scheme for particles and processes on the displayed ROOT plots adopts
+a local numbering, as follows (see SteppingAction.cc):
 
 -particles
 
@@ -119,10 +136,13 @@ hydrogen: 3
 alpha: 4
 alpha+: 5
 helium: 6
+GenericIon (above helium): 7
 
 -processes
 
 Capture: 1
+
+RadioactiveDecay: 2
 
 e-_G4DNAElectronSolvation: 10
 e-_G4DNAElastic: 11
@@ -191,8 +211,3 @@ Rayl: 84
 - the track kinetic energy (in eV)
 - the track ID
 - the parent track ID
-
----------------------------------------------------------------------------
-
-Should you have any enquiry, please do not hesitate to contact:
-incerti@lp2ib.in2p3.fr or tran@lp2ib.in2p3.fr

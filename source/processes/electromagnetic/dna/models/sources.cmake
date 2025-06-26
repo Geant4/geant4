@@ -3,7 +3,6 @@
 # Define the Geant4 Module.
 geant4_add_module(G4emdna-models
   PUBLIC_HEADERS
-    G4ChemEquilibrium.hh
     G4DNABornAngle.hh
     G4DNABornExcitationModel.hh
     G4DNABornExcitationModel1.hh
@@ -53,6 +52,7 @@ geant4_add_module(G4emdna-models
     G4DNARPWBAIonisationModel.hh
     G4DNARelativisticIonisationModel.hh
     G4DNARuddAngle.hh
+    G4DNARuddIonisationDynamicModel.hh
     G4DNARuddIonisationExtendedModel.hh
     G4DNARuddIonisationModel.hh
     G4DNASancheExcitationModel.hh
@@ -81,10 +81,10 @@ geant4_add_module(G4emdna-models
     G4VLEPTSModel.hh
     G4VUpdateSystemModel.hh
   SOURCES
-    G4ChemEquilibrium.cc
     G4DNABornAngle.cc
     G4DNABornExcitationModel1.cc
     G4DNABornExcitationModel2.cc
+    G4DNABornIonisationModel.cc
     G4DNABornIonisationModel1.cc
     G4DNABornIonisationModel2.cc
     G4DNACPA100ElasticModel.cc
@@ -128,6 +128,7 @@ geant4_add_module(G4emdna-models
     G4DNARPWBAIonisationModel.cc
     G4DNARelativisticIonisationModel.cc
     G4DNARuddAngle.cc
+    G4DNARuddIonisationDynamicModel.cc
     G4DNARuddIonisationExtendedModel.cc
     G4DNARuddIonisationModel.cc
     G4DNASancheExcitationModel.cc
@@ -167,6 +168,7 @@ geant4_module_link_libraries(G4emdna-models
     G4emlowenergy
     G4emutils
     G4globman
+    G4hepnumerics
     G4heprandom
     G4leptons
     G4materials

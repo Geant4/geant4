@@ -57,7 +57,9 @@ G4Allocator<G4TrajectoryPoint>*& masterTrajectoryPointAllocator()
 
 G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos) { fPosition = pos; }
 
-G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint& right) : fPosition(right.fPosition) {}
+G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint& right)
+: G4VTrajectoryPoint(),
+  fPosition(right.fPosition) {}
 
 G4TrajectoryPoint::~G4TrajectoryPoint() = default;
 

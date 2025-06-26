@@ -29,7 +29,6 @@
 #include "G4PlotterManager.hh"
 #include "G4ios.hh"
 
-#include <tools/forit>
 #include <tools/tokenize>
 
 G4PlotterManager& G4PlotterManager::GetInstance () {
@@ -46,9 +45,9 @@ G4PlotterManager::~G4PlotterManager() {
 }
 
 G4Plotter& G4PlotterManager::GetPlotter(const G4String& a_name) {
-  tools_vforit(NamedPlotter,fPlotters,it) {
-    if((*it).first==a_name) {
-      return (*it).second;
+  for(auto& plotter : fPlotters) {
+    if(plotter.first == a_name) {
+      return plotter.second;
     }
   }
   fPlotters.push_back(NamedPlotter(a_name,G4Plotter()));
@@ -56,8 +55,8 @@ G4Plotter& G4PlotterManager::GetPlotter(const G4String& a_name) {
 }
 
 void G4PlotterManager::List() const {
-  tools_vforcit(NamedPlotter,fPlotters,it) {
-    G4cout << (*it).first << G4endl;
+  for(const auto& plotter : fPlotters) {
+    G4cout << plotter.first << G4endl;
   }
 }
 
@@ -66,16 +65,16 @@ void G4PlotterManager::List() const {
 //////////////////////////////////////////////////////////////////
 
 void G4PlotterManager::ListStyles() const {
-  tools_vforcit(NamedStyle,fStyles,it) {
-    G4cout << (*it).first << G4endl;
+  for(const auto& style : fStyles) {
+    G4cout << style.first << G4endl;
   }
 }  
 
 G4PlotterManager::Style* G4PlotterManager::FindStyle(const G4String& a_name) {
-  tools_vforit(NamedStyle,fStyles,it){
-    if((*it).first==a_name) return &((*it).second);
+  for(auto& style : fStyles) {
+    if(style.first == a_name) return &style.second;
   }
-  return 0;
+  return nullptr;
 }
 
 void G4PlotterManager::SelectStyle(const G4String& a_name) {
@@ -86,21 +85,21 @@ void G4PlotterManager::SelectStyle(const G4String& a_name) {
 }  
 
 void G4PlotterManager::RemoveStyle(const G4String& a_name) {
-  tools_vforit(NamedStyle,fStyles,it) {
-    if((*it).first==a_name) {
+  for (auto it = fStyles.begin(); it != fStyles.end(); ++it) {
+    if (it->first == a_name) {
       fStyles.erase(it);
-      if(fCurrentStyle==a_name) fCurrentStyle.clear();
+      if (fCurrentStyle == a_name) fCurrentStyle.clear();
       return;
     }
   }
 }  
 
 void G4PlotterManager::PrintStyle(const G4String& a_name) const {
-  tools_vforcit(NamedStyle,fStyles,it) {
-    if((*it).first==a_name) {
-      G4cout << (*it).first << ":" << G4endl;
-      tools_vforcit(StyleItem,(*it).second,its) {
-        G4cout << " " << (*its).first << " " << (*its).second << G4endl;
+  for(const auto& style : fStyles) {
+    if(style.first == a_name) {
+      G4cout << style.first << ":" << G4endl;
+      for(const auto& item : style.second) {
+        G4cout << " " << item.first << " " << item.second << G4endl;
       }
     }
   }
@@ -112,9 +111,9 @@ void G4PlotterManager::AddStyleParameter(const G4String& a_parameter,const G4Str
     G4cout << "G4PlotterManager::AddStyleParameter: style " << fCurrentStyle << " not found." << G4endl;
     return;
   }
-  tools_vforit(StyleItem,(*_style),it) {
-    if((*it).first==a_parameter) {
-      (*it).second = a_value;
+  for(auto& item : *_style) {
+    if(item.first == a_parameter) {
+      item.second = a_value;
       return;
     }
   }

@@ -1,0 +1,32 @@
+/control/execute common_settings_highgran.mac
+# Initialize
+/run/initialize
+
+/control/execute common_settings_postInit.mac
+/control/execute common_settings_vis.mac
+
+# Fast Simulation
+# Inference Setup
+## dimension of the latent vector (encoded vector in a Variational Autoencoder model)
+/Par04/inference/setSizeLatentVector 10
+## size of the condition vector (energy, angle and geometry)
+/Par04/inference/setSizeConditionVector 4
+## path to the model which is set to download by cmake
+/Par04/inference/setModelPathName MLModels/Generator.onnx
+## Set ML model to use (VAE, CaloDiT-2)
+/Par04/inference/setModelType VAE
+/Par04/inference/setProfileFlag 1
+/Par04/inference/setOptimizationFlag 0
+/Par04/inference/setInferenceLibrary ONNX
+## set mesh size for inference == mesh size of a full sim that
+## was used for training; it coincides with readout mesh size
+/Par04/inference/setSizeOfRhoCells 2.325 mm
+/Par04/inference/setSizeOfZCells 3.4 mm
+/Par04/inference/setNbOfRhoCells 18
+/Par04/inference/setNbOfPhiCells 50
+/Par04/inference/setNbOfZCells 45
+## Dynamic readout mesh from particle direction needs to be the first fast sim model!
+/param/ActivateModel defineMesh
+## ML fast sim, configured with the inference setup /Par04/inference
+/param/ActivateModel inferenceModel
+/run/beamOn 1

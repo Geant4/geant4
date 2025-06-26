@@ -6,6 +6,48 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-06-22 Vladimir Ivanchenko (phys-ctor-em-V11-03-08)
+- G4EmDNABuilder - fixed upper energy limit for ionisation of hydrogen.
+
+## 2025-06-20 Vladimir Ivanchenko (phys-ctor-em-V11-03-07)
+- G4EmDNABuilder - fixed enegy limits for excitation model for light ions,
+  for increase/decrease models. This modification provides a correct
+  printout and does not change any DNA physics result. 
+
+## 2025-06-13 Vladimir Ivanchenko (phys-ctor-em-V11-03-06)
+- G4EmDNABuilder - fixed upper limit of energy increase/decrease processes,
+  they should the same as for ionisation and excitation processes
+
+## 2025-06-05 Vladimir Ivanchenko (phys-ctor-em-V11-03-05)
+- G4EmDNABuilder - for opt8 configuration use the same configuration of
+  models for e- and protons as in opt2.
+- in all DNA constructors the upper limit for DNA models for ions is set 
+  to 300 MeV instead of 400 MeV.
+
+## 2025-05-25 Vladimir Ivanchenko (phys-ctor-em-V11-03-04)
+- G4GeneralGammaProcess - updated destructor according to modification in
+    electromagnetic/utils
+
+## 2025-05-22 Sebastien Incerti (phys-ctor-em-V11-03-03)
+- G4EmDNABuilder - replaced G4DNABornIonisationModel by 
+  G4DNABornIonisationModel1 for proton ionisation
+
+## 2025-05-21 Vladimir Ivanchenko (phys-ctor-em-V11-03-02)
+- G4EmDNAPhysics_option6 - disable "fast" flag in order to have comparisons
+    with Opt4 in the same set of general DNA parameters.
+- G4EmDNAPhysics_stationary_X constructor - added disclaimer saying that
+    these constructors are obsolete.
+
+## 2025-02-12 Vladimir Ivanchenko (phys-ctor-em-V11-03-01)
+- G4EmDNABuilder - use new version of Born ionisation model.
+
+## 2025-02-12 Vladimir Ivanchenko (phys-ctor-em-V11-03-00)
+- G4EmDNABuilder, G4EmDNAPhysicsActivator - introduce usage of the new ion
+  ionisation model in DNA Opt8 physics configuration
+- G4EmDNAPhysics, G4EmDNAPhysics_option2, G4EmDNAPhysics_option4,
+  G4EmDNAPhysics_option6, G4EmDNAPhysics_option8 - update interface to
+  G4EmDNABuilder.
+
 ## 2024-10-18 Vladimir Ivanchenko (phys-ctor-em-V11-02-12)
 - G4EmStandardPhysics_option3 - return back positron annihilation lost in
     previous MR.

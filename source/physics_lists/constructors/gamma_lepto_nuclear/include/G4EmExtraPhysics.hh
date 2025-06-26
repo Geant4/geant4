@@ -35,6 +35,8 @@
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
 // 31.01.2018 V. Grichine: add neutrino-electron process and xsc
+// 19.11.2024 D.M.Wright: Removed function ConstructLENDGammaNuclear since
+//                        its functionality was moved to G4HadronPhysicsLEND
 //
 //----------------------------------------------------------------------------
 //
@@ -86,9 +88,6 @@ public:
 private:
 
   void ConstructGammaElectroNuclear();
-
-  void ConstructLENDGammaNuclear(G4CascadeInterface* cascade,
-                                 G4HadronInelasticProcess* gnuc);
 
   G4bool gnActivated{true};
   G4bool eActivated{true};

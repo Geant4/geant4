@@ -189,12 +189,10 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // needs a kernel visit.  (In this respect, it differs from the
       // OpenGL drivers, where it's done in SetView.)
       (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
-      (vp.GetVisAttributesModifiers() !=
-       fVP.GetVisAttributesModifiers())                       ||
-      (vp.IsSpecialMeshRendering() !=
-       fVP.IsSpecialMeshRendering())                          ||
-      (vp.GetSpecialMeshRenderingOption() !=
-       fVP.GetSpecialMeshRenderingOption())
+      (vp.GetVisAttributesModifiers()    != fVP.GetVisAttributesModifiers())    ||
+      (vp.IsSpecialMeshRendering()       != fVP.IsSpecialMeshRendering())       ||
+      (vp.GetSpecialMeshRenderingOption()!= fVP.GetSpecialMeshRenderingOption())||
+      (vp.GetTransparencyByDepth()       != fVP.GetTransparencyByDepth())
       )
     return true;
 
@@ -228,6 +226,18 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       (vp.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
+  if (vp.GetTransparencyByDepth() > 0. &&
+      vp.GetTransparencyByDepthOption() != fVP.GetTransparencyByDepthOption())
+    return true;
+
+  return false;
+}
+
+G4bool G4OpenInventorViewer::CompareForTransientsRedraw(G4ViewParameters& vp)
+{
+  if (vp.GetTimeParameters() != fVP.GetTimeParameters()) {
+    return fTransientsNeedRedrawing = true;
+  }
   return false;
 }
 
@@ -383,8 +393,21 @@ G4OpenInventorViewer::lookedAt(SoCamera* camera,SbVec3f & dir, SbVec3f & up)
 void G4OpenInventorViewer::DrawView () {
   //G4cout << "debug Iv::DrawViewer " <<G4endl;
   if (!fNeedKernelVisit) KernelVisitDecision();
-  fLastVP= fVP;
-  ProcessView();
+  G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
+
+  ProcessView ();  // Clears store and processes scene only if necessary.
+
+  if (kernelVisitWasNeeded) {
+    // We might need to do something if the kernel was visited.
+  } else {  // Or even if it was not!
+    if (!fTransientsNeedRedrawing) CompareForTransientsRedraw(fLastVP);
+    if (fTransientsNeedRedrawing) {
+      ProcessTransients();
+    }
+  }
+
+  fLastVP = fVP;
+
   FinishView();
 }
 

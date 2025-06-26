@@ -55,6 +55,11 @@ G4QSSMessenger::G4QSSMessenger()
   stepperSelectorCmd->SetParameterName("choice", false);
   stepperSelectorCmd->SetCandidates("TemplatedDoPri OldRK45 G4QSS2");
 
+  maxSubstepsCmd = new G4UIcmdWithAnInteger("/QSS/maxSubsteps",this);
+  maxSubstepsCmd->SetGuidance("Default is 5000");
+  maxSubstepsCmd->SetDefaultValue(5000);
+  maxSubstepsCmd->SetParameterName("maxSubstepsCmd", false);
+
 }
 
 G4QSSMessenger::~G4QSSMessenger()
@@ -64,6 +69,7 @@ G4QSSMessenger::~G4QSSMessenger()
   delete dQRelCmd;
   delete stepperSelectorCmd;
   delete trialProposedStepModifierCmd;
+  delete maxSubstepsCmd;
   //qssStats.print();
 }
 
@@ -81,6 +87,10 @@ void G4QSSMessenger::SetNewValue(G4UIcommand *command, G4String newValue)
 
   if ( command == dQRelCmd ) {
     dQRel = dQRelCmd->GetNewDoubleValue(newValue);
+  }
+
+  if (command == maxSubstepsCmd){
+    maxSubsteps = maxSubstepsCmd->GetNewIntValue(newValue);
   }
 
   if ( command == trialProposedStepModifierCmd ) {

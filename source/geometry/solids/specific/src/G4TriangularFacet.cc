@@ -40,8 +40,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TriangularFacet.hh"
-
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 #include "G4TessellatedGeometryAlgorithms.hh"
 
 using namespace std;
@@ -776,9 +775,13 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector& p,
 //
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double u = G4UniformRand();
-  G4double v = G4UniformRand();
-  if (u+v > 1.) { u = 1. - u; v = 1. - v; }
+  G4double u = G4QuickRand();
+  G4double v = G4QuickRand();
+  if (u + v > 1.)
+  {
+    u = 1. - u;
+    v = 1. - v;
+  }
   return GetVertex(0) + u*fE1 + v*fE2;
 }
 

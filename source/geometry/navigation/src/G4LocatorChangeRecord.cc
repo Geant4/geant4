@@ -25,13 +25,12 @@
 //
 // G4LocatorChangeRecord class implementation
 //
-// Author: John Apostolakis, 28.08.19 - First version
+// Author: John Apostolakis (CERN), 27 August 2019
 // --------------------------------------------------------------------
 
 #include <iostream>
 #include <iomanip>
 #include <locale>
-// #include <cassert>
 
 #include "G4LocatorChangeRecord.hh"
 
@@ -42,6 +41,20 @@ const char * G4LocatorChangeRecord::fNameChangeLocation[] =
     "NoIntersections-AForFB",  "RecalculatedB",         // 2
     "InsertingMidPoint", "RecalculatedB-2ndHalf",       // 2
     "Level Pop" };
+
+// --------------------------------------------------------------------
+// 
+G4LocatorChangeRecord::
+G4LocatorChangeRecord( EChangeLocation codeLocation,
+                       G4int iter,
+                       unsigned int count,
+                       const G4FieldTrack& fieldTrack )
+  : fCodeLocation( codeLocation),
+    fIteration(iter),
+    fEventCount(count),
+    fFieldTrack( fieldTrack )
+{
+}
 
 // --------------------------------------------------------------------
 // 

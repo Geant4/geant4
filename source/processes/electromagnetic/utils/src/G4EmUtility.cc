@@ -288,6 +288,7 @@ G4EmUtility::FillPeaksStructure(G4PhysicsTable* p, G4LossTableBuilder* bld)
   }
   // case of no 1st peak in all vectors
   if(!isDeep) {
+    for (G4int k=0; k<n; ++k) { delete (*ptr)[k]; }
     delete ptr;
     ptr = nullptr;
     return ptr;
@@ -381,6 +382,32 @@ void G4EmUtility::InitialiseElementSelectors(G4VEmModel* mod,
     */
   }
   mod->SetElementSelectors(elmSelectors);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4EmUtility::FillFluctFlags(std::vector<std::pair<G4String, G4bool> >& reg,
+		    	         std::vector<G4bool>* flags)
+{
+  G4RegionStore* regStore = G4RegionStore::GetInstance();
+  G4ProductionCutsTable* theCoupleTable=
+    G4ProductionCutsTable::GetProductionCutsTable();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
+  for (std::size_t i = 0; i < numOfCouples; ++i) {
+    auto couple = theCoupleTable->GetMaterialCutsCouple((G4int)i);
+    auto mat = const_cast<G4Material*>(couple->GetMaterial());
+    for (auto const& r : reg) {
+      const G4String& rname = r.first;
+      G4Region* region = regStore->GetRegion(rname, false);
+      if (nullptr != region) {
+	auto couple1 = region->FindCouple(mat);
+	if (couple1 == couple) {
+	  (*flags)[couple->GetIndex()] = r.second;
+	  break;
+	}
+      }
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

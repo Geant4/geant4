@@ -75,6 +75,16 @@ public:
     m_session.to_render(this);
   }
 
+  bool window_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
+    return true;
+  }
+  void render_area_size(unsigned int& a_w,unsigned int& a_h) {
+    a_w = parent::width();
+    a_h = parent::height();
+  }
+
   void set_device_interactor(sg::device_interactor*) {}
 
 public:

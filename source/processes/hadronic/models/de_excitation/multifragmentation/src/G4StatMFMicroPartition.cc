@@ -177,7 +177,9 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(G4double U,
   
   // If this happens, T = 0 MeV, which means that probability for this
   // partition will be 0
-  if (std::fabs(U + FreeInternalE0 - PartitionEnergy) < 0.003) return -1.0;
+  if (std::abs(U + FreeInternalE0 - PartitionEnergy) < 0.003) {
+    return -1.0;
+  }
     
   // Calculate temperature by midpoint method
 	
@@ -189,23 +191,26 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(G4double U,
   G4double Da = (U + FreeInternalE0 - GetPartitionEnergy(Ta))/U;
   G4double Db = (U + FreeInternalE0 - GetPartitionEnergy(Tb))/U;
   
-  G4int maxit = 0;
-  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-  while (Da*Db > 0.0 && maxit < 1000) 
-    {
-      ++maxit;
+  if (Da*Db < 0.0) {
+    G4bool yes = false;
+    for (G4int i = 0; i < 1000; ++i) { 
       Tb += 0.5*Tb; 	
       Db = (U + FreeInternalE0 - GetPartitionEnergy(Tb))/U;
+      if (Da*Db >= 0.0) {
+	yes = true;
+	break;
+      }
     }
+    if (!yes) { return -1.0; }
+  }
+  G4double eps = 1.0e-10*std::abs(Ta-Tb);
   
-  G4double eps = 1.0e-14*std::abs(Ta-Tb);
-  
-  for (G4int i = 0; i < 1000; i++) 
+  for (G4int i = 0; i < 1000; ++i) 
     {
       Tmid = (Ta+Tb)/2.0;
-      if (std::fabs(Ta-Tb) <= eps) return Tmid;
+      if (std::abs(Ta-Tb) <= eps) { return Tmid; }
       G4double Dmid = (U + FreeInternalE0 - GetPartitionEnergy(Tmid))/U;
-      if (std::fabs(Dmid) < 0.003) return Tmid;
+      if (std::abs(Dmid) < 0.003) { return Tmid; }
       if (Da*Dmid < 0.0) 
         {
           Tb = Tmid;
@@ -217,12 +222,7 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(G4double U,
           Da = Dmid;
         } 
     }
-  // if we arrive here the temperature could not be calculated
-  G4cout << "G4StatMFMicroPartition::CalcPartitionTemperature: I can't calculate the temperature"  
-         << G4endl;
-  // and set probability to 0 returning T < 0
-  return -1.0;
-  
+  return -1.0;  
 }
 
 G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
@@ -234,70 +234,50 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
   _Temperature = T;
   
   G4Pow* g4calc = G4Pow::GetInstance();
+  G4int n = (G4int)_thePartition.size();
   
   // Factorial of fragment multiplicity
-  G4double Fact = 1.0;
-  unsigned int i;
-  for (i = 0; i < _thePartition.size() - 1; i++) 
-    {
-      G4double f = 1.0;
-      for (unsigned int ii = i+1; i< _thePartition.size(); i++) 
-        {
-          if (_thePartition[i] == _thePartition[ii]) f++;
-        }
-      Fact *= f;
-  }
+  G4double Fact = g4calc->factorial(n);
 	
   G4double ProbDegeneracy = 1.0;
   G4double ProbA32 = 1.0;	
-	
-  for (i = 0; i < _thePartition.size(); i++) 
-    {
-      ProbDegeneracy *= GetDegeneracyFactor(_thePartition[i]);
-      ProbA32 *= _thePartition[i]*std::sqrt((G4double)_thePartition[i]);
-    }
-	
-  // Compute entropy
   G4double PartitionEntropy = 0.0;
-  for (i = 0; i < _thePartition.size(); i++) 
-    {
-      // interaction entropy for alpha
-      if (_thePartition[i] == 4) 
-        {
-          PartitionEntropy += 
-            2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i]);
-        }
-      // interaction entropy for Af > 4
-      else if (_thePartition[i] > 4) 
-        {
-          PartitionEntropy += 
-            2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i])
-            - G4StatMFParameters::DBetaDT(T) * g4calc->Z23(_thePartition[i]);
-        } 
+  G4double db = G4StatMFParameters::DBetaDT(T);
+	
+  for (G4int i = 0; i < n; ++i) {
+    G4int par = _thePartition[i];
+    ProbDegeneracy *= GetDegeneracyFactor(par);
+    ProbA32 *= _thePartition[i]*std::sqrt((G4double)par);
+
+    // interaction entropy for alpha
+    if (par == 4) {
+      PartitionEntropy += 2.0 * T * par/InvLevelDensity(par);
     }
+    // interaction entropy for Af > 4
+    else if (par > 4) {
+      PartitionEntropy += 2.0 * T * par/InvLevelDensity(par) - db * g4calc->Z23(par);
+    } 
+  }
 	
   // Thermal Wave Lenght = std::sqrt(2 pi hbar^2 / nucleon_mass T)
   G4double ThermalWaveLenght3 = 16.15*fermi/std::sqrt(T);
   ThermalWaveLenght3 = ThermalWaveLenght3*ThermalWaveLenght3*ThermalWaveLenght3;
   
   // Translational Entropy
-  G4double kappa = 1. + elm_coupling*(g4calc->Z13((G4int)_thePartition.size())-1.0)
-                    /(G4StatMFParameters::Getr0()*g4calc->Z13(theA));
-  kappa = kappa*kappa*kappa;
-  kappa -= 1.;
-  G4double V0 = (4./3.)*pi*theA*G4StatMFParameters::Getr0()*G4StatMFParameters::Getr0()*
-    G4StatMFParameters::Getr0();
-  G4double FreeVolume = kappa*V0;
-  G4double TranslationalS = std::max(0.0, G4Log(ProbA32/Fact) +
-      (_thePartition.size()-1.0)*G4Log(FreeVolume/ThermalWaveLenght3) +
-      1.5*(_thePartition.size()-1.0) - 1.5*g4calc->logZ(theA));
+  G4double r0 = G4StatMFParameters::Getr0();
+  G4double kappa = 1. + elm_coupling*(g4calc->Z13(n) - 1.0)/(r0*g4calc->Z13(theA));
+  G4double V0 = (4./3.)*pi*theA*r0*r0*r0;
+  G4double FreeVolume = (kappa*kappa*kappa - 1.0)*V0;
+  G4double TranslationalS = G4Log(ProbA32/Fact)
+    + (n - 1)*G4Log(FreeVolume/ThermalWaveLenght3)
+    + 1.5*(n - 1) - 1.5*g4calc->logZ(theA);
+  TranslationalS = std::max(TranslationalS, 0.0);
   
   PartitionEntropy += G4Log(ProbDegeneracy) + TranslationalS;
   _Entropy = PartitionEntropy;
 	
   // And finally compute probability of fragment configuration
-  G4double exponent = PartitionEntropy-SCompound;
-  if (exponent > 300.0) exponent = 300.0;
+  G4double exponent = std::min(PartitionEntropy - SCompound, 200.);
   return _Probability = G4Exp(exponent);
 }
 
@@ -318,40 +298,37 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(G4int A0, G4int Z0, G4double M
 // Gives fragments charges
 {
   std::vector<G4int> FragmentsZ;
+  G4int n = (G4int)_thePartition.size();
   
   G4int ZBalance = 0;
-  do 
-    {
-      G4double CC = G4StatMFParameters::GetGamma0()*8.0;
-      G4int SumZ = 0;
-      for (unsigned int i = 0; i < _thePartition.size(); i++) 
-        {
-          G4double ZMean;
-          G4double Af = _thePartition[i];
-          if (Af > 1.5 && Af < 4.5) ZMean = 0.5*Af;
-          else ZMean = Af*Z0/A0;
-          G4double ZDispersion = std::sqrt(Af * MeanT/CC);
-          G4int Zf;
-          do 
-            {
-              Zf = static_cast<G4int>(G4RandGauss::shoot(ZMean,ZDispersion));
-	    } 
-          // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-          while (Zf < 0 || Zf > Af);
-          FragmentsZ.push_back(Zf);
-          SumZ += Zf;
-	}
-      ZBalance = Z0 - SumZ;
-    } 
+  do {
+    G4double CC = G4StatMFParameters::GetGamma0()*8.0;
+    G4int SumZ = 0;
+    for (G4int i = 0; i < n; ++i) {
+      G4double ZMean;
+      G4double Af = _thePartition[i];
+      if (Af > 1.5 && Af < 4.5) { ZMean = 0.5*Af; }
+      else ZMean = Af*Z0/A0;
+      G4double ZDispersion = std::sqrt(Af * MeanT/CC);
+      G4int Zf;
+      do {
+	Zf = static_cast<G4int>(G4RandGauss::shoot(ZMean, ZDispersion));
+      } 
+      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+      while (Zf < 0 || Zf > Af);
+      FragmentsZ.push_back(Zf);
+      SumZ += Zf;
+    }
+    ZBalance = Z0 - SumZ;
+  } 
   // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   while (std::abs(ZBalance) > 1);
   FragmentsZ[0] += ZBalance;
 	
   G4StatMFChannel * theChannel = new G4StatMFChannel;
-  for (unsigned int i = 0; i < _thePartition.size(); i++)
-    {
-      theChannel->CreateFragment(_thePartition[i],FragmentsZ[i]);
-    }
+  for (G4int i = 0; i < n; ++i) {
+    theChannel->CreateFragment(_thePartition[i], FragmentsZ[i]);
+  }
 
   return theChannel;
 }
