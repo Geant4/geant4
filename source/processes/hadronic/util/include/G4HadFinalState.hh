@@ -84,7 +84,7 @@ public:
   G4double GetLocalEnergyDeposit() const         { return theEDep;}
   //  void SecondariesAreStale();    // Deprecated; not needed for values
   inline
-  void ClearSecondaries()                        { theSecs.clear(); }
+  void ClearSecondaries()                        { for (auto& sec : theSecs) delete sec.GetParticle(); theSecs.clear(); }
 
   // Concatenate lists efficiently
   void AddSecondaries(const std::vector<G4HadSecondary>& addSecs);
